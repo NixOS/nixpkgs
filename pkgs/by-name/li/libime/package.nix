@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
-    tag = version;
+    rev = version;
     hash = "sha256-liVJEBUYcVYjjJCMW68xXbEHKQpAgTLCPm2yIdWG3IQ=";
     fetchSubmodules = true;
   };

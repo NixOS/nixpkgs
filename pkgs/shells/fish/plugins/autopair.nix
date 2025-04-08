@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "autopair.fish";
-    tag = version;
+    rev = version;
     sha256 = "sha256-s1o188TlwpUQEN3X5MxUlD/2CFCpEkWu83U9O+wg3VU=";
   };
 

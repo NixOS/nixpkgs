@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tobifroe";
     repo = "klog";
-    tag = version;
+    rev = version;
     hash = "sha256-t53HC5eBC587jyvJKxlG3B3Im7RM6bDcZfUO4npgGfM=";
   };
   useFetchCargoVendor = true;

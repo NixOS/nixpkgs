@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bpeel";
     repo = "prevodb";
-    tag = version;
+    rev = version;
     hash = "sha256-TfgsZidwXewwqGkb31Qv0SrX8wQdPaK7JQA3nB5h2bs=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bouncepaw";
     repo = "mycorrhiza";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Cgf2YtAatfKWxhe4xAqNRB4ktsGs3ONi5XqbjcZwzTw=";
   };
 

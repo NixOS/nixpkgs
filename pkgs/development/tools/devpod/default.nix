@@ -29,7 +29,7 @@ let
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
   };
 

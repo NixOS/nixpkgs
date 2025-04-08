@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KIbrJJ2QNghj/dehcDXJqWJU2pD6mt8Gw9RPLK3RTk0=";
   };
 

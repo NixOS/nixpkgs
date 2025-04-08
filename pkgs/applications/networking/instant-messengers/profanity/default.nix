@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-3TmnbTnL8SPSd3seThavOOJVELi8kWLSlZlAub24KZ4=";
   };
 

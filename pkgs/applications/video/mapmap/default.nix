@@ -22,7 +22,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mapmapteam";
     repo = "mapmap";
-    tag = version;
+    rev = version;
     sha256 = "1pyb3vz19lbfz2hrfqm9a29vnajw1bigdrblbmcy32imkf4isfvm";
   };
 

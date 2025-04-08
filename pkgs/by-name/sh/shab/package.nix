@@ -16,7 +16,7 @@ let
     src = fetchFromGitHub {
       owner = "zimbatm";
       repo = "shab";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-UW4tRZSir7KG7KXg0sOCd8kkIydEwZ6kdwxCeo0Ojgo=";
     };
 

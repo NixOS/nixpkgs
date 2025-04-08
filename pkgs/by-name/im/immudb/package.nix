@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-sQLxHHaKdqocjJVXuuuQqx+BNubl6bjVcp50r4kPQEs=";
   };
 

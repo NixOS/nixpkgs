@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "t-rex-tileserver";
     repo = "t-rex";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oZZrR86/acoyMX3vC1JGrpc8G+DEuplqfEAnaP+TBGU=";
   };
 

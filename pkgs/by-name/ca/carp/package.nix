@@ -14,7 +14,7 @@ haskellPackages.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-B7SBzjegFzL2gGivIJE6BZcLD3f0Bsh8yndjScG2TZI=";
   };
 

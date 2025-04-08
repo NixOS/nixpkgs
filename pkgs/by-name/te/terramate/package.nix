@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "terramate-io";
     repo = "terramate";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9Bv4FlQzUX/mnSlv1qZqVER/JS0gr3HHmPV+axHKgJw=";
   };
 

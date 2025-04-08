@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SwagLyrics";
     repo = "SwSpotify";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xGLvc154xnje45Akf7H1qqQRUc03gGVt8AhGlkcP3kY=";
   };
 

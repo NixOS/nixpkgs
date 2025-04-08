@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ivi";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1xv7chp7rm0vrvbz6q57fpwhlgjz461h08q9zgmkcl2l0w96hmsn";
   };
 

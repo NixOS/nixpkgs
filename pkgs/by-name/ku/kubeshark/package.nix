@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Mxj42D+MxYn0/csI/ZsMdU8xOz8P/IzsHr7vtmlQPa0=";
   };
 

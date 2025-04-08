@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moddevices";
     repo = "lv2bm";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0vlppxfb9zbmffazs1kiyb79py66s8x9hihj36m2vz86zsq7ybl0";
   };
 

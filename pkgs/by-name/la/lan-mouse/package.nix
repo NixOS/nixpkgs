@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "feschber";
     repo = "lan-mouse";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ofiNgJbmf35pfRvZB3ZmMkCJuM7yYgNL+Dd5mZZqyNk=";
   };
 

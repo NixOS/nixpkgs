@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kwin-scripts";
     repo = "kwin-tiling";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "095slpvipy0zcmbn0l7mdnl9g74jaafkr2gqi09b0by5fkvnbh37";
   };
 

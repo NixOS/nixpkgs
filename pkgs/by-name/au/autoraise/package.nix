@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sbmpost";
     repo = "AutoRaise";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OsvmNHpQ46+cWkR4Nz/9oIgSFSWLfCwZnAnRKRiNm5E=";
   };
 

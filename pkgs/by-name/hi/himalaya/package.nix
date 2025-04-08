@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage {
     inherit hash;
     owner = "pimalaya";
     repo = "himalaya";
-    tag = "v${version}";
+    rev = "v${version}";
   };
 
   useFetchCargoVendor = true;

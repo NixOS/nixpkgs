@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
-    tag = version;
+    rev = version;
     hash = "sha256-DoYD8Hc5pd68+BhASw3mwwCdhu0vYHiELjVmVwU8FHs=";
   };
 

@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-integers";
-    tag = version;
+    rev = version;
     sha256 = "sha256-zuUgP1jOiVT0q6GisGpkqx7nybWbARgnAcU8NYqvCzA=";
   };
 

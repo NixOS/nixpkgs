@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "l1na-forever";
     repo = "mpris-notifier";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SD37JFbfg05GemtRNQKvXkXPAyszItSW9wClzudrTS8=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "clMathLibraries";
     repo = "clBLAS";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "154mz52r5hm0jrp5fqrirzzbki14c1jkacj75flplnykbl36ibjs";
   };
 

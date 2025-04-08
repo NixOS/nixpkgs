@@ -35,7 +35,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = pname;
-    tag = version;
+    rev = version;
     inherit (params) hash;
   };
 

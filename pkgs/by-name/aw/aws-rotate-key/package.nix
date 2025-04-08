@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Fullscreen";
     repo = "aws-rotate-key";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-fYpgHHOw0k/8WLGhq+uVOvoF4Wff6wzTXuN8r4D+TmU=";
   };
 

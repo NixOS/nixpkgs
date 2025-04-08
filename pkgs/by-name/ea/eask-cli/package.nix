@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "emacs-eask";
     repo = "cli";
-    tag = version;
+    rev = version;
     hash = "sha256-xMay2HGw5vGvGIrbjCk0LNn5bvSiHbnpjfdGdO7BpQ4=";
   };
 

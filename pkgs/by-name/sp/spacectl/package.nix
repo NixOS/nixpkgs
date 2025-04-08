@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "spacelift-io";
     repo = "spacectl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3s64o4rmkbvT9rOdqYZN1No08Lh1S4oNlIal+otfhWU=";
   };
 

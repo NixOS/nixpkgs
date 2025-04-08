@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndmon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PzmDotyuG8Fgkr6SlBWofqQamDG39v65fFjRUKjIWWM=";
   };
 

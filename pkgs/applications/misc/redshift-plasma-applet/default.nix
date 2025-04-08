@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kotelnik";
     repo = "plasma-applet-redshift-control";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "122nnbafa596rxdxlfshxk45lzch8c9342bzj7kzrsjkjg0xr9pq";
   };
 

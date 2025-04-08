@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "louis-thevenet";
     repo = "vault-tasks";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IjpmvoibxDwbdq4SyPXWxhsUTzaRKH1qUXwskCWOqm4=";
   };
   useFetchCargoVendor = true;

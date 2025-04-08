@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "miguelmarco";
     repo = "libhomfly";
-    tag = version;
+    rev = version;
     sha256 = "sha256-s1Hgy6S9+uREKsgjOVQdQfnds6oSLo5UWTrt5DJnY2s=";
   };
 

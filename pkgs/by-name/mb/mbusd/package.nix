@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "3cky";
     repo = "mbusd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RQRSqlbPwBhw0SiNSP+euMVAwVBJo3lx0qB5gyWA+cM=";
   };
 

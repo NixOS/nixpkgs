@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "arduino-ci";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-9RbBxgwsSQ7oGGKr1Vsn9Ug9AsacoRgvQgd9jbRQ034=";
   };
 

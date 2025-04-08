@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "hh-suite";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kjNqJddioCZoh/cZL3YNplweIGopWIGzCYQOnKDqZmw=";
   };
 

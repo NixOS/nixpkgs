@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kK5/4j4Lvk0dMIi2S/iMUWDeIwfjAXr3ds6prm9Ym3A=";
   };
 

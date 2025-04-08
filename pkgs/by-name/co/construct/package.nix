@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Thomas-de-Bock";
     repo = "construct";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ENso0y7yEaXzGXzZOnlZ1L7+j/qayJL+f55/NYLz2ew=";
   };
 

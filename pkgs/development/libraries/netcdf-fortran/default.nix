@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Unidata";
     repo = "netcdf-fortran";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-nC93NcA4VJbrqaLwyhjP10j/t6rQSYcAzKBxclpZVe0=";
   };
 

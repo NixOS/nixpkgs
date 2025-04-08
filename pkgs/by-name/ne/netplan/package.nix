@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
-    tag = version;
+    rev = version;
     hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
   };
 

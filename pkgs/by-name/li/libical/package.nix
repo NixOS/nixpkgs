@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libical";
     repo = "libical";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KIMqZ6QAh+fTcKEYrcLlxgip91CLAwL9rwjUdKzBsQk=";
   };
 

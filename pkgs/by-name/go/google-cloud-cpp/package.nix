@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-gCq8Uc+s/rnJWsGlI7f+tvAZHH8K69+H/leUOKE2GCY=";
   };
 

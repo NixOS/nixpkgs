@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp-asyncmdnsresolver";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gtB5vnlOVeAFACnhR5DIS5p3caZkOXrollXFINl/7hQ=";
   };
 

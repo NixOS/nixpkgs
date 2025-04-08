@@ -15,7 +15,7 @@ buildLua rec {
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8E/EGIePK5siCchZPL81XMgspvNaRunqiLVU/J3nsmI=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "life4";
     repo = "enc";
-    tag = version;
+    rev = version;
     hash = "sha256-6CUSJCE37R6nypqxTEs4tk/Eqg7+ZNGKPit38Zz3r84=";
   };
 

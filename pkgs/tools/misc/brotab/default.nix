@@ -13,7 +13,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 

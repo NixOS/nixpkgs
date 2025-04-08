@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torpyorg";
     repo = "torpy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ni7GcpkxzAMtP4wBOFsi4KnxK+nC0XCZR/2Z/eS/C+w=";
   };
 

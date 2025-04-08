@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sigp";
     repo = "lighthouse";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8jHNm/MGpHGOt52rLMXLMWIVn8AXqnpAr+Wvk7DH6gc=";
   };
 

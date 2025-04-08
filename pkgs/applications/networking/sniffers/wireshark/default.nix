@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     repo = "wireshark";
     owner = "wireshark";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NO8tc5Av5Gl3yzkxK9KJAZwIjkrXEnIGmbLBPYKRm0E=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pboettch";
     repo = "json-schema-validator";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Ybr5dNmjBBPTYPvgorJ6t2+zvAjxYQISWXJmgUVHBVE=";
   };
 

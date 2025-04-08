@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cyring";
     repo = "CoreFreq";
-    tag = version;
+    rev = version;
     hash = "sha256-gdJ3yaE/Q10NV9TTbBUwzlF2wogiXFNy8gA36Fr/S7o=";
   };
 

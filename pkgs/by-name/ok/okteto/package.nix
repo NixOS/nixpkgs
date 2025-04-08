@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
-    tag = version;
+    rev = version;
     hash = "sha256-vi2ow95a3btiR4yINunEa56SUGWlbgNdMdS/T747a+U=";
   };
 

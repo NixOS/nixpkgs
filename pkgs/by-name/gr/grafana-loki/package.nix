@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1tI9X2eIKuWEWJBbN4UAw8yeRrjgfqcenJyTNMk5rqU=";
   };
 

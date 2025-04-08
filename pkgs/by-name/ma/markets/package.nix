@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bitstower";
     repo = "markets";
-    tag = version;
+    rev = version;
     sha256 = "sha256-/g/r/1i69PmPND40zIID3Nun0I4ZFT1EFoNf1qprBjI=";
   };
 

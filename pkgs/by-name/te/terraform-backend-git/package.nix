@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "plumber-cd";
     repo = "terraform-backend-git";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mZbGMv5b9wK/gWqQB75sDJIVURrS6t/L7WBhTonaatQ=";
   };
 

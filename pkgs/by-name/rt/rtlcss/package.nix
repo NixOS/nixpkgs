@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "MohammadYounes";
     repo = "rtlcss";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KdAf7jzt8o/YEzT/bLCXj546HX0oC90kr44u3p3qv/k=";
   };
 

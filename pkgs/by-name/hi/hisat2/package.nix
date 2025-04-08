@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DaehwanKimLab";
     repo = "hisat2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0lmzdhzjkvxw7n5w40pbv5fgzd4cz0f9pxczswn3d4cr0k10k754";
   };
 

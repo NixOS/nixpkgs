@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "skype4pidgin";
-    tag = version;
+    rev = version;
     sha256 = "11snyrjhm58gjvdmr5h5ajii3ah4a7c8zw3cavjv9xnnwrpfm5rb";
   };
 

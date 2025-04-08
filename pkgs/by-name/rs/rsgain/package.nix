@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "rsgain";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dqvaPLVpNnbN2W0TOphS7QU6MDh5pxFJoUDGvkat164=";
   };
 

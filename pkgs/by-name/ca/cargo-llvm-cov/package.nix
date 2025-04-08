@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     inherit owner;
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-iJrnNDSMich5OzEbPgnQWLVz6Zj/MUIzEsaBzqVdoDg=";
   };
 

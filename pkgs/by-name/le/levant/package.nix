@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "levant";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-pinrBLzBMptqzMMiQmZob6B5rNNyQsaEkuECFFyTkrw=";
   };
 

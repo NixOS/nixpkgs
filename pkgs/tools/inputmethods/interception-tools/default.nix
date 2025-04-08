@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "interception/linux";
     repo = "tools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 

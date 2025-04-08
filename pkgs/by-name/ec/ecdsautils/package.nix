@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = pkgs.fetchFromGitHub {
     owner = "freifunk-gluon";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 

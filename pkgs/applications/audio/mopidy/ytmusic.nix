@@ -16,7 +16,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jmcdo29";
     repo = "mopidy-ytmusic";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2o4fDtaIxRDvIiAGV/9qK/00BmYXasBUwW03fxFcDAU=";
   };
 

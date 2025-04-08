@@ -14,7 +14,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "hultenvp";
     repo = "solis-sensor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hiCgro2BDi1ZXxZu9E+m0wdHN0qnjlUvgv4pPmSb9j4=";
   };
 

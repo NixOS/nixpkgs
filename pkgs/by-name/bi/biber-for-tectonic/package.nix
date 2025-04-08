@@ -41,7 +41,7 @@ in
     src = fetchFromGitHub {
       owner = "plk";
       repo = "biber";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-Tt2sN2b2NGxcWyZDj5uXNGC8phJwFRiyH72n3yhFCi0=";
     };
     patches = [

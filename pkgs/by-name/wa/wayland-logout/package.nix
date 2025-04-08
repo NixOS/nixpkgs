@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "soreau";
     repo = "wayland-logout";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VSAw6go4v937HWazXfMz8OdHgOnUtrlDXkslsV4eDIg=";
   };
   nativeBuildInputs = [

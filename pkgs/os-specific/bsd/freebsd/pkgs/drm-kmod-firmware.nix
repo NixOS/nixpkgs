@@ -16,7 +16,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "drm-kmod-firmware";
-    tag = version;
+    rev = version;
     hash = "sha256-Ly9B0zf+YODel/X1sZYVVUVWh38faNLhkcXcjEnQwII=";
   };
 

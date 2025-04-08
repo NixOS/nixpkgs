@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DMHP7DVWXrTsqU0m9tc783E6dNO0EQoSXZTn5kZOtTg=";
   };
 

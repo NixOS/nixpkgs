@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "IvanMalison";
     repo = "quill-qr";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1kdsq6csmxfvs2wy31bc9r92l5pkmzlzkyqrangvrf4pbk3sk0r6";
   };
 

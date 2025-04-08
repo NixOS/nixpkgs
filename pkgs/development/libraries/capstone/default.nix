@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
-    tag = version;
+    rev = version;
     hash = "sha256-ovIvsxVq+/q5UUMzP4WpxzaE0898uayNc1g2Coignnc=";
   };
 

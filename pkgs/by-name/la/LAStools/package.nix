@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LAStools";
     repo = "LAStools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-IyZjM8YvIVB0VPNuEhmHHw7EuKw5RanB2qhCnBD1fRY=";
   };
 

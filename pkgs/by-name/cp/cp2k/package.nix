@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-04AFiEuv+EYubZVoYErQDdr9zipKlF7Gqy8DrUaYUMk=";
     fetchSubmodules = true;
   };

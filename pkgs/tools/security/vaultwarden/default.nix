@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
-    tag = version;
+    rev = version;
     hash = "sha256-Lu3/qVTi5Eedcm+3XlHAAJ1nPHm9hW4HZncQKmzDdoo=";
   };
 

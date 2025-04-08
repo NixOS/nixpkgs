@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-0rRwIbOciPepo+ApvJiK5IyhMdq/4jsMlCSv0UeDETs=";
   };

@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "savoirfairelinux";
       repo = "pjproject";
-      tag = version;
+      rev = version;
       hash = "sha256-uA6ZJYUgAu3cK4CKCGtqaI0KPM/0szExPS2pCOflz5A=";
     };
 

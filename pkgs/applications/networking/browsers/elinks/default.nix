@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "elinks";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TTb/v24gIWKiCQCESHo0Pz6rvRtw5anoXK0b35dzfLM=";
   };
 

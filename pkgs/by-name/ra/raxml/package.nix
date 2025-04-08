@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stamatak";
     repo = "standard-RAxML";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-w+Eqi0GhVira1H6ZnMNeZGBMzDjiGT7JSFpQEVXONyk=";
   };
 

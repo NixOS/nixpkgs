@@ -36,7 +36,7 @@ let
         src = fetchFromGitHub {
           owner = "hashicorp";
           repo = pname;
-          tag = "v${version}";
+          rev = "v${version}";
           inherit sha256;
         };
 

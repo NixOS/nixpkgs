@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "octobanana";
     repo = "crex";
-    tag = version;
+    rev = version;
     sha256 = "086rvwl494z48acgsq3yq11qh1nxm8kbf11adn16aszai4d4ipr3";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "swh";
     repo = "timemachine";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "16fgyw6jnscx9279dczv72092dddghwlp53rkfw469kcgvjhwx0z";
   };
 

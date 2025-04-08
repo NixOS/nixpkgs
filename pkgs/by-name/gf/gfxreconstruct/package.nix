@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MuCdJoBFxKwDCOCltlU3oBS9elFS6F251dHjHcIb4Jg=";
     fetchSubmodules = true;
   };

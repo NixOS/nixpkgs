@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "root-gg";
     repo = "plik";
-    tag = version;
+    rev = version;
     hash = "sha256-WCtfkzlZnyzZDwNDBrW06bUbLYTL2C704Y7aXbiVi5c=";
   };
 

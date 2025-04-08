@@ -168,7 +168,7 @@ rec {
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
       };
 
@@ -192,7 +192,7 @@ rec {
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-lrucache";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
       };
 
@@ -263,7 +263,7 @@ rec {
       src = fetchFromGitHub {
         owner = "vicious-widgets";
         repo = "vicious";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
       };
 

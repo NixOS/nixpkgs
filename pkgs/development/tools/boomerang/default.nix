@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BoomerangDecompiler";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0xncdp0z8ry4lkzmvbj5d7hlzikivghpwicgywlv47spgh8ny0ix";
   };
 

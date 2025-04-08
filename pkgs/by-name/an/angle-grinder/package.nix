@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rcoh";
     repo = "angle-grinder";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-1SZho04qJcNi84ZkDmxoVkLx9VJX04QINZQ6ZEoCq+c=";
   };
 

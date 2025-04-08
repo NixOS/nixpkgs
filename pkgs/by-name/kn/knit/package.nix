@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = "knit";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zxwEJnQZpOEJhV7jx2ClS3XmMfGBiq8AHR26TOIBJVw=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "dnsmasq_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2sOOJWEEseWwozIyZ7oes400rBjlxIrOOtkP3rSNFXo=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
-    tag = version;
+    rev = version;
     sha256 = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
   };
 

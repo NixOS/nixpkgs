@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "spicy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MLwBklSNLqx3LgNSFvo5p/MPyt/IlYGwvTbN1PJlims=";
     fetchSubmodules = true;
   };

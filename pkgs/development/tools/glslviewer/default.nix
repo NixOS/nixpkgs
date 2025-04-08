@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "patriciogonzalezvivo";
     repo = "glslViewer";
     fetchSubmodules = true;
-    tag = version;
+    rev = version;
     hash = "sha256-Ve3wmX5+kABCu8IRe4ySrwsBJm47g1zvMqDbqrpQl88=";
   };
   nativeBuildInputs = [

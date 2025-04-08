@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
+    rev = version;
     hash = "sha256-POImMopbrhVXuSx2MQ9mwPNKQx7BljyikKhu6M4hZME=";
   };
 

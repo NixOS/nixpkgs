@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secnot";
     repo = "rectpack";
-    tag = version;
+    rev = version;
     hash = "sha256-kU0TT3wiudcLXrT+lYPYHYRtf7aNj/IKpnYKb/H91ng=";
   };
 

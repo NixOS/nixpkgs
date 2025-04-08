@@ -28,7 +28,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QD9b3r91ukGbAg+ZWj9cdBsXb6pl3wlVgEY3zF+tDQI=";
   };
 

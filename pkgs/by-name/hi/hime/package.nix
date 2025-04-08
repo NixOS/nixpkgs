@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "hime";
     owner = "hime-ime";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-fCqet+foQjI+LpTQ/6Egup1GzXELlL2hgbh0dCKLwPI=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cg2121";
     repo = "obs-vintage-filter";
-    tag = version;
+    rev = version;
     sha256 = "sha256-K7AxvwVLe4G+75aY430lygSRB7rMtsGi17pGzdygEac=";
   };
 

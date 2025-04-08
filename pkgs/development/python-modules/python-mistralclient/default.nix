@@ -36,7 +36,7 @@ buildPythonPackage rec {
     domain = "opendev.org";
     owner = "openstack";
     repo = "python-mistralclient";
-    tag = version;
+    rev = version;
     hash = "sha256-Vi56+OlFU2Aj7yJ/cH5y0ZbzPhglTciJcTnkbA0S7Qo=";
   };
 

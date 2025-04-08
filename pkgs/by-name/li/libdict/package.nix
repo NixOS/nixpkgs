@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "libdict";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-GFK2yjtxAwwstoJQGCXxwNKxn3LL74FBxad7JdOn0pU=";
   };
 

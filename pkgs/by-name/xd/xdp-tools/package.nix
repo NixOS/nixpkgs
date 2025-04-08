@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NJawacCrmTuRXsOiAOMD8RaljPnuPFISoWEgiDcInw8=";
   };
 

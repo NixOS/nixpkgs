@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hexagonal-sun";
     repo = "bic";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1ws46h1ngzk14dspmsggj9535yl04v9wh8v4gb234n34rdkdsyyw";
   };
 

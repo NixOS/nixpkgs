@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-OlNUBdCizMOSb7WEtu00LaHYSXLSPlISVJD/0rHujnY=";
   };
 

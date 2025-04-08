@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "python-pae";
-    tag = version;
+    rev = version;
     hash = "sha256-D0X2T0ze79KR6Gno4UWpA/XvlkK6Y/jXUtLbzlOKr3E=";
   };
 

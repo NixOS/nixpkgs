@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "fiano";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QX0XMec99YbYWyfRThhwDaNjKstkUEz6wsisBynprmg=";
   };
 

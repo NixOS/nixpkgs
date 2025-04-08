@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9pLySzYfLyRcbhKz+zusBFHNVnhtGyqlsrNr1AzDQx0=";
   };
 

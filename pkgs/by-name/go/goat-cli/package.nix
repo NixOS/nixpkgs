@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "goat";
     owner = "studio-b12";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7inoRBVR7zmt0jUFAGYjoYT2cdda0qgzyXLL+GiBFMg=";
   };
 

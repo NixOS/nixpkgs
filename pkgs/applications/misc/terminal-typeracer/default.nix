@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "ttyperacer";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-S3OW6KihRd6ReTWUXRb1OWC7+YoxehjFRBxcnJVgImU=";
   };
 

@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "soyersoyer";
     repo = "cameractrls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MM+Py8tHtqJWIGmGg3RaIhJa0E1zM3hXOnTOqXPuejw=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rinchsan";
     repo = "gosimports";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xM1CGW8UB+VHN+2Rm6cF/1bOBVDeUG+6kxUxUcvP7FM=";
   };
 

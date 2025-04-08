@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wlh320";
     repo = "rime-ls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bVpFE25Maady0oyrwWf2l7FCW/VHN6mJsnEefmStxIU=";
   };
 

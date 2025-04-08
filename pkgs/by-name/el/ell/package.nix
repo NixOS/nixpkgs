@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
-    tag = version;
+    rev = version;
     hash = "sha256-nbfWjV0zPPx2kcnD/aRaWSXUGIqrUX7Z4U45ASk5Ric=";
   };
 

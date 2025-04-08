@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "krayon";
     repo = "ratslap";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-PO/79tTiO4TBtojrEtkSf5W6zuG+Ml2iJGAtYHDwHEY=";
     leaveDotGit = true;
   };

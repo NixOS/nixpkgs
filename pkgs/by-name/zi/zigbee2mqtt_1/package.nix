@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
-    tag = version;
+    rev = version;
     hash = "sha256-/7mZrf3FyIliCzsy6yzVRJYMy4bViphYi81UY43iO98=";
   };
 

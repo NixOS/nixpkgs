@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "felipec";
     repo = "msn-pecan";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0133rpiy4ik6rx9qn8m38vp7w505hnycggr53g3a2hfpk5xj03zh";
   };
 

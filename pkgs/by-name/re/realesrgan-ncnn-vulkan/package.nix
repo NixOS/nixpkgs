@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xinntao";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-F+NfkAbk8UtAKzsF42ppPF2UGjK/M6iFfBsRRBbCmcI=";
   };
   sourceRoot = "${src.name}/src";

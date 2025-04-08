@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "cargo-benchcmp";
-    tag = version;
+    rev = version;
     hash = "sha256-J8KFI0V/mOhUlYtVnFAQgPIpXL9/dLhOFxSly4bR00I=";
   };
 

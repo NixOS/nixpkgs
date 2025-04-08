@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dataclass-wizard";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ufi4lZc+UkM6NZr4bS2OibpOmMjyiBEoVKxmrqauW50=";
   };
 

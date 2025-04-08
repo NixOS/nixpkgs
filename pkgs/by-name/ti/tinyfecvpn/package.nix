@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wangyu-";
     repo = "tinyfecvpn";
-    tag = version;
+    rev = version;
     hash = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
     fetchSubmodules = true;
   };

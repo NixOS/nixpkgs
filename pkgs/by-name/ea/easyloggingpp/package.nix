@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amrayn";
     repo = "easyloggingpp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
   };
 

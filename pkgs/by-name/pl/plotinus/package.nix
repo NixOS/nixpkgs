@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "plotinus";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "19k6f6ivg4ab57m62g6fkg85q9sv049snmzq1fyqnqijggwshxfz";
   };
 

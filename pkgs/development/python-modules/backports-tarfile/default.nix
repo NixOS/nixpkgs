@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "jaraco";
       repo = "backports.tarfile";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-X3rkL35aDG+DnIOq0fI7CFoWGNtgLkLjtT9y6+23oto=";
     };
 

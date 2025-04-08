@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "exoscale";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-PO6LIp5eortBEygdIRf2LpPJalSEMGosW8KtqBV/MlM=";
   };
 

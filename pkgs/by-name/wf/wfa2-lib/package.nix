@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "smarco";
     repo = "WFA2-lib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vTeSvhSt3PQ/BID6uM1CuXkQipgG7VViDexvAwV4nW8=";
   };
 

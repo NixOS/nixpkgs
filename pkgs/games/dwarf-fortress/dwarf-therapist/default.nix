@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
-    tag = "v${version}";
+    rev = "v${version}";
     inherit hash;
   };
 

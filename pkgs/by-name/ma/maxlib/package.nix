@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "electrickery";
     repo = "pd-maxlib";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "10w9qfgn26lj3zqjksf2r1wsjpf5xy4dx22jay9l6idy9q62mxsn";
   };
 

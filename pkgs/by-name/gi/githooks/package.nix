@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gabyx";
     repo = "githooks";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pTSC8ruNiPzQO1C6j+G+WFX3pz/mWPukuWkKUSYdfHw=";
   };
 

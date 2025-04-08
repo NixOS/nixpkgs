@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Luzifer";
     repo = "nginx-sso";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fNMCskS8uXAykl2Zu4ZZqtIS2F5w7HV7C8hyPaWnav4=";
   };
 

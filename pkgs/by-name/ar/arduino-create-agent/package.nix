@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduino-create-agent";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-L77LDMe6KTwQ2qAx3OT1O27h4DhAjZzcs8WL/N7E8hI=";
   };
 

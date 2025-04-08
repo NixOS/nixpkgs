@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nkmathew";
     repo = "yasi-sexp-indenter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xKhVTmh/vrtBkatxtk8R4yqbGroH0I+xTKNYUpuikt4=";
   };
 

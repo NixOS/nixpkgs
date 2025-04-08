@@ -21,7 +21,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnp-ocaml";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-G4B1llsHnGcuGIarDB248QMaRBvS47IEQB5B93wY7nA=";
   };
 

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BVLC";
     repo = "caffe";
-    tag = version;
+    rev = version;
     sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 

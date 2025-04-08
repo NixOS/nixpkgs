@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alienarena";
     repo = "alienarena";
-    tag = version;
+    rev = version;
     hash = "sha256-ri0p/0onI5DU7kDxwdFxRyT1LQLVe89VNEYPXPgilOs=";
   };
 

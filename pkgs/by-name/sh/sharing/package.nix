@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "parvardegr";
     repo = "sharing";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-y5tAbyRGxr6lagU/+pLBN0VIpk3+SzKyXOehQk6NW+M=";
   };
 

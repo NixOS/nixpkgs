@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "znerol";
     repo = "py-fnvhash";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "00h8i70qd3dpsyf2dp7fkcb9m2prd6m3l33qv3wf6idpnqgjz6fq";
   };
 

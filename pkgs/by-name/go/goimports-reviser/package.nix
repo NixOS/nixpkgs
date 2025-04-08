@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "incu6us";
     repo = "goimports-reviser";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MMF5gzUbL8j9NTGKT1Xz177Z0SqdeKObBa6TEguK5aI=";
   };
   vendorHash = "sha256-BAV7vMWRgBZaL2Pya4QiVcY54VIiHT++Dz4ZZ92FGgM=";

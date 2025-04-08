@@ -24,7 +24,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1c6rcdp8bicdiwqc2mb59cl9l2vxlp3y8hmnr9x924fq7acly248";
   };
 

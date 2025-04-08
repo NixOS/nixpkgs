@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hysOe1ZZpCClVOGo0+UeCP7imAakXrZlnJ4V95zfiyA=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "edgelesssys";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5I916T70sH4UAq5EGRjR7lnRBbPqMJIxaXwUCJQ4DcM=";
   };
 

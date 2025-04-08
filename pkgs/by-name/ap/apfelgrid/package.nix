@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nhartland";
     repo = "APFELgrid";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0l0cyxd00kmb5aggzwsxg83ah0qiwav0shbxkxwrz3dvw78n89jk";
   };
 

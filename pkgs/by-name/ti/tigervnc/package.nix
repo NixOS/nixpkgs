@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
   };
 

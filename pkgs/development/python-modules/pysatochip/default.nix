@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "toporin";
     repo = "pysatochip";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7wA9erk2OA1FyNSzOSWJzjyp9QeYq6C+YA8B0Dk2iQE=";
   };
 

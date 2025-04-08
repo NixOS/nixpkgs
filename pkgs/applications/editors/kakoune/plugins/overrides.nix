@@ -52,7 +52,7 @@ self: super: {
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-ansi";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "kFjTYFy0KF5WWEHU4hHFAnD/03/d3ptjqMMbTSaGImE=";
     };
 
@@ -86,7 +86,7 @@ self: super: {
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-plumb";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "1rz6pr786slnf1a78m3sj09axr4d2lb5rg7sfa4mfg1zcjh06ps6";
     };
 

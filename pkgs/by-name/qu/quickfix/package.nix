@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "quickfix";
     repo = "quickfix";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1fgpwgvyw992mbiawgza34427aakn5zrik3sjld0i924a9d17qwg";
   };
 

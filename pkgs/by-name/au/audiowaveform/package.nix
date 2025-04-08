@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
-    tag = version;
+    rev = version;
     sha256 = "sha256-FcQq0xWs3jH2MfhFQ5r5Vaz8B3akBHBSg8Z/k9An/Wg=";
   };
 

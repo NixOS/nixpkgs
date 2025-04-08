@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-bMX538yen9cINPCtgf7SUGGsNRJugMrveqXtChHzPkk=";
   };
 

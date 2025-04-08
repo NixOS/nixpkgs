@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "legendary";
-    tag = version;
+    rev = version;
     sha256 = "sha256-+aywgd5RZfkmVuA0MaF2/Ie4a5If/zQxvVCcTfGpQpE=";
   };
 

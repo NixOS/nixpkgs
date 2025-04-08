@@ -23,7 +23,7 @@ let
   src = fetchFromGitHub {
     owner = "adileo";
     repo = "squirreldisk";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-As2nvc68knjeLPuX0QLBoybj8vuvkpS5Vr+7U7E5CjA=";
   };
   frontend-build = buildNpmPackage {

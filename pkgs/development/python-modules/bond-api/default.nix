@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prystupa";
     repo = "bond-api";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+87/j94eHyW3EMMBK+aXaNTVoNxsixeLusyBsPWa9yM=";
   };
 

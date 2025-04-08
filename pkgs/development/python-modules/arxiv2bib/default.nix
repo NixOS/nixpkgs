@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nathangrigg";
     repo = "arxiv2bib";
-    tag = version;
+    rev = version;
     sha256 = "1kp2iyx20lpc9dv4qg5fgwf83a1wx6f7hj1ldqyncg0kn9xcrhbg";
   };
 

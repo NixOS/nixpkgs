@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rajatomar788";
     repo = "pywebcopy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XTPk3doF9dqImsLtTB03YKMWLzQrJpJtjNXe+691rZo=";
   };
 

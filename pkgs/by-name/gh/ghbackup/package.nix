@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "qvl";
     repo = "ghbackup";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3LSe805VrbUGjqjnhTJD2KBVZ4rq+4Z3l4d0I1MrBMA=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcalbert";
     repo = "uEagle";
-    tag = version;
+    rev = version;
     sha256 = "1hxwk5alalvmhc31y917dxsnbiwq1xci2krma3235581319xr3w7";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cargo-expand";
-    tag = version;
+    rev = version;
     hash = "sha256-PSiuTw3H3vl4Tnts5eOTd1v8SLPvYZCkuQ/pTSa3O18=";
   };
 

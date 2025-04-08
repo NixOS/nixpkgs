@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "pssh";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-B1dIa6hNeq4iE8GKVhTp3Gzq7vp+v5Yyzj8uF8X71yg=";
   };
 

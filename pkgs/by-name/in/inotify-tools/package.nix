@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     repo = "inotify-tools";
     owner = "inotify-tools";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-6kM2JzxRcwUjUmbUWGnQ+gAvZcn7C32/enRwiYiuQGU=";
   };
 

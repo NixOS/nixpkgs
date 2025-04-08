@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NtTXpXDYazcXilQNW455UDkqMCFzFPvTUkbEBQsWIDo=";
     # leaveDotGit is necessary because `build.rs` expects git information which
     # is used to write a `built.rs` file which is read by the CLI application

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libratbag";
     repo = "libratbag";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dAWKDF5hegvKhUZ4JW2J/P9uSs4xNrZLNinhAff6NSc=";
   };
 

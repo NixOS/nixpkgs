@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "javascript-typescript-langserver";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vd7Hj0jPFgK0u3CBlMfOFERmW+w9CnKIY9nvs48KqsI=";
   };
 

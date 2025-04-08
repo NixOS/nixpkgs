@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "arcmenu";
     repo = "ArcMenu";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XlDkdNINTnUAqr2bxL0u2tHWfiggqT1oOryED7sG/vs=";
   };
 

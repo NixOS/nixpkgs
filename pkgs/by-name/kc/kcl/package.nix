@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ron+8pK/1VYwL0HO97QvBpWhKeAlhM+sVi1Djc++4n4=";
   };
 

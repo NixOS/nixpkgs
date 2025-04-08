@@ -176,7 +176,7 @@ let
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-JRnGgxkf5ct6P71bYgLbCEUmotDLS2Evy6t8R7ac7D4=";
       fetchSubmodules = true;
     };

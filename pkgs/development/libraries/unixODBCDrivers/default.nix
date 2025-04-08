@@ -47,7 +47,7 @@
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
-      tag = version;
+      rev = version;
       hash = "sha256-l+HlS7/A0shwsEXYKDhi+QCmwHaMTeKrtcvo9yYpYws=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)

@@ -31,7 +31,7 @@ gcc10Stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };

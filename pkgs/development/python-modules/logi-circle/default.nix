@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "evanjd";
     repo = "python-logi-circle";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Q+uoaimJjn6MiO3jXGYyZ6cS0tqI06Azkq1QbNq2FN8=";
   };
 

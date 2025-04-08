@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-vorbis";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iCoE7I70wAp4n4XfETVKeaob2811E97/e6144bY/nqk=";
   };
 

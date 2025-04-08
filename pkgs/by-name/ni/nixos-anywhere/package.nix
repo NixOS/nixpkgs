@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-anywhere";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-7kHxBQuzb7gcHzVmLGljJ4kF6BDDSYVCIxYFDmYPnAo=";
   };
   nativeBuildInputs = [ makeWrapper ];

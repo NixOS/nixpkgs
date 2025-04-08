@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "fltrdr";
     owner = "octobanana";
-    tag = version;
+    rev = version;
     sha256 = "1vpci7vqzcpdd21zgigyz38k77r9fc81dmiwsvfr8w7gad5sg6sj";
   };
 

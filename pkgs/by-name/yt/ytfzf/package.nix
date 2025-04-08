@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rwCVOdu9UfTArISt8ITQtLU4Gj2EZd07bcFKvxXQ7Bc=";
   };
 

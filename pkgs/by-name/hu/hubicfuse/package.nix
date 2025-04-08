@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TurboGit";
     repo = "hubicfuse";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1x988hfffxgvqxh083pv3lj5031fz03sbgiiwrjpaiywfbhm8ffr";
   };
 

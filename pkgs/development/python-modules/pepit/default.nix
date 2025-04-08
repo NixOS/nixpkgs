@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PerformanceEstimation";
     repo = "PEPit";
-    tag = version;
+    rev = version;
     hash = "sha256-Gdymdfi0Iv9KXBNSbAEWGYIQ4k5EONnbyWs+99L5D/A=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "opensm";
-    tag = version;
+    rev = version;
     sha256 = "sha256-/bqo5r9pVt7vg29xaRRO/9k21AMlmoe2327Ot5gVIwc=";
   };
 

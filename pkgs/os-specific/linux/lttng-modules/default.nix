@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cEiv1EjsEvyreRERrCGKKpJdA1IKvuyVmgA7S3EkEnU=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "openresolv";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-rpfzAIzuiO+QTFhN+tHND+OQOyX/GUPvLLX3CSSwqA4=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "beaupy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tN78OV0Ks1MIdqVh8yisTgK4dOaKqYlZxvIoCa44eAI=";
   };
 

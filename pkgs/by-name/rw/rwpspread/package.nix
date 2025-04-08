@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1i1675OiyleCXcc/uN95kyY7m5ht/rS3UKY7EmuSsrk=";
   };
   useFetchCargoVendor = true;

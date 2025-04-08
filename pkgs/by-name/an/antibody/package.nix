@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getantibody";
     repo = "antibody";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-If7XAwtg1WqkDkrJ6qYED+DjwHWloPu3P7X9rUd5ikU=";
   };
 

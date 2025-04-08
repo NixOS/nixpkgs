@@ -14,7 +14,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-php-instrumentation";
-    tag = version;
+    rev = version;
     hash = "sha256-frFnL49tF74cDKdlTJorOOrs8rNgFMZdMdVmqsyO3cI=";
   };
 

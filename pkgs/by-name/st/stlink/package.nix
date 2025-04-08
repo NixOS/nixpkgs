@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stlink-org";
     repo = "stlink";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-hlFI2xpZ4ldMcxZbg/T5/4JuFFdO9THLcU0DQKSFqrw=";
   };
 

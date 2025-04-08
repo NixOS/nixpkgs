@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-freeze-filter";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-fVrfGqwce4oFYdWGElXMsXHO1AzQ/mhfBmZL1mPdT3I=";
     fetchSubmodules = true;
   };

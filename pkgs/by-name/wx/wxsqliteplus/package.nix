@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "guanlisheng";
     repo = "wxsqliteplus";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gyH1Wlmg9xQy7xm7rhKZa7BFTFFN4JQHp3CHmzMkVOg=";
   };
 

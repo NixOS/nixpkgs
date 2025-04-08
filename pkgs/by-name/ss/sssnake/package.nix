@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "angeljumbo";
     repo = "sssnake";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
   };
   postPatch = ''

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-rNcEPE1BoCltpV5A3ugc7NI2ASfLXuPC9NNbc4Gn8BA=";
   };
 

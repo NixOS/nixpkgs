@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "hpack";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vbxfDlRDwMXuzkPO0oceCpSz1ekLNxLSj4iocdHo680=";
   };
 

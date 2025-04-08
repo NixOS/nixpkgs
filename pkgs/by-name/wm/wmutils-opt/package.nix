@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wmutils";
     repo = "opt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0gd05qsir1lnzfrbnfh08qwsryz7arwj20f886nqh41m87yqaljz";
   };
 

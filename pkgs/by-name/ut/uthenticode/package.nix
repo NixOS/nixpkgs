@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "uthenticode";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NGVOGXMRlgpSRw56jr63rJc/5/qCmPjtAFa0D21ogd4=";
   };
 

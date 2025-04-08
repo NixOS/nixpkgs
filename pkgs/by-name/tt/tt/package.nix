@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lemnos";
     repo = "tt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vKh19xYBeNqvVFilvA7NeQ34RM5VnwDs+Hu/pe3J0y4=";
   };
 

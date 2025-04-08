@@ -33,7 +33,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GL0vnrNz9vcdybubYIjiK0tDH3L4lNWNo+rAAWv7d8o=";
   };
 

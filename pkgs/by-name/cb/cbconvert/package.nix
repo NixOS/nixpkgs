@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gen2brain";
     repo = "cbconvert";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-C2Eox6fpKS0fPB7KFgBn62HKbWYacSVMJK0CkT6+FBU=";
   };
 

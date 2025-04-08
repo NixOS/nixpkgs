@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "astarte-platform";
     repo = "astartectl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-T4/lkeipE7GWq1zTxkoV3MfADlduFKtGuB/dsI4YZZw=";
   };
 

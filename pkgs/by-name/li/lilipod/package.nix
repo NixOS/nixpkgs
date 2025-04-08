@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "lilipod";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PqeYNLr4uXe+H+DLENlUpl1H2wV6VJvDoA+MVP3SRqY=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
-    tag = version;
+    rev = version;
     sha256 = "sha256-17vvC6J0VdXouGfX4k1kCVRlkXbNSX3AT8QIY8uKDUE=";
   };
 

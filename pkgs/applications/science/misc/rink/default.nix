@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tiffany352";
     repo = "rink-rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2+ZkyWhEnnO/QgCzWscbMr0u5kwdv2HqPLjtiXDfv/o=";
   };
 

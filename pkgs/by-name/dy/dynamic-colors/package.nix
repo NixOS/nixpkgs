@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "peterhoeg";
     repo = "dynamic-colors";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-jSdwq9WwYZP8MK6z7zJa0q93xfanr6iuvAt8YQkQxxE=";
   };
 

@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atsb";
     repo = "xmltoman";
-    tag = version;
+    rev = version;
     hash = "sha256-EmFdGIeBEcTY0Pqp7BJded9WB/DaXWcMNWh6aTsZlLg=";
   };
 

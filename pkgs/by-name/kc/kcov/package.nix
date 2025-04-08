@@ -22,7 +22,7 @@ let
     src = fetchFromGitHub {
       owner = "SimonKagstrom";
       repo = "kcov";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-hRJYuHNSXyRoUDBF/yIPXPcBBxZoTO5cgoB2tBhKPwY=";
     };
 

@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "aclap-dev";
     repo = "vdhcoapp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8xeZvqpRq71aShVogiwlVD3gQoPGseNOmz5E3KbsZxU=";
   };
 

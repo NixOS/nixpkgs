@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
-    tag = version;
+    rev = version;
     hash = "sha256-SW9ZW6IcxG+KonfgRHnCRo7P9KqfDCrS5MjnRKHvN1k=";
   };
 

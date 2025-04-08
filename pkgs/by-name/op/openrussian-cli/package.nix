@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rhaberkorn";
     repo = "openrussian-cli";
-    tag = version;
+    rev = version;
     hash = "sha256-lu13Dd3D4P/7Yol1ixt86BHk86y8DMsbFzfi244+KuY=";
   };
 

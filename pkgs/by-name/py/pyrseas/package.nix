@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "perseas";
       repo = "pgdbconn";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "09r4idk5kmqi3yig7ip61r6js8blnmac5n4q32cdcbp1rcwzdn6z";
     };
 
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "perseas";
     repo = "Pyrseas";
-    tag = version;
+    rev = version;
     sha256 = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
   };
 

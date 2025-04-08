@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "assetnote";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vIYPpkbqyk0zH10DGp2FF0aI4lFpsZavulBIiR/3kiA=";
   };
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ADBeveridge";
     repo = "raider";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fOv4Y5kBbZazFNkPrLS3D7LMLLvT/kIYmsCezsl/fxQ=";
   };
 

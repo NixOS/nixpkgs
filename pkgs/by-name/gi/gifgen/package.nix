@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lukechilds";
     repo = "gifgen";
-    tag = version;
+    rev = version;
     hash = "sha256-ni9RL4LyMejmu8vm5HC8WSTqAPQMBQNRDOZ4ZfvrkSU=";
   };
 

@@ -17,7 +17,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "CastagnaIT";
     repo = namespace;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tve7E7dK60BIHETdwt9hD3/5eEdJB6c6rhw4oDoLAKM=";
   };
 
