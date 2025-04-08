@@ -6,49 +6,56 @@
   wireguard-go,
 }:
 
-buildGoModule rec {
-  pname = "wireguard-go";
-  version = "0.0.20230223";
+buildGoModule (
+  finalAttrs:
+  let
+    rev = "12269c2761734b15625017d8565745096325392f";
+    shortVer = "${finalAttrs.version} (${lib.substring 0 7 rev})";
+  in
+  {
+    pname = "wireguard-go";
+    version = "0-unstable-2023-12-11";
 
-  src = fetchzip {
-    url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
-    sha256 = "sha256-ZVWbZwSpxQvxwySS3cfzdRReFtHWk6LT2AuIe10hyz0=";
-  };
+    src = fetchzip {
+      url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${rev}.tar.xz";
+      hash = "sha256-br7/dwr/e4HvBGJXh+6lWqxBUezt5iZNy9BFqEA1bLk=";
+    };
 
-  postPatch = ''
-    # Skip formatting tests
-    rm -f format_test.go
-  '';
+    postPatch = ''
+      # Skip formatting tests
+      rm -f format_test.go
 
-  vendorHash = "sha256-i6ncA71R0hi1SzqCLphhtF3yRAHDmOdYJQ6pf3UDBg8=";
+      # Inject version
+      printf 'package main\n\nconst Version = "${shortVer}"' > version.go
+    '';
 
-  subPackages = [ "." ];
+    vendorHash = "sha256-RqZ/3+Xus5N1raiUTUpiKVBs/lrJQcSwr1dJib2ytwc=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+    subPackages = [ "." ];
 
-  postInstall = ''
-    mv $out/bin/wireguard $out/bin/wireguard-go
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    package = wireguard-go;
-    version = "v${version}";
-  };
-
-  meta = with lib; {
-    description = "Userspace Go implementation of WireGuard";
-    homepage = "https://git.zx2c4.com/wireguard-go/about/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      kirelagin
-      zx2c4
+    ldflags = [
+      "-s"
+      "-w"
     ];
-    mainProgram = "wireguard-go";
-    # Doesn't build with Go toolchain >1.22, build error:
-    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'.
-    broken = true;
-  };
-}
+
+    postInstall = ''
+      mv $out/bin/wireguard $out/bin/wireguard-go
+    '';
+
+    passthru.tests.version = testers.testVersion {
+      package = wireguard-go;
+      version = "v${shortVer}";
+    };
+
+    meta = with lib; {
+      description = "Userspace Go implementation of WireGuard";
+      homepage = "https://git.zx2c4.com/wireguard-go/about/";
+      license = licenses.mit;
+      maintainers = with maintainers; [
+        kirelagin
+        zx2c4
+      ];
+      mainProgram = "wireguard-go";
+    };
+  }
+)
