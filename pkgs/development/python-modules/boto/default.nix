@@ -4,8 +4,8 @@
   fetchPypi,
   python,
   pythonAtLeast,
-  nose,
-  mock,
+  # nose,
+  # mock,
   requests,
   httpretty,
 }:
@@ -37,13 +37,16 @@ buildPythonPackage rec {
     substituteInPlace boto/mws/connection.py --replace 'import collections' 'import collections.abc as collections'
   '';
 
+  # Depends on nose testing framework, which is obsolete and removed
+  doCheck = false;
+
   checkPhase = ''
     ${python.interpreter} tests/test.py default
   '';
 
   nativeCheckInputs = [
-    nose
-    mock
+    # nose
+    # mock
   ];
   propagatedBuildInputs = [
     requests
