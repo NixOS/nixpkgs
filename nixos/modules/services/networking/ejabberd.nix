@@ -15,6 +15,8 @@ let
 
   ectl = ''${cfg.package}/bin/ejabberdctl ${
     lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
+  } ${
+    lib.optionalString (cfg.configDir != null) "--config-dir ${lib.escapeShellArg cfg.configDir}"
   } --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
@@ -46,6 +48,13 @@ in
         type = lib.types.str;
         default = "ejabberd";
         description = "Group under which ejabberd is ran";
+      };
+
+      configDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/etc/ejabberd";
+        description = "Location of the configuration directory of ejabberd";
       };
 
       spoolDir = lib.mkOption {
