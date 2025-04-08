@@ -3087,10 +3087,6 @@ with pkgs;
 
   cocoapods-beta = lowPrio (callPackage ../development/tools/cocoapods { beta = true; });
 
-  cocom = callPackage ../tools/networking/cocom {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   compass = callPackage ../development/tools/compass { };
 
   cone = callPackage ../development/compilers/cone {
