@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nothub";
     repo = "asciiquarium";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-zQyVIfwmhF3WsCeIZLwjDufvKzAfjLxaK2s7WTedqCg=";
   };
 

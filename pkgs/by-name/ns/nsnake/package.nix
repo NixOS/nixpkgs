@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alexdantas";
     repo = "nSnake";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-MixwIhyymruruV8G8PjmR9EoZBpaDVBCKBccSFL0lS8=";
   };
 

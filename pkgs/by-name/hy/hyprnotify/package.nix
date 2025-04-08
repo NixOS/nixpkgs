@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "codelif";
     repo = "hyprnotify";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+vBOHXaCWEoQ/Lk9VwP55XqlhSzSS9hoVg4FQOj8dIU=";
   };
 

@@ -44,7 +44,7 @@ let
     src = fetchFromGitHub {
       owner = "eth-p";
       repo = "bat-extras";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-6IRAKSy5f/WcQZBcJKVSweTjHLznzdxhsyx074bXnUQ=";
       fetchSubmodules = true;
     };

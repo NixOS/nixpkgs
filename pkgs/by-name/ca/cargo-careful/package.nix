@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RalfJung";
     repo = "cargo-careful";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pYfyqsS+bGwSP6YZAtI+8iMXdID/hrCiX+cuYoYiZmc=";
   };
 

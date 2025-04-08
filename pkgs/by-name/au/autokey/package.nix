@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 

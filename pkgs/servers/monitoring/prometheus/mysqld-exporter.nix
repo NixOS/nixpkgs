@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "mysqld_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vkbjOWVV79fDBdCa6/ueY9QhPDkFCApR/EZn20SYHYU=";
   };
 

@@ -29,7 +29,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YFItnwU08g4pVo4OOHscRmPRVXyr+R9YWYTxhSzd7iI=";
   };
 

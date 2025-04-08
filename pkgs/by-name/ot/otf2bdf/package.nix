@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "otf2bdf";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HK9ZrnwKhhYcBvSl+3RwFD7m/WSaPkGKX6utXnk5k+A=";
   };
 

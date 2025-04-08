@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gabutakut";
     repo = "gabutdm";
-    rev = version;
+    tag = version;
     hash = "sha256-FKOgoJ0QreYk3PgvUoQMczC3tXkthw86/Y3pnm6tTQk=";
   };
 

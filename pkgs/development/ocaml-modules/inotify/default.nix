@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "ocaml-inotify";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Vg9uVIx6/OMS1WoJIHwZbSt5ZyFy+Xgw5167FJWGslg=";
   };
 

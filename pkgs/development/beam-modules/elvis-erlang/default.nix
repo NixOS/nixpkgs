@@ -20,7 +20,7 @@ rebar3Relx rec {
   src = fetchFromGitHub {
     inherit owner repo;
     sha256 = "13QM6UbH+1PxzhY/ufi5PEP2pKqSl5+g6tMvKmOUMb0=";
-    rev = version;
+    tag = version;
   };
   beamDeps = builtins.attrValues (
     import ./rebar-deps.nix {

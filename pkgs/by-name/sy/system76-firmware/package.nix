@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-firmware";
-    rev = version;
+    tag = version;
     sha256 = "sha256-6c2OTHCTIYl/ezkWjmyb60FAdasOrV9hjd0inDc44wI=";
   };
 

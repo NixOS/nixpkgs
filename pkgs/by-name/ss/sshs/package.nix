@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = "sshs";
-    rev = version;
+    tag = version;
     hash = "sha256-8tIIpGEQBXfLQ/Bok4KrpDGwoYhIQz/ylg6fUc6mBdc=";
   };
 

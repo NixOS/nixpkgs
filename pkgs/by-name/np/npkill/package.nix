@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "voidcosmos";
     repo = "npkill";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0pouc+5kl5bjaNYz81OD5FZppYXKdyMBRvEq/DedEV4=";
   };
 

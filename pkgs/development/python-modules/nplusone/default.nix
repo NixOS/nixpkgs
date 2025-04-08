@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmcarp";
     repo = "nplusone";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0qdwpvvg7dzmksz3vqkvb27n52lq5sa8i06m7idnj5xk2dgjkdxg";
   };
 

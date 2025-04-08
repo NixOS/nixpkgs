@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
   };
 

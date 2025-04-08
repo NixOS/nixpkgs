@@ -12,7 +12,7 @@ gccStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alt-romes";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
   };
 

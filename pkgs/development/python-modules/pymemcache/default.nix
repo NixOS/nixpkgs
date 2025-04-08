@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pinterest";
     repo = "pymemcache";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WgtHhp7lE6StoOBfSy9+v3ODe/+zUC7lGrc2S4M68+M=";
   };
 

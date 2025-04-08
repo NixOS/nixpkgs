@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudentity";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-axCzPCYPn6T8AGqE92Yf/aVJ78Wl004Ts4YebSWYa6U=";
   };
 

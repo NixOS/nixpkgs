@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-5bGiePD0PwTvVEdVDzr6hIVtLwwF2mPa8ywLH1u8hLk=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "ssh-tpm-agent";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yK7G+wZIn+kJazKOFOs8EYlRWZkCQuT0qZfmdqbcOnM=";
   };
 

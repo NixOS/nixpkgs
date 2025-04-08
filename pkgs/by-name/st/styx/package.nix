@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "styx-static";
     repo = "styx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-f6iA/nHpKnm3BALoQq8SzdcSzJLCFSferEf69SpgD2Y=";
   };
 

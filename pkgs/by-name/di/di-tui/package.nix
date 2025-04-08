@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "acaloiaro";
     repo = "di-tui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jX+2wdnkJPEtCWoMNbwgn3c+LsEktYa5lIfSXY0Wsew=";
   };
 

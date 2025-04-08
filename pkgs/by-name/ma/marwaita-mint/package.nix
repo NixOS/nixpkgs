@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-mint";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Bvo4IRE1yXu4SDvyDY8mrMyZivqYEVQwkdSH+UZruSI=";
   };
 

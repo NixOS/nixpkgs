@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alexbers";
     repo = "mtprotoproxy";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-tQ6e1Y25V4qAqBvhhKdirSCYzeALfH+PhNtcHTuBurs=";
   };
 

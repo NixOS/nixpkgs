@@ -156,7 +156,7 @@ rec {
     src = fetchFromGitHub {
       owner = "jonls";
       repo = "redshift";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
     };
 
@@ -185,7 +185,7 @@ rec {
     src = fetchFromGitLab {
       owner = "chinstrap";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-EdVLBBIEjMu+yy9rmcxQf4zdW47spUz5SbBDbhmLjOU=";
     };
 

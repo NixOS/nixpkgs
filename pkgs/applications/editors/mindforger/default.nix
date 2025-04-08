@@ -18,7 +18,7 @@ let
     mindforger = fetchFromGitHub {
       owner = "dvorka";
       repo = "mindforger";
-      rev = version;
+      tag = version;
       sha256 = "sha256-+8miV2xuQcaWGdWCEXPIg6EXjAHtgD9pX7Z8ZNhpMjA=";
     };
     cmark-gfm = fetchFromGitHub {

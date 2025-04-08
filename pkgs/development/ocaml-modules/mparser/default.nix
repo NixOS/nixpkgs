@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "murmour";
     repo = "mparser";
-    rev = version;
+    tag = version;
     sha256 = "16j19v16r42gcsii6a337zrs5cxnf12ig0vaysxyr7sq5lplqhkx";
   };
 

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mbrlabs";
     repo = "Lorien";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mPv/3hyLGF3IUy6cKfGoABidIsyw4UfmhfhS4AD72K8=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "CSXCAD";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
   };
 

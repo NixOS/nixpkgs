@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbello";
     repo = "memory-tempfile";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4fz2CLkZdy2e1GwGw/afG54LkUVJ4cza70jcbX3rVlQ=";
   };
 

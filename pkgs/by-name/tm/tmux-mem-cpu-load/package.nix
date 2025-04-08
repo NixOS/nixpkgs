@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thewtex";
     repo = "tmux-mem-cpu-load";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-8QUcEbgk3DSsWt9TRHHtDhQ7a1hkK8RZEX+0d3h/c0w=";
   };
 

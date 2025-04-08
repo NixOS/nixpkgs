@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hZ8jkIbNY2z4M7sHCYq6vVacetThcoYPJjkr8PFQmQA=";
   };
 

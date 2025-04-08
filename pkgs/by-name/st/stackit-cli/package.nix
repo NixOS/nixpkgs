@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stackitcloud";
     repo = "stackit-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EPjQrPt6m7yOFgYqHOaWAZN7CjlsOgl2jsEuRB8+1fE=";
   };
 

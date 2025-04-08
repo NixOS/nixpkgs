@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tuya";
     repo = "tuya-iot-python-sdk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KmSVa71CM/kNhzE4GznaxISGmIaV+UcTSn3v+fmxmrQ=";
   };
 

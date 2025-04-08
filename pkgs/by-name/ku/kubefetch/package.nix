@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jkulzer";
     repo = "kubefetch";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-1NbbQ9f81DbfvpGayhMYdOTOZrDg2hdZi+qUOr2mntY=";
   };
 

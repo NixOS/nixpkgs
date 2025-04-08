@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-history-substring-search";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0vjw4s0h4sams1a1jg9jx92d6hd2swq4z908nbmmm2qnz212y88r";
   };
 

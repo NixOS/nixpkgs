@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_home_control_api";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4AyC1DDYtKl8SwJf75BbzoOAhbZXmBZ05ma9YmLzksM=";
   };
 

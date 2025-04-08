@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dino";
     repo = "libomemo-c";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GvHMp0FWoApbYLMhKfNxSBel1xxWWF3TZ4lnkLvu2s4=";
   };
 

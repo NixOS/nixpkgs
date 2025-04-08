@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LXuURq+MSSkd8+VzhltX2VqKsU3PWcQLMQTqqS5oLMg=";
   };
 

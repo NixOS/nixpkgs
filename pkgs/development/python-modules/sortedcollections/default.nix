@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-sortedcollections";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GkZO8afUAgDpDjIa3dhO6nxykqrljeKldunKMODSXfg=";
   };
 

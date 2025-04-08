@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "john30";
     repo = "ebusd";
-    rev = version;
+    tag = version;
     sha256 = "sha256-+3QOB7/yCgR4j2UGfhWQ5s5sldoNfWSzX7qa//FHeJ4=";
   };
 

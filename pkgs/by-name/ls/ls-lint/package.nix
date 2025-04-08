@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "loeffel-io";
     repo = "ls-lint";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-QAUmQAa1gNS2LLyFmOsydOVKZoZMWzu9y7SgbIq1ESk=";
   };
 

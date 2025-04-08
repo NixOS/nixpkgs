@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0kcqz13vzpy24dhmrx9hbs6s7hqb8y305vciznm15h277sabpmw9";
   };
 

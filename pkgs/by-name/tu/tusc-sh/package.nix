@@ -16,7 +16,7 @@ let
     src = fetchFromGitHub {
       owner = "adhocore";
       repo = "tusc.sh";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-EKlcE+rsVh5lUd8dQzAwXDjiUvrrud5yWfF6JWSZQFE=";
     };
 

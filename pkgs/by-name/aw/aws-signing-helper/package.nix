@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "rolesanywhere-credential-helper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CIUhO+5gMIknB3NwYwaBbtZEkW2x/U2Bi9Qbqn9bLuc=";
   };
   vendorHash = "sha256-QKKgBIocJoGbfs78PxNBLBi4KTDPtSuhzvsb6OBhNWQ=";

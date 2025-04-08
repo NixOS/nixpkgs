@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zAFDbSbNvFtQeJhyeG1tgFwwFgluiX1Y5BmSUsE4z3c=";
   };
 

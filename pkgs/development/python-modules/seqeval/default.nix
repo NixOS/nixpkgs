@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chakki-works";
     repo = "seqeval";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0qv05gn54kc4wpmwnflmfqw4gwwb8lxqhkiihl0pvl7s2i7qzx2j";
   };
 

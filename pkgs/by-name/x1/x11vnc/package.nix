@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "x11vnc";
-    rev = version;
+    tag = version;
     sha256 = "1g652mmi79pfq4p5p7spaswa164rpzjhc5rn2phy5pm71lm0vib1";
   };
 

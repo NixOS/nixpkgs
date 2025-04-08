@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4IToXaOEMfgEh9mXuN7nRn+8l8T6+mzVWYvfsYN4ZIM=";
   };
 

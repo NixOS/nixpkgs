@@ -33,7 +33,7 @@ let
   src = fetchFromGitHub {
     owner = "synfig";
     repo = "synfig";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D+FUEyzJ74l0USq3V9HIRAfgyJfRP372aEKDqF8+hsQ=";
   };
 

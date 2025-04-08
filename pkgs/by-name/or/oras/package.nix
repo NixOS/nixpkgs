@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iSmoD2HhzVrWQBaZ7HaIjcPmybl4JTVeVVfbn29i91Q=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "item_synchronizer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+mviKtCLlJhYV576Q07kcFJvtls5qohKSrqZtBqE/s4=";
   };
 

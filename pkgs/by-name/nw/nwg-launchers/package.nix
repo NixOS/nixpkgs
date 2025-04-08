@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-launchers";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+waoJHU/QrVH7o9qfwdvFTFJzTGLcV9CeYPn3XHEAkM=";
   };
 

@@ -16,7 +16,7 @@ flutter327.buildFlutterApplication {
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
-    rev = version;
+    tag = version;
     hash = "sha256-SDzKB5KLHkJ3xcJY67TNBXDiDlBOApKrh4x0OZR/K/M=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;

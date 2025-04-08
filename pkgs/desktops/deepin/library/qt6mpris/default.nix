@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "deepin-community";
     repo = "qt6mpris";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-PCdA9q/txaL2Fbr2/4+Z7L4zxWeULl3bq8MVH3i1g3g=";
   };
 

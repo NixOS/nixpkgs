@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "xdg-desktop-portal-shana";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9uie6VFyi7sO8DbthUTgpEc68MvvLA+bUwyV/DSpKkE=";
   };
 

@@ -26,7 +26,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pokerth";
     repo = "pokerth";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-j4E3VMpaPqX7+hE3wYRZZUeRD//F+K2Gp8oPmJqX5FQ=";
   };
 

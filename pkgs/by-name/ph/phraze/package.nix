@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sts10";
     repo = "phraze";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4RdPN2l0tQbxgTVxwdl0APYD8h9DrF9f5MIQkcozt48=";
   };
 

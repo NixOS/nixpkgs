@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-extras";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-SF/UF84K9kNtLHO9FDuIFdQId0NfbmRiRZiPrOKvE9o=";
   };
 

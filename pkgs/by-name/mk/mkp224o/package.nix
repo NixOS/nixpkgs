@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OL3xhoxIS1OqfVp0QboENFdNH/e1Aq1R/MFFM9LNFbQ=";
   };
 

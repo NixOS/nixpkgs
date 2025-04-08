@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "boa";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ROzdOanfHNPwHXA0SzU2fpuBonbDbgDqH+ZgOjwK/tg=";
     fetchSubmodules = true;
   };

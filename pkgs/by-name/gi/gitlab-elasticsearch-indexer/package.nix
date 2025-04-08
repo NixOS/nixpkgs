@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jrUNOxqc/k4a/34nHEatGnBorTlh/EuHnEs/GfFRUcI=";
   };
 

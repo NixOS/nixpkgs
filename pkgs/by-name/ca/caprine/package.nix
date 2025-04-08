@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "caprine";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yfCilJ62m7nKe8B+4puwAbNgr2g1P7HaKIhFINdv0/k=";
   };
 

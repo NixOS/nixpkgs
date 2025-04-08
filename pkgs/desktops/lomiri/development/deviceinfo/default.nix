@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/deviceinfo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-wTl+GgNiWzJxGLdU2iMH94UhQ40gjAPTVErouQIGXOA=";
   };
 

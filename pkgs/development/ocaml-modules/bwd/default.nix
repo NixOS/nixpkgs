@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = "ocaml-bwd";
-    rev = version;
+    tag = version;
     hash = "sha256-rzn0U/D6kPNsH5hBTElc3d1jfKbgKbjA2JHicpaJtu4=";
   };
 

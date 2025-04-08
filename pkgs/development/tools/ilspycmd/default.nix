@@ -15,7 +15,7 @@ buildDotnetModule (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7cPXFaEKr76GtqcNsKx7tstRUeTpSTF8ggxbyEnQa9M=";
   };
 

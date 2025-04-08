@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tinyobjloader";
     repo = "tinyobjloader";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BNffbicnLTGK2GQ2/bB328LFU9fqHxrpAVj2hJaekWc=";
   };
 

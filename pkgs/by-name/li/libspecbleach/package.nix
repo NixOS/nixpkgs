@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = "libspecbleach";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
   };
 

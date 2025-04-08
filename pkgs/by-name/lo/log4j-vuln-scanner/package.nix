@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hillu";
     repo = "local-log4j-vuln-scanner";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-YMD2233EdrrF1SLjwiRcNr53b7Rf5Tu8CZC43QhSY7c=";
   };
 

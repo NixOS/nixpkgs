@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Borealis-cursors";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-1qgyU0Npbx/AgqGbmF/BWtlVC0KsKtgC48SL/HtkDrk=";
   };
 

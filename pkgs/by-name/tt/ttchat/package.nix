@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "atye";
     repo = "ttchat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ezlqji/j6nyCzc1jrfB1MZR4ugKAa5D5CL6wfuP6PsY=";
   };
 

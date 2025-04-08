@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hackerschoice";
     repo = "gsocket";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7ph7YaY8rbfzvEh1ABgl3Jg15d6WBP4pywFn/nXjPKY=";
   };
 

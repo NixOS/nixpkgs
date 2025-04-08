@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flasgger";
     repo = "flasgger";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cYFMKZxpi69gVWqyZUltCL0ZwcfIABNsJKqAhN2TTSg=";
   };
 

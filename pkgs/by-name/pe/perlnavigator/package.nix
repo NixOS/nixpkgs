@@ -9,7 +9,7 @@ let
   src = fetchFromGitHub {
     owner = "bscan";
     repo = "PerlNavigator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CNsgFf+W7YQwAR++GwfTka4Cy8woRu02BQIJRmRAxK4=";
   };
   browser-ext = buildNpmPackage {

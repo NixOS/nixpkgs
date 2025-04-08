@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pojntfx";
     repo = "multiplex";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+KvFBzoIYmSbuazstJae8lC0xdPtXLhFWawlc+iGGoU=";
   };
 

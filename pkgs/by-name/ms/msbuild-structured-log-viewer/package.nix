@@ -19,7 +19,7 @@ buildDotnetModule (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "KirillOsenkov";
     repo = "MSBuildStructuredLog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-09+Jo5nSNOFX7jTzMhetHHjTJdxlEZH4JWzv84stUDE=";
   };
 

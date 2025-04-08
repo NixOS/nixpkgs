@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "digitallyinduced";
     repo = "ihp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DmaIr9kF+TG24wVNPVufxC74TYMCLziLYS9hCZHBDTc=";
   };
 

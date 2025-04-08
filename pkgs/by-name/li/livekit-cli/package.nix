@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-J5tg3nm2pEemEZcIpObcxH+G4ByzvUtoSyy92CcWr6M=";
   };
 

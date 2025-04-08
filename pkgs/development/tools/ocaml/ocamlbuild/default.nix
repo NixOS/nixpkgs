@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "ocamlbuild";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash =
       {
         "0.14.3" = "sha256-dfcNu4ugOYu/M0rRQla7lXum/g1UzncdLGmpPYo0QUM=";

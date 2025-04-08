@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ulzcsFAiZDg8nABQXNB2/MS7lZdK3czGHLKgKDWS15E=";
     fetchSubmodules = true;
   };

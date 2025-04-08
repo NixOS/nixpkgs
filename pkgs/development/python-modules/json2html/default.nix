@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "softvar";
     repo = "json2html";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Y+mwJ0p4Q2TKMU8qQvuvo08RiMdsReO7psgXaiW9ntk=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "charles-lunarg";
     repo = "vk-bootstrap";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-X3ANqfplrCF1R494+H5/plcwMH7rbW6zpLA4MZrYaoE=";
   };
 

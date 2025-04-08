@@ -18,7 +18,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mmottl";
     repo = "gsl-ocaml";
-    rev = version;
+    tag = version;
     hash = "sha256-h1jO2RheBBzxiBgig2yEPk4YyBaZxStt5f+KNZqHdBo=";
   };
 

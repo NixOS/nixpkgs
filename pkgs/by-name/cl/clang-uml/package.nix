@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bkryza";
     repo = "clang-uml";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-mY6kJnwWLgCeKXSquNTxsnr4S3bKwedgiRixzyLWTK8=";
   };
 

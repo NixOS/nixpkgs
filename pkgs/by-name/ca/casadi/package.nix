@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-WumXAWO65XnNQqHMqAwfj2Y+KGOVTWx95qIuyE1M9us=";
   };
 

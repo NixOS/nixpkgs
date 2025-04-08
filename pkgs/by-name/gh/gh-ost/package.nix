@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-ost";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TTc69dWasqMVwwJNo+M9seMKEWgerZ2ZR7dwDfM1gWI=";
   };
 

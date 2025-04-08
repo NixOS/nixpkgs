@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-scheduler";
-    rev = version;
+    tag = version;
     hash = "sha256-5GiHmu++YRCewDHm/qxKmQwDIAZwlW5Eya/fDriVSdA=";
   };
   useFetchCargoVendor = true;

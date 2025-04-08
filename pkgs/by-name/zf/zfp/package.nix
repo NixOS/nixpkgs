@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "zfp";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
   };
 

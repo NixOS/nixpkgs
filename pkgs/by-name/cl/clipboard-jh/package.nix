@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
-    rev = version;
+    tag = version;
     hash = "sha256-3SloqijgbX3XIwdO2VBOd61or7tnByi7w45dCBKTkm8=";
   };
 

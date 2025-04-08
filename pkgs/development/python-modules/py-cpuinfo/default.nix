@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "workhorsy";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Q5u0guAqDVhf6bvJTzNvCpWbIzjxxAjE7s0OuXj9T4Q=";
   };
 

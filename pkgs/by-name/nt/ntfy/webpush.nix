@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dschep";
     repo = "ntfy-webpush";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1dxlvq3glf8yjkn1hdk89rx1s4fi9ygg46yn866a9v7a5a83zx2n";
   };
 

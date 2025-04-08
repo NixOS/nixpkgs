@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stargateaudio";
     repo = "libcds";
-    rev = version;
+    tag = version;
     sha256 = "sha256-THThEzS8gGdwn3h0EBttaX5ljZH9Ma2Rcg143+GIdU8=";
   };
 

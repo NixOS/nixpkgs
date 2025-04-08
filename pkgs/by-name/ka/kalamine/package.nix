@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "OneDeadKey";
     repo = "kalamine";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eDOwoI7S0l48oOWWDaBbDlC0A8RtPEA+FDCHpPur0OQ=";
   };
 

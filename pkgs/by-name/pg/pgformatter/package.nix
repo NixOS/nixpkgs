@@ -14,7 +14,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4KtrsckO9Q9H0yIM0877YvWaDW02CQVAQiOKD919e9w=";
   };
 

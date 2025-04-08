@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "genome";
     repo = "somatic-sniper";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0lk7p9sp6mp50f6w1nppqhr40fcwy1asw06ivw8w8jvvnwaqf987";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bytbox";
     repo = "pommed-light";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "18fvdwwhcl6s4bpf2f2i389s71c8k4g0yb81am9rdddqmzaw27iy";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jfeick";
     repo = "beefi";
-    rev = version;
+    tag = version;
     sha256 = "1180avalbw414q1gnfqdgc9zg3k9y0401kw9qvcn51qph81d04v5";
   };
 

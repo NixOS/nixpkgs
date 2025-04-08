@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "redsiege";
     repo = "EyeWitness";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nSPpPbwqagc5EadQ4AHgLhjQ0kDjmbdcwE/PL5FDL4I=";
   };
 

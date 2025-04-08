@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kuzmoyev";
     repo = "google-calendar-simple-api";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ye8mQSzgaEZx0vUpt5xiMrJTFh2AmSB7ZZlKaEj/YpM=";
   };
 

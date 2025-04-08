@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitLab {
     owner = "gardenappl";
     repo = "readability-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pvAp3ZJ8/FPhrSMC8B4U1m5zuBNRP/HcsXkrW6QYgSQ=";
   };
 

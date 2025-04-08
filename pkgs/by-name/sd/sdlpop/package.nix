@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NagyD";
     repo = "SDLPoP";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-UI7NfOC/+druRYL5g2AhIjTPEq4ta1qEThcxgyrFjHY=";
   };
 

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bpy4G+f3NJ2iVsycPluV+98at0G2wlp7t5cPEMGM90s=";
   };
 

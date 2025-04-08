@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FXq6AOq1tUM05++fkzowApbLnlgeS5ZJ+UmypHrF11g=";
   };
 

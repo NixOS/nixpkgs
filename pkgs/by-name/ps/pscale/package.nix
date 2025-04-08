@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-aWml3iTcci1V8RkiCrvv+E7zmW5JJCDzDNv2RaDhjAg=";
   };
 

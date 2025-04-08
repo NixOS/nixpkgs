@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "misterdanb";
     repo = "avizo";
-    rev = version;
+    tag = version;
     sha256 = "sha256-Vj8OrNlAstl0AXTeVAPdEf5JgnAmJwl9s3Jdc0ZiYQc=";
   };
 

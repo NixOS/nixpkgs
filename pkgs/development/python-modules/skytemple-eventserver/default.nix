@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-PWLGPORNprTfG+jgXI1sxyVkRTwSEib4SZhPdOBchwE=";
   };
 

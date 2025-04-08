@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YoLi4wxBK9TFTtZRm+2N8HO5ZiC3V2GMqKFKKLHq++s=";
   };
 

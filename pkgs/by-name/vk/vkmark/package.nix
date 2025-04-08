@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vkmark";
     repo = "vkmark";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
   };
 

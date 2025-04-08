@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "x42";
     repo = "ltc-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0vp25b970r1hv5ndzs4di63rgwnl31jfaj3jz5dka276kx34q4al";
   };
 

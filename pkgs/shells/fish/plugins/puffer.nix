@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "nickeb96";
     repo = "puffer-fish";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
   };
 

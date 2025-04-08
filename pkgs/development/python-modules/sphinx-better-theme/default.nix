@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irskep";
     repo = "sphinx-better-theme";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "07lhfmsjcfzcchsjzh6kxdq5s47j2a6lb5wv3m1kmv2hcm3gvddh";
   };
 

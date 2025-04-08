@@ -31,7 +31,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yC/TlAJa71hbPYYuqPV+k3syGuo/VhnNjXmmxh47ySQ=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SimonTheLeg";
     repo = "konf-go";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GSrR2uLeGodmE1egRtvTyWhJckYUnI97n7dnmjPvu3k=";
   };
 

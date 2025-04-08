@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "pwru";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3lIKbzwPX6okJT9CeErX5/innUK3VqnnbWPpvlSN+6U=";
   };
 

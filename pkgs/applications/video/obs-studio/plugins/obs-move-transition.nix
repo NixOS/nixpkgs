@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
-    rev = version;
+    tag = version;
     sha256 = "sha256-BCivYK18T4b+lRo6Qf9qFwmjAyjCPZDekQVi03QBLHc=";
   };
 

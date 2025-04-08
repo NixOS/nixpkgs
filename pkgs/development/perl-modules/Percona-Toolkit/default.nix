@@ -16,7 +16,7 @@ buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-toolkit";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "084ldpskvlfm32lfss5qqzm5y9b8hf029aa4i5pcnzgb53xaxkqx";
   };
 

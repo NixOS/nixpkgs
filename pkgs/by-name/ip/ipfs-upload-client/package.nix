@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "infura";
     repo = "ipfs-upload-client";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BT/LC+PKzAjxM7P2Iis28OlJmrZRbCwfd6kPEL3oaaI=";
   };
 

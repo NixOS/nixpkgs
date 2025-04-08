@@ -36,7 +36,7 @@ clangStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gxkko7LFyJNlxpTS+CWOd/p9x/778/kNIXfpDGiKM2A=";
   };
 

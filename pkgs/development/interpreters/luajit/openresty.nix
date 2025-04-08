@@ -11,7 +11,7 @@ callPackage ./default.nix rec {
   src = fetchFromGitHub {
     owner = "openresty";
     repo = "luajit2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kMHE4iQtm2CujK9TVut1jNhY2QxYP514jfBsxOCyd4s=";
   };
 

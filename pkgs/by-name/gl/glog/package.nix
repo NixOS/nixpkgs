@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
 

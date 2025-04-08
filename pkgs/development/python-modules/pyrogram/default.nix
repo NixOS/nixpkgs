@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyrogram";
     repo = "pyrogram";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-W/t3v5q0s+ba0Uly+JUaJl75uDQGeFaj2zDKGRMIMow=";
   };
 

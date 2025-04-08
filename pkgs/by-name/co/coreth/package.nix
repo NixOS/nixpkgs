@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YUqrbTjye0eNNuf9hGQXtMidRq6y3m3pSKzIRVECy9E=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "rpcsvc-proto";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
   };
 

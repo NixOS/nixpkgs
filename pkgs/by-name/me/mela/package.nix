@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vbertone";
     repo = "MELA";
-    rev = version;
+    tag = version;
     sha256 = "01sgd4mwx4n58x95brphp4dskqkkx8434bvsr38r5drg9na5nc9y";
   };
 

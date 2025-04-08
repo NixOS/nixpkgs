@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1m2+etJG+33fPTxBF8qT/U9WiZGcSn9r0WlK5PDL6/Q=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spotify";
     repo = "git-test";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "01h3f0andv1p7pwir3k6n01v92hgr5zbjadfwl144yjw9x37fm2f";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hadrien-psydk";
     repo = "pngoptimizer";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1hbgf91vzx46grslfdx86smdvm6gs6lq9hpa3bax9xfbsknxi0i7";
   };
 

@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "laughedelic";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Oou2IeNNAqR00ZT3bss/DbhrJjGeMsn9dBBYhgdafBw=";
   };
 

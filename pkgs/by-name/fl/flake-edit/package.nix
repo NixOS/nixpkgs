@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "flake-edit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7n8WANm9AijZYI5nlnevLI+aZtV55teroeQIEld7tkE=";
   };
 

@@ -6,7 +6,7 @@ rec {
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MLwhqLPWdjg1ZUZP5Sig37RgZEeHlU+DyELpyMif6iY=";
   };
 

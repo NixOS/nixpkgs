@@ -21,7 +21,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     src = fetchFromGitHub {
       owner = "OCamlPro";
       repo = "ocp-build";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "1641xzik98c7xnjwxpacijd6d9jzx340fmdn6i372z8h554jjlg9";
     };
 

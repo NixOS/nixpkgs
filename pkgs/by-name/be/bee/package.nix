@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-44mjSeV8imatPpNkRSA5Uewunvkc5j6Eo+gKya+dqzE=";
   };
 

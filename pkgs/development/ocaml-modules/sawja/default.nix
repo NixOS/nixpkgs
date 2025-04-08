@@ -26,7 +26,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
     src = fetchFromGitHub {
       owner = "javalib-team";
       repo = pname;
-      rev = version;
+      tag = version;
       hash = "sha256-G1W8/G0TEcldnFnH/NAb9a6ZSGGP2fWTM47lI8bBHnw=";
     };
 

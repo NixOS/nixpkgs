@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jsummers";
     repo = "imageworsener";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-1f5x8Ph994Kkjo38NudXL+UF0fpR8BmZfaGPxc8RENU=";
   };
 

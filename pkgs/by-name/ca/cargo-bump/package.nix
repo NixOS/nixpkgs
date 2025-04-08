@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rustadopt";
     repo = "cargo-bump";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PhA7uC2gJcBnUQPWgZC51p/KTSxSGld3m+dd6BhW6q8=";
   };
 

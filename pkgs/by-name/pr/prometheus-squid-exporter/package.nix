@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "boynux";
     repo = "squid-exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-low1nIL7FbIYfIP7KWPskAQ50Hh+d7JI+ryYoR+mP10=";
   };
 

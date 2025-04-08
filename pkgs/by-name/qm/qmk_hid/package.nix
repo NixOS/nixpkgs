@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "qmk_hid";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wJi7FQrvMbdTwvbbjBnzmxupMbEuM8TeZ0JIK5ulQKI=";
   };
 

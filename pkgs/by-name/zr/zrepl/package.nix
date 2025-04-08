@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zrepl";
     repo = "zrepl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sFSWcJ0aBMay+ngUqnr0PKBMOfCcKHgBjff6KRpPZrg=";
   };
 

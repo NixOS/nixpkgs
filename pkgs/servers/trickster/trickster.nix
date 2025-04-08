@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trickstercache";
     repo = "trickster";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BRD8IF3s9RaDorVtXRvbKLVVVXWiEQTQyKBR9jFo1eM=";
   };
 

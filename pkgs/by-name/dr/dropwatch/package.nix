@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "dropwatch";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-TbhgcX5WzuigP5/Mj5JuK7O/UKcu70D7dcOcvo4fxeQ=";
   };
 

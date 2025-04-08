@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "akavel";
     repo = "up";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d6FCJ9G9ytHhWQ5lXEtlmzclt3odS9e+Y1ry6EiIDsk=";
   };
 

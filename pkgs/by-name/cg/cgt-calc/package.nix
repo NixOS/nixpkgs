@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "capital-gains-calculator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y/Y05wG89nccXyxfjqazyPJhd8dOkfwRJre+Rzx97Hw=";
   };
 

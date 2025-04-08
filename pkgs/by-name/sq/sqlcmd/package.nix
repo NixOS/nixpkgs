@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "go-sqlcmd";
     owner = "microsoft";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LHNH/Jybtv+P/mRby3/nn8XjDHYWDTtgefb8z35J2VM=";
   };
 

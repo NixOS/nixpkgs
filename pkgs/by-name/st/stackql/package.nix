@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stackql";
     repo = "stackql";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FLr4xGE9x9O0+BcjBiqDoNdw5LAqtqYYkqZ8wWjhgHA=";
   };
 

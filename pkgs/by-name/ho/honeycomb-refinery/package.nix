@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "honeycombio";
     repo = "refinery";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SU9JbyUuBMqPw4XcoF5s8CgBn7+V/rHBAwpXJk373jg=";
   };
 

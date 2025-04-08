@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-nYaBdVsq7aLE9P1bQlJlQkrk/cq7C1hxM5XtCGyEzC0=";
   };
 

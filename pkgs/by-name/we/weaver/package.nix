@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kfBWI+1f39oSSKYflXfXnBTc96OZch7o5HWfOgOfuxs=";
   };
 

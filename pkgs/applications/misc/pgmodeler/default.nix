@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ZoWCXCRaFQMf/RbcgXZQiF4+TDogdMOtccxOTk1c7Jw=";
   };
 

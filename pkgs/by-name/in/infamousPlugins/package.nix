@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "infamousPlugins";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
   };
 

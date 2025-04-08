@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-multicore";
     repo = "multicoretests";
-    rev = version;
+    tag = version;
     hash = "sha256-taaH+hBOdiCK2HT+5OfX892/f1ozlLdd/AteapYWK9Y=";
   };
 

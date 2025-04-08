@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Dc4ts";
     repo = "ChangeTower";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-P20kzsFTR6kVWUD6mt3T3sge/ioIYgeREfy40oxlDBU=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "danvergara";
     repo = "dblab";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-a0452fNr78FDhVoBF8RkKbtamvc5e6gEbTOeRdgGQs4=";
   };
 

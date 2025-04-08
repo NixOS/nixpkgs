@@ -16,7 +16,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JemqSr1XBwW1hLuWQrApY/hqLj/VpW3xSJedVIoFSiY=";
   };
 

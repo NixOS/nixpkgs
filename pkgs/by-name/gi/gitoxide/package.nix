@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "GitoxideLabs";
     repo = "gitoxide";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hrCWt4cCnlH3NKH5Uugf/rvVN+YpbeZgZ/lhnQGZ2I0=";
   };
 

@@ -18,7 +18,7 @@ else
     src = fetchFromGitHub {
       owner = "johnwhitington";
       repo = "cpdf-source";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-DvTY5EQcvnL76RlQTcVqBiycqbCdGQCXzarSMH2P/pg=";
     };
 

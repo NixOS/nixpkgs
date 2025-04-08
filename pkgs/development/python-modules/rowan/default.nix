@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "rowan";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-klIqyX04w1xYmYtAbLF5jwpcJ83oKOaENboxyCL70EY=";
   };
 

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-runtime";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DoFqHKTu4CvgDYPT4vbwNvSZ/lNTdAF+wlHOOIBJKUw=";
   };
 

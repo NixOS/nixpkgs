@@ -45,7 +45,7 @@ let
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-J4gz4rnydu8JlzqNC/OIoVoRcgeFd6B1Qboxu5drOKY=";
     };
   };

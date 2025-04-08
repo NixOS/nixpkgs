@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "martin-helmich";
     repo = "prometheus-nginxlog-exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-UkXrVHHHZ9mEgsMUcHu+wI6NZFw4h3X4atDBjpBcz8E=";
   };
 

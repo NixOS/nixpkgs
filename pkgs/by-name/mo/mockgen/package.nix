@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "mock";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-1UlaM3IvKlplBW1pg5l+IXwirlierjDKqKsVwFt7EAw=";
   };
 

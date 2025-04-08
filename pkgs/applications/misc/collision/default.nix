@@ -26,7 +26,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-c/74LzDM63w5zW8z2T8o4Efvuzj791/zTSKEDN32uak=";
   };
 

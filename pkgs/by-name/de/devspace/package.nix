@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "devspace-sh";
     repo = "devspace";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-aD7A9GGFnX1w5MehmhqYE+wEREASyKFxusE5GFFgwbs=";
   };
 

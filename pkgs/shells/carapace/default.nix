@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ewZ06HPAS7UXmnRlrOaHegVrfYxwko/jyHqtQV/0JwY=";
   };
 

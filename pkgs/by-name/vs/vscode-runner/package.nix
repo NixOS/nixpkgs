@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "Merrit";
     repo = "vscode-runner";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mDhwydAFlDcpbpmh+I2zjjuC+/5hmygFkpHSZGEpuLs=";
   };
 in

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "swami";
     repo = "libinstpatch";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OU6/slrPDgzn9tvXZJKSWbcFbpS/EAsOi52FtjeYdvA=";
   };
 

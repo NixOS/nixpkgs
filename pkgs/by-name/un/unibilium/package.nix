@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "unibilium";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6bFZtR8TUZJembRBj6wUUCyurUdsn3vDGnCzCti/ESc=";
   };
 

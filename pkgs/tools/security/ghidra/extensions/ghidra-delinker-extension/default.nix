@@ -13,7 +13,7 @@ let
     src = fetchFromGitHub {
       owner = "boricj";
       repo = "ghidra-delinker-extension";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-h6F50Z7S6tPOl9mIhChLKoFxHuAkq/n36ysUEFwWGxI=";
     };
 

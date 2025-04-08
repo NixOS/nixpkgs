@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dreamchess";
     repo = "dreamchess";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-qus/RjwdAl9SuDXfLVKTPImqrvPF3xSDVlbXYLM3JNE=";
   };
 

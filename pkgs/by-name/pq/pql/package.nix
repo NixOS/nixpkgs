@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "runreveal";
     repo = "pql";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/112LQfIkya/9hzq3nxtpdSarHIshPw4mezNcKm4xyI=";
   };
 

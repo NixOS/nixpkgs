@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cyberang3l";
     repo = "timelapse-deflicker";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0bbfnrdycrpyz7rqrql5ib9qszny7z5xpqp65c1mxqd2876gv960";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pPY8y+pQdk9/F7dnUBz/y4lvcR1k/EClywcZATArZVA=";
   };
 

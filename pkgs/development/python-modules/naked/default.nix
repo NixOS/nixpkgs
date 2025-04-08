@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrissimpkins";
     repo = "naked";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KhygnURFggvUTR9wwWtORtfQES8ANd5sIaCONvIhfRM=";
   };
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-01PK9LxqHno89gypd7ze5gDP4V3en2J5g6JZRqohDB0=";
   };
 

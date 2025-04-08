@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "fgallaire";
     repo = "cjkwrap";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0wTx3rnlUfQEE2/Z8Y7iwlsHk+CIy6ut+QIpC5yg4aM=";
   };
 

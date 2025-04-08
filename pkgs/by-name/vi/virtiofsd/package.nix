@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QT0GfE0AOrNuL7ppiKNs6IKbCtdkfAnAT3PCGujMIUQ=";
   };
 

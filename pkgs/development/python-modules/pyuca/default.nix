@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jtauber";
     repo = "pyuca";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KIWk+/o1MX5J9cO7xITvjHrYg0NdgdTetOzfGVwAI/4=";
   };
 

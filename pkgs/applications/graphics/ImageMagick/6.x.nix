@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-AdlJaCJOrN+NkkzzzgELtgAr5iZ9dvlVYVc7tYiM+R8=";
   };
 

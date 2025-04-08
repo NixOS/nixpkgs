@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "django-permissionedforms";
     owner = "wagtail";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DQzPGmh5UEVpGWnW3IrEVPkZZ8mdiW9J851Ej4agTDc=";
   };
 

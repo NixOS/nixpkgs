@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-5M1N0f1kVaIC5dkLb5ft0Da8CqzVRQlyr1otQdMvtow=";
   };

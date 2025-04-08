@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
-    rev = version;
+    tag = version;
     hash = "sha256-o/7sfBcrhyXEakccOAogQqm8dO4Szj1QSpaIHg6OSt4=";
   };
 

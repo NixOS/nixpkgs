@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = "libuninameslist";
-    rev = version;
+    tag = version;
     hash = "sha256-Pi30c3To57AzY59i39JVG2IUkGnq7CEAQkqJ1f5AZhw=";
   };
 

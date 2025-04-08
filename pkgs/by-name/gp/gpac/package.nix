@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RADDqc5RxNV2EfRTzJP/yz66p0riyn81zvwU3r9xncM=";
   };
 

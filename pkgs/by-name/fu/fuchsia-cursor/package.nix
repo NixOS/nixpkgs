@@ -31,7 +31,7 @@ lib.checkListOfEnum "${pname}: theme variants" [ "Fuchsia" "Fuchsia-Pop" "Fuchsi
     src = fetchFromGitHub {
       owner = "ful1e5";
       repo = "fuchsia-cursor";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-WnDtUsjRXT7bMppgwU5BIDqphP69DmPzQM/0qXES5tM=";
     };
 

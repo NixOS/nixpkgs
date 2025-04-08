@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-apvMcn/1dV9uujyoHikiOxregwWtAFPvrZvYjd3XQwM=";
   };
   useFetchCargoVendor = true;

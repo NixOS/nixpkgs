@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "apcupsd_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
   };
 
