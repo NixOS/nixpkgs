@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HB1E7rP/U58dyL3j6YnhF5AOGAcHqmA/ZZ5JNBDibco=";
   };
 

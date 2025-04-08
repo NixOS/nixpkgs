@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mailhog";
     repo = "MailHog";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-flxEp9iXLLm/FPP8udlnpbHQpGnqxAhgyOIUUJAJgog=";
   };
 

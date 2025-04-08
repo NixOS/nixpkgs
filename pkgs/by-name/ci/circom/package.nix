@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "iden3";
     repo = "circom";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BSInX4owuamRWnlKL1yJJOyzRIiE55TIzCk2TdX7aOQ=";
   };
 

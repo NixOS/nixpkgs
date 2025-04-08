@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "KTX-Software";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bDdRdVFbVmN8fEGRLnPLOXsV6lfYU9Lg4nW0GuCj6AU=";
   };
 

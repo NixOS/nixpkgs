@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jstarks";
     repo = "npiperelay";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cg4aZmpTysc8m1euxIO2XPv8OMnBk1DwhFcuIFHF/1o=";
   };
 

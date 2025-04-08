@@ -15,7 +15,7 @@ buildGraalvmNativeImage rec {
   src = fetchFromGitHub {
     owner = "clojure-lsp";
     repo = "clojure-lsp";
-    tag = version;
+    rev = version;
     hash = "sha256-3CKY3t2NWGAQNWYhmyiq3IJDMp81Q0LDCrS23XJeIys=";
   };
 

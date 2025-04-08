@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "couchbaselabs";
     repo = "couchbase-shell";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wqOU94rPqIO128uL9iyVzWcAgqnDUPUy1+Qq1hSkvHA=";
   };
 

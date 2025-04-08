@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pcarrier";
     repo = "afuse";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KpysJRvDx+12BSl9pIGRqbJAM4W1NbzxMgDycGCr2RM=";
   };
 

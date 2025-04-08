@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "stdoutisatty";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-NyVn9cxx0rY1ridNDTqe0pzcVhdLVaPCKT4hoQkQzRs=";
   };
 

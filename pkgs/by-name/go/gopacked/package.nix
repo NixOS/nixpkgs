@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "gopacked";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PpOLLqgUQf09grZlJ7bXTxAowzDusmVN8PHfaGlGGQ8=";
   };
 

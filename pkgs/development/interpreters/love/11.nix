@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
-    tag = version;
+    rev = version;
     sha256 = "sha256-wZktNh4UB3QH2wAIIlnYUlNoXbjEDwUmPnT4vesZNm0=";
   };
 

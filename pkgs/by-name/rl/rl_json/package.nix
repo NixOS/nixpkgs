@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "RubyLane";
     repo = "rl_json";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-FkOsdOHPE75bSkKw3cdaech6jAv0f/RJ9tgRVzPSAdA=";
     fetchSubmodules = true;
   };

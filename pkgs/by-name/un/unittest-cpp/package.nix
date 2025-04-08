@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "unittest-cpp";
     repo = "unittest-cpp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0sxb3835nly1jxn071f59fwbdzmqi74j040r81fanxyw3s1azw0i";
   };
 

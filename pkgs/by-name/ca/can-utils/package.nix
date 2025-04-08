@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-can";
     repo = "can-utils";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wum0hqPj3rCHHubNsOnj89tvrRQxoXrGQvZFcMKAGME=";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/gmenuharness";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-MswB8cQvz3JvcJL2zj7szUOBzKRjxzJO7/x+87m7E7c=";
   };
 

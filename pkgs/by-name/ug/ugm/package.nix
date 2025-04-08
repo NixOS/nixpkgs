@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FTgu5bzhX+B71dj4wHcgwbtrde5fzF98zMV1lRO++AE=";
   };
 

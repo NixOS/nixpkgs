@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ipfs-cluster";
     repo = "ipfs-cluster";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CpMnhqRlikKdPT3/tsLpKdKm6icePDsmqEnUEBwvCT0=";
   };
 

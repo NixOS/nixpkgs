@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ericwa";
     repo = "ericw-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "11sap7qv0rlhw8q25azvhgjcwiql3zam09q0gim3i04cg6fkh0vp";
   };
   postUnpack = ''

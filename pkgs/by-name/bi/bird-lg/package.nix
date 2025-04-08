@@ -14,7 +14,7 @@ let
       src = fetchFromGitHub {
         owner = "xddxdd";
         repo = "bird-lg-go";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-j81cfHqXNsTM93ofxXz+smkjN8OdJXxtm9z5LdzC+r8=";
       };
 

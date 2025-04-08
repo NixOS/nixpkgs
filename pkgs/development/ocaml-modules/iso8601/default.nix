@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sagotch";
     repo = "ISO8601.ml";
-    tag = version;
+    rev = version;
     sha256 = "sha256-QWjZ+2AjvXnnRVenbyCG/hSjfW53bHiftQUtWpK/7I8=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Gobidev";
     repo = "pfetch-rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Kgoo8piv4pNqzw9zQSEj7POSK6l+0KMvaNbvMp+bpF8=";
   };
 

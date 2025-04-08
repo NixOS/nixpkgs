@@ -79,7 +79,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RirMBb45KeBLdBJrRa86WxI4FiXdBar+RnVQ2ezEEYc=";
   };
 

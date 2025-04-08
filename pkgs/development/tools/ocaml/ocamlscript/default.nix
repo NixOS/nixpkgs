@@ -16,7 +16,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
     src = fetchFromGitHub {
       owner = "mjambon";
       repo = "ocamlscript";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256:10xz8jknlmcgnf233nahd04q98ijnxpijhpvb8hl7sv94dgkvpql";
     };
 

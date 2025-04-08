@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "2bc4";
     repo = "twitch-hls-client";
-    tag = version;
+    rev = version;
     hash = "sha256-H446qXFwRGippLMZemkW8sVhTV3YGpKmAvD8QBamAlo=";
   };
 

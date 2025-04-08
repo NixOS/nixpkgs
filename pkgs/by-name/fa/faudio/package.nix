@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
-    tag = version;
+    rev = version;
     sha256 = "sha256-nPU225LLQYN0D1LUsp9XGm2bCcB5WLpD3TcGDiWCe0c=";
   };
 

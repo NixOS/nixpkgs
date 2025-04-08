@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vouch-opensource";
     repo = "mcumgr-client";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-P5ykIVdWAxuCblMe7kzjswEca/+MsqpizCGUHIpR4qc=";
   };
 

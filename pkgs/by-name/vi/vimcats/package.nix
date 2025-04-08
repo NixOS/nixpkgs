@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mrcjkb";
     repo = "vimcats";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QV/eIy6yd6Lnmo8XV+E37/oCZCC3jlPu31emH0MgiO4=";
   };
 

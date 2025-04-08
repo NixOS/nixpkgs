@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-pages";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9ZJSW6kdxpwHd25CuGTE4MMXylXaZKL3eAEKKdYiuXs=";
   };
 

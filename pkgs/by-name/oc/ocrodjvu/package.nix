@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FriedrichFroebel";
     repo = "ocrodjvu";
-    tag = version;
+    rev = version;
     hash = "sha256-EiMCrRFUAJbu9QLgKpFIKqigCZ77lpTDD6AvZuMbyhA=";
   };
 

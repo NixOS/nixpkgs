@@ -28,7 +28,7 @@ let
   main_src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-uL4lO6aWiDfOQkhpTnr/iVx1fI7n/fx7WYr5jDWPfYM=";
   };
 

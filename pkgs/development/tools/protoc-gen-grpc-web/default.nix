@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-web";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-yqiSuqan4vynE3AS8OnYdzA+3AVlVFTBkxTuJe17114=";
   };
 

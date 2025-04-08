@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "subxt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zg2MraqKLbyhaxTi02rE4MsMuPw4diIseYNUQEoqnVA=";
   };
 

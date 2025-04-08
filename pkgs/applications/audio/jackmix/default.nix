@@ -19,7 +19,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kampfschlaefer";
     repo = "jackmix";
-    tag = version;
+    rev = version;
     sha256 = "0p59411vk38lccn24r7nih10jpgg9i46yc26zpc3x13amxwwpd4h";
   };
 

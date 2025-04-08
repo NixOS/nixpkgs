@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "efficios";
     repo = "barectf";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JelFfd3WS012dveNlIljhLdyPmgE9VEOXoZE3MBA/Gw=";
   };
 

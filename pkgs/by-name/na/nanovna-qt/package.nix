@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nanovna-v2";
     repo = "NanoVNA-QT";
-    tag = version;
+    rev = version;
     hash = "sha256-0nRpjLglCog9e4bSkaNSwjrwmLwut3Ykr3AaYZCaMEs=";
   };
 

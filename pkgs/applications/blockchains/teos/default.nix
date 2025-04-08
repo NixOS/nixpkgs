@@ -16,7 +16,7 @@ let
   src = fetchFromGitHub {
     owner = "talaia-labs";
     repo = "rust-teos";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UrzH9xmhVq12TcSUQ1AihCG1sNGcy/N8LDsZINVKFkY=";
   };
 

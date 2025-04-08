@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "namespacelabs";
     repo = "foundation";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ToAZacID91HxzsPRBKk+b8d9RHYmeDHjT0fQxOjXgRo=";
   };
 

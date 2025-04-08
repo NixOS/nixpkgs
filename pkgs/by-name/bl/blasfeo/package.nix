@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "giaf";
     repo = "blasfeo";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-p1pxqJ38h6RKXMg1t+2RHlfmRKPuM18pbUarUx/w9lw=";
   };
 

@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "juicity";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-4sej/nb7d58+hSCaD6KIfDsqiGmgECPIbRKR65TbMBM=";
   };
 

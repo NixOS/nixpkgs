@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot-node-agent";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3rr8LWaEhhAvzJisVj2uLK3O5us5/XEOpl7RFL2GBxw=";
   };
 

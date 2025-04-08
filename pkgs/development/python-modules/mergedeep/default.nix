@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clarketm";
     repo = "mergedeep";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1msvvdzk33sxzgyvs4fs8dlsrsi7fjj038z83s0yw5h8m8d78469";
   };
 

@@ -13,7 +13,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-K3phBiu2D3DbOm7mApqqSNnVCsfYRQtN/o3bCVubN9I=";
   };
 

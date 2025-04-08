@@ -18,7 +18,7 @@ else
     src = fetchFromGitHub {
       owner = "OCamlPro";
       repo = "ocp-ocamlres";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "0smfwrj8qhzknhzawygxi0vgl2af4vyi652fkma59rzjpvscqrnn";
     };
 

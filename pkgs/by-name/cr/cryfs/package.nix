@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cryfs";
     repo = "cryfs";
-    tag = version;
+    rev = version;
     hash = "sha256-OkJhLg+YzS3kDhlpUQe9A+OiVBPG/iKs6OU7aKFJ5wY=";
   };
 

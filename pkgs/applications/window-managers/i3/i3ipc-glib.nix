@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "i3ipc-glib";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "01fzvrbnzcwx0vxw29igfpza9zwzp2s7msmzb92v01z0rz0y5m0p";
   };
 

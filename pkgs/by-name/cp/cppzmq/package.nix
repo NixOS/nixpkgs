@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HTdaV1cLbwGYuikS9EAVvAOdLmCoWlvVXlpYsUwY5IA=";
   };
 

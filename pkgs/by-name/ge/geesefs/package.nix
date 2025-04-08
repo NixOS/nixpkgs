@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "yandex-cloud";
     repo = "geesefs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KkKdqSev6xpYfEjDSLVs/gKc3NCvLrzukNEQT2Wuk+A=";
   };
 

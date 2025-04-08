@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kr";
     repo = "beanstalkd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xoudhPad4diGGE8iZaY1/4LiENlKT2dYcIR6wlQdlTU=";
   };
 

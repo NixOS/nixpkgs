@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ssvb";
     repo = "tinymembench";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-N6jHRLqVSNe+Mk3WNfIEBGtVC7Y6/sERVaeAD68LQJc=";
   };
 

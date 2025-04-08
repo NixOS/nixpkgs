@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "FlamingTempura";
     repo = "bibtex-tidy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-sMgy29deEfc3DFSC0Z4JZCeNAFpBKNYj+mJnFI1pSY4=";
   };
 

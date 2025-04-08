@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "klange";
     repo = "nyancat";
-    tag = version;
+    rev = version;
     sha256 = "1mg8nm5xzcq1xr8cvx24ym2vmafkw53rijllwcdm9miiz0p5ky9k";
   };
 

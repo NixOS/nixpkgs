@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "numatop";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-GJvTwqgx34ZW10eIJj/xiKe3ZkAfs7GlJImz8jrnjfI=";
   };
 

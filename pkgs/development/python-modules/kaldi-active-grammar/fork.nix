@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "daanzu";
     repo = "kaldi-fork-active-grammar";
-    tag = version;
+    rev = version;
     sha256 = "+kT2xJRwDj/ECv/v/J1FpsINWOK8XkP9ZvZ9moFRl70=";
   };
 

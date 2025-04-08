@@ -21,7 +21,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-5vCjr8WRwa7Q/84Itgg07K1CJKGnWA1z53et2IxxReE=";
   };
 

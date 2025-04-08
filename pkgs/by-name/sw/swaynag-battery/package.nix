@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "m00qek";
     repo = "swaynag-battery";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7f9+4Fzw5B5ATuud4MJC3iyuNRTx6kwJ7/KsusGtQM8=";
   };
 

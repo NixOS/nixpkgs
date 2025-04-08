@@ -23,7 +23,7 @@ buildDunePackage (
     src = fetchFromGitHub {
       owner = "janestreet";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = hash;
     };
 

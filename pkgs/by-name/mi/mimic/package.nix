@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MycroftAI";
     repo = "mimic1";
-    tag = version;
+    rev = version;
     sha256 = "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id";
   };
 

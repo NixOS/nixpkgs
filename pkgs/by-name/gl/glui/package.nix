@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libglui";
     repo = "glui";
-    tag = version;
+    rev = version;
     sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
   };
 

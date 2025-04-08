@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "venam";
     repo = "2bwm";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1xwib612ahv4rg9yl5injck89dlpyp5475xqgag0ydfd0r4sfld7";
   };
 

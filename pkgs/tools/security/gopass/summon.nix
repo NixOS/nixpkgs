@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-summon-provider";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yMua3BSl4u/1axLMmLIzjqj8wYvMMPTqmRgcuH1tqN0=";
   };
 

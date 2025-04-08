@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "risacher";
     repo = "sunwait";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-v2cNjecJ4SstOsvDe/Lu0oOyBd8I8LMHZIH+f9ZC7Fc=";
   };
 

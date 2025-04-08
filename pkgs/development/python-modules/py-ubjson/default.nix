@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Iotic-Labs";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1frn97xfa88zrfmpnvdk1pc03yihlchhph99bhjayvzlfcrhm5v3";
   };
 

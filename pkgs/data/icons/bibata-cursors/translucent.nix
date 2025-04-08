@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Silicasandwhich";
     repo = "Bibata_Cursor_Translucent";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
   };
 

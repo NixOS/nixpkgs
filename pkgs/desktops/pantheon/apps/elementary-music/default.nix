@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "music";
-    tag = version;
+    rev = version;
     sha256 = "sha256-pqOAeHTFWSoJqXE9UCUkVIy5T7EoYsieJ4PMU1oX9ko=";
   };
 

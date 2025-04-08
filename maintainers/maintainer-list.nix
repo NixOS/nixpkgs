@@ -3223,6 +3223,12 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+  blackzeshi = {
+    name = "blackzeshi";
+    email = "sergey_zhuzhgov@mail.ru";
+    github = "zeshi09";
+    githubId = 105582686;
+  };
   blakesmith = {
     name = "Blake Smith";
     email = "blakesmith0@gmail.com";
@@ -3747,6 +3753,12 @@
     github = "bolasblack";
     githubId = 382011;
     name = "c4605";
+  };
+  c4f3z1n = {
+    name = "João Nogueira";
+    email = "shires.waking0d@icloud.com";
+    github = "c4f3z1n";
+    githubId = 22820003;
   };
   c4thebomb = {
     name = "Ceferino Patino";
@@ -6443,6 +6455,11 @@
     matrix = "@draketdl:matrix.org";
     github = "DrakeTDL";
     githubId = 22124013;
+  };
+  drakon64 = {
+    name = "Adam Chance";
+    email = "nixpkgs@drakon.cloud";
+    githubId = 6444703;
   };
   dramaturg = {
     email = "seb@ds.ag";
@@ -9895,6 +9912,12 @@
     matrix = "@hubofeverything:bark.lgbt";
     github = "the-furry-hubofeverything";
     githubId = 53921912;
+  };
+  hucancode = {
+    email = "hucancode@gmail.com";
+    github = "hucancode";
+    githubId = 15852849;
+    name = "Bang Nguyen Huu";
   };
   hufman = {
     email = "hufman@gmail.com";
@@ -19936,6 +19959,14 @@
     github = "Rampoina";
     githubId = 5653911;
     name = "Rampoina";
+  };
+  rane = {
+    name = "Rane";
+    email = "rane+git@junkyard.systems";
+    matrix = "@rane:junkyard.systems";
+    github = "digitalrane";
+    githubId = 1829286;
+    keys = [ { fingerprint = "EBB6 0EE1 488F D04C D922  C039 AE96 1AF5 9D40 10B5"; } ];
   };
   ranfdev = {
     email = "ranfdev@gmail.com";

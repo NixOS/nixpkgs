@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jvns";
     repo = "dnspeep";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };
 

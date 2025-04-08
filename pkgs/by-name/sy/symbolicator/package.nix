@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
-    tag = version;
+    rev = version;
     hash = "sha256-/8Jo/M51ulrQFzXKkcFXTYfh9a3w6C5oW6A/bDFcRp0=";
     fetchSubmodules = true;
   };

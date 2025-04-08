@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "HRKings";
     repo = "pokemonsay-newgenerations";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IDTAZmOzkUg0kLUM0oWuVbi8EwE4sEpLWrNAtq/he+g=";
   };
 

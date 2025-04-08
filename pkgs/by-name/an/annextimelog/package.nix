@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "annextimelog";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+3PkG33qKckagSVvVdqkypulO7uu5AMOv8fQiP8IUbs=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-age";
-    tag = version;
+    rev = version;
     sha256 = "sha256-Y+GC8Zkznjr0pTvYED+uE1v6zIg+tq44F++ZrBytS1E=";
   };
 

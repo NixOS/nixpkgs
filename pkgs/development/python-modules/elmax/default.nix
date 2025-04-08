@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-elmax";
-    tag = version;
+    rev = version;
     hash = "sha256-EcYEpYv+EwwEfW8Sy7aQjFAPpmsA6qVbmlwrPdxdnEw=";
   };
 

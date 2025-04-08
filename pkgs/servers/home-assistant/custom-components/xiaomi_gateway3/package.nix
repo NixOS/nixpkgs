@@ -14,7 +14,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "XiaomiGateway3";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VvuvOUldhmROTs1+YbCT7++VJ71GgGKRbHjqZxQQY0w=";
   };
 

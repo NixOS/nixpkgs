@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = "numix-cursor-theme";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1q3w5i0h3ly6i7s9pqjdrb14kp89i78s0havri7lhiqyxizjvcvh";
   };
 

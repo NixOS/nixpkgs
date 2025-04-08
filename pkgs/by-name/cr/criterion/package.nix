@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-5GH7AYjrnBnqiSmp28BoaM1Xmy8sPs1atfqJkGy3Yf0=";
   };

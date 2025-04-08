@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-session";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-XduE3tPUjw/wIjFCACasxtN33KO4bDLWrpl7pZcYaAA=";
   };
 

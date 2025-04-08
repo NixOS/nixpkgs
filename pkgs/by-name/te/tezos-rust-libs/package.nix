@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "tezos";
     repo = "tezos-rust-libs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SuCqDZDXmWdGI/GN+3nYcUk66jnW5FQQaeTB76/rvaw=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dell";
     repo = "libsmbios";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 

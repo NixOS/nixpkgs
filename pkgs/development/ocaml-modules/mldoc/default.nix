@@ -39,7 +39,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "mldoc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7uuNUFMSQEgakTKfpYixp43gnfpQSW++snBzgr0Ni0Y=";
   };
 

@@ -18,7 +18,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MyVKRWhLXxz4h2/2OtpmYrLYiZeNOMEetHwl4NklkOA=";
   };
 

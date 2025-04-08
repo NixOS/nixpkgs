@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tiiffi";
     repo = "mcrcon";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cedeKsZgEyu0jqN4kBSgMJzFNUfCVXCEwH3M54miSG4=";
   };
 

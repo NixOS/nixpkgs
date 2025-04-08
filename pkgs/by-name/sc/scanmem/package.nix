@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scanmem";
     repo = "scanmem";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
 

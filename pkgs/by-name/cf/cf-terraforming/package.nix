@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cf-terraforming";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-iv4vQRQNYBl2v2TAK11VJbVCQB1jw51NjGJ80aIGPbQ=";
   };
 

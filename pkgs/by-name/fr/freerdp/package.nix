@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-3hBssoD6l0d1DC5SRhE7HQlcoxNPjz3G8jbQx2rzp60=";
   };
 

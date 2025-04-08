@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iM+Qy8tQAjonXpt36WWIEIAmtqnR0wWtMMxIh76Fv0U=";
   };
 

@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "screego";
     repo = "server";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wFLoReqzLx6PEW/u9oz7VIYKtJkmwGTneeB6Ysgse7Q=";
   };
 

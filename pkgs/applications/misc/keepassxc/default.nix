@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
-    tag = version;
+    rev = version;
     hash = "sha256-FBoqCYNM/leN+w4aV0AJMx/G0bjHbI9KVWrnmq3NfaI=";
   };
 

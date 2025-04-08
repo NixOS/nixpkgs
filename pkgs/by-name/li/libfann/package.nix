@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libfann";
     repo = "fann";
-    tag = version;
+    rev = version;
     sha256 = "0awbs0vjsrdglqiaybb0ln13ciizmyrw9ahllahvgbq4nr0nvf6y";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vlm";
     repo = "zip-fix-filename-encoding";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0l5zbb5hswxczigvyal877j0aiq3fc01j3gv88bvy7ikyvw3lc07";
   };
 

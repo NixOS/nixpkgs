@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-desktop";
-    tag = version;
+    rev = version;
     hash = "sha256-B3RcYr/b8pZTJV35BWuqmWbq+C2WkkcwBR0oNaUXPRw=";
   };
 

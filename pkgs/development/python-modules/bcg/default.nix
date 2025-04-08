@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-gateway";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "2Yh5MeIv+BIxjoO9GOPqq7xTAFhyBvnxPy7DeO2FrkI=";
   };
 

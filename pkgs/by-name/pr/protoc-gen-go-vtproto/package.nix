@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "vtprotobuf";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ji6elc0hN49A4Ov/ckd8chPR4/8ZX11THzVz9HJGui4=";
   };
 

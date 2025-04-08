@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "soywod";
     repo = "comodoro";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Y9SuxqI8wvoF0+X6CLNDlSFCwlSU8R73NYF/LjACP18=";
   };
 

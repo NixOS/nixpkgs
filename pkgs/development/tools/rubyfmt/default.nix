@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fables-tales";
     repo = "rubyfmt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IIHPU6iwFwQ5cOAtOULpMSjexFtTelSd/LGLuazdmUo=";
     fetchSubmodules = true;
   };

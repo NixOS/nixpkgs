@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "FieldOfClay";
     repo = "hyprland-activewindow";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oH3BsS0KqnNdYe7HWHlfRSiUJx+vC3IveN+mcEgwZLs=";
   };
 

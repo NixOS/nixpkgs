@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mgumz";
     repo = "mtr-exporter";
-    tag = version;
+    rev = version;
     hash = "sha256-+myQg27TGclU+SfU8oO+DvXYqc/8sWE2zRK6fL2DhwM=";
   };
 

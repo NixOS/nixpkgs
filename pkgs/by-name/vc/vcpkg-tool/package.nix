@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-tu6mN9y2lYsf71LUmRPMdZHE6VIWODOOQFs8+v0KIt8=";
   };
 

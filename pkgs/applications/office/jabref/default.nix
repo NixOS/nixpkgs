@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-inE2FXAaEEiq7343KwtjEiTEHLtn01AzP0foTpsLoAw=";
     fetchSubmodules = true;
   };

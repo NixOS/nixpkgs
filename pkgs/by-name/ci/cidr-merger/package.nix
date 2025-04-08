@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zhanhb";
     repo = "cidr-merger";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Kb+89VP7JhBrTE4MM3H/dqoIBgDLnVhKqkgHdymYCgk=";
   };
 

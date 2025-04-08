@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aksiksi";
     repo = "compose2nix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rFnnbRVVv/N5021Al3vmjFAui1cTp8NBZDBNQo8CsXM=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "philn";
     repo = "glide";
-    tag = version;
+    rev = version;
     hash = "sha256-gmBXUj6LxC7VDH/ni8neYivysagqcbI/UCUq9Ly3D24=";
   };
 

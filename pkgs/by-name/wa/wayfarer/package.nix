@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stronnag";
     repo = "wayfarer";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Vuiy2SjpK2T1ekbwa/KyIFa1V4BJsnJRIj4b+Yx0VEw=";
   };
 

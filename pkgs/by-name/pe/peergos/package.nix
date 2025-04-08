@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Peergos";
     repo = "web-ui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TSvhp/9nneXGADiDPgGvA78emVcQG0UzHsFfVS9k7mo=";
     fetchSubmodules = true;
   };

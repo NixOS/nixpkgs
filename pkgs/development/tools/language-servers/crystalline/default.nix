@@ -17,7 +17,7 @@ crystal.buildCrystalPackage {
   src = fetchFromGitHub {
     owner = "elbywan";
     repo = "crystalline";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6ZAogEuOJH1QQ6NSJ+8KZUSFSgQAcvd4U9vWNAGix/M=";
   };
 

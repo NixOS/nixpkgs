@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "mkjeldsen";
     repo = "commitmsgfmt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-HEkPnTO1HeJg8gpHFSUTkEVBPWJ0OdfUhNn9iGfaDD4=";
   };
   useFetchCargoVendor = true;

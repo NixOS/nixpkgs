@@ -21,7 +21,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "gg-scm";
     repo = "gg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-qw0KWhCkJVYRhDBNtiNactWGGMHjBwdQ1Po4lQQbaj4=";
   };
   postPatch = ''

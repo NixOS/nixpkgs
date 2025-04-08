@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dolthub";
     repo = "dolt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-d4n4Cz4FvSMznTqHs5cD18Y1xE6p8umGr7PqtI5k6Zg=";
   };
 

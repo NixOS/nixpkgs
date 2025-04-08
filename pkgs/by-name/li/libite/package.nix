@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "libite";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-q1NoHSiPmFPwkTJqg3L5fEBXF/JjRWvA9e4d532ILE8=";
   };
 

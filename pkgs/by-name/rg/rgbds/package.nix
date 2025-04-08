@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Rv2ylZavLy+G4XFLBdNGjk78hSb8cDoX9lW1l2TRmtk=";
   };
   nativeBuildInputs = [

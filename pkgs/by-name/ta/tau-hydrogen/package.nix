@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tau-OS";
     repo = "tau-hydrogen";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-nnQ0lkHtkOjJhF4NSMqjt0deddYjMnHHlANlHoZS2wY=";
   };
 

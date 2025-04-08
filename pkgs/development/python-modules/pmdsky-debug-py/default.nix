@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-uhLmEViiJ5+2Aw9MJP8GL7nhk8lMPcRZRB8WTDFXe+s=";
   };
 

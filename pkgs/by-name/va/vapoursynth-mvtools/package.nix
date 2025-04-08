@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dubhater";
     repo = "vapoursynth-mvtools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bEifU1PPNOBr6o9D6DGIzTaG4xjygBxkQYnZxd/4SwQ=";
   };
 

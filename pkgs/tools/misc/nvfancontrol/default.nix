@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "foucault";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
   };
 

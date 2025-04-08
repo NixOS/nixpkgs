@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bnprks";
     repo = "mcfly-fzf";
-    tag = version;
+    rev = version;
     hash = "sha256-ZdsbkN+/NLA0vor6/eEdAI7V5m5GEi+phcJQ89Jp4fk=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "racket";
     repo = "zuo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-F7ba/4VVVhNDK/wqk+kgJKYxETS2pR9ZiDh0O0aOWn0=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds-cxx";
-    tag = version;
+    rev = version;
     hash = "sha256-whFVEQec/Ca+dr6R7z9mMrNg315z3oIWchVT+vQ36So=";
   };
 

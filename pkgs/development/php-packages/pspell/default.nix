@@ -15,7 +15,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php";
     repo = "pecl-text-pspell";
-    tag = version;
+    rev = version;
     hash = "sha256-IVBuEVsUKah8W+oVpIPT9Iln6MFox0e5/5Y14/Kgcg4=";
   };
 

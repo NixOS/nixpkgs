@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coloquinte";
     repo = "PlaceRoute";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-bPDXaNZCNBM0qiu+46cL/zH/41lwqHPqfqTzJaERgVQ=";
   };
 

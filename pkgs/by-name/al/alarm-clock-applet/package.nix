@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "alarm-clock";
-    tag = version;
+    rev = version;
     hash = "sha256-10hkWWEsAUJnGeu35bR5d0RFKd9CKDZI7WGMzmEM3rI=";
   };
 

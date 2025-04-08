@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "clingo";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VhfWGAcrq4aN5Tgz84v7vLOWexsA89vRaang58SXVyI=";
   };
 

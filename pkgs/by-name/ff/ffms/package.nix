@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FFMS";
     repo = "ffms2";
-    tag = version;
+    rev = version;
     sha256 = "sha256-Ildl8hbKSFGh4MUBK+k8uYMDrOZD9NSMdPAWIIaGy4E=";
   };
 

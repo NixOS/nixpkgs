@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "tgswitch";
-    tag = version;
+    rev = version;
     sha256 = "sha256-Q3Cef3B7hfVHLvW8Rx6IdH9g/3luDhpUMZ8TXVpb8gQ=";
   };
 

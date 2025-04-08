@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rr-debugger";
     repo = "rr";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-o+HXrgGXdsvjlNh70qsXRtp2yXOiZIT30ejfs1KEaqE=";
   };
 

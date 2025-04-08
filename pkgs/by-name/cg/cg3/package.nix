@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "GrammarSoft";
       repo = "cg3";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-TiEhhk90w5GibGZ4yalIf+4qLA8NoU6+GIPN6QNTz2A=";
     };
 

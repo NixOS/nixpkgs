@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-mTkDyfdAwjJwBEp/bOYRz0zfzPSzOUEI5hp+mridZsA=";
   };
 

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Iqhj4BteFTBhhgQmyJVNdRHrXd/kaMRbOJ3eRKilYpw=";
   };
 

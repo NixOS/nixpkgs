@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "HelloZeroNet";
     repo = "ZeroNet";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "04prgicm0yjh2klcxdgwx1mvlsxxi2bdkzfcvysvixbgq20wjvdk";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jmesmon";
     repo = "illum";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "S4lUBeRnZlRUpIxFdN/bh979xvdS7roF6/6Dk0ZUrnM=";
     fetchSubmodules = true;
   };

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
   };
 

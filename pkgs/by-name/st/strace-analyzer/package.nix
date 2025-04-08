@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wookietreiber";
     repo = "strace-analyzer";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
   };
 

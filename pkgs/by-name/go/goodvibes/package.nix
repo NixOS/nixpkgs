@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "goodvibes";
     repo = "goodvibes";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-AHw8KlU1lmgH837GOpxGBgngwRIs5XV3+TvH4MuCx54=";
   };
 

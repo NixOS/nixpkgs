@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nCAT";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hbsrs9lgpxNqG8mmXsft01LmpX4dBpl1ncpdTWBgrUQ=";
   };
 

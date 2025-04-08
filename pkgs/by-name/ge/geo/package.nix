@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "geo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lwFBevf3iP90LgnfUqweCjPBJPr2vMFtRqQXXUC+cRA=";
   };
 

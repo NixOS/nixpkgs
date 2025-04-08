@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-10e1S+li7SXKJX2lETSdx84GavWqQYQqyLoBIVToTBI=";
   };
 

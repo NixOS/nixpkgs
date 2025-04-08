@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-upToPltob3P8EwDUbl9F3COGCxnz6NZNrZ/wxv5pBQU=";
   };
 

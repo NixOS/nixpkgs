@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "beancount-ing-diba";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-1cdXqdeTz38n0g13EXJ1/IF/gJJCe1uL/Z5NJz4DL+E=";
   };
 

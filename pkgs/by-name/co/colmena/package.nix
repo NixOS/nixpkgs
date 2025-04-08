@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "colmena";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 

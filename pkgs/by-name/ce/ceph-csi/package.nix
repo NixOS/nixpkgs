@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ceph";
     repo = "ceph-csi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Wa5elZbQotgeb4pH9DIZd48CQyBJ0O5y1SidIb/iyGY=";
   };
 

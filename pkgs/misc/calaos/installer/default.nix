@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "calaos";
     repo = "calaos_installer";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-e/f58VtGmKukdv4rIrGljXhA9d/xUycM5V6I1FT5qeY=";
   };
 

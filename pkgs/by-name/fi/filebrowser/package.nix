@@ -11,7 +11,7 @@ let
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zLM1fLrucIhzGdTTDu81ZnTIipK+iRnPhgfMiT1P+yg=";
   };
 

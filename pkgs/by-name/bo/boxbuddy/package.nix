@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
-    tag = version;
+    rev = version;
     hash = "sha256-9BGgm4yRjCarJIGP/G9gPj/qsYWb96XGJmpgLj3XCdM=";
   };
 

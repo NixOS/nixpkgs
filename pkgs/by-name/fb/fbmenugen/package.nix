@@ -18,7 +18,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "fbmenugen";
-    tag = version;
+    rev = version;
     sha256 = "A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gzuidhof";
     repo = "tygo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-W2PgBcbkreP61QtAuOZ+VHUUZ4Mhe++1SK1p4Tg4Ack=";
   };
 

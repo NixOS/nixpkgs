@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
   };
 

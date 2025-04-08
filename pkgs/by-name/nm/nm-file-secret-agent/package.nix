@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lilioid";
     repo = "nm-file-secret-agent";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xQWgNxrbpHOfnKXa57cV1F3JmtJcvQsqUfgwfWg5Ni4=";
   };
   useFetchCargoVendor = true;

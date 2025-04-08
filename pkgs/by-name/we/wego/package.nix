@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "schachmat";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-YGUll0Wi/oulNMXSrSFeAVe+aGpyFeyXRZTW4ngC3Zk=";
   };
 

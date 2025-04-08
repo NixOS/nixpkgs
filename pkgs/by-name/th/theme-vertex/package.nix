@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "vertex-theme";
-    tag = version;
+    rev = version;
     sha256 = "0c9mhrs95ahz37djrv176vn41ywvj26ilwmnr1h9171giv6hid98";
   };
 

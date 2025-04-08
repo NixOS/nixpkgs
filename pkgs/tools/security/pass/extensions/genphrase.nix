@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "congma";
     repo = "pass-genphrase";
-    tag = version;
+    rev = version;
     sha256 = "01dff2jlp111y7vlmp1wbgijzphhlzc19m02fs8nzmn5vxyffanx";
   };
 

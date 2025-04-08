@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Godl/SQ0+NkI6kwH85SXHPQ5GRlih3xvCyeYxwiqH/s=";
   };
 

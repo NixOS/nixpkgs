@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "flokli";
     repo = "gerrit-queue";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JkAYqqet6y89RTBU9FuxkMwJiGM6opL0reXbojSal3Y=";
   };
   vendorHash = "sha256-+Ig4D46NphzpWKXO23Haea9EqVtpda8v9zLPJkbe3bQ=";

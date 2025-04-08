@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "accellera-official";
     repo = "systemc";
-    tag = version;
+    rev = version;
     sha256 = "sha256-ReYRKx7H9rxVhvY9gAdxrMu5nlsK2FcVIzfgvZroD/E=";
   };
 

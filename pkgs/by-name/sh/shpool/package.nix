@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "shell-pool";
     repo = "shpool";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pSSMC4pUtB38c6UNOj+Ma/Y1jcSfm33QV1B4tA/MyKY=";
   };
 

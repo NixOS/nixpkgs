@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "chrome-token-signing";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-wKy/RVR7jx5AkMJgHXsuV+jlzyfH5nDRggcIUgh2ML4=";
   };
 

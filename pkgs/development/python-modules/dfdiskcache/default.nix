@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "df-diskcache";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-s+sqEPXw6tbEz9mnG+qeUSF6BmDssYhaDYOmraFaRbw=";
   };
 

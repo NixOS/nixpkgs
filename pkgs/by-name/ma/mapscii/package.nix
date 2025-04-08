@@ -10,7 +10,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "rastapasta";
     repo = "mapscii";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IFVX3l2b3pu0nfMZebVix0mwHUvnE2NUNrB3+jr3G2Q=";
   };
 

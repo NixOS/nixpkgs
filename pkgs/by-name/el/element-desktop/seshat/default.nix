@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
-    tag = version;
+    rev = version;
     hash = pinData.srcHash;
   };
 

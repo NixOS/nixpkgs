@@ -16,7 +16,7 @@ buildNpmPackage rec {
     (fetchFromGitHub {
       owner = "hrsh7th";
       repo = "vscode-langservers-extracted";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-3m9+HZY24xdlLcFKY/5DfvftqprwLJk0vve2ZO1aEWk=";
     })
     vscodium.src

@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LPyyPHTdV9cUDRKSlP+XaMyb+yhSj4Jq0tnT7AnTRqw=";
   };
 

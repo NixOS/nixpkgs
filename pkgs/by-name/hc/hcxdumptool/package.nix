@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = "hcxdumptool";
-    tag = version;
+    rev = version;
     sha256 = "sha256-InMyDUEH135Y1RYJ3z1+RQxPMi7+QMf670S/S2ZL9vg=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-basic-ng";
-    tag = version;
+    rev = version;
     hash = "sha256-MHBGIKOKhGklrx3O075LRud8NhY2hzlTWh+jalrFpko=";
   };
 

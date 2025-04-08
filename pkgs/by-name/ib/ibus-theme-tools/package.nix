@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "IBus-Theme-Tools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0i8vwnikwd1bfpv4xlgzc51gn6s18q58nqhvcdiyjzcmy3z344c2";
   };
 

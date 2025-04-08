@@ -23,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "opencast";
       repo = "pyCA";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
     };
 
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "opencast";
     repo = "pyCA";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 

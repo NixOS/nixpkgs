@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-xQO/yi4pJSnO/ldzVQkC7UhAfpy57xzO58NV7KZm4E8=";
   };
 

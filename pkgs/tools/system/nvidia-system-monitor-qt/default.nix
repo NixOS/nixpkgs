@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "congard";
     repo = "nvidia-system-monitor-qt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-JHK7idyk5UxgDyt+SzvYjTLmlNzx6+Z+OPYsRD4NWPg=";
   };
 

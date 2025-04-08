@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mrene";
     repo = "minidsp-rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8bKP9/byVRKj1P1MP3ZVg8yw0WaNB0BcqarCti7B8CA=";
   };
 

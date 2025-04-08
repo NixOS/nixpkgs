@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "polyfloyd";
     repo = "go-errorlint";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xO9AC1z3JNTRVEpM/FF8x+AMfmspU64kUywvpMb2yxM=";
   };
 

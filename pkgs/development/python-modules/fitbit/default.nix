@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "orcasgit";
     repo = "python-fitbit";
-    tag = version;
+    rev = version;
     hash = "sha256-1u3h47lRBrJ7EUWBl5+RLGW4KHHqXqqrXbboZdy7VPA=";
   };
 

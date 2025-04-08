@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vO/1laFb1yC+OESXTx9KuGdwSNC9Iv49F3V7kfXnyJU=";
   };
   sourceRoot = "${src.name}/packages/less";

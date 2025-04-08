@@ -70,6 +70,7 @@ let
     maintainers = with lib.maintainers; [
       octodi
       d3vil0p3r
+      blackzeshi
     ];
     platforms = [ "x86_64-linux" ];
   };

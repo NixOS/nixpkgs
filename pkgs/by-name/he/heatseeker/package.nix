@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rschmitt";
     repo = "heatseeker";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-SU5HLAFA7IHnVhsmVtxskteeKKIEvvVSqHIeEk5BkfA=";
   };
 

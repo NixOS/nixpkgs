@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iJNEwDsGOOqWQgG3iwrZt9mpbKWHOw7zkEORURcAGLQ=";
   };
 

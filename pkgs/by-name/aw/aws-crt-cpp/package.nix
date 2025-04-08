@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Uv1BHM39f9soq7kziedqRhHqQ/xwnqcz++1UM5nuo8g=";
   };
 

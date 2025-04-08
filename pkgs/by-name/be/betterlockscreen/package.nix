@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "betterlockscreen";
     repo = "betterlockscreen";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-59Ct7XIfZqU3yaW9FO7UV8SSMLdcZMPRc7WJangxFPo=";
   };
 

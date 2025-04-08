@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "majestrate";
     repo = "XD";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-k8Mm0tC7wiBmHFdCX38Rz7ccEFkdeArzGJVHTLQ7iWY=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "unasync";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
   };
 

@@ -20,7 +20,7 @@ let
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-izYsf2Cc0jG8Wf82K6HsTVP+kAhmoEJVU7OJXhSzXLo=";
   };
   goModulesHash = "sha256-mE0vhW1nW16SzqIu0C3q8qCXabJO7fZgkp7GeLWCwog=";

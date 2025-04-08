@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wolfcw";
     repo = "libfaketime";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "docopt";
     repo = "docopt.cpp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0cz3vv7g5snfbsqcf3q8bmd6kv5qp84gj3avwkn4vl00krw13bl7";
   };
 

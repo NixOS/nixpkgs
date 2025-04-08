@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "percona";
     repo = "mongodb_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FwY4rAmv7P55EGfEHrs0y15BvU3qnq0VHf37R7W2yA4=";
   };
 

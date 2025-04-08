@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "infracost";
-    tag = "v${version}";
+    rev = "v${version}";
     repo = "infracost";
     sha256 = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
   };

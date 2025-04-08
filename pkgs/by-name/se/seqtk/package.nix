@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lh3";
     repo = "seqtk";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-W6IUn7R9tlnWrKe/qOHJL+43AL4EZB7zj7M5u9l83WE=";
   };
 

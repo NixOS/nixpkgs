@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };

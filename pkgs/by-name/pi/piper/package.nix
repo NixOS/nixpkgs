@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "libratbag";
     repo = "piper";
-    tag = version;
+    rev = version;
     hash = "sha256-j58fL6jJAzeagy5/1FmygUhdBm+PAlIkw22Rl/fLff4=";
   };
 

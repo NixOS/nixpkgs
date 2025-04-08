@@ -21,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "nadermx";
       repo = "backgroundremover";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-tQ8J3xamOzPPSbFMxIDYKv1TzK1AVwF/DWXdZlrlYvM=";
     };
 

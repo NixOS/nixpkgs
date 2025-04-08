@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "eiwd";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-rmkXR4RZbtD6lh8cGrHLWVGTw4fQqP9+Z9qaftG1ld0=";
     fetchSubmodules = true;
   };

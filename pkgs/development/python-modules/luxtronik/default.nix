@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bouni";
     repo = "python-luxtronik";
-    tag = version;
+    rev = version;
     hash = "sha256-7TuvqOAb/MUumOF6BKTRLOJuvteqZPmFUXXsuwEpmOM=";
   };
 

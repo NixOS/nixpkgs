@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "clairvoyant";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-CSORiNPqzliIpslV28NRPs/+bc9iblsLTPOm1WxxTjc=";
   };
 

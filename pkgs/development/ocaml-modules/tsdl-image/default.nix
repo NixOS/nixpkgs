@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "sanette";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-mgTFwkuFJVwJmHrzHSdNh8v4ehZIcWemK+eLqjglw5o=";
   };
 

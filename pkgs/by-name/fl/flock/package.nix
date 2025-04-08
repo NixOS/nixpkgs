@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "discoteq";
     repo = "flock";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cCpckORtogs6Nt7c5q2+z0acXAnALdLV6uzxa5ng3s4=";
   };
 

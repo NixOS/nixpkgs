@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "c-bata";
     repo = "kube-prompt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
   };
 

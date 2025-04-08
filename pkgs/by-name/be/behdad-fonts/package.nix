@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "font-store";
     repo = "BehdadFont";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gKfzxo3/bCMKXl2d6SP07ahIiNrUyrk/SN5XLND2lWY=";
   };
 

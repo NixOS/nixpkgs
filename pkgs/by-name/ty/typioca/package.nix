@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "typioca";
-    tag = version;
+    rev = version;
     hash = "sha256-fViYwewzhJUJjMupCYk1UsnnPAhByYZqYkuKD6MJNnE=";
   };
 

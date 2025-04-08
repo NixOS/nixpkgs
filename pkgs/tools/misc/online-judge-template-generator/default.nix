@@ -22,7 +22,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "template-generator";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cS1ED1a92fEFqy6ht8UFjxocWIm35IA/VuaPSLsdlqg=";
   };
 

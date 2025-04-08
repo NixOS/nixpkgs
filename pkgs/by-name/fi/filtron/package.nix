@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "filtron";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RihxlJvbHq5PaJz89NHl/wyXrKjSiC4XYAs7LSKAo6E=";
   };
 

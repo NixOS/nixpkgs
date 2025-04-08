@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gvolpe";
     repo = pname;
-    tag = version;
+    rev = version;
     sparseCheckout = [
       "BeautyLine-V3"
     ];

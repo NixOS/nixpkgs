@@ -20,7 +20,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "reasonml-community";
     repo = "graphql-ppx";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+WJhA2ixZHiSZBoX14dnQKk7JfVAIME4JooNSnhRp44=";
   };
 

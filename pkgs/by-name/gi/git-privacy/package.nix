@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EMPRI-DEVOPS";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-b2RkRL8/mZwqc3xCs+oltzualhQtp/7F9POlLlT3UUU=";
   };
 

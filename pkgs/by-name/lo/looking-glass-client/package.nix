@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-I84oVLeS63mnR19vTalgvLvA5RzCPTXV+tSsw+ImDwQ=";
     fetchSubmodules = true;
   };

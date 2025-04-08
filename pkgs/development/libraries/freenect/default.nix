@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenKinect";
     repo = "libfreenect";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-PpJGFWrlQ5sK7TJxQNoPujw1MxWRjphvblwOqnF+mSg=";
   };
 

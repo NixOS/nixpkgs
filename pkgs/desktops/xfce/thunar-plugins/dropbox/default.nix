@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Jeinzi";
     repo = "thunar-dropbox";
-    tag = version;
+    rev = version;
     sha256 = "sha256-q7tw/1JgEn9SyjH1KBZl0tintWJjd3ctUs4JUuCWULs=";
   };
 

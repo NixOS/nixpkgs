@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-m9RHgMqbYBo/p4hXVbLa6j8ms9JcNH0CccF8rjfeUns=";
   };
 

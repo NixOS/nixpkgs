@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "blahgeek";
     repo = "emacs-lsp-booster";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uP/xJfXQtk8oaG5Zk+dw+C2fVFdjpUZTDASFuj1+eYs=";
   };
 

@@ -12,7 +12,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "react-static";
     repo = "react-static";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dlYmD0vgEqWxYf7E0VYstZMAuNDGvQP7xDgHo/wmlUs=";
   };
 

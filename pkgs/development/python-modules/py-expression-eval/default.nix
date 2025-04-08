@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "axiacore";
     repo = "py-expression-eval";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "YxhZd8V6ofphcNdcbBbrT5mc37O9c6W1mfhsvFVC+KM=";
   };
 

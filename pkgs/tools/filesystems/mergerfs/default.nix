@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
   };
 

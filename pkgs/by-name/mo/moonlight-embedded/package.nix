@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-embedded";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Jc706BjIT3rS9zwntNOdgszP4CHuX+qxvPvWeU68Amg=";
     fetchSubmodules = true;
   };

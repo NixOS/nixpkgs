@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IQeYmqCXhzWsuufrLKeBI2sw86dXbn7c5DbmcoJTWvo=";
     fetchSubmodules = true;
   };

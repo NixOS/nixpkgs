@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "team-eternity";
     repo = "eternity";
-    tag = version;
+    rev = version;
     sha256 = "0dlz7axbiw003bgwk2hl43w8r2bwnxhi042i1xwdiwaja0cpnf5y";
     fetchSubmodules = true;
   };

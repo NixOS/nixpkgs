@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-r9SdQg6JTMoGxO2xUtkkBe5F5cajnsndZEq20BjJGuU=";
   };
 

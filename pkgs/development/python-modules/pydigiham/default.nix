@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pydigiham";
-    tag = version;
+    rev = version;
     hash = "sha256-QenoMyVFs8MEDPoMV6TT6XfzktfN/gAMIHR0Scq11wk=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "packethost";
     repo = "prometheus-packet-sd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2k8AsmyhQNNZCzpVt6JdgvI8IFb5pRi4ic6Yn2NqHMM=";
   };
 

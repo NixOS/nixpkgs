@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "whois-api-llc";
     repo = "whois-api-py";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SeBeJ6k2R53LxHov+8t70geqUosk/yBJQCi6GaVteMM=";
   };
 

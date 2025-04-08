@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peo3";
     repo = "cgroup-utils";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0qnbn8cnq8m14s8s1hcv25xjd55dyb6yy54l5vc7sby5xzzp11fq";
   };
 

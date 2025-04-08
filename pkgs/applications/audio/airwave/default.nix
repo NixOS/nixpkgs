@@ -21,7 +21,7 @@ let
   airwave-src = fetchFromGitHub {
     owner = "phantom-code";
     repo = "airwave";
-    tag = version;
+    rev = version;
     sha256 = "1ban59skw422mak3cp57lj27hgq5d3a4f6y79ysjnamf8rpz9x4s";
   };
 

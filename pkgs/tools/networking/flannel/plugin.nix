@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "flannel-io";
     repo = "cni-plugin";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-mhDUpQf1HQLx4vn+Ju5jN5DYgkdsAs8CcmZbBqEITB4=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "tenacityteam";
     repo = "libid3tag";
-    tag = version;
+    rev = version;
     hash = "sha256-6/49rk7pmIpJRj32WmxC171NtdIOaMNhX8RD7o6Jbzs=";
   };
 

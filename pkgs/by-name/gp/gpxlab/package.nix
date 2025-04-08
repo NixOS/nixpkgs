@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BourgeoisLab";
     repo = "GPXLab";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
 

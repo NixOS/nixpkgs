@@ -38,7 +38,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/8MJE1Io0MRSUXiFirYDn6FH2qkWQHE7Fl3nJLjieDw=";
   };
 

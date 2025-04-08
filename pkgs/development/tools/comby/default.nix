@@ -29,7 +29,7 @@ let
       src = fetchFromGitHub {
         owner = "comby-tools";
         repo = "comby";
-        tag = version;
+        rev = version;
         sha256 = "sha256-yQrfSzJgJm0OWJxhxst2XjZULIVHeEfPMvMIwH7BYDc=";
       };
 

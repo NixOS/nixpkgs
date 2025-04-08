@@ -27,7 +27,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
     src = fetchFromGitHub {
       owner = "fdopen";
       repo = "ppx_cstubs";
-      tag = version;
+      rev = version;
       hash = "sha256-qMmwRWCIfNyhCQYPKLiufnb57sTR3P+WInOqtPDywFs=";
     };
 

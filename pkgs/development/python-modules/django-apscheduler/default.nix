@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcass77";
     repo = "django-apscheduler";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2YSVX4FxE1OfJkSYV9IRKd2scV4BrMA/mBzJARQCX38=";
   };
 

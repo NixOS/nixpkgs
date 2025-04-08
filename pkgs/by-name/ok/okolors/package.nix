@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Ivordir";
     repo = "Okolors";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
   };
 

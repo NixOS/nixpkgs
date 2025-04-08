@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCOLLADA";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1ym16fxx9qhf952vva71sdzgbm7ifis0h1n5fj1bfdj8zvvkbw5w";
   };
 

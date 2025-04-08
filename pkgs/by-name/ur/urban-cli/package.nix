@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tfkhdyt";
     repo = "urban-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-URTEhtOiwb3IDyjRUtUmVTaeDXw4Beg0woWdGxeq098=";
   };
 

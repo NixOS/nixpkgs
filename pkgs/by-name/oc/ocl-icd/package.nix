@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OCL-dev";
     repo = "ocl-icd";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-nx9Zz5DpS29g1HRIwPAQi6i+d7Blxd53WQ7Sb1a3FHg=";
   };
 

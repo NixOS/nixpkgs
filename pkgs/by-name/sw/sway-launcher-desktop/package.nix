@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Biont";
     repo = "sway-launcher-desktop";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lv1MLPJsJJjm6RLzZXWEz1JO/4EXTQ8wj225Di+98G4=";
   };
 

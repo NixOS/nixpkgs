@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "hhugo";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-C11HpftrYOCVyWT31wrqo8FVZuP7mRUkRv5IDeAZ+To=";
   };
 

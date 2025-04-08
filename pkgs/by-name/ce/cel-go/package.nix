@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "cel-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-t451e3Pkkt4pmBvS0DBSHOVg7P8ipJd28XyiQ6P/QIQ=";
   };
 

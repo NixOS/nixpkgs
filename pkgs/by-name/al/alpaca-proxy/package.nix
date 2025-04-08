@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "samuong";
     repo = "alpaca";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1CMuZl1bVlofogPwA2wRuQPlXNE2EM1B8rDDDaJGq64=";
   };
 

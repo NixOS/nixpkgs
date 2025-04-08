@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
   };
 

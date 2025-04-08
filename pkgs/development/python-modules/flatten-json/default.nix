@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amirziai";
     repo = "flatten";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ViOLbfJtFWkDQ5cGNYerTk2BqVg5f5B3hZ96t0uvhpk=";
   };
 

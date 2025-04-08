@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World/design";
     repo = "lorem";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-q6gpxxNebf2G/lT5wWXT/lVp3zR8QLWB8/sdK+wLTJ8=";
   };
 

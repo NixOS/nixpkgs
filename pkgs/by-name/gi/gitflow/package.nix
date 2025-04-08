@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "petervanderdoes";
     repo = "gitflow";
-    tag = version;
+    rev = version;
     sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 

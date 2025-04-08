@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "auriamg";
     repo = "macdylibbundler";
-    tag = version;
+    rev = version;
     sha256 = "0j4ij48jf5izgymzxxaakf6vc50w9q0761yir6nfj1n6qlnrlidf";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-tfs-incidents-client";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Cz0PRcGReAE0mg04ktCUaoLqPTjvyU1TiB/Pdz7o7zo=";
   };
 

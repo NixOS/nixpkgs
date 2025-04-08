@@ -17,7 +17,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     src = fetchFromGitHub {
       owner = "mlin";
       repo = "twt";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
     };
 

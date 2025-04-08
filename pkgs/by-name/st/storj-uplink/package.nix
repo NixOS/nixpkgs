@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "storj";
     repo = "storj";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-r0N9TpSlKkGy/hlVxKB+fMXFvQQOXC5L4Ryd5fP+Ud0=";
   };
 

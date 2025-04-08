@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "usbarmory";
     repo = "interlock";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-YXa4vErt3YnomTKAXCv8yUVhcc0ST47n9waW5E8QZzY=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cXDFqt2KgMFGfdh6NGE+JmP4R0Wm9LNHM0eIblYe6zU=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GZ+KOnQV/eXPt1QGaqWj4JAlPNhNKpVn7rlC7W4zfDo=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.

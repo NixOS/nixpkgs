@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "susam";
     repo = "vimer";
-    tag = version;
+    rev = version;
     sha256 = "01qhr3i7wasbaxvms39c81infpry2vk0nzh7r5m5b9p713p0phsi";
   };
 

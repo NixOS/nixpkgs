@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tlocke";
     repo = "scramp";
-    tag = version;
+    rev = version;
     hash = "sha256-KpododRJ+CYRGBR7Sr5cVBhJvUwh9YmPERd/DAJqEcY=";
   };
 

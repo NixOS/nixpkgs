@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gdraheim";
     repo = "zziplib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8QxQrxqYO4LtB8prMqgz5a0QqvSKL7KzTkgi+VdHp6A=";
   };
 

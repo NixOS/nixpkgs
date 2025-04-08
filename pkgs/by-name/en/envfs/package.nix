@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "envfs";
-    tag = version;
+    rev = version;
     hash = "sha256-kOfnKguvJQHW/AfQOetxVefjoEj7ec5ew6fumhOwP08=";
   };
   useFetchCargoVendor = true;

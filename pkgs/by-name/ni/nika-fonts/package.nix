@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "font-store";
     repo = "NikaFont";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jDemm8IyjhoCOg4Bfsp0tzUR7m+JaswL5d7Kug+asJk=";
   };
 

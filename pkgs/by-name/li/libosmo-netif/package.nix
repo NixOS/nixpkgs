@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-netif";
-    tag = version;
+    rev = version;
     hash = "sha256-X2sRjhlB63ffkLB4c/M11iFpprG0DUzq2NL6mRN9H+c=";
   };
 

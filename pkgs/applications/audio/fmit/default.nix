@@ -27,7 +27,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gillesdegottex";
     repo = "fmit";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1q062pfwz2vr9hbfn29fv54ip3jqfd9r99nhpr8w7mn1csy38azx";
   };
 

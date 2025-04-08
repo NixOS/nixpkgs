@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "piranha";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-pxk9tauB7u0oe6g4maHh+dREZXKwMz44v3KB43yYW6c=";
   };
 

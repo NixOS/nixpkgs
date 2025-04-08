@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BdNv0rx+9/F0leNj2AAej8psy8X8HysDrIXheVOOkSo=";
   };
 
