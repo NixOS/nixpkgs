@@ -1,30 +1,40 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  makeBinaryWrapper,
+  fetchFromGitHub,
+  makeWrapper,
   jre,
+  maven,
 }:
 
-stdenvNoCC.mkDerivation rec {
+maven.buildMavenPackage rec {
   version = "10.22.0";
   pname = "checkstyle";
 
-  src = fetchurl {
-    url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-U6QpASgCKxv3NTFINkJ9Aey4E9Y089RY5X2TNhSlIOs=";
+  src = fetchFromGitHub {
+    owner = "checkstyle";
+    repo = "checkstyle";
+    tag = "checkstyle-${version}";
+    hash = "sha256-upMZYfWB7Ww00VEX6vXzxl//izILm2eb1XtCFrQCR08=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
-  buildInputs = [ jre ];
+  mvnHash = "sha256-4LiYy/xOlyDpPFwn7t/8k0SsPljHt3BcMakMPWaVxMA=";
 
-  dontUnpack = true;
+  nativeBuildInputs = [
+    maven
+    makeWrapper
+  ];
+
+  mvnParameters = lib.escapeShellArgs [ "-Passembly,no-validations" ];
 
   installPhase = ''
     runHook preInstall
-    install -D $src $out/checkstyle/checkstyle-all.jar
+
+    mkdir -p $out/bin $out/share/checkstyle
+    install -Dm644 target/checkstyle-${version}-all.jar $out/share/checkstyle/checkstyle-all.jar
+
     makeWrapper ${jre}/bin/java $out/bin/checkstyle \
-      --add-flags "-jar $out/checkstyle/checkstyle-all.jar"
+      --add-flags "-jar $out/share/checkstyle/checkstyle-all.jar"
+
     runHook postInstall
   '';
 
@@ -38,9 +48,15 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://checkstyle.org/";
     changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ pSub ];
-    platforms = jre.meta.platforms;
+    maintainers = with maintainers; [
+      pSub
+      progrm_jarvis
+    ];
+    inherit (jre.meta) platforms;
   };
 }
