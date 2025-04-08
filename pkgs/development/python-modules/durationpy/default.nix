@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "icholy";
     repo = "durationpy";
-    tag = version;
+    rev = version;
     hash = "sha256-R/cZPnUUlosGHCOcqwRJ0GJlcB6Lu5a3e5h1CQ6fysA=";
   };
 

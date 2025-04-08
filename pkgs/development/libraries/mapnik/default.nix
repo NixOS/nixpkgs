@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pReoyMdu8RYrberKcwGw0DKmkxVRJezZYcPAM/UAn6o=";
     fetchSubmodules = true;
   };

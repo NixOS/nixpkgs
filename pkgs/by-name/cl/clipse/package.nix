@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "savedra1";
     repo = "clipse";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yUkHT7SZT7Eudvk1n43V+WGWqUKtXaV+p4ySMK/XzQw=";
   };
 

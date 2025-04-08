@@ -16,7 +16,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2Or4L3wrvqW7bvrJcgvK7rGqjqiob6k8CZc/XauguLo=";
   };
 

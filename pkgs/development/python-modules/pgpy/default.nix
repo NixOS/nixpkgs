@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SecurityInnovation";
     repo = "PGPy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-47YiHNxmjyCOYHHUV3Zyhs3Att9HZtCXYfbN34ooTxU=";
   };
 

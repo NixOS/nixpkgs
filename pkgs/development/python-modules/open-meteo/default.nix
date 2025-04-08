@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-open-meteo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PddQyCCYbI9DjTvlJ4F3IQB6VichwcNhC04DJMULYZM=";
   };
 

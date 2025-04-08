@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "psmokotnin";
     repo = "osm";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-X/edRuYtZsvbs7Bl/JpJJPIGeQDEDH+FTQCX1Zy1osE=";
   };
 

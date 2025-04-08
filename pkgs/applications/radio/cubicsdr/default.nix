@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cjcliffe";
     repo = "CubicSDR";
-    tag = version;
+    rev = version;
     sha256 = "0cyv1vk97x4i3h3hhh7dx8mv6d1ad0fypdbx5fl26bz661sr8j2n";
   };
 

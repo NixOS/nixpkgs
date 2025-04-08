@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "taarskog";
     repo = "pySOMweb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cLKEKDCMK7lCtbmj2KbhgJUCZpPnPI5tZvO5L+ey8qI=";
   };
 

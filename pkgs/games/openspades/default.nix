@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yvt";
     repo = "openspades";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1fvmqbif9fbipd0vphp57pk6blb4yp8xvqlc2ppipk5pjv6a3d2h";
   };
 

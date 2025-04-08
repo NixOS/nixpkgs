@@ -103,7 +103,7 @@ let
           src = fetchFromGitLab {
             owner = "arpa2";
             repo = "arpa2common";
-            tag = "v${version}";
+            rev = "v${version}";
             sha256 = "sha256-8zVsAlGtmya9EK4OkGUMu2FKJRn2Q3bg2QWGjqcii64=";
           };
         }))
@@ -245,7 +245,7 @@ let
         name = "echo";
         owner = "openresty";
         repo = "echo-nginx-module";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
       };
 
@@ -391,7 +391,7 @@ let
         name = "lua";
         owner = "openresty";
         repo = "lua-nginx-module";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
       };
 

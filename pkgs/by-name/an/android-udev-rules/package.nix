@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
-    tag = version;
+    rev = version;
     hash = "sha256-QADyZ3FHVuxX/PfsRt2ijwJRCksQb1Hz5lSgYJlyb1Q=";
   };
 

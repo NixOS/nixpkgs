@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "26F-Studio";
     repo = "cold_clear_ai_love2d_wrapper";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-sguV+Dw+etZH43tXZYL46NAdsI/qvyvGWCPUiTEjhy4=";
   };

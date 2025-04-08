@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pMY86Ucp5nuH63YgAh60l3WZYDPvM8LcTaV9QS2BzAA=";
   };
 

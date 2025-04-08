@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "monero-ecosystem";
     repo = "monero-python";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
   };
 

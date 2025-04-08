@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "henrikschnor";
     repo = "pasimple";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Z271FdBCqPFcQzVqGidL74nO85rO9clNvP4czAHmdEw=";
   };
 

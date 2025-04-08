@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
-    tag = version;
+    rev = version;
     hash = "sha256-umMekxP9bvV01KzfIh2Zxa9Xb+tR5x+tG9dOnBIOkjY=";
   };
 

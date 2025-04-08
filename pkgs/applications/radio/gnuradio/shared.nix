@@ -33,7 +33,7 @@ in
       fetchFromGitHub {
         repo = "gnuradio";
         owner = "gnuradio";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = sourceSha256;
       };
   nativeBuildInputs =

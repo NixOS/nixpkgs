@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getcuia";
     repo = "ochre";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-U6qycLnldwNze3XMAn6DS3XGX4RaCZgW0pH/y/FEAkk=";
   };
 

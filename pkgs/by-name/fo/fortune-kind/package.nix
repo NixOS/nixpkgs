@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cafkafk";
     repo = "fortune-kind";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Tpg0Jq2EhkwQuz5ZOtv6Rb5YESSlmzLoJPTxYJNNgac=";
   };
 

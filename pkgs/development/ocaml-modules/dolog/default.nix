@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "UnixJunkie";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-g68260mcb4G4wX8y4T0MTaXsYnM9wn2d0V1VCdSFZjY=";
   };
 

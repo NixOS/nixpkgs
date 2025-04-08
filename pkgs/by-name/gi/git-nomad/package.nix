@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rraval";
     repo = "git-nomad";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-G/i+mCKZSe8tPMuCLzymkU9SGyFNHY74cGhcC4ru0/k=";
   };
 

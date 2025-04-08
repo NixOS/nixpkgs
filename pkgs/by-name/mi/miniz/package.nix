@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "richgel999";
     repo = "miniz";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-3J0bkr2Yk+MJXilUqOCHsWzuykySv5B1nepmucvA4hg=";
   };
   passthru.updateScript = nix-update-script { };

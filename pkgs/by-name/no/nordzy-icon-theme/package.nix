@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-icon";
-    tag = version;
+    rev = version;
     sha256 = "sha256-r/WYGcHRAFX7TennestobjcJhwu3GE8aQXxnaeokQM0=";
   };
 

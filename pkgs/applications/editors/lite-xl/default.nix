@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ig0XDxnll/zruAwWHwuXiqumBXgAPxuK0E1ELupvcXo=";
   };
 

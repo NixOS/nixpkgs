@@ -12,7 +12,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "totaldebug";
     repo = "atomic-calendar-revive";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TaxvxAUcewQH0IMJ0/VjW4+T6squ1tuZIFGn3PE3jhU=";
   };
 

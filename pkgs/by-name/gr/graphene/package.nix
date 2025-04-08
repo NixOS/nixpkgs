@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ebassi";
     repo = "graphene";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
 

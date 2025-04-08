@@ -16,7 +16,7 @@ mkDerivation (
     src = fetchFromGitHub {
       owner = "crytic";
       repo = "echidna";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-NJ2G6EkexYE4P3GD7PZ+lLEs1dqnoqIB2zfAOD5SQ8M=";
     };
 

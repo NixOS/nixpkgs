@@ -55,7 +55,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "dbb-app";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 

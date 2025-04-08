@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = "topicctl";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-sYt/t16OVJiWFVqSdLNog/mj1gj/TeY0r7z/gMZspls=";
   };
 

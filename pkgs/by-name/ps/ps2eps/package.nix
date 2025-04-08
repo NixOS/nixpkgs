@@ -14,7 +14,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "roland-bless";
     repo = "ps2eps";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SPLwsGKLVhANoqSQ/GJ938cYjbjMbUOXkNn9so3aJTA=";
   };
   patches = [

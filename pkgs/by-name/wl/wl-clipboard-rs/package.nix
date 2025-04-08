@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jGTWcVR6atkEeEUunystJ4B6I3GzYiCOMs0MC6pvPfI=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "keepassxc-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-seCeHNEj5GxAI7BVMPzh+YuoxivmTwvhVCqY5LKHpQk=";
   };
 

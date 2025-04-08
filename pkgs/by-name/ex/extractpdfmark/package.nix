@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trueroad";
     repo = "extractpdfmark";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pNc/SWAtQWMbB2+lIQkJdBYSZ97iJXK71mS59qQa7Hs=";
   };
 

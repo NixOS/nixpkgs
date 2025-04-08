@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";
     repo = "async-profiler";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0CCJoRjRLq4LpiRD0ibzK8So9qSQymePCTYUI60Oy2k=";
   };
 

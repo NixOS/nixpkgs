@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "dbcsr";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-YXySNw3+DiY7E57W1ypeWLyawwcWVGlmTM4Kgj7Nnmo=";
   };
 

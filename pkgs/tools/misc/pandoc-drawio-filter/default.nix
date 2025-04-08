@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "tfc";
     repo = "pandoc-drawio-filter";
-    tag = version;
+    rev = version;
     sha256 = "sha256-2XJSAfxqEmmamWIAM3vZqi0mZjUUugmR3zWw8Imjadk=";
   };
 

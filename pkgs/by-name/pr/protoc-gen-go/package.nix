@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6Wx1XoHZS1RM0hpgVE85U7huVS4IK+AroTE2zpZR4VI=";
   };
 

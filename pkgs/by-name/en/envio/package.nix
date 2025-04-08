@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "envio-cli";
     repo = "envio";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-je0DBoBIayFK//Aija5bnO/2z+hxNWgVkwOgxMyq5s4=";
   };
 

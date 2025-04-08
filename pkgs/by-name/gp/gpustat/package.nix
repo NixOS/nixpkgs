@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "arduano";
     repo = "gpustat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
   };
 

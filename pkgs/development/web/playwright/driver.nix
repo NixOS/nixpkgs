@@ -32,7 +32,7 @@ let
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-s4lJRdsA4H+Uf9LjriZ6OimBl5A9Pf4fvhWDw2kOMkg=";
   };
 

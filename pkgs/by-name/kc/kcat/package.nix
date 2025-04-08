@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "kcat";
-    tag = version;
+    rev = version;
     sha256 = "sha256-pCIYNx0GYPGDYzTLq9h/LbOrJjhKWLAV4gq07Ikl5O4=";
   };
 

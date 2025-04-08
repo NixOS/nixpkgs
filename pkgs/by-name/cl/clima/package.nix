@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "clima";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CRnAxhkuCTyHR4uQofA51Dm3+YKqm3iwBkFNkbLTv1A=";
   };
 

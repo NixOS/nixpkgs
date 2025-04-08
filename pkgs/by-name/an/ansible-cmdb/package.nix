@@ -26,7 +26,7 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "fboender";
     repo = "ansible-cmdb";
-    tag = version;
+    rev = version;
     hash = "sha256-HOFLX8fiid+xJOVYNyVbz5FunrhteAUPlvS3ctclVHo=";
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nm-l2tp";
     repo = "network-manager-l2tp";
-    tag = version;
+    rev = version;
     hash = "sha256-AmbDWBCUG9fvqA6iJopYtbitdRwv2faWvIeKN90p234=";
   };
 

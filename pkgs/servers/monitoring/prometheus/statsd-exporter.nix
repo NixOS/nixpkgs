@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "statsd_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-h58yD+jmvUCvYsJqNcBSR1f+5YgDyMbLDd3I0HW9/kA=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-H+ibj7eroIWti2Mxa+V5pzE1NE7b3H3/ThVIDqweWf8=";
   };
 

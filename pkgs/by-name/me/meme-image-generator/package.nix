@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nomad-software";
     repo = "meme";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-L+JpNg9X3RSNXTozv2H1n2JiQx75i9gFGaQmDFaMIf0=";
   };
 

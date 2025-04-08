@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DskjcKjdz1HmKzmA568zRCjh4UK1/LBD5cSIu7Rfwok=";
   };
 in

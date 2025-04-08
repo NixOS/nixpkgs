@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mborgerding";
     repo = "kissfft";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ukikTVnmKomKXTo6zc+PhpZzEkzXN2imFwZOYlfR3Pk=";
   };
 

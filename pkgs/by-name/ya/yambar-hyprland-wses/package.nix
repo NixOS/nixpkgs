@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "yambar-hyprland-wses";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-furHj1AAFgNiNHP9RBsVrIvrDckSKU8FXilzH9TQ99c=";
   };
 

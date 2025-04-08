@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-EulQYGOMIh952e4Xp13hT/HMW3qP1QXYtt5PEej1VTY=";
   };
   vendorHash = "sha256-D6ipwGMxT0B3uYUzg6Oo2TYnsOVBY0mYO5lC7vtVPc0=";

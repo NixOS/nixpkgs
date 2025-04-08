@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SRn7kg5FdSimKMFowKNUIan+MrojtNO0apeehIRTzfw=";
   };
 

@@ -10,7 +10,7 @@ rec {
   src = fetchFromGitHub {
     owner = "vim";
     repo = "vim";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-buqA6OM2FcxPefGQIGm8kD8ZWcskw7K/VO3xCRw7SbI=";
   };
 

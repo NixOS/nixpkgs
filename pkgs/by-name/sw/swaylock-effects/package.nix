@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "swaylock-effects";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
   };
 

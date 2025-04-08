@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "8051Enthusiast";
     repo = "biodiff";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZLxjOV08sC5dKICvRUyL6FLMORkxwdLgNq7L45CDwa4=";
     fetchSubmodules = true;
   };

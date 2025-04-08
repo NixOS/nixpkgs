@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "powercap";
     repo = "powercap";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-l+IpFqBnCYUU825++sUPySD/Ku0TEIX2kt+S0Wml6iA=";
   };
 

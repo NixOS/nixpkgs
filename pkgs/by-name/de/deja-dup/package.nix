@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-MjZ+NkNAzwEnC9R48Q5Cb3+c5jM7ooOv7+5TQ6Xo4LM=";
   };
 

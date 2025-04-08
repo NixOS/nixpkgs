@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lensfun";
     repo = "lensfun";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-FyYilIz9ssSHG6S02Z2bXy7fjSY51+SWW3v8bm7sLvY=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-32QFgmvXQ+8ix1N9I6pJaIJGWOT67/FG0VVEhftwQQw=";
   };
   vendorHash = "sha256-WRH9doQavcdH1sd2fS8QoFSmlirBMZgSzB/sj1q6cUQ=";

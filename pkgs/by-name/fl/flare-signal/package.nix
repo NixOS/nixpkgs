@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-qj34x/e5Nc3wPdFaHFZHQ8uCMHIlxfVNyvlp7eb3tSo=";
   };
 

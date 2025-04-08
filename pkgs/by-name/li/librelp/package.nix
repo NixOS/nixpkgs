@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "librelp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VJlvFiOsIyiu0kBU8NkObtt9j2ElrSzJtvE8wtSlOus=";
   };
 

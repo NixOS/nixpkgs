@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-cfn-template-flip";
-    tag = version;
+    rev = version;
     hash = "sha256-lfhTR3+D1FvblhQGF83AB8+I8WDPBTmo+q22ksgDgt4=";
   };
 

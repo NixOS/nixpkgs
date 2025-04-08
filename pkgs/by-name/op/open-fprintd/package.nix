@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uunicorn";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
   };
 

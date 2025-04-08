@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
-    tag = version;
+    rev = version;
     hash = "sha256-C4VqKHi6nVAHuXVhqvTRRyn0Bb619ez4LzgUWPH1cbM=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "GpuZelenograd";
     repo = "memtest_vulkan";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8tmQtycK7D5bol9v5VL8VkROZbSCndHo+uBvqqFTZjw=";
   };
 

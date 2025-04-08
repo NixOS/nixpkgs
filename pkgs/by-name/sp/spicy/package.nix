@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trhodeos";
     repo = "spicy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-TodMm4UbnLB+LiyfPVXT7bcVLbyBFbGoOYQSsz3IMfM=";
   };
 

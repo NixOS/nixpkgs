@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AudioSharing";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-yUMiy5DaCPfCmBIGCXpqtvSSmQl5wo6vsLdW7Tt/Wfo=";
   };
 

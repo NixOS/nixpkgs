@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "feediron";
     repo = "ttrss_plugin-feediron";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KU4XQJNK7Ua7rZaXA32lv16RlloCysAb54E5kEY847A=";
   };
 

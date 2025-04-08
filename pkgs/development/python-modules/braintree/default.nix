@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "braintree";
     repo = "braintree_python";
-    tag = version;
+    rev = version;
     hash = "sha256-5MF8W2zUVvNiOnmszgJkMDmeYLZ6ppFHqmH6dmlCzQY=";
   };
 

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DanielDent";
     repo = "git-annex-remote-rclone";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-B6x67XXE4BHd3x7a8pQlqPPmpy0c62ziDAldB4QpqQ4=";
   };
 

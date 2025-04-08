@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tree-sitter-grammars";
     repo = "tree-sitter-make";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WiuhAp9JZKLd0wKCui9MV7AYFOW9dCbUp+kkVl1OEz0=";
   };
 

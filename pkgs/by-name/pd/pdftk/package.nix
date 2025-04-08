@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 

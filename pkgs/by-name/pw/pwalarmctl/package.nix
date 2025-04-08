@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "amyipdev";
     repo = "pwalarmd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xoC1PtDQjkvoWb9x8A43ITo6xyYOv9hxH2pxiZBBvKI=";
   };
 

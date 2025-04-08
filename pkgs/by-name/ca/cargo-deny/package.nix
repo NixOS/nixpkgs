@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-deny";
-    tag = version;
+    rev = version;
     hash = "sha256-u93x0w6gSPxDCrp9bNJDCxLBZfh8EhXU4qvhklI4GKY=";
   };
 

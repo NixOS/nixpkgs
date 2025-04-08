@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Kerenoc";
     repo = "GCstar";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
   };
 

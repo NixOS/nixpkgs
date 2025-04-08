@@ -11,7 +11,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "nilzen";
     repo = "xbmc-" + pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-CZtBUqFaKtMmKcpfBQp0Mb8sVvpCTkqcpfdYe41YSJs=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "kanjidraw";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "03ag8vkbf85qww857ii8hcnn8bh5qa7rsmhka0v9vfxk272ifbyq";
   };
 

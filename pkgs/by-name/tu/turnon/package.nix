@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "turnon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eKJRyQMZOa/QRUW0VQ0EkXbJSMcYHfCC9wTs0YEB1yo=";
   };
 

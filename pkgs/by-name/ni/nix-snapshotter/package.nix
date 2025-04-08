@@ -11,7 +11,7 @@ let
   src = fetchFromGitHub {
     owner = "pdtpartners";
     repo = "nix-snapshotter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TCZdXCmnqCPsd3PjLv/LDSKJhTspLliL0DE+c/XP9BY=";
   };
 

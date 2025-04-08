@@ -16,7 +16,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "snuffleupagus";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-W+EQXjvmDHih5YW/SjRcEdUELePUPKrNWB8vW9dLK/g=";
   };
 

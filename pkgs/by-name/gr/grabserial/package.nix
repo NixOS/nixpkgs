@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tbird20d";
     repo = "grabserial";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0ryk4w8q6zfmia71nwnk5b7xaxw0sf45dw9q50xp7k76i3k5f9f3";
   };
 

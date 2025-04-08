@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phatina";
     repo = "simple-mtpfs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vAqi2owa4LJK7y7S7TwkPAqDxzyHrZZBTu0MBwMT0gI=";
   };
 

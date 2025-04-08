@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
-    tag = version;
+    rev = version;
     hash = "sha256-vZIO6ILatIWa9nJYOp4AMKwvaZLahqYWRLMDOizyBI0=";
   };
   passthru.updateScript = gitUpdater { };

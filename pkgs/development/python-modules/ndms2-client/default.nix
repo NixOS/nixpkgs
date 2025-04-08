@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "foxel";
     repo = "python_ndms2_client";
-    tag = version;
+    rev = version;
     hash = "sha256-A19olC1rTHTy0xyeSP45fqvv9GUynQSrMgXBgW8ySOs=";
   };
 

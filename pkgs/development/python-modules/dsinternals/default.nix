@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "pydsinternals";
-    tag = version;
+    rev = version;
     hash = "sha256-C1ar9c4F4WI5ICX7PJe8FzVwK8bxZds+kMBpttEp9Ko=";
   };
 

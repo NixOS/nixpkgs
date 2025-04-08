@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "itaysk";
     repo = "kubectl-neat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-j8v0zJDBqHzmLamIZPW9UvMe9bv/m3JUQKY+wsgMTFk=";
   };
 

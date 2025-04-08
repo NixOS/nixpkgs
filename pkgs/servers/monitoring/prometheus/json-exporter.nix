@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "json_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Zeq4gbwGd16MkGQRL8+bq0Ns06Yg+H9GAEo3qaMGDbc=";
   };
 

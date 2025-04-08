@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-luWcbYCv5OM3aidxiO7glqD+VYnCZMElZYaPKbtvMYI=";
   };
 

@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "litecli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TPwzXfb4n6wTe6raQ5IowKdhGkKrf2pmSS2+Q03NKYk=";
   };
 

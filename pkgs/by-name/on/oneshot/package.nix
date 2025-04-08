@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "forestnode-io";
     repo = "oneshot";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eEVjdFHZyk2bSVqrMJIsgZvvLoDOira8zTzX9oDNtHM=";
   };
 

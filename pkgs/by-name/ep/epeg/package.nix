@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mattes";
     repo = "epeg";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-lttqarR8gScNIlSrc5uU3FLfvwxxJ2A1S4oESUW7oIw=";
   };
 

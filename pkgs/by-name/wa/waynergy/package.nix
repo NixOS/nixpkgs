@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "r-c-f";
     repo = "waynergy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cwpW6O+KJNDvSrHeSM1Ci7S0kNw6a8KCdGAIhowPEIw=";
   };
 

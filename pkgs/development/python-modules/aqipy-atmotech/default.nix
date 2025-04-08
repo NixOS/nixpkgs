@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atmotube";
     repo = "aqipy";
-    tag = version;
+    rev = version;
     hash = "sha256-tqHhfJmtVFUSO57Cid9y3LK4pOoG7ROtwDT2hY5IE1Y=";
   };
 

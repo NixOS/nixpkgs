@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-bKMAyONy1Udd+2nDVEMrtIsnfqrNuBVMWU7nCqvZ+3E=";
   };

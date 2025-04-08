@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "corr-CDE";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-s375gtqBWx0GGXALXR+fN4bb3tmpvPNu/3bNz+75UWU=";
   };
 

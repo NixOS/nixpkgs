@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uO5KezbUQGj3rNpuw2SJOzcP86DZqX7DJFz3BxEnf1E=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "opcr-io";
     repo = "policy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-vTUlC/LQTQEpzd1AXgcJJBZXmbSuX8JACbM60KVuT9E=";
   };
   vendorHash = "sha256-3KBHK9CKn9h45eq0wAwLivm3Lj3COGYn/zGltonLP9k=";

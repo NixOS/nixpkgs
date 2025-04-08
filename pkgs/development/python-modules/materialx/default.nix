@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
   };
 

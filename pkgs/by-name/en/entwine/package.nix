@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
-    tag = version;
+    rev = version;
     sha256 = "sha256-1dy5NafKX0E4MwFIggnr7bQIeB1KvqnNaQQUUAs6Bq8=";
   };
 

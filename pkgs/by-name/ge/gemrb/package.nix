@@ -34,7 +34,7 @@ let
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+aPnOJQGRblqcrblVU5ZwA8CZqeT19rxEtn3GLuofYU=";
   };
 

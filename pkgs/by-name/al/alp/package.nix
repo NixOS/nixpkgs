@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gernotfeichter";
     repo = "alp";
-    tag = version;
+    rev = version;
     hash = "sha256-tE8qKNXLKvFcnDULVkJJ/EJyEsvATCk/3YFkZCmpHSo=";
   };
   vendorHash = "sha256-AHPVhtm6La7HWuxJfpxTsS5wFTUZUJoVyebLGYhNKTg=";

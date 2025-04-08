@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-uBtQk8uhW/i8lSbv6zwsRyiiImFBw1YCQHVWQ8jot5w=";
   };
 

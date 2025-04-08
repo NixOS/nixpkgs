@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-udp-forwarder";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Snj5nKyFsq8WJJNw1d8O/YX/dZ/tCTVBw5R8kXJvsa4=";
   };
 

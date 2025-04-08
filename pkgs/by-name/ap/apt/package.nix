@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-B4rFOt4J94/XkFw09sdvfogdY1b5R6QYnNC3HVUV9pc=";
   };
 

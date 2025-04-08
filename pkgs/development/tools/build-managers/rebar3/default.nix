@@ -28,7 +28,7 @@ let
     src = fetchFromGitHub {
       inherit owner;
       repo = pname;
-      tag = version;
+      rev = version;
       sha256 = "OhzgDipFhscHtRGlfc33ZewBgHgQLa9Zhjby/r1m49A=";
     };
 

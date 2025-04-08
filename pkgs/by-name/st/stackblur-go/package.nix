@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "esimov";
     repo = "stackblur-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-y1Fov81mholhz+bLRYl+G7jhzcsFS5TUjQ3SUntD8E0=";
   };
 

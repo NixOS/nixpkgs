@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "awslabs";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 

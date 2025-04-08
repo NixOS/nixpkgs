@@ -15,7 +15,7 @@ let
         src = fetchFromGitHub {
           owner = "grain-lang";
           repo = "dypgen";
-          tag = version;
+          rev = version;
           hash = "sha256-fKuO/e5YbA2B7XcghWl9pXxwvKw9YlhnmZDZcuKe3cs=";
         };
       }

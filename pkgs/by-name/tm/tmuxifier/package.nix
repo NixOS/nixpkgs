@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jimeh";
     repo = "tmuxifier";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7TvJnvtZEo5h45PcSy3tJN09UblswV0mQbTaKjgLyqw=";
   };
 

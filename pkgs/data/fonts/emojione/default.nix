@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eosrei";
     repo = "emojione-color-font";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1781kxfbhnvylypbkwxc3mx6hi0gcjisfjr9cf0jdz4d1zkf09b3";
   };
 

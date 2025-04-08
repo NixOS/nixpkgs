@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getcuia";
     repo = "stransi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PDMel6emra5bzX+FwHvUVpFu2YkRKy31UwkCL4sGJ14=";
   };
 

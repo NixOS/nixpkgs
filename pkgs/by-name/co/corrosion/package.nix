@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/Xq0SKaKuOgrMXbgw+Aa59NEnU1mPQhARoh7EqV01K8=";
   };
 

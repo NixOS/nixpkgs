@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gpUiLUdg+EpVkJzDg43gI5oXhy611QwndwZZVVgg4Lg=";
   };
 

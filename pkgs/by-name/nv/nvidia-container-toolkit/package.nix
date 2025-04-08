@@ -32,7 +32,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "nvidia";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IH2OjaLbcKSGG44aggolAOuJkjk+GaXnnTbrXfZ0lVo=";
 
   };

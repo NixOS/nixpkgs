@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-eVndqIqJ3DRceuFMT++g2riXq0CL5r+TWbvzvaYIfZ8=";
   };
 

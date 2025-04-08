@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-OMd8t043JVfMEfRjLdcE/R/4ymGp2yennkCjyX75r8Q=";
   };
 

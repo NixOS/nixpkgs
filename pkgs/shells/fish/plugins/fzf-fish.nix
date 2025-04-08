@@ -21,7 +21,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=";
   };
 

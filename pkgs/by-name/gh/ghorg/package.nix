@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-tsR7cBpDa311rLI1CTXD2LLl3j2PxkBeQsjkUP99iIo=";
   };
 

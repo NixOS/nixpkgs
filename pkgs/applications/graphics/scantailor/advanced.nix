@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vigri";
     repo = "scantailor-advanced";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-mvoCoYdRTgXW5t8yd9Y9TOl7D3RDVwcjUv2YDUWrtRI=";
   };
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "secp256k1";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-u3o6kE1HykxH2KbrJmNTDz9IbT+e26Vxze5RzvfCfVA=";
   };
 

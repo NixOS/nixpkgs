@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ahayworth";
     repo = "python_awair";
-    tag = version;
+    rev = version;
     hash = "sha256-zdZyA6adM4bfEYupdZl7CzMjwyfRkQBrntNh0MusynE=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kichiki";
     repo = "waon";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1xmq8d2rj58xbp4rnyav95y1vnz3r9s9db7xxfa2rd0ilq0ps4y7";
   };
 

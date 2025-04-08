@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndinit";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KXCObRUhXTEeb48hnQYrnb55g+nJomr52IIVpFDn+nY=";
   };
 

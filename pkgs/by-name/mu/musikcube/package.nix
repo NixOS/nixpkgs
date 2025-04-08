@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "clangen";
     repo = "musikcube";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha512-ibpSrzbn2yGNgWnjAh4sG9ZRFImxjE2sq6tu9k0w1QAAr/OWSTwtaIuK71ClT6yt4HKyRk1KSaXa+/IzOHI6Kg==";
   };
 

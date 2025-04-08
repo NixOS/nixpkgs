@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant_integration_ntfy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ydWZ4ApYQ9kyMA5A2OGXG323/7H3fa2XPiOAFBZNM30=";
   };
 

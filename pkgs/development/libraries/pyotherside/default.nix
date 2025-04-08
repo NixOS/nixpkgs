@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thp";
     repo = "pyotherside";
-    tag = version;
+    rev = version;
     sha256 = "sha256-2OYVULNW9EzssqodiVtL2EmhTSbefXpLkub3zFvNwNo=";
   };
 

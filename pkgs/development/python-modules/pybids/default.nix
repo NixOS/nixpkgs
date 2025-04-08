@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "pybids";
-    tag = version;
+    rev = version;
     hash = "sha256-nSBc4vhkCdRo7CNBwvJreCiwoxJK6ztyI5gvcpzYZ/Y=";
   };
 

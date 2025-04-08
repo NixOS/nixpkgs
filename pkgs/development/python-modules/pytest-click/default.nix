@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "pytest-click";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-A/RF+SgPu2yYF3eHEFiZwKJW2VwQ185Ln6S3wn2cS0k=";
   };
 

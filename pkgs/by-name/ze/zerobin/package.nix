@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Tygs";
     repo = "0bin";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1dfy3h823ylz4w2vv3mrmnmiyvf6rvyvsp4j3llr074w9id0zy16";
   };
 

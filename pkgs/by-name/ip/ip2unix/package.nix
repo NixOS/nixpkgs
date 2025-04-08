@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
   };
 

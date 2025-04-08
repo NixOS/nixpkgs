@@ -178,7 +178,7 @@ let
         src = fetchFromGitHub {
           owner = "encode";
           repo = "django-rest-framework";
-          tag = version;
+          rev = version;
           hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
         };
 

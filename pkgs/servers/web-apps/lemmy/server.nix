@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
-    tag = version;
+    rev = version;
     hash = pinData.serverHash;
     fetchSubmodules = true;
   };

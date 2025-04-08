@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
-    tag = version;
+    rev = version;
     sha256 = "08cy0jd463kng6hwbd3nfldsp4dpd2lknlvdm88cq795wy0kh4wp";
   };
 

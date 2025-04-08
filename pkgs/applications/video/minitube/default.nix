@@ -21,7 +21,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     hash = "sha256-ROqROQsV8ddrxYT5mMdkf6rCgCoGr1jpxQ1ohcoEaQs=";
-    tag = version;
+    rev = version;
     repo = "minitube";
     owner = "flaviotordini";
     fetchSubmodules = true;

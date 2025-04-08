@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "Lysxia";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "RUnsAB4hMV87ItCyGhc47bHGY1iOwVv9kco2HxnzqbU=";
   };
 

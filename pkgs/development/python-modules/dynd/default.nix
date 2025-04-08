@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libdynd";
     repo = "dynd-python";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "19igd6ibf9araqhq9bxmzbzdz05vp089zxvddkiik3b5gb7l17nh";
   };
 

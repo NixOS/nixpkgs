@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deater";
     repo = "linux_logo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yBAxPwgKyFFIX0wuG7oG+FbEDpA5cPwyyJgWrFErJ7I=";
   };
 

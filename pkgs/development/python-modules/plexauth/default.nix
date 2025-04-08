@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jjlawren";
     repo = "python-plexauth";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1wy6syz3cgfw28zvigh2br4jabg8rzpi5l0bhfb6vjjc7aam13ag";
   };
 

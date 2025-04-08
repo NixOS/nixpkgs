@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "dbus-sharp-glib";
 
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0z8ylzby8n5sar7aywc8rngd9ap5qqznadsscp5v34cacdfz1gxm";
   };
 

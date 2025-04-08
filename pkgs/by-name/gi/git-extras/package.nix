@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tj";
     repo = "git-extras";
-    tag = version;
+    rev = version;
     sha256 = "sha256-0XZwEhDjh+rL6ZEWb60+GUw7hFOS3Xr32hgPNJcOL9I=";
   };
 

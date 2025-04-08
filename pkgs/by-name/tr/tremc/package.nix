@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tremc";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-219rntmetmj1JFG+4NyYMFTWmrHKJL7fnLoMIvnTP4Y=";
   };
 

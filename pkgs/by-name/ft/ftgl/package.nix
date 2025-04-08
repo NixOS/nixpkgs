@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "frankheckenbach";
     repo = "ftgl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
 

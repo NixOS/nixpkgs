@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "dock";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-bixNYpPdWU2FndiCPX7SxNTz2MEttRuj35NaWn3GJrI=";
   };
 

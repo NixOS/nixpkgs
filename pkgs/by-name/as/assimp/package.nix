@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-sOYhYHBz3Tg+pi1OIJ1mGmsjEc6dPO6nFH0aolfpLRA=";
   };
 

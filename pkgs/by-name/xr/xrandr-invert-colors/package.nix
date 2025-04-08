@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zoltanp";
     repo = "xrandr-invert-colors";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-MIbHNJFDQsvjPUbperTKKbHY5GSgItvRyV5OsfpzYT4=";
   };
 

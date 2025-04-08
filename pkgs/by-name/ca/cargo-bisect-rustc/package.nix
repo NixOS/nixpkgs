@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "cargo-bisect-rustc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7HiM1oRuLSfRaum66duag/w8ncFdxRLF0yeSGlIey0Y=";
   };
 

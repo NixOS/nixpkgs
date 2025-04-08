@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "klauspost";
     repo = "asmfmt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
   };
 

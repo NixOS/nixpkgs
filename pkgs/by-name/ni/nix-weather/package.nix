@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cafkafk";
     repo = "nix-weather";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-15FUA4fszbAVXop3IyOHfxroyTt9/SkWZsSTUh9RtwY=";
   };
 

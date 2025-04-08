@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vinniefalco";
     repo = "LuaBridge";
-    tag = version;
+    rev = version;
     sha256 = "sha256-gXrBNzE41SH98Xz480+uHQlxHjMHzs23AImxil5LZ0g=";
   };
 

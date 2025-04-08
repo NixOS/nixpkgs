@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "typst";
     repo = "svg2pdf";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-A3lUX2q5D1Z5Q3sZOl2uvaOLTuLRdtJyR9tmfPkE7TI=";
   };
 

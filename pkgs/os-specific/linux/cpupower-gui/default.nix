@@ -32,7 +32,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "vagnum08";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "05lvpi3wgyi741sd8lgcslj8i7yi3wz7jwl7ca3y539y50hwrdas";
   };
 

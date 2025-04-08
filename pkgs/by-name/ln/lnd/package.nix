@@ -28,7 +28,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7Y1GcZoj7Uk0PGd0B0J4hXpb5voqmM2f/Ie4FRHI3iQ=";
   };
 

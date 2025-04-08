@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "anrieff";
     repo = "libcpuid";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/28yo1V4/xYMirt2bNTB/l9Xl8NgRmxTitOW21TY8gE=";
   };
 

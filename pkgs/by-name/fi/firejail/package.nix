@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
-    tag = version;
+    rev = version;
     sha256 = "sha256-BKEW2IWatzePGREAA479eaP6bJb1i2fRs/GZcyLinrM=";
   };
 

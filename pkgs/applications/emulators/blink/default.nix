@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jart";
     repo = "blink";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-4wgDftXOYm2fMP+/aTRljDi38EzbbwAJlQkuxjAMl3I=";
   };
 

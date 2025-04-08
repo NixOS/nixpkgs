@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "civo";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-30uv9vVjfjZWsUhwrgY7TYs8cAkv+v/TdsSW+VmupJM=";
   };
 

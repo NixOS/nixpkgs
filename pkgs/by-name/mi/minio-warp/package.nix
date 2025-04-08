@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zRRvY/PpLSY8cx3vqcAGfVK7FJKzFnxtghhIwrlUh+Y=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
-    tag = version;
+    rev = version;
     hash = "sha256-6YcraHBFWmm8TBfuFHbM9jGvUm9KvTOplJrFSTQkt70=";
   };
 

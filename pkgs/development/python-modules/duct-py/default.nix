@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "duct.py";
-    tag = version;
+    rev = version;
     hash = "sha256-4ja/SQ9R/SbKlf3NqKxLi+Fl/4JI0Fl/zG9EmTZjWZc=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 

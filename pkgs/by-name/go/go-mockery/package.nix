@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-X0cHpv4o6pzgjg7+ULCuFkspeff95WFtJbVHqy4LxAg=";
   };
 

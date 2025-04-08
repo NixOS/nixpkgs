@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-epO7yw6/21/ess3vMCkXvXEqAn6/4613zmH/hbaBbUw=";
   };
   sourceRoot = "${finalAttrs.src.name}/tools/pioasm";

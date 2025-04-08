@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bluekeyes";
     repo = "patch2pr";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RQg7Fo8Z0P+z6Fv6YTv/IpEErP6ncxylvBaeargTrIQ=";
   };
 

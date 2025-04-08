@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GeertJohan";
     repo = "gomatrix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VeRHVR8InfU+vEw2F/w3KFbNVSKS8ziRlQ98f3cuBfM=";
   };
 

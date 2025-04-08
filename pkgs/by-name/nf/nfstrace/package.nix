@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "epam";
     repo = "nfstrace";
-    tag = version;
+    rev = version;
     sha256 = "1djsyn7i3xp969rnmsdaf5vwjiik9wylxxrc5nm7by00i76c1vsg";
   };
 

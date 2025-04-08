@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "WizardMac";
     repo = "ReadStat";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-4lRJgZPB2gfaQ9fQKvDDpGhy1eDNT/nT1QmeZlCmCis=";
   };
 

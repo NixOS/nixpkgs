@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KAHCeM1rAPGi98PrcVJtzkhTWGWFwf37VuSQTjqXSEg=";
   };
 

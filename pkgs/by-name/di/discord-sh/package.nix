@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ChaoticWeg";
     repo = "discord.sh";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZOGhwR9xFzkm+q0Gm8mSXZ9toXG4xGPNwBQMCVanCbY=";
   };
 

@@ -12,7 +12,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "ik11235";
     repo = "wakatime.fish";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Hsr69n4fCvPc64NztgaBZQuR0znkzlL8Uotw9Jf2S1o=";
   };
 

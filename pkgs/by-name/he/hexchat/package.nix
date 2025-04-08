@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 

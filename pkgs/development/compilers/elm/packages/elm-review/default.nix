@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jfmengels";
     repo = "node-elm-review";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-HQ7ilGfw/sMXMQVoJQAj31LbyJfdCfbrZ22gTh1vbD8=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "oklog";
     repo = "ulid";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/oQPgcO1xKbHXutxz0WPfIduShPrfH1l+7/mj8jLst8=";
   };
 

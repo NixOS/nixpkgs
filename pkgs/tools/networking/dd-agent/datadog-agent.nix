@@ -27,7 +27,7 @@ let
 
   src = fetchFromGitHub {
     inherit owner repo;
-    tag = version;
+    rev = version;
     hash = "sha256-rU3eg92MuGs/6r7oJho2roeUCZoyfqYt1xOERoRPqmQ=";
   };
   rtloader = stdenv.mkDerivation {

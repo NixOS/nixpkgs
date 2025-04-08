@@ -58,7 +58,7 @@
       src = fetchFromGitHub {
         owner = "OpenPrinting";
         repo = "cups-filters";
-        tag = version;
+        rev = version;
         hash = "sha256-bLOl64bdeZ10JLcQ7GbU+VffJu3Lzo0ves7O7GQIOWY=";
       };
 

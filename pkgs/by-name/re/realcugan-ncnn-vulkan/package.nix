@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nihui";
     repo = "realcugan-ncnn-vulkan";
-    tag = version;
+    rev = version;
     hash = "sha256-P3Y1B8m1+mpFinacwnvBE2vU150jj6Q12IS6QYNRZ6A=";
   };
   sourceRoot = "${src.name}/src";

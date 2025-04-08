@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jgautheron";
     repo = "goconst";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-GpOZJ5/5aNw1o8fk2RSAx200v6AZ+pbNu/25i8OSS1Y=";
   };
 

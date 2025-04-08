@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "session-manager-plugin";
-    tag = version;
+    rev = version;
     hash = "sha256-4DPwFKt5pNNl4AczgIhZA7CuBHx7q41jMZKenDFYmwg=";
   };
 

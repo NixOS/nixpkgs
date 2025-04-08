@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5jiqR3gn3X+klcYr1zTEB9omxWwHKQNLKCVXhry1jjY=";
     fetchSubmodules = true;
   };

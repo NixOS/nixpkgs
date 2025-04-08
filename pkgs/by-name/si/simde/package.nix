@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-igjDHCpKXy6EbA9Mf6peL4OTVRPYTV0Y2jbgYQuWMT4=";
   };
 

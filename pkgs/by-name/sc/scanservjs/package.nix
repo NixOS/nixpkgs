@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "sbs20";
     repo = "scanservjs";
-    # tag = "v${version}";
+    # rev = "v${version}";
     # 2.27.1 doesn't have a tag
     rev = "b15adc6f97fb152fd9819371bb1a9b8118baf55b";
     hash = "sha256-ne9fEF/eurWPXzmJQzBn5jiy+JgxMWiCXsOdmu2fj6E=";

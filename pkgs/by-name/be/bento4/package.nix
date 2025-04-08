@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Qy8D3cbCVHmLAaXtiF64rL2oRurXNCtd5Dsgt0W7WdY=";
   };
 

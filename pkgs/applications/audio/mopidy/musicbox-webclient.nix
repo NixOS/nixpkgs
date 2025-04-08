@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pimusicbox";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
 

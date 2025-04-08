@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LonnyGomes";
     repo = "hexcurse";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
   };
   buildInputs = [ ncurses ];

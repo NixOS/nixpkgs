@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "veox";
     repo = "python3-krakenex";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-htldEds3vf9bjFkJAew0e0fHDLD15OTcVYybSmIp3DI=";
   };
 

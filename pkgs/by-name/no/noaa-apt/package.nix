@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
   };
 

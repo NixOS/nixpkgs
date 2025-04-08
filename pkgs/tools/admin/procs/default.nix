@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+qY0BG3XNCm5vm5W6VX4a0JWCb4JSat/oK9GLXRis/M=";
   };
 

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "thomasloven";
     repo = "lovelace-card-mod";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MjeLbo1r/PMbzDfZurZYm1fHUukHfzOx6njRgEB8rWk=";
   };
 

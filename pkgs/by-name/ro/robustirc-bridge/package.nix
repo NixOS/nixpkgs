@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "robustirc";
     repo = "bridge";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8SNy3xqVahBuEXCrG21zIggXeahbzJtqtFMxfp+r48g=";
   };
 

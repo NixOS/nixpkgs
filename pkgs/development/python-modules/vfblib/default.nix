@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-D37i4dJPWGruwhLVEEPY3mzu0ONM38JTbC3Pt+/35lQ=";
   };
 

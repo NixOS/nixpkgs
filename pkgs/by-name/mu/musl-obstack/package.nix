@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "musl-obstack";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-oydS7FubUniMHAUWfg84OH9+CZ0JCrTXy7jzwOyJzC8=";
   };
 

@@ -58,7 +58,7 @@ clangStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "xeus-cling";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-OfZU+z+p3/a36GntusBfwfFu3ssJW4Fu7SV3SMCoo1I=";
   };
 

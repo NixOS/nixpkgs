@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "nix-your-shell";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FjGjLq/4qeZz9foA7pfz1hiXvsdmbnzB3BpiTESLE1c=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "uncenter";
     repo = "icnsify";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-v8jwN29S6ZTt2XkPpZM+lJugbP9ClzPhqu52mdwdP00=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dineshba";
     repo = "tf-summarize";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yjketL/7+gsWIvltqotouSNgTCBOqVrHqiblXoCsWgI=";
   };
 

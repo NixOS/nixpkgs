@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
   };
 

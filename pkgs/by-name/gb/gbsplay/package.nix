@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mmitch";
     repo = "gbsplay";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-I2T77HGuzp6IYQOd8RSaWYCXy8fwz7PtMxtO5IoAzdw=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NIFTI-Imaging";
     repo = "nifti_clib";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0hamm6nvbjdjjd5md4jahzvn5559frigxaiybnjkh59ckxwb1hy4";
   };
 

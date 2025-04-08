@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "caryll";
     repo = "otfcc";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1nrkzpqklfpqsccji4ans40rj88l80cv7dpxwx4g577xrvk13a0f";
   };
 

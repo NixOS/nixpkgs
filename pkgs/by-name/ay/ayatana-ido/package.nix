@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-ido";
-    tag = version;
+    rev = version;
     sha256 = "sha256-KeErrT2umMaIVfLDr4CcQCmFrMb8/h6pNYbunuC/JtI=";
   };
 

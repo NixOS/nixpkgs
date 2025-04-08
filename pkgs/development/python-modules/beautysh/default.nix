@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lovesegfault";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rPeGRcyNK45Y7OvtzaIH93IIzexBf/jM1SzYP0phQ1o=";
   };
 

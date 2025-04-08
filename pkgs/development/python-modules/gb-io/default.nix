@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "gb-io.py";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xpyfb5pTV8w7S7g2Tagl5N3jLO+IisP2KXuYN/RDDpY=";
   };
 

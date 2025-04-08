@@ -32,7 +32,7 @@ effectiveStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Anen1YtXsSPhk8DpA4JtADIz9m8oXFl9umlkb4iImf8=";
   };
 

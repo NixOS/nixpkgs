@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fantix";
     repo = "aiocontextvars";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-s1YhpBLz+YNmUO+0BOltfjr3nz4m6mERszNqlmquTyg=";
   };
 

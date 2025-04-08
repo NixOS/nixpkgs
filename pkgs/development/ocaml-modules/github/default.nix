@@ -18,7 +18,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-github";
-    tag = version;
+    rev = version;
     sha256 = "sha256-psUIiIvjVV2NTlBtHnBisWreaKKnsqIjKT2+mLnfsxg=";
   };
 

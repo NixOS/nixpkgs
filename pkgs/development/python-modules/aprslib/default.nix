@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
     repo = "aprs-python";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2bYTnbJ8wF/smTpZ2tV+3ZRae7FpbNBtXoaR2Sc9Pek=";
   };
 

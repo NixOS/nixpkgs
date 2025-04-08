@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "v-byte-cpu";
     repo = "sx";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HTIzA1QOVn3V/hGUu7wLIYUNYmcJ/FXi2yr6BGRizZA=";
   };
 

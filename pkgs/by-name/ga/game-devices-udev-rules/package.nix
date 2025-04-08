@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "fabiscafe";
     repo = "game-devices-udev";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-dWWo3qXnxdLP68NuFKM4/Cw5yE6uAsWzj0vZa9UTT0U=";
   };
 

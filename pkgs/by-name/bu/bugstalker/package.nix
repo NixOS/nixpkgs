@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JacRt+zNwL7hdpdh5h9Mxztqi47f5eUbcZyx6ct/5Bc=";
   };
 

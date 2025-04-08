@@ -18,7 +18,7 @@ buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "youtube-viewer";
-    tag = version;
+    rev = version;
     sha256 = "9Z4fv2B0AnwtYsp7h9phnRMmHtBOMObIJvK8DmKQRxs=";
   };
 

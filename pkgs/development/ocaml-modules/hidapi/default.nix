@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "vbmithr";
     repo = "ocaml-hidapi";
-    tag = version;
+    rev = version;
     hash = "sha256-upygm5G46C65lxaiI6kBOzLrWxzW9qWb6efN/t58SRg=";
   };
 

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Odonno";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OiH3O74tJQFAW+ZyyspvOXUMcWkqjpd4GVU4cKn1jBg=";
   };
 

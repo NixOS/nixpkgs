@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nate-xyz";
     repo = "conjure";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-qWeqUQxTTnmJt40Jm1qDTGGuSQikkurzOux8sZsmDQk=";
   };
 

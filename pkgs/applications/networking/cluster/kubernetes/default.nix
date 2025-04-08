@@ -26,7 +26,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kF3Oo+YETnsrFPWBO5b7nH2A2eONIOkE84+u6vOSrpE=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "glean";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6UAZkVBxFJ1CWRn9enCLBBidIugAtxP7stbYlhh1ArA=";
   };
 

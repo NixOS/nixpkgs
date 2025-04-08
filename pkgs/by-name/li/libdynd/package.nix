@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libdynd";
     repo = "libdynd";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0fkd5rawqni1cq51fmr76iw7ll4fmbahfwv4rglnsabbkylf73pr";
   };
 

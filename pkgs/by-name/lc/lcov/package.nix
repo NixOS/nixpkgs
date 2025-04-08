@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-31318or9AQ7iyu9DNQEvf5jaDzrneOOqOXu0HF1eag4=";
   };
 

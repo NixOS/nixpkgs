@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8e13kSQEjzzf+j4uTrocVioZjJ6lAz+80dLfWwjPb9o=";
   };
 

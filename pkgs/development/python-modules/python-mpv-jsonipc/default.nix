@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = "python-mpv-jsonipc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-W9TNtbRhQmwZXhi0TJIDkZRtWhi92/iwL056YIcWnLM=";
   };
 

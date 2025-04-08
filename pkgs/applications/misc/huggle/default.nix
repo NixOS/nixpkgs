@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "huggle";
     repo = "huggle3-qt-lx";
-    tag = version;
+    rev = version;
     sha256 = "sha256-f7Oo6x262Ju9KY8f/xjm9gL6I1fRCaDsQWGWJMUNUfY=";
     fetchSubmodules = true;
   };

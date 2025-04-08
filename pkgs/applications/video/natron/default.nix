@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NatronGitHub";
     repo = "Natron";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-dgScbfyulZPlrngqSw7xwipldoRd8uFO8VP9mlJyhQ8=";
   };

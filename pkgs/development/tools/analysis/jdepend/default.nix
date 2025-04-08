@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "clarkware";
     repo = "jdepend";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-0/xGgAaJ7TTUHxShJbbcPzTODk4lDn+FOn5St5McrtM=";
   };
 

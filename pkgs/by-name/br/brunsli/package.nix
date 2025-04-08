@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "brunsli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZcrRz2xSoRepgG8KZYY/JzgONerItW0e6mH1PYsko98=";
   };
 

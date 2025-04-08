@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "davy7125";
     repo = "polyphone";
-    tag = version;
+    rev = version;
     hash = "sha256-43EswCgNJv11Ov+4vmj2vS/yJ2atyzkRmk/SoCKYD/0=";
   };
 

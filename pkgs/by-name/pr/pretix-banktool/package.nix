@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-banktool";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-x6P+WqrOak5/gmMEmBkHrx6kPsbSOAXbKRbndFG3IJU=";
   };
 

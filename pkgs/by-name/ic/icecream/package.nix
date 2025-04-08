@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "icecc";
     repo = "icecream";
-    tag = version;
+    rev = version;
     sha256 = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
   };
   enableParallelBuilding = true;

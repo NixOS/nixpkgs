@@ -33,7 +33,7 @@ py.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arminstraub";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1ygzc7vlwszqmsd3v1dsqp1dpsn6inx7g8gck63alvf88dbn8m3s";
   };
 

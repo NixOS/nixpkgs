@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
   };
 

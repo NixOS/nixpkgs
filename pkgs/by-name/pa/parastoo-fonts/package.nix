@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "parastoo-font";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-E94B9R2h227D49dscCBsprmb7w0GrQ+2tWOWRf8FH30=";
   };
 

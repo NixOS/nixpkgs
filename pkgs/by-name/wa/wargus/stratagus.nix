@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wargus";
     repo = "stratagus";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-q8AvIWr/bOzI0wV0D2emxIXYEKDYmFxbtwr2BS+xYfA=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hanickadot";
     repo = "compile-time-regular-expressions";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Fmx8eKo4UHSYQa5RL70VmaogQj+ILVA1gfpaVE8+MlQ=";
   };
 

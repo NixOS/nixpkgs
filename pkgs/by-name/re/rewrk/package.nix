@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lnx-search";
     repo = "rewrk";
-    tag = version;
+    rev = version;
     hash = "sha256-Bqr5kmIIx+12hW4jpINcv0GBJBbMAkd4di/hZSXlT18=";
   };
 

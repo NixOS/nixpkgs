@@ -52,7 +52,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "semgrep";
     repo = "semgrep";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = common.srcHash;
   };
 

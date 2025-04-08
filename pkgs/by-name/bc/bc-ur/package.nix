@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BlockchainCommons";
     repo = "bc-ur";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-j7nmAZH1OL7R5H3jqQomg7kwPOvIHMqrfSk7mq/f7Cg=";
   };
 

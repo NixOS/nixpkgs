@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "0xabu";
     repo = "pdfannots";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-C0Ss6kZvPx0hHnpBKquEolxeuTfjshhSBSIDXcCKtM8=";
   };
 
