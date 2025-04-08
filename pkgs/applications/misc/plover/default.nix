@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   fetchFromGitHub,
   python3Packages,
   wmctrl,
@@ -8,8 +9,6 @@
 }:
 
 {
-  stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
-
   dev =
     with python3Packages;
     mkDerivationWith buildPythonPackage rec {
@@ -57,4 +56,7 @@
         makeWrapperArgs+=("''${qtWrapperArgs[@]}")
       '';
     };
+}
+// lib.optionalAttrs config.allowAliases {
+  stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
 }
