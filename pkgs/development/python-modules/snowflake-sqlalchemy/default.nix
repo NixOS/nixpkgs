@@ -1,32 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  hatchling,
   six,
   snowflake-connector-python,
   sqlalchemy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
   version = "1.7.3";
-  format = "setuptools";
+  pyproject = true;
+  build-system = [ hatchling ];
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LtmTsdAAQhxjaTj4qCUlFsvuTPn64S6jT9cFIxaNjZg=";
+  src = fetchFromGitHub {
+    owner = "snowflakedb";
+    repo = "snowflake-sqlalchemy";
+    tag = "v${version}";
+    sha256 = "sha256-E3UnlsGaQPlxHSgBVGrG8pGCA8fE7yN5x9eidbMQ10w=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     six
     snowflake-connector-python
     sqlalchemy
   ];
 
-  # Pypi does not include tests
+  # tests are now available but seem broken in version 1.7.3
   doCheck = false;
 
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
@@ -37,8 +38,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
     license = licenses.asl20;
     maintainers = [ ];
-
-    # https://github.com/snowflakedb/snowflake-sqlalchemy/issues/380
-    broken = versionAtLeast sqlalchemy.version "2";
   };
 }
