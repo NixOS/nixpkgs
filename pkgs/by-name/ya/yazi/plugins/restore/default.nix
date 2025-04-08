@@ -1,9 +1,9 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
+  mkYaziPlugin,
 }:
-stdenvNoCC.mkDerivation {
+mkYaziPlugin {
   pname = "restore.yazi";
   version = "25.2.7-unstable-2025-04-04";
 
@@ -13,14 +13,6 @@ stdenvNoCC.mkDerivation {
     rev = "328dd888c1e2b9b0cb5dc806f099e3164e179620";
     hash = "sha256-3Z8P25u9bffdjrPjxLRWUQn6MdBS+vyElUBkgV4EUwY=";
   };
-
-  installPhase = ''
-    runHook preInstall
-
-    cp -r . $out
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Undo/Recover trashed files/folders.";

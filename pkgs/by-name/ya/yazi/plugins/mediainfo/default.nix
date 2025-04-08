@@ -1,9 +1,9 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
+  mkYaziPlugin,
 }:
-stdenvNoCC.mkDerivation {
+mkYaziPlugin {
   pname = "mediainfo.yazi";
   version = "25.2.7-unstable-2025-04-05";
 
@@ -13,14 +13,6 @@ stdenvNoCC.mkDerivation {
     rev = "436cb5f04d6e5e86ddc0386527254d87b7751ec8";
     hash = "sha256-oFp8mJ62FsJX46mKQ7/o6qXPC9qx3+oSfqS0cKUZETI=";
   };
-
-  installPhase = ''
-    runHook preInstall
-
-    cp -r . $out
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Yazi plugin for previewing media files.";
