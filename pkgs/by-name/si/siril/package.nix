@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-pSJp4Oj8x4pKuwPSaSyGbyGfpnanoWBxAdXtzGTP7uA=";
   };
 
