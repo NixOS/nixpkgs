@@ -1610,6 +1610,7 @@
   ./services/web-apps/pretix.nix
   ./services/web-apps/privatebin.nix
   ./services/web-apps/prosody-filer.nix
+  ./services/web-apps/reposilite.nix
   ./services/web-apps/rimgo.nix
   ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
