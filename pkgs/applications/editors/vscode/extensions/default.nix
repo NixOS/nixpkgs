@@ -3368,26 +3368,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                hash = "sha256-oQMwzQuW5vjxtDboRCeiEO5aytsAY6rb14JDTmK3JPg=";
+                hash = "sha256-pmA7BNwyHiaU93j61/MyrBV5kH0DlW+7BA6HNlKGnso=";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                hash = "sha256-/9+qtLDNYUFvdoehit3BihA38p6RqJ7na5Q27xxpZk0=";
+                hash = "sha256-E2KRzjIxLFmwArzEKittjejacrCOFFNNzphWw8v5CpE=";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                hash = "sha256-JqLlYMKyTXaEzuTPPxVaO8WJiuCUN+9xBzyA6+aYdSc=";
+                hash = "sha256-pnQP1OKr3NJgUuXzO1InYqGA49OuMFn2iEf8wpl4PqM=";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                hash = "sha256-dhiUePePkO3MxRQ5UP+lOxRax503JlERe/GWJ8pPUIg=";
+                hash = "sha256-8XIeK5AIFKQaK5YMNSRqxr5p72zXb7ZLPq6PbeWO864=";
               };
             };
           in
           {
             name = "vscodeintellicode-csharp";
             publisher = "ms-dotnettools";
-            version = "2.1.11";
+            version = "2.2.3";
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
