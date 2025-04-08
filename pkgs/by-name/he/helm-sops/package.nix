@@ -27,7 +27,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "A Helm plugin to encrypt secrets with SOPS";
     homepage = "https://github.com/camptocamp/helm-sops";
+    changelog = "https://github.com/camptocamp/helm-sops/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mrupnikm ];
+    maintainers = [ maintainers.mrupnikm ];
   };
 }
