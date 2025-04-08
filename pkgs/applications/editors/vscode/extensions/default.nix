@@ -3074,8 +3074,8 @@ let
         mktplcRef = {
           name = "vscode-ltex-plus";
           publisher = "ltex-plus";
-          version = "15.4.0";
-          hash = "sha256-ET7ZnXKiT4IAoySMaZn0O2awsKtWMGgnTT7xOEcSim4=";
+          version = "15.5.0";
+          hash = "sha256-tAqtWX7NHR8ftrtDRY2BGk3VwLa0Wx9OxQo8uGF/JlA=";
         };
         meta = {
           description = "VS Code extension for grammar/spell checking using LanguageTool with support for LaTeX, Markdown, and others";
