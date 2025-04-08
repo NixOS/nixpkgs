@@ -119,6 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-xmRUUMjQt3CFJ0GxlUsUqmp//XTRWik3jSD4auql7Nk=";
     fetchSubmodules = true;
+    deepClone = true;
+    postFetch = ''
+      cd $out
+      git branch --show-current > GIT_BRANCH
+      git rev-parse --short=7 HEAD > GIT_COMMIT_HASH
+      git describe --tags --abbrev=0 --exact-match HEAD > GIT_COMMIT_TAG
+      rm -rf .git
+    '';
   };
 
   patches = [
@@ -195,6 +203,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
+  '';
+
+  postPatch = ''
+    substituteInPlace soh/src/boot/build.c.in \
+    --replace-fail "@CMAKE_PROJECT_GIT_BRANCH@" "$(cat GIT_BRANCH)" \
+    --replace-fail "@CMAKE_PROJECT_GIT_COMMIT_HASH@" "$(cat GIT_COMMIT_HASH)" \
+    --replace-fail "@CMAKE_PROJECT_GIT_COMMIT_TAG@" "$(cat GIT_COMMIT_TAG)"
   '';
 
   postBuild = ''
