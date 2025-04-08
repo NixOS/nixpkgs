@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.3";
+  version = "8.4";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-VRtxey4o9+kPdJMjaGobW7vYTPoTkGBNhUo8o3ePER4=";
+    hash = "sha256-WtKSIrvVViTYfqZ3kosxBqdDEU1sb5tB82yXviqOYo0=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;

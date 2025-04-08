@@ -8,7 +8,6 @@
   openssl,
   upnpSupport ? true,
   miniupnpc,
-  aesniSupport ? stdenv.hostPlatform.aesSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,14 +36,9 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  makeFlags =
-    let
-      ynf = a: b: a + "=" + (if b then "yes" else "no");
-    in
-    [
-      (ynf "USE_AESNI" aesniSupport)
-      (ynf "USE_UPNP" upnpSupport)
-    ];
+  makeFlags = [
+    "USE_UPNP=${if upnpSupport then "yes" else "no"}"
+  ];
 
   enableParallelBuilding = true;
 
