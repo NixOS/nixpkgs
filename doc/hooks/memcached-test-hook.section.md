@@ -20,13 +20,15 @@ stdenv.mkDerivation {
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
 ```nix
-  checkPhase ''
+{
+  checkPhase = ''
     runHook preCheck
 
     # ... your tests
 
     runHook postCheck
-  ''
+  '';
+}
 ```
 
 ## Variables {#sec-memcachedTestHook-variables}
@@ -48,6 +50,6 @@ stdenv.mkDerivation {
   ];
 
   preCheck = ''
-    memcachedTestPort=1234
-  ''
+    memcachedTestPort=1234;
+  '';
 }

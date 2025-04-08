@@ -91,7 +91,7 @@ jd-cli.overrideMavenAttrs (old: rec {
 
   # old mvnHash of 1.2.0 maven dependencies
   mvnHash = "sha256-N9XC1pg6Y4sUiBWIQUf16QSXCuiAPpXEHGlgApviF4I=";
-});
+})
 ```
 :::
 
@@ -129,7 +129,7 @@ maven.buildMavenPackage rec {
     "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
-};
+}
 ```
 :::
 
