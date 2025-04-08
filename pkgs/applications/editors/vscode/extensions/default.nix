@@ -241,6 +241,8 @@ let
         };
       };
 
+      almenon.arepl = callPackage ./almenon.arepl { };
+
       alygin.vscode-tlaplus = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tlaplus";
