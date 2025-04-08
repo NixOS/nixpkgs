@@ -68,6 +68,7 @@ buildGoModule (
       license = licenses.mit;
       maintainers = with maintainers; [
         kirelagin
+        winter
         zx2c4
       ];
       mainProgram = "wireguard-go";
