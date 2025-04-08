@@ -18,14 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-kbctfPhEF1PdVLjE62GyLDzjOnZxH/kOWUS4x2vd/+8=";
 
-  meta = with lib; {
+  meta = {
     description = "A small utility to help with kanidm provisioning";
     homepage = "https://github.com/oddlama/kanidm-provision";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ oddlama ];
+    maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "kanidm-provision";
   };
 })
