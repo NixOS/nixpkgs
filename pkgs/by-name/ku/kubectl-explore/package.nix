@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "keisku";
     repo = "kubectl-explore";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RCLOqe4Ptac2YVDjWYG5H5geUMUsmh6klQfk92XvjI4=";
   };
 

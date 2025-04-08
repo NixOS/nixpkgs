@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "smart-pattern";
     repo = "valentina";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vIlqrK7wyFaXKfvcJ3FtkAwUt6Xb/47qxcDGy1Ty2uk=";
   };
 

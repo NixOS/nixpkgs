@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-kHMCMsJ8+rI0AtS9zEE5knGvKALhgfmgS8lC/CTmYs0=";
   };
 

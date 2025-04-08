@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-4k+WK2Cxu1yBWgvEW9LMD2RGfiY7XDAe0qqph82zvlI=";
   };
 

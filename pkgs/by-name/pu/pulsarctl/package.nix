@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "streamnative";
     repo = "pulsarctl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/4JSSYd18hEHUOiay3y74VHBY3ql6aqAK4aWDJaqwCU=";
   };
 

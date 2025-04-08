@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "okta";
     repo = "okta-aws-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-4S7pXPdHUgMNg+3bCsalEH9m9Hl15mX9IEl2eBqIWqA=";
   };
 

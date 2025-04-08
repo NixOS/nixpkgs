@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vapier";
     repo = "ncompress";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 

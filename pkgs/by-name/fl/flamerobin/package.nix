@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mariuz";
     repo = "flamerobin";
-    tag = version;
+    rev = version;
     sha256 = "sha256-uWx3riRc79VKh7qniWFjxxc7v6l6cW0i31HxoN1BSdA=";
   };
 

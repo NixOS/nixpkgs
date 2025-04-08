@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fumiama";
     repo = "base16384";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2HZeom+8eEH4CrphCoOV+wJbqhYKVUcAQrYLyEVACkQ=";
   };
 

@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = "pipewire";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-TnGn6EVjjpEybslLEvBb66uqOiLg5ngpNV9LYO6TfvA=";
   };
 

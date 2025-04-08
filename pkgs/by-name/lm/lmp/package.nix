@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "0xInfection";
     repo = "LogMePwn";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VL/Hp7YaXNcV9JPb3kgRHcdhJJ5p3KHUf3hHbT3gKVk=";
   };
 

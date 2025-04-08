@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplenote-vim";
     repo = "simplenote.py";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1grvvgzdybhxjydalnsgh2aaz3f48idv5lqs48gr0cn7n18xwhd5";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh";
-    tag = version;
+    rev = version;
     hash = "sha256-iwimXL1jcBLwaek9tmvGuow56+LMCyA5qkvHsn72m+c=";
   };
 

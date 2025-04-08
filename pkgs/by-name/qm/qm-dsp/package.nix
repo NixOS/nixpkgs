@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "c4dm";
     repo = "qm-dsp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1vkb1xr2hjcaw88gig7rknlwsx01lm0w94d2z0rk5vz9ih4fslvv";
   };
 

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kangax";
     repo = "html-minifier";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OAykAqBxgr7tbeXXfSH23DALf7Eoh3VjDKNKWGAL3+A=";
   };
 

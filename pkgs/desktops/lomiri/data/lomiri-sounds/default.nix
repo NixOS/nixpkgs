@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-sounds";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-j4OUwE1z++rLsg5y2YvZktFQfOys3QjoE8Ravd1JFVA=";
   };
 

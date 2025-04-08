@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zk-org";
     repo = "zk";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-aFpn3luIp5tMp9jpBxVCmU+IU9eJg3/5UZFIklauFjI=";
   };
 

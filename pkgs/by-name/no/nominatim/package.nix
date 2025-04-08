@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-GPMDbvTPl9SLpZi5gyRAPQ84NSTIRoSfGJeqWs1e9Oo=";
   };

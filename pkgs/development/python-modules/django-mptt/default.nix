@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-mptt";
     repo = "django-mptt";
-    tag = version;
+    rev = version;
     hash = "sha256-vWnXKWzaa5AWoNaIc8NA1B2mnzKXRliQmi5VdrRMadE=";
   };
 

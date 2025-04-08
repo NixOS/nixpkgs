@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kvaps";
     repo = "kubectl-node-shell";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jLwnWp/XS4SOyf5v46DPy2Nc6LatF6AzNvHiGVNpsto=";
   };
 

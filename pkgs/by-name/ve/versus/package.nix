@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "INFURA";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jX2HRdrLwDjnrUofRzmsSFLMbiPh0a1DPv1tzl+StUg=";
   };
 

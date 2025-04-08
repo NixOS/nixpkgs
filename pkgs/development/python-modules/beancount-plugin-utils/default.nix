@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Akuukis";
     repo = "beancount_plugin_utils";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oyfL2K/sS4zZ7cq1P36h0dTcW1m5GUyQ9+IyZGfpb2E=";
   };
 

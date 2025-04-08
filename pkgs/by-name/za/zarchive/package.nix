@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Exzap";
     repo = "ZArchive";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hX637O/mVLTzmG0a9swJu9w+3o26VHo+K/9RhMuf1lI=";
   };
 

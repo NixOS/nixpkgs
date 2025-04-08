@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "puddinging";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CI0Jva7oA/zUGatv+wCdByqbTBNQRw+4clr8IDKX6HQ=";
   };
 

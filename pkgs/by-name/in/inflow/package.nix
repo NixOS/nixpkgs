@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stephen-huan";
     repo = "inflow";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xKUqkrPwITai8g6U1NiNieAip/AzISgFfFtvR30hLNk=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "wxHexEditor";
     owner = "EUA";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-EmdWYifwewk40s1TARYoUzx/qhyMmgmUC9tr5KKCtiM=";
   };
 

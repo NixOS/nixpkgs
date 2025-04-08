@@ -25,7 +25,7 @@ let
     fetchFromGitHub {
       owner = "itchio";
       repo = "itch";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
       sparseCheckout = [ sparseCheckout ];
     }

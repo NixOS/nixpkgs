@@ -13,7 +13,7 @@ buildGhidraExtension {
   src = fetchFromGitHub {
     owner = "antoniovazquezblanco";
     repo = "GhidraFindcrypt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gWVYy+PWpNXlcgD83jap4IFRv66qdhloOwvpQVU2TcI=";
   };
 

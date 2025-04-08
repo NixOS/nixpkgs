@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "humio";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2vkzde4l6GIIBzzNSewCtaVlBqkqpZQGXjw7VdJFPaE=";
   };
 

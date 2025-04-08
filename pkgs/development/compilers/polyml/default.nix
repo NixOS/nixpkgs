@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
   };
 

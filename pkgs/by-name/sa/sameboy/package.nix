@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KUvhmORI3hIJFMCW8U2BZYnIwzg7h+GZZA4+U0IPS9E=";
   };
 

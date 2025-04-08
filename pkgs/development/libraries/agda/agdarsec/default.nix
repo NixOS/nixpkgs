@@ -12,7 +12,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gallais";
     repo = "agdarsec";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "02fqkycvicw6m2xsz8p01aq8n3gj2d2gyx8sgj15l46f8434fy0x";
   };
 

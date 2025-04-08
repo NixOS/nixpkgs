@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cespare";
     repo = "reflex";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-/2qVm2xpSFVspA16rkiIw/qckxzXQp/1EGOl0f9KljY=";
   };
 

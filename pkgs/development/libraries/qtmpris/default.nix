@@ -13,7 +13,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "qtmpris";
-    tag = version;
+    rev = version;
     hash = "sha256-kuM8hUdsa7N+eLDbwYw3ay+PWxg35zcTBOvGow1NlzI=";
   };
 

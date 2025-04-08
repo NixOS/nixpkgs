@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "hpe-ltfs";
 
   src = fetchFromGitHub {
-    tag = version;
+    rev = version;
     owner = "nix-community";
     repo = "hpe-ltfs";
     sha256 = "193593hsc8nf5dn1fkxhzs1z4fpjh64hdkc8q6n9fgplrpxdlr4s";

@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    tag = version;
+    rev = version;
     hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
   };
 

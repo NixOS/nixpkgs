@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alicevision";
     repo = "CCTag";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-foB+e7BCuUucyhN8FsI6BIT3/fsNLTjY6QmjkMWZu6A=";
   };
 

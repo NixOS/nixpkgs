@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-63wh9D5D9qzABEvKCBxBRHYuGBnlX+hrme56STkyoQU=";
     fetchSubmodules = true;
   };

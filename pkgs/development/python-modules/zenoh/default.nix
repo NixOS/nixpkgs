@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-python";
-    tag = version;
+    rev = version;
     hash = "sha256-AIsIjMcT9g0mTAgxOL/shBEjpeuOm/7Wn4EOSyYbShE=";
   };
 

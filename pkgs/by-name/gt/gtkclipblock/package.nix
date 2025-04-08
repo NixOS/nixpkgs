@@ -24,7 +24,7 @@ let
   src = fetchFromGitHub {
     owner = "notpeelz";
     repo = "gtkclipblock";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ok/D7M0KekN8zf8AzhcOLtedbYVRHHv3m9zEHsJfcPM=";
     fetchSubmodules = true;
   };

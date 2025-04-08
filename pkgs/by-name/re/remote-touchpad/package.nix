@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "unrud";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-UZjbU9Ti5+IjcxIf+LDWlcqxb4kMIwa8zHmZDdZbnw8=";
   };
 

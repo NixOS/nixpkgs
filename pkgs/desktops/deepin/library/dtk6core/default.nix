@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6core";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-51TvPQy0b/8kkBs0e3q1B53mEAKHpAYPBla4h1k616c=";
   };
 

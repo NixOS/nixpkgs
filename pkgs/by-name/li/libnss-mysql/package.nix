@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "saknopper";
     repo = "libnss-mysql";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1fhsswa3h2nkhjkyjxxqnj07rlx6bmfvd8j521snimx2jba8h0d6";
   };
 

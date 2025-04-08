@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KittyKatt";
     repo = "screenFetch";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-UNZMCLXhH4wDV0/fGWsB+KAi6aJVuPs6zpWXIQAqnjo=";
   };
 

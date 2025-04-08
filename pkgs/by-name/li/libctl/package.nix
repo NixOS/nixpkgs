@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "libctl";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "uOydBWYPXSBUi+4MM6FNx6B5l2to7Ny9Uc1MMTV9bGA=";
   };
 

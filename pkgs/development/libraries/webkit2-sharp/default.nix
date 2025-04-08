@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hbons";
     repo = "webkit2-sharp";
-    tag = version;
+    rev = version;
     sha256 = "sha256:0a7vx81zvzn2wq4q2mqrxvlps1mqk28lm1gpfndqryxm4iiw28vc";
   };
 

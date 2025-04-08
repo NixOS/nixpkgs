@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "functions-framework-python";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wLL8VWhRb3AEa41DO/mwx3G0AwmLACiXeDvo+LEq1xM=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
-    tag = version;
+    rev = version;
     hash = "sha256-c5dy5dD5Eb/MVNCpLqIGNuafsrmgLjEfRfSxKVxu5wY=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "rich-argparse-plus";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oF2wuvyLYwObVJ4fhJl9b/sdfmQ2ahgKkfd9ZwObfPw=";
   };
 

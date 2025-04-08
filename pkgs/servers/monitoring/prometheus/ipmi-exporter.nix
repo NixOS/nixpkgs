@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "ipmi_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Go47Txf/NX9ytMvvFQeNVCw0ORWqbsg2sIWK4MVRyIA=";
   };
 

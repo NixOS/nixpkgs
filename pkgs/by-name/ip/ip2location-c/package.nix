@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "chrislim2888";
     repo = "IP2Location-C-Library";
-    tag = version;
+    rev = version;
     sha256 = "sha256-3/cLoGV7go4S1ew73IJzJEMTlLnvM3adl+/Sb7mPrZY=";
   };
 

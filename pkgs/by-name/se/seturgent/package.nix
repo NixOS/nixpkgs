@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.codemadness.org/seturgent";
-    tag = version;
+    rev = version;
     sha256 = "sha256-XW7ms0BVCf1/fuL3PJ970t6sHkmMY1iLYXfS9R60JX0=";
   };
 

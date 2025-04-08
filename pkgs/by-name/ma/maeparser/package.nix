@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "maeparser";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+eCTOU0rqFQC87wcxgINGLsULfbIr/wKxQTkRR59JVc=";
   };
 

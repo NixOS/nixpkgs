@@ -46,7 +46,7 @@ let
       src = fetchFromGitHub {
         owner = "smartavionics";
         repo = pname;
-        tag = version;
+        rev = version;
         sha256 = "0hvi7qwd4xfnqnhbj9dgfjmvv9df7s42asf3fdfxv43n6nx74scw";
       };
 

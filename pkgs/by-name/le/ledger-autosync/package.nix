@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bbFjDdxYr85OPjdvY3JYtCe/8Epwi+8JN60PKVKbqe0=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "streaming-form-data";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ntiad5GZtfRd+2uDPgbDzLBzErGFroffK6ZAmMcsfXA=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-sync-daemon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Wb9YLxuu9i9s/Y6trz5NZDU9WRywe3138cp5Q2gWbxM=";
   };
 

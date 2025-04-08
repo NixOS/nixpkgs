@@ -9,7 +9,7 @@ let
   src = fetchFromGitHub {
     owner = "stonith404";
     repo = "pingvin-share";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xP6XiehTbbXu9hCxF1mwb9ud/2SCnaskhz9XMtF3HKI=";
   };
 in

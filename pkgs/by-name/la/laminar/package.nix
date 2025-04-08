@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ohwgiles";
     repo = "laminar";
-    tag = version;
+    rev = version;
     hash = "sha256-eo5WzvmjBEe0LAfZdQ/U0XepEE2kdWKKiyE4HOi3RXk=";
   };
   patches = [ ./patches/no-network.patch ];

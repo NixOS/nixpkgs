@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = "binbloom";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ox4o9RPtqMsme//8dVatNUo+mA/6dM9eI/T5lsuSAus=";
   };
 

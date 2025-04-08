@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "TypicalAM";
     repo = "goread";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2C/PejWCwLdWu9n2hpbm3u/UrD56JCJqG+A7xnn/bP4=";
   };
 

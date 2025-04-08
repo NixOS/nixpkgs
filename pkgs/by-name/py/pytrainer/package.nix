@@ -36,7 +36,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 

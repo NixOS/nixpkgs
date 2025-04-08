@@ -28,7 +28,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RetroShare";
     repo = "RetroShare";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1A1YvOWIiWlP1JPUTg5Z/lxVGCBv4tCPf5sZdPogitU=";
     fetchSubmodules = true;
   };

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-dGQDRb7fgIkXelZKa+PdodIs9DxbgEMlVGJjK/hU3Mo=";
   };
 

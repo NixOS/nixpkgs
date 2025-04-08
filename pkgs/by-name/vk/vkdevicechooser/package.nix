@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jiriks74";
     repo = "vkdevicechooser";
-    tag = version;
+    rev = version;
     hash = "sha256-j4hefarOQ3q0sKkB2g/dO2/4bSYzt4oxmCna0nMAjFk=";
   };
 

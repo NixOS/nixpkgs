@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "joelcourtney";
     repo = "mdbook-kroki-preprocessor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3BxIhJK0YWZBEbbNwMKixo1icEn+QKJwoskgIEaZcGQ=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "bubblewrap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8IDMLQPeO576N1lizVudXUmTV6hNOiowjzRpEWBsZ+U=";
   };
 

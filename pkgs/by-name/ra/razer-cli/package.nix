@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lolei";
     repo = "razer-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-p/RcBpkvtqYQ3Ekt0pLvKyi1Vv93oHDd7hqSTu/5CSw=";
   };
 

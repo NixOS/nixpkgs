@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KieranWynn";
     repo = "pyquaternion";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-L0wT9DFUDRcmmN7OpmIDNvtQWQrM7iFnZt6R2xrJ+3A=";
   };
 

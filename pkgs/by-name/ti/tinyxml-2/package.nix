@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leethomason";
     repo = "tinyxml2";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-rYVQSvxA0nxlZFHwGcOWkxcXZWEvTxR9P+d8E7CSm6U=";
   };
 

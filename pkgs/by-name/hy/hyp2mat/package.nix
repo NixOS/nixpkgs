@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "koendv";
     repo = "hyp2mat";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "03ibk51swxfl7pfrhcrfiffdi4mnf8kla0g1xj1lsrvrjwapfx03";
   };
 

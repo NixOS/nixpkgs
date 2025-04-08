@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ryansuchocki";
     repo = "microscheme";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "5qTWsBCfj5DCZ3f9W1bdo6WAc1DZqVxg8D7pwC95duQ=";
   };
 

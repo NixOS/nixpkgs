@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espmonitor";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "hWFdim84L2FfG6p9sEf+G5Uq4yhp5kv1ZMdk4sMHa+4=";
   };
 

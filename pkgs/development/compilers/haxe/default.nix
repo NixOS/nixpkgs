@@ -72,7 +72,7 @@ let
       src = fetchFromGitHub {
         owner = "HaxeFoundation";
         repo = "haxe";
-        tag = version;
+        rev = version;
         fetchSubmodules = true;
         inherit hash;
       };

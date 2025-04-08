@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bnjbvr";
     repo = "cargo-machete";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0vlau3leAAonV5E9NAtSqw45eKoZBzHx0BmoEY86Eq8=";
   };
 

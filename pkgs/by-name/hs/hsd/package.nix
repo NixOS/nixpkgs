@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "handshake-org";
     repo = "hsd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bmvoykpaYQDWLYKOwgKZ1V6ivzDJFM1Yo+ATkzKTP2s=";
   };
 

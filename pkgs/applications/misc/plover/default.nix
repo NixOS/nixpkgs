@@ -29,7 +29,7 @@
       src = fetchFromGitHub {
         owner = "openstenoproject";
         repo = "plover";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "sha256-oJ7+R3ZWhUbNTTAw1AfMg2ur8vW1XEbsa5FgSTam1Ns=";
       };
 

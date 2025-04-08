@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mentalisttraceur";
     repo = "python-macaddress";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2eD5Ui8kUduKLJ0mSiwaz7TQSeF1+2ASirp70V/8+EA=";
   };
 

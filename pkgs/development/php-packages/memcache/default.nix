@@ -14,7 +14,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "websupport-sk";
     repo = "pecl-memcache";
-    tag = version;
+    rev = version;
     hash = "sha256-77GvQ59XUpIZmdYZP6IhtjdkYwXKuNBSG+LBScz2BtI=";
   };
 

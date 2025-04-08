@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KoKMfZrI3V73hbZGm0Xx8VxL7ENicSApropLm02B098=";
   };
 

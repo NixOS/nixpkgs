@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ory";
     repo = "keto";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DQiE7PvRnOzdRITRl7LgUDmCJO5/aUzbFdEIyiofZfU=";
   };
 

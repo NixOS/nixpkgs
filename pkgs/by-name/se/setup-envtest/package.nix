@@ -12,7 +12,7 @@ buildGoModule rec {
     fetchFromGitHub {
       owner = "kubernetes-sigs";
       repo = "controller-runtime";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-9AqZMiA+OIJD+inmeUc/lq57kV7L85jk1I4ywiSKirg=";
     }
     + "/tools/setup-envtest";

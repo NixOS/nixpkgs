@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dI9tE/I+14IhYZ+IDLErPunlT4L29AudbZXh0at4jKQ=";
   };
 

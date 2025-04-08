@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lu5zbZXTaLJ5m2sVOG1Y7I/bbJ7kwqbfL1ebwPJ+C0o=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.

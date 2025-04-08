@@ -17,7 +17,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Luwx";
     repo = "Lightly";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0qkjzgjplgwczhk6959iah4ilvazpprv7yb809jy75kkp1jw8mwk";
   };
 

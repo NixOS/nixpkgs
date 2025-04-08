@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stefanlogue";
     repo = "meteor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DWnwofNJhILdVITRDh8MNlGl6PSENCS2PkaFm1o+MW8=";
   };
 

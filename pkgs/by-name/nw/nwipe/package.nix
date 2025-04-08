@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "martijnvanbrummelen";
     repo = "nwipe";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-idSIdq7DKhSwuR1xe9JEws0jIh1juCaz2eSeKvd85D4=";
   };
 

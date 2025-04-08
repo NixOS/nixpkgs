@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-25FVNUXMEuzPJtpld/GHEppspa2ns7fAuniBCltSync=";
   };
 

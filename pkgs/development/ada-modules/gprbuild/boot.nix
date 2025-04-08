@@ -14,7 +14,7 @@ let
     name = "gprconfig-kb-${version}-src";
     owner = "AdaCore";
     repo = "gprconfig_kb";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "09x1njq0i0z7fbwg0mg39r5ghy7369avbqvdycfj67lpmw17gb1r";
   };
 in
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     name = "gprbuild-${version}";
     owner = "AdaCore";
     repo = "gprbuild";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1mqsmc0q5bzg8223ls18kbvaz6mhzjz7ik8d3sqhhn24c0j6wjaw";
   };
 

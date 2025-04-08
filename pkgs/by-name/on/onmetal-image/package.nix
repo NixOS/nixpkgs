@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "onmetal";
     repo = "onmetal-image";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KvOBvAIE9V2bj5prdcc8G5ifHsvybHBCYWrI4fWtdvE=";
   };
 

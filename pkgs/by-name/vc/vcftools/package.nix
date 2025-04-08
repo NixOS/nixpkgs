@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "vcftools";
     owner = "vcftools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0msb09d2cnm8rlpg8bsc1lhjddvp3kf3i9dsj1qs4qgsdlzhxkyx";
   };
 

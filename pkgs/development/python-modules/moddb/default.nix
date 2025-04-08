@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ClementJ18";
     repo = "moddb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2t5QQAmSLOrdNCl0XdsFPdP2UF10/qq69DovqeQ1Vt8=";
   };
 

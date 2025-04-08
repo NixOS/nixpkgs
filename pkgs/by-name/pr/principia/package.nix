@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-cXtc1E4iJf3//UyzZzhky/NV7zk4959xSwGLHdCeyk0=";
   };
 

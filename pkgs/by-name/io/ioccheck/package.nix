@@ -14,7 +14,7 @@ let
         src = fetchFromGitHub {
           owner = "carpedm20";
           repo = "emoji";
-          tag = "v${version}";
+          rev = "v${version}";
           hash = "sha256-vKQ51RP7uy57vP3dOnHZRSp/Wz+YDzeLUR8JnIELE/I=";
         };
       };
@@ -27,7 +27,7 @@ let
         src = fetchFromGitHub {
           owner = "tweepy";
           repo = "tweepy";
-          tag = "v${version}";
+          rev = "v${version}";
           hash = "sha256-3BbQeCaAhlz9h5GnhficNubJHu4kTpnCDM4oKzlti0w=";
         };
         doCheck = false;

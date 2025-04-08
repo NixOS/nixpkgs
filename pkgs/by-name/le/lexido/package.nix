@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "micr0-dev";
     repo = "lexido";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zJP14dbC/Oz15CA3PRD0RfEYOrfulL2fWYHwFxhLKO4=";
   };
 

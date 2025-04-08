@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "vmtouch";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "08da6apzfkfjwasn4dxrlfxqfx7arl28apdzac5nvm0fhvws0dxk";
   };
 

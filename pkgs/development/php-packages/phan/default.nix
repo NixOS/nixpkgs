@@ -12,7 +12,7 @@
     src = fetchFromGitHub {
       owner = "phan";
       repo = "phan";
-      tag = finalAttrs.version;
+      rev = finalAttrs.version;
       hash = "sha256-CSV+kapCzGOCBaYnX0lJVlDdZGNBCKZ/nogOac1xj1A=";
     };
 

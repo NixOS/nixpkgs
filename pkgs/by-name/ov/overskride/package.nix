@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     inherit owner;
     repo = name;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SqaPhub/HwZz7uBg/kevH8LvPDVLgRd/Rvi03ivNrRc=";
   };
 

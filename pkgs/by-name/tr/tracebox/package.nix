@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tracebox";
     repo = "tracebox";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1KBJ4uXa1XpzEw23IjndZg+aGJXk3PVw8LYKAvxbxCA=";
     fetchSubmodules = true;
   };

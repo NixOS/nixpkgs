@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "serialdv";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-uswddoIpTXqsvjM2/ygdud9jZHTemLn9Dlv9FBXXKow=";
   };
 

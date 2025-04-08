@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "jstaf";
     repo = "onedriver";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mA5otgqXQAw2UYUOJaC1zyJuzEu2OS/pxmjJnWsVdxs=";
   };
 in

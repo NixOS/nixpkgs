@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "sha256-8dLfk2k7xG2CXMHfMPrpgq43j3ttj5a0bgNPEahl2rQ=";
   };
 

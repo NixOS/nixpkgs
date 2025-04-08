@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jpakkane";
     repo = "capypdf";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-aaZHIBXOdKysxAk/011b9Di/QHH5vgF+/g3tWPn6d/k=";
   };
 

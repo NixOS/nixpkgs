@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "nix-store-veritysetup-generator";
-    tag = version;
+    rev = version;
     hash = "sha256-kQ+mFBnvxmEH2+z1sDaehGInEsBpfZu8LMAseGjZ3/I=";
   };
 

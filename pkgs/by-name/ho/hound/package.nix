@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hound-search";
     repo = "hound";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Qdk57zLjTXLdDEmB6K+sZAym5s0BekJJa/CpYeOBOcY=";
   };
 

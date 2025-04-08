@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-66o/k5DvyKxwa0sZPCfSycVRxEhrRhUJXJVz2p817OE=";
   };
 

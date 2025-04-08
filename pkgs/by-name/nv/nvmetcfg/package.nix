@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vifino";
     repo = "nvmetcfg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LoQTcHM6czzQ5ZwXcklFXf/7WlRsoJTF61UhQ56aleQ=";
   };
 

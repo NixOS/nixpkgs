@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spieglt";
     repo = "whatfiles";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5Ju9g7/B9uxLkQzV/MN3vBkjve4EAMseO6K4HTAoS/o=";
   };
 

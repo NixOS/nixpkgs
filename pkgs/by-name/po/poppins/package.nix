@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "itfoundry";
     repo = "poppins";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7+RQHYxNFqOw2EeS2hgrbK/VbUAiPorUtkyRb5MFh5w=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mfreeborn";
     repo = "heliocron";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5rzFz29Bpy2GR6bEt2DdCq9RtpdcY3SK/KnZrBrHUvk=";
   };
 

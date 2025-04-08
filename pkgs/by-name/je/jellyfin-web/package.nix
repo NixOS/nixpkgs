@@ -20,7 +20,7 @@ buildNpmPackage rec {
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-jX9Qut8YsJRyKI2L7Aww4+6G8z741WzN37CUx3KWQfY=";
     };
 

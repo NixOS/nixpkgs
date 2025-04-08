@@ -236,7 +236,7 @@ let
         src = fetchFromGitHub {
           owner = "MatsNl";
           repo = "pyatag";
-          tag = version;
+          rev = version;
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
@@ -370,7 +370,7 @@ let
         src = fetchFromGitHub {
           owner = "spry-group";
           repo = "python-vultr";
-          tag = version;
+          rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
         };
       });

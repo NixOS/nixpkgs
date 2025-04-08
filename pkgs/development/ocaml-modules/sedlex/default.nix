@@ -51,7 +51,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "sedlex";
-    tag = "v${version}";
+    rev = "v${version}";
     inherit (param) sha256;
   };
 

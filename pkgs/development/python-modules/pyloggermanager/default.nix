@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coldsofttech";
     repo = "pyloggermanager";
-    tag = version;
+    rev = version;
     hash = "sha256-1hfcmMLH2d71EV71ExKqjZ7TMcqVd1AQrEwJhmEWOVU=";
   };
 

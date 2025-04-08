@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     domain = "codeberg.org";
     owner = "explosion-mental";
     repo = "wallust";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-n3FXPlm8nructXh+Wc7BgJvxas6OFHEPbTe2QWjEpsg=";
   };
 

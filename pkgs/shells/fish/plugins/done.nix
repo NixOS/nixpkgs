@@ -12,7 +12,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "franciscolourenco";
     repo = "done";
-    tag = version;
+    rev = version;
     hash = "sha256-DMIRKRAVOn7YEnuAtz4hIxrU93ULxNoQhW6juxCoh4o=";
   };
 

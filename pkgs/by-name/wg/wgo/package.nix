@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "bokwoon95";
     repo = "wgo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iTUZTeruP21pfd/28fdIhhS5GiSn6DC9Oe2w6VTaxFE=";
   };
 

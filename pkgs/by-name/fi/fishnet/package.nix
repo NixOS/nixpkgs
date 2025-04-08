@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JhllThFiHeC/5AAFwwZQ0mgbENIWP1cA7aD01DeDVL8=";
     fetchSubmodules = true;
   };

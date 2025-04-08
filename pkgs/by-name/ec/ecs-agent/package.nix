@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "1.91.2";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "aws";
     repo = pname;
     hash = "sha256-7f1qJ9dgouhj+DGikdIzUREPraAA/1y/5lYA8fbIoJo=";

@@ -10,7 +10,7 @@ gnu-efi.overrideAttrs (
     src = fetchFromGitHub {
       owner = "ncroxon";
       repo = "gnu-efi";
-      tag = finalAttrs.version;
+      rev = finalAttrs.version;
       hash = "sha256-xtiKglLXm9m4li/8tqbOsyM6ThwGhyu/g4kw5sC4URY=";
     };
     passthru.tests = {

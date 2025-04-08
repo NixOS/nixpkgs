@@ -22,7 +22,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "xflux-gui";
     owner = "xflux-gui";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "09zphcd9821ink63636swql4g85hg6lpsazqg1mawlk9ikc8zbps";
   };
 

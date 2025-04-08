@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libesmtp";
     repo = "libESMTP";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
   };
 

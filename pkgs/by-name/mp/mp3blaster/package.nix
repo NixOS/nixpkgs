@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stragulus";
     repo = "mp3blaster";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0pzwml3yhysn8vyffw9q9p9rs8gixqkmg4n715vm23ib6wxbliqs";
   };
 

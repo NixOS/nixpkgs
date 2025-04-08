@@ -26,7 +26,7 @@ let
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ExSS5HxDmJJtYypRYJNz7nY0D50gjoDBc4CnJMfgVw8=";
   };
 

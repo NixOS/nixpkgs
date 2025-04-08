@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "quodlibetor";
     repo = "git-instafix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Uz+KQ8cQT3v97EtmbAv2II30dUrFD0hMo/GhnqcdBOs=";
   };
 

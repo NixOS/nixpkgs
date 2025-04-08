@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "gitjacker";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
   };
 

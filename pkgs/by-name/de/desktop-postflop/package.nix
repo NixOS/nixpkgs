@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "b-inary";
     repo = "desktop-postflop";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pOPxNHM4mseIuyyWNoU0l+dGvfURH0+9+rmzRIF0I5s=";
   };
 

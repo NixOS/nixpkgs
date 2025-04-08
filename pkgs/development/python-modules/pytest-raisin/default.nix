@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "pytest-raisin";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
   };
 

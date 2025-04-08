@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "viewizard";
     repo = "astromenace";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-W6d+8iw7/r2qJbE75U7egxqvK2HXaKzk+GtnspZRAxk=";
   };
 

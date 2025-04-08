@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "apple";
     repo = "swift-protobuf";
-    tag = finalAttrs.version;
+    rev = "${finalAttrs.version}";
     hash = "sha256-UPYwu8SiBUHofqHdUT6uxdeY2WUXYqbkLj+h4chSCa4=";
   };
 

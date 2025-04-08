@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mobilinkd";
     repo = "m17-cxx-demod";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mvppkFBmmPVqvlqIqrbwGrOBih5zS5sZrV/usEhHiws=";
   };
 

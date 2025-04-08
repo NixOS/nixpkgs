@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "fdroidcl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tqhs3b/DHfnGOm9qcM56NSzt1GJflJfbemkp7+nXbug=";
   };
 

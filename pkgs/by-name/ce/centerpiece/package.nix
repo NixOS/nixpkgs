@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "friedow";
     repo = "centerpiece";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tZNwMPL1ITWVvoywojsd5j0GIVQt6pOKFLwi7jwqLKg=";
   };
 

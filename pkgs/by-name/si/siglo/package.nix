@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "theironrobin";
     repo = "siglo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-4jKsRpzuyHH31LXndC3Ua4TYcI0G0v9qqe0cbvLuCDA=";
   };
 

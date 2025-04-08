@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3nT64dFUcuwPfhQDwY5MTe/xPdr7XZMBpVL7V0y9tng=";
   };
 

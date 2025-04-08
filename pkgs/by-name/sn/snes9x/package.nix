@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };

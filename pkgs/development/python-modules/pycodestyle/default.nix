@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pycodestyle";
-    tag = version;
+    rev = version;
     hash = "sha256-rQkOjDikJPHCBqrqxFQ9PLikYSeQZwJnHAmPGRUZecA=";
   };
 

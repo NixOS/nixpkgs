@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "coldsnap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tlQ4PDrYnnbsxXRbrIoF08aSy7VP+iXgTKf0A8MITpo=";
   };
   useFetchCargoVendor = true;

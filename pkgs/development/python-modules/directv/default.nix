@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-directv";
-    tag = version;
+    rev = version;
     sha256 = "19jckf6qvl8fwi8yff1qy8c44xdz3zpi1ip1md6zl2c503qc91mk";
   };
 

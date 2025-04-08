@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zegl";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-YsbefR6WkFef5nhbD9ACQ7Xx572RsHlL2zY78RtTtsQ=";
   };
 

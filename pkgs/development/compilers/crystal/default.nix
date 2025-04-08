@@ -104,7 +104,7 @@ let
       src = fetchFromGitHub {
         owner = "crystal-lang";
         repo = "crystal";
-        tag = version;
+        rev = version;
         inherit sha256;
       };
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/net-cpp";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-MSqdP3kGI9hDdxFv2a0yd5ZkFkf1lMurB+KDIZLR9jg=";
   };
 

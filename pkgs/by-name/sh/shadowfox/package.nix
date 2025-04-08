@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SrKomodo";
     repo = "shadowfox-updater";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 

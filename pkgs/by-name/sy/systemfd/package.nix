@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     repo = "systemfd";
     owner = "mitsuhiko";
-    tag = version;
+    rev = version;
     sha256 = "sha256-OUsQBHymoiLClRS45KE4zsyOh/Df8psP0t8aIkKNZsM=";
   };
 

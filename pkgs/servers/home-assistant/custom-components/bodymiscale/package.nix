@@ -14,7 +14,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
-    tag = version;
+    rev = version;
     hash = "sha256-6bYKqU9yucISjTrmCUx1bNn9kqvT9jW1OBrqAa4ayEQ=";
   };
 

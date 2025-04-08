@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Parchive";
     repo = "par2cmdline";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "11mx8q29cr0sryd11awab7y4mhqgbamb1ss77rffjj6in8pb4hdk";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fzerorubigd";
     repo = "jcal";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-vJc5uijZlvohEtiS03LYlqtswVE38S9/ejlHrmZ0wqA=";
   };
 

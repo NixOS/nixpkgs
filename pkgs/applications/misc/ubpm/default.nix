@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "LazyT";
     repo = "ubpm";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-BUUn1WyLT7nm4I+2SpO1ZtIf8isGDy8Za15SiO7sXL8=";
   };
 

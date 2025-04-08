@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "moul";
     repo = "sshportal";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-XJ8Hgc8YoJaH2gYOvoYhcpY4qgasgyr4M+ecKJ/RXTs=";
   };
 

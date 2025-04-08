@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-XVsZckNVJ1H5q8FzqoVd1UWRw0zOygvRtb7arX9dwGE=";
   };
 

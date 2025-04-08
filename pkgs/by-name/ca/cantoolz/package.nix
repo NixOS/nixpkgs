@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CANToolz";
     repo = "CANToolz";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-0ROWx1CsKtjxmbCgPYZpvr37VKsEsWCwMehf0/0/cnY=";
   };
 

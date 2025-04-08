@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
-    tag = version;
+    rev = version;
     sha256 = "sha256-FI6YMbqZfaU19k8pS2eoNCnX8O8F99SHHOxMwHC5fTc=";
   };
 

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "ngrid";
-    tag = version;
+    rev = version;
     hash = "sha256-69icp0m+bAHBsQFIDGd8NjfMsMYsB1sUfzuP/OBl5jc=";
   };
 

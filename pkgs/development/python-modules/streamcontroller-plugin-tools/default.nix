@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StreamController";
     repo = "streamcontroller-plugin-tools";
-    tag = version;
+    rev = version;
     hash = "sha256-dQZPRSzHhI3X+Pf7miwJlECGFgUfp68PtvwXAmpq5/s=";
   };
 

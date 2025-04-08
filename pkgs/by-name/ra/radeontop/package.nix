@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "0kwqddidr45s1blp0h8r8h1dd1p50l516yb6mb4s6zsc827xzgg3";
-    tag = "v${version}";
+    rev = "v${version}";
     repo = "radeontop";
     owner = "clbr";
   };

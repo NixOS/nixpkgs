@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IqWtVklzSq334cGgLx/13l329g391oDW50MZWyO6l08=";
   };
 

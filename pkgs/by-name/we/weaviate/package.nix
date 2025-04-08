@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Akg0iY5M3X6ztKxhNEkhi03VnbNpNW7/Vcbv2KB6X54=";
   };
 

@@ -19,7 +19,7 @@ let
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-JJzLOu8UJbkLT+JywddKtgmDNxAiSV6n9eaQu1ihqSg=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.

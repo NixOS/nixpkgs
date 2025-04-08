@@ -15,7 +15,7 @@ let
     src = fetchFromGitHub {
       owner = "intelxed";
       repo = "mbuild";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-nVHHiaPbf+b+RntjUGjLLGS53e6c+seXIBx7AcTtiWU=";
     };
   };
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
 

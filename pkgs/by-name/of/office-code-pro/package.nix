@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nathco";
     repo = "Office-Code-Pro";
-    tag = version;
+    rev = version;
     hash = "sha256-qzKTXYswkithZUJT0a3IifCq4RJFeKciZAPhYr2U1X4=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dbro";
     repo = "csvquote";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-847JAoDEfA9K4LB8z9cqSw+GTImqmITBylB/4odLDb0=";
   };
 

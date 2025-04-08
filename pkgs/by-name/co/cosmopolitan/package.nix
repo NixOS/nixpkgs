@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jart";
     repo = "cosmopolitan";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-DTL1dXH+LhaxWpiCrsNjV74Bw5+kPbhEAA2Z1NKiPDk=";
   };
 

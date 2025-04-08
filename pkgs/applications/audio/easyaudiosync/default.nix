@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "EasyAudioSync";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UCOL4DzynKjNDvS0HZ4/K+Wn5lOqHZ0bNop0zqJl5kc=";
   };
 

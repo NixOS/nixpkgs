@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
-    tag = version;
+    rev = version;
     hash = "sha256-Khmrhp5qy4vvoQe4WgoogpjWrgcUB/q8zZeqIydthYg=";
   };
 

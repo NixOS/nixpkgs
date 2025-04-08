@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lintingzhen";
     repo = "commitizen-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pAWdIQ3icXEv79s+sUVhQclsNcZg+PTZZ6I6JPo7pNg=";
   };
 

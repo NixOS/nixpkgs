@@ -18,7 +18,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "runelite";
     repo = "launcher";
-    tag = version;
+    rev = version;
     hash = "sha256-ckeZ/7rACyZ5j+zzC5hv1NaXTi9q/KvOzMPTDd1crHQ=";
   };
 

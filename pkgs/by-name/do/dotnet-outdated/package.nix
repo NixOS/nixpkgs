@@ -11,7 +11,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "dotnet-outdated";
     repo = "dotnet-outdated";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ah5VOCIkSRkeDWk/KYHIc/OELo0T/HuJl0LEUiumlu0=";
   };
 

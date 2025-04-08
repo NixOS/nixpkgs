@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 

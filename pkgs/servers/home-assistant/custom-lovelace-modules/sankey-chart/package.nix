@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "MindFreeze";
     repo = "ha-sankey-chart";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Yjh9HrL7zcMFSlXLRW071zG4Wiyv9q2siIw5Ego4e80=";
   };
 

@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-1LRwbKOLNBkY/TMTLlWq2lkFzCabXqwdaMRT9HNr6HE=";
   };
   vendorHash = null;

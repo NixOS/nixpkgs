@@ -10,7 +10,7 @@ buildGoModule rec {
   pname = "grobi";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "fd0";
     repo = "grobi";
     hash = "sha256-evgDY+OjfQ0ngf4j/D4yOeITHQXmBmw8KiJhLKjdVAw=";

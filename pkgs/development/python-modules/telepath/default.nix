@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "telepath";
     owner = "wagtail";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MS4Q41WVSrjFmFjv4fztyf0U2+5WkNU79aPEKv/CeUQ=";
   };
 

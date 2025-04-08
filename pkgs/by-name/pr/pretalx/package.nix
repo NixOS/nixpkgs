@@ -27,7 +27,7 @@ let
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-y3BsNmLh9M5NgDPURCjCGWYci40hYcQtDVqsu2HqPRU=";
   };
 

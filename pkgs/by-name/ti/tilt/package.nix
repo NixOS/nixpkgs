@@ -14,7 +14,7 @@ let
     src = fetchFromGitHub {
       owner = "tilt-dev";
       repo = "tilt";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-3LFsTaz47QAIDGId/Tl3G7xP5b9gc25X+ZeMaVhXf8w=";
     };
   };

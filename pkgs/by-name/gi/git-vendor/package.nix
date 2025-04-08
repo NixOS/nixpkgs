@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "brettlangdon";
     repo = "git-vendor";
-    tag = "v${version}";
+    rev = "v${version}";
     inherit sha256;
   };
 

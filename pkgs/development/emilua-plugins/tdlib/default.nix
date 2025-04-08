@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "tdlib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dqbSECQLM664l2QrkEAfT65/NBI0ghj286dt7eaxcks=";
     fetchSubmodules = true;
   };

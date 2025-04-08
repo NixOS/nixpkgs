@@ -18,7 +18,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "parkouss";
     repo = "webmacs";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     sha256 = "1hzb9341hybgrqcy1w20hshm6xaiby4wbjpjkigf4zq389407368";
   };

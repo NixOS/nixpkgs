@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-0JCmKuSVuSOinJiLDT4dOKNON6PnICum6Smnf3syJfM=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "licenseclassifier";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-j+8hX8W0VD0h09Qmu7POnHT8f8+SeG5Si1fI0CDIwuo=";
   };
 

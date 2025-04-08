@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5VYw9Kq33/YFW9mFzkFzhrxavfx6r/CtC1SJhZbanhg=";
   };
 

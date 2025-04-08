@@ -30,7 +30,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-kPVlfTYUusf5CZnKB53WZcCHo3MEnA2bLUHTRPGPn+8=";
   };
 

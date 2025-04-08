@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "real-logic";
     repo = "aeron";
-    tag = version;
+    rev = version;
     hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
   };
 

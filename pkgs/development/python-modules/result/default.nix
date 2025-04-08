@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rustedpy";
     repo = "result";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-o+7qKxGQCeMUnsmEReggvf+XwQWFHRCYArYk3DxCa50=";
   };
 

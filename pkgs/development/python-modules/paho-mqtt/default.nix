@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VMq+WTW+njK34QUUTE6fR2j2OmHxVzR0wrC92zYb1rY=";
   };
 

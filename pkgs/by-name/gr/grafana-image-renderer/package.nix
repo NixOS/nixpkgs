@@ -19,7 +19,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-twB2V5iecLEMTrp+prFmDoJvcGLVQlLJ+DTSl/9V8S8=";
   };
 

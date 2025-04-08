@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "lmdbxx";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-7CxQZdgHVvmof6wVR9Mzic6tg89XJT3Z1ICGRs7PZYo=";
   };
 

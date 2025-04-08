@@ -13,7 +13,7 @@ in
   source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zaBu/hhFIMjneb7yUzToaJJAaSptxLld8zOvfGckHLY=";
   };
 }).overrideAttrs

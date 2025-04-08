@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OioPl2uJVepMsR1PYHpASj3yQ10bCaGFxI1wQR61EsA=";
   };
 

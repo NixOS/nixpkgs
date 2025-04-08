@@ -31,7 +31,7 @@ let
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BgxWsT/s5Hv5cvzcSjfrgAmZhcoquaydSZKdPmld4Rg=";
   };
 

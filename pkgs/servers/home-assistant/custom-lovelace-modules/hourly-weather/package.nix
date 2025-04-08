@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "decompil3d";
     repo = "lovelace-hourly-weather";
-    tag = version;
+    rev = version;
     hash = "sha256-D2kCUcUgLyMVeba3xc02q/5PrEzXrBVCX+75F58j8y0=";
   };
 

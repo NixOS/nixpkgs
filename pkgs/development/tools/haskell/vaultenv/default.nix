@@ -37,7 +37,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Jb+Y/Cbapw2ZCXMwXMw1hsy0vT/K8mM/A/Z1all7y+A=";
   };
 

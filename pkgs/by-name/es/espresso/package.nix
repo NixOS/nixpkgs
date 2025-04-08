@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "espresso";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-z5By57VbmIt4sgRgvECnLbZklnDDWUA6fyvWVyXUzsI=";
   };
 

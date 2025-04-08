@@ -10,7 +10,7 @@ buildGhidraExtension rec {
   src = fetchFromGitHub {
     owner = "WorksButNotTested";
     repo = "lightkeeper";
-    tag = version;
+    rev = version;
     hash = "sha256-aGMWg6VQleKH/txlxpSw19QOotWZSqeW5Ve2SpWGhgA=";
   };
   preConfigure = ''

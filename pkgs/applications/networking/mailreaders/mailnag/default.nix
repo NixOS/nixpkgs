@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pulb";
     repo = "mailnag";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0m1cyzwzm7z4p2v31dx098a1iar7dbilwyjcxiqnjx05nlmiqvgf";
   };
 

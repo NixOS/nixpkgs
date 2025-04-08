@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
   };
 

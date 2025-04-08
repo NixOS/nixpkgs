@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-OtzYxWwiba0jRK9X+4deWWDDTeZWlysEt0qMyGUarDo=";
   };
 

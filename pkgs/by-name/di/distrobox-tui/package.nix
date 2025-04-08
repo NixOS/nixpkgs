@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "phanirithvij";
     repo = "distrobox-tui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uOeJ9f2yXszGUYTxMLwvXCRkmT9Uo7mkZVhpf5HVhbg=";
   };
 
