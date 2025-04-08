@@ -5,6 +5,7 @@
   yq,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) kanidm-provisioning; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "A small utility to help with kanidm provisioning";
