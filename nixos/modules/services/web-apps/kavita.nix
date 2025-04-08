@@ -119,5 +119,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ misterio77 nevivurn ];
+  meta.maintainers = with lib.maintainers; [
+    misterio77
+    nevivurn
+  ];
 }
