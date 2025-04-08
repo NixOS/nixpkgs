@@ -53,13 +53,7 @@
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
   enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
-  tcl,
-  tk,
   tkinter,
-
-  # Ghostscript
-  enableGhostscript ? true,
-  ghostscript,
 
   # Qt
   enableQt ? false,
@@ -130,15 +124,9 @@ buildPythonPackage rec {
       freetype
       qhull
     ]
-    ++ lib.optionals enableGhostscript [ ghostscript ]
     ++ lib.optionals enableGtk3 [
       cairo
       gtk3
-    ]
-    ++ lib.optionals enableTk [
-      libX11
-      tcl
-      tk
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
