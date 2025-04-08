@@ -17,6 +17,8 @@
   toml11,
   jemalloc,
   doctest,
+
+  nixosTests,
 }@args:
 
 let
@@ -45,5 +47,9 @@ in
         hash = "sha256-ZLIcmcfirm1+96DtTIr53HfM5z38uTLZrRNHAmZL6rc=";
       })
     ];
+  };
+
+  passthru = {
+    tests.foundationdb = nixosTests.foundationdb;
   };
 }
