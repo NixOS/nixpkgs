@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildDunePackage,
   ocaml,
+  ounit,
   qtest,
   qcheck,
   num,
@@ -24,7 +25,10 @@ buildDunePackage rec {
   };
 
   nativeCheckInputs = [ qtest ];
-  checkInputs = [ qcheck ];
+  checkInputs = [
+    ounit
+    qcheck
+  ];
   propagatedBuildInputs = [
     camlp-streams
     num
