@@ -15,7 +15,7 @@ let
     src = fetchFromGitHub {
       owner = "justinethier";
       repo = "cyclone-bootstrap";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-kJBPb0Ej32HveY/vdGpH2gyxSwq8Xq7muneFIw3Y7hM=";
     };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "justinethier";
     repo = "cyclone";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-4U/uOTbFpPTC9BmO6Wkhy4PY8UCFVt5eHSGqrOlKT/U=";
   };
 

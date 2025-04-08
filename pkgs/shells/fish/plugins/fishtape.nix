@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "fishtape";
-    tag = version;
+    rev = version;
     sha256 = "0dxcyhs2shhgy5xnwcimqja8vqsyk841x486lgq13i3y1h0kp2kd";
   };
 

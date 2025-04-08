@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
         }
       else
         {
-          tag = finalAttrs.version;
+          rev = finalAttrs.version;
           hash = "sha256-Q/A0ryIC5E1pt2Sh7o79gxHbe4OgdlrwflOWtxWSS5o=";
         }
     )

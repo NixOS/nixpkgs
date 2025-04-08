@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GCtcIXGrMH6LOKxjnB2SkUSChQnMj5d939i2atvqK+Q=";
   };
 

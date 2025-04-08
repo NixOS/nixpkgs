@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.gitano.org.uk/libgfshare.git";
-    tag = version;
+    rev = version;
     sha256 = "0s37xn9pr5p820hd40489xwra7kg3gzqrxhc2j9rnxnd489hl0pr";
   };
 

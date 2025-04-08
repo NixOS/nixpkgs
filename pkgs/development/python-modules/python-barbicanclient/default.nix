@@ -29,7 +29,7 @@ buildPythonPackage rec {
     domain = "opendev.org";
     owner = "openstack";
     repo = "python-barbicanclient";
-    tag = version;
+    rev = version;
     hash = "sha256-odoYyBulOQkjUpymFyZgvI+DYmdHJY3PaG8hh2ms+/0=";
   };
 

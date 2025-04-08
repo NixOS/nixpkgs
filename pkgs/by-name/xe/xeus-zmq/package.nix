@@ -19,7 +19,7 @@ clangStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
     repo = "xeus-zmq";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-CrFb0LDb6akCfFnwMSa4H3D3A8KJx9Kiejw6VeV3IDs=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tlsa";
     repo = "libcyaml";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JIN/cvh9PRl4/K0Z3WZtSCA3casBxyaxNxjXZZdQRWQ=";
   };
 

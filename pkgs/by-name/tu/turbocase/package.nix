@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "codeberg.org";
     owner = "MartijnBraam";
     repo = "TurboCase";
-    tag = version;
+    rev = version;
     hash = "sha256-mwWN7XYKr/BD9r935oElqoQN87kdrrWjkmhURkAkjj4=";
   };
 

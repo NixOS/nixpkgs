@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rockymadden";
     repo = "slack-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "022yr3cpfg0v7cxi62zzk08vp0l3w851qpfh6amyfgjiynnfyddl";
   };
 

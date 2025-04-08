@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "linenoise-ng";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "176iz0kj0p8d8i3jqps4z8xkxwl3f1986q88i9xg5fvqgpzsxp20";
   };
 

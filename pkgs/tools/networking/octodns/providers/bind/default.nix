@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-bind";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IxZr7Wds8wLfJg6rqCtJ59Sg/mCIJ1g9jDJ8CTM7O8w=";
   };
 

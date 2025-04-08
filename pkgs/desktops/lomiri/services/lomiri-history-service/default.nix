@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/history-service";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-pcTYuumywTarW+ZciwwvmmBQQH6aq4+FdVjV62VzSZU=";
   };
 

@@ -20,7 +20,7 @@ let
         src = fetchFromGitHub {
           owner = "elastic";
           repo = "beats";
-          tag = "v${version}";
+          rev = "v${version}";
           hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
         };
 

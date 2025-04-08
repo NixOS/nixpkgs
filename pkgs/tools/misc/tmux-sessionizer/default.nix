@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "jrmoulton";
     repo = name;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uoSm9oWZSiqwsg7dVVMay9COL5MEK3a5Pd+D66RzzPM=";
   };
 

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exiv2";
     repo = "exiv2";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+Fe0+wkWWtM3MNgY6qp34/kC8jkOjOLusnd9WquYpA8=";
   };
 

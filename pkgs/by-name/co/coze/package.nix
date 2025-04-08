@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Cyphrme";
     repo = "Coze_cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/Cznx5Q0a9vVrC4oAoBmAkejT1505AQzzCW/wi3itv4=";
   };
 

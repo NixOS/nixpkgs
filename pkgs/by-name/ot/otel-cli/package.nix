@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "equinix-labs";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JYi9CbP4mUhX0zNjhi6QlBzLKcj2zdPwlyBSIYKp6vk=";
   };
 

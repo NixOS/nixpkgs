@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jamespwilliams";
     repo = "psitop";
-    tag = version;
+    rev = version;
     hash = "sha256-TD+NTlfmBtz+m2w2FnTcUIJQakpvVBCK/MAHfCrOue4=";
   };
 

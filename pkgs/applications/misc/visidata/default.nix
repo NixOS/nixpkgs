@@ -56,7 +56,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ICEYC9QjYrB+oTzakfjgyg4DigzDOtYnqHRTaqF7Gw0=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sqls-server";
     repo = "sqls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-b3zLyj2n+eKOPBRooS68GfM0bsiTVXDblYKyBYKiYug=";
   };
 

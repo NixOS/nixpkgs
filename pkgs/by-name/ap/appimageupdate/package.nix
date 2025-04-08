@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "AppImageUpdate";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-b2RqSw0Ksn9OLxQV9+3reBiqrty+Kx9OwV93jlvuPnY=";
   };
 

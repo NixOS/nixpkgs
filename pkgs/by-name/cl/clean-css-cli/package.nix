@@ -9,7 +9,7 @@ let
   src = fetchFromGitHub {
     owner = "clean-css";
     repo = "clean-css-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tsFNcQg55uY2gL5xLLLS6INLlYzbsU6M3hnsYeOFGEw=";
   };
 in

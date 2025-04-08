@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "meshoptimizer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vA9FXpJuLJS510MZgVZ96LAUbjXth4CFNkXMEV0DpYg=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-css";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ASFg5LM1NbpK+Df1TPs+O13WmZktw+BtfsCJagF5nUc=";
   };
 

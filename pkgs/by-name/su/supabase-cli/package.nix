@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-350b+79Jmrk8wsVQdE3gRAP3JZbgAtL1Cw46sOCyaok=";
   };
 

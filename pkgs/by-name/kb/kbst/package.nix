@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kbst";
     repo = "kbst";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tbSYNJp/gzEz+wEAe3bvIiZL5axZvW+bxqTOBkYSpMY=";
   };
 

@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "radomirbosak";
       repo = "duden";
-      tag = finalAttrs.version;
+      rev = finalAttrs.version;
       hash = "sha256-c6IItrjFVbsdYg3sDrExcxv7aRcKhd/M5hiZD+wBZ2Y=";
     };
 

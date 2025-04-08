@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WMejspnk2PvJhvNGi4h+DF+fzipuOMcS1QWim5DnAhQ=";
   };
 

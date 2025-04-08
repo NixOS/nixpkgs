@@ -15,7 +15,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "mermaid-js";
     repo = "mermaid-cli";
-    tag = version;
+    rev = version;
     hash = "sha256-hj6pnucms6OcLuIebnlHMQj2K8zMbyuWzvVkZh029Sw=";
   };
 

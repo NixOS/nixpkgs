@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    tag = version;
+    rev = version;
     hash = "sha256-hwNLcuFN6ItH5KhC2gDUsaZT7qTC48fPR/Qx6u8B1+M=";
   };
 

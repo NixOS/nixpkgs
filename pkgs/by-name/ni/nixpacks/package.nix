@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "nixpacks";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-G3PIQfwddATVNhe/cEZBSFESX3grFqjUQjq40DB5mH4=";
   };
 

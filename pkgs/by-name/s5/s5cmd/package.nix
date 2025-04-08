@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "peak";
     repo = "s5cmd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+wSVJkXmu+1BzvO1o31jhKZLXeG7y+YkABIZZ1TlK/g=";
   };
 

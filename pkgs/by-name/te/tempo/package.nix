@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-JBbECknhqYKzFlxAOVinuUCf/2xuUdh2ryK9c35YZ9o=";
   };

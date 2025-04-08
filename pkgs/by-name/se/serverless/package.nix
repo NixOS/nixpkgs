@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "serverless";
     repo = "serverless";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DplJRJOdIpZfIvpyPo9VcaXCHVPWB8FwhOH4vISUh3Q=";
   };
 

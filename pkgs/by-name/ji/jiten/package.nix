@@ -17,14 +17,14 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "jiten";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "13bdx136sirbhxdhvpq5kf0r6q1xvm5zyzp454z51gy0v6rn0qrp";
   };
 
   nonFreeData = fetchFromGitHub {
     owner = "obfusk";
     repo = "jiten-nonfree-data";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "16sz8i0sw7ggy6kijcx4qyl2zr6xj789x4iav0yyllx12dfgp5b1";
   };
 

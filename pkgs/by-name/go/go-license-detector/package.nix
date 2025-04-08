@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "go-enry";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-S9LKXjn5dL5FETOOAk+bs7bIVdu2x7MIhfjpZuXzuLo=";
   };
 

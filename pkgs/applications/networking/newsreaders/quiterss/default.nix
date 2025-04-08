@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
-    tag = version;
+    rev = version;
     sha256 = "1cgvl67vhn5y7bj5gbjbgk26bhb0196bgrgsp3r5fmrislarj8s6";
   };
 

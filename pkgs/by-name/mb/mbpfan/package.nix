@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-F9IWUcILOuLn5K4zRSU5jn+1Wk1xy0CONSI6JTXU2pA=";
   };
   installPhase = ''

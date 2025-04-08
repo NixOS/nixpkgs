@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nbuchwitz";
     repo = "nc_dnsapi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OE4+wJbJbUZ+YB5J5OyvytLFCcrnXCeZEqmphHKKprQ=";
   };
 

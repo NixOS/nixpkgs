@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BlackArch";
     repo = "torctl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rTJR+9pbK/sWMqdHyIqJgASgCGtGtpUPoHmYZJ7COFQ=";
   };
 

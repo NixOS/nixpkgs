@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/1pSGbKBfin7xqoILacKp2//65NNiBXZxzhO39FOOjY=";
   };
 

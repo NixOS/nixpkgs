@@ -24,7 +24,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pstavirs";
     repo = "ostinato";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-/fPUxGeh5Cc3rb+1mR0chkiFPw5m+O6KtWDvzLn0iYo=";
   };
 

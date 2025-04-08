@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "dendrite";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-b/kybHF9WcP88kQuG7LB0/pgflYUeWNqEHfUyKfUCIU=";
   };
 

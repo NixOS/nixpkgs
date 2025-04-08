@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MesserLab";
     repo = "SLiM";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Hgh1ianEdITRUIDKLiLW32kQlPlXKIfN4PSv3cOXTGI=";
   };
 

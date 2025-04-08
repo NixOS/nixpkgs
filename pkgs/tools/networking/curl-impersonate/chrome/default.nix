@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yifeikong";
     repo = "curl-impersonate";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-m6zeQUL+yBh3ixS+crbJWHX5TLa61A/3oqMz5UVELso=";
   };
 

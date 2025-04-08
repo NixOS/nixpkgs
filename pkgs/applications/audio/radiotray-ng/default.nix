@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
   };
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "robertsanseries";
     repo = "ciano";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-nubm6vBWwsHrrmvFAL/cIzYPxg9B1EhnpC79IJMNuFY=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dagger";
     repo = "cuelsp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+E49TR2D26HSTwgwO1XFkIwXr5lmvv9l3KtR8dVT/cQ=";
   };
 

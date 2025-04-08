@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mezantrop";
     repo = "ts-warp";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-bFF/xVI6K2pDMQazJ3E/lAMfrAMbb0cCVUgbfoFxd4Y=";
   };
 

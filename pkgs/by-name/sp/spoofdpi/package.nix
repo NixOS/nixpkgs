@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xvzc";
     repo = "SpoofDPI";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-m4fhFhZLuWT1diDlDTmTsNrckKTjhEZbhciv44FZcro=";
   };
 

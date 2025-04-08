@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "elves";
     repo = "elvish";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+qkr0ziHWs3MVhBoqAxrwwbsQVvmGHRKrlqiujqBKvs=";
   };
 

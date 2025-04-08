@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "glsl-language-server";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-wi1QiqaWRh1DmIhwmu94lL/4uuMv6DnB+whM61Jg1Zs=";
   };

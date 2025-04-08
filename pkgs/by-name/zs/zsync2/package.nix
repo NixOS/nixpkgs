@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "zsync2";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-OCeMEXQmbc34MZ1NyOfAASdrUyeSQqqfvWqAszJN4x0=";
   };
 

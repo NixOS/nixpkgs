@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dj-on-github";
     repo = "djent";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-inMh7l/6LlrVnIin+L+fj+4Lchk0Xvt09ngVrCuvphE=";
   };
 

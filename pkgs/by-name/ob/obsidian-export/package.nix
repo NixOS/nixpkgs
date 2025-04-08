@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zoni";
     repo = "obsidian-export";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FcySNccDVeftX5BKVwYXdufsCmG8YuFBQrbSqibbVV8=";
   };
 

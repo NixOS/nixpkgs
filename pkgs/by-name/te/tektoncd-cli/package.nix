@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-LcYd8v6+at/GqlEV2Qkj5g+WNiTBfnQuhDtpP7lmnuk=";
   };
 

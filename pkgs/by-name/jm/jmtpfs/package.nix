@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "1pm68agkhrwgrplrfrnbwdcvx5lrivdmqw8pb5gdmm3xppnryji1";
-    tag = "v${version}";
+    rev = "v${version}";
     repo = "jmtpfs";
     owner = "JasonFerrara";
   };

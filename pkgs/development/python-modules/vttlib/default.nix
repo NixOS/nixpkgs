@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "daltonmaag";
     repo = "vttLib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ChsuzeFRQFDYGlAE4TWzE+et7yGLOfha1VqGcOdayOs=";
   };
 

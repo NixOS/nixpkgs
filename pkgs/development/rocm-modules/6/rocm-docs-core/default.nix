@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-docs-core";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-++Vi0jZLtHWsGy5IUohgF3P+Q6Jg/d0xWyDA6urbHUA=";
   };
 

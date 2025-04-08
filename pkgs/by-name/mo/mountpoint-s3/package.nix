@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/a9chdeijaGKJ3nDDYYZLdS9JrZiAjC8QFQ6bjdLWT8=";
     fetchSubmodules = true;
   };

@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "vkbo";
     repo = "novelWriter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-262YMVqxSZv8G82amdRnHiW/5gnxkYyFSQDiS5gOdBE=";
   };
 

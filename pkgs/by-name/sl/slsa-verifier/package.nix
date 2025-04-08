@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "slsa-framework";
     repo = "slsa-verifier";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wOK0S0XJ0LbFSr8Z/KEnKolq0u/SyBNDiugOAD0OmgY=";
   };
 

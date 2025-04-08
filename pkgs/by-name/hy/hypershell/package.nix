@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "hypershell";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UWXlcY65elw+xKLte5KE5eyFLDZmEVQBSwsSpv9G7ng=";
   };
 

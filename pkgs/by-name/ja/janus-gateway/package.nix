@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "meetecho";
     repo = "janus-gateway";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Y4MdbB706aziKPxM9y/3uCKpc60dMDlV0xgugDjfa7A=";
   };
 

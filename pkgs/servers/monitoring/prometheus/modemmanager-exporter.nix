@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "modemmanager_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-wQATmTjYsm1J2DicPryoa/jVpbLjXz+1TTQUH5yGV6w=";
   };
 

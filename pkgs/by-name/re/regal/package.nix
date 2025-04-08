@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "StyraInc";
     repo = "regal";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fO/hZw5aoDshemK0vmlwUJiSqGQ2peF5egT40029aAg=";
   };
 

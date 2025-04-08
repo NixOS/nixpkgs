@@ -19,7 +19,7 @@ flutter324.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
-    tag = version;
+    rev = version;
     hash = "sha256-MpY6yJvGBaFiEwuGEme2Uvyi5INCYhZJHyaRpC9pCuk=";
   };
 

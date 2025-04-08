@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "pkg";
-    tag = version;
+    rev = version;
     hash = "sha256-h3rHR3JE9hVcd3oiE7VL2daYXGTQo7NcOHGC6pmE/xs=";
   };
 

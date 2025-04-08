@@ -297,7 +297,7 @@ let
           src = fetchFromGitHub {
             owner = "kubernetes-client";
             repo = "python";
-            tag = "v${version}";
+            rev = "v${version}";
             sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
             fetchSubmodules = true;
           };

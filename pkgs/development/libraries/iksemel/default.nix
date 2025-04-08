@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "timothytylee";
     repo = "iksemel-1.4";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1xv302p344hnpxqcgs3z6wwxhrik39ckgfw5cjyrw0dkf316z9yh";
   };
 

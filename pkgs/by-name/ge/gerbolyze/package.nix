@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
     fetchSubmodules = true;
   };

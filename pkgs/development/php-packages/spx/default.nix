@@ -15,7 +15,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Dcv8ncYPIug7e24mvL1gn0x0CeLNAck8djm/r/yiPe8=";
   };
 

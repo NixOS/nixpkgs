@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "cznic";
     repo = "golex";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0Z2oE00vGnH2BBNmKAjRhy//fEbT5AQ+CKLIUr+NPwY=";
   };
 

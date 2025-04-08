@@ -15,7 +15,7 @@ eggDerivation rec {
   src = fetchFromGitHub {
     owner = "the-kenny";
     repo = "egg2nix";
-    tag = version;
+    rev = version;
     sha256 = "sha256-5ov2SWVyTUQ6NHnZNPRywd9e7oIxHlVWv4uWbsNaj/s=";
   };
 

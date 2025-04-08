@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-RSfdlLT2v3fM4P8E0mIyZZ8A1MWVIS0N0MDczqq7Y64=";
   };
 

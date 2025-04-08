@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Z+PMSV6fipfHBrqGS24SOgGJS173Vct12sVzCGZL0IA=";
   };
 

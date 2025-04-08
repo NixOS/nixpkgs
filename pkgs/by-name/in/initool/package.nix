@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "initool";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PROsyYw8xdnn0PX+3OyUPaybQbTmO88G2koeZhBfwjg=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "WeiDUorg";
     repo = "weidu";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 

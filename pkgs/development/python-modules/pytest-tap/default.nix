@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-tap";
     repo = "pytest-tap";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "R0RSdKTyJYGq+x0+ut4pJEywTGNgGp/ps36ZaH5dyY4=";
   };
 

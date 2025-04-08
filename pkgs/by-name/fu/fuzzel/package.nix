@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fuzzel";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-FM5HvPfLVmuKpS3/0m2QM/lSRcWsVpnwtJ++L3Uo5Dc=";
   };
 

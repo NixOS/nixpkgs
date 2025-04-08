@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "baumgarr";
     repo = "nixnote2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0cfq95mxvcgby66r61gclm1a2c6zck5aln04xmg2q8kg6p9d31fr";
   };
 

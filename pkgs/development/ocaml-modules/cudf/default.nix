@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "irill";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-E4KXKnso/Q3ZwcYpKPgvswNR9qd/lafKljPMxfStedM=";
   };
 

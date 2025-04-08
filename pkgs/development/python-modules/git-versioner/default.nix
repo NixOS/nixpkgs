@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "alelec";
     repo = "__version__";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bnpuFJSd4nBXJA75V61kiB+nU5pUzdEAIScfKx7aaGU=";
   };
 

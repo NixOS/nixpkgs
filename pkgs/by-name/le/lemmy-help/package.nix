@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "numToStr";
     repo = "lemmy-help";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HcIvHuuzQj4HsRJyn1A9nXiGDGAcz1nqTsC7sROt7OI=";
   };
 

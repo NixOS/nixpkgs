@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "stanc3";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-IrpHV00Fn3Nxail4Xgv/8ezclKpyVuQa1F34kF07wwA=";
   };
 

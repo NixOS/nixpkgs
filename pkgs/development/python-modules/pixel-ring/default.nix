@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "respeaker";
     repo = "pixel_ring";
-    tag = version;
+    rev = version;
     hash = "sha256-J9kScjD6Xon0YWGxFU881bIbjmDpY7cnWzJ8G0SOKaw=";
   };
 

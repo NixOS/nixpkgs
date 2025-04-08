@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wasm3";
     repo = "wasm3";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "07zzmk776j8ydyxhrnnjiscbhhmz182a62r6aix6kfk5kq2cwia2";
   };
 

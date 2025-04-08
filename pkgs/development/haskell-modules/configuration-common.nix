@@ -3090,7 +3090,7 @@ self: super:
       src = pkgs.fetchFromGitHub {
         owner = "PostgREST";
         repo = "postgrest";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-peXM5/K034Phcy5vNhc5AT3/9oGXohVogFN9gRsSosY=";
       };
     })

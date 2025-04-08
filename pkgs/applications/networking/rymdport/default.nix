@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WWLs0gzFo1+scG+2JfNMd28jIP1BMMJOK4fhQ726mHY=";
   };
 

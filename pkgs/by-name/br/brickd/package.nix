@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Tinkerforge";
     repo = "brickd";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-6w2Ew+dLMmdRf9CF3TdKHa0d5ZgmX5lKIR+5t3QAWFQ=";
   };
 

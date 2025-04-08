@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bitnami-labs";
     repo = "sealed-secrets";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-unPqjheT8/2gVQAwvzOvHtG4qTqggf9o0M5iLwl1eh4=";
   };
 

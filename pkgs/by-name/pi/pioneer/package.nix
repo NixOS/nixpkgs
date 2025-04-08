@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
-    tag = version;
+    rev = version;
     hash = "sha256-mPTMmCgttFEhMyhGbRFBsIqI6oU0yBQJp+m7NbeeUHA=";
   };
 

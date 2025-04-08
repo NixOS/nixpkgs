@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "william8000";
     repo = "lout";
-    tag = version;
+    rev = version;
     hash = "sha256-bXLhkJqhv8pftDZYv6vn9ycy5u3vde+m3gCPvWJz2M8=";
   };
 

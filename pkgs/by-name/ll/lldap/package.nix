@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-iQ+Vv9kx/pWHoa/WZChBK+FD2r1avzWWz57bnnzRjUg=";
     };
 

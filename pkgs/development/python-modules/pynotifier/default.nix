@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YuriyLisovskiy";
     repo = "pynotifier";
-    tag = version;
+    rev = version;
     hash = "sha256-xS3hH3cyqgDD7uoWkIYXpQAh7SN7XJ/qMfB0Vq5bva0=";
   };
 

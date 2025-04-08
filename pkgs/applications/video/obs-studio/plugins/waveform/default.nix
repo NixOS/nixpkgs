@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     owner = "phandasm";
     repo = "waveform";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Bg1n1yV4JzNFEXFNayNa1exsSZhmRJ0RLHDjLWmqGZE=";
   };
 

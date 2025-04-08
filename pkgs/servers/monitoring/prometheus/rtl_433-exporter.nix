@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mhansen";
     repo = "rtl_433_prometheus";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ggtGi1gnpTLGvZnfAW9vyYyU7ELbTRNhXyCMotx+KKU=";
   };
 

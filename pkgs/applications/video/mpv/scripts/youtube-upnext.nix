@@ -13,7 +13,7 @@ buildLua rec {
   src = fetchFromGitHub {
     owner = "cvzi";
     repo = "mpv-youtube-upnext";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-x9mfyc8JIlOpbSfGEwxXoUtsH0A+K3JPwT/8MHq7ks4=";
   };
 

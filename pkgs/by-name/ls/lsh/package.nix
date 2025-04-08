@@ -9,7 +9,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "latitudesh";
     repo = "lsh";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0YpjG4u+wb4LRWzfTddKFwut0MBzEch+HZijmZiVXpE=";
   };
   vendorHash = "sha256-ogdyzfayleka4Y8x74ZtttD7MaeCl1qP/rQi9x0tMto=";

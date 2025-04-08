@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tmountain";
     repo = "uchess";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1njl3f41gshdpj431zkvpv2b7zmh4m2m5q6xsijb0c0058dk46mz";
   };
 

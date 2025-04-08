@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonrob";
     repo = "pyasynchat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Cep8tsapLjhPbVhMrC1ZUgd4jZZLOliL4yF0OX2KrYs=";
   };
 

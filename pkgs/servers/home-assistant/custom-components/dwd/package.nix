@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "hg1337";
     repo = "homeassistant-dwd";
-    tag = version;
+    rev = version;
     hash = "sha256-v5xSIUW8EMTdLY66yZ31cR/1DWVvn85CfIl/Y4xpXiw=";
   };
 

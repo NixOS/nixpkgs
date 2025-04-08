@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "wi1dcard";
     repo = "v2ray-exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "12mzng3cw24fyyh8zjfi26gh853k5blzg3zbxcccnv5lryh2r0yi";
   };
 

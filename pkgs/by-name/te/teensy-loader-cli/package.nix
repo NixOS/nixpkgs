@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PaulStoffregen";
     repo = "teensy_loader_cli";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-NYqCNWO/nHEuNc9eOzsUqJEHJtZ3XaNz1VYNbeuqEk8=";
   };
 

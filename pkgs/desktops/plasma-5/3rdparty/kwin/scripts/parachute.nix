@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tcorreabr";
     repo = "parachute";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "QIWb1zIGfkS+Bef7LK+JA6XpwGUW+79XZY47j75nlCE=";
   };
 

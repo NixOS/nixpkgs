@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit-Qt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-rLNeVjzIT18qUZgj6Qcf7E59CL4gx/ArYJfs9KHrqNs=";
   };
 

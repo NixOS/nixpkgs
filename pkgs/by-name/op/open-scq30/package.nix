@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DL2hYm1j27K0nnBvE3iGnguqm0m1k56bkuG+6+u4u4c=";
   };
 

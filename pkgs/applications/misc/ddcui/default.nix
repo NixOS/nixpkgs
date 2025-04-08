@@ -16,7 +16,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rockowitz";
     repo = "ddcui";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KcivAoPV/4TihVkwYgq3bWWhG5E8enVSD3bhObl++I0=";
   };
 

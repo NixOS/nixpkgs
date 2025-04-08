@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rmeissner";
     repo = "py-eth-sig-utils";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PNvEHH5w2ptntRGzqWrqlbIzJJsT60OXg/Dh5f6Wq9k=";
   };
 

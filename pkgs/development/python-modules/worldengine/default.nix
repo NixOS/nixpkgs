@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "worldengine";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1xrckb0dn2841gvp32n18gib14bpi77hmjw3r9jiyhg402iip7ry";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "py-tree-sitter-languages";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wKU2c8QRBKFVFqg+DAeH5+cwm5jpDLmPZG3YBUsh/lM=";
     # Use git, to also fetch tree-sitter repositories that upstream puts their
     # hashes in the repository as well, in repos.txt.

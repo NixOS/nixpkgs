@@ -60,7 +60,7 @@ in
       repo = "vdr-plugin-femon";
       owner = "rofafor";
       sha256 = "sha256-0qBMYgNKk7N9Bj8fAoOokUo+G9gfj16N5e7dhoKRBqs=";
-      tag = "v${version}";
+      rev = "v${version}";
     };
 
     postPatch = "substituteInPlace Makefile --replace /bin/true true";
@@ -88,7 +88,7 @@ in
     src = fetchFromGitHub {
       repo = "vdr-plugin-vnsiserver";
       owner = "vdr-projects";
-      tag = version;
+      rev = version;
       sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
     };
 
@@ -148,7 +148,7 @@ in
     src = fetchFromGitHub {
       owner = "jowi24";
       repo = "vdr-fritz";
-      tag = version;
+      rev = version;
       hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
       fetchSubmodules = true;
     };

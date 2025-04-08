@@ -53,7 +53,7 @@ let
       inherit version;
       owner = "Ensembl";
       repo = "ensembl-xs";
-      tag = version;
+      rev = version;
       sha256 = "1qqnski532f4bz32wxbqd9w1sz40rjh81ipp9p02k3rlaf1gp1fa";
     };
     # PREFIX is important

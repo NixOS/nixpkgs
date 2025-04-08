@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "t2bot";
     repo = "matrix-media-repo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-trVn+Mn98aJLQCpQX1+qps/uuA5+8zeDoM94eauxHO8=";
   };
 

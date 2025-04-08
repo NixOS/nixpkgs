@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sp-nitech";
     repo = "SPTK";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lIyOcN2AR3ilUZ9stpicjbwlredbwgGPwmMICxZEijU=";
   };
 

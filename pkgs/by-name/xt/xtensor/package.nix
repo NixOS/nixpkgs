@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "go-python";
     repo = "gpython";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xqwq27u41Jgoh7t9UDyatuBQswr+h3xio5AV/npncHc=";
   };
 

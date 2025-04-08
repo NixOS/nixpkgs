@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "RomRider";
     repo = "apexcharts-card";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bB/FCNVBK8vOfT3q9+qNssNJCtiN7ReqrsJoobf5dpU=";
   };
 

@@ -99,7 +99,7 @@ lib.makeScope pkgs.newScope (
       src = fetchFromGitHub {
         owner = "alessandrofrancesconi";
         repo = "gimp-plugin-bimp";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-IJ3+/9UwxJTRo0hUdzlOndOHwso1wGv7Q4UuhbsFkco=";
       };
 
@@ -217,7 +217,7 @@ lib.makeScope pkgs.newScope (
       src = fetchFromGitHub {
         owner = "bootchk";
         repo = "resynthesizer";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
       };
 
@@ -277,7 +277,7 @@ lib.makeScope pkgs.newScope (
       src = fetchFromGitHub {
         owner = "carlobaldassi";
         repo = "gimp-lqr-plugin";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
       };
       patches = [

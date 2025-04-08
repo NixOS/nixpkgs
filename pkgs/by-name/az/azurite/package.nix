@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "Azurite";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-aH9FAT49y4k87lzerQdgLqi+ZlucORQX4w1NBFtEfMw=";
   };
 

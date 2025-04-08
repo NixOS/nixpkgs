@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UJRHqvfCeKxbE+SRQZEm797WqwGpwjlqol8z36l3nS4=";
   };
 

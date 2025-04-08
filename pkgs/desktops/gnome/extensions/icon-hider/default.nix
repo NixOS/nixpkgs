@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "gnome-shell-extension-icon-hider";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "18c8zkdrmdbghqqz7b450vhgpykgz25mgigwn2nggcb2lxmvm9ks";
   };
 

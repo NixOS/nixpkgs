@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "1npfk5jv59kk4n8pkyx89fn9s6p8x3gbffs42jaw24frgxfgp8ca";
-    tag = "v${version}";
+    rev = "v${version}";
     repo = "libconfuse";
     owner = "martinh";
   };

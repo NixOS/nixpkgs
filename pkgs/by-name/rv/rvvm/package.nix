@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LekKit";
     repo = "RVVM";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-5nSlKyWDAx0EeKFzzwP5+99XuJz9BHXEF1WNkRMLa9U=";
   };
 

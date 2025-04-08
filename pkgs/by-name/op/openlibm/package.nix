@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "JuliaLang";
     repo = "openlibm";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HFSRrTdIhbbSyeU/FSo5e2ZI5tff2ZDEFgYcI412ATU=";
   };
 

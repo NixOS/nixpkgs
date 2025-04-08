@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo = "ndstool";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-121xEmbt1WBR1wi4RLw9/iLHqkpyXImXKiCNnLCYnJs=";
   };
 

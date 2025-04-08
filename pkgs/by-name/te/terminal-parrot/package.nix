@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jmhobbs";
     repo = "terminal-parrot";
-    tag = version;
+    rev = version;
     hash = "sha256-LI67DDcK3M084r9JPx8NcBWthaiBOCEL4lQJhuUJSok=";
   };
 

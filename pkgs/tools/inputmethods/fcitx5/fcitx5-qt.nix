@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
-    tag = version;
+    rev = version;
     hash = "sha256-cOCLPsWRcwukGCKAYHrZSRUYlmfYxdyspX5Y0rqbD2w=";
   };
 

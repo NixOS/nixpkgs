@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Cyb3r-Jak3";
     repo = "cloudflare-utils";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LbqH48ysOp2s+e+52doHIyaxUbzzCdJqhdvLuIJ3CCc=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dvidelabs";
     repo = "flatcc";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
   };
 

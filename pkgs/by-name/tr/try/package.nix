@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "binpash";
     repo = "try";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2EDRVwW4XzQhd7rAM2rDuR94Fkaq4pH5RTooFEBBh5g=";
   };
   nativeBuildInputs = [ makeWrapper ];

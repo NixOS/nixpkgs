@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AlbrechtL";
     repo = "welle.io";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-sSknzZiD9/MLyO+gAYopogOQu5HRcqaRcfqwq4Rld7A=";
   };
 

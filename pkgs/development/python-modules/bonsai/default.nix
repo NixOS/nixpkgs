@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "bonsai";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SAP/YeWqow5dqXlXDzjnTWIfJhMwVeZSSUfWr1Mgmng=";
   };
 

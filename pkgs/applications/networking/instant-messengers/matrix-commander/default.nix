@@ -23,7 +23,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JZcdAo6d7huwDQ9hJE8oT5FH0ZQjg0DhoglOkhOyk1o=";
   };
 

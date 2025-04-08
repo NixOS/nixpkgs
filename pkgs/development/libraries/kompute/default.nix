@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KomputeProject";
     repo = "kompute";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cf9Ef85R+VKao286+WHLgBWUqgwvuRocgeCzVJOGbdc=";
   };
 

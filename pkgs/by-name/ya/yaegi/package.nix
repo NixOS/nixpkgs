@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "yaegi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jpLx2z65KeCPC4AQgFmUUphmmiT4EeHwrYn3/rD4Rzg=";
   };
 

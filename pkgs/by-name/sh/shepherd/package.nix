@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NerdWalletOSS";
     repo = "shepherd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LY8Vde4YpGuKnQ5UnSOpsQDY7AOyZRziUrfZb5dRiX4=";
   };
 

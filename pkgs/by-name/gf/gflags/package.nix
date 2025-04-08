@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gflags";
     repo = "gflags";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "147i3md3nxkjlrccqg4mq1kyzc7yrhvqv5902iibc7znkvzdvlp0";
   };
 

@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = "ymuse";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WbIeqOAhdqxU8EvHEsG7ASwy5xZG1domZKT5ccOggHg=";
   };
 

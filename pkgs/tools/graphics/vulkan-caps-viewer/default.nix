@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
-    tag = version;
+    rev = version;
     hash = "sha256-fliiNeZPEP4uNMRDgG093fvU01ZTxwv08YLGwBooOLA=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.

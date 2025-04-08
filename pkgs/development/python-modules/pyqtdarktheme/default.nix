@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "5yutan5";
     repo = "PyQtDarkTheme";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jK+wnIyPE8Bav0pzbvVisYYCzdRshYw1S2t0H3Pro5M=";
   };
 

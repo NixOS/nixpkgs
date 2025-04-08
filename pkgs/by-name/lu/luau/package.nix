@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
-    tag = version;
+    rev = version;
     hash = "sha256-AEPUdqQ+uIWxSTOwwbZ8tWSz3VKKHa1D08o6oeEREkg=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ya-mouse";
     repo = "fatresize";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1vhz84kxfyl0q7mkqn68nvzzly0a4xgzv76m6db0bk7xyczv1qr2";
   };
 

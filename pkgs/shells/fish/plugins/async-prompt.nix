@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "acomagu";
     repo = "fish-async-prompt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-B7Ze0a5Zp+5JVsQUOv97mKHh5wiv3ejsDhJMrK7YOx4=";
   };
 

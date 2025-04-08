@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quadprog";
     repo = "quadprog";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8gPuqDY3ajw/+B6kJdtpq+HL+Oq2Nsy/O7m+IWzxP38=";
   };
 

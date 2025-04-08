@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-isal";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gvUVSGarPA4KupQTd61x75CfqNVqZfFC1zq0R21Clf8=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zalando-stups";
     repo = "stups-cli-support";
-    tag = version;
+    rev = version;
     sha256 = "1r6g29gd009p87m8a6wv4rzx7f0564zdv67qz5xys4wsgvc95bx0";
   };
 

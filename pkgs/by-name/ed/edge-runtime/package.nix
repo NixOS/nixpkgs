@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "supabase";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-w0iSKHT6aIixKh1bHg1lOQNEw/emKK7R2iLzWjb2Pnk=";
     fetchSubmodules = true;
   };

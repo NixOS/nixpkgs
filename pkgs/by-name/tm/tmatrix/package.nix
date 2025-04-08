@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "M4444";
     repo = "TMatrix";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-G3dg0SWfBjCA66TTxkVAcVrFNJOWE9+GJXYKzCUX34w=";
   };
 

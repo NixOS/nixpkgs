@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GearKite";
     repo = "MatrixZulipBridge";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5bDqZb8xx5SjThZUSmOcctwo6B15cjkIwA26QNfED2A=";
   };
 

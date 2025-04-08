@@ -82,7 +82,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "cryptpad";
     repo = "cryptpad";
-    tag = version;
+    rev = version;
     hash = "sha256-oSrDajaCEc7I2AsDzKoO34ffd4OeXDwFDGm45yQDSvE=";
   };
 

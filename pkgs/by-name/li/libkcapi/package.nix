@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "libkcapi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xOI29cjhUGUeHLaYIrPA5ZwwCE9lBdZG6kaW0lo1uL8=";
   };
 

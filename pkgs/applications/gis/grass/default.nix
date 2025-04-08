@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-q1jOimQi+24I1ZBf6Z0cvAyXcBFBpT5aWSNeG6n6y0k=";
   };
 

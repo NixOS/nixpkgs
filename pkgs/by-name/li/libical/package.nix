@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libical";
     repo = "libical";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZJXxi1LOZyEpgdcmoK0pe5IA3+l9WY0zLu6Ttzy1QSc=";
   };
 

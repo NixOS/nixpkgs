@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anntzer";
     repo = "mplcursors";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-L5pJqRpgPRQEsRDoP10+Pi8uzH5TQNBuGRx7hIL1x7s=";
   };
 

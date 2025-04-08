@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "zon2nix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pS0D+wdebtpNaGpDee9aBwEKTDvNU56VXer9uzULXcM=";
   };
 

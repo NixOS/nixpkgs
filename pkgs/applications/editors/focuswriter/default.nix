@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "focuswriter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oivhrDF3HikbEtS1cOlHwmQYNYf3IkX+gQGW0V55IWU=";
   };
 

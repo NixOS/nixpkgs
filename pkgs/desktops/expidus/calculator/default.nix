@@ -10,7 +10,7 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "ExpidusOS";
     repo = "calculator";
-    tag = version;
+    rev = version;
     hash = "sha256-O3LHp10Fo3PW3zoN7mFSQEKh+AAaR+IqkRtc6nQrIZE=";
   };
 

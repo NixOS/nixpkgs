@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fastly";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NmXBD/BEQnAH4ES5SYwf8fInC4k++JX2OIhvusLlmG8=";
   };
 

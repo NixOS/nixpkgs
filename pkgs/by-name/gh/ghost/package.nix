@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EntySec";
     repo = "Ghost";
-    tag = version;
+    rev = version;
     sha256 = "13p3inw7v55na8438awr692v9vb7zgf5ggxpha9r3m8vfm3sb4iz";
   };
 

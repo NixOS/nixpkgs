@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "erincatto";
       repo = "box2d";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
     };
     sourceRoot = "${src.name}/Box2D";

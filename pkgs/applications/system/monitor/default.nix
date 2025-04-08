@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
-    tag = version;
+    rev = version;
     hash = "sha256-Kk3L4hfHon0B6Y6vU7en1UFpg221+EiVCxMX9mvu7pU=";
     fetchSubmodules = true;
   };

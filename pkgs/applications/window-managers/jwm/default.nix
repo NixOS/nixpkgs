@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-odGqHdm8xnjEcXmpKMy51HEhbjcROLL3hRSdlbmTr2g=";
   };
 

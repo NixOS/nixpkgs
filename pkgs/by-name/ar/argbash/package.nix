@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "matejak";
     repo = "argbash";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-G739q6OhsXEldpIxiyOU51AmG4RChMqaN1t2wOy6sPU=";
   };
 

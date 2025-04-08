@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "cleanit";
-    tag = version;
+    rev = version;
     hash = "sha256-z1QAWWm+yg/pRCQfPqGbL0EFFT9UwqIkwhmjUuRHyuk=";
   };
 

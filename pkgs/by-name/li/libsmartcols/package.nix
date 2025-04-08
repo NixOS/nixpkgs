@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "karelzak";
     repo = "util-linux";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-X39os2iHqSrrYP6HVHPOkuTfc6vNB3pmsOP3VjW50fI=";
   };
 

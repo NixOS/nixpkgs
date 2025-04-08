@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     owner = "museoa";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-38XFjRzOGasr030f+mRYT+ptlabpnVJfa+1s7ZAjS+k=";
   };
 
