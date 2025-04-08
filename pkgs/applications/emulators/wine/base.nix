@@ -301,9 +301,10 @@ stdenv.mkDerivation (
       inherit badPlatforms platforms;
       maintainers = with lib.maintainers; [
         avnik
-        raskin
         bendlas
         jmc-figueira
+        kira-bruneau
+        raskin
         reckenrode
       ];
       inherit mainProgram;
