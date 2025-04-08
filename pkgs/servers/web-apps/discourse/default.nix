@@ -444,6 +444,12 @@ let
       maintainers = with maintainers; [ talyz ];
       license = licenses.gpl2Plus;
       description = "Discourse is an open source discussion platform";
+      knownVulnerabilities = [
+        "Various security issues were fixed in newer releases that cannot be backported to NixOS 24.11."
+        "https://meta.discourse.org/t/3-3-3-security-and-maintenance-release/343239"
+        "https://meta.discourse.org/t/3-3-4-security-and-maintenance-release/349301"
+        "https://meta.discourse.org/t/3-4-2-security-and-bug-fix-release/358152"
+      ];
     };
 
     passthru = {
