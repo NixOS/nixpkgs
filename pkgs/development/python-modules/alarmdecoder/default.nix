@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "alarmdecoder" ];
 
   meta = with lib; {
-    changelog = "https://github.com/nutechsoftware/alarmdecoder/releases/tag/${src.tag}";
+    changelog = "https://github.com/nutechsoftware/alarmdecoder/releases/tag/${src.rev}";
     description = "Python interface for the Alarm Decoder (AD2USB, AD2SERIAL and AD2PI) devices";
     homepage = "https://github.com/nutechsoftware/alarmdecoder";
     license = licenses.mit;
