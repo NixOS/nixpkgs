@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "steghide";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-uUXEipIUfu9AbG7Ekz+25JkWSEGzqA7sJHZqezLzUto=";
   };
 

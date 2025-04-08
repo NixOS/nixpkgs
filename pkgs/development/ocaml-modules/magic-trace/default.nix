@@ -25,7 +25,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "magic-trace";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cAoaAXZOeWNQh6emm17a9oCis8s4jJxPQMI/NfiUa7g=";
   };
 

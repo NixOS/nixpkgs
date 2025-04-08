@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-NG0ZP8LOm7fZVecErTuLOfbp1yvXwHnwPkWTBzUJXWE=";
   };
 

@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yUUZ6gPI2Bte36HzfUE6z8B/I1NlwWDSJA2pwkuzd34=";
   };
 

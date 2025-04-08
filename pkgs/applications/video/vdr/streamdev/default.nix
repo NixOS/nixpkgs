@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vdr-projects";
     repo = "vdr-plugin-streamdev";
-    tag = version;
+    rev = version;
     sha256 = "sha256-fFnRDe3n/ltanRvLhrQDB6aV0UmyuEJgNUip0gKBrBA=";
   };
 

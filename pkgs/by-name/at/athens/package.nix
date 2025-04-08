@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6NBdif8rQ1aj4nTYXhrWyErzRv0q8WpIheRnb2FCnkU=";
   };
 

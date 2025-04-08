@@ -11,7 +11,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "nmittu";
     repo = "gradescope-submit";
-    tag = version;
+    rev = version;
     hash = "sha256-BVNXipgw0wz3PRGYvur8jrXZw/6i0fZ+MOZHzXzlFOk=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "felixlen";
     repo = "trlib";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-pD2MGsIQgMO4798Gp9oLprKhmV0lcjgtUHh1rvEjSIY=";
   };
 

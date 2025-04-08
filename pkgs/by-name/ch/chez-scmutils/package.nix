@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-scmutils";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-y2ug7GfmkJC6jddgB8YllsumjmGxFJxTGTpPf1Vcs/s=";
   };
 

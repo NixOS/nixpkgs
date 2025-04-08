@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-94av3EW96qApCYWpo08QjrxoneuqGrE98aE7YXQEaT4=";
   };
 

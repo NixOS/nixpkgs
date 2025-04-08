@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vultr";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uk0tG66u0gQgEzpiFAeMC0qPrd+Pk6nbrXuuyOtVLe4=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HarlemSquirrel";
     repo = "python-vivotek";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "pNlnGpDjdYE7Lxog8GGZV+UZZmfmt5bwHof5LngPQjg=";
   };
 

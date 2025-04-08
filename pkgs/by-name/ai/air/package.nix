@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "air-verse";
     repo = "air";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+PgJR9+adeko86jUs6/mvkZLgVuIMyd6fv8xxOZB4tE=";
   };
 

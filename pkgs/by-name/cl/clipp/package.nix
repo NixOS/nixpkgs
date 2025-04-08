@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "muellan";
     repo = "clipp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0rq80ba2krwzvcg4r2g1al88453c7lz6ziri2s1ygv8inp9r775s";
   };
 

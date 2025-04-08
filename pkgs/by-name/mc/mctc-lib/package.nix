@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zR4J9gOKwUIfDZsHMdX/t+mKdTpHKYTZQBYxQMWC8Vk=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xmikos";
     repo = "reparser";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "04v7h52wny0j2qj37501nk33j0s4amm134kagdicx2is49zylzq1";
   };
 

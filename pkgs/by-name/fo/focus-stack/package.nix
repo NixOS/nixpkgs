@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PetteriAimonen";
     repo = "focus-stack";
-    tag = version;
+    rev = version;
     hash = "sha256-SoECgBMjWI+n7H6p3hf8J5E9UCLHGiiz5WAsEEioJsU=";
   };
 

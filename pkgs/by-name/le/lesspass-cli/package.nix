@@ -20,7 +20,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = repo;
     repo = repo;
-    tag = version;
+    rev = version;
     sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
   sourceRoot = "${src.name}/cli";

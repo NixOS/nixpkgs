@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "taskcluster";
     repo = "slugid.py";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "McBxGRi8KqVhe2Xez5k4G67R5wBCCoh41dRsTKW4xMA=";
   };
 

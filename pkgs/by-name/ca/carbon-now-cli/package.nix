@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mixn";
     repo = "carbon-now-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-J7H1oofgosFGxoHzcx+UxaRbqGwqrmk6MYmMISpNB6w=";
   };
 

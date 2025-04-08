@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "html-void-elements";
-    tag = version;
+    rev = version;
     hash = "sha256-Q5OEczTdgCCyoOsKv3MKRE3w4t/qyPG4YKbF19jlC88=";
   };
 

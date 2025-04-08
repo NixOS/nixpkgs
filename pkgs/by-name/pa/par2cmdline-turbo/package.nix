@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "animetosho";
     repo = "par2cmdline-turbo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GFMFqHiKoQByD8ZYgGm36ehfMP4CvC2F+u2Va20RSNI=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-CK9ta+2Kf7IFKb+uQhI1AtdNkJZpBgIL7JDM3JqsV4c=";
   };
 

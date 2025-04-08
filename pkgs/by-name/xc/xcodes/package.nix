@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "XcodesOrg";
     repo = "xcodes";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-TwPfASRU98rifyA/mINFfoY0MbbwmAh8JneVpJa38CA=";
   };
 

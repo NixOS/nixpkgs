@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bastikr";
     repo = "boolean.py";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-i6aNzGDhZip9YHXLiuh9crGm2qT2toBU2xze4PDLleg=";
   };
 

@@ -52,7 +52,7 @@ buildGoModule rec {
               src = fetchFromGitHub {
                 owner = "evanw";
                 repo = "esbuild";
-                tag = "v${version}";
+                rev = "v${version}";
                 hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
               };
               vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";

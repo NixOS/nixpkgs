@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "blyxyas";
     repo = "mdbook-emojicodes";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-dlvfY2AMBvTl0j9YaT+u4CeWQGGihFD8AZaAK4/hUWU=";
   };
 

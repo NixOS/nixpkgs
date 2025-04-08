@@ -12,7 +12,7 @@
   libpng,
   libwebp,
   gdk-pixbuf,
-  openexr_3,
+  openexr,
   pkg-config,
   makeWrapper,
   zlib,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ORwhKOp5Nog366UkLbuWpjz/6sJhxUO6+SkoJGH+3fE=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     libpng
     libwebp
     gdk-pixbuf
-    openexr_3
+    openexr
     zlib
   ];
 

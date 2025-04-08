@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlfut";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0Bqgoyp43Y961BMghJFBUx+1lcM2HHlPDjPyLHquWiE=";
   };
 

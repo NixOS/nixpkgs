@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "sanjoyg";
     repo = "dirigera_platform";
-    tag = version;
+    rev = version;
     hash = "sha256-FNcGl6INQlVP+P3qmExWLI1ALh9ZacjJAbNKRtgM3ms=";
   };
 

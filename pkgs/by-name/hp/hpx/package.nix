@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yrKG0n5BhrUNXjFWZRpb38/GYQlvMr0PSqUbhmZlgm0=";
   };
 

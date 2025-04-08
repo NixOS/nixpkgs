@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3P6iudD/swpNDPL4G8isJI6zxqc6/rmHAMpPnEwnuiM=";
   };
 

@@ -11,7 +11,7 @@ let
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
-    version = "0.2.9";
+    version = "0.3.0";
     pyproject = true;
 
     build-system = [
@@ -21,8 +21,8 @@ let
     src = fetchFromGitHub {
       owner = "nadermx";
       repo = "backgroundremover";
-      tag = "v${version}";
-      hash = "sha256-tQ8J3xamOzPPSbFMxIDYKv1TzK1AVwF/DWXdZlrlYvM=";
+      rev = "v${version}";
+      hash = "sha256-fWazMDjc+EoXvO7Iq+zwtJaMEU64ajpO6JtlvU5T0nc=";
     };
 
     models = runCommand "background-remover-models" { } ''

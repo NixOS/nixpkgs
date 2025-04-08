@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sktan";
     repo = "aws-codeartifact-proxy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+P0AIg5m7nePy+Yd445nVfLVxya80Om9lJTPKZeTshc=";
   };
   sourceRoot = "${src.name}/src";

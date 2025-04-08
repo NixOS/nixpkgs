@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "denisenkom";
     repo = "pytds";
-    tag = version;
+    rev = version;
     hash = "sha256-ubAXCifSfNtxbFIJZD8IuK/8oPT9vo77YBCexoO9zsw=";
   };
 

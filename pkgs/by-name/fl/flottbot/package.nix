@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "target";
     repo = "flottbot";
-    tag = version;
+    rev = version;
     hash = "sha256-Z17CkJhxIwoF3Fa0doDfE6N2eUtiBeEEhDwDUoWCCQ8=";
   };
 

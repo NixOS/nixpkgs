@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alpernebbi";
     repo = "git-annex-metadata-gui";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "03kch67k0q9lcs817906g864wwabkn208aiqvbiyqp1qbg99skam";
   };
 

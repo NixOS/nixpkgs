@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "muse-sequencer";
     repo = "muse";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-LxibuqopMHuKEfTWXSEXc1g3wTm2F3NQRiV71FHvaY0=";
   };
 

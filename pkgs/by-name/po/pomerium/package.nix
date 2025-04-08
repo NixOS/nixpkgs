@@ -23,7 +23,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Uj/mVklFRaoDNQjCFS5NW/AhSU+7V1XxPiZBAUuly7s=";
   };
 

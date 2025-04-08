@@ -16,7 +16,6 @@
   docbook_xml_dtd_412,
   docbook_xsl,
   glib,
-  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
-    tag = version;
+    rev = version;
     sha256 = "sha256-9RkN0yZnHf5cx6tsp3P6jsi0/xtplWxMm3hYCPjWj0M=";
   };
 

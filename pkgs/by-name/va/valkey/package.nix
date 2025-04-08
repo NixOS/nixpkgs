@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-05EuPjVokzfJxhrnvFHD7prwt5y7gPxemeDIkLML7lw=";
   };
 

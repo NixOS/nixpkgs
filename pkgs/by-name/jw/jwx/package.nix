@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lestrrat-go";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UXiF3X1jLk4dCGKmZlx9V08hzNJV+s/K2Wei9i+A6dg=";
   };
 

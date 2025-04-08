@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pocketbase";
     repo = "pocketbase";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PDHRMCICzvb7InHSvYRvlYDaB6hkESJyL7iiz+lO6+I=";
   };
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-ssb-debugger";
-    tag = version;
+    rev = version;
     hash = "sha256-HmJOjHX2/P284DSIdKuSz3++Qr1fKVGRQmA/+cMrcYw=";
   };
 

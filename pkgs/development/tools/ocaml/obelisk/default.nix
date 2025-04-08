@@ -11,7 +11,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-JJ8k9/6awKZH87T9Ut8x/hlshiUI6sy2fZtY6x2dIIk=";
   };
 

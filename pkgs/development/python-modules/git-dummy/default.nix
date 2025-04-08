@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "initialcommit-com";
     repo = "git-dummy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-viybxn2J7SO7NgSvjwlP+tgtm+H6QrACafIy82d9XEk=";
   };
 

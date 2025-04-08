@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "yashbhutwala";
     repo = "kubectl-df-pv";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FxKqkxLMNfCXuahKTMod6kWKZ/ucYeIEFcS8BmpbLWg=";
   };
 

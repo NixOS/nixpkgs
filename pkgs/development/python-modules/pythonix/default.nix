@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "pythonix";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1wxqv3i4bva2qq9mx670bcx0g0irjn68fvk28dwvhay9ndwcspqf";
   };
 

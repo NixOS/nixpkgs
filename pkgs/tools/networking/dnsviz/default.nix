@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dnsviz";
     repo = "dnsviz";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-x6LdPVQFfsJIuKde1+LbFKz5bBEi+Mri9sVH0nGsbCU=";
   };
 

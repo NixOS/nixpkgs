@@ -22,7 +22,7 @@ let
   src = fetchFromGitHub {
     owner = "JonathanGiles";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
 

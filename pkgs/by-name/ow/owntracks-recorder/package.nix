@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "owntracks";
     repo = "recorder";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-E4hdsUAg8NHjmUrlr8cskezib4qMv+wF32cThe2/kBc=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ejDne7vaV+GYP6M0n3VAEva4UHuxRGwfc2rgxf7U/EM=";
   };
 

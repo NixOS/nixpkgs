@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-p8D79BRjaPlhzap/FWbqMlkrbVELSgeJW8CljxBAaCI=";
   };
 

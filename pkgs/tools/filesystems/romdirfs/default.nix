@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mlafeldt";
     repo = "romdirfs";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1jbsmpklrycz5q86qmzvbz4iz2g5fvd7p9nca160aw2izwpws0g7";
   };
 

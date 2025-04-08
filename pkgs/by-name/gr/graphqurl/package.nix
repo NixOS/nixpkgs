@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphqurl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-q46DX/luUwBoVskKy9+hXOkpGmlh+lNRvwfcTn6DPN8=";
   };
 

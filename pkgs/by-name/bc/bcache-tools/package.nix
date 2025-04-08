@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "g2p";
     repo = "bcache-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6gy0ymecMgEHXbwp/nXHlrUEeDFnmFXWZZPlzP292g4=";
   };
 

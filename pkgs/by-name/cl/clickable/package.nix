@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5fymmsZUYwB+wc1X7Y1HwwJbGRjQPwkk9JLTxnfH8fo=";
   };
 

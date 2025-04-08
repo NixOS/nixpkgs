@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lVrZCjLhSCyD3aEr6IyRZejqwdiT89w0/ppmQE8Thto=";
     fetchSubmodules = true;
   };

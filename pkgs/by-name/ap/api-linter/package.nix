@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "api-linter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eLs5F3wghAfPfRQgAtW220xlzs7Un8sPpRpfvzc8Jfw=";
   };
 

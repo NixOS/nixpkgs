@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "imtui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eHQPDEfxKGLdiOi0lUUgqJcmme1XJLSPAafT223YK+U=";
   };
 

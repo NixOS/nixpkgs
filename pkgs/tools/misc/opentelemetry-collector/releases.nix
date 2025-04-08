@@ -25,7 +25,7 @@ let
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VJ/lIvTXU8jbmoA0eONotxIwo9TT8MZbbu7hbO0PK7k=";
   };
 

@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "gephi";
     repo = "gephi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZNSEaiD32zFfF2ISKa1CmcT9Nq6r5i2rNHooQAcVbn4=";
   };
 

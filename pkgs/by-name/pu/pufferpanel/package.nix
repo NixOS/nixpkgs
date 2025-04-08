@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "PufferPanel";
     repo = "PufferPanel";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+ZZUoqCiSbrkaeYrm9X8SuX0INsGFegQNwa3WjBvgHQ=";
   };
 

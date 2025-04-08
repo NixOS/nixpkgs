@@ -19,7 +19,7 @@ buildPythonPackage rec {
     inherit version;
     owner = "GehirnInc";
     repo = "python-jwt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-N1J8yBVX/O+92cRp+q2gA2cFsd+C7JjUR9jo0VGoINg=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3WPelRhvK/9LY+TFDExcltszE1wVRr1MMY9Xjijj0so=";
   };
 

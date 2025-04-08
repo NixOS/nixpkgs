@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zint";
     repo = "zint";
-    tag = version;
+    rev = version;
     hash = "sha256-/ILq/7A8Lffe2NuiABiV3KeYXapuL1SO55Qk3wXfC/8=";
   };
 

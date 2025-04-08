@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "HOST-Oman";
     repo = "libraqm";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KhGE66GS5rIieVXJUFA3jSsXEpbdnzN0VIAF/zOelU4=";
   };
 

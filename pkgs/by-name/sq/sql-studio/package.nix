@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "sql-studio";
-    tag = version;
+    rev = version;
     hash = "sha256-ZWGV4DYf+85LIGVDc8hcWSEJsM6UisuCB2Wd2kiw/sk=";
   };
 

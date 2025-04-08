@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "greybird";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-De8y+LRQ26UKrUECLCcbCg7p9Z+aRssQ/7YzegAUPw4=";
   };
 

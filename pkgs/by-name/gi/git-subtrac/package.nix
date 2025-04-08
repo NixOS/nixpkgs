@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "apenwarr";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3Z1AbPPsTBa3rqfvNAMBz7CIRq/zc9q5/TcLJWYSNlw=";
   };
 

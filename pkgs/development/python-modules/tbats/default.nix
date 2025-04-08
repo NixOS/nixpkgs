@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "intive-DataScience";
     repo = "tbats";
-    tag = version;
+    rev = version;
     hash = "sha256-f6QqDq/ffbnFBZRAT6KQRlqvZZSE+Pff2/o+htVabZI=";
   };
 

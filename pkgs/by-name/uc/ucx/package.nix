@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ve9/h8DntyEClZA0P/iIg8WAuWOwYD7yzfKeN779eIo=";
   };
 

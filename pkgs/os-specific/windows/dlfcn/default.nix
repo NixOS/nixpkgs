@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dlfcn-win32";
     repo = "dlfcn-win32";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ljVTMBiGp8TPufrQcK4zQtcVH1To4zcfBAbUOb+v910=";
   };
 

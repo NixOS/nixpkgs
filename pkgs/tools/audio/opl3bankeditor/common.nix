@@ -31,7 +31,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Wohlstand";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     inherit sha256;
   };
 

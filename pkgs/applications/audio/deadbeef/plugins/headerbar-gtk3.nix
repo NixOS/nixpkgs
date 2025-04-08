@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "ddb_misc_headerbar_GTK3";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
   };
 

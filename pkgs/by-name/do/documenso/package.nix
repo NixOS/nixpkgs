@@ -15,7 +15,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "documenso";
     repo = "documenso";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uKOJVZ0GRHo/CYvd/Ix/tq1WDhutRji1tSGdcITsNlo=";
   };
 

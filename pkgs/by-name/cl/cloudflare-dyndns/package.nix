@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kissgyorgy";
     repo = "cloudflare-dyndns";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tI6qdNxIMEuAR+BcqsRi2EBXTQnfdDLKW7Y+fbcmlao=";
   };
 

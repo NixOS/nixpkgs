@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };

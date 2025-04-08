@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "geoip-api-c";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0ixyp3h51alnncr17hqp1p0rlqz9w69nlhm60rbzjjz3vjx52ajv";
   };
 

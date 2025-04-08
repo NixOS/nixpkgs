@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xdC+T79ZQBx/XhuIXtP93Roj0N9lF+E65ReEKQ4kIsg=";
   };
 
@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
+    insecure = true;
   };
 }

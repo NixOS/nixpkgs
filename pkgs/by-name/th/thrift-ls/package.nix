@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "joyme123";
     repo = "thrift-ls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BkkXvmJ1XmDamU2Mt0BjbSnNVwlBxphW1FvE4x32ja0=";
   };
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8kmYeqsmqR7tY044rZb3KuEAVGv37IObX6k1qjXWG0A=";
   };
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-bjbW4pr04pP0TCuSdzPcV8h6LbLWMvdGSf61RL9Ju6E=";
     })
     ./4.4.1-newer-spdlog-fmt-compat.patch
+    ./resynthesis-fix-narrowing-conversion.patch
   ];
 
   # make sure bundled dependencies don't get in the way - install also otherwise

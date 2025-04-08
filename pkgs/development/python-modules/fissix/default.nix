@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "fissix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-geGctke+1PWFqJyiH1pQ0zWj9wVIjV/SQ5njOOk9gOw=";
   };
 

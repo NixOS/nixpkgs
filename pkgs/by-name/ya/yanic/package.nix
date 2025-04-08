@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-z2vr1QmRCo8y4hopWP14xSV7lsWKkCzK9OehlVLFdIg=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "fullonic";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hQ6CSXnAoUSaKUSmE+2GHZemkFqd8Dc5+OvcUD7/r5Y=";
   };
 

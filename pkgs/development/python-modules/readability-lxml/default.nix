@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
   };
 

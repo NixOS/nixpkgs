@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fletcher";
     repo = "MultiMarkdown-6";
-    tag = version;
+    rev = version;
     hash = "sha256-emJbY0wucoc/GdjlILoeqjwuwuPpTjXTqZN0gUKOyLg=";
   };
 

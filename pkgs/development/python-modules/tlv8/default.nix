@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jlusiardi";
     repo = "tlv8_python";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-G35xMFYasKD3LnGi9q8wBmmFvqgtg0HPdC+y82nxRWA=";
   };
 

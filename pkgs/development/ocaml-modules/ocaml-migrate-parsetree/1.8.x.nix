@@ -18,7 +18,7 @@ else
     src = fetchFromGitHub {
       owner = "ocaml-ppx";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "16x8sxc4ygxrr1868qpzfqyrvjf3hfxvjzmxmf6ibgglq7ixa2nq";
     };
 

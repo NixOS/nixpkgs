@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "mozilla-django-oidc";
-    tag = version;
+    rev = version;
     hash = "sha256-72F1aLLIId+YClTrpOz3bL8LSq6ZhZjjtv8V/GJGkqs=";
   };
 

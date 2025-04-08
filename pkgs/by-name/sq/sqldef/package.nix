@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sqldef";
     repo = "sqldef";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vwkvKOM8/57lzT6toLqaux3yJD6zYi+J5Ae1qhxnhEw=";
   };
 

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "emuell";
     repo = "restic-browser";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-magf19hA5PVAZafRcQXFaAD50qGofztpiluVc2aCeOk=";
   };
 

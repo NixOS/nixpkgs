@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "7sDream";
     repo = "fontfor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gJl9SPL/KeYFzKIjwWPVR1iVy6h/W7OP7xE7krhYaY8=";
   };
 

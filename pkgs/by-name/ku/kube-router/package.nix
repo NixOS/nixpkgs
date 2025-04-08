@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bt7BnMIq/tkRL8d1pf/gG5qBq/1yiMqXDpBrIICo780=";
   };
 

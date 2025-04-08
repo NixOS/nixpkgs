@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
   };
 

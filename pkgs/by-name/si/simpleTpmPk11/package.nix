@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "simple-tpm-pk11";
-    tag = version;
+    rev = version;
     sha256 = "0vpbaklr4r1a2am0pqcm6m41ph22mkcrq33y8ab5h8qkhkvhd6a6";
   };
 

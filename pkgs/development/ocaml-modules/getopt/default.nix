@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "scemama";
     repo = "ocaml-getopt";
-    tag = version;
+    rev = version;
     hash = "sha256-oYDm945LgjIW+8x7UrO4FlbHywnu8480aiEVvnjBxc8=";
   };
 

@@ -38,7 +38,7 @@ mkDerivation rec {
     owner = "RedisInsight";
     repo = "RedisDesktopManager";
     fetchSubmodules = true;
-    tag = version;
+    rev = version;
     hash = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
   };
 

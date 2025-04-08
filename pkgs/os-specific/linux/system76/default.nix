@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-dkms";
-    tag = version;
+    rev = version;
     inherit hash;
   };
 

@@ -79,7 +79,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FileCheck";
-            tag = version;
+            rev = version;
             sha256 = "sha256-Y7yvImnYahmrf5GC4c8Ki8IsOZ8r9I4uk8mYBhEQZ28=";
           };
           doCheck = false;
@@ -95,7 +95,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FirmwareCheck";
-            tag = version;
+            rev = version;
             hash = "sha256-wqbD82bhJDrDawJ+X9kZkoA6eqGxqJc1Z5dA0EUwgEI=";
           };
           doCheck = false;
@@ -111,7 +111,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-PiSupport";
-            tag = version;
+            rev = version;
             hash = "sha256-KfkZXJ2f02G2ee+J1w+YQRKz+LSWwxVIIwmdevDGhew=";
           };
 
@@ -132,7 +132,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
-            tag = version;
+            rev = version;
             hash = "sha256-BToW1/AcQ01OK7RWZrkstX2M4+uKuL/wFB6HGkVUflk=";
           };
 

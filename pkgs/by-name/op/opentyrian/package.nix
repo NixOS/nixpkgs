@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opentyrian";
     repo = "opentyrian";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-fVcc8v1c9uU72X6afEo4VoMo6YuDECQSwDQ/TQjgwUY=";
   };
 

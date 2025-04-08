@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nalgeon";
     repo = "redka";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CCTPhcarLFs2wyhu7OqifunVSil2QU61JViY3uTjVg8=";
   };
 

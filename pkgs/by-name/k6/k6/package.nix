@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wU/Kelv/5N86xHJT6E5dfdzBgSYiTYZJ8rkjLyU7RAo=";
   };
 

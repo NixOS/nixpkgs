@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0kl7nq62362clgzxwwd5c256xnaar4ilxcvbralazxg47zv95r11";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "owfs";
     repo = "owfs";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
   };
 

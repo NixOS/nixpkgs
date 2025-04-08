@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "alemuntoni";
     repo = "structuresynth";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-uFz4WPwA586B/5p+DUJ/W8KzbHLBhLIwP6mySZJ1vPY=";
   };
 

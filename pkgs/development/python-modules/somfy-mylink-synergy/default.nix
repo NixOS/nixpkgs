@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bendews";
     repo = "somfy-mylink-synergy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1aa178b5lxdzfa4z7sjw6ky39dkfazp7dqs9dq78z2zay2sqgmgr";
   };
 

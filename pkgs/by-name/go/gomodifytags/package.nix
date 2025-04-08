@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fatih";
     repo = "gomodifytags";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-XVjSRW7FzXbGmGT+xH4tNg9PVXvgmhQXTIrYYZ346/M=";
   };
 

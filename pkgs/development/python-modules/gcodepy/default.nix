@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rmeno12";
     repo = "gcodepy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+amBkwwISPyes8ABdqgCw50Zg5ioDa46WZgQsZZgl+8=";
   };
 

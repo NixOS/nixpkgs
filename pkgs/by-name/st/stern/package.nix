@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1yueWGyVM9pDnKjdCq6MHZdOzYessPTKs9xq1ganDf0=";
   };
 

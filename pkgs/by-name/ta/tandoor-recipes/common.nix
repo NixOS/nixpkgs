@@ -5,7 +5,7 @@ rec {
   src = fetchFromGitHub {
     owner = "TandoorRecipes";
     repo = "recipes";
-    tag = version;
+    rev = version;
     hash = "sha256-CNlst4bpvRSOPABg85k9xltbrZhs5MQLfJr+t7l7hhI=";
   };
 

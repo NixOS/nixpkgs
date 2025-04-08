@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stephane";
     repo = "libmodbus";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-d/diR9yeV0WY0C6wqxYZfOjEKFeWTvN73MxcWtXPOJc=";
   };
 

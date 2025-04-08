@@ -21,7 +21,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "centrifugal";
     repo = "centrifugo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FDtAkoN1bdqVUEP0obbXBfQfVRpZN5YXbU1KT1yXWuI=";
   };
 

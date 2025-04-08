@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tMYw+nkyEEK7AqG9AvMchCGzzKWlfut4poXc1WK6vkA=";
   };
 

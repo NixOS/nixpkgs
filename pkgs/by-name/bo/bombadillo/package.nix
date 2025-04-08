@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchgit {
     url = "https://tildegit.org/sloum/bombadillo.git";
-    tag = version;
+    rev = version;
     hash = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
   };
 

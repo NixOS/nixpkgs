@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "irccloud";
     repo = "irccat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fr5x1usviJPbc4t5SpIVgV9Q6071XG8eYtyeyraddts=";
   };
 

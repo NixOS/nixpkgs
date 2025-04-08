@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cas--";
     repo = "XCreateMouseVoid";
-    tag = version;
+    rev = version;
     sha256 = "151pv4gmzz9g6nd1xw94hmawlb5z8rgs1jb3x1zpvn3znd7f355c";
   };
 

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "polylux-typ";
     repo = "polylux";
-    tag = "v${version}";
+    rev = "v${version}";
     sparseCheckout = [ dirname ];
     hash = "sha256-41FgRejonvVTmE89WGm0Cqumm8lb6kkfxtkWV74UKJA=";
   };

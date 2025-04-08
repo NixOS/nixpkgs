@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "spacemeowx2";
     repo = "blflash";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lv5bUbq5AnZVeR8V0A4pamY9ZIQAhLmvZEr+CRMPcj0=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "VoiceOfFaust";
-    tag = version;
+    rev = version;
     sha256 = "sha256-vB8+ymvNuuovFXwOJ3BTIj5mGzCGa1+yhYs4nWMYIxU=";
   };
 

@@ -21,7 +21,7 @@ buildDunePackage (
     src = fetchFromGitLab {
       owner = "nomadic-labs/cryptography";
       repo = "ocaml-chia-vdf";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-KvpnX2DTUyfKARNWHC2lLBGH2Ou2GfRKjw05lu4jbBs=";
     };
 

@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "go-musicfox";
     repo = "go-musicfox";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pzB57XeDD8lfJMkP9/k1rrszYXYYzQt2UekH2Atiqjw=";
   };
 

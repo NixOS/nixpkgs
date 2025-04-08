@@ -27,12 +27,6 @@ buildDotnetModule rec {
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";
   nugetDeps = ./deps.json;
 
-  preConfigureNuGet = ''
-    # This should really be in the upstream nuget.config
-    dotnet nuget add source https://api.nuget.org/v3/index.json \
-      -n nuget.org --configfile nuget.config
-  '';
-
   runtimeDeps = [
     zlib
     openssl

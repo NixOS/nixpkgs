@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tobixen";
     repo = "calendar-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
   };
 

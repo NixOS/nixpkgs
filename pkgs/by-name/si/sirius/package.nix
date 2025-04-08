@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-A3WiEzo2ianxdF9HMZN9cT0lFosToGEHh0o6uBSAYqU=";
   };
 

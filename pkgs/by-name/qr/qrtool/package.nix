@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-f/2AaNnojtZMhJod6ukLwEq+Bsu6O2oTD9OWGL8IS80=";
   };
 

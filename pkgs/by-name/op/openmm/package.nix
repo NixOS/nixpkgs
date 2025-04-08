@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "openmm";
-    tag = version;
+    rev = version;
     hash = "sha256-p0zjr8ONqGK4Vbnhljt16DeyeZ0bR1kE+YdiIlw/1L0=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "annotator";
-    tag = version;
+    rev = version;
     hash = "sha256-VHvznkGvrE8o9qq+ijrIStSavq46dS8BqclWEWZ8mG8=";
   };
 

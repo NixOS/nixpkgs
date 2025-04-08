@@ -14,7 +14,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "skeditorteam";
     repo = "skeditor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-e8mQTkTvR8RfC27VsONqf9UtkM/H8GebxrYVUdJw7PE=";
   };
 

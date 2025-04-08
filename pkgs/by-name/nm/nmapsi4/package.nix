@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nmapsi4";
     repo = "nmapsi4";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-q3XfwJ4TGK4E58haN0Q0xRH4GDpKD8VZzyxHe/VwBqY=";
   };
 

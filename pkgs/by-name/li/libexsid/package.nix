@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "exsid-driver";
-    tag = version;
+    rev = version;
     sha256 = "1qbiri549fma8c72nmj3cpz3sn1vc256kfafnygkmkzg7wdmgi7r";
   };
 

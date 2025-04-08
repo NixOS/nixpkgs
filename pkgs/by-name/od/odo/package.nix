@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "odo";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-zEN8yfjW3JHf6OzPQC6Rg2/hJ+3d9d2nYhz60BdSK9s=";
   };
 

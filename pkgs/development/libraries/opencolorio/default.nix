@@ -22,7 +22,7 @@
   # Build apps
   buildApps ? true, # Utility applications
   lcms2,
-  openexr_3,
+  openexr,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+P7T8UZuQEVmsMykSWtUxg0vC7Sr4fQJpovCU5sKtsA=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals buildApps [
       lcms2
-      openexr_3
+      openexr
     ];
 
   cmakeFlags =

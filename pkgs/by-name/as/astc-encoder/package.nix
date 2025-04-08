@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
-    tag = version;
+    rev = version;
     sha256 = "sha256-rCyi5Nla2IXsLD+rLMTN1h3B9umlNN0epZmPi/IFHPQ=";
   };
 

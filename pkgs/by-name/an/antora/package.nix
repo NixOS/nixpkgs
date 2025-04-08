@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitLab {
     owner = "antora";
     repo = "antora";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hkavYC2LO8NRIRwHNWIJLRDkVnhAB4Di3IqL8uGt+U8=";
   };
 

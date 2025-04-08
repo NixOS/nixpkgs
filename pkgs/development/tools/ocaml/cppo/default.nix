@@ -33,7 +33,7 @@ if lib.versionAtLeast ocaml.version "4.02" then
     src = fetchFromGitHub {
       owner = "ocaml-community";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-+HnAGM+GddYJK0RCvKrs+baZS+1o8Yq+/cVa3U3nFWg=";
     };
 
@@ -55,7 +55,7 @@ else
     src = fetchFromGitHub {
       owner = "mjambon";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
     };
 

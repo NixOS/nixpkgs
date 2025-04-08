@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "TheZoraiz";
     repo = "ascii-image-converter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-svM/TzGQU/QgjqHboy0470+A6p4kR76typ9gnfjfAJk=";
   };
 

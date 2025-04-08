@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "smlx";
     repo = "piv-agent";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bfJIrWDFQIg0n1RDadARPHhQwE6i7mAMxE5GPYo4WU8=";
   };
 

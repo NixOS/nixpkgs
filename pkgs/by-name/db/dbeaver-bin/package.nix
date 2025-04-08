@@ -17,7 +17,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.0.1";
+  version = "25.0.2";
 
   src =
     let
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-p4bVQxP5dazNPSGJN6tu2rsowLf5VPJN30W+q8HiUNM=";
-        aarch64-linux = "sha256-3vrJOqC5szOWcj/oDg3uc1BND5vfbMRR+MNTDcG4vk8=";
-        x86_64-darwin = "sha256-bu67Tz8awAQ69inY2s330g2qPan2tRLWImeYx9HB3tU=";
-        aarch64-darwin = "sha256-3TnswzRm3l7egoZttaOBSfO0aGasD56dOndMZ0howDI=";
+        x86_64-linux = "sha256-UmTy4Flxz/zIh3cLxRi7EhNDf0Ojc7fuzCbRKIE/+CQ=";
+        aarch64-linux = "sha256-I+V/2kfdxGx8zNkH98b2685IQPbVPSe9++qS4QEg0LU=";
+        x86_64-darwin = "sha256-8Qf69OHXPiqdMs//f1jbKbyKoll+oX+P+l3mpdOvraI=";
+        aarch64-darwin = "sha256-bGxn8y9hvJyqj1/i5tScufO5/ZjdlOlPChmeL+DWwoY=";
       };
     in
     fetchurl {
@@ -89,10 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           }"
 
         mkdir -p $out/share/icons/hicolor/256x256/apps
-        # for some reason it's missing from the aarch64 build
-        if [ -e $out/opt/dbeaver/dbeaver.png ]; then
-          ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
-        fi
+        ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
 
         mkdir -p $out/share/applications
         ln -s $out/opt/dbeaver/dbeaver-ce.desktop $out/share/applications/dbeaver.desktop

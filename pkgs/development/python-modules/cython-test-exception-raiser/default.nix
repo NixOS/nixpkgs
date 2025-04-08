@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "cython-test-exception-raiser";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fwMq0pOrFUJnPndH/a6ghoo6mlcVSxtsWazqE9mCx3M=";
   };
 

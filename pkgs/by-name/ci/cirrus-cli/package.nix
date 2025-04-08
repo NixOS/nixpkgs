@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "cirrus-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-nh6nvH26mYPHmjixTk3sn65JXVT5QSj7cX8yfEYaoD4=";
   };
 

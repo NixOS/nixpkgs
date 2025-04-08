@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "rlottie";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "10bxr1zf9wxl55d4cw2j02r6sgqln7mbxplhhfvhw0z92fi40kr3";
   };
 

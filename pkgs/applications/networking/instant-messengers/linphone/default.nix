@@ -42,7 +42,7 @@ mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-Pu2tGKe3C1uR4lzXkC5sJFu8iJBqF76UfWJXYjPwBkc=";
   };
 

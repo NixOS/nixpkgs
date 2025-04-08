@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hebcal";
     repo = "hebcal";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-iWp2S3s8z/y4dZ66Ogqu7Yf4gTUvSS1J5F7d0ifRbcY=";
   };
 

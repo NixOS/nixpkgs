@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = "vacuum-card";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-egWseYspxm+zkfFwTEBYQfBox3sswYMuOYqU6oEQTb4=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = "ocproxy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "03323nnhb4y9nzwva04mq7xg03dvdrgp689g89f69jqc261skcqx";
   };
 

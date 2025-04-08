@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "7sDream";
     repo = "torrent_parser";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zM738r3o9dGZYoWLN7fM4E06m6YPcAODEkgDS6wU/Sc=";
   };
 

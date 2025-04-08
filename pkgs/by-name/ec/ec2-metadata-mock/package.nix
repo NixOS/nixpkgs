@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ec2-metadata-mock";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8X6LBGo496fG0Chhvg3jAaUF6mp8psCzHd+Es75z27Y=";
   };
 

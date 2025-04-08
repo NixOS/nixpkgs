@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "source-foundry";
     repo = "ufolint";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-sv8WbnDd2LFHkwNsB9FO04OlLhemdzwjq0tC9+Fd6/M=";
   };
 

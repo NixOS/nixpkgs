@@ -43,7 +43,7 @@ let
       src = fetchFromGitHub {
         owner = "clojupyter";
         repo = "clojupyter";
-        tag = version;
+        rev = version;
         sha256 = "sha256-BCzcPnLSonm+ELFU4JIIzLPlVnP0VzlrRSGxOd/LFow=";
       };
 

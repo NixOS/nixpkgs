@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Melkeydev";
     repo = "go-blueprint";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8J+PxFHrNkX2McBn1tO7Q1X4tWtMWDIRsxzKtRhM/Jk=";
   };
 

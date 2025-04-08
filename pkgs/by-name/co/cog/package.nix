@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "igalia";
     repo = "cog";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-eF7rvOjZntcMmn622342yqfp4ksZ6R/FFBT36bYCViE=";
   };
 

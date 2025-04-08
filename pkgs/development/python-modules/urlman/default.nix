@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrewgodwin";
     repo = "urlman";
-    tag = version;
+    rev = version;
     hash = "sha256-p6lRuMHM2xJrlY5LDa0XLCGQPDE39UwCouK6e0U9zJE=";
   };
 

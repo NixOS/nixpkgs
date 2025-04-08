@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cpplint";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpplint";
     repo = "cpplint";
     tag = version;
-    hash = "sha256-IM1XznnpdL1Piei9kKR1nCwfs7TVgLcTgMI4r+cQXLg=";
+    hash = "sha256-4crTuqynQt8Nyjqea6DpREtLy7ydRF0hNVnc7tUnO1k=";
   };
 
   # We use pytest-cov-stub instead

@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "prophet";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vvSn2sVs6KZsTAKPuq9irlHgM1BmpkG8LJbvcu8ohd0=";
   };
 

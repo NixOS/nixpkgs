@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "akvcam";
-    tag = version;
+    rev = version;
     sha256 = "sha256-8jQxBvWRE9Bsh0oz76gO7o+ROm6Z5QGAIe3WERIouUw=";
   };
   sourceRoot = "${src.name}/src";

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "PressLabs";
     repo = "gitfs";
-    tag = version;
+    rev = version;
     sha256 = "1jzwdwan8ndvp2lw6j7zbvg5k9rgf2d8dcxjrwc6bwyk59xdxn4p";
   };
 

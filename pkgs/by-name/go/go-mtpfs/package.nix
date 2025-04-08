@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hanwen";
     repo = "go-mtpfs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-HVfB8/MImgZZLx4tcrlYOfQjpAdHMHshEaSsd+n758w=";
   };
 

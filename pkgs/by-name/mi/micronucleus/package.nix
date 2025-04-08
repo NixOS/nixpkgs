@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "micronucleus";
     repo = "micronucleus";
-    tag = version;
+    rev = version;
     sha256 = "14msy9amlbflw5mqrbs57b7bby3nsgx43srr7215zyhfdgsla0in";
   };
 

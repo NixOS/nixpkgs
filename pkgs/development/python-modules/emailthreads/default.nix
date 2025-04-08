@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "python-emailthreads";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 

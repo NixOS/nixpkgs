@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bibajz";
     repo = "bitcoin-python-async-rpc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uxkSz99X9ior7l825PaXGIC5XJzO/Opv0vTyY1ixvxU=";
   };
 

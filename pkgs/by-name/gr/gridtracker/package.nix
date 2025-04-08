@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6WgP13JVOzYnYtCDH3qCQXT70X9j4yqlUb18FFf1aSY=";
   };
 

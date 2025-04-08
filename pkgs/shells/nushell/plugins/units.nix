@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     repo = "nu_plugin_units";
     owner = "JosephTLyons";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iDRrA8bvufV92ADeG+eF3xu7I/4IinJcSxEkwuhkHlg=";
   };
   useFetchCargoVendor = true;

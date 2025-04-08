@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = "postgres-operator";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZwKfbmKPvhxLpCGH+IlfoQjnw8go4N6mfseY2LWCktA=";
   };
 

@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fboender";
     repo = "multi-git-status";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-DToyP6TD9up0k2/skMW3el6hNvKD+c8q2zWpk0QZGRA=";
   };
 

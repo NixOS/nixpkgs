@@ -13,7 +13,7 @@ buildLua (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cyl0";
     repo = "ModernX";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-q7DwyfmOIM7K1L7vvCpq1EM0RVpt9E/drhAa9rLYb1k=";
   };
 

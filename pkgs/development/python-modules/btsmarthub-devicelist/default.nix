@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jxwolstenholme";
     repo = "btsmarthub_devicelist";
-    tag = version;
+    rev = version;
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 

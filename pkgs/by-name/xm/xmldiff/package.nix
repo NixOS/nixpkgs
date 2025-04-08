@@ -9,7 +9,7 @@ let
   src = fetchFromGitHub {
     owner = "Shoobx";
     repo = "xmldiff";
-    tag = version;
+    rev = version;
     hash = "sha256-qn8gGultTSNKPUro6Ap4xJGcbpxV+lKgZFpKvyPdhtc=";
   };
 in

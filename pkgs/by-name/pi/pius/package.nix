@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "jaymzh";
     repo = "pius";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0l87dx7n6iwy8alxnhvval8h1kl4da6a59hsilbi65c6bpj4dh3y";
   };
 

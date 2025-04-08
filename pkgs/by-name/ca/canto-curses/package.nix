@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-curses";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
   };
 

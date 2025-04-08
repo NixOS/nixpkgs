@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "JeanMertz";
     repo = "chruby-fish";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "15q0ywsn9pcypbpvlq0wb41x4igxm9bsvhg9a05dqw1n437qjhyb";
   };
 

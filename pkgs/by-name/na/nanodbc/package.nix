@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nanodbc";
     repo = "nanodbc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dVUOwA7LfLqcQq2nc6OAha0krmgTy5RUHupBVrNdo4g=";
   };
 

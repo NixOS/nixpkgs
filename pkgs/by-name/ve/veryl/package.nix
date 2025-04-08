@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PeRz44agIKDPsgUhjPgm1Pn1oJb7Epyw0oj3xPCkj4k=";
     fetchSubmodules = true;
   };

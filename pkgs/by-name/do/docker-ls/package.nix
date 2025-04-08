@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "docker-ls";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
   };
 

@@ -21,7 +21,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "darktile";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-M3vySAyYwqscR9n0GGXp1ttO/mhdSCponZNYJRBBI18=";
   };
 

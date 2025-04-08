@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mathjax";
     repo = "mathjax-node-cli";
-    tag = version;
+    rev = version;
     hash = "sha256-jFSn/Ftm1iNOAmMadHYfy2jm0H/+hP2XCyyNbJqfhkY=";
   };
 

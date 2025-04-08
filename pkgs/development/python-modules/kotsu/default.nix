@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datavaluepeople";
     repo = "kotsu";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-V5OkgiLUTRNbNt6m94+aYUZd9Nw+/60LfhrqqdFhiUw=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "pluto";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/gq6BdlNG9vUazVt7Ucvv2679BytUEZrx6u8znnsxG4=";
   };
 

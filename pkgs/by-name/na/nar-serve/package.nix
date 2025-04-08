@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8QuMS00EutmqzAIPxyJEPxM8EHiWlSKs6E2Htoh3Kes=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "omping";
-    tag = version;
+    rev = version;
     sha256 = "1f0vsbnhxp7bbgdnfqshryx3nhz2sqdnxdj068s0nmzsh53ckbf7";
   };
 

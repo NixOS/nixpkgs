@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8PFGlsm9B6qHRrY7YIPwknmGS+Peg5MWd0kMT173wIQ=";
   };
 

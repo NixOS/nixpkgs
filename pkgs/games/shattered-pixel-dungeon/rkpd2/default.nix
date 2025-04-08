@@ -10,7 +10,7 @@ callPackage ../generic.nix rec {
   src = fetchFromGitHub {
     owner = "Zrp200";
     repo = "rkpd2";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jM4CtC3AVXXBjHAfeDp4dFomDpRl76DhD+q9vIAeEhA=";
   };
 

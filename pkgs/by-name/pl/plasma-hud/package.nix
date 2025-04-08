@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-hud";
-    tag = version;
+    rev = version;
     hash = "sha256-1AQtgVlrmzBkim1kVZzTAwJHq0OH3YAPr6o5aUpgdKc=";
   };
 

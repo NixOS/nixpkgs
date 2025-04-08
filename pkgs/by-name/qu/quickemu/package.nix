@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
   };
 

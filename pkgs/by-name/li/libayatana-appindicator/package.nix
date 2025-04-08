@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
-    tag = version;
+    rev = version;
     sha256 = "sha256-NzaWQBb2Ez1ik23wCgW1ZQh1/rY7GcPlLvaSgV7uXrA=";
   };
 

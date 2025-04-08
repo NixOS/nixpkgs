@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "minimaxir";
     repo = "gpt-2-simple";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WwD4sDcc28zXEOISJsq8e+rgaNrrgIy79Wa4J3E7Ovc=";
   };
 

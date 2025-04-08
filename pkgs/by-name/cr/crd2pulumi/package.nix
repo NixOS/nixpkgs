@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "crd2pulumi";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-PqEQrmSfcPH+GSGnuv6xpAm/2gAyTmLf81C+e25Un4s=";
   };
 

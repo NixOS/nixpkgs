@@ -15,7 +15,7 @@ else
     src = fetchFromGitLab {
       owner = "gadmm";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-Pmuln5TihPoPZuehZlqPfERif6lf7O+0454kW9y3aKc=";
     };
 

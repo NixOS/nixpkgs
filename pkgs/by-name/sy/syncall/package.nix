@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "syncall";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-f9WVZ1gpVG0wvIqoAkeaYBE4QsGXSqrYS4KyHy6S+0Q=";
   };
 

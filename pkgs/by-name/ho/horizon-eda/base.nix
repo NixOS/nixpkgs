@@ -29,7 +29,7 @@ rec {
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0ikCR10r/WPb+H+Ut2GO6y4A/9bctJLanL/RR4r9GWs=";
   };
 

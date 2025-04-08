@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-files";
-    tag = version;
+    rev = version;
     hash = "sha256-4ENuYq074j/VdzLyrGVCGaZhoStwlgJWTqGbrt20A3Q=";
     # Most patches are in submodules
     fetchSubmodules = true;

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "equalsraf";
     repo = "neovim-qt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-r77tg3xVemHW/zDNA6dYerFjFaYDDeHsD68WhMfI70Q=";
   };
 

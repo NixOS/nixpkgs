@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mpereira";
     repo = "tty-solitaire";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
   };
 
