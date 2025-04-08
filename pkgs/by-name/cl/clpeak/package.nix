@@ -5,27 +5,20 @@
   cmake,
   ocl-icd,
   opencl-clhpp,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clpeak";
-  version = "1.1.0";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "krrishnarraj";
     repo = "clpeak";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "1wkjpvn4r89c3y06rv7gfpwpqw6ljmqwz0w0mljl9y5hn1r4pkx2";
+    sha256 = "sha256-unQLZ5EExL9lU2XuYLJjASeFzDA74+TnU0CQTWyNYiQ=";
   };
-
-  patches = [
-    # The cl.hpp header was removed from opencl-clhpp. This patch
-    # updates clpeak to use the new cp2.hpp header. The patch comes
-    # from the following PR and was updated to apply against more
-    # recent versions: https://github.com/krrishnarraj/clpeak/pull/46
-    ./clpeak-clhpp2.diff
-  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -34,11 +27,17 @@ stdenv.mkDerivation rec {
     opencl-clhpp
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Tool which profiles OpenCL devices to find their peak capacities";
     homepage = "https://github.com/krrishnarraj/clpeak/";
-    license = licenses.unlicense;
-    maintainers = [ ];
+    changelog = "https://github.com/krrishnarraj/clpeak/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.haylin ];
     mainProgram = "clpeak";
   };
-}
+})
