@@ -14,7 +14,7 @@
     ripgrep
     fzf
     zoxide
-    resvg
+    imagemagick
     chafa
     resvg
   ],
@@ -32,7 +32,7 @@
   ripgrep,
   fzf,
   zoxide,
-  resvg,
+  imagemagick,
   chafa,
   resvg,
 
