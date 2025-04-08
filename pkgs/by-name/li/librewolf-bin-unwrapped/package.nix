@@ -38,6 +38,8 @@ let
   pname = "librewolf-bin-unwrapped";
 
   version = "136.0.4-1";
+
+  release = "136.0.4";
 in
 
 stdenv.mkDerivation {
@@ -95,7 +97,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit binaryName;
+    inherit binaryName release;
     applicationName = "LibreWolf";
     libName = "librewolf-bin-${version}";
     ffmpegSupport = true;
