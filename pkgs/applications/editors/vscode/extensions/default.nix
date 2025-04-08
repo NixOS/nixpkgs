@@ -1898,8 +1898,8 @@ let
         mktplcRef = {
           name = "vscode-jest-runner";
           publisher = "firsttris";
-          version = "0.4.79";
-          hash = "sha256-gcykn/mOvNzFKjKyY4fVhmIWR2kBKCo1ILpp1am0dIw=";
+          version = "0.4.80";
+          hash = "sha256-Qe0EOKohvk/ALYT0QbOiYKOkBvfF63hv3T4VwiIls6A=";
         };
         meta = {
           description = "Simple way to run or debug a single (or multiple) tests from context-menu";
