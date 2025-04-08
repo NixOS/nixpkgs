@@ -22,7 +22,7 @@
   # Build apps
   buildApps ? true, # Utility applications
   lcms2,
-  openexr_3,
+  openexr,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals buildApps [
       lcms2
-      openexr_3
+      openexr
     ];
 
   cmakeFlags =
