@@ -1,0 +1,78 @@
+diff --git a/unclutter.c b/unclutter.c
+index 23bb99b..c71625b 100755
+--- a/unclutter.c
++++ b/unclutter.c
+@@ -24,14 +24,15 @@
+ #include <X11/Xutil.h>
+ #include <X11/Xproto.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ #include "vroot.h"
+ 
+ char *progname;
+-pexit(str)char *str;{
++void pexit(char *str){
+     fprintf(stderr,"%s: %s\n",progname,str);
+     exit(1);
+ }
+-usage(){
++void usage(){
+     pexit("usage:\n\
+ 	-display <display>\n\
+ 	-idle <seconds>		time between polls to detect idleness.\n\
+@@ -58,9 +59,7 @@ usage(){
+  * ignore these errors.
+  */
+ int (*defaulthandler)();
+-int errorhandler(display,error)
+-Display *display;
+-XErrorEvent *error;
++int errorhandler(Display *display, XErrorEvent *error)
+ {
+     if(error->error_code!=BadWindow)
+ 	(*defaulthandler)(display,error);
+@@ -72,9 +71,7 @@ char **names;	/* -> argv list of names to avoid */
+  * return true if window has a wm_name and the start of it matches
+  * one of the given names to avoid
+  */
+-nameinlist(display,window)
+-Display *display;
+-Window window;
++int nameinlist(Display *display, Window window)
+ {
+     char **cpp;
+     char *name;
+@@ -93,9 +90,7 @@ Window window;
+ /*
+  * create a small 1x1 curssor with all pixels masked out on the given screen.
+  */
+-createnullcursor(display,root)
+-Display *display;
+-Window root;
++Cursor createnullcursor(Display *display, Window root)
+ {
+     Pixmap cursormask;
+     XGCValues xgc;
+@@ -117,7 +112,7 @@ Window root;
+     return cursor;
+ }
+ 
+-main(argc,argv)char **argv;{
++int main(int argc,char **argv) {
+     Display *display;
+     int screen,oldx = -99,oldy = -99,numscreens;
+     int doroot = 0, jitter = 0, idletime = 5, usegrabmethod = 0, waitagain = 0,
+diff --git a/vroot.h b/vroot.h
+index 0f32668..edf11de 100755
+--- a/vroot.h
++++ b/vroot.h
+@@ -38,8 +38,7 @@
+ #include <X11/Xatom.h>
+ 
+ static Window
+-VirtualRootWindow(dpy, screen)
+-Display *dpy;
++VirtualRootWindow(Display *dpy, int screen)
+ {
+ 	static Display *save_dpy = (Display *)0;
+ 	static int save_screen = -1;

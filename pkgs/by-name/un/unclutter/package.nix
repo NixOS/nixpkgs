@@ -5,17 +5,19 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unclutter";
   version = "8";
   src = fetchurl {
-    url = "https://www.ibiblio.org/pub/X11/contrib/utilities/unclutter-${version}.tar.gz";
+    url = "https://www.ibiblio.org/pub/X11/contrib/utilities/unclutter-${finalAttrs.version}.tar.gz";
     sha256 = "33a78949a7dedf2e8669ae7b5b2c72067896497820292c96afaa60bb71d1f2a6";
   };
 
   buildInputs = [ libX11 ];
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  patches = [ ./gcc14-fix.patch ];
 
   installPhase = ''
     mkdir -pv "$out/bin"
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     make DESTDIR="$out" MANPATH="$out/share/man" PREFIX="" install.man
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hides mouse pointer while not in use";
     longDescription = ''
       Unclutter hides your X mouse cursor when you do not need it, to prevent
@@ -36,9 +38,9 @@ stdenv.mkDerivation rec {
 
           unclutter -idle 1 &
     '';
-    maintainers = with maintainers; [ domenkozar ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.domenkozar ];
+    platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
     mainProgram = "unclutter";
   };
-}
+})
