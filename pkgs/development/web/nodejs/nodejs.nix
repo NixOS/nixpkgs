@@ -429,6 +429,12 @@ let
                 "test-macos-app-sandbox"
                 "test-os"
                 "test-os-process-priority"
+
+                # Debugger tests failing on macOS 15.4
+                "test-debugger-extract-function-name"
+                "test-debugger-random-port-with-inspect-port"
+                "test-debugger-launch"
+                "test-debugger-pid"
               ]
               ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
                 # These tests fail on x86_64-darwin (even without sandbox).
