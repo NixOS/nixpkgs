@@ -13,7 +13,7 @@
   toml11,
   jemalloc,
   doctest,
-
+  zlib,
   gccStdenv,
   llvmPackages,
   useClang ? false,
@@ -58,6 +58,7 @@ let
         msgpack-cxx
         toml11
         jemalloc
+        zlib
       ];
 
       checkInputs = [ doctest ];
