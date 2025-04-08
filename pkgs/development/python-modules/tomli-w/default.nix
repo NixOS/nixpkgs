@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Write-only counterpart to Tomli, which is a read-only TOML parser";
     homepage = "https://github.com/hukkin/tomli-w";
-    changelog = "https://github.com/hukkin/tomli-w/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/hukkin/tomli-w/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
   };

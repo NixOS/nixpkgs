@@ -43,7 +43,7 @@ let
     passthru.tests.calver = self.overridePythonAttrs { doCheck = true; };
 
     meta = {
-      changelog = "https://github.com/di/calver/releases/tag/${src.tag}";
+      changelog = "https://github.com/di/calver/releases/tag/${src.rev}";
       description = "Setuptools extension for CalVer package versions";
       homepage = "https://github.com/di/calver";
       license = lib.licenses.asl20;
