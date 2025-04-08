@@ -5,17 +5,18 @@
   cmake,
   python3,
   opencl-headers,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-clhpp";
-  version = "2024.05.08";
+  version = "2024.10.24";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-CLHPP";
-    tag = "v${version}";
-    sha256 = "sha256-bIm4tGqwWX0IPKH3BwLgkf0T7YFrkN6vemYvdPrqUpw=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-b5f2qFJqLdGEMGnaUY8JmWj2vjZscwLua4FhgC4YP+k=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +33,14 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=OFF"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "OpenCL Host API C++ bindings";
     homepage = "http://github.khronos.org/OpenCL-CLHPP/";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    changelog = "https://github.com/KhronosGroup/OpenCL-CLHPP/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.haylin ];
   };
-}
+})
