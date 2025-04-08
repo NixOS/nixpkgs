@@ -43,7 +43,7 @@ diff --git a/deps/npm/node_modules/pacote/lib/git.js b/deps/npm/node_modules/pac
 index 1fa8b1f96..a026bb50d 100644
 --- a/deps/npm/node_modules/pacote/lib/git.js
 +++ b/deps/npm/node_modules/pacote/lib/git.js
-@@ -188,6 +188,34 @@ class GitFetcher extends Fetcher {
+@@ -188,6 +188,35 @@ class GitFetcher extends Fetcher {
        }
        noPrepare.push(this.resolved)
  
@@ -60,7 +60,7 @@ index 1fa8b1f96..a026bb50d 100644
 +          Promise.resolve()
 +
 +        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', 'npm ' + args + ` $npm${cmd}Flags "$\{npm${cmd}FlagsArray[@]}" $npmFlags "$\{npmFlagsArray[@]}" || [ -n "$forceGitDeps" ]`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
-+        const patchShebangs = () => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs node_modules'], { cwd: dir })
++        const patchShebangs = path => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs ' + path], { cwd: dir })
 +
 +        // the DirFetcher will do its own preparation to run the prepare scripts
 +        // All we have to do is put the deps in place so that it can succeed.
@@ -69,10 +69,11 @@ index 1fa8b1f96..a026bb50d 100644
 +        // to the rest of the build as possible.
 +        return copy
 +          .then(() => spawn('bash', ['-c', '$prefetchNpmDeps --fixup-lockfile package-lock.json || [ -n "$forceGitDeps" ]'], { cwd: dir }))
++          .then(() => patchShebangs('.'))
 +          .then(() => npmWithNixFlags('ci --ignore-scripts', 'Install'))
-+          .then(patchShebangs)
++          .then(() => patchShebangs('node_modules'))
 +          .then(() => npmWithNixFlags('rebuild', 'Rebuild'))
-+          .then(patchShebangs)
++          .then(() => patchShebangs('node_modules'))
 +      }
 +
        // the DirFetcher will do its own preparation to run the prepare scripts
