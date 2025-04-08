@@ -18,7 +18,6 @@
   xz,
   zlib,
   zstd,
-  CoreFoundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,9 +55,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       attr
       e2fsprogs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
     ];
 
   configureFlags = [

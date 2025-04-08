@@ -3175,10 +3175,6 @@ with pkgs;
 
   danger-gitlab = callPackage ../applications/version-management/danger-gitlab { };
 
-  dar = callPackage ../tools/backup/dar {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
-  };
-
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   devilspie2 = callPackage ../applications/misc/devilspie2 {
