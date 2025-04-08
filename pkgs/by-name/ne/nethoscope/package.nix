@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vvilhonen";
     repo = "nethoscope";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-v7GO+d4b0N3heN10+WSUJEpcShKmx4BPR1FyZoELWzc=";
   };
 

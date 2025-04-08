@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    tag = version;
+    rev = version;
     hash = "sha256-YgNM+fzss1+Q6Fv9mhedhCorWFnerx5oC3iISEhs6z8=";
   };
 

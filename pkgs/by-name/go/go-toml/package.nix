@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "pelletier";
     repo = "go-toml";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+l89SvJ/4SxVItys1ROLOv2hZ5euU1MF21Yn0siQHUM=";
   };
 

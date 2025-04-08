@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "crazystylus";
     repo = "otadump";
-    tag = version;
+    rev = version;
     hash = "sha256-4zPVcTU+0otV4EPQi80uSRkpRo9XzI0V3Kr17ugXX2U=";
   };
 

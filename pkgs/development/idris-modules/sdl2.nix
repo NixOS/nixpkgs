@@ -27,7 +27,7 @@ build-idris-package rec {
   src = fetchFromGitHub {
     owner = "steshaw";
     repo = "idris-sdl2";
-    tag = version;
+    rev = version;
     sha256 = "1jslnlzyw04dcvcd7xsdjqa7waxzkm5znddv76sv291jc94xhl4a";
   };
 

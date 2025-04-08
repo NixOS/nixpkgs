@@ -53,7 +53,7 @@ let
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-FaPcUta5z/8oasw+9zGBRZnUVYD8eCo1t/XwwsFoSM8=";
   };
 

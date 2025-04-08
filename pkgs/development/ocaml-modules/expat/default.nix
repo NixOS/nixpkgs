@@ -19,7 +19,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
     src = fetchFromGitHub {
       owner = "whitequark";
       repo = "ocaml-expat";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-eDA6MUcztaI+fpunWBdanNnPo9Y5gvbj/ViVcxYYEBg=";
     };
 

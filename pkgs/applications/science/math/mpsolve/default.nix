@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "robol";
     repo = "MPSolve";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-7lYwInodKj02G76xqhp/6e9MCzPY80gsAW3vTMNsfdA=";
   };
 

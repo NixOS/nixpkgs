@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ledger";
     repo = "ledger";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Uym4s8EyzXHlISZqThcb6P1H5bdgD9vmdIOLkk5ikG0=";
   };
 

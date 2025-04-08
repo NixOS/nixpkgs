@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "btford";
     repo = "write-good";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-cq3cj2BwoQMKqo3iU2l+PR/2bJIFMSTRsDGQJ06GWXk=";
   };
 

@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PVd9aYo4ALgzovNOfAUQkAaAbWNLeqF+UEPlL9iGhAs=";
   };
 

@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "aixlog";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Xhle7SODRZlHT3798mYIzBi1Mqjz8ai74/UnbVWetiY=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "smarty-php";
     repo = "smarty";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QGhccIJ7BZTWGF+n8rmB1RCVyJKID95NW6Yb2VvqqGQ=";
   };
 

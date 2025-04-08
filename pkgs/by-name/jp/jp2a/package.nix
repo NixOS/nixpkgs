@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Talinx";
     repo = "jp2a";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-TyXEaHemKfCMyGwK6P2vVL9gPWRLbkaNP0g+/UYGSVc=";
   };
 

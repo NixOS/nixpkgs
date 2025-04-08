@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Xk+gLTrqfWb0kGB6QhnM62zAHVFb8rRAqCIBxn0V824=";
   };
   nativeBuildInputs = [

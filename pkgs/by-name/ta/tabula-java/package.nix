@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "tabulapdf";
     repo = "tabula-java";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lg8/diyGhfkUU0w7PEOlxb1WNpJZVDDllxMMsTIU/Cw=";
   };
 

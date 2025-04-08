@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mGb6ZHi6XGYiVe0NHcBx7MWtcSDK2/wXpM4j0GiczEk=";
   };
 

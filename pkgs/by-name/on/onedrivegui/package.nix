@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bpozdena";
     repo = "OneDriveGUI";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pcY1JOi74pePvkIMRuHv5mlE4F68NzuBLJTCtgjUFRw=";
   };
 

@@ -9,7 +9,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "gnss-share";
-    tag = version;
+    rev = version;
     hash = "sha256-4X1oiQWn2oZPw/14hNyZ0a6FEwoykotBisY6lk6lj2k=";
   };
   vendorHash = "sha256-dmE6hfKUqEr7BMNi/HMUOk4jDB0dPXEMkWQyWj6XpY4=";

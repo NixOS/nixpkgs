@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dragon-lang";
     repo = "rund";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "10x6f1nn294r5qnpacrpcbp348dndz5fv4nz6ih55c61ckpkvgcf";
   };
 

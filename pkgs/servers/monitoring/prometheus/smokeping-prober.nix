@@ -30,7 +30,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SuperQ";
     repo = "smokeping_prober";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-TOt0YKgzcASQVY0ohoIwRJhjoH/Q0cuPabaItPnhv+w=";
   };
   vendorHash = "sha256-m6jOZx4zuVl1Bay4OCvPTF/pRFXfBfitWfQ+S10xe9I=";

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-copybutton";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LM2LtQuYsPRJ2XX9aAW36xRtwghTkzug6A6fpVJ6hbk=";
     fetchSubmodules = true;
   };

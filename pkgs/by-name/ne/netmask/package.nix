@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tlby";
     repo = "netmask";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1269bmdvl534wr0bamd7cqbnr76pnb14yn8ly4qsfg29kh7hrds6";
   };
 

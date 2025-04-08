@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oEbbQRqvnK521N3Kerv18h1frVLbioFeHfb/FCkHC6Y=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.com";
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-UCNmD5Ea2wnEwG9gkt88TaX0vfS4SCaIOPRMeNFx80Y=";
   };
 

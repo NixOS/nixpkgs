@@ -22,7 +22,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "gluonhq";
     repo = "scenebuilder";
-    tag = version;
+    rev = version;
     hash = "sha256-YEcW1yQK6RKDqSstsrpdOqMt972ZagenGDxcJ/gP+SA=";
   };
 

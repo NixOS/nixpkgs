@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
-    tag = version;
+    rev = version;
     sha256 = "sha256-85XgRml1D6J4HkxiUk0zLlC+q0ylmN68hL0z73HG/Lk=";
   };
 

@@ -61,7 +61,7 @@ let
       src = fetchFromGitHub {
         owner = "sbosio";
         repo = "rla-es";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
       meta = with lib; {
@@ -903,7 +903,7 @@ rec {
     src = fetchFromGitHub {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
-      tag = version;
+      rev = version;
       sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
     };
 
@@ -1194,7 +1194,7 @@ rec {
     src = fetchFromGitHub {
       owner = "spellcheck-ko";
       repo = "hunspell-dict-ko";
-      tag = version;
+      rev = version;
       hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
     };
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "qwlroots";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ZyG0JGUlz/ubtwN5wYtC8qeYsPur+0kTkD7iIjHX7KU=";
   };
 

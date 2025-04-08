@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BatchDrake";
     repo = "suscan";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-h1ogtYjkqiHb1/NAJfJ0HQIvGnZM2K/PSP5nqLXUf9M=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "markscribe";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-I8WSG9rMqgf2QADQetlYTSUIQH1Iv8cMVw/3uIwEDPc=";
   };
 

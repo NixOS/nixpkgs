@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "AcalephStorage";
     repo = "consul-alerts";
     sha256 = "0836zicv76sd6ljhbbii1mrzh65pch10w3gfa128iynaviksbgn5";

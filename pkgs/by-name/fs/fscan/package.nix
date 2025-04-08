@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
-    tag = version;
+    rev = version;
     hash = "sha256-paW48xpxl/d3abDsBCPwbmSZ8yoFhlTU+VPg/Egq0eY=";
   };
 

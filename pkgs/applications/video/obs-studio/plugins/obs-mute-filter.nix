@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-mute-filter";
-    tag = version;
+    rev = version;
     sha256 = "sha256-UVYN9R7TnwD3a+KIYTXvxOQWfNUtR8cSWUoKZuNoBJc=";
   };
 

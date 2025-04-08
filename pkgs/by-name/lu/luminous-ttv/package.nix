@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AlyoshaVasilieva";
     repo = "luminous-ttv";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pT+hiREKdzw9MKv28QpLK6LmHvnRci26f0DlcXns2rA=";
   };
 

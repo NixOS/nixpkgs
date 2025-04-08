@@ -22,7 +22,7 @@ tcl.mkTclDerivation rec {
     domain = "git.skoll.ca";
     owner = "Skollsoft-Public";
     repo = "Remind";
-    tag = version;
+    rev = version;
     hash = "sha256-dMnsMV4DRxXWgev9LCb4wwdnx7A++giCsW7c2cMde9Q=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fnott";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-C0GvpjOrcelk/KNNDQ7/02Ai7xy8FVzmLcuC2je5wYA=";
   };
 

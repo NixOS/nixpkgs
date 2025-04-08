@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amd";
     repo = "aocl-utils";
-    tag = version;
+    rev = version;
     hash = "sha256-96j3Sw+Ts+CZzjPpUlt8cRYO5z0iASo+W/x1nrrAyQE=";
   };
 

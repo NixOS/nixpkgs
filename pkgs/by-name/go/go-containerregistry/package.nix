@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HiksVzVuY4uub7Lwfyh3GN8wpH2MgIjKSO4mQJZeNvs=";
   };
   vendorHash = null;

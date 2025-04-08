@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Aanok";
     repo = "jftui";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-w5DK9B3D3/9VExAQktigVPim33VfpoQPHUZefAS3pWQ=";
   };
 

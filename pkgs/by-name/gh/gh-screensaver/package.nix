@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vilmibm";
     repo = "gh-screensaver";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MqwaqXGP4E+46vpgftZ9bttmMyENuojBnS6bWacmYLE=";
   };
 

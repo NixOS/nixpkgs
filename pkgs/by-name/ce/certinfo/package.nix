@@ -14,7 +14,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "pete911";
     repo = "certinfo";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-BI5gYWKGMU0wLvnArG41bLWj+9ipe/GARKRX0fwz4ag=";
   };
 

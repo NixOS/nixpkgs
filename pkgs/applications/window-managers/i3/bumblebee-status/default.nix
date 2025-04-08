@@ -26,7 +26,7 @@ python.pkgs.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "tobi-wan-kenobi";
     repo = "bumblebee-status";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+RCg2XZv0AJnexi7vnQhEXB1qSoKBN1yKWm3etdys1s=";
   };
 

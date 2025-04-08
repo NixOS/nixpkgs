@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-eEvQ7kZRY6gxunb8wDETXvZ6PYmLktDISMZoQFZEUmM=";
   };
 

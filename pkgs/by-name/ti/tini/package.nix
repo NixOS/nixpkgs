@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "krallin";
     repo = "tini";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
   };
 

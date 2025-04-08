@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KpsW3EycYRYU5YOg7NNGv5eeZbS9MAikj0Ke2ybPzAU=";
   };
 

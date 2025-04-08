@@ -21,7 +21,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "stedolan";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-0jjwiOZ9Ut+dv5Iw4xNvf396WTehT1VClxY9VHicw4U=";
   };
 

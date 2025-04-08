@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
-    tag = version;
+    rev = version;
     hash = "sha256-Unw+r8NlfaSn/UCtdnkCCsC6xM33Qy6hQdUg/4bIG+I=";
   };
 

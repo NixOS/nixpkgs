@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "guillaumeboehm";
     repo = "Nordzy-cursors";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-pPcdlMa3H5RtbqIxvgxDkP4tw76H2UQujXbrINc3MxE=";
   };
 

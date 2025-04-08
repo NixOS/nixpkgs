@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "html5tagger";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Or0EizZC9FMjTcbgecDvgGB09KNGyxHreSDojgB7ysg=";
   };
 

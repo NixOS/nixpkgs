@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mariushelf";
     repo = "graphlib_backport";
-    tag = version;
+    rev = version;
     hash = "sha256-ssJLtBQH8sSnccgcAKLKfYpPyw5U0RIm1F66/Er81lo=";
   };
 

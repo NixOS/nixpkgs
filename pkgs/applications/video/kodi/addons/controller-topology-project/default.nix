@@ -13,7 +13,7 @@ let
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = "controller-topology-project";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256-pbYFNCDhKhYKREffWbMbcd9xBL4ZiKWR7hMZUCTUHRg=";
     };
 

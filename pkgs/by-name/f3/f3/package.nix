@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AltraMayor";
     repo = "f3";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZajlFGXJcYUVe/wUFfdPYVW8stOo1Aqe8uD2Bm9KIk0=";
   };
 

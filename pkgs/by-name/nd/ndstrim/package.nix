@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Nemris";
     repo = "ndstrim";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KgtejBbFg6+klc8OpCs1CIb+7uVPCtP0/EM671vxauk=";
   };
 

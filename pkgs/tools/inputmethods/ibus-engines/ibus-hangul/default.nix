@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libhangul";
     repo = "ibus-hangul";
-    tag = version;
+    rev = version;
     hash = "sha256-x2oOW8eiEuwmdCGUo+r/KcsitfGccSyianwIEaOBS3M=";
   };
 

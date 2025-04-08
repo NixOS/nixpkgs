@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xenserver";
     repo = "xe-guest-utilities";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LpZx+Km2qRywYK/eFLP3aCDku6K6HC4+MzEODH+8Gvs=";
   };
 

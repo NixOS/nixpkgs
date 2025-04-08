@@ -23,7 +23,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Nihilus118";
     repo = "perl-debug-adapter";
-    tag = version;
+    rev = version;
     hash = "sha256-IXXKhk4rzsWSPA0RT0L3CZuKlgTWtweZ4dQtruTigRs=";
   };
 

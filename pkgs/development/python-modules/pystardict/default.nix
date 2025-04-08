@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lig";
     repo = "pystardict";
-    tag = version;
+    rev = version;
     hash = "sha256-YrZpIhyxfA3G7rP0SJ+EvzGwAXlne80AYilkj6cIDnA=";
   };
 

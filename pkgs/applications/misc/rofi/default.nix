@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-TEn3LoTUc5mxYcVkckIFTfkqQ9cUJxkXyg/5TFv5TZ0=";
   };

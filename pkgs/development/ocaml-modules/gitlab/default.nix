@@ -18,7 +18,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "tmcgilchrist";
     repo = "ocaml-gitlab";
-    tag = version;
+    rev = version;
     hash = "sha256-7pUpH1SoP4eW8ild5j+Tcy+aTXq0+eSkhKUOXJ6Z30k=";
   };
 

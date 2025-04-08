@@ -13,7 +13,7 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "disruptek";
     repo = "balls";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-CMYkMkekVI0C1WUds+KBbRfjMte42kBAB2ddtQp8d+k=";
   };
 

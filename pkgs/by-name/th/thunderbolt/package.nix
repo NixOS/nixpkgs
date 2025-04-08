@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thunderbolt-software-user-space";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "zmqpp";
-    tag = version;
+    rev = version;
     sha256 = "08v34q3sd8g1b95k73n7jwryb0xzwca8ib9dz8ngczqf26j8k72i";
   };
 

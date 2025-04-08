@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "picosh";
     repo = "git-pr";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2A2rP7yr8faVoIYAWprr+t7MwDPerhsuOjWWEl1mhXw=";
   };
 

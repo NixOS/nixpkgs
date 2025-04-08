@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-t165nTG4IkI3WrcS3ZryINmAOVzfctxg5zY3oqmNtLw=";
   };
 

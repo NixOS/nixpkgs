@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "travisgoodspeed";
     repo = "maskromtool";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iuCjAAVEKVwJuAgKITwkXGhKau2DVWhFQLPjp28tjIo=";
   };
 

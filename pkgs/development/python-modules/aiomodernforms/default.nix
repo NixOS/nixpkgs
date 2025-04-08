@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wonderslug";
     repo = "aiomodernforms";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Vx51WBjjNPIfLlwMnAuwHnGNljhnjKkU0tWB9M9rjsw=";
   };
 

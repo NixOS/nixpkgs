@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-c/+NQHvscW/XE49Twmg1Rk1IfsjReCtRQWffobZtgTs=";
   };
 

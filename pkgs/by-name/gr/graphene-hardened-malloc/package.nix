@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-8EIdJmnPdJgES+8QwWzL1oKVqO62CQdtjyMgFw+P0+g=";
   };
 

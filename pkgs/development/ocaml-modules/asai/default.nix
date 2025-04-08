@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-IpRLX7umpmlNt2uV2MB+YvjAvNk0+gl5plbBExVvcdM=";
   };
 

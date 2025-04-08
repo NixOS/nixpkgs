@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "woelper";
     repo = "oculante";
-    tag = version;
+    rev = version;
     hash = "sha256-3kDrsD24/TNcA7NkwwCHN4ez1bC5MP7g28H3jaO/M7E=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "poolpOrg";
     repo = "filter-rspamd";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Ud1irvEyYr9QDsm2PsnWoWkXoDH0WWeH73k/IbLrVf4=";
   };
 

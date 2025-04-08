@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "WolframResearch";
     repo = "WolframLanguageForJupyter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "19d9dvr0bv7iy0x8mk4f576ha7z7h7id39nyrggwf9cp7gymxf47";
   };
 

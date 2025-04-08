@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapweb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rrJmuTFk2dC+GqYmBZ+hu5hx1iknAgSWjr22S7bfmEE=";
   };
 

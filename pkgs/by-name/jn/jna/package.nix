@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "java-native-access";
     repo = "jna";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-4i7iQaxH4wS35cIvMfcNf4kUGI+uIoHNpZkQrs4oAyk=";
   };
 

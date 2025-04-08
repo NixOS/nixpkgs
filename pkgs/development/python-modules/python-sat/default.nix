@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysathq";
     repo = "pysat";
-    tag = version;
+    rev = version;
     hash = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
   };
 

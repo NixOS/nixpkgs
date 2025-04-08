@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "guacamole-server";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ZrUaoWkZ3I/LxE7csDXXeUZ92jZDhkZ1c8EQU0gI1yY=";
   };
 

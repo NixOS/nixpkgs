@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "Gbury";
     repo = "mSAT";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ER7ZUejW+Zy3l2HIoFDYbR8iaKMvLZWaeWrOAAYXjG4=";
   };
 

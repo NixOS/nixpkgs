@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    tag = version;
+    rev = version;
     sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 

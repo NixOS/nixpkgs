@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mattrobenolt";
     repo = "jinja2-cli";
-    tag = version;
+    rev = version;
     hash = "sha256-67gYt0nZX+VTVaoSxVXGzbRiXD7EMsVBFWC8wHo+Vw0=";
   };
 

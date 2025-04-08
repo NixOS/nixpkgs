@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
-    tag = version;
+    rev = version;
     hash = "sha256-a3NdU1OZI+BqtvpUhqhwylf5upFJxeg8B+1cPTAdDr4=";
   };
 

@@ -11141,7 +11141,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
     };
   };
@@ -11152,7 +11152,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
     };
   };
@@ -11163,7 +11163,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
     };
   };
@@ -11174,7 +11174,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
     };
   };

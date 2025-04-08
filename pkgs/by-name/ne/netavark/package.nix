@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "netavark";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kAJOfZ4Q1EQ+JV1izXoLe/Z/qgxbzz3WbczM4fVhxfU=";
   };
 

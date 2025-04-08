@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };
 

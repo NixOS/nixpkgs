@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "umoci";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0in8kyi4jprvbm3zsl3risbjj8b0ma62yl3rq8rcvcgypx0mn7d4";
   };
 

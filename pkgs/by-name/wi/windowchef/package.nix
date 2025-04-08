@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tudurom";
     repo = "windowchef";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1m4vly7w2f28lrj26rhh3x9xsp3d97m5cxj91fafgh5rds4ygyhp";
   };
 

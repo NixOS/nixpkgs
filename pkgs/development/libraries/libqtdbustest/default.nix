@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libqtdbustest";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-yqqyKxsbqiVTrkas79YoPMi28dKFNntiE7+dx1v+Qh4=";
   };
 

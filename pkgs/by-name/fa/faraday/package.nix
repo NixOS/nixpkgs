@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "faraday";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-KiGj24sBeClmzW60lRrvXwgXf3My7jhHTY+VhIMMp0k=";
   };
 

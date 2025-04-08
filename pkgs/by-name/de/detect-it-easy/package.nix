@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "horsicq";
     repo = "DIE-engine";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-yHgxYig5myY2nExweUk2muKbJTKN3SiwOLgQcMIY/BQ=";
   };

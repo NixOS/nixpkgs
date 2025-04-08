@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-doc";
     repo = "octavius";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-/S6WpIo1c5J9uM3xgtAM/elhnsl0XimnIFsKy3ootbA=";
   };
 

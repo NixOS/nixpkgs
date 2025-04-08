@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "rng-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wqJvLvxmNG2nb5P525w25Y8byUUJi24QIHNJomCKeG8=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wiiuse";
     repo = "wiiuse";
-    tag = version;
+    rev = version;
     sha256 = "sha256-l2CS//7rx5J3kI32yTSp0BDtP0T5+riLowtnxnfAotc=";
   };
 

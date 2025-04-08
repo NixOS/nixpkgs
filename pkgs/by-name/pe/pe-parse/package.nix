@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pe-parse";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XegSZWRoQg6NEWuTSFI1RMvN3GbpLDrZrloPU2XdK2M=";
   };
 

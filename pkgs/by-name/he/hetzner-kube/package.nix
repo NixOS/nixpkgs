@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xetys";
     repo = "hetzner-kube";
-    tag = version;
+    rev = version;
     hash = "sha256-XHvR+31yq0o3txMBHh2rCh2peDlG5Kh3hdl0LGm9D8c=";
   };
 

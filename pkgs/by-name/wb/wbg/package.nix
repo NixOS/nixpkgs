@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "wbg";
-    tag = version;
+    rev = version;
     hash = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
   };
 

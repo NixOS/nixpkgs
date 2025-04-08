@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "linuxkit";
     repo = "linuxkit";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-dCRTBy2Nbl5KP8dxXt+1ww1BF/gWm3PfLtSBAaVcBvw=";
   };
 

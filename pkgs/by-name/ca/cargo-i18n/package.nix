@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kellpossible";
     repo = "cargo-i18n";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 

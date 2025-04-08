@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazycli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1qq167hc7pp9l0m40ysphfljakmm8hjjnhpldvb0kbc825h0z8z5";
   };
 

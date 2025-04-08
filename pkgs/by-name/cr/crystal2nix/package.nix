@@ -13,7 +13,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "peterhoeg";
     repo = "crystal2nix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gb2vgKWVXwYWfUUcFvOLFF0qB4CTBekEllpyKduU1Mo=";
   };
 

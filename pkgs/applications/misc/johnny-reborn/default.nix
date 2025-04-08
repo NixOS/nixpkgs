@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xesf";
     repo = "jc_reborn";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PDh2RKdvm4LkDKi963CB5RiraWcS3FED6ug8T1J65GM=";
   };
 

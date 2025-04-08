@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "raghur";
     repo = "mermaid-filter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GG2RWr5nVe6PCcTEJLmPyKL2j7ggSyNnHZAffNvPukg=";
   };
 

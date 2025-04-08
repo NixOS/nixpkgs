@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/geonames";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-AhRnUoku17kVY0UciHQXFDa6eCH6HQ4ZGIOobCaGTKQ=";
   };
 

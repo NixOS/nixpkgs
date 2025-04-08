@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Hibou57";
     repo = "PostiATS-Utilities";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
   };
 

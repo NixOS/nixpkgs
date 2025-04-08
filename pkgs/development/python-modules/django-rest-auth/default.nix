@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tivix";
     repo = "django-rest-auth";
-    tag = version;
+    rev = version;
     hash = "sha256-rCChUHv8sTEFErDCZnPN5b5XVtMJ7JNVZwBYF3d99mY=";
   };
 

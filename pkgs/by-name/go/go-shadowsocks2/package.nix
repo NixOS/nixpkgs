@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "go-shadowsocks2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-z2+5q8XlxMN7x86IOMJ0qbrW4Wrm1gp8GWew51yBRFg=";
   };
 

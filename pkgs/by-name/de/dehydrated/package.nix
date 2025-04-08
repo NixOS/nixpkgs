@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lukas2511";
     repo = "dehydrated";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-K08eeruyT5vKzK3PzfCkubZiHbf9Yq7wzD1z69MeDtY=";
   };
 

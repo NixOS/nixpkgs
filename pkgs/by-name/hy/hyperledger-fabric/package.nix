@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ev9a+d15kr6apKyGR5xTa/2I3cByyPSTW2Y+HAQk9GU=";
   };
 

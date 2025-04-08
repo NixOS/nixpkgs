@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "karma-runner";
     repo = "karma";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-v6IiLz65NS8GwM/FPqRxR5qcFDDu7EqloR0SIensdDI=";
   };
 

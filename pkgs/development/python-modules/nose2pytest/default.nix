@@ -20,7 +20,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "nose2pytest";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BYyj2ZOZvWBpmzQACpmxAzCdQhlZlDYt+HLMdft+wYY=";
   };
 

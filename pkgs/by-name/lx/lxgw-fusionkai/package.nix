@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lxgw";
     repo = "FusionKai";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pEISoFEsv8SJOGa2ud/nV1yvl8T9kakfKENu3mfYA5A=";
   };
 

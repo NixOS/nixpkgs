@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ChrisJohnsen";
     repo = "tmux-MacOSX-pasteboard";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1qgimh58hcx5f646gj2kpd36ayvrdkw616ad8cb3lcm11kg0ag79";
   };
 

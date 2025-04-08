@@ -21,7 +21,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "seemoo-lab";
     repo = "opendrop";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-4FeVQO7Z6t9mjIgesdjKx4Mi+Ro5EVGJpEFjCvB2SlA=";
   };
 

@@ -19,7 +19,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectM";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
   };
 

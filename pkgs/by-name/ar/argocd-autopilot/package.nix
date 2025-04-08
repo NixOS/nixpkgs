@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZJVlmZX/eQnOM2mlAe7DOyvykjgi5DHMqHoPAHPZlXM=";
   };
 

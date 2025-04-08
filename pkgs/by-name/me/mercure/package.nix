@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-igPb2b3q3gGewg9DhSBVCSnFvwbGxIOQTCN1sEzdSJE=";
   };
 

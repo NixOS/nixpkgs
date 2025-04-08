@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "justwatchcom";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-KygxnNbElzRtVwjKmlbgdCxO3oEYssfFl5UAk5+F50c=";
   };
 

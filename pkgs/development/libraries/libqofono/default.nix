@@ -17,7 +17,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "libqofono";
-    tag = version;
+    rev = version;
     hash = "sha256-fI7RS0V8wrsJ2AZAyjVgHmG+c13DXdo6xTjIlGbOHI8=";
   };
 

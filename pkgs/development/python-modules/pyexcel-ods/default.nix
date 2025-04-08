@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-ods";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wptjCSi56hotmiIE0TrLY7jsCHKwDR+a7d89sAQWBHg=";
   };
 

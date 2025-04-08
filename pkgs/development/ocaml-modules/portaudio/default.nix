@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-portaudio";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-rMSE+ta7ughjjCnz4oho1D3VGaAsUlLtxizvxZT0/cQ=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pyflakes";
-    tag = version;
+    rev = version;
     hash = "sha256-nNug9EZ0coI095/QJu/eK1Ozlt01INT+mLlYdqrJuzE=";
   };
 

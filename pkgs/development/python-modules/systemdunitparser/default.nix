@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sgallagher";
     repo = "systemdunitparser";
-    tag = version;
+    rev = version;
     hash = "sha256-lcvXEieaifPUDhLdaz2FXaNdbw7wKR+x/kC+MMDT0tE=";
   };
 

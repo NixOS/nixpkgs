@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "gitty";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-g0D6nJiHY7cz72DSmdQZsj9Vgv/VOp0exTcLsaypGiU=";
   };
 

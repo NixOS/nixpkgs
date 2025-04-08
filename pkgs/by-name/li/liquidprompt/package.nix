@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "liquidprompt";
     repo = "liquidprompt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZVzFGe3ItWsN23iyGpxZEN2KtviYKI8x/sDa2MRio/Y=";
   };
 

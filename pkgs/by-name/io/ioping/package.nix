@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "koct9i";
     repo = "ioping";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "10bv36bqga8sdifxzywzzpjil7vmy62psirz7jbvlsq1bw71aiid";
   };
 

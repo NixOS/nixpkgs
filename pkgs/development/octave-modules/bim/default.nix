@@ -13,7 +13,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "carlodefalco";
     repo = "bim";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-hgFb1KFE1KJC8skIaeT/7h/fg1aqRpedGnEPY24zZSI=";
   };
 

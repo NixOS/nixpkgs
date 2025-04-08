@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2XeIAeneSKf8TSWOunvRJ7N+3IrmOUjS79ZubsGne9E=";
   };
 

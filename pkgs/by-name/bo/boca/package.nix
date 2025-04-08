@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "boca";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-HIYUMFj5yiEC+liZLMXD9otPyoEb1sxHlECTYtYXc2I=";
   };
 

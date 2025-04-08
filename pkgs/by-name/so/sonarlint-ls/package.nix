@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
-    tag = version;
+    rev = version;
     hash = "sha256-/SpooLAJutBJ/FakSUyXMtPLy3TaPxCU8KEMnnzgdBs=";
   };
 

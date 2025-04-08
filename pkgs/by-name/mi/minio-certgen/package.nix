@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "certgen";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-bYZfQeqPqroMkqJOqHri3l7xscEK9ml/oNLVPBVSDKk=";
   };
 

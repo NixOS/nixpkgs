@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "irdest";
     repo = "irdest";
-    tag = version;
+    rev = "${version}";
     sha256 = "sha256-OuKUZSvIUekhbe1LoEFBL8+sU2KLXBsp1JCEEuxkUlk=";
   };
 

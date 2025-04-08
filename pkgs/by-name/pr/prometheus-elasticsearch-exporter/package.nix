@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "elasticsearch_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-v6Fi5O/87jhFI1h6qWyWb61X+dTjcqS3Fi9/MPQSr8Y=";
   };
 

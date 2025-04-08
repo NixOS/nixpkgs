@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
     repo = "oqs-provider";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-P3UEiWYchHVQ5s3JXHOzaDaN09K62pMYjnrW/gS5x/I=";
   };
 

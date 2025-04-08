@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Vfr7e5UQ34TkirywuYJPrkxRA6yJp3/ivfCJOnh34MY=";
   };
 

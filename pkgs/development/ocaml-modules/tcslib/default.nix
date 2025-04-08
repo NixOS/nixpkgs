@@ -15,7 +15,7 @@ buildOasisPackage rec {
   src = fetchFromGitHub {
     owner = "tcsprojects";
     repo = "tcslib";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "05g6m82blsccq8wx8knxv6a5fzww7hi624jx91f9h87nk2fsplhi";
   };
 

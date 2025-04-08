@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "04dzfdzjwcwwaw9min322g30q0saxpq5kqzld4f22fmk820ki6gp";
   };
 

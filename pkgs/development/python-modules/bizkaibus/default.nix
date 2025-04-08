@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "UgaitzEtxebarria";
     repo = "BizkaibusRTPI";
-    tag = version;
+    rev = version;
     hash = "sha256-TM02pSSOELRGSwsKc5C+34W94K6mnS0C69aijsPqSWs=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KejPi";
     repo = "AbracaDABra";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yCjMinDCoBTOC5Ks4MUd0MQeitfrIe8bI3Q4ahz36kQ=";
   };
 

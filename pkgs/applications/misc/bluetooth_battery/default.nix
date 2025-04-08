@@ -12,7 +12,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TheWeirdDev";
     repo = "Bluetooth_Headset_Battery_Level";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "067qfxh228cy1x95bnjp88dx4k00ajj7ay7fz5vr1gkj2yfa203s";
   };
 

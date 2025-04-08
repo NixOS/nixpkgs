@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "openrdap";
     repo = "rdap";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-FiaUyhiwKXZ3xnFPmdxb8bpbm5eRRFNDL3duOGDnc/A=";
   };
 

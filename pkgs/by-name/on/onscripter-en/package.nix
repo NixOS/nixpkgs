@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "onscripter-en";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Lc5ZlH2C4ER02NmQ6icfiqpzVQdVUnOmdywGjjjSYSg=";
   };
 

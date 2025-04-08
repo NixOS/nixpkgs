@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "bngblaster";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-HqwyqUkLYoXTjx01pB8sL3hBXwLqe441M+LTqBhaZ58=";
   };
 

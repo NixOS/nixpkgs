@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "megatokio";
     repo = "zasm";
-    tag = version;
+    rev = version;
     sha256 = "sha256-Zbno8kmzss1H2FjwzHB4U7UXxa6oDfsPV80MVVFfM68=";
     postFetch = ''
       # remove folder containing files with weird names (causes the hash to turn out differently under macOS vs. Linux)

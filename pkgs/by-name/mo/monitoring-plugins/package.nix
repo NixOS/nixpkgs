@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "monitoring-plugins";
     repo = "monitoring-plugins";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-T37t0shhC+8k7CN/hIOxsskuuCi0LwQui8xyRTC+pjQ=";
   };
 

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "asm-lsp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RAyiE+Msmr/Qt5v7rWuUTAji383XLKxeMQJove2b1NE=";
   };
 

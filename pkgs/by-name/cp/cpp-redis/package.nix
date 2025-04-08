@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cpp-redis";
     repo = "cpp_redis";
-    tag = version;
+    rev = version;
     hash = "sha256-dLAnxgldylWWKO3WIyx+F7ylOpRH+0nD7NZjWSOxuwQ=";
     fetchSubmodules = true;
   };

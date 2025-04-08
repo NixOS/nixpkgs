@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vC+Vsv7UWjkO+6lm7gAb91Ig04Y7r9gYQoz6R9xpxsA=";
   };
 

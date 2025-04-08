@@ -47,7 +47,7 @@ let
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "sapling";
-    tag = version;
+    rev = version;
     hash = "sha256-4pOpJ91esTSH90MvvMu74CnlLULLUawqxcniUeqnLwA=";
   };
 

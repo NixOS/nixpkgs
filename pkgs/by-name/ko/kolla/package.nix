@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "openstack";
     repo = "kolla";
     hash = "sha256-jLD6ILihymQlWkkpGYC4OX8BKLpQurAK6Y5Xpju+QAI=";
-    tag = version;
+    rev = version;
   };
 
   postPatch = ''

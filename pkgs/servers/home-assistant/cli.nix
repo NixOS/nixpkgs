@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "home-assistant-cli";
-    tag = version;
+    rev = version;
     hash = "sha256-4OeHJ7icDZUOC5K4L0F0Nd9lbJPgdW4LCU0wniLvJ1Q=";
   };
 

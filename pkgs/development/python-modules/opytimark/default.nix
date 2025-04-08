@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gugarosa";
     repo = "opytimark";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-T3OFm10gvGrUXAAHOnO0Zv1nWrXPBXSmEWnbJxrWYU0=";
   };
 

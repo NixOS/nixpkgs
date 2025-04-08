@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VAbMcON75dTS+1lUqmveN2WruQCCmK3kB86e+vKM64U=";
   };
 

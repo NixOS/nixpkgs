@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = "extension-manager";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0AK7wU04gQCS/3FvoAwAEmaP/jC23EduOSRncLjt4l8=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-4PtoZWESEkRaZ4HOgXLWXRPhG1+JlWuMiYZtjbbLcz4=";
   };
 

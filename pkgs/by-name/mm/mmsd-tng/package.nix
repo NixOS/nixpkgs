@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "kop316";
     repo = "mmsd";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-kXl+T5A8Qw0PmJ47sned8dzTIYUmaWc8w6X6BLEdLIg=";
   };
 

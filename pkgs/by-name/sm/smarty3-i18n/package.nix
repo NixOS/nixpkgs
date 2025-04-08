@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kikimosha";
     repo = "smarty3-i18n";
-    tag = version;
+    rev = version;
     sha256 = "0rjxq4wka73ayna3hb5dxc5pgc8bw8p5fy507yc6cv2pl4h4nji2";
   };
 

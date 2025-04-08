@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "daynin";
     repo = "fundoc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8WWaYgfqGWrTV2EEeSPz1BN2ur7gsxFiHeDNMJdVDcw=";
   };
 

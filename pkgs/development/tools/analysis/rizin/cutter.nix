@@ -30,7 +30,7 @@ let
     src = fetchFromGitHub {
       owner = "rizinorg";
       repo = "cutter";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-TSEi1mXVvvaGo4koo3EnN/veXPUHF747g+gifnl4IDQ=";
       fetchSubmodules = true;
     };

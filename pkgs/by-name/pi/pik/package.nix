@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jacek-kurlit";
     repo = "pik";
-    tag = version;
+    rev = version;
     hash = "sha256-G4GTrS3zUQVLsdc/19qPl4GWZZe4U8jV+UOkX36fMWU=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "42wim";
     repo = "matterircd";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-qA07i31fGLLIfWoCBW1f5nvf4AWEIkSXZh22F6rRnpM=";
   };
 

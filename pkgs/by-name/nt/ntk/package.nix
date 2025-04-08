@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "ntk";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-NyEdg6e+9CI9V+TIgdpPyH1ei+Vq8pUxD3wPzWY5fEU=";
   };
 

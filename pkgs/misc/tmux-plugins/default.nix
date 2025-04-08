@@ -116,7 +116,7 @@ in
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-Is0CQ1ZJMXIwpDjrI5MDNHJtq+R3jlNcd9NXQESUe2w=";
     };
     postInstall = ''
@@ -213,7 +213,7 @@ in
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "tmux-ctrlw";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-YYbPkGQmukIDD1fcYleioETFai/SOJni+aZ9Jh2+Zc8=";
     };
   };
@@ -562,7 +562,7 @@ in
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "tmux-plumb";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-WcTyAeuGAF+Xsqeb3MtRtHDSXiUmTJNDQOkrQJsj07A=";
     };
     postInstall = ''
@@ -940,7 +940,7 @@ in
     src = pkgs.fetchFromGitHub {
       owner = "joshmedeski";
       repo = "t-smart-tmux-session-manager";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -1046,7 +1046,7 @@ in
     src = fetchFromGitHub {
       owner = "o0th";
       repo = "tmux-nova";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-0LIql8as2+OendEHVqR0F3pmQTxC1oqapwhxT+34lJo=";
     };
     meta = with lib; {

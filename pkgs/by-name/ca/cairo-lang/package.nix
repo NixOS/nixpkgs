@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
   };
 

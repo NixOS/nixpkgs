@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = "flowblade";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-5w8mGFPOawbUwinzVLSCUZWGxuyxhi1/3tOrmQyfUUg=";
   };
 

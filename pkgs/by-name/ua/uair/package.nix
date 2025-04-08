@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "metent";
     repo = "uair";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VytbtTQch8O5hCg3L3ANNOfFOyiQY1V7DvGMEKr1R04=";
   };
 

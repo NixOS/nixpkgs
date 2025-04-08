@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ACEnglish";
     repo = "truvari";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SFBVatcVavBfQtFbBcXifBX3YnKsxJS669vCcyjsBA4=";
   };
 

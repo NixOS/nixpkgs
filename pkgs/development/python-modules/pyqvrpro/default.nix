@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oblogic7";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lOd2AqnrkexNqT/usmJts5NW7vJtV8CRsliYgkhgRaU=";
   };
 

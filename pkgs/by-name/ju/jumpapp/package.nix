@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mkropat";
     repo = "jumpapp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-9sh0+zpDxwqRGC1jUgGTDdSDRdAFsL12mQ/Opwh/UBc=";
   };
 

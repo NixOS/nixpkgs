@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
-    tag = version;
+    rev = version;
     sha256 = "sha256-I+PvfGc5F8H/NJOGRa18z7dKyKcO8I8Cg7Tj5yxkYAQ=";
   };
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
-    tag = version;
+    rev = version;
     hash = "sha256-vG52R8jYJlCgQqhA8zbZLMES1UxfxknAVOt87nhcflM=";
   };
 

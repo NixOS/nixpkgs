@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-EIJT/LwxRZUYvbH0EFYSeZpGgFOywI6jpfmFO3g8cps=";
   };
   vendorHash = null;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tmbdev";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "14f9hkp7pr677085w8iidwd0la9cjzy3pyj3rdg9b03nz9pc0w6p";
   };
 

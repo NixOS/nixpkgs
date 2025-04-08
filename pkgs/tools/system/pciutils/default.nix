@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-buhq7SN6eH+sckvT5mJ8eP4C1EP/4CUFt3gooJohJW0=";
   };
 

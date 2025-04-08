@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "cbmp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vOEz2KGJLCiiX+Or9y0JE9UF7sYbwaSCVm5iBv4jIdI=";
   };
 

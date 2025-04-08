@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-c5YabBqZn6ilIkF3lifTsYyLZMsZN21jDj1hNu0PRAc=";
   };
 

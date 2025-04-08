@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nathom";
     repo = "streamrip";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Klrkz0U36EIGO2sNxTnKPACvvqu1sslLFFrQRjFdxiE=";
   };
 

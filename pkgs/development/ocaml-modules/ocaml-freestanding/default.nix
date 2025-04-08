@@ -28,7 +28,7 @@ else
     src = fetchFromGitHub {
       owner = "mirage";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "sha256:1mbyjzwcs64n7i3xkkyaxgl3r46drbl0gkqf3fqgm2kh3q03638l";
     };
 

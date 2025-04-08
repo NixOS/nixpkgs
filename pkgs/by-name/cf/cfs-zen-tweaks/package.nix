@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "igo95862";
     repo = "cfs-zen-tweaks";
-    tag = version;
+    rev = version;
     hash = "sha256-E3sNWWXm0NEqLCzFccd/nfYby+/b/MVjIHeGlDxV1W4=";
   };
 

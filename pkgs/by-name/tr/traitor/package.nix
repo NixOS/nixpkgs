@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "liamg";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-LQfKdjZaTm5z8DUt6He/RJHbOUCUwP3CV3Fyt5rJIfU=";
   };
 

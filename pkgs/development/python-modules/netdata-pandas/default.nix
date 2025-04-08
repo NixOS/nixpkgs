@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata-pandas";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-AXt8BKWyM3glm5hrRryb+vBzs3z2x61HhbR6DDZkh9o=";
   };
 

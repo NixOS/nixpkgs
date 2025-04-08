@@ -18,7 +18,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "openswoole";
     repo = "swoole-src";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1Bq/relLhjPRROikpCzSzzrelxW3AiMA5G17Ln2lg34=";
   };
 

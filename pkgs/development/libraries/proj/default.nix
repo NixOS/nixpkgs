@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-sY3AIvsQnV2zi38nJs/U6zTsIgIv4/CaZaxinCg5nEs=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "costela";
     repo = "wesher";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-EIajvcBhS5G9dJzRgXhnD1QKOAhmzngdyCU4L7itT8U=";
   };
 

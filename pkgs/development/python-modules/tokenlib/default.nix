@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "tokenlib";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-+KybaLb4XAcuBARJUhL5gK71jfNMb8YL8dV5Vzf7yXI=";
   };
 

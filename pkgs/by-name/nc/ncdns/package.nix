@@ -21,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "namecoin";
       repo = "x509-compressed";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-BmVtClZ3TsUbQrhwREXa42pUOlkBA4a2HVBzl1sdBIo=";
     };
 

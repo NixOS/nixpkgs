@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
-    tag = version;
+    rev = version;
     hash = "sha256-NSozi6oElNTIFTdRW32ZcNm8Ae311xk6kN1wtrEqjaU=";
   };
 

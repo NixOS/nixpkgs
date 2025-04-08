@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lbellonda";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-UzN5U+aC/uKokSdeUG2zv8+mkaH4ndYZ0sfzkpQ3l1M=";
   };
 

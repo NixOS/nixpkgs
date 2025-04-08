@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tzutalin";
     repo = "labelImg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RJxCtiDOePajlrjy9cpKETSKsWlH/Dlu1iFMj2aO4XU=";
   };
   nativeBuildInputs = with python3Packages; [

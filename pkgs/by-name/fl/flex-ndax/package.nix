@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nDAX";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FCF22apO6uAc24H36SkvfKEKdyqY4l+j7ABdOnhZP6M=";
   };
 

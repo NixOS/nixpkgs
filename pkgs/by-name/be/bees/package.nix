@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Zygo";
     repo = "bees";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-f3P3BEd8uO6QOZ1/2hBzdcuOSggYvHxW3g9pGftKO8g=";
   };
 

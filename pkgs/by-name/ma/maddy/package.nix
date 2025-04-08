@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cR5qRUYQnFfm+ZOwwwNNRo1odq/ntI2QlGmhJBTjaF4=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OctoMap";
     repo = "octomap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QxQHxxFciR6cvB/b8i0mr1hqGxOXhXmB4zgdsD977Mw=";
   };
 

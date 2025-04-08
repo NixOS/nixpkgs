@@ -20,7 +20,7 @@ else
     src = fetchFromGitHub {
       owner = "garrigue";
       repo = "lablgl";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-GiQKHMn5zHyvDrA2ve12X5YTm3/RZp8tukIqifgVaW4=";
     };
 

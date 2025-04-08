@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Yeraze";
     repo = "ytnef";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kQb45Da0T7wWi1IivA8Whk+ECL2nyFf7Gc0gK1HKj2c=";
   };
 

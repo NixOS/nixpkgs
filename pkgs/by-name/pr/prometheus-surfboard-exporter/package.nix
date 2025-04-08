@@ -10,7 +10,7 @@ buildGoModule rec {
   version = "2.0.0";
 
   src = fetchFromGitHub {
-    tag = version;
+    rev = version;
     owner = "ipstatic";
     repo = "surfboard_exporter";
     sha256 = "11qms26648nwlwslnaflinxcr5rnp55s908rm1qpnbz0jnxf5ipw";

@@ -10,7 +10,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "BalliAsghar";
     repo = "Mailsy";
-    tag = version;
+    rev = version;
     hash = "sha256-RnOWvu023SOcN83xEEkYFwgDasOmkMwSzJ/QYjvTBDo=";
   };
 

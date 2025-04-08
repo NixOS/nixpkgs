@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "dagargo";
     repo = "elektroid";
-    tag = version;
+    rev = version;
     hash = "sha256-YJcvJlnRUhwjQ6P3jgjyDtoJhuije1uY77mGNGZure0=";
   };
 

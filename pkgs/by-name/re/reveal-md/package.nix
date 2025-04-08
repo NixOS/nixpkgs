@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "webpro";
     repo = "reveal-md";
-    tag = version;
+    rev = version;
     hash = "sha256-5lYC4v+Jvm1OdWrkU/cn1I1jd0B1C+AvACCiGUBv+h0=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "fdupoux";
     repo = "fsarchiver";
-    tag = version;
+    rev = version;
     sha256 = "sha256-bEwNqPQRpjfOVTUog9wsZfS5yQ7Z21pHolPRLlbzHAA=";
   };
 

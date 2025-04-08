@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "openscap";
-    tag = version;
+    rev = version;
     hash = "sha256-omPGm3VSLmwEIzInIORLfJf7wreRyxbDOXTRl05mAz0=";
   };
 

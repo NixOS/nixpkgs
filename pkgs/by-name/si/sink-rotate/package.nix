@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "mightyiam";
     repo = "sink-rotate";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZHbisG9pdctkwfD1S3kxMZhBqPw0Ni5Q9qQG4RssnSw=";
   };
 

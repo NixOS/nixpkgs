@@ -18,7 +18,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hBQyz6VAtiC1XOADZml1MwGKtmdyiJNlRAmHRjt6QsA=";
   };
 

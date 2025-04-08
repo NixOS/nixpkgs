@@ -11,7 +11,7 @@ buildGoModule rec {
   subPackages = [ "govc" ];
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
     sha256 = "sha256-vwvhVC+Avi55uenlW68tWGREEHRZw8RUjgiC0r7BgQ4=";

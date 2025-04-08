@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GKRI5qry2eYPP3/BTjS7qnIp7lX/uAR0s40y/oECaeY=";
   };
 

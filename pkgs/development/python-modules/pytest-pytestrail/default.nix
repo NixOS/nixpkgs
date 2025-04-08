@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "pytest-pytestrail";
-    tag = version;
+    rev = version;
     sha256 = "sha256-y34aRxQ8mu6b6GBRMFVzn1shMVc7TumdjRS3daMEZJM=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "starcharts";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RLGKf5+HqJlZUhA5C3cwDumIhlbXcOr5iitI+7GZPBc=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
-    tag = version;
+    rev = version;
     sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
     fetchSubmodules = true;
   };

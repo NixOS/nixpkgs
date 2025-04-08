@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-k/JJoLRykIY/ZmjqG+ZzXuMPQRcoumqisPKrD9PPyd0=";
   };
 

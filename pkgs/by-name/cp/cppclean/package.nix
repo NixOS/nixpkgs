@@ -13,7 +13,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "myint";
     repo = "cppclean";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "081bw7kkl7mh3vwyrmdfrk3fgq8k5laacx7hz8fjpchrvdrkqph0";
   };
 

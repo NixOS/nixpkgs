@@ -16,7 +16,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php-ds";
     repo = "ext-ds";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-lL1PUjc4bMTsWm2th0wDxnMaGuVziBUtgK88bUJXuBY=";
   };
 

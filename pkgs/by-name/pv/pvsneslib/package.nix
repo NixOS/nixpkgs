@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alekmaul";
     repo = "pvsneslib";
-    tag = version;
+    rev = version;
     hash = "sha256-Cl4+WvjKbq5IPqf7ivVYwBYwDDWWHGNeq4nWXPxsUHw=";
     fetchSubmodules = true;
   };

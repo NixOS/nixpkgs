@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "Kotlin";
     repo = "kotlin-interactive-shell";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3DTyo7rPswpEVzFkcprT6FD+ITGJ+qCXFKXEGoCK+oE=";
   };
 

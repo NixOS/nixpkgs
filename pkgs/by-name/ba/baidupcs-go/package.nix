@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "qjfoidnh";
     repo = "BaiduPCS-Go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-C88q2tNNuX+tIvYKHbRE76xfPe81UHqfezyRXzrxzlc=";
   };
 

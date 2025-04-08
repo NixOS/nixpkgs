@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "neutrinolabs";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GT0kBfq6KvuiX30B9JzCiUxgSm9E6IhdJuQKKKprDCE=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "MrReplikant";
     repo = "lxqt-panel-profiles";
-    tag = version;
+    rev = version;
     hash = "sha256-YGjgTLodVTtDzP/SOEg+Ehf1LYggTnG1H1rN5m1jaNM=";
   };
 

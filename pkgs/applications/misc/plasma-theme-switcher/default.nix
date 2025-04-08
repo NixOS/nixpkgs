@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maldoinc";
     repo = "plasma-theme-switcher";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sdcJ6K5QmglJEDIEl4sd8x7DuCPCqMHRxdYbcToM46Q=";
   };
 

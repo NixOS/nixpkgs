@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "maxbrunet";
     repo = "automatic-timezoned";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-j7wQ7jUiXpiDdGBDSiGkIcnnrwkJZESiwB4yqxp0moU=";
   };
 

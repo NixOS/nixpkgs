@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-3d-effect";
-    tag = version;
+    rev = version;
     sha256 = "sha256-SgxrBhuO3IaqINwjwdtn31cIcu3hXiPZyVMZJiNsO+s=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-acpi-dkms";
-    tag = version;
+    rev = version;
     inherit sha256;
   };
 

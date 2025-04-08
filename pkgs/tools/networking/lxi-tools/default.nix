@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "lxi-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-lmWZpKI3TXwF76LDFfZcOGUtPeBmBu+0Lu/3eCMMb3Y=";
   };
 

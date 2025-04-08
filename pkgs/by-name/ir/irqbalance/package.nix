@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "irqbalance";
     repo = "irqbalance";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-7es7wwsPnDSF37uL5SCgAQB+u+qGWmWDHOh3JkHuXMs=";
   };
 
