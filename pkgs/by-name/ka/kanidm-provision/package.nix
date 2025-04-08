@@ -3,14 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm-provision";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "kanidm-provision";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pgPjkj0nMb5j3EvyJTTDpfmh0WigAcMzoleF5EOqBAM=";
   };
 
@@ -27,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ oddlama ];
     mainProgram = "kanidm-provision";
   };
-}
+})
