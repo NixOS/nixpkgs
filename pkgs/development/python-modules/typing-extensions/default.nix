@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   pythonOlder,
 
@@ -12,22 +12,19 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.12.2";
+  version = "4.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "typing_extensions";
-    inherit version;
-    hash = "sha256-Gn6tVcflWd1N7ohW46iLQSJav+HOjfV7fBORX+Eh/7g=";
+  src = fetchFromGitHub {
+    owner = "python";
+    repo = "typing_extensions";
+    rev = version;
+    hash = "sha256-L9sHwr2rCkw1jrfA1M0kifXl2jUlTZKdmwQx275/Ndk=";
   };
 
   nativeBuildInputs = [ flit-core ];
-
-  # Tests are not part of PyPI releases. GitHub source can't be used
-  # as it ends with an infinite recursion
-  doCheck = false;
 
   pythonImportsCheck = [ "typing_extensions" ];
 
