@@ -106,14 +106,17 @@ in
     package = lib.mkPackageOption pkgs "sanoid" { };
 
     interval = lib.mkOption {
-      type = lib.types.str;
+      type = with lib.types; either str (listOf str);
       default = "hourly";
       example = "*-*-* *:15:00";
       description = ''
         Run syncoid at this interval. The default is to run hourly.
 
-        The format is described in
-        {manpage}`systemd.time(7)`.
+        Must be in the format described in {manpage}`systemd.time(7)`.  This is
+        equivalent to adding a corresponding timer unit with
+        {option}`OnCalendar` set to the value given here.
+
+        Set to an empty list to avoid starting syncoid automatically.
       '';
     };
 
