@@ -21,13 +21,15 @@ stdenv.mkDerivation {
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
 ```nix
-  checkPhase ''
+{
+  checkPhase = ''
     runHook preCheck
 
     # ... your tests
 
     runHook postCheck
-  ''
+  '';
+}
 ```
 
 ## Variables {#sec-redisTestHook-variables}
@@ -55,6 +57,6 @@ stdenv.mkDerivation {
   ];
 
   preCheck = ''
-    redisTestPort=6390
-  ''
+    redisTestPort=6390;
+  '';
 }
