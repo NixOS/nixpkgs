@@ -61,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Also modifies the functionality by replacing 'false' with 'true' to enable the portal to start properly.
   postPatch = ''
+    substituteInPlace src/screenshot.rs src/widget/screenshot.rs \
+      --replace-fail '/usr/share' '/run/current-system/sw/share'
     substituteInPlace data/org.freedesktop.impl.portal.desktop.cosmic.service \
       --replace-fail 'Exec=/bin/false' 'Exec=${lib.getExe' coreutils "true"}'
   '';

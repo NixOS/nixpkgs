@@ -36,6 +36,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-UKg3TIpyaqtynk6wLFFPpv69F74hmqfMVPra2+iFbvE=";
   };
 
+  postPatch = ''
+    substituteInPlace \
+      cosmic-settings/src/pages/desktop/appearance/icon_themes.rs \
+      cosmic-settings/src/pages/desktop/wallpaper/config.rs \
+      cosmic-settings/src/pages/system/users/mod.rs \
+      --replace-fail '/usr/share' '/run/current-system/sw/share'
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-mf/Cw3/RLrCYgsk7JKCU2+oPn1VPbD+4JzkUmbd47m8=";
 

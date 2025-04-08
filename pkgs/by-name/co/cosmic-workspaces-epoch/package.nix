@@ -23,6 +23,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-3jivE0EaSddPxMYn9DDaYUMafPf60XeCwVeQegbt++c=";
   };
 
+  postPatch = ''
+    substituteInPlace src/view/mod.rs \
+      --replace-fail '/usr/share' '/run/current-system/sw/share'
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-l5y9bOG/h24EfiAFfVKjtzYCzjxU2TI8wh6HBUwoVcE=";
 

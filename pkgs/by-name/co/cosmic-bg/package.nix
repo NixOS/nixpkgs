@@ -21,6 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-4b4laUXTnAbdngLVh8/dD144m9QrGReSEjRZoNR6Iks=";
   };
 
+  postPatch = ''
+    substituteInPlace config/src/lib.rs data/v1/all src/wallpaper.rs \
+      --replace-fail '/usr/share' '/run/current-system/sw/share'
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-GLXooTjcGq4MsBNnlpHBBUJGNs5UjKMQJGJuj9UO2wk=";
 

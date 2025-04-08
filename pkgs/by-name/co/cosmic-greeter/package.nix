@@ -60,6 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace src/greeter.rs \
+      --replace-fail '/usr/share' '/run/current-system/sw/share'
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
