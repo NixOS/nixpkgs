@@ -29,7 +29,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eiskaltdcpp";
     repo = "eiskaltdcpp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-JmAopXFS6MkxW0wDQ1bC/ibRmWgOpzU0971hcqAehLU=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     name = "UnNetHack";
     owner = "UnNetHack";
     repo = "UnNetHack";
-    rev = version;
+    tag = version;
     sha256 = "1rg0mqyplgn3dfh3wz09a600qxk7aidqw4d84kyiincljvhyb7ps";
   };
 

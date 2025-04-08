@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "repro-get";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-qLu9SZuHCkKAOhzrBPEEev1iD5mcIBvrbXspHtifsq4=";
   };
 

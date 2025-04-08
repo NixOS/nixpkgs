@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Guldoman";
     repo = "mpv_inhibit_gnome";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LSGg5gAQE2JpepBqhz6D6d3NlqYaU4bjvYf1F+oLphQ=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

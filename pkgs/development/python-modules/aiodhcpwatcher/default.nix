@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodhcpwatcher";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qdtOEfhBrLpO14IJNuTL71ajmf9sjgKgjuT/3Mqycc8=";
   };
 

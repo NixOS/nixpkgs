@@ -13,7 +13,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "pure-fish";
     repo = "pure";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8zxqPU9N5XGbKc0b3bZYkQ3yH64qcbakMsHIpHZSne4=";
   };
 

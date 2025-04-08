@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "post-factum";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-oDg9OSvi9aQsZ2SQm02NKAcppE0w5SGZaI13gdp7gv4=";
   };
 

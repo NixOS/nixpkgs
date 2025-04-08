@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "VHDL-LS";
     repo = "rust_hdl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MzlsZoV09QeerpbE/Nmu5tMIvgscu84fk2bYlWn7bjg=";
   };
 

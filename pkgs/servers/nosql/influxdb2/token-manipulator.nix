@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "influxdb2-token-manipulator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9glz+TdqvGJgSsbLm4J/fn7kzMC75z74/jxZrEZiooc=";
   };
 

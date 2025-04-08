@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "holocm";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0lypbgf96bcc4m3968xa4il1zwprsdyc0pw6pl9mqq7djxabikd0";
   };
 

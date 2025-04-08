@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "PurpleBooth";
     repo = "git-mit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+7rl4wxVQq4bLBsnLSeJD+1kkRuf7FCi81pXGrNNOPI=";
   };
 

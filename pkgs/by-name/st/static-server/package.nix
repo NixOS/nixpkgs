@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "static-server";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AZcNh/kF6IdAceA7qe+nhRlwU4yGh19av/S1Zt7iKIs=";
   };
 

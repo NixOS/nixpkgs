@@ -59,7 +59,7 @@ py.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UIOKXU92JEOeVdpYLNmDBtLn0u3LMdKItcn9bFd9u8g=";
   };
 

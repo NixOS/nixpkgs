@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "libdatachannel";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Xn2RfPFvCIx7gTFqxXbFVJZDkphZR94SAHJ+0ombf+8=";
   };
 

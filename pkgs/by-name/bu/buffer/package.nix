@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-W6LTTQvIMAB99q2W11EBlBknJnOuv4ptgf5SSM422Cg=";
   };
 

@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "XorTroll";
     repo = "Goldleaf";
-    rev = version;
+    tag = version;
     hash = "sha256-gagIQGOiygJ0Onm0SrkbFWaovqWX2WJNx7LpSRheCLM=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluec0re";
     repo = "android-backup-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0c436hv64ddqrjs77pa7z6spiv49pjflbmgg31p38haj5mzlrqvw";
   };
 

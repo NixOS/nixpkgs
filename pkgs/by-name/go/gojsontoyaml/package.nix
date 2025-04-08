@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "brancz";
     repo = "gojsontoyaml";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ebxz2uTH7XwD3j6JnsfET6aCGYjvsCjow/sU9pagg50=";
   };
 

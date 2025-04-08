@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andersbakken";
     repo = "rtags";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EJ5pC53S36Uu7lM6KuLvLN6MAyrQW/Yk5kPqZNS5m8c=";
     fetchSubmodules = true;
     # unicode file names lead to different checksums on HFS+ vs. other

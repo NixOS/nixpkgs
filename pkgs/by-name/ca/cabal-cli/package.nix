@@ -14,7 +14,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "cabal-club";
     repo = "cabal-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DZ+F+pgPc8WuiBhLgxNO5es5lA996fJdvZyg6QjfrHg=";
   };
 

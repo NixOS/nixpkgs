@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZdQwWRAr6AKLmZ/L0lSxIlvWRLoZIKinn7BAQiR+luk=";
   };
 

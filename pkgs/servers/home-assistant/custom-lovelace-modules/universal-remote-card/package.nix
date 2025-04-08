@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "android-tv-card";
-    rev = version;
+    tag = version;
     hash = "sha256-93qPYFr7qNDlQH28dT461EQjWKZJOpL3EpfBBGt4acw=";
   };
 

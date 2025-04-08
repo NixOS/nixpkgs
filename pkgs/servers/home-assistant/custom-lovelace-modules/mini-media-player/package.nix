@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kalkih";
     repo = "mini-media-player";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tEG8xmqsPDssXmsCobHJoNK3qdRvBRe6FcTfm16r6+g=";
   };
 

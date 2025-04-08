@@ -5877,6 +5877,8 @@ self: super: with self; {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  granian = callPackage ../development/python-modules/granian { };
+
   graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
 
   grapheme = callPackage ../development/python-modules/grapheme { };
@@ -7478,6 +7480,8 @@ self: super: with self; {
 
   langgraph-cli = callPackage ../development/python-modules/langgraph-cli { };
 
+  langgraph-prebuilt = callPackage ../development/python-modules/langgraph-prebuilt { };
+
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
 
   langid = callPackage ../development/python-modules/langid { };
@@ -8242,9 +8246,7 @@ self: super: with self; {
 
   macaroonbakery = callPackage ../development/python-modules/macaroonbakery { };
 
-  macfsevents = callPackage ../development/python-modules/macfsevents {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
-  };
+  macfsevents = callPackage ../development/python-modules/macfsevents { };
 
   macholib = callPackage ../development/python-modules/macholib { };
 
@@ -12243,6 +12245,8 @@ self: super: with self; {
   pygerber = callPackage ../development/python-modules/pygerber { };
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
+
+  pyghmi = callPackage ../development/python-modules/pyghmi { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
@@ -16939,7 +16943,7 @@ self: super: with self; {
             src = pkgs.fetchFromGitHub {
               owner = "grpc";
               repo = "grpc";
-              rev = "v${version}";
+              tag = "v${version}";
               hash = "sha256-PpiOT4ZJe1uMp5j+ReQulC9jpT0xoR2sAl6vRYKA0AA=";
               fetchSubmodules = true;
             };
@@ -17094,6 +17098,8 @@ self: super: with self; {
   textual-dev = callPackage ../development/python-modules/textual-dev { };
 
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
+
+  textual-image = callPackage ../development/python-modules/textual-image { };
 
   textual-serve = callPackage ../development/python-modules/textual-serve { };
 

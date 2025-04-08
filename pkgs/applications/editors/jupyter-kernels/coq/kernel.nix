@@ -12,7 +12,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "EugeneLoy";
     repo = "coq_jupyter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+Pp51cxeqjg5MW4CEccNWVjNcY9iyFNATIEage9RWJ0=";
   };
 

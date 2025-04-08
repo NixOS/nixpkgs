@@ -24,7 +24,7 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "nile";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/C4b8wPKWHGgiheuAN7AvU+KcD5aj5i6KzgFSdTIkNI=";
   };
 

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-next";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0fmsdn28z09bvivdkqcla5bnalky7k744iir25z70bv4pz1jcvnk";
   };
 

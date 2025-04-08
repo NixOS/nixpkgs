@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "ubi_reader";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-04HwzkonPzzWfX8VE//fMoVv5ggAS+61zx2W8VEUIy4=";
   };
 

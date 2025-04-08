@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tpsecore";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+OynnLMBEiYwdFzxGzgkcBN6xrHoH1Q6O5i+OW7RBLo=";
   };
 

@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "contabo";
     repo = "cntb";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4QS1fkXVcGxhZDPRLDc0xKl4jr8W4og/Qf591i3gzxk=";
     # docs contains two files with the same name but different cases,
     # this leads to a different hash on case insensitive filesystems (e.g. darwin)

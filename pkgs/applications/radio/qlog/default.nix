@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gCXLZ00klyjisLxSvs4wKD0Sg8CFvF0xR+eHpc1D0Jc=";
     fetchSubmodules = true;
   };

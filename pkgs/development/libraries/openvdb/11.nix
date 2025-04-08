@@ -10,7 +10,7 @@ openvdb.overrideAttrs (old: rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openvdb";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-wDDjX0nKZ4/DIbEX33PoxR43dJDj2NF3fm+Egug62GQ=";
   };
   meta = old.meta // {

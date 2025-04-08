@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "rustworkx";
-    rev = version;
+    tag = version;
     hash = "sha256-hzB99ReL1bTmj1mYne9rJp2rBeMnmIR17VQFVl7rzr0=";
   };
 

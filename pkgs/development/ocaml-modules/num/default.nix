@@ -15,7 +15,7 @@ stdenv.mkDerivation (
     src = fetchFromGitHub {
       owner = "ocaml";
       repo = "num";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "0a4mhxgs5hi81d227aygjx35696314swas0vzy3ig809jb7zq4h0";
     };
 

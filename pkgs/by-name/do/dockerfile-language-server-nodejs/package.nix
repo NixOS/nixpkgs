@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "rcjsuen";
     repo = "dockerfile-language-server-nodejs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xhb540hXATfSo+O+BAYt4VWOa6QHLzKHoi0qKrdBVjw=";
   };
 

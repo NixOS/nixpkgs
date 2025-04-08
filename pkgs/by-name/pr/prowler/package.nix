@@ -4,7 +4,22 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest pydantic
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+        dependencies = [
+          python3.pkgs.pydantic_1
+          python3.pkgs.cryptography
+          python3.pkgs.email-validator
+        ];
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication rec {
   pname = "prowler";
   version = "5.4.3";
   pyproject = true;
@@ -18,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with py.pkgs; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     alive-progress
     awsipranges
     azure-identity
@@ -59,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     numpy
     pandas
     py-ocsf-models
-    pydantic
+    pydantic_1
     python-dateutil
     pytz
     schema

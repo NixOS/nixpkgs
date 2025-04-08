@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "shweshi";
     repo = "terminal-stocks";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6eDBcQfo6M+Z31ILLM4BbiOxoTD6t4LQJxawoJFEzhg=";
   };
 

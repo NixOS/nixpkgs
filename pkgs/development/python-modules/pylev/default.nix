@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "toastdriven";
     repo = "pylev";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0fgxjdnvnvavnxmxxd0fl5jyr2f31g3a26bwyxcpy56mgpd095c1";
   };
 

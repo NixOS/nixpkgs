@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenCBM";
     repo = "OpenCBM";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
   };
 

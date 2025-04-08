@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = "pg_tileserv";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xTIx39eLmHBUlaUjQy9KGpi5X4AU93DzX+Ofg5PMLWE=";
   };
 

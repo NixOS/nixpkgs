@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "robotastic";
     repo = "trunk-recorder";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d2iBCSLR3kr6rnLXO3MeGVdi6+8pqXZqW/yhxAvA1cY=";
   };
 

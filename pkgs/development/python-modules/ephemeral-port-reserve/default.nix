@@ -17,7 +17,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "ephemeral-port-reserve";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-R6NRpfaT05PO/cTWgCakiGfCuCyucjVOXbAezn5x1cU=";
   };
 

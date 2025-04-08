@@ -9,7 +9,7 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "giterlizzi";
       repo = "dokuwiki-template-bootstrap3";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
     };
     installPhase = "mkdir -p $out; cp -R * $out/";

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "osgQt";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-iUeIqRDlcAHdKXWAi4WhEaOCxa7ZivQw0K5E7ccEKnM=";
   };
 

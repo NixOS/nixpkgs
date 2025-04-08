@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0FjJXOmLHM0At0TJdcsYTafgDbw+C37BH11ft+UjEl0=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "passbolt";
     repo = "go-passbolt-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BtMPOmp9dbi/HoNigEeGWIYXRh1/gorV8ycrtWw9I8s=";
   };
 

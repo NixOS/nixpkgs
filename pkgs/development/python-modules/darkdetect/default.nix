@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albertosottile";
     repo = "darkdetect";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OOINgrgjSLr3L07E9zf1+mlTPr+7ZlgN3CfkWE8+LoE=";
   };
 

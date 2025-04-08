@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mina86";
     repo = "urxvt-tabbedex";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "06msd156h6r8ss7qg66sjz5jz8613qfq2yvp0pc24i6mxzj8vl77";
   };
 

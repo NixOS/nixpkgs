@@ -13,7 +13,7 @@ buildLua rec {
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "mpv_thumbnail_script";
-    rev = version;
+    tag = version;
     sha256 = "sha256-nflavx25skLj9kitneL6Uz3zI2DyMMhQC595npofzbQ=";
   };
   passthru.updateScript = gitUpdater { };

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "gnuwget";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
   };
 

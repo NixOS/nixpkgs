@@ -24,7 +24,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VU4tOszGkw20DWW2SerFsnjFiSkrSwqBcwosGnHJfU8=";
   };
 

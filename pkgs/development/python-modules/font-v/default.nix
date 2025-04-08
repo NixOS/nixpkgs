@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "source-foundry";
     repo = "font-v";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ceASyYcNul5aWPAPGajCQrqsQ3bN1sE+nMbCbj7f35w=";
   };
 

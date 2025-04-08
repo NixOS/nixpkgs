@@ -14,7 +14,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-javascript";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TmP6xftUVTD7yML7UEM/DB8bcsL5RFlKPyCpcboD86U=";
   };
 

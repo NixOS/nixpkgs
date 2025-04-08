@@ -19,7 +19,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 

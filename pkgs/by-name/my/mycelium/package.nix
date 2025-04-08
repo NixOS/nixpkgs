@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PbEoM+AnZTuo9xtwcDcTH9FZAzPzfBhX41+zVVTdgRo=";
   };
 

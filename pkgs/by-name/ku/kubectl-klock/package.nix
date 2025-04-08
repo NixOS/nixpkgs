@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "applejag";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-S7cpVRVboLkU+GgvwozJmfFAO29tKpPlk+r9mbVLxF8=";
   };
 

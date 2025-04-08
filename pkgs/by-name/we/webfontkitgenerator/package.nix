@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "webfont-kit-generator";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZfyF1Didce88/HaLeMNTw0nGzj3EZnC7V9OzsN21L40=";
   };
 

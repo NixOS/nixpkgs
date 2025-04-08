@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ugtrain";
     repo = "ugtrain";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0pw9lm8y83mda7x39874ax2147818h1wcibi83pd2x4rp1hjbkkn";
   };
 

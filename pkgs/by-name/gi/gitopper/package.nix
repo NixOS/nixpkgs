@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "miekg";
     repo = "gitopper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y0gzoXSIQDQ6TMVsAijPaN0sRqFEtTKyd297YxXAukM=";
   };
 

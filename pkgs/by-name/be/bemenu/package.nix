@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = "bemenu";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-0vpqJ2jydTt6aVni0ma0g+80PFz+C4xJ5M77sMODkSg=";
   };
 

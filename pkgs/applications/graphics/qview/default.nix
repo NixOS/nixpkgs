@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jurplel";
     repo = "qView";
-    rev = version;
+    tag = version;
     hash = "sha256-h1K1Smfy875NoHtgUrOvZZp0IgcQdbyuQhXU9ndM4bA=";
   };
 

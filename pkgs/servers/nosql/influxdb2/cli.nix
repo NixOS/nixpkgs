@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0Gyoy9T5pA+40k8kKybWBMtOfpKZxw3Vvp4ZB4ptcJs=";
   };
 

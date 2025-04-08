@@ -17,7 +17,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kward";
     repo = "shunit2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IZHkgkVqzeh+eEKCDJ87sqNhSA+DU6kBCNDdQaUEeiM=";
   };
 

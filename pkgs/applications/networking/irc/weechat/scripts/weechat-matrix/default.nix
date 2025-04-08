@@ -34,7 +34,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "weechat-matrix";
-    rev = version;
+    tag = version;
     hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
   };
 

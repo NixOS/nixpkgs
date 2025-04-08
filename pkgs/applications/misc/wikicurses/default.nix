@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ids1024";
     repo = "wikicurses";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0f14s4qx3q5pr5vn460c34b5mbz2xs62d8ljs3kic8gmdn8x2knm";
   };
 

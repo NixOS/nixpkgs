@@ -23,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "manticoresoftware";
       repo = "columnar";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-TGFGFfoyHnPSr2U/9dpqFLUN3Dt2jDQrTF/xxDY4pdE=";
     };
     nativeBuildInputs = [ cmake ];

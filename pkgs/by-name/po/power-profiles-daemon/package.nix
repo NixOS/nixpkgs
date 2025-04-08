@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "upower";
     repo = "power-profiles-daemon";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-iQUhA46BEln8pyIBxM/MY7An8BzfiFjxZdR/tUIj4S4=";
   };
 

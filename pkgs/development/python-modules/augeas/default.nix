@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "python-augeas";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Lq8ckra3sqN38zo1d5JsEq6U5TtLKRmqysoWNwR9J9A=";
   };
 

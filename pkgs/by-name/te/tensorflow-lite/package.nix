@@ -38,7 +38,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "tensorflow";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
   };
 

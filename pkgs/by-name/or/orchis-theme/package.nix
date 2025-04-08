@@ -43,7 +43,7 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
     src = fetchFromGitHub {
       repo = "Orchis-theme";
       owner = "vinceliuice";
-      rev = version;
+      tag = version;
       hash = "sha256-K8FiS1AiFMhVaz2Jbr0pudQJGqpwBkQ/4NZdZACtM9Q=";
     };
 

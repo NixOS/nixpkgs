@@ -49,7 +49,7 @@ rebar3Relx {
   src = fetchFromGitHub {
     inherit owner repo;
     hash = "sha256-MSDBU+blsAdeixaHMMXmeMJ+9Yrzn3HekE8KbIc/Guo=";
-    rev = version;
+    tag = version;
   };
 
   # remove when fixed upstream https://github.com/erlang-ls/erlang_ls/pull/1576

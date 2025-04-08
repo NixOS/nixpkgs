@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-IvbAL96tILXgeutoSKhNkxxfLb+d2xgKUuvyGobOTUs=";
   };
 

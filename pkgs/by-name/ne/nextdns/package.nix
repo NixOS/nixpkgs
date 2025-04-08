@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nextdns";
     repo = "nextdns";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-CvFzDfDij4AYuytlPNrY2L0mov8MionUd06kf7aZQAo=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iBroadcastMediaServices";
     repo = "MediaSyncLiteLinux";
-    rev = version;
+    tag = version;
     hash = "sha256-ToSkR6tPJMBCcj1NUBAywKjCAPlpmh+ngIopFrT2PIA=";
   };
 

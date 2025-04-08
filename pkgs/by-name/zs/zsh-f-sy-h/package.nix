@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "z-shell";
     repo = "F-Sy-H";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0bcsc4kgda577fs3bnvymmxdz3z5mf19pn8ngfqsklabnf79f5nf";
   };
 

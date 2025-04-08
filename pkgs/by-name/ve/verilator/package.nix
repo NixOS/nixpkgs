@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1o9Qf6avdiRgIYUgBS/S0W2GLSi/HdO9Xgs78oW6VJE=";
   };
 

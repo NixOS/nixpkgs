@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Kirottu";
     repo = "watershot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-l9CPSB8TCw901ugl5FLVZDkp2rLha0yXMewK7LxXIiE=";
   };
 

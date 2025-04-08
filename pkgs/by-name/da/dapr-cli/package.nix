@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ex6H5N5h5ScacyakgFDh8/xJMfS6Q6d2FmfcBXiCl+4=";
   };
 

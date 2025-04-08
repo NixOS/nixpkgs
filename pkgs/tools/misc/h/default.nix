@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "h";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4rhol8a+OMX2+MxFPEM1WzM/70C7sye8jw4pg7CujRo=";
   };
 

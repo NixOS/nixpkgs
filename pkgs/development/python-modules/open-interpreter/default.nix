@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KillianLucas";
     repo = "open-interpreter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TeBiRylrq5CrAG9XS47Z9GlruAv7V7Nsl4QbSV55isM=";
   };
 

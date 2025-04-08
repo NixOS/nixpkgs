@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
-    rev = version;
+    tag = version;
     sha256 = "sha256-4cA2OHTc51U8XIk3iS16En7JJExkcn4a4VdtjNkZfH8=";
   };
 

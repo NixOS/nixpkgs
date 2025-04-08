@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "neuronsimulator";
     repo = "nrn";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-xASBpsF8rIzrb5G+4Qi6rvWC2wqL7nAGlSeMsBAI6WM=";
   };

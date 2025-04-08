@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "0.9";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
     repo = "vis";
     owner = "martanne";

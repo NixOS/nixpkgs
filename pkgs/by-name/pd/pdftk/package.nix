@@ -3,12 +3,20 @@
   stdenv,
   fetchFromGitLab,
   gradle_8,
-  jre,
+  jre_headless,
+  jre_minimal,
   runtimeShell,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;
+
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+    ];
+    jdk = jre_headless;
+  };
 in
 stdenv.mkDerivation rec {
   pname = "pdftk";
@@ -17,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 

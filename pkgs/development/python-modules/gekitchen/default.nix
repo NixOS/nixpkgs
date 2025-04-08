@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ajmarks";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eKGundh7j9LqFd71bx86rNBVu2iAcgLN25JfFa39+VA=";
   };
 

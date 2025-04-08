@@ -34,7 +34,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     src = fetchFromGitHub {
       owner = "whitequark";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       inherit (param) sha256;
     };
 

@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bImuMrrXssKEh4VvSMy4iuK61GJ+Pltt6Ksir1Bx1as=";
   };
   vendorHash = null;

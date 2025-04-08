@@ -17,7 +17,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Borda";
     repo = "pyDeprecate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-84RmQvLxwtLPQk3hX7Q6eeJeejhrO3t+mc95W1E85Fg=";
   };
 

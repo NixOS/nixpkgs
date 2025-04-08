@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "reitzig";
     repo = "sdkman-for-fish";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7cgyR3hQ30Jv+9lJS5qaBvSaI/0YVT8xPXlUhDBTdFc=";
   };
 

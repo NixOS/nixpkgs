@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fuzzylite";
     repo = "fuzzylite";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-i1txeUE/ZSRggwLDtpS8dd4uuZfHX9w3zRH0gBgGXnk=";
   };
   sourceRoot = "${src.name}/fuzzylite";

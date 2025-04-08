@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "skypjack";
     repo = "entt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IPAM7fr/tvSOMKWUbXbloNAnlp5t7J0ynSsTMZ2jKYs=";
   };
 

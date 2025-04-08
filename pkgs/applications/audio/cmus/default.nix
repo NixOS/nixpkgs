@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cmus";
     repo = "cmus";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8hgibGtkiwzenMI9YImIApRmw2EzTwE6RhglALpUkp4=";
   };
 

@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     inherit (srcInfo) sha256;
   };
 

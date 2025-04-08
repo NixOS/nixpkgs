@@ -11,7 +11,7 @@ let
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-7ufF1OXFtT+OZY6UiDDiaohe4witVPEaO9zZaM6wldA=";
   };
 in

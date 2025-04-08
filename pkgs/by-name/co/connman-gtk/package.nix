@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jgke";
     repo = "connman-gtk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2bfoGXzy4wXRALLXEEa7vPWbsBNUhE31nn7dDkuHYCY=";
   };
 

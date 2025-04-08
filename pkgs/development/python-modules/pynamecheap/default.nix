@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bemmu";
     repo = "PyNamecheap";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1g1cd2yc6rpdsc5ax7s93y5nfkf91gcvbgcaqyl9ida6srd9hr97";
   };
 

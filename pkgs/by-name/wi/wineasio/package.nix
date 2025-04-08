@@ -15,7 +15,7 @@ multiStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d5BGJAkaM5XZXyqm6K/UzFE4sD6QVHHGnLi1bcHxiaM=";
     fetchSubmodules = true;
   };

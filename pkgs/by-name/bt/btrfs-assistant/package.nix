@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "btrfs-assistant";
     repo = "btrfs-assistant";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-I4nbQmHwk84qN1SngKzKnPtQN5Dz1QSSEpHJxV8wkJw=";
   };
 

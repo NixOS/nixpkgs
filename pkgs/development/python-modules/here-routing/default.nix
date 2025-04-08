@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "here_routing";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sdNs5QNYvL1Cpbk9Yi+7PSiDZ6LEgAXQ19IYSAY78p0=";
   };
 

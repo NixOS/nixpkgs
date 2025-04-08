@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rwowlwP56IAdogEL6/SBGDtvOW7FhO4+2vTWI755HXI=";
   };
 

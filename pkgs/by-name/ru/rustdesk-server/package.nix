@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk-server";
-    rev = version;
+    tag = version;
     hash = "sha256-5LRMey1cxmjLg1s9RtVwgPjHjwYLSQHa6Tyv7r/XEQs=";
     fetchSubmodules = true;
   };

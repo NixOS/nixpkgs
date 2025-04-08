@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-t3r/bF/uKoprdDoRjrmYTND0Jws+jX6tAGnBeqofBF8=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-zlib-ng";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UsdZgpRI7h6GemT1+1g/cP/8uhLykZ//saH4JMwwlY4=";
   };
 

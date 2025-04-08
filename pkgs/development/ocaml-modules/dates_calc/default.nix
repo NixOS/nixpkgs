@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "catalalang";
     repo = "dates-calc";
-    rev = version;
+    tag = version;
     sha256 = "sha256-B4li8vIK6AnPXJ1QSJ8rtr+JOcy4+h5sc1SH97U+Vgw=";
   };
 

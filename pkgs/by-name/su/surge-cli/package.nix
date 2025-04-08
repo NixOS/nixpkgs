@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "sintaxi";
     repo = "surge";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EpYww/YCQhPFmnOJ1zbigI2qyUrKN2TxKHEju/0Si3M=";
   };
 

@@ -11,7 +11,7 @@ callPackage ./build.nix rec {
   src = fetchFromGitHub {
     owner = "alexbatalov";
     repo = "fallout1-ce";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZiBoF3SL00sN0QrD3fkWG9SAknumOvzRB1oQJff6ITA=";
   };
 

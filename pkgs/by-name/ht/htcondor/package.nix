@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "htcondor";
     repo = "htcondor";
 
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-F8uI8Stvao7VKULTcOjv/nFUhFHxqd00gRNe6tkKgPE=";
   };
 

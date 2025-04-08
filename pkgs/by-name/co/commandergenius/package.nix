@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4WfHdgn8frcDVa3Va6vo/jZihf09vIs+bNdAxScgovE=";
   };
 

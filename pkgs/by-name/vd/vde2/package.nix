@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "virtualsquare";
     repo = "vde-2";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Yf6QB7j5lYld2XtqhYspK4037lTtimoFc7nCavCP+mU=";
   };
 

@@ -13,7 +13,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vlSiM6kskV4wfBZF7Rv5ICyqKG0Zhz/iU8kflYOaf0U=";
   };
 

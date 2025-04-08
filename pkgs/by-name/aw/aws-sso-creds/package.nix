@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jaxxstorm";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-QYE+HvvBEWPxopVP8QMqb4lNRyAtVDewuiWzja9XdM4=";
   };
   vendorHash = "sha256-2EDpyw7Mqhvc0i6+UjWfNlvndRYJDaezRkOy9PBeD1Y=";

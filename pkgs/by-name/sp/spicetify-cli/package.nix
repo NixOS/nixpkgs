@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rdyHVHKVgl9fOviFYQuXY8Ko+/XwpKlKDfriQAgkusE=";
   };
 

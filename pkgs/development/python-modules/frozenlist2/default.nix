@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rohanpm";
     repo = "frozenlist2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fF0oFZ2q1wRH7IKBlCjm3Za4xtEMSHyEaGL09rHgtTY=";
   };
 

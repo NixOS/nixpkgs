@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "vfkit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+ds9GIa3q2ck4D3sjUHz7e9w00XgD6/jq4L8QkBpCJg=";
   };
 

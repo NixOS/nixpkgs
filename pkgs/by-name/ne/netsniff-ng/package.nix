@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "netsniff-ng";
     owner = "netsniff-ng";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
   };
 

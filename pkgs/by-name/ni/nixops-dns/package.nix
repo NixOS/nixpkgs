@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "nixops-dns";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d3vVm6YeQTOAE5HFSKI01L9ZqfbQKrdoLsMwHP5HulE=";
   };
 

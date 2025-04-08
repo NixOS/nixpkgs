@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RoaringBitmap";
     repo = "CRoaring";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WaFyJ/6zstJ05e3vfrwhaZKQsjRAEvVTs688Hw0fr94=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tVK4chDV26vpuTaqVWe498j8ijZN2OOhe97LLE+xK9Y=";
   };
 

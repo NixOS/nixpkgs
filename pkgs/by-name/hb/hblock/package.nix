@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hectorm";
     repo = "hblock";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cke3MppQm8p8B9+5IcvCplw6CtyRbgq46wHqli7U77I=";
   };
 

@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "protesilaos";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-5lPViAo9SztOdds6HEmKJpT17tgcxmU/voXDffxTMDI=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";

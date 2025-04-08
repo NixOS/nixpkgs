@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rubik";
     repo = "radon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yY+j9kuX0ou/uDoVI/Qfqsmq0vNHv735k+vRl22LwwY=";
   };
 
