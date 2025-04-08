@@ -4,6 +4,7 @@
   curl,
   expat,
   fetchFromGitHub,
+  gspell,
   gst_all_1,
   gtk3,
   libGL,
@@ -12,9 +13,12 @@
   libXinerama,
   libXtst,
   libXxf86vm,
+  libnotify,
   libpng,
+  libsecret,
   libtiff,
   libjpeg_turbo,
+  libxkbcommon,
   zlib,
   pcre2,
   pkg-config,
@@ -66,11 +70,15 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       curl
+      gspell # wxTextCtrl spell checking
       gtk3
       libSM
       libXinerama
       libXtst
       libXxf86vm
+      libnotify # wxNotificationMessage backend
+      libsecret # wxSecretStore backend
+      libxkbcommon # proper key codes in key events
       xorgproto
     ]
     ++ lib.optional withMesa libGLU
@@ -142,7 +150,10 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ tfmoraes ];
+    maintainers = with maintainers; [
+      tfmoraes
+      fliegendewurst
+    ];
     platforms = platforms.unix;
   };
 }
