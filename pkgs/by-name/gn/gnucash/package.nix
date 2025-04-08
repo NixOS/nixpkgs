@@ -26,6 +26,7 @@
   webkitgtk_4_0,
   wrapGAppsHook3,
   python3,
+  replaceVars,
 }:
 
 stdenv.mkDerivation rec {
@@ -86,20 +87,14 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # this patch adds in env vars to the Python lib that makes it able to find required resource files
+    ./0005-python-env.patch
   ];
 
   postPatch = ''
-    patch -p0 <<END_PATCH
-      +++ bindings/python/__init__.py
-      @@ -1,3 +1,7 @@
-      +import os
-      +os.environ['GNC_DBD_DIR'] = '${libdbiDrivers}/lib/dbd'
-      +os.environ['GSETTINGS_SCHEMA_DIR'] = '${glib.makeSchemaPath "$out" "gnucash-${version}"}'
-      +
-       # import all the symbols from gnucash_core, so basic gnucash stuff can be
-       # loaded with:
-       # >>> from gnucash import thingy
-        END_PATCH
+    substituteInPlace bindings/python/__init__.py \
+      --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
+      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${version}"};
   '';
 
   # this needs to be an environment variable and not a cmake flag to suppress
