@@ -14,8 +14,9 @@
     ripgrep
     fzf
     zoxide
-    imagemagick
+    resvg
     chafa
+    resvg
   ],
 
   # deps
@@ -31,8 +32,9 @@
   ripgrep,
   fzf,
   zoxide,
-  imagemagick,
+  resvg,
   chafa,
+  resvg,
 
   settings ? { },
   plugins ? { },
