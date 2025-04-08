@@ -99,6 +99,7 @@ buildPythonPackage rec {
       qmake
       qtquick3d
       qtquicktimeline
+      qtwebengine
     ]
     # ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withMultimedia qtmultimedia
@@ -141,6 +142,7 @@ buildPythonPackage rec {
       "PyQt6.QtWidgets"
       "PyQt6.QtGui"
       "PyQt6.QtQuick"
+      "PyQt6.QtPdf"
     ]
     ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
     ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
