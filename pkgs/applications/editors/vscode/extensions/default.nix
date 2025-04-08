@@ -2827,8 +2827,8 @@ let
         mktplcRef = {
           name = "lean";
           publisher = "jroesch";
-          version = "0.16.59";
-          hash = "sha256-tXiAM2MBF+Axd0zB7Rlgx8b8FgwlLaZex0++H2DpBls=";
+          version = "0.16.60";
+          hash = "sha256-z0mOnbqpKMH5d78jAMgDIgO+5sk4xHOWAfa4kzXYISs=";
         };
         meta = {
           changelog = "https://github.com/leanprover/vscode-lean/blob/v${mktplcRef.version}/README.md#release-notes";
