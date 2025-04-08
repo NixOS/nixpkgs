@@ -57,7 +57,7 @@ in
             default = "http${
               lib.optionalString config.services.nginx.virtualHosts."${cfg.settings.hostname}".enableACME "s"
             }://${cfg.settings.hostname}";
-            defaultText = lib.literalExpression ''"https://''${cfg.settings.hostname}"'';
+            defaultText = lib.literalExpression ''"https://''${config.services.gancio.settings.hostname}"'';
             example = "https://demo.gancio.org/gancio";
             description = "The full URL under which the server is reachable.";
           };
@@ -89,9 +89,7 @@ in
               readOnly = true;
               type = types.nullOr types.str;
               default = if cfg.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null;
-              defaultText = ''
-                if cfg.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null
-              '';
+              defaultText = ''if config.services.gancio.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null'';
             };
             host = mkOption {
               description = ''
@@ -100,9 +98,7 @@ in
               readOnly = true;
               type = types.nullOr types.str;
               default = if cfg.settings.db.dialect == "postgres" then "/run/postgresql" else null;
-              defaultText = ''
-                if cfg.settings.db.dialect == "postgres" then "/run/postgresql" else null
-              '';
+              defaultText = ''if config.services.gancio.settings.db.dialect == "postgres" then "/run/postgresql" else null'';
             };
             database = mkOption {
               description = ''
@@ -111,9 +107,7 @@ in
               readOnly = true;
               type = types.nullOr types.str;
               default = if cfg.settings.db.dialect == "postgres" then cfg.user else null;
-              defaultText = ''
-                if cfg.settings.db.dialect == "postgres" then cfg.user else null
-              '';
+              defaultText = ''if config.services.gancio.settings.db.dialect == "postgres" then cfg.user else null'';
             };
           };
           log_level = mkOption {
