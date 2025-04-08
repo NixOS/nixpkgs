@@ -20,7 +20,7 @@ let
 
   inherit (source) version;
 
-  url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
+  url = "https://www.segger.com/downloads/jlink/JLink_${platform.os}_V${version}_${platform.name}.${platform.ext}";
 
   src =
     assert
