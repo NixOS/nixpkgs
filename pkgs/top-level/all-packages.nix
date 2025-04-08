@@ -3070,10 +3070,6 @@ with pkgs;
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
-  chafa = callPackage ../tools/misc/chafa {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav {
