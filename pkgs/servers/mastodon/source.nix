@@ -5,14 +5,14 @@
   patches ? [ ],
 }:
 let
-  version = "4.3.6";
+  version = "4.3.7";
 in
 (applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
-    hash = "sha256-cTJmSrQ+xlDfrAyHKeiIvrUOgAh9DQT2NNizN8XT3P0=";
+    hash = "sha256-KmeWBMuyJ/ZdZnFXAlpvgXV+J8IZrcaTXvvui4l6mjY=";
   };
   patches = patches ++ [ ./downgrade-bundler-version.patch ];
 })
