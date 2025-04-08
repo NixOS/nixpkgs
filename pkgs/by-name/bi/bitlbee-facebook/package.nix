@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.2.2";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "bitlbee";
     repo = "bitlbee-facebook";
     sha256 = "1qiiiq17ybylbhwgbwsvmshb517589r8yy5rsh1rfaylmlcxyy7z";

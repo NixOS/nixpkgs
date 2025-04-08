@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gkdr";
     repo = "lurch";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yyzotKL1Z4B2BxloJndJKemONMPLG9pVDVe2K5AL05g=";
     fetchSubmodules = true;
   };

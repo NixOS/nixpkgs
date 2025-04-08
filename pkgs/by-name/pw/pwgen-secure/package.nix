@@ -20,7 +20,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mjmunger";
     repo = "pwgen_secure";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "15md5606hzy1xfhj2lxmc0nvynyrcs4vxa5jdi34kfm31rdklj28";
   };
 

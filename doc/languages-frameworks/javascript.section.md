@@ -194,7 +194,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jesec";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };
 

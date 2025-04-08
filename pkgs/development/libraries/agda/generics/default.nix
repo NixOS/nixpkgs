@@ -12,7 +12,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flupe";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-B1eT6F0Dp2zto50ulf+K/KYMlMp8Pgc/tO9qkcqn+O8=";
   };
 

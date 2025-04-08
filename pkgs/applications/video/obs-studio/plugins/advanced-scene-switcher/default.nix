@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
-    tag = version;
+    rev = version;
     hash = "sha256-1U5quhfdhEBcCbEzW0uEpimYgvdbsIwaL2EdQ4cLF/M=";
   };
 

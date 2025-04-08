@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bQ2546q+oachvuNKMJHjQzF6uv06LG+f7eFQPoAn6mw=";
   };
 in

@@ -17,7 +17,7 @@ else
     src = fetchFromGitHub {
       owner = "johnwhitington";
       repo = "camlpdf";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-+SFuFqlrP0nwm199y0QFWYvlwD+Cbh0PHA5bmXIWdNk=";
     };
 

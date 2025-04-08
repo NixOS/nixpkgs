@@ -26,7 +26,7 @@ let
   src = fetchFromGitHub {
     owner = "quickwit-oss";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OrCO0mCFmhYBdpr4Gps56KJJ37uuJpV6ZJHWspOScyw=";
   };
 

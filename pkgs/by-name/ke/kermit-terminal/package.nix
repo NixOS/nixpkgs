@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "kermit";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-rhlUnRfyd7PmtMSyP+tiu+TxZNb/YyS0Yc5IkWft7/4=";
   };
 

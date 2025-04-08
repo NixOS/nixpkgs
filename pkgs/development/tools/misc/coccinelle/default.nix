@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     repo = "coccinelle";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     owner = "coccinelle";
     hash = "sha256-be95cuFP6bAdpCT0Z9zBAx9cc3gYuuXAmHYaI/bmyTE=";
   };

@@ -19,7 +19,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Chinachu";
     repo = "Mirakurun";
-    tag = version;
+    rev = version;
     sha256 = "sha256-Qg+wET5H9t3Mv2Hv0iT/C85/SEaQ+BHSBL3JjMQW5+Q=";
   };
 

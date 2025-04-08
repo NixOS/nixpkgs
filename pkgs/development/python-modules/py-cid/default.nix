@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipld";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
   };
 

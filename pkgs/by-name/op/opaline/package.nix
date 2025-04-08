@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jaapb";
     repo = "opaline";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
   };
 

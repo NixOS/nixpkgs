@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "warpd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5B3Ec+R1vF2iI0ennYcsRlnFXJkSns0jVbyAWJA4lTU=";
     leaveDotGit = true;
   };

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stapelberg";
     repo = "mscompress";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Urq8CzVfO9tdEUrEya+bUzoNjZQ2TO7OB+h2MTAGwEI=";
   };
 

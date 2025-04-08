@@ -13,7 +13,7 @@ import ./versions.nix (
     src = fetchFromGitHub {
       owner = "honeycombio";
       repo = "honeyvent";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = sha256;
     };
 

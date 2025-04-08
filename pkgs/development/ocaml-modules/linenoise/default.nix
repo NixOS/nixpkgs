@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "fxfactorial";
     repo = "ocaml-${pname}";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-yWBWMbk1anXaF4hIakTOcRZFCYmxI0xG3bHFFOAyEDA=";
   };
 

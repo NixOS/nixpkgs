@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dis-works";
     repo = "diswall-rs";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-t2ZBi3ab6OUWzc0L0Hq/ay+s3KNDMeu6mkYxti48BuE=";
   };
 

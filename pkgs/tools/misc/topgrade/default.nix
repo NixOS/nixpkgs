@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "topgrade-rs";
     repo = "topgrade";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TLeShvDdVqFBIStdRlgF1Zmi8FwS9pmeQ9qOu63nq/E=";
   };
 

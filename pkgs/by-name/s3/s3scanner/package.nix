@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sa7mon";
     repo = "s3scanner";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RS/+m/snJIm8OxCgvh/Bn1u9ghvRgS8tYvy1v1DV02I=";
   };
 

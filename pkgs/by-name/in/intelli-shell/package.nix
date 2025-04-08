@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lasantosr";
     repo = "intelli-shell";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-D7hB1vKi54L7hU3TqTvzxXIr6XohfYLUTidR6wFJmfo=";
   };
 

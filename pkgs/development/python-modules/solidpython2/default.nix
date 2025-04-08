@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeff-dh";
     repo = "SolidPython";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Tq3hrsC2MmueCqChk6mY/u/pCjF/pFuU2o3K+qw7ImY=";
   };
 

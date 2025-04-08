@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "pgbouncer_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8ChYYJIHdzH2vWxqnzS6sz9fDeLe+Y29fzia3/aBkgc=";
   };
 

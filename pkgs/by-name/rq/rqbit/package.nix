@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Meztr/UxLgnbd3YwkSW0vy+D2N4mFg2v+T4nBnYiQBI=";
   };
 

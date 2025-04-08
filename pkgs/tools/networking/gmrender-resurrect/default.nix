@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "gmrender-resurrect";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Zt8YYRqqX5L/MGLsFzR8JOdYoNX9ypXLX5i+fqkzPkk=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PsPCbuSK8JlNZOqFbxCK0f8h+7EC4tNFtjBfJqiPi7Q=";
   };
 

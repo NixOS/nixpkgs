@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   source = fetchFromGitHub {
     owner = "makehumancommunity";
     repo = "makehuman";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-x0v/SkwtOl1lkVi2TRuIgx2Xgz4JcWD3He7NhU44Js4=";
     name = "${pname}-source";
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   assets = fetchFromGitHub {
     owner = "makehumancommunity";
     repo = "makehuman-assets";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Jd2A0PAHVdFMnDLq4Mu5wsK/E6A4QpKjUyv66ix1Gbo=";
     name = "${pname}-assets-source";
   };

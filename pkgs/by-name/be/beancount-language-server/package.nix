@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "polarmutex";
     repo = "beancount-language-server";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-aqWenvNAdDL7B7J1hvt+JXT73SJJKu9KFlpUReOp3s4=";
   };
 

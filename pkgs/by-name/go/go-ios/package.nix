@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-YThPGxKtGEv/jTlvtWvdJFjk+1+GLuKAtH0ivNlmr6A=";
   };
 

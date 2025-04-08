@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "DirectX-Headers";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1s/lrvUUOBGVAtfyAG2b/9raQVj2Hcjw9/RtqBO7ENA=";
   };
 

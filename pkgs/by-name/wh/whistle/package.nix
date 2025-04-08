@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "avwo";
     repo = "whistle";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yCFehRcMB5hxBRB2GjI/uTE+mA5Wfr5MeVrdj5xbJlA=";
   };
 

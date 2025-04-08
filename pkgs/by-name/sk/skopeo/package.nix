@@ -22,7 +22,7 @@ buildGoModule rec {
   version = "1.18.0";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
     hash = "sha256-Ws01dYx2Jq/zB8rWiWSnV4ZgcxyBWHWvE3DfG7gvFOc=";

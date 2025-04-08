@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "gixy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "14arz3fjidb8z37m08xcpih1391varj8s0v3gri79z3qb4zq5k6b";
   };
 

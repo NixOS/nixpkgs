@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-1G9H+1YBoIgSE8GO8UuUaG9gbVtY+gCp0oPNSNw0oO8=";
   };
 

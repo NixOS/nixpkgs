@@ -188,7 +188,7 @@ let
       src = fetchFromGitHub {
         owner = "rancher";
         repo = "plugins";
-        tag = "v${version}";
+        rev = "v${version}";
         sha256 = k3sCNISha256;
       };
 

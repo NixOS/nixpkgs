@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "0xacx";
     repo = "chatgpt-shell-cli";
-    tag = version;
+    rev = version;
     hash = "sha256-hYLrUya4UCsIB1J/n+jp1jFRCEqnGFJOr3ATxm0zwdY=";
   };
 

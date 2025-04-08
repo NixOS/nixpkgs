@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "unpoller";
     repo = "unpoller";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-x3Uboa6bs59LafEF9/aYmudo9JIh3KIMNdLJRimcmxY=";
   };
 

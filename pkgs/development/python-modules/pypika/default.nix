@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kayak";
     repo = "pypika";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9HKT1xRu23F5ptiKhIgIR8srLIcpDzpowBNuYOhqMU0=";
   };
 

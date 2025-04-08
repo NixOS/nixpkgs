@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "rgrinberg";
     repo = "ocaml-mustache";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
   };
 

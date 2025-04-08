@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "RodZill4";
     repo = "material-maker";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-vyagu7xL4ITt+xyoYyCcF8qq6L9sR6Ltdl6NwfrbZdA=";
   };
 

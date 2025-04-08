@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "etix";
     repo = "mirrorbits";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ta3+Y3P74cvx09Z4rB5ObgBZtfF4grVgyeZ57yFPlGM=";
   };
 

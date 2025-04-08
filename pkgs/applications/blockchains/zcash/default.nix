@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   src = fetchFromGitHub {
     owner = "zcash";
     repo = "zcash";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
 

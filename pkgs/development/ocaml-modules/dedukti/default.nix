@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "Deducteam";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SFxbgq2znO+OCEFzuekVquvtOEuCQanseKy+iZAeWbc=";
   };
 

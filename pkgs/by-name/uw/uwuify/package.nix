@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Daniel-Liu-c0deb0t";
     repo = "uwu";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
   };
 

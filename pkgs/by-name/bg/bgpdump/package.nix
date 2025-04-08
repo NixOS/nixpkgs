@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "bgpdump";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-1HXMf9mHManR7jhonU2Agon0YFXOlM9APIN1Zm840AM=";
   };
 

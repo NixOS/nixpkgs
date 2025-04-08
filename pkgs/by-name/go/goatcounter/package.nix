@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "goatcounter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
   };
 

@@ -17,7 +17,7 @@ beamPackages.mixRelease rec {
   src = fetchFromGitHub {
     owner = "kieraneglin";
     repo = "pinchflat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XHYCYC3SEVyheBV6diE2pn1AJARml+aNNUjJw2tVKTk=";
   };
 

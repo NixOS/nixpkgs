@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BlueDragonX";
     repo = "dispad";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-PtwvaNtnCm3Y+6vlxPDc21RyIA2v3vkMOHpoGFxNFng=";
   };
 

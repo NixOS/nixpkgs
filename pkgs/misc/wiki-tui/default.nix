@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = "wiki-tui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eTDxRrTP9vX7F1lmDCuF6g1pfaZChqB8Pv1kfrd7I9w=";
   };
 

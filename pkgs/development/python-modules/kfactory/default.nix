@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VLhAJ5rOBKEO1FDCnlaseA+SmrMSoyS+BaEzjdHm59Y=";
   };
 

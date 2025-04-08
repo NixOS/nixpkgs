@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-rf5cGq3Iv6ucURSUFuFANQzaGeufBZ+adjKlg4B5DRY=";
   };
 

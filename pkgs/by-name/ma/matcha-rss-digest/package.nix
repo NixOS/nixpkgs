@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "piqoni";
     repo = "matcha";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Zs6Och5CsqN2mpnCLgV1VkH4+CV1fklfP20A22rE5y0=";
   };
 

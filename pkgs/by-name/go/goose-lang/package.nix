@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "goose-lang";
     repo = "goose";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LAuWd/KeVdvPY45wL8g0MBTMrRCHcu/Ti3+IUvtcFUY=";
   };
 

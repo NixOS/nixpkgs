@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "climech";
     repo = "grit";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-c8wBwmXFjpst6UxL5zmTxMR4bhzpHYljQHiJFKiNDms=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rdT1gCALEsPiyN+4RKmJ36CUkYmbkIyi56JjVkzzkp8=";
   };
 

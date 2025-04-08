@@ -20,7 +20,7 @@ let
   src = fetchFromGitHub {
     owner = "x42";
     repo = "sisco.lv2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1r6g29yqbdqgkh01x6d3nvmvc58rk2dp94fd0qyyizq37a1qplj1";
   };
 

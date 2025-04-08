@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mailru";
     repo = "easyjson";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-m2WZwi6TM6hiBlCQOe+rxF5z3vvnYqtHQX8d7y5NLgI=";
   };
   vendorHash = "sha256-BsksTYmfPQezbWfIWX0NhuMbH4VvktrEx06C2Nb/FYE=";

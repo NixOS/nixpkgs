@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/3+vTz/W1mmI2zlVQLW4wPd66zK7HpFb8VaLFuUPRhk=";
   };
 

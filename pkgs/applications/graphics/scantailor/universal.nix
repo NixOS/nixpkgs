@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trufanov-nok";
     repo = pname;
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-n8NbokK+U0FAuYXtjRJcxlI1XAmI4hk5zV3sF86hB/s=";
   };

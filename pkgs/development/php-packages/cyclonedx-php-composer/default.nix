@@ -14,7 +14,7 @@ php.buildComposerWithPlugin {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-php-composer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0fb1QiuVJqcB7CAEyB0y60/O9iiibT06mccZYe52dFQ=";
   };
 

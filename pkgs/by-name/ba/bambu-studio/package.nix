@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
   };
 

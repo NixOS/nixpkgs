@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dlce-eva";
     repo = "python-newick";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TxyR6RYvy2oIcDNZnHrExtPYGspyWOtZqNy488OmWwk=";
   };
 

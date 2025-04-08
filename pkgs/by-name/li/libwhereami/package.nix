@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "05fc28dri2h858kxbvldk5b6wd5is3fjcdsiqj3nxf95i66bb3xp";
-    tag = version;
+    rev = version;
     repo = "libwhereami";
     owner = "puppetlabs";
   };

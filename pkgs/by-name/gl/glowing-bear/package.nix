@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
 
   src = fetchFromGitHub {
-    tag = version;
+    rev = version;
     owner = "glowing-bear";
     repo = "glowing-bear";
     sha256 = "0lf0j72m6rwlgqssdxf0m9si99lah08lww7q7i08p5i5lpv6zh2s";

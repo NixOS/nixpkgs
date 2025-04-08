@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "timbray";
     repo = "topfew";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-P3K3IhgYkrxmEG2l7EQDVWQ+P7fOjUMUFrlAnY+8NmI=";
   };
 

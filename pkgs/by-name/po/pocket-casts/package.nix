@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5xn2uAjqIyWKQAruHLyho72HCYpbxyWlcTQ3LXXZy6M=";
   };
 

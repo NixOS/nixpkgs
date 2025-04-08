@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mike-oakley";
     repo = "openapi-pydantic";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SMAjzHGuu+QVWe/y8jQ4UWJI9f+pLR2BxgjvE6vOT0Q=";
   };
 

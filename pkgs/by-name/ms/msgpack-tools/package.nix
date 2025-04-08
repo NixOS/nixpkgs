@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ludocode";
     repo = "msgpack-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1ygjk25zlpqjckxgqmahnz999704zy2bd9id6hp5jych1szkjgs5";
   };
 

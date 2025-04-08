@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "spk121";
     repo = "guile-aspell";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-CvLECZLwf4MujAQCL3I81O5xFvq6ezVhV0BjbqI3mR0=";
   };
 

@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "wifite2";
-    tag = version;
+    rev = version;
     hash = "sha256-G2AKKZUDS2UQm95TEhGJIucyMRcm7oL0d3J8uduEQhw=";
   };
 

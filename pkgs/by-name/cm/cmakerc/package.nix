@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vector-of-bool";
     repo = "cmrc";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-++16WAs2K9BKk8384yaSI/YD1CdtdyXVBIjGhqi4JIk=";
   };
 

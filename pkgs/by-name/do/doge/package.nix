@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Olivia5k";
     repo = "doge";
-    tag = version;
+    rev = version;
     hash = "sha256-CZw9Pz9YPVmDMOfDp5yIp/yStOvXEzAgb/HvKpxhQ8I=";
   };
 

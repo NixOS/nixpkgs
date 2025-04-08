@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "donuts-are-good";
     repo = "neosay";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2tFjvAobDpBh1h0ejdtqxDsC+AqyneN+xNssOJNfEbk=";
   };
 

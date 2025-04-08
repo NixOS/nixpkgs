@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VcD3NwVrC75kLOJiIgrnzVpkBPhjxTmEFyKg/87wHGc=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gera2ld";
     repo = "async_dns";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0vn7hxvpzikd7q61a27fwzal4lwsra2063awyr6fjpy6lh3cjdwf";
   };
 

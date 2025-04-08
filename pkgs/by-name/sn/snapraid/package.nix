@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7guTRH9AZCsQYyWLpws19/sEe9GVFop21GYPzXCK6Fg=";
   };
 

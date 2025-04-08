@@ -25,7 +25,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Qq35WhRFpmQwWPupcjnUo/SEFRSRynVIx+PiHEsGED8=";
   };
 

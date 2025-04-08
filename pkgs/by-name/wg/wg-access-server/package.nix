@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "freifunkMUC";
     repo = "wg-access-server";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-AhFqEmHrx9MCdjnB/YA3qU7KsaMyLO+vo53VWUrcL8I=";
   };
 

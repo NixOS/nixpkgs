@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ory";
     repo = "kratos";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FJrBwjWBYwoiy8rWXn+jaVc1b35So1Rb9SjkUlNwAqE=";
   };
 

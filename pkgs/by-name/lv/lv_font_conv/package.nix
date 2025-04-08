@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "lvgl";
     repo = "lv_font_conv";
-    tag = version;
+    rev = version;
     hash = "sha256-tm6xPOW0pOO02M10O1H7ww+yXWq/DJtbDmlfrJ6Lp4Y=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "efficios";
     repo = "babeltrace";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-L4YTqPxvWynUBnmAQnlJ2RNbEv9MhBxQOsqbWix8ZwU=";
   };
 

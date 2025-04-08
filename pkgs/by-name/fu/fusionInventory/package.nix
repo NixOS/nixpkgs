@@ -18,7 +18,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "fusioninventory";
     repo = "fusioninventory-agent";
-    tag = version;
+    rev = version;
     sha256 = "1hbp5a9m03n6a80xc8z640zs71qhqk4ifafr6fp0vvzzvq097ip2";
   };
 

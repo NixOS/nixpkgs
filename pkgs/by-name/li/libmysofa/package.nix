@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jvib1hGPJEY2w/KjlD7iTtRy1s8LFG+Qhb2d6xdpUyc=";
   };
 

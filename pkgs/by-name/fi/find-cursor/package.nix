@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "find-cursor";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-/Dw4bOTCnpCbeI0YJ5DJ9Q2AGBognylUk7xYGn0KIA8=";
   };
 

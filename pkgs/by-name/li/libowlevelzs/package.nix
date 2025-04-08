@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fogti";
     repo = "libowlevelzs";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "y/EaMMsmJEmnptfjwiat4FC2+iIKlndC2Wdpop3t7vY=";
   };
 

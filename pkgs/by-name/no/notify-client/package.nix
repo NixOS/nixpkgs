@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ranfdev";
     repo = "notify";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0p/XIGaawreGHbMRoHNmUEIxgwEgigtrubeJpndHsug=";
   };
 

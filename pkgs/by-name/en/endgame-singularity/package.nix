@@ -14,7 +14,7 @@ let
   main_src = fetchFromGitHub {
     owner = "singularity";
     repo = "singularity";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
   };
 

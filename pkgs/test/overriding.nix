@@ -140,7 +140,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "knqyf263";
           repo = "pet";
-          tag = "v${version}";
+          rev = "v${version}";
           hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
         };
 
@@ -161,7 +161,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "knqyf263";
           repo = "pet";
-          tag = "v${version}";
+          rev = "v${version}";
           hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
         };
 
@@ -181,7 +181,7 @@ let
 
           src = pkgs.fetchFromGitHub {
             inherit (previousAttrs.src) owner repo;
-            tag = "v${finalAttrs.version}";
+            rev = "v${finalAttrs.version}";
             hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
           };
 

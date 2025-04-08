@@ -37,7 +37,7 @@ let
     src = fetchFromGitHub {
       owner = "fzyzcjy";
       repo = "flutter_rust_bridge";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-SbwqWapJbt6+RoqRKi+wkSH1D+Wz7JmnVbfcfKkjt8Q=";
     };
 

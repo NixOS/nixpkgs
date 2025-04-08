@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "zsnes";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Xz+9YgMpnHyno7vP67aut4tIyG/gTn7SnU2FO2QMND0=";
   };
 

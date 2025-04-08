@@ -17,7 +17,7 @@ swift.stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
-    tag = version;
+    rev = version;
     sha256 = "sha256-AZAQSwmGNHN6ykh9ufeQLC1dEXvTt32X24MPTDh6bI8=";
   };
 

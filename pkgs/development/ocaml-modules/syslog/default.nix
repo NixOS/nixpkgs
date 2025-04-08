@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "geneanet";
     repo = "ocaml-syslog";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WybNZBPhv4fhjzzb95E+6ZHcZUnfROLlNF3PMBGO9ys=";
   };
 

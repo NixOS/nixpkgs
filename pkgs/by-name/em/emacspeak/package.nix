@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tvraman";
     repo = "emacspeak";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-npS/wlqI7nBde/2S/rzp79jdfYXIIhgsVs5VizxEDAQ=";
   };
 

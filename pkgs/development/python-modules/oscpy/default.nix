@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "oscpy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Luj36JLgU9xbBMydeobyf98U5zs5VwWQOPGV7TPXQwA=";
   };
 

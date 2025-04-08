@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "liberfa";
     repo = "erfa";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-NtHYgiN5mo3kWC2H+5TUDbU1nFrwuhNyOIhg2jZbssM=";
   };
 

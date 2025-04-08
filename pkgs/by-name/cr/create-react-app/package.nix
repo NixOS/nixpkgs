@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "create-react-app";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-nUvJRxBZ98ogSkbw8ciFYtZRQNFD6pLThoEjeDMcGm0=";
   };
 

@@ -79,7 +79,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fwbuilder";
     repo = "fwbuilder";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-j5HjGcIqq93Ca9OBqEgSotoSXyw+q6Fqxa3hKk1ctwQ=";
   };
 

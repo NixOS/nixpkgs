@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fphilipe";
     repo = "psql2csv";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XIdZ2+Jlw2JLn4KXD9h3+xXymu4FhibAfp5uGGkVwLQ=";
   };
 

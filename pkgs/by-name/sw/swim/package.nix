@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "swim";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0H45kOIwFMdp+eIQJNutLUC/jEpWKsPfEZXDUOUa12g=";
   };
 

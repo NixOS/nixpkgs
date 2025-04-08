@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = "cargo-bundle-licenses";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pTxZ9s8ZccylMfEiifYmJuBB+riZ37QJSAMpVuSgLzs=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kutsan";
     repo = "zsh-system-clipboard";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VWTEJGudlQlNwLOUfpo0fvh0MyA2DqV+aieNPx/WzSI=";
   };
 

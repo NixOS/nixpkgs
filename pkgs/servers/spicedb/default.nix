@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7E9wbPi82F9mqqEsnK96a376QRu9NnpdZRAFB0pe1Lc=";
   };
 

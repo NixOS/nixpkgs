@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "garyelephant";
     repo = "pygrok";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "07487rcmv74srnchh60jp0vg46g086qmpkaj8gxqhp9rj47r1s4m";
   };
 

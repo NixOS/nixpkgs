@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "denilsonsa";
     repo = "prettyping";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "05vfaq9y52z40245j47yjk1xaiwrazv15sgjq64w91dfyahjffxf";
   };
 

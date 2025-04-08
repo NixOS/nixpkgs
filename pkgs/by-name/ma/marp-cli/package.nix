@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "marp-team";
     repo = "marp-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-T3VZEXk3bhr17/BWlBx9beEbNhG2y/AnNf7+a1Adi2k=";
   };
 

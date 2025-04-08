@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OLSR";
     repo = "OONF";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-7EH2K7gaBGD95WFlG6RRhKEWJm91Xv2GOHYQjZWuzl0=";
   };
 

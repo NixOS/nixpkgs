@@ -99,7 +99,7 @@ let
   src = fetchFromGitHub {
     owner = "ActiveState";
     repo = "cpython";
-    tag = "v${version}";
+    rev = "v${version}";
     inherit hash;
   };
 

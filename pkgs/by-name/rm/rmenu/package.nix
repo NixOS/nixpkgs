@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   version = "1.2.2";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "imgurbot12";
     repo = "rmenu";
     hash = "sha256-khauloUGVuekR+Lran1DLnsxwY8sIf5PsEKY7sNy1K4=";

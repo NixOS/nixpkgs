@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wiire-a";
     repo = "pixiewps";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cJ20Gp6YaSdgUXK/ckK5Yv0rGbGXuFMP5zKZG0c4oOY=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "machinezone";
     repo = "tcpkali";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "09ky3cccaphcqc6nhfs00pps99lasmzc2pf5vk0gi8hlqbbhilxf";
   };
   postPatch = ''

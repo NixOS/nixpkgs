@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cisasteelersfan";
     repo = "quantum_gateway";
-    tag = version;
+    rev = version;
     hash = "sha256-jwLfth+UaisPR0p+UHfm6qMXT2eSYWnsYEp0BqyeI9U=";
   };
 

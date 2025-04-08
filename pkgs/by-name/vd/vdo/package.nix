@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = "vdo";
-    tag = version;
+    rev = version;
     hash = "sha256-6oX3ngsBPhE6XsMfliWw5Qzu3UosnsIFIAFRCqckU7U=";
   };
 

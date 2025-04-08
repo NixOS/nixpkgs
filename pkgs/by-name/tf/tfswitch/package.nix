@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "terraform-switcher";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-5Zyu0SLF+xjemFKInzRKCcDZs72gwAJN7bacO+5StMg=";
   };
 

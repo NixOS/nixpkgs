@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Ouz1SSc35gQaJcVQO95azkxNgLxuY712ELAwM5buEtY=";
   };
 

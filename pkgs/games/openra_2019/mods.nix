@@ -58,7 +58,7 @@ in
       src = fetchFromGitHub {
         owner = "OpenRA";
         repo = "OpenRA";
-        tag = version;
+        rev = version;
         sha256 = "0p0izykjnz7pz02g2khp7msqa00jhjsrzk9y0g29dirmdv75qa4r";
         name = "engine";
         inherit postFetch;
@@ -110,7 +110,7 @@ in
       src = fetchFromGitHub {
         owner = "MustaphaTR";
         repo = "OpenRA";
-        tag = version;
+        rev = version;
         sha256 = "1x6byz37s8qcpqj902zvkvbv95rv2mv2kj35c12gbpyc92xkqkq0";
         name = "generals-alpha-engine";
         inherit postFetch;
@@ -194,7 +194,7 @@ in
       src = fetchFromGitHub {
         owner = "OpenRA";
         repo = "OpenRA";
-        tag = version;
+        rev = version;
         sha256 = "1pgi3zaq9fwwdq6yh19bwxscslqgabjxkvl9bcn1a5agy4bfbqk5";
         name = "engine";
         inherit postFetch;
@@ -222,7 +222,7 @@ in
       src = fetchFromGitHub {
         owner = "OpenRA";
         repo = "OpenRA";
-        tag = version;
+        rev = version;
         sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
         name = "engine";
         inherit postFetch;
@@ -327,7 +327,7 @@ in
       src = fetchFromGitHub {
         owner = "RAunplugged";
         repo = "OpenRA";
-        tag = version;
+        rev = version;
         sha256 = "1p5hgxxvxlz8480vj0qkmnxjh7zj3hahk312m0zljxfdb40652w1";
         name = "engine";
         inherit postFetch;
@@ -351,7 +351,7 @@ in
       src = fetchFromGitHub {
         owner = "OpenRA";
         repo = "OpenRA";
-        tag = version;
+        rev = version;
         sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
         name = "engine";
         inherit postFetch;

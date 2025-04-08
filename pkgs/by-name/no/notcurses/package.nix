@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-i3UNd1y88aOGBp2r9itBFd9w+UJQhleJQHZOiK0d26w=";
   };
 

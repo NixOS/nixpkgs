@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "junos_exporter";
-    tag = version;
+    rev = version;
     sha256 = "sha256-PZKP8kcxU5ArC+bkYIO91Dg/f85T5qneX4wuKTj/jP4=";
   };
 

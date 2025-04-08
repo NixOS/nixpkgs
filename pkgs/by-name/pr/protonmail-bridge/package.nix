@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Jx6yzn3QNOVz/VM8dqmTm4Upzz46aNo9d6lvhjLwdL4=";
   };
 

@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PhotoFlare";
     repo = "photoflare";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-0eAuof/FBro2IKxkJ6JHauW6C96VTPxy7QtfPVzPFi4=";
   };
 

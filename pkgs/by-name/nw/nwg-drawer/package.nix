@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-drawer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uctM2fi3lfSrvKSinkjAXD3bLyJOVC0DTyDoAKXgB54=";
   };
 

@@ -53,7 +53,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pragha-music-player";
     repo = "pragha";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-C4zh2NHqP4bwKMi5s+3AfEtKqxRlzL66H8OyNonGzxE=";
   };
 

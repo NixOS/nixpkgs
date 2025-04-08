@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jcbeaudoin";
     repo = "mkcl";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0i2bfkda20lfypis6i4m7srfz6miyf66d8knp693d6sms73m2l26";
   };
 

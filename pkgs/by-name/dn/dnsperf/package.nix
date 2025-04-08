@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eDDVNFMjj+0wEBe1qO6r4Bai554Sp+EmP86reJ/VXGk=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "pushgateway";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VIqk5GxI5qFnsjeq6FL1UUd7lX3VLLhTcPlo4j8oL/c=";
   };
 

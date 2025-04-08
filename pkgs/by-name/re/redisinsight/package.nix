@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ek0Fp8v6j+mZPK2cEuFNrBgInXdYIKBBUg0UD1I51Sg=";
   };
 

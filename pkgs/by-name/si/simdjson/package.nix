@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-/FfaM5BTWKrt2m70+VcUXz//RiZuzxnUOaHOjPJWsGw=";
   };
 

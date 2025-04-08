@@ -16,7 +16,7 @@ let
     src = fetchFromGitHub {
       owner = "ugjka";
       repo = "sblast";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-ICSnLfzBoaax3YKa4LiTBQ4zxgDxttxcN4YVLApFH24=";
     };
 

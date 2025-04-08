@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "kennylevinsen";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZzsBD3KKTT+JGiFCpdumPyVAE2gEJvzCq+nRnK3RdxI=";
   };
 

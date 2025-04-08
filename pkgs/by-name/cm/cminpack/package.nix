@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devernay";
     repo = "cminpack";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eFJ43cHbSbWld+gPpMaNiBy1X5TIcN9aVxjh8PxvVDU=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "leonerd";
     repo = "libtickit";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-q8JMNFxmnyOiUso4nXLZjJIBFYR/EF6g45lxVeY0f1s=";
   };
 

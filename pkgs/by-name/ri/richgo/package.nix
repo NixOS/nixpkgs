@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kyoh86";
     repo = "richgo";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-pOB1exuwGwSxStodKhLLwh1xBvLjopUn0k+sEARdA9g=";
   };
 

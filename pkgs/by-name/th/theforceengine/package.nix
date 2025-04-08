@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
   };
 

@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "simon-r";
     repo = "dr14_t.meter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1nfsasi7kx0myxkahbd7rz8796mcf5nsadrsjjpx2kgaaw5nkv1m";
   };
 

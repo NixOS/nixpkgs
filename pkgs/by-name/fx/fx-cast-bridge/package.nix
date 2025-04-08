@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "hensm";
     repo = "fx_cast";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hB4NVJW2exHoKsMp0CKzHerYgj8aR77rV+ZsCoWA1Dg=";
   };
   sourceRoot = "${src.name}/app";

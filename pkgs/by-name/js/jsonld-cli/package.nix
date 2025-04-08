@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "digitalbazaar";
     repo = "jsonld-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GandTCcRYd0c0SlSdsCAcaTKfwD4g1cwHuoxA62aD74=";
   };
 

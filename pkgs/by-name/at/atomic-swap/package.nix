@@ -17,7 +17,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "AthanorLabs";
     repo = "atomic-swap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MOylUZ6BrvlxUrsZ5gg3JzW9ROG5UXeGhq3YoPZKdHs=";
   };
 

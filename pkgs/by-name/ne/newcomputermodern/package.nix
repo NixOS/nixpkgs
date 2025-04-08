@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.gnu.org.ua/newcm.git";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-AMzEytBn9PbyYFNJ2CMPg8ejsL3eFhY+eZHXShaLG9E=";
   };
 

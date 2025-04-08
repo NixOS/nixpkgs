@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenPHDGuiding";
     repo = "phd2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-GnT/tyk975caqESBSu4mdX5IWGi5O+RljLSd+CwoGWo=";
   };
 

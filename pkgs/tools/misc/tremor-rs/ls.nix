@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-language-server";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-odYhpb3FkbIF1dc2DSpz3Lg+r39lhDKml9KGmbqJAtA=";
   };
 
