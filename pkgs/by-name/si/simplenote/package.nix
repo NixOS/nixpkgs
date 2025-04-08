@@ -8,11 +8,11 @@
 
 let
   pname = "simplenote";
-  version = "2.22.2";
+  version = "2.23.2";
 
   src = fetchurl {
     url = "https://github.com/Automattic/simplenote-electron/releases/download/v${version}/Simplenote-linux-${version}-x86_64.AppImage";
-    sha512 = "4aTMCbnURlJqgZqSqU/b3HTaWDp3FzFhWcES1ANxElNumfUs7IBdCGroyiumBUbQQb+4NG+Yj0kCKuVBjVXZXQ==";
+    hash = "sha512-m2Z1XlIdnxMgnHu6YWKZAp4Nwe1UaOyodtiKhy4/xvPwU2c8z4iBQHjgPoeAwnWJNQ/9JazPgBoP7W5oIMHLCg==";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -47,11 +47,12 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ josephfinlayson ];
+    maintainers = with lib.maintainers; [ josephfinlayson ];
+    changelog = "https://github.com/Automattic/simplenote-electron/releases/tag/v${version}/RELEASE-NOTES.md";
   };
 }
