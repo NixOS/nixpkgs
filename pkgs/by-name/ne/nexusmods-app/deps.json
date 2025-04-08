@@ -1606,8 +1606,8 @@
   },
   {
     "pname": "NexusMods.Archives.Nx",
-    "version": "0.6.3",
-    "hash": "sha256-E4bOexmmPqMJoXs2gDAhgierGAFyc2JVrP3HBn3KAXs="
+    "version": "0.6.4",
+    "hash": "sha256-jDOCZ6VWPqcKE6gqqAdkyLL3G2g6pbG78mpMRhgYx2o="
   },
   {
     "pname": "NexusMods.Hashing.xxHash3",
