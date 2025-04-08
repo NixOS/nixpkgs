@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
     for image in throbber*.png; do
       [[ -e "$image" ]] || break
       magick "$image" -resize 25% "$image";
@@ -36,15 +37,14 @@ stdenvNoCC.mkDerivation {
       31s/^/UseFirmwareBackground=true\n/  # display uefi logo @ shutdown
       34s/^/UseFirmwareBackground=true\n/  # display uefi logo @ reboot
     }' framework.plymouth
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-
     mkdir -p "$out"/share/plymouth/themes/framework
     cp * "$out"/share/plymouth/themes/framework
     sed -i "s@/usr/@$out/@" "$out"/share/plymouth/themes/framework/framework.plymouth
-
     runHook postInstall
   '';
 
