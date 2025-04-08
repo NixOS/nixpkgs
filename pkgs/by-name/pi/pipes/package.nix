@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pipeseroni";
     repo = "pipes.sh";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-856OWlnNiGB20571TJg7Ayzcz4r6NqdW5DMDiim09mc=";
   };
 

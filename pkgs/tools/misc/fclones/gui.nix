@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = "fclones-gui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ad7wyoCjSQ8i6c+4IorImqAY2Q6pwBtI2JkkbkGa46U=";
   };
 

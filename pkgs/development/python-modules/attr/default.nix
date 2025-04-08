@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "denis-ryzhkov";
     repo = "attr";
-    tag = version;
+    rev = version;
     hash = "sha256-1gOAONDuZb7xEPFZJc00BRtFF06uX65S8b3RRRNGeSo=";
   };
 

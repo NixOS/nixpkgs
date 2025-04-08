@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
-    tag = version;
+    rev = version;
     hash = "sha256-kPQ0GCRYrxoAz4Y2uGHsvn8KxiAE2Fc6FMOJyZaWTjI=";
   };
 

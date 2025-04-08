@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tryffel";
     repo = "jellycli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1awzcxnf175a794rhzbmqxxjss77mfa1yrr0wgdxaivrlkibxjys";
   };
 

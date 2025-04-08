@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "incinirate";
     repo = "Riko4";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "008i9991sn616dji96jfwq6gszrspbx4x7cynxb1cjw66phyy5zp";
   };
 

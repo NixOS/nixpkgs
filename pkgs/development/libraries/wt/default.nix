@@ -31,7 +31,7 @@ let
       src = fetchFromGitHub {
         owner = "emweb";
         repo = "wt";
-        tag = version;
+        rev = version;
         inherit sha256;
       };
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "digibyte-core";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "zPwnC2qd28fA1saG4nysPlKU1nnXhfuSG3DpCY6T+kM=";
   };
 

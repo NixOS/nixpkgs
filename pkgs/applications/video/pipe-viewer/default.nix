@@ -48,7 +48,7 @@ buildPerlModule rec {
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
-    tag = version;
+    rev = version;
     hash = "sha256-NVUZn02rBhOQyIfBp/BArbL2YY19TuDTwfiQH2pEWzk=";
   };
 

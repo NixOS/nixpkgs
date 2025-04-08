@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moriyoshi";
     repo = "cyrus-sasl-xoauth2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-lI8uKtVxrziQ8q/Ss+QTgg1xTObZUTAzjL3MYmtwyd8=";
   };
 

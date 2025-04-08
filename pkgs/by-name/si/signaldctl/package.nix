@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "signald";
     repo = "signald-go";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lMJyr4BPZ8V2f//CUkr7CVQ6o8nRyeLBHMDEyLcHSgQ=";
   };
 

@@ -27,7 +27,7 @@ let
 
       src = fetchFromGitHub {
         owner = "liberationfonts";
-        tag = version;
+        rev = version;
         inherit repo sha256;
       };
 

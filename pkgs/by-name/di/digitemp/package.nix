@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bcl";
     repo = "digitemp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "19zka5fcdxhhginaspak76l984iqq9v2j6qrwvi5mvca7bcj8f72";
   };
 

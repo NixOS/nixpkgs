@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shoenig";
     repo = "marathonctl";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-MigmvOwYa0uYPexchS4MP74I1Tp6QHYuQVSOh1+FrMg=";
   };
 

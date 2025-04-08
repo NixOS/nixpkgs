@@ -31,7 +31,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "skia";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-IlZbalmHl549uDUfPG8hlzub8TLWhG0EsV6HVAPdsl0=";
   };
 

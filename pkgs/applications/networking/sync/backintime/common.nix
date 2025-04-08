@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-QTUezD3OdOMqrxOCrdPFI8fB5XDhNVo9XpLgi7Y2aRg=";
   };
 

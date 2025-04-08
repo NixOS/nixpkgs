@@ -12,7 +12,7 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickgui";
-    tag = version;
+    rev = version;
     hash = "sha256-M2Qy66RqsjXg7ZpHwaXCN8qXRIsisnIyaENx3KqmUfQ=";
   };
 

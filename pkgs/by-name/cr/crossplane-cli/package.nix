@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "crossplane";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pQIiVdDWy3+PrqhvVHDwgGHHCQCYWtWt9ympc8QbBcE=";
   };
 

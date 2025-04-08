@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "resto";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VdkYUy7Fi53ku6F/1FV55/VcyF/tDZKN4NTMabDd/T4=";
   };
 

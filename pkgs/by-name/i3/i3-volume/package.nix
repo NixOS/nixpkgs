@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hastinbe";
     repo = "i3-volume";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vmyfEXJ/5TRWIJQCblYcy8owI03F+ARNAEd0ni5ublM=";
   };
 

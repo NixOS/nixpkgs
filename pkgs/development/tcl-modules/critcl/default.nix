@@ -13,7 +13,7 @@ mkTclDerivation rec {
   src = fetchFromGitHub {
     owner = "andreas-kupries";
     repo = "critcl";
-    tag = version;
+    rev = version;
     hash = "sha256-LBTAuwTrvwj42vo/TXVSUK8euxHgvSLai23e1jmhMso=";
   };
 

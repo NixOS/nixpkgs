@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kszenes";
     repo = "tocPDF";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RaNMhEgJ2pSL9BvK1d2Z8AsUPhARaRtEiCnt/2E2uNs=";
   };
 

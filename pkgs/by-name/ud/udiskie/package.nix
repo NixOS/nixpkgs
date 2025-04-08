@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ndoTVeF6iTe4+aqFDRaLUEaBavgCWHzULXeG3Kj3ptY=";
   };
 

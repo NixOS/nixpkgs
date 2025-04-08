@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = "cargo-bloat";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-B71VX7cJe1giOLmk3cQE8Zxr7fKGyQkoXRuM+NzBcb8=";
   };
 

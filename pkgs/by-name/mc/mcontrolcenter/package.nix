@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dmitry-s93";
     repo = "MControlCenter";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Gl+YnbUbwtwF2WHT39bIKh48qSIMe3fpzxgdvifR4DQ=";
   };
 

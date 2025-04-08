@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "esdm";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5XctrI02pfCgK1P76AaSkMjiQqav6LX3SMjKr4F44sw=";
   };
 

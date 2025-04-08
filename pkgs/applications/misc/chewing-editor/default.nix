@@ -16,7 +16,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "chewing";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "0kc2hjx1gplm3s3p1r5sn0cyxw3k1q4gyv08q9r6rs4sg7xh2w7w";
   };
 

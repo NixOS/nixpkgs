@@ -12,7 +12,7 @@ buildGoModule rec {
     domain = "codeberg.org";
     owner = "Tomkoid";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-Fv5XpWA2ebqXdA+46gZQouuZ3XxH4WDj/W6xJ0ETg8E=";
   };
 

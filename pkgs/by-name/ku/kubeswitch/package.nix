@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "danielfoehrKn";
     repo = "kubeswitch";
-    tag = version;
+    rev = version;
     hash = "sha256-899hHqXxx2OuWII4ego6F62EnFIszaYqTTcU9wO2csw=";
   };
 

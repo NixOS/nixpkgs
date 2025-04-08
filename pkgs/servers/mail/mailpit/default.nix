@@ -24,7 +24,7 @@ let
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = source.hash;
   };
 

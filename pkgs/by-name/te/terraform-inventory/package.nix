@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "adammck";
     repo = "terraform-inventory";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-gkSDxcBoYmCBzkO8y1WKcRtZdfl8w5qVix0zbyb4Myo=";
   };
 

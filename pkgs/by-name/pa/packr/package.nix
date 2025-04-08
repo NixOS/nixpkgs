@@ -15,7 +15,7 @@ let
       fetchFromGitHub {
         owner = "gobuffalo";
         repo = "packr";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
       }
       + "/v2";
@@ -48,7 +48,7 @@ let
     src = fetchFromGitHub {
       owner = "gobuffalo";
       repo = "packr";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
     };
 

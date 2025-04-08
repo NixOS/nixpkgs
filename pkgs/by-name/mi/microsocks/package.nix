@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rofl0r";
     repo = "microsocks";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5NR2gtm+uMkjmkV/dv3DzSedfNvYpHZgFHVSrybl0Tk=";
   };
 

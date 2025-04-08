@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "one2nc";
     repo = "cloudlens";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-b0i9xaIm42RKWzzZdSAmapbmZDmTpCa4IxVsM9eSMqM=";
   };
 

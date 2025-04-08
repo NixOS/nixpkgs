@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-CcXreKZ83+WDucV3sr62bwKzSs+S9R3e+z0JD0rR8jw=";
   };
 

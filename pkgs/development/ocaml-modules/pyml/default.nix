@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "thierry-martinez";
     repo = "pyml";
-    tag = version;
+    rev = version;
     sha256 = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
 

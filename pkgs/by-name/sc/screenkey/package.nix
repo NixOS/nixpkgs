@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kWktKzRyWHGd1lmdKhPwrJoSzAIN2E5TKyg30uhM4Ug=";
   };
 

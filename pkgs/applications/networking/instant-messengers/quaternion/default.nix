@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "Quaternion";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-lRCSEb/ldVnEv6z0moU4P5rf0ssKb9Bw+4QEssLjuwI=";
   };
 

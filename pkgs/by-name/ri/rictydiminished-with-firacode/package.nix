@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hakatashi";
     repo = "RictyDiminished-with-FiraCode";
-    tag = version;
+    rev = version;
     hash = "sha256-twh3yLAM4MUjWzSDNmo8gNIRf01hieXeOS334sNdFk4=";
     fetchSubmodules = true;
   };

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VDLHED/QKxccZ18WEPV7GPdr3v7VaizDa5sZq7ei5+g=";
   };
 

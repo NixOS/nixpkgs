@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-0dly7XbTNGyfvZd6wYn7Nz3CVRGaZvc4LIuHvX5Asbg=";
   };
 

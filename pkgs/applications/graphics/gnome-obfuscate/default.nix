@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Obfuscate";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-/Plvvn1tle8t/bsPcsamn5d81CqnyGCyGYPF6j6U5NI=";
   };
 

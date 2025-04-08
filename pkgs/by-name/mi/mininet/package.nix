@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mininet";
     repo = "mininet";
-    tag = version;
+    rev = version;
     hash = "sha256-Z7Vbfu0EJ4+rCpckXrt3hgxeB9N2nnyPIXgPBnpV4uw=";
   };
 

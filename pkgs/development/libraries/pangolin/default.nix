@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stevenlovegrove";
     repo = "Pangolin";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-B5YuNcJZHjR3dlVs66rySi68j29O3iMtlQvCjTUZBeY=";
   };
 

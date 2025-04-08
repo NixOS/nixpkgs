@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lakshmipathi";
     repo = "dduper";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "09ncdawxkffldadqhfblqlkdl05q2qmywxyg6p61fv3dr2f2v5wm";
   };
 

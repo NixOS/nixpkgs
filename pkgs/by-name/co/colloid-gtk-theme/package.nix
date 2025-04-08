@@ -62,7 +62,7 @@ lib.checkListOfEnum "${pname}: theme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      tag = version;
+      rev = version;
       hash = "sha256-70HDn87acG0me+zbXk6AoGmakY6VLuawq1ubgGcRZVk=";
     };
 

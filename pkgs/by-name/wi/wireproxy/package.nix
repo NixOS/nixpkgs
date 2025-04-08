@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pufferffish";
     repo = "wireproxy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-F8WatQsXgq3ex2uAy8eoS2DkG7uClNwZ74eG/mJN83o=";
   };
 

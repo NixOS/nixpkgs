@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mschneider82";
     repo = "keylight-control";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xC/JRM8vyqAsxPpf37P3pZv6i73s+CLQt6Sh4nMxwzM=";
   };
 

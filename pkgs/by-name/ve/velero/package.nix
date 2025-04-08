@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WClNupUW1Nd5Xnx58KYDRLz1/2kNCOR4AoAsUv78yPE=";
   };
 

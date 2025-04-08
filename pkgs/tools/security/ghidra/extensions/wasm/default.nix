@@ -15,7 +15,7 @@ buildGhidraExtension {
   src = fetchFromGitHub {
     owner = "nneonneo";
     repo = "ghidra-wasm-plugin";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-aoSMNzv+TgydiXM4CbvAyu/YsxmdZPvpkZkYEE3C+V4=";
   };
 

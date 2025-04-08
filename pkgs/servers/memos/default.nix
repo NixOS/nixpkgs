@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lcOZg5mlFPp04ZCm5GDhQfSwE2ahSmGhmdAw+pygK0A=";
   };
 

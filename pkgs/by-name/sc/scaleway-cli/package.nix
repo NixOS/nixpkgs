@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-3yte4gNl8uBSHfDp11HH+l3trN+d5YcEYajpruyOrKc=";
   };
 

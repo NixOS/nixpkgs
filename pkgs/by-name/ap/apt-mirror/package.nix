@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "apt-mirror";
     repo = "apt-mirror";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-GNsyXP/O56Y+8QhoSfMm+ig5lK/K3Cm085jxRt9ZRmI=";
   };
 

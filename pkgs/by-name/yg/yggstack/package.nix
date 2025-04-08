@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggstack";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-S3yk2v2RPGFeGDJ8Lmjr7VM2kIswIREfPpDLXM/P1YU=";
   };
 

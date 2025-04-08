@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    tag = version;
+    rev = version;
     sha256 = "sha256-XzZ9UmEA45ipVU0AHLZ+HeW/rmlBtgLXgyyGF1O1nqE=";
   };
 

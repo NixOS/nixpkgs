@@ -55,7 +55,7 @@ let
       inherit pname version;
       src = fetchgit {
         url = repository;
-        tag = version;
+        rev = version;
         inherit sha256;
       };
     };

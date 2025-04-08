@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "crc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = gitHash;
   };
 

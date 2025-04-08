@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Jsivw4lNA/2oqsOGGx8D4gUPftzuys877A9RXyapnSQ=";
   };
 

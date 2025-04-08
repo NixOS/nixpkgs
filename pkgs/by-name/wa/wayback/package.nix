@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "wabarc";
     repo = "wayback";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GnirEgJHgZVzxkFFVDU9795kgvMTitnH+xWd7ooNf7Y=";
   };
 

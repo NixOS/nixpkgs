@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "carto";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-TylMgb2EI52uFmVeMJiQltgNCSh6MutFwUjsYC7gfEA=";
   };
 

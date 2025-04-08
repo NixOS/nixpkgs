@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "pantheon-wayland";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-UKGgz3G960dPmcDaFwLjDy55x+mDPdQQv2Ejs7BujLg=";
   };
 

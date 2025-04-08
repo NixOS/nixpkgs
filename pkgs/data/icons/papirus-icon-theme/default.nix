@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-E2SpGAMsFfB64axDzUgVOZZwHDyPVbZjEvY4fJzRyUQ=";
   };
 

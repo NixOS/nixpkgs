@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vadimi";
     repo = "grpc-client-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+Njo3cqqWhQMYsO7VLScPemmBMCf55khzLqBmODqEng=";
   };
 

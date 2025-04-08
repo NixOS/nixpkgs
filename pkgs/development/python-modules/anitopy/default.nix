@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "igorcmoura";
     repo = "anitopy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-xXEf7AJKg7grDmkKfFuC4Fk6QYFJtezClyfA3vq8TfQ=";
   };
 

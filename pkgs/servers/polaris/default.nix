@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
-    tag = version;
+    rev = version;
     hash = "sha256-2GHYIlEzRS7KXahdrxMjyIcPCNw8gXJw5/4ZpB/zT3Y=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".

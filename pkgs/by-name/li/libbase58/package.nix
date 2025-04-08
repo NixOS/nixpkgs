@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bitcoin";
     repo = "libbase58";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CU55V89GbcYnrhwTPFMd13EGeCk/x9nQswUZ2JsYsUU=";
   };
 

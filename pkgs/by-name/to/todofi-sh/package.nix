@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hugokernel";
     repo = "todofi.sh";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1gmy5inlghycsxiwnyyjyv81jn2fmfk3s9x78kcgyf7khzb5kwvj";
   };
 

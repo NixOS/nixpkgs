@@ -19,7 +19,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "pveber";
     repo = "dbf";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-096GodM3J/4dsVdylG+6xz/p6ogUkhDGdFjiPwl/jLQ=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bgp";
     repo = "stayrtr";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QdPp+AHOVn/L4lArhwUNNu3OP2ALEFzs/hVnfSxaEbg=";
   };
   vendorHash = "sha256-m1CHpmTUQVkBjkjg2bjl9llU1Le1GLRKKLGT4h7MbnE=";

@@ -48,7 +48,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZhVlDX5I6SJEntVg30Iy/XxgsorDjFycAt2uksJMJps=";
   };
 

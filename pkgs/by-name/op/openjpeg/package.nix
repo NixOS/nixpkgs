@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
   };
 

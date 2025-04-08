@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nate-xyz";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-c+X49bMywstRg7cSAbbpG/vd8OUB7RhdQVRumTIBDDk=";
   };
 

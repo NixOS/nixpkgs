@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcarbaugh";
     repo = "python-roku";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "09mq59kjll7gj1srw4qc921ncsm7cld95sbz5v3p2bwmgckpqza7";
   };
 

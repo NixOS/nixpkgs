@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thomasnordquist";
     repo = "MQTT-Explorer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oFS4RnuWQoicPemZbPBAp8yQjRbhAyo/jiaw8V0MBAo=";
   };
 

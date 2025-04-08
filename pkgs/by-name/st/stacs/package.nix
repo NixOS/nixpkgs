@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "stacscan";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "00ZYdpJktqUXdzPcouHyZcOQyFm7jdFNVuDqsufOviE=";
   };
 

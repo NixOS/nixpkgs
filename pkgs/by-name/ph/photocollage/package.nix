@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "PhotoCollage";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jDb2mFsok8TNi9+A/FAieqo7YbAUsmrFRBGwdGv71Xg=";
   };
 

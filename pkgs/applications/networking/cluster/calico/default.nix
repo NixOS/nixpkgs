@@ -19,7 +19,7 @@ builtins.mapAttrs
       src = fetchFromGitHub {
         owner = "projectcalico";
         repo = "calico";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-JK/iKVLXT8h+xZpkjVBEI8vfgRuoTHwWaoKikjBsJgI=";
       };
 

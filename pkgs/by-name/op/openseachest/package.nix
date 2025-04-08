@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Seagate";
     repo = "openSeaChest";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1vfWX6uTQcM6K6wu9Ygu2xZV4nXm6VnwNHmQ2ceh62s=";
     fetchSubmodules = true;
   };

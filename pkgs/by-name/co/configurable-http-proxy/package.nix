@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "configurable-http-proxy";
-    tag = version;
+    rev = version;
     hash = "sha256-nj6+GmBw5YSQs23rWVh3qU4jdzRdbPyx43QmZ3LRwn4=";
   };
 

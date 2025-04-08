@@ -27,7 +27,7 @@ stdenv.mkDerivation (rec {
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-cCZo/lOvSvF19SGQ9BU2J3EBKHF9PgRBhuUVBkggF9I=";
     fetchSubmodules = true;
   };

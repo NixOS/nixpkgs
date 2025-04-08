@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Ripser";
     repo = "ripser";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-BxmkPQ/nl5cF+xwQMTjXnLgkLgdmT/39y7Kzl2wDfpE=";
   };
 

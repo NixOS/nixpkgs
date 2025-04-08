@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-URJcC0ib87ejrTCglCjhC2tQHNc5TRvo4CQ52N58n+4=";
   };
 

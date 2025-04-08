@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "blechschmidt";
     repo = "massdns";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hrnAg5ErPt93RV4zobRGVtcKt4aM2tC52r08T7+vRGc=";
   };
 

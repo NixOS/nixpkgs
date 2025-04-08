@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "fabric";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wFVb2IdYB1T7wozQcjxLE7uVRsIFkPL5rS/8V0LnRcg=";
   };
 

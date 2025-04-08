@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
-    tag = version;
+    rev = version;
     sha256 = "sha256-aREZv+t4QhtfLKOMrneLiRxgnu0fzB8UV8dvr1dnhx4=";
   };
 

@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
     repo = "mob";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OTKlasXswrZPfhdHD6tJt8z/e+BbgWa9LrKYhMbG/N4=";
   };
 

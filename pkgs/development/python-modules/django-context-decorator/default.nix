@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rixx";
     repo = "django-context-decorator";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lNmZDsguOu2+gtMVjbwr709sbLCQOQ1sAePN7UJQbcw=";
   };
 

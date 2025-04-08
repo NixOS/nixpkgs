@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "artizirk";
     repo = "wdisplays";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dtvP930ChiDRT60xq6xBDU6k+zHnkrAkxkKz2FxlzRs=";
   };
 

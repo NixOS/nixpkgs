@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OtQN8Iigu92iKa7CAaslIpbS0bqJ9Vus++inrgV/eeM=";
     fetchSubmodules = true;
   };

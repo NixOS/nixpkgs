@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "solusipse";
     repo = "fiche";
-    tag = version;
+    rev = version;
     sha256 = "1102r39xw17kip7mjp987jy8na333gw9vxv31f7v8q05cr7d7kfb";
   };
 

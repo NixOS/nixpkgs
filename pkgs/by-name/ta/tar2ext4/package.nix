@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "hcsshim";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-20+y7wFV3HxkrS1qHNq2neIc826HU5AXzuqqS7Ll2gg=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneTBB";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zGZHMtAUVzBKFbCshpepm3ce3tW6wQ+F30kYYXAQ/TE=";
   };
 

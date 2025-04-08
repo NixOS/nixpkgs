@@ -18,7 +18,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MdquhDdbOdP1shnKHBlzQrSDe41fp0qnMzgaqL89jTk=";
   };
   vendorHash = "sha256-ERilQZ8vnhGW1IEcLA4CcmozDooHKbnmASMw87tjYD4=";

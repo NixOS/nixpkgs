@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "fastly-exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1xgTAMsUw+eYeHD6NEo2Zw3fL1Hdm6fxQWfgp/VQaXc=";
   };
 

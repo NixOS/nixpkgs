@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jgmdev";
     repo = "wl-color-picker";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-lvhpXy4Sd1boYNGhbPoZTJlBhlW5obltDOrEzB1Gq0A=";
   };
 

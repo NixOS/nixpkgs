@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ken-matsui";
     repo = "git2-cpp";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-2jKSQW6dUCIKtl33paSTuZdYAaYdFnILx/Gxv/ghFiI=";
   };
 

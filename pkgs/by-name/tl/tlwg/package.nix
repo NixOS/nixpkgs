@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tlwg";
     repo = "fonts-tlwg";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "hWiH5KJnYTdcrm+Kzn9HUQry8ry3SKzjA6/0536kCLQ=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "agl";
     repo = "jbig2enc";
-    tag = version;
+    rev = version;
     hash = "sha256-B19l2NdMq+wWKQ5f/y5aoPiBtQnn6sqpaIoyIq+ugTg=";
   };
 

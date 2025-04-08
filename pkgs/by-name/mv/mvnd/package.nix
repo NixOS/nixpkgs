@@ -28,7 +28,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "maven-mvnd";
-    tag = version;
+    rev = version;
     sha256 = "sha256-c1jD7m4cOdPWQEoaUMcNap2zvvX7H9VaWQv8JSgAnRU=";
   };
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
   };
 

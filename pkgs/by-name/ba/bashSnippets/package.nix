@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "alexanderepstein";
     repo = "Bash-Snippets";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "044nxgd3ic2qr6hgq5nymn3dyf5i4s8mv5z4az6jvwlrjnvbg8cp";
   };
 

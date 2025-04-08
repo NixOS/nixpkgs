@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "AssemblyScript";
     repo = "assemblyscript";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Wop7S7GvvXFcONER+TYIygLkAZpCdhMlPz3hhWSOZro=";
   };
 

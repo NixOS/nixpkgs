@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ios-control";
     repo = "ios-deploy";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-TVGC+f+1ow3b93CK3PhIL70le5SZxxb2ug5OkIg8XCA=";
   };
 

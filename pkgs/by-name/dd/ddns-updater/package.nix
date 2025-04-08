@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "qdm12";
     repo = "ddns-updater";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Vvk3owtSpwstmC5UaVyUEY+FW25KA+nYp2dOqiP4HTs=";
   };
 

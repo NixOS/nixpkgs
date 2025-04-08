@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GcmblIAu/BDbqZRycmnBsHkvzJe07qB2lSfDnO7ZYtg=";
   };
 

@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitLab {
     owner = "antora";
     repo = "antora-lunr-extension";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GplCwhUl8jurD4FfO6/T3Vo1WFjg+rtAjWeIh35unk4=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dsifford";
     repo = "yarn-completion";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0xflbrbwskjqv3knvc8jqygpvfxh5ak66q7w22d1ng8gwrfqzcng";
   };
 

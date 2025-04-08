@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dhZYOfXepOnt1lQEgrM/y++5V58weiiTMAyMKl2t37Q=";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ZY+kyimLzAeEgvDaflXM7MbyzsGgivOnG1aBD9/ozbk=";
   };
 

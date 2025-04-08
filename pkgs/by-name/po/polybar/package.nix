@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "polybar";
     repo = "polybar";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-5PYKl6Hi4EYEmUBwkV0rLiwxNqIyR5jwm495YnNs0gI=";
     fetchSubmodules = true;
   };

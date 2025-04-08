@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WestberryTech";
     repo = "wb32-dfu-updater";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-DKsDVO00JFhR9hIZksFVJLRwC6PF9LCRpf++QywFO2w=";
   };
 

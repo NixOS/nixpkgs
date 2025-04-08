@@ -32,7 +32,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+9uBmmdQ/shWYnJ7tM+Y8OgqYcQHHI2qeMw2tl1lE+w=";
   };
 

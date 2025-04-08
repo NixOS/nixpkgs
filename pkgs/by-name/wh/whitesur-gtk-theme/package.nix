@@ -99,7 +99,7 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      tag = version;
+      rev = version;
       hash = "sha256-XSghDBpxAjdQMB9tyV2NIM6j/AzmzsnybGGDYi7u3BQ=";
     };
 

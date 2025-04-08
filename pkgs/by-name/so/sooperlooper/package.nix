@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Lrsz/UDCgoac63FJ3CaPVaYwvBtzkGQQRLhUi6lUusE=";
   };
 

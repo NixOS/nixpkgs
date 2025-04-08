@@ -30,7 +30,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "lemminx";
-    tag = version;
+    rev = version;
     hash = "sha256-xGC3ZGQ1dA0485/IPHsmX2NO1QOPp/nHMLBZvcC4Om8=";
     # Lemminx reads this git information at runtime from a git.properties
     # file on the classpath

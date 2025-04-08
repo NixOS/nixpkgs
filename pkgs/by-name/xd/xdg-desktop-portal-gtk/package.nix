@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "xdg-desktop-portal-gtk";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-aeSm6Wd0EMaZb7tYpnKT/QBt9l/fVyQLgvn5aBqQOAc=";
   };
 

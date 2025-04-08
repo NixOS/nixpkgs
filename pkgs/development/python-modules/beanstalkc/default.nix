@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bosondata";
     repo = "beanstalkc";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1dpb1yimp2pfnikmgsb2fr9x6h8riixlsx3xfqphnfvrid49vw5s";
   };
 

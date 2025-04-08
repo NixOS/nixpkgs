@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "KlipperScreen";
     repo = "KlipperScreen";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MxuUmkuEnfFC0iPwNUc0Wh8bIEl1J1FMgGEYMjHePZ8=";
   };
 

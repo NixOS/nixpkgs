@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
-    tag = version;
+    rev = version;
     hash = "sha256-ovyfHqLCf5U3UR1HfoA+UQhqLZ6IaILcpqptPRQsb60=";
   };
 

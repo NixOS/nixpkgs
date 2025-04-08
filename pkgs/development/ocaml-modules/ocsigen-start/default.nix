@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-start";
-    tag = version;
+    rev = version;
     hash = "sha256-i2nj/m1Ihb/bprtHvZh47/oK0v+aFNVH+A2CB4rrrPk=";
   };
 

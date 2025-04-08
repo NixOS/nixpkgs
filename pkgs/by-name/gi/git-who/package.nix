@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sinclairtarget";
     repo = "git-who";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-64Hb2+ZCXJis19V0WDyZ0SHZX99Dqxr3UGQTQZSCAp8=";
   };
 

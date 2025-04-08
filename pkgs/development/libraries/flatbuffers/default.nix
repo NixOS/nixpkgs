@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LApjF14eoqcT11Jp9SaJQbtvK8iIelTY4GJKqjVCpCM=";
   };
 

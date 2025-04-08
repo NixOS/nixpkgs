@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Clever";
     repo = "microplane";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-3QPxH4ZR02bkL2uKoJpLW9e7q1LjSlWw5jo0jxegeiM=";
   };
 

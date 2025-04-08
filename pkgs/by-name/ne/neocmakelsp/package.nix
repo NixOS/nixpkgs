@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "neocmakelsp";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iVetPUg/eX8o2BB1y9dlijbhZUyDNMHaLrqcqTbvpQk=";
   };
 

@@ -42,7 +42,7 @@ lib.checkListOfEnum "${pname}: platform"
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
-        tag = finalAttrs.version;
+        rev = finalAttrs.version;
         hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
       };
 

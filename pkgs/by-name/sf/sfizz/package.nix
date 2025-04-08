@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
     fetchSubmodules = true;
   };

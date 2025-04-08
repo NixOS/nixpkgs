@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dmcg310";
     repo = "Rust-Traverse";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OcCWmBNDo4AA5Pk5TQqb8hen9LlHaY09Wrm4BkrU7qA=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fpco";
     repo = "pid1-rs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2dnQj3AQxedyq1YvHKt+lVXNEtuB5sMRSCqX9YeifzI=";
   };
 

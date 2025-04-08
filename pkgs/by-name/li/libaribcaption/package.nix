@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xqq";
     repo = "libaribcaption";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-x6l0ZrTktSsqfDLVRXpQtUOruhfc8RF3yT991UVZiKA=";
   };
 

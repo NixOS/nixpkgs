@@ -41,7 +41,7 @@ in
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
-    tag = version;
+    rev = version;
     hash = "sha256-rwlVGF/cWSv6Bsvhrs6nMDQ8avYT80aasrhWyQv55/A=";
   };
 

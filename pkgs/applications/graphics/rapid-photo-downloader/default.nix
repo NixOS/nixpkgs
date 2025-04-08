@@ -26,7 +26,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "rapid-photo-downloader";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-4VC1fwQh9L3c5tgLUaC36p9QHL4dR2vkWc2XlNl0Xzw=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "haproxy_exporter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-hpZnMvHAAEbvzASK3OgfG34AhPkCdRM7eOm15PRemkA=";
   };
 

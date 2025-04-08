@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sip-connector";
-    tag = version;
+    rev = version;
     hash = "sha256-NmjaN28NnAIpMwUHCUS+7LJBwvCp48kyhmHRf6cU5WE=";
   };
 

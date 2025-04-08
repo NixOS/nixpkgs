@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
-    tag = version;
+    rev = version;
     hash = "sha256-YABoDBPrxII0uw4Cyy1A4AcLQ3Uo28dJa/F4LTI7f5Y=";
   };
 

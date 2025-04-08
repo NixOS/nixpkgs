@@ -19,7 +19,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "darioteixeira";
     repo = "pgocaml";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Mz3zVgXas1UivH/BVARx5kWClgr9v9YcGarwaD961tU=";
   };
 

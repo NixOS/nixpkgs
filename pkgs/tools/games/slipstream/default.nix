@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "Vhati";
     repo = "Slipstream-Mod-Manager";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = "lunatic";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uMMssZaPDZn3bOtQIho+GvUCPmzRllv7eJ+SJuKaYtg=";
   };
 

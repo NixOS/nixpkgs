@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raelgc";
     repo = "scudcloud";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1ffdy74igll74fwpmnn3brvcxbk4iianqscdzz18sx1pfqpw16cl";
   };
 

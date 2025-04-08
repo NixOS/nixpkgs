@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-gateway-bridge";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-nVrYyvoN6jayXAwivwxhijNeLEcGICTWJ4T9EBs5uaI=";
   };
 

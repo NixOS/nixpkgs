@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-21";
-      tag = version;
+      rev = version;
       hash = "sha256-Df2Pq2aPrTxD4FeqG12apE/USfQULmMGsDsgXrmCINc=";
     };
   };

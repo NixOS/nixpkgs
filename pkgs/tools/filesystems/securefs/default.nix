@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "netheril96";
     repo = "securefs";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-7xjGuN7jcLgfGkaBoSj+WsBpM806PPGzeBs7DnI+fwc=";
   };

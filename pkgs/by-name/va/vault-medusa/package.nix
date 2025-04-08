@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jonasvinther";
     repo = "medusa";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-pMCkJMY5KFkNsmv/LFYZrDmrq2G7fw1fl9HEYGAKuIM=";
   };
 

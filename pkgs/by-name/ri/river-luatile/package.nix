@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "river-luatile";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8/qHoNFoGH1nSdTwBkaQk+yyvJtrXADTA39gUAMeSv8=";
   };
 

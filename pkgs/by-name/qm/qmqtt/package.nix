@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "qmqtt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JLGwEF5e/IKzPzCQBzB710REGWbc/MW+r5AHmyYUkUI=";
   };
 

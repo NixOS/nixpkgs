@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "flit";
-    tag = version;
+    rev = version;
     hash = "sha256-AK5iuR1l/i2Cgj8D4CnyV6mQkSNbFw4sHGQF2OdwNkU=";
   };
 

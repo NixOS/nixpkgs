@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "minder";
-    tag = version;
+    rev = version;
     sha256 = "sha256-LZm2TLUugW/lSHp+y3Sz9IacQCEFQloVnZ9MoBjqHvI=";
   };
 

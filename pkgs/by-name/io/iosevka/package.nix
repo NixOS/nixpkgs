@@ -61,7 +61,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Yosl6dqbYLsX1whkSazHHlbZ4zhJ5jSZmrdi22BLBJM=";
   };
 

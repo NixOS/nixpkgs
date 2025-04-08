@@ -14,7 +14,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pylixm";
     repo = "django-mdeditor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-t57j1HhjNQtBwlbqe4mAHQ9WiNcIhMKYmrZkiqh+k5k=";
   };
 

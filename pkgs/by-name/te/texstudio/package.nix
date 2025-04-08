@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-PvxzG4VPhCmwc/Kh5g85fV/Mc7ih08pt/zUNBgldZiI=";
   };
 

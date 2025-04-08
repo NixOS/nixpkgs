@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bodgit";
     repo = "rvz";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OxU+Pm9OfFuwmmc2+b7eLhN8JR3SB8cjvh9lPS0qJ5Y=";
   };
 

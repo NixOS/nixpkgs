@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "twitchdev";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kRyJl2SxppVGCO/6wrsb8cO+wpBT1nBsyI/JsPRYzMc=";
   };
 

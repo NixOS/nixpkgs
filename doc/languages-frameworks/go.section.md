@@ -20,7 +20,7 @@ The following is an example expression using `buildGoModule`:
     src = fetchFromGitHub {
       owner = "knqyf263";
       repo = "pet";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
     };
 

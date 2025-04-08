@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-WMHjBVkeSoQ4Naj1U7Bg9j2hcoErH1dx00BPKiom9T4=";
   };
 

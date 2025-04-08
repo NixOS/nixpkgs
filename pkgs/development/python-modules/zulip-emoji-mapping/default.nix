@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GearKite";
     repo = "zulip-emoji-mapping";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-logm5uAnLAcFqI7mUxKEO9ZmHqRkd6CFiCW4B5tqZzg=";
   };
 

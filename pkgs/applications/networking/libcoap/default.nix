@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "libcoap";
     owner = "obgm";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-QNrsR6VarZ2favvTZ9pMhVafwF2fOjYLKcyNqZyUl6s=";
   };

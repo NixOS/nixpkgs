@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "genuinetools";
     repo = "img";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0r5hihzp2679ki9hr3p0f085rafy2hc8kpkdhnd4m5k4iibqib08";
   };
 

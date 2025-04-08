@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "chfritz";
     repo = "lineselect";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-dCmLD4Wjsdlta2xsFCMj1zWQr4HWCfcWsKVmrTND4Yw=";
   };
 

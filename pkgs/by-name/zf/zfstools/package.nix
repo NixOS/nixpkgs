@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "16lvw3xbmxp2pr8nixqn7lf4504zaaxvbbdnjkv4dggwd4lsdjyg";
-    tag = "v${version}";
+    rev = "v${version}";
     repo = "zfstools";
     owner = "bdrewery";
   };

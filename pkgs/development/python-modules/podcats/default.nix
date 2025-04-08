@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "podcats";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0zjdgry5n209rv19kj9yaxy7c7zq5gxr488izrgs4sc75vdzz8xc";
   };
 

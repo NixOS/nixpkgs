@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-twOlAiLE0v7+9nWo/Gd+oiKT1umL3UnG1Xa0zDG7u7s=";
   };
 

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "mlange-42";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-JXEWnekL9Mtw0S3rI5aeO1HB9kJ7bRJDJ6EJ4ATlFeQ=";
   };
 

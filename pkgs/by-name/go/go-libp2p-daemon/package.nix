@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "libp2p";
     repo = "go-libp2p-daemon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-N/5V03HQTr7dIvMpIVRlIhEaV2f+aDF36esWMjT96HA=";
   };
 

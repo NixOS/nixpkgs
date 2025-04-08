@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "esa";
     repo = "pagmo2";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
   };
 

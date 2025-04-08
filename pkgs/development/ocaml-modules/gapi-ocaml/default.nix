@@ -19,7 +19,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "astrada";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-qlQEE8l/H22bb1VcK9YehR+9L5XepMu8JY7OLw1OIXg=";
   };
 

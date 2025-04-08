@@ -12,7 +12,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "azuwis";
     repo = "zigbee2mqtt-networkmap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-S4iUTjI+pFfa8hg1/lJSI1tl2nEIh+LO2WTYhWWLh/s=";
   };
 

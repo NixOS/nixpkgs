@@ -335,7 +335,7 @@ let
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-eHylgEbPNQ8CVLlstkeQH6jqYOKfvel1uU5ro8DkLJs=";
   };
 

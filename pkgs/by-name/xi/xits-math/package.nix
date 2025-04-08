@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alif-type";
     repo = "xits";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1x3r505dylz9rz8dj98h5n9d0zixyxmvvhnjnms9qxdrz9bxy9g1";
   };
 

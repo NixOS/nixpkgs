@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitLab {
     owner = "matsievskiysv";
     repo = "math-preview";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-P3TZ/D6D2PvwPV6alSrDEQujzgI8DhK4VOuCC0BCIFo=";
   };
 

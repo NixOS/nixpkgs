@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-mit";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-TmoLA0zLETKE+PsrGS5dce9xLQUIKwSNixRSVjbrOlk=";
   };
 

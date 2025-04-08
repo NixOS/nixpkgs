@@ -10,7 +10,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "webos-tools";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-tSnmIDDDEhhQBrjZ5bujmCaYpetTjpdCGUjKomue+Bc=";
   };
 

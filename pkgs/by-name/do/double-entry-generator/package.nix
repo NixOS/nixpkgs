@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "deb-sig";
     repo = "double-entry-generator";
     hash = "sha256-2Y8Spj1LAVZsUgChDYDCZ63pTH+nqs2ff9xcmC+gr0c=";
-    tag = "v${version}";
+    rev = "v${version}";
   };
 
   vendorHash = "sha256-Xedva9oGteOnv3rP4Wo3sOHIPyuy2TYwkZV2BAuxY4M=";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.tvdr.de/vdr.git";
-    tag = version;
+    rev = version;
     hash = "sha256-0Metur3+fQhomf+ClY9zXijNsr5wWkaqnzjUNXjsjss=";
   };
 

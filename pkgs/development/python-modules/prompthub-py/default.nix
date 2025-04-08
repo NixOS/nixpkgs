@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FA4IfhHViSL1u4pgd7jh40rEcS0BldSFDwCPG5irk1g=";
   };
 

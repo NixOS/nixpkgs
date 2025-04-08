@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mariusor";
     repo = "mpris-scrobbler";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-qjd/8Ro4wERvp8RDxyZiqWqVKwA0CX1LaoZAquw9asA=";
   };
 

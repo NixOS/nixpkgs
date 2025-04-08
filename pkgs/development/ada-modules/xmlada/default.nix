@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     name = "xmlada-${version}-src";
     owner = "AdaCore";
     repo = "xmlada";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-UMJiXSHMS8+X5gyV1nmC29gF71BFnz7LNPQnwUMD3Yg=";
   };
 

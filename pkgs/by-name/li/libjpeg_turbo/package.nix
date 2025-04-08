@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ZNqhOfZtWcMv10VWIUxn7MSy4KhW/jBrgC1tUFKczqs=";
   };
 
