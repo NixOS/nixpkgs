@@ -298,7 +298,7 @@ def update_plugins():
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
-        {'name': 'discourse-voting'},
+        {'name': 'discourse-voting', 'repo_name': "discourse-topic-voting"},
         {'name': 'discourse-yearly-review'},
     ]
 
@@ -319,8 +319,9 @@ def update_plugins():
         # https://meta.discourse.org/t/pinning-plugin-and-theme-versions-for-older-discourse-installs/156971
         # this makes sure we don't upgrade plugins to revisions that
         # are incompatible with the packaged Discourse version
+        repo_latest_commit = repo.latest_commit_sha
         try:
-            compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
+            compatibility_spec = repo.get_file('.discourse-compatibility', repo_latest_commit)
             versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
                         for [discourse_version, plugin_rev]
                         in [line.lstrip("< ").split(':')
@@ -329,12 +330,12 @@ def update_plugins():
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
             versions = list(filter(lambda ver: ver[0] >= discourse_version, versions))
             if versions == []:
-                rev = repo.latest_commit_sha
+                rev = repo_latest_commit
             else:
                 rev = versions[0][1]
                 print(rev)
         except requests.exceptions.HTTPError:
-            rev = repo.latest_commit_sha
+            rev = repo_latest_commit
 
         filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')
         if filename is None:
