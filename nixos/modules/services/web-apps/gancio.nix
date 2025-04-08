@@ -176,7 +176,11 @@ in
         mkdir -p $out/bin
         echo '#!${pkgs.runtimeShell}
         cd /var/lib/gancio/
-        exec ${lib.getExe cfg.package} ''${1:--help}
+        sudo=exec
+        if [[ "$USER" != ${cfg.user} ]]; then
+          sudo="exec /run/wrappers/bin/sudo -u ${cfg.user}"
+        fi
+        $sudo ${lib.getExe cfg.package} ''${1:--help}
         ' > $out/bin/gancio
         chmod +x $out/bin/gancio
       '')
