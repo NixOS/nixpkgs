@@ -1165,6 +1165,7 @@
   ./services/networking/jitsi-videobridge.nix
   ./services/networking/jool.nix
   ./services/networking/jotta-cli.nix
+  ./services/networking/kasmvnc.nix
   ./services/networking/kea.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
