@@ -16,11 +16,12 @@
   langgraph-checkpoint-sqlite,
   postgresql,
   postgresqlTestHook,
-  psycopg-pool,
   psycopg,
+  psycopg-pool,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  xxhash,
 
   # passthru
   nix-update-script,
@@ -55,19 +56,17 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    postgresql
-    postgresqlTestHook
-  ];
-
-  checkInputs = [
     langgraph-checkpoint
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
+    postgresql
+    postgresqlTestHook
     psycopg
     psycopg-pool
     pytest-asyncio
     pytest-mock
+    pytestCheckHook
+    xxhash
   ];
 
   preCheck = ''
