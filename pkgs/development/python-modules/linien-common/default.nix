@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   importlib-metadata,
-  numpy,
+  numpy_1,
   rpyc,
   scipy,
   appdirs,
@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   dependencies = [
     importlib-metadata
-    numpy
+    numpy_1
     rpyc
-    scipy
+    (scipy.override { runtimeNumpy = numpy_1; })
     appdirs
   ];
 
