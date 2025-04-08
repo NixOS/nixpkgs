@@ -33,18 +33,18 @@
 }:
 
 let
-  openrct2-version = "0.4.20";
+  openrct2-version = "0.4.21";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.5.1";
+  objects-version = "1.6.1";
   openmsx-version = "1.6";
   opensfx-version = "1.0.5";
   title-sequences-version = "0.4.14";
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
-    hash = "sha256-xrgAy817G5xwfzZX+8Xy2508/Zwq32aKzMndus14Qd8=";
+    hash = "sha256-aCkYZjDlLDMrakhH67k2xUmlIvytr49eXkV5xMkaRFA=";
   };
   openmsx = fetchurl {
     url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-G/uD3t8m7C74pjSA6dbz4gzu9CwEpmyFwtYpoFIiRjM=";
+    hash = "sha256-exG6pXqok/mrDSCtqIs6VS2WwCr6XlP1gHJA1FgPOiM=";
   };
 
   nativeBuildInputs = [

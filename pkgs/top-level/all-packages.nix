@@ -8928,7 +8928,7 @@ with pkgs;
   };
 
   yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
-    jre = jdk17;
+    jre = jdk21;
   };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
@@ -12424,6 +12424,7 @@ with pkgs;
     withMysql = false;
     withNotification = false;
     withIcingadb = false;
+    withPerfdata = false;
   };
 
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });

@@ -7480,6 +7480,8 @@ self: super: with self; {
 
   langgraph-cli = callPackage ../development/python-modules/langgraph-cli { };
 
+  langgraph-prebuilt = callPackage ../development/python-modules/langgraph-prebuilt { };
+
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
 
   langid = callPackage ../development/python-modules/langid { };
@@ -8244,9 +8246,7 @@ self: super: with self; {
 
   macaroonbakery = callPackage ../development/python-modules/macaroonbakery { };
 
-  macfsevents = callPackage ../development/python-modules/macfsevents {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
-  };
+  macfsevents = callPackage ../development/python-modules/macfsevents { };
 
   macholib = callPackage ../development/python-modules/macholib { };
 
@@ -17098,6 +17098,8 @@ self: super: with self; {
   textual-dev = callPackage ../development/python-modules/textual-dev { };
 
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
+
+  textual-image = callPackage ../development/python-modules/textual-image { };
 
   textual-serve = callPackage ../development/python-modules/textual-serve { };
 
