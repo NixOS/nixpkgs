@@ -181,14 +181,14 @@
   "module-system-lib-evalModules-return-value-extendModules": [
     "index.html#module-system-lib-evalModules-return-value-extendModules"
   ],
-  "module-system-lib-evalModules-return-value-_module": [
-    "index.html#module-system-lib-evalModules-return-value-_module"
+  "module-system-lib-evalModules-return-value--module": [
+    "index.html#module-system-lib-evalModules-return-value--module"
   ],
-  "module-system-lib-evalModules-return-value-_type": [
-    "index.html#module-system-lib-evalModules-return-value-_type"
+  "module-system-lib-evalModules-return-value--type": [
+    "index.html#module-system-lib-evalModules-return-value--type"
   ],
-  "module-system-lib-evalModules-return-value-_configurationClass": [
-    "index.html#module-system-lib-evalModules-return-value-_configurationClass"
+  "module-system-lib-evalModules-return-value--configurationClass": [
+    "index.html#module-system-lib-evalModules-return-value--configurationClass"
   ],
   "part-stdenv": ["index.html#part-stdenv"],
   "chap-stdenv": ["index.html#chap-stdenv"],
