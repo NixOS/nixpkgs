@@ -1,9 +1,9 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
+  mkYaziPlugin,
 }:
-stdenvNoCC.mkDerivation {
+mkYaziPlugin {
   pname = "glow.yazi";
   version = "0-unstable-2025-02-22";
 
@@ -13,14 +13,6 @@ stdenvNoCC.mkDerivation {
     rev = "c76bf4fb612079480d305fe6fe570bddfe4f99d3";
     hash = "sha256-DPud1Mfagl2z490f5L69ZPnZmVCa0ROXtFeDbEegBBU=";
   };
-
-  installPhase = ''
-    runHook preInstall
-
-    cp -r . $out
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Glow preview plugin for yazi.";

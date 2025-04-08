@@ -1,9 +1,9 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
+  mkYaziPlugin,
 }:
-stdenvNoCC.mkDerivation {
+mkYaziPlugin {
   pname = "miller.yazi";
   version = "0-unstable-2024-08-28";
 
@@ -13,14 +13,6 @@ stdenvNoCC.mkDerivation {
     rev = "40e02654725a9902b689114537626207cbf23436";
     hash = "sha256-GXZZ/vI52rSw573hoMmspnuzFoBXDLcA0fqjF76CdnY=";
   };
-
-  installPhase = ''
-    runHook preInstall
-
-    cp -r . $out
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Miller, now in yazi.";
