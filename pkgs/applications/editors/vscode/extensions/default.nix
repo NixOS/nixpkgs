@@ -2105,8 +2105,8 @@ let
           publisher = "github";
           name = "copilot";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
-          version = "1.293.0";
-          hash = "sha256-LwgINocPHA9jL6pMw40BgaZ3lOUwWPoOJWTDr+27h5Q=";
+          version = "1.297.0";
+          hash = "sha256-UVL0Yf8MSY7ETOxmEK+dljrOQL9ctUWVhbYdr0v00b0=";
         };
 
         meta = {
