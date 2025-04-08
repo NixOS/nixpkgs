@@ -219,6 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
       $ETN 'test_websocket_basic'  # flakey
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )
 
