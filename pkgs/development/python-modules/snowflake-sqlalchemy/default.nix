@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  six,
   snowflake-connector-python,
   sqlalchemy,
 }:
@@ -11,6 +12,7 @@ buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
   version = "1.7.3";
   pyproject = true;
+  build-system = [ hatchling ];
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
@@ -19,9 +21,8 @@ buildPythonPackage rec {
     hash = "sha256-E3UnlsGaQPlxHSgBVGrG8pGCA8fE7yN5x9eidbMQ10w=";
   };
 
-  build-system = [ hatchling ];
-
   dependencies = [
+    six
     snowflake-connector-python
     sqlalchemy
   ];
