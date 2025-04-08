@@ -22,9 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-8hNuF5tD1PwdIJB0q3wxDOGDcppo0ac+zol3AHWGv0s=";
 
-  passthru.updateScript = lib.mkUpdateScript {
-    extraFetchers = [ fetchFromSourcehut ];
-  };
+  passthru.updateScript = ./update.sh;
 
   RUSTC_BOOTSTRAP = true;
   buildInputs = [ sqlite ];
