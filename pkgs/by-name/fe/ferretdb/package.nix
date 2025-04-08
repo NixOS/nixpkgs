@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ferretdb";
-  version = "1.24.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    hash = "sha256-WMejspnk2PvJhvNGi4h+DF+fzipuOMcS1QWim5DnAhQ=";
+    hash = "sha256-vUkP5Gdv1DeaKUaMzn3iwnMnxaj76VlpdEzhLRgTNpk=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
-  vendorHash = "sha256-GT6e9yd6LF6GFlGBWVAmcM6ysB/6cIGLbnM0hxfX5TE=";
+  vendorHash = "sha256-tPDnbrVeH42zS+mXr8FdJXz9JK3++qNnAE9Z2MMm7lQ=";
 
   env.CGO_ENABLED = 0;
 
