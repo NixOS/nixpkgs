@@ -3,8 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchurl,
-  testers,
-  fishnet,
+  versionCheckHook,
 }:
 
 let
@@ -42,9 +41,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-aUSppXw0UDqCDX7YX+sYNEcmiABXDn0nrow0H9UjpaA=";
 
-  passthru.tests.version = testers.testVersion {
-    package = fishnet;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";
