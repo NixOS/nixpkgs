@@ -186,7 +186,7 @@ stdenv.mkDerivation {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Desktop File
       substituteInPlace $out/share/applications/Zoom.desktop \
-          --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
+          --replace-fail Exec={/usr/bin/,}zoom
 
       for i in aomhost zopen ZoomLauncher ZoomWebviewHost; do
         if [ -f $out/opt/zoom/$i ]; then
