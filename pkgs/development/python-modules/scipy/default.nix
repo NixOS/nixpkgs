@@ -39,6 +39,10 @@
 
   # Reverse dependency
   sage,
+
+  # Scipy built against numpy 2 results in a wheel that is compatible at runtime with
+  # numpy 1 AND 2. This enables dependents which only support numpy 1.x to work.
+  runtimeNumpy ? numpy,
 }:
 
 let
@@ -101,6 +105,7 @@ buildPythonPackage {
       pythran
       pkg-config
       setuptools
+      numpy
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Minimal version required according to:
@@ -118,7 +123,7 @@ buildPythonPackage {
     xsimd
   ];
 
-  dependencies = [ numpy ];
+  dependencies = [ runtimeNumpy ];
 
   __darwinAllowLocalNetworking = true;
 
