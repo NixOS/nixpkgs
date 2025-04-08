@@ -19,14 +19,14 @@ let
     sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
   version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JhllThFiHeC/5AAFwwZQ0mgbENIWP1cA7aD01DeDVL8=";
     fetchSubmodules = true;
   };
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
   meta = with lib; {
@@ -62,4 +62,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "fishnet";
   };
-}
+})
