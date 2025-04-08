@@ -17,6 +17,7 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
         };
+        patches = [];
         nativeBuildInputs = with pySelf; [
           setuptools
         ];
@@ -45,6 +46,7 @@ let
           "test_app"
           "test_openapi_yaml_behind_proxy"
           "test_swagger_ui"
+          "test_invalid_type"
         ];
       });
       flask = pySuper.flask.overridePythonAttrs (o: rec {
