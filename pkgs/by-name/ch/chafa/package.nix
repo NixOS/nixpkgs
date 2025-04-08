@@ -16,7 +16,6 @@
   docbook_xml_dtd_412,
   docbook_xsl,
   glib,
-  Foundation,
 }:
 
 stdenv.mkDerivation rec {
