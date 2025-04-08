@@ -107,7 +107,7 @@ class Repo:
         )
 
     def flatten_repr(self) -> dict:
-        return {"fetcher": self.fetcher, "attrs": {**({"hash": self.hash} if hasattr(self, "hash") else {}), **self.args}}
+        return {"fetcher": self.fetcher, "args": {**({"hash": self.hash} if hasattr(self, "hash") else {}), **self.args}}
 
     def flatten(self, path: str) -> dict:
         out = {path: self.flatten_repr()}
