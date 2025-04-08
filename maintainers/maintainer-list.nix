@@ -9926,6 +9926,12 @@
     github = "the-furry-hubofeverything";
     githubId = 53921912;
   };
+  hucancode = {
+    email = "hucancode@gmail.com";
+    github = "hucancode";
+    githubId = 15852849;
+    name = "Bang Nguyen Huu";
+  };
   hufman = {
     email = "hufman@gmail.com";
     github = "hufman";
