@@ -370,9 +370,9 @@ in
     };
   };
 
-  openssl_3_4 = common {
-    version = "3.4.1";
-    hash = "sha256-ACotazC1i/S+pGxDvdljZar42qbEKHgqpP7uBtoZffM=";
+  openssl_3_5 = common {
+    version = "3.5.0";
+    hash = "sha256-NE0KefGpsIApsHROLMQBpD+ckKzRBE0JpTC0iFqOn8A=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -383,10 +383,13 @@ in
 
       (
         if stdenv.hostPlatform.isDarwin then
-          ./3.4/use-etc-ssl-certs-darwin.patch
+          ./3.5/use-etc-ssl-certs-darwin.patch
         else
-          ./3.4/use-etc-ssl-certs.patch
+          ./3.5/use-etc-ssl-certs.patch
       )
+
+      # can be dropped again with 3.5.1, see: https://github.com/openssl/openssl/issues/27282
+      ./3.5/quic_accept.patch
     ];
 
     withDocs = true;
