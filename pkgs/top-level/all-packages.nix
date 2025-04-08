@@ -5674,8 +5674,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation IOBluetooth;
   };
 
-  wireguard-go = callPackage ../tools/networking/wireguard-go { };
-
   wring = nodePackages.wring;
 
   wyrd = callPackage ../tools/misc/wyrd {
