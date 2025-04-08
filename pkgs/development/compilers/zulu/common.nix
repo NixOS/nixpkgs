@@ -174,7 +174,7 @@ let
     # fixupPhase is moving the man to share/man which breaks it because it's a
     # relative symlink.
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
+      ln -nsf $bundle/Contents/Home/man $out/share/man
     '';
 
     passthru =
