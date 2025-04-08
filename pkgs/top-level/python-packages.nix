@@ -12485,6 +12485,8 @@ self: super: with self; {
 
   pyro5 = callPackage ../development/python-modules/pyro5 { };
 
+  pyroaring = callPackage ../development/python-modules/pyroaring { };
+
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
   pyroma = callPackage ../development/python-modules/pyroma { };
