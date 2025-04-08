@@ -2,23 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  yq,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm-provision";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "kanidm-provision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pgPjkj0nMb5j3EvyJTTDpfmh0WigAcMzoleF5EOqBAM=";
+    hash = "sha256-+NQJEAJ0DqKEV1cYZN7CLzGoBJNUL3SQAMmxRQG5DMI=";
   };
 
+  postPatch = ''
+    tomlq -ti '.package.version = "${finalAttrs.version}"' Cargo.toml
+  '';
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-kbctfPhEF1PdVLjE62GyLDzjOnZxH/kOWUS4x2vd/+8=";
+  cargoHash = "sha256-uo/TGyfNChq/t6Dah0HhXhAwktyQk0V/wewezZuftNk=";
+
+  nativeBuildInputs = [
+    yq # for `tomlq`
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
