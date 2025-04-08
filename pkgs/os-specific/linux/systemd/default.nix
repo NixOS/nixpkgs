@@ -214,16 +214,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-<<<<<<< HEAD
-    rev = "v${version}";
-    hash = "sha256-mn/JB/nrOz2TOobu2d+XBH2dVH3vn/HPvWN4Zz6s+SM=";
-||||||| 774ee2926ccc
-    rev = "v${version}";
-    hash = "sha256-GvRn55grHWR6M+tA86RMzqinuXNpPZzRB4ApuGN/ZvU=";
-=======
     tag = "v${version}";
-    hash = "sha256-GvRn55grHWR6M+tA86RMzqinuXNpPZzRB4ApuGN/ZvU=";
->>>>>>> origin/staging-next
+    hash = "sha256-mn/JB/nrOz2TOobu2d+XBH2dVH3vn/HPvWN4Zz6s+SM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
