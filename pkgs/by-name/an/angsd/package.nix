@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "ANGSD";
     repo = "angsd";
     sha256 = "sha256-Ppxgy54pAnqJUzNX5c12NHjKTQyEEcPSpCEEVOyZ/LA=";
-    tag = version;
+    rev = version;
   };
 
   patches = [

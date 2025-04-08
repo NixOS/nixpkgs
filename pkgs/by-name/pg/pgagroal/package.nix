@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "agroal";
     repo = "pgagroal";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-bgJvGJ35RdFopW88o+H1DLpG70anP197y6xrpRRrxUA=";
   };
 

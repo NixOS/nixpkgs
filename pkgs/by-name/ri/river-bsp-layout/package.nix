@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "areif-dev";
     repo = "river-bsp-layout";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/R9v3NGsSG4JJtdk0sJX7ahRolRmJMwMP48JRmLffXc=";
   };
 

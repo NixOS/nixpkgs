@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "arsv";
     repo = "u2ps";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-sa0CL47PwYVDykxzF8KeWhz7HXAX6jZ0AcfecD+aFyg=";
   };
 

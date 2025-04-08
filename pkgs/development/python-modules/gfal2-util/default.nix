@@ -15,7 +15,7 @@
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-util";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3JbJgKD17aYkrB/aaww7IQU8fLFrTCh868KWlLPxmlk=";
   };
 

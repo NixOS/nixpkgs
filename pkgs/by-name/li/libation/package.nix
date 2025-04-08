@@ -17,7 +17,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-FD3f2Cba1xN15BloyRQ/m/vDovhN8x0AlfeJk+LGVV4=";
   };
 

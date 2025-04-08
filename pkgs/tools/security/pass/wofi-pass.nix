@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "schmidtandreas";
     repo = "wofi-pass";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-oRGDhr28UQjr+g//fWcLKWXqKSsRUWtdh39UMFSaPfw=";
   };
 

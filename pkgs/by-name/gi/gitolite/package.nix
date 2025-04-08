@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-/VBu+aepIrxWc2padPa/WoXbIdKfIwqmA/M8d1GE5FI=";
   };
 

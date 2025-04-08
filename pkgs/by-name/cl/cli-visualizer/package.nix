@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dpayne";
     repo = "cli-visualizer";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "003mbbwsz43mg3d7llphpypqa9g7rs1p1cdbqi1mbc2bfrc1gcq2";
   };
 

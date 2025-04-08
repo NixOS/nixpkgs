@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-opensaml.git";
-    tag = version;
+    rev = version;
     sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
   };
 

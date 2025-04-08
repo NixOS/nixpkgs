@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "qt5";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9w9E0RWwW3scbmOOXdOXj22LR65a6XBHDkC8eimAfUs=";
   };
 

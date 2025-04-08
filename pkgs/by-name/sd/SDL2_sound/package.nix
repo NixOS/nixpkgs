@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "SDL_sound";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-N2znqy58tMHgYa07vEsSedWLRhoJzDoINcsUu0UYLnA=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cpcsdk";
     repo = "idsk";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rYClWq1Nl3COoG+eOJyFDTvBSzpHpGminU4bndZs6xc=";
   };
 

@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "pdonadeo";
     repo = "ocaml-lens";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1k23n7pa945fk6nbaq6nlkag5kg97wsw045ghz4gqp8b9i2im3vn";
   };
 

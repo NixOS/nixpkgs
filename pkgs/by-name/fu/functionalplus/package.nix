@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Dobiasd";
     repo = "FunctionalPlus";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-eKCOi5g8YdKgxaI/mLlqB2m1zwrU9DOSrQF+PW2DBBQ=";
   };
 

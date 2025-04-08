@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wobcom";
     repo = "iperf3d";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pMwGoBgFRVY+H51k+YCamzHgBoaJVwEVqY0CvMPvE0w=";
   };
 

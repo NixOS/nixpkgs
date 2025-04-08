@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-qn4hQKl3E36q7HsgOVWz+eRceKGysyy5rHXzQnOc7JY=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "beeender";
     repo = "glrnvim";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-n3t3s3fzmBGXRDydYxNJ13itKul8dyLNW6HP8Di4hY0=";
   };
 

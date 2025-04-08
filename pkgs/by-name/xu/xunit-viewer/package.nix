@@ -17,7 +17,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "lukejpreston";
     repo = "xunit-viewer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-n9k1Z/wofExG6k/BxtkU8M+Lo3XdCgCh8VFj9jcwL1Q=";
   };
 

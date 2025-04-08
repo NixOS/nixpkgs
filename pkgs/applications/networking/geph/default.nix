@@ -34,7 +34,7 @@ in
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = pname;
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
     };
 
@@ -101,7 +101,7 @@ in
                 src = fetchFromGitHub {
                   owner = "evanw";
                   repo = "esbuild";
-                  tag = "v${version}";
+                  rev = "v${version}";
                   hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
                 };
                 vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";

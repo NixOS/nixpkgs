@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-LXxr/xqBHG7a0rOBrb8IMZ4IjZak3NsBw40Qf+z1fic=";
   };
 

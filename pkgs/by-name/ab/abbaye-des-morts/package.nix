@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-IU7E1zmeif9CdoBxzmh7MG2jElGGnEZyKnK7eYFrjsQ=";
   };
 

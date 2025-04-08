@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-RjFMLInulyynrmyAg6Km/u9HGfcYeerkou0gQwCdhsA=";
   };
 

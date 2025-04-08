@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NFFT";
     repo = "nfft";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-HR8ME9PVC+RAv1GIgV2vK6eLU8Wk28+rSzbutThBv3w=";
   };
 

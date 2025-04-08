@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sergiou87";
     repo = "open-supaplex";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
   };
 

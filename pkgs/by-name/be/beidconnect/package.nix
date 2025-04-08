@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "fts-beidconnect";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-xkBldXOlgLMgrvzm7ajXzJ92mpXrxHD1RX4DeBxU3kk=";
   };
 

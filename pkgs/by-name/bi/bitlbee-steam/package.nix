@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   pname = "bitlbee-steam";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    rev = "v${version}";
     owner = "bitlbee";
     repo = "bitlbee-steam";
     sha256 = "121r92mgwv445wwxzh35n19fs5k81ihr0j19k256ia5502b1xxaq";

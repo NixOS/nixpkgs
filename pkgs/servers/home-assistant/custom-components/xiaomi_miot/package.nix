@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "al-one";
     repo = "hass-xiaomi-miot";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2qUzLGFXbBq5m+ecSQScC2PHeI6kz6CDeRAjyVu4oWk=";
   };
 

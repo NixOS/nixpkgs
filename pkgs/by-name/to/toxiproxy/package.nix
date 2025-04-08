@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "toxiproxy";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-CqJr3h2n+fzN6Ves38H7fYXd5vlpDVfF3kg4Tr8ThPc=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
-    tag = version;
+    rev = version;
     hash = "sha256-oKEUddzg7Gt3uu6x9D65JX0PvuC59r7Psb9VZz3+nCc=";
   };
 

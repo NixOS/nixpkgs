@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "newrelic";
     repo = "infrastructure-agent";
-    tag = version;
+    rev = version;
     hash = "sha256-odB40XRZyFuHX82RzxIvW3SAwglOyYRiApWUfRhOEmk=";
   };
 

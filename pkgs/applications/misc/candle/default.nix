@@ -14,7 +14,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Denvi";
     repo = "Candle";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1gpx08gdz8awbsj6lsczwgffp19z3q0r2fvm72a73qd9az29pmm0";
   };
 

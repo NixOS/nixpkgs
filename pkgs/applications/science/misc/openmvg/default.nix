@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vG+tW9Gl/DAUL8DeY+rJVDJH/oMPH3XyZMUgzjtwFv0=";
   };
 

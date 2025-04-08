@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pkomiske";
     repo = "Wasserstein";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-s9en6XwvO/WPsF7/+SEmGePHZQgl7zLgu5sEn4nD9YE=";
   };
 

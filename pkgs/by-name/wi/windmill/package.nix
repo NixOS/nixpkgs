@@ -49,7 +49,7 @@ let
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9BtItmqyW4NbG4istssAYn4CWlfYAv33CE1enL+5LtE=";
   };
 in

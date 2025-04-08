@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "node-opcua";
     repo = "opcua-commander";
-    tag = version;
+    rev = version;
     hash = "sha256-7KYwIdrhlvGR9RHZBfMFOcBa+opwx7Q/crCdvwZD6Y8=";
   };
 

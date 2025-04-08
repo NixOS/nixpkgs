@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cyberark";
     repo = "summon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-nAjaZh0bnGBZh2wK78M4gg8BGsM6kBQ8MNvfPI7TIOg=";
   };
 

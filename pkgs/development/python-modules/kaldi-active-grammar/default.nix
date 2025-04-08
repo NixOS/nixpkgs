@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "daanzu";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0lilk6yjzcy31avy2z36bl9lr60gzwhmyqwqn8akq11qc3mbffsk";
   };
 

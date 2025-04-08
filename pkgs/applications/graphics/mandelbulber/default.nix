@@ -25,7 +25,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
-    tag = version;
+    rev = version;
     sha256 = "sha256-amNNRuuk7qtcyXUVLEW71yEETExgKw48HeQQyxbi8BE=";
   };
 

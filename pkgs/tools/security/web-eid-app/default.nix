@@ -16,7 +16,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UqHT85zuoT/ISFP2qgG2J1518eGEvm5L96ntZ/lx9BE=";
     fetchSubmodules = true;
   };

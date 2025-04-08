@@ -12,7 +12,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-eSHeHBzDvzsDAck0zexwR8drasisvlQNTeowv92E2uc=";
   };
 

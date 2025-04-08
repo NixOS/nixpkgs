@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kreijack";
     repo = "xlibinput_calibrator";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MvlamN8WSER0zN9Ru3Kr2MFARD9s7PYKkRtyD8s6ZPI=";
   };
 

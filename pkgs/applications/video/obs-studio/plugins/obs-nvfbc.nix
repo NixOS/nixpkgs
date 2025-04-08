@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "fzwoch";
     repo = "obs-nvfbc";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-AJ3K0O1vrixskn+/Tpg7LsgRO8N4sgDo1Y6gg3CwGVo=";
   };
 

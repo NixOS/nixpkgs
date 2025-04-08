@@ -20,7 +20,7 @@ buildPythonApplication rec {
     domain = "code.ungleich.ch";
     owner = "ungleich-public";
     repo = "cdist";
-    tag = version;
+    rev = version;
     hash = "sha256-lIx0RtGQJdY2e00azI9yS6TV+5pCegpKOOD0dQmgMqA=";
   };
 

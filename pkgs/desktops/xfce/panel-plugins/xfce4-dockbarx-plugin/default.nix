@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "xfce4-dockbarx-plugin";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-ZxaWORqA8LiM4CzakxClg5C6AsyHrzCGydgboCrC45g=";
   };
 

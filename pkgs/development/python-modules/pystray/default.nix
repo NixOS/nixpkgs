@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pystray";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CZhbaXwKFrRBEomzfFPMQdMkTOl5lbgI64etfDRiRu4=";
   };
 

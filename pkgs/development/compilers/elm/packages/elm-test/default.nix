@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "rtfeldman";
     repo = "node-test-runner";
-    tag = version;
+    rev = version;
     hash = "sha256-y9ejNZHtgRtZCKE1myH+LwZMOaPdG9for0zCH7xGSR4=";
   };
 

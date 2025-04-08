@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "fileshelter";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "07n70wwqj7lqdxs3wya1m8bwg8l6lgmmlfpwyv3r3s4dfzb1b3ka";
   };
 

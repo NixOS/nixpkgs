@@ -17,7 +17,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "veraPDF";
     repo = "veraPDF-apps";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2g16PJdbC4OgFzLonfZgE7LRw2dKGjLCb2AYvrr8lxA=";
   };
 

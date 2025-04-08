@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "twitchtv";
     repo = "twirp";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-p3gHVHGBHakOOQnJAuMK7vZumNXN15mOABuEHUG0wNs=";
   };
 

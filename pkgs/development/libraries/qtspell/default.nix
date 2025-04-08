@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "manisandro";
     repo = "qtspell";
-    tag = version;
+    rev = "${version}";
     hash = "sha256-yaR3eCUbK2KTpvzO2G5sr+NEJ2mDnzJzzzwlU780zqU=";
   };
 

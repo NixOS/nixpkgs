@@ -9,7 +9,7 @@ buildNimSbom (finalAttrs: {
     domain = "git.syndicate-lang.org";
     owner = "ehmry";
     repo = "preserves-nim";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-A1v72ToSLEEUZTNcPl82t8OKvr5heQCWVWYEJh362Eo=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "muffinmad";
     repo = "pidgin-im-gnome-shell-extension";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1jyg8r0s1v83sgg6y0jbsj2v37mglh8rvd8vi27fxnjq9xmg8kpc";
   };
 

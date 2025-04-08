@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = "zig";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     inherit hash;
   };
 

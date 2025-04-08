@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "nigoroll";
     repo = "libvmod-dynamic";
-    tag = "v${version}";
+    rev = "v${version}";
     inherit sha256;
   };
 

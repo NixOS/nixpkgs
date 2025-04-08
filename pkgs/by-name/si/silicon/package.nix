@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "silicon";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-lwwbjSXW5uonJNZTAqTK14Ib4QDOD4puxY2CsiJk4/Q=";
   };
 

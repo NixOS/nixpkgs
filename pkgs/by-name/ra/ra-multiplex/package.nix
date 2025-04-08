@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pr2502";
     repo = "ra-multiplex";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-aBrn9g+MGXLAsOmHqw1Tt6NPFGJTyYv/L9UI/vQU4i8=";
   };
 

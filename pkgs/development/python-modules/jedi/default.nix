@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
     fetchSubmodules = true;
   };

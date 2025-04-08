@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-e4eF09xwX2Qf/y9YfOGy7p6yhDFnKGI5cnrQy3o8c98=";
   };
 

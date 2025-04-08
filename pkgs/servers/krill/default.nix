@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3pkDu20vgzslJcK5KQH+GY+jnimEZgm+bQxy8QMUeCk=";
   };
 

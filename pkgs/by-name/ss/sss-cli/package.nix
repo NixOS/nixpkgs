@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dsprenkels";
     repo = "sss-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9Wht+t48SsWpj1z2yY6P7G+h9StmuqfMdODtyPffhak=";
   };
 

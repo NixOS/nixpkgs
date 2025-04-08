@@ -13,7 +13,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "inkle";
     repo = "ink";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha512-aUjjT5Qf64wrKRn1vkwJadMOBWMkvsXUjtZ7S3/ZWAh1CCDkQNO84mSbtbVc9ny0fKeJEqaDX2tJNwq7pYqAbA==";
   };
 

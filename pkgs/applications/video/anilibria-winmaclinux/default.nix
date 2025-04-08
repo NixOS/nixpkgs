@@ -26,7 +26,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
-    tag = version;
+    rev = version;
     hash = "sha256-F+5R1nSmZuHKUe9bAEVwOru07SVs8tIQlbDC6Ip+zy4=";
   };
 

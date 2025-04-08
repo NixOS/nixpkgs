@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "R0FrRRQRe0tWrHUoU4PPwOgIsltUEImEMTXL79ISfRE=";
     fetchSubmodules = true;
   };

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "igorshubovych";
     repo = "markdownlint-cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1CQVj2iFywimK9sBJ60u9xH5qm/stEOA0yAHcUSAdY8=";
   };
 

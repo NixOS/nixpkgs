@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nikolaydubina";
     repo = "go-cover-treemap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-MSkPot8uYcr8pxsIkJh2FThVK9xpzkN9Y69KeiQnQlA=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "orm";
-    tag = version;
+    rev = version;
     hash = "sha256-nlKEWdqttFnjBnXutlxTy9oILqFzKHKKPJpTtCUbJ5k=";
   };
 

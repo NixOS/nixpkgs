@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bitrise-io";
     repo = "bitrise";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-j7Gbr+j/5RnM7S6eRZZkmlXgY+vBgfTJ5ZaLz8o7pww=";
   };
 

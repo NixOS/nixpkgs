@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "yusukebe";
     repo = "gh-markdown-preview";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-5jxGFZqYkhFQ4Rx4jbI+fes9ezsuXa+VZowk5Jzhi3I=";
   };
 

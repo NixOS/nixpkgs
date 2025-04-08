@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "cdogs-sdl";
     owner = "cxong";
-    tag = version;
+    rev = version;
     sha256 = "sha256-I4v13CPdA2KYwhlIJjz+qgKe2EoXUtV6iWeadrg4Usc=";
   };
 

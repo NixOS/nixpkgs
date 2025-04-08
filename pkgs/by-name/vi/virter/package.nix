@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "LINBIT";
     repo = "virter";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zEdG1n+tsDzyMTHBCikZaMalEhqdQiQvcsbElrbd1H4=";
   };
 

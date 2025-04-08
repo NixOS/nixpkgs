@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Baldomo";
     repo = "open-in-mpv";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mr1c2L5D1v+4VoPA4i5q7/RCdWLLZ1UfTGayiG5Nm6M=";
   };
 

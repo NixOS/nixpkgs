@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cascremers";
     repo = "pdfdiff";
-    tag = version;
+    rev = version;
     hash = "sha256-NPki/PFm0b71Ksak1mimR4w6J2a0jBCbQDTMQR4uZFI=";
   };
 

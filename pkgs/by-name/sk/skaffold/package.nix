@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-iw9SYoepa2QjKnSaqFkIxuU5dcsLcR7S13kPh5S2Jyw=";
   };
 

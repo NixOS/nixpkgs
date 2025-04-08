@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QAdwaitaDecorations";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-ZU3cwFwQECh4Z6YcTzD2WooZmJ2nSUABYft3dfakSuY=";
   };
 

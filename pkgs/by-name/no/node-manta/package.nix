@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-manta";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Uj3fNzeERiO++sW2uyAbtfN/1Ed6uRVBBvCecncq/QY=";
   };
 

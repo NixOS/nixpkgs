@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mntmn";
     repo = "Firedecor";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-7or8HkmIZnLpXEZzUhJ3u8SIPfIQFgn32Ju/5OzK06Y=";
   };
 

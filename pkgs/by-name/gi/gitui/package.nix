@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = "gitui";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/persistent-cache-cpp";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-bOABrRSy5Mzeaqoc5ujcGXyBAaCJLv/488M7fkr0npE=";
   };
 

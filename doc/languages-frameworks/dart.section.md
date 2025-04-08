@@ -39,7 +39,7 @@ buildDartApplication rec {
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
-    tag = version;
+    rev = version;
     hash = "sha256-U6enz8yJcc4Wf8m54eYIAnVg/jsGi247Wy8lp1r1wg4=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     name = "freebayes-${version}-src";
     owner = "ekg";
     repo = "freebayes";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "035nriknjqq8gvil81vvsmvqwi35v80q8h1cw24vd1gdyn1x7bys";
     fetchSubmodules = true;
   };

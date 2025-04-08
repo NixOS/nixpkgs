@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "guetzli";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1wy9wfvyradp0aigfv8yijvj0dgb5kpq2yf2xki15f605jc1r5dm";
   };
   nativeBuildInputs = [ pkg-config ];

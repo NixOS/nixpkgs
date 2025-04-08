@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SG5TzozKvYc7qcEPJgiEtsxgzdZbbJt90lmuUbCPyv0=";
   };
   postUnpack = ''

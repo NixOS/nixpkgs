@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "Bibata_Cursor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-kIKidw1vditpuxO1gVuZeUPdWBzkiksO/q2R/+DUdEc=";
   };
 

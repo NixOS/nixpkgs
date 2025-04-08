@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus-pinyin";
-    tag = version;
+    rev = version;
     hash = "sha256-8nM/dEjkNhQNv6Ikv4xtRkS3mALDT6OYC1EAKn1zNtI=";
   };
 

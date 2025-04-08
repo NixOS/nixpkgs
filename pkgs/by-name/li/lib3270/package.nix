@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PerryWerneck";
     repo = "lib3270";
-    tag = version;
+    rev = version;
     hash = "sha256-w6Bg+TvSDAuZwtu/nyAIuq6pgheM5nXtfuryECfnKng=";
   };
 

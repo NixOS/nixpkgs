@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "optiv";
     repo = "Freeze";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BE5MvCU+NfEccauOdWNty/FwMiWwLttPh7eE9+UzEMY=";
   };
 

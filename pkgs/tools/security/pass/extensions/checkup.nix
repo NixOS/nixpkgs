@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "etu";
     repo = pname;
-    tag = version;
+    rev = version;
     sha256 = "1p65yxr00k35g4bnagszp8i03pmhnrcmipgrdsawps2ba8faqp6r";
   };
 

@@ -35,7 +35,7 @@ clangStdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
-    tag = version;
+    rev = version;
     hash = "sha256-qSPuEVW+FwC9OJa+dseIy4/2bhVdTryJSJNSpes9tpY=";
   };
 

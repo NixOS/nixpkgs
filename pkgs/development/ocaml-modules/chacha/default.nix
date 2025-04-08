@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "abeaumont";
     repo = "ocaml-chacha";
-    tag = version;
+    rev = version;
     hash = "sha256-PmeiFloU0k3SqOK1VjaliiCEzDzrzyMSasgnO5fJS1k=";
   };
 

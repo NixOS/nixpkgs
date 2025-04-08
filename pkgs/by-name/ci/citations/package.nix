@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-aJp9UrfRXAsnHFGgMTHGRgCvlPEa62r9/0hEp5YKRzE=";
   };
 

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Inlyne-Project";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
   };
 

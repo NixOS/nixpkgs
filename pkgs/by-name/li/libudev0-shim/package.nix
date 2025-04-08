@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "archlinux";
     repo = "libudev0-shim";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1460qm6rp1cqnns39lj24z7191m8sbpvbjabqbzb55dkdd2kw50z";
   };
 

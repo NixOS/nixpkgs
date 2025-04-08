@@ -31,7 +31,7 @@ let
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
-      tag = version;
+      rev = version;
       hash = "sha256-o9VAmZl0dJfap5WccDXUWS4PSKvb/DYmeZotKZ1v/ps=";
     };
 

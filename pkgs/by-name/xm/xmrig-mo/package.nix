@@ -11,7 +11,7 @@ xmrig.overrideAttrs (oldAttrs: rec {
   src = fetchFromGitHub {
     owner = "MoneroOcean";
     repo = "xmrig";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-pJ4NTdpWCt7C98k1EqGoiU0Lup25Frdm1kFJuwTfXgY=";
   };
 

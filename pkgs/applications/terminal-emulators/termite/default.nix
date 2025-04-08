@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thestinger";
     repo = "termite";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0hp1x6lj098m3jgna274wv5dv60lnzg22297di68g4hw9djjyd2k";
     fetchSubmodules = true;
   };

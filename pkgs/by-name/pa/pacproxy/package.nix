@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "williambailey";
     repo = "pacproxy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oDSptPihrDIiTCgcP4t2J3vJBNGMViyPAAmBv4ynLNU=";
   };
 

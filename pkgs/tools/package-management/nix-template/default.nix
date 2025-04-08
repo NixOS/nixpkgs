@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     name = "${pname}-${version}-src";
     owner = "jonringer";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
 

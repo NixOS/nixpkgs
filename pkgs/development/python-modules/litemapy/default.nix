@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SmylerMC";
     repo = "litemapy";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-mGRnrFfrg0VD9pXs0WOuiP6QnYyu0Jbv/bqCWtkOie0=";
   };
 

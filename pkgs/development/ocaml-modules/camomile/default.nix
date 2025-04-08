@@ -20,7 +20,7 @@ let
           src = fetchFromGitHub {
             owner = "yoriyuki";
             repo = "camomile";
-            tag = version;
+            rev = version;
             sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
           };
 
@@ -42,7 +42,7 @@ let
       src = fetchFromGitHub {
         owner = "ocaml-community";
         repo = "camomile";
-        tag = "v${version}";
+        rev = "v${version}";
         hash = "sha256-HklX+VPD0Ta3Knv++dBT2rhsDSlDRH90k4Cj1YtWIa8=";
       };
 

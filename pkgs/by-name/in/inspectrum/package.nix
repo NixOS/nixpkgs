@@ -17,7 +17,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "miek";
     repo = "inspectrum";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-yY2W2hQpj8TIxiQBSbQHq0J16n74OfIwMDxFt3mLZYc=";
   };
 

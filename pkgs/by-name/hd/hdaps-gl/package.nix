@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-thinkpad";
     repo = "hdaps-gl";
-    tag = version;
+    rev = version;
     sha256 = "0jywsrcr1wzkjig5cvz014c3r026sbwscbkv7zh1014lkjm0kyyh";
   };
 

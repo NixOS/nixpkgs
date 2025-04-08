@@ -50,7 +50,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
-    tag = version;
+    rev = version;
     sha256 = "sha256-RlZwMBWjhCTEEV08UHbf8NvuqmuihXwR1aA/vMmD1BM=";
   };
 

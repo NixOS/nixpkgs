@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cifsd-team";
     repo = "ksmbd-tools";
-    tag = version;
+    rev = version;
     sha256 = "sha256-f2B+24AboAWLIrtuHWn8YMEPzWahIafc3kfx0zKyz8g=";
   };
 

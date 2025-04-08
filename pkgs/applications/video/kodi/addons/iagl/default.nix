@@ -19,7 +19,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "zach-morris";
     repo = "plugin.program.iagl";
-    tag = version;
+    rev = version;
     sha256 = "sha256-b8nO3D/xTnj/5UDshGlIJdiHd75VhIlkrGUi0vkZqG4=";
   };
 

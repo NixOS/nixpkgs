@@ -12,7 +12,7 @@ buildGo124Module rec {
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-+IndC9znKgVGiFWW0aCNjhxPwX1kDFnfG2+SKEQ15Rc=";
   };
 

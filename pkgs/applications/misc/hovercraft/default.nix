@@ -21,7 +21,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "hovercraft";
-    tag = version;
+    rev = version;
     sha256 = "0k0gjlqjz424rymcfdjpj6a71ppblfls5f8y2hd800d1as4im8az";
   };
 

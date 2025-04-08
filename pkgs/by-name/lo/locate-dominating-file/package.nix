@@ -16,7 +16,7 @@ resholve.mkDerivation {
   src = fetchFromGitHub {
     owner = "roman";
     repo = "locate-dominating-file";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gwh6fAw7BV7VFIkQN02QIhK47uxpYheMk64UeLyp2IY=";
   };
 

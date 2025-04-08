@@ -13,7 +13,7 @@ buildDubPackage rec {
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "btdu";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-B8ojxdXibeNEZay9S5lzpB6bTKNB2ZI6AQ3XKUHioE0=";
   };
 

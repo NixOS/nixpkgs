@@ -14,7 +14,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "nikic";
     repo = "php-ast";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-9HP+hKcpkWmvsx335JiCVjFG+xyAMEm5dWxWC1nZPxU=";
   };
 

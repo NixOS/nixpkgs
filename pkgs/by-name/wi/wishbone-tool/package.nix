@@ -10,7 +10,7 @@ let
   src = fetchFromGitHub {
     owner = "litex-hub";
     repo = "wishbone-utils";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Gl0bxHJ8Y0ytYJxToYAR2tVkD4YNMihk+zRpieSvMGE=";
   };
 in

@@ -18,7 +18,7 @@ let
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-d5XNfjDgtBkNkUMhShYTjKtMbwVa2tLXdvYi6sXQmIA=";
   };
 

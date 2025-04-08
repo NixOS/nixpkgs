@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "igrr";
     repo = "mkspiffs";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-oa6Lmo2yb66IjtEKkZyJBgM/p7rdvmrKfgNd2rAM/Lk=";
   };

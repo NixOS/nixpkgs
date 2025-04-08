@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NBISweden";
     repo = "MrBayes";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-pkkxZ6YHRn/I1SJpT9A+EK4S5hWGmFdcDBJS0zh5mLA=";
   };
 

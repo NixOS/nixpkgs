@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flintlock";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Kbk94sqj0aPsVonPsiu8kbjhIOURB1kX9Lt3NURL+jk=";
   };
 

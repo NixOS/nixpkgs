@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "agola-io";
     repo = "agola";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ggi0Eb4vO5zBoIrIIa3MFwOIW0IBS8yGF6eveBb+lgY=";
   };
 

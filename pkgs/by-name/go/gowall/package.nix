@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-QKukWA8TB0FoNHu0Wyco55x4oBY+E33qdoT/SaXW6DE=";
   };
 

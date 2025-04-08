@@ -38,7 +38,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-8LZMS1rAqEZ8k1IWSRkQ2O650oqHLP0P31T8oUeE4fw=";
   };
 

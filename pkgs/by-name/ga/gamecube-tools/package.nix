@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo = "gamecube-tools";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-GsTmwyxBc36Qg+UGy+cRAjGW1eh1XxV0s94B14ZJAjU=";
   };
 

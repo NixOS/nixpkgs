@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tsyrogit";
     repo = "zxcvbn-c";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-RKqbv0iGkjS7Y7KikqglZ+AK1oiw4G1mB2Zg87tOlbI=";
   };
 

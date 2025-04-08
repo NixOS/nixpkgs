@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
-    tag = version;
+    rev = version;
     sha256 = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
   };
 

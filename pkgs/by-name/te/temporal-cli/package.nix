@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-9O+INXJhNwgwwvC0751ifdHmxbD0qI5A3LdDb4Krk/o=";
   };
 

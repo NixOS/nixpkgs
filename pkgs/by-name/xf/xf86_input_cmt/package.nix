@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hugegreenbug";
     repo = "xf86-input-cmt";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "1cnwf518nc0ybc1r3rsgc1gcql1k3785khffv0i4v3akrm9wdw98";
   };
 

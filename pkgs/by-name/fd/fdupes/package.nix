@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo = "fdupes";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-epregz+i2mML5zCQErQDJFUFUxnUoqcBlUPGPJ4tcmc=";
   };
 

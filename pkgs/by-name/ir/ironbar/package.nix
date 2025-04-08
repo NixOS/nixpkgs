@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-UtBO1XaghmzKv9qfhfoLi4ke+mf+Mtgh4f4UpCeEVDg=";
   };
 

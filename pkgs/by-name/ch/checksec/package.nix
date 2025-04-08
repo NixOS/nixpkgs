@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "slimm609";
     repo = "checksec.sh";
-    tag = version;
+    rev = version;
     hash = "sha256-BWtchWXukIDSLJkFX8M/NZBvfi7vUE2j4yFfS0KEZDo=";
   };
 

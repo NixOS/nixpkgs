@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-VAl9UceVDS2XltP3G1YxNp07R+PmuJGJ8zvtxblcQLc=";
   };
 

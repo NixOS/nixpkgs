@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aerkalov";
     repo = "ebooklib";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Ciks/eeRpkqkWnyLgyHC+x/dSOcj/ZT45KUElKqv1F8=";
   };
 

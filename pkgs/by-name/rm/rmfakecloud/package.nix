@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZsYq1+Bb6SyMGdbiy5UzanDiUiFOt4uhttiPKC0ESis=";
   };
 

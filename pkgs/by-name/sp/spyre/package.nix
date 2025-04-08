@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "spyre-project";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wlGZTMCJE6Ki5/6R6J9EJP06/S125BNNd/jNPYGwKNw=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FastCGI-Archives";
     repo = "fcgi2";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-GI2RL0djfCej7bBhxR6cK/FrTbDYEl75SEfQFgl0ctA=";
   };
 

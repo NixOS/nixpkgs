@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "samim-font";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-DVBMsNOVAVwzlZ3cDus/3CSsC05bLZalQ2KeueEvwXs=";
   };
 

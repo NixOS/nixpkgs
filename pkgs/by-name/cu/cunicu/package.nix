@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cunicu";
     repo = "cunicu";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-1y9olRSPu2akvE728oXBr70Pt03xj65R2GaOlZ/7RTg=";
   };
 

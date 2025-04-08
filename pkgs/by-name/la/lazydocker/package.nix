@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-cVjDdrxmGt+hj/WWP9B3BT739k9SSr4ryye5qWb3XNM=";
   };
 

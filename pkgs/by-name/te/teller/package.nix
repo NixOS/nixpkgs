@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "tellerops";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-CI74nMMTIPwjJfy7ASR19V6EbYZ62NoAOxlP3Xt2BuI=";
   };
 

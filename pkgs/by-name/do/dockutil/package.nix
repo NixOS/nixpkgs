@@ -37,7 +37,7 @@ let
     src = fetchFromGitHub {
       owner = "kcrawford";
       repo = "dockutil";
-      tag = finalAttrs.version;
+      rev = finalAttrs.version;
       hash = "sha256-mmk4vVZhq4kt05nI/dDM1676FDWyf4wTSwY2YzqKsLU=";
     };
 

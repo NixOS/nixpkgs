@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ruslashev";
     repo = "elfcat";
-    tag = version;
+    rev = version;
     sha256 = "sha256-lmoOwxRGXcInoFb2YDawLKaebkcUftzpPZ1iTXbl++c=";
   };
 

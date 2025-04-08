@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iRASPA";
     repo = "RASPA2";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-i8Y+pejiOuyPNJto+/0CmRoAnMljCrnDFx8qDh4I/68=";
   };
 

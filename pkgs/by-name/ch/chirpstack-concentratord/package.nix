@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-concentratord";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RFjBeFGK0HzRPeCCU5Un3c3XSg8hmXo+7DWP6tfsDgw=";
   };
 

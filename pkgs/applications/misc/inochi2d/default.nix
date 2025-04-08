@@ -27,7 +27,7 @@ in
     src = fetchFromGitHub {
       owner = "Inochi2D";
       repo = "inochi-creator";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-9d3j5ZL6rGOjN1GUpCIfbjby0mNMvOK7BJbHYgwLY2k=";
     };
 
@@ -58,7 +58,7 @@ in
     src = fetchFromGitHub {
       owner = "Inochi2D";
       repo = "inochi-session";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-FcgzTCpD+L50MsPP90kfL6h6DEUtiYkUV1xKww1pQfg=";
     };
 

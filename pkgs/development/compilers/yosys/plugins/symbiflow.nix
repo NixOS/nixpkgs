@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "yosys-f4pga-plugins";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XIn5wFw8i2njDN0Arua5BdZ0u1q6a/aJAs48YICehsc=";
   };
 

@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openafs-contrib";
     repo = "fabs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ejAcCwrOWGX0zsMw224f9GTWlozNYC0gU6LdTk0XqH0=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-vYuXW+Yb0GXZAwaarV4WBIJtS31+EleiddU9ibBn/hs=";
     fetchSubmodules = true;
   };

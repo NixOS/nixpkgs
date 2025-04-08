@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vpk";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SPkPb8kveAR2cN9kd2plS+TjmBYBCfa6pJ0c22l69M0=";
   };
 

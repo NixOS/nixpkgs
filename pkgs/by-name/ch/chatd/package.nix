@@ -19,7 +19,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "BruceMacD";
     repo = "chatd";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6z5QoJk81NEP115uW+2ah7vxpDz8XQUmMLESPsZT9uU=";
   };
 

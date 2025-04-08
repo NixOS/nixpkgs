@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hugegreenbug";
     repo = "libgestures";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0dfvads2adzx4k8cqc1rbwrk1jm2wn9wl2jk51m26xxpmh1g0zab";
   };
   patches = [ ./include-fix.patch ];

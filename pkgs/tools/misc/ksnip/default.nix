@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
   };
 

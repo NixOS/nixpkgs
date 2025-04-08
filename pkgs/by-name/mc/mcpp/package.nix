@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "mcpp";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
   };
 

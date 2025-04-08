@@ -36,7 +36,7 @@ let
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
-    tag = "v${version}";
+    rev = "v${version}";
     inherit hash;
   };
   pname = "teleport";

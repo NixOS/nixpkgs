@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-soundcloud";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-1Qqbfw6NZ+2K1w+abMBfWo0RAmIRbNyIErEmalmWJ0s=";
   };
 

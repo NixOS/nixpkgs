@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pomsky-lang";
     repo = "pomsky";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
   };
 

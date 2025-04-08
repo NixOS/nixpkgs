@@ -27,7 +27,7 @@ else
           src = fetchFromGitHub {
             owner = "camlp5";
             repo = "camlp5";
-            tag = version;
+            rev = version;
             hash = "sha256-nz+VfGR/6FdBvMzPPpVpviAXXBWNqM3Ora96Yzx964o=";
           };
 

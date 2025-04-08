@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "project-chip";
     repo = "zap";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-oYw1CxeCr4dUpw7hhXjtB+QwTfBI7rG9jgfxWKZYsSc=";
   };
 

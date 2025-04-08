@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "unclutter-xfixes";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-suKmaoJq0PBHZc7NzBQ60JGwJkAtWmvzPtTHWOPJEdc=";
   };
 

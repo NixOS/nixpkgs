@@ -12,7 +12,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ZlB9lyfC4xrLWAb+Jbo6eI/LuYjvgMEauQeLxGCqy88=";
   };
 

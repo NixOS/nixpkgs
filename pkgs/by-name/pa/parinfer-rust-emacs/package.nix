@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "justinbarclay";
     repo = "parinfer-rust-emacs";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-JYKFfbfpkvBRxYUDw2d6DD1mO27OKzdquSOhBk0lXr0=";
   };
 

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-p9bQ90zUXVeVPUDuns+gmZb9SJHpAVrJOHe+RvEru7w=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uyjulian";
     repo = "pfsshell";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0cr91al3knsbfim75rzl7rxdsglcc144x0nizn7q4jx5cad3zbn8";
   };
 

@@ -20,7 +20,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fzcGAcKOAEnBiAEYYyxKJ71xnixb5cz7FzR28/cKIFg=";
   };
 

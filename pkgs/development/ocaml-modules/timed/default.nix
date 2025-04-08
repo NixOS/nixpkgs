@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "rlepigre";
     repo = "ocaml-${pname}";
-    tag = version;
+    rev = version;
     sha256 = "sha256-wUoI9j/j0IGYW2NfJHmyR2XEYfYejyoYLWnKsuWdFas=";
   };
 

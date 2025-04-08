@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lokalise";
     repo = "lokalise-cli-2-go";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-R8vzHuWkNznq/eeXUVHm9SJJmRV2B2WXKQFEHil+HiY=";
   };
 

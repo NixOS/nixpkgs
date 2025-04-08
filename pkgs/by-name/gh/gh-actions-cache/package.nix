@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "actions";
     repo = "gh-actions-cache";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GVha3xxLTBTiKfAjGb2q9btsGYzWQivGLyZ4Gg0s/N0=";
   };
 

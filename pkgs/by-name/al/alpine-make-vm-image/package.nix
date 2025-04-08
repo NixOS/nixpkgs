@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-vm-image";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-N7S9MlTpLIL5Od+buS7q64v8fmN+wbYK1FH/YW+nMP8=";
   };
 

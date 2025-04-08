@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "calamares-nixos-extensions";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Tmp/sWQmhiZe2dmA+msCMPwPlBd1Oa3q5X+QP+CoAWI=";
   };
 

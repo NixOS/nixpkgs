@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = "libredwg";
-    tag = version;
+    rev = version;
     hash = "sha256-FlBHwNsqVSBE8dTDewoKkCbs8Jd/4d69MPpEFzg6Ruc=";
     fetchSubmodules = true;
   };

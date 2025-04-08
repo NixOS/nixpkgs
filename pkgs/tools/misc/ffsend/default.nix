@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 

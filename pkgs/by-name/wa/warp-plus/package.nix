@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "warp-plus";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-gDn4zicSD+Hz3GsL6pzGpUaiHcw+8KHDaOJGCML6LOA=";
   };
 

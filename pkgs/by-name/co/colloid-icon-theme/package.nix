@@ -49,7 +49,7 @@ lib.checkListOfEnum "${pname}: scheme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      tag = version;
+      rev = version;
       hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 

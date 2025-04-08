@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "randomouscrap98";
     repo = "ardugotools";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-SqeUcYa8XscwaJaCSIoZ9lEtRJ0hN01XJDyCJFX2dTc=";
   };
 

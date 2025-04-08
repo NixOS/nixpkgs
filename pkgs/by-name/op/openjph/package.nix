@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "aous72";
     repo = "openjph";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-pmFoaQC1WLqtxMkkC7myzkNk0zgQ90CzPFg+F1Y0a/k=";
   };
 

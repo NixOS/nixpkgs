@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "portunus";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-+pMMIutj+OWKZmOYH5NuA4a7aS5CD+33vAEC9bJmyfM=";
   };
 

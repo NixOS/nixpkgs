@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "0ldsk00l";
     repo = "nestopia";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-6r6o/2GDp1Rcp+OWaQVgIQGC6NAxtmx4lxDWWpwv8aQ=";
   };
 

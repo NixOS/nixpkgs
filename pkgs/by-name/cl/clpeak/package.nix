@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "krrishnarraj";
     repo = "clpeak";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     sha256 = "1wkjpvn4r89c3y06rv7gfpwpqw6ljmqwz0w0mljl9y5hn1r4pkx2";
   };

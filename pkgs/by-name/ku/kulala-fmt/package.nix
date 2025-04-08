@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mistweaverco";
     repo = "kulala-fmt";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-yq7DMrt+g5wM/tynI7Cf6MBJs/d+fP3IppndKnTJMTw=";
   };
 

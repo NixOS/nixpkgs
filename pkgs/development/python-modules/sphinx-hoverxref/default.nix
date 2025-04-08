@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-hoverxref";
-    tag = version;
+    rev = version;
     hash = "sha256-DJ+mHu9IeEYEyf/SD+nDNtWpTf6z7tQzG0ogaECDpkU=";
   };
 

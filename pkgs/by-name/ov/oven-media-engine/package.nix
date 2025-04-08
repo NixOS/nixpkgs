@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-fYvP1mk32lrnYxWdpI1WqEUxAfHsQH3Ng0JLC/GbjrY=";
   };
 

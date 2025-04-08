@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "coral-xyz";
     repo = "anchor";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rwf2PWHoUl8Rkmktb2u7veRrIcLT3syi7M2OZxdxjG4=";
     fetchSubmodules = true;
   };

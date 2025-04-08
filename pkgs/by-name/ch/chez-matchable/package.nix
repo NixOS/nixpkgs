@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-matchable";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-UYoT8Kp1FTfiL22ntrFXFcAB1HGVrJ6p9JgvhUKi+Yo=";
   };
 

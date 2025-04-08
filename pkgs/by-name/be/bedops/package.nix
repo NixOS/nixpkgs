@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bedops";
     repo = "bedops";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-VJBoi1+tHA4oOVOsClUfimB+mOV5ZSQsDcDq3vAZwBA=";
   };
 

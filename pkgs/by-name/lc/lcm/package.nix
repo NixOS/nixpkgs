@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lcm-proj";
     repo = "lcm";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-043AJzalfx+qcCoxQgPU4T/DcUH0pXOE4v1aJaW3aXs=";
   };
 

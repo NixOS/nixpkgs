@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uKYCJD88TnrJTTnzCCietNt01QPeFW+hhnjcBNKUWsY=";
   };
 

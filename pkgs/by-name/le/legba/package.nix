@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "legba";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-ioH/dy+d20p81iLLIcer+1fVib60TJ5Ezr6UlsL+F9g=";
   };
 

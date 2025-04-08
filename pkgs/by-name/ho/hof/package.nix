@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hofstadter-io";
     repo = "hof";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-okc11mXqB/PaXd0vsRuIIL70qWSFprvsZJtE6PvCaIg=";
   };
 

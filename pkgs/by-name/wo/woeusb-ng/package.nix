@@ -17,7 +17,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB-ng";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-2opSiXbbk0zDRt6WqMh97iAt6/KhwNDopOas+OZn6TU=";
   };
 

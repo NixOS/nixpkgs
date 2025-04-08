@@ -17,7 +17,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-fqzrgmtqy7dlmGEaTXAqpdt9HqZCVooJ0Vf6/JUKihw=";
   };
 

@@ -51,7 +51,7 @@ else
     src = fetchFromGitHub {
       owner = "BinaryAnalysisPlatform";
       repo = "bap";
-      tag = "v${version}";
+      rev = "v${version}";
       sha256 = "1c30zxn0zyi0wypvjmik3fd6n6a8xjcb102qfnccn1af052bvsrd";
     };
 

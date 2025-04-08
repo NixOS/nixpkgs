@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-goNwLtVjNY3O/BhFrCcM3X11dtM34XgfHL6bh+YFoIY=";
   };
 
