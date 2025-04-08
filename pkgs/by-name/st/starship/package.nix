@@ -7,9 +7,6 @@
   cmake,
   git,
   nixosTests,
-  Security,
-  Foundation,
-  Cocoa,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,17 +23,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     cmake
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    Foundation
-    Cocoa
-  ];
-
-  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-framework"
-    "AppKit"
   ];
 
   # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
