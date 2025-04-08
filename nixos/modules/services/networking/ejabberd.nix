@@ -23,6 +23,13 @@ let
 
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ejabberd"
+      "imagemagick"
+    ] "Instead use `services.ejabberd.package = pkgs.ejabberd.override { withImageMagick = true; };`")
+  ];
 
   ###### interface
 
@@ -100,12 +107,6 @@ in
         description = "Configuration dumps that should be loaded on the first startup";
         example = lib.literalExpression "[ ./myejabberd.dump ]";
       };
-
-      imagemagick = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Add ImageMagick to server's path; allows for image thumbnailing";
-      };
     };
 
   };
@@ -135,7 +136,7 @@ in
       path = [
         pkgs.findutils
         pkgs.coreutils
-      ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      ];
 
       serviceConfig = {
         User = cfg.user;
