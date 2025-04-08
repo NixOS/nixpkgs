@@ -1158,8 +1158,8 @@ let
         mktplcRef = {
           name = "dbclient-jdbc";
           publisher = "cweijan";
-          version = "1.4.2";
-          hash = "sha256-ru4c7/6X3HfKyn5wz7I5PRh+A4bntB+FAWEGUzjMlY8=";
+          version = "1.4.3";
+          hash = "sha256-XaV7N3IFe6+gc/qrHkSUikAQghJb6k6+XE5fMYWdyDY=";
         };
         meta = {
           description = "JDBC Adapter For Database Client";
