@@ -16,7 +16,7 @@ let
     src = fetchFromGitHub {
       owner = "di";
       repo = "calver";
-      rev = version;
+      tag = version;
       hash = "sha256-F7OnhwlwCw6cZeigmzyyIkttQMfxFoC2ynpxw0FGYMo=";
     };
 
