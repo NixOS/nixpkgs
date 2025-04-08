@@ -8068,15 +8068,16 @@ with self;
     };
   };
 
-  DataEntropy = buildPerlModule {
+  DataEntropy = buildPerlPackage {
     pname = "Data-Entropy";
-    version = "0.007";
+    version = "0.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Entropy-0.007.tar.gz";
-      hash = "sha256-JhHEoaMDhZTXnqTtFNnhWpr493EF9RZneV/k+KU0J+Q=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/Data-Entropy-0.008.tar.gz";
+      hash = "sha256-GKUrE4boLGuM2zhKOYYdYCIKRCp5DgdwEL5y3YU7Z7M=";
     };
     propagatedBuildInputs = [
       CryptRijndael
+      CryptURandom
       DataFloat
       HTTPLite
       ParamsClassify
