@@ -38,6 +38,21 @@ buildGoModule (
       "-w"
     ];
 
+    # No tests besides the formatting one are in root.
+    # We can't override subPackages per-phase (and we don't
+    # want to needlessly build packages that have build
+    # constraints), so just use the upstream Makefile (that
+    # runs `go test ./...`) to actually run the tests.
+    checkPhase = ''
+      runHook preCheck
+      export GOFLAGS=''${GOFLAGS//-trimpath/}
+      make test
+      runHook postCheck
+    '';
+
+    # Tests require networking.
+    __darwinAllowLocalNetworking = finalAttrs.doCheck;
+
     postInstall = ''
       mv $out/bin/wireguard $out/bin/wireguard-go
     '';
