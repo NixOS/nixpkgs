@@ -663,6 +663,7 @@ broken-packages:
   - carte # failure in job https://hydra.nixos.org/build/233201806 at 2023-09-02
   - Cartesian # failure in job https://hydra.nixos.org/build/233249956 at 2023-09-02
   - casa-abbreviations-and-acronyms # failure in job https://hydra.nixos.org/build/233194663 at 2023-09-02
+  - casadi-bindings-core # failure in job https://hydra.nixos.org/build/294582281 at 2025-04-09
   - Cascade # failure in job https://hydra.nixos.org/build/233223917 at 2023-09-02
   - cascading # failure in job https://hydra.nixos.org/build/233238563 at 2023-09-02
   - case-insensitive-match # failure in job https://hydra.nixos.org/build/233252304 at 2023-09-02
