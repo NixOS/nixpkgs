@@ -57,10 +57,11 @@ let
       url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/linux/x64/Cursor-0.48.7-x86_64.AppImage";
       hash = "sha256-LxAUhmEM02qCaeUUsHgjv0upAF7eerX+/QiGeKzRY4M=";
     };
-    aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/linux/arm64/Cursor-0.48.7-aarch64.AppImage";
-      hash = "sha256-l1T0jLX7oWjq4KzxO4QniUAjzVbBu4SWA1r5aXGpDS4=";
-    };
+    # Broken: see https://github.com/NixOS/nixpkgs/issues/304751 (blocked by https://github.com/NixOS/nixpkgs/issues/304751)
+    # aarch64-linux = fetchurl {
+    #   url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/linux/arm64/Cursor-0.48.7-aarch64.AppImage";
+    #   hash = "sha256-l1T0jLX7oWjq4KzxO4QniUAjzVbBu4SWA1r5aXGpDS4=";
+    # };
     x86_64-darwin = fetchurl {
       url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/darwin/x64/Cursor-darwin-x64.dmg";
       hash = "sha256-h9zcmZRpOcfBRK5Xw/AdY/rwlINEHYiUgpCoGXg6hSY=";
@@ -197,6 +198,7 @@ stdenvNoCC.mkDerivation {
       aspauldingcode
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    badPlatforms = [ "aarch64-linux" ]; # Blocked by https://github.com/NixOS/nixpkgs/issues/304751
     mainProgram = "cursor";
   };
 }

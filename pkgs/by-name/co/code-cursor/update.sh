@@ -4,7 +4,9 @@ set -eu -o pipefail
 
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
 
-declare -A platforms=( [x86_64-linux]='linux-x64' [aarch64-linux]='linux-arm64' [x86_64-darwin]='darwin-x64' [aarch64-darwin]='darwin-arm64' )
+# declare -A platforms=( [x86_64-linux]='linux-x64' [aarch64-linux]='linux-arm64' [x86_64-darwin]='darwin-x64' [aarch64-darwin]='darwin-arm64' )
+# Ignoring aarch64-linux for now, as it depends on an unavailable package
+declare -A platforms=( [x86_64-linux]='linux-x64' [x86_64-darwin]='darwin-x64' [aarch64-darwin]='darwin-arm64' )
 declare -A updates=( )
 first_version=""
 

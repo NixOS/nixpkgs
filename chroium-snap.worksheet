@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CurrentWorkingDirectory</key>
+	<string>/Users/seclark/Library/Application Support/BBEdit/Stationery</string>
+	<key>WorksheetContents</key>
+	<string>releases=$(curl --header 'Snap-Device-Series: 16' http://api.snapcraft.io/v2/snaps/info/chromium)
+# echo $releases | yq -p=json
+echo $releases | jq '."channel-map"|.[]|select(.channel.risk=="stable")'
+echo $releases | jq '."channel-map"|.[]|select(.channel.risk=="stable") | {arch: .channel.architecture, url: .download.url, version}'
+{
+  "arch": "amd64",
+  "url": "https://api.snapcraft.io/api/v1/snaps/download/XKEcBqPM06H1Z7zGOdG5fbICuf8NWK5R_3099.snap",
+  "version": "135.0.7049.52"
+}
+{
+  "arch": "arm64",
+  "url": "https://api.snapcraft.io/api/v1/snaps/download/XKEcBqPM06H1Z7zGOdG5fbICuf8NWK5R_3092.snap",
+  "version": "135.0.7049.52"
+}
+{
+  "arch": "armhf",
+  "url": "https://api.snapcraft.io/api/v1/snaps/download/XKEcBqPM06H1Z7zGOdG5fbICuf8NWK5R_3091.snap",
+  "version": "135.0.7049.52"
+}
+{
+  "arch": "i386",
+  "url": "https://api.snapcraft.io/api/v1/snaps/download/XKEcBqPM06H1Z7zGOdG5fbICuf8NWK5R_1862.snap",
+  "version": "98.0.4758.9"
+}
+
+</string>
+</dict>
+</plist>
