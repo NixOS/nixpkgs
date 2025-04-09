@@ -30,6 +30,9 @@ let
   cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
+  # Darwin needs to use a different ABI namespace to avoid conflicting with the system libc++.
+  abiNamespace = if stdenv.hostPlatform.isDarwin then "__nix1" else "__1";
+
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
@@ -106,6 +109,12 @@ let
       (lib.cmakeBool "LIBCXX_ENABLE_THREADS" false)
       (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
       (lib.cmakeBool "LIBCXX_ENABLE_EXCEPTIONS" false)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Avoid ODR violations when using libc++ from LLVM on Darwin with system frameworks that use libc++.
+      # While the system libc++ is derived from LLVM, it is considered distinct from LLVM’s and not compatible.
+      # See: https://discourse.llvm.org/t/apples-libc-now-provides-std-type-descriptor-t-functionality-not-found-in-upstream-libc/73881/3
+      (lib.cmakeFeature "LIBCXX_ABI_NAMESPACE" abiNamespace)
     ]
     ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
       (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
@@ -261,6 +270,7 @@ stdenv.mkDerivation (
       '';
 
     passthru = {
+      inherit abiNamespace;
       isLLVM = true;
     };
 
