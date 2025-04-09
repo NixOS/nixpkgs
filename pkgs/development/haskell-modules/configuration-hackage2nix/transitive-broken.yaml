@@ -737,6 +737,9 @@ dont-distribute-packages:
  - cas-hashable-s3
  - cas-store
  - casadi-bindings
+ - casadi-bindings-control
+ - casadi-bindings-ipopt-interface
+ - casadi-bindings-snopt-interface
  - cash
  - casr-logbook-html
  - casr-logbook-meta
