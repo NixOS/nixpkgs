@@ -13730,10 +13730,6 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  whitebox-tools = callPackage ../applications/gis/whitebox-tools {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
 
   ### APPLICATIONS
