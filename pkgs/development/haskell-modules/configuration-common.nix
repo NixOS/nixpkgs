@@ -2984,6 +2984,20 @@ self: super:
   bzlib =
     assert super.bzlib.version == "0.5.2.0";
     doJailbreak super.bzlib;
+
+  what4 = lib.pipe super.what4 [
+    (addTestToolDepends (
+      with pkgs;
+      [
+        cvc4
+        cvc5
+        z3
+      ]
+    ))
+    # 2025-04-09: template_tests still failing with:
+    #   fd:9: hPutBuf: resource vanished (Broken pipe)
+    dontCheck
+  ];
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
