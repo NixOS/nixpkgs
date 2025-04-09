@@ -2969,6 +2969,11 @@ self: super:
     }))
 
   ];
+
+  # 2025-04-09: jailbreak to allow hedgehog >= 1.5
+  hw-int =
+    assert super.hw-int.version == "0.0.2.0";
+    doJailbreak super.hw-int;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
