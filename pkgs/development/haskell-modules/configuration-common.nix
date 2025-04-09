@@ -3003,6 +3003,11 @@ self: super:
   egison-pattern-src-th-mode =
     assert super.egison-pattern-src-th-mode.version == "0.2.1.2";
     doJailbreak super.egison-pattern-src-th-mode;
+
+  # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
+  hasql-streams-core =
+    assert super.hasql-streams-core.version == "0.1.0.0";
+    doJailbreak super.hasql-streams-core;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
