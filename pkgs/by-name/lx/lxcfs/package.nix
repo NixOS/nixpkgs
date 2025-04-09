@@ -59,6 +59,13 @@ stdenv.mkDerivation rec {
         util-linux
       ]
     }
+
+    # requires access to sleep
+    wrapProgram "$out/share/lxcfs/lxc.reboot.hook" --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+      ]
+    }
   '';
 
   postFixup = ''
