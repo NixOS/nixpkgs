@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.130.5";
+  version = "6.130.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-PJx8Mf+OUmZ6GgLBKesKdFs09avxtGtU96ejAVznFNQ=";
+    hash = "sha256-6p7OCjeZKZJ+3MDfdi+9XffET95pXGC6nzhTiMiEVQA=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -80,6 +80,8 @@ buildPythonPackage rec {
       "test_uses_cached_charmap"
       # fails if builder is too slow
       "test_can_run_with_no_db"
+      # calls script with the naked interpreter
+      "test_constants_from_running_file"
     ]
     ++ lib.optionals (pythonOlder "3.10") [
       # not sure why these tests fail with only 3.9
@@ -88,7 +90,9 @@ buildPythonPackage rec {
       "test_assume_has_status_reason"
       "test_observability_captures_stateful_reprs"
     ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # AssertionError: assert [b'def      \...   f(): pass'] == [b'def\\', b'    f(): pass']
+      # https://github.com/HypothesisWorks/hypothesis/issues/4355
       "test_clean_source"
     ];
 
