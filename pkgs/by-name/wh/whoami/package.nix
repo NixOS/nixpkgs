@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -31,7 +32,10 @@ buildGoModule (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) whoami; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Tiny Go server that prints os information and HTTP request to output";
