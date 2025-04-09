@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "vi-mongo";
-  version = "0.1.22";
+  version = "0.1.23";
 
   src = fetchFromGitHub {
     owner = "kopecmaciej";
     repo = "vi-mongo";
     tag = "v${version}";
-    hash = "sha256-OKeflsr823Z9KBgymJG2Z9C4OFxdbW8LzVCWLahMJ0s=";
+    hash = "sha256-zQgGclK6iUtN1PMBSuYVYE8tS1qHTKcTDWDYqhVp3Hg=";
   };
 
   vendorHash = "sha256-rKXrmK0ns3FB6EGyCJ2nYrCUsQ7yPm8dmzJioiVzHIc=";

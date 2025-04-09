@@ -23,7 +23,6 @@
   langgraph-checkpoint-sqlite,
   langsmith,
   psycopg,
-  psycopg-pool,
   pydantic,
   pytest-asyncio,
   pytest-mock,
@@ -115,10 +114,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
-    "tests/test_pregel_async.py"
-    "tests/test_pregel.py"
+    "tests/test_checkpoint_migration.py"
     "tests/test_large_cases.py"
     "tests/test_large_cases_async.py"
+    "tests/test_pregel.py"
+    "tests/test_pregel_async.py"
   ];
 
   passthru = {
