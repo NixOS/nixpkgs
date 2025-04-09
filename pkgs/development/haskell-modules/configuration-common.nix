@@ -1014,6 +1014,8 @@ self: super:
                 hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
               }
               + "/${name}";
+            # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
+            jailbreak = true;
           }) super.${name};
       in
       lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
