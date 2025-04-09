@@ -327,7 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
       # libuuid, slowing down program startup a lot).
       noldconfigPatch
     ]
-    ++ optionals (pythonOlder "3.12") [
+    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.12") [
       # https://www.cve.org/CVERecord?id=CVE-2025-0938
       ./CVE-2025-0938.patch
     ]
