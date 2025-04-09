@@ -2129,6 +2129,11 @@
     githubId = 11493130;
     name = "Asbjørn Olling";
   };
+  aschleck = {
+    name = "April Schleck";
+    github = "aschleck";
+    githubId = 115766;
+  };
   ascii17 = {
     name = "Allen Conlon";
     email = "software@conlon.dev";
