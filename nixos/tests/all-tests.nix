@@ -1080,6 +1080,7 @@ in
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
       { };
   postfixadmin = handleTest ./postfixadmin.nix { };
+  postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = handleTest ./postgresql { };
   postgrest = runTest ./postgrest.nix;
   powerdns = handleTest ./powerdns.nix { };
