@@ -4108,6 +4108,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  diagflow-nvim = buildVimPlugin {
+    pname = "diagflow.nvim";
+    version = "2025-03-04";
+    src = fetchFromGitHub {
+      owner = "dgagn";
+      repo = "diagflow.nvim";
+      rev = "b13321b517ff64bf42eeac2214085d3c76d83a0d";
+      sha256 = "10avjhbs6kn10l5yjp9wk16w6rkvaj540zwrbgk2p6w3v38lr6c0";
+    };
+    meta.homepage = "https://github.com/dgagn/diagflow.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   diaglist-nvim = buildVimPlugin {
     pname = "diaglist.nvim";
     version = "2022-09-01";
