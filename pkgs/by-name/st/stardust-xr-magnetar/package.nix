@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "stardust-xr-magnetar";
-  version = "0-unstable-2024-12-29";
+  version = "0-unstable-2025-04-03";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "magnetar";
-    rev = "d00c5ecf0bcaf2b4382ec3b4f3373ea5b761ee7b";
-    hash = "sha256-2I6BRjw5t68OMc93cis4/qnyYT9OBYIr1S+ZF8LmFCc=";
+    rev = "63ff648bb64c23023a0047ea3ff2c0b6b1fd3caf";
+    hash = "sha256-LRI3HKuOUfUb93mHB8DUpp0hvES+GbzsKAxpkLCLzKQ=";
   };
 
   useFetchCargoVendor = true;
