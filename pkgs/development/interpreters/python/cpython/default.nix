@@ -327,7 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
       # libuuid, slowing down program startup a lot).
       noldconfigPatch
     ]
-    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.12") [
+    ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
       # https://www.cve.org/CVERecord?id=CVE-2025-0938
       ./CVE-2025-0938.patch
     ]
@@ -382,9 +382,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./loongarch-support.patch
       # fix failing tests with openssl >= 3.4
       # https://github.com/python/cpython/pull/127361
-    ]
-    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
-      ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
     ]
     ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
       (fetchpatch {
