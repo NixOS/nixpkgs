@@ -14789,6 +14789,8 @@ self: super: with self; {
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
+  reactionmenu = callPackage ../development/python-modules/reactionmenu { };
+
   reactivex = callPackage ../development/python-modules/reactivex { };
 
   readabilipy = callPackage ../development/python-modules/readabilipy { };
