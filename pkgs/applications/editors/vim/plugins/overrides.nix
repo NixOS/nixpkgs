@@ -610,7 +610,7 @@ in
     ];
   };
 
-  codeium-nvim =
+  windsurf-nvim =
     let
       # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
       codeiumVersion = "1.20.9";
@@ -648,7 +648,7 @@ in
       };
 
     in
-    super.codeium-nvim.overrideAttrs {
+    super.windsurf-nvim.overrideAttrs {
       dependencies = [ self.plenary-nvim ];
       buildPhase = ''
         cat << EOF > lua/codeium/installation_defaults.lua
@@ -2221,6 +2221,7 @@ in
       "nvchad.themes.mappings"
       "nvchad.cheatsheet.grid"
       "nvchad.cheatsheet.simple"
+      "nvchad.blink.config"
     ];
   };
 
@@ -2586,6 +2587,7 @@ in
       # Pickers, can use telescope or fzf-lua
       fzf-lua
       telescope-nvim
+      snacks-nvim
     ];
     dependencies = with self; [
       plenary-nvim
