@@ -266,8 +266,8 @@ rec {
       "sha256-nVAeLXy2hjJZDjNTjFccKClY7DS0oLv9Q9QLlngkX6M=";
 
   mypy-boto3-codebuild =
-    buildMypyBoto3Package "codebuild" "1.37.26"
-      "sha256-gHSdYTzGKq5U3L3kqNCtl6JW8zzIBTbQeHRmLsPIYGg=";
+    buildMypyBoto3Package "codebuild" "1.37.29"
+      "sha256-iUO4pxG9wJexwwnD3KUie9TeLP1D6Mu3RjP11zYxHp4=";
 
   mypy-boto3-codecatalyst =
     buildMypyBoto3Package "codecatalyst" "1.37.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-JSVZVCZ6P5A+EqjXHmbbDIdE1rKrdSwNcZvUbYxKpSA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.37.13"
-      "sha256-FrJfuU55fUM3pxt4ey/KLmgXD3wTs6PlksCOBCQ1ibA=";
+    buildMypyBoto3Package "glue" "1.37.29"
+      "sha256-LL7zn9WjB7NyFYN2bs54X9v5i+ax2GpDDFzMcm6t5N0=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.37.0"
@@ -866,8 +866,8 @@ rec {
       "sha256-Ltzv3h+NATTcKsyd1PfnUdjIhT3V0OS3woGsStyI/qA=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.37.26"
-      "sha256-fJHjUBVtXAeNth2fAzBdcLwaFNN6ma+3eQpwFnZU6B4=";
+    buildMypyBoto3Package "medialive" "1.37.29"
+      "sha256-X8jdJi7XRidW2DsyFRM+6jMUtu3jNJDNm0h7HMOxp/E=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.37.0"
@@ -1014,8 +1014,8 @@ rec {
       "sha256-e9sP379VsbZeKUhLURtsMsSPxfIvCsYVNqZhUg67+MY=";
 
   mypy-boto3-personalize =
-    buildMypyBoto3Package "personalize" "1.37.0"
-      "sha256-qUtv4DOn0Hle7QGBr3cgphQXDNj9iC0xwOhCGHaayW8=";
+    buildMypyBoto3Package "personalize" "1.37.29"
+      "sha256-A7TLIG3TYVkSAAIRcn6OLoNSUpiwIEItwk4JI+f0nAc=";
 
   mypy-boto3-personalize-events =
     buildMypyBoto3Package "personalize-events" "1.37.0"
@@ -1370,8 +1370,8 @@ rec {
       "sha256-UW0b40n+M8za5guDPxhU5cRvtbkqzX6G7M2UaxNq5ws=";
 
   mypy-boto3-transfer =
-    buildMypyBoto3Package "transfer" "1.37.24"
-      "sha256-0+oRkebGHtwR7NXxXfdVMlF1+11+yFQyDBPJGuaz9k4=";
+    buildMypyBoto3Package "transfer" "1.37.29"
+      "sha256-sTjua+D1wGOa/8lod+/cafll9lk3NFI6vkE7NlGKmyU=";
 
   mypy-boto3-translate =
     buildMypyBoto3Package "translate" "1.37.0"

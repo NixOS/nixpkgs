@@ -18,18 +18,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.28.1";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LDMHMFg9fjEMi8I2Fc3TEyWMctqJurAbckubCgkkZiM=";
+    hash = "sha256-EAD40ZZr6VK4w9OuYzx2YcVgOODopF7IWN7GVjTlblE=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-y/GQSzI7bVPieuAmQKdZY1qticmmRYibBtgXSEJ7dU4=";
+  cargoHash = "sha256-WOzzBhZLV4kfsmTGreg1m+sPcDjznB4Kh8ONVNZkp5A=";
 
   nativeBuildInputs = [
     installShellFiles

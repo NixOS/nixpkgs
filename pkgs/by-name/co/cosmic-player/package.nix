@@ -13,6 +13,7 @@
   libglvnd,
   libgbm,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -71,13 +72,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {

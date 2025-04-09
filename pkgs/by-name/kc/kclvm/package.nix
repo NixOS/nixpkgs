@@ -10,19 +10,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kclvm";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "kcl";
     rev = "v${version}";
-    hash = "sha256-OMPo2cT0ngwHuGghVSfGoDgf+FThj2GsZ3Myb1wSxQM=";
+    hash = "sha256-14yFGa8y8w3wbCmx0JOSN0TShXLZZpTdVynEfUKkjuE=";
   };
 
   sourceRoot = "${src.name}/kclvm";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xQgCiNt0lUvB5XmVB45l0GuIiVp5Jm6dZY7396Rsnqw=";
+  cargoHash = "sha256-o7YFyqRWAMjq23mcAqDrcN4infdBgp1KNvviYOLR35s=";
 
   buildInputs =
     [ rustc ]

@@ -125,9 +125,7 @@ with pkgs;
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
-    dontRecurseIntoAttrs (import ./pkg-config/defaultPkgConfigPackages.nix pkgs) // {
-      __attrsFailEvaluation = true;
-    };
+    dontRecurseIntoAttrs (import ./pkg-config/defaultPkgConfigPackages.nix pkgs);
 
   ### Nixpkgs maintainer tools
 
@@ -360,10 +358,6 @@ with pkgs;
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   copilot-language-server-fhs = copilot-language-server.fhs;
-
-  curv = callPackage ../by-name/cu/curv/package.nix {
-    openexr = openexr_3;
-  };
 
   databricks-sql-cli = callPackage ../applications/misc/databricks-sql-cli { };
 
@@ -3070,10 +3064,6 @@ with pkgs;
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
-  chafa = callPackage ../tools/misc/chafa {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav {
@@ -4736,7 +4726,6 @@ with pkgs;
     libclang = llvmPackages_15.libclang;
     clang = clang_15;
     llvm = llvm_15;
-    openexr = openexr_3;
   };
 
   ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
@@ -8921,7 +8910,7 @@ with pkgs;
   };
 
   yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
-    jre = jdk17;
+    jre = jdk21;
   };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
@@ -9258,8 +9247,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
   };
 
-  factorPackages = callPackage ./factor-packages.nix { };
-  factor-lang = factorPackages.factor-lang;
+  factorPackages-0_99 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.99.nix { };
+  };
+  factorPackages-0_100 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.100.nix { };
+  };
+  factorPackages = factorPackages-0_100;
+
+  factor-lang-0_99 = factorPackages-0_99.factor-lang;
+  factor-lang-0_100 = factorPackages-0_100.factor-lang;
+  factor-lang = factor-lang-0_100;
 
   far2l = callPackage ../applications/misc/far2l {
     inherit (darwin.apple_sdk.frameworks)
@@ -9352,6 +9350,10 @@ with pkgs;
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
 
+  freeimage = callPackage ../by-name/fr/freeimage/package.nix {
+    openexr = openexr_2;
+  };
+
   freeipa = callPackage ../os-specific/linux/freeipa {
     # NOTE: freeipa and sssd need to be built with the same version of python
     kerberos = krb5.override {
@@ -9395,6 +9397,7 @@ with pkgs;
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
+    openexr = openexr_2;
   };
 
   gensio = darwin.apple_sdk_11_0.callPackage ../development/libraries/gensio { };
@@ -9843,7 +9846,7 @@ with pkgs;
   hunspellWithDicts =
     dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
-  hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_24; };
+  hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_28; };
 
   icu-versions = callPackages ../development/libraries/icu { };
   inherit (icu-versions)
@@ -10783,6 +10786,7 @@ with pkgs;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
     enableLto = false;
+    openexr = openexr_2;
   };
 
   opencv4WithoutCuda = opencv4.override {
@@ -10791,9 +10795,8 @@ with pkgs;
 
   opencv = opencv4;
 
-  openexr = openexr_2;
-  openexr_2 = callPackage ../development/libraries/openexr { };
-  openexr_3 = callPackage ../development/libraries/openexr/3.nix { };
+  openexr = callPackage ../development/libraries/openexr/3.nix { };
+  openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
@@ -11432,7 +11435,6 @@ with pkgs;
 
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
-    openexr = openexr_3;
   };
 
   vllm = with python3Packages; toPythonApplication vllm;
@@ -12417,6 +12419,7 @@ with pkgs;
     withMysql = false;
     withNotification = false;
     withIcingadb = false;
+    withPerfdata = false;
   };
 
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
@@ -13792,9 +13795,7 @@ with pkgs;
 
   airwave = libsForQt5.callPackage ../applications/audio/airwave { };
 
-  alembic = callPackage ../development/libraries/alembic {
-    openexr = openexr_3;
-  };
+  alembic = callPackage ../development/libraries/alembic { };
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
@@ -13893,7 +13894,6 @@ with pkgs;
   };
 
   blender = callPackage ../by-name/bl/blender/package.nix {
-    openexr = openexr_3;
     python3Packages = python311Packages;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa
@@ -14082,6 +14082,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
+
   djview = libsForQt5.callPackage ../applications/graphics/djview { };
   djview4 = djview;
 
@@ -14174,7 +14176,6 @@ with pkgs;
     emacs30-nox
     emacs30-pgtk
 
-    emacs28-macport
     emacs29-macport
     ;
 
@@ -14720,7 +14721,6 @@ with pkgs;
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
-    openexr = openexr_3;
   };
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
@@ -14929,7 +14929,6 @@ with pkgs;
   imagemagick = lowPrio (
     callPackage ../applications/graphics/ImageMagick {
       inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
-      openexr = openexr_3;
     }
   );
 
@@ -15086,7 +15085,7 @@ with pkgs;
   };
 
   kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix {
-    buildGoModule = buildGo123Module;
+    buildGoModule = buildGo124Module;
   };
 
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
@@ -15247,7 +15246,9 @@ with pkgs;
     portaudio = null;
   };
 
-  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr {
+    openexr = openexr_2;
+  };
 
   luddite = with python3Packages; toPythonApplication luddite;
 
@@ -15683,7 +15684,6 @@ with pkgs;
   };
 
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-    openexr = openexr_3;
   };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
@@ -18993,7 +18993,7 @@ with pkgs;
   nixosOptionsDoc = attrs: (import ../../nixos/lib/make-options-doc) ({ inherit pkgs lib; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_26;
+    nix = nixVersions.nix_2_28;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
