@@ -17,20 +17,19 @@
   callPackage,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  version = "0.11.6-unstable-2025-02-04";
+  version = "0.11.7";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    # release 0.11.6 broken, see https://github.com/stalwartlabs/mail-server/issues/1150
-    rev = "fa6483b6df57513582425119027bc4fce8f03d65";
-    hash = "sha256-mB3Vm07b+eKDlQ95pmVk14Q7jXTBbV1jTbN+6hcFt0s=";
+    tag = "v${version}";
+    hash = "sha256-pBCj/im5UB7A92LBuLeB6EAHTJEuN62BG5Nkj8qsNNA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PHr73GQ/6d5ulJzntSHIilGzdF4Y8Np9jSFa6F2Nwao=";
+  cargoHash = "sha256-B+xsTVsh9QBAybKiJq0Sb7rveOsH05vuCmNQ5t/UZnk=";
 
   nativeBuildInputs = [
     pkg-config
