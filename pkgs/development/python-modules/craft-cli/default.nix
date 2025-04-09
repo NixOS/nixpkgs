@@ -11,6 +11,7 @@
   pytest-check,
   pytest-mock,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -46,12 +47,8 @@ buildPythonPackage rec {
     pytest-check
     pytest-mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
