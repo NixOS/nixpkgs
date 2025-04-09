@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-eQS+UZDXh5lSVjt4o68OWPon2VJa9/U/k+rHqDtDPns=";
   };
 
+  patches = [
+    # Make wheel file generation deterministic https://github.com/NixOS/nixpkgs/issues/383885
+    ./sip-builder.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
