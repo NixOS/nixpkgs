@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcifpp";
-  version = "7.0.9";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = "libcifpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wV4YvQmtpbj+mOiMeSr9gBpZzFPygkAOkj74vv4pA4U=";
+    hash = "sha256-t1ovrrKu+QSSdwgTp2Nag4SsAJeU9aRizJccd+u+dVI=";
   };
 
   nativeBuildInputs = [
