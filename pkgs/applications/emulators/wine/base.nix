@@ -286,8 +286,8 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit pkgArches;
-      inherit (src) updateScript;
       tests = { inherit (nixosTests) wine; };
+      updateScript = src.updateScript or null;
     };
     meta = {
       inherit version;
@@ -301,9 +301,10 @@ stdenv.mkDerivation (
       inherit badPlatforms platforms;
       maintainers = with lib.maintainers; [
         avnik
-        raskin
         bendlas
         jmc-figueira
+        kira-bruneau
+        raskin
         reckenrode
       ];
       inherit mainProgram;

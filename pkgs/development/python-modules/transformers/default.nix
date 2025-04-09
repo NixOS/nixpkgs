@@ -58,14 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.50.3";
+  version = "4.51.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${version}";
-    hash = "sha256-Qou5q7FZJJXO87lgMC5Qttfi5KJWCwuzG5icCEfgs0M=";
+    hash = "sha256-02HT0GAfEyGgqPvly7EPZX0loSeS2mJQNI87E8WbEGY=";
   };
 
   build-system = [ setuptools ];
@@ -133,6 +133,9 @@ buildPythonPackage rec {
         jaxlib
         flax
         optax
+      ];
+      hf_xet = [
+        # hf-xet (unpackaged)
       ];
       tokenizers = [ tokenizers ];
       ftfy = [ ftfy ];
