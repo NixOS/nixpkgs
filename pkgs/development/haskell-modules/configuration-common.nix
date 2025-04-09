@@ -3013,6 +3013,11 @@ self: super:
   pipes-text =
     assert super.pipes-text.version == "1.0.1";
     doJailbreak super.pipes-text;
+
+  # 2025-04-09: jailbreak to allow bytestring >= 0.12
+  array-builder =
+    assert super.array-builder.version == "0.1.4.1";
+    doJailbreak super.array-builder;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
