@@ -20,20 +20,35 @@
 let
 
   # Called for Nix < 2.26
-  common =
+  commonAutoconf =
     args:
-    nixDependencies.callPackage (import ./common.nix ({ inherit lib fetchFromGitHub; } // args)) {
+    nixDependencies.callPackage
+      (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
+      {
+        inherit
+          Security
+          storeDir
+          stateDir
+          confDir
+          ;
+        aws-sdk-cpp =
+          if lib.versionAtLeast args.version "2.12pre" then
+            nixDependencies.aws-sdk-cpp
+          else
+            nixDependencies.aws-sdk-cpp-old;
+      };
+
+  # Called for Nix == 2.28. Transitional until we always use
+  # per-component packages.
+  commonMeson =
+    args:
+    nixDependencies.callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
       inherit
         Security
         storeDir
         stateDir
         confDir
         ;
-      aws-sdk-cpp =
-        if lib.versionAtLeast args.version "2.12pre" then
-          nixDependencies.aws-sdk-cpp
-        else
-          nixDependencies.aws-sdk-cpp-old;
     };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -140,7 +155,7 @@ lib.makeExtensible (
   (
     {
       nix_2_3 =
-        (common {
+        (commonAutoconf {
           version = "2.3.18";
           hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
           patches = [
@@ -155,63 +170,45 @@ lib.makeExtensible (
             enableParallelChecking = false;
           };
 
-      nix_2_24 = common {
-        version = "2.24.13";
-        hash = "sha256-lUsK8lAwaaTEM+KFML/6sYwaVAiSf70g1EfSDJNNrU0=";
+      nix_2_24 = commonAutoconf {
+        version = "2.24.14";
+        hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
         self_attribute_name = "nix_2_24";
       };
 
-      nix_2_25 = common {
+      nix_2_25 = commonAutoconf {
         version = "2.25.5";
         hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
         self_attribute_name = "nix_2_25";
       };
 
-      nixComponents_2_26 = nixDependencies.callPackage ./modular/packages.nix {
+      nix_2_26 = commonMeson {
         version = "2.26.3";
+        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
+        self_attribute_name = "nix_2_28";
+      };
+
+      nix_2_28 = commonMeson {
+        version = "2.28.1";
+        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
+        self_attribute_name = "nix_2_28";
+      };
+
+      nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.29pre20250407_${lib.substring 0 8 src.rev}";
         inherit (self.nix_2_24.meta) maintainers;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
+        otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "42fc03dd1f12df2d9152303f3fb8bf22b746462c";
-          hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
+          rev = "73d3159ba0b4b711c1f124a587f16e2486d685d7";
+          hash = "sha256-9wJXUGqXIqMjNyKWJKCcxrDHM/KxDkvJMwo6S3s+WuM=";
         };
       };
 
-      # Note, this might eventually become an alias, as packages should
-      # depend on the components they need in `nixComponents_2_26`.
-      nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
+      git = addTests "git" self.nixComponents_git.nix-everything;
 
-      nixComponents_2_27 = nixDependencies.callPackage ./modular/packages.nix {
-        version = "2.27.1";
-        inherit (self.nix_2_24.meta) maintainers;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_27";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          rev = "9cb662df7442a1e2c4600fb8ecb2ad613ebc5a95";
-          hash = "sha256-rBPulEBpn4IiqkPsetuh7BRzT2iGCzZYnogTAsbrvhU=";
-        };
-      };
-
-      nix_2_27 = addTests "nix_2_27" self.nixComponents_2_27.nix-everything;
-
-      nixComponents_2_28 = nixDependencies.callPackage ./modular/packages.nix {
-        version = "2.28.1pre";
-        inherit (self.nix_2_24.meta) maintainers;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_28";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          rev = "9cdf72beaa77f1e6c0faed44872b83783051f20d";
-          hash = "sha256-0sk7cGOdfUA6/AamSsuURHdILxSyw+s2zl7CDaSsawo=";
-        };
-      };
-
-      nix_2_28 = addTests "nix_2_28" self.nixComponents_2_28.nix-everything;
-
-      latest = self.nix_2_26;
+      latest = self.nix_2_28;
 
       # The minimum Nix version supported by Nixpkgs
       # Note that some functionality *might* have been backported into this Nix version,
@@ -231,7 +228,7 @@ lib.makeExtensible (
           nix;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_24;
+      stable = addFallbackPathsCheck self.nix_2_28;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (
@@ -244,8 +241,10 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
+
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
-        git = throw "nixVersions.git has been removed. use nixVersions.latest or the nix flake.";
       }
     )
   )

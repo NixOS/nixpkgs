@@ -146,7 +146,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       azahi
       flokli
-      emilylange
       hbjydev
     ];
     platforms = lib.platforms.unix;

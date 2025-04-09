@@ -7,6 +7,7 @@
   geoclue2-with-demo-agent,
   libinput,
   udev,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -38,12 +39,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   dontCargoInstall = true;
 
+  passthru.tests = {
+    inherit (nixosTests)
+      cosmic
+      cosmic-autologin
+      cosmic-noxwayland
+      cosmic-autologin-noxwayland
+      ;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
     description = "Settings Daemon for the COSMIC Desktop Environment";
     mainProgram = "cosmic-settings-daemon";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = with maintainers; [
+      nyabinary
+      drakon64
+    ];
     platforms = platforms.linux;
   };
 })
