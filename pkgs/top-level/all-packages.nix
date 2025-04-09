@@ -393,6 +393,8 @@ with pkgs;
     catch2 = catch2_3;
   };
 
+  eff = callPackage ../by-name/ef/eff/package.nix { ocamlPackages = ocaml-ng.ocamlPackages_5_2; };
+
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
 
   inherit (gridlock) nyarr;
@@ -8353,9 +8355,11 @@ with pkgs;
   };
 
   framac = callPackage ../by-name/fr/framac/package.nix {
+    ocamlPackages = ocaml-ng.ocamlPackages_5_2;
     why3 = why3.override {
       version = "1.7.2";
       coqPackages = coqPackages_8_18;
+      ocamlPackages = ocaml-ng.ocamlPackages_5_2;
     };
   };
 
