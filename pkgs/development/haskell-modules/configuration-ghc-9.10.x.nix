@@ -64,7 +64,8 @@ self: super: {
 
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
-  extensions = doDistribute self.extensions_0_1_0_2;
+  # 2025-04-09: jailbreak to allow hedgehog >= 1.5, hspec-hedgehog >=0.2
+  extensions = doJailbreak (doDistribute self.extensions_0_1_0_2);
   # Test suite tightens bound on Diff
   fourmolu = dontCheck (doDistribute self.fourmolu_0_17_0_0);
   ghc-lib = doDistribute self.ghc-lib_9_10_1_20250103;
@@ -88,7 +89,15 @@ self: super: {
   # Jailbreaks
   #
   base64 = doJailbreak super.base64; # base <4.20
+  # 2025-04-09: base <4.20, containers <0.7, filepath <1.5, Cabal-syntax <3.11
+  cabal-install-parsers =
+    assert super.cabal-install-parsers == "0.6.1.1";
+    doJailbreak super.cabal-install-parsers;
   floskell = doJailbreak super.floskell; # base <4.20
+  # 2025-04-09: filepath <1.5
+  haddock-library =
+    assert super.haddock-library == "1.11.0";
+    doJailbreak super.haddock-library;
   spdx = doJailbreak super.spdx; # Cabal-syntax < 3.13
   tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
   tree-diff = doJailbreak super.tree-diff; # base <4.20
@@ -98,8 +107,6 @@ self: super: {
   bitvec = doJailbreak super.bitvec; # primitive <0.9
 
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
-
-  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
   # Test suite issues

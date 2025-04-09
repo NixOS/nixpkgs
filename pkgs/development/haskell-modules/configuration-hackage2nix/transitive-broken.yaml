@@ -575,6 +575,7 @@ dont-distribute-packages:
  - azure-functions-worker
  - azure-service-api
  - azure-servicebus
+ - b9
  - babylon
  - backblaze-b2-hs
  - backdropper
@@ -737,6 +738,9 @@ dont-distribute-packages:
  - cas-hashable-s3
  - cas-store
  - casadi-bindings
+ - casadi-bindings-control
+ - casadi-bindings-ipopt-interface
+ - casadi-bindings-snopt-interface
  - cash
  - casr-logbook-html
  - casr-logbook-meta
@@ -1933,6 +1937,7 @@ dont-distribute-packages:
  - ihaskell-rlangqq
  - ihttp
  - imap
+ - imbib
  - imgurder
  - imj-animation
  - imj-base
@@ -2456,6 +2461,7 @@ dont-distribute-packages:
  - mysnapsession-example
  - mysql-haskell-openssl
  - mysql-simple-typed
+ - mywatch
  - mywork
  - n2o-web
  - nakadi-client
@@ -3441,6 +3447,10 @@ dont-distribute-packages:
  - tip-haskell-frontend
  - tip-lib
  - titan
+ - tlex
+ - tlex-debug
+ - tlex-encoding
+ - tlex-th
  - tls-extra
  - tn
  - to-string-instances
@@ -3471,7 +3481,12 @@ dont-distribute-packages:
  - transient-universe
  - transient-universe-tls
  - translate-cli
+ - trasa-client
+ - trasa-extra
  - trasa-form
+ - trasa-reflex
+ - trasa-server
+ - trasa-th
  - traversal-template
  - treemap-html-tools
  - treersec
