@@ -2960,6 +2960,15 @@ self: super:
       sha256 = "sha256-ayRKeCqYKgZVA826xgAXxGhttm0Gx4ZrIRJlFlXPKhw=";
     }))
   ];
+
+  HList = lib.pipe super.HList [
+    # Fixes syntax error in tests
+    (appendPatch (fetchpatch {
+      url = "https://bitbucket.org/HList/hlist/commits/e688f11d7432c812c2b238464401a86f588f81e1/raw";
+      sha256 = "sha256-XIBIrR2MFmhKaocZJ4p57CgmAaFmMU5Z5a0rk2CjIcM=";
+    }))
+
+  ];
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
