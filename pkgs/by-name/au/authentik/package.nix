@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "2024.12.1";
+  version = "2024.12.4";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-CkUmsVKzAQ/VWIhtxWxlcGtrWVa8hxqsMqvfcsG5ktA=";
+    hash = "sha256-t5Jwu//zc49L7iWIVaIZ4ipOdxqSe9Qv3xKpPpWMq1s=";
   };
 
   meta = with lib; {
@@ -43,7 +43,7 @@ let
 
     sourceRoot = "source/website";
 
-    outputHash = "sha256-SONw9v67uuVk8meRIuS1KaBGbej6Gbz6nZxPDnHfCwQ=";
+    outputHash = "sha256-JBFDpLGaED05pHZ4ihwqNEFf8qBOAcTByVdF49hESAk=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -53,7 +53,7 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
-      rm -r ./cache
+      rm -r ./cache node_modules/@parcel/watcher-linux-* node_modules/.package-lock.json
     '';
 
     installPhase = ''
