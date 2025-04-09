@@ -11,17 +11,17 @@
   stdenv,
   darwin,
   testers,
-  espup,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espup";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1muyZd7jhhDkif/8mX7QZEMnV105jNMHT0RaZPinD/4=";
   };
 
@@ -67,21 +67,24 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/espup completions zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = espup;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for installing and maintaining Espressif Rust ecosystem";
     homepage = "https://github.com/esp-rs/espup/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       knightpp
       beeb
     ];
     mainProgram = "espup";
   };
-}
+})
