@@ -3026,6 +3026,11 @@ self: super:
   kind-generics-th =
     assert super.kind-generics-th.version == "0.2.3.3";
     doJailbreak super.kind-generics-th;
+
+  # 2025-04-09: jailbreak to allow tasty >= 1.5
+  cvss =
+    assert super.cvss.version == "0.1";
+    doJailbreak super.cvss;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
