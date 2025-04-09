@@ -115,6 +115,10 @@ let
       # While the system libc++ is derived from LLVM, it is considered distinct from LLVM’s and not compatible.
       # See: https://discourse.llvm.org/t/apples-libc-now-provides-std-type-descriptor-t-functionality-not-found-in-upstream-libc/73881/3
       (lib.cmakeFeature "LIBCXX_ABI_NAMESPACE" abiNamespace)
+      # LLVM’s headers assume that Darwin will use availability annotations to limit features to what is supported by
+      # the system libc++ based on deployment target. Since nixpkgs ships and links its own libc++, disable the
+      # availability annotations to ensure that all features are supported regardless of deployment target.
+      (lib.cmakeBool "LIBCXX_ENABLE_VENDOR_AVAILABILITY_ANNOTATIONS" false)
     ]
     ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
       (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
