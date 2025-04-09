@@ -27,7 +27,7 @@
   # client
   grpcio,
   # cpp
-  ray-cpp,
+  # ray-cpp,
   # data
   fsspec,
   numpy,
@@ -69,7 +69,8 @@
 }:
 
 let
-  pname = "ray" + lib.optionalString cpp "-cpp";
+  pname = "ray";
+  # pname = "ray" + lib.optionalString cpp "-cpp";
   version = "2.44.0";
 in
 buildPythonPackage rec {
@@ -147,7 +148,8 @@ buildPythonPackage rec {
         .${pname};
     in
     fetchPypi {
-      pname = "ray" + lib.optionalString cpp "_cpp";
+      # pname = "ray" + lib.optionalString cpp "_cpp";
+      pname = "ray";
       inherit version format;
       dist = pyShortVersion;
       python = pyShortVersion;
@@ -182,7 +184,7 @@ buildPythonPackage rec {
       cupy
     ];
     client = [ grpcio ];
-    cpp = [ ray-cpp ];
+    # cpp = [ ray-cpp ];
     data = [
       fsspec
       numpy
@@ -245,14 +247,15 @@ buildPythonPackage rec {
     ];
   };
 
-  postInstall = lib.optionalString (!cpp) ''
+  # postInstall = lib.optionalString (!cpp) ''
+  postInstall = ''
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}
   '';
 
   pythonImportsCheck = [ "ray" ];
 
   passthru.tests = {
-    inherit ray-cpp;
+    # inherit ray-cpp;
   };
 
   meta = {
