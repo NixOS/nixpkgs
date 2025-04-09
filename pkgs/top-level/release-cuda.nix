@@ -119,6 +119,7 @@ let
       rtabmap = linux;
       saga = linux;
       suitesparse = linux;
+      sunshine = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
