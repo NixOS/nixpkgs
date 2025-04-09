@@ -5908,6 +5908,7 @@ broken-packages:
   - transient # failure in job https://hydra.nixos.org/build/233221557 at 2023-09-02
   - translatable-intset # failure in job https://hydra.nixos.org/build/233252531 at 2023-09-02
   - translate # failure in job https://hydra.nixos.org/build/233239029 at 2023-09-02
+  - trasa # failure in job https://hydra.nixos.org/build/294586179 at 2025-04-09
   - traverse-code # failure in job https://hydra.nixos.org/build/233236749 at 2023-09-02
   - travis # failure in job https://hydra.nixos.org/build/233230706 at 2023-09-02
   - travis-meta-yaml # failure in job https://hydra.nixos.org/build/233251064 at 2023-09-02
