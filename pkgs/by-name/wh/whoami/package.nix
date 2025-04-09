@@ -21,8 +21,6 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  doCheck = false;
-
   meta = {
     description = "Tiny Go server that prints os information and HTTP request to output";
     mainProgram = "whoami";
