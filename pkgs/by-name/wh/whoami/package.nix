@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +21,8 @@ buildGoModule (finalAttrs: {
   ldflags = [ "-s" ];
 
   env.CGO_ENABLED = 0;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tiny Go server that prints os information and HTTP request to output";
