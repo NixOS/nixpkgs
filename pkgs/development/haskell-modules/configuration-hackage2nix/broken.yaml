@@ -5851,6 +5851,7 @@ broken-packages:
   - Titim # failure in job https://hydra.nixos.org/build/233196143 at 2023-09-02
   - tkhs # failure in job https://hydra.nixos.org/build/233216589 at 2023-09-02
   - tkyprof # failure in job https://hydra.nixos.org/build/233205547 at 2023-09-02
+  - tlex-core # failure in job https://hydra.nixos.org/build/294586136 at 2025-04-09
   - tls-debug # failure in job https://hydra.nixos.org/build/233228426 at 2023-09-02
   - TLT # failure in job https://hydra.nixos.org/build/233193495 at 2023-09-02
   - tmp-postgres # failure in job https://hydra.nixos.org/build/252731301 at 2024-03-16

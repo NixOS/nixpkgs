@@ -3441,6 +3441,10 @@ dont-distribute-packages:
  - tip-haskell-frontend
  - tip-lib
  - titan
+ - tlex
+ - tlex-debug
+ - tlex-encoding
+ - tlex-th
  - tls-extra
  - tn
  - to-string-instances
