@@ -481,7 +481,10 @@ builtins.intersectAttrs super {
   hasql-transaction = dontCheck super.hasql-transaction;
 
   # Avoid compiling twice by providing executable as a separate output (with small closure size),
-  postgres-websockets = enableSeparateBinOutput super.postgres-websockets;
+  postgres-websockets = lib.pipe super.postgres-websockets [
+    enableSeparateBinOutput
+    (overrideCabal { passthru.tests = pkgs.nixosTests.postgres-websockets; })
+  ];
 
   # Test suite requires a running postgresql server,
   # avoid compiling twice by providing executable as a separate output (with small closure size),
