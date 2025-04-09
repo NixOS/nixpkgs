@@ -535,10 +535,10 @@ mkDerivation (finalAttrs: {
     };
   };
 
-  meta = meta // {
+  meta = {
     broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
     knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
       "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
     ];
-  };
+  } // meta;
 })
