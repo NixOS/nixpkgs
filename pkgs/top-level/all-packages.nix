@@ -1248,11 +1248,11 @@ with pkgs;
   };
 
   yabridge = callPackage ../tools/audio/yabridge {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.yabridge;
   };
 
   yabridgectl = callPackage ../tools/audio/yabridgectl {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.yabridge;
   };
 
   yafetch = callPackage ../tools/misc/yafetch {
@@ -19282,6 +19282,7 @@ with pkgs;
           stagingFull
           wayland
           waylandFull
+          yabridge
           fonts
           ;
       }
