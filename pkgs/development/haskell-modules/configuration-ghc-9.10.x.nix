@@ -64,7 +64,8 @@ self: super: {
 
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
-  extensions = doDistribute self.extensions_0_1_0_2;
+  # 2025-04-09: jailbreak to allow hedgehog >= 1.5, hspec-hedgehog >=0.2
+  extensions = doJailbreak (doDistribute self.extensions_0_1_0_2);
   # Test suite tightens bound on Diff
   fourmolu = dontCheck (doDistribute self.fourmolu_0_17_0_0);
   ghc-lib = doDistribute self.ghc-lib_9_10_1_20250103;
