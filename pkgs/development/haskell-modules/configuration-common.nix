@@ -3018,6 +3018,9 @@ self: super:
   array-builder =
     assert super.array-builder.version == "0.1.4.1";
     doJailbreak super.array-builder;
+
+  # 2025-04-09: missing dependency - somehow it's not listed on hackage
+  broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
