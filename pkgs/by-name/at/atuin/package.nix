@@ -5,8 +5,7 @@
   installShellFiles,
   rustPlatform,
   nixosTests,
-  jq,
-  moreutils,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,8 +42,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) atuin;
+  passthru = {
+    tests = {
+      inherit (nixosTests) atuin;
+    };
+    updateScript = nix-update-script { };
   };
 
   checkFlags = [
