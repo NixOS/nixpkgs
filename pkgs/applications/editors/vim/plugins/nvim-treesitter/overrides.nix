@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   tree-sitter,
   neovim,
@@ -13,9 +14,28 @@ self: super:
 
 let
   inherit (neovimUtils) grammarToPlugin;
-  generatedGrammars = callPackage ./generated.nix {
-    inherit (tree-sitter) buildGrammar;
+
+  overrides = prev: {
+    ocamllex =
+      if stdenv.hostPlatform.isDarwin then
+        # remove after https://github.com/314eter/tree-sitter-ocamllex/issues/10 is resolved
+        # see https://github.com/NixOS/nixpkgs/pull/394636
+        (prev.ocamllex.overrideAttrs {
+          src = prev.ocamllex.src.override {
+            hash = "sha256-UBGVc98lrtTCp/kYDEFM/8iG9n7Tekx+xbE7Wdyp2uQ=";
+          };
+        })
+      else
+        prev.ocamllex;
   };
+
+  generatedGrammars =
+    let
+      generated = callPackage ./generated.nix {
+        inherit (tree-sitter) buildGrammar;
+      };
+    in
+    lib.overrideExisting generated (overrides generated);
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
 
