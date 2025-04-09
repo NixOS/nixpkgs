@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "2.15.0";
+  version = "3.0.0";
 
   pyproject = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-cli";
     tag = version;
-    hash = "sha256-L8hOQJhjVAMo/WxEHHEk2QorlSdDFMGdcL/Q3Pv6mT4=";
+    hash = "sha256-RAnvx5519iXZnJm8jtY635e0DEL7jnIgZtTCindqMTY=";
   };
 
   postPatch = ''
@@ -47,6 +47,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
+
+  preCheck = ''
+    mkdir -p check-phase
+    export HOME="$(pwd)/check-phase"
+  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
