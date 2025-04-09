@@ -19,7 +19,7 @@
     license = licenses.agpl3Only;
     maintainers = with maintainers; [
       heyimnova
-      caralice
+      magistau
     ];
     platforms = platforms.linux ++ platforms.darwin;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
