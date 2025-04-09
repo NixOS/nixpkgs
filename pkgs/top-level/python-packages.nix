@@ -5584,6 +5584,8 @@ self: super: with self; {
 
   glueviz = callPackage ../development/python-modules/glueviz { };
 
+  gluonts = callPackage ../development/python-modules/gluonts { };
+
   glymur = callPackage ../development/python-modules/glymur { };
 
   glyphsets = callPackage ../development/python-modules/glyphsets { };
