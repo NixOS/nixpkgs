@@ -68,6 +68,11 @@ buildGoModule rec {
     cp -r ${ui}/share/parca/ui/* ui/packages/app/web/build
   '';
 
+  passthru = {
+    inherit ui;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     mainProgram = "parca";
     description = "Continuous profiling for analysis of CPU and memory usage";
