@@ -7,6 +7,7 @@
   testers,
   rockcraft,
   cacert,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -39,13 +40,9 @@ python3Packages.buildPythonApplication rec {
       pytest-mock
       pytest-subprocess
       pytestCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ [ dpkg ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   disabledTests = [
     "test_project_all_platforms_invalid"
