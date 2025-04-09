@@ -275,7 +275,7 @@ in
     };
 
     fileSystems =
-      {
+      lib.mkImageMediaOverride {
         "/" = {
           device = "/dev/disk/by-label/nixos";
           autoResize = true;
