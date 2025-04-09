@@ -762,6 +762,8 @@ let
         };
       };
 
+      bodil.blueprint-gtk = callPackage ./bodil.blueprint-gtk { };
+
       bradgashler.htmltagwrap = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "bradgashler";
