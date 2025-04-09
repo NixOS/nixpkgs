@@ -3008,6 +3008,11 @@ self: super:
   hasql-streams-core =
     assert super.hasql-streams-core.version == "0.1.0.0";
     doJailbreak super.hasql-streams-core;
+
+  # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
+  pipes-text =
+    assert super.pipes-text.version == "1.0.1";
+    doJailbreak super.pipes-text;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
