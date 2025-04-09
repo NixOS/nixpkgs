@@ -2998,6 +2998,11 @@ self: super:
     #   fd:9: hPutBuf: resource vanished (Broken pipe)
     dontCheck
   ];
+
+  # 2025-04-09: jailbreak to allow mtl >= 2.3, template-haskell >= 2.17, text >= 1.3
+  egison-pattern-src-th-mode =
+    assert super.egison-pattern-src-th-mode.version == "0.2.1.2";
+    doJailbreak super.egison-pattern-src-th-mode;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
