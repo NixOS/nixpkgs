@@ -184,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };
 
