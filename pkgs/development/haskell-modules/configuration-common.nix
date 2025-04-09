@@ -2974,6 +2974,11 @@ self: super:
   hw-int =
     assert super.hw-int.version == "0.0.2.0";
     doJailbreak super.hw-int;
+
+  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
+  chimera =
+    assert super.chimera.version == "0.4.1.0";
+    doJailbreak super.chimera;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
