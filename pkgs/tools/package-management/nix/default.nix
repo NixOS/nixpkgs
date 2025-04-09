@@ -2,10 +2,8 @@
   lib,
   config,
   stdenv,
-  aws-sdk-cpp,
-  boehmgc,
-  libgit2,
-  callPackage,
+  nixDependencies,
+  generateSplicesForMkScope,
   fetchFromGitHub,
   fetchpatch,
   fetchpatch2,
@@ -22,127 +20,48 @@
   confDir ? "/etc",
 }:
 let
-  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
-  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    patches = (drv.patches or [ ]) ++ [
-      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-      ./patches/boehmgc-coroutine-sp-fallback.patch
-    ];
-  });
-
-  # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
-  aws-sdk-cpp-old-nix =
-    (aws-sdk-cpp.override {
-      apis = [
-        "s3"
-        "transfer"
-      ];
-      customMemoryManagement = false;
-    }).overrideAttrs
-      (args: rec {
-        # intentionally overriding postPatch
-        version = "1.9.294";
-
-        src = fetchFromGitHub {
-          owner = "aws";
-          repo = "aws-sdk-cpp";
-          rev = version;
-          hash = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
-        };
-        postPatch =
-          ''
-            # Avoid blanket -Werror to evade build failures on less
-            # tested compilers.
-            substituteInPlace cmake/compiler_settings.cmake \
-              --replace '"-Werror"' ' '
-
-            # Missing includes for GCC11
-            sed '5i#include <thread>' -i \
-              aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
-              aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
-              aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
-              aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
-              aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
-              aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
-              aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
-              aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
-              aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
-              aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
-              aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
-              aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
-              aws-cpp-sdk-transfer-tests/TransferTests.cpp
-            # Flaky on Hydra
-            rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
-            # Includes aws-c-auth private headers, so only works with submodule build
-            rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
-            # TestRandomURLMultiThreaded fails
-            rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-          ''
-          + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
-            # EPSILON is exceeded
-            rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
-          '';
-
-        patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
-
-        # only a stripped down version is build which takes a lot less resources to build
-        requiredSystemFeatures = [ ];
-      });
-
-  aws-sdk-cpp-nix =
-    (aws-sdk-cpp.override {
-      apis = [
-        "s3"
-        "transfer"
-      ];
-      customMemoryManagement = false;
-    }).overrideAttrs
+  # Called for Nix < 2.26
+  commonAutoconf =
+    args:
+    nixDependencies.callPackage
+      (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
       {
-        # only a stripped down version is build which takes a lot less resources to build
-        requiredSystemFeatures = [ ];
+        inherit
+          Security
+          storeDir
+          stateDir
+          confDir
+          ;
+        boehmgc = nixDependencies.boehmgc-coroutine-patch;
+        aws-sdk-cpp =
+          if lib.versionAtLeast args.version "2.12pre" then
+            nixDependencies.aws-sdk-cpp
+          else
+            nixDependencies.aws-sdk-cpp-old;
+        libgit2 =
+          if lib.versionAtLeast args.version "2.25.0" then
+            nixDependencies.libgit2-thin-packfile
+          else
+            pkgs.libgit2;
       };
 
-  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
-    nativeBuildInputs =
-      args.nativeBuildInputs or [ ]
-      # gitMinimal does not build on Windows. See packbuilder patch.
-      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-        # Needed for `git apply`; see `prePatch`
-        buildPackages.gitMinimal
-      ];
-    # Only `git apply` can handle git binary patches
-    prePatch =
-      args.prePatch or ""
-      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-        patch() {
-          git apply
-        }
-      '';
-    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
-    patches =
-      (args.patches or [ ])
-      ++ [
-        ./patches/libgit2-mempack-thin-packfile.patch
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-        ./patches/libgit2-packbuilder-callback-interruptible.patch
-      ];
-  });
-
-  common =
+  # Called for Nix == 2.28. Transitional until we always use
+  # per-component packages.
+  commonMeson =
     args:
-    callPackage (import ./common.nix ({ inherit lib fetchFromGitHub; } // args)) {
+    nixDependencies.callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
       inherit
         Security
         storeDir
         stateDir
         confDir
         ;
-      boehmgc = boehmgc-nix;
-      aws-sdk-cpp =
-        if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
-      libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
+      libgit2 =
+        if lib.versionAtLeast args.version "2.25.0" then
+          nixDependencies.libgit2-thin-packfile
+        else
+          pkgs.libgit2;
     };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -230,6 +149,19 @@ let
       };
     };
 
+  # Factored out for when we have package sets for multiple versions of
+  # Nix.
+  #
+  # `nixPackages_*` would be the most regular name, analogous to
+  # `linuxPackages_*`, especially if we put other 3rd-party software in
+  # here, but `nixPackages_*` would also be *very* confusing to humans!
+  generateSplicesForNixComponents =
+    nixComponentsAttributeName:
+    generateSplicesForMkScope [
+      "nixVersions"
+      nixComponentsAttributeName
+    ];
+
 in
 lib.makeExtensible (
   self:
@@ -237,7 +169,7 @@ lib.makeExtensible (
     {
       nix_2_3 =
         (
-          (common {
+          (commonAutoconf {
             version = "2.3.18";
             hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
             patches = [
@@ -246,7 +178,7 @@ lib.makeExtensible (
             self_attribute_name = "nix_2_3";
             maintainers = with lib.maintainers; [ flokli ];
           }).override
-          { boehmgc = boehmgc-nix_2_3; }
+          { boehmgc = nixDependencies.boehmgc-no-coroutine-patch; }
         ).overrideAttrs
           {
             # https://github.com/NixOS/nix/issues/10222
@@ -254,72 +186,79 @@ lib.makeExtensible (
             enableParallelChecking = false;
           };
 
-      nix_2_18 = common {
+      nix_2_18 = commonAutoconf {
         version = "2.18.9";
         hash = "sha256-RrOFlDGmRXcVRV2p2HqHGqvzGNyWoD0Dado/BNlJ1SI=";
         self_attribute_name = "nix_2_18";
       };
 
-      nix_2_19 = common {
+      nix_2_19 = commonAutoconf {
         version = "2.19.7";
         hash = "sha256-CkT1SNwRYYQdN2X4cTt1WX3YZfKZFWf7O1YTEo1APfc=";
         self_attribute_name = "nix_2_19";
       };
 
-      nix_2_20 = common {
+      nix_2_20 = commonAutoconf {
         version = "2.20.9";
         hash = "sha256-b7smrbPLP/wcoBFCJ8j1UDNj0p4jiKT/6mNlDdlrOXA=";
         self_attribute_name = "nix_2_20";
       };
 
-      nix_2_21 = common {
+      nix_2_21 = commonAutoconf {
         version = "2.21.5";
         hash = "sha256-/+TLpd6hvYMJFoeJvVZ+bZzjwY/jP6CxJRGmwKcXbI0=";
         self_attribute_name = "nix_2_21";
       };
 
-      nix_2_22 = common {
+      nix_2_22 = commonAutoconf {
         version = "2.22.4";
         hash = "sha256-JWjJzMA+CeyImMgP2dhSBHQW4CS8wg7fc2zQ4WdKuBo=";
         self_attribute_name = "nix_2_22";
       };
 
-      nix_2_23 = common {
+      nix_2_23 = commonAutoconf {
         version = "2.23.4";
         hash = "sha256-rugH4TUicHEdVfy3UuAobFIutqbuVco8Yg/z81g7clE=";
         self_attribute_name = "nix_2_23";
       };
 
-      nix_2_24 = common {
+      nix_2_24 = commonAutoconf {
         version = "2.24.14";
         hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
         self_attribute_name = "nix_2_24";
       };
 
-      nix_2_25 = common {
-        version = "2.25.2";
-        hash = "sha256-MZNpb4awWHXU+kGmH58VUB7M9l6UVo33riuQLTbMh4E=";
+      nix_2_25 = commonAutoconf {
+        version = "2.25.5";
+        hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
         self_attribute_name = "nix_2_25";
       };
 
-      nix_2_26 = addTests "nix_2_26" (
-        callPackage ./vendor/2_26/componentized.nix {
-          inherit (self.nix_2_24.meta) maintainers;
-          inherit libgit2-thin-packfile;
-        }
-      );
+      nix_2_26 = commonMeson {
+        version = "2.26.3";
+        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
+        self_attribute_name = "nix_2_28";
+      };
 
-      git = common rec {
-        version = "2.25.0";
-        suffix = "pre20241101_${lib.substring 0 8 src.rev}";
+      nix_2_28 = commonMeson {
+        version = "2.28.1";
+        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
+        self_attribute_name = "nix_2_28";
+      };
+
+      nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.29pre20250407_${lib.substring 0 8 src.rev}";
+        inherit (self.nix_2_24.meta) maintainers;
+        otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
-          hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
+          rev = "73d3159ba0b4b711c1f124a587f16e2486d685d7";
+          hash = "sha256-9wJXUGqXIqMjNyKWJKCcxrDHM/KxDkvJMwo6S3s+WuM=";
         };
-        self_attribute_name = "git";
       };
+
+      git = addTests "git" self.nixComponents_git.nix-everything;
 
       latest = self.nix_2_24;
 
@@ -354,6 +293,9 @@ lib.makeExtensible (
         ) (lib.range 4 17)
       )
       // {
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
+
         unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
       }
     )
