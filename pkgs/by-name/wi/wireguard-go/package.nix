@@ -33,10 +33,7 @@ buildGoModule (
 
     subPackages = [ "." ];
 
-    ldflags = [
-      "-s"
-      "-w"
-    ];
+    ldflags = [ "-s" ];
 
     # No tests besides the formatting one are in root.
     # We can't override subPackages per-phase (and we don't
