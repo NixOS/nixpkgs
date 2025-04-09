@@ -3021,6 +3021,11 @@ self: super:
 
   # 2025-04-09: missing dependency - somehow it's not listed on hackage
   broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
+
+  # 2025-04-09: jailbreak to allow template-haskell >= 2.21, th-abstraction >= 0.7
+  kind-generics-th =
+    assert super.kind-generics-th.version == "0.2.3.3";
+    doJailbreak super.kind-generics-th;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
