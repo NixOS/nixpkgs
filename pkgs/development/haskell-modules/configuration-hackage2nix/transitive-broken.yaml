@@ -575,6 +575,7 @@ dont-distribute-packages:
  - azure-functions-worker
  - azure-service-api
  - azure-servicebus
+ - b9
  - babylon
  - backblaze-b2-hs
  - backdropper
@@ -1936,6 +1937,7 @@ dont-distribute-packages:
  - ihaskell-rlangqq
  - ihttp
  - imap
+ - imbib
  - imgurder
  - imj-animation
  - imj-base
@@ -2459,6 +2461,7 @@ dont-distribute-packages:
  - mysnapsession-example
  - mysql-haskell-openssl
  - mysql-simple-typed
+ - mywatch
  - mywork
  - n2o-web
  - nakadi-client
