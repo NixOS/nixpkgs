@@ -45,7 +45,7 @@ let
           "-X 'github.com/hashicorp/terraform/version.dev=no'"
         ];
 
-        postConfigure = ''
+        postPatch = ''
           # Between go 1.23 and 1.24 the following GODEBUG setting was removed, and a new
           # similar one was added.
           # https://github.com/golang/go/issues/72111
@@ -54,7 +54,8 @@ let
           # https://tldr.fail/
           substituteInPlace go.mod \
             --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
-
+        '';
+        postConfigure = ''
           # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
           substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
             --replace-fail "/bin/stty" "${coreutils}/bin/stty"
