@@ -13671,6 +13671,8 @@ self: super: with self; {
 
   pytest-responses = callPackage ../development/python-modules/pytest-responses { };
 
+  pytest-retry = callPackage ../development/python-modules/pytest-retry { };
+
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
 
   pytest-run-parallel = callPackage ../development/python-modules/pytest-run-parallel { };
