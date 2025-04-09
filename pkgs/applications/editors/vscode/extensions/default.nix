@@ -2429,6 +2429,8 @@ let
         };
       };
 
+      huacnlee.autocorrect = callPackage ./huacnlee.autocorrect { };
+
       humao.rest-client = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "humao";
