@@ -2,9 +2,11 @@
   lib,
   callPackage,
   stdenvNoCC,
+  writeShellScript,
 }:
 let
   root = ./.;
+  updateScript = ./update.sh;
 
   mkYaziPlugin =
     args@{
@@ -14,6 +16,10 @@ let
       installPhase ? null,
       ...
     }:
+    let
+      # Extract the plugin name from pname (removing .yazi suffix if present)
+      pluginName = lib.removeSuffix ".yazi" pname;
+    in
     stdenvNoCC.mkDerivation (
       args
       // {
@@ -44,6 +50,16 @@ let
         meta = meta // {
           description = meta.description or "";
           platforms = meta.platforms or lib.platforms.all;
+        };
+        passthru = (args.passthru or { }) // {
+          updateScript = {
+            command = writeShellScript "update-${pluginName}" ''
+              export PLUGIN_NAME="${pluginName}"
+              export PLUGIN_PNAME="${pname}"
+              exec ${updateScript}
+            '';
+            supportedFeatures = [ "commit" ];
+          };
         };
       }
     );
