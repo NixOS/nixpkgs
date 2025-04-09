@@ -2979,6 +2979,11 @@ self: super:
   chimera =
     assert super.chimera.version == "0.4.1.0";
     doJailbreak super.chimera;
+
+  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
+  bzlib =
+    assert super.bzlib.version == "0.5.2.0";
+    doJailbreak super.bzlib;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
