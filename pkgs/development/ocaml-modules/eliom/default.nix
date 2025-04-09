@@ -1,6 +1,7 @@
 {
   buildDunePackage,
   lib,
+  ocaml,
   fetchFromGitHub,
   which,
   ocsigen_server,
@@ -15,6 +16,9 @@
   lwt_ppx,
   ocsipersist,
 }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.3")
+  "eliom is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "eliom";
