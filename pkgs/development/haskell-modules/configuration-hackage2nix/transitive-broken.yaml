@@ -3471,7 +3471,12 @@ dont-distribute-packages:
  - transient-universe
  - transient-universe-tls
  - translate-cli
+ - trasa-client
+ - trasa-extra
  - trasa-form
+ - trasa-reflex
+ - trasa-server
+ - trasa-th
  - traversal-template
  - treemap-html-tools
  - treersec
