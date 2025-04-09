@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub,
+{ stdenv, lib, fetchFromGitHub, callPackage,
 libz,
 autoconf,
 automake,
@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    # Copy over binaries
     make install
+    # Make wrappers
     mkdir $out/bin
     touch $out/bin/breseq
     touch $out/bin/gdtools
@@ -44,8 +46,23 @@ stdenv.mkDerivation rec {
     echo -e "#! /usr/bin/bash\n\nexport PATH=$REQUIRED_R/bin:$REQUIRED_BOWTIE/bin:\$PATH\n\nexec $out/unwrapped/bin/gdtools \$@" >> $out/bin/gdtools
     chmod +x $out/bin/breseq
     chmod +x $out/bin/gdtools
+    # Clean up dependency tree
     find $out -type f -exec patchelf --shrink-rpath '{}' \; -exec strip '{}' \; 2>/dev/null
+    # Copy over tests and license
+    cp LICENSE $out/license
+    mkdir $out/tests
+    mkdir $out/tests/data
+    cp tests/data/tmv_plasmid $out/tests/data/tmv_plasmid -r
+    cp tests/data/lambda $out/tests/data/lambda -r
+    cp tests/common.sh $out/tests/common.sh
+    cp tests/tmv_plasmid_circular_deletion $out/tests/tmv_plasmid_circular_deletion -r
+    cp tests/gdtools_compare_1 $out/tests/gdtools_compare_1 -r
   '';
+
+  passthru.tests = {
+    breseq_works = callPackage ./tests/breseq.nix { };
+    gdtools_works = callPackage ./tests/gdtools.nix { };
+  };
 
   meta = with lib; {
     description = "A computational pipeline for finding mutations relative to a reference sequence in short-read DNA re-sequencing data.";
