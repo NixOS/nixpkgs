@@ -1014,6 +1014,8 @@ self: super:
                 hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
               }
               + "/${name}";
+            # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
+            jailbreak = true;
           }) super.${name};
       in
       lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
@@ -2960,6 +2962,82 @@ self: super:
       sha256 = "sha256-ayRKeCqYKgZVA826xgAXxGhttm0Gx4ZrIRJlFlXPKhw=";
     }))
   ];
+
+  HList = lib.pipe super.HList [
+    # Fixes syntax error in tests
+    (appendPatch (fetchpatch {
+      url = "https://bitbucket.org/HList/hlist/commits/e688f11d7432c812c2b238464401a86f588f81e1/raw";
+      sha256 = "sha256-XIBIrR2MFmhKaocZJ4p57CgmAaFmMU5Z5a0rk2CjIcM=";
+    }))
+
+  ];
+
+  # 2025-04-09: jailbreak to allow hedgehog >= 1.5
+  hw-int =
+    assert super.hw-int.version == "0.0.2.0";
+    doJailbreak super.hw-int;
+
+  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
+  chimera =
+    assert super.chimera.version == "0.4.1.0";
+    doJailbreak super.chimera;
+
+  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
+  bzlib =
+    assert super.bzlib.version == "0.5.2.0";
+    doJailbreak super.bzlib;
+
+  what4 = lib.pipe super.what4 [
+    (addTestToolDepends (
+      with pkgs;
+      [
+        cvc4
+        cvc5
+        z3
+      ]
+    ))
+    # 2025-04-09: template_tests still failing with:
+    #   fd:9: hPutBuf: resource vanished (Broken pipe)
+    dontCheck
+  ];
+
+  # 2025-04-09: jailbreak to allow mtl >= 2.3, template-haskell >= 2.17, text >= 1.3
+  egison-pattern-src-th-mode =
+    assert super.egison-pattern-src-th-mode.version == "0.2.1.2";
+    doJailbreak super.egison-pattern-src-th-mode;
+
+  # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
+  hasql-streams-core =
+    assert super.hasql-streams-core.version == "0.1.0.0";
+    doJailbreak super.hasql-streams-core;
+
+  # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
+  pipes-text =
+    assert super.pipes-text.version == "1.0.1";
+    doJailbreak super.pipes-text;
+
+  # 2025-04-09: jailbreak to allow bytestring >= 0.12
+  array-builder =
+    assert super.array-builder.version == "0.1.4.1";
+    doJailbreak super.array-builder;
+
+  # 2025-04-09: missing dependency - somehow it's not listed on hackage
+  broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
+
+  # 2025-04-09: jailbreak to allow template-haskell >= 2.21, th-abstraction >= 0.7
+  kind-generics-th =
+    assert super.kind-generics-th.version == "0.2.3.3";
+    doJailbreak super.kind-generics-th;
+
+  # 2025-04-09: jailbreak to allow tasty >= 1.5
+  cvss =
+    assert super.cvss.version == "0.1";
+    doJailbreak super.cvss;
+
+  # 2025-04-09: jailbreak to allow aeson >= 2.2, base >= 4.19, text >= 2.1
+  ebird-api =
+    assert super.ebird-api.version == "0.2.0.0";
+    doJailbreak super.ebird-api;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

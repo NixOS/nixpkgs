@@ -663,6 +663,7 @@ broken-packages:
   - carte # failure in job https://hydra.nixos.org/build/233201806 at 2023-09-02
   - Cartesian # failure in job https://hydra.nixos.org/build/233249956 at 2023-09-02
   - casa-abbreviations-and-acronyms # failure in job https://hydra.nixos.org/build/233194663 at 2023-09-02
+  - casadi-bindings-core # failure in job https://hydra.nixos.org/build/294582281 at 2025-04-09
   - Cascade # failure in job https://hydra.nixos.org/build/233223917 at 2023-09-02
   - cascading # failure in job https://hydra.nixos.org/build/233238563 at 2023-09-02
   - case-insensitive-match # failure in job https://hydra.nixos.org/build/233252304 at 2023-09-02
@@ -916,6 +917,7 @@ broken-packages:
   - conf # failure in job https://hydra.nixos.org/build/233213738 at 2023-09-02
   - ConfigFileTH # failure in job https://hydra.nixos.org/build/233191126 at 2023-09-02
   - config-parser # failure in job https://hydra.nixos.org/build/233206136 at 2023-09-02
+  - ConfigFile # failure in job https://hydra.nixos.org/build/294581227 at 2025-04-09
   - Configurable # failure in job https://hydra.nixos.org/build/233200781 at 2023-09-02
   - configuration # failure in job https://hydra.nixos.org/build/233195399 at 2023-09-02
   - config-value-getopt # failure in job https://hydra.nixos.org/build/233204566 at 2023-09-02
@@ -5851,6 +5853,7 @@ broken-packages:
   - Titim # failure in job https://hydra.nixos.org/build/233196143 at 2023-09-02
   - tkhs # failure in job https://hydra.nixos.org/build/233216589 at 2023-09-02
   - tkyprof # failure in job https://hydra.nixos.org/build/233205547 at 2023-09-02
+  - tlex-core # failure in job https://hydra.nixos.org/build/294586136 at 2025-04-09
   - tls-debug # failure in job https://hydra.nixos.org/build/233228426 at 2023-09-02
   - TLT # failure in job https://hydra.nixos.org/build/233193495 at 2023-09-02
   - tmp-postgres # failure in job https://hydra.nixos.org/build/252731301 at 2024-03-16
@@ -5908,6 +5911,7 @@ broken-packages:
   - transient # failure in job https://hydra.nixos.org/build/233221557 at 2023-09-02
   - translatable-intset # failure in job https://hydra.nixos.org/build/233252531 at 2023-09-02
   - translate # failure in job https://hydra.nixos.org/build/233239029 at 2023-09-02
+  - trasa # failure in job https://hydra.nixos.org/build/294586179 at 2025-04-09
   - traverse-code # failure in job https://hydra.nixos.org/build/233236749 at 2023-09-02
   - travis # failure in job https://hydra.nixos.org/build/233230706 at 2023-09-02
   - travis-meta-yaml # failure in job https://hydra.nixos.org/build/233251064 at 2023-09-02
