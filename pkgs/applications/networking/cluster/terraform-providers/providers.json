@@ -922,13 +922,13 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-Yfs+yd5AgHL8Wl9/Zq922WJwJUOjoTshOa9RyI/AGZc=",
+    "hash": "sha256-M2F84q7ZBzrGUpUv5vTWeeb3jG4RcinFxiQxooWkrhs=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.15.0",
+    "rev": "v4.16.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pykDVH44iZoOihiRr9rA9rEsCc9N6TD+UMbHelab6Nw="
+    "vendorHash": "sha256-fYCisoPEON8F11HauVONyqS56RS/1+bebnLeCCXTrsw="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
