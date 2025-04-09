@@ -48,11 +48,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.6";
+  version = "9.7";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-egEkMns5j9nrGmq95YM4mCFCLHRP+hBzSyT1V2ENMoM=";
+    hash = "sha256-6LsmrQKT+bWh/EP7QrqXDjEsZs6SwbCxZxPXUA2yUb8=";
   };
 
   postPatch =
