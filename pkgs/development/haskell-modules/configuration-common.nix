@@ -2583,12 +2583,6 @@ self: super:
     excludes = [ "*.cabal" ];
   }) super.primitive-unlifted;
 
-  # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/stm-hamt/pull/9
-  stm-hamt = appendPatch (fetchpatch {
-    url = "https://github.com/nikita-volkov/stm-hamt/commit/4f094ab328606ce7ab8592604cc7fc72eebe6b01.patch";
-    sha256 = "sha256-y6/hK18YveyPhRtvrGvJ+Ho4fKoAeD7efXgkusyWfug=";
-  }) super.stm-hamt;
-
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
 
