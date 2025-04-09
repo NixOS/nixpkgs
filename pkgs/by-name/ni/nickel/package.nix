@@ -6,7 +6,7 @@
   python3,
   versionCheckHook,
   pkg-config,
-  nix,
+  nixVersions,
   nix-update-script,
   enableNixImport ? true,
 }:
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
 
   buildInputs = lib.optionals enableNixImport [
-    nix
+    nixVersions.nix_2_24
     boost
   ];
 
