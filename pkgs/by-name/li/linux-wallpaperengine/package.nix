@@ -55,7 +55,10 @@
   libdecor,
   autoPatchelfHook,
 }:
+
 let
+  gl_rpath = lib.makeLibraryPath [ stdenv.cc.cc ];
+
   rpath = lib.makeLibraryPath [
     glib
     nss
@@ -85,37 +88,44 @@ let
     udev
     systemd
   ];
-  buildType = "Release";
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  arch = selectSystem {
-    aarch64-linux = "arm64";
-    x86_64-linux = "x64";
-  };
-  cef-bin-name = "cef_binary_120.1.10+g3ce3184+chromium-120.0.6099.129_linux${arch}";
-  cef-bin = stdenv.mkDerivation {
-    pname = "cef-bin";
-    version = "120.0.6099.129";
 
-    src = fetchzip {
-      url = "https://cef-builds.spotifycdn.com/${
-        builtins.replaceStrings [ "+" ] [ "%2B" ] cef-bin-name
-      }.tar.bz2";
-      hash = selectSystem {
-        aarch64-linux = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
-        x86_64-linux = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
+  buildType = "Release";
+
+  libcef = stdenv.mkDerivation (finalAttrs: {
+    pname = "cef-binary";
+    version = "120.1.10";
+    gitRevision = "3ce3184";
+    chromiumVersion = "120.0.6099.129";
+
+    src =
+      let
+        selectSystem =
+          attrs:
+          attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+        arch = selectSystem {
+          aarch64-linux = "arm64";
+          x86_64-linux = "x64";
+        };
+      in
+      fetchzip {
+        url = "https://cef-builds.spotifycdn.com/cef_binary_${finalAttrs.version}+g${finalAttrs.gitRevision}+chromium-${finalAttrs.chromiumVersion}_linux${arch}_minimal.tar.bz2";
+        hash = selectSystem {
+          aarch64-linux = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
+          x86_64-linux = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
+        };
       };
-    };
+
+    nativeBuildInputs = [ autoPatchelfHook ];
 
     installPhase = ''
       runHook preInstall
 
       cp --recursive --no-preserve=mode . $out
-      patchelf $out/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
-      patchelf $out/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
-      patchelf $out/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
-      sed 's/-O0/-O2/' -i $out/cmake/cef_variables.cmake
+      patchelf --set-rpath "${rpath}" $out/${buildType}/libcef.so
+      patchelf --set-rpath "${gl_rpath}" $out/${buildType}/libEGL.so
+      patchelf --set-rpath "${gl_rpath}" $out/${buildType}/libGLESv2.so
+      patchelf --set-rpath "${gl_rpath}" $out/${buildType}/libvk_swiftshader.so
+      patchelf --set-rpath "${gl_rpath}" $out/${buildType}/libvulkan.so.1
 
       runHook postInstall
     '';
@@ -131,9 +141,9 @@ let
       ];
       hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
   version = "0-unstable-2024-11-08";
 
@@ -177,13 +187,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${buildType}"
-    "-DCEF_ROOT=${cef-bin}"
+    "-DCEF_ROOT=${libcef}"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
   ];
 
   preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/app/linux-wallpaperengine/linux-wallpaperengine
     chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
+    patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}:${libcef}" $out/app/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
     ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
   '';
@@ -200,4 +210,4 @@ stdenv.mkDerivation rec {
     ];
     hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
   };
-}
+})
