@@ -22,6 +22,15 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/whoami --help 2> /dev/null
+
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
