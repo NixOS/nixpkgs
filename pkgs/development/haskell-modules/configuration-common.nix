@@ -236,13 +236,6 @@ self: super:
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
 
-  # make gtk build with pango >= 1.56: https://github.com/gtk2hs/gtk2hs/issues/337
-  pango = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/gtk2hs/gtk2hs/pull/336/commits/ca7f98bd3e9462deac3661244dc76004a36fc8c3.patch";
-    hash = "sha256-fsZIwh4MY3Jnr3Gv4vZKl/LwUsJ+H+7KJ8unARQBifE=";
-    stripLen = 1;
-  }) super.pango;
-
   # Out of date test data: https://github.com/ocharles/weeder/issues/176
   weeder = appendPatch (pkgs.fetchpatch {
     name = "weeder-2.9.0-test-fix-expected.patch";
@@ -864,16 +857,7 @@ self: super:
 
   # https://github.com/bos/snappy/issues/1
   # https://github.com/bos/snappy/pull/10
-  snappy = appendPatches [
-    (pkgs.fetchpatch {
-      url = "https://github.com/bos/snappy/commit/8687802c0b85ed7fbbb1b1945a75f14fb9a9c886.patch";
-      sha256 = "sha256-p6rMzkjPAZVljsC1Ubj16/mNr4mq5JpxfP5xwT+Gt5M=";
-    })
-    (pkgs.fetchpatch {
-      url = "https://github.com/bos/snappy/commit/21c3250c1f3d273cdcf597e2b7909a22aeaa710f.patch";
-      sha256 = "sha256-qHEQ8FFagXGxvtblBvo7xivRARzXlaMLw8nt0068nt0=";
-    })
-  ] (dontCheck super.snappy);
+  snappy = dontCheck super.snappy;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -2592,12 +2576,6 @@ self: super:
     sha256 = "sha256-9XuzIxEbepaw5bRoIOUka8fkiZBfturIybh/9nhGmWQ=";
   }) super.mod;
 
-  # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/primitive-extras/pull/9
-  primitive-extras = appendPatch (fetchpatch {
-    url = "https://github.com/nikita-volkov/primitive-extras/commit/ffc1304793c210a2624532c4f5c45ce7dea5cfbe.patch";
-    sha256 = "sha256-AU+OeNjisquoXElZbydrgqElXc2Vwmb5qmG49fU+uj0=";
-  }) super.primitive-extras;
-
   # Fixes build of test suite: not yet released
   primitive-unlifted = appendPatch (fetchpatch {
     url = "https://github.com/haskell-primitive/primitive-unlifted/commit/26922952ef20c4771d857f3e96c9e710cb3c2df9.patch";
@@ -2610,12 +2588,6 @@ self: super:
     url = "https://github.com/nikita-volkov/stm-hamt/commit/4f094ab328606ce7ab8592604cc7fc72eebe6b01.patch";
     sha256 = "sha256-y6/hK18YveyPhRtvrGvJ+Ho4fKoAeD7efXgkusyWfug=";
   }) super.stm-hamt;
-
-  # Support tasty-quickcheck 0.11: https://github.com/ku-fpg/natural-transformation/pull/16
-  natural-transformation = appendPatch (fetchpatch {
-    url = "https://github.com/ku-fpg/natural-transformation/commit/12dac8789c775a9cdbb36e702b36eb347a6f8b43.patch";
-    sha256 = "sha256-7BLdVZ+2mCug0tvgftzolAwfwwrtGkWHF3gHuojQgvM=";
-  }) super.natural-transformation;
 
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
@@ -2950,13 +2922,6 @@ self: super:
 
   # 2025-01-23: jailbreak to allow base >= 4.17
   warp-systemd = doJailbreak super.warp-systemd;
-
-  yesod-core = appendPatch (fetchpatch {
-    # Relax dependency constraints,
-    url = "https://github.com/DamienCassou/yesod/commit/8e7d7de4920e47ab4d05b6a540b1a96ca4c2b053.patch";
-    sha256 = "sha256-IxtyHFKygbrUK7JTAytWBZVHh+M1xQTv2IPCG3mjTGE=";
-    stripLen = 1;
-  }) super.yesod-core;
 
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
     (lib.warnIf (lib.versionOlder "0.0.0.4" super.bsb-http-chunked.version) "override for haskellPackages.bsb-http-chunked may no longer be needed")
