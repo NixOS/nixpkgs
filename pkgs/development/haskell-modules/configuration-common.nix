@@ -3033,6 +3033,11 @@ self: super:
   cvss =
     assert super.cvss.version == "0.1";
     doJailbreak super.cvss;
+
+  # 2025-04-09: jailbreak to allow aeson >= 2.2, base >= 4.19, text >= 2.1
+  ebird-api =
+    assert super.ebird-api.version == "0.2.0.0";
+    doJailbreak super.ebird-api;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
