@@ -16,6 +16,7 @@
   libjack2,
   libjpeg,
   libnghttp2,
+  libudev-zero,
   libxkbcommon,
   makeWrapper,
   pango,
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXtst
     libxkbcommon
+    libudev-zero
     pango
     pipewire
     (lib.getLib stdenv.cc.cc)
