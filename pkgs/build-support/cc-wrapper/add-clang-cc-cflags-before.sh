@@ -26,7 +26,7 @@ while (("$n" < "$nParams")); do
     esac
 done
 
-if $targetPassed && [[ "$targetValue" != "@defaultTarget@" ]]; then
+if $targetPassed && [[ "$targetValue" != "@defaultTarget@" ]] && (( "${NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING:-0}" < 1 )); then
     echo "Warning: supplying the --target $targetValue != @defaultTarget@ argument to a nix-wrapped compiler may not work correctly - cc-wrapper is currently not designed with multi-target compilers in mind. You may want to use an un-wrapped compiler instead." >&2
 elif [[ $0 != *cpp ]]; then
     extraBefore+=(-target @defaultTarget@ @machineFlags@)
