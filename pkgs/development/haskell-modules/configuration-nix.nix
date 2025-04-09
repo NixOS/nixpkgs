@@ -480,6 +480,9 @@ builtins.intersectAttrs super {
   hasql-pool = dontCheck super.hasql-pool;
   hasql-transaction = dontCheck super.hasql-transaction;
 
+  # Avoid compiling twice by providing executable as a separate output (with small closure size),
+  postgres-websockets = enableSeparateBinOutput super.postgres-websockets;
+
   # Test suite requires a running postgresql server,
   # avoid compiling twice by providing executable as a separate output (with small closure size),
   # generate shell completion
