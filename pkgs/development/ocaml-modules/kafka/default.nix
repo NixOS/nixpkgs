@@ -1,10 +1,14 @@
 {
   lib,
   fetchurl,
+  ocaml,
   buildDunePackage,
   rdkafka,
   zlib,
 }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "kafka is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "kafka";
