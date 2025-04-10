@@ -1,6 +1,5 @@
 {
   lib,
-  mkDerivation,
   fetchFromGitHub,
   bison,
   cmake,
@@ -44,7 +43,7 @@ let
     ];
   });
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openroad";
   version = "2.0-unstable-2025-03-01";
 
@@ -65,6 +64,7 @@ mkDerivation rec {
     gtest
     pkg-config
     swig
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
