@@ -21,7 +21,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  
+
   pname = "chromium-codecs-ffmpeg-extra";
 
   version = "119293";
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -vD chromium-ffmpeg-${version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
   '';
+
+  passthru = {
+    inherit sources;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Additional support for proprietary codecs for Vivaldi and other chromium based tools";
