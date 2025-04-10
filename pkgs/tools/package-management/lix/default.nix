@@ -8,6 +8,7 @@
   callPackage,
   fetchgit,
   fetchFromGitHub,
+  fetchFromGitea,
   rustPlatform,
   editline,
   ncurses,
@@ -25,7 +26,8 @@ let
     {
       attrName,
       lix-args,
-      nix-eval-jobs-args,
+      # Starting with 2.93, `nix-eval-jobs` lives in the `lix` repository.
+      nix-eval-jobs-args ? { inherit (lix-args) version src; },
     }:
     let
       # GCC 13.2 is known to miscompile Lix coroutines (introduced in 2.92).
@@ -192,7 +194,6 @@ lib.makeExtensible (self: {
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
         inherit src;
-        allowGitDependencies = false;
         hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
       };
     };
@@ -207,7 +208,29 @@ lib.makeExtensible (self: {
     };
   };
 
-  latest = self.lix_2_92;
+  lix_2_93 = self.makeLixScope {
+    attrName = "lix_2_93";
+
+    lix-args = rec {
+      version = "2.93.0";
+
+      src = fetchFromGitea {
+        domain = "git.lix.systems";
+        owner = "lix-project";
+        repo = "lix";
+        rev = version;
+        hash = "sha256-hsFe4Tsqqg4l+FfQWphDtjC79WzNCZbEFhHI8j2KJzw=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-${version}";
+        inherit src;
+        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+      };
+    };
+  };
+
+  latest = self.lix_2_93;
 
   # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
   # See: https://git.lix.systems/lix-project/lix/issues/662
