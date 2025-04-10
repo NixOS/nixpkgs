@@ -19,7 +19,7 @@
 }:
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_10;
+  pnpm = pnpm_10.override { inherit nodejs; };
   electron = electron_35;
 
   nodeOS =
@@ -45,6 +45,7 @@ let
   '';
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
+  signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
 
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
@@ -91,7 +92,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      (pnpm.override { inherit nodejs; }).configHook
+      pnpm.configHook
     ];
 
     buildPhase = ''
@@ -113,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    (pnpm.override { inherit nodejs; }).configHook
+    pnpm.configHook
     makeWrapper
     copyDesktopItems
     python3
@@ -163,6 +164,11 @@ stdenv.mkDerivation (finalAttrs: {
       die "libsignal-client version mismatch"
     fi
 
+    if [ "`jq -r '.dependencies."@signalapp/sqlcipher"' < package.json`" != "${signal-sqlcipher.version}" ]
+    then
+      die "signal-sqlcipher version mismatch"
+    fi
+
     if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc.version}" ]
     then
       die "ringrtc version mismatch"
@@ -174,6 +180,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -fr node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
+
+    rm -fr node_modules/@signalapp/sqlcipher
+    cp -r ${signal-sqlcipher} node_modules/@signalapp/sqlcipher
   '';
 
   buildPhase = ''
@@ -241,6 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       ringrtc
       webrtc
       sticker-creator
+      signal-sqlcipher
       ;
     tests.application-launch = nixosTests.signal-desktop;
     updateScript.command = [ ./update.sh ];
@@ -270,13 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ];
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-
-      # @signalapp/sqlcipher
-      # ringrtc
-      binaryNativeCode
     ];
   };
 })
