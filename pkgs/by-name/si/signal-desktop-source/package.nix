@@ -22,6 +22,23 @@ let
   pnpm = pnpm_10;
   electron = electron_35;
 
+  nodeOS =
+    {
+      "linux" = "linux";
+      "darwin" = "darwin";
+    }
+    .${stdenv.hostPlatform.parsed.kernel.name}
+      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.kernel.name}");
+
+  nodeArch =
+    {
+      # https://nodejs.org/api/os.html#osarch
+      "x86_64" = "x64";
+      "aarch64" = "arm64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name}
+      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
+
   electron-headers = runCommand "electron-headers" { } ''
     mkdir -p $out
     tar -C $out --strip-components=1 -xvf ${electron.headers}
@@ -29,7 +46,8 @@ let
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
 
-  ringrtc-bin = callPackage ./ringrtc-bin.nix { };
+  webrtc = callPackage ./webrtc.nix { };
+  ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
   # Noto Color Emoji PNG files for emoji replacement; see below.
   noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
@@ -145,12 +163,14 @@ stdenv.mkDerivation (finalAttrs: {
       die "libsignal-client version mismatch"
     fi
 
-    if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc-bin.version}" ]
+    if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc.version}" ]
     then
       die "ringrtc version mismatch"
     fi
 
-    cp -r ${ringrtc-bin} node_modules/@signalapp/ringrtc/build
+    mkdir -p node_modules/@signalapp/ringrtc/build
+    install -D ${ringrtc}/lib/libringrtc${stdenv.hostPlatform.extensions.library} \
+      node_modules/@signalapp/ringrtc/build/${nodeOS}/libringrtc-${nodeArch}.node
 
     rm -fr node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
@@ -218,7 +238,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit
       libsignal-node
-      ringrtc-bin
+      ringrtc
+      webrtc
       sticker-creator
       ;
     tests.application-launch = nixosTests.signal-desktop;

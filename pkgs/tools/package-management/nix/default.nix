@@ -176,16 +176,10 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_24";
       };
 
-      nix_2_25 = commonAutoconf {
-        version = "2.25.5";
-        hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
-        self_attribute_name = "nix_2_25";
-      };
-
       nix_2_26 = commonMeson {
         version = "2.26.3";
-        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
-        self_attribute_name = "nix_2_28";
+        hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
+        self_attribute_name = "nix_2_26";
       };
 
       nix_2_28 = commonMeson {
@@ -195,14 +189,14 @@ lib.makeExtensible (
       };
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.29pre20250407_${lib.substring 0 8 src.rev}";
+        version = "2.29pre20250409_${lib.substring 0 8 src.rev}";
         inherit (self.nix_2_24.meta) maintainers;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "73d3159ba0b4b711c1f124a587f16e2486d685d7";
-          hash = "sha256-9wJXUGqXIqMjNyKWJKCcxrDHM/KxDkvJMwo6S3s+WuM=";
+          rev = "e76bbe413e86e3208bb9824e339d59af25327101";
+          hash = "sha256-Aqnj5+sA7B4ZRympuyfWPPK83iomKHEHMYhlwslI8iA=";
         };
       };
 
@@ -243,6 +237,7 @@ lib.makeExtensible (
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
+        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
 
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
       }

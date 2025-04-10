@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "6.0.3";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    rev = "v${version}";
-    hash = "sha256-+Xlx1E6ggB/Vx3yOJGgh4UfEvaVyT7uOttaxelDA7Iw=";
+    tag = "v${version}";
+    hash = "sha256-jmadClC/3nHfNL+F/gC5NM6u03OE9flEVtPU28nylw4=";
   };
 
   patches = [
@@ -57,6 +57,13 @@ stdenv.mkDerivation rec {
       lib.makeBinPath [
         coreutils
         util-linux
+      ]
+    }
+
+    # requires access to sleep
+    wrapProgram "$out/share/lxcfs/lxc.reboot.hook" --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
       ]
     }
   '';

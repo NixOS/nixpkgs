@@ -134,7 +134,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://python-pillow.org";
+    homepage = "https://python-pillow.github.io/";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
     longDescription = ''

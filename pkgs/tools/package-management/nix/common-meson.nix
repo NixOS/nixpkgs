@@ -199,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags =
     [
+      (lib.mesonBool "unit-tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
       (lib.mesonBool "bindings" false)
       (lib.mesonOption "libstore:store-dir" storeDir)
       (lib.mesonOption "libstore:localstatedir" stateDir)
