@@ -4,19 +4,26 @@
   fetchFromGitHub,
   fetchurl,
   versionCheckHook,
+  writeShellApplication,
+  curl,
+  jq,
+  nix-update,
+  common-updater-scripts,
 }:
 
 let
   # These files can be found in Stockfish/src/evaluate.h
   nnueBigFile = "nn-1111cefa1111.nnue";
+  nnueBigHash = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
   nnueBig = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    hash = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+    hash = nnueBigHash;
   };
   nnueSmallFile = "nn-37f18f62d772.nnue";
+  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   nnueSmall = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    hash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+    hash = nnueSmallHash;
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -47,6 +54,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-${finalAttrs.pname}";
+
+      runtimeInputs = [
+        curl
+        jq
+        nix-update
+        common-updater-scripts
+      ];
+
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = builtins.toString ./package.nix;
+        GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
+        NNUE_BIG_FILE = nnueBigFile;
+        NNUE_BIG_HASH = nnueBigHash;
+        NNUE_SMALL_FILE = nnueSmallFile;
+        NNUE_SMALL_HASH = nnueSmallHash;
+      };
+
+      text = builtins.readFile ./update.bash;
+    });
+  };
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";
