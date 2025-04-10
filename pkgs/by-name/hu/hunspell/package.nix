@@ -95,8 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://hunspell.github.io/";
     changelog = "https://github.com/hunspell/hunspell/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
-      gpl2
-      lgpl21
+      gpl2Plus
+      lgpl21Plus
       mpl11
     ];
     maintainers = with lib.maintainers; [ getchoo ];
