@@ -4,6 +4,7 @@
   stdenv,
   rustPlatform,
   pop-gtk-theme,
+  adw-gtk3,
   pkg-config,
   geoclue2-with-demo-agent,
   libinput,
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace src/battery.rs \
       --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
+    substituteInPlace src/theme.rs \
+      --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
   useFetchCargoVendor = true;
