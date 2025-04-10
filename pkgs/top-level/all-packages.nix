@@ -18505,8 +18505,6 @@ with pkgs;
     qcsxcad = libsForQt5.qcsxcad;
   };
 
-  openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
-
   qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
   xyce = callPackage ../applications/science/electronics/xyce { };
