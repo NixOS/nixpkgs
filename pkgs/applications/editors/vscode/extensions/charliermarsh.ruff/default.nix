@@ -45,7 +45,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     ln -sf ${lib.getExe ruff} "$out/$installPrefix/bundled/libs/bin/ruff"
   '';
 
-  passthru.updateScript = vscode-extension-update-script { extraArgs = [ "--platforms" ]; };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     license = lib.licenses.mit;

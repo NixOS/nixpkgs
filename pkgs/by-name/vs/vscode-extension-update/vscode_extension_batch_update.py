@@ -21,6 +21,7 @@ class VSCodeExtensionBatchUpdater:
         "vscode-extensions.ms-ceintl.vscode-language-pack-it",
         "vscode-extensions.ms-ceintl.vscode-language-pack-ja",
         "vscode-extensions.ms-ceintl.vscode-language-pack-ko",
+        "vscode-extensions.ms-ceintl.vscode-language-pack-pl",
         "vscode-extensions.ms-ceintl.vscode-language-pack-pt-br",
         "vscode-extensions.ms-ceintl.vscode-language-pack-qps-ploc",
         "vscode-extensions.ms-ceintl.vscode-language-pack-ru",
@@ -39,13 +40,6 @@ class VSCodeExtensionBatchUpdater:
         self.parser = argparse.ArgumentParser(
             description="Batch update VSCode extensions"
         )
-        # By default, update command skips extensions with updateScript or need '--platforms'
-        self.parser.add_argument(
-            "--platforms",
-            action="store_true",
-            help="add '--platforms' to update command from some extensions",
-        )
-        self.platforms = self.parser.parse_args().platforms
 
     def execute_command(
         self, command, env: dict[str, str] = None, shell: bool = False
@@ -75,10 +69,6 @@ class VSCodeExtensionBatchUpdater:
         except subprocess.CalledProcessError:
             return False
 
-    def _has_platform_source(self, extension: str) -> bool:
-        source_url = self._get_nix_attribute(f"{extension}.src.url")
-        return "targetPlatform=" in source_url
-
     def _get_nix_attribute(self, attribute: str) -> str:
         return self.execute_command(["nix", "eval", "--raw", "-f", ".", attribute])
 
@@ -93,11 +83,6 @@ class VSCodeExtensionBatchUpdater:
             if self._has_update_script(extension):
                 return
             update_command = ["vscode-extension-update", extension, "--commit"]
-            if self._has_platform_source(extension):
-                if self.platforms:
-                    update_command.append("--platforms")
-                else:
-                    return
             filename = self._get_extension_filename(extension)
             if filename:
                 update_command.extend(["--override-filename", filename])
