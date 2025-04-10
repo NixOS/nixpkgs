@@ -175,8 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andrewrk ] ++ lib.teams.zig.members;
     mainProgram = "zig";
-    # docgen fails to build
-    broken = version == "0.11.0";
     platforms = lib.platforms.unix;
   };
 })
