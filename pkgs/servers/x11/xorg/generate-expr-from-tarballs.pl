@@ -260,14 +260,16 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  pixman,
+  font-alias,
   luit,
+  pixman,
 }:
 
 self: with self; {
 
   inherit pixman;
   inherit luit;
+  fontalias = font-alias;
 
 EOF
 
