@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${version}";
-    hash = "sha256-GBQNk31rgNgAntur5DjmG4CKWvwvbpfaT2T6H7XMHQ0=";
+    hash = "sha256-4idp8Og+fSHAR9Wpplo9sdcM2RN0NNpdKc85de177/8=";
   };
 
   # Let Tauri know what version we're building
@@ -60,11 +60,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-nKBCoKqq93fV3O4imX3sHYj5QnycIWDKvYyOB7Daeo8=";
+  cargoHash = "sha256-HbVsYhUm5U19GV8L1b49HrsM9L3v9DU1RwmFKGgyOp0=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-ogCr2gzxox6UkFgaWTgZaEba5l++nzvuZa0NeRexnko=";
+    hash = "sha256-R3GU2CnS1s1au90Dap76XpgyiRL0X+PkXjMc+Xz866s=";
   };
 
   nativeBuildInputs = [
