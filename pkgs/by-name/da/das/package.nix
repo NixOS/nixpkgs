@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     "defusedxml"
     "netaddr"
     "networkx"
+    "plotly"
   ];
 
   build-system = with python3.pkgs; [ poetry-core ];
