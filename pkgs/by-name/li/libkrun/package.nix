@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun";
-  version = "1.9.8";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a5ot5ad8boANK3achn6PJ52k/xmxawbTM0/hEEC/fss=";
+    hash = "sha256-B11f7uG/oODwkME2rauCFbVysxUtUrUmd6RKeuBdnUU=";
   };
 
   outputs = [
@@ -38,8 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-X1NPZQaXFBw9IKD2DbBCPug0WDjv8XnpefbA2RNJgFU=";
+    hash = "sha256-bcHy8AfO9nzSZKoFlEpPKvwupt3eMb+A2rHDaUzO3/U=";
   };
+
+  # Make sure libkrunfw can be found by dlopen()
+  # FIXME: This wasn't needed previously. What changed?
+  env.RUSTFLAGS = toString (
+    map (flag: "-C link-arg=" + flag) [
+      "-Wl,--push-state,--no-as-needed"
+      "-lkrunfw"
+      "-Wl,--pop-state"
+    ]
+  );
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
