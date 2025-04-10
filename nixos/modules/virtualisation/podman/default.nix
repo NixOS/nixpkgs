@@ -232,6 +232,7 @@ in
       # containers cannot reach aardvark-dns otherwise
       networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
 
+      virtualisation.podman.extraPackages = [ pkgs.iptables ];
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
