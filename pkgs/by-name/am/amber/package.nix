@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-q0o2PQngbDLumck27V0bIiB35zesn55Y+MwK2GjNVWo=";
   };
 
@@ -23,7 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
   ];
 
   meta = with lib; {
