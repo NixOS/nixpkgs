@@ -23,20 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "5.0.0";
+  version = "6.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Solanum";
     rev = version;
-    hash = "sha256-Xf/b/9o6zHF1hjHSyAXb90ySoBj+DMMe31e6RfF8C4Y=";
+    hash = "sha256-Wh9/88Vc4mtjL0U1Vrw+GEEBPjEv+5NrWd/Kw1glp+w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jtMTW9tIf0UGbE9bJU31maub+o0agf0pDRO4s9QReyc=";
+    hash = "sha256-krjbeutochFk5md+THlYBW4iEwfFDbK89DYHZyd3IKo=";
   };
 
   postPatch = ''
