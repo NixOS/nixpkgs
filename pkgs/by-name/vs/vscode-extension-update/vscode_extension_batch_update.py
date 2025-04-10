@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p nix python3 python3Packages.loguru nix-search-tv vscode-extensions-update gitMinimal
+#! nix-shell -i python3 -p nix python3 python3Packages.loguru nix-search-tv vscode-extension-update gitMinimal
 
 import argparse
 import subprocess
@@ -92,7 +92,7 @@ class VSCodeExtensionBatchUpdater:
         try:
             if self._has_update_script(extension):
                 return
-            update_command = ["vscode-extensions-update", extension, "--commit"]
+            update_command = ["vscode-extension-update", extension, "--commit"]
             if self._has_platform_source(extension):
                 if self.platforms:
                     update_command.append("--platforms")
