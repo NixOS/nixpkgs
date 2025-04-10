@@ -41,22 +41,24 @@ rustPlatform.buildRustPackage rec {
     # curl-sys wants to run curl-config on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
-  # skip tests with networking or other failures
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   checkFlags = [
-    "--skip serialize_test1_quick_report"
+    # panics
     "--skip serialize_test2_quick_report"
     "--skip serialize_test3_quick_report"
-    "--skip serialize_test4_quick_report"
     "--skip serialize_test6_quick_report"
-    "--skip serialize_test7_quick_report"
-    "--skip serialize_test1_report"
     "--skip serialize_test2_report"
     "--skip serialize_test3_report"
-    "--skip serialize_test4_report"
     "--skip serialize_test6_report"
-    "--skip serialize_test7_report"
-    # multiple test cases that time-out or cause memory leaks
-    "--skip test_package"
+    # requires networking
+    "--skip test_package::case_2"
+    "--skip test_package::case_3"
+    "--skip test_package::case_6"
+    "--skip test_package::case_9"
+    # panics, snapshot assertions fails
     "--skip test_package_update_readme::case_2"
     "--skip test_package_update_readme::case_3"
     "--skip test_package_update_readme::case_5"
