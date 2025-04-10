@@ -4,7 +4,7 @@
   buildPackages,
   fetchurl,
   flex,
-  db4,
+  gdbm,
   gettext,
   audit,
   libxcrypt,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [
-    db4
+    gdbm
     libxcrypt
   ] ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
