@@ -748,7 +748,7 @@ stdenv.mkDerivation (finalAttrs: {
   # (see above), make sure these don't leak again by accident.
   # FIXME: disabled for kdeIntegration builds because the weird symlinkJoin setup
   # leaks all the -dev dependencies :(
-  disallowedRequisites = lib.optionals (!kdeIntegration) (
+  disallowedReferences = lib.optionals (!kdeIntegration) (
     lib.concatMap (x: lib.optional (x ? dev) x.dev) finalAttrs.buildInputs
   );
 
