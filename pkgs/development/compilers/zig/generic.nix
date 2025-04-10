@@ -7,6 +7,7 @@
   xcbuild,
   targetPackages,
   libxml2,
+  ninja,
   zlib,
   coreutils,
   callPackage,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
       (lib.getDev llvmPackages.llvm.dev)
+      ninja
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # provides xcode-select, which is required for SDK detection
