@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       nickcao
       RossComputerGuy
+      nrabulinski
     ];
     platforms = libkrunfw.meta.platforms;
   };
