@@ -9240,9 +9240,7 @@ with pkgs;
   };
   enchant = enchant2;
 
-  libepoxy = callPackage ../development/libraries/libepoxy {
-    inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
-  };
+  libepoxy = callPackage ../development/libraries/libepoxy { };
 
   factorPackages-0_99 = callPackage ./factor-packages.nix {
     factor-unwrapped = callPackage ../development/compilers/factor-lang/0.99.nix { };
