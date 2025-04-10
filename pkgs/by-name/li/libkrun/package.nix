@@ -74,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig
-    mv $out/lib64/pkgconfig $dev/lib/pkgconfig
-    mv $out/include $dev/include
+    mv $out/lib64/pkgconfig $dev/lib/
+    mv $out/include $dev/
   '';
 
   meta = with lib; {
