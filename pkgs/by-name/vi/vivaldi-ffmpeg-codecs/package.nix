@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       betaboon
       cawilliamson
       fptje
+      sarahec
     ];
     platforms = [ "x86_64-linux" ];
   };
