@@ -24392,10 +24392,10 @@
     name = "Travis Whitton";
   };
   tmplt = {
-    email = "tmplt@dragons.rocks";
+    email = "v@tmplt.dev";
     github = "tmplt";
     githubId = 6118602;
-    name = "Viktor";
+    name = "Viktor Sonesten";
   };
   tne = {
     email = "tne@garudalinux.org";
