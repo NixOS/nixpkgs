@@ -86,7 +86,6 @@ buildPythonPackage rec {
     geckodriver
     isort
     json5
-    narwhals
     nbconvert
     networkx
     psutil
@@ -113,6 +112,7 @@ buildPythonPackage rec {
     pyyaml
     tornado
     xyzservices
+    narwhals
   ];
 
   doCheck = false; # need more work
