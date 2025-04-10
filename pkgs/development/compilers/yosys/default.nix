@@ -177,6 +177,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://yosyshq.net/yosys/";
     license = licenses.isc;
     platforms = platforms.all;
+    badPlatforms = [
+      # Tests fail
+      # https://github.com/NixOS/nixpkgs/issues/398121
+      lib.systems.inspect.patterns.isDarwin
+    ];
     maintainers = with maintainers; [
       shell
       thoughtpolice
