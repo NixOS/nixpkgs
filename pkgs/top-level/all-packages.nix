@@ -9807,7 +9807,11 @@ with pkgs;
     callPackages ../by-name/hu/hunspell/dictionaries-chromium.nix { }
   );
 
-  hunspellWithDicts = dicts: callPackage ../by-name/hu/hunspell/wrapper.nix { inherit dicts; };
+  hunspellWithDicts =
+    dicts:
+    lib.warn "hunspellWithDicts is deprecated, please use hunspell.withDicts instead."
+      hunspell.withDicts
+      (_: dicts);
 
   hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_28; };
 
