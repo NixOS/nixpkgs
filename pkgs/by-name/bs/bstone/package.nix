@@ -3,8 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  SDL2,
-  libGL,
+  sdl2-compat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libGL
-    SDL2
+    sdl2-compat
   ];
 
   postInstall = ''

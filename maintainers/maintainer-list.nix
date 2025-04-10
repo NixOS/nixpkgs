@@ -5413,6 +5413,12 @@
     githubId = 64467514;
     name = "Daniel Krywult";
   };
+  danilobuerger = {
+    email = "info@danilobuerger.de";
+    github = "danilobuerger";
+    githubId = 996231;
+    name = "Danilo Bürger";
+  };
   daniyalsuri6 = {
     email = "daniyal.suri@gmail.com";
     github = "daniyalsuri6";

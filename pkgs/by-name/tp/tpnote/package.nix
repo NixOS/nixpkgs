@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tpnote";
-  version = "1.25.6";
+  version = "1.25.7";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     tag = "v${version}";
-    hash = "sha256-9mj88mUCpMPBIUrwAL61/XAtn3OQ3EtdP8ZlQBHE4/I=";
+    hash = "sha256-lTUS3sAMq5FPxC8Moi6a+S71XtG+9AlBTO/cDVTrncM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-K/vtA6Gr015xwuJBge+QDW3MQMJNyKyfxtkV6fs/zmE=";
+  cargoHash = "sha256-3oallbuiRrBDAWsIl8vGz3xbjPIb5ceBmQsNHVOWbTE=";
 
   nativeBuildInputs = [
     cmake
