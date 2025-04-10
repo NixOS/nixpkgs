@@ -4181,8 +4181,6 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
-  netexec = callPackage ../tools/security/netexec { };
-
   netdata = callPackage ../tools/system/netdata {
     protobuf = protobuf_21;
   };
