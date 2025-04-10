@@ -762,6 +762,8 @@ let
         };
       };
 
+      bodil.blueprint-gtk = callPackage ./bodil.blueprint-gtk { };
+
       bradgashler.htmltagwrap = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "bradgashler";
@@ -2125,8 +2127,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.26.2025030506"; # latest compatible with vscode ^1.98
-          hash = "sha256-mCmZs5xGxcqHyo8NyMjk2mu9LmxFlMb2NGUwjXg27JA=";
+          version = "0.26.2025040204"; # latest compatible with vscode ^1.98
+          hash = "sha256-grG/pn+R4paCqkSx6DGzKjyjQVZ2FINRxdpXynGF35g=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -2426,6 +2428,8 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      huacnlee.autocorrect = callPackage ./huacnlee.autocorrect { };
 
       humao.rest-client = buildVscodeMarketplaceExtension {
         mktplcRef = {

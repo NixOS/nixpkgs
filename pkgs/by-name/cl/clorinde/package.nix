@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clorinde";
-  version = "0.14.2";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "halcyonnouveau";
     repo = "clorinde";
     tag = "clorinde-v${finalAttrs.version}";
-    hash = "sha256-zl4LSDxbvzmfigMCTvaoF1vGbWj/Obce4aHpM0rPqxM=";
+    hash = "sha256-dMTYYvxqy3ev6TSOyOer23twmtT7g7ZOh2vFD67wy9c=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-05sN5MkwBhpdmVcz0OUwx7h2ZJBjZefj8B9dLvkPZLw=";
+  cargoHash = "sha256-lJqg20NVZHTOsQplg6vsB4pa2ltsFBFBs//YkOkfBm4=";
 
   cargoBuildFlags = [ "--package=clorinde" ];
 

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  source, # this is ./source.nix
 
   glib,
   wrapGAppsHook3,
@@ -39,17 +39,12 @@ let
       cleanArgs args
       // {
         pname = "astal-${name}";
-        version = "0-unstable-2025-03-21";
+        inherit (source) version;
 
         __structuredAttrs = true;
         strictDeps = true;
 
-        src = fetchFromGitHub {
-          owner = "Aylur";
-          repo = "astal";
-          rev = "dc0e5d37abe9424c53dcbd2506a4886ffee6296e";
-          hash = "sha256-5WgfJAeBpxiKbTR/gJvxrGYfqQRge5aUDcGKmU1YZ1Q=";
-        };
+        src = source;
 
         sourceRoot = "${finalAttrs.src.name}/${sourceRoot}";
 

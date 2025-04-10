@@ -1248,11 +1248,11 @@ with pkgs;
   };
 
   yabridge = callPackage ../tools/audio/yabridge {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.yabridge;
   };
 
   yabridgectl = callPackage ../tools/audio/yabridgectl {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.yabridge;
   };
 
   yafetch = callPackage ../tools/misc/yafetch {
@@ -2488,10 +2488,6 @@ with pkgs;
 
   grype = callPackage ../by-name/gr/grype/package.nix {
     buildGoModule = buildGo123Module;
-  };
-
-  hiksink = callPackage ../tools/misc/hiksink {
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
@@ -19277,6 +19273,7 @@ with pkgs;
           stagingFull
           wayland
           waylandFull
+          yabridge
           fonts
           ;
       }

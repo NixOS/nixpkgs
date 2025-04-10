@@ -7,10 +7,10 @@
 }:
 let
   pname = "archipelago";
-  version = "0.6.0";
+  version = "0.6.1";
   src = fetchurl {
     url = "https://github.com/ArchipelagoMW/Archipelago/releases/download/${version}/Archipelago_${version}_linux-x86_64.AppImage";
-    hash = "sha256-hpyMi/Zd4yDKd/53xuChRTQDD9QkcyqwqrmwoWSQMkY=";
+    hash = "sha256-8mPlR5xVnHL9I0rV4bMFaffSJv7dMlCcPHrLkM/pyVU=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

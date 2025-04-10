@@ -148,8 +148,6 @@ not possible to fix, please open an issue and we can discuss a solution.
 
 ## TODON'T
 
-- Reimplement `systemd-run` logic: will be moved to the new
-  [`apply`](https://github.com/NixOS/nixpkgs/pull/344407) script
 - Nix bootstrap: it is only used for non-Flake paths and it is basically
   useless nowadays. It was created at a time when Nix was changing frequently
   and there was a need to bootstrap a new version of Nix before evaluating the

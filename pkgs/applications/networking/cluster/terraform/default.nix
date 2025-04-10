@@ -45,6 +45,16 @@ let
           "-X 'github.com/hashicorp/terraform/version.dev=no'"
         ];
 
+        postPatch = ''
+          # Between go 1.23 and 1.24 the following GODEBUG setting was removed, and a new
+          # similar one was added.
+          # https://github.com/golang/go/issues/72111
+          # The setting is configured upstream due to the following timeouts caused by
+          # the TLS handshake using post-quantum crypto with servers that don't support it
+          # https://tldr.fail/
+          substituteInPlace go.mod \
+            --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
+        '';
         postConfigure = ''
           # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
           substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
@@ -184,9 +194,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.11.3";
-    hash = "sha256-th2VaFlvRKvL0ZEcAGU9eJui+k5dTaPGtLB2u9Q/vxg=";
-    vendorHash = "sha256-Tz01h3VITbvyEAfT8sfU7ghHd+vlCBVsMTTQS96jp7c=";
+    version = "1.11.4";
+    hash = "sha256-VGptJz+MbJ8nJRGUW9LzX6IDLYbjI5tK40ZhkZCGVf0=";
+    vendorHash = "sha256-pDtWGDKEnYq4wJYG+Rr5C1pWN/X92P+wvHrNm0Ldh+8=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

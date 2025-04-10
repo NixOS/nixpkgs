@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "craft-platforms";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-platforms";
     tag = version;
-    hash = "sha256-/mnRFw79YMG34/0aQMi237KMNxWanyJixkEKq+zaSuE=";
+    hash = "sha256-BFs+LqcJWqKMgEr7IzyP5qME+zaV6EFc79ustOB1Cno=";
   };
 
   postPatch = ''

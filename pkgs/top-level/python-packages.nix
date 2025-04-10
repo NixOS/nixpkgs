@@ -3094,6 +3094,13 @@ self: super: with self; {
 
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
+  dartsim = toPythonModule (
+    pkgs.dartsim.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
   dasbus = callPackage ../development/python-modules/dasbus { };
 
   dash = callPackage ../development/python-modules/dash { };
@@ -4379,6 +4386,8 @@ self: super: with self; {
   emcee = callPackage ../development/python-modules/emcee { };
 
   emoji = callPackage ../development/python-modules/emoji { };
+
+  emojis = callPackage ../development/python-modules/emojis { };
 
   empty-files = callPackage ../development/python-modules/empty-files { };
 
@@ -13650,6 +13659,8 @@ self: super: with self; {
   pytest-resource-path = callPackage ../development/python-modules/pytest-resource-path { };
 
   pytest-responses = callPackage ../development/python-modules/pytest-responses { };
+
+  pytest-retry = callPackage ../development/python-modules/pytest-retry { };
 
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
 

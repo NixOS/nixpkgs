@@ -8,7 +8,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-attachments";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   disabled = pythonAtLeast "3.13";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Kani999";
     repo = "netbox-attachments";
     tag = version;
-    hash = "sha256-uSp6z2jSb+kX5YspIV0essqRHGtOlZ5m0hMS6OO9Trk=";
+    hash = "sha256-EYf1PbFIFyCb2fYrnn/T8dnXz3dHmDOLI8Wbnef8V8M=";
   };
 
   build-system = [ setuptools ];

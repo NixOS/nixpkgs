@@ -29,6 +29,22 @@ from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
+SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
+    "systemd-run",
+    "-E",
+    # Will be set to new value early in switch-to-configuration script,
+    # but interpreter starts out with old value
+    "LOCALE_ARCHIVE",
+    "-E",
+    "NIXOS_INSTALL_BOOTLOADER",
+    "--collect",
+    "--no-ask-password",
+    "--pipe",
+    "--quiet",
+    "--same-dir",
+    "--service-type=exec",
+    "--unit=nixos-rebuild-switch-to-configuration",
+]
 logger = logging.getLogger(__name__)
 
 
@@ -628,8 +644,21 @@ def switch_to_configuration(
         if not path_to_config.exists():
             raise NRError(f"specialisation not found: {specialisation}")
 
+    r = run_wrapper(
+        ["test", "-d", "/run/systemd/system"],
+        remote=target_host,
+        check=False,
+    )
+    cmd = SWITCH_TO_CONFIGURATION_CMD_PREFIX
+    if r.returncode:
+        logger.debug(
+            "skipping systemd-run to switch configuration since systemd is "
+            + "not working in target host"
+        )
+        cmd = []
+
     run_wrapper(
-        [path_to_config / "bin/switch-to-configuration", str(action)],
+        [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
         remote=target_host,
         sudo=sudo,

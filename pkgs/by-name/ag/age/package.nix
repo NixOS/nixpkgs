@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   age-plugin-tpm,
+  age-plugin-sss,
   age-plugin-ledger,
   age-plugin-yubikey,
   age-plugin-fido2-hmac,
@@ -58,6 +59,7 @@ buildGoModule (final: {
   passthru.plugins = {
     inherit
       age-plugin-tpm
+      age-plugin-sss
       age-plugin-ledger
       age-plugin-yubikey
       age-plugin-fido2-hmac

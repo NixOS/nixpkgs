@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.105";
+  version = "2.0.108";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S/ZlEFgcFiLr0V7g0X0bjWU0YNVzA0JctFaJTK/QkpI=";
+    hash = "sha256-wfp6u2YIliufjkaLBlLVFw2/dqpHYFAfcow4iyOB2ME=";
   };
 
   pythonRelaxDeps = true;
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonPackage rec {
 
   build-system = with python3.pkgs; [
     cython
-    poetry-core
+    pdm-backend
   ];
 
   dependencies = with python3.pkgs; [

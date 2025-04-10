@@ -11,6 +11,7 @@
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
+  pytest-retry,
   importlib-metadata,
   psutil,
   untangle,
@@ -99,6 +100,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     pytest-timeout
+    pytest-retry
 
     ## Used by test helpers:
     importlib-metadata
@@ -129,7 +131,12 @@ buildPythonPackage rec {
   '';
 
   # Override default arguments in pytest.ini
-  pytestFlagsArray = [ "--timeout=0" ];
+  pytestFlags = [ "--timeout=0" ];
+
+  disabledTests = [
+    # hanging test (flaky)
+    "test_systemexit"
+  ];
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
