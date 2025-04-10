@@ -4,6 +4,7 @@
   fetchpatch,
   ncurses ? null,
   perl ? null,
+  pkg-config,
   lib,
 }:
 
@@ -32,12 +33,24 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+
   buildInputs = [
     ncurses
     perl
   ];
 
-  configureFlags = lib.optional (perl == null) "--with-perl-bindings=no";
+  configureFlags = [
+    "ac_cv_func_malloc_0_nonnull=yes"
+  ] ++ lib.optional (perl == null) "--with-perl-bindings=no";
+
+  buildFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = with lib; {
     description = "C library to generate ICMP echo requests (a.k.a. ping packets)";
