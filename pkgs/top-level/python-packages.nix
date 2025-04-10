@@ -8815,6 +8815,8 @@ self: super: with self; {
 
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
 
+  mkdocs-markmap = callPackage ../development/python-modules/mkdocs-markmap { };
+
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
 
   mkdocs-material-extensions =
