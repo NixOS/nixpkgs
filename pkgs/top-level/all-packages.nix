@@ -19519,7 +19519,7 @@ with pkgs;
   };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_18;
   };
 
   zrythm = callPackage ../applications/audio/zrythm {
