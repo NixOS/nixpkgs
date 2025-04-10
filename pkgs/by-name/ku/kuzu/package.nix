@@ -5,6 +5,7 @@
   ninja,
   python3,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     changelog = "https://github.com/kuzudb/kuzu/releases/tag/v${finalAttrs.version}";
