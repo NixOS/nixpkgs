@@ -6,7 +6,7 @@
 }:
 let
   root = ./.;
-  updateScript = ./update.sh;
+  updateScript = ./update.py;
 
   mkYaziPlugin =
     args@{
