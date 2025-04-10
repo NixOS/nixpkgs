@@ -8789,6 +8789,8 @@ self: super: with self; {
 
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
 
+  mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
+
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
 
   mkdocs-get-deps = callPackage ../development/python-modules/mkdocs-get-deps { };
@@ -8812,6 +8814,8 @@ self: super: with self; {
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
 
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
+
+  mkdocs-markmap = callPackage ../development/python-modules/mkdocs-markmap { };
 
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
 
