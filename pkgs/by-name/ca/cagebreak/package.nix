@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/project-repo/cagebreak";
     description = "Wayland tiling compositor inspired by ratpoison";
-    license = licenses.mit;
-    maintainers = with maintainers; [ berbiche ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ berbiche ];
+    platforms = lib.platforms.linux;
     changelog = "https://github.com/project-repo/cagebreak/blob/${finalAttrs.version}/Changelog.md";
     mainProgram = "cagebreak";
   };
