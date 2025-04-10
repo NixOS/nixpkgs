@@ -2023,6 +2023,8 @@ self: super: with self; {
 
   bravia-tv = callPackage ../development/python-modules/bravia-tv { };
 
+  brax = callPackage ../development/python-modules/brax { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   breezy = callPackage ../development/python-modules/breezy { };
@@ -9081,6 +9083,8 @@ self: super: with self; {
 
   mujoco = callPackage ../development/python-modules/mujoco { inherit (pkgs) mujoco; };
 
+  mujoco-mjx = callPackage ../development/python-modules/mujoco-mjx { mujoco-main = pkgs.mujoco; };
+
   mujson = callPackage ../development/python-modules/mujson { };
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
@@ -14254,6 +14258,8 @@ self: super: with self; {
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 
   pytimeparse2 = callPackage ../development/python-modules/pytimeparse2 { };
+
+  pytinyrenderer = callPackage ../development/python-modules/pytinyrenderer { };
 
   pytlv = callPackage ../development/python-modules/pytlv { };
 
