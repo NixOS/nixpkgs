@@ -18155,13 +18155,6 @@ with pkgs;
     nodejs = nodejs_20;
   };
 
-  or-tools = callPackage ../by-name/or/or-tools/package.nix {
-    protobuf = protobuf_29.override {
-      abseil-cpp = abseil-cpp_202407;
-    };
-    abseil-cpp = abseil-cpp_202407;
-  };
-
   p4est-sc = callPackage ../development/libraries/science/math/p4est-sc {
     p4est-sc-debugEnable = false;
   };

@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     abseil-cpp
     highs
     protobuf
-    (python3.pkgs.protobuf.override { protobuf = protobuf; })
+    python3.pkgs.protobuf
     python3.pkgs.immutabledict
     python3.pkgs.numpy
     python3.pkgs.pandas
