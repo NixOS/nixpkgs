@@ -4,12 +4,12 @@
   appimageTools,
 }:
 let
-  version = "0.7.2";
+  version = "0.7.3";
   pname = "Vial";
 
   src = fetchurl {
     url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
-    hash = "sha256-bWmKNKCrXzyNj7zYdEX+lfITdIernTp/WxFJnd1RRYU=";
+    hash = "sha256-tdSJjmf1IUQ1S7V90dTVgWJDOAuBsiUTUz0QV6LPlqo=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

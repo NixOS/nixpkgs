@@ -61,6 +61,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "dep:comrak" "comrak"
   '';
 
+  cargoTestFlags = [
+    # Skip the py-nickel tests because linking them fails on aarch64, and we
+    # aren't packaging py-nickel anyway
+    "--workspace"
+    "--exclude=py-nickel"
+  ];
+
   checkFlags = [
     # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
     # fails because src is not a git repo
@@ -99,10 +106,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       matthiasbeyer
     ];
     mainProgram = "nickel";
-    badPlatforms = [
-      # collect2: error: ld returned 1 exit status
-      # undefined reference to `PyExc_TypeError'
-      "aarch64-linux"
-    ];
   };
 })
