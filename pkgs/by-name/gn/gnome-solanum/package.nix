@@ -21,7 +21,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solanum";
   version = "6.0.0";
 
@@ -29,13 +29,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Solanum";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Wh9/88Vc4mtjL0U1Vrw+GEEBPjEv+5NrWd/Kw1glp+w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-krjbeutochFk5md+THlYBW4iEwfFDbK89DYHZyd3IKo=";
   };
 
@@ -71,12 +70,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/Solanum";
     description = "Pomodoro timer for the GNOME desktop";
-    maintainers = with maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "solanum";
   };
-}
+})
