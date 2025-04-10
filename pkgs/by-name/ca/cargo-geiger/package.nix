@@ -13,26 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.11.7";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "rust-secure-code";
+    owner = "geiger-rs";
     repo = "cargo-geiger";
-    rev = "cargo-geiger@v${version}";
-    hash = "sha256-/5yuayqneZV6aVQ6YFgqNS2XY3W6yETRQ0kE5ovc7p8=";
+    tag = "cargo-geiger-${version}";
+    hash = "sha256-OW/LOZUCGOIl7jeWnzt4SXTo3gplJx/wbC21S1TdZx0=";
   };
 
-  cargoPatches = [
-    # https://github.com/geiger-rs/cargo-geiger/pull/528
-    ./fix-build-with-rust-1.80.patch
-  ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-n6RfulzrK9QebC1tgVVd/YnBc21Jf0OSfHApRO1c0ew=";
-
-  patches = [
-    ./allow-warnings.patch
-  ];
+  cargoHash = "sha256-aDgpEfX0QRkQD6c4ant6uSN18WLHVnZISRr7lyu9IzA=";
 
   buildInputs =
     [ openssl ]
