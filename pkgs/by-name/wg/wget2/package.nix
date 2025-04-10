@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "2.1.0";
+  version = "2.2.0";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "gnuwget";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
+    hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
 
   # wget2_noinstall contains forbidden reference to /build/
