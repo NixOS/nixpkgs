@@ -5,6 +5,7 @@
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
+  stdenv,
   syrupy,
 }:
 
@@ -28,10 +29,17 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  disabledTests = [
-    # accesses network
-    "test_connect_timeout"
-  ];
+  disabledTests =
+    [
+      # accesses network
+      "test_connect_timeout"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # OSError: could not bind on any address out of [('127.0.0.2', 1255)]
+      "test_failover"
+    ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyheos" ];
 
