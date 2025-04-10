@@ -5438,19 +5438,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  grug-far-nvim = buildVimPlugin {
-    pname = "grug-far.nvim";
-    version = "2025-04-08";
-    src = fetchFromGitHub {
-      owner = "MagicDuck";
-      repo = "grug-far.nvim";
-      rev = "082f97122dd59d816a9a7b676d2b2f86a8ab6ed9";
-      sha256 = "04z8d5vh4z26d3rpf8ab78q434zsvg6h1fb7hhkd3mqk8wlv0zyw";
-    };
-    meta.homepage = "https://github.com/MagicDuck/grug-far.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   gruvbox = buildVimPlugin {
     pname = "gruvbox";
     version = "2023-08-14";
