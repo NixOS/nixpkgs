@@ -9026,10 +9026,6 @@ with pkgs;
 
   aws-spend-summary = haskellPackages.aws-spend-summary.bin;
 
-  backlight-auto = callPackage ../by-name/ba/backlight-auto/package.nix {
-    zig = buildPackages.zig_0_11;
-  };
-
   inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
 
   bc-soci = callPackage ../development/libraries/soci/bc-soci.nix { };
