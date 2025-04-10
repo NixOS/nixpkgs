@@ -14,7 +14,6 @@
   readline,
   tcl,
   zlib,
-  boost,
 
   # tests
   gtkwave,
@@ -86,13 +85,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.51";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y2Gf3CXd1em+4dlIo2+dwfZbqahM3kqG0rZUTjkIZak=";
+    hash = "sha256-yEAZvdBc+923a0OTtaCpTbrl33kcmvgwFlL5VEssHkQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -110,20 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs =
-    [
-      bison
-      flex
-      pkg-config
-    ]
-    ++ lib.optionals enablePython [
-      (python3.withPackages (
-        p: with p; [
-          pip
-          setuptools
-        ]
-      ))
-    ];
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+  ];
 
   propagatedBuildInputs =
     [
@@ -131,24 +121,21 @@ stdenv.mkDerivation (finalAttrs: {
       readline
       tcl
       zlib
-    ]
-    ++ lib.optionals enablePython [
       (python3.withPackages (
         pp: with pp; [
           click
         ]
       ))
-      (boost.override {
-        enablePython = true;
-        python = python3;
-      })
+    ]
+    ++ lib.optionals enablePython [
+      python3.pkgs.boost
     ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
     ./plugin-search-dirs.patch
-    ./fix-clang-build.patch # see https://github.com/YosysHQ/yosys/issues/2011
+    ./fix-clang-build.patch
   ];
 
   postPatch = ''
