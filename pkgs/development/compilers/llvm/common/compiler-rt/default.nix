@@ -255,6 +255,13 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace cmake/builtin-config-ix.cmake \
         --replace-fail 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
     ''
+    # TSan needs to access symbols internal to libc++ to functional properly on Darwin. Since Darwin uses a different
+    # ABI namespace, TSan needs patched to link correctly.
+    # See: https://reviews.llvm.org/D21609 and https://reviews.llvm.org/D24188
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && !noSanitizers) ''
+      substituteInPlace lib/tsan/rtl/tsan_interceptors_mac.cpp \
+        --replace-fail 3__1 ${toString (lib.stringLength stdenv.cc.libcxx.abiNamespace)}${stdenv.cc.libcxx.abiNamespace}
+    ''
     + lib.optionalString (!haveLibc) (
       (lib.optionalString (lib.versions.major release_version == "18") ''
         substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
