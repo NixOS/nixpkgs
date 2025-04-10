@@ -4,10 +4,7 @@
   fetchurl,
   cmake,
   pkg-config,
-  qtbase,
-  qttools,
-  qtmultimedia,
-  wrapQtAppsHook,
+  qt6,
   # transports
   curl,
   libmms,
@@ -44,7 +41,7 @@
 }:
 
 # Additional plugins that can be added:
-#  ProjectM visualization plugin
+# ProjectM visualization plugin
 
 # To make MIDI work we must tell Qmmp what instrument configuration to use (and
 # this can unfortunately not be set at configure time):
@@ -55,26 +52,26 @@
 # Qmmp installs working .desktop file(s) all by itself, so we don't need to
 # handle that.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmmp";
-  version = "2.1.8";
+  version = "2.2.5";
 
   src = fetchurl {
-    url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
-    hash = "sha256-hGphQ8epqym47C9doiSOQd3yc28XwV2UsNc7ivhaae4=";
+    url = "https://qmmp.ylsoftware.com/files/qmmp/2.2/qmmp-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-WCEfMnrDhau8fXXmpdjdZLzbXMDxEZMp8pJ9FjEJfhg=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     # basic requirements
-    qtbase
-    qttools
-    qtmultimedia
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtmultimedia
     # transports
     curl
     libmms
@@ -110,12 +107,12 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based audio player that looks like Winamp";
-    mainProgram = "qmmp";
     homepage = "https://qmmp.ylsoftware.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    mainProgram = "qmmp";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})
