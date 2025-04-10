@@ -287,6 +287,7 @@ stdenv'.mkDerivation (finalAttrs: {
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
+    mainProgram = "netdata";
     platforms = platforms.unix;
     maintainers = with maintainers; [
       mkg20001
