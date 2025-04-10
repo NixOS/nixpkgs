@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       nickcao
       RossComputerGuy
+      nrabulinski
     ];
     platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
   };
