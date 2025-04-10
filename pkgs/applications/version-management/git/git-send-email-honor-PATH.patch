@@ -1,8 +1,17 @@
-diff --git a/Documentation/git-send-email.txt b/Documentation/git-send-email.txt
-index 3db4eab4ba..39bc0e77c9 100644
+diff --git a/Documentation/git-send-email.adoc b/Documentation/git-send-email.adoc
+index 7f223db42d..7e46a07d31 100644
 --- a/Documentation/git-send-email.adoc
 +++ b/Documentation/git-send-email.adoc
-@@ -220,9 +220,9 @@ a password is obtained using 'git-credential'.
+@@ -177,7 +177,7 @@ Sending
+ 	The command will be executed in the shell if necessary.  Default
+ 	is the value of `sendemail.sendmailCmd`.  If unspecified, and if
+ 	--smtp-server is also unspecified, git-send-email will search
+-	for `sendmail` in `/usr/sbin`, `/usr/lib` and $PATH.
++	for `sendmail` in $PATH.
+ 
+ --smtp-encryption=<encryption>::
+ 	Specify in what way encrypting begins for the SMTP connection.
+@@ -233,9 +233,9 @@ a password is obtained using 'git-credential'.
  --smtp-server=<host>::
  	If set, specifies the outgoing SMTP server to use (e.g.
  	`smtp.example.com` or a raw IP address).  If unspecified, and if
@@ -16,10 +25,10 @@ index 3db4eab4ba..39bc0e77c9 100644
  For backward compatibility, this option can also specify a full pathname
  of a sendmail-like program instead; the program must support the `-i`
 diff --git a/git-send-email.perl b/git-send-email.perl
-index e65d969d0b..508d49483d 100755
+index 798d59b84f..69c9cc2a7d 100755
 --- a/git-send-email.perl
 +++ b/git-send-email.perl
-@@ -1066,8 +1066,7 @@ sub expand_one_alias {
+@@ -1091,8 +1091,7 @@ sub expand_one_alias {
  }
  
  if (!defined $sendmail_cmd && !defined $smtp_server) {
