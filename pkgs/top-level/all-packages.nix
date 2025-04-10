@@ -15775,10 +15775,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  peertube = callPackage ../servers/peertube {
-    nodejs = nodejs_18;
-  };
-
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
