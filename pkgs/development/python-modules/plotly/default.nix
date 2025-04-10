@@ -5,10 +5,12 @@
   fetchFromGitHub,
   setuptools,
   packaging,
-  tenacity,
+  narwhals,
   kaleido,
   pytestCheckHook,
   pandas,
+  polars,
+  pyarrow,
   requests,
   matplotlib,
   xarray,
@@ -20,37 +22,20 @@
   which,
   nbformat,
   scikit-image,
-  orca,
-  psutil,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.24.1";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-ONuX5/GlirPF8+7bZtib1Xsv5llcXcSelFfGyeTc5L8=";
+    hash = "sha256-UMXWczd87G535qMGOQDgxU9dBtsHSp+kA6MbdgLm8sY=";
   };
-
-  sourceRoot = "${src.name}/packages/python/plotly";
-
-  # tracking numpy 2 issue: https://github.com/plotly/plotly.py/pull/4622
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "\"jupyterlab~=3.0;python_version>='3.6'\"," ""
-
-    substituteInPlace plotly/tests/test_optional/test_utils/test_utils.py \
-      --replace-fail "np.NaN" "np.nan" \
-      --replace-fail "np.NAN" "np.nan" \
-      --replace-fail "np.Inf" "np.inf"
-
-    substituteInPlace plotly/tests/test_optional/test_px/test_imshow.py \
-      --replace-fail "- 255 * img.max()" "- np.int64(255) * img.max()"
-  '';
 
   env.SKIP_NPM = true;
 
@@ -58,22 +43,20 @@ buildPythonPackage rec {
 
   dependencies = [
     packaging
-    tenacity
+    narwhals
     kaleido
   ];
 
   # packages/python/plotly/optional-requirements.txt
   optional-dependencies = {
-    orca = [
-      orca
-      requests
-      psutil
-    ];
+    express = [ numpy ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pandas
+    polars
+    pyarrow
     requests
     matplotlib
     xarray
@@ -93,27 +76,26 @@ buildPythonPackage rec {
     "test_linestyle"
     # test bug, i assume sensitive to dep versions
     "test_sanitize_json"
-    # requires vaex and polars, vaex is not packaged
-    "test_build_df_from_vaex_and_polars"
-    "test_build_df_with_hover_data_from_vaex_and_polars"
     # lazy loading error, could it be the sandbox PYTHONPATH?
     # AssertionError: assert "plotly" not in sys.modules
     "test_dependencies_not_imported"
     "test_lazy_imports"
-    # numpy2 related error, RecursionError
-    # https://github.com/plotly/plotly.py/pull/4622#issuecomment-2452886352
-    "test_masked_constants_example"
+    # AssertionError: rgb(2...4, 96) != #fcff...a5
+    "test_acceptance_named"
   ];
+
   disabledTestPaths =
     [
-      # unable to locate orca binary, adding the package does not fix it
-      "plotly/tests/test_orca/"
+      # needs anywidget, but adding that requires building JS files
+      "tests/test_io/test_to_from_json.py"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # requires local networking
-      "plotly/tests/test_io/test_renderers.py"
+      "tests/test_io/test_renderers.py"
+      # a bunch of errors, recursion depth exceeded
+      "tests/test_plotly_utils/validators"
       # fails to launch kaleido subprocess
-      "plotly/tests/test_optional/test_kaleido"
+      "tests/test_optional/test_kaleido"
     ];
 
   pythonImportsCheck = [ "plotly" ];
