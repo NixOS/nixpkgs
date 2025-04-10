@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     for file in $out/bin/*; do
-      wrapProgram $file --set PATH "$out/bin"
+      wrapProgram $file --prefix PATH : "$out/bin"
     done
   '';
 
