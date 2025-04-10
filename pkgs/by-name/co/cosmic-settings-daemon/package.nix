@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
+  pop-gtk-theme,
   pkg-config,
   geoclue2-with-demo-agent,
   libinput,
@@ -20,6 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "epoch-${finalAttrs.version}";
     hash = "sha256-DtwW6RxHnNh87Xu0NCULfUsHNzYU9tHtFKE9HO3rvME=";
   };
+
+  postPatch = ''
+    substituteInPlace src/battery.rs \
+      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
+  '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-lGzQBL9IXbPsaKeVHp34xkm5FnTxWvfw4wg3El4LZdA=";
