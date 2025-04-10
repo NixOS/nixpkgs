@@ -17150,14 +17150,7 @@ self: super: with self; {
 
   thespian = callPackage ../development/python-modules/thespian { };
 
-  thinc = callPackage ../development/python-modules/thinc {
-    inherit (pkgs.darwin.apple_sdk.frameworks)
-      Accelerate
-      CoreFoundation
-      CoreGraphics
-      CoreVideo
-      ;
-  };
+  thinc = callPackage ../development/python-modules/thinc { };
 
   thinqconnect = callPackage ../development/python-modules/thinqconnect { };
 
