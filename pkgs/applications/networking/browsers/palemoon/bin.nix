@@ -6,7 +6,9 @@
   autoPatchelfHook,
   copyDesktopItems,
   dbus-glib,
-  ffmpeg,
+  # ffmpeg 7 not supported yet, results in MP4 playback being unavailable
+  # https://repo.palemoon.org/MoonchildProductions/UXP/issues/2523
+  ffmpeg_6,
   gtk2-x11,
   withGTK3 ? true,
   gtk3,
@@ -145,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          ffmpeg
+          ffmpeg_6
           libglvnd
           libpulseaudio
         ]
