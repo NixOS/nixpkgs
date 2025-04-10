@@ -25378,6 +25378,12 @@ with self;
       url = "mirror://cpan/authors/id/D/DS/DSHULTZ/Net-FreeDB-0.10.tar.gz";
       hash = "sha256-90PhIjjrFslIBK+0sxCwJUj3C8rxeRZOrlZ/i0mIroU=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://salsa.debian.org/perl-team/modules/packages/libnet-freedb-perl/-/raw/6be43c69333796c6ec14fea72f2a8035df42fd15/debian/patches/implicit-function-declaration.patch";
+        hash = "sha256-oIfJuLzTm0JLzAUvP1mcGCm6oWGpcLWDPqHN/4pKC9Q=";
+      })
+    ];
     buildInputs = [
       TestDeep
       TestDifferences
