@@ -8,6 +8,7 @@ let
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
   redisServer = config.services.redis.servers.paperless;
+  isDbLocal = !(cfg.settings ? PAPELESS_DBHOST) or (lib.hasPrefix "/" cfg.settings.PAPERLESS_DBHOST);
 
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
@@ -327,7 +328,7 @@ in
         inherit (cfg) user;
         inherit (config.users.users.${cfg.user}) group;
       };
-    in {
+    in
       "${cfg.dataDir}".d = defaultRule;
       "${cfg.mediaDir}".d = defaultRule;
       "${cfg.consumptionDir}".d = if cfg.consumptionDirIsPublic then { mode = "777"; } else defaultRule;
@@ -342,7 +343,7 @@ in
         ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
         LoadCredential = lib.optionalString (cfg.passwordFile != null) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
-        PrivateNetwork = cfg.database.createLocally or (cfg.settings ? PAPERLESS_DBHOST == false); # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
+        PrivateNetwork = isDbLocal; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
       };
       environment = env;
 
@@ -421,7 +422,7 @@ in
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
         Restart = "on-failure";
-        PrivateNetwork = cfg.database.createLocally or (cfg.settings ? PAPERLESS_DBHOST == false); # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
+        PrivateNetwork = isDbLocal; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
       };
       environment = env;
       # Allow the consumer to access the private /tmp directory of the server.
