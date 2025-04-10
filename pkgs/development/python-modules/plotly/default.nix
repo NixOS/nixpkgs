@@ -124,6 +124,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/plotly/plotly.py";
     changelog = "https://github.com/plotly/plotly.py/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = with lib.maintainers; [
+      pandapip1
+      WeetHet
+    ];
   };
 }
