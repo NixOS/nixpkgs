@@ -19,15 +19,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "10.4";
+  version = "11.0";
   format = "other";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
-    rev = version;
-    hash = "sha256-FyBtw7Gkvd5XONkM7OVGxE+S5FpuUIl7KWLFHoQeoN4=";
+    tag = version;
+    hash = "sha256-FGSRxujj4CfWxVIEkXvu/gJvtJ7F8t1nQZxqD8EwwCg=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
+    changelog = "https://gitlab.gnome.org/World/secrets/-/releases/${version}";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mvnetbiz ];
