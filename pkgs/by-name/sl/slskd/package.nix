@@ -19,13 +19,13 @@ let
 in
 buildDotnetModule rec {
   pname = "slskd";
-  version = "0.22.2";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     tag = version;
-    hash = "sha256-Arf/QOq0wYely+CYwb4sJXsxB2BbEHZ2bUNyqeGbFdg=";
+    hash = "sha256-CXJ55mtNVaPZVxuzYyiMjnJJZPAUlRc/DHKt6+ZfWHo=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildDotnetModule rec {
     name = "${pname}-${version}-npm-deps";
     inherit src;
     sourceRoot = "${src.name}/${npmRoot}";
-    hash = "sha256-eCHYPkE8eJKg0IX7hN9Wm9HsWKUFPW5T4e+o6N0CsNc=";
+    hash = "sha256-I/rgSIFFCA47Y22zbmrrdUWS7mHCxKmFwO3QNBHTdCM=";
   };
 
   projectFile = "slskd.sln";
