@@ -3,7 +3,6 @@
   bzip2,
   cbc,
   cmake,
-  DarwinTools, # sw_vers
   eigen,
   ensureNewerSourcesForZipFilesHook,
   fetchFromGitHub,
@@ -13,7 +12,7 @@
   lib,
   pkg-config,
   protobuf,
-  python,
+  python3,
   re2,
   stdenv,
   swig,
@@ -21,14 +20,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "or-tools";
   version = "9.12";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5rFeAK51+BfjIyu/5f5ptaKMD7Hd20yHa2Vj3O3PkLU=";
   };
 
@@ -62,18 +61,22 @@ stdenv.mkDerivation rec {
       sed -i -e "/protobuf/ { s/.*,/'protobuf >= 5.26',/ }" ortools/python/setup.py.in
     '';
 
-  cmakeFlags = [
-    "-DBUILD_DEPS=OFF"
-    "-DBUILD_PYTHON=ON"
-    "-DBUILD_pybind11=OFF"
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DFETCH_PYTHON_DEPS=OFF"
-    "-DUSE_GLPK=ON"
-    "-DUSE_SCIP=OFF"
-    "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_DEPS" false)
+      (lib.cmakeBool "BUILD_PYTHON" true)
+      (lib.cmakeBool "BUILD_pybind11" false)
+      (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+      (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+      (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+      (lib.cmakeBool "FETCH_PYTHON_DEPS" false)
+      (lib.cmakeBool "USE_GLPK" true)
+      (lib.cmakeBool "USE_SCIP" false)
+      (lib.cmakeFeature "Python3_EXECUTABLE" "${python3.pythonOnBuildForHost.interpreter}")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeBool "CMAKE_MACOSX_RPATH" false)
+    ];
 
   strictDeps = true;
 
@@ -82,14 +85,11 @@ stdenv.mkDerivation rec {
       cmake
       ensureNewerSourcesForZipFilesHook
       pkg-config
-      python.pythonOnBuildForHost
+      python3.pythonOnBuildForHost
       swig
       unzip
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-    ]
-    ++ (with python.pythonOnBuildForHost.pkgs; [
+    ++ (with python3.pythonOnBuildForHost.pkgs; [
       pip
       mypy-protobuf
       mypy
@@ -100,14 +100,15 @@ stdenv.mkDerivation rec {
     cbc
     eigen
     glpk
-    python.pkgs.absl-py
-    python.pkgs.pybind11
-    python.pkgs.pybind11-abseil
-    python.pkgs.pybind11-protobuf
-    python.pkgs.pytest
-    python.pkgs.scipy
-    python.pkgs.setuptools
-    python.pkgs.wheel
+    highs
+    python3.pkgs.absl-py
+    python3.pkgs.pybind11
+    python3.pkgs.pybind11-abseil
+    python3.pkgs.pybind11-protobuf
+    python3.pkgs.pytest
+    python3.pkgs.scipy
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
     re2
     zlib
   ];
@@ -115,14 +116,14 @@ stdenv.mkDerivation rec {
     abseil-cpp
     highs
     protobuf
-    (python.pkgs.protobuf.override { protobuf = protobuf; })
-    python.pkgs.numpy
-    python.pkgs.pandas
-    python.pkgs.immutabledict
+    python3.pkgs.protobuf
+    python3.pkgs.immutabledict
+    python3.pkgs.numpy
+    python3.pkgs.pandas
   ];
   nativeCheckInputs = [
-    python.pkgs.matplotlib
-    python.pkgs.virtualenv
+    python3.pkgs.matplotlib
+    python3.pkgs.virtualenv
   ];
 
   # some tests fail on linux and hang on darwin
@@ -147,14 +148,14 @@ stdenv.mkDerivation rec {
     "python"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/or-tools";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = ''
       Google's software suite for combinatorial optimization.
     '';
     mainProgram = "fzn-cp-sat";
-    maintainers = with maintainers; [ andersk ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ andersk ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
