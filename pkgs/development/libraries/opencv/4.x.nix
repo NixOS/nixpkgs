@@ -88,7 +88,7 @@
   enabledModules ? [ ],
 
   bzip2,
-  apple-sdk_14,  # earlier SDKs cause linking issues on x86_64
+  apple-sdk_14, # earlier SDKs cause linking issues on x86_64
   callPackage,
 }@inputs:
 
