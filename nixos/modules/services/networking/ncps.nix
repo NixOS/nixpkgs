@@ -245,7 +245,8 @@ in
     systemd.services.ncps = {
       description = "ncps binary cache proxy service";
 
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
