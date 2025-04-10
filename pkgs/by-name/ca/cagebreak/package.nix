@@ -26,14 +26,14 @@
   wlroots_0_18,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cagebreak";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
-    repo = pname;
-    rev = version;
+    repo = "cagebreak";
+    tag = finalAttrs.version;
     hash = "sha256-eJLYv9CalBTOQEOMRg/5ctHByrkA44pfS7K3H4XTdSc=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dman-pages=true"
-    "-Dversion_override=${version}"
+    "-Dversion_override=${finalAttrs.version}"
     "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
@@ -89,9 +89,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
-    changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
+    changelog = "https://github.com/project-repo/cagebreak/blob/${finalAttrs.version}/Changelog.md";
     mainProgram = "cagebreak";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;
-}
+})
