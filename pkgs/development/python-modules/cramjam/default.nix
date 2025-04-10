@@ -54,6 +54,12 @@ buildPythonPackage rec {
     "benchmarks/test_bench.py"
   ];
 
+  disabledTests = [
+    # https://github.com/milesgranger/cramjam/issues/201
+    # https://github.com/HypothesisWorks/hypothesis/issues/4267
+    "test_variants_decompress_into"
+  ];
+
   pythonImportsCheck = [ "cramjam" ];
 
   meta = {
