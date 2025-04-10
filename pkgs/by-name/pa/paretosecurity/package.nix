@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "paretosecurity";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = version;
-    hash = "sha256-ovyfHqLCf5U3UR1HfoA+UQhqLZ6IaILcpqptPRQsb60=";
+    hash = "sha256-qHHpqcVrjWTzYtRSufogceUiroeNru0J7qRFNlGCYC0=";
   };
 
   vendorHash = "sha256-7mKAFkKGpBOjXc3J/sfF3k3pJF53tFybXZgbfJInuSY=";
