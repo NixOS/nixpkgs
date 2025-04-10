@@ -35,7 +35,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
-  passthru.updateScript = vscode-extension-update-script { extraArgs = [ "--platforms" ]; };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Jujutsu version control integration, for simpler Git workflow";
