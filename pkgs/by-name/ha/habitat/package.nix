@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
-    rev = version;
+    tag = version;
     hash = "sha256-+5If4veDOGTTIhYxhAiq1cC4Sy6vAmjX5hrmUmpGlFU=";
   };
 
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Application automation framework";
     homepage = "https://www.habitat.sh";
-    changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/habitat-sh/habitat/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       rushmorem

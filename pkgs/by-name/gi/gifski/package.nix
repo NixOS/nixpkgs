@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
-    rev = version;
+    tag = version;
     hash = "sha256-IjQ2PqjXhNvXknVxfphSSwQEWBuTkSxMFrbwd2trlVI=";
   };
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";
-    changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
+    changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "gifski";
