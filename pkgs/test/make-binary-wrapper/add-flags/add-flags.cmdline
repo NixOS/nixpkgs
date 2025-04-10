@@ -1,4 +1,18 @@
     --append-flags "-foo -bar" \
     --add-flags "-x -y -z" \
     --add-flags -abc \
-    --add-flags "-g *.txt"
+    --add-flags "-g *.txt" \
+    --add-flags 'some\ word' \
+    --add-flags some\\\ word \
+    --add-flags '-g "*.txt *.lua $HOME"
+    \$HOME' \
+    --add-flags "--cmd 'lua testvar = true'" \
+    --add-flags "--cmd 'lua print(true)'" \
+    --add-flags "--cmd 'lua print(\"hello\")'" \
+    --add-flags '--cmd "lua print('\''hello'\'')"' \
+    --add-flags '--cmd "lua print('\''$HOME'\'')"' \
+    --add-flags '-g "*.txt
+    *.lua $HOME"
+    $HOME' \
+    --add-flags '\$word "\$word"' \
+    --add-flags ''\''\$word'\'''

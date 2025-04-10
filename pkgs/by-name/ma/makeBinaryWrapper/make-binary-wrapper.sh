@@ -205,21 +205,8 @@ makeCWrapper() {
 addFlags() {
     local n flag before after var
 
-    # Disable file globbing, since bash will otherwise try to find
-    # filenames matching the the value to be prefixed/suffixed if
-    # it contains characters considered wildcards, such as `?` and
-    # `*`. We want the value as is, except we also want to split
-    # it on on the separator; hence we can't quote it.
-    local reenableGlob=0
-    if [[ ! -o noglob ]]; then
-        reenableGlob=1
-    fi
-    set -o noglob
-    # shellcheck disable=SC2086
-    before=($1) after=($2)
-    if (( reenableGlob )); then
-        set +o noglob
-    fi
+    escapedArgsFromString before "$1"
+    escapedArgsFromString after "$2"
 
     var="argv_tmp"
     printf '%s\n' "char **$var = calloc(${#before[@]} + argc + ${#after[@]} + 1, sizeof(*$var));"
@@ -238,6 +225,89 @@ addFlags() {
     done
     printf '%s\n' "${var}[${#before[@]} + argc + ${#after[@]}] = NULL;"
     printf '%s\n' "argv = $var;"
+}
+
+# escapedArgsFromString ARRAYNAME "$INPUT"
+# escapedArgsFromString ARRAYNAME <<< "$INPUT"
+escapedArgsFromString() {
+    local outvarname="$1"
+    local input="${2:-$(cat)}"
+    local char='' token='' escape=0 quote=''
+
+    local out=()
+
+    while IFS= read -r -n1 char || [[ -n "$char" ]]; do
+        # it gives empty char when you get a newline
+        [[ -z "$char" ]] && char=$'\n'
+
+        if (( escape )); then
+            token+="$char"
+            escape=0
+            continue
+        fi
+
+        case "$char" in
+            # in an argument list, \ within ' are ignored, but \ within " are not
+            \\)
+                if [[ $quote == "'" ]]; then
+                    token+="$char"
+                else
+                    escape=1
+                fi
+                ;;
+
+            "'")
+                if [[ $quote == '' ]]; then
+                    quote="'"
+                elif [[ $quote == "'" ]]; then
+                    quote=''
+                else
+                    token+="$char"
+                fi
+                ;;
+
+            '"')
+                if [[ $quote == '' ]]; then
+                    quote='"'
+                elif [[ $quote == '"' ]]; then
+                    quote=''
+                else
+                    token+="$char"
+                fi
+                ;;
+
+            [[:space:]])
+                if [[ -n $quote ]]; then
+                    token+="$char"
+                elif [[ -n $token ]]; then
+                    out+=("$token")
+                    token=''
+                fi
+                ;;
+
+            $'\n')
+                if [[ -n $quote ]]; then
+                    token+="$char"
+                elif [[ -n $token ]]; then
+                    out+=("$token")
+                    token=''
+                fi
+                ;;
+
+            *)
+                token+="$char"
+                ;;
+        esac
+    done <<< "$input"
+
+    # Add final token if needed
+    [[ -n $token ]] && out+=("$token")
+
+    # set variable name given to the new array
+    eval "$outvarname=()"
+    for (( i=0; i<${#out[@]}; i++ )); do
+        eval "$(printf "$outvarname+=(%q)" "${out[i]}")"
+    done
 }
 
 # chdir DIR
