@@ -200,7 +200,7 @@ else
       + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version meta;
+      inherit (ghc) version meta targetPrefix;
 
       # Inform users about backwards incompatibilities with <= 21.05
       override =
