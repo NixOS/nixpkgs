@@ -19,6 +19,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-c6H/8/dmCWasFKVR15U/kty4AzQAqmiL/VLKrPtH+s4=";
 
+  ldflags = [
+    "-X github.com/p4gefau1t/trojan-go/constant.Version=v${version}"
+    "-X github.com/p4gefau1t/trojan-go/constant.Commit=v${version}"
+  ];
+
+  tags = [
+    "api"
+    "client"
+    "server"
+    "forward"
+    "nat"
+    "other"
+  ];
+
   # tests fail due to requiring networking
   doCheck = false;
 
