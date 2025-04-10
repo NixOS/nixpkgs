@@ -10768,14 +10768,6 @@ with pkgs;
   };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
-    inherit (darwin.apple_sdk.frameworks)
-      AVFoundation
-      Cocoa
-      VideoDecodeAcceleration
-      CoreMedia
-      MediaToolbox
-      Accelerate
-      ;
     pythonPackages = python3Packages;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
