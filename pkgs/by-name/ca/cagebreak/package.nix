@@ -23,7 +23,7 @@
   wayland-scanner,
   withXwayland ? true,
   xwayland,
-  wlroots,
+  wlroots_0_18,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     systemd
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_18
   ];
 
   mesonFlags = [

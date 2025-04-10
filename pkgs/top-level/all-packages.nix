@@ -19518,10 +19518,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  cagebreak = callPackage ../applications/window-managers/cagebreak {
-    wlroots = wlroots_0_18;
-  };
-
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
   };
