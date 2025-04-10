@@ -22,6 +22,10 @@ buildGoModule rec {
     installShellFiles
   ];
 
+  ldflags = [
+    "-X github.com/open-policy-agent/gatekeeper/v3/pkg/version.Version=${version}"
+  ];
+
   subPackages = [ "cmd/gator" ];
 
   postInstall = ''
