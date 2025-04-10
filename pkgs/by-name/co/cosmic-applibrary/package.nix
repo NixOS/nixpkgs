@@ -67,10 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
     description = "Application Template for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    maintainers = lib.teams.cosmic.members;
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-app-library";
   };
