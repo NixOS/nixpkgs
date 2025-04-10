@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2024.11";
+  version = "2025.04";
 
   src =
     {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-        hash = "sha256-ibehFrOcJqhM+CMAcHDn3Xwy6CueB8kdnoYMMDe/2Js=";
+        hash = "sha256-ZZujk98YVvNJmffW2fDg+n+z1xgtkha7y1LasYEhCR4=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
