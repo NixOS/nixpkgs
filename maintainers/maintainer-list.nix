@@ -5065,7 +5065,6 @@
   };
   croots = {
     name = "Cameron Roots";
-    email = "38054423+croots@users.noreply.github.com";
     github = "croots";
     githubId = 38054423;
     keys = [ { fingerprint = "8496 ECF3 0961 115C A6DE 919F A01D C430 0605 1618"; } ];
