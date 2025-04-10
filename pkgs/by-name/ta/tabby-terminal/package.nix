@@ -27,13 +27,13 @@
 let
   tabby = rec {
     pname = "tabby-terminal";
-    version = "1.0.216";
+    version = "1.0.223";
 
     src = fetchFromGitHub {
       owner = "Eugeny";
       repo = "tabby";
-      rev = "1e44d8c5252b68324c15f39ad082950c192b3291";
-      hash = "sha256-TQaJyloZOxCz1iSLJrYLAk6KQjm1pTBGe0j+gscsAYc=";
+      rev = "v${version}";
+      hash = "sha256-YWqbVrxG3/tOw1ERkoEosVlz6k2eTkcsQnHAtdKpkpE=";
       leaveDotGit = true;
     };
 
