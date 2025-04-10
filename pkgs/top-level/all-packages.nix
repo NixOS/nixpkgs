@@ -15714,10 +15714,6 @@ with pkgs;
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi { };
 
-  vivaldi-ffmpeg-codecs =
-    callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix
-      { };
-
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
   orpie = callPackage ../applications/misc/orpie {
