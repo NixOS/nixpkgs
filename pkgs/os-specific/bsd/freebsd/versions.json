@@ -1,15 +1,15 @@
 {
   "main": {
-    "hash": "sha256-xsgY5Ex/B5ngOTa5OZRauSaSYvET5lWI7veJRrSq1oY=",
+    "hash": "sha256-f69U2FX+3GQimdUJunWApFseeKJhzjgNw4h26ZBPiT0=",
     "ref": "main",
     "refType": "branch",
-    "rev": "c5773d366ecc5271b9bd6e5506c00fb3520f19ae",
+    "rev": "9357c694e8dca627c25b15529e8435b2ab3dd48b",
     "supported": false,
     "version": {
       "branch": "CURRENT",
       "major": 15,
       "minor": 0,
-      "reldate": "1500035",
+      "reldate": "1500036",
       "release": "15.0-CURRENT",
       "revision": "15.0",
       "type": "FreeBSD",
@@ -161,7 +161,7 @@
     }
   },
   "release/14.2.0": {
-    "hash": "sha256-qZkeuUZbuPOvXZBgP5x6Hii1YN7XdDJzwZeYacIR5BI=",
+    "hash": "sha256-q5/0pKRlmzZUN+VMwUImkve+NTT1+O68YlwgXp2/aQM=",
     "ref": "release/14.2.0",
     "refType": "tag",
     "rev": "c8918d6c7412fce87922e9bd7e4f5c7d7ca96eb7",
@@ -308,7 +308,7 @@
     "ref": "releng/14.1",
     "refType": "branch",
     "rev": "f389e68ca980b7e053a34d9eddde89b4c2a1ee6c",
-    "supported": true,
+    "supported": false,
     "version": {
       "branch": "RELEASE-p8",
       "major": 14,
@@ -322,7 +322,7 @@
     }
   },
   "releng/14.2": {
-    "hash": "sha256-XP8BFnXvziaC9wOJj8q31UZXFqCUE7WQ5FdJHEZWGbg=",
+    "hash": "sha256-iSeTif/cEkqhIQ5hSNF+Rx7dORU13Bc0Dk8Zv4TYWtA=",
     "ref": "releng/14.2",
     "refType": "branch",
     "rev": "ac2cbb46b5f1efa7f7b5d4eb15631337329ec5b2",
@@ -340,10 +340,10 @@
     }
   },
   "stable/13": {
-    "hash": "sha256-J9SJKeR6Den3Sep2o4r0cqIDd2V5gbY0Ow9eP69Ny0o=",
+    "hash": "sha256-rex3CUXyyNDz/TouNqlzZFo6DAwSOKXTdC5HaRQoKKc=",
     "ref": "stable/13",
     "refType": "branch",
-    "rev": "a8431b47adae8f8b731206dc38d82b2245ad245e",
+    "rev": "64f5a71c1cb79c09e50a37ddbe958224bb64add4",
     "supported": true,
     "version": {
       "branch": "STABLE",
@@ -357,10 +357,10 @@
     }
   },
   "stable/14": {
-    "hash": "sha256-tleB6J5Cg1SIN2LCfvV3Cfp4Lxx65UHmiILpin6UYGY=",
+    "hash": "sha256-s+pj8LttAnKNNohUsJNOJRFmLg6x06tlkJn3xQnFQiY=",
     "ref": "stable/14",
     "refType": "branch",
-    "rev": "6e510d8fbaf8d91da235fe28250cd48124edda9f",
+    "rev": "e6a470ffcbd708cf404472bb871c2cb76eaa7b39",
     "supported": true,
     "version": {
       "branch": "STABLE",
