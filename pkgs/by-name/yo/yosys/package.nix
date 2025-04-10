@@ -86,13 +86,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.51";
+  version = "0.52";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y2Gf3CXd1em+4dlIo2+dwfZbqahM3kqG0rZUTjkIZak=";
+    hash = "sha256-E2lxmix6qM3KF8Kg0rvO2H//nQ9At7fCi2fM7wp2sQE=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -110,17 +110,31 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [
-    bison
-    flex
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      bison
+      flex
+      pkg-config
+    ]
+    ++ lib.optionals enablePython [
+      # (python3.withPackages (
+      #   p: with p; [
+      #     pip
+      #     setuptools
+      #     wheel
+      #   ]
+      # ))
+    ];
+
   propagatedBuildInputs =
     [
       libffi
       (python3.withPackages (
         pp: with pp; [
           click
+          pip
+          setuptools
+          wheel
         ]
       ))
       readline
