@@ -230,6 +230,28 @@ lib.makeExtensible (self: {
     };
   };
 
+  git = self.makeLixScope {
+    attrName = "git";
+
+    lix-args = rec {
+      version = "2.94.0-pre-20250509_${builtins.substring 0 12 src.rev}";
+
+      src = fetchFromGitea {
+        domain = "git.lix.systems";
+        owner = "lix-project";
+        repo = "lix";
+        rev = "dcb0a97000d50b2868ed4f8d9fd465c5a5b8eb3a";
+        hash = "sha256-qCRBy8Bbh5XhPalPkhonxNgfsbw3lP0UIXBLSrhxAvI=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-${version}";
+        inherit src;
+        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+      };
+    };
+  };
+
   latest = self.lix_2_93;
 
   # Note: This is not yet 2.92 because of a non-deterministic `curl` error.

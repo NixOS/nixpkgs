@@ -869,6 +869,7 @@ with lib.maintainers;
       qyriad
       _9999years
       lf-
+      alois31
     ];
     scope = "Maintain the Lix package manager inside of Nixpkgs.";
     shortName = "Lix ecosystem";
