@@ -25,10 +25,9 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/Altus.desktop $out/share/applications/altus.desktop
-    install -m 444 -D ${appimageContents}/Altus.png \
-      $out/share/icons/hicolor/scalable/apps/altus.png
-    substituteInPlace $out/share/applications/altus.desktop \
+    install -Dm 644 ${appimageContents}/Altus.desktop -t $out/share/applications
+    install -Dm 644 ${appimageContents}/Altus.png -t $out/share/icons/hicolor/256x256/apps
+    substituteInPlace $out/share/applications/Altus.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=altus'
     wrapProgram "$out/bin/altus" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

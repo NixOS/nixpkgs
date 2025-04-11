@@ -216,6 +216,24 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  cosmic = {
+    members = [
+      a-kenji
+      ahoneybun
+      drakon64
+      griffi-gh
+      HeitorAugustoLN
+      nyabinary
+      pandapip1
+      qyliss
+      thefossguy
+    ];
+    githubTeams = [ "cosmic" ];
+    shortName = "cosmic";
+    scope = "Maintain the COSMIC DE and related packages.";
+    enableFeatureFreezePing = true;
+  };
+
   cuda = {
     members = [
       connorbaker
