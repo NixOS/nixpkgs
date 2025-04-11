@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Notifications for the COSMIC Desktop Environment";
     mainProgram = "cosmic-notifications";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = teams.cosmic.members;
     platforms = platforms.linux;
   };
 })

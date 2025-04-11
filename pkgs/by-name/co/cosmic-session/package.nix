@@ -80,12 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Session manager for the COSMIC desktop environment";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with lib.maintainers; [
-      a-kenji
-      nyabinary
-      thefossguy
-      HeitorAugustoLN
-    ];
+    maintainers = lib.teams.cosmic.members;
     platforms = lib.platforms.linux;
   };
 })

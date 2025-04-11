@@ -3,10 +3,13 @@
   buildPythonPackage,
   distro,
   fetchPypi,
+  fixtures,
+  libredirect,
   packaging,
   parsley,
   pbr,
-  setuptools,
+  pytestCheckHook,
+  testtools,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +26,6 @@ buildPythonPackage rec {
 
   build-system = [
     pbr
-    setuptools
   ];
 
   dependencies = [
@@ -33,8 +35,21 @@ buildPythonPackage rec {
     distro
   ];
 
-  # Checks moved to 'passthru.tests' to workaround infinite recursion
-  doCheck = false;
+  nativeCheckInputs = [
+    fixtures
+    libredirect.hook
+    pytestCheckHook
+    testtools
+  ];
+
+  preCheck = ''
+    echo "ID=nixos
+    " > os-release
+    export NIX_REDIRECTS=/etc/os-release=$(realpath os-release)
+    export PATH=$PATH:$out/bin
+  '';
+
+  pytestFlagsArray = [ "-s" ];
 
   pythonImportsCheck = [ "bindep" ];
 
