@@ -103,6 +103,8 @@ self: super: {
   tree-diff = doJailbreak super.tree-diff; # base <4.20
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
   time-compat = doJailbreak super.time-compat; # base <4.20
+  # https://github.com/haskell-party/feed/issues/73
+  feed = doJailbreak super.feed; # base
 
   bitvec = doJailbreak super.bitvec; # primitive <0.9
 
