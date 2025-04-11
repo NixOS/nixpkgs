@@ -20,7 +20,11 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [
     poetry-core
     poetry-dynamic-versioning
-    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "typer"
+    "smpclient"
   ];
 
   dependencies = with python3Packages; [
@@ -33,17 +37,9 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
-  pythonRelaxDeps = [
-    "typer"
-    "smpclient"
-  ];
-
-  versionCheckProgramArg = [ "--version" ];
-
-  pythonImportsCheck = [
-    "smpmgr"
-  ];
+  pythonImportsCheck = [ "smpmgr" ];
 
   meta = {
     description = "Simple Management Protocol (SMP) Manager for remotely managing MCU firmware";
