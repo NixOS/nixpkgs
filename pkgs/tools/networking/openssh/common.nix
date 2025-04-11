@@ -36,6 +36,8 @@
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
   withPAM ? stdenv.hostPlatform.isLinux,
+  # Attempts to mlock the entire sshd process on startup to prevent swapping.
+  withLinuxMemlock ? stdenv.hostPlatform.isLinux,
   dsaKeysSupport ? false,
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
@@ -119,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
     ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
+    ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} =
