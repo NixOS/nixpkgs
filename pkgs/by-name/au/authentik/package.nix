@@ -7,6 +7,7 @@
   buildNpmPackage,
   buildGoModule,
   runCommand,
+  bash,
   chromedriver,
   openapi-generator-cli,
   nodejs,
@@ -342,6 +343,8 @@ in
 stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     rm Makefile
