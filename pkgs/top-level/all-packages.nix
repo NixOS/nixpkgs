@@ -7844,11 +7844,7 @@ with pkgs;
     ;
 
   electron_32 = electron_32-bin;
-  electron_33 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then
-      electron-source.electron_33
-    else
-      electron_33-bin;
+  electron_33 = electron_33-bin;
   electron_34 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then
       electron-source.electron_34
