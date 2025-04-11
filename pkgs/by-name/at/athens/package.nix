@@ -6,14 +6,14 @@
   athens,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "athens";
   version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6NBdif8rQ1aj4nTYXhrWyErzRv0q8WpIheRnb2FCnkU=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   env.CGO_ENABLED = "0";
   ldflags = [
     "-s"
-    "-X github.com/gomods/athens/pkg/build.version=${version}"
+    "-X github.com/gomods/athens/pkg/build.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/proxy" ];
@@ -47,4 +47,4 @@ buildGoModule rec {
     ];
     platforms = platforms.unix;
   };
-}
+})
