@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fepegar";
+    owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
     hash = "sha256-pcUc0pnpb3qQLMOYU9yh7cljyCQ+Ngf8fJDcrRrK8LQ=";
