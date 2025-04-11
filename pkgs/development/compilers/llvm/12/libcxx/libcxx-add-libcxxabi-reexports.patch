@@ -1,0 +1,39 @@
+diff --git a/libcxx/cmake/Modules/HandleLibCXXABI.cmake b/libcxx/cmake/Modules/HandleLibCXXABI.cmake
+index 52236f473f..6000c7ee05 100644
+--- a/libcxx/cmake/Modules/HandleLibCXXABI.cmake
++++ b/libcxx/cmake/Modules/HandleLibCXXABI.cmake
+@@ -139,3 +139,34 @@
+      supported for c++ abi."
+     )
+ endif ()
++
++add_library(cxxabi-reexports INTERFACE)
++function(reexport_symbols file)
++  # -reexported_symbols_list is only available on Apple platforms
++  if (APPLE)
++    target_link_libraries(cxxabi-reexports INTERFACE "-Wl,-reexported_symbols_list,${file}")
++  endif()
++endfunction()
++
++reexport_symbols("@libcxxabi-build-support@/cxxabiv1.exp")
++reexport_symbols("@libcxxabi-build-support@/fundamental-types.exp")
++reexport_symbols("@libcxxabi-build-support@/itanium-base.exp")
++reexport_symbols("@libcxxabi-build-support@/std-misc.exp")
++
++if (NOT LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS)
++  reexport_symbols("@libcxxabi-build-support@/new-delete.exp")
++endif()
++
++# Note that std:: exception types are always defined by the library regardless of
++# whether the exception runtime machinery is provided.
++reexport_symbols("@libcxxabi-build-support@/std-exceptions.exp")
++
++if (LIBCXX_ENABLE_EXCEPTIONS)
++  reexport_symbols("@libcxxabi-build-support@/itanium-exceptions.exp")
++
++  if ("${CMAKE_OSX_ARCHITECTURES}" MATCHES "^(armv6|armv7|armv7s)$")
++    reexport_symbols("@libcxxabi-build-support@/personality-sjlj.exp")
++  else()
++    reexport_symbols("@libcxxabi-build-support@/personality-v0.exp")
++  endif()
++endif()

@@ -7,27 +7,34 @@
   src ? null,
   runCommand,
   cmake,
+  darwin,
   lndir,
   ninja,
   python3,
   fixDarwinDylibNames,
   version,
   freebsd,
-  cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null,
+  cxxabi ?
+    if stdenv.hostPlatform.isFreeBSD then
+      freebsd.libcxxrt
+    else if stdenv.hostPlatform.isDarwin then
+      darwin.libcxxabi
+    else
+      null,
   libunwind,
   enableShared ? stdenv.hostPlatform.hasSharedLibraries,
   devExtraCmakeFlags ? [ ],
   substitute,
+  getVersionFile,
   fetchpatch,
 }:
 
-# external cxxabi is not supported on Darwin as the build will not link libcxx
-# properly and not re-export the cxxabi symbols into libcxx
-# https://github.com/NixOS/nixpkgs/issues/166205
-# https://github.com/NixOS/nixpkgs/issues/269548
-assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
-  cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
+  cxxabiName =
+    lib.optionalString (
+      stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "14"
+    ) "system-"
+    + "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
   # Darwin needs to use a different ABI namespace to avoid conflicting with the system libc++.
@@ -110,16 +117,28 @@ let
       (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
       (lib.cmakeBool "LIBCXX_ENABLE_EXCEPTIONS" false)
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Avoid ODR violations when using libc++ from LLVM on Darwin with system frameworks that use libc++.
-      # While the system libc++ is derived from LLVM, it is considered distinct from LLVM’s and not compatible.
-      # See: https://discourse.llvm.org/t/apples-libc-now-provides-std-type-descriptor-t-functionality-not-found-in-upstream-libc/73881/3
-      (lib.cmakeFeature "LIBCXX_ABI_NAMESPACE" abiNamespace)
-      # LLVM’s headers assume that Darwin will use availability annotations to limit features to what is supported by
-      # the system libc++ based on deployment target. Since nixpkgs ships and links its own libc++, disable the
-      # availability annotations to ensure that all features are supported regardless of deployment target.
-      (lib.cmakeBool "LIBCXX_ENABLE_VENDOR_AVAILABILITY_ANNOTATIONS" false)
-    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      # libc++ 12 and 13 do not support specifying `system-libc++abi` for `LIBCXX_CXX_ABI`, but they do support linking
+      # against an external libc++abi, which can happen to be the system libc++abi.
+      lib.optionals (lib.versionOlder release_version "14") [
+        (lib.cmakeFeature "LIBCXX_CXX_ABI_LIBRARY_PATH" "${lib.getLib darwin.libcxxabi}/lib")
+        (lib.cmakeBool "LIBCXX_STANDALONE_BUILD" true)
+      ]
+      # Make sure that system libc++abi symbols are reexported.
+      ++ lib.optional (lib.versionOlder release_version "19") (
+        lib.cmakeBool "LIBCXX_OSX_REEXPORT_LIBCXXABI_SYMBOLS" true
+      )
+      ++ [
+        # Avoid ODR violations when using libc++ from LLVM on Darwin with system frameworks that use libc++.
+        # While the system libc++ is derived from LLVM, it is considered distinct from LLVM’s and not compatible.
+        # See: https://discourse.llvm.org/t/apples-libc-now-provides-std-type-descriptor-t-functionality-not-found-in-upstream-libc/73881/3
+        (lib.cmakeFeature "LIBCXX_ABI_NAMESPACE" abiNamespace)
+        # LLVM’s headers assume that Darwin will use availability annotations to limit features to what is supported by
+        # the system libc++ based on deployment target. Since nixpkgs ships and links its own libc++, disable the
+        # availability annotations to ensure that all features are supported regardless of deployment target.
+        (lib.cmakeBool "LIBCXX_ENABLE_VENDOR_AVAILABILITY_ANNOTATIONS" false)
+      ]
+    )
     ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
       (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
     ];
@@ -174,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
         + ''
           cp -r ${monorepoSrc}/runtimes "$out"
         ''
-        + (lib.optionalString (cxxabi == null) ''
+        + (lib.optionalString (cxxabi == null || cxxabi == darwin.libcxxabi) ''
           cp -r ${monorepoSrc}/libcxxabi "$out"
         '')
       )
@@ -190,37 +209,56 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs utils/cat_files.py
   '';
 
-  patches = lib.optionals (lib.versionOlder release_version "16") (
-    lib.optional (lib.versions.major release_version == "15")
-      # See:
-      #   - https://reviews.llvm.org/D133566
-      #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
-      # !!! Drop in LLVM 16+
-      (
-        fetchpatch {
-          url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
-          hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
-        }
+  patches =
+    lib.optionals stdenv.hostPlatform.isDarwin (
+      [
+        # Add libc++abi reexports logic to `HandleLibCXXABI.cmake` from libcxxabi. It’s needed by libc++ to know which
+        # symbols to reexport from libc++abi (since not all of them should be).
+        (substitute {
+          src = getVersionFile "libcxx/libcxx-add-libcxxabi-reexports.patch";
+          substitutions = [
+            "--subst-var-by"
+            "libcxxabi-build-support"
+            darwin.libcxxabi.build-support
+          ];
+        })
+      ]
+      # libc++ 19+ do not support reexporting symbols from the system libc++abi, but support can be trivially restored.
+      ++ lib.optional (lib.versionAtLeast release_version "19") (
+        getVersionFile "libcxx/libcxx-reexport-libcxxabi-symbols.patch"
       )
-    ++ [
-      (substitute {
-        src = ../libcxxabi/wasm.patch;
+    )
+    ++ lib.optionals (lib.versionOlder release_version "16") (
+      lib.optional (lib.versions.major release_version == "15")
+        # See:
+        #   - https://reviews.llvm.org/D133566
+        #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+        # !!! Drop in LLVM 16+
+        (
+          fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+            hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+          }
+        )
+      ++ [
+        (substitute {
+          src = ../libcxxabi/wasm.patch;
+          substitutions = [
+            "--replace-fail"
+            "/cmake/"
+            "/llvm/cmake/"
+          ];
+        })
+      ]
+      ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
+        src = ./libcxx-0001-musl-hacks.patch;
         substitutions = [
           "--replace-fail"
           "/include/"
           "/libcxx/include/"
         ];
       })
-    ]
-    ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
-      src = ./libcxx-0001-musl-hacks.patch;
-      substitutions = [
-        "--replace-fail"
-        "/include/"
-        "/libcxx/include/"
-      ];
-    })
-  );
+    );
 
   postPatch =
     (lib.optionalString
@@ -232,6 +270,20 @@ stdenv.mkDerivation (finalAttrs: {
           --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
       ''
     )
+    # The system libc++abi does not support `__cxa_init_primary_exception` until macOS 15.
+    # This can be removed once macOS 15 is the minimum deployment target in nixpkgs (for 26.11).
+    +
+      lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder (lib.getVersion cxxabi) "15")
+        (
+          (lib.optionalString (lib.versions.major release_version == "18") ''
+            substituteInPlace libcxx/include/__availability \
+              --replace-fail '#  define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION 1' '#  define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION 0'
+          '')
+          + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+            substituteInPlace libcxx/include/__configuration/availability.h \
+              --replace-fail '#define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION _LIBCPP_INTRODUCED_IN_LLVM_18' '#define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION 0'
+          '')
+        )
     + ''
       cd runtimes
     '';
@@ -255,7 +307,12 @@ stdenv.mkDerivation (finalAttrs: {
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
   # support linker scripts so the external cxxabi needs to be symlinked in
   postInstall =
-    lib.optionalString (cxxabi != null) ''
+    # Older versions of libc++ install their headers to `$out` instead of `$dev`. This is normally handled by a fixup
+    # hook, but that causes the following to fail when cxxabi is non-null.
+    lib.optionalString (lib.versionOlder release_version "14") ''
+      moveToOutput include/c++/v1 $dev
+    ''
+    + lib.optionalString (cxxabi != null) ''
       lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
       lndir ${lib.getLib cxxabi}/lib $out/lib
       libcxxabi=$out/lib/lib${cxxabi.libName}.a
