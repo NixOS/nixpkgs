@@ -8,7 +8,6 @@
   makeWrapper,
   callPackage,
   fetchFromGitHub,
-  runCommand,
   jq,
   makeDesktopItem,
   copyDesktopItems,
@@ -38,11 +37,6 @@ let
     }
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
-
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
 
@@ -179,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    export npm_config_nodedir=${electron-headers}
+    export npm_config_nodedir=${electron.headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     cp -r ${sticker-creator} sticker-creator/dist
