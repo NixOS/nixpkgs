@@ -352,14 +352,16 @@ with lib;
         ];
       };
 
-      fileSystems."/" = {
-        device = "/dev/disk/by-label/nixos";
-        autoResize = true;
-        fsType = "ext4";
-      };
-      fileSystems."/boot" = lib.mkIf hasBootPartition {
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
+      fileSystems = lib.mkImageMediaOverride {
+        "/" = {
+          device = "/dev/disk/by-label/nixos";
+          autoResize = true;
+          fsType = "ext4";
+        };
+        "/boot" = lib.mkIf hasBootPartition {
+          device = "/dev/disk/by-label/ESP";
+          fsType = "vfat";
+        };
       };
 
       networking = mkIf cfg.cloudInit.enable {
