@@ -7,6 +7,7 @@
   moreutils,
   jq,
   git,
+  writableTmpDirAsHomeHook,
 }:
 let
   # finalAttrs when 🥺 (buildGoModule does not support them)
@@ -52,15 +53,10 @@ buildGoModule {
     "-X github.com/thomiceli/opengist/internal/config.OpengistVersion=v${version}"
   ];
 
-  # required for tests
   nativeCheckInputs = [
     git
+    writableTmpDirAsHomeHook
   ];
-
-  # required for tests to not try to write into $HOME and fail
-  preCheck = ''
-    export OG_OPENGIST_HOME=$(mktemp -d)
-  '';
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
