@@ -463,34 +463,42 @@ self: super:
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = overrideCabal (drv: {
-    src = pkgs.fetchgit {
-      name = "git-annex-${super.git-annex.version}-src";
-      url = "git://git-annex.branchable.com/";
-      rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "08k0qlx97j0c7vx07nwhzwxb2rxcnzwzlg2x3j01cx033vwch8hq";
-      # delete android and Android directories which cause issues on
-      # darwin (case insensitive directory). Since we don't need them
-      # during the build process, we can delete it to prevent a hash
-      # mismatch on darwin.
-      postFetch = ''
-        rm -r $out/doc/?ndroid*
-      '';
-    };
+  git-annex = lib.pipe super.git-annex (
+    [
+      (overrideCabal (drv: {
+        src = pkgs.fetchgit {
+          name = "git-annex-${super.git-annex.version}-src";
+          url = "git://git-annex.branchable.com/";
+          rev = "refs/tags/" + super.git-annex.version;
+          sha256 = "18n6ah4d5i8qhx1s95zsb8bg786v0nv9hcjyxggrk88ya77maxha";
+          # delete android and Android directories which cause issues on
+          # darwin (case insensitive directory). Since we don't need them
+          # during the build process, we can delete it to prevent a hash
+          # mismatch on darwin.
+          postFetch = ''
+            rm -r $out/doc/?ndroid*
+          '';
+        };
 
-    patches = drv.patches or [ ] ++ [
-      # Prevent .desktop files from being installed to $out/usr/share.
-      # TODO(@sternenseemann): submit upstreamable patch resolving this
-      # (this should be possible by also taking PREFIX into account).
-      ./patches/git-annex-no-usr-prefix.patch
-    ];
+        patches = drv.patches or [ ] ++ [
+          # Prevent .desktop files from being installed to $out/usr/share.
+          # TODO(@sternenseemann): submit upstreamable patch resolving this
+          # (this should be possible by also taking PREFIX into account).
+          ./patches/git-annex-no-usr-prefix.patch
+        ];
 
-    postPatch = ''
-      substituteInPlace Makefile \
-        --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
-                       'InstallDesktopFile git-annex'
-    '';
-  }) super.git-annex;
+        postPatch = ''
+          substituteInPlace Makefile \
+            --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
+                           'InstallDesktopFile git-annex'
+        '';
+      }))
+    ]
+    ++ lib.optionals (lib.versionOlder self.ghc.version "9.10") [
+      (disableCabalFlag "OsPath")
+      (addBuildDepends [ self.filepath-bytestring ])
+    ]
+  );
 
   # Too strict bounds on servant
   # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555

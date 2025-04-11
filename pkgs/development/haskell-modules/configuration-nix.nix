@@ -851,6 +851,15 @@ builtins.intersectAttrs super {
         executableSystemDepends = runtimeExecDeps;
         enableSharedExecutables = false;
 
+        # Unnecessary for Setup.hs, but we reuse the setup package db
+        # for the installation utilities.
+        setupHaskellDepends = drv.setupHaskellDepends or [ ] ++ [
+          self.buildHaskellPackages.unix-compat
+          self.buildHaskellPackages.IfElse
+          self.buildHaskellPackages.QuickCheck
+          self.buildHaskellPackages.data-default
+        ];
+
         preConfigure =
           drv.preConfigure or ""
           + ''
