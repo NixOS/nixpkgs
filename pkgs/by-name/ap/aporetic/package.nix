@@ -57,7 +57,7 @@ symlinkJoin {
   meta = {
     inherit (src.meta) homepage;
     description = ''
-      Custom build of Iosevka with different style and metrics than the default. This is the successor to my "Iosevka Comfy" fonts.
+      Custom build of Iosevka with different style and metrics than the default, successor to my "Iosevka Comfy" fonts
     '';
     license = lib.licenses.ofl;
     platforms = iosevka.meta.platforms;
