@@ -25,6 +25,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL
       libGLU
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
     ];
 
   strictDeps = true;
