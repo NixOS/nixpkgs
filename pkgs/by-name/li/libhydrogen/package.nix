@@ -30,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     "INCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "LIBRARY_INSTALL_DIR=${placeholder "out"}/lib"
     "PKGCONFIG_INSTALL_DIR=${placeholder "dev"}/lib/pkgconfig"
+    "lib"
   ];
+
+  checkTarget = "test";
 
   postInstall = ''
     mkdir -p "$dev/lib/pkgconfig"
@@ -47,10 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
-  '';
-
-  checkPhase = ''
-    tests/tests
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
