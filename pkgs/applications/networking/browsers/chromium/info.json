@@ -787,7 +787,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "135.0.7049.52",
+    "version": "135.0.7049.84",
     "deps": {
       "depot_tools": {
         "rev": "85ec2718b5a29990c7eb67778348c9f76a00f392",
@@ -798,16 +798,16 @@
         "hash": "sha256-8NynNvLNCHxy8EYmsnPovKhXu9DcDcYBhg4A6d2QIfY="
       },
       "ungoogled-patches": {
-        "rev": "135.0.7049.52-1",
-        "hash": "sha256-i7fSJsbuXgzDvh/4RJwHvVEalS134SoRzvcJZbYsIIo="
+        "rev": "135.0.7049.84-1",
+        "hash": "sha256-Cncp+sLFWC8nuepXCbkeHZYgAw2cFIAIaQe9wgun/AA="
       },
       "npmHash": "sha256-wNrZaugdKJCyV1WchkKXzr/I1OW1AtjiC2p7qTZZOqU="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "9ba7e609d28c509a8ce9265c2247065d8d251173",
-        "hash": "sha256-PjvfckdlaMq9HWefGxFppgBumlqh7xoCoxYFwk/r630=",
+        "rev": "6c019e56001911b3fd467e03bf68c435924d62f4",
+        "hash": "sha256-BFw1o2cIHBeBudeigH6YTOuLGsp/+pTOeE1lXBO3aio=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -912,8 +912,8 @@
       },
       "src/third_party/dawn": {
         "url": "https://dawn.googlesource.com/dawn.git",
-        "rev": "bdc68b25b620d7302a955e2c38c548ebfe74ef31",
-        "hash": "sha256-R9SQiKUjLkLmPJwuWpw7fcibrWxSlXWkDsCra7Ci0UQ="
+        "rev": "53dfda5e9d07d58b43cea66b8153c55dd751ff88",
+        "hash": "sha256-zXxJZz2C4eDJ8beHDXJe0UCNesDw5R0ogFcsdiF8VIc="
       },
       "src/third_party/dawn/third_party/glfw": {
         "url": "https://chromium.googlesource.com/external/github.com/glfw/glfw",
@@ -1402,8 +1402,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "b99f146a03d3c98049768fd91c2bbe6594b02b2c",
-        "hash": "sha256-tl1GDmcStkuKMmzzsYuRG6Nrk4xDqgYYBoa1VsQNOwY="
+        "rev": "6e445bdea696eb6b6a46681dfc1a63edaa517edb",
+        "hash": "sha256-mSup6nKsEPjJ/HBV7PwjBI4PP7/RdwFm/dnavKeRqzI="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -1492,8 +1492,8 @@
       },
       "src/third_party/wasm_tts_engine/src": {
         "url": "https://chromium.googlesource.com/chromium/wasm-tts-engine",
-        "rev": "6ab3e63276a2d66ba3e7db4f87c5b7cb00e22130",
-        "hash": "sha256-ZcnKKnHsN1UyztAXClc2EUwfeX3yuLtMM2Zjwpnh62U="
+        "rev": "53d2aba6f0cf7db57e17edfc3ff6471871b0c125",
+        "hash": "sha256-t5eeehwspRLaowEMPLa8/lV5AHamXQBfH/un0DHLVAM="
       },
       "src/third_party/wayland/src": {
         "url": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git",
@@ -1537,8 +1537,8 @@
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "04413d62f754a7b1a3a2d8c3df23bcde040112b2",
-        "hash": "sha256-sFoBgpPeMJQNSjNp8dDEUlB/7lJUpIXTpu0eRq94cGk="
+        "rev": "9e5db68b15087eccd8d2493b4e8539c1657e0f75",
+        "hash": "sha256-gXdBDo+fzp6hJB8qyhscV7ajwSfCUeYvSxhL10g56rU="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
