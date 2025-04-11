@@ -39,7 +39,7 @@ with lib;
     in
     mkMerge [
       {
-        fileSystems."/" = lib.mkDefault {
+        fileSystems."/" = lib.mkImageMediaOverride {
           device = "/dev/disk/by-label/nixos";
           autoResize = true;
           fsType = "ext4";
