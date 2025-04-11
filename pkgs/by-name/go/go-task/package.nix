@@ -6,20 +6,21 @@
   installShellFiles,
   nix-update-script,
   versionCheckHook,
+  fetchpatch2,
 }:
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.41.0";
+  version = "3.42.1";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
     tag = "v${version}";
-    hash = "sha256-yJ9XTCS0BK+pcQvcbGR2ixwPODJKdfQnHgB1QoTFhzA=";
+    hash = "sha256-oA/vW4TWLePOW26xOguiAOcVxx6J2PiJFelOM0mDYBA=";
   };
 
-  vendorHash = "sha256-DR9G+I6PYk8jrR0CZiPqtuULTMekATNSLjyHACOmlbk=";
+  vendorHash = "sha256-BmpyPWCgVpx5KWET/VUYkxKE7Rni9Rnsqk5skxlxrqA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,6 +30,17 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=github.com/go-task/task/v3/internal/version.version=${version}"
+  ];
+
+  patches = [
+    # Workaround to avoid empty version number. Consider removing after release 3.42.2 or later.
+    # This patch was suggested in https://github.com/go-task/task/pull/2105 and is still used in the Homebrew formula.
+    # Although that PR was closed by merging https://github.com/go-task/task/pull/2131 upstream,
+    # the commit depends on other unreleased changes.
+    (fetchpatch2 {
+      url = "https://github.com/go-task/task/commit/44cb98cb0620ea98c43d0f11ce92f5692ad57212.patch?full_index=1";
+      hash = "sha256-LCaDarCeKs7fZ70DjlKdGAjRZpE5mASbhAxCbhtc5nI=";
+    })
   ];
 
   env.CGO_ENABLED = 0;
