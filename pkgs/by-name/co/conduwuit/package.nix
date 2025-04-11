@@ -98,6 +98,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://conduwuit.puppyirl.gay/";
     changelog = "https://github.com/girlbossceo/conduwuit/releases/tag/v${version}";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "On April 11, 2025, the conduwuit project officially ceased development"
+    ];
     maintainers = with lib.maintainers; [ niklaskorz ];
     # Not a typo, conduwuit is a drop-in replacement for conduit.
     mainProgram = "conduit";
