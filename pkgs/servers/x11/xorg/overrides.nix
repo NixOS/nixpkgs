@@ -620,38 +620,6 @@ self: super:
     ]; # mainly to avoid propagation
   });
 
-  libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-    ];
-
-    buildInputs =
-      attrs.buildInputs
-      ++ [ zlib ]
-      ++ lib.optionals stdenv.hostPlatform.isNetBSD [
-        netbsd.libarch
-        netbsd.libpci
-      ];
-
-    mesonFlags = [
-      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
-      (lib.mesonEnable "zlib" true)
-    ];
-
-    meta = attrs.meta // {
-      # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
-      platforms =
-        lib.fold (os: ps: ps ++ lib.platforms.${os})
-          [ ]
-          [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
-      badPlatforms = [
-        # mandatory shared library
-        lib.systems.inspect.platformPatterns.isStatic
-      ];
-    };
-  });
-
   libpthreadstubs = super.libpthreadstubs.overrideAttrs (attrs: {
     # only contains a pkgconfig file on linux and windows
     meta = attrs.meta // {
