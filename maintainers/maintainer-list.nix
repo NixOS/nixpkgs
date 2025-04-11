@@ -8900,6 +8900,12 @@
     githubId = 19275558;
     name = "Julien Girard-Satabin";
   };
+  gjhenrique = {
+    email = "me@gjhenrique.com";
+    github = "gjhenrique";
+    githubId = 2664596;
+    name = "Guilherme Henrique";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
