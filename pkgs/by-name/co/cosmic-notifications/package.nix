@@ -4,14 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   just,
+  libcosmicAppHook,
   which,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
-  appstream-glib,
-  desktop-file-utils,
-  intltool,
   nixosTests,
 }:
 
@@ -36,15 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     just
     which
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
-    appstream-glib
-    desktop-file-utils
-    intltool
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
@@ -57,11 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-notifications"
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-notifications \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
-  '';
 
   passthru.tests = {
     inherit (nixosTests)
