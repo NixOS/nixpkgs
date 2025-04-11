@@ -618,15 +618,6 @@ self: super:
   smproxy = addMainProgram super.smproxy { };
   transset = addMainProgram super.transset { };
 
-  utilmacros = super.utilmacros.overrideAttrs (attrs: {
-    # not needed for releases, we propagate the needed tools
-    propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [ ] ++ [
-      automake
-      autoconf
-      libtool
-    ];
-  });
-
   viewres = addMainProgram super.viewres { };
 
   x11perf = super.x11perf.overrideAttrs (attrs: {
