@@ -22,6 +22,11 @@ python.pkgs.buildPythonPackage {
   ];
 
   postPatch = ''
+    # high parallelism let the tests easily fail with concurrent errors
+    if (( $NIX_BUILD_CORES > 4)); then
+      NIX_BUILD_CORES=4
+    fi
+
     substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
   '';
 
