@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontUseJustBuild = true;
+  # Runs the default checkPhase instead
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
