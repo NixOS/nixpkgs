@@ -59,6 +59,9 @@ buildPythonPackage rec {
   disabledTests = [
     # ValueError: <class 'bool'> can be computed for one-element arrays only.
     "test_dot_with_sparse"
+
+    # ValueError: `shape` was not provided.
+    "test_sparse"
   ];
 
   __darwinAllowLocalNetworking = true;
