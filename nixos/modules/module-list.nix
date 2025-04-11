@@ -515,6 +515,7 @@
   ./services/databases/opentsdb.nix
   ./services/databases/pgbouncer.nix
   ./services/databases/pgmanage.nix
+  ./services/databases/postgres-websockets.nix
   ./services/databases/postgresql.nix
   ./services/databases/postgrest.nix
   ./services/databases/redis.nix
