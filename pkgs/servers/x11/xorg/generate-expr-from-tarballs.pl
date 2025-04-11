@@ -40,6 +40,7 @@ $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
 $pcMap{"xbitmaps"} = "xbitmaps";
+$pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -275,6 +276,7 @@ print OUT <<EOF;
   pixman,
   util-macros,
   xbitmaps,
+  xcb-proto,
 }:
 
 self: with self; {
@@ -292,6 +294,7 @@ self: with self; {
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
   utilmacros = util-macros;
+  xcbproto = xcb-proto;
 
 EOF
 
