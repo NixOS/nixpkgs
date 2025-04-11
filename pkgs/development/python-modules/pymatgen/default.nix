@@ -50,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2025.1.24";
+  version = "2025.4.10";
   pyproject = true;
 
   disabled = pythonAtLeast "3.13";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     tag = "v${version}";
-    hash = "sha256-0P3/M6VI2RKPArMwXD95sjW7dYOTXxUeu4tOliN0IGk=";
+    hash = "sha256-r8PftCOv2z8lVgBHjCtzuECQYSzKsLCPXkB/gFFhk4I=";
   };
 
   build-system = [ setuptools ];
@@ -135,6 +135,9 @@ buildPythonPackage rec {
       "test_pca"
       "test_static_si_no_kgrid"
       "test_thermal_conductivity"
+
+      # Needs moyopy, not packaged
+      "get_protostructure_label_from_moyopy"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # AttributeError: 'NoneType' object has no attribute 'items'
@@ -158,6 +161,10 @@ buildPythonPackage rec {
       "test_proj_bandstructure_plot"
       "test_structure"
       "test_structure_environments"
+
+      # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+      "test_timer"
+      "test_timer_10_2_7"
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
