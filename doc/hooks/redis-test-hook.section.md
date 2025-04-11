@@ -7,7 +7,7 @@ This hook starts a Redis server during `checkPhase`. Example:
 {
   stdenv,
   redis,
-  redisTestHook
+  redisTestHook,
 }:
 stdenv.mkDerivation {
 
@@ -47,7 +47,11 @@ Bash-only variables:
 Example usage:
 
 ```nix
-{ stdenv, redis, redisTestHook }:
+{
+  stdenv,
+  redis,
+  redisTestHook,
+}:
 stdenv.mkDerivation {
 
   # ...
@@ -60,3 +64,4 @@ stdenv.mkDerivation {
     redisTestPort=6390;
   '';
 }
+```
