@@ -19529,6 +19529,8 @@ with pkgs;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
+  yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
+
   yazi-unwrapped = callPackage ../by-name/ya/yazi-unwrapped/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
