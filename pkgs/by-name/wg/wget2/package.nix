@@ -24,6 +24,7 @@
   xz,
   zlib,
   zstd,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -96,6 +97,13 @@ stdenv.mkDerivation rec {
     # TODO: https://gitlab.com/gnuwget/wget2/-/issues/537
     (lib.withFeatureAs sslSupport "ssl" "openssl")
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Successor of GNU Wget, a file and recursive website downloader";
