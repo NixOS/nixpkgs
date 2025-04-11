@@ -12478,6 +12478,7 @@ with pkgs;
   postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
   postgresql17JitPackages = recurseIntoAttrs postgresql_17_jit.pkgs;
 
+  postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
