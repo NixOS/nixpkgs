@@ -2830,6 +2830,42 @@ runTests {
     expected = "unknown";
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/396849
+  "test: submodule definitions aren't unchecked when evaluating submodule documentation" = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options.foo = lib.mkOption { type = lib.types.submodule submodule; };
+          };
+
+        submodule = {
+          options.bar = lib.mkOption { type = lib.types.int; };
+          config.submoduleWrong = throw "yikes";
+        };
+
+        options = (evalModules { modules = [ module ]; }).options;
+
+        renderableOpts = filter (o: !o.internal) (optionAttrSetToDocList options);
+        # Evaluate the whole docs
+      in
+      builtins.deepSeq renderableOpts
+        # Return the locations
+        (map (o: o.loc) renderableOpts);
+    expected = [
+      [
+        "_module"
+        "args"
+      ]
+      [ "foo" ]
+      [
+        "foo"
+        "bar"
+      ]
+    ];
+  };
+
   testFreeformOptions = {
     expr =
       let

@@ -12,9 +12,7 @@
 
   meta = {
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      thefossguy
-    ];
+    maintainers = lib.teams.cosmic.members;
   };
 
   nodes.machine = {

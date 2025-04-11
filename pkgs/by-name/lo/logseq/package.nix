@@ -24,14 +24,6 @@
   git,
 }:
 
-let
-  # unpack tarball containing electron's headers
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
   version = "0.10.9-unstable-2025-03-11";
@@ -202,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     npm rebuild --verbose
     popd
 
-    export npm_config_nodedir=${electron-headers}
+    export npm_config_nodedir=${electron.headers}
 
     pushd static
 
@@ -210,13 +202,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/dugite/package.json \
       --replace-fail '"postinstall"' '"_postinstall"'
 
-    # this doesn't seem to build with electron-headers
+    # this doesn't seem to build with electron.headers
     rm node_modules/macos-alias/binding.gyp
 
     # the electron-rebuild command deadlocks for some reason, let's just use normal npm rebuild (since we overrode the nodedir anyways)
     npm rebuild --verbose
 
-    # remove most references to electron-headers
+    # remove most references to electron.headers
     # TODO: track down the remaining references
     find node_modules -type f \( -name "*.target.mk" -o -name "config.gypi" -o -name "Makefile" \) -delete
 
