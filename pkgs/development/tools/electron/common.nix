@@ -10,7 +10,6 @@
   yarn,
   libnotify,
   unzip,
-  pkgs,
   pkgsBuildHost,
   pipewire,
   libsecret,
@@ -36,6 +35,9 @@ in
     "out"
     "headers"
   ];
+
+  # don't automatically move the include directory from $headers back into $out
+  moveToDev = false;
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
     nodejs
@@ -213,11 +215,8 @@ in
     mkdir -p $libExecPath
     unzip -d $libExecPath out/Release/dist.zip
 
-    # Create reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
-    tar --sort=name \
-      --mtime="@$SOURCE_DATE_EPOCH" \
-      --owner=0 --group=0 --numeric-owner \
-      -czf $headers -C out/Release/gen node_headers
+    mkdir -p $headers
+    cp -r out/Release/gen/node_headers/* $headers/
 
     runHook postInstall
   '';
