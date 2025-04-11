@@ -4,6 +4,9 @@
   rustPlatform,
   pkg-config,
   openssl,
+  # testing
+  testers,
+  cargo-geiger,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,6 +53,10 @@ rustPlatform.buildRustPackage rec {
     "--skip test_package_update_readme::case_3"
     "--skip test_package_update_readme::case_5"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = cargo-geiger;
+  };
 
   meta = {
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
