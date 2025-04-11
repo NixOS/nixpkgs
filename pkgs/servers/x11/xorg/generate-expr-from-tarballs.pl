@@ -39,6 +39,7 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -273,6 +274,7 @@ print OUT <<EOF;
   makedepend,
   pixman,
   util-macros,
+  xbitmaps,
 }:
 
 self: with self; {
@@ -284,6 +286,7 @@ self: with self; {
     luit
     makedepend
     pixman
+    xbitmaps
     ;
   fontalias = font-alias;
   fontutil = font-util;
