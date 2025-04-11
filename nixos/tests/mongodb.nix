@@ -8,6 +8,7 @@ let
     print(db.greetings.findOne().greeting);
   '';
   mongoshExe = lib.getExe pkgs.mongosh;
+  rootPw = "notagoodpw";
 in
 {
   name = "mongodb";
@@ -18,9 +19,33 @@ in
     niklaskorz
   ];
 
-  nodes.mongodb = {
-    services.mongodb.enable = true;
-  };
+  nodes.mongodb =
+    { config, ... }:
+    let
+      mongodKeyFileEtcPath = "mongod.keyFile";
+    in
+    {
+      environment.etc."${mongodKeyFileEtcPath}" = {
+        source = pkgs.runCommand "keyfile" { } ''
+          ${lib.getExe pkgs.openssl} rand -base64 756 > $out
+        '';
+        mode = "0400";
+        user = config.services.mongodb.user;
+      };
+
+      services.mongodb = {
+        enable = true;
+        enableAuth = true;
+        replSetName = "rs0";
+        initialRootPasswordFile = builtins.toFile "pw" rootPw;
+        extraConfig = ''
+          security.keyFile: /etc/${mongodKeyFileEtcPath}
+        '';
+        initialScript = builtins.toFile "initial.js" ''
+          rs.initiate()
+        '';
+      };
+    };
 
   testScript = ''
     start_all()
@@ -30,8 +55,9 @@ in
         mongodb.wait_for_open_port(27017)
 
     with subtest("insert and find a document"):
-        result = mongodb.succeed("${mongoshExe} ${testQuery}")
+        result = mongodb.succeed("${mongoshExe} -u root -p ${rootPw} ${testQuery}")
         print("Test output:", result)
         assert result.strip() == "hello"
   '';
+
 }

@@ -158,6 +158,7 @@ in
           cfg_ = cfg // {
             enableAuth = false;
             bind_ip = "127.0.0.1";
+            replSetName = "";
           };
         in
         ''
@@ -185,6 +186,7 @@ in
                 user: "root",
                 pwd: "$initialRootPassword",
                 roles: [
+                  { role: "root", db: "admin" },
                   { role: "userAdminAnyDatabase", db: "admin" },
                   { role: "dbAdminAnyDatabase", db: "admin" },
                   { role: "readWriteAnyDatabase", db: "admin" }
@@ -200,7 +202,7 @@ in
         if test -e "${cfg.dbpath}/.first_startup"; then
           ${lib.optionalString (cfg.initialScript != null) ''
             initialRootPassword=$(<${cfg.initialRootPasswordFile})
-            ${mongoshExe} ${lib.optionalString (cfg.enableAuth) "-u root -p $initialRootPassword"} admin "${cfg.initialScript}"
+            ${mongoshExe} ${lib.optionalString cfg.enableAuth "-u root -p $initialRootPassword"} admin "${cfg.initialScript}"
           ''}
           rm -f "${cfg.dbpath}/.first_startup"
         fi
