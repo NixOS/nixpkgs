@@ -5,6 +5,7 @@
   unstableGitUpdater,
   installShellFiles,
   makeWrapper,
+  apple-sdk_13,
   xorg,
   pkg-config,
   wayland-scanner,
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
         wayland-scanner
       ];
       unix = [ makeWrapper ];
+      osx-cocoa = [ ];
     }
     ."${config}" or (throw "unsupported CONF");
 
@@ -55,11 +57,11 @@ stdenv.mkDerivation {
         xorg.libX11
         xorg.libXt
       ];
+      osx-cocoa = [ apple-sdk_13 ];
     }
     ."${config}" or (throw "unsupported CONF");
 
-  # TODO: macos
-  makeFlags = [ "CONF=${config}" ];
+  makeFlags = [ "CONF=${config}" ] ++ lib.optional (config == "osx-cocoa") "CC=clang";
 
   installPhase =
     {
@@ -71,6 +73,12 @@ stdenv.mkDerivation {
         mv drawterm drawterm.bin
         install -Dm755 -t $out/bin/ drawterm.bin
         makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+      '';
+      osx-cocoa = ''
+        mkdir -p $out/{Applications,bin}
+        mv gui-cocoa/drawterm.app $out/Applications/
+        mv drawterm $out/Applications/drawterm.app/
+        ln -s $out/Applications/drawterm.app/drawterm $out/bin/
       '';
     }
     ."${config}" or (throw "unsupported CONF")
@@ -88,7 +96,7 @@ stdenv.mkDerivation {
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ moody ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "drawterm";
   };
 }
