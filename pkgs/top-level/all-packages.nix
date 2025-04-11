@@ -5750,8 +5750,6 @@ with pkgs;
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
-  zint = qt6Packages.callPackage ../development/libraries/zint { };
-
   zstd = callPackage ../tools/compression/zstd {
     cmake = buildPackages.cmakeMinimal;
   };
@@ -12467,6 +12465,7 @@ with pkgs;
   postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
   postgresql17JitPackages = recurseIntoAttrs postgresql_17_jit.pkgs;
 
+  postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
