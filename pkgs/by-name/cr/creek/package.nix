@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     zig.hook
     pkg-config
-    wayland
     wayland-scanner
   ];
 
   buildInputs = [
     fcft
     pixman
+    wayland
     wayland-protocols
   ];
 
