@@ -297,6 +297,7 @@ let
 
   # LLVM tools packages are staged separately (xclang, stage3) from LLVM libs (xclang).
   llvmLibrariesPackages = prevStage: { inherit (prevStage.llvmPackages) compiler-rt libcxx; };
+  llvmLibrariesDarwinDepsNoCC = prevStage: { inherit (prevStage.darwin) libcxxabi; };
   llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {
@@ -710,6 +711,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isFromNixpkgs [
       (darwinPackagesNoCC prevStage)
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
 
@@ -777,6 +779,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -808,7 +811,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             darwin = super.darwin.overrideScope (
               selfDarwin: superDarwin:
-              darwinPackages prevStage
+              llvmLibrariesDarwinDepsNoCC prevStage
+              // darwinPackages prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped;
                 # Rewrap binutils so it uses the rebuilt Libsystem.
@@ -862,6 +866,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -887,6 +892,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             darwin = super.darwin.overrideScope (
               selfDarwin: superDarwin:
               darwinPackages prevStage
+              // llvmLibrariesDarwinDepsNoCC prevStage
               // sdkDarwinPackages prevStage
               # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
@@ -941,6 +947,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -963,7 +970,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             # Rebuild locales and sigtool with the new clang.
             darwin = super.darwin.overrideScope (
               _: superDarwin:
-              sdkDarwinPackages prevStage
+              llvmLibrariesDarwinDepsNoCC prevStage
+              // sdkDarwinPackages prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped libSystem;
                 binutils = superDarwin.binutils.override {
@@ -1056,6 +1064,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -1155,6 +1164,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ]
           ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
+            libcxxabi
             libiconv.out
             libresolv.out
             libsbuf.out
@@ -1203,7 +1213,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
               darwin = super.darwin.overrideScope (
                 _: _:
-                sdkDarwinPackages prevStage
+                llvmLibrariesDarwinDepsNoCC prevStage
+                // sdkDarwinPackages prevStage
                 // {
                   inherit (prevStage.darwin) libSystem locale sigtool;
                 }
