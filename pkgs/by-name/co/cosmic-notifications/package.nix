@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-notifications";
     description = "Notifications for the COSMIC Desktop Environment";
     mainProgram = "cosmic-notifications";
-    license = licenses.gpl3Only;
-    maintainers = teams.cosmic.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.cosmic.members;
+    platforms = lib.platforms.linux;
   };
 })
