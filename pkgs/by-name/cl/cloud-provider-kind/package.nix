@@ -21,7 +21,7 @@ buildGoModule rec {
 
   checkFlags = lib.optional
     stdenv.isDarwin
-    "-skip=^Test_firstSuccessfulProbe$"
+    "-skip=^Test_firstSuccessfulProbe$";
 
   meta = {
     description = "Load Balancer implementation for Kubernetes-in-Docker";
