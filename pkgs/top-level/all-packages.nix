@@ -19129,6 +19129,7 @@ with pkgs;
   mfcl3770cdwcupswrapper = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).cupswrapper;
 
   mfcl3730cdnlpr = (callPackage ../misc/cups/drivers/brother/mfcl3730cdn { }).driver;
+  mfcl3730cdncupswrapper = (callPackage ../misc/cups/drivers/brother/mfcl3730cdn { }).cupswrapper;
 
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
