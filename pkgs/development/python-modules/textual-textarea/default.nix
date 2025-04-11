@@ -13,6 +13,7 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    tree-sitter-python
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
@@ -53,6 +55,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # https://github.com/tconbeer/textual-textarea/issues/296
     "tests/functional_tests/test_textarea.py"
+  ];
+
+  disabledTests = [
+    # requires tree-sitter-sql dependency
+    "test_comments[sql--- ]"
   ];
 
   meta = {
