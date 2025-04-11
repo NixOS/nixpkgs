@@ -34,6 +34,7 @@ resholve.mkDerivation {
   };
 
   meta = with lib; {
+    broken = true; # ix.io has been offline since 2023-12-10
     homepage = "http://ix.io";
     description = "Command line pastebin";
     maintainers = with maintainers; [ peterhoeg ];
