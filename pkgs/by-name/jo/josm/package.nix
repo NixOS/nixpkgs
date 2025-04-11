@@ -11,21 +11,21 @@
 }:
 let
   pname = "josm";
-  version = "19307";
+  version = "19369";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-08dacfJrRbdk8Bj+lDW2s8YuGVvnKdvMQN825lusohk=";
+      hash = "sha256-rcnfrKaKVWvPLdr8hab380Ao661NVj+pCZMIGiUM0aQ=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-wFLQXGOaRnFDZEDlZwmv8wb3pNJbVxocYVjc8wy1Q10=";
+      hash = "sha256-zIiOq14o972Z+V4Cc3IFjcgd50G1VDEoxbcYVtOR5C4=";
     };
     pkg = fetchFromGitHub {
       owner = "JOSM";
       repo = "josm";
       tag = "${version}-tested";
-      hash = "sha256-TwheY/9gXbKH36jZLMoV9xIBeq59FpHUUoselaiYGzA=";
+      hash = "sha256-mPuf98HfvmAHcnOiFKHUtqNVg7sy5XZP2hnm7ZdaUQo=";
     };
   };
 
