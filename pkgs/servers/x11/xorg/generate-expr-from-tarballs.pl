@@ -272,6 +272,7 @@ print OUT <<EOF;
   luit,
   makedepend,
   pixman,
+  util-macros,
 }:
 
 self: with self; {
@@ -287,6 +288,7 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
+  utilmacros = util-macros;
 
 EOF
 
