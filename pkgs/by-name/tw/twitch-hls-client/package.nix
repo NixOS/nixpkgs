@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "twitch-hls-client";
-  version = "1.3.13";
+  version = "1.3.14";
 
   src = fetchFromGitHub {
     owner = "2bc4";
     repo = "twitch-hls-client";
     rev = version;
-    hash = "sha256-H446qXFwRGippLMZemkW8sVhTV3YGpKmAvD8QBamAlo=";
+    hash = "sha256-g7pnTu6NHvtge7vUyG1Cms6hv4ozPgawMUKYGU7VRak=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-sqhB2Lj3RK1OyXy87Be9aOkfcksqz+5VfRTlKuswerU=";
+  cargoHash = "sha256-Suq+j4/lmkEMg6VlLT8UcPcVjDyBLyjUaqPXdqDo3dU=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
