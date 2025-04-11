@@ -11,6 +11,7 @@
   makedepend,
   pixman,
   util-macros,
+  xbitmaps,
 }:
 
 self: with self; {
@@ -22,6 +23,7 @@ self: with self; {
     luit
     makedepend
     pixman
+    xbitmaps
     ;
   fontalias = font-alias;
   fontutil = font-util;
@@ -3862,37 +3864,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xbitmaps = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xbitmaps";
-      version = "1.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/data/xbitmaps-1.1.3.tar.xz";
-        sha256 = "0yhgrllia3lbqx9b21w31w4sppx1a9ggrk62hrys2ckqi1aasv5d";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xbitmaps" ];
         platforms = lib.platforms.unix;
       };
     })
