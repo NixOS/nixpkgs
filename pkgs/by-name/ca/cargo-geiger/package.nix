@@ -64,22 +64,22 @@ rustPlatform.buildRustPackage rec {
     "--skip test_package_update_readme::case_5"
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/rust-secure-code/cargo-geiger";
-    changelog = "https://github.com/rust-secure-code/cargo-geiger/blob/cargo-geiger-${version}/CHANGELOG.md";
+  meta = {
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
-    mainProgram = "cargo-geiger";
     longDescription = ''
       A cargo plugin that detects the usage of unsafe Rust in a Rust crate and
       its dependencies. It provides information to aid auditing and guide
       dependency selection but it can not help you decide when and why unsafe
       code is appropriate.
     '';
-    license = with licenses; [
+    homepage = "https://github.com/geiger-rs/cargo-geiger";
+    changelog = "https://github.com/geiger-rs/cargo-geiger/blob/cargo-geiger-${version}/CHANGELOG.md";
+    mainProgram = "cargo-geiger";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       evanjs
       gepbird
       jk
