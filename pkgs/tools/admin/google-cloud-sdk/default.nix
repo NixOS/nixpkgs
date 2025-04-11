@@ -18,6 +18,7 @@
   callPackage,
   installShellFiles,
   with-gce ? false,
+  writeShellScript,
 }:
 
 let
@@ -145,7 +146,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
-    updateScript = ./update.sh;
+    updateScript = writeShellScript "update.sh" ''
+      UPDATE_NIX_OLD_VERSION="${version}" \
+        ./pkgs/tools/admin/google-cloud-sdk/update.sh;
+    '';
   };
 
   meta = with lib; {
