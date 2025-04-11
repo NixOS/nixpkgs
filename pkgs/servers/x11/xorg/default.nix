@@ -6,6 +6,7 @@
   gccmakedep,
   libpciaccess,
   libpthread-stubs,
+  libxcvt,
   luit,
   pixman,
 }:
@@ -15,6 +16,7 @@ self: with self; {
   inherit
     gccmakedep
     libpciaccess
+    libxcvt
     luit
     pixman
     ;
@@ -3272,43 +3274,6 @@ self: with self; {
           "xcb-xv"
           "xcb-xvmc"
         ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libxcvt = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      meson,
-      ninja,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libxcvt";
-      version = "0.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libxcvt-0.1.3.tar.xz";
-        sha256 = "009f8kr53cv7lzsg4507cgnk9vxyrm8lgnnn6vx7vpk7hy59jad9";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        meson
-        ninja
-      ];
-      buildInputs = [ ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
         platforms = lib.platforms.unix;
       };
     })

@@ -268,6 +268,7 @@ print OUT <<EOF;
   gccmakedep,
   libpciaccess,
   libpthread-stubs,
+  libxcvt,
   luit,
   pixman,
 }:
@@ -277,6 +278,7 @@ self: with self; {
   inherit
     gccmakedep
     libpciaccess
+    libxcvt
     luit
     pixman
     ;
