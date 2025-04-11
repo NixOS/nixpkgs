@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  hatchling,
   fetchPypi,
   lib,
 }:
@@ -7,7 +8,8 @@
 buildPythonPackage rec {
   pname = "jsonrpclib-pelix";
   version = "0.4.3.4";
-  format = "setuptools";
+  pyproject = true;
+  build-system = [ hatchling ];
 
   src = fetchPypi {
     pname = "jsonrpclib_pelix";
