@@ -2735,6 +2735,8 @@ self: super: with self; {
 
   conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
 
+  condense-json = callPackage ../development/python-modules/condense-json { };
+
   conduit = callPackage ../development/python-modules/conduit { };
 
   conduit-mpi = callPackage ../development/python-modules/conduit { mpiSupport = true; };
