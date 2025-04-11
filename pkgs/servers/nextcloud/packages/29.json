@@ -70,9 +70,9 @@
     ]
   },
   "deck": {
-    "hash": "sha256-kDo4L6RlJDbxNbbFrnz0cxuYAuTLvC3shMi0G3IADTw=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.13.4/deck-v1.13.4.tar.gz",
-    "version": "1.13.4",
+    "hash": "sha256-n+d5WdVuXJIyor/Ko5tVd5r7ew6Htn/spu5g6jv06NY=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.13.5/deck-v1.13.5.tar.gz",
+    "version": "1.13.5",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-0CqZmvjILDNdDMoI8H9H0uphXOkLavTvXpSsoeBP6fk=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.10/forms-v4.3.10.tar.gz",
-    "version": "4.3.10",
+    "hash": "sha256-5UWL9ePH6sdfrVcjAN+vP5cTkWGj1O1/5fx7UmyT92I=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.12/forms-v4.3.12.tar.gz",
+    "version": "4.3.12",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -220,9 +220,9 @@
     ]
   },
   "music": {
-    "hash": "sha256-lqWdzi41YZfd8eH8l8Dm46XzgoZJ2CPV3+hzlNyd+v8=",
-    "url": "https://github.com/owncloud/music/releases/download/v2.1.3/music_2.1.3_for_nextcloud.tar.gz",
-    "version": "2.1.3",
+    "hash": "sha256-h83Xc292/NQPWOTRIbUSgqHUH/Sp4fYJ8GAHSiJWHP0=",
+    "url": "https://github.com/owncloud/music/releases/download/v2.1.4/music_2.1.4_for_nextcloud.tar.gz",
+    "version": "2.1.4",
     "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Advanced search to freely use and combine dozens of search criteria\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on dozens of external apps on Android, iOS, Windows, Linux, etc.\n- Widget for the Nextcloud Dashboard",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
@@ -260,9 +260,9 @@
     ]
   },
   "onlyoffice": {
-    "hash": "sha256-Bh0CGw0qdJI+NzJ/dmzoqSZdVYzcFbqSJa70gvZhDGs=",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.7.0/onlyoffice.tar.gz",
-    "version": "9.7.0",
+    "hash": "sha256-lOkVGOo2ylTaRVDFGD31DMUb3IbteWgFkHEj0Ox0D84=",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.8.0/onlyoffice.tar.gz",
+    "version": "9.8.0",
     "description": "ONLYOFFICE app allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -280,9 +280,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-fnZT4iuwlD66AVwiNPE0yurszO5/9IQsJfA1OB/dEVU=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.4.1/polls-v7.4.1.tar.gz",
-    "version": "7.4.1",
+    "hash": "sha256-zatPm8JY1WkeO2Uvm9BUVPXrJp0df12jspqSNNuZVh0=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.4.2/polls-v7.4.2.tar.gz",
+    "version": "7.4.2",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "registration": {
-    "hash": "sha256-1Y1mZWqaJu8Xtwbo8ziqzzdszNNoiWJLO3Sy5Ko7rys=",
-    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.6.0/registration-v2.6.0.tar.gz",
-    "version": "2.6.0",
+    "hash": "sha256-iskmm8s32Nj65dyhx1ZO/Rg6fPi+usF/O/dYou+Ujjk=",
+    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.7.0/registration-v2.7.0.tar.gz",
+    "version": "2.7.0",
     "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
     "homepage": "https://github.com/nextcloud/registration",
     "licenses": [
@@ -350,9 +350,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-Wu228AT3cRcHZs1yk14LK8s/Rhpzhzl/qnZl2ZcL6qU=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.14/spreed-v19.0.14.tar.gz",
-    "version": "19.0.14",
+    "hash": "sha256-j+TPhm7JO23wTVTcyEYXVKrrJcGIMDute3ANjmbscMg=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.15/spreed-v19.0.15.tar.gz",
+    "version": "19.0.15",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
