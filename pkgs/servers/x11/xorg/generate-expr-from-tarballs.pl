@@ -37,6 +37,7 @@ $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
 $pcMap{"fontutil"} = "fontutil";
+$pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -264,6 +265,7 @@ print OUT <<EOF;
   font-alias,
   font-util,
   gccmakedep,
+  libpciaccess,
   luit,
   pixman,
 }:
@@ -272,6 +274,7 @@ self: with self; {
 
   inherit
     gccmakedep
+    libpciaccess
     luit
     pixman
     ;
