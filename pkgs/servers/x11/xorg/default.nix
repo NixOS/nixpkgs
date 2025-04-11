@@ -12,6 +12,7 @@
   pixman,
   util-macros,
   xbitmaps,
+  xcb-proto,
 }:
 
 self: with self; {
@@ -29,6 +30,7 @@ self: with self; {
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
   utilmacros = util-macros;
+  xcbproto = xcb-proto;
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage (
@@ -3908,41 +3910,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbproto = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      python3,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-proto";
-      version = "1.17.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/proto/xcb-proto-1.17.0.tar.xz";
-        sha256 = "130lc8jx43s83496nc8jn47zixjcp4abgsz69pvrjiqg279aq6rc";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        python3
-      ];
-      buildInputs = [ ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-proto" ];
         platforms = lib.platforms.unix;
       };
     })
