@@ -7971,9 +7971,9 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
-  electron = electron_34;
-  electron-bin = electron_34-bin;
-  electron-chromedriver = electron-chromedriver_34;
+  electron = electron_35;
+  electron-bin = electron_35-bin;
+  electron-chromedriver = electron-chromedriver_35;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
