@@ -1457,6 +1457,12 @@ builtins.intersectAttrs super {
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
+    # Test suite is broken by DOS line endings inserted by Hackage revisions
+    # https://github.com/vmchale/jacinda/issues/5
+    postPatch = ''
+      ${drv.postPatch or ""}
+      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+    '';
     postInstall = ''
       ${drv.postInstall or ""}
 
