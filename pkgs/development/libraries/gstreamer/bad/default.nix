@@ -113,6 +113,7 @@
   hotdoc,
   guiSupport ? true,
   gst-plugins-bad,
+  apple-sdk_13,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -284,6 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
       CoreVideo
       Foundation
       MediaToolbox
+      apple-sdk_13
     ];
 
   mesonFlags =
