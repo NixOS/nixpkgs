@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     libmnl
   ];
 
+  enableParallelBuilding = true;
+
   passthru = {
     updateScript = writeScript "update-ethtool" ''
       #!/usr/bin/env nix-shell
