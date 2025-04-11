@@ -10,6 +10,7 @@
   documentation-highlighter,
   nixos-render-docs,
   nixpkgs ? { },
+  markdown-code-runner,
 }:
 
 stdenvNoCC.mkDerivation (
@@ -110,9 +111,17 @@ stdenvNoCC.mkDerivation (
             open = "/share/doc/nixpkgs/manual.html";
           };
         in
-        mkShellNoCC { packages = [ devmode' ]; };
+        mkShellNoCC {
+          packages = [
+            devmode'
+            markdown-code-runner
+          ];
+        };
 
-      tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
+      tests = {
+        manpage-urls = callPackage ../tests/manpage-urls.nix { };
+        check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
+      };
     };
   }
 )
