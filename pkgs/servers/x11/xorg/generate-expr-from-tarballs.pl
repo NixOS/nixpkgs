@@ -270,6 +270,7 @@ print OUT <<EOF;
   libpthread-stubs,
   libxcvt,
   luit,
+  makedepend,
   pixman,
 }:
 
@@ -280,6 +281,7 @@ self: with self; {
     libpciaccess
     libxcvt
     luit
+    makedepend
     pixman
     ;
   fontalias = font-alias;

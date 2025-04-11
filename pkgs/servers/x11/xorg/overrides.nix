@@ -613,7 +613,6 @@ self: super:
     };
   });
 
-  makedepend = addMainProgram super.makedepend { };
   mkfontscale = addMainProgram super.mkfontscale { };
   oclock = addMainProgram super.oclock { };
   smproxy = addMainProgram super.smproxy { };

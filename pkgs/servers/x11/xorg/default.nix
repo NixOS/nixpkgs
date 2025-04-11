@@ -8,6 +8,7 @@
   libpthread-stubs,
   libxcvt,
   luit,
+  makedepend,
   pixman,
 }:
 
@@ -18,6 +19,7 @@ self: with self; {
     libpciaccess
     libxcvt
     luit
+    makedepend
     pixman
     ;
   fontalias = font-alias;
@@ -3411,37 +3413,6 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [ xorgproto ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  makedepend = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "makedepend";
-      version = "1.0.9";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/util/makedepend-1.0.9.tar.xz";
-        sha256 = "1m1dg32z22fw9shg0wsxw7dvdcnfm16gq9qxpkfxixpzb6vdxl4j";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
