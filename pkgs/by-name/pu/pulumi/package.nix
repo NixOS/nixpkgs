@@ -60,6 +60,11 @@ buildGoModule rec {
     # Skip tests that fail in Nix sandbox.
     "-skip=^${
       lib.concatStringsSep "$|^" [
+        # Concurrent map modification in test case.
+        # TODO: remove after the fix is merged and released.
+        # https://github.com/pulumi/pulumi/pull/19200
+        "TestGetDocLinkForPulumiType"
+
         # Seems to require TTY.
         "TestProgressEvents"
 
