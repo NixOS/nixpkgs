@@ -14,6 +14,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,10 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
       hotdoc
     ];
 
-  buildInputs = [
-    gst-plugins-base
-    gst-plugins-bad
-  ];
+  buildInputs =
+    [
+      gst-plugins-base
+      gst-plugins-bad
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ];
 
   mesonFlags = [
     "-Dglib_debug=disabled" # cast checks should be disabled on stable releases

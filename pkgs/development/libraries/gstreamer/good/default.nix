@@ -33,7 +33,6 @@
   libpulseaudio,
   libintl,
   libxml2,
-  Cocoa,
   lame,
   mpg123,
   twolame,
@@ -62,6 +61,7 @@
   hotdoc,
   gst-plugins-good,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -195,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     )
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
+      apple-sdk_gstreamer
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libdrm
