@@ -7,11 +7,11 @@
 
 buildDunePackage rec {
   pname = "ocamlgraph";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/backtracking/ocamlgraph/releases/download/${version}/ocamlgraph-${version}.tbz";
-    hash = "sha256-D5YsNvklPfI5OVWvQbB0tqQmsvkqne95WyAFtX0wLWU=";
+    hash = "sha256-sJViEIY8wk9IAgO6PC7wbfrlV5U2oFdENk595YgisjA=";
   };
 
   minimalOCamlVersion = "4.08";
