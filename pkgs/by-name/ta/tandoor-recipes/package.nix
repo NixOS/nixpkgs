@@ -126,7 +126,7 @@ python.pkgs.buildPythonPackage {
     mock
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-django
     pytest-factoryboy
     pytest-html
