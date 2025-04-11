@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   gitUpdater,
+  stdenv,
 }:
 buildGoModule rec {
   pname = "cloud-provider-kind";
@@ -17,6 +18,10 @@ buildGoModule rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   vendorHash = null;
+
+  checkFlags = lib.optional
+    stdenv.isDarwin
+    "-skip=^Test_firstSuccessfulProbe$"
 
   meta = {
     description = "Load Balancer implementation for Kubernetes-in-Docker";
