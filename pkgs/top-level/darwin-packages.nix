@@ -101,6 +101,10 @@ makeScopeWithSplicing' {
 
       libunwind = callPackage ../os-specific/darwin/libunwind { };
 
+      # This should always be the minimally supported SDK version for compatibility.
+      libcxx = callPackage ../os-specific/darwin/libcxx { };
+      libcxxabi = callPackage ../os-specific/darwin/libcxxabi { };
+
       sigtool = callPackage ../os-specific/darwin/sigtool { };
 
       signingUtils = callPackage ../os-specific/darwin/signing-utils { };
