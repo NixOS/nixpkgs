@@ -7,6 +7,7 @@
   libcosmicAppHook,
   which,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,13 +45,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-notifications"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests)
-      cosmic
-      cosmic-autologin
-      cosmic-noxwayland
-      cosmic-autologin-noxwayland
-      ;
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
