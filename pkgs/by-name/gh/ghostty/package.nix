@@ -189,9 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     outputsToInstall = [
       "out"
-      "man"
-      "shell_integration"
-      "terminfo"
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # Issues finding the SDK in the sandbox
