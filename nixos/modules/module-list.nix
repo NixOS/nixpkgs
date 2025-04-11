@@ -1490,6 +1490,7 @@
   ./services/web-apps/archtika.nix
   ./services/web-apps/artalk.nix
   ./services/web-apps/audiobookshelf.nix
+  ./services/web-apps/baikal.nix
   ./services/web-apps/bluemap.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/c2fmzq-server.nix

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration-ui";
-  version = "1.1.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_collaboration_ui";
     inherit version;
-    hash = "sha256-5TbKC6zhVVv6vaewUlL27ZP91R+ge/6wFBcKbGlVMHA=";
+    hash = "sha256-9UONyyhvhpywCVNbGtZz9eL8EGUS4XBM1zEY1RWsomY=";
   };
 
   postPatch = ''
