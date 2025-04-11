@@ -5,8 +5,8 @@ on:
     # Re-run should be triggered when the base branch is updated, instead of silently failing
     types: [opened, synchronize, reopened, edited]
     branches:
-      - 'nixos-**'
-      - 'nixpkgs-**'
+      - "nixos-**"
+      - "nixpkgs-**"
 
 permissions: {}
 

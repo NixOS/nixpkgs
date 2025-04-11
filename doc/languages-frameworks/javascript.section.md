@@ -142,13 +142,14 @@ To add a package from npm to nixpkgs:
    nix-build -A nodePackages.<new-or-updated-package>
    ```
 
-    To build against the latest stable Current Node.js version (e.g. 18.x):
+   To build against the latest stable Current Node.js version (e.g. 18.x):
 
-    ```sh
-    nix-build -A nodePackages_latest.<new-or-updated-package>
-    ```
+   ```sh
+   nix-build -A nodePackages_latest.<new-or-updated-package>
+   ```
 
-    If the package doesn't build, you may need to add an override as explained above.
+   If the package doesn't build, you may need to add an override as explained above.
+
 4. If the package's name doesn't match any of the executables it provides, add an entry in [pkgs/development/node-packages/main-programs.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/main-programs.nix). This will be the case for all scoped packages, e.g., `@angular/cli`.
 5. Add and commit all modified and generated files.
 
@@ -220,20 +221,20 @@ If these are not defined, `npm pack` may miss some files, and no binaries will b
 
 #### Arguments {#javascript-buildNpmPackage-arguments}
 
-* `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
-* `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
-* `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
-* `npmWorkspace`: The workspace directory within the project to build and install.
-* `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
-* `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
-* `npmFlags`: Flags to pass to all npm commands.
-* `npmInstallFlags`: Flags to pass to `npm ci`.
-* `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
-* `npmPackFlags`: Flags to pass to `npm pack`.
-* `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
-* `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
-* `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
-* `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace dependencies.
+- `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
+- `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
+- `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+- `npmWorkspace`: The workspace directory within the project to build and install.
+- `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
+- `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
+- `npmFlags`: Flags to pass to all npm commands.
+- `npmInstallFlags`: Flags to pass to `npm ci`.
+- `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
+- `npmPackFlags`: Flags to pass to `npm pack`.
+- `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
+- `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
+- `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
+- `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace dependencies.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
@@ -284,6 +285,7 @@ Use `importNpmLock.npmConfigHook` instead.
 :::{.example}
 
 ##### `pkgs.importNpmLock` usage example {#javascript-buildNpmPackage-example}
+
 ```nix
 { buildNpmPackage, importNpmLock }:
 
@@ -299,9 +301,11 @@ buildNpmPackage {
   npmConfigHook = importNpmLock.npmConfigHook;
 }
 ```
+
 :::
 
 :::{.example}
+
 ##### `pkgs.importNpmLock` usage example with `fetcherOpts` {#javascript-buildNpmPackage-example-fetcherOpts}
 
 `importNpmLock` uses the following fetchers:
@@ -330,6 +334,7 @@ buildNpmPackage {
   npmConfigHook = importNpmLock.npmConfigHook;
 }
 ```
+
 :::
 
 #### importNpmLock.buildNodeModules {#javascript-buildNpmPackage-importNpmLock.buildNodeModules}
@@ -367,6 +372,7 @@ pkgs.mkShell {
   };
 }
 ```
+
 will create a development shell where a `node_modules` directory is created & packages symlinked to the Nix store when activated.
 
 ### corepack {#javascript-corepack}
@@ -380,6 +386,7 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 You will need to generate a Nix expression for the dependencies. Don't forget the `-l package-lock.json` if there is a lock file. Most probably you will need the `--development` to include the `devDependencies`
 
 So the command will most likely be:
+
 ```sh
 node2nix --development -l package-lock.json
 ```
@@ -523,7 +530,6 @@ pnpmDeps = pnpm.fetchDeps {
 ```
 
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
-
 
 ### Yarn {#javascript-yarn}
 
@@ -706,6 +712,7 @@ mkYarnPackage rec {
 
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
+
 - `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}

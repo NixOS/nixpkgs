@@ -114,6 +114,7 @@ body:
       description: "Add any other context about the problem here."
     validations:
       required: false
+  - type: "textarea"
     id: "maintainers"
     attributes:
       label: "Notify maintainers"

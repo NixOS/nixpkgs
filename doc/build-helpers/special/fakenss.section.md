@@ -19,28 +19,29 @@ For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](
 `extraPasswdLines` (List of Strings; _optional_)
 
 : A list of lines that will be added to `/etc/passwd`.
-  Useful if extra users need to exist in the output of `fakeNss`.
-  If `extraPasswdLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
-  Those entries will always exist.
+Useful if extra users need to exist in the output of `fakeNss`.
+If `extraPasswdLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
+Those entries will always exist.
 
-  Lines specified here must follow the format in {manpage}`passwd(5)`.
+Lines specified here must follow the format in {manpage}`passwd(5)`.
 
-  _Default value:_ `[]`.
+_Default value:_ `[]`.
 
 `extraGroupLines` (List of Strings; _optional_)
 
 : A list of lines that will be added to `/etc/group`.
-  Useful if extra groups need to exist in the output of `fakeNss`.
-  If `extraGroupLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
-  Those entries will always exist.
+Useful if extra groups need to exist in the output of `fakeNss`.
+If `extraGroupLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
+Those entries will always exist.
 
-  Lines specified here must follow the format in {manpage}`group(5)`.
+Lines specified here must follow the format in {manpage}`group(5)`.
 
-  _Default value:_ `[]`.
+_Default value:_ `[]`.
 
 ## Examples {#sec-fakeNss-examples}
 
 :::{.example #ex-fakeNss-dockerTools-buildImage}
+
 # Using `fakeNss` with `dockerTools.buildImage`
 
 This example shows how to use `fakeNss` as-is.
@@ -60,9 +61,11 @@ dockerTools.buildImage {
   };
 }
 ```
+
 :::
 
 :::{.example #ex-fakeNss-overriding}
+
 # Using `fakeNss` with an override to add extra lines
 
 The following code uses `override` to add extra lines to `/etc/passwd` and `/etc/group` to create another user and group entry.
@@ -74,4 +77,5 @@ fakeNss.override {
   extraGroupLines = ["newuser:x:9001:"];
 }
 ```
+
 :::

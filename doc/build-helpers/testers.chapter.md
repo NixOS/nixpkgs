@@ -5,6 +5,7 @@ This chapter describes several testing builders which are available in the `test
 ## `hasPkgConfigModules` {#tester-hasPkgConfigModules}
 
 <!-- Old anchor name so links still work -->
+
 []{#tester-hasPkgConfigModule}
 Checks whether a package exposes a given list of `pkg-config` modules.
 If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.pkgConfigModules`.
@@ -85,32 +86,32 @@ It has two modes:
 `remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
-  The values should be strings, derivations, or path values.
+The values should be strings, derivations, or path values.
 
-  In the returned check's default configuration, external URLs are only checked when you run the `.online` attribute.
+In the returned check's default configuration, external URLs are only checked when you run the `.online` attribute.
 
-  By adding remappings, you can check offline that URLs to external resources are correct, by providing a stand-in from the file system.
+By adding remappings, you can check offline that URLs to external resources are correct, by providing a stand-in from the file system.
 
-  Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
+Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
 
-  Example:
+Example:
 
-  ```nix
-  {
-    "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
-    "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
-  }
-  ```
+```nix
+{
+  "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
+  "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
+}
+```
 
-  Store paths in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
-  If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
+Store paths in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
+If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
 
 `extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
 
 : Extra configuration to pass to `lychee` in its [configuration file](https://github.com/lycheeverse/lychee/blob/master/lychee.example.toml).
-  It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
+It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
 
-  Example: `{ "include_verbatim" = true; }`
+Example: `{ "include_verbatim" = true; }`
 
 `lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
 
@@ -121,6 +122,7 @@ It has two modes:
 Run files through `shellcheck`, a static analysis tool for shell scripts, failing if there are any issues.
 
 :::{.example #ex-shellcheck}
+
 # Run `testers.shellcheck`
 
 A single script
@@ -156,14 +158,14 @@ testers.shellcheck {
 
 `name` (string, optional)
 : The name of the test.
-  `name` will be required at a future point because it massively improves traceability of test failures, but is kept optional for now to avoid breaking existing usages.
-  Defaults to `run-shellcheck`.
-  The name of the derivation produced by the tester is `shellcheck-${name}` when `name` is supplied.
+`name` will be required at a future point because it massively improves traceability of test failures, but is kept optional for now to avoid breaking existing usages.
+Defaults to `run-shellcheck`.
+The name of the derivation produced by the tester is `shellcheck-${name}` when `name` is supplied.
 
 `src` (path-like)
 : The path to the shell script(s) to check.
-  This can be a single file or a directory containing shell files.
-  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+This can be a single file or a directory containing shell files.
+All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
 
 ### Return value {#tester-shellcheck-return}
 
@@ -175,6 +177,7 @@ The build will fail if `shellcheck` finds any issues.
 Run files through `shfmt`, a shell script formatter, failing if any files are reformatted.
 
 :::{.example #ex-shfmt}
+
 # Run `testers.shfmt`
 
 A single script
@@ -210,18 +213,18 @@ testers.shfmt {
 
 `name` (string)
 : The name of the test.
-  `name` is required because it massively improves traceability of test failures.
-  The name of the derivation produced by the tester is `shfmt-${name}`.
+`name` is required because it massively improves traceability of test failures.
+The name of the derivation produced by the tester is `shfmt-${name}`.
 
 `src` (path-like)
 : The path to the shell script(s) to check.
-  This can be a single file or a directory containing shell files.
-  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+This can be a single file or a directory containing shell files.
+All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
 
 `indent` (integer, optional)
 : The number of spaces to use for indentation.
-  Defaults to `2`.
-  A value of `0` indents with tabs.
+Defaults to `2`.
+A value of `0` indents with tabs.
 
 ### Return value {#tester-shfmt-return}
 
@@ -284,18 +287,18 @@ Make sure that a build does not succeed. This is useful for testing testers.
 
 This returns a derivation with an override on the builder, with the following effects:
 
- - Fail the build when the original builder succeeds
- - Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
- - Save the build log to `$out/testBuildFailure.log` (same)
+- Fail the build when the original builder succeeds
+- Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
+- Save the build log to `$out/testBuildFailure.log` (same)
 
 While `testBuildFailure` is designed to keep changes to the original builder's environment to a minimum, some small changes are inevitable:
 
- - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
- - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
- - One or two extra processes are present in the sandbox during the original builder's execution.
- - The derivation and output hashes are different, but not unusual.
- - The derivation includes a dependency on `buildPackages.bash` and `expect-failure.sh`, which is built to include a transitive dependency on `buildPackages.coreutils` and possibly more.
-   These are not added to `PATH` or any other environment variable, so they should be hard to observe.
+- The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
+- `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
+- One or two extra processes are present in the sandbox during the original builder's execution.
+- The derivation and output hashes are different, but not unusual.
+- The derivation includes a dependency on `buildPackages.bash` and `expect-failure.sh`, which is built to include a transitive dependency on `buildPackages.coreutils` and possibly more.
+  These are not added to `PATH` or any other environment variable, so they should be hard to observe.
 
 :::{.example #ex-testBuildFailure-showingenvironmentchanges}
 
@@ -357,26 +360,26 @@ testers.testBuildFailure' {
 `name` (string, optional)
 
 : The name of the test.
-  When not provided, this value defaults to `testBuildFailure-${(testers.testBuildFailure drv).name}`.
+When not provided, this value defaults to `testBuildFailure-${(testers.testBuildFailure drv).name}`.
 
 `expectedBuilderExitCode` (integer, optional)
 
 : The expected exit code of the builder of `drv`.
-  When not provided, this value defaults to `1`.
+When not provided, this value defaults to `1`.
 
 `expectedBuilderLogEntries` (array of string-like values, optional)
 
 : A list of string-like values which must be found in the builder's log by exact match.
-  When not provided, this value defaults to `[ ]`.
+When not provided, this value defaults to `[ ]`.
 
-  NOTE: Patterns and regular expressions are not supported.
+NOTE: Patterns and regular expressions are not supported.
 
 `script` (string, optional)
 
 : A string containing additional checks to run.
-  When not provided, this value defaults to `""`.
-  The result of `testers.testBuildFailure drv` is available through the variable `failed`.
-  As an example, the builder's log is at `"$failed/testBuildFailure.log"`.
+When not provided, this value defaults to `""`.
+The result of `testers.testBuildFailure drv` is available through the variable `failed`.
+As an example, the builder's log is at `"$failed/testBuildFailure.log"`.
 
 ### Return value {#tester-testBuildFailurePrime-return}
 
@@ -465,36 +468,36 @@ NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
 `script` (string)
 
 : The singular task of `script` is to populate `actualArray` or `actualMap` (it may populate both).
-  To do this, `script` may access the following shell variables:
+To do this, `script` may access the following shell variables:
 
-  - `valuesArray` (available when `valuesArray` is provided to the tester)
-  - `valuesMap` (available when `valuesMap` is provided to the tester)
-  - `actualArray` (available when `expectedArray` is provided to the tester)
-  - `actualMap` (available when `expectedMap` is provided to the tester)
+- `valuesArray` (available when `valuesArray` is provided to the tester)
+- `valuesMap` (available when `valuesMap` is provided to the tester)
+- `actualArray` (available when `expectedArray` is provided to the tester)
+- `actualMap` (available when `expectedMap` is provided to the tester)
 
-  While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they *must not* be accessed or modified from within `script`.
+While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they _must not_ be accessed or modified from within `script`.
 
 `valuesArray` (array of string-like values, optional)
 
 : An array of string-like values.
-  This array may be used within `script`.
+This array may be used within `script`.
 
 `valuesMap` (attribute set of string-like values, optional)
 
 : An attribute set of string-like values.
-  This attribute set may be used within `script`.
+This attribute set may be used within `script`.
 
 `expectedArray` (array of string-like values, optional)
 
 : An array of string-like values.
-  This array *must not* be accessed or modified from within `script`.
-  When provided, `script` is expected to populate `actualArray`.
+This array _must not_ be accessed or modified from within `script`.
+When provided, `script` is expected to populate `actualArray`.
 
 `expectedMap` (attribute set of string-like values, optional)
 
 : An attribute set of string-like values.
-  This attribute set *must not* be accessed or modified from within `script`.
-  When provided, `script` is expected to populate `actualMap`.
+This attribute set _must not_ be accessed or modified from within `script`.
+When provided, `script` is expected to populate `actualMap`.
 
 ### Return value {#tester-testEqualArrayOrMap-return}
 
@@ -562,10 +565,12 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 `runCommand :: { name, script, stdenv ? stdenvNoCC, hash ? "...", ... } -> Derivation`
 
 This is a wrapper around `pkgs.runCommandWith`, which
+
 - produces a fixed-output derivation, enabling the command(s) to access the network ;
 - salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
 
 It accepts the following attributes:
+
 - the derivation's `name` ;
 - the `script` to be executed ;
 - `stdenv`, the environment to use, defaulting to `stdenvNoCC` ;
@@ -654,6 +659,6 @@ A derivation that runs the VM test.
 
 Notable attributes:
 
- * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
+- `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
- * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+- `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.

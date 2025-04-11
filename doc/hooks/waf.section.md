@@ -37,7 +37,7 @@ When set to true, don't use the predefined `wafInstallPhase`.
 The following variables are similar to their `stdenv.mkDerivation` counterparts.
 
 | `wafHook` Variable    | `stdenv.mkDerivation` Counterpart |
-|-----------------------|-----------------------------------|
+| --------------------- | --------------------------------- |
 | `wafConfigureFlags`   | `configureFlags`                  |
 | `wafConfigureTargets` | `configureTargets`                |
 | `wafBuildFlags`       | `buildFlags`                      |

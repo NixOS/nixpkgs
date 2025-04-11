@@ -5,8 +5,8 @@
 `pkgs.substitute` is a wrapper around [the `substitute` Bash function](#fun-substitute) in the standard environment.
 It replaces strings in `src` as specified by the `substitutions` argument.
 
-
 :::{.example #ex-pkgs-substitute}
+
 # Usage of `pkgs.substitute`
 
 In a build script, the line:
@@ -28,6 +28,7 @@ substitute {
   ];
 }
 ```
+
 :::
 
 ## `pkgs.substituteAll` {#pkgs-substituteall}
@@ -36,6 +37,7 @@ substitute {
 As this uses the [`substituteAll`] (#fun-substitute) function, its limitations regarding variable names that will or will not be replaced also apply here.
 
 :::{.example #ex-pkgs-substituteAll}
+
 # Usage of `pkgs.substituteAll`
 
 If `say-goodbye.sh` contains the following:
@@ -72,6 +74,7 @@ such that `$out` will result in something like the following:
 echo @unchanged@
 /nix/store/566f5isbvw014h7knmzmxa5l6hshx43k-hello-2.12.1/bin/hello --greeting goodbye
 ```
+
 :::
 
 ## `pkgs.substituteAllFiles` {#pkgs-substituteallfiles}
@@ -82,6 +85,7 @@ It expects `src` to be a directory and requires a `files` argument that specifie
 As it also uses the `substituteAll` function, it is subject to the same limitations on environment variables as discussed in [pkgs.substituteAll](#pkgs-substituteall).
 
 :::{.example #ex-pkgs-substitute-all-files}
+
 # Usage of `pkgs.substituteAllFiles`
 
 If the current directory contains `{foo,bar,baz}.txt` and the following `default.nix`

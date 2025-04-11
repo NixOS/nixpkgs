@@ -3,8 +3,8 @@ name: "Check shell"
 on:
   pull_request_target:
     paths:
-      - 'shell.nix'
-      - 'ci/**'
+      - "shell.nix"
+      - "ci/**"
 
 permissions: {}
 
