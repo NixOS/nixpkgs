@@ -14131,6 +14131,7 @@ with pkgs;
 
   drawterm = callPackage ../tools/admin/drawterm { config = "unix"; };
   drawterm-wayland = callPackage ../tools/admin/drawterm { config = "linux"; };
+  drawterm-cocoa = callPackage ../tools/admin/drawterm { config = "osx-cocoa"; };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
