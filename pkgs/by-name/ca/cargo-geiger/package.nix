@@ -1,14 +1,9 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   openssl,
-  # darwin dependencies
-  darwin,
-  libiconv,
-  curl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,21 +20,13 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-aDgpEfX0QRkQD6c4ant6uSN18WLHVnZISRr7lyu9IzA=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Security
-        libiconv
-        curl
-      ]
-    );
-  nativeBuildInputs =
-    [ pkg-config ]
-    # curl-sys wants to run curl-config on darwin
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
