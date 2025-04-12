@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-ctl";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "cosmic-ctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dcUzrJcwJpzbYPuqdHgm43NYbaowsFmFP4sS0cfzNAg=";
+    hash = "sha256-4UbmzBKxJwpyzucPRguQV1078961goiQlhtDjOGz1kA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EReo2hkBaIO1YOBx4D9rQSXlx+3NK5VQtj59jfZZI/0=";
+  cargoHash = "sha256-53lpHzHQ6SoZzd+h6O0NvSJHsPgbW0/kqnDrM5D6SWQ=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
