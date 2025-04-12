@@ -18,13 +18,13 @@ assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    hash = "sha256-4M2Kzy/tTpIZzpyubnXWywQh7Np5InT4sYkVG2v6wWs=";
+    hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
   };
 
   # upstream removed pkg-config support and uses dlopen now
