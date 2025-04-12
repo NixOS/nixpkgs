@@ -67,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
+  # with trivialautovarinit enabled can produce an empty .pc file
+  hardeningDisable = [ "trivialautovarinit" ];
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_EXAMPLES" withExamples)
     (lib.cmakeBool "BUILD_TOOLS" withTools)
