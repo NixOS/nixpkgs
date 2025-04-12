@@ -1,7 +1,7 @@
 {
   callPackage,
   lib,
-  zig_0_13,
+  zig_0_14,
   stdenv,
   fetchFromGitHub,
   fcft,
@@ -12,17 +12,17 @@
   wayland-protocols,
 }:
 let
-  zig = zig_0_13;
+  zig = zig_0_14;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "creek";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "nmeum";
     repo = "creek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Q690DEMgPqURTHKzJwH5iVyTLvgYqNpxuwAEV+/Lyw=";
+    hash = "sha256-5TANQt/VWafm6Lj4dYViiK0IMy/chGr/Gzq0S66HZqI=";
   };
 
   depsBuildBuild = [ pkg-config ];
