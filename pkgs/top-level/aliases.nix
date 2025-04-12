@@ -835,6 +835,7 @@ mapAliases {
   isl_0_17 = throw "isl_0_17 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   iso-flags-png-320x420 = lib.warnOnInstantiate "iso-flags-png-320x420 has been renamed to iso-flags-png-320x240" iso-flags-png-320x240; # Added 2024-07-17
   itktcl = tclPackages.itktcl; # Added 2024-10-02
+  ix = throw "ix has been removed from Nixpkgs, as the ix.io pastebin has been offline since Dec. 2023"; # Added 2025-04-11
 
   ### J ###
 
