@@ -5,7 +5,6 @@
   fetchPypi,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -18,17 +17,10 @@ buildPythonPackage rec {
   version = "0.36";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MstJ4RwbyvCgdid4Let3RPrDHWXkuUa8WePtCwVaf+4=";
   };
-
-  postPatch = ''
-    # Remove vendorized versioneer
-    rm versioneer.py
-  '';
 
   pythonRelaxDeps = [
     "defusedxml"

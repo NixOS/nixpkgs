@@ -167,15 +167,10 @@ stdenvNoCC.mkDerivation {
 
     ${lib.optionalString hostPlatform.isDarwin ''
       APP_DIR="$out/Applications"
-      CURSOR_APP="$APP_DIR/Cursor.app"
       mkdir -p "$APP_DIR"
       cp -Rp Cursor.app "$APP_DIR"
       mkdir -p "$out/bin"
-      cat << EOF > "$out/bin/cursor"
-      #!${stdenvNoCC.shell}
-      open -na "$CURSOR_APP" --args "\$@"
-      EOF
-      chmod +x "$out/bin/cursor"
+      ln -s "$APP_DIR/Cursor.app/Contents/Resources/app/bin/cursor" "$out/bin/cursor"
     ''}
 
     runHook postInstall

@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   fetchurl,
+  fetchzip,
   wrapGAppsHook3,
   glib,
   gtk3,
@@ -69,7 +70,8 @@ let
 
   headersFetcher =
     vers: hash:
-    fetchurl {
+    fetchzip {
+      name = "electron-${vers}-headers";
       url = "https://artifacts.electronjs.org/headers/dist/v${vers}/node-v${vers}-headers.tar.gz";
       sha256 = hash;
     };

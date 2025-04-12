@@ -5598,7 +5598,7 @@
     name = "David Sánchez";
   };
   dav-wolff = {
-    email = "dav-wolff@outlook.com";
+    email = "nixpkgs@dav.dev";
     github = "dav-wolff";
     githubId = 130931508;
     name = "David Wolff";
@@ -15652,6 +15652,12 @@
     github = "michaelshmitty";
     githubId = 114845;
   };
+  michaelvanstraten = {
+    name = "Michael van Straten";
+    email = "michael@vanstraten.de";
+    github = "michaelvanstraten";
+    githubId = 50352631;
+  };
   michalrus = {
     email = "m@michalrus.com";
     github = "michalrus";
@@ -17192,6 +17198,13 @@
     email = "nixpkgs@vousten.dev";
     github = "NiklasVousten";
     githubId = 24965952;
+  };
+  nikolaiser = {
+    name = "Nikolai Sergeev";
+    email = "mail@nikolaiser.com";
+    githubId = 5569482;
+    github = "nikolaiser";
+    keys = [ { fingerprint = "FF23 8141 F4E9 1896 6162  F0CD 980B 9E9C 5686 F13A"; } ];
   };
   nikolaizombie1 = {
     name = "Fabio J. Matos Nieves";
@@ -19382,6 +19395,18 @@
       {
         # Email, etc.
         fingerprint = "AF85 991C C950 49A2 4205  1933 BCA9 943D D1DF 4C04";
+      }
+    ];
+  };
+  prince213 = {
+    name = "Sizhe Zhao";
+    email = "prc.zhao@outlook.com";
+    matrix = "@prince213:matrix.org";
+    github = "Prince213";
+    githubId = 25235514;
+    keys = [
+      {
+        fingerprint = "2589 45E5 C556 7B4D B36C  3E28 A64B 5235 356E 16D1";
       }
     ];
   };

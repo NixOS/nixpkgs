@@ -8,7 +8,6 @@
   makeWrapper,
   callPackage,
   fetchFromGitHub,
-  runCommand,
   jq,
   makeDesktopItem,
   copyDesktopItems,
@@ -39,11 +38,6 @@ let
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
 
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
-
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
 
   webrtc = callPackage ./webrtc.nix { };
@@ -70,13 +64,13 @@ let
     '';
   });
 
-  version = "7.49.0";
+  version = "7.50.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-URWDSHiPK+DCh8giT8YFW2HNY0tYNokqbAKBpBWZKD0=";
+    hash = "sha256-APdwETadRIQRJ/Wdxqnr2R5H/7Qqbacpp+SV16jesDw=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -136,15 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-QBlouzA3PhRGiL94sCQS/zRSdsFbKf4VI20x3seMpE4="
+        "sha256-BcKHVMrD8b9u/5hNtAY5V2vjTVHItob0EG89soFSwa4="
       else
-        "sha256-LKSFptmJyfI0ACo1egZ2LAY5pAXexu9UNjIhD79rJ9E=";
+        "sha256-GdeCIUV0aTwnEV55/RnpESDBrkpcVVa+1XhUmUIgBPU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1743627521;
+    SOURCE_DATE_EPOCH = 1744232207;
   };
 
   preBuild = ''
@@ -179,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    export npm_config_nodedir=${electron-headers}
+    export npm_config_nodedir=${electron.headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     cp -r ${sticker-creator} sticker-creator/dist

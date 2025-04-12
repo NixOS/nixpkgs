@@ -45,10 +45,7 @@ stdenv.mkDerivation {
       mit
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    maintainers = lib.teams.cosmic.members;
     platforms = lib.platforms.linux;
   };
 }
