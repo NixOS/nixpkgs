@@ -17207,8 +17207,8 @@
   };
   niklaskorz = {
     name = "Niklas Korz";
-    email = "niklas@niklaskorz.de";
-    matrix = "@niklaskorz:korz.dev";
+    email = "nixpkgs@korz.dev";
+    matrix = "@niklaskorz:matrix.org";
     github = "niklaskorz";
     githubId = 590517;
   };
