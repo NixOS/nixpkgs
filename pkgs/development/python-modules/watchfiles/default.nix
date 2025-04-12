@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "watchfiles";
     tag = "v${version}";
-    hash = "sha256-0JBnUi/aRM9UFTkb8OkP9UkJV+BF2EieZptymRvAXc0=";
+    hash = "sha256-a6SHqYRNMGXNkVvwj9RpLj449dAQtWXO44v1ko5suaw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-5iJmtMnZKHAl/SkIjXlXkRA4ZME/ozpqFfxXKCAABoQ=";
+    hash = "sha256-2RMWxeOjitbEqer9+ETpMX9WxHEiPzVmEv7LpSiaRVg=";
   };
 
   nativeBuildInputs = [
