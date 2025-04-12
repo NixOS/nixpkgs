@@ -18,6 +18,7 @@
   gsettings-desktop-schemas,
   wrapGAppsHook3,
   autoPatchelfHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = "./build.py";
 
   installPhase = "./install.py";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
