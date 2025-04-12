@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "Merrit";
     repo = "vscode-runner";
     rev = "v${version}";
-    hash = "sha256-mDhwydAFlDcpbpmh+I2zjjuC+/5hmygFkpHSZGEpuLs=";
+    hash = "sha256-lhrUPlTBKMiWL3+zhjFBoUvjfjbM9t55Z4Anhj3sPuk=";
   };
 in
 buildDartApplication {
