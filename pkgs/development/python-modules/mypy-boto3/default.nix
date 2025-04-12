@@ -434,8 +434,8 @@ rec {
       "sha256-Ip3JFGZnN112dRHwGbtx/Qu9lIhBkbeB5dTIJ3TJFEo=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.37.12"
-      "sha256-Dk16Fvudunqresm6j/NyH5aWqEhLHu1pO3lJFkt4Bbo=";
+    buildMypyBoto3Package "dynamodb" "1.37.31"
+      "sha256-TYe2qFBZqrCAywaKLGUSWE5CTbkigO+as5E0sXgEOYI=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.37.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-JSVZVCZ6P5A+EqjXHmbbDIdE1rKrdSwNcZvUbYxKpSA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.37.29"
-      "sha256-LL7zn9WjB7NyFYN2bs54X9v5i+ax2GpDDFzMcm6t5N0=";
+    buildMypyBoto3Package "glue" "1.37.31"
+      "sha256-wUofbzr8JoxrbsxVgiOTFdZBObxLml6yOqTVItV73eE=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.37.0"
@@ -590,8 +590,8 @@ rec {
       "sha256-RVay0BEbaqtWdNpJo3eswTIq+rRnLuDPRcvOPsrl8xQ=";
 
   mypy-boto3-groundstation =
-    buildMypyBoto3Package "groundstation" "1.37.0"
-      "sha256-Cr6VKzjij95Bs5lza+wxNNVWBFR10SL9wRku5tlFeGQ=";
+    buildMypyBoto3Package "groundstation" "1.37.31"
+      "sha256-sdfOAC4jlcz8AjessEO2u9NWbBqM3CCL6oJrJHYG6wk=";
 
   mypy-boto3-guardduty =
     buildMypyBoto3Package "guardduty" "1.37.0"
@@ -1370,8 +1370,8 @@ rec {
       "sha256-UW0b40n+M8za5guDPxhU5cRvtbkqzX6G7M2UaxNq5ws=";
 
   mypy-boto3-transfer =
-    buildMypyBoto3Package "transfer" "1.37.29"
-      "sha256-sTjua+D1wGOa/8lod+/cafll9lk3NFI6vkE7NlGKmyU=";
+    buildMypyBoto3Package "transfer" "1.37.31"
+      "sha256-2YiHVXvLrc72mi78aUHkQ5zkD747y9DvNbXUFewJaro=";
 
   mypy-boto3-translate =
     buildMypyBoto3Package "translate" "1.37.0"

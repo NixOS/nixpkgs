@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.28.5";
+  version = "1.28.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     tag = "v${version}";
-    hash = "sha256-CJ4hq3Eeub426jU0mXMEvqynJb9ekAG2QhfZxbgxV8U=";
+    hash = "sha256-f1XCNDc2oNJ/EM8S12nCSYtQh7nUi4UROEzTuOH41Ds=";
   };
 
   pythonRelaxDeps = [
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Capture a URL with Playwright";
     homepage = "https://github.com/Lookyloo/PlaywrightCapture";
-    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/v${version}";
+    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
