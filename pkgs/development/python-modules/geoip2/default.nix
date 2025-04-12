@@ -5,7 +5,6 @@
   fetchPypi,
   h11,
   maxminddb,
-  mocket,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     h11
-    mocket
     requests-mock
     pytestCheckHook
     pytest-httpserver
