@@ -311,6 +311,10 @@ in
     (mkRemovedOptionModule [ "services" "rippleDataApi" ] ''
       The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
     '')
+    (mkRemovedOptionModule [ "services" "conduwuit" ] ''
+      The conduwuit project has been discontinued by upstream.
+      See https://github.com/NixOS/nixpkgs/pull/397902 for more information.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];
