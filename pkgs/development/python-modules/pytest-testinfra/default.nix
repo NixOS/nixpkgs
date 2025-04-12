@@ -3,13 +3,14 @@
   ansible-core,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
+  hatch-vcs,
   paramiko,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   pywinrm,
   salt,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -20,11 +21,15 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pytest_testinfra";
+    inherit version;
     hash = "sha256-U3/V64jaYYwfRhJIqiBZTPjURRLoUZsjmDfoOHXh6c0=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [
     ansible-core
@@ -35,14 +40,8 @@ buildPythonPackage rec {
     salt
   ];
 
-  # Markers don't get added when docker is not available (leads to warnings):
-  # https://github.com/pytest-dev/pytest-testinfra/blob/9.0.0/test/conftest.py#L223
   preCheck = ''
     export HOME=$(mktemp -d)
-    sed -i '54imarkers = \
-    \ttestinfra_hosts(host_selector): mark test to run on selected hosts \
-    \tdestructive: mark test as destructive \
-    \tskip_wsl: skip test on WSL, no systemd support' setup.cfg
   '';
 
   disabledTests = [
