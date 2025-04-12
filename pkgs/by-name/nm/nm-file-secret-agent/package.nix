@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   name = "nm-file-secret-agent";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lilioid";
     repo = "nm-file-secret-agent";
     rev = "v${version}";
-    hash = "sha256-xQWgNxrbpHOfnKXa57cV1F3JmtJcvQsqUfgwfWg5Ni4=";
+    hash = "sha256-FZef9qMJeQkoLvCHcsGMqr0riC98WVXntQtbt76Iev4=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Q2RQ6pWYKOr/6nD7PLpTonVldOfyUu2lvwNRAc8zkLg=";
+  cargoHash = "sha256-HYyL0r9YrDL22uQdypJQ7Xep9Uqt4b16bhl0D9kRByU=";
   buildInputs = [ dbus ];
   nativeBuildInputs = [ pkg-config ];
 
