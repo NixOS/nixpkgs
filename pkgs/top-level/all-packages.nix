@@ -7589,12 +7589,6 @@ with pkgs;
     bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
-  python39Full = python39.override {
-    self = python39Full;
-    pythonAttr = "python39Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
   python310Full = python310.override {
     self = python310Full;
     pythonAttr = "python310Full";
@@ -7639,7 +7633,6 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
     python27
-    python39
     python310
     python311
     python312
@@ -7655,7 +7648,6 @@ with pkgs;
 
   # Python package sets.
   python27Packages = python27.pkgs;
-  python39Packages = python39.pkgs;
   python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
   python312Packages = recurseIntoAttrs python312.pkgs;
