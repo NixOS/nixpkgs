@@ -83,15 +83,11 @@ stdenv.mkDerivation rec {
       docbook-xsl-nons
       glib
       intltool
-      ipset
-      iptables
-      kmod
       libxml2
       libxslt
       pkg-config
       python3
       python3.pkgs.wrapPython
-      sysctl
       wrapGAppsNoGuiHook
     ]
     ++ lib.optionals withGui [
@@ -118,6 +114,20 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  ac_cv_path_MODPROBE = lib.getExe' kmod "modprobe";
+  ac_cv_path_RMMOD = lib.getExe' kmod "rmmod";
+  ac_cv_path_SYSCTL = lib.getExe' sysctl "sysctl";
+
+  configureFlags = [
+    "--with-iptables=${lib.getExe' iptables "iptables"}"
+    "--with-iptables-restore=${lib.getExe' iptables "iptables-restore"}"
+    "--with-ip6tables=${lib.getExe' iptables "ip6tables"}"
+    "--with-ip6tables-restore=${lib.getExe' iptables "ip6tables-restore"}"
+    "--with-ebtables=${lib.getExe' iptables "ebtables"}"
+    "--with-ebtables-restore=${lib.getExe' iptables "ebtables-restore"}"
+    "--with-ipset=${lib.getExe' ipset "ipset"}"
+  ];
 
   postInstall =
     ''
