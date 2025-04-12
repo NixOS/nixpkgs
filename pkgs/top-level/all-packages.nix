@@ -14037,9 +14037,7 @@ with pkgs;
     buildServerGui = false;
   };
 
-  drawterm = callPackage ../by-name/dr/drawterm/package.nix { config = "unix"; };
-  drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { config = "linux"; };
-  drawterm-cocoa = callPackage ../by-name/dr/drawterm/package.nix { config = "osx-cocoa"; };
+  drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { withWayland = true; };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
