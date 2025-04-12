@@ -1414,12 +1414,6 @@ self: super:
   xmodmap = addMainProgram super.xmodmap { };
   xmore = addMainProgram super.xmore { };
 
-  xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
-    # This makes the man pages discoverable by the default man,
-    # since it looks for packages in $PATH
-    postInstall = "mkdir $out/bin";
-  });
-
   xpr = addMainProgram super.xpr { };
   xprop = addMainProgram super.xprop { };
 
