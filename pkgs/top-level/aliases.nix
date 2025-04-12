@@ -1405,6 +1405,14 @@ mapAliases {
   postgresql12Packages = throw "postgresql_12 has been removed since it reached its EOL upstream"; # Added 2024-11-14
   postgresql12JitPackages = throw "postgresql_12 has been removed since it reached its EOL upstream"; # Added 2024-11-14
 
+  # Ever since building with JIT by default, those are the same.
+  postgresqlJitPackages = postgresqlPackages; # Added 2025-04-12
+  postgresql13JitPackages = postgresql13Packages; # Added 2025-04-12
+  postgresql14JitPackages = postgresql14Packages; # Added 2025-04-12
+  postgresql15JitPackages = postgresql15Packages; # Added 2025-04-12
+  postgresql16JitPackages = postgresql16Packages; # Added 2025-04-12
+  postgresql17JitPackages = postgresql17Packages; # Added 2025-04-12
+
   # pinentry was using multiple outputs, this emulates the old interface for i.e. home-manager
   # soon: throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'";
   pinentry = pinentry-all // {
