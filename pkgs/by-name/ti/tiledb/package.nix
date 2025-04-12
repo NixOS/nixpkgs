@@ -20,9 +20,9 @@
   gtest,
   rapidcheck,
   libpng,
+  libwebp,
   file,
   runCommand,
-  catch2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
@@ -50,24 +50,30 @@ stdenv.mkDerivation rec {
   # without the -fexperimental-library flag. Tiledb adds its own
   # implementations in the std namespace which conflict with libcxx. This
   # test can be re-enabled once libcxx supports stop_token and jthread.
-  postPatch = lib.optionalString (stdenv.cc.libcxx != null) ''
-    truncate -s0 tiledb/stdx/test/CMakeLists.txt
-  '';
+  postPatch =
+    lib.optionalString (stdenv.cc.libcxx != null) ''
+      truncate -s0 tiledb/stdx/test/CMakeLists.txt
+    ''
+    + ''
+      substituteInPlace tiledb/sm/misc/test/unit_parse_argument.cc \
+        --replace-fail '"catch.hpp"' '<catch2/catch_all.hpp>'
+    '';
 
   env.TILEDB_DISABLE_AUTO_VCPKG = "1";
 
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
   cmakeFlags = [
-    "-DTILEDB_WEBP=OFF"
+    "-DTILEDB_WEBP=ON"
     "-DTILEDB_WERROR=OFF"
+    (lib.cmakeBool "TILEDB_TESTS" doCheck)
+    (lib.cmakeBool "TILEDB_ARROW_TESTS" false)
     # https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
-    catch2_3
     clang-tools
     cmake
     python3
@@ -85,18 +91,20 @@ stdenv.mkDerivation rec {
     boost
     libpqxx
     libpng
+    libwebp
     file
     rapidcheck'
-    catch2
   ];
-
-  # fatal error: catch.hpp: No such file or directory
-  doCheck = false;
 
   nativeCheckInputs = [
     gtest
-    catch2
   ];
+
+  checkInputs = [
+    catch2_3
+  ];
+
+  strictDeps = true;
 
   # test commands taken from
   # https://github.com/TileDB-Inc/TileDB/blob/dev/.github/workflows/unit-test-runs.yml
@@ -111,6 +119,8 @@ stdenv.mkDerivation rec {
 
     runHook postCheck
   '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installTargets = [
     "install-tiledb"
@@ -127,5 +137,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rakesh4g ];
+    # Tries to compile magic file using tool built for host.
+    # https://github.com/TileDB-Inc/TileDB/blob/main/ports/libmagic/CMakeLists.txt
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }
