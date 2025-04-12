@@ -280,6 +280,7 @@ print OUT <<EOF;
   xkeyboard-config,
   xorg-cf-files,
   xorg-docs,
+  xorg-sgml-doctools,
 }:
 
 self: with self; {
@@ -301,6 +302,7 @@ self: with self; {
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
+  xorgsgmldoctools = xorg-sgml-doctools;
 
 EOF
 
