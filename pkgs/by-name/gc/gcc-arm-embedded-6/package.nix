@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/doc/gcc-arm-none-eabi/man $out/man
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
