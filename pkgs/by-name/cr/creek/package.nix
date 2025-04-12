@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = "https://git.8pit.net/creek";
+    homepage = "https://github.com/nmeum/creek";
     changelog = "https://github.com/nmeum/creek/releases/v${finalAttrs.version}";
     description = "Malleable and minimalist status bar for the River compositor";
     license = lib.licenses.mit;
