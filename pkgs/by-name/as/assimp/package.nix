@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
   zlib,
 }:
 
@@ -25,7 +24,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
     zlib
   ];
 
