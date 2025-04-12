@@ -26,14 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+dXIU66HIS2mE0pa99UemMMFBGCYjupUX8P7q3G7Nis=";
   };
 
-  postPatch = ''
+  patches = [
     # Fix cmake file installation
     # https://github.com/zint/zint/pull/8
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'DESTINATION "''${CMAKE_INSTALL_DATADIR}/zint"' 'DESTINATION lib/cmake/zint'
-    substituteInPlace backend/CMakeLists.txt \
-      --replace-fail 'DESTINATION "''${CMAKE_INSTALL_DATADIR}/zint"' 'DESTINATION lib/cmake/zint'
-  '';
+    ./fix-installation-of-cmake-files.patch
+  ];
 
   nativeBuildInputs = [
     cmake
