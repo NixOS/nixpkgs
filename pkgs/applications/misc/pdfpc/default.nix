@@ -19,7 +19,7 @@
   webkitgtk_4_1,
   discount,
   json-glib,
-  fetchpatch,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "MOVIES" false);
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Presenter console with multi-monitor support for PDF files";
