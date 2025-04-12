@@ -748,7 +748,6 @@
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
-  ./services/matrix/conduwuit.nix
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
