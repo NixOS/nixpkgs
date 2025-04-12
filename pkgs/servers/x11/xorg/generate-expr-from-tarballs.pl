@@ -279,6 +279,7 @@ print OUT <<EOF;
   xcb-proto,
   xkeyboard-config,
   xorg-cf-files,
+  xorg-docs,
 }:
 
 self: with self; {
@@ -299,6 +300,7 @@ self: with self; {
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
+  xorgdocs = xorg-docs;
 
 EOF
 
