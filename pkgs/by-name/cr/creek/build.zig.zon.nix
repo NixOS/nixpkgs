@@ -8,24 +8,24 @@
 
 linkFarm "zig-packages" [
   {
-    name = "1220687c8c47a48ba285d26a05600f8700d37fc637e223ced3aa8324f3650bf52242";
+    name = "fcft-2.0.0-zcx6C5EaAADIEaQzDg5D4UvFFMjSEwDE38vdE9xObeN9";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.2.0.tar.gz";
-      hash = "sha256-dvit+yvc0MnipqWjxJdfIsA6fJaJZOaIpx4w4woCxbE=";
+      url = "https://git.sr.ht/~novakane/zig-fcft/archive/v2.0.0.tar.gz";
+      hash = "sha256-qDEtiZNSkzN8jUSnZP/itqh8rMf+lakJy4xMB0I8sxQ=";
     };
   }
   {
-    name = "12209db20ce873af176138b76632931def33a10539387cba745db72933c43d274d56";
+    name = "pixman-0.3.0-LClMnz2VAAAs7QSCGwLimV5VUYx0JFnX5xWU6HwtMuDX";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.2.0.tar.gz";
-      hash = "sha256-zcfZEMnipWDPuptl9UN0PoaJDjy2EHc7Wwi4GQq3hkY=";
+      url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.3.0.tar.gz";
+      hash = "sha256-8tA4auo5FEI4IPnomV6bkpQHUe302tQtorFQZ1l14NU=";
     };
   }
   {
-    name = "1220a4029ee3ee70d3175c69878e2b70dccd000c4324bc74ba800d8a143b7250fb38";
+    name = "wayland-0.3.0-lQa1kjPIAQDmhGYpY-zxiRzQJFHQ2VqhJkQLbKKdt5wl";
     path = fetchzip {
-      url = "https://git.sr.ht/~novakane/zig-fcft/archive/1.1.0.tar.gz";
-      hash = "sha256-JAR6Ticav9l/3aemJWGsjXMEUyHjuhUr3L0fznnLoEY=";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.3.0.tar.gz";
+      hash = "sha256-ydEavD9z20wRwn9ZVX56ZI2T5i1tnm3LupVxfa30o84=";
     };
   }
 ]
