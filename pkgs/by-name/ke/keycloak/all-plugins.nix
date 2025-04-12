@@ -13,15 +13,15 @@
     (fetchMavenArtifact {
       groupId = "io.quarkiverse.systemd.notify";
       artifactId = "quarkus-systemd-notify";
-      version = "1.0.1";
-      hash = "sha256-3I4j22jyIpokU4kdobkt6cDsALtxYFclA+DV+BqtmLY=";
+      version = "1.0.2";
+      hash = "sha256-tADHHxpGRzj6cZ0K83M5eQXkRs+Px4n8daNeQu00UHI=";
     }).passthru.jar;
 
   quarkus-systemd-notify-deployment =
     (fetchMavenArtifact {
       groupId = "io.quarkiverse.systemd.notify";
       artifactId = "quarkus-systemd-notify-deployment";
-      version = "1.0.1";
-      hash = "sha256-xHxzBxriSd/OU8gEcDG00VRkJYPYJDfAfPh/FkQe+zg=";
+      version = "1.0.2";
+      hash = "sha256-NB+JAt0T3lL6YYudZbSTxv107SRWzzECndjyAKbmJBE=";
     }).passthru.jar;
 }
