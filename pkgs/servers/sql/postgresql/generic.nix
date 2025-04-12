@@ -188,6 +188,7 @@ let
             disallowedRequisites = [
               stdenv'.cc
               llvmPackages.llvm.out
+              llvmPackages.llvm.lib
             ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
           };
 
@@ -201,6 +202,7 @@ let
             disallowedRequisites = [
               stdenv'.cc
               llvmPackages.llvm.out
+              llvmPackages.llvm.lib
             ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
           };
 
