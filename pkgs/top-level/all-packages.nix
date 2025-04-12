@@ -6613,11 +6613,15 @@ with pkgs;
 
   jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk17;
+    jdkOnBuild = buildPackages.jdk17;
   };
   jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk21;
+    jdkOnBuild = buildPackages.jdk21;
   };
-  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
+  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdkOnBuild = buildPackages.jdk;
+  };
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
