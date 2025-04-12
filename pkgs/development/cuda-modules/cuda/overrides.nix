@@ -159,7 +159,6 @@ filterAndCreateOverrides {
       expat,
       libxcrypt-legacy,
       ncurses6,
-      python39,
       python310,
       python311,
       python312,
@@ -176,7 +175,6 @@ filterAndCreateOverrides {
         ++ lib.lists.optionals (cudaAtLeast "12.5") [
           libxcrypt-legacy
           ncurses6
-          python39
           python310
           python311
           python312
