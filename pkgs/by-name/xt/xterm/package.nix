@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
     echo '#define USE_UTMP_SETGID 1'
   '';
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
