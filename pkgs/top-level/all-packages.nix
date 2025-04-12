@@ -949,10 +949,6 @@ with pkgs;
 
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
 
-  mitm-cache = callPackage ../build-support/mitm-cache {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
