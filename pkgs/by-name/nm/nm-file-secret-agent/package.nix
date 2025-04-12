@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   rustPlatform,
   dbus,
   networkmanager,
@@ -11,8 +11,9 @@ rustPlatform.buildRustPackage rec {
   name = "nm-file-secret-agent";
   version = "1.1.0";
 
-  src = fetchFromGitHub {
-    owner = "lilioid";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "lilly";
     repo = "nm-file-secret-agent";
     rev = "v${version}";
     hash = "sha256-FZef9qMJeQkoLvCHcsGMqr0riC98WVXntQtbt76Iev4=";
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "NetworkManager secret agent that responds with the content of preconfigured files";
     mainProgram = "nm-file-secret-agent";
-    homepage = "https://github.com/lilioid/nm-file-secret-agent/";
+    homepage = "https://codeberg.org/lilly/nm-file-secret-agent";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lilioid ];
     platforms = lib.lists.intersectLists dbus.meta.platforms networkmanager.meta.platforms;
