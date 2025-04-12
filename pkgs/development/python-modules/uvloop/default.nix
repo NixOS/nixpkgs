@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
+  fetchpatch,
 
   # build-system
   cython,
@@ -31,6 +32,20 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
   };
+
+  patches = [
+    # fix test failures on Python 3.13
+    # (remove on next update)
+    (fetchpatch {
+      url = "https://github.com/MagicStack/uvloop/commit/96b7ed31afaf02800d779a395591da6a2c8c50e1.patch";
+      hash = "sha256-Nbe3BuIuwlylll5fIYij+OiP90ZeFNI0GKHK9SwWRk8=";
+      excludes = [ ".github/workflows/tests.yml" ];
+    })
+    (fetchpatch {
+      url = "https://github.com/MagicStack/uvloop/commit/56807922f847ddac231a53d5b03eef70092b987c.patch";
+      hash = "sha256-X5Ob1t/CRy9csw2JrWvwS55G6qTqZhIuGLTy83O03GU=";
+    })
+  ];
 
   postPatch = ''
     rm -rf vendor
