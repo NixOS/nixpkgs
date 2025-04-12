@@ -21,8 +21,8 @@ let
       });
       # pdm requires hishel and subsequentially pytest-regressions -> matplotlib -> ghostscript -> jbig2dec which is AGPL only
       matplotlib = super.matplotlib.override ({ enableGhostscript = false; });
-      # pdm requires hishel and subsequentially moto -> graphql-core -> pytest-benchmark -> pygal-cairosvg -> cairocffi -> pikepdf -> jbig2dec which is AGPL only
-      cairocffi = super.cairocffi.overridePythonAttrs (old: rec {
+      # avoid many extra dependencies
+      moto = super.moto.overridePythonAttrs (old: rec {
         doCheck = false;
       });
     };
