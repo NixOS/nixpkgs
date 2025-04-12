@@ -278,6 +278,7 @@ print OUT <<EOF;
   xbitmaps,
   xcb-proto,
   xkeyboard-config,
+  xorg-cf-files,
 }:
 
 self: with self; {
@@ -297,6 +298,7 @@ self: with self; {
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
+  xorgcffiles = xorg-cf-files;
 
 EOF
 

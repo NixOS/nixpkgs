@@ -1414,12 +1414,6 @@ self: super:
   xmodmap = addMainProgram super.xmodmap { };
   xmore = addMainProgram super.xmore { };
 
-  xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
-    '';
-  });
-
   xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
     # This makes the man pages discoverable by the default man,
     # since it looks for packages in $PATH
