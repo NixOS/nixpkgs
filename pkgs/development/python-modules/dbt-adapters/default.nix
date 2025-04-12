@@ -24,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-6UYXUGZIzHYxd8J+avmnIfdigtgoVU0lE28ng2b0Q8M=";
   };
 
-  postPatch = ''
-    mkdir src
-    mv dbt src
-  '';
-
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
