@@ -1,28 +1,36 @@
 {
   lib,
   stdenv,
-  testers,
-  versionCheckHook,
-  nix-update-script,
   rustPlatform,
   fetchFromGitHub,
-  protobuf,
-  restate,
-  pkg-config,
+
+  # nativeBuildInputs
+  cmake,
   openssl,
   perl,
-  cmake,
-  cacert,
+  pkg-config,
+  protobuf,
+
+  # buildInputs
   rdkafka,
+
+  # tests
+  cacert,
+  versionCheckHook,
+
+  # passthru
+  testers,
+  restate,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
   version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uDNPIL9Ox5rwWVzqWe74elHPGy6lSvWR1S7HsY6ATjc=";
   };
 
@@ -33,14 +41,13 @@ rustPlatform.buildRustPackage rec {
     PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
 
-    VERGEN_GIT_COMMIT_DATE = "2024-12-23";
-    VERGEN_GIT_SHA = "v${version}";
+    VERGEN_GIT_SHA = "v${finalAttrs.version}";
 
     # rustflags as defined in the upstream's .cargo/config.toml
     RUSTFLAGS =
       let
         target = stdenv.hostPlatform.config;
-        targetFlags = rec {
+        targetFlags = lib.fix (self: {
           build = [
             "-C force-unwind-tables"
             "-C debug-assertions"
@@ -48,21 +55,21 @@ rustPlatform.buildRustPackage rec {
             "--cfg tokio_unstable"
           ];
 
-          "aarch64-unknown-linux-gnu" = build ++ [
+          "aarch64-unknown-linux-gnu" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
           ];
 
-          "x86_64-unknown-linux-musl" = build ++ [
+          "x86_64-unknown-linux-musl" = self.build ++ [
             "-C link-self-contained=yes"
           ];
 
-          "aarch64-unknown-linux-musl" = build ++ [
+          "aarch64-unknown-linux-musl" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
             "-C link-self-contained=yes"
           ];
-        };
+        });
       in
       lib.concatStringsSep " " (lib.attrsets.attrByPath [ target ] targetFlags.build targetFlags);
 
@@ -71,13 +78,17 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    pkg-config
+    cmake
     openssl
     perl
+    pkg-config
     rustPlatform.bindgenHook
-    cmake
   ];
-  buildInputs = [ rdkafka ];
+
+  buildInputs = [
+    rdkafka
+  ];
+
   nativeCheckInputs = [
     cacert
   ];
@@ -113,9 +124,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Restate is a platform for developing distributed fault-tolerant applications.";
     homepage = "https://restate.dev";
-    changelog = "https://github.com/restatedev/restate/releases/tag/v${version}";
+    changelog = "https://github.com/restatedev/restate/releases/tag/v${finalAttrs.version}";
     mainProgram = "restate";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ myypo ];
   };
-}
+})
