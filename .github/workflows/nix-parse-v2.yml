@@ -10,10 +10,17 @@ jobs:
     uses: ./.github/workflows/get-merge-commit.yml
 
   tests:
-    name: nix-files-parseable-check
+    name: ${{ format('nix-files-parseable-check ({0})', matrix.nix_version.name) }}
     runs-on: ubuntu-24.04
     needs: get-merge-commit
     if: "needs.get-merge-commit.outputs.mergedSha && !contains(github.event.pull_request.title, '[skip treewide]')"
+    strategy:
+      matrix:
+        nix_version:
+          - name: "2.3.18"
+            install_url: "https://releases.nixos.org/nix/nix-2.3.18/install"
+          - name: "latest stable"
+            install_url: ""
     steps:
       - name: Get list of changed files from PR
         env:
@@ -36,6 +43,7 @@ jobs:
         with:
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=channel:nixpkgs-unstable
+          install_url: ${{ matrix.nix_version.install_url }}
 
       - name: Parse all changed or added nix files
         run: |
