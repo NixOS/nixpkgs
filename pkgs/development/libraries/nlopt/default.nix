@@ -3,49 +3,74 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  octave ? null,
-  libiconv,
+  # Optionally build Python bindings
+  withPython ? false,
+  python3,
+  python3Packages,
+  swig,
+  # Optionally build Octave bindings
+  withOctave ? false,
+  octave,
+  # Build static on-demand
+  withStatic ? stdenv.hostPlatform.isStatic,
 }:
-
-stdenv.mkDerivation rec {
+let
+  buildPythonBindingsEnv = python3.withPackages (p: [ p.numpy ]);
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "nlopt";
   version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "stevengj";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-TgieCX7yUdTAEblzXY/gCN0r6F9TVDh4RdNDjQdXZ1o=";
+    repo = "nlopt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TgieCX7yUdTAEblzXY/gCN0r6F9TVDh4RdNDjQdXZ1o=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
-  buildInputs = [ octave ];
-
-  configureFlags =
-    [
-      "--with-cxx"
-      "--enable-shared"
-      "--with-pic"
-      "--without-guile"
-      "--without-python"
-      "--without-matlab"
+  nativeBuildInputs =
+    [ cmake ]
+    ## Building the python bindings requires SWIG, and numpy in addition to the CXX routines.
+    ## The tests also make use of the same interpreter to test the bindings.
+    ++ lib.optionals withPython [
+      swig
+      buildPythonBindingsEnv
     ]
-    ++ lib.optionals (octave != null) [
-      "--with-octave"
-      "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
-      "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
-    ];
+    ## Building octave bindings requires `mkoctfile` to be installed.
+    ++ lib.optional withOctave octave;
+
+  # Python bindings depend on numpy at import time.
+  propagatedBuildInputs = lib.optional withPython python3Packages.numpy;
+
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" (!withStatic))
+      (lib.cmakeBool "NLOPT_CXX" true)
+      (lib.cmakeBool "NLOPT_PYTHON" withPython)
+      (lib.cmakeBool "NLOPT_OCTAVE" withOctave)
+      (lib.cmakeBool "NLOPT_SWIG" withPython)
+      (lib.cmakeBool "NLOPT_FORTRAN" false)
+      (lib.cmakeBool "NLOPT_MATLAB" false)
+      (lib.cmakeBool "NLOPT_GUILE" false)
+      (lib.cmakeBool "NLOPT_TESTS" finalAttrs.doCheck)
+    ]
+    ++ lib.optional withPython (
+      lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"
+    );
+
+  doCheck = true;
 
   postFixup = ''
-    substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace \
+    substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace-fail \
       'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/' 'INTERFACE_INCLUDE_DIRECTORIES "'
   '';
 
   meta = {
     homepage = "https://nlopt.readthedocs.io/en/latest/";
+    changelog = "https://github.com/stevengj/nlopt/releases/tag/v${finalAttrs.version}";
     description = "Free open-source library for nonlinear optimization";
     license = lib.licenses.lgpl21Plus;
-    hydraPlatforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bengsparks ];
   };
-
-}
+})
