@@ -4,9 +4,8 @@
   fetchurl,
   ncurses6,
   libxcrypt-legacy,
-  runtimeShell,
-  zstd,
   xz,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,8 +56,8 @@ stdenv.mkDerivation rec {
           stdenv.cc.cc
           ncurses6
           libxcrypt-legacy
-          zstd
           xz
+          zstd
         ]
       } "$f" || true
     done
