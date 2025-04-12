@@ -96,7 +96,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picolibc";
-  version = "1.8.9";
+  version = "1.8.9-2";
   strictDeps = true;
 
   outputs = [
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "picolibc";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-W1zK9mLMfi5pbOpbSLxiB2qKdiyNjOSQu96NM94/fcY=";
+    hash = "sha256-djOZKkinsaaYD4tUEA6mKdo+5em0GP1/+rI0mIm7Vs8=";
   };
 
   nativeBuildInputs = [

@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl grep common-updater-scripts
+    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     version=$(curl -I -X GET https://chatboxai.app/install_chatbox/linux | grep -oP 'Chatbox-\K[0-9]+\.[0-9]+\.[0-9]+')
     update-source-version chatbox $version
   '';

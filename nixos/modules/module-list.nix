@@ -1639,6 +1639,7 @@
   ./services/web-apps/wakapi.nix
   ./services/web-apps/weblate.nix
   ./services/web-apps/whitebophir.nix
+  ./services/web-apps/whoami.nix
   ./services/web-apps/wiki-js.nix
   ./services/web-apps/windmill.nix
   ./services/web-apps/wordpress.nix
