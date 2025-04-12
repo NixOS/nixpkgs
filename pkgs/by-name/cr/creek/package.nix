@@ -38,17 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  deps = callPackage ./build.zig.zon.nix {
-    inherit zig;
-  };
+  deps = callPackage ./build.zig.zon.nix { };
 
   zigBuildFlags = [
     "--system"
     "${finalAttrs.deps}"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    homepage = "https://git.8pit.net/creek";
+    homepage = "https://github.com/nmeum/creek";
+    changelog = "https://github.com/nmeum/creek/releases/tag/v${finalAttrs.version}";
     description = "Malleable and minimalist status bar for the River compositor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alexandrutocar ];
