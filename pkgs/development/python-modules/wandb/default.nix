@@ -250,6 +250,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Require docker access
     "tests/system_tests"
+
+    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
+    "tests/unit_tests/test_analytics/test_sentry.py"
   ];
 
   disabledTests =
