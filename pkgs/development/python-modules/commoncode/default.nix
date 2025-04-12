@@ -33,6 +33,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [ "beautifulsoup4" ];
+
   dependencies = [
     attrs
     beautifulsoup4
