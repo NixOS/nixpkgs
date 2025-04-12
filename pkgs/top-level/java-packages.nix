@@ -33,7 +33,7 @@ with pkgs;
               headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
             };
           openjdkLinuxHeadless = openjdkLinux.override { headless = true; };
-          openjdkDarwin = (callPackage ../development/compilers/zulu/${featureVersion}.nix { }) // {
+          openjdkDarwin = (callPackage (../development/compilers/zulu + "/${featureVersion}.nix") { }) // {
             headless = mergeMetaPlatforms openjdkDarwin openjdkLinuxHeadless;
           };
         in
