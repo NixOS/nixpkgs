@@ -40,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  deps = callPackage ./build.zig.zon.nix {
-    inherit zig;
-  };
+  deps = callPackage ./build.zig.zon.nix { };
 
   zigBuildFlags = [
     "--system"
