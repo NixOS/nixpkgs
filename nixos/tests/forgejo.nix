@@ -60,7 +60,6 @@ let
               pkgs.gnupg
               pkgs.jq
               pkgs.file
-              pkgs.htmlq
             ];
             services.openssh.enable = true;
 
@@ -253,27 +252,22 @@ let
               client.succeed("git -C /tmp/repo push origin main")
 
               def poll_workflow_action_status(_) -> bool:
-                  output = server.succeed(
-                      "curl --fail http://localhost:3000/test/repo/actions | "
-                      + 'htmlq ".flex-item-leading span" --attribute "data-tooltip-content"'
-                  ).strip()
+                  try:
+                      response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
+                      status = json.loads(response).get("workflow_runs")[0].get("status")
 
-                  # values taken from https://codeberg.org/forgejo/forgejo/src/commit/af47c583b4fb3190fa4c4c414500f9941cc02389/options/locale/locale_en-US.ini#L3649-L3661
-                  if output in [ "Failure", "Canceled", "Skipped", "Blocked" ]:
-                      raise Exception(f"Workflow status is '{output}', which we consider failed.")
-                      server.log(f"Command returned '{output}', which we consider failed.")
+                  except IndexError:
+                      status = "???"
 
-                  elif output in [ "Unknown", "Waiting", "Running", "" ]:
-                      server.log(f"Workflow status is '{output}'. Waiting some more...")
-                      return False
+                  server.log(f"Workflow status: {status}")
 
-                  elif output in [ "Success" ]:
-                      return True
+                  if status == "failure":
+                      raise Exception("Workflow failed")
 
-                  raise Exception(f"Workflow status is '{output}', which we don't know. Value mappings likely need updating.")
+                  return status == "success"
 
               with server.nested("Waiting for the workflow run to be successful"):
-                  retry(poll_workflow_action_status)
+                  retry(poll_workflow_action_status, 60)
 
           with subtest("Testing backup service"):
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
