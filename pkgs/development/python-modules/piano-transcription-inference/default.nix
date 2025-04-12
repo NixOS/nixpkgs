@@ -7,6 +7,7 @@
   librosa,
   matplotlib,
   mido,
+  setuptools,
   torch,
   torchlibrosa,
 }:
@@ -14,10 +15,11 @@
 buildPythonPackage rec {
   pname = "piano-transcription-inference";
   version = "0.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "piano_transcription_inference";
+    inherit version;
     hash = "sha256-tt0A+bS8rLYUByXwO0E5peD0rNNaaeSSpdH3NOz70jE=";
   };
 
@@ -29,7 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-w/qXMHJb9Kdi8cFLyAzVmG6s2gGwJvWkolJc1geHYUE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     librosa
     matplotlib
     mido

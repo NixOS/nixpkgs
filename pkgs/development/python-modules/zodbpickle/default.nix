@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools<74" "setuptools"
+      --replace-fail "setuptools <= 75.6.0" "setuptools"
   '';
 
   build-system = [ setuptools ];
@@ -29,6 +29,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zodbpickle" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    mv src/zodbpickle/tests ./.
+    rm -rf src
+  '';
 
   # fails..
   disabledTests = [

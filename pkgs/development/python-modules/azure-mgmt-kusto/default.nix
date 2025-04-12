@@ -17,7 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "azure_mgmt_kusto";
+    inherit version;
     hash = "sha256-K8keApefYp/u7cTZuWNYhltVlFethunG+ccJpAgyDmM=";
   };
 
