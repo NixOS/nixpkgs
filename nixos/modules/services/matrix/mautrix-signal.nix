@@ -268,7 +268,7 @@ in
     buildDocsInSandbox = false;
     doc = ./mautrix-signal.md;
     maintainers = with lib.maintainers; [
-      niklaskorz
+      alyaeanyx
       frederictobiasc
     ];
   };
