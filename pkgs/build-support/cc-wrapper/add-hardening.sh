@@ -32,7 +32,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection pacret pie pic strictoverflow format trivialautovarinit zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection nostrictaliasing pacret pie pic strictoverflow format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -90,6 +90,10 @@ for flag in "${!hardeningEnableMap[@]}"; do
     stackclashprotection)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stack-clash-protection >&2; fi
       hardeningCFlagsBefore+=('-fstack-clash-protection')
+      ;;
+    nostrictaliasing)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling nostrictaliasing >&2; fi
+      hardeningCFlagsBefore+=('-fno-strict-aliasing')
       ;;
     pie)
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
