@@ -1081,6 +1081,7 @@ in
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
       { };
   postfixadmin = handleTest ./postfixadmin.nix { };
+  postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = handleTest ./postgresql { };
   postgrest = runTest ./postgrest.nix;
   powerdns = handleTest ./powerdns.nix { };
@@ -1445,6 +1446,7 @@ in
   webhook = runTest ./webhook.nix;
   weblate = handleTest ./web-apps/weblate.nix { };
   whisparr = handleTest ./whisparr.nix { };
+  whoami = runTest ./whoami.nix;
   whoogle-search = handleTest ./whoogle-search.nix { };
   wiki-js = runTest ./wiki-js.nix;
   wine = handleTest ./wine.nix { };
