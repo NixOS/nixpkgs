@@ -49,6 +49,8 @@ in
   pname = "quassel${tag}";
   version = "0.14.0";
 
+  mainProgram = "quassel";
+
   src = fetchFromGitHub {
     owner = "quassel";
     repo = "quassel";
