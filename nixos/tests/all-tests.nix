@@ -423,6 +423,7 @@ in
   ecryptfs = handleTest ./ecryptfs.nix { };
   fscrypt = handleTest ./fscrypt.nix { };
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
+  easytier = handleTest ./easytier.nix { };
   eintopf = handleTest ./eintopf.nix { };
   ejabberd = handleTest ./xmpp/ejabberd.nix { };
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
