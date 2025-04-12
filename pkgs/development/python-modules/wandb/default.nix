@@ -71,17 +71,18 @@
   soundfile,
   tenacity,
   torch,
+  torchvision,
   tqdm,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.19.8";
+  version = "0.19.10";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-hveMyGeu9RhdtWMbV/4GQ4KUNfjSt0CKyW7Yx8QtlLM=";
+    hash = "sha256-SptjImAK0hDAr7UZjUMWnAVB1bxyzoATlyrPek5Tm48=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -92,7 +93,7 @@ let
     sourceRoot = "${src.name}/gpu_stats";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-KrwZh8OoVwImfYDmvT2Je2MYyiTZVQYngwvVC+7fTzI=";
+    cargoHash = "sha256-kkWvTLduxFVIEvi4e65QQ7S0kHTRJ8XW028o430L91s=";
 
     checkFlags = [
       # fails in sandbox
@@ -119,9 +120,9 @@ let
 
     # hardcode the `gpu_stats` binary path.
     postPatch = ''
-      substituteInPlace pkg/monitor/gpu.go \
+      substituteInPlace pkg/monitor/gpuresourcemanager.go \
         --replace-fail \
-          'cmdPath, err := getGPUStatsCmdPath()' \
+          'cmdPath, err := getGPUCollectorCmdPath()' \
           'cmdPath, err := "${lib.getExe gpu-stats}", error(nil)'
     '';
 
@@ -136,6 +137,18 @@ let
     ];
     versionCheckProgramArg = "--version";
     doInstallCheck = true;
+
+    checkFlags =
+      let
+        skippedTests = [
+          # gpu sampling crashes in the sandbox
+          "TestSystemMonitor_BasicStateTransitions"
+          "TestSystemMonitor_RepeatedCalls"
+          "TestSystemMonitor_UnexpectedTransitions"
+          "TestSystemMonitor_FullCycle"
+        ];
+      in
+      [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
     __darwinAllowLocalNetworking = true;
 
@@ -238,6 +251,7 @@ buildPythonPackage rec {
     soundfile
     tenacity
     torch
+    torchvision
     tqdm
     writableTmpDirAsHomeHook
   ];
