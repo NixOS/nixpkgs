@@ -332,6 +332,9 @@ checkConfigOutput '^"null or package"$' options.nullablePackage.type.description
 checkConfigOutput '^"hello"$' config.nullablePackageWithDefault.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
 
 # submoduleWith
 
