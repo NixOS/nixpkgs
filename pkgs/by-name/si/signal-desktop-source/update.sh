@@ -22,6 +22,7 @@ latestVersion="`jq -r '.version' <<< $packageJson`"
 nodeVersion="`jq -r '.engines.node' <<< $packageJson | cut -d. -f1`"
 electronVersion="`jq -r '.devDependencies.electron' <<< $packageJson | cut -d. -f1`"
 libsignalClientVersion=`jq -r '.dependencies."@signalapp/libsignal-client"' <<< $packageJson`
+signalSqlcipherVersion=`jq -r '.dependencies."@signalapp/sqlcipher"' <<< $packageJson`
 ringrtcVersion=`jq -r '.dependencies."@signalapp/ringrtc"' <<< $packageJson`
 ringrtcVersionProperties="`curl_github "https://raw.githubusercontent.com/signalapp/ringrtc/refs/tags/v$ringrtcVersion/config/version.properties"`"
 webrtcVersion="`grep --only-matching "^webrtc.version=.*$" <<< $ringrtcVersionProperties | sed "s/webrtc.version=//g"`"
@@ -45,6 +46,15 @@ update-source-version signal-desktop-source.libsignal-node \
 update-source-version signal-desktop-source.libsignal-node \
   --ignore-same-version \
   --source-key=npmDeps
+
+update-source-version signal-desktop-source.signal-sqlcipher \
+  "$signalSqlcipherVersion"
+update-source-version signal-desktop-source.signal-sqlcipher \
+  --ignore-same-version \
+  --source-key=cargoDeps.vendorStaging
+update-source-version signal-desktop-source.signal-sqlcipher \
+  --ignore-same-version \
+  --source-key=pnpmDeps
 
 update-source-version signal-desktop-source.ringrtc "$ringrtcVersion"
 update-source-version signal-desktop-source.ringrtc \
