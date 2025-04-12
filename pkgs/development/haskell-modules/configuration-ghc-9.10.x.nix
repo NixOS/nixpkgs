@@ -91,12 +91,12 @@ self: super: {
   base64 = doJailbreak super.base64; # base <4.20
   # 2025-04-09: base <4.20, containers <0.7, filepath <1.5, Cabal-syntax <3.11
   cabal-install-parsers =
-    assert super.cabal-install-parsers == "0.6.1.1";
+    assert super.cabal-install-parsers.version == "0.6.1.1";
     doJailbreak super.cabal-install-parsers;
   floskell = doJailbreak super.floskell; # base <4.20
   # 2025-04-09: filepath <1.5
   haddock-library =
-    assert super.haddock-library == "1.11.0";
+    assert super.haddock-library.version == "1.11.0";
     doJailbreak super.haddock-library;
   spdx = doJailbreak super.spdx; # Cabal-syntax < 3.13
   tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
