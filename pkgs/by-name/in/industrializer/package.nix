@@ -6,10 +6,12 @@
   audiofile,
   autoconf,
   automake,
+  gettext,
   gnome2,
   gtk2,
   libGL,
   libjack2,
+  libpulseaudio,
   libtool,
   libxml2,
   pkg-config,
@@ -27,6 +29,10 @@ stdenv.mkDerivation rec {
     pkg-config
     autoconf
     automake
+    gettext # autopoint
+    libxml2 # AM_PATH_XML2
+    alsa-lib # AM_PATH_ALSA
+    libtool
   ];
 
   buildInputs = [
@@ -36,9 +42,11 @@ stdenv.mkDerivation rec {
     gtk2
     libGL
     libjack2
-    libtool
     libxml2
+    libpulseaudio
   ];
+
+  strictDeps = true;
 
   preConfigure = "./autogen.sh";
 
