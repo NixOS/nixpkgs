@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     "${finalAttrs.deps}"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://git.8pit.net/creek";
     description = "Malleable and minimalist status bar for the River compositor";
