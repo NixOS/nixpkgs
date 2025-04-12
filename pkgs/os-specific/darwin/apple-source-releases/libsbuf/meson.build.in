@@ -1,0 +1,17 @@
+# Project settings
+project('libsbuf', 'c', version : '@version@')
+
+
+# Libraries
+library(
+    'sbuf',
+    darwin_versions : '1',
+    install : true,
+    sources : [
+        'subr_prf.c',
+        'subr_sbuf.c',
+    ],
+    soversion : '6',
+)
+install_headers('usbuf.h')
+install_man('sbuf.9')

@@ -1,0 +1,21 @@
+diff --git a/rpy2/rinterface_lib/embedded.py b/rpy2/rinterface_lib/embedded.py
+index ccd3a315..51fb5da4 100644
+--- a/rpy2/rinterface_lib/embedded.py
++++ b/rpy2/rinterface_lib/embedded.py
+@@ -276,6 +276,16 @@ def _initr(
+                  os.environ.get('LD_LIBRARY_PATH', ''))
+                 )
+         )
++
++        # path to libraries
++        existing = os.environ.get('R_LIBS_SITE')
++        if existing is not None:
++            prefix = existing + ':'
++        else:
++            prefix = ''
++        additional = '@NIX_R_LIBS_SITE@'
++        os.environ['R_LIBS_SITE'] = prefix + additional
++
+         options_c = [ffi.new('char[]', o.encode('ASCII')) for o in _options]
+         n_options = len(options_c)
+         n_options_c = ffi.cast('int', n_options)

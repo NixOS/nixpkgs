@@ -1,0 +1,27 @@
+--- pilot-link/configure.ac
++++ pilot-link/configure.ac
+@@ -63,8 +63,8 @@
+ dnl Eat -Werror so configure will run properly, if the user provided it
+ enable_werror=no
+ save_CFLAGS="$CFLAGS"
+-CFLAGS=$(echo $save_CFLAGS | sed -e s/-Werror//g)
+-CXXFLAGS=$(echo $save_CXXFLAGS | sed -e s/-Werror//g)
++CFLAGS=$(echo "$save_CFLAGS" | sed -e 's/-Werror[^=]//g')
++CXXFLAGS=$(echo "$save_CXXFLAGS" | sed -e 's/-Werror[^=]//g')
+ if test "x$CFLAGS" != "x$save_CFLAGS"; then
+ 	dnl -Werror was set; treat it as implicit --enable-werror below
+ 	enable_werror="yes"
+@@ -392,11 +392,8 @@
+ 		dnl Determine if system popt is good enough
+ 		save_LIBS="$LIBS"
+ 		AC_CHECK_HEADER(popt.h,
+-			AC_CHECK_DECL(POPT_BIT_SET,
+-				AC_CHECK_LIB(popt, poptStrippedArgv,,
+-					[with_included_popt="yes"]),
+-				[with_included_popt="yes"],
+-				[#include <popt.h>]),
++			AC_CHECK_LIB(popt, poptStrippedArgv,,
++				[with_included_popt="yes"]),
+ 			[with_included_popt="yes"]
+ 		)
+ 		LIBS="$save_LIBS"

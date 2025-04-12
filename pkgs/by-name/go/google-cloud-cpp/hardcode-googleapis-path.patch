@@ -1,0 +1,14 @@
+--- a/external/googleapis/CMakeLists.txt
++++ b/external/googleapis/CMakeLists.txt
+@@ -20,10 +20,7 @@ endif ()
+
+ include(GoogleapisConfig)
+
+-set(GOOGLE_CLOUD_CPP_GOOGLEAPIS_URL
+-    "https://github.com/googleapis/googleapis/archive/${_GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz"
+-    "https://storage.googleapis.com/cloud-cpp-community-archive/github.com/googleapis/googleapis/archive/${_GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz"
+-)
++set(GOOGLE_CLOUD_CPP_GOOGLEAPIS_URL @url@)
+ set(GOOGLE_CLOUD_CPP_GOOGLEAPIS_URL_HASH
+     "${_GOOGLE_CLOUD_CPP_GOOGLEAPIS_SHA256}")
+ if (GOOGLE_CLOUD_CPP_OVERRIDE_GOOGLEAPIS_URL)

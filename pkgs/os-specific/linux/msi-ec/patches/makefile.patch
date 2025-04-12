@@ -1,0 +1,28 @@
+diff --git a/Makefile b/Makefile
+index bffcbd4..fd1d8a3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,7 @@
+ VERSION         := 0.08
+ DKMS_ROOT_PATH  := /usr/src/msi_ec-$(VERSION)
+ TARGET ?= $(shell uname -r)
++KERNELDIR ?= /lib/modules/$(TARGET)/build/
+ 
+ ccflags-y := -std=gnu11 -Wno-declaration-after-statement
+ 
+@@ -10,11 +11,14 @@ obj-m += msi-ec.o
+ all: modules
+ 
+ modules:
+-	@$(MAKE) -C /lib/modules/$(TARGET)/build M=$(CURDIR) modules
++	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) modules
+ 
+ clean:
+ 	@$(MAKE) -C /lib/modules/$(TARGET)/build M=$(CURDIR) clean
+ 
++modules_install:
++	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) modules_install
++
+ load:
+ 	insmod msi-ec.ko
+ 

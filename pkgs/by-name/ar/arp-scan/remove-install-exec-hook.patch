@@ -1,0 +1,24 @@
+diff --git a/Makefile.am b/Makefile.am
+index c02e1cc..0dd6321 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -29,19 +29,3 @@ arp-scan.1: arp-scan.1.dist Makefile
+ 	$(do_subst) < $(srcdir)/arp-scan.1.dist > arp-scan.1
+ get-oui.1: get-oui.1.dist Makefile
+ 	$(do_subst) < $(srcdir)/get-oui.1.dist > get-oui.1
+-# Install arp-scan with cap_net_raw if possible, otherwise SUID root
+-install-exec-hook:
+-	@if command -v setcap > /dev/null; then \
+-	if setcap cap_net_raw+p $(DESTDIR)$(bindir)/arp-scan$(EXEEXT); then \
+-	echo "setcap cap_net_raw+p $(DESTDIR)$(bindir)/arp-scan$(EXEEXT)"; \
+-	chmod u-s $(DESTDIR)$(bindir)/arp-scan$(EXEEXT); \
+-	else \
+-	echo "Setcap failed on $(DESTDIR)$(bindir)/arp-scan$(EXEEXT), falling back to setuid" >&2; \
+-	echo "chmod u+s $(DESTDIR)$(bindir)/arp-scan$(EXEEXT)";  \
+-	chmod u+s $(DESTDIR)$(bindir)/arp-scan$(EXEEXT);  \
+-	fi \
+-	else \
+-	echo "Setcap is not installed, falling back to setuid" >&2 ; \
+-	echo "chmod u+s $(DESTDIR)$(bindir)/arp-scan$(EXEEXT)" ;\
+-	chmod u+s $(DESTDIR)$(bindir)/arp-scan$(EXEEXT) ;\
+-	fi

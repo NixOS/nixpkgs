@@ -1,0 +1,29 @@
+diff --git a/common/flatpak-dir.c b/common/flatpak-dir.c
+index eba81fef..134024e2 100644
+--- a/common/flatpak-dir.c
++++ b/common/flatpak-dir.c
+@@ -7532,8 +7532,13 @@ export_desktop_file (const char         *app,
+       g_key_file_remove_key (keyfile, groups[i], "X-GNOME-Bugzilla-ExtraInfoScript", NULL);
+ 
+       new_exec = g_string_new ("");
+-      if ((flatpak = g_getenv ("FLATPAK_BINARY")) == NULL)
+-        flatpak = FLATPAK_BINDIR "/flatpak";
++      if (g_str_has_suffix (name, ".service"))
++      {
++        flatpak = "/run/current-system/sw/bin/flatpak";
++      } else {
++        if ((flatpak = g_getenv ("FLATPAK_BINARY")) == NULL)
++          flatpak = "flatpak";
++      }
+ 
+       g_string_append_printf (new_exec,
+                               "%s run --branch=%s --arch=%s",
+@@ -8867,7 +8872,7 @@ flatpak_dir_deploy (FlatpakDir          *self,
+                                        error))
+         return FALSE;
+       if ((flatpak = g_getenv ("FLATPAK_BINARY")) == NULL)
+-        flatpak = FLATPAK_BINDIR "/flatpak";
++        flatpak = "flatpak";
+ 
+       bin_data = g_strdup_printf ("#!/bin/sh\nexec %s run --branch=%s --arch=%s %s \"$@\"\n",
+                                   flatpak, escaped_branch, escaped_arch, escaped_app);

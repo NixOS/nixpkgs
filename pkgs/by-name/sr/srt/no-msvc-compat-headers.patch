@@ -1,0 +1,10 @@
+--- srt-1.3.2/common/filelist_win32.maf.orig	2018-06-15 21:44:11.000000000 +0200
++++ srt-1.3.2/common/filelist_win32.maf	2018-09-25 20:26:36.903688700 +0200
+@@ -4,7 +4,6 @@
+ #
+ # These are included by platform_sys.h header contained in ../srtcore/filelist.maf
+ #
+-win/unistd.h
+ 
+ SOURCES
+ win_time.cpp

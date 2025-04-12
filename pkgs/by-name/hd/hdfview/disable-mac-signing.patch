@@ -1,0 +1,49 @@
+diff --git i/build.xml w/build.xml
+index 3bbd89b..5834e7c 100644
+--- i/build.xml
++++ w/build.xml
+@@ -1607,14 +1607,6 @@
+ 
+     <!-- package args for fixed jpackage -->
+     <target name="createJXPackageMac" depends="createJPackageBase" if="${isXMac}">
+-        <!-- unlock keychain -->
+-        <exec executable="security" dir="${dist.dir}" failonerror="true">
+-            <arg value="unlock-keychain" />
+-            <arg value="-p" />
+-            <arg value="${pass.keychain_key}" />
+-            <arg value="${name.keychain_key}" />
+-        </exec>
+-
+         <echo> JXPackage the mac application</echo>
+         <exec executable="${java.home}/bin/jpackage">
+             <!-- Basic usage -->
+@@ -1680,7 +1672,6 @@
+             <arg value="dmg" />
+             <arg value="--icon" />
+             <arg value="${basedir}/package_files/macosx/HDFView.icns" />
+-            <arg value="--mac-sign" />
+             <arg value="--mac-package-identifier" />
+             <arg value="HDFView.hdfgroup.org" />
+             <arg value="--mac-package-name" />
+@@ -2054,13 +2045,6 @@
+             description="Create the final package for distribution" />
+ 
+     <target name="createJPackageMac" depends="createJPackageBase" if="${isAppMac}">
+-        <!-- unlock keychain -->
+-        <exec executable="security" dir="${dist.dir}" failonerror="true">
+-            <arg value="unlock-keychain" />
+-            <arg value="-p" />
+-            <arg value="${pass.keychain_key}" />
+-            <arg value="${name.keychain_key}" />
+-        </exec>
+ 
+         <echo> Create the mac jpackage</echo>
+         <exec executable="${java.home}/bin/jpackage">
+@@ -2116,7 +2100,6 @@
+             <arg value="app-image" />
+             <arg value="--icon" />
+             <arg value="${basedir}/package_files/macosx/HDFView.icns" />
+-            <arg value="--mac-sign" />
+             <arg value="--mac-package-identifier" />
+             <arg value="HDFView.hdfgroup.org" />
+             <arg value="--mac-package-name" />

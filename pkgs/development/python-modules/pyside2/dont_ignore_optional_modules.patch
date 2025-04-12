@@ -1,0 +1,11 @@
+--- pyside-setup-opensource-src-5.14.2/sources/cmake_helpers/helpers.cmake~	2020-07-17 10:29:30.555285529 +0200
++++ pyside-setup-opensource-src-5.14.2/sources/cmake_helpers/helpers.cmake	2020-07-17 10:29:49.817003683 +0200
+@@ -139,7 +139,7 @@
+     # If the module was found, and also the module path is the same as the
+     # Qt5Core base path, we will generate the list with the modules to be installed
+     set(looked_in_message ". Looked in: ${${_name_dir}}")
+-    if("${${_name_found}}" AND (("${found_basepath}" GREATER "0") OR ("${found_basepath}" EQUAL "0")))
++    if("${${_name_found}}")
+         message(STATUS "${module_state} module ${name} found (${ARGN})${looked_in_message}")
+         # record the shortnames for the tests
+         list(APPEND all_module_shortnames ${shortname})

@@ -1,0 +1,11 @@
+diff --git a/uxsim/__init__.py b/uxsim/__init__.py
+index cf661c5..540e6f8 100644
+--- a/uxsim/__init__.py
++++ b/uxsim/__init__.py
+@@ -1,3 +1,6 @@
++import os
++if not os.getenv("QT_PLUGIN_PATH"):
++    os.environ["QT_PLUGIN_PATH"] = "$NIX_QT_PLUGIN_PATH"
+ from .uxsim import *
+ from .utils import *
+ from .analyzer import *

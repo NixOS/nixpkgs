@@ -1,0 +1,59 @@
+From 2f0cbc740a0fe050f4de082620296c5eea18eba3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Thu, 27 Oct 2022 20:56:07 +0200
+Subject: [PATCH] Lookup dumpcap in PATH
+
+NixOS patch: Look for dumpcap in PATH first, because there may be a
+dumpcap wrapper that we want to use instead of the default
+non-setuid dumpcap binary.
+
+Also change execv() to execvp() because we've set argv[0] to "dumpcap"
+and have to enable PATH lookup. Wireshark is not a setuid program, so
+looking in PATH is not a security issue.
+
+ORIGINALLY by Björn Forsman
+
+EDITED by teto for wireshark 3.6
+
+EDITED by esclear for wireshark 4.0
+
+EDITED by paveloom for wireshark 4.2
+
+EDITED by pabloaul for wireshark 4.4
+
+Signed-off-by: Franz Pletz <fpletz@fnordicwalking.de>
+---
+ capture/capture_sync.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/capture/capture_sync.c b/capture/capture_sync.c
+index 946dc810db..ef0b6e12cd 100644
+--- a/capture/capture_sync.c
++++ b/capture/capture_sync.c
+@@ -243,8 +243,15 @@ init_pipe_args(int *argc) {
+     char *exename;
+     char **argv;
+ 
+-    /* Find the absolute path of the dumpcap executable. */
+-    exename = get_executable_path("dumpcap");
++    /* NixOS patch: Look for dumpcap in PATH first, because there may be a
++     * dumpcap wrapper that we want to use instead of the default
++     * non-setuid dumpcap binary. */
++    if (system("command -v dumpcap >/dev/null") == 0) {
++        exename = ws_strdup_printf("dumpcap");
++    } else {
++        /* Use dumpcap from the package. */
++        exename = get_executable_path("dumpcap");
++    }
+     if (exename == NULL) {
+         return NULL;
+     }
+@@ -596,7 +603,7 @@ sync_pipe_open_command(char **argv, int *data_read_fd,
+         snprintf(sync_id, ARGV_NUMBER_LEN, "%d", sync_pipe[PIPE_WRITE]);
+         argv = sync_pipe_add_arg(argv, &argc, sync_id);
+ #endif
+-        execv(argv[0], argv);
++        execvp(argv[0], argv);
+         sync_pipe_write_int_msg(sync_pipe[PIPE_WRITE], SP_EXEC_FAILED, errno);
+ 
+         /* Exit with "_exit()", so that we don't close the connection

@@ -1,0 +1,40 @@
+Index: b/apngopt.cpp
+===================================================================
+--- a/apngopt.cpp
++++ b/apngopt.cpp
+@@ -33,7 +33,6 @@
+ #include <vector>
+ #include "png.h"     /* original (unpatched) libpng is ok */
+ #include "zlib.h"
+-#include "7z.h"
+ extern "C" {
+ #include "zopfli.h"
+ }
+@@ -958,8 +957,6 @@ void deflate_rect_fin(int deflate_method
+   if (deflate_method == 1)
+   {
+     unsigned size = zbuf_size;
+-    compress_rfc1950_7z(rows, op[n].h*(rowbytes + 1), zbuf, size, iter<100 ? iter : 100, 255);
+-    *zsize = size;
+   }
+   else
+   {
+@@ -1438,8 +1435,7 @@ int main(int argc, char** argv)
+   if (argc <= 1)
+   {
+     printf("\n\nUsage: apngopt [options] anim.png [anim_opt.png]\n\n"
+-           "-z0  : zlib compression\n"
+-           "-z1  : 7zip compression (default)\n"
++           "-z0  : zlib compression (default)\n"
+            "-z2  : zopfli compression\n"
+            "-i## : number of iterations, default -i%d\n", iter);
+     return 1;
+@@ -1459,7 +1455,7 @@ int main(int argc, char** argv)
+         if (szOpt[2] == '0')
+           deflate_method = 0;
+         if (szOpt[2] == '1')
+-          deflate_method = 1;
++          deflate_method = 0;
+         if (szOpt[2] == '2')
+           deflate_method = 2;
+       }

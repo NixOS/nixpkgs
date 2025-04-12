@@ -1,0 +1,12 @@
+diff --git a/cmake/modules/FindPythonInstDir.cmake b/cmake/modules/FindPythonInstDir.cmake
+index ed098ded..2a2e1543 100644
+--- a/cmake/modules/FindPythonInstDir.cmake
++++ b/cmake/modules/FindPythonInstDir.cmake
+@@ -1,6 +1 @@
+-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
+-from sys import stdout
+-from sysconfig import get_path
+-path=get_path(name='platlib', vars={'platbase':'${CMAKE_INSTALL_PREFIX}'})
+-stdout.write(path)"
+-OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++SET(PYTHON_INSTALL_DIR "@PYTHON_INSTALL_DIR@")

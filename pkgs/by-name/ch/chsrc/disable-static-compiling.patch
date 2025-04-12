@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index 99065da..2415738 100644
+--- a/Makefile
++++ b/Makefile
+@@ -16,9 +16,6 @@ endif
+ ifeq ($(CC), clang)
+ 	CFLAGS += $(CLANG_FLAGS)
+ endif
+-ifeq ($(shell uname), Linux)
+-	CFLAGS += -static
+-endif
+ 
+ Target = chsrc
+ 

@@ -1,0 +1,13 @@
+diff --git a/module/system/base/target.scm b/module/system/base/target.scm
+index 95ab8d8c9..93616f4a3 100644
+--- a/module/system/base/target.scm
++++ b/module/system/base/target.scm
+@@ -86,6 +86,8 @@
+              (endianness big))
+             ((string=? "aarch64" cpu)
+              (endianness little))
++            ((string-match "riscv[1-9][0-9]*" cpu)
++             (endianness little))
+             (else
+              (error "unknown CPU endianness" cpu)))))
+ 

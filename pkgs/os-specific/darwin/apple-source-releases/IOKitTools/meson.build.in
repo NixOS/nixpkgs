@@ -1,0 +1,75 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/IOKitTools/blob/main/IOKitTools.xcodeproj/project.pbxproj
+
+# Project settings
+project('IOKitTools', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+ncurses = dependency('ncurses')
+
+core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
+iokit = dependency('appleframeworks', modules : 'IOKit')
+core_symbolication = dependency('appleframeworks', modules : 'CoreSymbolication')
+perfdata = dependency('appleframeworks', modules : 'perfdata')
+
+
+# Compatibility tests
+iomainport_test = '''
+#include <IOKit/IOKit.h>
+int main(int argc, char* argv[]) {
+    const mach_port_t port = kIOMasterPortDefault;
+}
+'''
+
+if not cc.compiles(iomainport_test, name : 'supports IOMainPort', dependencies : [ iokit ])
+    add_project_arguments(
+        '-DIOMainPort=IOMasterPort',
+        '-DkIOMainPortDefault=kIOMasterPortDefault',
+        language : 'c'
+    )
+    message('Redefining IOMainPort to IOMasterPort.')
+endif
+
+kiouserclasseskey_test = '''
+#include <IOKit/IOKit.h>
+int main(int argc, char* argv[]) {
+    const char* key = kIOUserClassesKey;
+}
+'''
+
+if not cc.compiles(iomainport_test, name : 'supports IOUserClasses', dependencies : [ iokit ])
+    add_project_arguments(
+        '-DkIOUserClassesKey="IOUserClasses"',
+        language : 'c'
+    )
+    message('Manually defining IOUserClasses constants.')
+endif
+
+
+# Binaries
+executable(
+    'ioalloccount',
+    dependencies : [ core_foundation, iokit ],
+    install : true,
+    sources : [ 'ioalloccount.tproj/ioalloccount.c' ],
+)
+install_man('ioalloccount.tproj/ioalloccount.8')
+
+executable(
+    'ioclasscount',
+    dependencies : [ core_foundation, core_symbolication, iokit, perfdata ],
+    install : true,
+    sources : [ 'ioclasscount.tproj/ioclasscount.c' ],
+)
+install_man('ioclasscount.tproj/ioclasscount.8')
+
+executable(
+    'ioreg',
+    dependencies : [ core_foundation, iokit, ncurses ],
+    install : true,
+    sources : [ 'ioreg.tproj/ioreg.c' ],
+)
+install_man('ioreg.tproj/ioreg.8')

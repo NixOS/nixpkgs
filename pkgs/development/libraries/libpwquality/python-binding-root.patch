@@ -1,0 +1,13 @@
+diff --git a/python/Makefile.am b/python/Makefile.am
+index 64d3892..365dc8e 100644
+--- a/python/Makefile.am
++++ b/python/Makefile.am
+@@ -14,7 +14,7 @@ all-local:
+ 	CFLAGS="${CFLAGS} -fno-strict-aliasing" @PYTHONBINARY@ setup.py build --build-base py$(PYTHONREV)
+ 
+ install-exec-local:
+-	CFLAGS="${CFLAGS} -fno-strict-aliasing" @PYTHONBINARY@ setup.py build --build-base py$(PYTHONREV) install --root ${DESTDIR} --prefix=${prefix} --install-lib=$(pythonsitedir)
++	CFLAGS="${CFLAGS} -fno-strict-aliasing" @PYTHONBINARY@ setup.py build --build-base py$(PYTHONREV) install --root ${py} --install-lib=$(pythonsitedir)
+ 
+ clean-local:
+ 	rm -rf py$(PYTHONREV)
