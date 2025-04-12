@@ -1019,6 +1019,10 @@ stdenv.mkDerivation (
   }
   // lib.optionalAttrs withCudaLLVM {
     # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
-    hardeningDisable = [ "zerocallusedregs" ];
+    hardeningDisable = [
+      "pacret"
+      "shadowstack"
+      "zerocallusedregs"
+    ];
   }
 )
