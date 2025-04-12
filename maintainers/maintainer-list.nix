@@ -7173,6 +7173,12 @@
     githubId = 28287;
     name = "Jon Roberts";
   };
+  encode42 = {
+    name = "encode42";
+    email = "me@encode42.dev";
+    github = "encode42";
+    githubId = 34699884;
+  };
   enderger = {
     email = "endergeryt@gmail.com";
     github = "enderger";
