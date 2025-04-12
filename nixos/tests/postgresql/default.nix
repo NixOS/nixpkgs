@@ -38,6 +38,5 @@ in
   anonymizer = importWithArgs ./anonymizer.nix;
   pgjwt = importWithArgs ./pgjwt.nix;
   pgvecto-rs = importWithArgs ./pgvecto-rs.nix;
-  tsja = importWithArgs ./tsja.nix;
   wal2json = importWithArgs ./wal2json.nix;
 }
