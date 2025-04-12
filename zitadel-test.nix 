@@ -1,0 +1,22 @@
+let
+  nixpkgs = import ./. { system = "x86_64-linux"; };
+  evalConfig = import (nixpkgs.path + "/nixos/lib/eval-config.nix");
+in
+evalConfig {
+  system = "x86_64-linux";
+  modules = [
+    ./nixos/modules/services/security/zitadel.nix
+    {
+      services.zitadel = {
+        enable = true;
+        databaseName = "zitadel";
+        databaseUser = "zitadel";
+        databasePassword = "zitadel";
+      };
+      services.postgresql.enable = true;
+      networking.firewall.allowedTCPPorts = [ 8080 ];
+      system.stateVersion = "25.05";
+    }
+  ];
+}
+
