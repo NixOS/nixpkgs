@@ -7,6 +7,7 @@
   openssl,
   postgresql,
   postgresqlBuildExtension,
+  postgresqlTestExtension,
   stdenv,
 
   enableUnfree ? true,
@@ -50,7 +51,50 @@ postgresqlBuildExtension (finalAttrs: {
     done
   '';
 
-  passthru.tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    withPackages = [ "timescaledb_toolkit" ];
+    postgresqlExtraSettings = ''
+      shared_preload_libraries='timescaledb,timescaledb_toolkit'
+    '';
+    sql = ''
+      CREATE EXTENSION timescaledb;
+      CREATE EXTENSION timescaledb_toolkit;
+
+      CREATE TABLE sth (
+        time TIMESTAMPTZ NOT NULL,
+        value DOUBLE PRECISION
+      );
+
+      SELECT create_hypertable('sth', 'time');
+
+      INSERT INTO sth (time, value) VALUES
+      ('2003-04-12 04:05:06 America/New_York', 1.0),
+      ('2003-04-12 04:05:07 America/New_York', 2.0),
+      ('2003-04-12 04:05:08 America/New_York', 3.0),
+      ('2003-04-12 04:05:09 America/New_York', 4.0),
+      ('2003-04-12 04:05:10 America/New_York', 5.0)
+      ;
+
+      WITH t AS (
+        SELECT
+          time_bucket('1 day'::interval, time) AS dt,
+          stats_agg(value) AS stats
+        FROM sth
+        GROUP BY time_bucket('1 day'::interval, time)
+      )
+      SELECT
+        average(stats)
+      FROM t;
+    '';
+    asserts = [
+      {
+        query = "SELECT count(*) FROM sth";
+        expected = "5";
+        description = "hypertable can be queried successfully.";
+      }
+    ];
+  };
 
   meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
