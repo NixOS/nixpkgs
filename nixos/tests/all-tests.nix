@@ -420,6 +420,7 @@ in
   ecryptfs = runTest ./ecryptfs.nix;
   fscrypt = runTest ./fscrypt.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
+  easytier = handleTest ./easytier.nix { };
   eintopf = runTest ./eintopf.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
