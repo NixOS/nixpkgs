@@ -5240,6 +5240,12 @@
     github = "d4rkstar";
     githubId = 4957015;
   };
+  dabao1955 = {
+    email = "dabao1955@163.com";
+    github = "dabao1955";
+    githubId = 79307765;
+    name = "Hang Li";
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
