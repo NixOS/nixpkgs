@@ -15,13 +15,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-nvaq+9evQSj/ahK68nj8FckG4nA1gs2DqcZxFEFH1iU=";
+    hash = "sha256-On67RM3u1/XhdwgtAHve1GAJwKGCnk8IOCjNZcyDfyg=";
   };
 
   patches = [
