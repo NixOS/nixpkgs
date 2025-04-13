@@ -3,6 +3,7 @@
   lib,
   fetchzip,
   fetchurl,
+  fetchFromGitHub,
   libarchive,
 }:
 
@@ -23,15 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://www.moddb.com/mods/high-quality-quake
   # TODO check if that file needs renaming to something that starts with z_* so it actually overrides anything in pak0.pk3
   extra-pack-resolution = fetchurl {
-    # url = "https://github.com/diegoulloao/ioquake3-mac-install/raw/master/extras/extra-pack-resolution.pk3";
     url = "https://web.archive.org/web/20250310093216/https://fmt3.dl.dbolical.com/dl/2018/11/06/q3a-hqq-v37.zip?st=0XzNnNvOYWrJAi_6AB3mKw==&e=1741602736";
     hash = "sha256-0nAXkrf4ahlct75TgO18PjuT9IkH8fpDhtTflJfPpPM=";
-  };
-
-  # backport of sound files from quake 3 live
-  quake3-live-sounds = fetchurl {
-    url = "https://github.com/diegoulloao/ioquake3-mac-install/blob/3a767ff0131742ec517fd5f13ddca16dee91927d/extras/quake3-live-sounds.pk3";
-    hash = "sha256-kdHP6lNMuq5+OfWQuxgeVPijYEm8JcZveAzZDoYCrc4=";
   };
   # https://www.moddb.com/mods/cz45modbundle/addons/cz45-q3a-weapon-model-remake-v10
   # https://www.moddb.com/downloads/mirror/255463/130/9de70b5dc7ebb1baa44acf91458b04f9/
@@ -42,16 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://web.archive.org/web/20250310101737/https://fmt1.dl.dbolical.com/dl/2023/08/13/czq3hdweaprem_v10.zip?st=XBoRCpVmvTYtc60xxi36VQ==&e=1741605457";
     hash = "sha256-pL7MsEFsKJV+a+z45Ns16SPdQB3i2D6T3x7tBqWtm1s=";
   };
-  zpack-weapons = fetchurl {
-    url = "https://github.com/diegoulloao/ioquake3-mac-install/blob/3a767ff0131742ec517fd5f13ddca16dee91927d/extras/zpack-weapons.pk3";
-    hash = "sha256-RG9pgJc8BHB9sfkmMQI3bEzAf+xO0HPD2bxJ9CxRtek";
+
+  # I would like to find the original sources of the quake3-live-sounds.pk3 and zpack-weapons.pk3 files
+  # Any hints are welcome
+  ioquake3_mac = fetchFromGitHub {
+    owner = "diegoulloao";
+    repo = "ioquake3-mac-install";
+    rev = "3a767ff0131742ec517fd5f13ddca16dee91927d";
+    hash = "sha256-uY3pybCnQ7lZatP3s9AiT779/4xj8N3R4qx8V6991aM=";
   };
 
   buildCommand = ''
     mkdir -p $out/baseq3
     install -Dm444 $src/xcsv_bq3hi-res.pk3 $out/baseq3/xcsv_bq3hi-res.pk3
     install -Dm444 ${finalAttrs.extra-pack-resolution} $out/baseq3/pak9hqq37test20181106.pk3
-    install -Dm444 ${finalAttrs.quake3-live-sounds} $out/baseq3/quake3-live-sounds.pk3
 
     bsdunzip ${finalAttrs.hd-weapons}
     install -Dm444 zzczhdwr1.pk3 $out/baseq3/zzczhdwr1.pk3
@@ -59,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     # install -Dm444 zzczhdwr2.pk3 $out/baseq3/zzczhdwr2.pk3
     # install -Dm444 zzczhdwr3.pk3 $out/baseq3/zzczhdwr3.pk3
 
-    install -Dm444 ${finalAttrs.zpack-weapons} $out/baseq3/zpack-weapons.pk3
+    install -Dm444 ${finalAttrs.ioquake3_mac}/extras/quake3-live-sounds.pk3 $out/baseq3/quake3-live-sounds.pk3
+    install -Dm444 ${finalAttrs.ioquake3_mac}/extras/zpack-weapons.pk3 $out/baseq3/zpack-weapons.pk3
   '';
 
   preferLocalBuild = true;
