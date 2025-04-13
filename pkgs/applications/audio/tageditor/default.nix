@@ -45,12 +45,18 @@ stdenv.mkDerivation rec {
     tagparser
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/*.app $out/Applications
+    ln -s $out/Applications/tageditor.app/Contents/MacOS/tageditor $out/bin/tageditor
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/Martchus/tageditor";
     description = "Tag editor with Qt GUI and command-line interface supporting MP4/M4A/AAC (iTunes), ID3, Vorbis, Opus, FLAC and Matroska";
     license = licenses.gpl2;
     maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "tageditor";
   };
 }
