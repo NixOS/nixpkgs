@@ -6113,6 +6113,8 @@ self: super: with self; {
 
   gotify = callPackage ../development/python-modules/gotify { };
 
+  gotrue = callPackage ../development/python-modules/gotrue { };
+
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
