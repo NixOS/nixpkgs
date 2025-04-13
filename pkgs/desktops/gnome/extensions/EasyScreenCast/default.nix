@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.extensionUuid = "EasyScreenCast@iacopodeenosee.gmail.com";
 
-  meta = with lib; {
+  meta = {
     description = "Simplifies the use of the video recording function integrated in gnome shell";
     homepage = "https://github.com/EasyScreenCast/EasyScreenCast";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux;
   };
 })
