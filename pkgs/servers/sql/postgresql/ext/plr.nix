@@ -8,9 +8,11 @@
   stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "plr";
-  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL" src.rev)}";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "REL" finalAttrs.src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "postgres-plr";
@@ -27,9 +29,9 @@ postgresqlBuildExtension rec {
   meta = {
     description = "PL/R - R Procedural Language for PostgreSQL";
     homepage = "https://github.com/postgres-plr/plr";
-    changelog = "https://github.com/postgres-plr/plr/blob/${src.rev}/changelog.md";
+    changelog = "https://github.com/postgres-plr/plr/blob/${finalAttrs.src.rev}/changelog.md";
     maintainers = with lib.maintainers; [ qoelet ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.gpl2Only;
   };
-}
+})
