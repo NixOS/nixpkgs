@@ -949,10 +949,6 @@ with pkgs;
 
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
 
-  mitm-cache = callPackage ../build-support/mitm-cache {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
@@ -1026,8 +1022,6 @@ with pkgs;
 
   _7zz = darwin.apple_sdk_11_0.callPackage ../tools/archivers/7zz { };
   _7zz-rar = _7zz.override { enableUnfree = true; };
-
-  acme-dns = callPackage ../servers/dns/acme-dns/default.nix { };
 
   acquire = with python3Packages; toPythonApplication acquire;
 
@@ -2541,7 +2535,9 @@ with pkgs;
 
   klipper = callPackage ../servers/klipper { };
 
-  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
+  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix {
+    gcc-arm-embedded = gcc-arm-embedded-13;
+  };
 
   klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
 
@@ -6369,7 +6365,7 @@ with pkgs;
     inherit (llvmPackages_15) llvm;
   };
 
-  gcc-arm-embedded = gcc-arm-embedded-14;
+  gcc-arm-embedded = gcc-arm-embedded-12;
 
   # It would be better to match the default gcc so that there are no linking errors
   # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
@@ -7589,6 +7585,12 @@ with pkgs;
     bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
+  python39Full = python39.override {
+    self = python39Full;
+    pythonAttr = "python39Full";
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
+    x11Support = true;
+  };
   python310Full = python310.override {
     self = python310Full;
     pythonAttr = "python310Full";
@@ -7633,6 +7635,7 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
     python27
+    python39
     python310
     python311
     python312
@@ -7648,6 +7651,7 @@ with pkgs;
 
   # Python package sets.
   python27Packages = python27.pkgs;
+  python39Packages = python39.pkgs;
   python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
   python312Packages = recurseIntoAttrs python312.pkgs;
@@ -17684,7 +17688,7 @@ with pkgs;
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
-  stuntrally = callPackage ../games/stuntrally { boost = boost183; };
+  stuntrally = callPackage ../games/stuntrally { };
 
   superTuxKart = darwin.apple_sdk_11_0.callPackage ../games/super-tux-kart {
     inherit (darwin.apple_sdk_11_0.frameworks)
