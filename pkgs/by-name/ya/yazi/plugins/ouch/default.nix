@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "A Yazi plugin to preview archives.";
+    description = "Yazi plugin to preview archives";
     homepage = "https://github.com/ndtoan96/ouch.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
