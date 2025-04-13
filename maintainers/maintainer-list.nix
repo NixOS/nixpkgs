@@ -21234,6 +21234,12 @@
     name = "Robert Helgesson";
     keys = [ { fingerprint = "36CA CF52 D098 CC0E 78FB  0CB1 3573 356C 25C4 24D4"; } ];
   };
+  ryex = {
+    email = "powers.e.rachel@gmail.com";
+    github = "Ryex";
+    githubId = 508861;
+    name = "Rachel Powers";
+  };
   ryneeverett = {
     email = "ryneeverett@gmail.com";
     github = "ryneeverett";
