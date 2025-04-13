@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "time-travel.yazi";
-  version = "0-unstable-2025-03-02";
+  version = "0-unstable-2025-02-14";
 
   src = fetchFromGitHub {
     owner = "iynaix";
