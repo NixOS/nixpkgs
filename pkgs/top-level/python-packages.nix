@@ -2669,6 +2669,8 @@ self: super: with self; {
 
   colcon-notification = callPackage ../development/python-modules/colcon-notification { };
 
+  colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
