@@ -149,7 +149,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       CUDA_TOOLKIT_ROOT_DIR = lib.getDev cudaPackages.cuda_cudart;
     });
 
-  appendRunpaths = [
+  appendRunpaths = lib.optionals cudaSupport [
     (lib.makeLibraryPath [
       cudaPackages.libcublas
       cudaPackages.libcurand
