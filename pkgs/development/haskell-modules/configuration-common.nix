@@ -3001,6 +3001,10 @@ self: super:
     dontCheck
   ];
 
+  copilot-theorem = lib.pipe super.copilot-theorem [
+    (addTestToolDepends (with pkgs; [ z3 ]))
+  ];
+
   # 2025-04-09: jailbreak to allow mtl >= 2.3, template-haskell >= 2.17, text >= 1.3
   egison-pattern-src-th-mode =
     assert super.egison-pattern-src-th-mode.version == "0.2.1.2";
