@@ -2541,9 +2541,7 @@ with pkgs;
 
   klipper = callPackage ../servers/klipper { };
 
-  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix {
-    gcc-arm-embedded = gcc-arm-embedded-13;
-  };
+  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
   klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
 
@@ -6371,7 +6369,7 @@ with pkgs;
     inherit (llvmPackages_15) llvm;
   };
 
-  gcc-arm-embedded = gcc-arm-embedded-12;
+  gcc-arm-embedded = gcc-arm-embedded-14;
 
   # It would be better to match the default gcc so that there are no linking errors
   # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
@@ -7591,12 +7589,6 @@ with pkgs;
     bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
-  python39Full = python39.override {
-    self = python39Full;
-    pythonAttr = "python39Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
   python310Full = python310.override {
     self = python310Full;
     pythonAttr = "python310Full";
@@ -7641,7 +7633,6 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
     python27
-    python39
     python310
     python311
     python312
@@ -7657,7 +7648,6 @@ with pkgs;
 
   # Python package sets.
   python27Packages = python27.pkgs;
-  python39Packages = python39.pkgs;
   python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
   python312Packages = recurseIntoAttrs python312.pkgs;
