@@ -3057,6 +3057,11 @@ self: super:
   hw-bits =
     assert super.hw-bits.version == "0.7.2.2";
     doJailbreak super.hw-bits;
+
+  # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
+  crucible =
+    assert super.crucible.version == "0.7.2";
+    doJailbreak super.crucible;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
