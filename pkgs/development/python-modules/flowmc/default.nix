@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "flowmc";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
     tag = "flowMC-${version}";
-    hash = "sha256-Qsh5nvLdJeIx3EHACdhRE4GDdI31MHYvUDHephMs+2Y=";
+    hash = "sha256-M0FrIe7q0YI6f+IwQeMsZKahw9wcQd42hf/dmXJp2Fk=";
   };
 
   build-system = [ hatchling ];
@@ -48,7 +48,6 @@ buildPythonPackage rec {
 
   dependencies = [
     chex
-    coveralls
     equinox
     jax
     jaxtyping
