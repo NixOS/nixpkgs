@@ -13,6 +13,8 @@
   openssl,
   xorg,
   libGL,
+  libxkbcommon,
+  wayland,
   withGui ? false, # build GUI version
 }:
 
@@ -59,6 +61,8 @@ rustPlatform.buildRustPackage rec {
       xorg.libXi
       xorg.libxcb
       libGL
+      libxkbcommon
+      wayland
     ];
 
   buildNoDefaultFeatures = true;
