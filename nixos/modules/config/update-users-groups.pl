@@ -362,6 +362,14 @@ foreach my $u (values %usersOut) {
 
     if($u->{autoSubUidGidRange}) {
         my $subordinate = allocSubUid($name);
+        if (defined $subUidMap->{$name} && $subUidMap->{$name} != $subordinate) {
+          print STDERR "warning: The subuids for '$name' changed, as they coincided with the subuids of a different user (see /etc/subuid). "
+            . "The range now starts with $subordinate instead of $subUidMap->{$name}. "
+            . "If the subuids were used (e.g. with rootless container managers like podman), please change the ownership of affected files accordingly. "
+            . "Alternatively, to keep the old overlapping ranges, add this to the system configuration: "
+            . "users.users.$name.subUidRanges = [{startUid = $subUidMap->{$name}; count = 65536;}]; "
+            . "users.users.$name.subGidRanges = [{startGid = $subUidMap->{$name}; count = 65536;}];\n";
+        }
         $subUidMap->{$name} = $subordinate;
         my $value = join(":", ($name, $subordinate, 65536));
         push @subUids, $value;
