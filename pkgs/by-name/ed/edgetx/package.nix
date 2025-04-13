@@ -1,19 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   gcc-arm-embedded,
   python3Packages,
-  qtbase,
-  qtmultimedia,
-  qttools,
+  libsForQt5,
   SDL,
   gtest,
   dfu-util,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "edgetx";
   version = "2.7.2";
 
@@ -29,12 +27,13 @@ mkDerivation rec {
     cmake
     gcc-arm-embedded
     python3Packages.pillow
-    qttools
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
     SDL
   ];
 
