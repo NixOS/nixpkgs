@@ -3,42 +3,44 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
+  gotrue,
+  postgrest,
+  realtime,
+  storage3,
+  supafunc,
   httpx,
-  h2,
-  pydantic,
-  pyjwt,
-  pytest-mock,
 }:
 
 buildPythonPackage rec {
-  pname = "gotrue";
-  version = "2.12.0";
+  pname = "supabase";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ueoWTuUpZNg2TFUM3hbdDpV2JBpM/+qlLsozn2HR0Us=";
+    hash = "sha256-mPOBAVgBLU7A4wg/LlUV9eELMr1x59RYZiFA6WPB0WQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
+    postgrest
+    realtime
+    gotrue
     httpx
-    h2
-    pydantic
-    pyjwt
-    pytest-mock
+    storage3
+    supafunc
   ];
 
-  pythonImportsCheck = [ "gotrue" ];
+  pythonImportsCheck = [ "supabase" ];
 
   # test aren't in pypi package
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/supabase/auth-py";
+    homepage = "https://github.com/supabase-community/supabase-py";
     license = lib.licenses.mit;
-    description = "Python Client Library for Supabase Auth";
+    description = "Supabas client for Python";
     maintainers = with lib.maintainers; [ siegema ];
   };
 }

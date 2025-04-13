@@ -26,17 +26,15 @@ buildPythonPackage rec {
     deprecation
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   pythonImportCheck = [ "storage3" ];
 
-  # tests aren't in pypi package
-  doCheck = false;
-
-  meta = with lib; {
-    homepage = "https://github.com/supabase/storage-py.git";
-    license = licenses.mit;
+  # tests aren't in pypi package doCheck = false;
+  meta = {
+    homepage = "https://github.com/supabase/storage-py";
+    license = lib.licenses.mit;
     description = "Supabase Storage client for Python.";
-    maintainers = with maintainers; [ siegema ];
+    maintainers = with lib.maintainers; [ siegema ];
   };
 }

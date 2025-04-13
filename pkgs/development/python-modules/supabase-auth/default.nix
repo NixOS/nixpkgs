@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, httpx
-, h2
-, pydantic
-, pyjwt
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  httpx,
+  h2,
+  pydantic,
+  pyjwt,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -16,12 +17,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-b5nb8yS8WHbT7nAhNe5O9iLtfwjI61HfHZzmleqfhGA=";
+    hash = "sha256-b5nb8yS8WHbT7nAhNe5O9iLtfwjI61HfHZzmleqfhGA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     h2
     pydantic
@@ -34,10 +35,10 @@ buildPythonPackage rec {
   # test aren't in pypi package
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/supabase/auth-py.git";
-    license = licenses.mit;
+  meta = {
+    homepage = "https://github.com/supabase/auth-py";
+    license = lib.licenses.mit;
     description = "Python Client Library for Supabase Auth";
-    maintainers = with maintainers; [ siegema ];
+    maintainers = with lib.maintainers; [ siegema ];
   };
 }

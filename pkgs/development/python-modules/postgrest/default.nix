@@ -1,12 +1,13 @@
-{lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, httpx
-, h2
-, deprecation
-, pydantic
-, strenum
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  httpx,
+  h2,
+  deprecation,
+  pydantic,
+  strenum,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-87s+jEYCd1x1yESjH1ZfXz3VhN9NNtaD8LZ9Aahr4yI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     h2
     deprecation
@@ -34,10 +35,10 @@ buildPythonPackage rec {
   # tests aren't in the pypi package
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/supabase/postgrest-py.git";
+  meta = {
+    homepage = "https://github.com/supabase/postgrest-py";
     description = "PostgREST client for Python. This library provides an ORM interface to PostgREST.";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siegema ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siegema ];
   };
 }
