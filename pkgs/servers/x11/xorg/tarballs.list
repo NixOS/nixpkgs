@@ -198,7 +198,6 @@ mirror://xorg/individual/lib/libXxf86dga-1.1.6.tar.xz
 mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2
 mirror://xorg/individual/lib/libXxf86vm-1.1.6.tar.xz
 mirror://xorg/individual/lib/xcb-util-cursor-0.1.5.tar.xz
-mirror://xorg/individual/proto/xorgproto-2024.1.tar.xz
 mirror://xorg/individual/util/bdftopcf-1.1.2.tar.xz
 mirror://xorg/individual/util/imake-1.0.10.tar.xz
 mirror://xorg/individual/util/lndir-1.0.5.tar.xz
