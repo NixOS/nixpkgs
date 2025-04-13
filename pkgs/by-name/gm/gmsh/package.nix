@@ -15,6 +15,7 @@
   libGLU,
   xorg,
   opencascade-occt,
+  llvmPackages,
   python ? null,
   enablePython ? false,
 }:
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
       xorg.libSM
       xorg.libICE
     ]
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
     ++ lib.optional enablePython python;
 
   enableParallelBuilding = true;
