@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, python-dateutil
-, typing-extensions
-, websockets
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  python-dateutil,
+  typing-extensions,
+  websockets,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
@@ -15,32 +16,29 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jndhbYxyHw8X6golb2tc1tYmsOtmswVUTV8zDDptmkw=";
+    hash = "sha256-jndhbYxyHw8X6golb2tc1tYmsOtmswVUTV8zDDptmkw=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     typing-extensions
     websockets
     aiohttp
   ];
-  
+
+  pythonRelaxDeps = [ "websockets" ];
+
   pythonImportsCheck = [ "realtime" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-    --replace-quiet 'websockets = ">=11,<15"' 'websockets = "*"' 
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   # tests aren't in the pypi package
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/supabase/realtime-py.git";
-    license = licenses.mit;
+  meta = {
+    homepage = "https://github.com/supabase/realtime-py";
+    license = lib.licenses.mit;
     description = "Python Realtime Client for Supabase";
-    maintainers = with maintainers; [ siegema ];
+    maintainers = with lib.maintainers; [ siegema ];
   };
 }
