@@ -100,11 +100,16 @@ let
       {
         nativeBuildInputs = [ debian-devscripts ];
         buildInputs = [ testBin ];
-        meta.platforms =
-          if ignoreStackClashProtection then
-            lib.platforms.linux # ELF-reliant
-          else
-            [ "x86_64-linux" ]; # stackclashprotection test looks for x86-specific instructions
+        meta = {
+          platforms =
+            if ignoreStackClashProtection then
+              lib.platforms.linux # ELF-reliant
+            else
+              [ "x86_64-linux" ]; # stackclashprotection test looks for x86-specific instructions
+          # musl implementation of fortify undetectable by this means even if present,
+          # static similarly
+          broken = (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isStatic) && !ignoreFortify;
+        };
       }
       (
         ''
@@ -259,8 +264,7 @@ nameDrvAfterAttrName (
         }
     );
 
-    # musl implementation undetectable by this means even if present
-    fortifyExplicitEnabled = brokenIf stdenv.hostPlatform.isMusl (
+    fortifyExplicitEnabled = (
       checkTestBin
         (f2exampleWithStdEnv stdenv {
           hardeningEnable = [ "fortify" ];
@@ -288,17 +292,15 @@ nameDrvAfterAttrName (
           )
         );
 
-    fortify3ExplicitEnabled =
-      brokenIf (stdenv.hostPlatform.isMusl || !stdenv.cc.isGNU || lib.versionOlder stdenv.cc.version "12")
-        (
-          checkTestBin
-            (f3exampleWithStdEnv stdenv {
-              hardeningEnable = [ "fortify3" ];
-            })
-            {
-              ignoreFortify = false;
-            }
-        );
+    fortify3ExplicitEnabled = brokenIf (!stdenv.cc.isGNU || lib.versionOlder stdenv.cc.version "12") (
+      checkTestBin
+        (f3exampleWithStdEnv stdenv {
+          hardeningEnable = [ "fortify3" ];
+        })
+        {
+          ignoreFortify = false;
+        }
+    );
 
     # musl implementation is effectively FORTIFY_SOURCE=1-only
     fortify3ExplicitEnabledExecTest =
@@ -513,16 +515,14 @@ nameDrvAfterAttrName (
           expectFailure = true;
         };
 
-    # musl implementation undetectable by this means even if present
-    fortify3StdenvUnsuppDoesntUnsuppFortify1 = brokenIf stdenv.hostPlatform.isMusl (
+    fortify3StdenvUnsuppDoesntUnsuppFortify1 =
       checkTestBin
         (f1exampleWithStdEnv (stdenvUnsupport [ "fortify3" ]) {
           hardeningEnable = [ "fortify" ];
         })
         {
           ignoreFortify = false;
-        }
-    );
+        };
 
     fortify3StdenvUnsuppDoesntUnsuppFortify1ExecTest = fortifyExecTest (
       f1exampleWithStdEnv (stdenvUnsupport [ "fortify3" ]) {
@@ -590,8 +590,7 @@ nameDrvAfterAttrName (
           expectFailure = true;
         };
 
-    # musl implementation undetectable by this means even if present
-    fortify3EnabledEnvEnablesFortify1 = brokenIf stdenv.hostPlatform.isMusl (
+    fortify3EnabledEnvEnablesFortify1 =
       checkTestBin
         (f1exampleWithStdEnv stdenv {
           hardeningDisable = [
@@ -604,8 +603,7 @@ nameDrvAfterAttrName (
         })
         {
           ignoreFortify = false;
-        }
-    );
+        };
 
     fortify3EnabledEnvEnablesFortify1ExecTest = fortifyExecTest (
       f1exampleWithStdEnv stdenv {
@@ -651,8 +649,7 @@ nameDrvAfterAttrName (
     # current implementation prevents the command-line from disabling
     # fortify if cc-wrapper is enabling it.
 
-    # undetectable by this means on static even if present
-    fortify1ExplicitEnabledCmdlineDisabled = brokenIf stdenv.hostPlatform.isStatic (
+    fortify1ExplicitEnabledCmdlineDisabled =
       checkTestBin
         (f1exampleWithStdEnv stdenv {
           hardeningEnable = [ "fortify" ];
@@ -663,27 +660,22 @@ nameDrvAfterAttrName (
         {
           ignoreFortify = false;
           expectFailure = false;
-        }
-    );
+        };
 
     # current implementation doesn't force-disable fortify if
     # command-line enables it even if we use hardeningDisable.
 
-    # musl implementation undetectable by this means even if present
     fortify1ExplicitDisabledCmdlineEnabled =
-      brokenIf (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isStatic)
-        (
-          checkTestBin
-            (f1exampleWithStdEnv stdenv {
-              hardeningDisable = [ "fortify" ];
-              postConfigure = ''
-                export TEST_EXTRA_FLAGS='-D_FORTIFY_SOURCE=1'
-              '';
-            })
-            {
-              ignoreFortify = false;
-            }
-        );
+      checkTestBin
+        (f1exampleWithStdEnv stdenv {
+          hardeningDisable = [ "fortify" ];
+          postConfigure = ''
+            export TEST_EXTRA_FLAGS='-D_FORTIFY_SOURCE=1'
+          '';
+        })
+        {
+          ignoreFortify = false;
+        };
 
     fortify1ExplicitDisabledCmdlineEnabledExecTest = fortifyExecTest (
       f1exampleWithStdEnv stdenv {
