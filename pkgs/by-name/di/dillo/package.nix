@@ -2,7 +2,7 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
-  fltk,
+  fltk13,
   giflib,
   libXcursor,
   libXi,
@@ -36,19 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dillo-browser";
     repo = "dillo";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    fltk
+    fltk13
     which
   ];
 
   buildInputs = [
-    fltk
+    fltk13
     giflib
     libXcursor
     libXi
