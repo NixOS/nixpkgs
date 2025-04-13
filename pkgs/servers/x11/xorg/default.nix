@@ -17,6 +17,7 @@
   xorg-cf-files,
   xorg-docs,
   xorg-sgml-doctools,
+  xtrans,
 }:
 
 self: with self; {
@@ -29,6 +30,7 @@ self: with self; {
     makedepend
     pixman
     xbitmaps
+    xtrans
     ;
   fontalias = font-alias;
   fontutil = font-util;
@@ -8098,37 +8100,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xtrans = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xtrans";
-      version = "1.6.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/xtrans-1.6.0.tar.xz";
-        sha256 = "14ly6m6ww8rl45fdmlf58m0l1ihfji936ncx7lbiligjdcbfmbzs";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xtrans" ];
         platforms = lib.platforms.unix;
       };
     })
