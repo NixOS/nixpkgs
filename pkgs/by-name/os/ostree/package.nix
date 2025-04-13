@@ -42,6 +42,7 @@
   systemd,
   replaceVars,
   openssl,
+  ostree-full,
 }:
 
 let
@@ -171,6 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
+      inherit ostree-full;
     };
   };
 
