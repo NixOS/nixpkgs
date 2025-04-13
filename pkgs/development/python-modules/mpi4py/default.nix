@@ -5,7 +5,6 @@
   cython,
   setuptools,
   mpi,
-  pytestCheckHook,
   mpiCheckPhaseHook,
 }:
 
@@ -37,9 +36,29 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mpi4py" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mpiCheckPhaseHook
   ];
+
+  doCheck = true;
+
+  # follow the upstream check process in ci-test.yml
+  checkPhase = ''
+    runHook preCheck
+
+    for nproc in {1..2}; do
+      echo "Testing mpi4py (np=$nproc)"
+      mpiexec -n $nproc python test/main.py
+      echo "Testing mpi4py.futures (np=$nproc)"
+      mpiexec -n $nproc python demo/futures/test_futures.py
+    done
+
+    echo "Testing mpi4py.run"
+    python demo/test-run/test_run.py
+    echo "Testing init-fini"
+    bash demo/init-fini/run.sh
+
+    runHook postCheck
+  '';
 
   passthru = {
     inherit mpi;
