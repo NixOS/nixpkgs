@@ -9632,25 +9632,6 @@ with pkgs;
   gst_all_1 = recurseIntoAttrs (
     callPackage ../development/libraries/gstreamer {
       callPackage = newScope gst_all_1;
-      stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "12.3" else stdenv;
-      inherit (darwin.apple_sdk_12_3.frameworks)
-        AudioToolbox
-        AVFoundation
-        Cocoa
-        CoreFoundation
-        CoreMedia
-        CoreServices
-        CoreVideo
-        DiskArbitration
-        Foundation
-        IOKit
-        MediaToolbox
-        OpenGL
-        Security
-        SystemConfiguration
-        VideoToolbox
-        ;
-      inherit (darwin.apple_sdk_12_3.libs) xpc;
     }
   );
 
