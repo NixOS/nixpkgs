@@ -13,6 +13,7 @@
   xdotool,
   xorg,
   yad,
+  util-linux,
   writeShellApplication,
 }:
 
@@ -61,6 +62,7 @@ stdenvNoCC.mkDerivation {
           unixtools.xxd
           unzip
           usbutils
+          util-linux
           wget
           xdotool
           xorg.xprop
