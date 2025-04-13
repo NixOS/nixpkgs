@@ -122,13 +122,6 @@ self: super:
     };
   });
 
-  bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-    meta = attrs.meta // {
-      mainProgram = "bdftopcf";
-    };
-  });
-
   bitmap = addMainProgram super.bitmap { };
 
   editres = super.editres.overrideAttrs (attrs: {
