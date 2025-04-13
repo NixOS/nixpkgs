@@ -346,22 +346,13 @@ in {
         message = "services.restic.backups.<name>: exactly one of repository or repositoryFile should be set";
       }
       {
-        assertion =
-          lib.all (
-            backup:
-              with backup;
-                lib.count [
-                  (path
-                    != null
-                    || path != []
-                    || dynamicFilesFrom != null
-                    || dynamicFilesFrom != [])
-                  (command != [])
-                ]
-                <= 1
-          )
+        assertion = let
+          fileBackup = b: (b.paths != null && b.paths != []) || (b.dynamicFilesFrom != null && b.dynamicFilesFrom != []);
+          commandBackup = b: (b.command != []);
+        in
+          !lib.any (backup: (fileBackup backup && commandBackup backup))
           (lib.attrValues backups);
-        message = "services.restic.backups.<name>: command is mutually exclusive with path and dynamicFilesFrom";
+        message = "services.restic.backups.<name>: command is mutually exclusive with paths and dynamicFilesFrom";
       }
     ];
     systemd.services =
@@ -445,13 +436,14 @@ in {
                       } --files-from=${filesFromTmpFile}"
                     ])
                     ++ (lib.optionals commandBackup [
-                      "${resticCmd} backup
-                        ${lib.concatStringsSep " " (
-                        backup.extraBackupArgs
-                        ++ excludeFlags
-                        ++ [" --stdin-from-command=true --"]
-                        ++ backup.command
-                      )}"
+                      "${resticCmd} backup ${
+                        lib.concatStringsSep " " (
+                          backup.extraBackupArgs
+                          ++ excludeFlags
+                          ++ [" --stdin-from-command=true --"]
+                          ++ backup.command
+                        )
+                      }"
                     ])
                     ++ pruneCmd
                     ++ checkCmd;
@@ -486,7 +478,7 @@ in {
                 ${lib.optionalString (backup.backupCleanupCommand != null) ''
                   ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
                 ''}
-                ${lib.optionalString doBackup ''
+                ${lib.optionalString fileBackup ''
                   rm ${filesFromTmpFile}
                 ''}
               '';
