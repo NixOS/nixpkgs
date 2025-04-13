@@ -3052,6 +3052,11 @@ self: super:
   twain =
     assert super.twain.version == "2.2.0.1";
     doJailbreak super.twain;
+
+  # 2025-04-13: jailbreak to allow hedgehog >= 1.5
+  hw-bits =
+    assert super.hw-bits.version == "0.7.2.2";
+    doJailbreak super.hw-bits;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
