@@ -62,6 +62,13 @@ in
   };
   config = lib.mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = cfg.settings ? initial_session.command || cfg.settings ? default_session.command;
+        message = "No session command defined for greetd.";
+      }
+    ];
+
     services.greetd.settings.terminal.vt = lib.mkDefault cfg.vt;
     services.greetd.settings.default_session.user = lib.mkDefault "greeter";
 
