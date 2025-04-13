@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "expandvars";
-  version = "0.12.0";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fRrfpVcoz0tdgS7OPQh3A/rqlT4MChp4QV3p31Ak2EQ=";
+    hash = "sha256-8EBwuCYCZBhfgRQs2F5d+c7vcinoNsWEQwLEzPoAww0=";
   };
 
   nativeBuildInputs = [ hatchling ];

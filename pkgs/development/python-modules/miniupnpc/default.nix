@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "miniupnpc";
-  version = "2.3.0";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AvnUqth2igy4xGvDC+C6jOwUi2005NDvmfrbec+JrzE=";
+    hash = "sha256-XCHRKwUEm1Amoth0ekzYCwe5rmG4mLXcZiSXzHsbmTU=";
   };
 
   patches = [
