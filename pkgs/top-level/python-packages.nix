@@ -13817,6 +13817,8 @@ self: super: with self; {
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
+  python-coinmarketcap = callPackage ../development/python-modules/python-coinmarketcap { };
+
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
