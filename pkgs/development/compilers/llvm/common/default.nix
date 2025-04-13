@@ -231,6 +231,15 @@ let
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
+      # Darwin uses the system libc++ by default. It is set up as its own clang definition so that `libcxxClang`
+      # continues to use the libc++ from LLVM.
+      systemLibcxxClang = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = darwin.libcxx;
+        extraPackages = [ targetLlvmLibraries.compiler-rt ];
+        extraBuildCommands = mkExtraBuildCommands cc;
+      };
+
       lld = callPackage ./lld {
       };
 
