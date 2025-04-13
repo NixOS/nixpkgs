@@ -96,6 +96,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ AngryAnt ];
-    mainProgram = "rusty-psn";
+    mainProgram = if withGui then "rusty-psn-gui" else "rusty-psn";
   };
 }
