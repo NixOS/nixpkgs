@@ -10147,6 +10147,8 @@ self: super: with self; {
 
   onelogin = callPackage ../development/python-modules/onelogin { };
 
+  onelogin_2 = callPackage ../development/python-modules/onelogin/2.nix { };
+
   onetimepad = callPackage ../development/python-modules/onetimepad { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
