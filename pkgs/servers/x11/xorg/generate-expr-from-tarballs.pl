@@ -279,6 +279,7 @@ print OUT <<EOF;
   font-alias,
   font-util,
   gccmakedep,
+  imake,
   libpciaccess,
   libpthread-stubs,
   libxcvt,
@@ -302,6 +303,7 @@ self: with self; {
   inherit
     bdftopcf
     gccmakedep
+    imake
     libpciaccess
     libxcvt
     lndir
