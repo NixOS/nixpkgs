@@ -15,6 +15,7 @@
   kdePackages,
   kmod,
   libnotify,
+  librsvg,
   libxml2,
   libxslt,
   networkmanager,
@@ -108,6 +109,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [
       gtk3
       libnotify
+      librsvg
       qt6.qtbase
     ];
 

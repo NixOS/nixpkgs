@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libplctag";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "libplctag";
     repo = "libplctag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HUog7Tlm4jiqYXk22dziumCA/68c35+OwnTNYu9mV5E=";
+    hash = "sha256-pk+N78MITI8G+LHyc6fXhqWeLyCOdUEkPePM2RtpMCE=";
   };
 
   env = {
