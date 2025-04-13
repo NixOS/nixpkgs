@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Yazi plugin that uses duckdb to preview data files.";
+    description = "Yazi plugin that uses duckdb to preview data files";
     homepage = "https://github.com/wylie102/duckdb.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
