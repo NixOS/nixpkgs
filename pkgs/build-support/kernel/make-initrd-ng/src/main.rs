@@ -5,8 +5,11 @@ use std::fs;
 use std::hash::Hash;
 use std::iter::FromIterator;
 use std::os::unix;
+use std::os::unix::fs::PermissionsExt;
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
+
+use libc::umask;
 
 use eyre::Context;
 use goblin::{elf::Elf, Object};
@@ -191,9 +194,9 @@ fn copy_file<
         let mut permissions = fs::metadata(&target)
             .wrap_err_with(|| format!("failed to get metadata for {:?}", target))?
             .permissions();
-        permissions.set_readonly(false);
-        fs::set_permissions(&target, permissions)
-            .wrap_err_with(|| format!("failed to set readonly flag to false for {:?}", target))?;
+        permissions.set_mode(permissions.mode() | 0o200);
+        fs::set_permissions(&target, permissions.clone())
+            .wrap_err_with(|| format!("failed to set read-write permissions for {:?}", target))?;
 
         // Strip further than normal
         if let Ok(strip) = env::var("STRIP") {
@@ -207,6 +210,11 @@ fn copy_file<
                 println!("{:?} was not successfully stripped.", OsStr::new(&target));
             }
         }
+
+        // Remove writable permissions
+        permissions.set_mode(permissions.mode() ^ 0o222);
+        fs::set_permissions(&target, permissions)
+            .wrap_err_with(|| format!("failed to remove writable permissions for {:?}", target))?;
     };
 
     Ok(())
@@ -334,6 +342,9 @@ fn main() -> eyre::Result<()> {
         })?;
     let output = &args[2];
     let out_path = Path::new(output);
+
+    // The files we create should not be writable.
+    unsafe { umask(0o022) };
 
     let mut queue = NonRepeatingQueue::<StorePath>::new();
 
