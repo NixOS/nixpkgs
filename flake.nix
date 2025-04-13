@@ -18,8 +18,7 @@
           inherit system;
         }
       );
-    in
-    {
+
       /**
         `nixpkgs.lib` is a combination of the [Nixpkgs library](https://nixos.org/manual/nixpkgs/unstable/#id-1.4), and other attributes
         that are _not_ part of the Nixpkgs library, but part of the Nixpkgs flake:
@@ -30,7 +29,7 @@
       */
       # DON'T USE lib.extend TO ADD NEW FUNCTIONALITY.
       # THIS WAS A MISTAKE. See the warning in lib/default.nix.
-      lib = lib.extend (
+      legacyFlakeLib = lib.extend (
         final: prev: {
 
           /**
@@ -95,6 +94,26 @@
             );
         }
       );
+
+      # The `lib` flake output attribute which isn't an unsound merger of the flake `lib` and the Nixpkgs standard library.
+      newFlakeLib = {
+        inherit lib;
+      };
+
+    in
+    {
+
+      /**
+        `lib` is the standard flake attribute for libraries. The nixpkgs flake
+        includes libraries for
+        - The Nixpkgs standard library, also known as `lib` or (here) `nixpkgsFlake.lib.lib`
+        - NixOS: `nixpkgsFlake.lib.nixos` and `nixpkgsFlake.lib.nixosSystem`
+
+        Before Nixpkgs 25.05, `lib` was a combination of the Nixpkgs standard library *and* the NixOS library.
+        In Nixpkgs 25.05, this continues to be the case, while making available `nixpkgsFlake.lib.lib` to clear the way
+        for an ecosystem-wide migration.
+      */
+      lib = legacyFlakeLib // newFlakeLib;
 
       checks = forAllSystems (
         system:
