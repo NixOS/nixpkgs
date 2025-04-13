@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Glow preview plugin for yazi.";
+    description = "Glow preview plugin for yazi";
     homepage = "https://github.com/Reledia/glow.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
