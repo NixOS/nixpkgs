@@ -16,9 +16,7 @@ submodules.
 
 <!-- TODO: Link to more details on the record and submodule types -->
 
-Freeform records can also be used to achieve the same thing, and may be
-preferred in many scenarios due to their improved performance when
-compared to submodules and also the ability to declare "optional" fields.
+A similar result can be achieved with `types.record` with a `wildcardType`. Whereas `submodule` is designed to host logic inside of it, `record` is just a data container, and that lets it implement optional fields.
 
 Freeform records are used by simply passing `freeformType = types.anything`
 to a record type definition.
