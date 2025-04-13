@@ -810,6 +810,7 @@ mapAliases {
   ht-rust = throw "'ht-rust' has been renamed to/replaced by 'xh'"; # Converted to throw 2024-10-17
   hydra_unstable = hydra; # Added 2024-08-22
   hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability";
+  hyenae = throw "hyenae has been removed because it fails to build and was unmaintained for 15 years"; # Added 2025-04-04
   hyprgui = throw "hyprgui has been removed as the repository is deleted"; # Added 2024-12-27
   hyprlauncher = throw "hyprlauncher has been removed as the repository is deleted"; # Added 2024-12-27
   hyprwall = throw "hyprwall has been removed as the repository is deleted"; # Added 2024-12-27
@@ -818,6 +819,7 @@ mapAliases {
 
   i3-gaps = i3; # Added 2023-01-03
   i3nator = throw "'i3nator' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  ibniz = throw "ibniz has been removed because it fails to compile and the source url is dead"; # Added 2025-04-07
   ib-tws = throw "ib-tws has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   ib-controller = throw "ib-controller has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   icuReal = throw "icuReal has been removed from nixpkgs as a mistake"; # Added 2025-02-18
