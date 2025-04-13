@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   cmake,
   pkg-config,
   check,
@@ -117,6 +118,10 @@ stdenv.mkDerivation rec {
     ];
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit (nixosTests) vpp;
+  };
 
   meta = {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
