@@ -17253,6 +17253,10 @@ self: super: with self; {
 
   sunweg = callPackage ../development/python-modules/sunweg { };
 
+  supabase-functions = self.supafunc;
+
+  supafunc = callPackage ../development/python-modules/supafunc { };
+
   superqt = callPackage ../development/python-modules/superqt { };
 
   supervise-api = callPackage ../development/python-modules/supervise-api { };
