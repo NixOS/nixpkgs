@@ -889,6 +889,7 @@
   ./services/misc/rshim.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
+  ./services/misc/seasonpackarr.nix
   ./services/misc/servarr/lidarr.nix
   ./services/misc/servarr/prowlarr.nix
   ./services/misc/servarr/radarr.nix
