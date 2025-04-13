@@ -275,6 +275,7 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
+  bdftopcf,
   font-alias,
   font-util,
   gccmakedep,
@@ -299,6 +300,7 @@ print OUT <<EOF;
 self: with self; {
 
   inherit
+    bdftopcf
     gccmakedep
     libpciaccess
     libxcvt
