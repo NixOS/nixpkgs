@@ -5949,6 +5949,7 @@ broken-packages:
   - tuntap # failure in job https://hydra.nixos.org/build/233199575 at 2023-09-02
   - tuple-append-instances # failure in job https://hydra.nixos.org/build/233256201 at 2023-09-02
   - tuple-fields # failure in job https://hydra.nixos.org/build/252721117 at 2024-03-16
+  - tuple-morph # failure in job https://hydra.nixos.org/build/294628958 at 2025-04-10
   - tupleinstances # failure in job https://hydra.nixos.org/build/233208004 at 2023-09-02
   - tuple-lenses # failure in job https://hydra.nixos.org/build/233239309 at 2023-09-02
   - turing-machines # failure in job https://hydra.nixos.org/build/233195604 at 2023-09-02

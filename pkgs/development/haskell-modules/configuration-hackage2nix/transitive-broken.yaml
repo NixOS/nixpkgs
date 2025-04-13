@@ -3105,6 +3105,7 @@ dont-distribute-packages:
  - selenium-server
  - semantic-source
  - semantic-version
+ - semi-iso
  - semialign-extras
  - semiring
  - semiring-num
@@ -3375,6 +3376,12 @@ dont-distribute-packages:
  - symmetry-operations-symbols
  - synapse
  - syncthing-hs
+ - syntax
+ - syntax-attoparsec
+ - syntax-example
+ - syntax-example-json
+ - syntax-pretty
+ - syntax-printer
  - syntaxnet-haskell
  - sys-process
  - systemstats
