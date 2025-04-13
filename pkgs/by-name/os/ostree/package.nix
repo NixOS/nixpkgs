@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
         (placeholder "out")
-        gobject-introspection
+        glib.out
       ];
     in
     lib.optionalString withIntrospection ''
