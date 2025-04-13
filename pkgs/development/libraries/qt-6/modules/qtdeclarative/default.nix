@@ -10,6 +10,7 @@
   lib,
   pkgsBuildBuild,
   replaceVars,
+  fetchpatch2,
 }:
 
 qtModule {
@@ -37,6 +38,12 @@ qtModule {
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
+    # Backport patch to fix qmlsc crash on "if + for"
+    # FIXME: remove for 6.9.1
+    (fetchpatch2 {
+      url = "https://github.com/qt/qtdeclarative/commit/d1aa2e8466bab73c3e4d120356238b482b55f02a.patch";
+      hash = "sha256-uD3OM6Abt5O6txAjhYPY2wTlz5ZWfD7s5bsfqeOB0W0=";
+    })
   ];
 
   preConfigure =
