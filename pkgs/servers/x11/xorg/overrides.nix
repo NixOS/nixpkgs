@@ -149,29 +149,6 @@ self: super:
   iceauth = addMainProgram super.iceauth { };
   ico = addMainProgram super.ico { };
 
-  imake = super.imake.overrideAttrs (attrs: {
-    inherit (xorg) xorgcffiles;
-    x11BuildHook = ./imake.sh;
-    patches = [
-      ./imake.patch
-      ./imake-cc-wrapper-uberhack.patch
-    ];
-    setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
-      if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
-    }\"'";
-
-    configureFlags = attrs.configureFlags or [ ] ++ [
-      "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
-    ];
-
-    inherit tradcpp;
-
-    meta = attrs.meta // {
-      mainProgram = "imake";
-    };
-  });
-
   mkfontdir = xorg.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
