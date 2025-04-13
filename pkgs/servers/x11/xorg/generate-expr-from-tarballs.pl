@@ -41,6 +41,7 @@ $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xtrans"} = "xtrans";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -281,6 +282,7 @@ print OUT <<EOF;
   xorg-cf-files,
   xorg-docs,
   xorg-sgml-doctools,
+  xtrans,
 }:
 
 self: with self; {
@@ -293,6 +295,7 @@ self: with self; {
     makedepend
     pixman
     xbitmaps
+    xtrans
     ;
   fontalias = font-alias;
   fontutil = font-util;
