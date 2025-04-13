@@ -3067,6 +3067,22 @@ self: super:
   ktx-codec =
     assert super.ktx-codec.version == "0.0.2.1";
     doJailbreak super.ktx-codec;
+
+  # 2025-04-13: jailbreak to allow template-haskell >= 2.17
+  sr-extra = overrideCabal (drv: {
+    version =
+      assert super.sr-extra.version == "1.88";
+      "1.88-unstable-2025-03-30";
+    # includes https://github.com/seereason/sr-extra/pull/7
+    src = pkgs.fetchFromGitHub {
+      owner = "seereason";
+      repo = "sr-extra";
+      rev = "2b18ced8d07aa8832168971842b20ea49369e4f0";
+      hash = "sha256-jInfHA1xkLjx5PfsgQVzeQIN3OjTUpEz7dpVNOGNo3g=";
+    };
+    editedCabalFile = null;
+    revision = null;
+  }) super.sr-extra;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
