@@ -188,6 +188,7 @@ filterAndCreateOverrides {
         # to avoid autopatchelf failing to find libpython3.8.so.
         + lib.optionalString (cudaAtLeast "12.5") ''
           find $bin -name '*python3.8*' -delete
+          find $bin -name '*python3.9*' -delete
         '';
     };
 

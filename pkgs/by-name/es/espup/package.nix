@@ -11,6 +11,7 @@
   stdenv,
   darwin,
   testers,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -51,9 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = [
     # makes network calls

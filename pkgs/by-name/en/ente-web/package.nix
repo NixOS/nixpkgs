@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ente-io/ente/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      surfaceflinger
       pinpox
     ];
     platforms = lib.platforms.all;
