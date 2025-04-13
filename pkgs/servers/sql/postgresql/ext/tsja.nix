@@ -7,12 +7,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsja";
   version = "0.5.0";
 
   src = fetchzip {
-    url = "https://www.amris.jp/tsja/tsja-${version}.tar.xz";
+    url = "https://www.amris.jp/tsja/tsja-${finalAttrs.version}.tar.xz";
     hash = "sha256-h59UhUG/7biN8NaDiGK6kXDqfhR9uMzt8CpwbJ+PpEM=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.gnu;
     license = lib.licenses.gpl2Only;
   };
-}
+})

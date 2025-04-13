@@ -63,7 +63,7 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `plugins`: A list of plugins to add to the wrapper.
 
 ```
-wrapNeovimUnstable {
+wrapNeovimUnstable neovim-unwrapped {
   autoconfigure = true;
   autowrapRuntimeDeps = true;
   luaRcContent = ''
@@ -105,10 +105,10 @@ patch those plugins but expose the necessary configuration under
 `PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
 needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
 
-#### {#neovim-luarocks-based-plugins}
+#### LuaRocks based plugins {#neovim-luarocks-based-plugins}
 
 In order to automatically handle plugin dependencies, several neovim plugins
-upload their package to [](www.luarocks.org). This means less work for nixpkgs maintainers in the long term as dependencies get updated automatically.
+upload their package to [LuaRocks](https://www.luarocks.org). This means less work for nixpkgs maintainers in the long term as dependencies get updated automatically.
 This means several neovim plugins are first packaged as nixpkgs [lua
 packages](#packaging-a-library-on-luarocks), and converted via `buildNeovimPlugin` in
 a vim plugin. This conversion is necessary because neovim expects lua folders to be
