@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,6 +34,9 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script;
+    tests = {
+      inherit (nixosTests) seasonpackarr;
+    };
   };
 
   meta = with lib; {
