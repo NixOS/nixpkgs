@@ -209,6 +209,8 @@ let
       clang =
         if stdenv.targetPlatform.libc == null then
           tools.clangNoLibc
+        else if stdenv.targetPlatform.isDarwin then
+          tools.systemLibcxxClang
         else if stdenv.targetPlatform.useLLVM or false then
           tools.clangUseLLVM
         else if (pkgs.targetPackages.stdenv or args.stdenv).cc.isGNU then
@@ -336,7 +338,8 @@ let
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith (
         rec {
           cc = tools.clang-unwrapped;
-          libcxx = targetLlvmLibraries.libcxx;
+          # This is used to build compiler-rt. Make sure to use the system libc++ on Darwin.
+          libcxx = if stdenv.hostPlatform.isDarwin then darwin.libcxx else targetLlvmLibraries.libcxx;
           bintools = bintools';
           extraPackages =
             [ targetLlvmLibraries.compiler-rt-no-libc ]
