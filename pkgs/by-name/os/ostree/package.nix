@@ -10,8 +10,7 @@
   glib,
   xz,
   e2fsprogs,
-  libsoup_2_4,
-  wrapGAppsNoGuiHook,
+  libsoup_3,
   gpgme,
   which,
   makeWrapper,
@@ -35,8 +34,6 @@
   composefs,
   withGjs ? lib.meta.availableOn stdenv.hostPlatform gjs,
   gjs,
-  withGlibNetworking ? lib.meta.availableOn stdenv.hostPlatform glib-networking,
-  glib-networking,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -82,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
       libxslt
       docbook-xsl-nons
       docbook_xml_dtd_42
-      wrapGAppsNoGuiHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection
@@ -93,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       curl
       glib
       e2fsprogs
-      libsoup_2_4
+      libsoup_3 # for trivial-httpd for tests
       gpgme
       fuse3
       libselinux
@@ -112,9 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withGjs [
       gjs
-    ]
-    ++ lib.optionals withGlibNetworking [
-      glib-networking
     ]
     ++ lib.optionals withSystemd [
       systemd
