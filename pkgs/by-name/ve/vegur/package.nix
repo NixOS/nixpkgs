@@ -28,7 +28,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "http://dotcolon.net/fonts/vegur/";
     description = "Humanist sans serif font";
     platforms = platforms.all;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with maintainers; [
+      djacu
+      minijackson
+    ];
     license = licenses.cc0;
   };
 })
