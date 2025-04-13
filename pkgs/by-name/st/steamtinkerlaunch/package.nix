@@ -91,7 +91,7 @@ stdenvNoCC.mkDerivation {
 
       cp -a $out/bin/steamtinkerlaunch $TMPDIR/steamtinkerlaunch
       # yad cannot print its version without a graphical session https://github.com/v1cont/yad/issues/277
-      substituteInPlace $TMPDIR/steamtinkerlaunch --replace ${yad} ${fakeYad}
+      substituteInPlace $TMPDIR/steamtinkerlaunch --replace-fail ${yad} ${fakeYad}
       HOME=$TMPDIR $TMPDIR/steamtinkerlaunch compat add
 
       cp -a $steamdir/compatibilitytools.d/SteamTinkerLaunch $steamcompattool
