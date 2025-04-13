@@ -967,27 +967,6 @@ self: super:
     };
   });
 
-  xorgproto = super.xorgproto.overrideAttrs (attrs: {
-    buildInputs = [ ];
-    propagatedBuildInputs = [ ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-    ];
-    # adds support for printproto needed for libXp
-    mesonFlags = [ "-Dlegacy=true" ];
-
-    patches = [
-      (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/meson.patch?h=mingw-w64-xorgproto&id=7b817efc3144a50e6766817c4ca7242f8ce49307";
-        sha256 = "sha256-Izzz9In53W7CC++k1bLr78iSrmxpFm1cH8qcSpptoUQ=";
-      })
-    ];
-    meta = attrs.meta // {
-      platforms = lib.platforms.unix ++ lib.platforms.windows;
-    };
-  });
-
   xorgserver = super.xorgserver.overrideAttrs (
     attrs_passed:
     let

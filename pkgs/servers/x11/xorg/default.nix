@@ -16,6 +16,7 @@
   xkeyboard-config,
   xorg-cf-files,
   xorg-docs,
+  xorgproto,
   xorg-sgml-doctools,
   xtrans,
 }:
@@ -30,6 +31,7 @@ self: with self; {
     makedepend
     pixman
     xbitmaps
+    xorgproto
     xtrans
     ;
   fontalias = font-alias;
@@ -7608,82 +7610,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xorgproto = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXt,
-      python3,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xorgproto";
-      version = "2024.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/proto/xorgproto-2024.1.tar.xz";
-        sha256 = "0nfbbi4j130m2gxzp20hp642xizbbl68jpbzahiq8nw183yja8ip";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        python3
-      ];
-      buildInputs = [ libXt ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "applewmproto"
-          "bigreqsproto"
-          "compositeproto"
-          "damageproto"
-          "dmxproto"
-          "dpmsproto"
-          "dri2proto"
-          "dri3proto"
-          "evieproto"
-          "fixesproto"
-          "fontcacheproto"
-          "fontsproto"
-          "glproto"
-          "inputproto"
-          "kbproto"
-          "lg3dproto"
-          "presentproto"
-          "printproto"
-          "randrproto"
-          "recordproto"
-          "renderproto"
-          "resourceproto"
-          "scrnsaverproto"
-          "trapproto"
-          "videoproto"
-          "windowswmproto"
-          "xcalibrateproto"
-          "xcmiscproto"
-          "xextproto"
-          "xf86bigfontproto"
-          "xf86dgaproto"
-          "xf86driproto"
-          "xf86miscproto"
-          "xf86rushproto"
-          "xf86vidmodeproto"
-          "xineramaproto"
-          "xproto"
-          "xproxymngproto"
-          "xwaylandproto"
-        ];
         platforms = lib.platforms.unix;
       };
     })
