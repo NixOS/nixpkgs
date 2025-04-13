@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  fetchpatch,
   cosmic-wallpapers,
   libcosmicAppHook,
   just,
@@ -21,6 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "epoch-${finalAttrs.version}";
     hash = "sha256-4b4laUXTnAbdngLVh8/dD144m9QrGReSEjRZoNR6Iks=";
   };
+
+  patches = [
+    # TOOD: This is merged and will be included in the 7th Alpha release, remove it then.
+    (fetchpatch {
+      url = "https://github.com/pop-os/cosmic-bg/commit/6a824a7902d7cc72b5a3117b6486603a1795a1d6.patch";
+      hash = "sha256-jL0az87BlJU99lDF3jnE74I4m/NV6NViyYXTfZoBDM4=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace config/src/lib.rs data/v1/all \
