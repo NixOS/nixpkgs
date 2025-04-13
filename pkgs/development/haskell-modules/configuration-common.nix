@@ -3062,6 +3062,11 @@ self: super:
   crucible =
     assert super.crucible.version == "0.7.2";
     doJailbreak super.crucible;
+
+  # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
+  ktx-codec =
+    assert super.ktx-codec.version == "0.0.2.1";
+    doJailbreak super.ktx-codec;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
