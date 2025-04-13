@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.9.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
-    hash = "sha256-2zzDVUZc+H2tBO5scRUjwz859uaQIbpvCaC0bm4B7NM=";
+    hash = "sha256-8AOmiirQeoi2qfUcvp7s1VlWrc0dobcyn1ggAMy2Ex4=";
   };
 
   pythonRelaxDeps = [
@@ -23,6 +23,7 @@ python3Packages.buildPythonApplication rec {
     "ollama"
     "packaging"
     "pillow"
+    "pydantic"
     "textual"
     "typer"
   ];
@@ -44,6 +45,7 @@ python3Packages.buildPythonApplication rec {
     rich-pixels
     textual
     textualeffects
+    textual-image
     typer
   ];
 
