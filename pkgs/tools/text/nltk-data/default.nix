@@ -67,6 +67,11 @@ lib.makeScope newScope (self: {
     location = "taggers";
     hash = "sha256-tl3Cn2okhBkUtTXvAmFRx72Brez6iTGRdmFTwFmpk3M=";
   };
+  averaged_perceptron_tagger_eng = makeNltkDataPackage {
+    pname = "averaged_perceptron_tagger_eng";
+    location = "taggers";
+    hash = "sha256-tl3Cn2okhBkUtTXvAmFRx72Brez6iTGRdmFTwFmpk3M=";
+  };
   snowball_data = makeNltkDataPackage {
     pname = "snowball_data";
     location = "stemmers";
