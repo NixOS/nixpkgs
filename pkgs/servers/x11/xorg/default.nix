@@ -13,6 +13,7 @@
   util-macros,
   xbitmaps,
   xcb-proto,
+  xkeyboard-config,
 }:
 
 self: with self; {
@@ -31,6 +32,7 @@ self: with self; {
   libpthreadstubs = libpthread-stubs;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xkeyboardconfig = xkeyboard-config;
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage (
@@ -7245,37 +7247,6 @@ self: with self; {
         libXaw
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xkeyboardconfig = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xkeyboard-config";
-      version = "2.44";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.44.tar.xz";
-        sha256 = "0aillh6pmx5ji5jbqviq007vvg69ahz5832rz941s0xvxqzc7ljl";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
