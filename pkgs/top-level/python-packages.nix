@@ -10149,6 +10149,8 @@ self: super: with self; {
 
   onelogin_2 = callPackage ../development/python-modules/onelogin/2.nix { };
 
+  onelogin-aws-assume-role = callPackage ../development/python-modules/onelogin-aws-assume-role { };
+
   onetimepad = callPackage ../development/python-modules/onetimepad { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
