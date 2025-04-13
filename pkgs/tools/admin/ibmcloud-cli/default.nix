@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibmcloud-cli";
-  version = "2.30.0";
+  version = "2.33.1";
 
   src = fetchurl {
     url = "https://download.clis.cloud.ibm.com/ibm-cloud-cli/${finalAttrs.version}/binaries/IBM_Cloud_CLI_${finalAttrs.version}_${platform}.tgz";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         "x86_64-darwin" = "5d4d16f35c034aa336e28b5685684146ec5773a6d7f456ed0d0e5d686adf4b25";
         "aarch64-darwin" = "d563b8a4214da4360756bd18283b68c118139b5d3dd1b1d31c7ab7e61349e126";
-        "x86_64-linux" = "e6c874702851f16a3c21570020da85122a0ec0ca7e9dd75091684df1030d7295";
+        "x86_64-linux" = "sha256-aIaM0z8DcRmCEAZjr7gONRszW5L40qlwCbJgqep8c1A=";
         "aarch64-linux" = "6904c9de54845adcd08eb9906567493b68ad3f4cbba9d1121f63d9df2dd47185";
         "i686-linux" = "bc6be9a65a6942e158ab202a2d1c89c4294b5cebf60841f4ac1d21064052e7e7";
         "powerpc64le-linux" = "271a0aa9c0a1dc2c84772fba33c9c6b97588d35eccf6757de6974c433b6e7874";
