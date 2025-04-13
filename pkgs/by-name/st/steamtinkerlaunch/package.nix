@@ -7,14 +7,15 @@
   procps,
   stdenvNoCC,
   unixtools,
+  unstableGitUpdater,
   unzip,
   usbutils,
+  util-linux,
   wget,
+  writeShellApplication,
   xdotool,
   xorg,
   yad,
-  util-linux,
-  writeShellApplication,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -26,6 +27,10 @@ stdenvNoCC.mkDerivation {
     repo = "steamtinkerlaunch";
     rev = "59b421b2f3686120a076909a4a158824cd4ef05e";
     hash = "sha256-CGtSGAm+52t2zFsPJEsm76w+FEHhbOd9NYuerGa31tc=";
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
   };
 
   outputs = [
