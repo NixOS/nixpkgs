@@ -47,6 +47,15 @@ $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
 $pcMap{"\${XKBMODULE}"} = "libxkbfile";
+foreach my $mod ("applewmproto", "bigreqsproto", "compositeproto", "damageproto", "dmxproto",
+    "dpmsproto", "dri2proto", "dri3proto", "evieproto", "fixesproto", "fontcacheproto",
+    "fontsproto", "glproto", "inputproto", "kbproto", "lg3dproto", "presentproto",
+    "printproto", "randrproto", "recordproto", "renderproto", "resourceproto", "scrnsaverproto",
+    "trapproto", "videoproto", "windowswmproto", "xcalibrateproto", "xcmiscproto", "xextproto",
+    "xf86bigfontproto", "xf86dgaproto", "xf86driproto", "xf86miscproto", "xf86rushproto",
+    "xf86vidmodeproto", "xineramaproto", "xproto", "xproxymngproto", "xwaylandproto") {
+    $pcMap{$mod} = "xorgproto";
+}
 
 
 my $downloadCache = "./download-cache";
@@ -281,6 +290,7 @@ print OUT <<EOF;
   xkeyboard-config,
   xorg-cf-files,
   xorg-docs,
+  xorgproto,
   xorg-sgml-doctools,
   xtrans,
 }:
@@ -295,6 +305,7 @@ self: with self; {
     makedepend
     pixman
     xbitmaps
+    xorgproto
     xtrans
     ;
   fontalias = font-alias;
