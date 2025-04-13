@@ -3047,6 +3047,11 @@ self: super:
   strings =
     assert super.strings.version == "1.1";
     doJailbreak super.strings;
+
+  # 2025-04-13: jailbreak to allow bytestring >= 0.12
+  twain =
+    assert super.twain.version == "2.2.0.1";
+    doJailbreak super.twain;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
