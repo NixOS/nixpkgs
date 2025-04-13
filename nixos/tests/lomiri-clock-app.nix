@@ -34,15 +34,25 @@
     machine.wait_for_x()
 
     with subtest("lomiri clock launches"):
-        machine.execute("lomiri-clock-app >&2 &")
-        machine.wait_for_text(r"(clock.ubports|City|Alarms)")
+        machine.succeed("lomiri-clock-app >&2 &")
+        machine.wait_for_window("clock.ubports")
+        # Optimise OCR
+        # OfBorg aarch64 CI is *incredibly slow*, hence the long duration
+        machine.sleep(60)
+        machine.wait_for_text(r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|City|Alarms)")
         machine.screenshot("lomiri-clock_open")
 
-    machine.succeed("pkill -f lomiri-clock-app")
+    machine.succeed("pgrep -afx lomiri-clock-app >&2")
+    machine.succeed("pkill -efx lomiri-clock-app >&2")
+    machine.wait_until_fails("pgrep -afx lomiri-clock-app >&2")
 
     with subtest("lomiri clock localisation works"):
         machine.execute("env LANG=de_DE.UTF-8 lomiri-clock-app >&2 &")
-        machine.wait_for_text(r"(Stadt|Weckzeiten)")
+        machine.wait_for_window("clock.ubports")
+        # Optimise OCR
+        # OfBorg aarch64 CI is *incredibly slow*, hence the long duration
+        machine.sleep(60)
+        machine.wait_for_text(r"(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag|Stadt|Weckzeiten)")
         machine.screenshot("lomiri-clock_localised")
   '';
 }
