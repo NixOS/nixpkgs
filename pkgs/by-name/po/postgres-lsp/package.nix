@@ -4,8 +4,7 @@
   fetchFromGitHub,
   protobuf,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
   version = "0-unstable-2024-03-24";
 
@@ -26,15 +25,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "-p=postgres_lsp" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
-  meta = with lib; {
+  meta = {
     description = "Language Server for Postgres";
     homepage = "https://github.com/supabase/postgres_lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "postgres_lsp";
   };
-}
+})
