@@ -24,17 +24,17 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.9p2";
+    version = "10.0p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-karbYD4IzChe3fll4RmdAlhfqU2ZTWyuW0Hhch4hVnM=";
+      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
     };
 
     extraPatches =
       let
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7ba88c964b6e5724eec462021d984da3989e6a08/security/openssh-portable/files/extra-patch-hpn";
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/dde9561b3ff73639aeebe8ec33ad52ecca0bf58d/security/openssh-portable/files/extra-patch-hpn";
       in
       [
         ./ssh-keysign-8.5.patch
@@ -45,7 +45,7 @@ in
           inherit url;
           stripLen = 1;
           excludes = [ "channels.c" ];
-          hash = "sha256-zk7t6FNzTE+8aDU4QuteR1x0W3O2gjIQmeCkTNbaUfA=";
+          hash = "sha256-0HQAacNdvqX+7CTDhkbgAyb0WbqnnH6iAYQBFh8XenA=";
         })
 
         (fetchpatch {
