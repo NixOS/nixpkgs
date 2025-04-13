@@ -277,6 +277,7 @@ print OUT <<EOF;
   util-macros,
   xbitmaps,
   xcb-proto,
+  xkeyboard-config,
 }:
 
 self: with self; {
@@ -295,6 +296,7 @@ self: with self; {
   libpthreadstubs = libpthread-stubs;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xkeyboardconfig = xkeyboard-config;
 
 EOF
 

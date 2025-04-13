@@ -903,29 +903,6 @@ self: super:
     };
   });
 
-  xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    prePatch = ''
-      patchShebangs rules/merge.py rules/compat/map-variants.py rules/generate-options-symbols.py rules/xml2lst.pl
-    '';
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-      python3
-      perl
-      libxslt # xsltproc
-      gettext # msgfmt
-    ];
-    mesonFlags = [
-      (lib.mesonBool "xorg-rules-symlinks" true)
-    ];
-    # 1: compatibility for X11/xkb location
-    # 2: I think pkg-config/ is supposed to be in /lib/
-    postInstall = ''
-      ln -s share "$out/etc"
-      mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
-    '';
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
