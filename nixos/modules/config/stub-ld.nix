@@ -42,10 +42,7 @@ let
         $CC -Os main.c -o $out
       '';
 
-  pkgs32 = pkgs.pkgsi686Linux;
-
   stub-ld = stub-ld-for pkgs message;
-  stub-ld32 = stub-ld-for pkgs32 message;
 in
 {
   options = {
@@ -65,7 +62,6 @@ in
 
   config = mkIf cfg.enable {
     environment.ldso = mkDefault stub-ld;
-    environment.ldso32 = mkIf pkgs.stdenv.hostPlatform.isx86_64 (mkDefault stub-ld32);
   };
 
   meta.maintainers = with lib.maintainers; [ tejing ];
