@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Preview file types using rich in Yazi.";
+    description = "Preview file types using rich in Yazi";
     homepage = "https://github.com/AnirudhG07/rich-preview.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
