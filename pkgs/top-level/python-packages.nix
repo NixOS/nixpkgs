@@ -5832,6 +5832,8 @@ self: super: with self; {
 
   gotenberg-client = callPackage ../development/python-modules/gotenberg-client { };
 
+  gotrue = callPackage ../development/python-modules/gotrue { };
+
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
