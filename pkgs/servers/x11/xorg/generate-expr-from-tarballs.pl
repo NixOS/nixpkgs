@@ -281,6 +281,7 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libxcvt,
+  lndir,
   luit,
   makedepend,
   pixman,
@@ -301,6 +302,7 @@ self: with self; {
     gccmakedep
     libpciaccess
     libxcvt
+    lndir
     luit
     makedepend
     pixman
