@@ -3042,6 +3042,11 @@ self: super:
   ebird-api =
     assert super.ebird-api.version == "0.2.0.0";
     doJailbreak super.ebird-api;
+
+  # 2025-04-13: jailbreak to allow bytestring >= 0.12
+  strings =
+    assert super.strings.version == "1.1";
+    doJailbreak super.strings;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
