@@ -14909,6 +14909,12 @@
     githubId = 775189;
     name = "Jordi Masip";
   };
+  Masrkai = {
+    email = "ahmahmhello@gmail.com";
+    github = "Masrkai";
+    githubId = 118424417;
+    name = "Ahmed Allam";
+  };
   MaskedBelgian = {
     email = "michael.colicchia@imio.be";
     github = "MaskedBelgian";
