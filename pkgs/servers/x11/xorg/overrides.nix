@@ -1354,13 +1354,6 @@ self: super:
     };
   });
 
-  sessreg = super.sessreg.overrideAttrs (attrs: {
-    preBuild = "sed -i 's|gcc -E|gcc -E -P|' man/Makefile";
-    meta = attrs.meta // {
-      mainProgram = "sessreg";
-    };
-  });
-
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone

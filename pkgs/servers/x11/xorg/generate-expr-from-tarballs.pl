@@ -287,6 +287,7 @@ print OUT <<EOF;
   luit,
   makedepend,
   pixman,
+  sessreg,
   util-macros,
   xbitmaps,
   xcb-proto,
@@ -310,6 +311,7 @@ self: with self; {
     luit
     makedepend
     pixman
+    sessreg
     xbitmaps
     xorgproto
     xtrans
