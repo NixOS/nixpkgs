@@ -14947,6 +14947,8 @@ self: super: with self; {
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
+  realtime = callPackage ../development/python-modules/realtime { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
