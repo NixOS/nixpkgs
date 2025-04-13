@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage {
     rev = "f90aed759b9c2217bea336e37ab5282616ece390";
     hash = "sha256-Cik8uVdzhMmgXfx23axkUJBg8zd5afMgYvluN0BJsdo=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-adCC5o17j6tuffymiLUn2SEPlrjMzYn6a74/4a9HI/w=";
