@@ -22,6 +22,7 @@
   ode,
   opencascade-occt_7_6,
   opencascade-occt,
+  pcl,
   pkg-config,
   python311Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
@@ -63,13 +64,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.0";
+    version = "e990b456b9db3952cf785cb38619622415b13dca";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       rev = finalAttrs.version;
-      hash = "sha256-u7RYSImUMAgKaAQSAGCFha++RufpZ/QuHAirbSFOUCI=";
+      hash = "sha256-96Gvxc6fEAAIh01+FBwV8N21ObvlQuR6L5Xh/mbOQfs=";
       fetchSubmodules = true;
     };
 
@@ -104,6 +105,7 @@ freecad-utils.makeCustomizable (
         medfile
         mpi
         ode
+        pcl
         pivy
         ply # for openSCAD file support
         py-slvs
@@ -150,7 +152,6 @@ freecad-utils.makeCustomizable (
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
       ./0002-FreeCad-OndselSolver-pkgconfig.patch
-      ./0003-Gui-take-in-account-module-path-argument.patch
     ];
 
     cmakeFlags =
@@ -161,6 +162,7 @@ freecad-utils.makeCustomizable (
         "-DBUILD_FLAT_MESH:BOOL=ON"
         "-DINSTALL_TO_SITEPACKAGES=OFF"
         "-DFREECAD_USE_PYBIND11=ON"
+        "-DFREECAD_USE_PCL=ON"
       ]
       ++ lib.optionals (qtVersion == 5) [
         "-DBUILD_QT5=ON"
