@@ -12664,6 +12664,8 @@ self: super: with self; {
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
+  pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
+
   pymodes = callPackage ../development/python-modules/pymodes { };
 
   pymonctl = callPackage ../development/python-modules/pymonctl { };
