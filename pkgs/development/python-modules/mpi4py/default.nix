@@ -36,8 +36,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpi4py" ];
 
-  __darwinAllowLocalNetworking = true;
-
   nativeCheckInputs = [
     pytestCheckHook
     mpiCheckPhaseHook
