@@ -2741,6 +2741,8 @@ self: super: with self; {
 
   conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
 
+  condense-json = callPackage ../development/python-modules/condense-json { };
+
   conduit = callPackage ../development/python-modules/conduit { };
 
   conduit-mpi = callPackage ../development/python-modules/conduit { mpiSupport = true; };
@@ -12665,6 +12667,8 @@ self: super: with self; {
   pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
+
+  pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
 
   pymodes = callPackage ../development/python-modules/pymodes { };
 
