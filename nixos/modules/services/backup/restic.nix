@@ -349,19 +349,19 @@ in {
         assertion =
           lib.all (
             backup:
-            with backup;
-              lib.count [
-                (path
-                  != null
-                  || path != []
-                  || extraBackupArgs != null
-                  || extraBackupArgs != [])
-                (command != [])
-              ]
-              <= 1
+              with backup;
+                lib.count [
+                  (path
+                    != null
+                    || path != []
+                    || dynamicFilesFrom != null
+                    || dynamicFilesFrom != [])
+                  (command != [])
+                ]
+                <= 1
           )
           (lib.attrValues backups);
-        message = "services.restic.backups.<name>: command is mutually exclusive with path and  or repositoryFile should be set";
+        message = "services.restic.backups.<name>: command is mutually exclusive with path and dynamicFilesFrom";
       }
     ];
     systemd.services =
@@ -379,13 +379,14 @@ in {
             "--what='sleep'"
             "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
           ];
-          resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}${stdinFromCommand}";
+          resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}";
           excludeFlags = lib.optional (
             backup.exclude != []
           ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
           filesFromTmpFile = "/run/restic-backups-${name}/includes";
           fileBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
-          doBackup = fileBackup || backup.command != [];
+          commandBackup = backup.command != [];
+          doBackup = fileBackup || commandBackup;
           pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
             (resticCmd + " unlock")
             (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
@@ -438,10 +439,19 @@ in {
                 {
                   Type = "oneshot";
                   ExecStart =
-                    (lib.optionals doBackup [
+                    (lib.optionals fileBackup [
                       "${resticCmd} backup ${
                         lib.concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)
                       } --files-from=${filesFromTmpFile}"
+                    ])
+                    ++ (lib.optionals commandBackup [
+                      "${resticCmd} backup
+                        ${lib.concatStringsSep " " (
+                        backup.extraBackupArgs
+                        ++ excludeFlags
+                        ++ [" --stdin-from-command=true --"]
+                        ++ backup.command
+                      )}"
                     ])
                     ++ pruneCmd
                     ++ checkCmd;
