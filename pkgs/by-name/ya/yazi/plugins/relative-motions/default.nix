@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Yazi plugin based about vim motions.";
+    description = "Yazi plugin based about vim motions";
     homepage = "https://github.com/dedukun/relative-motions.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
