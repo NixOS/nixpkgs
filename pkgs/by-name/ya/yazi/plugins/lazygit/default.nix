@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Lazygit plugin for yazi.";
+    description = "Lazygit plugin for yazi";
     homepage = "https://github.com/Lil-Dank/lazygit.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
