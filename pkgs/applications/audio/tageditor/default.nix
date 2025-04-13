@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tageditor";
-  version = "3.9.4";
+  version = "3.9.5";
 
   src = fetchFromGitHub {
     owner = "martchus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VRQV4bTPG4VFhRHFJamUnYd04ZCaNpaxU27Jcl6Chc4=";
+    hash = "sha256-Sia6Y/V81WQj4oWjZAAR4o3TngfWq7sWxxiKEuFjQ2M=";
   };
 
   nativeBuildInputs = [
