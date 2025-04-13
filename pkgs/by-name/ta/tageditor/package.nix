@@ -5,15 +5,11 @@
   pkg-config,
   cmake,
   cpp-utilities,
-  qtutilities,
   mp4v2,
   libid3tag,
-  qtbase,
-  qttools,
-  qtwebengine,
-  qtx11extras,
+  libsForQt5,
+  qt5,
   tagparser,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,26 +18,26 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "martchus";
-    repo = pname;
-    rev = "v${version}";
+    repo = "tageditor";
+    tag = "v${version}";
     hash = "sha256-Sia6Y/V81WQj4oWjZAAR4o3TngfWq7sWxxiKEuFjQ2M=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     mp4v2
     libid3tag
-    qtbase
-    qttools
-    qtx11extras
-    qtwebengine
+    qt5.qtbase
+    qt5.qttools
+    qt5.qtx11extras
+    qt5.qtwebengine
     cpp-utilities
-    qtutilities
+    libsForQt5.qtutilities
     tagparser
   ];
 
@@ -51,12 +47,12 @@ stdenv.mkDerivation rec {
     ln -s $out/Applications/tageditor.app/Contents/MacOS/tageditor $out/bin/tageditor
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Martchus/tageditor";
     description = "Tag editor with Qt GUI and command-line interface supporting MP4/M4A/AAC (iTunes), ID3, Vorbis, Opus, FLAC and Matroska";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
     mainProgram = "tageditor";
   };
 }

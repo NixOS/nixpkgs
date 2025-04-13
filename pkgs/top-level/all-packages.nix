@@ -11351,8 +11351,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
-
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
