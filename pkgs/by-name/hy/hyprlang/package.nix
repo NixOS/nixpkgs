@@ -9,13 +9,13 @@
 
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlang";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oj8V4kvzor5AOStzj4/B4W1ZIObAPxT9K4NfXx7dyKE=";
+    hash = "sha256-9HySx+EtsbbKlZDlY+naqqOV679VdxP6x6fP3wxDXJk=";
   };
 
   nativeBuildInputs = [
