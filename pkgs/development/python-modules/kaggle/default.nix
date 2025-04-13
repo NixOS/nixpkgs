@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.6.17";
+  version = "1.7.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q5p96h1QOfMg/WrV7CG2iNz6cNQFy0IJW4H0HtxAG4E=";
+    hash = "sha256-CxRDWPQYe96D6KAzVUm/c2+0ZmlycqE1qYXrbSxvnLY=";
   };
 
   build-system = [ hatchling ];

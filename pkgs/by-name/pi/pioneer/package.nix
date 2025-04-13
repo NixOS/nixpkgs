@@ -13,6 +13,7 @@
   libpng,
   libsigcxx,
   libvorbis,
+  libX11,
   lua5_2,
   libgbm,
   SDL2,
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     libpng
     libsigcxx
     libvorbis
+    libX11
     lua5_2
     libgbm
     SDL2

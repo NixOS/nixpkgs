@@ -71,7 +71,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.21.6";
+  version = "0.21.7";
 
   outputs = [
     "out"
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsecret/${lib.versions.majorMinor version}/libsecret-${version}.tar.xz";
-    hash = "sha256-dHuMF1vhCMiA0637nDU36mblIOStLcz13OWAA67soJA=";
+    hash = "sha256-a0UuR1BZCitWF63EACbyjS9JA94V8SUOHRxAv9aO1V4=";
   };
 
   depsBuildBuild = [

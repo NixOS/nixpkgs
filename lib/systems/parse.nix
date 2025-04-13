@@ -396,6 +396,12 @@ rec {
         significantByte = littleEndian;
         family = "javascript";
       };
+    }
+    // {
+      # aliases
+      # Apple architecture name, as used by `darwinArch`; required by
+      # LLVM ≥ 20.
+      arm64 = cpuTypes.aarch64;
     };
 
   # GNU build systems assume that older NetBSD architectures are using a.out.
@@ -921,6 +927,8 @@ rec {
 
   kernelName = kernel: kernel.name + toString (kernel.version or "");
 
+  darwinArch = cpu: if cpu.name == "aarch64" then "arm64" else cpu.name;
+
   doubleFromSystem =
     {
       cpu,
@@ -949,8 +957,9 @@ rec {
         kernel.name == "netbsd" && gnuNetBSDDefaultExecFormat cpu != kernel.execFormat
       ) kernel.execFormat.name;
       optAbi = optionalString (abi != abis.unknown) "-${abi.name}";
+      cpuName = if kernel.families ? darwin then darwinArch cpu else cpu.name;
     in
-    "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+    "${cpuName}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################
 

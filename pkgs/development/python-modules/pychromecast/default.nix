@@ -23,9 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-NB/KXKgmyLAhsL/CD463eNMO8brye5LKVCkkD3EloPU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+       --replace-fail "setuptools>=65.6,<78.0" setuptools
+  '';
+
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     casttube
     protobuf
     zeroconf

@@ -14,6 +14,7 @@
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
+  buildPackages,
   buildLlvmTools, # tools, but from the previous stage, for cross
   targetLlvmLibraries, # libraries, but from the next stage, for cross
   targetLlvm,
@@ -423,18 +424,14 @@ let
           libcxx = null;
           bintools = bintoolsNoLibc';
           extraPackages = [ ];
-          extraBuildCommands =
-            lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-nostartfiles" >> $out/nix-support/cc-cflags
-            ''
-            + mkExtraBuildCommands0 cc;
+          # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
+          extraBuildCommands = mkExtraBuildCommands0 cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [ "-nostartfiles" ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
+          nixSupport.cc-cflags = lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
         }
       );
 
@@ -576,6 +573,13 @@ let
           # Use clang due to "gnu::naked" not working on aarch64.
           # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
           stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
+          cmake =
+            if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
+          python3 =
+            if stdenv.targetPlatform.libc == "llvm" then
+              buildPackages.python3Minimal
+            else
+              buildPackages.python3;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;

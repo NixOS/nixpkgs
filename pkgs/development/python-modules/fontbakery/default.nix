@@ -47,12 +47,12 @@
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.13.1";
+  version = "0.13.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NoUqR+u2GgjE+nj05AXvtprdWieT6XbGGcmOnEMolC4=";
+    hash = "sha256-/wyrBoSUVjdKIIlK3HoDeHQ3yhMPT/0G05llWzDoE50=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";

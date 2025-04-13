@@ -56,6 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E9d5jWw4HeCO4sqDB0tXXgxM91kg1Gixi9B0xZQYe14=";
   };
 
+  # Combined backport to fix Qt 6.9 issues:
+  # - https://github.com/telegramdesktop/tdesktop/commit/8b92ab25c776899c5432bf935447cac6f0b3ea2d
+  # - https://github.com/telegramdesktop/tdesktop/commit/c261c3367a11eeef69e6e346d339706dc4f00406
+  # FIXME: remove in next update
+  patches = [
+    ./qt-6.9.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'

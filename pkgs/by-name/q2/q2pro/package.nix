@@ -11,8 +11,10 @@
   curl,
   SDL2,
   openalSoft,
+  libGL,
   libogg,
   libvorbis,
+  libX11,
   libXi,
   wayland,
   wayland-protocols,
@@ -61,8 +63,10 @@ stdenv.mkDerivation (finalAttrs: rec {
       libjpeg
       curl
       SDL2
+      libGL
       libogg
       libvorbis
+      libX11
       ffmpeg
       openalSoft
     ]

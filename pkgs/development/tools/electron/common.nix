@@ -83,7 +83,15 @@ in
 
   src = null;
 
-  patches = base.patches;
+  patches =
+    base.patches
+    # Fix building with Rust 1.86+
+    # electron_33 and electron_34 use older chromium versions which expect rust
+    # to provide the older `adler` library instead of the newer `adler2` library
+    # This patch makes those older versions also use the new adler2 library
+    ++ lib.optionals (lib.versionOlder info.version "35") [
+      ./use-rust-adler2.patch
+    ];
 
   npmRoot = "third_party/node";
 

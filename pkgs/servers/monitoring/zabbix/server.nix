@@ -50,7 +50,7 @@ import ./versions.nix (
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
-    ];
+    ] ++ optional postgresqlSupport libpq.pg_config;
     buildInputs =
       [
         curl

@@ -5,6 +5,7 @@
   django,
   funcy,
   redis,
+  redisTestHook,
   six,
   pytestCheckHook,
   pytest-django,
@@ -53,20 +54,8 @@ buildPythonPackage rec {
     before-after
     nettools
     pkgs.valkey
+    redisTestHook
   ];
-
-  preCheck = ''
-    redis-server &
-    REDIS_PID=$!
-    while ! redis-cli --scan ; do
-      echo waiting for redis to be ready
-      sleep 1
-    done
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
