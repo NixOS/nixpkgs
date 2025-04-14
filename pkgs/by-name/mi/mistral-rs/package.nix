@@ -159,9 +159,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # swagger-ui will once more be copied in the target directory during the check phase
+  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-7.1.0/utoipa-swagger-ui/build.rs#L168
   # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
   preCheck = ''
-    rm -rf target/${hostPlatform.config}/release/build/
+    rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
   '';
 
   # Prevent checkFeatures from inheriting buildFeatures because
