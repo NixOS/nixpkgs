@@ -568,7 +568,6 @@ dont-distribute-packages:
  - aws-sdk-xml-unordered
  - aws-sign4
  - aws-sns
- - axel
  - axiom
  - azimuth-hs
  - aztecs-sdl-image
@@ -780,8 +779,6 @@ dont-distribute-packages:
  - cheapskate-terminal
  - check-pvp
  - chevalier-common
- - chiasma
- - chiasma-test
  - chitauri
  - choose-exe
  - chorale-geo
@@ -803,7 +800,6 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
- - clash-lib-hedgehog
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -865,7 +861,6 @@ dont-distribute-packages:
  - commsec
  - commsec-keyexchange
  - comonad-random
- - compaREST
  - compact-mutable
  - compdoc
  - compdoc-dhall-decoder
@@ -1130,7 +1125,6 @@ dont-distribute-packages:
  - editable
  - effect-monad
  - effective-aspects-mzv
- - eflint
  - ekg-carbon
  - elasticsearch-interchange
  - electrs-client
@@ -1304,11 +1298,6 @@ dont-distribute-packages:
  - freekick2
  - freelude
  - freer-converse
- - freer-simple-catching
- - freer-simple-http
- - freer-simple-profiling
- - freer-simple-random
- - freer-simple-time
  - frequent-substring
  - fresnel-fused-effects
  - friday-devil
@@ -1325,9 +1314,6 @@ dont-distribute-packages:
  - ftshell
  - funbot
  - funbot-git-hook
- - funcons-lambda-cbv-mp
- - funcons-simple
- - funcons-tools
  - function-combine
  - functor
  - functor-combo
@@ -1694,7 +1680,6 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
- - helic
  - helics
  - helics-wai
  - helium
@@ -1896,7 +1881,6 @@ dont-distribute-packages:
  - hw-json-lens
  - hw-json-simple-cursor
  - hw-json-standard-cursor
- - hw-polysemy
  - hw-uri
  - hworker-ses
  - hwormhole
@@ -1950,7 +1934,6 @@ dont-distribute-packages:
  - imprevu-happstack
  - improve
  - inch
- - incipit
  - incremental-computing
  - incremental-maps
  - increments
@@ -2143,7 +2126,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - large-anon
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -2186,7 +2168,6 @@ dont-distribute-packages:
  - libmolude
  - librarian
  - librato
- - libriscv
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -2398,8 +2379,6 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp-pm
- - mptcpanalyzer
  - msgpack-aeson
  - msgpack-arbitrary
  - msgpack-binary
@@ -2551,8 +2530,6 @@ dont-distribute-packages:
  - oculus
  - odd-jobs
  - off-simple
- - ogma-cli
- - ogma-core
  - ogma-language-fret-cs
  - ogma-language-fret-reqs
  - ois-input-manager
@@ -2570,12 +2547,6 @@ dont-distribute-packages:
  - openssh-github-keys
  - opentelemetry-lightstep
  - opentok
- - opentracing-http-client
- - opentracing-jaeger
- - opentracing-wai
- - opentracing-zipkin-common
- - opentracing-zipkin-v1
- - opentracing-zipkin-v2
  - optimal-blocks
  - optimusprime
  - optparse-enum
@@ -2704,25 +2675,17 @@ dont-distribute-packages:
  - polysemy-RandomFu
  - polysemy-account
  - polysemy-account-api
- - polysemy-chronos
- - polysemy-conc
  - polysemy-db
  - polysemy-extra
  - polysemy-fskvstore
  - polysemy-hasql
  - polysemy-hasql-test
- - polysemy-http
  - polysemy-kvstore-jsonfile
- - polysemy-log
- - polysemy-log-co
- - polysemy-log-di
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
  - polysemy-path
- - polysemy-resume
  - polysemy-scoped-fs
- - polysemy-time
  - polysemy-uncontrolled
  - polysemy-video
  - polysemy-vinyl
@@ -2766,7 +2729,6 @@ dont-distribute-packages:
  - practice-room
  - pred-trie
  - prednote-test
- - prelate
  - presto-hdbc
  - pretty-diff
  - preview
@@ -2887,7 +2849,6 @@ dont-distribute-packages:
  - rbr
  - rc
  - rdioh
- - rds-data
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -3290,8 +3251,6 @@ dont-distribute-packages:
  - squeeze
  - srt-dhall
  - srt-formatting
- - srtree
- - srtree_2_0_0_4
  - sscgi
  - sshd-lint
  - sssp
@@ -3638,10 +3597,6 @@ dont-distribute-packages:
  - vinyl-operational
  - vision
  - visual-graphrewrite
- - vocoder
- - vocoder-audio
- - vocoder-conduit
- - vocoder-dunai
  - voicebase
  - vorbiscomment
  - vpq
@@ -3805,7 +3760,6 @@ dont-distribute-packages:
  - zasni-gerna
  - zeromq3-conduit
  - zeroth
- - zeugma
  - zifter-cabal
  - zifter-git
  - zifter-google-java-format
