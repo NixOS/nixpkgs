@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "notmuch";
-  version = "0.38.3";
+  version = "0.39";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mvRsyA2li0MByiuu/MJaQNES0DFVB+YywPPw8IMo0FQ=";
+    hash = "sha256-uIuwKnbEa62NMT/Su0+OOSmLUfZvy+swTZ+Aw+73BOM=";
   };
 
   nativeBuildInputs =
@@ -67,14 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp sfsexp;
-
-  patches = [
-    (fetchpatch {
-      name = "add-workaround-for-Emacs-30-pp-changes.patch";
-      url = "https://git.notmuchmail.org/git?p=notmuch;a=patch;h=e3d4721b1ba4836c7646e057b50123fe994652eb";
-      hash = "sha256-phfNSOlTajTmaf+DjtdmBAWSm+2tUbrQEChInUlwn5k=";
-    })
-  ];
 
   postPatch =
     ''
