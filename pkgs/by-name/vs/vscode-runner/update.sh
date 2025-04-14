@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p yq ripgrep common-updater-scripts dart
+#!nix-shell -i bash -p yq jq common-updater-scripts dart
 
 set -xeu -o pipefail
 
@@ -10,10 +10,8 @@ NIXPKGS_DIR="$PWD"
 
 # Get latest version number from GitHub
 version="$(
-  list-git-tags --url=https://github.com/Merrit/vscode-runner |
-    rg '^v(.*)' -r '$1' |
-    sort --version-sort |
-    tail -n1
+  curl --silent https://api.github.com/repos/Merrit/vscode-runner/releases/latest |
+    jq '.tag_name | ltrimstr("v")' --raw-output
 )"
 
 # Update to latest version
