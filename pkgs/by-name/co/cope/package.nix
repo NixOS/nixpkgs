@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  perl,
-  perlPackages,
+  perl538,
+  perl538Packages,
 }:
 
-perlPackages.buildPerlPackage {
+perl538Packages.buildPerlPackage {
   pname = "cope";
   version = "0-unstable-2024-03-27";
 
@@ -16,7 +16,7 @@ perlPackages.buildPerlPackage {
     hash = "sha256-LMAir7tUkjHtKz+KME/Raa9QHGN1g0bzr56fNxfURQY=";
   };
 
-  buildInputs = with perlPackages; [
+  buildInputs = with perl538Packages; [
     EnvPath
     FileShareDir
     IOPty
@@ -28,8 +28,8 @@ perlPackages.buildPerlPackage {
 
   postInstall = ''
     mkdir -p $out/bin
-    mv $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto/share/dist/Cope/* $out/bin/
-    rm -r $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto
+    mv $out/${perl538Packages.perl538.libPrefix}/${perl538Packages.perl538.version}/auto/share/dist/Cope/* $out/bin/
+    rm -r $out/${perl538Packages.perl538.libPrefix}/${perl538Packages.perl538.version}/auto
   '';
 
   meta = {

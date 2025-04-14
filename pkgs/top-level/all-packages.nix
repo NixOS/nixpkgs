@@ -348,11 +348,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cope = callPackage ../by-name/co/cope/package.nix {
-    perl = perl538;
-    perlPackages = perl538Packages;
-  };
-
   collision = callPackage ../applications/misc/collision { };
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
