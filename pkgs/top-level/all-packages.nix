@@ -2970,6 +2970,10 @@ with pkgs;
     threadsafe = true;
   };
 
+  headplane = callPackage ../by-name/he/headplane { };
+
+  hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
+
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };
