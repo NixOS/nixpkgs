@@ -2,6 +2,7 @@
   lib,
   fetchFromGitLab,
   buildNpmPackage,
+  fetchNpmDeps,
   jq,
   moreutils,
 }:
@@ -17,13 +18,19 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-6ZOwAP6VB/uBrV6Yjc9jvzTNdfInekbLO/9PO57S9X8=";
   };
 
-  npmDepsHash = "sha256-uEyET3y8LfjTasaJ+Hl206/Q7ov69mA7oNa0mhgcUEQ=";
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-uEyET3y8LfjTasaJ+Hl206/Q7ov69mA7oNa0mhgcUEQ=";
+  };
 
   postPatch = ''
-    ${lib.getExe jq} '. + {
-      "devDependencies": .devDependencies | del(.cypress, ."cypress-localstorage-commands")
-    }' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    jq '.devDependencies |= del(.cypress, ."cypress-localstorage-commands")' package.json | sponge package.json
   '';
+
+  nativeBuildInputs = [
+    moreutils
+    jq
+  ];
 
   buildPhase = ''
     runHook preBuild
