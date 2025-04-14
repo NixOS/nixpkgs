@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "kfactory";
-  version = "0.21.7";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
-    rev = "v${version}";
-    sha256 = "sha256-VLhAJ5rOBKEO1FDCnlaseA+SmrMSoyS+BaEzjdHm59Y=";
+    tag = "v${version}";
+    sha256 = "sha256-yzJluL3iyjn0ZCRhBCajBhOkj2dbx5fQJcmhwWgMYLQ=";
   };
 
   build-system = [
