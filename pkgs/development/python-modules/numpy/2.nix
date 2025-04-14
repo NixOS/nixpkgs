@@ -159,6 +159,10 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
       "test_loss_of_precision"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
+      # remove if https://github.com/numpy/numpy/issues/27460 is resolved
+      "test_validate_transcendentals"
     ];
 
   passthru = {
