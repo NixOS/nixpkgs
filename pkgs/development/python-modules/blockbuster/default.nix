@@ -36,6 +36,8 @@ buildPythonPackage rec {
     "test_ssl_socket"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "blockbuster" ];
 
   meta = {
