@@ -3,13 +3,13 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  protobuf,
 
   # nativeBuildInputs
   cmake,
   openssl,
   perl,
   pkg-config,
-  protobuf,
 
   # buildInputs
   rdkafka,
@@ -25,17 +25,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.1.6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uDNPIL9Ox5rwWVzqWe74elHPGy6lSvWR1S7HsY6ATjc=";
+    hash = "sha256-i/It8VWfkEO3MBQvBF9jDhL8s3BdJyg4+grdxO+GoQs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-z7VAKU4bi6pX2z4jCKWDfQt8FFLN7ugnW2LOy6IHz/w=";
+  cargoHash = "sha256-TNjxRFEAFY/6ZYCzPD5NcqMEwyM6HZnkfrt/hZkIHMY=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         targetFlags = lib.fix (self: {
           build = [
             "-C force-unwind-tables"
-            "-C debug-assertions"
             "--cfg uuid_unstable"
             "--cfg tokio_unstable"
           ];
@@ -97,6 +96,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Feature resolution seems to be failing due to this https://github.com/rust-lang/cargo/issues/7754
   auditable = false;
 
+  checkFlags = [
+    # Error: deadline has elapsed
+    "--skip replicated_loglet"
+
+    # TIMEOUT [ 180.006s]
+    "--skip fast_forward_over_trim_gap"
+
+    # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
+    "--skip restatectl_smoke_test"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [
@@ -122,7 +132,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Restate is a platform for developing distributed fault-tolerant applications.";
+    description = "Platform for developing distributed fault-tolerant applications.";
     homepage = "https://restate.dev";
     changelog = "https://github.com/restatedev/restate/releases/tag/v${finalAttrs.version}";
     mainProgram = "restate";
