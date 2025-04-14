@@ -5,6 +5,9 @@
   jre,
   copyDesktopItems,
   makeDesktopItem,
+  makeBinaryWrapper,
+  libGL,
+  xorg,
 }:
 
 let
@@ -14,7 +17,15 @@ let
       "x86_64-linux" = "linux-x86-64";
     }
     .${stdenv.system} or throwSystem;
-
+  runtimeDeps =
+    [
+      libGL
+    ]
+    ++ (with xorg; [
+      libX11
+      libXrender
+      libXxf86vm
+    ]);
 in
 stdenv.mkDerivation rec {
   pname = "weasis";
@@ -29,6 +40,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeBinaryWrapper
   ];
 
   desktopItems = [
@@ -63,10 +75,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{applications,pixmaps}
+    mkdir -p $out/{bin,opt/Weasis/share/{applications,pixmaps}}
 
-    mv weasis-${platform}-jdk${lib.versions.major jre.version}-${version}/Weasis/* $out/
-    mv $out/lib/*.png $out/share/pixmaps/
+    mv weasis-${platform}-jdk${lib.versions.major jre.version}-${version}/Weasis/* $out/opt/Weasis
+    mv $out/opt/Weasis/lib/*.png $out/opt/Weasis/share/pixmaps/
+
+    for bin in $out/opt/Weasis/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeDeps}
+    done
 
     runHook postInstall
   '';
