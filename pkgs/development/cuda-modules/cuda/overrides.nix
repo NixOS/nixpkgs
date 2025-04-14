@@ -159,7 +159,6 @@ filterAndCreateOverrides {
       expat,
       libxcrypt-legacy,
       ncurses6,
-      python39,
       python310,
       python311,
       python312,
@@ -176,7 +175,6 @@ filterAndCreateOverrides {
         ++ lib.lists.optionals (cudaAtLeast "12.5") [
           libxcrypt-legacy
           ncurses6
-          python39
           python310
           python311
           python312
@@ -190,6 +188,7 @@ filterAndCreateOverrides {
         # to avoid autopatchelf failing to find libpython3.8.so.
         + lib.optionalString (cudaAtLeast "12.5") ''
           find $bin -name '*python3.8*' -delete
+          find $bin -name '*python3.9*' -delete
         '';
     };
 

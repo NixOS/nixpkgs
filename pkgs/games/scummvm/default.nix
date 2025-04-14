@@ -16,6 +16,7 @@
   libvorbis,
   libGLU,
   libGL,
+  libX11,
   SDL2,
   zlib,
   Cocoa,
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
       libtheora
       libvorbis
       SDL2
+      libX11
       zlib
     ];
 

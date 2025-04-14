@@ -1,0 +1,39 @@
+From f259eca77c592813e11752a46c4e1f9a74c64091 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Fri, 11 Oct 2024 02:56:22 -0700
+Subject: [PATCH] [hipcc] Remove extra definition of hipBinUtilPtr_ in derived
+ platforms
+
+Fixes UB when hipBinUtilPtr_ is used.
+---
+ amd/hipcc/src/hipBin_amd.h    | 1 -
+ amd/hipcc/src/hipBin_nvidia.h | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/amd/hipcc/src/hipBin_amd.h b/amd/hipcc/src/hipBin_amd.h
+index 0a782d1beab9..36cd625ae8bc 100644
+--- a/src/hipBin_amd.h
++++ b/src/hipBin_amd.h
+@@ -42,7 +42,6 @@ THE SOFTWARE.
+ 
+ class HipBinAmd : public HipBinBase {
+  private:
+-  HipBinUtil* hipBinUtilPtr_;
+   string hipClangPath_ = "";
+   string roccmPathEnv_, hipRocclrPathEnv_, hsaPathEnv_;
+   PlatformInfo platformInfoAMD_;
+diff --git a/amd/hipcc/src/hipBin_nvidia.h b/amd/hipcc/src/hipBin_nvidia.h
+index ff142cc1cea2..09b7b80979c7 100644
+--- a/src/hipBin_nvidia.h
++++ b/src/hipBin_nvidia.h
+@@ -31,7 +31,6 @@ THE SOFTWARE.
+ 
+ class HipBinNvidia : public HipBinBase {
+  private:
+-  HipBinUtil* hipBinUtilPtr_;
+   string cudaPath_ = "";
+   PlatformInfo platformInfoNV_;
+   string hipCFlags_, hipCXXFlags_, hipLdFlags_;
+-- 
+2.46.0
+

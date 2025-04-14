@@ -9,8 +9,6 @@
   python3,
   libGL,
   libX11,
-  Carbon,
-  OpenGL,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   testers,
 }:
@@ -35,12 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
       patchShebangs src/*.py
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
+      substituteInPlace src/dispatch_common.h --replace-fail "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
     ''
     # cgl_core and cgl_epoxy_api fail in darwin sandbox and on Hydra (because it's headless?)
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace test/meson.build \
-        --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
+        --replace-fail "[ 'cgl_core', [ 'cgl_core.c' ] ]," "" \
+        --replace-fail "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
     '';
 
   outputs = [
@@ -62,10 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals x11Support [
       libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      OpenGL
     ];
 
   mesonFlags = [

@@ -10,6 +10,7 @@
   libjpeg,
   libogg,
   libvorbis,
+  libX11,
   openal,
   curl,
   copyDesktopItems,
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     SDL2
     libGLU
     libGL
+    libX11
     zlib
     libjpeg
     libogg

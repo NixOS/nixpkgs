@@ -12,9 +12,7 @@ let
 
     # Darwin
     "x86_64-darwin"
-    "i686-darwin"
     "aarch64-darwin"
-    "armv7a-darwin"
 
     # FreeBSD
     "i686-freebsd"

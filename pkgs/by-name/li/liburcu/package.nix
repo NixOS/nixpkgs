@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.15.0";
+  version = "0.15.1";
   pname = "liburcu";
 
   src = fetchurl {
     url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    hash = "sha256-Ty2DmvZ5Ba05bW1TulZJtmET2QhA3LyJlB4NpkvM04w=";
+    hash = "sha256-mNZswS8sWIGHm5dvDFXRDTEUAVE74lTjvSjPOBH7UMg=";
   };
 
   outputs = [

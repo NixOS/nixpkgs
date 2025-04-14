@@ -9,7 +9,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
   version = "0-unstable-2025-03-19";
 
@@ -20,18 +20,20 @@ stdenv.mkDerivation {
     hash = "sha256-5ZV39whIm8qJIBLNdAsR2e8+f0jYjwE9dGNgh6ARPUY=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail 'pkg-config' '${stdenv.cc.targetPrefix}pkg-config'
+  '';
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    systemd
     libxml2
     libusb1
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 ./qdl -t $out/bin
-    runHook postInstall
-  '';
+  makeFlags = [
+    "VERSION=${finalAttrs.src.rev}"
+    "prefix=${placeholder "out"}"
+  ];
 
   meta = {
     homepage = "https://github.com/linux-msm/qdl";
@@ -46,4 +48,4 @@ stdenv.mkDerivation {
   };
 
   passthru.updateScript = unstableGitUpdater { };
-}
+})
