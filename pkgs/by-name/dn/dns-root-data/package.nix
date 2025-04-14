@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "dns-root-data";
-  version = "2024-06-20";
+  version = "2025-04-14";
 
   buildCommand = ''
     mkdir $out
