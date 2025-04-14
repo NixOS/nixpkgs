@@ -15,6 +15,7 @@
   libargon2,
   libusb1,
   minizip,
+  nix-update-script,
   pcsclite,
   pkg-config,
   qrencode,
@@ -37,14 +38,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
   version = "2.7.10";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-FBoqCYNM/leN+w4aV0AJMx/G0bjHbI9KVWrnmq3NfaI=";
   };
 
@@ -60,18 +61,34 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DKEEPASSXC_BUILD_TYPE=Release"
-      "-DWITH_GUI_TESTS=ON"
-      "-DWITH_XC_UPDATECHECK=OFF"
+      (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
+      (lib.cmakeBool "WITH_GUI_TESTS" true)
+      (lib.cmakeBool "WITH_XC_UPDATECHECK" false)
     ]
-    ++ (lib.optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
-    ++ (lib.optional (withKeePassFDOSecrets && stdenv.hostPlatform.isLinux) "-DWITH_XC_FDOSECRETS=ON")
-    ++ (lib.optional (withKeePassYubiKey && stdenv.hostPlatform.isLinux) "-DWITH_XC_YUBIKEY=ON")
-    ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
-    ++ (lib.optional withKeePassBrowserPasskeys "-DWITH_XC_BROWSER_PASSKEYS=ON")
-    ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
-    ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
-    ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
+    ++ lib.optionals (!withKeePassX11) [
+      (lib.cmakeBool "WITH_XC_X11" false)
+    ]
+    ++ lib.optionals (withKeePassFDOSecrets && stdenv.hostPlatform.isLinux) [
+      (lib.cmakeBool "WITH_XC_FDOSECRETS" true)
+    ]
+    ++ lib.optionals (withKeePassYubiKey && stdenv.hostPlatform.isLinux) [
+      (lib.cmakeBool "WITH_XC_YUBIKEY" true)
+    ]
+    ++ lib.optionals withKeePassBrowser [
+      (lib.cmakeBool "WITH_XC_BROWSER" true)
+    ]
+    ++ lib.optionals withKeePassBrowserPasskeys [
+      (lib.cmakeBool "WITH_XC_BROWSER_PASSKEYS" true)
+    ]
+    ++ lib.optionals withKeePassKeeShare [
+      (lib.cmakeBool "WITH_XC_KEESHARE" true)
+    ]
+    ++ lib.optionals withKeePassNetworking [
+      (lib.cmakeBool "WITH_XC_NETWORKING" true)
+    ]
+    ++ lib.optionals withKeePassSSHAgent [
+      (lib.cmakeBool "WITH_XC_SSHAGENT" true)
+    ];
 
   doCheck = true;
   checkPhase = ''
@@ -121,23 +138,23 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      curl
       botan3
-      libsForQt5.kio
+      curl
       libXi
       libXtst
       libargon2
+      libsForQt5.kio
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
       minizip
       pcsclite
       qrencode
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
       readline
       zlib
     ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && withKeePassTouchID
-    ) darwin.apple_sdk_11_0.frameworks.LocalAuthentication
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withKeePassTouchID) [
+      darwin.apple_sdk_11_0.frameworks.LocalAuthentication
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libsForQt5.qtmacextras
 
@@ -146,12 +163,21 @@ stdenv.mkDerivation rec {
       # https://developer.apple.com/documentation/screencapturekit
       (darwinMinVersionHook "12.3")
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libusb1
-    ++ lib.optional withKeePassX11 libsForQt5.qtx11extras;
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libusb1
+    ]
+    ++ lib.optionals withKeePassX11 [
+      libsForQt5.qtx11extras
+    ];
 
-  passthru.tests = nixosTests.keepassxc;
+  passthru = {
+    tests = {
+      inherit (nixosTests) keepassxc;
+    };
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Offline password manager with many features";
     longDescription = ''
       A community fork of KeePassX, which is itself a port of KeePass Password Safe.
@@ -161,12 +187,13 @@ stdenv.mkDerivation rec {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
-    license = licenses.gpl2Plus;
+    changelog = "https://github.com/keepassxreboot/keepassxc/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       blankparticle
       sigmasquadron
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
