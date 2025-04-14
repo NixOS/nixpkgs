@@ -47,7 +47,7 @@ let
       psycopg
       pydantic
       sentry-sdk
-      symbolic
+      symbolic_10
       user-agents
       uvicorn
       uwsgi-chunked
