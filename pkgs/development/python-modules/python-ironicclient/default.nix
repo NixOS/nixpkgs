@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HqsOMvJ8SK8IEZgeClLd0TnQLBweBEru0Bw4WRSDG7s=";
   };
 
