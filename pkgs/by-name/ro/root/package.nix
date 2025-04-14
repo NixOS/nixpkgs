@@ -29,7 +29,7 @@
   xz,
   man,
   openssl,
-  pcre,
+  pcre2,
   nlohmann_json,
   pkg-config,
   procps,
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       patchRcPathCsh
       patchRcPathFish
       patchRcPathPosix
-      pcre
+      pcre2
       python3.pkgs.numpy
       tbb
       xrootd
