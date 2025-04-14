@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.10";
+  version = "3.11";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    hash = "sha256-kOXpPMck5OvhLt6A3xY0Bjx6hVaSaFkZv+YLVWyb0J4=";
+    hash = "sha256-pz7wX+N91YX32HBo5KBjl2BBn4EBOL11xh3aofniEx4=";
   };
 
   outputs = [
