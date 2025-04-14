@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
-  version = "4.2.5";
+  version = "4.2.10";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yLpDjHnt8ZwpT+KlmEtXMYgrpnbYlVzJ/MZMELVO/j8=";
+    hash = "sha256-6ZOwAP6VB/uBrV6Yjc9jvzTNdfInekbLO/9PO57S9X8=";
   };
 
-  npmDepsHash = "sha256-sR/p/JRVuaemN1euZ/VrJ0j1q7fkS/Zi6R1m6lPvygs=";
+  npmDepsHash = "sha256-uEyET3y8LfjTasaJ+Hl206/Q7ov69mA7oNa0mhgcUEQ=";
 
   postPatch = ''
     ${lib.getExe jq} '. + {
