@@ -19473,10 +19473,6 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
-  weasis = callPackage ../by-name/we/weasis/package.nix {
-    jre = jdk23;
-  };
-
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
