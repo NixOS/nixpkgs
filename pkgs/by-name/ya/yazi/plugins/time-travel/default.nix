@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "time-travel.yazi";
-  version = "0-unstable-2025-03-02";
+  version = "0-unstable-2025-02-14";
 
   src = fetchFromGitHub {
     owner = "iynaix";
@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "A yazi plugin for browsing backwards and forwards in time via BTRFS / ZFS snapshots.";
+    description = "Yazi plugin for browsing backwards and forwards in time via BTRFS / ZFS snapshots";
     homepage = "https://github.com/iynaix/time-travel.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

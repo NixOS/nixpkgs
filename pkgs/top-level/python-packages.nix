@@ -1894,6 +1894,8 @@ self: super: with self; {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+  blockbuster = callPackage ../development/python-modules/blockbuster { };
+
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
@@ -2738,6 +2740,8 @@ self: super: with self; {
   conda-package-handling = callPackage ../development/python-modules/conda-package-handling { };
 
   conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
+
+  condense-json = callPackage ../development/python-modules/condense-json { };
 
   conduit = callPackage ../development/python-modules/conduit { };
 
@@ -5165,6 +5169,8 @@ self: super: with self; {
 
   foolscap = callPackage ../development/python-modules/foolscap { };
 
+  forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
+
   fordpass = callPackage ../development/python-modules/fordpass { };
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
@@ -6077,6 +6083,8 @@ self: super: with self; {
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs { };
 
+  ha-silabs-firmware-client = callPackage ../development/python-modules/ha-silabs-firmware-client { };
+
   habanero = callPackage ../development/python-modules/habanero { };
 
   habiticalib = callPackage ../development/python-modules/habiticalib { };
@@ -6660,6 +6668,8 @@ self: super: with self; {
   influxdb3-python = callPackage ../development/python-modules/influxdb3-python { };
 
   inform = callPackage ../development/python-modules/inform { };
+
+  ingredient-parser-nlp = callPackage ../development/python-modules/ingredient-parser-nlp { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
@@ -7740,6 +7750,8 @@ self: super: with self; {
       python3 = python;
     }
   );
+
+  libpass = callPackage ../development/python-modules/libpass { };
 
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
@@ -10989,13 +11001,14 @@ self: super: with self; {
     inherit (pkgs)
       freetype
       lcms2
+      libavif
       libimagequant
       libjpeg
       libraqm
       libtiff
       libwebp
       openjpeg
-      zlib
+      zlib-ng
       ;
     inherit (pkgs.xorg) libxcb;
   };
@@ -12653,6 +12666,8 @@ self: super: with self; {
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
+  pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
+
   pymodes = callPackage ../development/python-modules/pymodes { };
 
   pymonctl = callPackage ../development/python-modules/pymonctl { };
@@ -13472,6 +13487,8 @@ self: super: with self; {
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
 
+  pytest-archon = callPackage ../development/python-modules/pytest-archon { };
+
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
@@ -13679,6 +13696,8 @@ self: super: with self; {
   pytest-retry = callPackage ../development/python-modules/pytest-retry { };
 
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
+
+  pytest-run-parallel = callPackage ../development/python-modules/pytest-run-parallel { };
 
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
 
@@ -17157,14 +17176,7 @@ self: super: with self; {
 
   thespian = callPackage ../development/python-modules/thespian { };
 
-  thinc = callPackage ../development/python-modules/thinc {
-    inherit (pkgs.darwin.apple_sdk.frameworks)
-      Accelerate
-      CoreFoundation
-      CoreGraphics
-      CoreVideo
-      ;
-  };
+  thinc = callPackage ../development/python-modules/thinc { };
 
   thinqconnect = callPackage ../development/python-modules/thinqconnect { };
 
@@ -17486,6 +17498,24 @@ self: super: with self; {
   tree-sitter-embedded-template =
     callPackage ../development/python-modules/tree-sitter-embedded-template
       { };
+
+  tree-sitter-grammars = lib.recurseIntoAttrs (
+    lib.mapAttrs
+      (
+        name: grammarDrv:
+        callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
+      )
+      (
+        # Filtering grammars not compatible with current py-tree-sitter version
+        lib.filterAttrs (
+          name: value:
+          !(builtins.elem name [
+            "tree-sitter-sql"
+            "tree-sitter-templ"
+          ])
+        ) pkgs.tree-sitter.builtGrammars
+      )
+  );
 
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 

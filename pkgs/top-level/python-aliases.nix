@@ -38,14 +38,12 @@ mapAliases ({
   python2Packages = throw "do not use python2Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python27Packages = throw "do not use python27Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python3Packages = throw "do not use python3Packages when building Python packages, specify each used package as a separate argument"; # do not remove
-  python39Packages = throw "do not use python39Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python310Packages = throw "do not use python310Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python311Packages = throw "do not use python311Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python312Packages = throw "do not use python312Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python313Packages = throw "do not use python313Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python2 = throw "do not use python2 when building Python packages, use the generic python parameter instead"; # do not remove
   python3 = throw "do not use python3 when building Python packages, use the generic python parameter instead"; # do not remove
-  python39 = throw "do not use python39 when building Python packages, use the generic python parameter instead"; # do not remove
   python310 = throw "do not use python310 when building Python packages, use the generic python parameter instead"; # do not remove
   python311 = throw "do not use python311 when building Python packages, use the generic python parameter instead"; # do not remove
   python312 = throw "do not use python312 when building Python packages, use the generic python parameter instead"; # do not remove
@@ -273,8 +271,7 @@ mapAliases ({
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
   flufl_lock = flufl-lock; # added 2023-11-03
-  fn = throw "fn was removed as it is no longer used by any package in nixpkgs, it is not compatible with python 3.11 or newer and it was last updated in 2014."; # added 2025-02-08
-  forbiddenfruit = throw "forbiddenfruit has been removed, because it was unmaintained and relied on the nose test framework"; # added 2024-07-08
+  fn = throw "fn was removed as it is no longer used by any package in nixpkgs, it is not compatible with python 3.11 or newer and it was last updated in 2014."; # added 2025-02-08 # added 2024-07-08
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06

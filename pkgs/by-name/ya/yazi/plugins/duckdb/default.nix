@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "duckdb.yazi";
-  version = "25.4.8-unstable-2025-04-08";
+  version = "25.4.8-unstable-2025-04-09";
 
   src = fetchFromGitHub {
     owner = "wylie102";
@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Yazi plugin that uses duckdb to preview data files.";
+    description = "Yazi plugin that uses duckdb to preview data files";
     homepage = "https://github.com/wylie102/duckdb.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

@@ -520,9 +520,6 @@ let
           revert = true;
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
-      ]
-      ++ lib.optionals (chromiumVersionAtLeast "134" && lib.versionOlder rustcVersion "1.86") [
-        ./patches/chromium-134-rust-adler2.patch
       ];
 
     postPatch =

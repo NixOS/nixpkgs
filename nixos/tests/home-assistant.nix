@@ -85,7 +85,6 @@ in
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
-          shelly = { };
           zha = { };
 
           # set up a wake-on-lan switch to test capset capability required
@@ -108,7 +107,7 @@ in
 
           # https://www.home-assistant.io/integrations/logger/
           logger = {
-            default = "info";
+            default = "debug";
           };
         };
 

@@ -23,11 +23,13 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
+  directoryListingUpdater,
+  gst-plugins-ugly,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-ugly";
-  version = "1.24.10";
+  version = "1.26.0";
 
   outputs = [
     "out"
@@ -35,8 +37,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-nfb9haclYkHvuyX4SzN1deOzRSZvXas4STceRpR3nxg=";
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${finalAttrs.version}.tar.xz";
+    hash = "sha256-qGtRyEVKgTEghIyANCHzJ9jAeqvK5GHgWXzEk5jA/N4=";
   };
 
   nativeBuildInputs =
@@ -73,6 +75,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags =
     [
+      "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
       "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
       (lib.mesonEnable "doc" enableDocumentation)
     ]
@@ -97,6 +100,16 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  passthru = {
+    tests = {
+      lgplOnly = gst-plugins-ugly.override {
+        enableGplPlugins = false;
+      };
+    };
+
+    updateScript = directoryListingUpdater { };
+  };
+
   meta = with lib; {
     description = "Gstreamer Ugly Plugins";
     homepage = "https://gstreamer.freedesktop.org";
@@ -110,4 +123,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

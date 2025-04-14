@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2025.1";
+  version = "2025.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JIlJCeiM2yi9FjbGiHgB32TLSFvVk/L9g+8pB1qB1pQ=";
+    hash = "sha256-tgpjj8wNr/rfgv4PV+U9Br3sLzbE32YoCuebzmvW8rk=";
   };
 
   nativeBuildInputs = [ setuptools ];

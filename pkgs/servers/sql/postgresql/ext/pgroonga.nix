@@ -10,14 +10,14 @@
   xxHash,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
   version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
-    tag = "${version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-a5nNtlUiFBuuqWAjIN0gU/FaoV3VpJh+/fab8R/77dw=";
   };
 
@@ -43,9 +43,9 @@ postgresqlBuildExtension rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
-    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
+    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${finalAttrs.version}";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ DerTim1 ];
   };
-}
+})

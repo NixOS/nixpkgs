@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "deep-chainmap";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "deep_chainmap";
     inherit version;
-    hash = "sha256-6K7dyB5iQzzw3lXLcU10SVsiHZ+SAXhz9DSCkYnPQAA=";
+    hash = "sha256-R7Pfh+1bYJ7LCU+0SyZi2XGOsgL1zWiMkp1z9HD1I1w=";
   };
 
   # Tests are not published to pypi

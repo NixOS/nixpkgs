@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "7.3.2";
+  version = "7.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cF6DoXhfRbODvz7hPLdmgLktJPVvsMfSE2/h2FDNPKg=";
+    hash = "sha256-cHoxP7iC01+SGYnrPSBN6ULtUTKkTkqh/g6PJLudwl0=";
   };
 
   postPatch = ''

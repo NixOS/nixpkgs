@@ -669,6 +669,13 @@ mapAliases {
   gcc8Stdenv = throw "gcc8Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   gcc10StdenvCompat =
     if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11" then gcc10Stdenv else stdenv; # Added 2024-03-21
+  gcc-arm-embedded-6 = throw "gcc-arm-embedded-6 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gcc-arm-embedded-7 = throw "gcc-arm-embedded-7 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gcc-arm-embedded-8 = throw "gcc-arm-embedded-8 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gcc-arm-embedded-9 = throw "gcc-arm-embedded-9 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gcc-arm-embedded-10 = throw "gcc-arm-embedded-10 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gcc-arm-embedded-11 = throw "gcc-arm-embedded-11 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
+  gcc-arm-embedded-12 = throw "gcc-arm-embedded-12 has been removed from Nixpkgs as it is unmaintained and obsolete"; # Added 2025-04-12
   gcj = gcj6; # Added 2024-09-13
   gcj6 = throw "gcj6 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   gcolor2 = throw "'gcolor2' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gcolor3' or 'eyedropper' instead"; # Added 2024-09-15
@@ -804,6 +811,7 @@ mapAliases {
   ht-rust = throw "'ht-rust' has been renamed to/replaced by 'xh'"; # Converted to throw 2024-10-17
   hydra_unstable = hydra; # Added 2024-08-22
   hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability";
+  hyenae = throw "hyenae has been removed because it fails to build and was unmaintained for 15 years"; # Added 2025-04-04
   hyprgui = throw "hyprgui has been removed as the repository is deleted"; # Added 2024-12-27
   hyprlauncher = throw "hyprlauncher has been removed as the repository is deleted"; # Added 2024-12-27
   hyprwall = throw "hyprwall has been removed as the repository is deleted"; # Added 2024-12-27
@@ -812,6 +820,7 @@ mapAliases {
 
   i3-gaps = i3; # Added 2023-01-03
   i3nator = throw "'i3nator' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  ibniz = throw "ibniz has been removed because it fails to compile and the source url is dead"; # Added 2025-04-07
   ib-tws = throw "ib-tws has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   ib-controller = throw "ib-controller has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   icuReal = throw "icuReal has been removed from nixpkgs as a mistake"; # Added 2025-02-18
@@ -1806,6 +1815,7 @@ mapAliases {
   vistafonts-cht = vista-fonts-cht; # Added 2025-02-03
   vkBasalt = vkbasalt; # Added 2022-11-22
   vkdt-wayland = vkdt; # Added 2024-04-19
+  vocal = throw "'vocal' has been archived upstream. Consider using 'gnome-podcasts' or 'kasts' instead."; # Added 2025-04-12
   void = throw "'void' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
