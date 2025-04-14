@@ -90,6 +90,7 @@ extra-packages:
   - hasql-pool < 1.1                    # 2025-01-19: Needed for building postgrest
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
+  - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
