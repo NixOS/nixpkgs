@@ -28,6 +28,11 @@ in
     services.dbus.packages = [ cfg.package ];
     services.firewalld.packages = [ cfg.package ];
 
+    services.logrotate.settings."/var/log/firewalld" = {
+      copytruncate = true;
+      minsize = "1M";
+    };
+
     systemd.packages = [ cfg.package ];
     systemd.services.firewalld = {
       aliases = [ "dbus-org.fedoraproject.FirewallD1.service" ];
