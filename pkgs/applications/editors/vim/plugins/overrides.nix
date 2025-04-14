@@ -2725,6 +2725,12 @@ in
     ];
   };
 
+  persistent-breakpoints-nvim = super.persistent-breakpoints-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-dap
+    ];
+  };
+
   phpactor = buildVimPlugin {
     inherit (phpactor)
       pname
