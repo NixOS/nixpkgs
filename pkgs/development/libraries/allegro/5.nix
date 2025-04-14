@@ -4,6 +4,7 @@
   cmake,
   enet,
   fetchFromGitHub,
+  fixDarwinDylibNames,
   flac,
   freetype,
   gtk3,
@@ -49,10 +50,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   buildInputs =
     [
