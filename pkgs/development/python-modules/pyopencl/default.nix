@@ -23,6 +23,9 @@
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  mako,
+  pocl,
 }:
 
 let
@@ -63,18 +66,16 @@ buildPythonPackage rec {
     pytools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pocl
+    mako
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ] ++ pytools.optional-dependencies.siphash;
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    # https://github.com/NixOS/nixpkgs/issues/255262
-    cd $out
+    rm -rf pyopencl
   '';
-
-  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
-  # tests are all the tests that are available.
-  doCheck = false;
 
   pythonImportsCheck = [
     "pyopencl"
