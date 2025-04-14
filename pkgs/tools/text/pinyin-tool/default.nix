@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-SOeyk2uWCdO99ooQc2L1eXlV77lR4DLBK6PnV6Ur49A=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Simple command line tool for converting Chinese characters to space-separate pinyin words";

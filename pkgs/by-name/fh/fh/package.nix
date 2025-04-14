@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
   gcc,
   libcxx,
   cacert,
@@ -32,8 +31,6 @@ rustPlatform.buildRustPackage rec {
   checkInputs = [ cacert ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 

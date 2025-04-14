@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
   bison,
   flex,
   zlib,
@@ -22,15 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-l2DDqihhH8FDhmZUCs4A1XKk8pdCo6VG1lYodEr19HQ=";
   };
 
-  nativeBuildInputs =
-    [
-      bison
-      flex
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.DiskArbitration
-      darwin.apple_sdk.frameworks.System
-    ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
   buildInputs =
     [

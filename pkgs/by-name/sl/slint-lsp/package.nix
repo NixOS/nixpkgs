@@ -10,14 +10,7 @@
   xorg,
   libxkbcommon,
   wayland,
-  # Darwin Frameworks
-  AppKit,
-  CoreGraphics,
-  CoreServices,
-  CoreText,
-  Foundation,
   libiconv,
-  OpenGL,
 }:
 
 let
@@ -56,13 +49,7 @@ rustPlatform.buildRustPackage rec {
     rpathLibs
     ++ [ xorg.libxcb.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      CoreGraphics
-      CoreServices
-      CoreText
-      Foundation
       libiconv
-      OpenGL
     ];
 
   # Tests requires `i_slint_backend_testing` which is only a dev dependency

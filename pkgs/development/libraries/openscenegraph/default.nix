@@ -16,11 +16,6 @@
   libxml2,
   pcre,
   zlib,
-  AGL,
-  Accelerate,
-  Carbon,
-  Cocoa,
-  Foundation,
   boost,
   jpegSupport ? true,
   libjpeg,
@@ -116,14 +111,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AGL
-      Accelerate
-      Carbon
-      Cocoa
-      Foundation
-    ]
     ++ lib.optional (restSupport || colladaSupport) boost;
 
   patches = [

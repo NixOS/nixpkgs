@@ -3,7 +3,6 @@
   stdenv,
   bzip2,
   cmake,
-  darwin,
   fetchFromGitHub,
   libtomcrypt,
   zlib,
@@ -26,15 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      libtomcrypt
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Carbon
-    ];
+  buildInputs = [
+    bzip2
+    libtomcrypt
+    zlib
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))

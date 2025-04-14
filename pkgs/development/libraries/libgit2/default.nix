@@ -11,7 +11,6 @@
   openssl,
   pcre2,
   libiconv,
-  Security,
   staticBuild ? stdenv.hostPlatform.isStatic,
   # for passthru.tests
   libgit2-glib,
@@ -72,16 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      libssh2
-      openssl
-      pcre2
-      llhttp
-    ]
-    ++ lib.optional withGssapi krb5
-    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [
+    zlib
+    libssh2
+    openssl
+    pcre2
+    llhttp
+  ] ++ lib.optional withGssapi krb5;
 
   propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 

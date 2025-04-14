@@ -14,8 +14,6 @@
   pkg-config,
   zlib,
   enableTools ? false,
-  # Darwin-specific
-  AudioUnit,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,17 +42,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      libogg
-      libvorbis
-      libX11
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-    ];
+  buildInputs = [
+    SDL2
+    libogg
+    libvorbis
+    libX11
+    zlib
+  ];
 
   enableParallelBuilding = true;
 

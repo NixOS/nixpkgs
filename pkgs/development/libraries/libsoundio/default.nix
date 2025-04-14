@@ -6,7 +6,6 @@
   alsa-lib,
   libjack2,
   libpulseaudio,
-  AudioUnit,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,8 +26,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libpulseaudio
       alsa-lib
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin AudioUnit;
+    ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBUILD_TESTS=OFF"

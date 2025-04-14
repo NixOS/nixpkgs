@@ -7,8 +7,6 @@
   cups,
   libpng,
   libjpeg,
-  SystemConfiguration,
-  Foundation,
   pkg-config,
   htmldoc,
 }:
@@ -24,17 +22,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      zlib
-      cups
-      libpng
-      libjpeg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      SystemConfiguration
-    ];
+  buildInputs = [
+    zlib
+    cups
+    libpng
+    libjpeg
+  ];
 
   # do not generate universal binary on Darwin
   # because it is not supported by Nix's clang

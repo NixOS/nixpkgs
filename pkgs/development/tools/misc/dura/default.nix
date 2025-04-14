@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
   pkg-config,
-  Security,
   zlib,
 }:
 
@@ -29,14 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   nativeBuildInputs = [
     pkg-config

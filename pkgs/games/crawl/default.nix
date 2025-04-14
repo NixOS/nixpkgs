@@ -23,8 +23,6 @@
   tileMode ? false,
   enableSound ? tileMode,
   buildPackages,
-  # MacOS / Darwin builds
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -71,19 +69,7 @@ stdenv.mkDerivation rec {
       libGLU
       libGL
     ]
-    ++ lib.optional enableSound SDL2_mixer
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        AudioUnit
-        CoreAudio
-        ForceFeedback
-        Carbon
-        IOKit
-        OpenGL
-      ]
-    ));
+    ++ lib.optional enableSound SDL2_mixer;
 
   preBuild =
     ''

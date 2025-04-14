@@ -9,7 +9,6 @@
   freetype,
   libGL,
   xorg,
-  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,19 +30,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      expat
-      fontconfig
-      freetype
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    expat
+    fontconfig
+    freetype
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+  ];
 
   postInstall = ''
     install -Dm444 assets/epick.desktop -t $out/share/applications

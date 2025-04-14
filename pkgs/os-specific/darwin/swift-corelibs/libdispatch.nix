@@ -2,7 +2,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  apple_sdk_sierra,
   xnu-new,
 }:
 
@@ -16,7 +15,6 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    apple_sdk_sierra.sdk
     xnu-new
   ];
 }

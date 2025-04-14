@@ -22,8 +22,6 @@
   withPulseAudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   withCoreAudio ? stdenv.hostPlatform.isDarwin,
-  CoreAudio,
-  AudioToolbox,
   withLibao ? true,
   libao,
 
@@ -63,10 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withALSA [ alsa-lib ]
     ++ lib.optionals withPulseAudio [ libpulseaudio ]
-    ++ lib.optionals withCoreAudio [
-      CoreAudio
-      AudioToolbox
-    ]
     ++ lib.optionals withLibao [ libao ];
 
   cmakeFlags =

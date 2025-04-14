@@ -64,25 +64,19 @@ final: prev: {
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         pkgs.xcbuild
       ];
-    buildInputs =
-      with pkgs;
-      [
-        # required by sharp
-        # https://sharp.pixelplumbing.com/install
-        vips
+    buildInputs = with pkgs; [
+      # required by sharp
+      # https://sharp.pixelplumbing.com/install
+      vips
 
-        libsecret
-        final.node-gyp-build
-        node-pre-gyp
+      libsecret
+      final.node-gyp-build
+      node-pre-gyp
 
-        pixman
-        cairo
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.AppKit
-        darwin.apple_sdk.frameworks.Security
-      ];
+      pixman
+      cairo
+      pango
+    ];
 
     # add newer node-addon-api to build sharp
     # https://github.com/lovell/sharp/issues/3920
@@ -119,16 +113,11 @@ final: prev: {
 
   keyoxide = prev.keyoxide.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs =
-      with pkgs;
-      [
-        pixman
-        cairo
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
   };
 
   makam = prev.makam.override {
@@ -217,18 +206,13 @@ final: prev: {
 
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs =
-      with pkgs;
-      [
-        node-pre-gyp
-        pixman
-        cairo
-        pango
-        libjpeg
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+    buildInputs = with pkgs; [
+      node-pre-gyp
+      pixman
+      cairo
+      pango
+      libjpeg
+    ];
   };
 
   vega-lite = prev.vega-lite.override {
@@ -254,16 +238,11 @@ final: prev: {
     ];
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
-    buildInputs =
-      with pkgs;
-      [
-        giflib
-        pixman
-        cairo
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+    buildInputs = with pkgs; [
+      giflib
+      pixman
+      cairo
+      pango
+    ];
   };
 }

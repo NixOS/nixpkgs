@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [ openssl ];
 
   # disable downloading and building the tree-sitter grammars at build time
   # grammars can be configured in a config file and installed with `zee --build`

@@ -19,10 +19,6 @@
   autoconf,
   libtool,
   typescript,
-  ApplicationServices,
-  Carbon,
-  Cocoa,
-  VideoToolbox,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,12 +36,6 @@ rustPlatform.buildRustPackage rec {
     [
       ffmpeg
       x264
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Carbon
-      Cocoa
-      VideoToolbox
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       dbus

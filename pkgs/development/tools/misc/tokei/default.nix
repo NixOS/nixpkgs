@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  Security,
   zlib,
 }:
 
@@ -24,7 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
   ];
 
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];

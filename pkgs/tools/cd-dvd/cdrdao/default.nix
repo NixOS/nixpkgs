@@ -8,8 +8,6 @@
   libvorbis,
   libmad,
   libao,
-  CoreServices,
-  IOKit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,17 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libiconv
-      libvorbis
-      libmad
-      libao
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      IOKit
-    ];
+  buildInputs = [
+    libiconv
+    libvorbis
+    libmad
+    libao
+  ];
 
   hardeningDisable = [ "format" ];
 

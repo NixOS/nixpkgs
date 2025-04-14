@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitiles,
   cmake,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -23,9 +22,6 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
 
   cmakeFlags = [
     "-DAEMU_COMMON_GEN_PKGCONFIG=ON"

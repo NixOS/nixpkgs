@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -8,8 +7,6 @@
   pkg-config,
   openssl,
   dbus,
-  AppKit,
-  Security,
 }:
 
 let
@@ -32,15 +29,10 @@ rustPlatform.buildRustPackage {
     git
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Security
-    ];
+  buildInputs = [
+    openssl
+    dbus
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -5,7 +5,6 @@
   fetchurl,
   pkg-config,
   gtk2,
-  Carbon,
   useGTK ? config.libiodbc.gtk or false,
 }:
 
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals useGTK [ gtk2 ] ++ lib.optional stdenv.hostPlatform.isDarwin Carbon;
+  buildInputs = lib.optionals useGTK [ gtk2 ];
 
   preBuild = ''
     export NIX_LDFLAGS_BEFORE="-rpath $out/lib"

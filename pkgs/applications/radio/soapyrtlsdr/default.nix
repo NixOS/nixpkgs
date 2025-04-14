@@ -7,8 +7,6 @@
   rtl-sdr,
   soapysdr,
   libobjc,
-  IOKit,
-  Security,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      IOKit
-      Security
     ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];

@@ -1,10 +1,8 @@
 {
   buildNpmPackage,
-  darwin,
   fetchFromGitHub,
   lib,
   python3,
-  stdenv,
 }:
 
 buildNpmPackage rec {
@@ -26,10 +24,6 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   meta = with lib; {

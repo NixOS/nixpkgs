@@ -10,7 +10,6 @@
   rustfmt,
   setuptools-rust,
   openssl,
-  Security,
   msgpack,
   fetchpatch,
   nixosTests,
@@ -59,7 +58,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [ msgpack ];
 

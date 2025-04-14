@@ -16,7 +16,6 @@
   guiSupport ? fullBuild,
   tk,
   highlightSupport ? fullBuild,
-  ApplicationServices,
   # test dependencies
   runCommand,
   unzip,
@@ -78,7 +77,7 @@ let
         cargo
         rustc
       ];
-    buildInputs = [ docutils ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
+    buildInputs = [ docutils ];
 
     makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
 

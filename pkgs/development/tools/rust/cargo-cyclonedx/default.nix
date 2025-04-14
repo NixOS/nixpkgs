@@ -5,9 +5,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  Security,
-  SystemConfiguration,
-  CoreFoundation,
   curl,
 }:
 
@@ -34,9 +31,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-      CoreFoundation
       curl
     ];
 

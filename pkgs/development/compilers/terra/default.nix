@@ -12,8 +12,6 @@
   libffi,
   libobjc,
   libpfm,
-  Cocoa,
-  Foundation,
 }:
 
 let
@@ -68,8 +66,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      Cocoa
-      Foundation
     ];
 
   cmakeFlags =

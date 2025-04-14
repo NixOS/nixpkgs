@@ -2,7 +2,6 @@
   lib,
   autoAddDriverRunpath,
   cmake,
-  darwin,
   fetchFromGitHub,
   nix-update-script,
   stdenv,
@@ -49,15 +48,6 @@ let
     optionals
     optionalString
     ;
-
-  darwinBuildInputs =
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      CoreVideo
-      CoreGraphics
-    ]
-    ++ optionals metalSupport [ MetalKit ];
 
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
@@ -126,8 +116,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs =
-    optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
-    ++ optionals cudaSupport cudaBuildInputs
+    optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]

@@ -2,7 +2,6 @@
   lib,
   SDL2,
   autoreconfHook,
-  darwin,
   fetchurl,
   giflib,
   libXpm,
@@ -18,9 +17,6 @@
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Foundation;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
   version = "2.8.8";
@@ -45,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  ];
 
   configureFlags =
     [

@@ -1,7 +1,6 @@
 {
   lib,
   cmake,
-  darwin,
   fetchFromGitHub,
   libopus,
   openssl,
@@ -35,9 +34,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   OPENSSL_NO_VENDOR = 1;

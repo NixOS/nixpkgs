@@ -4,13 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
-  AppKit,
-  CoreFoundation,
-  CoreGraphics,
-  CoreVideo,
-  Foundation,
-  Metal,
-  QuartzCore,
   xorg,
   vulkan-loader,
 }:
@@ -31,16 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
-    Foundation
-    Metal
-    QuartzCore
   ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

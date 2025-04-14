@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   fetchpatch,
-  darwin,
   libiconv,
   testers,
   nix-update-script,
@@ -37,7 +36,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
     libiconv
   ];
 

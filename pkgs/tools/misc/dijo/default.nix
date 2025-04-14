@@ -1,16 +1,14 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   ncurses,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dijo";
   version = "0.2.7";
-  buildInputs = [ ncurses ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
+  buildInputs = [ ncurses ];
   src = fetchFromGitHub {
     owner = "NerdyPepper";
     repo = "dijo";

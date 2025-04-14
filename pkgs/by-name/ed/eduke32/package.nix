@@ -15,17 +15,10 @@
   libGL,
   SDL2,
   SDL2_mixer,
-  darwin,
   graphicsmagick,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AGL
-    Cocoa
-    GLUT
-    OpenGL
-    ;
   wrapper = "eduke32-wrapper";
   swWrapper = "voidsw-wrapper";
   furyWrapper = "fury-wrapper";
@@ -61,12 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
       alsa-lib
       gtk2
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AGL
-      Cocoa
-      GLUT
-      OpenGL
     ];
 
   nativeBuildInputs =

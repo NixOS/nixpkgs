@@ -6,8 +6,6 @@
   cmake,
   bluez,
   libobjc,
-  Foundation,
-  IOBluetooth,
 }:
 stdenv.mkDerivation rec {
 
@@ -44,8 +42,6 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.hostPlatform.isLinux [ bluez ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      Foundation
-      IOBluetooth
     ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];

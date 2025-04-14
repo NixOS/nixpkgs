@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  AppKit,
-  Cocoa,
 }:
 
 let
@@ -18,11 +16,6 @@ stdenv.mkDerivation {
     rev = version;
     sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
-
-  buildInputs = [
-    AppKit
-    Cocoa
-  ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -8,9 +8,6 @@
   pkg-config,
   openssl,
   libiconv,
-  Security,
-  CoreServices,
-  SystemConfiguration,
   dbBackend ? "sqlite",
   libmysqlclient,
   libpq,
@@ -42,9 +39,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
-      CoreServices
-      SystemConfiguration
     ]
     ++ lib.optional (dbBackend == "mysql") libmysqlclient
     ++ lib.optional (dbBackend == "postgresql") libpq;

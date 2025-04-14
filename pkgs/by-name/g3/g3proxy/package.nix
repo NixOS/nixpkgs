@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  darwin,
   c-ares,
   python3,
   lua5_4,
@@ -43,14 +41,10 @@ rustPlatform.buildRustPackage rec {
     cmake
   ];
 
-  buildInputs =
-    [
-      c-ares
-      lua5_4
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    c-ares
+    lua5_4
+  ];
 
   meta = {
     description = "Enterprise-oriented Generic Proxy Solutions";

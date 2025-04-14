@@ -8,7 +8,6 @@
   openssl,
   just,
   pandoc,
-  Security,
 }:
 
 rustPlatform.buildRustPackage {
@@ -33,9 +32,7 @@ rustPlatform.buildRustPackage {
     just
     pandoc
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   outputs = [
     "out"

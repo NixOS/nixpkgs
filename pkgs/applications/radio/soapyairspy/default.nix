@@ -6,8 +6,6 @@
   airspy,
   soapysdr,
   libobjc,
-  IOKit,
-  Security,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +27,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      IOKit
-      Security
     ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];

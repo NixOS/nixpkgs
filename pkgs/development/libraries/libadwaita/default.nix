@@ -18,8 +18,6 @@
   gsettings-desktop-schemas,
   desktop-file-utils,
   xvfb-run,
-  AppKit,
-  Foundation,
   testers,
 }:
 
@@ -65,15 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dtests=false"
     ];
 
-  buildInputs =
-    [
-      appstream
-      fribidi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
-    ];
+  buildInputs = [
+    appstream
+    fribidi
+  ];
 
   propagatedBuildInputs = [
     gtk4

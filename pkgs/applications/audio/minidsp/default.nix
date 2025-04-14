@@ -4,8 +4,6 @@
   rustPlatform,
   stdenv,
   libusb1,
-  AppKit,
-  IOKit,
   pkg-config,
 }:
 rustPlatform.buildRustPackage rec {
@@ -24,12 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p minidsp -p minidsp-daemon" ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      IOKit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 

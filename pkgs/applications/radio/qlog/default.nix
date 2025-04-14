@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       hamlib
       qtkeychain
     ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cups
-    ]);
+    ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
