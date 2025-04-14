@@ -14,3 +14,14 @@ nixos-image-amazon-25.05pre-git-x86_64-linux.vhd  nix-support
 
 To get a list of all variants available, run `nixos-rebuild build-image` without arguments.
 
+## Customize specific image variants {#sec-image-nixos-rebuild-build-image-customize}
+
+The `image.modules` option can be used to set specific options per image variant, in a similar fashion as [specialisations](options.html#opt-specialisation) for generic nixos configurations.
+
+E.g. images for the cloud provider Linode use `grub2` as a bootloader by default. If you are using `systemd-boot` on other platforms and want to disable it for Linode onlz, you could use the following options:
+
+``` nix
+  image.modules.linode = {
+    boot.loader.systemd-boot.enable = lib.mkForce false;
+  };
+```
