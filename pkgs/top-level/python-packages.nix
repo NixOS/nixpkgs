@@ -16788,6 +16788,8 @@ self: super: with self; {
 
   symbolic = callPackage ../development/python-modules/symbolic { };
 
+  symbolic_10 = callPackage ../development/python-modules/symbolic/10.nix { };
+
   symengine = callPackage ../development/python-modules/symengine { inherit (pkgs) symengine; };
 
   symfc = callPackage ../development/python-modules/symfc { };
