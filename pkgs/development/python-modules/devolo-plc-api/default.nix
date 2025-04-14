@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "devolo-plc-api";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -35,9 +35,9 @@ buildPythonPackage rec {
       --replace-fail "protobuf>=4.22.0" "protobuf"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     protobuf
     segno
