@@ -1,5 +1,9 @@
 # Almost directly vendored from https://github.com/NixOS/ofborg/blob/5a4e743f192fb151915fcbe8789922fa401ecf48/ofborg/src/maintainers.nix
-{ changedattrs, changedpathsjson }:
+{
+  changedattrs,
+  changedpathsjson,
+  byName ? false,
+}:
 let
   pkgs = import ../../.. {
     system = "x86_64-linux";
@@ -94,12 +98,13 @@ let
     pkg:
     builtins.map (maintainer: {
       id = maintainer.githubId;
+      inherit (maintainer) github;
       packageName = pkg.name;
       dueToFiles = pkg.filenames;
     }) pkg.maintainers
   ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
+  byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: builtins.map (pkg: pkg.packageName) packages
