@@ -65,6 +65,7 @@ buildFHSEnv {
           lz4.dev
           tbb
           libxkbcommon
+          librealsense
           boost
           glew
         ])

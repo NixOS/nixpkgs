@@ -11831,6 +11831,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  persistent-breakpoints-nvim = buildVimPlugin {
+    pname = "persistent-breakpoints.nvim";
+    version = "2025-03-22";
+    src = fetchFromGitHub {
+      owner = "weissle";
+      repo = "persistent-breakpoints.nvim";
+      rev = "d1656221836207787b8a7969cc2dc72668c4742a";
+      sha256 = "ed958d4725406d0b8cff2de316e67941f9af23ea53e099a8e645b61f08c34b56";
+    };
+    meta.homepage = "https://github.com/Weissle/persistent-breakpoints.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   pest-vim = buildVimPlugin {
     pname = "pest.vim";
     version = "2024-04-25";

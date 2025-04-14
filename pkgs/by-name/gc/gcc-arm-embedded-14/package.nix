@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
+  patches = [
+    # fix double entry in share/info/porting.info
+    # https://github.com/NixOS/nixpkgs/issues/363902
+    ./info-fix.patch
+  ];
+
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
