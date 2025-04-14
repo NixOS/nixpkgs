@@ -429,7 +429,9 @@ in
 
         ivsc-driver = callPackage ../os-specific/linux/ivsc-driver { };
 
-        ixgbevf = callPackage ../os-specific/linux/ixgbevf { };
+        ixgbe = callPackage ../os-specific/linux/ixgbe {};
+
+        ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
         it87 = callPackage ../os-specific/linux/it87 { };
 
