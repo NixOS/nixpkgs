@@ -100,6 +100,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = with lib; {
     description = "Game programming library";
     homepage = "https://liballeg.org/";
