@@ -177,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       elitak
       lopsided98
       wucke13
+      xokdvium
     ];
   };
 })
