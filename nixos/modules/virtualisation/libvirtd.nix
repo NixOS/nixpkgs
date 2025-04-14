@@ -440,6 +440,8 @@ in
       Include ${cfg.package}/etc/ssh/ssh_config.d/30-libvirt-ssh-proxy.conf
     '';
 
+    services.firewalld.packages = [ cfg.package ];
+
     systemd.packages = [ cfg.package ];
 
     systemd.services.libvirtd-config = {
