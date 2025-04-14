@@ -135,7 +135,7 @@ in
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
         fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
         ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
-        hlint = super.hlint;
+        hlint = self.hlint_3_6_1;
         stylish-haskell = super.stylish-haskell;
       }
     )
