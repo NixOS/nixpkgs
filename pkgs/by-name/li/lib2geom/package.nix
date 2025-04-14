@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
           # https://gitlab.com/inkscape/lib2geom/-/issues/70
           "circle-test"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+        ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux" || stdenv.hostPlatform ? gcc.arch) [
           # Broken on all platforms, test just accidentally passes on some.
           # https://gitlab.com/inkscape/lib2geom/-/issues/63
           "elliptical-arc-test"
