@@ -639,6 +639,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # Use libiconvReal with gettext to break an infinite recursion.
         gettext = super.gettext.override { libiconv = super.libiconvReal; };
 
+        # Disable grep’s tests for now due to impure locale updates in
+        # macOS 15.4 breaking them in the bootstrap.
+        gnugrep = super.gnugrep.overrideAttrs { doCheck = false; };
+
         # Disable tests because they use dejagnu, which fails to run.
         libffi = super.libffi.override { doCheck = false; };
 
