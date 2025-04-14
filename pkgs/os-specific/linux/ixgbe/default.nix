@@ -31,18 +31,14 @@ stdenv.mkDerivation rec {
   ];
 
   KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  # KSRC = "${linuxHeaders}";
-  #KSRC="${srcOnly kernel}";
   KVER="${kernel.modDirVersion}";
   KHEADERS = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source";
 
   configurePhase = ''
     cd src
-    # makeFlagsArray+=(KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build INSTALL_MOD_PATH=$out MANDIR=/share/man)
     substituteInPlace common.mk --replace /sbin/depmod ${kmod}/bin/depmod
     # prevent host system kernel introspection
     substituteInPlace common.mk --replace /boot/System.map /not-exists
-    #substituteInPlace common.mk --replace /lib/modules/ "${kernel.dev}/lib/modules/"
     substituteInPlace kcompat-generator.sh --replace 'cd "''${KSRC}"' 'cd "''${KHEADERS}"'
   '';
 
@@ -58,7 +54,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/ethernet-linux-ixgbe";
     license = licenses.gpl2Only;
     priority = 20;
-    # kernels ship ixgbevf driver for a long time already, maybe switch to a newest kernel?
-    # broken = versionAtLeast kernel.version "5.2";
   };
 }
