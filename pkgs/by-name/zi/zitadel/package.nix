@@ -202,6 +202,7 @@ buildGoModule rec {
     maintainers = builtins.attrValues {
       inherit (lib.maintainers)
         nrabulinski
+        benaryorg
         ;
     };
   };
