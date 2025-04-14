@@ -133,7 +133,7 @@ in
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = super.fourmolu;
+        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
         ormolu = super.ormolu;
         hlint = super.hlint;
         stylish-haskell = super.stylish-haskell;

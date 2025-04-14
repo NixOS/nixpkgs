@@ -1389,7 +1389,7 @@ builtins.intersectAttrs super {
       builtins.mapAttrs (_: fourmoluTestFix) super
     )
     fourmolu
-    fourmolu_0_15_0_0
+    fourmolu_0_14_0_0
     fourmolu_0_16_0_0
     ;
 
