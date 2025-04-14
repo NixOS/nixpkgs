@@ -11,6 +11,7 @@
   spirv-llvm-translator,
   spirv-tools,
   lttng-ust,
+  opencl-headers,
   ocl-icd,
   python3,
   runCommand,
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.llvm
     llvmPackages.libclang
     lttng-ust
+    opencl-headers
     ocl-icd
     spirv-tools
     spirv-llvm-translator
