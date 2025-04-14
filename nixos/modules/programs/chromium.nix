@@ -83,6 +83,7 @@ in
     programs.chromium = {
       enable = lib.mkEnableOption "Enable Chrome or Chromium browser";
 
+      # Intentionally set to `null` in order to keep the old behaviour
       package = lib.mkOption {
         type = lib.types.package;
         default = null;
