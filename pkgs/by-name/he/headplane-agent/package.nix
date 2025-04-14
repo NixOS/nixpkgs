@@ -1,0 +1,16 @@
+{buildGoModule, fetchFromGitHub}:
+buildGoModule rec {
+  pname = "hp_agent";
+  version = "0.5.10";
+  src = fetchFromGitHub {
+    repo = "headplane";
+    owner = "tale";
+    rev = version;
+    hash = "sha256-0sckkbjyjrgshzmxx1biylxasybcmybarmqgfhl2cn6yy40dw6p4";
+  };
+
+  vendorHash = "sha256-G0kahv3mPTL/mxU2U+0IytJaFVPXMbMBktbLMfM0BO8=";
+  ldflags = ["-s" "-w"];
+  env.CGO_ENABLED = 0;
+}
+
