@@ -217,11 +217,11 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = {
-      etc = lib.mkIf cfg.enable selectedBrowserConfig;
+      etc = selectedBrowserConfig;
 
-      systemPackages = lib.mkIf (cfg.enable && cfg.package != null) [ cfg.package ];
+      systemPackages = lib.optionals (cfg.package != null) [ cfg.package ];
     };
   };
 }
