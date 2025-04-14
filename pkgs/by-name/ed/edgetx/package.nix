@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EdgeTX Companion transmitter support software";
     longDescription = ''
       EdgeTX Companion is used for many different tasks like loading EdgeTX
@@ -167,13 +167,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion finalAttrs.version));
     homepage = "https://edgetx.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       elitak
       lopsided98
       wucke13
