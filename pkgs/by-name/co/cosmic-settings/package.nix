@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   cmake,
   just,
@@ -35,6 +36,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "epoch-${finalAttrs.version}";
     hash = "sha256-UKg3TIpyaqtynk6wLFFPpv69F74hmqfMVPra2+iFbvE=";
   };
+
+  patches = [
+    # TODO: This is merged and will be included in the 7th Alpha release, remove it then.
+    (fetchpatch {
+      url = "https://github.com/pop-os/cosmic-settings/commit/2e2898b31fabcb3f3b561e6c4cea2aca9de9b284.patch";
+      hash = "sha256-ZGJlGmR6lZB697uQ+ZsjvisNbPKBlBdRK/Ti541ZdlE=";
+    })
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-mf/Cw3/RLrCYgsk7JKCU2+oPn1VPbD+4JzkUmbd47m8=";
