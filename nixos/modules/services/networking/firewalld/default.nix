@@ -14,6 +14,10 @@ let
   };
 in
 {
+  imports = [
+    ./settings.nix
+  ];
+
   options.services.firewalld = {
     enable = lib.mkEnableOption "FirewallD";
     package = lib.mkPackageOption pkgs "firewalld" { };
