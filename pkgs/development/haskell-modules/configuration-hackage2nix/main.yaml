@@ -57,7 +57,7 @@ extra-packages:
   - commonmark-pandoc < 0.2.3           # 2025-04-06: Needed for pandoc 3.6
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
-  - fourmolu == 0.17.0.0                # 2025-01-27: for ghc 9.10 compat
+  - fourmolu == 0.16.0.0                # 2025-01-27: for ghc 9.10 compat
   - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
