@@ -14201,10 +14201,6 @@ with pkgs;
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
 
-  keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
-    inherit (darwin.apple_sdk_11_0.frameworks) LocalAuthentication;
-  };
-
   evolution-data-server-gtk4 = evolution-data-server.override {
     withGtk3 = false;
     withGtk4 = true;

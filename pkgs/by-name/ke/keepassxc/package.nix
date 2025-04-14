@@ -3,14 +3,13 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qttools,
+  libsForQt5,
 
   apple-sdk_15,
   asciidoctor,
   botan3,
   curl,
   darwinMinVersionHook,
-  kio,
   libXi,
   libXtst,
   libargon2,
@@ -19,16 +18,11 @@
   pcsclite,
   pkg-config,
   qrencode,
-  qtbase,
-  qtmacextras,
-  qtsvg,
-  qtx11extras,
   readline,
   wrapGAppsHook3,
-  wrapQtAppsHook,
   zlib,
 
-  LocalAuthentication,
+  darwin,
 
   withKeePassBrowser ? true,
   withKeePassBrowserPasskeys ? true,
@@ -85,7 +79,7 @@ stdenv.mkDerivation rec {
 
     export LC_ALL="en_US.UTF-8"
     export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}"
     # testcli, testgui and testkdbx4 are flaky - skip them all
     # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
     make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.hostPlatform.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
@@ -96,8 +90,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     asciidoctor
     cmake
-    wrapQtAppsHook
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
     pkg-config
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
 
@@ -129,21 +123,23 @@ stdenv.mkDerivation rec {
     [
       curl
       botan3
-      kio
+      libsForQt5.kio
       libXi
       libXtst
       libargon2
       minizip
       pcsclite
       qrencode
-      qtbase
-      qtsvg
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
       readline
       zlib
     ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && withKeePassTouchID) LocalAuthentication
+    ++ lib.optional (
+      stdenv.hostPlatform.isDarwin && withKeePassTouchID
+    ) darwin.apple_sdk_11_0.frameworks.LocalAuthentication
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      qtmacextras
+      libsForQt5.qtmacextras
 
       apple-sdk_15
       # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
@@ -151,7 +147,7 @@ stdenv.mkDerivation rec {
       (darwinMinVersionHook "12.3")
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libusb1
-    ++ lib.optional withKeePassX11 qtx11extras;
+    ++ lib.optional withKeePassX11 libsForQt5.qtx11extras;
 
   passthru.tests = nixosTests.keepassxc;
 
