@@ -1,6 +1,5 @@
 {
   lib,
-  runCommand,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
@@ -10,7 +9,6 @@
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
-  nix-update-script,
 }:
 
 let
@@ -112,17 +110,6 @@ buildNpmPackage {
       startupWMClass = "anytype";
     })
   ];
-
-  passthru.updateScript = nix-update-script {
-    # Prevent updating to versions with '-' in them.
-    # Necessary since Anytype uses Electron-based 'MAJOR.MINOR.PATCH(-{alpha,beta})?' versioning scheme where each
-    #  {alpha,beta} version increases the PATCH version, releasing a new full release version in GitHub instead of a
-    #  pre-release version.
-    extraArgs = [
-      "--version-regex"
-      "[^-]*"
-    ];
-  };
 
   meta = {
     inherit description;
