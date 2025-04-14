@@ -27,13 +27,13 @@
 
   withKeePassBrowser ? true,
   withKeePassBrowserPasskeys ? true,
-  withKeePassFDOSecrets ? true,
+  withKeePassFDOSecrets ? stdenv.hostPlatform.isLinux,
   withKeePassKeeShare ? true,
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
   withKeePassTouchID ? true,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? true,
+  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
 
   nixosTests,
 }:
@@ -59,36 +59,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./darwin.patch ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
-      (lib.cmakeBool "WITH_GUI_TESTS" true)
-      (lib.cmakeBool "WITH_XC_UPDATECHECK" false)
-    ]
-    ++ lib.optionals (!withKeePassX11) [
-      (lib.cmakeBool "WITH_XC_X11" false)
-    ]
-    ++ lib.optionals (withKeePassFDOSecrets && stdenv.hostPlatform.isLinux) [
-      (lib.cmakeBool "WITH_XC_FDOSECRETS" true)
-    ]
-    ++ lib.optionals (withKeePassYubiKey && stdenv.hostPlatform.isLinux) [
-      (lib.cmakeBool "WITH_XC_YUBIKEY" true)
-    ]
-    ++ lib.optionals withKeePassBrowser [
-      (lib.cmakeBool "WITH_XC_BROWSER" true)
-    ]
-    ++ lib.optionals withKeePassBrowserPasskeys [
-      (lib.cmakeBool "WITH_XC_BROWSER_PASSKEYS" true)
-    ]
-    ++ lib.optionals withKeePassKeeShare [
-      (lib.cmakeBool "WITH_XC_KEESHARE" true)
-    ]
-    ++ lib.optionals withKeePassNetworking [
-      (lib.cmakeBool "WITH_XC_NETWORKING" true)
-    ]
-    ++ lib.optionals withKeePassSSHAgent [
-      (lib.cmakeBool "WITH_XC_SSHAGENT" true)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
+    (lib.cmakeBool "WITH_GUI_TESTS" true)
+    (lib.cmakeBool "WITH_XC_UPDATECHECK" false)
+    (lib.cmakeBool "WITH_XC_X11" withKeePassX11)
+    (lib.cmakeBool "WITH_XC_BROWSER" withKeePassBrowser)
+    (lib.cmakeBool "WITH_XC_BROWSER_PASSKEYS" withKeePassBrowserPasskeys)
+    (lib.cmakeBool "WITH_XC_KEESHARE" withKeePassKeeShare)
+    (lib.cmakeBool "WITH_XC_NETWORKING" withKeePassNetworking)
+    (lib.cmakeBool "WITH_XC_SSHAGENT" withKeePassSSHAgent)
+    (lib.cmakeBool "WITH_XC_FDOSECRETS" withKeePassFDOSecrets)
+    (lib.cmakeBool "WITH_XC_YUBIKEY" withKeePassYubiKey)
+  ];
 
   doCheck = true;
   checkPhase = ''
