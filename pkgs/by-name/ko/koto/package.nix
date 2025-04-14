@@ -22,8 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Ok4rgqiQ7N5knXdb0Mfn3fYPPLXoRtOZVv8RvWR2h3k=";
 
   postPatch = ''
-    ${lib.getExe' yq "tomlq"} -ti 'del(.bench)' crates/koto/Cargo.toml
+    tomlq -ti 'del(.bench)' crates/koto/Cargo.toml
   '';
+
+  nativeBuildInputs = [
+    yq # for `tomlq`
+  ];
 
   cargoBuildFlags = [ "--package=koto_cli" ];
 
@@ -36,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Simple, expressive, embeddable programming language";
     homepage = "https://github.com/koto-lang/koto";
-    changelog = "https://github.com/koto-lang/koto/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/koto-lang/koto/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "koto";
