@@ -21,6 +21,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-RFLxDV/L6Qbz14KqIEcMX/EnirNUrHL0MW8v5Z8ByK0=";
   };
 
+  patches = [
+    ./disable-update-check.patch
+  ];
+
   build-system = with python3Packages; [ setuptools ];
 
   buildInputs = [
