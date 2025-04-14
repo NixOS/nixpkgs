@@ -282,8 +282,6 @@ with pkgs;
     extraPackages = [ jdk17 ];
   };
 
-  asitop = callPackage ../os-specific/darwin/asitop { };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   apko = callPackage ../development/tools/apko {
@@ -2678,7 +2676,7 @@ with pkgs;
   patool = with python3Packages; toPythonApplication patool;
 
   pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_33;
+    electron = electron_34;
   };
 
   pueue = darwin.apple_sdk_11_0.callPackage ../applications/misc/pueue {
@@ -12714,6 +12712,7 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
   zabbix64 = recurseIntoAttrs (zabbixFor "v64");
