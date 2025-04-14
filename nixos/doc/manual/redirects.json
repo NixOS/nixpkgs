@@ -200,6 +200,9 @@
   "sec-image-nixos-rebuild-build-image": [
     "index.html#sec-image-nixos-rebuild-build-image"
   ],
+  "sec-image-nixos-rebuild-build-image-customize": [
+    "index.html#sec-image-nixos-rebuild-build-image-customize"
+  ],
   "sec-image-repart": [
     "index.html#sec-image-repart"
   ],
