@@ -41,7 +41,18 @@ let
   ) validPackageAttributes;
 
   attrsWithMaintainers = builtins.map (
-    pkg: pkg // { maintainers = (pkg.package.meta or { }).maintainers or [ ]; }
+    pkg:
+    let
+      meta = pkg.package.meta or { };
+    in
+    pkg
+    // {
+      # TODO: Refactor this so we can ping entire teams instead of the individual members.
+      # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
+      maintainers =
+        meta.maintainers or [ ]
+        ++ lib.flatten (map (team: team.members or [ ]) (meta.teams or [ ]));
+    }
   ) attrsWithPackages;
 
   relevantFilenames =
