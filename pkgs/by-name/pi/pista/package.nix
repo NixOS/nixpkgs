@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
     zlib
   ];
-
+  doCheck = false; # no tests
   meta = {
     description = "Simple {bash, zsh} prompt for programmers";
     homepage = "https://github.com/oppiliappan/pista";
