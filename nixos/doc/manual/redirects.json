@@ -146,6 +146,9 @@
   "ex-config": [
     "index.html#ex-config"
   ],
+  "ex-nixos-rebuild-build-image-customize": [
+    "index.html#ex-nixos-rebuild-build-image-customize"
+  ],
   "sec-installation-additional-notes": [
     "index.html#sec-installation-additional-notes"
   ],
