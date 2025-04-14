@@ -41,7 +41,11 @@ esac
 ECLIPSES_JSON=$(dirname $0)/eclipses.json;
 
 t=$(mktemp);
-cat $ECLIPSES_JSON | jq ". + {platform_major: \"${platform_major}\",platform_minor: \"${platform_minor}\",year: \"${year}\",month: \"${month}\",buildmonth: \"${buildmonth}\",dayHourMinute: \"${builddaytime}\"}" > $t;
+# note: including platform_major, platform_minor, and version may seem redundant
+# the first two are needed for the derivation itself; the third is necessary so
+# that nixpkgs-update can see that the version changes as a result of this update
+# script.
+cat $ECLIPSES_JSON | jq ". + {platform_major: \"${platform_major}\",platform_minor: \"${platform_minor}\",version:\"${platform_major}.${platform_minor}\",year: \"${year}\",month: \"${month}\",buildmonth: \"${buildmonth}\",dayHourMinute: \"${builddaytime}\"}" > $t;
 mv $t $ECLIPSES_JSON;
 
 # prefetch new download hashes
