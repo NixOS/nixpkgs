@@ -36,7 +36,6 @@ in
   callPackage,
   coreutils,
   curl,
-  darwin,
   docbook_xsl_ns,
   docbook5,
   editline,
@@ -66,7 +65,6 @@ in
   python3,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
   util-linuxMinimal,
   xz,
@@ -168,9 +166,6 @@ let
       ++ lib.optionals (atLeast225 && enableDocumentation) [
         python3
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Security
-      ]
       ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
         libcpuid
       ]
@@ -179,9 +174,6 @@ let
       ]
       ++ lib.optionals withAWS [
         aws-sdk-cpp
-      ]
-      ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin) [
-        darwin.apple_sdk.libs.sandbox
       ];
 
     propagatedBuildInputs =
@@ -308,7 +300,6 @@ let
       perl-bindings = perl.pkgs.toPerlModule (
         callPackage ./nix-perl.nix {
           nix = self;
-          inherit Security;
         }
       );
 

@@ -8,7 +8,6 @@
   validatePkgConfig,
   rust,
   libiconv,
-  darwin,
   curl,
   apacheHttpd,
   testers,
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeBuildInputs = [

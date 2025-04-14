@@ -12,7 +12,6 @@
   libssh2,
   cppunit,
   sphinx,
-  Security,
   nixosTests,
 }:
 
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     libssh2
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   outputs = [
     "bin"

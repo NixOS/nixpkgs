@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   nmap,
   perl,
   python3,
   rustPlatform,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,8 +26,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'call_format = "nmap' 'call_format = "${nmap}/bin/nmap'
     patchShebangs fixtures/.rustscan_scripts/*
   '';
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     perl

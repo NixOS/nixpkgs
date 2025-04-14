@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
       libX11
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
       darwin.libobjc
     ];
 

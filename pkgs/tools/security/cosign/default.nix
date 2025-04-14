@@ -6,7 +6,6 @@
   pcsclite,
   pkg-config,
   installShellFiles,
-  PCSC,
   pivKeySupport ? true,
   pkcs11Support ? true,
   testers,
@@ -23,9 +22,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-QvU+JpIcE9EX+ehRWvs2bS2VGgGVekNX8f5+mITIwU0=";
   };
 
-  buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite)
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pivKeySupport) [ PCSC ];
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
 
   nativeBuildInputs = [
     pkg-config

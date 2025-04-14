@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
   curl,
   sqlite,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     curl
     sqlite
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   postInstall = ''
     substituteInPlace command-not-found.sh \

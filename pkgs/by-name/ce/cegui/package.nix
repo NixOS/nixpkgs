@@ -7,7 +7,6 @@
   freetype,
   boost,
   expat,
-  darwin,
   libiconv,
   unstableGitUpdater,
 }:
@@ -37,8 +36,6 @@ stdenv.mkDerivation {
       expat
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Foundation
       libiconv
     ];
 

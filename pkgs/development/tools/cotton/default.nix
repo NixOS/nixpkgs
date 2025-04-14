@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-y162tjxPGZQiYBJxFk4QN9ZqSH8jrqa5Y961Sx2zrRs=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "Package manager for JavaScript projects";

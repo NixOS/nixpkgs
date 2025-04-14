@@ -2,9 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
-  Security,
-  SystemConfiguration,
   installShellFiles,
   nix-update-script,
 }:
@@ -24,11 +21,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-+BlLVnvI2qBfwEtyxmZFNhR9MEzs0/a1Ce6ALOKtoPU=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
 
   postInstall = ''
     for shell in {ba,fi,z}sh; do

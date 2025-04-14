@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  Hypervisor,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ Hypervisor ];
 
   meta = with lib; {
     description = "Bash on Ubuntu on macOS";

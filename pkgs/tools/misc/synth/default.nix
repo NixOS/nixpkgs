@@ -2,9 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  AppKit,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,11 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-sJSU85f4bLh89qo8fojWJNfJ9t7i/Hlg5pnLcxcwKt4=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Security
-  ];
 
   checkFlags = [
     # https://github.com/shuttle-hq/synth/issues/309

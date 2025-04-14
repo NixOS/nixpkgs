@@ -6,7 +6,6 @@
   openssl,
   stdenv,
   curl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      Security
     ];
 
   doCheck = false;

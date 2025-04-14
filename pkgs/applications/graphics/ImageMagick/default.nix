@@ -52,8 +52,6 @@
   potrace,
   coreutils,
   curl,
-  ApplicationServices,
-  Foundation,
   testers,
   nixos-icons,
   perlPackages,
@@ -147,11 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       librsvg
       pango
     ]
-    ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Foundation
-    ];
+    ++ lib.optional openjpegSupport openjpeg;
 
   propagatedBuildInputs =
     [ curl ]

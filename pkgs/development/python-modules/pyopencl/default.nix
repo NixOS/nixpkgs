@@ -14,7 +14,6 @@
   # buildInputs
   opencl-headers,
   pybind11,
-  darwin,
   ocl-icd,
 
   # dependencies
@@ -25,10 +24,6 @@
   pytestCheckHook,
 }:
 
-let
-  os-specific-buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
-in
 buildPythonPackage rec {
   pname = "pyopencl";
   version = "2025.1";
@@ -55,7 +50,7 @@ buildPythonPackage rec {
   buildInputs = [
     opencl-headers
     pybind11
-  ] ++ os-specific-buildInputs;
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ ocl-icd ];
 
   dependencies = [
     numpy

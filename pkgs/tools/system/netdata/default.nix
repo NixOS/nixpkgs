@@ -7,7 +7,6 @@
   cmake,
   cups,
   curl,
-  darwin,
   freeipmi,
   go,
   google-cloud-cpp,
@@ -97,14 +96,10 @@ stdenv'.mkDerivation (finalAttrs: {
       zlib
       libyaml
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        IOKit
-        libossp_uuid
-      ]
-    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libossp_uuid
+    ]
+
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       libcap
       libuuid

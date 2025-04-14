@@ -2,19 +2,10 @@
   lib,
   alsa-lib,
   cmake,
-  darwin,
   fetchFromGitHub,
   stdenv,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    CoreAudio
-    CoreFoundation
-    CoreMIDI
-    CoreServices
-    ;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libremidi";
   version = "4.5.0";
@@ -30,16 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      CoreFoundation
-      CoreMIDI
-      CoreServices
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   # Bug: set this as true breaks obs-studio-plugins.advanced-scene-switcher
   strictDeps = false;

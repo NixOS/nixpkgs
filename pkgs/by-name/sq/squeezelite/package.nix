@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   flac,
   libgpiod,
@@ -59,17 +58,7 @@ stdenv.mkDerivation {
     ++ optional pulseSupport libpulseaudio
     ++ optional alsaSupport alsa-lib
     ++ optional portaudioSupport portaudio
-    ++ optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        CoreVideo
-        VideoDecodeAcceleration
-        CoreAudio
-        AudioToolbox
-        AudioUnit
-        Carbon
-      ]
-    )
+
     ++ optional faad2Support faad2
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile

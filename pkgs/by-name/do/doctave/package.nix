@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,10 +25,6 @@ rustPlatform.buildRustPackage rec {
       "doctave-markdown-0.9.0" = "sha256-DDeb91DgLx7vOYHwoDy6+/532q/3/myJUZDqjq7ejJ0=";
     };
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   meta = {
     description = "Batteries-included developer documentation site generator";

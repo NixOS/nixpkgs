@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   cmake,
   rustPlatform,
   pkg-config,
@@ -9,7 +8,6 @@
   gtk3,
   glib,
   openssl,
-  Security,
   nix-update-script,
 }:
 
@@ -32,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk3
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   nativeBuildInputs = [
     cmake

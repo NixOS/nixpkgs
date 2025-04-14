@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
   installShellFiles,
   asciidoctor,
 }:
@@ -35,8 +33,6 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     asciidoctor
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     asciidoctor --backend=manpage git-gone.1.adoc -o git-gone.1

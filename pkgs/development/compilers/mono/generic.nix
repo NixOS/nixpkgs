@@ -13,7 +13,6 @@
   zlib,
   bash,
   cacert,
-  Foundation,
   libobjc,
   python3,
   version,
@@ -63,7 +62,6 @@ stdenv.mkDerivation rec {
       bash
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
       libobjc
     ];
 

@@ -288,7 +288,6 @@ lib.makeScope pkgs.newScope (
           buildPecl = buildPecl.override {
             stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
           };
-          inherit (pkgs) darwin;
         };
 
         decimal = callPackage ../development/php-packages/decimal { };
@@ -324,9 +323,7 @@ lib.makeScope pkgs.newScope (
 
         memprof = callPackage ../development/php-packages/memprof { };
 
-        mongodb = callPackage ../development/php-packages/mongodb {
-          inherit (pkgs) darwin;
-        };
+        mongodb = callPackage ../development/php-packages/mongodb { };
 
         msgpack = callPackage ../development/php-packages/msgpack { };
 
@@ -383,9 +380,7 @@ lib.makeScope pkgs.newScope (
 
         smbclient = callPackage ../development/php-packages/smbclient { };
 
-        snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
-          inherit (pkgs) darwin;
-        };
+        snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
 
         spx = callPackage ../development/php-packages/spx { };
 

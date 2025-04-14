@@ -15,7 +15,6 @@
   gobject-introspection,
   dbus,
   fetchpatch,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,18 +41,13 @@ stdenv.mkDerivation rec {
     gobject-introspection
     python3
   ];
-  buildInputs =
-    [
-      dbus-glib
-      libxml2
-      sqlite
-      telepathy-glib
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    dbus-glib
+    libxml2
+    sqlite
+    telepathy-glib
+    dbus
+  ];
 
   configureFlags = [ "--enable-call" ];
 

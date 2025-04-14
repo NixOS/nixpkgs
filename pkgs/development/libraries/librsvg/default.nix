@@ -15,7 +15,6 @@
   libxml2,
   bzip2,
   dav1d,
-  Foundation,
   rustPlatform,
   rustc,
   cargo-c,
@@ -137,9 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withIntrospection [
       vala # for share/vala/Makefile.vapigen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
     ];
 
   propagatedBuildInputs = [

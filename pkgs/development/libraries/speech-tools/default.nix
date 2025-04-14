@@ -5,9 +5,6 @@
   fetchpatch,
   ncurses,
   alsa-lib,
-  CoreServices,
-  AudioUnit,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,11 +30,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      AudioUnit
-      Cocoa
     ];
 
   makeFlags = [

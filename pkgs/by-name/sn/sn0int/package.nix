@@ -37,9 +37,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libseccomp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkgs.darwin.apple_sdk.frameworks.Security
     ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"

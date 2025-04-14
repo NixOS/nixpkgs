@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  CoreServices,
   buildPackages,
   nixosTests,
 }:
@@ -46,8 +45,6 @@ stdenv.mkDerivation rec {
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

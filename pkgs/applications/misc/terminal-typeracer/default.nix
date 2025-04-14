@@ -8,7 +8,6 @@
   openssl,
   sqlite,
   libiconv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
     ];
 
   OPENSSL_NO_VENDOR = 1;

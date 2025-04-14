@@ -8,8 +8,6 @@
   hostname,
   mailutils,
   systemdLibs,
-  IOKit,
-  ApplicationServices,
 }:
 
 let
@@ -53,12 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      ApplicationServices
-    ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ];
   enableParallelBuilding = true;
 
   meta = with lib; {

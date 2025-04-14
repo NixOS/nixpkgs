@@ -9,7 +9,6 @@
   SDL2,
   glew,
   openal,
-  OpenAL,
   libvorbis,
   libogg,
   curl,
@@ -23,9 +22,6 @@
   angelscript,
   libopenglrecorder,
   sqlite,
-  Cocoa,
-  IOKit,
-  IOBluetooth,
   libsamplerate,
   shaderc,
 }:
@@ -117,10 +113,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
     ++ lib.optional stdenv.hostPlatform.isLinux openal
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenAL
-      IOKit
-      Cocoa
-      IOBluetooth
       libsamplerate
     ];
 

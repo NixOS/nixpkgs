@@ -37,10 +37,6 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       [
         darwin.libobjc
-        darwin.apple_sdk_11_0.Libsystem
-        darwin.apple_sdk_11_0.frameworks.Cocoa
-        darwin.apple_sdk_11_0.frameworks.AppKit
-        darwin.apple_sdk_11_0.frameworks.CoreFoundation
       ]
     else
       [

@@ -10,7 +10,6 @@
   libSM,
   libICE,
   which,
-  IOKit,
   copyDesktopItems,
   makeDesktopItem,
   wrapGAppsHook3,
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     libX11
     libSM
     libICE
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  ];
 
   hardeningDisable = [ "format" ];
 

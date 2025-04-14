@@ -3,8 +3,6 @@
   rustPlatform,
   fetchCrate,
   installShellFiles,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,10 +18,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-GBr0z2iJuk86xkgZd2sAz+ISTRfESDt99g6ssxXhzhI=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ];
 
   useNextest = true;
 

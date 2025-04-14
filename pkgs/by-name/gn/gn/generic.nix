@@ -1,10 +1,10 @@
 {
   stdenv,
   lib,
+  darwin,
   fetchgit,
   fetchpatch,
   cctools,
-  darwin,
   writeText,
   ninja,
   python3,
@@ -54,19 +54,10 @@ stdenv.mkDerivation {
     ninja
     python3
   ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin;
-    with apple_sdk.frameworks;
-    [
-      libobjc
-      cctools
-
-      # frameworks
-      ApplicationServices
-      Foundation
-      AppKit
-    ]
-  );
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libobjc
+    cctools
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 

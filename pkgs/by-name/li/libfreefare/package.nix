@@ -29,7 +29,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.libobjc
-      darwin.apple_sdk
     ];
 
   env = {

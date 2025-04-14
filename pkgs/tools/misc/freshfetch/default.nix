@@ -2,12 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  AppKit,
-  CoreFoundation,
-  DiskArbitration,
-  Foundation,
-  IOKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,14 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   # freshfetch depends on rust nightly features
   RUSTC_BOOTSTRAP = 1;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    CoreFoundation
-    DiskArbitration
-    Foundation
-    IOKit
-  ];
 
   meta = with lib; {
     description = "Fresh take on neofetch";

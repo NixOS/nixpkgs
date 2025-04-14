@@ -18,9 +18,6 @@
   libkrb5,
   xorg,
   ripgrep,
-  AppKit,
-  Cocoa,
-  Security,
   cctools,
   nixosTests,
 }:
@@ -127,9 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       libkrb5
     ])
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      Security
       cctools
     ];
 

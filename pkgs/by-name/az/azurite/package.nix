@@ -3,7 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   stdenv,
-  darwin,
   libsecret,
   pkg-config,
   python3,
@@ -26,17 +25,9 @@ buildNpmPackage rec {
     pkg-config
     python3
   ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libsecret
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin;
-      [
-        Security
-        apple_sdk.frameworks.AppKit
-      ]
-    );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libsecret
+  ];
 
   meta = {
     description = "An open source Azure Storage API compatible server";

@@ -78,14 +78,7 @@ stdenv.mkDerivation rec {
       dbus
       acl
     ]
-    ++ lib.optional enableSystemd systemd
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin;
-      [
-        configd
-        apple_sdk.frameworks.ApplicationServices
-      ]
-    );
+    ++ lib.optional enableSystemd systemd;
 
   propagatedBuildInputs = [ gmp ];
 

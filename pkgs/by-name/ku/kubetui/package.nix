@@ -2,8 +2,6 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,13 +19,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=workers::kube::store::tests::kubeconfigからstateを生成"
   ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) (
-    with darwin.apple_sdk;
-    [
-      frameworks.CoreGraphics
-      frameworks.AppKit
-    ]
-  );
   useFetchCargoVendor = true;
   cargoHash = "sha256-fMrlZMe2uD+ImM6zPXzo/+/Eto2MeIyscYfU8msLJFw=";
 

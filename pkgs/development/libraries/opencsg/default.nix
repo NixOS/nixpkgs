@@ -10,7 +10,6 @@
   libXext,
   libX11,
   qmake,
-  GLUT,
   fixDarwinDylibNames,
 }:
 
@@ -33,8 +32,7 @@ stdenv.mkDerivation rec {
       libXmu
       libXext
       libX11
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
+    ];
 
   doCheck = false;
 

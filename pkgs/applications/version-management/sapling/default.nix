@@ -16,12 +16,6 @@
   fixup-yarn-lock,
   glibcLocales,
   libiconv,
-  Cocoa,
-  CoreFoundation,
-  CoreGraphics,
-  CoreServices,
-  Security,
-  WebKit,
 
   enableMinimal ? false,
 }:
@@ -166,12 +160,6 @@ python311Packages.buildPythonApplication {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
       libiconv
-      Cocoa
-      CoreFoundation
-      CoreGraphics
-      CoreServices
-      Security
-      WebKit
     ];
 
   HGNAME = "sl";

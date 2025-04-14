@@ -11,8 +11,6 @@
 
   # native dependencies
   libuv,
-  CoreServices,
-  ApplicationServices,
 
   # tests
   psutil,
@@ -46,12 +44,7 @@ buildPythonPackage rec {
 
   env.LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
 
-  buildInputs =
-    [ libuv ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      ApplicationServices
-    ];
+  buildInputs = [ libuv ];
 
   nativeCheckInputs = [
     pyopenssl

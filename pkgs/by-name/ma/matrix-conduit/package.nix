@@ -5,7 +5,6 @@
   pkg-config,
   sqlite,
   stdenv,
-  darwin,
   nixosTests,
   rocksdb,
   rust-jemalloc-sys,
@@ -36,15 +35,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      sqlite
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    rust-jemalloc-sys
+  ];
 
   env = {
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";

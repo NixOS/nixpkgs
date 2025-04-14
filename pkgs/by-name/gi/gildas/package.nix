@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./clang.patch
       ./cpp-darwin.patch
-    ]);
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 

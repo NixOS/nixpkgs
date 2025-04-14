@@ -4,7 +4,6 @@
   python,
   fetchFromGitHub,
   cmake,
-  Cocoa,
   fontconfig,
   freetype,
   libGL,
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     fontconfig
     numpy
     rapidjson
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   cmakeFlags = [
     "-Wno-dev"

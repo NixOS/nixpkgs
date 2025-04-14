@@ -4,7 +4,6 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  Foundation,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -166,7 +165,6 @@ effectiveStdenv.mkDerivation rec {
       ]
     )
     ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      Foundation
       libiconv
     ]
     ++ lib.optionals cudaSupport (

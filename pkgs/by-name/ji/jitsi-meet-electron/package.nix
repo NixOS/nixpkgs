@@ -11,18 +11,9 @@
   libXi,
   libXtst,
   zlib,
-  darwin,
   electron,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    Carbon
-    CoreFoundation
-    ApplicationServices
-    OpenGL
-    ;
-in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
   version = "2025.2.0";
@@ -43,20 +34,13 @@ buildNpmPackage rec {
     ];
 
   # robotjs node-gyp dependencies
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libpng
-      libX11
-      libXi
-      libXtst
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreFoundation
-      ApplicationServices
-      OpenGL
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libpng
+    libX11
+    libXi
+    libXtst
+    zlib
+  ];
 
   npmDepsHash = "sha256-TckV91RJo06OKb8nIvxBCxu28qyHtA/ACDshOlaCQxA=";
 

@@ -13,9 +13,6 @@
   libvorbis,
   libcap,
   systemd,
-  Carbon,
-  CoreServices,
-  AppKit,
   withAlsa ? stdenv.hostPlatform.isLinux,
   alsa-lib,
 }:
@@ -48,11 +45,6 @@ stdenv.mkDerivation rec {
     ])
     ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
     ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreServices
-      AppKit
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libcap
       systemd

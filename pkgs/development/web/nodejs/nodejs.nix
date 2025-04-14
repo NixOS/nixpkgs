@@ -28,7 +28,6 @@
   nix,
   runtimeShell,
   gnupg,
-  darwin,
   installShellFiles,
 }:
 
@@ -40,7 +39,6 @@
 }@args:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
@@ -215,20 +213,14 @@ let
       # NB: technically, we do not need bash in build inputs since all scripts are
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
-      buildInputs =
-        lib.optionals stdenv.hostPlatform.isDarwin [
-          CoreServices
-          ApplicationServices
-        ]
-        ++ [
-          zlib
-          libuv
-          openssl
-          http-parser
-          icu
-          bash
-        ]
-        ++ lib.optionals useSharedSQLite [ sqlite ];
+      buildInputs = [
+        zlib
+        libuv
+        openssl
+        http-parser
+        icu
+        bash
+      ] ++ lib.optionals useSharedSQLite [ sqlite ];
 
       nativeBuildInputs =
         [

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   cryptography,
@@ -16,7 +15,6 @@
   setuptools-scm,
   tabulate,
   toml,
-  AppKit,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +32,7 @@ buildPythonPackage rec {
   buildInputs = [
     setuptools
     setuptools-scm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  ];
   propagatedBuildInputs = [
     cryptography
     click

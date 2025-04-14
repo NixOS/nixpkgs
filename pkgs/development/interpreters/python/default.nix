@@ -2,7 +2,6 @@
   __splicedPackages,
   callPackage,
   config,
-  darwin,
   db,
   lib,
   libffiBoot,

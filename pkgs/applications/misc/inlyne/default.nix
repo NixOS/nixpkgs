@@ -11,7 +11,6 @@
   wayland,
   libGL,
   openssl,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,20 +35,16 @@ rustPlatform.buildRustPackage rec {
       pkg-config
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      fontconfig
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libxcb
-      wayland
-      libxkbcommon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.AppKit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
+    wayland
+    libxkbcommon
+    openssl
+  ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Security,
   cmake,
   pkg-config,
   asio,
@@ -51,9 +50,6 @@ stdenv.mkDerivation {
       restinio
       llhttp
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
     ];
 
   cmakeFlags =

@@ -24,8 +24,6 @@
   pkg-config,
   replaceVars,
   testers,
-  AppKit,
-  Cocoa,
   gdktarget ? if stdenv.hostPlatform.isDarwin then "quartz" else "x11",
   cupsSupport ? config.gtk2.cups or stdenv.hostPlatform.isLinux,
   xineramaSupport ? stdenv.hostPlatform.isLinux,
@@ -103,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional cupsSupport cups
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libXdamage
-      AppKit
-      Cocoa
     ];
 
   preConfigure = lib.optionalString (

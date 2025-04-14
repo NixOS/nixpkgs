@@ -9,7 +9,6 @@
   SDL2,
   libX11,
   libXext,
-  Cocoa,
   utf8proc,
   nix-update-script,
 }:
@@ -64,8 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libXext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+    ];
 
   enableParallelBuilding = true;
 

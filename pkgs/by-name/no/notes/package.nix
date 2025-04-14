@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   qt6,
-  darwin,
   overrideSDK,
 }:
 let
@@ -29,14 +28,10 @@ stdenv'.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qt6.qtbase
-      qt6.qtdeclarative
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-    ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtdeclarative
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications

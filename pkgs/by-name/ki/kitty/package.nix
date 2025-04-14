@@ -28,11 +28,6 @@
   installShellFiles,
   dbus,
   sudo,
-  Libsystem,
-  Cocoa,
-  Kernel,
-  UniformTypeIdentifiers,
-  UserNotifications,
   libcanberra,
   libicns,
   wayland-scanner,
@@ -85,16 +80,9 @@ buildPythonApplication rec {
       xxHash
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Kernel
-      UniformTypeIdentifiers
-      UserNotifications
       libpng
       python3
       zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       fontconfig
