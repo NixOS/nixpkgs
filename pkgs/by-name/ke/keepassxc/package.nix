@@ -74,18 +74,37 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    let
+      disabledTests = lib.concatStringsSep "|" (
+        [
+          # flaky
+          "testcli"
+          "testgui"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # QWidget: Cannot create a QWidget without QApplication
+          "testautotype"
 
-    export LC_ALL="en_US.UTF-8"
-    export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}"
-    # testcli, testgui and testkdbx4 are flaky - skip them all
-    # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
-    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.hostPlatform.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
+          # FAIL!  : TestDatabase::testExternallyModified() Compared values are not the same
+          #   Actual   (((spyFileChanged.count()))): 0
+          #   Expected (1)                         : 1
+          #   Loc: [/tmp/nix-build-keepassxc-2.7.10.drv-2/source/tests/TestDatabase.cpp(288)]
+          "testdatabase"
+        ]
+      );
+    in
+    ''
+      runHook preCheck
 
-    runHook postCheck
-  '';
+      export LC_ALL="en_US.UTF-8"
+      export QT_QPA_PLATFORM=offscreen
+      export QT_PLUGIN_PATH="${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}"
+
+      make test ARGS+="-E '${disabledTests}' --output-on-failure"
+
+      runHook postCheck
+    '';
 
   nativeBuildInputs = [
     asciidoctor
