@@ -85,6 +85,8 @@ in
           }
         ];
 
+        environment.systemPackages = [ pkgs.nixos-firewall-tool ];
+
         networking.nftables.tables."nixos-fw".family = "inet";
         networking.nftables.tables."nixos-fw".content = ''
           set temp-ports {

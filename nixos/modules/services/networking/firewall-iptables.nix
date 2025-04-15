@@ -338,6 +338,8 @@ in
 
         networking.firewall.checkReversePath = lib.mkIf (!kernelHasRPFilter) (lib.mkDefault false);
 
+        environment.systemPackages = [ pkgs.nixos-firewall-tool ];
+
         systemd.services.firewall = {
           description = "Firewall";
           wantedBy = [ "sysinit.target" ];
