@@ -6,7 +6,6 @@
   pyvex,
   setuptools,
   typing-extensions,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -35,12 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ailment" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "Angr Intermediate Language";
     homepage = "https://github.com/angr/ailment";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }
