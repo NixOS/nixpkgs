@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -13,6 +14,7 @@
   qt6Packages,
   qmqtt,
   xz,
+  sdbus-cpp_2,
 }:
 
 let
@@ -23,13 +25,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hyperhdr";
-  version = "20.0.0.0";
+  version = "21.0.0.0";
 
   src = fetchFromGitHub {
     owner = "awawa-dev";
     repo = "HyperHDR";
     tag = "v${version}";
-    hash = "sha256-agIWtDlMwjD0sGX2ntFwqROzUsl8tY3nRbmFvvOVh4o=";
+    hash = "sha256-S4in3fVjbkPfQe7ubuoUJ6AKha2luSjZPFS55aSo2jU=";
+    fetchSubmodules = true;
+    deepClone = true;
   };
 
   nativeBuildInputs = [
@@ -38,8 +42,19 @@ stdenv.mkDerivation rec {
     qt6Packages.wrapQtAppsHook
   ];
 
+  patches = [
+    # https://github.com/awawa-dev/HyperHDR/pull/1140
+    # This can be removed on next release
+    (fetchpatch {
+      name = "USE_SYSTEM_SDBUS_CPP_LIBS";
+      url = "https://github.com/awawa-dev/HyperHDR/pull/1140.patch";
+      hash = "sha256-Fuog++K3qaDeC/HymLPl5RF0yolNFL891EY4f36ILwE=";
+    })
+  ];
+
   cmakeFlags = [
     "-DPLATFORM=linux"
+    (cmakeBool "USE_SYSTEM_SDBUS_CPP_LIBS" true)
     (cmakeBool "USE_SYSTEM_MQTT_LIBS" true)
     (cmakeBool "USE_SYSTEM_FLATBUFFERS_LIBS" true)
     (cmakeBool "USE_SYSTEM_MBEDTLS_LIBS" true)
@@ -56,6 +71,7 @@ stdenv.mkDerivation rec {
     qt6Packages.qtbase
     qt6Packages.qtserialport
     xz
+    sdbus-cpp_2
   ];
 
   meta = with lib; {
