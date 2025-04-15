@@ -235,14 +235,6 @@ self: super:
     };
   });
 
-  libXau = super.libXau.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
-  });
-
   libXtst = super.libXtst.overrideAttrs (attrs: {
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];
