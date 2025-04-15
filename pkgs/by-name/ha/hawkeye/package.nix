@@ -5,14 +5,14 @@
   pkg-config,
 }:
 
-rustPackages.rustPlatform.buildRustPackage rec {
+rustPackages.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hawkeye";
   version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "korandoru";
     repo = "hawkeye";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-reeNsnWvn7sSfyqjGIk8jFnv8HaEBJsqitmNbRa9eTM=";
   };
 
@@ -30,4 +30,4 @@ rustPackages.rustPlatform.buildRustPackage rec {
     mainProgram = "hawkeye";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})
