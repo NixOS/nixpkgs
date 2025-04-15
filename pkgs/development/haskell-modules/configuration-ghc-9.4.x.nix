@@ -136,7 +136,7 @@ in
         fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
         ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
         hlint = self.hlint_3_6_1;
-        stylish-haskell = super.stylish-haskell;
+        stylish-haskell = self.stylish-haskell_0_14_5_0;
       }
     )
     haskell-language-server
