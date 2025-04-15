@@ -59,7 +59,7 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && config.networking.nftables.enable && cfg.firewalld.enable == false) {
+  config = lib.mkIf (cfg.enable && cfg.backend == "nftables") {
     assertions = [
       {
         assertion = cfg.extraCommands == "";

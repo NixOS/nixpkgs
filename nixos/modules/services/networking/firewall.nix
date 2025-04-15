@@ -80,6 +80,32 @@ in
         '';
       };
 
+      backend = lib.mkOption {
+        type = lib.types.enum [
+          "iptables"
+          "nftables"
+          "firewalld"
+        ];
+        default =
+          if config.services.firewalld.enable then
+            "firewalld"
+          else if config.networking.nftables.enable then
+            "nftables"
+          else
+            "iptables";
+        defaultText = lib.literalExpression ''
+          if config.services.firewalld.enable then
+            "firewalld"
+          else if config.networking.nftables.enable then
+            "nftables"
+          else
+            "iptables"
+        '';
+        description = ''
+          Underlying implementation for the firewall service.
+        '';
+      };
+
       package = lib.mkOption {
         type = lib.types.package;
         default = if config.networking.nftables.enable then pkgs.nftables else pkgs.iptables;

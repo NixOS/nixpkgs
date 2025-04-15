@@ -319,7 +319,7 @@ in
 
   # FIXME: Maybe if `enable' is false, the firewall should still be
   # built but not started by default?
-  config = lib.mkIf (cfg.enable && config.networking.nftables.enable == false && cfg.firewalld.enable == false) {
+  config = lib.mkIf (cfg.enable && cfg.backend == "iptables") {
     assertions = [
       # This is approximately "checkReversePath -> kernelHasRPFilter",
       # but the checkReversePath option can include non-boolean

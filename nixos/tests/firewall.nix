@@ -18,6 +18,7 @@ import ./make-test-python.nix (
         {
           networking.firewall = {
             enable = true;
+            inherit backend;
             logRefusedPackets = true;
             # Syntax smoke test, not actually verified otherwise
             allowedTCPPorts = [

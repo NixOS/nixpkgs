@@ -4,11 +4,7 @@ let
   cfg = config.networking.firewall;
 in
 {
-  options.networking.firewall = {
-    firewalld.enable = lib.mkEnableOption "the firewalld based firewall";
-  };
-
-  config = lib.mkIf (cfg.enable && cfg.firewalld.enable && config.networking.nftables.enable == false) {
+  config = lib.mkIf (cfg.enable && cfg.backend == "firewalld") {
     services.firewalld = {
       settings = {
         DefaultZone = "nixos-fw-default";
