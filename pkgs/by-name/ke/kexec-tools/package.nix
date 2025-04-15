@@ -4,6 +4,7 @@
   buildPackages,
   fetchurl,
   fetchpatch,
+  gitUpdater,
   zlib,
 }:
 
@@ -45,6 +46,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git";
+    rev-prefix = "v";
+    allowedVersions = "^([0-9]+\\.){2}[0-9]+$";
+  };
 
   meta = with lib; {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
