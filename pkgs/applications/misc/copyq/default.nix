@@ -18,7 +18,7 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "CopyQ";
   version = "10.0.0";
 
@@ -51,11 +51,6 @@ stdenv.mkDerivation rec {
     kdePackages.knotifications
   ];
 
-  postPatch = ''
-    substituteInPlace shared/com.github.hluk.copyq.desktop.in \
-      --replace copyq "$out/bin/copyq"
-  '';
-
   patches = [
     (fetchpatch {
       # Can be removed after next release
@@ -65,15 +60,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [ "-DWITH_QT6=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_QT6" true)
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "copyq";
   };
-}
+})
