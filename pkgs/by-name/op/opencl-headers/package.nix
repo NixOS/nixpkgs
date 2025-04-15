@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, hashcat
-, ocl-icd
-, tesseract
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  hashcat,
+  ocl-icd,
+  tesseract,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

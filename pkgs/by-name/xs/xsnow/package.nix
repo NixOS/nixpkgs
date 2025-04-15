@@ -12,28 +12,30 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xsnow";
-  version = "3.7.9";
+  version = "3.8.4";
 
   src = fetchurl {
     url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${version}.tar.gz";
-    sha256 = "sha256-DEzQblUfm2kd0I21sUwO3EVUm/WHnOk7T6iMgo3+EAY=";
+    sha256 = "sha256-ixfX/EGdwMOYu6nzcRUp7gjii0+T14CcqHCHIWmR2f8=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs = [
-    gtk3-x11
-    libxkbcommon
-    libxml2
-    gsl
-  ] ++ (with xorg; [
-    libX11
-    libXpm
-    libXt
-    libXtst
-  ]);
+  buildInputs =
+    [
+      gtk3-x11
+      libxkbcommon
+      libxml2
+      gsl
+    ]
+    ++ (with xorg; [
+      libX11
+      libXpm
+      libXt
+      libXtst
+    ]);
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 

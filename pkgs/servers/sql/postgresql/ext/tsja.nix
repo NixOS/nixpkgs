@@ -1,18 +1,18 @@
 {
-  lib,
   fetchzip,
-  nixosTests,
-  stdenv,
+  lib,
   mecab,
+  nixosTests,
   postgresql,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsja";
   version = "0.5.0";
 
   src = fetchzip {
-    url = "https://www.amris.jp/tsja/tsja-${version}.tar.xz";
+    url = "https://www.amris.jp/tsja/tsja-${finalAttrs.version}.tar.xz";
     hash = "sha256-h59UhUG/7biN8NaDiGK6kXDqfhR9uMzt8CpwbJ+PpEM=";
   };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.postgresql.tsja.passthru.override postgresql;
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension implementing Japanese text search";
     homepage = "https://www.amris.jp/tsja/index.html";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
     # GNU-specific linker options are used
-    platforms = platforms.gnu;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.gnu;
+    license = lib.licenses.gpl2Only;
   };
-}
+})

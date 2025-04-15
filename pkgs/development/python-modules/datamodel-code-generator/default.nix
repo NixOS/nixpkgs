@@ -19,7 +19,6 @@
   pytest-mock,
   pytestCheckHook,
   pydantic,
-  python3,
   pyyaml,
   toml,
 }:

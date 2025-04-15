@@ -20,6 +20,7 @@
   libjpeg,
   libuuid,
   libuv,
+  libX11,
   lua5_4,
   lzfse,
   opencl-headers,
@@ -36,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.34";
+  version = "0.0.35";
 
   src = fetchFromGitHub {
     owner = "vengi-voxel";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a78Oiwln3vyzCyjNewbK1/05bnGcSixxzKIgz4oiDmA=";
+    hash = "sha256-8rGnW+VtqNJYqUqQDp0yOVIQd7w+cq7PIpqqIQPhkbE=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       lua5_4
       lzfse
       SDL2
+      libX11
       SDL2_mixer
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols

@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   fetchPypi,
-  fetchurl,
   buildPythonPackage,
   pytestCheckHook,
   pkgs,
@@ -35,13 +33,13 @@ in
 
 buildPythonPackage rec {
   pname = "fastjet";
-  version = "3.4.2.1";
+  version = "3.4.3.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fastjet";
     inherit version;
-    hash = "sha256-YlYJWCdwEBiG+koh1X2app1HinvktryisxP/C024g1k=";
+    hash = "sha256-c9LE3axkm3tJt6RfHHIbJZsA/0s2Cl1UqxGKqKvospI=";
   };
 
   # unvendor fastjet/fastjet-contrib
@@ -65,7 +63,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    awkward
     fastjet
+    numpy
+    vector
   ];
 
   buildInputs = [
@@ -75,9 +76,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    awkward
-    numpy
-    vector
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -6,7 +6,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnulib";
   version = "20241001";
 

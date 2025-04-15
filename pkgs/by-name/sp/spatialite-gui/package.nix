@@ -7,6 +7,7 @@
   curl,
   freexl,
   geos,
+  libpq,
   librasterlite2,
   librttopo,
   libspatialite,
@@ -16,7 +17,6 @@
   lz4,
   minizip,
   openjpeg,
-  postgresql,
   proj,
   sqlite,
   virtualpg,
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    libpq.pg_config
     pkg-config
   ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     curl
     freexl
     geos
+    libpq
     librasterlite2
     librttopo
     libspatialite
@@ -51,7 +53,6 @@ stdenv.mkDerivation rec {
     lz4
     minizip
     openjpeg
-    postgresql
     proj
     sqlite
     virtualpg

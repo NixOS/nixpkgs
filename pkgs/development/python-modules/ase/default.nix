@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchPypi,
-  fetchpatch2,
   buildPythonPackage,
   isPy27,
   pythonAtLeast,
@@ -21,25 +20,15 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.23.0";
+  version = "3.24.0";
   pyproject = true;
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kaKqMdib2QsO/f5KfoQmTzKCiyq/yfOOZeBBrXb+yK4=";
+    hash = "sha256-msyT1tqvSM0nuETFb4v0lCi52wVC+qPMMNnVuOGEIZU=";
   };
-
-  patches = [
-    # https://gitlab.com/ase/ase/-/merge_requests/3400
-    (fetchpatch2 {
-      name = "numpy_2-compatibility.patch";
-      url = "https://gitlab.com/ase/ase/-/commit/5434193ad9dd2cb20a76b3d503fa2b50d7a8ed34.patch";
-      excludes = [ "pyproject.toml" ];
-      hash = "sha256-3hsyzYnFCrlZDT/jqJKKvj2UXjnjLU0U6PJqgOpA7CU=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -72,6 +61,7 @@ buildPythonPackage rec {
     "test_jmol_roundtrip" # missing attribute
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
+    "test_ipi_protocol" # flaky
   ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   preCheck = ''

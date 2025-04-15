@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "cassowary";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "rogerwelin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lC3GOS4hugRoQbJYVGv6kl3h6xMAukcOdV2m/u3Wgkk=";
+    sha256 = "sha256-zaG4HrdTGXTalMFz/huRW32RZBQx55AvUi29tz6vFD8=";
   };
 
   vendorHash = "sha256-YP9q9lL2A9ERhzbJBIFKsYsgvy5xYeUO3ekyQdh97f8=";

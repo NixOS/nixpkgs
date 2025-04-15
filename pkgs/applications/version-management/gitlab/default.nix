@@ -4,19 +4,18 @@
   defaultGemConfig,
   fetchFromGitLab,
   fetchYarnDeps,
-  fixup-yarn-lock,
+  yarnConfigHook,
   git,
   gitlabEnterprise ? false,
   lib,
   makeWrapper,
   nettools,
   nixosTests,
-  nodejs,
+  nodejs_20,
   replace,
-  ruby_3_2,
+  ruby_3_3,
   stdenv,
   tzdata,
-  yarn,
 
   # gem dependencies:
   # gitlab-glfm-markdown
@@ -53,7 +52,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_2;
+    ruby = ruby_3_3;
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
@@ -83,7 +82,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-fikyG1e45XP+oWOxuCdapW1zM2O02KozqB5qnbw2TY8=";
+          hash = "sha256-VJR3F+6l8nYj1ZCHOWxnX82C68giXX45RkhIVpZvRLo=";
         };
 
         dontBuild = false;
@@ -150,11 +149,10 @@ let
     nativeBuildInputs = [
       rubyEnv.wrappedRuby
       rubyEnv.bundler
-      nodejs
-      yarn
+      nodejs_20
       git
       cacert
-      fixup-yarn-lock
+      yarnConfigHook
     ];
 
     patches = [
@@ -176,9 +174,7 @@ let
     SKIP_YARN_INSTALL = 1;
     NODE_OPTIONS = "--max-old-space-size=8192";
 
-    configurePhase = ''
-      runHook preConfigure
-
+    postConfigure = ''
       # Some rake tasks try to run yarn automatically, which won't work
       rm lib/tasks/yarn.rake
 
@@ -186,25 +182,17 @@ let
       mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
-      # Yarn and bundler wants a real home directory to write cache, config, etc to
-      export HOME=$NIX_BUILD_TOP/fake_home
-
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock yarn.lock
-
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-
-      patchShebangs node_modules/
       patchShebangs scripts/frontend/
-
-      runHook postConfigure
     '';
 
     buildPhase = ''
       runHook preBuild
+
+      # TODO: Try to yarn install without --ignore-scripts
+      # Needed for the js dependency pinia to work
+      pushd node_modules/vue-demi
+      yarn run postinstall
+      popd
 
       bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 

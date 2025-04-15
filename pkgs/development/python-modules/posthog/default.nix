@@ -1,11 +1,15 @@
 {
   lib,
+  anthropic,
   backoff,
   buildPythonPackage,
+  distro,
   fetchFromGitHub,
   freezegun,
   mock,
   monotonic,
+  openai,
+  parameterized,
   pytestCheckHook,
   python-dateutil,
   requests,
@@ -15,20 +19,21 @@
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.7.5";
+  version = "3.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${version}";
-    hash = "sha256-zdZUlHQbSOSJhAxOY404/w7RsX8h+602A+8qmH9fQIc=";
+    hash = "sha256-+nmCmO1vPnNgZJdZSWwapeFfckNXEcdc/129yaLygf8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     backoff
+    distro
     monotonic
     python-dateutil
     requests
@@ -36,8 +41,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    anthropic
     freezegun
     mock
+    openai
+    parameterized
     pytestCheckHook
   ];
 
@@ -57,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/releases/tag/v${version}";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

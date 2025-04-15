@@ -35,7 +35,8 @@ rustPlatform.buildRustPackage rec {
       --replace '"assets"' '"${placeholder "out"}/share/govee2mqtt/assets"'
   '';
 
-  cargoHash = "sha256-wApf+H5T7HPkCGQwv8ePoDnStUn04oVvv3eIJ8aKVUw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RJqAhAhrMHLunJwTtvUIBNO45xUWY251KXyX0RLruwk=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -10,21 +10,22 @@
   httpx,
   httpx-sse,
   orjson,
+  typing-extensions,
 
   # passthru
-  writeScript,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.43";
+  version = "0.1.61";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${version}";
-    hash = "sha256-mG04V36Aa5Df5pUgr+xWej8i2XYx+O/N61sSzxwN9Go=";
+    hash = "sha256-cwoJ/1D+oAxqt6DEmpRBxDiR2nRAqBIOfqwLOmgUcZQ=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -35,25 +36,18 @@ buildPythonPackage rec {
     httpx
     httpx-sse
     orjson
+    typing-extensions
   ];
 
   disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
-  passthru = {
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
-
-      set -eu -o pipefail +e
-      nix-update --commit --version-regex '(.*)' python3Packages.langgraph
-      nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
-      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
-      nix-update --commit --version-regex 'checkpointduckdb==(.*)' python3Packages.langgraph-checkpoint-duckdb
-      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
-      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
-    '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "sdk==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

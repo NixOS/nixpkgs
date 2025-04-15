@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "warp-plus";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "warp-plus";
     rev = "v${version}";
-    hash = "sha256-fFyYch14JqXSmnplPJ8c3epOxromZmEJAdcuSgkKbcM=";
+    hash = "sha256-gDn4zicSD+Hz3GsL6pzGpUaiHcw+8KHDaOJGCML6LOA=";
   };
 
-  vendorHash = "sha256-/rBZqrX9xZT8yOZwynkOOQyPl0govNmvsEqWVxsuvB4=";
+  vendorHash = "sha256-MWzF9+yK+aUr8D4d64+qCD6XIqtmWH5hCLmQoksgFf8=";
 
   ldflags = [
     "-s"
@@ -48,5 +48,8 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paveloom ];
     mainProgram = "warp-plus";
+    # Doesn't work with Go toolchain >1.22, runtime error:
+    # 'panic: tls.ConnectionState doesn't match'
+    broken = true;
   };
 }

@@ -79,8 +79,7 @@ in
       description = ''
         The package which contains the `yabar` binary.
 
-        Nixpkgs provides the `yabar` and `yabar-unstable`,
-        so it's possible to choose.
+        Nixpkgs offers both a stable (`yabar`) and unstable (`yabar-unstable`) version of Yabar.
       '';
     };
 

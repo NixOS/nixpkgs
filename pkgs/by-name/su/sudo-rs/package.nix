@@ -12,15 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     rev = "v${version}";
-    hash = "sha256-aXKkEdg44AJTcaGyllQmyUON3Z+irIatz06/l0cbi+E=";
+    hash = "sha256-apvMcn/1dV9uujyoHikiOxregwWtAFPvrZvYjd3XQwM=";
   };
-  cargoHash = "sha256-laTcGi2pwc9uWjum03PviyakVMmjijKgxfIPjIpoRy8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EAfNg7hUsynFZ+EcUqeD9o44BakBYIMgxRXc4vcl8HY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     # Those tests make path assumptions
     "common::command::test::test_build_command_and_args"
     "common::context::tests::test_build_context"
+    "common::context::tests::test_build_run_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
     "system::tests::kill_test"

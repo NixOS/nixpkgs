@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,12 +12,9 @@
   fsspec,
   numpy,
   packaging,
-  typing-extensions,
-  importlib-metadata,
 
-  # checks
+  # tests
   numba,
-  setuptools,
   numexpr,
   pandas,
   pyarrow,
@@ -28,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.7.2";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-nOKMwAQ5t8tc64bEKz0j8JxxoVQQu39Iu8Zr9cqSx7A=";
+    hash = "sha256-37yUZSD9c92ydjjt5Z7KnUzfSMAQM37Ah4WGp9HWiDs=";
   };
 
   build-system = [
@@ -43,15 +39,12 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      awkward-cpp
-      fsspec
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    awkward-cpp
+    fsspec
+    numpy
+    packaging
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -60,12 +53,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fsspec
     numba
-    setuptools
     numexpr
     pandas
     pyarrow
     pytest-xdist
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # pyarrow.lib.ArrowInvalid
+    "test_recordarray"
   ];
 
   disabledTestPaths = [

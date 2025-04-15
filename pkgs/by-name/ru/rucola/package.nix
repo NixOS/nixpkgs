@@ -9,16 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rucola";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Linus-Mussmaecher";
     repo = "rucola";
     rev = "v${version}";
-    hash = "sha256-FeQPf9sCEqypvB8VrGa1nnXmxlqo6K4fpLkJakbysvI=";
+    hash = "sha256-vBY6tkzLgZuSU5AqH3uzDwjPl/ayWY0S8uRvlgE/Wmw=";
   };
 
-  cargoHash = "sha256-5TvJ8h/kmXG9G7dl5/gIYhVgvmqmm24BmOJzdKVJ+uY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-a1f+WSXMNaZCKc7bScknW9WW+Qi1CZIuNLdJseem11I=";
 
   nativeBuildInputs = [
     pkg-config

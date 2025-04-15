@@ -28,7 +28,7 @@ in
       };
       description = ''
         Environment variables for the stirling-pdf app.
-        See https://github.com/Stirling-Tools/Stirling-PDF#customisation for available options.
+        See <https://github.com/Stirling-Tools/Stirling-PDF#customisation> for available options.
       '';
     };
 
@@ -57,7 +57,7 @@ in
           libreoffice
           qpdf
           ocrmypdf
-          poppler_utils
+          poppler-utils
           unoconv
           pngquant
           tesseract

@@ -1,5 +1,5 @@
 diff --git a/lua/sniprun.lua b/lua/sniprun.lua
-index 49be442..1834566 100644
+index 49be442..9342351 100644
 --- a/lua/sniprun.lua
 +++ b/lua/sniprun.lua
 @@ -3,9 +3,7 @@ M.ping_anwsered = 0
@@ -9,7 +9,7 @@ index 49be442..1834566 100644
 -local binary_path = vim.fn.fnamemodify(
 -        vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":h:h")
 -    .. "/target/release/sniprun"
-+local binary_path = "@sniprun_bin@/bin/sniprun"
++local binary_path = "@sniprun@"
  
  local sniprun_path = vim.fn.fnamemodify(vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":p:h") .. "/.."
  

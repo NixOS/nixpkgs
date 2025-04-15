@@ -4,6 +4,7 @@
   fetchFromGitHub,
   testers,
   pgweb,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -41,10 +42,13 @@ buildGoModule rec {
       "${builtins.concatStringsSep "|" skippedTests}"
     ];
 
-  passthru.tests.version = testers.testVersion {
-    version = "v${version}";
-    package = pgweb;
-    command = "pgweb --version";
+  passthru.tests = {
+    version = testers.testVersion {
+      version = "v${version}";
+      package = pgweb;
+      command = "pgweb --version";
+    };
+    integration_test = nixosTests.pgweb;
   };
 
   meta = with lib; {

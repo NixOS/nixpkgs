@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, jre_headless, jdk_headless, ant, saxon }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jre_headless,
+  jdk_headless,
+  ant,
+  saxon,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jing-trang";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ jdk_headless ant saxon ];
+  buildInputs = [
+    jdk_headless
+    ant
+    saxon
+  ];
 
   CLASSPATH = "lib/saxon.jar";
 
@@ -48,7 +60,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
     maintainers = [ maintainers.bjornfor ];
   };

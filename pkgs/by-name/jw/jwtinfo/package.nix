@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-FDN9K7KnMro2BluHB7I0HTDdT9YXxi8UcOoBhKx/5dA=";
   };
 
-  cargoHash = "sha256-iGvwuLiF8yGb4IxBxGH0M79SlNqZ5lpsXTNiVT7VGrU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pRlnZAFsEBGz0yYfcZ0SCiH2om8URQ4J3+c01pBT7ag=";
 
   meta = {
     description = "Command-line tool to get information about JWTs";

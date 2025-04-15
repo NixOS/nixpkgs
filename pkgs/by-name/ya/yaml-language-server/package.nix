@@ -5,40 +5,43 @@
   fixup-yarn-lock,
   makeWrapper,
   nodejs,
+  writableTmpDirAsHomeHook,
   stdenv,
   yarn,
 }:
 
 stdenv.mkDerivation rec {
   pname = "yaml-language-server";
-  version = "1.15.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
-    rev = version;
-    hash = "sha256-Y3Q/y9UIiy7US8Jl4vxT0Pfw8h3hiXK+Cu9TEQHyAaA=";
+    tag = version;
+    hash = "sha256-YGPktMZxYi6eihCDc8JIfN/Ht2uu3wGKoKPJWlDKu+g=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-zHcxZ4VU6CGux72Nsy0foU4gFshK1wO/LTfnwOoirmg=";
+    hash = "sha256-2OVxvvijnfB8Bytgoaybyx4p66nD/aahtyjxLf8womE=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     fixup-yarn-lock
     yarn
+    nodejs
+    writableTmpDirAsHomeHook
   ];
 
-  buildInputs = [
-    nodejs
-  ];
+  # NodeJS is also needed here so that script interpreter get patched
+  buildInputs = [ nodejs ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$offlineCache"
     fixup-yarn-lock yarn.lock
     yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install

@@ -14,12 +14,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
-    repo = pname;
+    repo = "lunatic";
     rev = "v${version}";
     hash = "sha256-uMMssZaPDZn3bOtQIho+GvUCPmzRllv7eJ+SJuKaYtg=";
   };
 
-  cargoHash = "sha256-ALjlQsxmZVREyi3ZGMJMv/38kkMjYh+hTSr/0avYJVs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SzfM4hQW9vTTRqCAEn/EPv9mK9WlXYRFUW8pA/Gfw04=";
 
   nativeBuildInputs = [
     pkg-config

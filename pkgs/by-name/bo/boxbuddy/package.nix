@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9BGgm4yRjCarJIGP/G9gPj/qsYWb96XGJmpgLj3XCdM=";
   };
 
-  cargoHash = "sha256-/0tk3unjiXwBqQEMTYMu1kasb34i0nbp99PHmtpdxAA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2ipLO2b/mEEwSl0PSCq6m9tBhhaiDj9mXXVO4pr/78c=";
 
   # The software assumes it is installed either in flatpak or in the home directory
   # so the xdg data path needs to be patched here

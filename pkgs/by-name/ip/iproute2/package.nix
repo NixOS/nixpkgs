@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.12.0";
+  version = "6.14.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-u9FB73tdASfMIVKEO6YfJ03DKBT6Pg8T59B6CAvvU9k=";
+    hash = "sha256-ptI1iBUAllkcPQD8J6MkqC7nHXoanup4313xetm4Rh8=";
   };
 
   patches = [

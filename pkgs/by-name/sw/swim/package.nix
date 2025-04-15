@@ -12,16 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swim";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "swim";
     rev = "v${version}";
-    hash = "sha256-GJQzz9o0QKbnE8l1MEjdW36S/rJo2GoaK02Qnl9dtEA=";
+    hash = "sha256-0H45kOIwFMdp+eIQJNutLUC/jEpWKsPfEZXDUOUa12g=";
   };
 
-  cargoHash = "sha256-OQpKy/TVsJV/AjqvvdqTnAnAc1+YhN83N1EyNfgF4qg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fF+43tZzr6lxVovMCIaDwf9JKweqiMMR+BNojIqQREY=";
 
   preConfigure = ''
     # de-vendor spade git submodule

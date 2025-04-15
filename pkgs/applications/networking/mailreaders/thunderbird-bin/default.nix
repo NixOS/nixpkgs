@@ -24,6 +24,7 @@
   systemLocale ? config.i18n.defaultLocale or "en_US",
   patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   generated,
+  applicationName ? "Thunderbird",
 }:
 
 let
@@ -120,6 +121,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
+    inherit applicationName;
     binaryName = "thunderbird";
     gssSupport = true;
     gtk3 = gtk3;

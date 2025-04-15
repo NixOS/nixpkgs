@@ -22,8 +22,6 @@ buildPythonApplication rec {
     python-dateutil
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   meta = with lib; {
     homepage = "https://s3tools.org/s3cmd";
     description = "Command line tool for managing Amazon S3 and CloudFront services";

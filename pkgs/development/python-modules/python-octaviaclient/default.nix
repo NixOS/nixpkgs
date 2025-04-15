@@ -30,19 +30,17 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cXReOIfgC5Fx5gT0vF/pV7QwEuC2YfnW4OE+m7nqr20=";
+    pname = "python_octaviaclient";
+    inherit version;
+    hash = "sha256-2yZnuPdhGyfEjS5bLXbRjhl/v+mQyyzYlv3gbztNYig=";
   };
 
-  postPatch = ''
-    # somehow python-neutronclient cannot be found despite it being supplied
-    substituteInPlace requirements.txt \
-      --replace-fail "python-neutronclient>=6.7.0" ""
-  '';
+  # somehow python-neutronclient cannot be found despite it being supplied
+  pythonRemoveDeps = [ "python-neutronclient" ];
 
   build-system = [
     setuptools

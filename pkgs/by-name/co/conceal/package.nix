@@ -14,12 +14,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
-    repo = pname;
+    repo = "conceal";
     rev = "v${version}";
     sha256 = "sha256-BYLDSRgBba6SoGsL/NTV/OTG1/V9RSr8lisj42JqBRM=";
   };
 
-  cargoHash = "sha256-loaKXnbhH6n6Bt58RQZdS/lxNguw+GIdB6uLcRZhVtg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yCHN7N+hRrWfuCEBA6gh2S/rRP+ZkHCjFBGGY9/LTb4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

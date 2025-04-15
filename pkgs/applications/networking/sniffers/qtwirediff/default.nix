@@ -57,5 +57,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aaptel/qtwirediff";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    # error: assignment of member 'trivial' in read-only object
+    broken = true;
   };
 }

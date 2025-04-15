@@ -14,13 +14,13 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.13.0";
+    version = "6.14.0";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }-lin.zip";
-      hash = "sha256-ypZVVPmAsApaccWl7ZtAECwphD2SUUiVNC2DYC5rYb4=";
+      hash = "sha256-GOvoPyfPdQV/gjveuFpZjueTZD/BYuEWSHgQKBm3o3A=";
       stripRoot = false;
     };
 
@@ -71,6 +71,13 @@ let
       done;
 
       cp ${desktopItem}/share/applications/*.desktop $out/share/applications
+      if ! grep -q StartupWMClass= "$out"/share/applications/*.desktop; then
+          chmod +w "$out"/share/applications/*.desktop
+          echo "StartupWMClass=com-st-microxplorer-maingui-STM32CubeMX" >> "$out"/share/applications/*.desktop
+      else
+          echo "error: upstream already provides StartupWMClass= in desktop file -- please update package expr" >&2
+          exit 1
+      fi
     '';
 
     meta = with lib; {
@@ -96,6 +103,11 @@ in
 buildFHSEnv {
   inherit (package) pname version meta;
   runScript = "${package.outPath}/bin/stm32cubemx";
+  extraInstallCommands = ''
+    mkdir -p $out/share/{applications,icons}
+    ln -sf ${package.outPath}/share/applications/* $out/share/applications/
+    ln -sf ${package.outPath}/share/icons/* $out/share/icons/
+  '';
   targetPkgs =
     pkgs: with pkgs; [
       alsa-lib
@@ -121,5 +133,8 @@ buildFHSEnv {
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
+      libgcrypt
+      openssl
+      udev
     ];
 }

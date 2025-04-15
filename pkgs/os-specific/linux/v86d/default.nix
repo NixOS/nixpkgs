@@ -9,7 +9,7 @@
 let
   pversion = "0.1.10";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "v86d";
   version = "${pversion}-${kernel.version}";
 

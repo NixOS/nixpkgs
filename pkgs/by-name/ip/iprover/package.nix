@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
     maintainers = with maintainers; [
       raskin
-      gebner
     ];
     platforms = platforms.linux;
     license = licenses.gpl3;

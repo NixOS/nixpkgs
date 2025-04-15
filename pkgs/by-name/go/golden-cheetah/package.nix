@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       ''
         runHook preInstall
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         runHook postInstall
       ''
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       ''
         runHook preInstall
         mkdir -p $out/Applications

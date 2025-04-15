@@ -5,6 +5,10 @@ let
   description = "Alice Foobar";
   password = "foobar";
 
+  wallpaperName = "wallpaper.jpg";
+  # In case it ever shows up in the VM, we could OCR for it instead
+  wallpaperText = "Lorem ipsum";
+
   # tmpfiles setup to make OCRing on terminal output more reliable
   terminalOcrTmpfilesSetup =
     {
@@ -50,6 +54,227 @@ let
       "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
       "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
     };
+
+  wallpaperFile =
+    pkgs:
+    pkgs.runCommand wallpaperName
+      {
+        nativeBuildInputs = with pkgs; [
+          (imagemagick.override { ghostscriptSupport = true; }) # produce OCR-able image
+        ];
+      }
+      ''
+        magick -size 640x480 canvas:white -pointsize 30 -fill black -annotate +100+100 '${wallpaperText}' $out
+      '';
+  # gsettings tool with access to wallpaper schema
+  lomiri-gsettings =
+    pkgs:
+    pkgs.stdenv.mkDerivation {
+      name = "lomiri-gsettings";
+      dontUnpack = true;
+      nativeBuildInputs = with pkgs; [
+        glib
+        wrapGAppsHook3
+      ];
+      buildInputs = with pkgs; [
+        # Not using the Lomiri-namespaced setting yet
+        # lomiri.lomiri-schemas
+        gsettings-desktop-schemas
+      ];
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/bin
+        ln -s ${pkgs.lib.getExe' pkgs.glib "gsettings"} $out/bin/lomiri-gsettings
+        runHook postInstall
+      '';
+    };
+  setLomiriWallpaperService =
+    pkgs:
+    let
+      lomiriServices = [
+        "lomiri.service"
+        "lomiri-full-greeter.service"
+        "lomiri-full-shell.service"
+        "lomiri-greeter.service"
+        "lomiri-shell.service"
+      ];
+    in
+    rec {
+      description = "Set Lomiri wallpaper to something OCR-able";
+      wantedBy = lomiriServices;
+      before = lomiriServices;
+      serviceConfig = {
+        Type = "oneshot";
+        # Not using the Lomiri-namespaed settings yet
+        # ExecStart = "${lomiri-gsettings pkgs}/bin/lomiri-gsettings set com.lomiri.Shell background-picture-uri file://${wallpaperFile pkgs}";
+        ExecStart = "${lomiri-gsettings pkgs}/bin/lomiri-gsettings set org.gnome.desktop.background picture-uri file://${wallpaperFile pkgs}";
+      };
+    };
+
+  sharedTestFunctions = ''
+    def wait_for_text(text):
+      """
+      Wait for on-screen text, and try to optimise retry count for slow hardware.
+      """
+
+      machine.sleep(30)
+      machine.wait_for_text(text)
+
+    def toggle_maximise():
+      """
+      Maximise the current window.
+      """
+
+      machine.send_key("ctrl-meta_l-up")
+
+      # For some reason, Lomiri in these VM tests very frequently opens the starter menu a few seconds after sending the above.
+      # Because this isn't 100% reproducible all the time, and there is no command to await when OCR doesn't pick up some text,
+      # the best we can do is send some Escape input after waiting some arbitrary time and hope that it works out fine.
+      machine.sleep(5)
+      machine.send_key("esc")
+      machine.sleep(5)
+
+    def mouse_click(xpos, ypos):
+      """
+      Move the mouse to a screen location and hit left-click.
+      """
+
+      # Need to reset to top-left, --absolute doesn't work?
+      machine.execute("ydotool mousemove -- -10000 -10000")
+      machine.sleep(2)
+
+      # Move
+      machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
+      machine.sleep(2)
+
+      # Click (C0 - left button: down & up)
+      machine.execute("ydotool click 0xC0")
+      machine.sleep(2)
+
+    def open_starter():
+      """
+      Open the starter, and ensure it's opened.
+      """
+
+      # Using the keybind has a chance of instantly closing the menu again? Just click the button
+      mouse_click(20, 30)
+
+  '';
+
+  makeIndicatorTest =
+    {
+      name,
+      left,
+      ocr,
+      extraCheck ? null,
+
+      titleOcr,
+    }:
+
+    makeTest (
+      { pkgs, lib, ... }:
+      {
+        name = "lomiri-desktop-ayatana-indicator-${name}";
+
+        meta = {
+          maintainers = lib.teams.lomiri.members;
+        };
+
+        nodes.machine =
+          { config, ... }:
+          {
+            imports = [
+              ./common/auto.nix
+              ./common/user-account.nix
+            ];
+
+            virtualisation.memorySize = 2047;
+
+            users.users.${user} = {
+              inherit description password;
+            };
+
+            test-support.displayManager.auto = {
+              enable = true;
+              inherit user;
+            };
+
+            # To control mouse via scripting
+            programs.ydotool.enable = true;
+
+            services.desktopManager.lomiri.enable = lib.mkForce true;
+            services.displayManager.defaultSession = lib.mkForce "lomiri";
+
+            # Not setting wallpaper, as it breaks indicator OCR(?)
+          };
+
+        enableOCR = true;
+
+        testScript =
+          { nodes, ... }:
+          sharedTestFunctions
+          + ''
+            start_all()
+            machine.wait_for_unit("multi-user.target")
+
+            # The session should start, and not be stuck in i.e. a crash loop
+            with subtest("lomiri starts"):
+                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+                # Output rendering from Lomiri has started when it starts printing performance diagnostics
+                machine.wait_for_console_text("Last frame took")
+                # Look for datetime's clock, one of the last elements to load
+                wait_for_text(r"(AM|PM)")
+                machine.screenshot("lomiri_launched")
+
+            # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
+            # There's a test app we could use that also displays their contents, but it's abit inconsistent.
+            mouse_click(735, 0) # the cog in the top-right, for the session indicator
+            wait_for_text(${titleOcr})
+            machine.screenshot("indicators_open")
+
+            # Indicator order within the menus *should* be fixed based on per-indicator order setting
+            # Session is the one we clicked, but it might not be the one we want to test right now.
+            # Go as far left as necessary.
+            ${lib.strings.replicate left "machine.send_key(\"left\")\n"}
+
+            with subtest("ayatana indicator session works"):
+                wait_for_text(r"(${lib.strings.concatStringsSep "|" ocr})")
+                machine.screenshot("indicator_${name}")
+          ''
+          + lib.optionalString (extraCheck != null) extraCheck;
+      }
+    );
+
+  makeIndicatorTests =
+    {
+      titles,
+      details,
+    }:
+    let
+      titleOcr = "r\"(${builtins.concatStringsSep "|" titles})\"";
+    in
+    builtins.listToAttrs (
+      builtins.map (
+        {
+          name,
+          left,
+          ocr,
+          extraCheck ? null,
+        }:
+        {
+          name = "desktop-ayatana-indicator-${name}";
+          value = makeIndicatorTest {
+            inherit
+              name
+              left
+              ocr
+              extraCheck
+              titleOcr
+              ;
+          };
+        }
+      ) details
+    );
 in
 {
   greeter = makeTest (
@@ -85,14 +310,8 @@ in
 
       testScript =
         { nodes, ... }:
-        ''
-          def wait_for_text(text):
-              """
-              Wait for on-screen text, and try to optimise retry count for slow hardware.
-              """
-              machine.sleep(10)
-              machine.wait_for_text(text)
-
+        sharedTestFunctions
+        + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
 
@@ -157,7 +376,7 @@ in
 
           environment = {
             # Help with OCR
-            etc."xdg/alacritty/alacritty.yml".text = lib.generators.toYAML { } {
+            etc."xdg/alacritty/alacritty.toml".source = (pkgs.formats.toml { }).generate "alacritty.toml" {
               font = rec {
                 normal.family = "Inconsolata";
                 bold.family = normal.family;
@@ -175,6 +394,8 @@ in
                 };
               };
             };
+
+            etc."${wallpaperName}".source = wallpaperFile pkgs;
 
             systemPackages = with pkgs; [
               # Forcing alacritty to run as an X11 app when opened from the starter menu
@@ -200,45 +421,16 @@ in
           systemd.tmpfiles.settings = {
             "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
+
+          systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
         };
 
       enableOCR = true;
 
       testScript =
         { nodes, ... }:
-        ''
-          def wait_for_text(text):
-              """
-              Wait for on-screen text, and try to optimise retry count for slow hardware.
-              """
-              machine.sleep(10)
-              machine.wait_for_text(text)
-
-          def mouse_click(xpos, ypos):
-              """
-              Move the mouse to a screen location and hit left-click.
-              """
-
-              # Need to reset to top-left, --absolute doesn't work?
-              machine.execute("ydotool mousemove -- -10000 -10000")
-              machine.sleep(2)
-
-              # Move
-              machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
-              machine.sleep(2)
-
-              # Click (C0 - left button: down & up)
-              machine.execute("ydotool click 0xC0")
-              machine.sleep(2)
-
-          def open_starter():
-              """
-              Open the starter, and ensure it's opened.
-              """
-
-              # Using the keybind has a chance of instantly closing the menu again? Just click the button
-              mouse_click(20, 30)
-
+        sharedTestFunctions
+        + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
 
@@ -256,9 +448,6 @@ in
               machine.send_key("ctrl-alt-t")
               wait_for_text(r"(${user}|machine)")
               machine.screenshot("terminal_opens")
-
-              # lomiri-terminal-app has a separate VM test to test its basic functionality
-
               machine.send_key("alt-f4")
 
           # We want the ability to launch applications
@@ -364,6 +553,8 @@ in
               };
             };
 
+            etc."${wallpaperName}".source = wallpaperFile pkgs;
+
             variables = {
               # So we can test what lomiri-content-hub is working behind the scenes
               LOMIRI_CONTENT_HUB_LOGGING_LEVEL = "2";
@@ -379,58 +570,16 @@ in
           systemd.tmpfiles.settings = {
             "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
+
+          systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
         };
 
       enableOCR = true;
 
       testScript =
         { nodes, ... }:
-        ''
-          def wait_for_text(text):
-              """
-              Wait for on-screen text, and try to optimise retry count for slow hardware.
-              """
-              machine.sleep(10)
-              machine.wait_for_text(text)
-
-          def toggle_maximise():
-              """
-              Maximise the current window.
-              """
-              machine.send_key("ctrl-meta_l-up")
-
-              # For some reason, Lomiri in these VM tests very frequently opens the starter menu a few seconds after sending the above.
-              # Because this isn't 100% reproducible all the time, and there is no command to await when OCR doesn't pick up some text,
-              # the best we can do is send some Escape input after waiting some arbitrary time and hope that it works out fine.
-              machine.sleep(5)
-              machine.send_key("esc")
-              machine.sleep(5)
-
-          def mouse_click(xpos, ypos):
-              """
-              Move the mouse to a screen location and hit left-click.
-              """
-
-              # Need to reset to top-left, --absolute doesn't work?
-              machine.execute("ydotool mousemove -- -10000 -10000")
-              machine.sleep(2)
-
-              # Move
-              machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
-              machine.sleep(2)
-
-              # Click (C0 - left button: down & up)
-              machine.execute("ydotool click 0xC0")
-              machine.sleep(2)
-
-          def open_starter():
-              """
-              Open the starter, and ensure it's opened.
-              """
-
-              # Using the keybind has a chance of instantly closing the menu again? Just click the button
-              mouse_click(20, 30)
-
+        sharedTestFunctions
+        + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
 
@@ -448,8 +597,6 @@ in
               machine.send_key("ctrl-alt-t")
               wait_for_text(r"(${user}|machine)")
               machine.screenshot("terminal_opens")
-
-              # lomiri-terminal-app has a separate VM test to test its basic functionality
 
               # for the LSS lomiri-content-hub test to work reliably, we need to kick off peer collecting
               machine.send_chars("lomiri-content-hub-test-importer\n")
@@ -526,147 +673,6 @@ in
     }
   );
 
-  desktop-ayatana-indicators = makeTest (
-    { pkgs, lib, ... }:
-    {
-      name = "lomiri-desktop-ayatana-indicators";
-
-      meta = {
-        maintainers = lib.teams.lomiri.members;
-      };
-
-      nodes.machine =
-        { config, ... }:
-        {
-          imports = [
-            ./common/auto.nix
-            ./common/user-account.nix
-          ];
-
-          virtualisation.memorySize = 2047;
-
-          users.users.${user} = {
-            inherit description password;
-          };
-
-          test-support.displayManager.auto = {
-            enable = true;
-            inherit user;
-          };
-
-          # To control mouse via scripting
-          programs.ydotool.enable = true;
-
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
-
-          environment.systemPackages = with pkgs; [ qt5.qttools ];
-        };
-
-      enableOCR = true;
-
-      testScript =
-        { nodes, ... }:
-        ''
-          def wait_for_text(text):
-              """
-              Wait for on-screen text, and try to optimise retry count for slow hardware.
-              """
-              machine.sleep(10)
-              machine.wait_for_text(text)
-
-          def mouse_click(xpos, ypos):
-              """
-              Move the mouse to a screen location and hit left-click.
-              """
-
-              # Need to reset to top-left, --absolute doesn't work?
-              machine.execute("ydotool mousemove -- -10000 -10000")
-              machine.sleep(2)
-
-              # Move
-              machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
-              machine.sleep(2)
-
-              # Click (C0 - left button: down & up)
-              machine.execute("ydotool click 0xC0")
-              machine.sleep(2)
-
-          start_all()
-          machine.wait_for_unit("multi-user.target")
-
-          # The session should start, and not be stuck in i.e. a crash loop
-          with subtest("lomiri starts"):
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
-
-          # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
-          # There's a test app we could use that also displays their contents, but it's abit inconsistent.
-          with subtest("ayatana indicators work"):
-              mouse_click(735, 0) # the cog in the top-right, for the session indicator
-              wait_for_text(r"(Notifications|Rotation|Battery|Sound|Time|Date|System)")
-              machine.screenshot("indicators_open")
-
-              # Indicator order within the menus *should* be fixed based on per-indicator order setting
-              # Session is the one we clicked, but the last we should test (logout). Go as far left as we can test.
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              # Notifications are usually empty, nothing to check there
-
-              with subtest("ayatana indicator display works"):
-                  # We start on this, don't go right
-                  wait_for_text("Lock")
-                  machine.screenshot("indicators_display")
-
-              with subtest("ayatana indicator bluetooth works"):
-                  machine.send_key("right")
-                  wait_for_text("Bluetooth settings")
-                  machine.screenshot("indicators_bluetooth")
-
-              with subtest("lomiri indicator network works"):
-                  machine.send_key("right")
-                  wait_for_text(r"(Flight|Wi-Fi)")
-                  machine.screenshot("indicators_network")
-
-              with subtest("ayatana indicator sound works"):
-                  machine.send_key("right")
-                  wait_for_text(r"(Silent|Volume)")
-                  machine.screenshot("indicators_sound")
-
-              with subtest("ayatana indicator power works"):
-                  machine.send_key("right")
-                  wait_for_text(r"(Charge|Battery settings)")
-                  machine.screenshot("indicators_power")
-
-              with subtest("ayatana indicator datetime works"):
-                  machine.send_key("right")
-                  wait_for_text("Time and Date Settings")
-                  machine.screenshot("indicators_timedate")
-
-              with subtest("ayatana indicator session works"):
-                  machine.send_key("right")
-                  wait_for_text("Log Out")
-                  machine.screenshot("indicators_session")
-
-                  # We should be able to log out and return to the greeter
-                  mouse_click(720, 280) # "Log Out"
-                  mouse_click(400, 240) # confirm logout
-                  machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-        '';
-    }
-  );
-
   keymap =
     let
       pwInput = "qwerty";
@@ -706,6 +712,10 @@ in
               "us"
             ];
 
+            environment.etc."${wallpaperName}".source = wallpaperFile pkgs;
+
+            systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
+
             # Help with OCR
             systemd.tmpfiles.settings = {
               "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
@@ -716,14 +726,8 @@ in
 
         testScript =
           { nodes, ... }:
-          ''
-            def wait_for_text(text):
-                """
-                Wait for on-screen text, and try to optimise retry count for slow hardware.
-                """
-                machine.sleep(10)
-                machine.wait_for_text(text)
-
+          sharedTestFunctions
+          + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
 
@@ -758,7 +762,7 @@ in
                 machine.screenshot("terminal_opens")
 
                 machine.send_chars("touch ${pwInput}\n")
-                machine.wait_for_file("/home/alice/${pwOutput}", 10)
+                machine.wait_for_file("/home/alice/${pwOutput}", 90)
 
                 # Issues with this keybind: input leaks to focused surface, may open launcher
                 # Don't have the keyboard indicator to handle this better
@@ -782,10 +786,77 @@ in
                 machine.send_key("backspace")
 
                 machine.send_chars("touch ${pwInput}\n")
-                machine.wait_for_file("/home/alice/${pwInput}", 10)
+                machine.wait_for_file("/home/alice/${pwInput}", 90)
 
                 machine.send_key("alt-f4")
           '';
       }
     );
+}
+// makeIndicatorTests {
+  titles = [
+    "Notifications" # messages
+    "Rotation" # display
+    "Battery" # power
+    "Sound" # sound
+    "Time" # datetime
+    "Date" # datetime
+    "System" # session
+  ];
+  details = [
+    # messages normally has no contents
+    ({
+      name = "display";
+      left = 6;
+      ocr = [ "Lock" ];
+    })
+    ({
+      name = "bluetooth";
+      left = 5;
+      ocr = [ "Bluetooth" ];
+    })
+    ({
+      name = "network";
+      left = 4;
+      ocr = [
+        "Flight"
+        "Wi-Fi"
+      ];
+    })
+    ({
+      name = "sound";
+      left = 3;
+      ocr = [
+        "Silent"
+        "Volume"
+      ];
+    })
+    ({
+      name = "power";
+      left = 2;
+      ocr = [
+        "Charge"
+        "Battery"
+      ];
+    })
+    ({
+      name = "datetime";
+      left = 1;
+      ocr = [
+        "Time"
+        "Date"
+      ];
+    })
+    ({
+      name = "session";
+      left = 0;
+      ocr = [ "Log Out" ];
+      extraCheck = ''
+        # We should be able to log out and return to the greeter
+        mouse_click(720, 280) # "Log Out"
+        mouse_click(400, 240) # confirm logout
+        machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+      '';
+    })
+  ];
 }

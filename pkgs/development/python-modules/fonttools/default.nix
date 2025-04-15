@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.55.2";
+  version = "4.56.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256:1y2sxzl9is3k1gmf9rvvxk9294dwbma1sh2ip56h7q1073346bv3";
+    hash = "sha256-ZkC1+I2d9wY9J7IoCGHGWG2gOVN7wW274UpN1lQxmJY=";
   };
 
   build-system = [
@@ -119,7 +119,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
-    changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

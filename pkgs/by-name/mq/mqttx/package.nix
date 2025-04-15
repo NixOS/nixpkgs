@@ -8,7 +8,7 @@
 
 let
   pname = "mqttx";
-  version = "1.10.1";
+  version = "1.11.1";
 
   suffixedUrl =
     suffix:
@@ -16,11 +16,11 @@ let
   sources = {
     "aarch64-linux" = fetchurl {
       url = suffixedUrl "-arm64";
-      hash = "sha256-QumOqOOFXOXf0oqXWVaz0+69kHDk3HQKvNcQl8X7Fp8=";
+      hash = "sha256-gRR0gFHqIPXOrSytqERAi7msfrrYXm2xP84Jy+UhrKg=";
     };
     "x86_64-linux" = fetchurl {
       url = suffixedUrl "";
-      hash = "sha256-+TyZnx3/qraoA3rcpIDKedGyTzFvdaAE/v4pzXrB0zU=";
+      hash = "sha256-rqzh4whp8NaeQb98mKTu+hL3RXQBEOKgvJKwLhzu+hg=";
     };
   };
 
@@ -35,6 +35,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
+
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/1024x1024/apps/${pname}.png
@@ -43,7 +45,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

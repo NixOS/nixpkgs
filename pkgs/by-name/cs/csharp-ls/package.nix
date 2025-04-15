@@ -21,7 +21,7 @@ buildDotnetGlobalTool rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -35,7 +35,7 @@ buildDotnetGlobalTool rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
-      # Crashes immediatly at runtime
+      # Crashes immediately at runtime
       # terminated by signal SIGKILL (Forced quit)
       # https://github.com/razzmatazz/csharp-language-server/issues/211
       "aarch64-darwin"

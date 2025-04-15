@@ -1,27 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  nix-update-script,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  click,
+
+  # testing
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  docker-compose,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.1.52";
+  version = "0.1.89";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-zTBeDJB1Xu/rWsvEC/L4BRzxyh04lPYV7HQNHoJcskk=";
+    hash = "sha256-AesYnUWDo6i2HogOE89hX9gJWlzNMOq3VB4qnzg743c=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -33,6 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    docker-compose
   ];
 
   pytestFlagsArray = [ "tests/unit_tests" ];
@@ -48,12 +55,14 @@ buildPythonPackage rec {
     "test_config_to_compose_end_to_end"
     "test_config_to_compose_simple_config"
     "test_config_to_compose_watch"
+    # Tests exit value, needs to happen in a passthru test
+    "test_dockerfile_command_with_docker_compose"
   ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "cli==(.*)"
+      "cli==(\\d+\\.\\d+\\.\\d+)"
     ];
   };
 

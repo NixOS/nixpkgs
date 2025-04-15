@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.16";
+  version = "0.0.19";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pcffont";
     inherit version;
-    hash = "sha256-erZ9zcXZqBg71subC8U7QA7nwwoh2lQeIzRAkmxBxzg=";
+    hash = "sha256-ci4E+e4jzHgfSpLPYhh6di1NUwlsPlq5ajzq61vQKwc=";
   };
 
   build-system = [ hatchling ];

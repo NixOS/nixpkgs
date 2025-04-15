@@ -17,15 +17,15 @@
   darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensubdiv";
   version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
-    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-liy6pQyWMk7rw0usrCoLGzZLO7RAg0z2pV/GF2NnOkE=";
+    tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-liy6pQyWMk7rw0usrCoLGzZLO7RAg0z2pV/GF2NnOkE=";
   };
 
   outputs = [
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     [
       cmake
       pkg-config
+      python3
     ]
-    ++ lib.optional cudaSupport [
+    ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
     ];
   buildInputs =
-    [
+    lib.optionals stdenv.hostPlatform.isUnix [
       libGLU
       libGL
-      python3
       # FIXME: these are not actually needed, but the configure script wants them.
       glew
       xorg.libX11
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       xorg.libXinerama
       xorg.libXi
     ]
-    ++ lib.optionals (openclSupport && !stdenv.hostPlatform.isDarwin) [ ocl-icd ]
+    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [ ocl-icd ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
@@ -84,20 +84,21 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DNO_TUTORIALS=1"
-      "-DNO_REGRESSION=1"
-      "-DNO_EXAMPLES=1"
-      (lib.cmakeBool "NO_METAL" (!stdenv.hostPlatform.isDarwin))
-      (lib.cmakeBool "NO_OPENCL" (!openclSupport))
-      (lib.cmakeBool "NO_CUDA" (!cudaSupport))
+      (lib.mapAttrsToList lib.cmakeBool {
+        NO_TUTORIALS = true;
+        NO_REGRESSION = true;
+        NO_EXAMPLES = true;
+        NO_DX = stdenv.hostPlatform.isWindows;
+        NO_METAL = !stdenv.hostPlatform.isDarwin;
+        NO_OPENCL = !openclSupport;
+        NO_CUDA = !cudaSupport;
+      })
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
-      "-DGLEW_LIBRARY=${glew.dev}/lib"
-    ]
-    ++ lib.optionals cudaSupport [
-    ]
-    ++ lib.optionals (!openclSupport) [
+    ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [
+      (lib.mapAttrsToList lib.cmakeFeature {
+        GLEW_INCLUDE_DIR = "${glew.dev}/include";
+        GLEW_LIBRARY = "${glew.dev}/lib";
+      })
     ];
 
   preBuild =
@@ -109,16 +110,22 @@ stdenv.mkDerivation rec {
       NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
     '';
 
-  postInstall = ''
-    moveToOutput "lib/*.a" $static
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isWindows then
+      ''
+        ln -s $out $static
+      ''
+    else
+      ''
+        moveToOutput "lib/*.a" $static
+      '';
 
   meta = {
     description = "Open-Source subdivision surface library";
     homepage = "http://graphics.pixar.com/opensubdiv";
     broken = openclSupport && cudaSupport;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

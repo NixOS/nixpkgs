@@ -39,6 +39,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distrax" ];
 
   disabledTests = [
+    # Flaky: AssertionError: 1 not less than 0.7000000000000001
+    "test_von_mises_sample_uniform_ks_test"
+
+    # Flaky: AssertionError: Not equal to tolerance
+    "test_composite_methods_are_consistent__with_jit"
+
     # NotImplementedError: Primitive 'square' does not have a registered inverse.
     "test_against_tfp_bijectors_square"
     "test_log_dets_square__with_device"

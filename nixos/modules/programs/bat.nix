@@ -18,6 +18,8 @@ let
     nameValuePair
     optionalString
     types
+    isBool
+    boolToString
     ;
   inherit (types) listOf package;
 
@@ -25,6 +27,15 @@ let
 
   settingsFormat = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
   inherit (settingsFormat) generate type;
+
+  recursiveToString =
+    value:
+    if isList value then
+      map recursiveToString value
+    else if isBool value then
+      boolToString value
+    else
+      toString value;
 
   initScript =
     {
@@ -97,12 +108,7 @@ in
     environment = {
       systemPackages = [ cfg.package ] ++ cfg.extraPackages;
       etc."bat/config".source = generate "bat-config" (
-        mapAttrs' (
-          name: value:
-          nameValuePair ("--" + name) (
-            if (isList value) then map (str: "\"${str}\"") value else "\"${value}\""
-          )
-        ) cfg.settings
+        mapAttrs' (name: value: nameValuePair ("--" + name) (recursiveToString value)) cfg.settings
       );
     };
 

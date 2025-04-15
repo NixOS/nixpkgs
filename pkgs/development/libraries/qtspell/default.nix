@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       enchant
       qtbase
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       glib
       llvmPackages.clang
     ];

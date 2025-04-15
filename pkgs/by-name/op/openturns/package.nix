@@ -40,34 +40,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-  ]
-  ++ lib.optionals enablePython [ python3Packages.sphinx ];
+  ] ++ lib.optionals enablePython [ python3Packages.sphinx ];
 
-  buildInputs = [
-    (lib.getLib primesieve)
-    boost
-    ceres-solver
-    cminpack
-    dlib
-    hdf5
-    hmat-oss
-    ipopt
-    libxml2
-    nlopt
-    pagmo2
-    spectra
-    swig
-    tbb
-  ]
-  ++ lib.optionals enablePython [
-    python3Packages.dill
-    python3Packages.matplotlib
-    python3Packages.psutil
-    python3Packages.python
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-  ];
+  buildInputs =
+    [
+      (lib.getLib primesieve)
+      boost
+      ceres-solver
+      cminpack
+      dlib
+      hdf5
+      hmat-oss
+      ipopt
+      libxml2
+      nlopt
+      pagmo2
+      spectra
+      swig
+      tbb
+    ]
+    ++ lib.optionals enablePython [
+      python3Packages.dill
+      python3Packages.matplotlib
+      python3Packages.psutil
+      python3Packages.python
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Accelerate
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON" enablePython)
@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openturns.github.io/www/";
     description = "Multivariate probabilistic modeling and uncertainty treatment library";
     changelog = "https://github.com/openturns/openturns/raw/v${finalAttrs.version}/ChangeLog";
-    license = with lib.licenses; [ lgpl3Plus gpl3Plus ];
+    license = with lib.licenses; [
+      lgpl3Plus
+      gpl3Plus
+    ];
     maintainers = with lib.maintainers; [ gdinh ];
     platforms = lib.platforms.unix;
   };

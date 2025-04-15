@@ -1,5 +1,5 @@
 diff --git a/app/legacy/src-tauri/Cargo.lock b/app/legacy/src-tauri/Cargo.lock
-index 109db68..c3a70c6 100644
+index 1bba0ae..af24986 100644
 --- a/app/legacy/src-tauri/Cargo.lock
 +++ b/app/legacy/src-tauri/Cargo.lock
 @@ -4138,7 +4138,7 @@ dependencies = [
@@ -45,7 +45,7 @@ index 109db68..c3a70c6 100644
   "core-foundation-sys",
   "glob",
 diff --git a/app/legacy/src-tauri/Cargo.toml b/app/legacy/src-tauri/Cargo.toml
-index 5468707..68ed47b 100644
+index b971c3d..44abf29 100644
 --- a/app/legacy/src-tauri/Cargo.toml
 +++ b/app/legacy/src-tauri/Cargo.toml
 @@ -20,7 +20,7 @@ notify-rust = "4.10"
@@ -58,7 +58,7 @@ index 5468707..68ed47b 100644
  tauri-plugin-autostart = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
  tauri-plugin-single-instance = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 diff --git a/app/main/src-tauri/Cargo.lock b/app/main/src-tauri/Cargo.lock
-index c1f175c..7bf1450 100644
+index bc4753a..ed4c7e8 100644
 --- a/app/main/src-tauri/Cargo.lock
 +++ b/app/main/src-tauri/Cargo.lock
 @@ -4182,7 +4182,7 @@ dependencies = [
@@ -102,7 +102,7 @@ index c1f175c..7bf1450 100644
  name = "sys_metrics"
  version = "0.2.7"
 diff --git a/app/main/src-tauri/Cargo.toml b/app/main/src-tauri/Cargo.toml
-index 90dcc88..56abae2 100644
+index 5653700..5120513 100644
 --- a/app/main/src-tauri/Cargo.toml
 +++ b/app/main/src-tauri/Cargo.toml
 @@ -20,7 +20,7 @@ notify-rust = "4.10"
@@ -111,6 +111,6 @@ index 90dcc88..56abae2 100644
  serde_json = "1.0"
 -sys_metrics = "0.2"
 +sys_metrics = { git = "https://github.com/Martichou/sys_metrics" }
- tauri = { version = "2.2", features = [ "devtools", "tray-icon", "native-tls-vendored"] }
+ tauri = { version = "2.2", features = [ "devtools", "tray-icon", "native-tls-vendored", "image-png"] }
  tauri-plugin-autostart = "2.2"
  tauri-plugin-process = "2.2"

@@ -4,6 +4,7 @@
   openssl,
   python311,
   fetchpatch2,
+  icu75,
   enableNpm ? true,
 }:
 
@@ -11,6 +12,7 @@ let
   buildNodejs = callPackage ./nodejs.nix {
     inherit openssl;
     python = python311;
+    icu = icu75; # does not build with newer
   };
 
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
@@ -19,8 +21,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.20.6";
-  sha256 = "c669b48b632fa6797d4f5fa7bbd2b476ec961120957864402226cc9fd8ebbc0e";
+  version = "18.20.8";
+  sha256 = "36a7bf1a76d62ce4badd881ee5974a323c70e1d8d19165732684e145632460d9";
   patches = [
     ./configure-emulator-node18.patch
     ./configure-armv6-vfpv2.patch
@@ -74,6 +76,11 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
       hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
+    })
+    # fix test failure on macos 15.4
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/33f6e1ea296cd20366ab94e666b03899a081af94.patch?full_index=1";
+      hash = "sha256-aVBMcQlhQeviUQpMIfC988jjDB2BgYzlMYsq+w16mzU=";
     })
   ] ++ gypPatches;
 }

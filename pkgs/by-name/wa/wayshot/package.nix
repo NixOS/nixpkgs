@@ -9,12 +9,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "waycrate";
-    repo = pname;
+    repo = "wayshot";
     rev = version;
     hash = "sha256-nUpIN4WTePtFZTmKAjv0tgj4VTdZeXjoQX6am9+M3ig=";
   };
 
-  cargoHash = "sha256-1Y9ymodZHtxHzhudjGbkP2ohMaBMOD9K+GpUoNmzHQs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uKETDGi1n6VcdGCrjrnEM1sQ0vVjd/vCXMUn9Hby2m8=";
 
   # tests are off as they are broken and pr for integration testing is still WIP
   doCheck = false;

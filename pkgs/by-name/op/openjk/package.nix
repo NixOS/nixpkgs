@@ -9,6 +9,7 @@
   zlib,
   libpng,
   libGL,
+  libX11,
   SDL2,
   unstableGitUpdater,
 }:
@@ -64,6 +65,7 @@ stdenv.mkDerivation {
     zlib
     libpng
     libGL
+    libX11
     SDL2
   ];
 
@@ -115,6 +117,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/JACoders/OpenJK";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tgunnoe ];
+    maintainers = with maintainers; [ ];
   };
 }

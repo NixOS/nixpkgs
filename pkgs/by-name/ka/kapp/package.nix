@@ -1,14 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kapp }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kapp,
+}:
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.64.0";
+  version = "0.64.1";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kapp";
     rev = "v${version}";
-    hash = "sha256-+kSZERC14IimUa6rwG6u6gHWheCPnk840Sowlv3tm8Q=";
+    hash = "sha256-vgb4VtMKYncO4TPlMj2HrgZvjoOsOc2cYy+EBDKnGcM=";
   };
 
   vendorHash = null;

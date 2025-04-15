@@ -38,12 +38,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "11.3.0";
+  version = "11.3.1";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-HaQxiz+W+H9NR1WKMtqyabjz/JVnCAOMKOcqGAsO+6Y=";
+    hash = "sha256-yTyplvbzWqQ/lI/8q6lgNGjfAd7rYvYcM7p2kifDGf4=";
   };
 
   # Fix broken paths in a .pc
@@ -118,8 +118,8 @@ stdenv.mkDerivation rec {
 
   postFixup =
     ''
-      # Don't try to export invalid environment variables.
-      sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
+      substituteInPlace "$out"/bin/geant4.sh \
+        --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
     ''
     + lib.optionalString enableQt ''
       wrapQtAppsHook

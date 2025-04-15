@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.tzupdate;
-in {
+in
+{
   options.services.tzupdate = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -28,7 +34,11 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
-        timedatectl set-timezone "$(${lib.getExe pkgs.tzupdate} --print-only)"
+        timezone="$(${lib.getExe pkgs.tzupdate} --print-only)"
+        if [[ -n "$timezone" ]]; then
+          echo "Setting timezone to '$timezone'"
+          timedatectl set-timezone "$timezone"
+        fi
       '';
 
       serviceConfig = {

@@ -40,10 +40,7 @@ let
       ) allUrls;
     in
     (
-      # This removes reference to deprecated `qt6Packages.stdenv`
-      # so when a KDE package asks for a stdenv, it won't trigger
-      # an eval warning
-      (lib.removeAttrs qt6Packages [ "stdenv" ])
+      qt6Packages
       // frameworks
       // gear
       // plasma
@@ -93,6 +90,7 @@ let
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
+        wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
     );
 in

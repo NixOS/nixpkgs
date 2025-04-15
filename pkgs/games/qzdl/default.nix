@@ -12,7 +12,7 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qzdl";
   version = "unstable-2023-04-04";
 

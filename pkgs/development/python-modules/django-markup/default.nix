@@ -65,6 +65,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ optional-dependencies.all_filter_dependencies;
 
+  disabledTests = [
+    # pygments compat issue
+    "test_rst_with_pygments"
+  ];
+
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=django_markup.tests
   '';

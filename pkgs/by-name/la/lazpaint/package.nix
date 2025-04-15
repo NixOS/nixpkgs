@@ -24,7 +24,7 @@ let
     hash = "sha256-5L05eGVN+xncd0/0XLFN6EL2ux4aAOsiU0BMoy0dKgg=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lazpaint";
   version = "7.2.2-unstable-2024-01-23";
 

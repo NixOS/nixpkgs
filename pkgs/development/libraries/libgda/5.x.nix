@@ -20,7 +20,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresSupport ? false,
-  postgresql,
+  libpq,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     autoconf-archive
     yelp-tools
+    libpq.pg_config
   ];
 
   buildInputs =
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
       libmysqlclient
     ]
     ++ lib.optionals postgresSupport [
-      postgresql
+      libpq
     ];
 
   propagatedBuildInputs = [

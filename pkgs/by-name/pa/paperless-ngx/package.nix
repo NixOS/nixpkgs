@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildNpmPackage,
+  node-gyp,
   nodejs_20,
   nixosTests,
   gettext,
@@ -17,7 +17,8 @@
   qpdf,
   tesseract5,
   unpaper,
-  poppler_utils,
+  pnpm,
+  poppler-utils,
   liberation_ttf,
   xcbuild,
   pango,
@@ -26,13 +27,13 @@
   xorg,
 }:
 let
-  version = "2.14.6";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-wBm4+ohM9v25n6zEUAeaVU6mAmB3GR8n1kDYyTBlnjM=";
+    hash = "sha256-vICkRfVxzQlqhSBCieVNSGeXb6FCOx0qOnInKMy6Lhg=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -51,88 +52,94 @@ let
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
-
-      uvicorn = prev.uvicorn.overridePythonAttrs (_: {
-        version = "0.25.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "uvicorn";
-          rev = "0.25.0";
-          hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
-        };
-      });
     };
   };
 
   path = lib.makeBinPath [
     ghostscript_headless
-    imagemagickBig
+    (imagemagickBig.override { ghostscript = ghostscript_headless; })
     jbig2enc
     optipng
     pngquant
     qpdf
     tesseract5
     unpaper
-    poppler_utils
+    poppler-utils
   ];
 
-  frontend = buildNpmPackage {
-    pname = "paperless-ngx-frontend";
-    inherit version src;
+  frontend =
+    let
+      frontendSrc = src + "/src-ui";
+    in
+    stdenv.mkDerivation rec {
+      pname = "paperless-ngx-frontend";
+      inherit version;
 
-    nodejs = nodejs_20;  # does not build with 22
+      src = frontendSrc;
 
-    postPatch = ''
-      cd src-ui
-    '';
+      pnpmDeps = pnpm.fetchDeps {
+        inherit pname version src;
+        hash = "sha256-yoTXlxXLcWD2DMxqjb02ZORJ+E0xE1DbZm1VL7vXM4g=";
+      };
 
-    npmDepsHash = "sha256-hK7Soop9gBZP4m2UzbEIAsLkPKpbQkLmVruY2So4CSs=";
+      nativeBuildInputs =
+        [
+          node-gyp
+          nodejs_20
+          pkg-config
+          pnpm.configHook
+          python3
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          xcbuild
+        ];
 
-    nativeBuildInputs =
-      [
-        pkg-config
-        python3
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        xcbuild
-      ];
+      buildInputs =
+        [
+          pango
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          giflib
+          darwin.apple_sdk.frameworks.CoreText
+        ];
 
-    buildInputs =
-      [
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        giflib
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+      CYPRESS_INSTALL_BINARY = "0";
+      NG_CLI_ANALYTICS = "false";
 
-    CYPRESS_INSTALL_BINARY = "0";
-    NG_CLI_ANALYTICS = "false";
+      buildPhase = ''
+        runHook preBuild
 
-    npmBuildFlags = [
-      "--"
-      "--configuration"
-      "production"
-    ];
+        pushd node_modules/canvas
+        node-gyp rebuild
+        popd
 
-    doCheck = true;
-    checkPhase = ''
-      runHook preCheck
-      npm run test
-      runHook postCheck
-    '';
+        pnpm run build --configuration production
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/lib/paperless-ui
-      mv ../src/documents/static/frontend $out/lib/paperless-ui/
-      runHook postInstall
-    '';
-  };
+        runHook postBuild
+      '';
+
+      doCheck = true;
+      checkPhase = ''
+        runHook preCheck
+
+        pnpm run test
+
+        runHook postCheck
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/lib/paperless-ui
+        mv ../src/documents/static/frontend $out/lib/paperless-ui/
+
+        runHook postInstall
+      '';
+    };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
-  pyproject = false;
+  pyproject = true;
 
   inherit version src;
 
@@ -141,13 +148,27 @@ python.pkgs.buildPythonApplication rec {
     if (( $NIX_BUILD_CORES > 4)); then
       NIX_BUILD_CORES=4
     fi
-    substituteInPlace src/setup.cfg \
-      --replace-fail "--numprocesses auto --maxprocesses=16" "--numprocesses $NIX_BUILD_CORES"
+    substituteInPlace pyproject.toml \
+      --replace-fail '"--numprocesses=auto",' "" \
+      --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES" \
+      --replace-fail "djangorestframework-guardian~=0.3.0" "djangorestframework-guardian2"
   '';
 
   nativeBuildInputs = [
     gettext
     xorg.lndir
+  ];
+
+  pythonRelaxDeps = [
+    "celery"
+    "django-allauth"
+    "django-extensions"
+    "drf-spectacular-sidecar"
+    "filelock"
+    "python-dotenv"
+    "rapidfuzz"
+    # TODO: https://github.com/NixOS/nixpkgs/pull/373099
+    "zxing-cpp"
   ];
 
   dependencies =
@@ -171,11 +192,13 @@ python.pkgs.buildPythonApplication rec {
       django-soft-delete
       djangorestframework
       djangorestframework-guardian2
+      drf-spectacular
+      drf-spectacular-sidecar
       drf-writable-nested
       filelock
       flower
       gotenberg-client
-      gunicorn
+      granian
       httpx-oauth
       imap-tools
       inotifyrecursive
@@ -199,16 +222,14 @@ python.pkgs.buildPythonApplication rec {
       setproctitle
       tika-client
       tqdm
-      uvicorn
       watchdog
       whitenoise
-      whoosh
+      whoosh-reloaded
       zxing-cpp
     ]
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
-    ++ redis.optional-dependencies.hiredis
-    ++ uvicorn.optional-dependencies.standard;
+    ++ redis.optional-dependencies.hiredis;
 
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
@@ -230,7 +251,7 @@ python.pkgs.buildPythonApplication rec {
       runHook preInstall
 
       mkdir -p $out/lib/paperless-ngx/static/frontend
-      cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
+      cp -r {src,static,LICENSE} $out/lib/paperless-ngx
       lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
       chmod +x $out/lib/paperless-ngx/src/manage.py
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
@@ -316,6 +337,7 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    mainProgram = "paperless-ngx";
     maintainers = with maintainers; [
       leona
       SuperSandro2000

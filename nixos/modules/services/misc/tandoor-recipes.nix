@@ -75,10 +75,33 @@ in
       };
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "tandoor_recipes";
+      description = "User account under which Tandoor runs.";
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "tandoor_recipes";
+      description = "Group under which Tandoor runs.";
+    };
+
     package = lib.mkPackageOption pkgs "tandoor-recipes" { };
   };
 
   config = lib.mkIf cfg.enable {
+    users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
+      tandoor_recipes = {
+        inherit (cfg) group;
+        isSystemUser = true;
+      };
+    };
+
+    users.groups = lib.mkIf (cfg.group == "tandoor_recipes") {
+      tandoor_recipes = { };
+    };
+
     systemd.services.tandoor-recipes = {
       description = "Tandoor Recipes server";
 
@@ -88,17 +111,14 @@ in
         '';
         Restart = "on-failure";
 
-        User = "tandoor_recipes";
-        Group = "tandoor_recipes";
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
         StateDirectory = "tandoor-recipes";
         WorkingDirectory = env.MEDIA_ROOT;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
-          "${
-            config.environment.etc."ssl/certs/ca-certificates.crt".source
-          }:/etc/ssl/certs/ca-certificates.crt"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"

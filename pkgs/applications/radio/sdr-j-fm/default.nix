@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     features = {
-      # All of these features don't require an external depencies, althought it
+      # All of these features don't require an external dependencies, although it
       # may be implied - upstraem bundles everything they need in their repo.
       AIRSPY = true;
       SDRPLAY = true;

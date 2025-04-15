@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   plib,
   libglut,
   xorgproto,
@@ -27,16 +27,17 @@
   curl,
 }:
 let
-  version = "2020.3.19";
-  shortVersion = builtins.substring 0 6 version;
+  version = "2024.1.1";
 in
 stdenv.mkDerivation rec {
   pname = "simgear";
   inherit version;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-O5N8W5RCJHjl15EUvc1seOQ6Cm/7qXVEqG1EHD+ejDo=";
+  src = fetchFromGitLab {
+    owner = "flightgear";
+    repo = "simgear";
+    tag = "v${version}";
+    hash = "sha256-hOA/q/cTsqRy82rTAXRxyHBDdw93TW9UL+K5Jq5b/08=";
   };
 
   nativeBuildInputs = [ cmake ];

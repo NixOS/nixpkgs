@@ -15,12 +15,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
-    repo = pname;
+    repo = "riff";
     rev = "v${version}";
     hash = "sha256-ThHkEvu+lWojHmEgcrwdZDPROfxznB7vv78msyZf90A=";
   };
 
-  cargoHash = "sha256-knA08KqjtI2FZUbllfVETxDqi/r4Gf3VuLE17JujTzc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JghCYYDf2keV9UFU5m+qDIIb7+V0aPwVzR41J01pXcI=";
 
   nativeBuildInputs = [
     makeWrapper

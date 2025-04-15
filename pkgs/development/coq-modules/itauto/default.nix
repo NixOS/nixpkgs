@@ -7,7 +7,7 @@
   version ? null,
 }:
 
-(mkCoqDerivation rec {
+(mkCoqDerivation {
   pname = "itauto";
   owner = "fbesson";
   domain = "gitlab.inria.fr";

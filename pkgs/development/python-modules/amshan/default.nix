@@ -37,6 +37,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "han" ];
 
+  # 2021.12.1 is an older version
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Decode smart power meter data stream of Cosem HDLC frames used by MBUS";
     longDescription = ''

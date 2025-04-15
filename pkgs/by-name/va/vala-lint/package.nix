@@ -14,7 +14,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vala-lint";
   version = "0-unstable-2024-08-28";
 

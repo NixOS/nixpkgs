@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "basedmypy";
-  version = "2.8.1";
+  version = "2.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "KotlinIsland";
     repo = "basedmypy";
     tag = "v${version}";
-    hash = "sha256-scPIcUoay8cChiKNhaXcKjN5S5G7teGCakkaFMmAJlo=";
+    hash = "sha256-/43wVQoW/BbRD8j8Oypq5yz79ZTyAkLD4T8/aUg/QT8=";
   };
 
   postPatch = ''

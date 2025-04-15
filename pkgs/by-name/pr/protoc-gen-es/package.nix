@@ -7,20 +7,20 @@
 
 buildNpmPackage rec {
   pname = "protoc-gen-es";
-  version = "2.2.3";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protobuf-es";
     tag = "v${version}";
-    hash = "sha256-ECTra+uT5yEdTbi9kyrdseZQmcctPzCkDIkjX54Zc5Y=";
+    hash = "sha256-7g7DZSSFyidgpWJQNuKQRpyDuCDQT6gGgIKNk1JsbEk=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-a6kc0FkmDH71XH7GbEo7lWBC0HrXu8+WdS0b922RV0M=";
+  npmDepsHash = "sha256-NclrKsBBHlcYIgWf0bEq7xI3pUq2RvZ+0Ebj77ICars=";
 
   npmWorkspace = "packages/protoc-gen-es";
 
@@ -32,6 +32,15 @@ buildNpmPackage rec {
   # copy npm workspace modules while properly resolving symlinks
   # TODO: workaround can be removed once this is merged: https://github.com/NixOS/nixpkgs/pull/333759
   postInstall = ''
+    rm -rf $out/lib/node_modules/protobuf-es/node_modules/ts4.*
+    cp -rL node_modules/ts4.* $out/lib/node_modules/protobuf-es/node_modules/
+
+    rm -rf $out/lib/node_modules/protobuf-es/node_modules/ts5.*
+    cp -rL node_modules/ts5.* $out/lib/node_modules/protobuf-es/node_modules/
+
+    rm -rf $out/lib/node_modules/protobuf-es/node_modules/upstream-protobuf
+    cp -rL node_modules/upstream-protobuf $out/lib/node_modules/protobuf-es/node_modules/
+
     rm -rf $out/lib/node_modules/protobuf-es/node_modules/@bufbuild
     cp -rL node_modules/@bufbuild $out/lib/node_modules/protobuf-es/node_modules/
   '';

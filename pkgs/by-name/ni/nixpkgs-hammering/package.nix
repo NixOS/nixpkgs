@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "0-unstable-2024-12-22";
+  version = "0-unstable-2025-02-09";
 
   src = fetchFromGitHub {
     owner = "jtojnar";
     repo = "nixpkgs-hammering";
-    rev = "56e8d636b3e7188dae2832fc405db2e388be634b";
-    hash = "sha256-hr+BHAmWT/FCLI5zNEHgtKdBbIYgmAydrErRu9RfuuM=";
+    rev = "df77e6533c21737e5976c6fe4a4d81d7dcfc3e0e";
+    hash = "sha256-Nr/4WcBMA/fc9WfNECB/nM85JfT2xwQYwS7Jq6rGKoM=";
   };
 
   meta = with lib; {

@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, pkg-config
-, openssl
-, pandoc
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  pkg-config,
+  openssl,
+  pandoc,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3wOka+MKSy2x3100eF0d9A5Jc0qFSNCiLsisHO1Uldc=";
   };
 
-  cargoHash = "sha256-hRtHjyOeIGx7ulXZiyY7EWXVQiF2vzFP1Gf+lTpe2GQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9Qm93Hmxutmg3oCXSVrCUAYA2W4gXR/LPC5zZ34x5jQ=";
 
   patches = [
     # remove date info to make the build reproducible
@@ -39,12 +41,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=options::test::two_classes"
   ];
 
-  nativeBuildInputs = [ installShellFiles pandoc ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
- postInstall = ''
+  postInstall = ''
     installShellCompletion completions/doge.{bash,fish,zsh}
     installManPage ./target/man/*.1
   '';

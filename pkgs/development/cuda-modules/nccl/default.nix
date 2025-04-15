@@ -22,16 +22,24 @@ let
     cudaOlder
     cudatoolkit
     ;
+  # versions 2.26+ with CUDA 11.x error with
+  # fatal error: cuda/atomic: No such file or directory
+  version = if cudaAtLeast "12.0" then "2.26.2-1" else "2.25.1-1";
+  hash =
+    if cudaAtLeast "12.0" then
+      "sha256-iLEuru3gaNLcAdH4V8VIv3gjdTGjgb2/Mr5UKOh69N4="
+    else
+      "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
-  version = "2.21.5-1";
+  version = version;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IF2tILwW8XnzSmfn7N1CO7jXL95gUp02guIW5n1eaig=";
+    hash = hash;
   };
 
   __structuredAttrs = true;
@@ -65,9 +73,16 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
-  postPatch = ''
-    patchShebangs ./src/device/generate.py
-  '';
+  postPatch =
+    ''
+      patchShebangs ./src/device/generate.py
+    ''
+    # CUDA 12.8 uses GCC 14 and we need to bump C++ standard to C++14
+    # in order to work with new constexpr handling
+    + lib.optionalString (cudaAtLeast "12.8") ''
+      substituteInPlace ./makefiles/common.mk \
+        --replace-fail "-std=c++11" "-std=c++14"
+    '';
 
   makeFlags =
     [

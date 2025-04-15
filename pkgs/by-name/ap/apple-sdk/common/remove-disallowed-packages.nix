@@ -1,7 +1,5 @@
 let
-  # This can be made unconditional once jq is available in the bootstrap tools. If corecrypto is  not removed from
-  # the umbrella framework, linking will fail in stage 1 because it can’t find the tbd.
-  disallowedPackages' = builtins.fromJSON (builtins.readFile ../metadata/disallowed-packages.json);
+  disallowedPackages = builtins.fromJSON (builtins.readFile ../metadata/disallowed-packages.json);
 in
 
 {
@@ -10,13 +8,6 @@ in
   stdenv,
 }:
 
-let
-  disallowedPackages =
-    if jq == null then
-      lib.filter (p: p.package != "corecrypto") disallowedPackages'
-    else
-      disallowedPackages';
-in
 self: super: {
   # Remove headers and stubs for packages that are available in nixpkgs.
   buildPhase =

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/zaibon/py-dmidecode/";
     changelog = "https://github.com/zaibon/py-dmidecode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -25,10 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZKAyKcKwhnPE6PrfBFjLJKkTlGbdLcmW1EP/xSv2cpM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-IaOhQfDEgLhGmes0xzhLVym29aP691TY0EXdOIgXEMA=";
+    hash = "sha256-cZ92wSKoygt9x6O/ginOEiCiarlR5qGVFOHrIFdWOWE=";
   };
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

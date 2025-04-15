@@ -20,11 +20,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "dropbear";
-  version = "2024.86";
+  version = "2025.87";
 
   src = fetchurl {
     url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
-    sha256 = "sha256-54k23/w5Xy4NsJkyHWvmWRkJZrmXErVcUw3QoYIuCl4=";
+    sha256 = "sha256-c4t/NYVH8MZMPhpWu8XvmNNNnsat+czfAdwL8sqivI0=";
   };
 
   CFLAGS = lib.pipe (lib.attrNames dflags) [

@@ -10,13 +10,13 @@ rustPlatform.buildRustPackage rec {
   # Since then, `dust` has been freed up, allowing this package to take that attribute.
   # However in order for tools like `nix-env` to detect package updates, keep `du-dust` for pname.
   pname = "du-dust";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    hash = "sha256-oaDJLDFI193tSzUDqQI/Lvrks0FLYTMLrrwigXwJ+rY=";
+    hash = "sha256-MmlCTF7tZBBOCnyhUjTatDjajFMGd+Nk2kYyxjzZc04=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-o9ynFkdx6a8kHS06NQN7BzWrOIxvdVwnUHmxt4cnmQU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H2tfDZBhIRRrdak8TWjzzjeJBQmYZVWqXNtxTnBnbDk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

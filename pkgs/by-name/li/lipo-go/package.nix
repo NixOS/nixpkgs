@@ -41,7 +41,7 @@ buildGoModule rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/lipo";
-  versionCheckProgramArg = [ "-version" ];
+  versionCheckProgramArg = "-version";
   doInstallCheck = true;
 
   passthru = {

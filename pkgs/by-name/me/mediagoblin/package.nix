@@ -4,7 +4,7 @@
   fetchFromSourcehut,
   gobject-introspection,
   gst_all_1,
-  poppler_utils,
+  poppler-utils,
   python3,
   xorg,
 }:
@@ -15,6 +15,12 @@ let
       celery = prev.celery.overridePythonAttrs {
         doCheck = false;
       };
+
+      kombu = prev.kombu.overridePythonAttrs {
+        # avoid conflicts with test only dependencies
+        doCheck = false;
+      };
+
       sqlalchemy = prev.sqlalchemy_1_4;
     };
   };
@@ -137,7 +143,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       webtest
 
-      poppler_utils
+      poppler-utils
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 

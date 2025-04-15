@@ -31,6 +31,15 @@ An attribute set of module arguments that can be used in `imports`.
 
 This is in contrast to `config._module.args`, which is only available after all `imports` have been resolved.
 
+::: {.warning}
+You may be tempted to use `specialArgs.lib` to provide extra library functions. Doing so limits the interoperability of modules, as well as the interoperability of Module System applications.
+
+`lib` is reserved for the Nixpkgs library, and should not be used for custom functions.
+
+Instead, you may create a new attribute in `specialArgs` to provide custom functions.
+This clarifies their origin and avoids incompatibilities.
+:::
+
 #### `class` {#module-system-lib-evalModules-param-class}
 
 If the `class` attribute is set and non-`null`, the module system will reject `imports` with a different `_class` declaration.

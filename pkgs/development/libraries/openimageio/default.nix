@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, giflib
-, libjpeg
-, libpng
-, libtiff
-, opencolorio
-, openexr
-, robin-map
-, unzip
-, fmt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  giflib,
+  libjpeg,
+  libpng,
+  libtiff,
+  opencolorio,
+  openexr,
+  robin-map,
+  unzip,
+  fmt,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,13 +26,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-hUCwlzQW5mJH5HYPbLWOcupc36nxM12CV0sakZhiGzo=";
   };
 
-  # Workaround broken zlib version detecion in CMake < 3.37.
+  # Workaround broken zlib version detection in CMake < 3.37.
   postPatch = ''
     substituteInPlace ./src/cmake/Config.cmake.in \
       --replace " @ZLIB_VERSION@" ""
   '';
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     cmake

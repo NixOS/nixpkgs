@@ -38,9 +38,12 @@ python.pkgs.buildPythonApplication rec {
     src = ./src;
   };
 
-  nativeBuildInputs = with python.pkgs; [
-    setuptools
-    pytestCheckHook
+  nativeCheckInputs = [
+    python.pkgs.pytestCheckHook
+  ];
+
+  build-system = [
+    python.pkgs.setuptools
   ];
 
   propagatedBuildInputs = with python.pkgs; [

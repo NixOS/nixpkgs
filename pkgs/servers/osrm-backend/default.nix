@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   bzip2,
@@ -16,7 +15,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "osrm-backend";
   version = "5.27.1-unstable-2024-11-03";
 
@@ -26,6 +25,11 @@ stdenv.mkDerivation rec {
     rev = "3614af7f6429ee35c3f2e836513b784a74664ab6";
     hash = "sha256-iix++G49cC13wZGZIpXu1SWGtVAcqpuX3GhsIaETzUU=";
   };
+
+  patches = [
+    # Taken from https://github.com/Project-OSRM/osrm-backend/pull/7073.
+    ./boost187-compat.patch
+  ];
 
   nativeBuildInputs = [
     cmake

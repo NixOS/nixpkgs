@@ -74,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sites.google.com/site/broguegame/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
-      AndersonTorres
       fgaz
     ];
     platforms = [ "x86_64-linux" ];

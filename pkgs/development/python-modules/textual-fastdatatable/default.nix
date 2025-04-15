@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "textual-fastdatatable";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
     tag = "v${version}";
-    hash = "sha256-Jz0ujO/nAnn15t8/OFOzZTpVBXNYsfVhxmYdGC39PpM=";
+    hash = "sha256-aQduVFHsdAMwjJzFPqOGB5Ec16YZ9YOYnEK6Ilf96xM=";
   };
 
   build-system = [ poetry-core ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "A performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
     homepage = "https://github.com/tconbeer/textual-fastdatatable";
-    changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };

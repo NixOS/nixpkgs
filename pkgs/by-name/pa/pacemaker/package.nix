@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
-    repo = pname;
+    repo = "pacemaker";
     rev = "Pacemaker-${version}";
     sha256 = "sha256-L/LQS5XLps0pqTfMAh1ZiR00SVltrNxMl6DXQhXBw1Q=";
   };

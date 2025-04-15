@@ -30,7 +30,7 @@ in
 
         Mutually exclusive with `configuration` option.
 
-        Configuration reference: https://github.com/mrlhansen/idrac_exporter/#configuration
+        Configuration reference: <https://github.com/mrlhansen/idrac_exporter/#configuration>
       '';
     };
     configuration = mkOption {
@@ -38,7 +38,7 @@ in
       description = ''
         Configuration for iDRAC exporter, as a nix attribute set.
 
-        Configuration reference: https://github.com/mrlhansen/idrac_exporter/#configuration
+        Configuration reference: <https://github.com/mrlhansen/idrac_exporter/#configuration>
 
         Mutually exclusive with `configurationPath` option.
       '';

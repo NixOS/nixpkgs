@@ -1,10 +1,12 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   deterministic-uname,
+  addBinToPathHook,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "zxpy";
   version = "1.6.4";
   pyproject = true;
@@ -16,18 +18,19 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-/VITHN517lPUmhLYgJHBYYvvlJdGg2Hhnwk47Mp9uc0=";
   };
 
-  build-system = [
-    python3.pkgs.setuptools
+  build-system = with python3Packages; [
+    setuptools
   ];
 
-  nativeCheckInputs = [
-    deterministic-uname
-    python3.pkgs.pytestCheckHook
-  ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      deterministic-uname
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pythonImportsCheck = [ "zx" ];
 

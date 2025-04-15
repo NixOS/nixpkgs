@@ -1,23 +1,31 @@
 {
+  stdenv,
   lib,
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchurl,
+  fetchgit,
   setuptools-scm,
   pdfium-binaries,
   numpy,
   pillow,
   pytestCheckHook,
+  removeReferencesTo,
   python,
+  replaceVars,
 }:
 
 let
   pdfiumVersion = "${pdfium-binaries.version}";
 
-  headers = fetchurl {
-    url = "https://pdfium.googlesource.com/pdfium/+archive/refs/heads/chromium/${pdfiumVersion}/public.tar.gz";
-    hash = "sha256-vKfs4Jd8LEtA3aTI+DcJMS0VOErq1IR1eThnMlxiER0=";
+  headers = fetchgit {
+    url = "https://pdfium.googlesource.com/pdfium";
+    # The latest revision on the chromium/${pdfiumVersion} branch
+    rev = "9232d7c94a0007377a8034222f47683fe391d474";
+    hash = "sha256-dI3jTyVYc0EmMLHTiVjGSf3C2noS9Ru5WijEJFtiSFk=";
+    sparseCheckout = [
+      "public"
+    ];
   };
 
   # They demand their own fork of ctypesgen
@@ -32,6 +40,12 @@ let
       rev = "848e9fbb1374f7f58a7ebf5e5da5c33292480b30";
       hash = "sha256-3JA7cW/xaEj/DxMHEypROwrKGo7EwUEcipRqALTvydw=";
     };
+
+    patches = [
+      (replaceVars ./fix-cc-detection.patch {
+        cc = "${stdenv.cc.targetPrefix}cc";
+      })
+    ];
 
     build-system = [
       setuptools-scm
@@ -56,6 +70,10 @@ buildPythonPackage rec {
   build-system = [
     ctypesgen
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    removeReferencesTo
   ];
 
   propagatedBuildInputs = [
@@ -84,8 +102,8 @@ buildPythonPackage rec {
     in
     ''
       # Preseed the headers and version file
-      mkdir -p ${headersDir}
-      tar -xf ${headers} -C ${headersDir}
+      mkdir -p ${bindingsDir}
+      cp -r ${headers}/public ${headersDir}
       install -m 644 ${inputVersionFile} ${versionFile}
 
       # Make generated bindings consider pdfium derivation path when loading dynamic libraries
@@ -99,6 +117,11 @@ buildPythonPackage rec {
                        '{"major": 133, "minor": 0, "build": ${pdfiumVersion}, "patch": 1}'
     '';
   env.PDFIUM_PLATFORM = "system:${pdfiumVersion}";
+
+  # Remove references to stdenv in comments.
+  postInstall = ''
+    remove-references-to -t ${stdenv.cc.cc} $out/${python.sitePackages}/pypdfium2_raw/bindings.py
+  '';
 
   nativeCheckInputs = [
     numpy

@@ -124,7 +124,7 @@ in
       description = ''
         Create the database and database user locally, and run installation.
 
-        WARNING: Due to https://github.com/flarum/framework/issues/4018, this option is set
+        WARNING: Due to <https://github.com/flarum/framework/issues/4018>, this option is set
         to false by default. The 'flarum install' command may delete existing database tables.
         Only set this to true if you are certain you are working with a fresh, empty database.
       '';
@@ -195,6 +195,10 @@ in
         message = "Flarum can only be automatically installed in MySQL/MariaDB.";
       }
     ];
+
+    systemd.services."phpfpm-flarum" = {
+      restartTriggers = [ cfg.package ];
+    };
 
     systemd.services.flarum-install = {
       description = "Flarum installation";

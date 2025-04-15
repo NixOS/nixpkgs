@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   dbus,
   fontconfig,
   xorg,
@@ -17,20 +17,28 @@
   qttools,
   qqc2-breeze-style,
   gpsd,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
       xmessage = lib.getExe xorg.xmessage;
       xrdb = lib.getExe xorg.xrdb;
-      xsetroot = lib.getExe xorg.xsetroot;
+      # @QtBinariesDir@ only appears in the *removed* lines of the diff
+      QtBinariesDir = null;
+    })
+
+    # Backport patch recommended by upstream
+    # FIXME: remove in 6.3.5
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/47d502353720004fa2d0e7b0065994b75b3e0ded.patch";
+      hash = "sha256-wt0ZIF4zcEOmP0o4ZcjBYxVjr2hVUlOKVJ8SMNSYt68=";
     })
   ];
 
@@ -62,10 +70,12 @@ mkKdeDerivation {
     gpsd
   ];
 
+  qtWrapperArgs = [ "--inherit-argv0" ];
+
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb} ${xorg.xsetroot}" > $out/nix-support/depends
+    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb}" > $out/nix-support/depends
   '';
 
   passthru.providedSessions = [

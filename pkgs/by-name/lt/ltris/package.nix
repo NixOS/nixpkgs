@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tetris clone from the LGames series";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "ltris";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (SDL.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

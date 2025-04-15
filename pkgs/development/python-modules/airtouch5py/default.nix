@@ -30,7 +30,11 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-  pythonRelaxDeps = [ "crc" ];
+
+  pythonRelaxDeps = [
+    "bitarray"
+    "crc"
+  ];
 
   dependencies = [
     bitarray

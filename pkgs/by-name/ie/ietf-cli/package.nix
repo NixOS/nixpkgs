@@ -7,14 +7,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   name = "ietf-cli";
-  version = "1.27";
+  version = "1.29";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "paulehoffman";
     repo = "ietf-cli";
     tag = version;
-    hash = "sha256-D62E0aHVwB2e+3ZNNMOB2E93Q2WKhbWrYtnH76ZOepM=";
+    hash = "sha256-xpwUUyTq/8WOUjssNkXOvxBYPgL7pmVVPz6abKetVc8=";
   };
   buildInputs = [ rsync ];
 

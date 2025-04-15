@@ -4,7 +4,7 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
-  # Pin Boost 1.86 due to use of boost::asio::io_service.
+  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
   boost186,
   cmake,
   cmake-extras,

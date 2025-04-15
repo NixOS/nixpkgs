@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/rust";
 
-  cargoHash = "sha256-NCxPLsBJX4Dp8LcWrjVrocqDBvWc587DF3WPXZg1uFY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9DwED8X/RHjBCInm+VbzoeVSb28U+XIE2IjNAGon6+E=";
 
   env = {
     SYSTEMD_VERITYSETUP_PATH = "${systemd}/lib/systemd/systemd-veritysetup";

@@ -5,28 +5,25 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  rocksdb_8_3,
+  rocksdb,
   testers,
   surrealdb,
   darwin,
   protobuf,
 }:
-
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
-  version = "2.0.2";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    rev = "v${version}";
-    hash = "sha256-kTTZx/IXXJrkC0qm4Nx0hYPbricNjwFshCq0aFYCTo0=";
+    tag = "v${version}";
+    hash = "sha256-NUmv/Ue14xrmBCxOkVXvcPmOwAA8L6LLPRu5E5Zkxw0=";
   };
 
-  cargoHash = "sha256-K62RqJqYyuAPwm8zLIiASH7kbw6raXS6ZzINMevWav0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NkAove8RlLkNI1KnMfJPnoqUswJ22Z2FOcpl05lqpKM=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -53,8 +50,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   checkFlags = [
-    # flaky
-    "--skip=ws_integration::none::merge"
     # requires docker
     "--skip=database_upgrade"
   ];

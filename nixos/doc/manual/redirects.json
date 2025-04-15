@@ -2,6 +2,15 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "module-services-anubis": [
+    "index.html#module-services-anubis"
+  ],
+  "module-services-anubis-configuration": [
+    "index.html#module-services-anubis-configuration"
+  ],
+  "module-services-anubis-quickstart": [
+    "index.html#module-services-anubis-quickstart"
+  ],
   "module-services-crab-hole": [
     "index.html#module-services-crab-hole"
   ],
@@ -40,6 +49,15 @@
   ],
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
+  ],
+  "module-services-strfry": [
+    "index.html#module-services-strfry"
+  ],
+  "module-services-strfry-basic-usage": [
+    "index.html#module-services-strfry-basic-usage"
+  ],
+  "module-services-strfry-reverse-proxy": [
+    "index.html#module-services-strfry-reverse-proxy"
   ],
   "preface": [
     "index.html#preface"
@@ -271,6 +289,9 @@
   ],
   "sec-x11-auto-login": [
     "index.html#sec-x11-auto-login"
+  ],
+  "sec-x11-startx": [
+    "index.html#sec-x11-startx"
   ],
   "sec-x11--graphics-cards-intel": [
     "index.html#sec-x11--graphics-cards-intel"
@@ -1250,6 +1271,9 @@
   "module-services-postgres-plugins": [
     "index.html#module-services-postgres-plugins"
   ],
+  "module-services-postgres-pls": [
+    "index.html#module-services-postgres-pls"
+  ],
   "module-services-postgres-jit": [
     "index.html#module-services-postgres-jit"
   ],
@@ -1288,6 +1312,12 @@
   ],
   "module-services-foundationdb-full-docs": [
     "index.html#module-services-foundationdb-full-docs"
+  ],
+  "module-service-umurmur": [
+    "index.html#module-service-umurmur"
+  ],
+  "module-service-umurmur-quick-start": [
+    "index.html#module-service-umurmur-quick-start"
   ],
   "module-borgbase": [
     "index.html#module-borgbase"
@@ -1583,6 +1613,9 @@
   "sec-option-types-string": [
     "index.html#sec-option-types-string"
   ],
+  "sec-option-types-specialised": [
+    "index.html#sec-option-types-specialised"
+  ],
   "sec-option-types-submodule": [
     "index.html#sec-option-types-submodule"
   ],
@@ -1642,6 +1675,9 @@
   ],
   "sec-option-definitions-merging": [
     "index.html#sec-option-definitions-merging"
+  ],
+  "sec-option-definitions-definitions": [
+    "index.html#sec-option-definitions-definitions"
   ],
   "sec-assertions": [
     "index.html#sec-assertions"
@@ -1922,6 +1958,9 @@
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
   ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"
   ],
@@ -1930,6 +1969,15 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

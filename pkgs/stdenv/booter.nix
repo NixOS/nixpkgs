@@ -22,7 +22,7 @@
 # The fourth and final goal is debugging. Normal packages should only source
 # their dependencies from the current stage. But for the sake of debugging, it
 # is nice that all packages still remain accessible. We make sure previous
-# stages are kept around with a `stdenv.__bootPackges` attribute referring the
+# stages are kept around with a `stdenv.__bootPackages` attribute referring the
 # previous stage. It is idiomatic that attributes prefixed with `__` come with
 # special restrictions and should not be used under normal circumstances.
 { lib, allPackages }:

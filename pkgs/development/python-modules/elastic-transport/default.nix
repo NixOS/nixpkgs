@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.15.0";
+  version = "8.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     tag = "v${version}";
-    hash = "sha256-5bNsJd0td3aQR+PvDBHg0/f+qPyt/ckWmeDrQJzxhYY=";
+    hash = "sha256-ZCzG7a/SWvUDWiIWwzVfj4JG/w7XUa25yKuuR53XCEQ=";
   };
 
   postPatch = ''
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
     homepage = "https://github.com/elasticsearch/elastic-transport-python";
-    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/v${version}";
+    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

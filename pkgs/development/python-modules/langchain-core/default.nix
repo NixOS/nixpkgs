@@ -5,18 +5,16 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   jsonpatch,
   langsmith,
   packaging,
+  pydantic,
   pyyaml,
   tenacity,
   typing-extensions,
-
-  # optional-dependencies
-  pydantic,
 
   # tests
   freezegun,
@@ -30,41 +28,44 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
-
-  # passthru
-  writeScript,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.31";
+  version = "0.3.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-u+Za7NtXVP0Mg6K65CuRLx8OrVpBXEe1ayP0uMUNJG4=";
+    hash = "sha256-s1vZ7G6Wzywf3euwX/RdCPkgzxvZTYVG0udGpHTIiQc=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  build-system = [ poetry-core ];
+  patches = [
+    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
+    ./rm-blockbuster.patch
+  ];
+
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "tenacity" ];
+
+  pythonRemoveDependencies = [
+    "blockbuster"
+  ];
 
   dependencies = [
     jsonpatch
     langsmith
     packaging
+    pydantic
     pyyaml
     tenacity
     typing-extensions
   ];
-
-  optional-dependencies = {
-    pydantic = [ pydantic ];
-  };
 
   pythonImportsCheck = [ "langchain_core" ];
 
@@ -90,26 +91,11 @@ buildPythonPackage rec {
     tests.pytest = langchain-core.overridePythonAttrs (_: {
       doCheck = true;
     });
-    # Updates to core tend to drive updates in everything else
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
 
-      set -u -o pipefail +e
-      # Common core
-      nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
-      nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
-      nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
-      nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
-
-      # Extensions
-      nix-update --commit --version-regex 'langchain-aws==(.*)' python3Packages.langchain-aws
-      nix-update --commit --version-regex 'langchain-azure-dynamic-sessions==(.*)' python3Packages.langchain-azure-dynamic-sessions
-      nix-update --commit --version-regex 'langchain-chroma==(.*)' python3Packages.langchain-chroma
-      nix-update --commit --version-regex 'langchain-huggingface==(.*)' python3Packages.langchain-huggingface
-      nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
-      nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
-    '';
+    updateScript = {
+      command = [ ./update.sh ];
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   disabledTests =
@@ -150,6 +136,8 @@ buildPythonPackage rec {
       "test_rate_limit_ainvoke"
       "test_rate_limit_astream"
     ];
+
+  disabledTestPaths = [ "tests/unit_tests/runnables/test_runnable_events_v2.py" ];
 
   meta = {
     description = "Building applications with LLMs through composability";

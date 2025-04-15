@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.1";
+  version = "0.3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-WvHSeWdBuxbfMNmfoNMzEbhJ5rirQ4JwlWUa0Tgrlrg=";
+    hash = "sha256-yIYVRn9IHjxBSxnBOTayYrIxw8ZbAeuawu3gKk9gA0M=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -45,7 +46,13 @@ buildPythonPackage rec {
       --replace-fail "--cov=langchain_openai" ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     langchain-core
@@ -89,8 +96,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-openai==([0-9.]+)$"
+    ];
   };
 
   meta = {

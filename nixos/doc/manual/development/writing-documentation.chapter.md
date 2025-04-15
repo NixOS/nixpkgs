@@ -11,12 +11,12 @@ The sources of the [](#book-nixos-manual) are in the
 [`nixos/doc/manual`](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual)
 subdirectory of the Nixpkgs repository.
 
-You can quickly validate your edits with `make`:
+You can quickly validate your edits with `devmode`:
 
 ```ShellSession
 $ cd /path/to/nixpkgs/nixos/doc/manual
 $ nix-shell
-nix-shell$ devmode
+[nix-shell:~]$ devmode
 ```
 
 Once you are done making modifications to the manual, it's important to

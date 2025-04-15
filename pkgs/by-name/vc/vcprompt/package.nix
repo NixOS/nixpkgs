@@ -6,7 +6,7 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vcprompt";
   version = "1.3.0-unstable-2020-12-28";
 

@@ -151,5 +151,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tic80";
     maintainers = with maintainers; [ blinry ];
+    # /build/source/vendor/sdl2/src/audio/pipewire/SDL_pipewire.c:623:37: error: passing argument 1 of 'pw_node_enum_params' from incompatible pointer type [-Wincompatible-pointer-types]
+    broken = true;
   };
 }

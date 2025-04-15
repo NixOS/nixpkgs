@@ -4,21 +4,23 @@
   fetchurl,
   fetchpatch,
   blas,
-  boost,
+  boost186,
+  buildPythonPackage,
   cmake,
   doxygen,
   eigen,
   hdf5,
+  isPy27,
   lapack,
   mpi,
   mpi4py,
   numpy,
   pkg-config,
+  pkgconfig,
   ply,
   pybind11,
   pytest,
   python,
-  pythonPackages,
   scotch,
   setuptools,
   six,
@@ -33,7 +35,7 @@
 let
   version = "2019.1.0";
 
-  dijitso = pythonPackages.buildPythonPackage {
+  dijitso = buildPythonPackage {
     pname = "dijitso";
     inherit version;
     src = fetchurl {
@@ -61,7 +63,7 @@ let
     };
   };
 
-  fiat = pythonPackages.buildPythonPackage {
+  fiat = buildPythonPackage {
     pname = "fiat";
     inherit version;
     src = fetchurl {
@@ -101,7 +103,7 @@ let
     };
   };
 
-  ufl = pythonPackages.buildPythonPackage {
+  ufl = buildPythonPackage {
     pname = "ufl";
     inherit version;
     src = fetchurl {
@@ -126,13 +128,20 @@ let
     };
   };
 
-  ffc = pythonPackages.buildPythonPackage {
+  ffc = buildPythonPackage {
     pname = "ffc";
     inherit version;
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/ffc/downloads/ffc-${version}.tar.gz";
       sha256 = "1zdg6pziss4va74pd7jjl8sc3ya2gmhpypccmyd8p7c66ji23y2g";
     };
+    patches = [
+      (fetchpatch {
+        name = "fenics-ffc-numpy2-compat.patch";
+        url = "https://bitbucket.org/fenics-project/ffc/commits/245d15115b35b5ac091251fe6c84cc6474704b3c/raw";
+        hash = "sha256-TcLQZ44C+uR2ryxtCBjR/5Tjn7B0S4MqoYi0nlP8JwI=";
+      })
+    ];
     nativeBuildInputs = [ pybind11 ];
     propagatedBuildInputs = [
       dijitso
@@ -177,6 +186,11 @@ let
         url = "https://bitbucket.org/fenics-project/dolfin/issues/attachments/1116/fenics-project/dolfin/1602778118.04/1116/0001-Use-__BYTE_ORDER__-instead-of-removed-Boost-endian.h.patch";
         hash = "sha256-wPaDmPU+jaD3ce3nNEbvM5p8e3zBdLozamLTJ/0ai2c=";
       })
+      (fetchpatch {
+        name = "fenics-boost-filesystem-1.85-compat.patch.";
+        url = "https://bitbucket.org/sblauth/dolfin/commits/16fa03887b3e9ec417c484ddf92db104cb9a93f9/raw";
+        hash = "sha256-ZMKfzeWlPre88cKzrj04Tj+nQWS4ixat0bBvyt3TJmk=";
+      })
     ];
     # https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=dolfin&id=a965ad934f7b3d49a5e77fa6fb5e3c710ec2163e
     postPatch = ''
@@ -197,7 +211,7 @@ let
       pkg-config
     ];
     buildInputs = [
-      boost
+      boost186
       dijitso
       eigen
       ffc
@@ -245,10 +259,10 @@ let
       license = lib.licenses.lgpl3;
     };
   };
-  python-dolfin = pythonPackages.buildPythonPackage rec {
+  python-dolfin = buildPythonPackage rec {
     pname = "dolfin";
     inherit version;
-    disabled = pythonPackages.isPy27;
+    disabled = isPy27;
     src = dolfin.src;
     sourceRoot = "${pname}-${version}/python";
     nativeBuildInputs = [
@@ -265,7 +279,7 @@ let
     '';
     buildInputs = [
       dolfin
-      boost
+      boost186
     ];
 
     propagatedBuildInputs = [
@@ -274,8 +288,8 @@ let
       mpi4py
       numpy
       ufl
-      pythonPackages.pkgconfig
-      pythonPackages.pybind11
+      pkgconfig
+      pybind11
     ];
     doCheck = false; # Tries to orte_ess_init and call ssh to localhost
     passthru.tests = {

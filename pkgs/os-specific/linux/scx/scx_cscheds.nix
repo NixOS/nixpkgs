@@ -95,7 +95,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
       "offline" = true;
-      # rust based schedulers are built seperately
+      # rust based schedulers are built separately
       "enable_rust" = false;
     })
     # Clang to use when compiling .bpf.c

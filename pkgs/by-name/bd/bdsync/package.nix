@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bdsync";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "rolffokkens";
-    repo = pname;
+    repo = "bdsync";
     rev = "v${version}";
-    sha256 = "sha256-58yoF6s0WjH+1mTY7X5OX53YgcnDmGxoCR8Kvl6lP+A=";
+    sha256 = "sha256-uvP26gdyIPC+IHxO5CYVuabfT4mnoWDOyaLTplYCW0I=";
   };
 
   nativeBuildInputs = [

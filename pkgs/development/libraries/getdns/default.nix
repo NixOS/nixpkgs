@@ -79,7 +79,7 @@ rec {
     };
   };
 
-  stubby = stdenv.mkDerivation rec {
+  stubby = stdenv.mkDerivation {
     pname = "stubby";
     version = "0.4.3";
     outputs = [

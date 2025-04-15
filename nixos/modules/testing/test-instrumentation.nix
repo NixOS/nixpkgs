@@ -1,7 +1,13 @@
 # This module allows the test driver to connect to the virtual machine
 # via a root shell attached to port 514.
 
-{ options, config, lib, pkgs, ... }:
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,54 +17,59 @@ let
   qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
 
   backdoorService = {
-    requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
-    after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
-    script =
-      ''
-        export USER=root
-        export HOME=/root
-        export DISPLAY=:0.0
+    requires = [
+      "dev-hvc0.device"
+      "dev-${qemu-common.qemuSerialDevice}.device"
+    ];
+    after = [
+      "dev-hvc0.device"
+      "dev-${qemu-common.qemuSerialDevice}.device"
+    ];
+    script = ''
+      export USER=root
+      export HOME=/root
+      export DISPLAY=:0.0
 
-        # Determine if this script is ran with nounset
-        strict="false"
-        if set -o | grep --quiet --perl-regexp "nounset\s+on"; then
-            strict="true"
-        fi
+      # Determine if this script is ran with nounset
+      strict="false"
+      if set -o | grep --quiet --perl-regexp "nounset\s+on"; then
+          strict="true"
+      fi
 
-        if [[ -e /etc/profile ]]; then
-            # TODO: Currently shell profiles are not checked at build time,
-            # so we need to unset stricter options to source them
-            set +o nounset
-            # shellcheck disable=SC1091
-            source /etc/profile
-            [ "$strict" = "true" ] && set -o nounset
-        fi
+      if [[ -e /etc/profile ]]; then
+          # TODO: Currently shell profiles are not checked at build time,
+          # so we need to unset stricter options to source them
+          set +o nounset
+          # shellcheck disable=SC1091
+          source /etc/profile
+          [ "$strict" = "true" ] && set -o nounset
+      fi
 
-        # Don't use a pager when executing backdoor
-        # actions. Because we use a tty, commands like systemctl
-        # or nix-store get confused into thinking they're running
-        # interactively.
-        export PAGER=
+      # Don't use a pager when executing backdoor
+      # actions. Because we use a tty, commands like systemctl
+      # or nix-store get confused into thinking they're running
+      # interactively.
+      export PAGER=
 
-        cd /tmp
-        exec < /dev/hvc0 > /dev/hvc0
-        while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
-        echo "connecting to host..." >&2
-        stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-        # The following line is essential since it signals to
-        # the test driver that the shell is ready.
-        # See: the connect method in the Machine class.
-        echo "Spawning backdoor root shell..."
-        # Passing the terminal device makes bash run non-interactively.
-        # Otherwise we get errors on the terminal because bash tries to
-        # setup things like job control.
-        # Note: calling bash explicitly here instead of sh makes sure that
-        # we can also run non-NixOS guests during tests. This, however, is
-        # mostly futureproofing as the test instrumentation is still very
-        # tightly coupled to NixOS.
-        PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
-      '';
-      serviceConfig.KillSignal = "SIGHUP";
+      cd /tmp
+      exec < /dev/hvc0 > /dev/hvc0
+      while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
+      echo "connecting to host..." >&2
+      stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
+      # The following line is essential since it signals to
+      # the test driver that the shell is ready.
+      # See: the connect method in the Machine class.
+      echo "Spawning backdoor root shell..."
+      # Passing the terminal device makes bash run non-interactively.
+      # Otherwise we get errors on the terminal because bash tries to
+      # setup things like job control.
+      # Note: calling bash explicitly here instead of sh makes sure that
+      # we can also run non-NixOS guests during tests. This, however, is
+      # mostly futureproofing as the test instrumentation is still very
+      # tightly coupled to NixOS.
+      PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
+    '';
+    serviceConfig.KillSignal = "SIGHUP";
   };
 
 in
@@ -130,8 +141,14 @@ in
             # backdoor to start even earlier.
             wantedBy = [ "sysinit.target" ];
             unitConfig.DefaultDependencies = false;
-            conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
-            before = [ "shutdown.target" "initrd-switch-root.target" ];
+            conflicts = [
+              "shutdown.target"
+              "initrd-switch-root.target"
+            ];
+            before = [
+              "shutdown.target"
+              "initrd-switch-root.target"
+            ];
           }
         ];
 
@@ -153,14 +170,11 @@ in
     # be set.
     virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
       qemu = {
-        # Only use a serial console, no TTY.
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
-        #       we avoid defining consoles if not possible.
+        #       we avoid defining attributes if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
-        #       or declare virtualisation.qemu.console option in a module that's always imported
-        consoles = [ qemu-common.qemuSerialDevice ];
-        package  = lib.mkDefault pkgs.qemu_test;
+        package = lib.mkDefault pkgs.qemu_test;
       };
     };
 
@@ -177,7 +191,8 @@ in
       "console=tty0"
       # Panic if an error occurs in stage 1 (rather than waiting for
       # user intervention).
-      "panic=1" "boot.panic_on_fail"
+      "panic=1"
+      "boot.panic_on_fail"
       # Using acpi_pm as a clock source causes the guest clock to
       # slow down under high host load.  This is usually a bad
       # thing, but for VM tests it should provide a bit more
@@ -190,12 +205,11 @@ in
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
 
     # Log everything to the serial console.
-    services.journald.extraConfig =
-      ''
-        ForwardToConsole=yes
-        TTYPath=/dev/${qemu-common.qemuSerialDevice}
-        MaxLevelConsole=debug
-      '';
+    services.journald.extraConfig = ''
+      ForwardToConsole=yes
+      TTYPath=/dev/${qemu-common.qemuSerialDevice}
+      MaxLevelConsole=debug
+    '';
 
     systemd.extraConfig = ''
       # Don't clobber the console with duplicate systemd messages.
@@ -239,7 +253,7 @@ in
     services.qemuGuest.package = pkgs.qemu_test.ga;
 
     # Squelch warning about unset system.stateVersion
-    system.stateVersion = lib.mkDefault lib.trivial.release;
+    system.stateVersion = (lib.mkOverride 1200) lib.trivial.release;
   };
 
 }

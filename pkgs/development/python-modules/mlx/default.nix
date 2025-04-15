@@ -52,6 +52,9 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
+
   env = {
     PYPI_RELEASE = version;
     # we can't use Metal compilation with Darwin SDK 11

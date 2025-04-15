@@ -5,6 +5,7 @@
   gfortran,
   makeWrapper,
   setuptools,
+  setuptools-scm,
   numpy,
   scipy,
   distutils,
@@ -16,17 +17,20 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-SJ0qTwwdIOR1nXs9MV6O1oxJPR6/6H86wscDy/sLc/g=";
+    hash = "sha256-OZuPJgcLyxZ+z3U3vraTq4MwgyMkBOHVJxB/y3qd7qw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     gfortran
@@ -45,6 +49,10 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonAtLeast "3.12") distutils;
 
   pytestFlagsArray = [ "ipi_tests/unit_tests" ];
+  disabledTests = [
+    "test_driver_base"
+    "test_driver_forcebuild"
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/i-pi \

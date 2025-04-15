@@ -17,19 +17,20 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.2.8";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-1vIM2MrQF0DO+5SEzIAUeZxOks6PKs3kkTdc09aCk2A=";
+    hash = "sha256-/WWodQcMibwXVexI+XbTZYRkIMtfNHk3bJVBPJHcoqI=";
   };
 
   sourceRoot = "${src.name}/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   patches = [
     # Disable update notifications and auto-update functionality
@@ -40,14 +41,6 @@ flutter324.buildFlutterApplication rec {
     rmdir assets/simple-icons
     ln -s ${simple-icons} assets/simple-icons
   '';
-
-  gitHashes = {
-    desktop_webview_window = "sha256-jdNMpzFBgw53asWlGzWUS+hoPdzcL6kcJt2KzjxXf2E=";
-    ente_crypto_dart = "sha256-XBzQ268E0cYljJH6gDS5O0Pmie/GwuhMDlQPfopSqJM=";
-    flutter_local_authentication = "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=";
-    flutter_secure_storage_linux = "sha256-x45jrJ7pvVyhZlpqRSy3CbwT4Lna6yi/b2IyAilWckg=";
-    sqflite = "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA=";
-  };
 
   nativeBuildInputs = [
     copyDesktopItems

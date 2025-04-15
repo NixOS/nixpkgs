@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "krb5";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ajCPLhfRUcOVsk5q7Hvf9qVv42J6MgQvyG1BI5ipLd0=";
+    hash = "sha256-7V8T1QMUibENhlXAraKKgcI5Gz7LigjG1znh5YNbxFA=";
   };
 
   build-system = [

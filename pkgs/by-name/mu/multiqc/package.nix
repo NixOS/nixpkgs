@@ -5,6 +5,7 @@
   procps,
   stdenv,
   versionCheckHook,
+  addBinToPathHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -77,21 +78,25 @@ python3Packages.buildPythonApplication rec {
   preCheck = ''
     chmod -R u+w ../test-data
     ln -s ../test-data .
-    export PATH=$out/bin:$PATH
   '';
 
   # Some tests run subprocess.run() with "ps"
-  nativeCheckInputs = with python3Packages; [
-    procps
-    pytest-cov
-    pytest-xdist
-    pytestCheckHook
-    syrupy
-    pygithub
-    versionCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      procps
+      pytest-cov
+      pytest-xdist
+      pytestCheckHook
+      syrupy
+      pygithub
+      versionCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests =
     # On darwin, kaleido fails to starts

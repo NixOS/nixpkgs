@@ -64,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.3.35-1";
+  version = "3.3.37-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    hash = "sha256-wWG/fs+tZIiFI+dcqfwXeh9RxT2zJDiAZoizhAAu60Q=";
+    hash = "sha256-LyIKjXdfE2sK81zFpXPneaFyfKqa4tU4GfXtt89TZOg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

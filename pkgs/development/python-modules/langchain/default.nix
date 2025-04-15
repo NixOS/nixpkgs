@@ -2,26 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # buildInputs
   bash,
 
   # dependencies
   aiohttp,
+  async-timeout,
   langchain-core,
   langchain-text-splitters,
   langsmith,
+  numpy,
   pydantic,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
-
-  # optional-dependencies
-  numpy,
 
   # tests
   freezegun,
@@ -40,25 +41,37 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.15";
+  version = "0.3.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-lANGoMABH1f9Tl/GgMMr7eTCji9q3uqD+Mwjr4nd2Dg=";
+    hash = "sha256-Up/pH2TxLPiPO49oIa2ZlNeH3TyN9sZSlNsqOIRmlxc=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
-  build-system = [ poetry-core ];
+  patches = [
+    # blockbuster isn't supported in nixpkgs
+    ./rm-blockbuster.patch
+  ];
+
+  build-system = [ pdm-backend ];
 
   buildInputs = [ bash ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
     "numpy"
     "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "blockbuster"
   ];
 
   dependencies = [
@@ -66,12 +79,13 @@ buildPythonPackage rec {
     langchain-core
     langchain-text-splitters
     langsmith
+    numpy
     pydantic
     pyyaml
     requests
     sqlalchemy
     tenacity
-  ];
+  ] ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];
@@ -134,8 +148,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain==([0-9.]+)$"
+    ];
   };
 
   meta = {
@@ -143,7 +160,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "langchain-server";
   };
 }

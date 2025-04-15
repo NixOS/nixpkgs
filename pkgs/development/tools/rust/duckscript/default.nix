@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
       libiconv
     ];
 
-  cargoHash = "sha256-TX/Xi57fn85GjHc74icxhsQ6n7FwqzGIr3Qoc2o681E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ft6EUajAj+Zw3cEhdajwwHAaMaUf+/vtTuUYni8E+o0=";
 
   meta = with lib; {
     description = "Simple, extendable and embeddable scripting language";

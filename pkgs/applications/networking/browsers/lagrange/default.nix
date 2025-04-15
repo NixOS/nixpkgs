@@ -9,6 +9,7 @@
   harfbuzz,
   libogg,
   libwebp,
+  libX11,
   mpg123,
   opusfile,
   SDL2,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.18.4";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Bty2TRL5blduhucYmI6x3RZVdgrY0/7Dtm5kgQ2N3ec=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NlnT8dGh05dDjSMxjaBnW7x/KjLgf2Ma0nbaiR7MpiY=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       harfbuzz
       libogg
       libwebp
+      libX11
       mpg123
       opusfile
       SDL2

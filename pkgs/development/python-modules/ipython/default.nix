@@ -12,6 +12,7 @@
   # Runtime dependencies
   decorator,
   exceptiongroup,
+  ipython-pygments-lexers,
   jedi,
   matplotlib-inline,
   pexpect,
@@ -43,13 +44,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.30.0";
+  version = "9.0.2";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ywpAWjBtKZWly7mQGJTSQHhKnzQTlMa6P0/oxuuJ/24=";
+    hash = "sha256-7HtHnj5WVr9PWMZSwSBJTfGCD08o9SL7fKCeITwqq1I=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   dependencies =
     [
       decorator
+      ipython-pygments-lexers
       jedi
       matplotlib-inline
       pexpect

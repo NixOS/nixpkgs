@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals requireSageTests [
-    # This is a hack to make sure sage-tests is evaluated. It doesn't acutally
+    # This is a hack to make sure sage-tests is evaluated. It doesn't actually
     # produce anything of value, it just decouples the tests from the build.
     sage-tests
   ];

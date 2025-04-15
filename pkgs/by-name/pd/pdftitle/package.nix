@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdftitle";
-  version = "0.16";
+  version = "0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metebalci";
     repo = "pdftitle";
-    rev = "v${version}";
-    hash = "sha256-s5OrZQogFJEKbaGoPHti7UcpqXhxrtIAC2Hd+clDbD4=";
+    tag = "v${version}";
+    hash = "sha256-rGGO4Cy+DZRU3ywb6Jq55JiM8ALgs/9wQmeXcSbPpG0=";
   };
 
   build-system = with python3Packages; [ setuptools ];

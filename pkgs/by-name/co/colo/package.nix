@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ocGzZR4gM2sInXccbHxh7Vf0kcZTZOnVW0KM6zp/pR8=";
   };
 
-  cargoHash = "sha256-HjEYC7FUHpxNWy/nUVO65O3f/RdT9hYZc3TpcqP3SSM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bAq1sDP/EG9TuUHHWLrp3JtW6S5nWgyyXQbiD63WPGk=";
 
   meta = {
     description = "Displays colors in various color spaces";

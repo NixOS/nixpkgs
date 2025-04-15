@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.dwm-status;
 
@@ -26,7 +31,16 @@ in
       };
 
       order = lib.mkOption {
-        type = lib.types.listOf (lib.types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
+        type = lib.types.listOf (
+          lib.types.enum [
+            "audio"
+            "backlight"
+            "battery"
+            "cpu_load"
+            "network"
+            "time"
+          ]
+        );
         description = ''
           List of enabled features in order.
         '';
@@ -43,7 +57,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

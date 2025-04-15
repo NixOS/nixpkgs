@@ -27,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-s6N+uyAoWrmsu7DhNw5iO7OY7TCH8OZ48j/6OwBjmD0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-1CHhnW8s4AA06HAgW+A/mx1jGTynj4CvIc/I7n0h+VY";
+    hash = "sha256-/fxFqs5lDzOhatc6KBc7Zwsq3A7N5AOanGOebttr1l8=";
   };
 
   cargoRoot = "settings/rust";

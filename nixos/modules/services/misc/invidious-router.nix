@@ -66,7 +66,7 @@ in
       };
       description = ''
         Configuration for invidious-router.
-        Check https://gitlab.com/gaincoder/invidious-router#configuration
+        Check <https://gitlab.com/gaincoder/invidious-router#configuration>
         for configuration options.
       '';
     };

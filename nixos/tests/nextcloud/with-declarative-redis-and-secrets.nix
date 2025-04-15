@@ -8,18 +8,13 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   let
     inherit (config) adminuser;
   in
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [
-        eqyiel
-        ma27
-      ];
-    };
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 
@@ -34,6 +29,13 @@ runTest (
               redis = true;
               memcached = false;
             };
+            notify_push = {
+              enable = true;
+              bendDomainToLocalhost = true;
+              logLevel = "debug";
+            };
+            extraAppsEnable = true;
+            extraApps.notify_push = config.services.nextcloud.package.packages.apps.notify_push;
             # This test also validates that we can use an "external" database
             database.createLocally = false;
             config = {
@@ -70,7 +72,7 @@ runTest (
           services.postgresql = {
             enable = true;
           };
-          systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
+          systemd.services.postgresql.postStart = lib.mkAfter ''
             password=$(cat ${config.services.nextcloud.config.dbpassFile})
             ${config.services.postgresql.package}/bin/psql <<EOF
               CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
@@ -95,7 +97,13 @@ runTest (
     test-helpers.extraTests = ''
       with subtest("non-empty redis cache"):
           # redis cache should not be empty
-          nextcloud.fail('test 0 -lt "$(redis-cli --pass secret --json KEYS "*" | jq "len")"')
+          assert nextcloud.succeed('redis-cli --pass secret --json KEYS "*" | jq length').strip() != "0", """
+            redis-cli for keys * returned 0 entries
+          """
+
+      with subtest("notify-push"):
+          client.execute("${lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")
+          nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${config.adminuser}\"")
     '';
   }
 )

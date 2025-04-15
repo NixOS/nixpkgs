@@ -17,7 +17,7 @@ let
   pname = "blast-bin";
   version = "2.16.0";
 
-  srcs = rec {
+  srcs = {
     x86_64-linux = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-linux.tar.gz";
       hash = "sha256-sLEwmMkB0jsyStFwDnRxu3QIp/f1F9dNX6rXEb526PQ=";

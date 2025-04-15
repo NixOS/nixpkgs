@@ -7,7 +7,6 @@
   pkg-config,
   glib,
   systemd,
-  boost,
   fmt,
   buildPackages,
   # Darwin inputs
@@ -201,19 +200,18 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.16";
+      version = "0.24.2";
 
       src = fetchFromGitHub {
         owner = "MusicPlayerDaemon";
         repo = "MPD";
         rev = "v${version}";
-        sha256 = "sha256-0To+V+4xLjymGpRSpsyE/Une5uUpCEiAg+d041guPA0=";
+        sha256 = "sha256-6wEFgiMsEoWvmfH609d+UZY7jzqDoNmXalpHBipqTN0=";
       };
 
       buildInputs =
         [
           glib
-          boost
           fmt
           # According to the configurePhase of meson, gtest is considered a
           # runtime dependency. Quoting:
@@ -236,13 +234,25 @@ let
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
       postPatch =
-        lib.optionalString
-          (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
-          ''
-            substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
-              --replace kAudioObjectPropertyElement{Main,Master} \
-              --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
-          '';
+        ''
+          # Basically a revert of https://github.com/MusicPlayerDaemon/MPD/commit/0aeda01ba6d22a8d9fc583faa67ffc6473869a43
+          # We use a yajl fork that fixed this issue in the pkg-config manifest
+          substituteInPlace \
+            src/lib/yajl/Callbacks.hxx \
+            src/lib/yajl/Handle.hxx \
+            --replace-fail "<yajl_parse.h>" "<yajl/yajl_parse.h>"
+          substituteInPlace \
+            src/lib/yajl/Gen.hxx \
+            --replace-fail "<yajl_gen.h>" "<yajl/yajl_gen.h>"
+        ''
+        +
+          lib.optionalString
+            (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
+            ''
+              substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
+                --replace kAudioObjectPropertyElement{Main,Master} \
+                --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+            '';
 
       # Otherwise, the meson log says:
       #

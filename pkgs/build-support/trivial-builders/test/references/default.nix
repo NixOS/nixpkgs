@@ -41,7 +41,7 @@
 # -------------------------------------------------------------------------- #
 
 let
-  # Map each attribute to an element specification of Bash associative arrary
+  # Map each attribute to an element specification of Bash associative array
   # and concatenate them with white spaces, to be used to define a
   # one-line Bash associative array.
   samplesToString =

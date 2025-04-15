@@ -143,9 +143,13 @@ mattermost.overrideAttrs (
         "TestSessionStore/MySQL/SessionGetWithDeviceId"
         "TestSessionStore/MySQL/GetMobileSessionMetadata"
       ]
-      ++ optionals (!stdenv.isx86_64) [
+      ++ optionals (!stdenv.hostPlatform.isx86_64) [
         # aarch64: invalid operating system or processor architecture
         "TestCanIUpgradeToE0"
+
+        # aarch64: thumbnail previews are nondeterministic
+        "TestUploadFiles/multipart_Happy_image_thumbnail"
+        "TestUploadFiles/simple_Happy_image_thumbnail"
       ];
 
     preCheck = ''

@@ -8,6 +8,7 @@
   git,
   cmake,
   nixosTests,
+  nixfmt-rfc-style,
   mobilizon-frontend,
   ...
 }:
@@ -19,10 +20,18 @@ in
 mixRelease rec {
   inherit (common) pname version src;
 
-  # Version 5.1.1 failed to bump their internal package version,
-  # which causes issues with static file serving in the NixOS module.
-  # See https://github.com/NixOS/nixpkgs/pull/370277
-  patches = [ ./0001-fix-version.patch ];
+  patches = [
+    # Version 5.1.2 failed to bump their internal package version,
+    # which causes issues with static file serving in the NixOS module.
+    ./0001-fix-version.patch
+    # Mobilizon uses chunked Transfer-Encoding for the media proxy but also
+    # sets the Content-Length header. This is a HTTP/1.1 protocol violation
+    # and results in nginx >=1.24 rejecting the response with this error:
+    # 'upstream sent "Content-Length" and "Transfer-Encoding" headers at the same
+    # time while reading response header from upstream'
+    # Upstream PR: https://framagit.org/framasoft/mobilizon/-/merge_requests/1604
+    ./0002-fix-media-proxy.patch
+  ];
 
   nativeBuildInputs = [
     git
@@ -64,7 +73,7 @@ mixRelease rec {
         });
 
         # The remainder are Git dependencies (and their deps) that are not supported by mix2nix currently.
-        web_push_encryption = buildMix rec {
+        web_push_encryption = buildMix {
           name = "web_push_encryption";
           version = "0.3.1";
           src = fetchFromGitHub {
@@ -144,11 +153,12 @@ mixRelease rec {
   '';
 
   passthru = {
-    tests.smoke-test = nixosTests.mobilizon;
+    tests = { inherit (nixosTests) mobilizon; };
     updateScript = writeShellScriptBin "update.sh" ''
       set -eou pipefail
 
       ${mix2nix}/bin/mix2nix '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
+      ${nixfmt-rfc-style}/bin/nixfmt pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
   };
@@ -156,6 +166,7 @@ mixRelease rec {
   meta = with lib; {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
     homepage = "https://joinmobilizon.org/";
+    changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
       minijackson

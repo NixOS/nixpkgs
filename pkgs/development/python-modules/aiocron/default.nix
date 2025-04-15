@@ -7,16 +7,17 @@
   croniter,
   tzlocal,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "aiocron";
-  version = "1.8";
+  version = "2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SFRlE/ry63kB5lpk66e2U8gBBu0A7ZyjQZw9ELZVWgE=";
+    hash = "sha256-G7ZaNq7hN+iDNZJ4OVbgx9xHi8PpJz/ChB1dDGBF5NI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -28,11 +29,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     tzlocal
   ];
 
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
     sed -i "/--ignore/d" setup.cfg
   '';
 

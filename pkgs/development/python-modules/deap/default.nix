@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zAHemJLfp9G8mAPasoiS/q0XfwGCyB20c2CiQOrXeP8=";
+    hash = "sha256-1nm+M3Pbi6kStGZCYMopx6yhA3L/WpaCMQR7Se/CKsU=";
   };
 
   propagatedBuildInputs = [

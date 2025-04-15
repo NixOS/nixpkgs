@@ -22,20 +22,20 @@
   sqlite,
   zlib,
   catch2,
-  postgresql,
+  libpq,
   protozero,
   sparsehash,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mapnik";
-  version = "4.0.4";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     rev = "v${version}";
-    hash = "sha256-CuLdhLh0S92tK/tKeLzG23H3Iiy+z/XwCS+q84FsZZo=";
+    hash = "sha256-gJktRWcJiSGxxjvWFt+Kl9d7g+TOSPk2PfGP0LIVxt4=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
+      --replace-fail '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
     rm -r scons
     # Remove bundled 'sparsehash' directory in favor of 'sparsehash' package
     rm -r deps/mapnik/sparsehash
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     libxml2
-    postgresql
+    libpq
     protozero
     sparsehash
   ];

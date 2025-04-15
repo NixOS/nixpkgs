@@ -5,7 +5,7 @@
   ...
 }:
 let
-  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
+  nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
   nvidia_x11 = if nvidiaEnabled || cfg.datacenter.enable then cfg.package else null;
 
   cfg = config.hardware.nvidia;
@@ -17,13 +17,20 @@ let
   offloadCfg = pCfg.offload;
   reverseSyncCfg = pCfg.reverseSync;
   primeEnabled = syncCfg.enable || reverseSyncCfg.enable || offloadCfg.enable;
-  busIDType = lib.types.strMatching "([[:print:]]+[:@][0-9]{1,3}:[0-9]{1,2}:[0-9])?";
+  busIDType = lib.types.strMatching "([[:print:]]+:[0-9]{1,3}(@[0-9]{1,10})?:[0-9]{1,2}:[0-9])?";
   ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
 in
 {
   options = {
     hardware.nvidia = {
+      enabled = lib.mkOption {
+        readOnly = true;
+        type = lib.types.bool;
+        default = nvidia_x11 != null;
+        defaultText = lib.literalMD "`true` if NVIDIA support is enabled";
+        description = "True if NVIDIA support is enabled";
+      };
       datacenter.enable = lib.mkEnableOption ''
         Data Center drivers for NVIDIA cards on a NVLink topology
       '';
@@ -113,30 +120,48 @@ in
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
         default = "";
-        example = "PCI:1:0:0";
+        example = "PCI:1@0:0:0";
         description = ''
           Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
-          shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
+          shows the NVIDIA GPU at "0001:02:03.4", set this option to "PCI:2@1:3:4".
+
+          lspci might omit the PCI domain (0001 in above example) if it is zero.
+          In which case, use "@0" instead.
+
+          Please be aware that this option takes decimal address while lspci reports
+          hexadecimal address. So for device at domain "10000", use "@65536".
         '';
       };
 
       prime.intelBusId = lib.mkOption {
         type = busIDType;
         default = "";
-        example = "PCI:0:2:0";
+        example = "PCI:0@0:2:0";
         description = ''
           Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
-          shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
+          shows the Intel GPU at "0001:02:03.4", set this option to "PCI:2@1:3:4".
+
+          lspci might omit the PCI domain (0001 in above example) if it is zero.
+          In which case, use "@0" instead.
+
+          Please be aware that this option takes decimal address while lspci reports
+          hexadecimal address. So for device at domain "10000", use "@65536".
         '';
       };
 
       prime.amdgpuBusId = lib.mkOption {
         type = busIDType;
         default = "";
-        example = "PCI:4:0:0";
+        example = "PCI:4@0:0:0";
         description = ''
           Bus ID of the AMD APU. You can find it using lspci; for example if lspci
-          shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
+          shows the AMD APU at "0001:02:03.4", set this option to "PCI:2@1:3:4".
+
+          lspci might omit the PCI domain (0001 in above example) if it is zero.
+          In which case, use "@0" instead.
+
+          Please be aware that this option takes decimal address while lspci reports
+          hexadecimal address. So for device at domain "10000", use "@65536".
         '';
       };
 
@@ -294,7 +319,7 @@ in
       igpuDriver = if pCfg.intelBusId != "" then "modesetting" else "amdgpu";
       igpuBusId = if pCfg.intelBusId != "" then pCfg.intelBusId else pCfg.amdgpuBusId;
     in
-    lib.mkIf (nvidia_x11 != null) (
+    lib.mkIf cfg.enabled (
       lib.mkMerge [
         # Common
         ({

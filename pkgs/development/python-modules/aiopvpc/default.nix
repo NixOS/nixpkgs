@@ -7,6 +7,7 @@
   poetry-core,
   pytest-asyncio,
   pytest-timeout,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   python-dotenv,
@@ -26,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-1xeXfhoXRfJ7vrpRPeYmwcAGjL09iNCOm/f4pPvuZLU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov --cov-report term --cov-report html" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -41,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
+    pytest-cov-stub
     pytestCheckHook
     python-dotenv
   ];

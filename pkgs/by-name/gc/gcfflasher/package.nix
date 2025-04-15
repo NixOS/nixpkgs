@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libgpiod,
   cmake,
@@ -9,14 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gcfflasher";
-  version = "4.5.2";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
-    repo = pname;
+    repo = "gcfflasher";
     tag = "v${version}";
-    hash = "sha256-jBKYKjsog0vfyrPoixqTifej5Kb+qYS11Tn+il3J0w0=";
+    hash = "sha256-W1sL3RyauEYAC/Fj0JhNnk0k5DT6Q8qIEuZNke3xNAE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dresden-elektronik/gcfflasher/commit/c1019d7ef2ab55a598ddd938db1b08169b05fc37.patch";
+      hash = "sha256-Frd3Xerkv3QolGCOrTE4AqBPqPHTKjjhk+DzhHABTqo=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

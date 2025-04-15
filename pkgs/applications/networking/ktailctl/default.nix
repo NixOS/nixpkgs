@@ -1,10 +1,10 @@
 {
-  buildGo123Module,
+  buildGo124Module,
   cmake,
   extra-cmake-modules,
   fetchFromGitHub,
   git,
-  go_1_23,
+  go_1_24,
   kconfig,
   kcoreaddons,
   kdbusaddons,
@@ -26,21 +26,21 @@
 }:
 
 let
-  version = "0.19.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-UUxHLC35au4Valy/ArFdBjI5uGsIQ8aMdNLMPz0gSTs=";
+    hash = "sha256-8vtNAqCDXbzEuGXqUZL26EMmVLJqSFu+E/zhK8VafLE=";
   };
 
   goDeps =
-    (buildGo123Module {
+    (buildGo124Module {
       pname = "ktailctl-go-wrapper";
       inherit src version;
       modRoot = "src/wrapper";
-      vendorHash = "sha256-xe2LUdh/F3ATRi2+5UbfLGAMgDnYj/J1ZIaB1lMPIkk=";
+      vendorHash = "sha256-F0fY9ZqibZNIUQSIlLRO3rX4gYAFHWMdFtwRNigpGZE=";
     }).goModules;
 in
 stdenv.mkDerivation {
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     git
-    go_1_23
+    go_1_24
     wrapQtAppsHook
   ];
 

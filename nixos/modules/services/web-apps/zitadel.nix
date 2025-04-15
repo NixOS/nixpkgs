@@ -136,7 +136,7 @@ in
         '';
         description = ''
           Contents of the runtime configuration file. See
-          https://zitadel.com/docs/self-hosting/manage/configure for more
+          <https://zitadel.com/docs/self-hosting/manage/configure> for more
           details.
         '';
       };
@@ -168,7 +168,7 @@ in
         '';
         description = ''
           Contents of the database initialization config file. See
-          https://zitadel.com/docs/self-hosting/manage/configure for more
+          <https://zitadel.com/docs/self-hosting/manage/configure> for more
           details.
         '';
       };

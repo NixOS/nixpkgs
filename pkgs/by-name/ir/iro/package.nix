@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-hGGrEGG1LyzfUCEnV7ahhRO0GrLk28xDWZEFqUHk1rE=";
   };
 
-  cargoHash = "sha256-ZP0YO+5juxFGc2rtvNBvknlTJBrtr8HiuN6/kKW1WNU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7QAhgUI6Pu0iqE6JyfYI4x3O/XTDb8B1Sy3hw9EVMYo=";
 
   meta = {
     description = "CLI tool to convet Hex color code or RGB to color code, RGB, HSL and color name";

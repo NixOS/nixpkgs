@@ -25,7 +25,7 @@
   jpegSupport ? true,
   libjpeg,
   exrSupport ? false,
-  openexr_3,
+  openexr,
   gifSupport ? true,
   giflib,
   pngSupport ? true,
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional exrSupport openexr_3
+    ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
     ++ lib.optional tiffSupport libtiff
@@ -136,6 +136,11 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-games/openscenegraph/files/openscenegraph-3.6.5-openexr3.patch?id=0f642d8f09b589166f0e0c0fc84df7673990bf3f";
       hash = "sha256-fdNbkg6Vp7DeDBTe5Zso8qJ5v9uPSXHpQ5XlGkvputk=";
+    })
+    # Fix compiling with libtiff when libtiff is compiled using CMake
+    (fetchurl {
+      url = "https://github.com/openscenegraph/OpenSceneGraph/commit/9da8d428f6666427c167b951b03edd21708e1f43.patch";
+      hash = "sha256-YGG/DIHU1f6StbeerZoZrNDm348wYB3ydmVIIGTM7fU=";
     })
   ];
 

@@ -5,7 +5,7 @@
   kernel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtl88xxau-aircrack";
   version = "${kernel.version}-unstable-2024-04-09";
 

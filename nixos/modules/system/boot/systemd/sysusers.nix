@@ -11,7 +11,7 @@ let
   cfg = config.systemd.sysusers;
   userCfg = config.users;
 
-  systemUsers = lib.filterAttrs (_username: opts: !opts.isNormalUser) userCfg.users;
+  systemUsers = lib.filterAttrs (_username: opts: opts.enable && !opts.isNormalUser) userCfg.users;
 
   sysusersConfig = pkgs.writeTextDir "00-nixos.conf" ''
     # Type Name ID GECOS Home directory Shell
@@ -89,7 +89,7 @@ in
         }
       ]
       ++ (lib.mapAttrsToList (username: opts: {
-        assertion = !opts.isNormalUser;
+        assertion = opts.enable -> !opts.isNormalUser;
         message = "${username} is a normal user. systemd-sysusers doesn't create normal users, only system users.";
       }) userCfg.users)
       ++ lib.mapAttrsToList (username: opts: {

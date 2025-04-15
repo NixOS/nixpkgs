@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_33,
+  electron_34,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_33;
+  electron = electron_34;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.10.2";
+  version = "5.11.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-LHjVmrsOdk8vfsqvNEWkzpusm6jbz3SOb3bEaIb7rb4=";
+    hash = "sha256-03874pV7/GqydMdaSlh3N17LsbHppfPdYJ8nGdbvvbk=";
   };
 
-  npmDepsHash = "sha256-LAbqsMdMmmHGgvg2ilz6neQxMOK3jtCKt8K0M8BWifs=";
+  npmDepsHash = "sha256-v6XEJJ9kozkY7HSLNJtM+86+36G7wt8xIFwCyO7x11Y=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -86,7 +86,9 @@ buildNpmPackage rec {
       # Invoking with `--version` insists on being able to write to a log file.
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+    };
   };
 
   meta = {

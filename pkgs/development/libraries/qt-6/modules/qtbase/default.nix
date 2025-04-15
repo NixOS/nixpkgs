@@ -64,7 +64,9 @@
   at-spi2-core,
   unixODBC,
   unixODBCDrivers,
+  libGL,
   # darwin
+  moltenvk,
   moveBuildTree,
   darwinVersionInputs,
   xcbuild,
@@ -73,15 +75,14 @@
   # optional dependencies
   cups,
   libmysqlclient,
-  postgresql,
+  libpq,
   withGtk3 ? false,
   gtk3,
   withLibinput ? false,
   libinput,
   # options
-  libGLSupported ? stdenv.hostPlatform.isLinux,
-  libGL,
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
@@ -99,6 +100,9 @@ stdenv.mkDerivation rec {
       openssl
       sqlite
       zlib
+      libGL
+      vulkan-headers
+      vulkan-loader
       # Text rendering
       harfbuzz
       icu
@@ -132,8 +136,6 @@ stdenv.mkDerivation rec {
       libselinux
       libsepol
       lttng-ust
-      vulkan-headers
-      vulkan-loader
       libthai
       libdrm
       libdatrie
@@ -159,26 +161,17 @@ stdenv.mkDerivation rec {
       xorg.xcbutilcursor
       libepoxy
     ]
-    ++ lib.optionals libGLSupported [
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      vulkan-headers
-      vulkan-loader
-    ]
     ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
       at-spi2-core
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (darwinVersionInputs ++ [ moltenvk ])
     ++ lib.optional withGtk3 gtk3
     ++ lib.optional withLibinput libinput
     ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
-    ++ lib.optional (
-      postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql
-    ) postgresql;
+    ++ lib.optional (libpq != null && lib.meta.availableOn stdenv.hostPlatform libpq) libpq;
 
   nativeBuildInputs = [
     bison
@@ -228,11 +221,6 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
-
-    # Qt treats linker flags without known suffix as libraries since 6.7.2 (see qt/qtbase commit ea0f00d).
-    # Don't do this for absolute paths (like `/nix/store/…/QtMultimedia.framework/Versions/A/QtMultimedia`).
-    # Upcoming upstream fix: https://codereview.qt-project.org/c/qt/qtbase/+/613683.
-    ./dont-treat-abspaths-without-suffix-as-libraries.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -274,14 +262,15 @@ stdenv.mkDerivation rec {
       "-DQT_FEATURE_libproxy=ON"
       "-DQT_FEATURE_system_sqlite=ON"
       "-DQT_FEATURE_openssl_linked=ON"
+      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       "-DQT_FEATURE_sctp=ON"
       "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
-      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DQT_FEATURE_rpath=OFF"
+      "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
     ]
     ++ lib.optionals isCrossBuild [
       "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
@@ -308,9 +297,9 @@ stdenv.mkDerivation rec {
       fixQtBuiltinPaths "$out" '*.pr?'
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-
       # FIXME: not sure why this isn't added automatically?
       patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
+      patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/lib/libQt6Gui.so
     '';
 
   dontWrapQtApps = true;

@@ -1,30 +1,29 @@
 {
+  cmake,
+  fetchFromGitLab,
   lib,
-  stdenv,
-  fetchFromGitHub,
   qtbase,
   qtsvg,
-  qtwayland,
-  qmake,
   qttools,
+  qtwayland,
+  stdenv,
   wrapQtAppsHook,
 }:
-let
-  inherit (lib) getDev;
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6ct";
-  version = "0.9";
+  version = "0.10";
 
-  src = fetchFromGitHub {
-    owner = "trialuser02";
+  src = fetchFromGitLab {
+    domain = "www.opencode.net";
+    owner = "trialuser";
     repo = "qt6ct";
-    rev = finalAttrs.version;
-    hash = "sha256-MmN/qPBlsF2mBST+3eYeXaq+7B3b+nTN2hi6CmxrILc=";
+    tag = finalAttrs.version;
+    hash = "sha256-o2k/b4AGiblS1CkNInqNrlpM1Y7pydIJzEVgVd3ao50=";
   };
 
   nativeBuildInputs = [
-    qmake
+    cmake
     qttools
     wrapQtAppsHook
   ];
@@ -35,18 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     qtwayland
   ];
 
-  qmakeFlags = [
-    "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
-    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-    "LIBDIR=${placeholder "out"}/lib"
-  ];
+  postPatch = ''
+    substituteInPlace src/qt6ct-qtplugin/CMakeLists.txt src/qt6ct-style/CMakeLists.txt \
+      --replace-fail "\''${PLUGINDIR}" "$out/${qtbase.qtPluginPrefix}"
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt6 Configuration Tool";
-    homepage = "https://github.com/trialuser02/qt6ct";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    homepage = "https://www.opencode.net/trialuser/qt6ct";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       Flakebi
       Scrumplex
     ];

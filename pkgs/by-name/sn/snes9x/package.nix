@@ -135,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         qknight
         thiagokokada
         sugar700

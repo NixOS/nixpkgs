@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   aiohttp,
@@ -13,15 +14,12 @@
   langchain,
   langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
-
-  # optional-dependencies
-  typer,
-  numpy,
 
   # tests
   httpx,
@@ -39,24 +37,37 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.15";
+  version = "0.3.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-community==${version}";
-    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
+    hash = "sha256-6YLy7G1kZIqHAGMUIQoGCfDO2ZuVgNEtpkOI1o8eFvc=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  patches = [
+    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
+    ./rm-blockbuster.patch
+  ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest langchain and -core.
+    # That prevents us from updating individul components.
+    "langchain"
+    "langchain-core"
     "numpy"
     "pydantic-settings"
     "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "blockbuster"
   ];
 
   dependencies = [
@@ -66,18 +77,13 @@ buildPythonPackage rec {
     langchain
     langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
     sqlalchemy
     tenacity
   ];
-
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
-
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
@@ -96,10 +102,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-  };
-
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
@@ -116,13 +118,30 @@ buildPythonPackage rec {
     "test_proper_inputs"
     # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
     "test_variable_key_naming"
+    # Fails due to the lack of blockbuster
+    "test_group_dependencies"
   ];
+
+  disabledTestPaths = [
+    # ValueError: Received unsupported arguments {'strict': None}
+    "tests/unit_tests/chat_models/test_cloudflare_workersai.py"
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-community==(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

@@ -10,13 +10,13 @@
 buildNimPackage (
   finalAttrs: prevAttrs: {
     pname = "nitter";
-    version = "0-unstable-2024-02-26";
+    version = "0-unstable-2025-04-05";
 
     src = fetchFromGitHub {
       owner = "zedeus";
       repo = "nitter";
-      rev = "c6edec04901d0a37799499ed4c6921db640fb5a4";
-      hash = "sha256-N3d63nyVzUTa2+UemA1REFfVsw6iOVU8xUlYraR55m4=";
+      rev = "83b0f8b55ae7bfb8a19a0bf14de52f30d06b8db6";
+      hash = "sha256-2QIcAhzYrIo1q80959980H+hzLYtPHAOy0+CItDZ1d4=";
     };
 
     lockFile = ./lock.json;
@@ -41,7 +41,7 @@ buildNimPackage (
 
     passthru = {
       tests = { inherit (nixosTests) nitter; };
-      updateScript = unstableGitUpdater { branch = "guest_accounts"; };
+      updateScript = unstableGitUpdater { };
     };
 
     meta = with lib; {

@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.14.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${version}";
-    hash = "sha256-JwFPNoFoNqAXkLCGhliLN98VAS+VCwRzo+JqWLIrxsw=";
+    hash = "sha256-101R5x4jAfMYrdE3OWWqGmkPWRI9rSMYr+Lye9NCbA4=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       darwin.ps
     ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray =
     [
@@ -140,6 +140,10 @@ python3Packages.buildPythonApplication rec {
       # '...2-macosx_14_0_arm64.whl'
       "test_macos_archflags"
       "test_macos_max_compat"
+
+      # https://github.com/pypa/hatch/issues/1942
+      "test_features"
+      "test_sync_dynamic_dependencies"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 

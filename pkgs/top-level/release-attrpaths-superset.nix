@@ -151,10 +151,14 @@ let
           lib.pipe value [
             (builtins.mapAttrs (
               name: value:
-              if excluded-attrnames-at-any-depth.${name} or false then
-                [ ]
-              else
-                (justAttrNames (path ++ [ name ]) value)
+              builtins.addErrorContext
+                "while evaluating package set attribute path '${lib.showAttrPath (path ++ [ name ])}'"
+                (
+                  if excluded-attrnames-at-any-depth.${name} or false then
+                    [ ]
+                  else
+                    (justAttrNames (path ++ [ name ]) value)
+                )
             ))
             builtins.attrValues
             builtins.concatLists

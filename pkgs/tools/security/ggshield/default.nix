@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.35.0";
+  version = "1.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${version}";
-    hash = "sha256-ystZS5TYmu6Y86lGTAEXzQlV2/eowQJ+UQqLPtvwdpE=";
+    hash = "sha256-VioahNz9mlai+pavSTvuyE8dm1gyrjFgBLlSPE1IKRw=";
   };
 
   pythonRelaxDeps = true;
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     rich
+    truststore
   ];
 
   nativeCheckInputs =
@@ -57,8 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     # Don't run functional tests
     "tests/functional/"
     "tests/unit/cmd/honeytoken"
-    "tests/unit/cmd/iac"
-    "tests/unit/cmd/sca/"
     "tests/unit/cmd/scan/"
     "tests/test_factories.py"
   ];
@@ -76,6 +75,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_file_is_longer_than_does_not_read_utf8_file"
     "test_file_is_longer_using_8bit_codec"
     "test_generate_files_from_paths"
+    # Nixpkgs issue
+    "test_get_file_sha_in_ref"
   ];
 
   meta = with lib; {

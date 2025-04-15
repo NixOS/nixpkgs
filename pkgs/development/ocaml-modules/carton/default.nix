@@ -27,7 +27,7 @@
   cmdliner,
   hxd,
   getconf,
-  substituteAll,
+  replaceVars,
 }:
 
 buildDunePackage rec {
@@ -42,8 +42,7 @@ buildDunePackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./carton-find-getconf.patch;
+    (replaceVars ./carton-find-getconf.patch {
       getconf = "${getconf}";
     })
   ];

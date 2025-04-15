@@ -12,7 +12,7 @@
   autoconf,
   autogen,
   libtool,
-  postgresql,
+  libpq,
   libmysqlclient,
   sqlite,
   pkg-config,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libmnl
     libnfnetlink
     libpcap
-    postgresql
+    libpq
     libmysqlclient
     sqlite
   ];

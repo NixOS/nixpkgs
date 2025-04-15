@@ -4,7 +4,7 @@
   fetchurl,
   readline,
   libmysqlclient,
-  postgresql,
+  libpq,
   sqlite,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     readline
     libmysqlclient
-    postgresql
+    libpq
     sqlite
   ];
 

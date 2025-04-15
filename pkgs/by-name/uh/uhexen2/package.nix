@@ -9,7 +9,7 @@
   xdelta,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhexen2";
   version = "1.5.9";
 

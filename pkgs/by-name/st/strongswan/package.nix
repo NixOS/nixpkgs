@@ -1,13 +1,35 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, autoreconfHook, perl, gperf, bison, flex
-, gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
-, openresolv
-, systemd, pam
-, curl
-, enableTNC            ? false, trousers, sqlite, libxml2
-, enableNetworkManager ? false, networkmanager
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  perl,
+  gperf,
+  bison,
+  flex,
+  gmp,
+  python3,
+  iptables,
+  ldns,
+  unbound,
+  openssl,
+  pcsclite,
+  glib,
+  openresolv,
+  systemd,
+  pam,
+  curl,
+  enableTNC ? false,
+  trousers,
+  sqlite,
+  libxml2,
+  enableTPM2 ? false,
+  tpm2-tss,
+  enableNetworkManager ? false,
+  networkmanager,
+  darwin,
+  nixosTests,
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -27,13 +49,42 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    perl
+    gperf
+    bison
+    flex
+  ];
   buildInputs =
-    [ curl gmp python3 ldns unbound openssl pcsclite ]
-    ++ lib.optionals enableTNC [ trousers sqlite libxml2 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev pam iptables ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
-    ++ lib.optionals enableNetworkManager [ networkmanager glib ];
+    [
+      curl
+      gmp
+      python3
+      ldns
+      unbound
+      openssl
+      pcsclite
+    ]
+    ++ lib.optionals enableTNC [
+      trousers
+      sqlite
+      libxml2
+    ]
+    ++ lib.optional enableTPM2 tpm2-tss
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      systemd.dev
+      pam
+      iptables
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks; [ SystemConfiguration ]
+    )
+    ++ lib.optionals enableNetworkManager [
+      networkmanager
+      glib
+    ];
 
   patches = [
     ./ext_auth-path.patch
@@ -46,7 +97,7 @@ stdenv.mkDerivation rec {
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
 
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
-    '';
+  '';
 
   configureFlags =
     [
@@ -54,35 +105,73 @@ stdenv.mkDerivation rec {
       "--enable-swanctl"
       "--enable-cmd"
       "--enable-openssl"
-      "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
-      "--enable-eap-simaka-reauth" "--enable-eap-identity" "--enable-eap-md5"
-      "--enable-eap-gtc" "--enable-eap-aka" "--enable-eap-aka-3gpp2"
-      "--enable-eap-mschapv2" "--enable-eap-radius" "--enable-xauth-eap" "--enable-ext-auth"
+      "--enable-eap-sim"
+      "--enable-eap-sim-file"
+      "--enable-eap-simaka-pseudonym"
+      "--enable-eap-simaka-reauth"
+      "--enable-eap-identity"
+      "--enable-eap-md5"
+      "--enable-eap-gtc"
+      "--enable-eap-aka"
+      "--enable-eap-aka-3gpp2"
+      "--enable-eap-mschapv2"
+      "--enable-eap-radius"
+      "--enable-xauth-eap"
+      "--enable-ext-auth"
       "--enable-acert"
-      "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
+      "--enable-pkcs11"
+      "--enable-eap-sim-pcsc"
+      "--enable-dnscert"
+      "--enable-unbound"
       "--enable-chapoly"
-      "--enable-curl" ]
+      "--enable-curl"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-farp" "--enable-dhcp"
-      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+      "--enable-farp"
+      "--enable-dhcp"
+      "--enable-systemd"
+      "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"
-      "--enable-af-alg" ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
+      "--enable-af-alg"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      "--enable-aesni"
+      "--enable-rdrand"
+    ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") "--enable-padlock"
     ++ lib.optionals enableTNC [
-         "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
-         "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
-         "--enable-tnc-imc" "--enable-imc-os" "--enable-imc-attestation"
-         "--enable-tnc-imv" "--enable-imv-attestation"
-         "--enable-tnc-ifmap" "--enable-tnc-imc" "--enable-tnc-imv"
-         "--with-tss=trousers"
-         "--enable-aikgen"
-         "--enable-sqlite" ]
+      "--disable-gmp"
+      "--disable-aes"
+      "--disable-md5"
+      "--disable-sha1"
+      "--disable-sha2"
+      "--disable-fips-prf"
+      "--enable-eap-tnc"
+      "--enable-eap-ttls"
+      "--enable-eap-dynamic"
+      "--enable-tnccs-20"
+      "--enable-tnc-imc"
+      "--enable-imc-os"
+      "--enable-imc-attestation"
+      "--enable-tnc-imv"
+      "--enable-imv-attestation"
+      "--enable-tnc-ifmap"
+      "--enable-tnc-imc"
+      "--enable-tnc-imv"
+      "--with-tss=trousers"
+      "--enable-aikgen"
+      "--enable-sqlite"
+    ]
+    ++ lib.optionals enableTPM2 [
+      "--enable-tpm"
+      "--enable-tss-tss2"
+    ]
     ++ lib.optionals enableNetworkManager [
-         "--enable-nm"
-         "--with-nm-ca-dir=/etc/ssl/certs" ]
+      "--enable-nm"
+      "--with-nm-ca-dir=/etc/ssl/certs"
+    ]
     # Taken from: https://wiki.strongswan.org/projects/strongswan/wiki/MacOSX
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--disable-systemd"
@@ -99,7 +188,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU "-lgcc_s" ;
+  NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
 

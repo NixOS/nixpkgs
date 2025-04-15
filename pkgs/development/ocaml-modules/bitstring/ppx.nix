@@ -11,7 +11,7 @@ if lib.versionOlder ppxlib.version "0.18.0" then
   throw "ppx_bitstring is not available with ppxlib-${ppxlib.version}"
 else
 
-  buildDunePackage rec {
+  buildDunePackage {
     pname = "ppx_bitstring";
     inherit (bitstring) version src;
 

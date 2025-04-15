@@ -84,6 +84,28 @@ in
                 description = "Whether this node is a relay.";
               };
 
+              lighthouse.dns.enable = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Whether this lighthouse node should serve DNS.";
+              };
+
+              lighthouse.dns.host = lib.mkOption {
+                type = lib.types.str;
+                default = "localhost";
+                description = ''
+                  IP address on which nebula lighthouse should serve DNS.
+                  'localhost' is a good default to ensure the service does not listen on public interfaces;
+                  use a Nebula address like 10.0.0.5 to make DNS resolution available to nebula hosts only.
+                '';
+              };
+
+              lighthouse.dns.port = lib.mkOption {
+                type = lib.types.nullOr lib.types.port;
+                default = 5353;
+                description = "UDP port number for lighthouse DNS server.";
+              };
+
               lighthouses = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
                 default = [ ];
@@ -172,10 +194,7 @@ in
                 '';
                 example = lib.literalExpression ''
                   {
-                    lighthouse.dns = {
-                      host = "0.0.0.0";
-                      port = 53;
-                    };
+                    lighthouse.interval = 15;
                   }
                 '';
               };
@@ -203,6 +222,9 @@ in
             lighthouse = {
               am_lighthouse = netCfg.isLighthouse;
               hosts = netCfg.lighthouses;
+              serve_dns = netCfg.lighthouse.dns.enable;
+              dns.host = netCfg.lighthouse.dns.host;
+              dns.port = netCfg.lighthouse.dns.port;
             };
             relay = {
               am_relay = netCfg.isRelay;
@@ -231,6 +253,19 @@ in
               ''
               settings
           );
+          capabilities =
+            let
+              nebulaPort = if !settings.tun.disabled then settings.listen.port else 0;
+              dnsPort = if settings.lighthouse.serve_dns then settings.lighthouse.dns.port else 0;
+            in
+            lib.concatStringsSep " " (
+              # creation of tunnel interfaces
+              lib.optional (!settings.tun.disabled) "CAP_NET_ADMIN"
+              # binding to privileged ports
+              ++ lib.optional (
+                nebulaPort > 0 && nebulaPort < 1024 || dnsPort > 0 && dnsPort < 1024
+              ) "CAP_NET_BIND_SERVICE"
+            );
         in
         {
           # Create the systemd service for Nebula.
@@ -248,8 +283,8 @@ in
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
               UMask = "0027";
-              CapabilityBoundingSet = "CAP_NET_ADMIN";
-              AmbientCapabilities = "CAP_NET_ADMIN";
+              CapabilityBoundingSet = capabilities;
+              AmbientCapabilities = capabilities;
               LockPersonality = true;
               NoNewPrivileges = true;
               PrivateDevices = false; # needs access to /dev/net/tun (below)
@@ -302,5 +337,8 @@ in
     );
   };
 
-  meta.maintainers = with lib.maintainers; [ numinit ];
+  meta.maintainers = with lib.maintainers; [
+    numinit
+    siriobalmelli
+  ];
 }

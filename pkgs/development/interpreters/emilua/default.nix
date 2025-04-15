@@ -23,6 +23,8 @@
   asciidoctor,
   makeWrapper,
   gitUpdater,
+  enableIoUring ? false,
+  emilua, # this package
 }:
 
 let
@@ -51,13 +53,13 @@ in
 
 stdenv.mkDerivation (self: {
   pname = "emilua";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
-    rev = "v${self.version}";
-    hash = "sha256-D6XKXik9nWQ6t6EF6dLbRGB60iFbPUM8/H8iFAz1QlE=";
+    tag = "v${self.version}";
+    hash = "sha256-Kl2atD3ejPSbwk9ByQrZrqBrHT4Wk+3AY3tvRC3jOCI=";
   };
 
   propagatedBuildInputs = [
@@ -89,8 +91,8 @@ stdenv.mkDerivation (self: {
   dontUseCmakeConfigure = true;
 
   mesonFlags = [
-    (lib.mesonBool "enable_file_io" true)
-    (lib.mesonBool "enable_io_uring" true)
+    (lib.mesonBool "enable_io_uring" enableIoUring)
+    (lib.mesonBool "enable_file_io" enableIoUring)
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
@@ -100,7 +102,8 @@ stdenv.mkDerivation (self: {
     patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
 
-  doCheck = true;
+  # io_uring is not allowed in Nix sandbox, that breaks the tests
+  doCheck = !enableIoUring;
 
   mesonCheckFlags = [
     # Skipped test: libpsx
@@ -120,17 +123,18 @@ stdenv.mkDerivation (self: {
     updateScript = gitUpdater { rev-prefix = "v"; };
     inherit boost;
     sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
+    tests.with-io-uring = emilua.override { enableIoUring = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lua execution engine";
     mainProgram = "emilua";
     homepage = "https://emilua.org/";
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       manipuladordedados
       lucasew
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

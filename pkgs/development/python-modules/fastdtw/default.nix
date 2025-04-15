@@ -37,7 +37,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastdtw.fastdtw" ];
   nativeCheckInputs = [ pytestCheckHook ];
-  dontUseSetuptoolsCheck = true; # looks for pytest-runner
   preCheck = ''
     echo "Temporarily moving tests to $OUT to find cython modules"
     export PACKAGEDIR=$out/${python.sitePackages}

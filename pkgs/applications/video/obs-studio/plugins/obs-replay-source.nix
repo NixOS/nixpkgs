@@ -10,16 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-replay-source";
-  version = "1.6.13-unstable-2024-02-03";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-replay-source";
-    rev = "6590fde1c8e4f8c733016646a8165d52e28d094b";
-    hash = "sha256-foIzWNlU72FWXZVWR8TEiqJJMfl1vWYDTyhV6thYJbA=";
+    tag = finalAttrs.version;
+    hash = "sha256-+PSALDqHXPyR0J7YnLn3QgPN6eIoH3yTIm1Bp7Li8c8=";
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     libcaption
     obs-studio
@@ -27,19 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p "$out/lib" "$out/share"
-    mv "$out/obs-plugins/64bit" "$out/lib/obs-plugins"
-    rm -rf "$out/obs-plugins"
-    mv "$out/data" "$out/share/obs"
+    mkdir -p $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    rm -rf $out/obs-plugins
+    mv $out/data $out/share/obs
   '';
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Replay source for OBS studio";
     homepage = "https://github.com/exeldro/obs-replay-source";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pschmitt ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pschmitt ];
   };
 })

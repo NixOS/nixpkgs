@@ -114,7 +114,7 @@ chromium.get_deps(
         },
         **{
         f"checkout_{arch}": True
-        for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64"]
+        for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc"]
         },
     },
     "",

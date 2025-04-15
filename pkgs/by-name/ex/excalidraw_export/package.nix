@@ -8,7 +8,7 @@
   stdenv,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "excalidraw_export";
   version = "1.1.0";
 
@@ -35,6 +35,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ venikx ];
     mainProgram = "excalidraw_export";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

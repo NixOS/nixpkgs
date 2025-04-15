@@ -45,8 +45,8 @@ let
   canApplyIainsDarwinPatches =
     stdenv.hostPlatform.isDarwin
     && stdenv.hostPlatform.isAarch64
-    && buildPlatform == hostPlatform
-    && hostPlatform == targetPlatform;
+    && (lib.systems.equals buildPlatform hostPlatform)
+    && (lib.systems.equals hostPlatform targetPlatform);
 
   inherit (lib) optionals optional;
 in
@@ -62,7 +62,7 @@ in
 
 [ ]
 ++ optional (!atLeast12) ./fix-bug-80431.patch
-++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
+++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
   [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ]
   ++ (
@@ -255,7 +255,12 @@ in
 
 ++ optional (langAda && (is9 || is10)) ./gnat-cflags.patch
 ++
-  optional (is10 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform)
+  optional
+    (
+      is10
+      && buildPlatform.system == "aarch64-darwin"
+      && (!lib.systems.equals targetPlatform buildPlatform)
+    )
     (fetchpatch {
       url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
       sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";

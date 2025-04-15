@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     for f in $filesToFix; do
       if [ -f "$f" ]; then
         length="$(wc -c "$f" | cut -d' ' -f1)"
-        hash="$(md5sum "$f" | cut -d' ' -f1)"
+        hash="$(sha256sum "$f" | cut -d' ' -f1)"
         sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
       else
         echo "INFO(files-to-fix): $f does not exist in this version"

@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       Baughn
       ymarkus
+      nullcube
     ];
     platforms = platforms.all;
   };

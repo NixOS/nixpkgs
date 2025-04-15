@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   version = "0.44";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/devilspie2/devilspie2-${version}.tar.xz";
-    sha256 = "Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
   };
 
   nativeBuildInputs = [

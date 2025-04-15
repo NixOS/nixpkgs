@@ -22,38 +22,44 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.7.16";
+  version = "2.7.17";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-U1SjboFx1KJs3Ve62cQRj4kkURTUGZmQD077WzldkD0=";
+    sha256 = "sha256-mX99mMiYJ3EDhb96fEMR/E5rnhLe1Ds/21o4EhOVgVo=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [
-    curl
-    librsync
-    libthreadar
-    gpgme
-    libargon2
-    libgcrypt
-    openssl
-    bzip2
-    lz4
-    lzo
-    xz
-    zlib
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    attr
-    e2fsprogs
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-  ];
+  buildInputs =
+    [
+      curl
+      librsync
+      libthreadar
+      gpgme
+      libargon2
+      libgcrypt
+      openssl
+      bzip2
+      lz4
+      lzo
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      attr
+      e2fsprogs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+    ];
 
   configureFlags = [
     "--disable-birthtime"

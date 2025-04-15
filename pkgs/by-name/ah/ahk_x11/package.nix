@@ -1,12 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   crystal_1_11,
   copyDesktopItems,
-  linkFarm,
-  fetchgit,
-
   gtk3,
   libxkbcommon,
   xorg,

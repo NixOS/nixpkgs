@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.9.4";
+  version = "14.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "rich";
     tag = "v${version}";
-    hash = "sha256-Zaop9zR+Sz9lMQjQP1ddJSid5jEmf0tQYuTeLuWNGA8=";
+    hash = "sha256-gnKzb4lw4zgepTfJahHnpw2/vcg8o1kv8KfeVDSHcQI=";
   };
 
   build-system = [ poetry-core ];
@@ -56,6 +56,14 @@ buildPythonPackage rec {
     attrs
     pytestCheckHook
     which
+  ];
+
+  disabledTests = [
+    # pygments 2.19 regressions
+    # https://github.com/Textualize/rich/issues/3612
+    "test_inline_code"
+    "test_blank_lines"
+    "test_python_render_simple_indent_guides"
   ];
 
   pythonImportsCheck = [ "rich" ];

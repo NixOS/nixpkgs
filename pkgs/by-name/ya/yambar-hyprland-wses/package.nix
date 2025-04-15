@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-furHj1AAFgNiNHP9RBsVrIvrDckSKU8FXilzH9TQ99c=";
   };
 
-  cargoHash = "sha256-/ewEgrBxRw5Xii5PX1GLKzBrZjgnzYc/Hz+M1pJpncQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bAJ8TTlSgXDYC7gSTuSISIS1HH0jCF9W5WswZhw94vQ=";
 
   meta = {
     description = "Enable Yambar to show Hyprland workspaces";

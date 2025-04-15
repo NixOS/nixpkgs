@@ -1,8 +1,8 @@
-diff --git a/src/portal-impl.c b/src/portal-impl.c
-index 85b3a23..6d43636 100644
---- a/src/portal-impl.c
-+++ b/src/portal-impl.c
-@@ -275,6 +275,8 @@ load_installed_portals (gboolean opt_verbose)
+diff --git a/src/xdp-portal-impl.c b/src/xdp-portal-impl.c
+index 770c265..a34ca8e 100644
+--- a/src/xdp-portal-impl.c
++++ b/src/xdp-portal-impl.c
+@@ -277,6 +277,8 @@ load_installed_portals (gboolean opt_verbose)
  
    /* We need to override this in the tests */
    portal_dir = g_getenv ("XDG_DESKTOP_PORTAL_DIR");

@@ -5,13 +5,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "FlameGraph";
   version = "2023-11-06";
 
   src = fetchFromGitHub {
     owner = "brendangregg";
-    repo = pname;
+    repo = "FlameGraph";
     rev = "a96184c6939f8c6281fcd7285b54fba80555ac74";
     sha256 = "sha256-hvp1HxmgNbe85kxe0NyolFUd+kPPBDYAt+g2K8pE1Ak=";
   };

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   python3,
@@ -18,14 +17,14 @@ let
   # See: https://en.wikipedia.org/wiki/Xcode#Toolchain_versions
   # Note: Can’t use a sparse checkout because the Darwin stdenv bootstrap can’t depend on fetchgit.
   appleLlvm = {
-    version = "15.0.0"; # As reported by upstream’s `tapi --version`.
-    rev = "2b5ff47e44b059c03de5779479d01a133ab4d581"; # Per the TAPI repo.
-    hash = "sha256-X37zBbpSEWmqtdTXsd1t++gp+0ggA8YtB73fGKNaiR0=";
+    version = "16.0.0"; # As reported by upstream’s `tapi --version`.
+    rev = "3602748d4ec9947f0d1493511a8c34410909506e"; # Per the TAPI repo.
+    hash = "sha256-7o/JY/tcu4AeXCa7xhfjbuuV3/Cbf89AdoZOKrciJk0=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtapi";
-  version = "1500.0.12.3";
+  version = "1600.0.11.8";
 
   outputs = [
     "out"
@@ -38,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
       name = "tapi-src";
       owner = "apple-oss-distributions";
       repo = "tapi";
-      rev = "tapi-${finalAttrs.version}";
-      hash = "sha256-YeaA2OeSY1fXYJHPJJ0TrVC1brspSvutBtPMPGX6Y1o=";
+      tag = "tapi-${finalAttrs.version}";
+      hash = "sha256-87AQZrCmZHv3lbfUnw0j17H4cP+GN5g0D6zhdT4P56Y=";
     })
     # libtapi can’t avoid pulling the whole repo even though it needs only a couple of folders because
     # `fetchgit` can’t be used in the Darwin bootstrap.
@@ -56,14 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     # when the linker supports it.
     # Note: This can be dropped once the bootstrap tools are updated after the ld64 update.
     ./0001-Check-for-no_exported_symbols-linker-support.patch
-    # The recommended upstream revision of Apple’s LLVM fork needs this patch, or
-    # `tapi stubify` will crash when generating stubs.
-    (fetchpatch {
-      url = "https://github.com/apple/llvm-project/commit/455bf3d1ccd6a52df5e38103532c1b8f49924edc.patch";
-      hash = "sha256-ujZcfdAls20JPIvjvO2Xv8st8cNTY/XTEQusICKBKSA";
-    })
-    # Updates `JSONReaderWriter` to work with the API change in the above patch.
-    ./0002-Pass-fileType-to-writeToStream.patch
     # Fix build on Linux. GCC is more picky than clang about the field order.
     ./0003-Match-designator-order-with-declaration-order.patch
   ];
@@ -93,9 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
             --replace-fail "DESTINATION $dir" "DESTINATION \''${$cmakevar}"
         done
       done
-      # Doesn’t seem to exist publically.
-      substituteInPlace tapi/test/CMakeLists.txt \
-        --replace-fail tapi-configs ""
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Remove Darwin-specific versioning flags.

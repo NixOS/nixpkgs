@@ -5,9 +5,8 @@
   cryptography,
   dnspython,
   fetchFromGitHub,
-  gssapi,
   hatchling,
-  ldap3,
+  minikerberos,
   msldap,
   pyasn1,
   pytestCheckHook,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.7";
+  version = "2.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-0BzVZ1aIjcq6D95hBjO+ahHaA48bmyaPAYHTAwQHaQg=";
+    hash = "sha256-XqCP2GfS8hxlFU4Mndeh+7Ll2kXJ3Dei+AGp/oy0PUg=";
   };
 
   build-system = [ hatchling ];
@@ -35,10 +34,8 @@ buildPythonPackage rec {
     asn1crypto
     cryptography
     dnspython
-    gssapi
-    ldap3
+    minikerberos
     msldap
-    pyasn1
     winacl
   ];
 

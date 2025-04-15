@@ -5,8 +5,6 @@
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
   gradle_8,
   gradle_7,
   perl,

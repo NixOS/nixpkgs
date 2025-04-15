@@ -19,7 +19,8 @@ let
       hash = "sha256-TYJ17uVj8v1u630MTb033h0X3aYRXY9d89GjAxG8muk=";
     };
 
-    cargoHash = "sha256-CYDy0CedwG/ThTV+XOfOg8ncxF3tdTEGakmu4MXfiE4=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-dgeHQs1IYD8m8gOtPEn+l0A2RbSmwTyzrbiusD3dUX0=";
 
     nativeCheckInputs = [ python3 ];
 

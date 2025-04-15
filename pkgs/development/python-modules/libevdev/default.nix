@@ -3,7 +3,7 @@
   buildPythonPackage,
   isPy27,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   pkgs,
   pytestCheckHook,
 }:
@@ -20,8 +20,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libevdev = lib.getLib pkgs.libevdev;
     })
   ];

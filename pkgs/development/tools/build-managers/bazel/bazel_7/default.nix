@@ -5,7 +5,7 @@
   fetchurl,
   makeWrapper,
   writeTextFile,
-  substituteAll,
+  replaceVars,
   writeShellApplication,
   makeBinaryWrapper,
   autoPatchelfHook,
@@ -44,7 +44,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
-  version ? "7.4.1",
+  version ? "7.6.0",
 }:
 
 let
@@ -52,7 +52,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-gzhmGLxIn02jYmbvJiDsZKUmxobPBwQTMsr/fJU6+vU=";
+    hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
   };
 
   defaultShellUtils =
@@ -377,15 +377,13 @@ stdenv.mkDerivation rec {
       # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
       # So we are replacing this bazel paths by defaultShellPath,
       # improving hermeticity and making it work in nixos.
-      (substituteAll {
-        src = ../strict_action_env.patch;
+      (replaceVars ../strict_action_env.patch {
         strictActionEnvPatch = defaultShellPath;
       })
 
       # bazel reads its system bazelrc in /etc
       # override this path to a builtin one
-      (substituteAll {
-        src = ../bazel_rc.patch;
+      (replaceVars ../bazel_rc.patch {
         bazelSystemBazelRCPath = bazelRC;
       })
     ]
@@ -530,6 +528,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.asl20;
     maintainers = lib.teams.bazel.members;
+    mainProgram = "bazel";
     inherit platforms;
   };
 

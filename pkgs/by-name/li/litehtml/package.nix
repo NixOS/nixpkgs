@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZE/HKzo3ejKpW/ih3sJwn2hzCtsBhAXeJWGezYd6Yc4";
   };
 
-  # Don't search for non-existant gumbo cmake config
+  # Don't search for non-existent gumbo cmake config
   # This will mislead cmake that litehtml is not found
   # Affects build of pkgs that depend on litehtml
   postPatch = ''

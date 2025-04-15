@@ -18,6 +18,11 @@ import ./make-test-python.nix (
 
         # For the sessionPath subtest.
         services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+
+        # For OCR test.
+        services.xserver.displayManager.lightdm.greeters.slick.extraConfig = ''
+          enable-hidpi = on
+        '';
       };
 
     enableOCR = true;

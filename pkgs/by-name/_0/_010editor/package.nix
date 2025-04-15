@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "15.0.1";
+  version = "15.0.2";
 
   src =
     if stdenv.hostPlatform.isLinux then
       fetchzip {
         url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-        hash = "sha256-/Bfm/fPX3Szla23U9+qoq99E2v8jC3f9pgkJMTxNFUk=";
+        hash = "sha256-oXwC4criDox8rac7mnJroqxMNKU7k+y7JQqc88XoRFc=";
       }
     else
       fetchurl {
         url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-        hash = "sha256-hpDhcX1xS4Nry2HOIrFwqYK45JOmy66lPq6dJr9pkQg=";
+        hash = "sha256-RZtFV3AbE5KfzW18usW0FS/AnX8Uets/RkVayBAODQ4=";
       };
 
   sourceRoot = ".";

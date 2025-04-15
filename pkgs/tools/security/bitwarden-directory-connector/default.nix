@@ -7,7 +7,7 @@
   python3,
   pkg-config,
   libsecret,
-  nodejs_18,
+  nodejs_22,
 }:
 
 let
@@ -19,14 +19,14 @@ let
     }:
     buildNpmPackage rec {
       pname = name;
-      version = "2025.1.0";
-      nodejs = nodejs_18;
+      version = "2025.4.0";
+      nodejs = nodejs_22;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
         rev = "v${version}";
-        hash = "sha256-4Bt+E0lkmRXY4yIq6DwCyggcu7/8QtaYE9QHNTUhM+8=";
+        hash = "sha256-dT5E3i04GLtpKCpF6a6GOf0ozrSsbcvsRquKA2hYmco=";
       };
 
       postPatch = ''

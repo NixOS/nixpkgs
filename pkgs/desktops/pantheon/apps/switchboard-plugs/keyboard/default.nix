@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, replaceVars
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, gettext
-, gnome-settings-daemon
-, granite7
-, gsettings-desktop-schemas
-, gtk4
-, libxml2
-, libgnomekbd
-, libxklavier
-, ibus
-, onboard
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  gnome-settings-daemon,
+  granite7,
+  gsettings-desktop-schemas,
+  gtk4,
+  libxml2,
+  libgnomekbd,
+  libxklavier,
+  ibus,
+  onboard,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {

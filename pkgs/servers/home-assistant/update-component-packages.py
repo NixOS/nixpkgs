@@ -44,9 +44,7 @@ PKG_PREFERENCES = {
     "ha-av": "av",
     "numpy": "numpy",
     "ollama-hass": "ollama",
-    "paho-mqtt": "paho-mqtt_1",
-    "pyhive-integration": "pyhiveapi", # https://github.com/home-assistant/core/pull/135482
-    "pysuezV2": "pysuez",
+    "paho-mqtt": "paho-mqtt",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",

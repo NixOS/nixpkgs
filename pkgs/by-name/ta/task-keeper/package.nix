@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
-  cargoHash = "sha256-fFN7nkkOlOreFVg2phvX2uj3crnohJrLgpgDUJucz5Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6KnZDSYPf3Rr9II/lsrPvzRMiwOknrstU8/91mv7x8k=";
 
   # tests depend on many packages (java, node, python, sbt, ...) - which I'm not currently willing to set up 😅
   doCheck = false;

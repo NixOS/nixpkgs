@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.32";
+  version = "4.8.33";
 
   src = fetchurl {
-    url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-TdyD0e3pryNjs+q5h/VLh89mGTJBEM4tOg5wlE0TWf4=";
+    url = "https://ftp.osuosl.org/pub/midnightcommander/${pname}-${version}.tar.xz";
+    hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
   nativeBuildInputs =
@@ -100,9 +100,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
-    downloadPage = "https://www.midnight-commander.org/downloads/";
-    homepage = "https://www.midnight-commander.org";
-    license = licenses.gpl2Plus;
+    downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
+    homepage = "https://midnight-commander.org";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
     mainProgram = "mc";

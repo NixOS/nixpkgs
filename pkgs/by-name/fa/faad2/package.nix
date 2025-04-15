@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "faad2";
-  version = "2.11.1";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
     rev = version;
-    hash = "sha256-E6oe7yjYy1SJo8xQkyUk1sSucKDMPxwUFVSAyrf4Pd8=";
+    hash = "sha256-JvmblrmE3doUMUwObBN2b+Ej+CDBWNemBsyYSCXGwo8=";
   };
 
   outputs = [

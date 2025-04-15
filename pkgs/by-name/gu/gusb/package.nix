@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -46,8 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-python-path.patch;
+    (replaceVars ./fix-python-path.patch {
       python = "${pythonEnv}/bin/python3";
     })
   ];

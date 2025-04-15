@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bQ91uCDA2HKuiBmHZ9QP4V6tM6c7hRvECqXzfC6EEnI=";
   };
 
-  cargoHash = "sha256-PheqGFkXd5lQLMfrmH+TS0jfHdGPym/pTSh5Y2ZIHqw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iKRLq2G0XYZFM/k0V6GVtx/Pl4rdfGaD4EVN34FLlOg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -48,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.usenix.org.uk/content/please.html";
     changelog = "https://github.com/edneville/please/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

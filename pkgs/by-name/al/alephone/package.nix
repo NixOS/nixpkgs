@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
   alsa-lib,
   boost,
   curl,

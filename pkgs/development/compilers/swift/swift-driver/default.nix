@@ -10,7 +10,7 @@
   XCTest,
   sqlite,
   ncurses,
-  substituteAll,
+  replaceVars,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -50,8 +50,7 @@ stdenv.mkDerivation {
       hash = "sha256-eVBaKN6uzj48ZnHtwGV0k5ChKjak1tDCyE+wTdyGq2c=";
     })
     # Prevent a warning about SDK directories we don't have.
-    (substituteAll {
-      src = ./patches/prevent-sdk-dirs-warnings.patch;
+    (replaceVars ./patches/prevent-sdk-dirs-warnings.patch {
       inherit (builtins) storeDir;
     })
   ];

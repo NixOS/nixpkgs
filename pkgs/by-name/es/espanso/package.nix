@@ -11,6 +11,7 @@
   libXtst,
   libnotify,
   libxkbcommon,
+  libpng,
   openssl,
   xclip,
   xdotool,
@@ -28,7 +29,7 @@
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
 
@@ -39,12 +40,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "yaml-rust-0.4.6" = "sha256-wXFy0/s4y6wB3UO19jsLwBdzMy7CGX4JoUt5V6cU7LU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2Hf492/xZ/QGqDYbjiZep/FX8bPyEuoxkMJ4qnMqu+c=";
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -71,6 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      libpng
       wxGTK32
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -99,6 +97,9 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
       --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+
+    substituteInPlace espanso-modulo/build.rs \
+      --replace-fail '"--with-libpng=builtin"' '"--with-libpng=sys"'
   '';
 
   # Some tests require networking

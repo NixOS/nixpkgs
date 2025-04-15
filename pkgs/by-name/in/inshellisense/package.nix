@@ -12,7 +12,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
+    repo = "inshellisense";
     tag = version;
     hash = "sha256-UGF7tARMnRaeIEKUhYa63hBpEoMb6qV209ECPirkgyg=";
   };

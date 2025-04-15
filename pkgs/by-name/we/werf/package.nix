@@ -1,27 +1,26 @@
 {
-  btrfs-progs,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
   lib,
   stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  btrfs-progs,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
   versionCheckHook,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.22.0";
+  version = "2.34.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
-    rev = "v${version}";
-    hash = "sha256-43ZN2bMzVBpliXjDDJrVZqdiWBS3rT5mYEd0440wp4s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hWkU3tyh0kQ9GNl5gQIs4wTRBQV0B3/0oOAhKLo1hOo=";
   };
 
-  vendorHash = "sha256-Qy5Tjg/QETeN8leTaWZXSUauK2LkPUUZbpztC79v6Jo=";
-
   proxyVendor = true;
+  vendorHash = "sha256-x9ehxBfyk5sMg71yJcyjcrBAi5bzEnENAaqLXFoGQck=";
 
   subPackages = [ "cmd/werf" ];
 
@@ -40,9 +39,9 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X github.com/werf/werf/v2/pkg/werf.Version=v${version}"
+      "-X github.com/werf/werf/v2/pkg/werf.Version=${finalAttrs.src.rev}"
     ]
-    ++ lib.optionals (env.CGO_ENABLED == 1) [
+    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
       "-extldflags=-static"
       "-linkmode external"
     ];
@@ -55,7 +54,7 @@ buildGoModule rec {
       "dfrunsecurity"
       "dfssh"
     ]
-    ++ lib.optionals (env.CGO_ENABLED == 1) [
+    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
       "cni"
       "exclude_graphdriver_devicemapper"
       "netgo"
@@ -64,18 +63,21 @@ buildGoModule rec {
       "static_build"
     ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   preCheck =
     ''
       # Test all packages.
       unset subPackages
 
-      # Remove tests that require external services, usually a Docker daemon.
+      # Remove tests that fail or require external services.
       rm -rf \
         integration/suites \
         pkg/true_git/*_test.go \
+        pkg/werf/exec/*_test.go \
         test/e2e
     ''
-    + lib.optionalString (env.CGO_ENABLED == 0) ''
+    + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
       # A workaround for osusergo.
       export USER=nixbld
     '';
@@ -101,9 +103,9 @@ buildGoModule rec {
       Buildah.
     '';
     homepage = "https://werf.io";
-    changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
+    changelog = "https://github.com/werf/werf/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "werf";
   };
-}
+})

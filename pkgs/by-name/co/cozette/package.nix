@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cozette";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchzip {
     url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts-v-${
       builtins.replaceStrings [ "." ] [ "-" ] version
     }.zip";
-    hash = "sha256-FOgRz9amVmJSBYPa0HEwzXWsdcc53td9g3tY3sQbs9c=";
+    hash = "sha256-KxlChsydFtm26CFugbWqeJi5DQP0BxONSz5mOcyiE28=";
   };
 
   installPhase = ''

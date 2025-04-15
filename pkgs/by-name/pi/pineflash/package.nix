@@ -15,6 +15,7 @@
   libGL,
   libxkbcommon,
   nix-update-script,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pineflash";
@@ -27,7 +28,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4tcwEok36vuXbtlZNUkLNw1kHFQPBEJM/gWRhRWNLPg=";
   };
 
-  cargoHash = "sha256-l01It6mUflENlADW6PpOQvK1o4qOjbTsMLB6n+OIl0U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OgUWOtqgGCRNYCrdMa8IAfxbbYqv+1WwubvfYybuAQU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,6 +48,7 @@ rustPlatform.buildRustPackage rec {
   runtimeDependencies = [
     libGL
     libxkbcommon
+    wayland
   ];
 
   postPatch =

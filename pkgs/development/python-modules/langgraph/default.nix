@@ -10,14 +10,15 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-prebuilt,
   langgraph-sdk,
+  xxhash,
 
   # tests
   aiosqlite,
   dataclasses-json,
   grandalf,
   httpx,
-  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
@@ -32,17 +33,16 @@
   postgresql,
   postgresqlTestHook,
 }:
-
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.56";
+  version = "0.3.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = version;
-    hash = "sha256-X/IMNEmggu9bSJFUaTohbFYxGZBguf+eFb3ObmQGplk=";
+    tag = "${version}";
+    hash = "sha256-NlTpBXBeADlIHQDlt0muJEuoKOgXiAtAo8GoU5CsvZo=";
   };
 
   postgresqlTestSetupPost = ''
@@ -57,7 +57,9 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-prebuilt
     langgraph-sdk
+    xxhash
   ];
 
   pythonImportsCheck = [ "langgraph" ];
@@ -67,11 +69,16 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    pytestCheckHook
+    postgresql
+    postgresqlTestHook
+  ];
+
+  checkInputs = [
     aiosqlite
     dataclasses-json
     grandalf
     httpx
-    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith
@@ -82,10 +89,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-repeat
     pytest-xdist
-    pytestCheckHook
     syrupy
-    postgresql
-    postgresqlTestHook
   ];
 
   disabledTests = [
@@ -110,11 +114,17 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
-    "tests/test_pregel_async.py"
+    "tests/test_checkpoint_migration.py"
+    "tests/test_large_cases.py"
+    "tests/test_large_cases_async.py"
     "tests/test_pregel.py"
+    "tests/test_pregel_async.py"
   ];
 
-  passthru.updateScript = langgraph-sdk.updateScript;
+  passthru = {
+    inherit (langgraph-sdk) updateScript;
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  };
 
   meta = {
     description = "Build resilient language agents as graphs";

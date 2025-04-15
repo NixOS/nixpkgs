@@ -3,20 +3,21 @@
   fetchFromGitHub,
   installShellFiles,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";
-  version = "2024.11.28.1";
+  version = "2025.03.28.0";
 
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
     rev = finalAttrs.version;
-    hash = "sha256-s/2Dcz7xrJJxun/KOQ+o+TFKHQT9D8uK1SXsLlKplT4=";
+    hash = "sha256-K3phBiu2D3DbOm7mApqqSNnVCsfYRQtN/o3bCVubN9I=";
   };
 
-  vendorHash = "sha256-vEw1RiZnMKtVo2pl0M7dTTs/TtNc9Vt8osAYptD46uA=";
+  vendorHash = "sha256-7wFlS+a97tdhfxfc/IElzOVH25MAgf42UZBC1giBAls=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,6 +25,10 @@ php.buildComposerProject2 (finalAttrs: {
     installShellCompletion --cmd phpactor \
     --bash <(php $out/bin/phpactor completion bash)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpactor/phpactor/releases/tag/${finalAttrs.version}";

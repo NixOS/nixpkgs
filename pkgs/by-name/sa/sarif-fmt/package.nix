@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uQQ/UbmyPJbilxP2R+6KyBkf2dzGohN22xCCtU31y0s=";
   };
 
-  cargoHash = "sha256-F2zHGlIaSGWcw67AIOa3N0AbKMVGQukUECZxCte7qlE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-naABVC4z5tYfe/Y2Gw4wp2Ye9wIF0Wq7jqhelcRQY30=";
 
   # `test_clippy` (the only test we enable) is broken on Darwin
   # because `--enable-profiler` is not enabled in rustc on Darwin

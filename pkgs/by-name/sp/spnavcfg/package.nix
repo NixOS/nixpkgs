@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Interactive configuration GUI for space navigator input devices";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     mainProgram = "spnavcfg";
   };
 })

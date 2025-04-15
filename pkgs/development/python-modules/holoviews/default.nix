@@ -18,21 +18,26 @@
 
   # tests
   pytestCheckHook,
-  pytest-cov,
+  pytest-asyncio,
   flaky,
 }:
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.19.1";
+  version = "1.20.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uehejAcnWkVsDvjQa8FX0Cs37/Zvs2AqoS9chvCEhlw=";
+    hash = "sha256-jHi3mGAc468xUjZnxtHLQN+NeBJJ6+u9ssX2FDVl5tg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"ignore:No data was collected:coverage.exceptions.CoverageWarning",' ""
+  '';
 
   build-system = [
     hatch-vcs
@@ -50,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-asyncio
     flaky
   ];
 

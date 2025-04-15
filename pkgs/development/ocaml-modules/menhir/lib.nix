@@ -18,7 +18,7 @@ let
     };
   }) version;
 in
-buildDunePackage rec {
+buildDunePackage {
   pname = "menhirLib";
   inherit (fetched) version src;
 

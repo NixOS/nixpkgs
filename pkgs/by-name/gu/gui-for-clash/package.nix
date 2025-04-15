@@ -12,17 +12,24 @@
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
-  replaceVars,
+  nix-update-script,
 }:
+
 let
   pname = "gui-for-clash";
-  version = "1.9.0";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-0PNFiOZ+POp1P/HDJmAIMKNGIjft6bfwPiRDLswY2ns=";
+    hash = "sha256-XQbiric4iAxvWRLKCCZtDrpFpPCylQlwnCm9dHSq/KM=";
+  };
+
+  metaCommon = {
+    homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +43,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-mG8b16PP876EyaX3Sc4WM41Yc/oDGZDiilZPaxPvvuQ=";
+      hash = "sha256-5SVu8eCyN89k6BvNEqgs4hOrP5IjvjUZrzrVuDwtYCk=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -52,16 +59,14 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r ./dist $out
+      cp -r dist $out
 
       runHook postInstall
     '';
 
-    meta = {
+    meta = metaCommon // {
       description = "GUI program developed by vue3";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.all;
     };
   });
 in
@@ -76,7 +81,7 @@ buildGoModule {
       --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-OrysyJF+lUMf+0vWmOZHjxUdE6fQCKArmpV4alXxtYs=";
+  vendorHash = "sha256-Zt3We+Ai8oEqof2eQvcaIkocH85goeldmPf4mmDX17o=";
 
   nativeBuildInputs = [
     wails
@@ -89,6 +94,18 @@ buildGoModule {
     webkitgtk_4_0
     libsoup_3
   ];
+
+  preBuild = ''
+    cp -r ${frontend} frontend/dist
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.Clash
+
+    runHook postBuild
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -106,33 +123,28 @@ buildGoModule {
     })
   ];
 
-  preBuild = ''
-    cp -r ${frontend} ./frontend/dist
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.Clash
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm 0755 ./build/bin/GUI.for.Clash $out/bin/GUI.for.Clash
+    install -Dm 0755 build/bin/GUI.for.Clash $out/bin/GUI.for.Clash
     install -Dm 0644 build/appicon.png $out/share/pixmaps/gui-for-clash.png
 
     runHook postInstall
   '';
 
-  meta = {
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
+
+  meta = metaCommon // {
     description = "Clash GUI program developed by vue3 + wails";
-    homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
     mainProgram = "GUI.for.Clash";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

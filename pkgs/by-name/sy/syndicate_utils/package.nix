@@ -5,7 +5,7 @@
   libxml2,
   libxslt,
   openssl,
-  postgresql,
+  libpq,
   sqlite,
 }:
 
@@ -21,7 +21,7 @@ buildNimSbom (finalAttrs: {
   };
 
   buildInputs = [
-    postgresql
+    libpq
     sqlite
     libxml2
     libxslt

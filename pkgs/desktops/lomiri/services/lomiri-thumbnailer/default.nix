@@ -2,7 +2,9 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
@@ -47,12 +49,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Fix compat with taglib 2.x
+    # Remove when version > 3.0.4
+    (fetchpatch {
+      name = "0001-lomiri-thumbnailer-Fix-taglib-2.x-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/b7f1055e36cd6e33314bb9f6648f93e977a33267.patch";
+      hash = "sha256-9RHtxqsgdMkgIyswaeL5yS6+o/YvzT+HgRD8KL/RfNM=";
+    })
+
     # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
     ./1001-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DO.patch
     ./1002-Re-enable-documentation.patch
     ./1003-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_m.patch
     ./1004-Re-enable-coverge-reporting.patch
     ./1005-Make-GTest-available-to-example-test.patch
+
+    # In aarch64 lomiri-gallery-app VM tests, default 10s timeout for thumbnail extractor is often too tight
+    # Raise to 20s to work around this (too much more will run into D-Bus' call timeout)
+    ./2001-Raise-default-extraction-timeout.patch
   ];
 
   postPatch = ''
@@ -169,7 +183,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # gallery app delegates to thumbnailer, tests various formats
+      gallery-app = nixosTests.lomiri-gallery-app;
+
+      # music app relies on thumbnailer to extract embedded cover art
+      music-app = nixosTests.lomiri-music-app;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 

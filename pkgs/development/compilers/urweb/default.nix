@@ -6,7 +6,7 @@
   openssl,
   mlton,
   libmysqlclient,
-  postgresql,
+  libpq,
   sqlite,
   gcc,
   icu,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     openssl
     mlton
     libmysqlclient
-    postgresql
+    libpq
     sqlite
     icu
   ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     export CCARGS="-I$out/include \
                    -L${lib.getLib openssl}/lib \
                    -L${libmysqlclient}/lib \
-                   -L${postgresql.lib}/lib \
+                   -L${libpq}/lib \
                    -L${sqlite.out}/lib";
   '';
 

@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   lib,
   tlpdb,
   bin,
@@ -77,6 +78,13 @@ lib.recursiveUpdate orig rec {
   texlogsieve.extraBuildInputs = [ bin.luatex ];
 
   #### perl packages
+  bundledoc.extraBuildInputs = [
+    (perl.withPackages (
+      ps: with ps; [
+        StringShellQuote
+      ]
+    ))
+  ];
   crossrefware.extraBuildInputs = [
     (perl.withPackages (
       ps: with ps; [
@@ -248,6 +256,12 @@ lib.recursiveUpdate orig rec {
     texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
   };
 
+  dvipdfmx.binlinks = {
+    # even though 'ebb' was removed from the Makefile, this symlink is still
+    # part of the binary container of dvipdfmx
+    ebb = "xdvipdfmx";
+  };
+
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
@@ -417,11 +431,38 @@ lib.recursiveUpdate orig rec {
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
   '';
 
+  # readd functions moved to 'tools.pm' not shipped to CTAN
+  eolang.postUnpack =
+    let
+      patch = fetchpatch {
+        name = "eolang-without-tools-pm.patch";
+        url = "https://github.com/objectionary/eolang.sty/commit/2c3bf97dd85e1748b2028ffa056a75c0d9432f88.patch";
+        includes = [ "eolang.pl" ];
+        hash = "sha256-ZQtGjqzfhX5foRWuiWQaomN8nOOEj394HdCDrb2sdzA=";
+      };
+    in
+    ''
+      if [[ -d "$out"/scripts/eolang ]] ; then
+        patch -d "$out/scripts/eolang" -i "${patch}"
+      fi
+    '';
+
   # find files in script directory, not binary directory
   # add runtime dependencies to PATH
   epspdf.postFixup = ''
     sed -i '2ios.setenv("PATH","${lib.makeBinPath epspdf.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/epspdf
     substituteInPlace "$out"/bin/epspdftk --replace-fail '[info script]' "\"$scriptsFolder/epspdftk.tcl\""
+  '';
+
+  # use correct path to xdvipdfmx
+  extractbb.extraBuildInputs = [ bin.core.dvipdfmx ];
+  extractbb.postUnpack = ''
+    if [[ -f "$out"/scripts/extractbb/extractbb-wrapper.lua ]] ; then
+      sed -i 's!local target_path = interpreter_dir .. "/" .. TARGET_PATH_NAME .. target_ext!local target_path = os.getenv("NIX_TEXLIVE_XDVIPDFMX")!' "$out"/scripts/extractbb/extractbb-wrapper.lua
+    fi
+  '';
+  extractbb.postFixup = ''
+    sed -i "2ios.setenv('NIX_TEXLIVE_XDVIPDFMX','$(PATH="$HOST_PATH" command -v xdvipdfmx)')" "$out"/bin/extractbb
   '';
 
   # find files in script directory, not in binary directory
@@ -498,9 +539,6 @@ lib.recursiveUpdate orig rec {
     !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV
   ) orig.luajittex.binfiles;
 
-  # osda is unfree. Hence, we can't include it by default
-  collection-publishers.deps = builtins.filter (dep: dep != "osda") orig.collection-publishers.deps;
-
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
     extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
@@ -528,11 +566,6 @@ lib.recursiveUpdate orig rec {
     postFixup = ''
       TEXMFCNF="${tl.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
-      substituteInPlace "$TMPDIR"/_texdoc \
-        --replace-fail 'compdef __texdoc texdoc' '#compdef texdoc' \
-        --replace-fail '$(kpsewhich -var-value TEXMFROOT)/tlpkg/texlive.tlpdb' '$(kpsewhich Data.tlpdb.lua)' \
-        --replace-fail '/^name[^.]*$/ {print $2}' '/^  \["[^"]*"\] = {$/ { print substr($1,3,length($1)-4) }'
-      echo '__texdoc' >> "$TMPDIR"/_texdoc
       installShellCompletion --zsh "$TMPDIR"/_texdoc
     '';
   };

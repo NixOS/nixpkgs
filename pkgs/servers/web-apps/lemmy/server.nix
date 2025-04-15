@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   openssl,
-  postgresql,
+  libpq,
   libiconv,
   Security,
   SystemConfiguration,
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = pinData.serverCargoHash;
 
   buildInputs =
-    [ postgresql ]
+    [ libpq ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       Security

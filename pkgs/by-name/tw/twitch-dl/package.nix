@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     tag = version;
-    hash = "sha256-D8jVm1nezEAvXpAToDdgr2OK7HZUaGrnT8qLqjBLJF8=";
+    hash = "sha256-L+IbcSUaxhTg2slNc5x1VJPnA5e2qrPEeWjspK2COAI=";
   };
 
   pythonRelaxDeps = [
@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "CLI tool for downloading videos from Twitch";
     homepage = "https://github.com/ihabunek/twitch-dl";
-    changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
       pbsds

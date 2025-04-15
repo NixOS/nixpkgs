@@ -3,10 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # bring your own
-  django,
+  # build-system
+  setuptools,
 
-  # propagates
+  # dependencies
+  django,
   python-stdnum,
 
   # tests
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "django-localflavor";
   version = "4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
@@ -26,9 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-UWp3ei1VlEsEfjbJIE+MpffSzYF4X1HEQw+z+5kZoP0=";
   };
 
-  buildInputs = [ django ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ python-stdnum ];
+  dependencies = [
+    django
+    python-stdnum
+  ];
 
   pythonImportsCheck = [
     # samples
@@ -41,12 +45,12 @@ buildPythonPackage rec {
     "localflavor.za"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
     description = "Country-specific Django helpers";

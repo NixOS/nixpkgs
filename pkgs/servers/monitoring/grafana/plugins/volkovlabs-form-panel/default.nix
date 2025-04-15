@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "volkovlabs-form-panel";
   version = "4.6.0";
   zipHash = "sha256-ne2dfCr+PBodeaxGfZL0VrAxHLYEAaeQfuZQf2F3s0s=";

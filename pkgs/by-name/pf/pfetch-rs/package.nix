@@ -12,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Gobidev";
-    repo = pname;
+    repo = "pfetch-rs";
     rev = "v${version}";
     hash = "sha256-Kgoo8piv4pNqzw9zQSEj7POSK6l+0KMvaNbvMp+bpF8=";
   };
 
-  cargoHash = "sha256-24t2T+YkhDfGrYbT1VWYxA20//q6ElbvVCPY7VsLXRA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-36MjBzSzEOVaSnd6dTqYnV+Pi+5EDoUskkYsvYMGrgg=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit

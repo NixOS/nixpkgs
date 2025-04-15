@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "mdtraj";
-  version = "1.10.2";
+  version = "1.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdtraj";
     repo = "mdtraj";
     tag = version;
-    hash = "sha256-0hSMKrY3p29IUmMuLsNUK4s/AM5zCzAh6Udg/xbeky0=";
+    hash = "sha256-xmxVPF6GhZpyuTxdmxB7mkfrDb1FIh9Z3obgUOdQmrw=";
   };
 
   patches = [
@@ -110,7 +110,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Open library for the analysis of molecular dynamics trajectories";
     homepage = "https://github.com/mdtraj/mdtraj";
-    changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${version}";
+    changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${src.tag}";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ natsukium ];
   };

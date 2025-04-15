@@ -15,19 +15,19 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.3.4";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "vercel";
-    repo = "turbo";
-    tag = "v${version}";
-    hash = "sha256-cvwYBdvBxkntCXA4FJMc54Rca+zoZEjyWZUQoMH9Qdc=";
+    repo = "turborepo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-crpEJdhO27cVXl4YnPmUwvJFAeezcxdS/vJPJ2m1VU8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-e9xq3xc8Rtuq3e/3IEwj9eR9SEj5N4bvsu4PFubm8mM=";
+  cargoHash = "sha256-7pcJ7NUTLe9rxLWnviJbWtTg1P145BzL1ZfWcuxPlSc=";
 
   nativeBuildInputs =
     [
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'v(\\d+\\.\\d+\\.\\d+)'"
+        "v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
   };
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance build system for JavaScript and TypeScript codebases";
     homepage = "https://turbo.build/";
-    changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
+    changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dlip
@@ -79,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "turbo";
   };
-}
+})

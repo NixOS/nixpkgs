@@ -15,7 +15,9 @@
   meta,
   webkitgtk_4_1,
   openssl,
+  jq,
 }:
+
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
@@ -28,11 +30,6 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  patches = [
-    # https://github.com/clash-verge-rev/clash-verge-rev/pull/2582
-    ./0001-enable-format_bytes_speed-for-every-platform.patch
-  ];
-
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -44,16 +41,18 @@ rustPlatform.buildRustPackage {
       --replace-fail '"kwriteconfig5"' '"${libsForQt5.kconfig}/bin/kwriteconfig5"' \
       --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
 
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${webui}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
-    sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
-    sed -i -e '/sidecar/d' -e '/resources/d' tauri.linux.conf.json
+    cat tauri.conf.json | jq 'del(.bundle.resources) | del(.bundle.externalBin) | .build.frontendDist = "${webui}" | .build.beforeBuildCommand = ""' > tauri.conf.json.2
+    mv tauri.conf.json.2 tauri.conf.json
+    cat tauri.linux.conf.json | jq 'del(.bundle.externalBin)' > tauri.linux.conf.json.2
+    mv tauri.linux.conf.json.2 tauri.linux.conf.json
+    chmod 777 ../.cargo
+    rm ../.cargo/config.toml
   '';
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.cargoSetupHook
+    jq
   ];
 
   buildInputs = [

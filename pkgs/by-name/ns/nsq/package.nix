@@ -29,5 +29,6 @@ buildGoModule rec {
     description = "Realtime distributed messaging platform";
     changelog = "https://github.com/nsqio/nsq/raw/v${version}/ChangeLog.md";
     license = licenses.mit;
+    maintainers = with maintainers; [ blakesmith ];
   };
 }

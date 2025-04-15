@@ -500,6 +500,12 @@ def _update_package(path, target):
             # incase there's no prefix, just rewrite without interpolation
             text = text.replace('"${version}";', "version;")
 
+            # update changelog to reference the src.tag
+            if result := re.search("changelog = \"[^\"]+\";", text):
+                cl_old = result[0]
+                cl_new = re.sub(r"v?\$\{(version|src.rev)\}", "${src.tag}", cl_old)
+                text = text.replace(cl_old, cl_new)
+
     with open(path, "w") as f:
         f.write(text)
 
@@ -550,6 +556,8 @@ def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwa
 
     if changelog := _get_attr_value(f"{pkgs_prefix}{pname}.meta.changelog"):
         msg += f"\n\n{changelog}"
+
+    msg += "\n\nThis commit was automatically generated using update-python-libraries."
 
     try:
         subprocess.check_call([GIT, "add", path])

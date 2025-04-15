@@ -47,13 +47,17 @@
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   testSupport ? true,
-  waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 
+assert lib.assertMsg (
+  waylandSupport -> openglSupport
+) "SDL3 requires OpenGL support to enable Wayland";
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.0";
+  version = "3.2.10";
 
   outputs = [
     "lib"
@@ -65,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-gVLZPuXtMdFhylxh3+LC/SJCaQiOwZpbVcBGctyGGYY=";
+    hash = "sha256-SylXpHPT4Y/37UapfLScJJ/CGniNyK4UNVAWax+WiBo=";
   };
 
   postPatch =
@@ -133,12 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXfixes
       xorg.libXi
       xorg.libXrandr
-    ];
-
-  propagatedBuildInputs = finalAttrs.dlopenPropagatedBuildInputs;
-
-  dlopenPropagatedBuildInputs =
-    [
+    ]
+    ++ [
       vulkan-headers
       vulkan-loader
     ]
@@ -172,11 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
     # helps them be found
-    NIX_LDFLAGS =
-      lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so")
-        "-rpath ${
-          lib.makeLibraryPath (finalAttrs.dlopenBuildInputs ++ finalAttrs.dlopenPropagatedBuildInputs)
-        }";
+    NIX_LDFLAGS = lib.optionalString (
+      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
+    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
   };
 
   passthru = {
@@ -219,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'release-(.*)'"
+        "release-(3\\..*)"
       ];
     };
   };
@@ -230,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ getchoo ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sdl3" ];
   };
 })

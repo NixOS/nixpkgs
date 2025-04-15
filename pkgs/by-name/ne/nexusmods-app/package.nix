@@ -8,9 +8,8 @@
   fetchgit,
   imagemagick,
   lib,
-  makeFontsConf,
-  runCommand,
   xdg-utils,
+  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -25,12 +24,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.7.2";
+  version = "0.9.2";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Kss1K1ZqXLZ/WbbyY3ZQRe8Kvmjdu3tRGfcagE7Q42Q=";
+    hash = "sha256-Xb/i25l0jLn87OeouD0+CRv11d8aOn7Sr69z3TkS6I4=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -60,13 +59,7 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
-  # TODO: remove .NET 8; StrawberryShake currently needs it
-  dotnet-sdk =
-    with dotnetCorePackages;
-    combinePackages [
-      sdk_9_0
-      runtime_8_0
-    ];
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
@@ -132,57 +125,22 @@ buildDotnetModule (finalAttrs: {
 
   disabledTests =
     [
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+      # Fails attempting to download game hashes DB from github:
+      # HttpRequestException : Resource temporarily unavailable (github.com:443)
+      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
 
-      # Fails in ofborg with VerifyException tests/Games/NexusMods.Games.StardewValley.Tests
-      "NexusMods.Games.StardewValley.Tests.StardewValleyInstallersTests.CanInstallMod"
-
-      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
-      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
+      # Fails attempting to fetch SMAPI version data from github:
+      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
     ]
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
     ];
 
-  passthru = {
-    tests =
-      let
-        runTest =
-          name: script:
-          runCommand "${pname}-test-${name}"
-            {
-              nativeBuildInputs = [ finalAttrs.finalPackage ];
-              FONTCONFIG_FILE = makeFontsConf {
-                fontDirectories = [ ];
-              };
-            }
-            ''
-              export XDG_DATA_HOME="$PWD/data"
-              export XDG_STATE_HOME="$PWD/state"
-              export XDG_CACHE_HOME="$PWD/cache"
-              mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
-              # TODO: on error, print $XDG_STATE_HOME/NexusMods.App/Logs/nexusmods.app.main.current.log
-              ${script}
-              touch $out
-            '';
-      in
-      {
-        serve = runTest "serve" ''
-          NexusMods.App
-        '';
-        help = runTest "help" ''
-          NexusMods.App --help
-        '';
-        associate-nxm = runTest "associate-nxm" ''
-          NexusMods.App associate-nxm
-        '';
-        list-tools = runTest "list-tools" ''
-          NexusMods.App list-tools
-        '';
-      };
-    updateScript = ./update.bash;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "NexusMods.App";

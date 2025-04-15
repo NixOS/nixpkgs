@@ -14,11 +14,13 @@
   meson,
   ninja,
   bzip2,
+  libarchive,
 }:
 
 let
   atLeast223 = lib.versionAtLeast nix.version "2.23";
   atLeast224 = lib.versionAtLeast nix.version "2.24";
+  atLeast226 = lib.versionAtLeast nix.version "2.26";
 
   mkConfigureOption =
     {
@@ -39,21 +41,24 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = "sourceRoot=$sourceRoot/${lib.optionalString atLeast224 "src"}/perl";
 
   # TODO: Remove this once the nix build also uses meson
-  postPatch = lib.optionalString atLeast224 ''
+  postPatch = lib.optionalString (atLeast224 && lib.versionOlder nix.version "2.27") ''
     substituteInPlace lib/Nix/Store.xs \
       --replace-fail 'config-util.hh' 'nix/config.h' \
       --replace-fail 'config-store.hh' 'nix/config.h'
   '';
 
-  buildInputs = [
-    boost
-    bzip2
-    curl
-    libsodium
-    nix
-    perl
-    xz
-  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) Security;
+  buildInputs =
+    [
+      boost
+      bzip2
+      curl
+      libsodium
+      nix
+      perl
+      xz
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) Security
+    ++ lib.optional atLeast226 libarchive;
 
   # Not cross-safe since Nix checks for curl/perl via
   # NEED_PROG/find_program, but both seem to be needed at runtime

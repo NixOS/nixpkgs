@@ -1,5 +1,10 @@
 # Fusion Inventory daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.fusionInventory;
 
@@ -11,7 +16,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -37,7 +43,6 @@ in {
       };
     };
   };
-
 
   ###### implementation
 

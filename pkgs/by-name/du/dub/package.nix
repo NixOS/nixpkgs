@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dub";
-  version = "1.38.1";
+  version = "1.39.0";
 
   enableParallelBuilding = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dlang";
     repo = "dub";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8Lr/0sx4SKwU1aNOxZArta0RXpDM+EWl29ZsPDdPWFo=";
+    hash = "sha256-73b15A9+hClD6IbuxTy9QZKpTKjUFYBuqGOclUyhrnM=";
   };
 
   postPatch = ''

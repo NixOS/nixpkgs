@@ -8,6 +8,7 @@
   makeWrapper,
   rresult,
   bos,
+  pcre2,
   re,
   camlp-streams,
   legacy ? false,
@@ -21,13 +22,13 @@ else
     params =
       if lib.versionAtLeast ocaml.version "4.12" && !legacy then
         rec {
-          version = "8.03.00";
+          version = "8.03.02";
 
           src = fetchFromGitHub {
             owner = "camlp5";
             repo = "camlp5";
             rev = version;
-            hash = "sha256-hu/279gBvUc7Z4jM6EHiar6Wm4vjkGXl+7bxowj+vlM=";
+            hash = "sha256-nz+VfGR/6FdBvMzPPpVpviAXXBWNqM3Ora96Yzx964o=";
           };
 
           nativeBuildInputs = [
@@ -38,10 +39,18 @@ else
           ];
           buildInputs = [
             bos
+            pcre2
             re
             rresult
           ];
           propagatedBuildInputs = [ camlp-streams ];
+          postInstall = ''
+            for prog in camlp5 camlp5o camlp5r camlp5sch mkcamlp5 ocpp5
+            do
+              wrapProgram $out/bin/$prog \
+                --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH"
+            done
+          '';
 
         }
       else

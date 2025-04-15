@@ -7,7 +7,7 @@
   extraPackages ? [ ],
   optionalDeps ? [
     jq
-    poppler_utils
+    poppler-utils
     _7zz
     ffmpeg
     fd
@@ -16,6 +16,7 @@
     zoxide
     imagemagick
     chafa
+    resvg
   ],
 
   # deps
@@ -24,7 +25,7 @@
 
   # optional deps
   jq,
-  poppler_utils,
+  poppler-utils,
   _7zz,
   ffmpeg,
   fd,
@@ -33,6 +34,7 @@
   zoxide,
   imagemagick,
   chafa,
+  resvg,
 
   settings ? { },
   plugins ? { },

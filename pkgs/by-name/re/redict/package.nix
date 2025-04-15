@@ -6,7 +6,6 @@
   lua,
   jemalloc,
   pkg-config,
-  nixosTests,
   tcl,
   which,
   ps,
@@ -103,8 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
-
-  passthru.tests.redict = nixosTests.redict;
 
   meta = {
     homepage = "https://redict.io";

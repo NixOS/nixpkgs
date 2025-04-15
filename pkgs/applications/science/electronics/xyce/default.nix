@@ -33,7 +33,7 @@ assert withMPI -> trilinos.withMPI;
 let
   version = "7.8.0";
 
-  # useing fetchurl or fetchFromGitHub doesn't include the manuals
+  # using fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
   xyce_src = fetchgit {
     url = "https://github.com/Xyce/Xyce.git";

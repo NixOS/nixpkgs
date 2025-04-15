@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5AIzMxEcxL/vYWx3D/meA///Zo+1210HUMEE4dFBhkc=";
   };
 
-  cargoHash = "sha256-Ya7RL3TuQjKkEkggK/ANChtVZRuTaooM+lE3KBZnvYU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AvoyJPh59fZPDcOtIZ4UFUgW83szBC3HOOlkxA3VFgE=";
 
   meta = with lib; {
     description = "Provides different tools for projects using the diesel_cli";

@@ -20,7 +20,7 @@
   fetchFromGitHub,
   rustPlatform,
   llvmPackages_19,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -45,7 +45,7 @@ let
   };
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname version;
 
   # Use `fetchFromGitHub` instead of `fetchCrate` because the latter does not
@@ -59,10 +59,11 @@ rustPlatform.buildRustPackage {
 
   # Upstream doesn't include the lockfile so we need to add it back
   postUnpack = ''
-    cp ${cargoLock} source/Cargo.lock
+    cp ${cargoLock} ${finalAttrs.src.name}/Cargo.lock
   '';
 
-  cargoHash = "sha256-kYKQ7ddgoSvarF0HG/yESu5cU87DUgYm9tDkem5a/gw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Sr56iu51WjVi8qCqSRjix/e6NNvRmqIvAOlgSArF48I=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests
@@ -70,7 +71,7 @@ rustPlatform.buildRustPackage {
   LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.
@@ -102,4 +103,4 @@ rustPlatform.buildRustPackage {
     # The profiler runtime is (currently) disabled on non-Linux platforms
     broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
   };
-}
+})

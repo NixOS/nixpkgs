@@ -7,14 +7,14 @@
 }:
 mkKdeDerivation rec {
   pname = "kdevelop-pg-qt";
-  version = "2.3.0";
+  version = "2.4.0";
 
   # Breaks with split -dev
   outputs = [ "out" ];
 
   src = fetchurl {
     url = "mirror://kde/stable/kdevelop-pg-qt/${version}/src/kdevelop-pg-qt-${version}.tar.xz";
-    hash = "sha256-PT7zyzlelnDmDDmepthlzHluAOUsNV7tlD++yn2nEg0=";
+    hash = "sha256-rL62HIL116ot3PoY477l4lWRBpcL1tFG1GyV+NAnu4Y=";
   };
 
   extraNativeBuildInputs = [

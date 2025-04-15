@@ -1,8 +1,10 @@
 {
+  argcomplete,
   lib,
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  installShellFiles,
   pytestCheckHook,
   p7zip,
   cabextract,
@@ -58,6 +60,17 @@ buildPythonPackage rec {
     substituteInPlace patoolib/util.py \
       --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
   '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd patool \
+      --bash <(${argcomplete}/bin/register-python-argcomplete -s bash $out/bin/patool) \
+      --fish <(${argcomplete}/bin/register-python-argcomplete -s fish $out/bin/patool) \
+      --zsh <(${argcomplete}/bin/register-python-argcomplete -s zsh $out/bin/patool)
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 

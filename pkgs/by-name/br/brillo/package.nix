@@ -4,24 +4,25 @@
   fetchFromGitLab,
   go-md2man,
   coreutils,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation rec {
   pname = "brillo";
-  version = "1.4.12";
+  version = "1.4.13";
 
   src = fetchFromGitLab {
     owner = "cameronnemo";
     repo = "brillo";
     rev = "v${version}";
-    hash = "sha256-dKGNioWGVAFuB4kySO+QGTnstyAD0bt4/6FBVwuRxJo=";
+    hash = "sha256-+BUyM3FFnsk87NFaD9FBwdLqf6wsNhX+FDB7nqhgAmM=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./udev-rule.patch;
+    (replaceVars ./udev-rule.patch {
       inherit coreutils;
+      # patch context
+      group = null;
     })
   ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
     license = [
-      licenses.gpl3
+      licenses.gpl3Only
       licenses.bsd0
     ];
     platforms = platforms.linux;

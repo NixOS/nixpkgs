@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
-    repo = pname;
+    repo = "cargo-geiger";
     rev = "cargo-geiger@v${version}";
     hash = "sha256-/5yuayqneZV6aVQ6YFgqNS2XY3W6yETRQ0kE5ovc7p8=";
   };
@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     ./fix-build-with-rust-1.80.patch
   ];
 
-  cargoHash = "sha256-511KeTykHw3xbnsuwIt2QmBK3mG9yK23z0yrS3eIY74=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-n6RfulzrK9QebC1tgVVd/YnBc21Jf0OSfHApRO1c0ew=";
 
   patches = [
     ./allow-warnings.patch

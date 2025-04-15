@@ -13,7 +13,7 @@ let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) optionalString;
 
-  makeBird2Host =
+  makeBirdHost =
     hostId:
     { pkgs, ... }:
     {
@@ -32,7 +32,7 @@ let
         networkConfig.Address = "10.0.0.${hostId}/24";
       };
 
-      services.bird2 = {
+      services.bird = {
         enable = true;
 
         config = ''
@@ -107,17 +107,17 @@ let
     };
 in
 makeTest {
-  name = "bird2";
+  name = "bird";
 
-  nodes.host1 = makeBird2Host "1";
-  nodes.host2 = makeBird2Host "2";
+  nodes.host1 = makeBirdHost "1";
+  nodes.host2 = makeBirdHost "2";
 
   testScript = ''
     start_all()
 
-    host1.wait_for_unit("bird2.service")
-    host2.wait_for_unit("bird2.service")
-    host1.succeed("systemctl reload bird2.service")
+    host1.wait_for_unit("bird.service")
+    host2.wait_for_unit("bird.service")
+    host1.succeed("systemctl reload bird.service")
 
     with subtest("Waiting for advertised IPv4 routes"):
       host1.wait_until_succeeds("ip --json r | jq -e 'map(select(.dst == \"10.10.0.2\")) | any'")

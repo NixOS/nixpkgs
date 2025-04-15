@@ -2,18 +2,23 @@
   callPackage,
   lib,
   stdenv,
+  meta,
 }:
 let
-  examples-shell = callPackage ./examples/shell.nix { };
-  examples-shell-with-emulator = callPackage ./examples/shell-with-emulator.nix { };
-  examples-shell-without-emulator = callPackage ./examples/shell-without-emulator.nix { };
+  examples-shell = callPackage ./examples/shell.nix { licenseAccepted = true; };
+  examples-shell-with-emulator = callPackage ./examples/shell-with-emulator.nix {
+    licenseAccepted = true;
+  };
+  examples-shell-without-emulator = callPackage ./examples/shell-without-emulator.nix {
+    licenseAccepted = true;
+  };
   all-tests =
     examples-shell.passthru.tests
     // (examples-shell-with-emulator.passthru.tests // examples-shell-without-emulator.passthru.tests);
 in
 stdenv.mkDerivation {
   name = "androidenv-test-suite";
-  buidInputs = lib.mapAttrsToList (name: value: value) all-tests;
+  buildInputs = lib.mapAttrsToList (name: value: value) all-tests;
 
   buildCommand = ''
     touch $out
@@ -21,5 +26,14 @@ stdenv.mkDerivation {
 
   passthru.tests = all-tests;
 
-  meta.timeout = 60;
+  # This is the toplevel package, so inherit the update script
+  passthru.updateScript = {
+    command = [ ./update.sh ];
+    attrPath = "androidenv.test-suite";
+    supportedFeatures = [ "commit" ];
+  };
+
+  meta = meta // {
+    timeout = 60;
+  };
 }

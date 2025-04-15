@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
+  libGL,
   IOKit,
   Foundation,
   OpenGL,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       SDL2
+      libGL
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
     # Expects SDL2.framework in specific location, which we don't have
-    "-DSDL2_INCLUDE_DIRS=${SDL2.dev}/include/SDL2"
+    "-DSDL2_INCLUDE_DIRS=${lib.getInclude SDL2}/include/SDL2"
   ];
 
   installPhase =

@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "fceux";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       sbruder
     ];
     platforms = lib.platforms.linux;

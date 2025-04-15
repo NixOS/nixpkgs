@@ -4,6 +4,7 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
+  nix-update-script,
   installShellFiles,
   lib,
   python3Packages,
@@ -14,19 +15,22 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.8.14";
+  version = "1.9.14";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WYs7wiwZ1TvTdeUpWv7FbREXWfdGcYRarP4FXFOfp0Y=";
+    hash = "sha256-w503lwXlKWlTsguzECUGmsbhvdJzTF4XK+Ib2KuD2DE=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs =
     with python3Packages;
     [
       flexmock
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
     ]
     ++ optional-dependencies.apprise;
 
@@ -81,6 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://torsion.org/borgmatic/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    mainProgram = "borgmatic";
     maintainers = with lib.maintainers; [
       imlonghao
       x123

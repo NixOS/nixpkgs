@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librecad";
-  version = "2.2.1";
+  version = "2.2.1.1";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GBn4lduzaKWEWzeTNjC9TpioSouVj+jVl32PLjc8FBc=";
+    hash = "sha256-0RhdX8wUjZ2JQazhFjkfdnxvh5VhXfVMspvhBF03VNk=";
   };
 
   buildInputs = [

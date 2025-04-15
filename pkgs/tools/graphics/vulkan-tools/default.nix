@@ -26,19 +26,22 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.296.0";
+  version = "1.4.309.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-+24IVmmcxuPaT/vYRYZ4yluHS/uKfWiVa7yIvzsdTuQ=";
+    hash = "sha256-1bODaBxL0pb+YQxqnuE9lBk7NXGKpoj4ZsInofLcm3s=";
   };
+
+  patches = [ ./wayland-scanner.patch ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
+    wayland-scanner
   ];
 
   buildInputs =
@@ -57,7 +60,6 @@ stdenv.mkDerivation rec {
       libXrandr
       wayland
       wayland-protocols
-      wayland-scanner
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       moltenvk

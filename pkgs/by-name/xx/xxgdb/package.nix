@@ -11,12 +11,12 @@
   libXt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xxgdb";
   version = "1.12";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/x/xxgdb/xxgdb_${version}.orig.tar.gz";
+    url = "http://deb.debian.org/debian/pool/main/x/xxgdb/xxgdb_${finalAttrs.version}.orig.tar.gz";
     sha256 = "0jwazg99wk2l7r390ggw0yr8xipl07bp0qynni141xss530i6d1a";
   };
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     # http://zhu-qy.blogspot.com.es/2012/11/slackware-14-i-still-got-xxgdb-all-ptys.html
     ./xxgdb-pty.patch
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   nativeBuildInputs = [
     imake
@@ -62,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.all;
   };
-}
+})

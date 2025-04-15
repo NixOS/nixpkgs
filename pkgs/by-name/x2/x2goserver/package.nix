@@ -36,7 +36,7 @@ let
     sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
   };
 
-  x2go-perl = perlPackages.buildPerlPackage rec {
+  x2go-perl = perlPackages.buildPerlPackage {
     pname = "X2Go";
     inherit version src;
     makeFlags = [
@@ -96,7 +96,7 @@ let
     xorg.setxkbmap
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
   buildInputs = [

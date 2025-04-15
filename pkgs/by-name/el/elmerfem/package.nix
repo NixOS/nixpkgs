@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elmercsc";
-    repo = pname;
+    repo = "elmerfem";
     rev = "0fcced06f91c93f44557efd6a5f10b2da5c7066c";
     hash = "sha256-UuARDYW7D3a4dB6I86s2Ed5ecQxc+Y/es3YIeF2VyTc=";
   };

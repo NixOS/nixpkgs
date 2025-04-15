@@ -1,41 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  dataclasses-json,
   fetchFromGitHub,
-  langchain-core,
-  langgraph-sdk,
-  msgpack,
+
+  # build system
   poetry-core,
+
+  # dependencies
+  langchain-core,
+  msgpack,
+  ormsgpack,
+
+  # testing
+  dataclasses-json,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.8";
+  version = "2.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-obDK6wn+oo8zDQsidogwKTIgT5wuUH/l4y+12cttkd0=";
+    hash = "sha256-NlTpBXBeADlIHQDlt0muJEuoKOgXiAtAo8GoU5CsvZo=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
 
   build-system = [ poetry-core ];
 
-  dependencies = [ langchain-core ];
+  dependencies = [
+    langchain-core
+    ormsgpack
+  ];
 
   propagatedBuildInputs = [ msgpack ];
-
-  pythonRelaxDeps = [ "msgpack" ]; # Can drop after msgpack 1.0.10 lands in nixpkgs
 
   pythonImportsCheck = [ "langgraph.checkpoint" ];
 
@@ -51,8 +58,11 @@ buildPythonPackage rec {
     "test_serde_jsonplus"
   ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "checkpoint==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

@@ -14,13 +14,13 @@
   # tests
   psutil,
   pytestCheckHook,
-  redis-server,
+  redisTestHook,
   sentry-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.16.2";
+  version = "2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-8uhCV4aJNbY273jOa9D5OlgEG1w3hXVncClKQTO9Pyk=";
+    hash = "sha256-RuqLfPEwdwfJo+mdY4vB3lpyGkbP/GQDfRU+TmUur3s=";
   };
 
   build-system = [ hatchling ];
@@ -42,17 +42,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
+    redisTestHook
     sentry-sdk
   ];
-
-  preCheck = ''
-    PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
-  '';
-
-  postCheck = ''
-    kill %%
-  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -66,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    changelog = "https://github.com/rq/rq/releases/tag/v${version}";
+    changelog = "https://github.com/rq/rq/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mrmebelman ];
   };

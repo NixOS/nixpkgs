@@ -17,11 +17,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-TmFvv+jzOSM8kKCxBbUoDsUjKRPTplhWheVfIjS5nsY=";
   };
 
-  cargoHash = "sha256-nfz5tpqJSPJvYDvzsl0tQHv0olLOi1d1PTo3lFDmIkI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QjQoGtLF5BAxWFiLZZYCpwrYCdiVfvG/lAukCNZGsec=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

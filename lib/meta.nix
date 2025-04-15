@@ -6,13 +6,19 @@
 { lib }:
 
 let
-  inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (lib)
+    matchAttrs
+    any
+    all
+    isDerivation
+    getBin
+    assertMsg
+    ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
   inherit (builtins) isString match typeOf;
 
 in
 rec {
-
 
   /**
     Add to or override the meta attributes of the given
@@ -28,7 +34,6 @@ rec {
 
     : 2\. Function argument
 
-
     # Examples
     :::{.example}
     ## `lib.meta.addMetaAttrs` usage example
@@ -39,9 +44,7 @@ rec {
 
     :::
   */
-  addMetaAttrs = newAttrs: drv:
-    drv // { meta = (drv.meta or {}) // newAttrs; };
-
+  addMetaAttrs = newAttrs: drv: drv // { meta = (drv.meta or { }) // newAttrs; };
 
   /**
     Disable Hydra builds of given derivation.
@@ -52,8 +55,7 @@ rec {
 
     : 1\. Function argument
   */
-  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
-
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
   /**
     Change the [symbolic name of a derivation](https://nixos.org/manual/nix/stable/language/derivations.html#attr-name).
@@ -72,8 +74,7 @@ rec {
 
     : 2\. Function argument
   */
-  setName = name: drv: drv // {inherit name;};
-
+  setName = name: drv: drv // { inherit name; };
 
   /**
     Like `setName`, but takes the previous name as an argument.
@@ -88,7 +89,6 @@ rec {
 
     : 2\. Function argument
 
-
     # Examples
     :::{.example}
     ## `lib.meta.updateName` usage example
@@ -99,8 +99,7 @@ rec {
 
     :::
   */
-  updateName = updater: drv: drv // {name = updater (drv.name);};
-
+  updateName = updater: drv: drv // { name = updater (drv.name); };
 
   /**
     Append a suffix to the name of a package (before the version
@@ -112,13 +111,18 @@ rec {
 
     : 1\. Function argument
   */
-  appendToName = suffix: updateName (name:
-    let x = builtins.parseDrvName name; in "${x.name}-${suffix}-${x.version}");
-
+  appendToName =
+    suffix:
+    updateName (
+      name:
+      let
+        x = builtins.parseDrvName name;
+      in
+      "${x.name}-${suffix}-${x.version}"
+    );
 
   /**
     Apply a function to each derivation and only to derivations in an attrset.
-
 
     # Inputs
 
@@ -130,11 +134,12 @@ rec {
 
     : 2\. Function argument
   */
-  mapDerivationAttrset = f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
+  mapDerivationAttrset =
+    f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
 
   /**
     The default priority of packages in Nix. See `defaultPriority` in [`src/nix/profile.cc`](https://github.com/NixOS/nix/blob/master/src/nix/profile.cc#L47).
-   */
+  */
   defaultPriority = 5;
 
   /**
@@ -159,7 +164,6 @@ rec {
     `drv`
 
     : 1\. Function argument
-
   */
   lowPrio = setPrio 10;
 
@@ -173,7 +177,6 @@ rec {
     : 1\. Function argument
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
-
 
   /**
     Increase the nix-env priority of the package, i.e., this
@@ -198,7 +201,6 @@ rec {
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
 
-
   /**
     Check to see if a platform is matched by the given `meta.platforms`
     element.
@@ -214,7 +216,6 @@ rec {
     We can inject these into a pattern for the whole of a structured platform,
     and then match that.
 
-
     # Inputs
 
     `platform`
@@ -224,7 +225,6 @@ rec {
     `elem`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -237,21 +237,24 @@ rec {
 
     :::
   */
-  platformMatch = platform: elem: (
-    # Check with simple string comparison if elem was a string.
-    #
-    # The majority of comparisons done with this function will be against meta.platforms
-    # which contains a simple platform string.
-    #
-    # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
-    # because this is a hot path for nixpkgs.
-    if isString elem then platform ? system && elem == platform.system
-    else matchAttrs (
-      # Normalize platform attrset.
-      if elem ? parsed then elem
-      else { parsed = elem; }
-    ) platform
-  );
+  platformMatch =
+    platform: elem:
+    (
+      # Check with simple string comparison if elem was a string.
+      #
+      # The majority of comparisons done with this function will be against meta.platforms
+      # which contains a simple platform string.
+      #
+      # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
+      # because this is a hot path for nixpkgs.
+      if isString elem then
+        platform ? system && elem == platform.system
+      else
+        matchAttrs (
+          # Normalize platform attrset.
+          if elem ? parsed then elem else { parsed = elem; }
+        ) platform
+    );
 
   /**
     Check if a package is available on a given platform.
@@ -263,7 +266,6 @@ rec {
 
     2. None of `meta.badPlatforms` pattern matches the given platform.
 
-
     # Inputs
 
     `platform`
@@ -273,7 +275,6 @@ rec {
     `pkg`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -286,9 +287,10 @@ rec {
 
     :::
   */
-  availableOn = platform: pkg:
-    ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
-    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+  availableOn =
+    platform: pkg:
+    ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
+    && all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
 
   /**
     Mapping of SPDX ID to the attributes in lib.licenses.
@@ -309,13 +311,10 @@ rec {
 
     :::
   */
-  licensesSpdx =
-    mapAttrs'
-    (_key: license: {
-      name = license.spdxId;
-      value = license;
-    })
-    (filterAttrs (_key: license: license ? spdxId) lib.licenses);
+  licensesSpdx = mapAttrs' (_key: license: {
+    name = license.spdxId;
+    value = license;
+  }) (filterAttrs (_key: license: license ? spdxId) lib.licenses);
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
@@ -348,10 +347,11 @@ rec {
   */
   getLicenseFromSpdxId =
     licstr:
-      getLicenseFromSpdxIdOr licstr (
-        lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
-        { shortName = licstr; }
-      );
+    getLicenseFromSpdxIdOr licstr (
+      lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}" {
+        shortName = licstr;
+      }
+    );
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
@@ -398,12 +398,11 @@ rec {
         name = lib.toLower name;
         inherit value;
       }) licensesSpdx;
-    in licstr: default:
-      lowercaseLicenses.${ lib.toLower licstr } or default;
+    in
+    licstr: default: lowercaseLicenses.${lib.toLower licstr} or default;
 
   /**
     Get the path to the main program of a package based on meta.mainProgram
-
 
     # Inputs
 
@@ -430,16 +429,22 @@ rec {
 
     :::
   */
-  getExe = x: getExe' x (x.meta.mainProgram or (
-    # This could be turned into an error when 23.05 is at end of life
-    lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
-    lib.getName
-    x
-  ));
+  getExe =
+    x:
+    getExe' x (
+      x.meta.mainProgram or (
+        # This could be turned into an error when 23.05 is at end of life
+        lib.warn
+          "getExe: Package ${
+            lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name
+          } does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+          lib.getName
+          x
+      )
+    );
 
   /**
     Get the path of a program of a derivation.
-
 
     # Inputs
 
@@ -470,7 +475,8 @@ rec {
 
     :::
   */
-  getExe' = x: y:
+  getExe' =
+    x: y:
     assert assertMsg (isDerivation x)
       "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
     assert assertMsg (isString y)

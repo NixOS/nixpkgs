@@ -8,7 +8,6 @@
   wrapGAppsHook3,
   curl,
   fuse3,
-  fetchpatch2,
   desktopToDarwinBundle,
   glib,
   gtk3,
@@ -16,7 +15,7 @@
   libxkbfile,
   libX11,
   python3,
-  freerdp3,
+  freerdp,
   libssh,
   libgcrypt,
   gnutls,
@@ -77,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       gettext
       libxkbfile
       libX11
-      freerdp3
+      freerdp
       libssh
       libgcrypt
       gnutls
@@ -108,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
     ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
     ++ lib.optionals withVte [ vte ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   cmakeFlags =
     [

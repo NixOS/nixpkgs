@@ -1,12 +1,13 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
   inherit (pkgs) lib;
 
-  # Test cases from https://docs.pgvecto.rs/use-cases/hybrid-search.html
+  # Test cases from https://docs.vectorchord.ai/use-case/hybrid-search.html
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION vectors;
 
@@ -72,11 +73,7 @@ let
         '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.pgvecto-rs.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.pgvecto-rs.meta.broken;
+}

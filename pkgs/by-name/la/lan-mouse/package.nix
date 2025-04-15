@@ -47,7 +47,8 @@ rustPlatform.buildRustPackage rec {
     libXtst
   ];
 
-  cargoHash = "sha256-RP3Jw0b2h8KJlVdd8X/AkkmGdRlIfG2tkPtUKohDxvA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+UXRBYfbkb114mwDGj36oG5ZT3TQtcEzsbyZvtWTMxM=";
 
   meta = {
     description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";

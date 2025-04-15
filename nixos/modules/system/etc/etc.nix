@@ -194,9 +194,14 @@ in
                   default = "+${toString config.uid}";
                   type = lib.types.str;
                   description = ''
-                    User name of created file.
-                    Only takes effect when the file is copied (that is, the mode is not 'symlink').
-                    Changing this option takes precedence over `uid`.
+                    User name of file owner.
+
+                    Only takes effect when the file is copied (that is, the
+                    mode is not `symlink`).
+
+                    When `services.userborn.enable`, this option has no effect.
+                    You have to assign a `uid` instead. Otherwise this option
+                    takes precedence over `uid`.
                   '';
                 };
 
@@ -204,9 +209,14 @@ in
                   default = "+${toString config.gid}";
                   type = lib.types.str;
                   description = ''
-                    Group name of created file.
-                    Only takes effect when the file is copied (that is, the mode is not 'symlink').
-                    Changing this option takes precedence over `gid`.
+                    Group name of file owner.
+
+                    Only takes effect when the file is copied (that is, the
+                    mode is not `symlink`).
+
+                    When `services.userborn.enable`, this option has no effect.
+                    You have to assign a `gid` instead. Otherwise this option
+                    takes precedence over `gid`.
                   '';
                 };
 

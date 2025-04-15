@@ -7,6 +7,7 @@
   perl,
   pkg-config,
   SDL2,
+  libX11,
   libXext,
   Cocoa,
   utf8proc,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20241226";
+  version = "20250313";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
     tag = version;
-    hash = "sha256-CZc5rIAgEydb8JhtkRSqEB9PI7TC58oJZg939GIEiMs=";
+    hash = "sha256-AiQ5+HTosVOR+Z5+uT6COMLvkGS3zvXtkCkg16MhVf4=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       SDL2
+      libX11
       utf8proc
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

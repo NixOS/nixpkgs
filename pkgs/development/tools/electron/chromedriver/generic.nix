@@ -94,7 +94,7 @@ let
     dontUnpack = true;
     dontBuild = true;
 
-    # darwin distributions come with libffmpeg dependecy + icudtl.dat file
+    # darwin distributions come with libffmpeg dependency + icudtl.dat file
     installPhase = ''
       runHook preInstall
       unzip $src

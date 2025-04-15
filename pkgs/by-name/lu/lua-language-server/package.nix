@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.13.5";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-t1kKRLrh5gVWIiVNEW2O3YAyECVzWc84Wp91Sc9fTrU=";
+    hash = "sha256-+pxDCjBcNYpSGZJpwJhL/PsARNhqdIXRHKj9DQvOyLE=";
     fetchSubmodules = true;
   };
 
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

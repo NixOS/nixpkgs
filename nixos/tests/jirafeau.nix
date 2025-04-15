@@ -3,7 +3,7 @@ import ./make-test-python.nix (
 
   {
     name = "jirafeau";
-    meta.maintainers = with lib.maintainers; [ davidtwco ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { pkgs, ... }:

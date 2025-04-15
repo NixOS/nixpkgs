@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   clangStdenv,
   llvmPackages,
   fetchFromGitHub,
@@ -44,12 +45,12 @@
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2025-01-05";
+  version = "2025-02-07";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "92a13b4f06221ef26c901130c0c52658976cdfb2";
-    hash = "sha256-803pDT/yq7eBk4J3E1JwKdhurnupPdB4A9xroLRg3+0=";
+    rev = "1308a7d476facb466bf9fae1e77666c35c8e3c8f";
+    hash = "sha256-+0cQ5mgRzOPfP6nl/rfC/hnw3V7yvGJCyLU8hOmlGOc=";
     # Unfortunately, we can't selectively fetch submodules. It would be good
     # to see that we don't accidentally depend on it.
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
@@ -124,9 +125,20 @@ clangStdenv.mkDerivation rec {
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+
+    # The sources enable this for only apple. We turn it off globally anyway to stay
+    # consistent.
+    "-DUSE_QT6=OFF"
   ];
 
-  doCheck = true;
+  # tests rely on sysprof which is not available on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin
+  '';
 
   nativeCheckInputs = [
     mesa.llvmpipeHook

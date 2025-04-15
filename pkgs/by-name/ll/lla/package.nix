@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  cargoHash = "sha256-U0peFuyWZ0RP1Chtj7WY646fIQ8Q+HB2gtnhTO3hhiM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aX8nm/V0ug2g40QeFU9AWxjuFAnW+gYTR8RC5CV7wRQ=";
 
   cargoBuildFlags = [ "--workspace" ];
 

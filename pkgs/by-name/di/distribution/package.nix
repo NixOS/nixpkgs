@@ -7,15 +7,15 @@
   distribution,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "distribution";
-  version = "3.0.0-rc.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "distribution";
     repo = "distribution";
-    tag = "v${version}";
-    hash = "sha256-OIym8qenQl/50qUNGKlROyLnbaxfzcVaQhHyIRpEjpA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-myezQTEdH7kkpCoAeZMf5OBxT4Bz8Qx6vCnwim230RY=";
   };
 
   vendorHash = null;
@@ -30,7 +30,7 @@ buildGoModule rec {
   passthru = {
     tests.version = testers.testVersion {
       package = distribution;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
@@ -50,4 +50,4 @@ buildGoModule rec {
     mainProgram = "registry";
     platforms = platforms.unix;
   };
-}
+})

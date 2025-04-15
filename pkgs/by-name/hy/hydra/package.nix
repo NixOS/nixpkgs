@@ -1,57 +1,60 @@
-{ stdenv
-, lib
-, nix
-, perlPackages
-, buildEnv
-, makeWrapper
-, unzip
-, pkg-config
-, libpqxx
-, top-git
-, mercurial
-, darcs
-, subversion
-, breezy
-, openssl
-, bzip2
-, libxslt
-, perl
-, postgresql
-, prometheus-cpp
-, nukeReferences
-, git
-, nlohmann_json
-, openssh
-, openldap
-, gnused
-, coreutils
-, findutils
-, gzip
-, xz
-, gnutar
-, rpm
-, dpkg
-, cdrkit
-, pixz
-, boost
-, mdbook
-, foreman
-, python3
-, libressl
-, cacert
-, glibcLocales
-, meson
-, ninja
-, fetchFromGitHub
-, nixosTests
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  nix,
+  perlPackages,
+  buildEnv,
+  makeWrapper,
+  unzip,
+  pkg-config,
+  libpqxx,
+  top-git,
+  mercurial,
+  darcs,
+  subversion,
+  breezy,
+  openssl,
+  bzip2,
+  libxslt,
+  perl,
+  postgresql,
+  prometheus-cpp,
+  nukeReferences,
+  git,
+  nlohmann_json,
+  openssh,
+  openldap,
+  gnused,
+  coreutils,
+  findutils,
+  gzip,
+  xz,
+  gnutar,
+  rpm,
+  dpkg,
+  cdrkit,
+  pixz,
+  boost,
+  mdbook,
+  foreman,
+  python3,
+  libressl,
+  cacert,
+  glibcLocales,
+  meson,
+  ninja,
+  nix-eval-jobs,
+  fetchFromGitHub,
+  nixosTests,
+  unstableGitUpdater,
 }:
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [
+    paths =
+      with perlPackages;
+      lib.closePropagation [
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -76,6 +79,7 @@ let
         CryptRandPasswd
         DBDPg
         DBDSQLite
+        DBIxClassHelpers
         DataDump
         DateTime
         DigestSHA1
@@ -118,23 +122,27 @@ let
         UUID4Tiny
         XMLSimple
         YAML
-        nix.perl-bindings
+        (nix.libs.nix-perl-bindings or nix.perl-bindings)
         git
       ];
   };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-12-05";
+  version = "0-unstable-2025-04-07";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "250668a19fa4d8ff9a6176ee6c44ca3003adedf1";
-    hash = "sha256-r+t/0U8Pp6/Lvi3s3v8nDB9xCggvxFsnCEJ9TuZvVJc=";
+    rev = "1c52c4c0ed596ea71de370562ed5af1604bd2183";
+    hash = "sha256-pcZA2SA7nskxsvDYp3nzF5V258b67YrZONv9G3PhLCE=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     unzip
@@ -152,7 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pixz
     boost
-    postgresql
     nlohmann_json
     prometheus-cpp
   ];
@@ -162,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
+      nix-eval-jobs
       coreutils
       findutils
       pixz
@@ -176,7 +184,12 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      rpm
+      dpkg
+      cdrkit
+    ]
   );
 
   nativeBuildInputs = [
@@ -194,7 +207,9 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
     python3
     libressl.nc
+    nix-eval-jobs
     openldap
+    postgresql
   ];
 
   env = {
@@ -202,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   shellHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
+    PATH=$(pwd)/src/script:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
@@ -228,7 +243,8 @@ stdenv.mkDerivation (finalAttrs: {
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nix.name or "unknown"}
+            --set NIX_RELEASE ${nix.name or "unknown"} \
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
     done
   '';
 
@@ -236,8 +252,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit nix perlDeps;
-    tests.basic = nixosTests.hydra.hydra;
-    updateScript = unstableGitUpdater {};
+    tests = { inherit (nixosTests) hydra; };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {

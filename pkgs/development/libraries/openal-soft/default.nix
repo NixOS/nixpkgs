@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   removeReferencesTo,
-  alsaSupport ? !stdenv.hostPlatform.isDarwin,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   dbusSupport ? !stdenv.hostPlatform.isDarwin,
   dbus,
@@ -16,28 +16,19 @@
   CoreServices,
   AudioUnit,
   AudioToolbox,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
-  version = "1.23.1";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
-    sha256 = "sha256-jwY1NzNJdWIvVv7TvJyg4cIGFLWGZhL3BkMI1NbOEG0=";
+    sha256 = "sha256-ECrIkxMACPsWehtJWwTmoYj6hGcsdxwVuTiQywG36Y8=";
   };
-
-  patches = [
-    # this will make it find its own data files (e.g. HRTF profiles)
-    # without any other configuration
-    ./search-out.patch
-  ];
-  postPatch = ''
-    substituteInPlace core/helpers.cpp \
-      --replace "@OUT@" $out
-  '';
 
   strictDeps = true;
 
@@ -63,15 +54,21 @@ stdenv.mkDerivation rec {
       # Automatically links dependencies without having to rely on dlopen, thus
       # removes the need for NIX_LDFLAGS.
       "-DALSOFT_DLOPEN=OFF"
+
+      # allow oal-soft to find its own data files (e.g. HRTF profiles)
+      "-DALSOFT_SEARCH_INSTALL_DATADIR=1"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # https://github.com/NixOS/nixpkgs/issues/183774
-      "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
+      "-DALSOFT_BACKEND_OSS=OFF"
     ];
 
-  postInstall = lib.optional pipewireSupport ''
-    remove-references-to -t ${pipewire.dev} $(readlink -f $out/lib/*.so)
-  '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = with lib; {
     description = "OpenAL alternative";

@@ -5,7 +5,7 @@
   netlify-cli,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "esbuild";
   version = "0.14.39";
 

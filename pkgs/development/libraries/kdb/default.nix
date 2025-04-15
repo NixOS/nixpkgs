@@ -8,7 +8,7 @@
   kcoreaddons,
   python3,
   sqlite,
-  postgresql,
+  libpq,
   libmysqlclient,
   qttools,
 }:
@@ -44,7 +44,7 @@ mkDerivation rec {
     kcoreaddons
     python3
     sqlite
-    postgresql
+    libpq
     libmysqlclient
   ];
 

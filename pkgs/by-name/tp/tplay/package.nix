@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SRn7kg5FdSimKMFowKNUIan+MrojtNO0apeehIRTzfw=";
   };
 
-  cargoHash = "sha256-ztWs20Vl+fX0enL12pybiM6lhFh0/EFa1aSTRpzz64g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SzOx9IPp+TjiJpAEX8+GhZ+UEEmqNpI67S40OiYrHfM=";
   checkFlags = [
     # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"

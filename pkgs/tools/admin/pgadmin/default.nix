@@ -16,19 +16,19 @@
 
 let
   pname = "pgadmin";
-  version = "8.12";
-  yarnHash = "sha256-C5CI8oP9vEana3OEs1yAsSSTvO2uLEuCU1nHhC7LerY=";
+  version = "9.2";
+  yarnHash = "sha256-nFYzaMRASkorEJC5UgLZjDY99ptwPqOMxOomhY/CY5k=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-OIFHaU+Ty0xJn42iqYhse8dfFJZpx8AV/10RNxp1Y4o=";
+    hash = "sha256-2Hl9YpXXlfkD0KOEV0dD0Ib1QlwyY3tXm56sDyvafKE=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
+  pythonPackages = python3.pkgs.overrideScope (final: prev: { });
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
@@ -78,7 +78,7 @@ pythonPackages.buildPythonApplication rec {
     sed 's|*|0|g' -i requirements.txt
     # remove packageManager from package.json so we can work without corepack
     substituteInPlace web/package.json \
-      --replace-fail "\"packageManager\": \"yarn@3.8.3\"" "\"\": \"\""
+      --replace-fail "\"packageManager\": \"yarn@3.8.7\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
       --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
@@ -196,7 +196,6 @@ pythonPackages.buildPythonApplication rec {
     azure-identity
     sphinxcontrib-youtube
     dnspython
-    greenlet
     speaklater3
     google-auth-oauthlib
     google-api-python-client
@@ -220,7 +219,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  doCheck = !postgresqlTestHook.meta.broken;
 
   checkPhase = ''
     runHook preCheck

@@ -222,6 +222,10 @@ let
           else
             mkdir -p "''${!package}"/bin
             mv "$out/bin/$bin" "''${!package}"/bin/
+            if [[ -e "$out/share/texmf-dist/scripts/$bin" ]] ; then
+              mkdir -p "''${!package}"/share/texmf-dist/scripts
+              mv "$out/share/texmf-dist/scripts/$bin" "''${!package}"/share/texmf-dist/scripts/
+            fi
           fi
         else
           echo "WARNING: no output known for binary '$bin', leaving in 'out'"
@@ -246,6 +250,16 @@ rec {
     __structuredAttrs = true;
 
     inherit (common) binToOutput src prePatch;
+
+    patches = [
+      (fetchpatch {
+        # do not create extractbb -> xdvipdfmx link
+        name = "extractbb-separate-package.patch";
+        url = "https://github.com/TeX-Live/texlive-source/commit/e48aafd2889281e5e9082cf2e4815a906b9a68ec.patch";
+        hash = "sha256-Rh0PJeUgKUfmgZ+WXnTteM5A0vXPEajKzZBU7AoE7Vs";
+        excludes = [ "texk/dvipdfm-x/ChangeLog" ];
+      })
+    ];
 
     outputs = [
       "out"
@@ -332,16 +346,24 @@ rec {
 
     # TODO: perhaps improve texmf.cnf search locations
     postInstall =
-      # remove redundant texmf-dist (content provided by TeX Live packages)
-      ''
-        rm -fr "$out"/share/texmf-dist
-      ''
       # install himktables in separate output for use in cross compilation
-      + ''
+      ''
         mkdir -p $dev/bin
         cp texk/web2c/.libs/himktables $dev/bin/himktables
       ''
-      + common.moveBins;
+      + common.moveBins
+      # remove redundant texmf-dist (content provided by TeX Live packages)
+      + ''
+        rm -frv "$out"/share/texmf-dist
+
+        mkdir -p "${placeholder "psutils"}"/share/texmf-dist/scripts/psutils
+        cp texk/psutils/{extractres.pl,includeres.pl,psjoin.pl} "${placeholder "psutils"}"/share/texmf-dist/scripts/psutils
+      ''
+      # remove broken symlinks
+      + ''
+        rm "$out"/bin/{eptex,ptex,uptex}
+        rm "${placeholder "ptex"}"/bin/{pbibtex,pdvitype,ppltotf,ptftopl}
+      '';
 
     passthru = { inherit version buildInputs; };
 
@@ -501,7 +523,11 @@ rec {
         "tie"
         "web"
       ];
-    postInstall = common.moveBins;
+    postInstall =
+      common.moveBins
+      + ''
+        rm "${placeholder "ptex"}"/bin/{pbibtex,pdvitype,ppltotf,ptftopl}
+      '';
   };
 
   chktex = stdenv.mkDerivation {
@@ -678,11 +704,14 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-nZtcb6fg+848HlT+sl4tUdKMT+d5jyTHbNyugpGo6mY=";
+        hash = "sha256-egUACsP2vwYx2uvSCZ8H/jLU9f17Siz8gFWwCNSXsIQ=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;
       texdocContainer = texlive.pkgs.asymptote.texdoc;
+
+      # build issue with asymptote 2.95 has been fixed
+      postConfigure = "";
     }
   );
 

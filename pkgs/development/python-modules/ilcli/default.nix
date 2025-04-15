@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ilcli";
   version = "0.3.2";
   pyproject = true;

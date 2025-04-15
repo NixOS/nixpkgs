@@ -398,6 +398,9 @@ Use the following commands:
     [](#ch-options). A minimal example is shown in
     [Example: NixOS Configuration](#ex-config).
 
+    This command accepts an optional `--flake` option, to also generate a
+    `flake.nix` file, if you want to set up a flake-based configuration.
+
     The command `nixos-generate-config` can generate an initial
     configuration file for you:
 
@@ -489,6 +492,14 @@ Use the following commands:
     other issue (such as a network outage while downloading binaries
     from the NixOS binary cache), you can re-run `nixos-install` after
     fixing your `configuration.nix`.
+
+    If you opted for a flake-based configuration, you will need to pass the
+    `--flake` here as well and specify the name of the configuration as used in
+    the `flake.nix` file. For the default generated flake, this is `nixos`.
+
+    ```ShellSession
+    # nixos-install --flake 'path/to/flake.nix#nixos'
+    ```
 
     As the last step, `nixos-install` will ask you to set the password
     for the `root` user, e.g.

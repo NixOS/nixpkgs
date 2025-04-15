@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    # Switch to peotry-core, https://github.com/rbw/pysnow/pull/183
+    # Switch to poetry-core, https://github.com/rbw/pysnow/pull/183
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/rbw/pysnow/commit/f214a203432b329df5317f3a25b2c0d9b55a9029.patch";

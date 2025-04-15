@@ -48,8 +48,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ssh = [ paramiko paramiko.optional-dependencies.ed25519 ];
-    tls = [];
+    ssh = [ paramiko ];
+    tls = [ ];
     websockets = [ websocket-client ];
   };
 

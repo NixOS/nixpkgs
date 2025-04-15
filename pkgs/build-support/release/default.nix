@@ -147,7 +147,7 @@ rec {
   /*
     Create a channel job which success depends on the success of all of
     its contituents. Channel jobs are a special type of jobs that are
-    listed in the channel tab of Hydra and that can be suscribed.
+    listed in the channel tab of Hydra and that can be subscribed.
     A tarball of the src attribute is distributed via the channel.
 
     - constituents: a list of derivations on which the channel success depends.

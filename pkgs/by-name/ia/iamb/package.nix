@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cjBSWUBgfwdLnpneJ5XW2TdOFkNc+Rc/wyUp9arZzwg=";
   };
 
-  cargoHash = "sha256-a5y8nNFixOxJPNDOzvFFRqVrY2jsirCud2ZJJ8OvRhQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fAre0jrpJ63adcg4AKCYzdQtCsd0MMMcWA0RsoHo6ig=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Attempted to create a NULL object.
     "--skip=base::tests::test_complete_cmdbar"
     "--skip=base::tests::test_complete_msgbar"
@@ -47,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

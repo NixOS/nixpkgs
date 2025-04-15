@@ -115,7 +115,6 @@ stdenv.mkDerivation rec {
       done
 
       patchShebangs build/unix/
-      ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
 
       # __malloc_hook is deprecated
       substituteInPlace misc/memstat/src/TMemStatHook.cxx \

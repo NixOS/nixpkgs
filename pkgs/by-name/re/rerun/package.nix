@@ -35,13 +35,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rerun";
-  version = "0.21.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = version;
-    hash = "sha256-U+Q8u1XKBD9c49eXAgc5vASKytgyAEYyYv8XNfftlZU=";
+    hash = "sha256-J9Iy/KiDajDavL95qLcQBfUWpZ6OiUtldk+ZAGpSNWA=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -50,7 +50,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-d68dNAAGY+a0DpL82S/qntu2XOsoVqHpfU2L9NcoJQc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cGg8yi/jYKyle8dudHSNLPMnOtcgqlBQmu83h4B26NI=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -139,7 +140,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -152,7 +153,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate.  Built in Rust using egui";
     homepage = "https://github.com/rerun-io/rerun";
-    changelog = "https://github.com/rerun-io/rerun/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rerun-io/rerun/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

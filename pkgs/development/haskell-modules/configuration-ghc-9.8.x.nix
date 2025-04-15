@@ -7,7 +7,8 @@ let
   inherit (pkgs) lib;
 in
 
-self: super: {
+self: super:
+{
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
@@ -43,7 +44,11 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -96,8 +101,8 @@ self: super: {
   blaze-svg = doJailbreak super.blaze-svg; # base <4.19
   commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
   diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
-  diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
-  diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
+  diagrams-postscript = doJailbreak super.diagrams-postscript; # base <4.19, bytestring <0.12
+  diagrams-svg = doJailbreak super.diagrams-svg; # base <4.19, text <2.1
   generics-sop = doJailbreak super.generics-sop_0_5_1_4; # th-abstraction >=0.6 && <0.7
   ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
   hashing = doJailbreak super.hashing; # bytestring <0.12
@@ -133,7 +138,7 @@ self: super: {
   #
 
   # 2023-12-23: It needs this to build under ghc-9.6.3.
-  #   A factor of 100 is insufficent, 200 seems seems to work.
+  #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 }
 // lib.optionalAttrs (lib.versionAtLeast super.ghc.version "9.8.3") {

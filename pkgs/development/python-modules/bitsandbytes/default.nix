@@ -11,7 +11,7 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.45.0";
+  version = "0.45.1";
 
   inherit (torch) cudaPackages cudaSupport;
   inherit (cudaPackages) cudaVersion;
@@ -57,11 +57,11 @@ buildPythonPackage {
     owner = "TimDettmers";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-HoZNEDhCPgGwFgwT4NqkbUAy0bYqvki75FBZn5aLuKM=";
+    hash = "sha256-MZ+3mUXaAhRb+rBtE+eQqT3XdtFxlWJc/CmTEwQkKSA=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
-  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionnally.
+  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionally.
   # Indeed, in this case, only `libbitsandbytes_cuda124.so` is built. `libbitsandbytes_cpu.so` is not.
   # Also, hardcode the path to the previously built library instead of relying on
   # `get_cuda_bnb_library_path(cuda_specs)` which relies on `torch.cuda` too.

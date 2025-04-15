@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "helm-dt";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "vmware-labs";
     repo = "distribution-tooling-for-helm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m+XTR+LYTXeDTqo/deFAIQjbUqGn6yD/n5cQvJ+jKPc=";
+    hash = "sha256-/TRhi4YgEB5RwRZXuwGCCqHz3SoBfs1SdKLBWg1yed0=";
   };
 
-  vendorHash = "sha256-rovAY4G4ew6JhehyXMz7cDKSEsHu0IQwaNYvClDog2s=";
+  vendorHash = "sha256-54QB8dZSqSpDb4z7di5K6d8/fFbXftKfQJAljV50/Jk=";
 
   ldflags = [
     "-s"

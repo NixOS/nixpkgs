@@ -16,11 +16,11 @@ let
   # This is copied from influxdb2 with the required flux version
   flux = rustPlatform.buildRustPackage rec {
     pname = "libflux";
-    version = "v${libflux_version}";
+    version = libflux_version;
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "v${libflux_version}";
+      tag = "v${libflux_version}";
       hash = "sha256-XHT/+JMu5q1cPjZT2x/OKEPgxFJcnjrQKqn8w9/Mb3s=";
     };
     patches = [

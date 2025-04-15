@@ -6,11 +6,14 @@
   click,
   construct,
   construct-classes,
+  cryptography,
   ecdsa,
   libusb1,
   mnemonic,
   requests,
   setuptools,
+  shamir-mnemonic,
+  slip10,
   typing-extensions,
   trezor-udev-rules,
   pytestCheckHook,
@@ -18,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.9";
+  version = "0.13.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFC9e7nSPl4zo8nljhjwWLRMnZw0ymZLSYGnlaqfse8=";
+    hash = "sha256-egtq5GKN0MMaXOtRJYkY2bvdOthROIg3IlgmsijuUE8=";
   };
 
   build-system = [ setuptools ];
@@ -32,10 +35,13 @@ buildPythonPackage rec {
     click
     construct
     construct-classes
+    cryptography
     ecdsa
     libusb1
     mnemonic
     requests
+    shamir-mnemonic
+    slip10
     typing-extensions
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
 

@@ -2,31 +2,33 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   rtaudio,
   rtmidi,
   glew,
   alsa-lib,
+  angelscript,
   cmake,
   pkg-config,
   zenity,
+  withEditor ? true,
 }:
 let
   # package depends on SDL2main static library
-  SDL2' = SDL2.override {
+  SDL2' = SDL2_classic.override {
     withStatic = true;
   };
 in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.10.000";
+  version = "1.22.300";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    hash = "sha256-oEcjHb6HY5qxKuPoNBuobPbdi39hUUWtKSb7FbAfEpc=";
+    hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +43,13 @@ stdenv.mkDerivation rec {
     rtmidi
     glew
     alsa-lib
+    angelscript
+  ];
+
+  hardeningDisable = [ "format" ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_EDITOR" withEditor)
   ];
 
   prePatch = ''
@@ -60,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://theforceengine.github.io";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ devusb ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

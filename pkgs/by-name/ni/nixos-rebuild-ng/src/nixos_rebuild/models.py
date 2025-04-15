@@ -8,13 +8,13 @@ from typing import Any, Callable, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
-type ImageVariants = dict[str, str]
+type ImageVariants = list[str]
 
 
 class NRError(Exception):
     "nixos-rebuild general error."
 
-    def __init__(self, message: str):
+    def __init__(self, message: str) -> None:
         self.message = message
 
     @override
@@ -140,8 +140,7 @@ class Flake:
                 default_path = Path("/etc/nixos/flake.nix")
                 if default_path.exists():
                     # It can be a symlink to the actual flake.
-                    if default_path.is_symlink():
-                        default_path = default_path.readlink()
+                    default_path = default_path.resolve()
                     return cls.parse(str(default_path.parent), get_hostname)
                 else:
                     return None

@@ -19,11 +19,11 @@
   ocl-icd,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
-  substituteAll,
+  replaceVars,
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "john";
   version = "rolling-2404";
 
@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = lib.optionals withOpenCL [
-    (substituteAll {
-      src = ./opencl.patch;
+    (replaceVars ./opencl.patch {
       ocl_icd = ocl-icd;
     })
   ];
@@ -113,13 +112,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   postInstall = ''
-    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/${perlPackages.perl.libPrefix}"
+    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
     find -L ../run -mindepth 1 -maxdepth 1 -type f -executable \
       -exec cp -d {} "$out/bin" \;
     cp -vt "$out/etc/john" ../run/*.conf
     cp -vt "$out/share/john" ../run/*.chr ../run/password.lst
     cp -vt "$out/share/john/rules" ../run/rules/*.rule
-    cp -vrt "$out/share/doc/john" ../doc/*
+    cp -vt "$out/share/john/opencl" ../run/opencl/*.cl ../run/opencl/*.h
+    cp -vLrt "$out/share/doc/john" ../doc/*
     cp -vt "$out/${perlPackages.perl.libPrefix}" ../run/lib/*
   '';
 

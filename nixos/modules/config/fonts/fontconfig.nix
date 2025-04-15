@@ -58,7 +58,7 @@ let
       <fontconfig>
         <!-- Font directories -->
         ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.packages)}
-        ${lib.optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
+        ${lib.optionalString (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages) ''
           <!-- Pre-generated font caches -->
           <cachedir>${cache}</cachedir>
           ${lib.optionalString (pkgs.stdenv.hostPlatform.isx86_64 && cfg.cache32Bit) ''

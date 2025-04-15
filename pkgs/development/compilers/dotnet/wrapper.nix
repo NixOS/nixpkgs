@@ -15,7 +15,7 @@
   darwin,
   icu,
   lndir,
-  substituteAll,
+  replaceVars,
   nugetPackageHook,
   xmlstarlet,
 }:
@@ -42,10 +42,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     [
       ./dotnet-setup-hook.sh
     ]
-    ++ lib.optional (type == "sdk") (substituteAll {
-      src = ./dotnet-sdk-setup-hook.sh;
-      inherit lndir xmlstarlet;
-    });
+    ++ lib.optional (type == "sdk") (
+      replaceVars ./dotnet-sdk-setup-hook.sh {
+        inherit lndir xmlstarlet;
+      }
+    );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
@@ -75,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/dotnet --info
+    HOME=$(mktemp -d) $out/bin/dotnet --info
     runHook postInstallCheck
   '';
 
@@ -281,14 +282,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       in
       unwrapped.passthru.tests or { }
       // {
-        version = testers.testVersion (
-          {
-            package = finalAttrs.finalPackage;
-          }
-          // lib.optionalAttrs (type != "sdk") {
-            command = "dotnet --info";
-          }
-        );
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
+        };
       }
       // lib.optionalAttrs (type == "sdk") ({
         console = lib.recurseIntoAttrs {

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.1.1";
+  version = "7.0.0";
   pyproject = true;
 
   inherit stdenv;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z4SWcowY8tC0UZjwaJW+UvNmEXEXRrfzDEZLQitQ4vU=";
+    hash = "sha256-e+nD66OL7Mtkleozr9mCpEB0t48oxDSh9RzAf9MVxFY=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
-  # - the other disabled tests are likely due to sanboxing (missing specific errors)
+  # - the other disabled tests are likely due to sandboxing (missing specific errors)
   pytestFlagsArray = [
     # Note: $out must be referenced as test import paths are relative
     "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"

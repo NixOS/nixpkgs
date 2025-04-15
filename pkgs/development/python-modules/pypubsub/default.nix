@@ -6,7 +6,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pypubsub";
   version = "4.0.3";
   format = "setuptools";

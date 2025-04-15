@@ -13,7 +13,7 @@
   openjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2022-05-16";
   pname = "xygrib";
 

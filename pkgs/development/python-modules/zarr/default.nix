@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.3";
-  format = "pyproject";
+  version = "2.18.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JYDYy23YRiF3GhDTHE13fcqKJ3BqGomyn0LS034t9c4=";
+    hash = "sha256-yWW/JbWCX8/PM5vabDKaVskJl98SMkNeJ7ZKoTbxQsc=";
   };
 
   build-system = [
@@ -45,6 +45,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "zarr" ];
+
+  # FIXME remove once zarr's reverse dependencies support v3
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Implementation of chunked, compressed, N-dimensional arrays for Python";

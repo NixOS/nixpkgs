@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "malt";
-  version = "1.2.3";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "memtt";
     repo = "malt";
     rev = "v${version}";
-    sha256 = "sha256-eeiThHorLxL2qHIXd9vzc2jRYd7BN3/OHCqM9BmXi0U=";
+    sha256 = "sha256-Hq6XDxcjH5ronprnV1CwumGqBg9RXYpJ+WANqoBA2/c=";
   };
 
   postPatch = ''

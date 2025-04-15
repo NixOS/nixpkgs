@@ -33,28 +33,32 @@
   uproot,
   vector,
 
-  # checks
+  # tests
   distributed,
   pyinstrument,
-  pytestCheckHook,
   pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.1.1";
+  version = "2025.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-AGYi1w4e8XJOWRbuPX5eB/rTY5dCPji49zD0VQ4FvAs=";
+    hash = "sha256-NZ3r/Dyw5bB4qOO29DUAARPzdJJxgR9OO9LxVu3YbNo=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   dependencies = [
@@ -87,8 +91,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     distributed
     pyinstrument
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "coffea" ];
@@ -102,10 +106,6 @@ buildPythonPackage rec {
     # https://github.com/scikit-hep/coffea/issues/1246
     "test_packed_selection_cutflow_dak" # cutflow.npz
     "test_packed_selection_nminusone_dak" # nminusone.npz
-
-    # AssertionError: bug in Awkward Array: attempt to convert TypeTracerArray into a concrete array
-    "test_apply_to_fileset"
-    "test_lorentz_behavior"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.12.0";
+  version = "1.12.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-itkaBEWgNngrk2bvi4wsUCkfg6VTR4uoWAxz0yFXAM8=";
+    hash = "sha256-XNlXgkrDbxQCYJZOujxr5kQqg1m4xI9K35AhDzOgS3s=";
   };
 
   build-system = [ setuptools ];
@@ -21,8 +21,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # wheel metadata version mismatch 2.1 vs 2.3
+    # wheel metadata version mismatch 2.1 vs 2.2
+    "test_get_metadata_w_module"
+    "test_get_metadata_w_package_name"
     "test_installed_ctor_w_dist_info"
+    "test_installed_ctor_w_name"
+    "test_installed_ctor_w_package"
   ];
 
   pythonImportsCheck = [ "pkginfo" ];

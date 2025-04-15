@@ -1,6 +1,7 @@
 import base64
 import io
 import os
+import platform
 import queue
 import re
 import select
@@ -199,7 +200,13 @@ class StartCommand:
         allow_reboot: bool = False,
     ) -> str:
         display_opts = ""
+
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
+        if platform.system() == "Darwin":
+            # We have no DISPLAY variables on macOS and seemingly no better way
+            # to find out
+            display_available = "TERM_PROGRAM" in os.environ
+
         if not display_available:
             display_opts += " -nographic"
 
@@ -772,7 +779,7 @@ class Machine:
             retry(tty_matches, timeout)
 
     def send_chars(self, chars: str, delay: float | None = 0.01) -> None:
-        """
+        r"""
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
         followed by the Enter key.

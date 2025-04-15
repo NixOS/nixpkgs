@@ -74,7 +74,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
-  version = "m114";
+  version = "125-unstable-2025-03-24";
 
   src = "${sources}/src";
 
@@ -95,20 +95,37 @@ stdenv.mkDerivation {
         url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
         hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
       })
-      # Fixes concurrency and localization issues
+      # Fixes "error: no matching member function for call to 'emplace'"
       (fetchpatch {
-        url = "https://github.com/zed-industries/webrtc/commit/08f7a701a2eda6407670508fc2154257a3c90308.patch";
-        hash = "sha256-oWYZLwqjRSHDt92MqsxsoBSMyZKj1ubNbOXZRbPpbEw=";
+        url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/refs/heads/main/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
+        hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
+
+        extraPrefix = "third_party/";
+        stripLen = 1;
       })
       # Required for dynamically linking to ffmpeg libraries and exposing symbols
       ./0001-shared-libraries.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./0002-disable-narrowing-const-reference.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # GCC does not support C11 _Generic in C++ mode. Fixes boringssl build with GCC
+      (fetchpatch {
+        name = "fix-gcc-c11-generic-boringssl";
+
+        url = "https://github.com/google/boringssl/commit/c70190368c7040c37c1d655f0690bcde2b109a0d.patch";
+        hash = "sha256-xkmYulDOw5Ny5LOCl7rsheZSFbSF6md2NkZ3+azjFQk=";
+        stripLen = 1;
+        extraPrefix = "third_party/boringssl/src/";
+      })
     ];
 
   postPatch =
     ''
+      substituteInPlace .gn \
+        --replace-fail "vpython3" "python3"
+
       substituteInPlace tools/generate_shim_headers/generate_shim_headers.py \
         --replace-fail "OFFICIAL_BUILD" "GOOGLE_CHROME_BUILD"
 
@@ -166,7 +183,7 @@ stdenv.mkDerivation {
       cpio
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
     [ nasm ]
@@ -235,7 +252,7 @@ stdenv.mkDerivation {
       "api/task_queue:default_task_queue_factory"
       "sdk:native_api"
       "sdk:default_codec_factory_objc"
-      "pc:peerconnection"
+      "pc:peer_connection"
       "sdk:videocapture_objc"
       "sdk:mac_framework_objc"
     ];

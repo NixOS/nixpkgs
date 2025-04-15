@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.24";
+  version = "3.0.25";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${version}";
-    hash = "sha256-gzwdDUYOHZnd9mMHmuW9q1xhxWjpk5u/yoxdJkSNrVA=";
+    hash = "sha256-1KwFa0FixlzgRd2hSUj/ODf0SJKxZ496/xg374uV4fI=";
     fetchSubmodules = true;
   };
 
@@ -66,7 +66,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";

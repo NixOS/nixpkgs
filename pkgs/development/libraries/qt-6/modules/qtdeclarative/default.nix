@@ -3,7 +3,9 @@
   qtbase,
   qtlanguageserver,
   qtshadertools,
+  qtsvg,
   openssl,
+  darwin,
   stdenv,
   lib,
   pkgsBuildBuild,
@@ -17,9 +19,14 @@ qtModule {
     qtbase
     qtlanguageserver
     qtshadertools
+    qtsvg
     openssl
   ];
   strictDeps = true;
+
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    darwin.sigtool
+  ];
 
   patches = [
     # invalidates qml caches created from nix applications at different

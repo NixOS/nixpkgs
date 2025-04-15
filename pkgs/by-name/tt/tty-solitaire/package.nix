@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mpereira";
-    repo = pname;
+    repo = "tty-solitaire";
     rev = "v${version}";
     sha256 = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
   };
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/mpereira/tty-solitaire";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "ttysolitaire";
   };
 }

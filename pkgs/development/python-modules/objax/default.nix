@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objax" ];
 
-  # This is necessay to ignore the presence of two protobufs version (tensorflow is bringing an
+  # This is necessary to ignore the presence of two protobufs version (tensorflow is bringing an
   # older version).
   catchConflicts = false;
 

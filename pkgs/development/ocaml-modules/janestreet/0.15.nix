@@ -9,6 +9,16 @@
   zstd,
 }:
 
+let
+  js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+  js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+  gen_js_api = self.gen_js_api.override {
+    inherit js_of_ocaml-compiler;
+    ojs = self.ojs.override { inherit js_of_ocaml-compiler; };
+  };
+  js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+in
+
 with self;
 
 {
@@ -1206,6 +1216,7 @@ with self;
       sexp_select
     ];
     meta.description = "S-expression swiss knife";
+    meta.broken = true; # Does not build with GCC 14
   };
 
   sexp_diff = janePackage {
@@ -1276,6 +1287,7 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
+    doCheck = false; # Does not build with GCC 14
   };
 
   shexp = janePackage {

@@ -6,16 +6,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scooter";
-  version = "0.2.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${version}";
-    hash = "sha256-dojVVBdXBtWvD/YIfouRmnsf1AWgfB3CYjH2KhtCsvI=";
+    hash = "sha256-wu9SNcd1+JqTkhUghOiRlGP/za/9Md/lgGrwNA2lCJE=";
   };
 
-  cargoHash = "sha256-moRqtxLMO/7fBNpq6Xcnzu9HgmE2vDf0xn9SlvY8ZU0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DQU3djlSjG1VG2bs+JuegwF3ii+asJXpEEPb95xeXqk=";
+
+  checkFlags = [
+    # failed only for buildRustPackage
+    # might be related to https://ryantm.github.io/nixpkgs/languages-frameworks/rust/#tests-relying-on-the-structure-of-the-target-directory
+    "--skip=test_search_current_dir"
+  ];
 
   meta = {
     description = "Interactive find and replace in the terminal";

@@ -8,7 +8,7 @@
   tesseract3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vobsub2srt";
   version = "unstable-2014-08-17";
 

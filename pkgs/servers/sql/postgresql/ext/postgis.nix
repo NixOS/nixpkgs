@@ -1,39 +1,40 @@
 {
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  perl,
-  libxml2,
-  postgresql,
-  postgresqlTestHook,
-  geos,
-  proj,
-  gdalMinimal,
-  json_c,
-  pkg-config,
-  file,
-  protobufc,
-  libiconv,
-  libxslt,
-  docbook5,
-  cunit,
-  pcre2,
-  postgresqlTestExtension,
-  jitSupport,
-  llvm,
-  buildPostgresqlExtension,
   autoconf,
   automake,
+  cunit,
+  docbook5,
+  fetchFromGitHub,
+  file,
+  gdalMinimal,
+  geos,
+  jitSupport,
+  json_c,
+  lib,
+  libiconv,
   libtool,
+  libxml2,
+  libxslt,
+  llvm,
+  pcre2,
+  perl,
+  pkg-config,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+  postgresqlTestHook,
+  proj,
+  protobufc,
+  stdenv,
   which,
-  sfcgal,
+
   withSfcgal ? false,
+  sfcgal,
 }:
 
 let
   gdal = gdalMinimal;
 in
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
   version = "3.5.2";
 
@@ -45,13 +46,12 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postgis";
     repo = "postgis";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
   buildInputs =
     [
-      libxml2
       geos
       proj
       gdal
@@ -61,17 +61,22 @@ buildPostgresqlExtension (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
     ++ lib.optional withSfcgal sfcgal;
+
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    libxml2
     perl
     pkg-config
+    protobufc
     which
   ] ++ lib.optional jitSupport llvm;
+
   dontDisableStatic = true;
 
   nativeCheckInputs = [
+    postgresql
     postgresqlTestHook
     cunit
     libxslt
@@ -89,6 +94,7 @@ buildPostgresqlExtension (finalAttrs: {
   '';
 
   configureFlags = [
+    "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
     "--with-gdalconfig=${gdal}/bin/gdal-config"
     "--with-jsondir=${json_c.dev}"
     "--disable-extension-upgrades-install"
@@ -157,12 +163,12 @@ buildPostgresqlExtension (finalAttrs: {
       '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ marcweber ];
     inherit (postgresql.meta) platforms;
   };
 })

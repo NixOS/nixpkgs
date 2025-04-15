@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   atk,
   cairo,
   desktop-file-utils,

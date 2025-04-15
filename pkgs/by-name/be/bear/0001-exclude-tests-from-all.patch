@@ -1,11 +1,9 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index f1ecfe0..9056f9d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -83,8 +83,9 @@ ExternalProject_Add(BearSource
-             -DCMAKE_MODULE_LINKER_FLAGS:STRING=${CMAKE_MODULE_LINKER_FLAGS}
-             -DROOT_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+@@ -85,8 +85,9 @@
              ${CMAKE_CACHE_ARGS_EXTRA}
+         BUILD_ALWAYS
+             1
 -        TEST_BEFORE_INSTALL
 +        TEST_EXCLUDE_FROM_MAIN
              1
@@ -13,7 +11,7 @@ index f1ecfe0..9056f9d 100644
          TEST_COMMAND
              ctest # or `ctest -T memcheck`
          )
-@@ -100,7 +101,8 @@ if (ENABLE_FUNC_TESTS)
+@@ -102,7 +103,8 @@
                  -DCMAKE_INSTALL_LIBDIR:PATH=${CMAKE_INSTALL_LIBDIR}
                  -DCMAKE_INSTALL_BINDIR:PATH=${CMAKE_INSTALL_BINDIR}
                  -DSTAGED_INSTALL_PREFIX:PATH=${STAGED_INSTALL_PREFIX}

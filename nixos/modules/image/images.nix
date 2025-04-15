@@ -45,9 +45,12 @@ let
     sd-card = {
       imports =
         let
-          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.linuxArch}.nix";
+          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.qemuArch}.nix";
         in
-        if builtins.pathExists module then [ module ] else throw "The module ${module} does not exist.";
+        if builtins.pathExists module then
+          [ module ]
+        else
+          throw "The module ${toString module} does not exist.";
     };
     kexec = ../installer/netboot/netboot-minimal.nix;
   };

@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    fltk13 # fltk-config
     pkg-config
   ];
 

@@ -7,7 +7,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xalan-c";
   version = "1.12.0";
 

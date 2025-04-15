@@ -171,7 +171,7 @@ in
           This feature can be used with the long-term authentication mechanism, only.
           This feature purpose is to support "TURN Server REST API", see
           "TURN REST API" link in the project's page
-          https://github.com/coturn/coturn/
+          <https://github.com/coturn/coturn/>
 
           This option is used with timestamp:
 

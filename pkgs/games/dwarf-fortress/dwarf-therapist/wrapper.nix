@@ -1,11 +1,19 @@
-{ stdenv, dwarf-therapist, dwarf-fortress, substituteAll, coreutils, wrapQtAppsHook
+{
+  stdenv,
+  dwarf-therapist,
+  dwarf-fortress,
+  replaceVars,
+  coreutils,
+  wrapQtAppsHook,
 }:
 
 let
-  platformSlug = let
-    prefix = if dwarf-fortress.baseVersion >= 50 then "-classic_" else "_";
-    base = if stdenv.hostPlatform.is32bit then "linux32" else "linux64";
-  in prefix + base;
+  platformSlug =
+    let
+      prefix = if dwarf-fortress.baseVersion >= 50 then "-classic_" else "_";
+      base = if stdenv.hostPlatform.is32bit then "linux32" else "linux64";
+    in
+    prefix + base;
   inifile = "linux/v0.${builtins.toString dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}${platformSlug}.ini";
 
 in
@@ -14,8 +22,7 @@ stdenv.mkDerivation {
   pname = "dwarf-therapist";
   inherit (dwarf-therapist) version meta;
 
-  wrapper = substituteAll {
-    src = ./dwarf-therapist.in;
+  wrapper = replaceVars ./dwarf-therapist.in {
     stdenv_shell = "${stdenv.shell}";
     rm = "${coreutils}/bin/rm";
     ln = "${coreutils}/bin/ln";
@@ -23,6 +30,8 @@ stdenv.mkDerivation {
     mkdir = "${coreutils}/bin/mkdir";
     dirname = "${coreutils}/bin/dirname";
     therapist = "${dwarf-therapist}";
+    # replaced in buildCommand
+    install = null;
   };
 
   paths = [ dwarf-therapist ];

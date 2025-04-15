@@ -23,7 +23,7 @@ if stdenv.hostPlatform.isStatic then
     work on static builds where dynamic loader is not used.
   ''
 else
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "libredirect";
     version = "0";
 
@@ -95,7 +95,7 @@ else
 
       ''
       + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-        # dylib will be rejected unless dylib rpath gets explictly set
+        # dylib will be rejected unless dylib rpath gets explicitly set
         install_name_tool \
           -change $libName $out/lib/$libName \
           $out/lib/$libName
@@ -104,6 +104,7 @@ else
         # Provide a setup hook that injects our library into every process.
         mkdir -p "$hook/nix-support"
         cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
+        echo "Setting up libredirect"
         ${
           if stdenv.hostPlatform.isDarwin then
             ''

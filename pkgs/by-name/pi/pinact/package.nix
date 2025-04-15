@@ -8,19 +8,19 @@
 
 let
   pname = "pinact";
-  version = "1.2.0";
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     tag = "v${version}";
-    hash = "sha256-OmWt4EyUHZyQDIj1Uro+bnC29MNi6wlXO2ksRP84F2U=";
+    hash = "sha256-h/Y+zFqWmd+TVkM+2CLC4Txz8/Vwvck+goslPEQlXOA=";
   };
   mainProgram = "pinact";
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-sZv91EYksNmMhWbT/5PUQTM2gND/8b4ORVfMNtlAI2A=";
+  vendorHash = "sha256-36U5R9eXwfwXrJFsdNri7HPEq8t2AT4f/Gn//ane/48=";
 
   env.CGO_ENABLED = 0;
 
@@ -31,7 +31,7 @@ buildGoModule {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${mainProgram}";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   passthru = {
     updateScript = nix-update-script { };

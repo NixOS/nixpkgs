@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycomm3" ];
 
   disabledTestPaths = [
-    # Don't test examples as some have aditional requirements
+    # Don't test examples as some have additional requirements
     "examples/"
     # No physical PLC available
     "tests/online/"

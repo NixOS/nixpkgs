@@ -5,10 +5,10 @@
   curl,
   gmp,
   gsl,
+  libpq,
   mpfr,
   ncurses,
   plotutils,
-  postgresql,
   pkg-config,
   withPDFDoc ? true,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     gsl
     plotutils
-    postgresql
+    libpq
   ];
 
   strictDeps = true;
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "a68g";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

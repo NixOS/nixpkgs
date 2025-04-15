@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
       sed -i '/googletest/d' third_party/CMakeLists.txt
@@ -45,10 +47,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [
-    gtest
     lit
     nodejs
     filecheck
+  ];
+  checkInputs = [
+    gtest
   ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
@@ -73,7 +77,7 @@ stdenv.mkDerivation rec {
     "lit"
     "gtest"
   ];
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";

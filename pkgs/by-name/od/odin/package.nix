@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "odin";
-  version = "0-unstable-2024-10-12";
+  version = "dev-2025-01";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "af9ae4897ad9e526d74489ddd12cfae179639ff3";
-    hash = "sha256-ky3jiVk2KfOW4JjXqiCTdnbEu7bnmTVupw2r5fwyB00=";
+    rev = "dev-2025-01";
+    hash = "sha256-GXea4+OIFyAhTqmDh2q+ewTUqI92ikOsa2s83UH2r58=";
   };
 
   postPatch =

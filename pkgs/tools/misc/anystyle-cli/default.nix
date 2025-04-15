@@ -3,7 +3,7 @@
   buildRubyGem,
   bundlerEnv,
   ruby,
-  poppler_utils,
+  poppler-utils,
 }:
 let
   deps = bundlerEnv rec {
@@ -31,7 +31,7 @@ buildRubyGem rec {
   propagatedBuildInputs = [ deps ];
 
   preFixup = ''
-    wrapProgram $out/bin/anystyle --prefix PATH : ${poppler_utils}/bin
+    wrapProgram $out/bin/anystyle --prefix PATH : ${poppler-utils}/bin
   '';
 
   meta = with lib; {
@@ -41,5 +41,7 @@ buildRubyGem rec {
     maintainers = with maintainers; [ shamilton ];
     mainProgram = "anystyle";
     platforms = platforms.unix;
+    # error: passing argument 2 of 'rb_hash_foreach' from incompatible pointer type [-Wincompatible-pointer-types]
+    broken = true;
   };
 }

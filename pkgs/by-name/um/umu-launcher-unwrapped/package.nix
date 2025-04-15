@@ -1,50 +1,69 @@
 {
-  python3Packages,
-  fetchFromGitHub,
-  lib,
   bash,
+  cargo,
+  fetchFromGitHub,
   hatch,
+  lib,
+  nix-update-script,
+  python3Packages,
+  rustPlatform,
   scdoc,
-  replaceVars,
-  fetchpatch2,
+  writableTmpDirAsHomeHook,
+  withTruststore ? true,
+  withDeltaUpdates ? true,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.1.4";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-TOsVK6o2V8D7CLzVOkLs8AClrZmlVQTfeii32ZIQCu4=";
+    hash = "sha256-DkfB78XhK9CXgN/OpJZTjwHB7IcLC4h2HM/1JW42ZO0=";
   };
 
-  # Both patches can be safely removed with the next release
-  patches = [
-    # Patch to avoid running `git describe`
-    # Fixed by https://github.com/Open-Wine-Components/umu-launcher/pull/289 upstream
-    (replaceVars ./no-umu-version-json.patch { inherit version; })
-    # Patch to use PREFIX in the installer call
-    (fetchpatch2 {
-      url = "https://github.com/Open-Wine-Components/umu-launcher/commit/602a2f84a05a63f7b1b1c4d8ca85d99fdaec2cd2.diff";
-      hash = "sha256-BMinTXr926V3HlzHHabxHKvy8quEvxsZKu1hoTGQT00=";
-    })
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-JhNErFDJsM20BhgIgJSUBeNzAst8f+s1NzpLfl2m2es=";
+  };
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    python3Packages.pytestCheckHook
   ];
 
   nativeBuildInputs = [
-    python3Packages.build
+    cargo
     hatch
-    scdoc
+    python3Packages.build
     python3Packages.installer
+    rustPlatform.cargoSetupHook
+    scdoc
   ];
 
-  pythonPath = [
-    python3Packages.filelock
-    python3Packages.xlib
-  ];
+  pythonPath =
+    with python3Packages;
+    [
+      pyzstd
+      urllib3
+      xlib
+    ]
+    ++ lib.optionals withTruststore [
+      truststore
+    ]
+    ++ lib.optionals withDeltaUpdates [
+      cbor2
+      xxhash
+    ];
 
   pyproject = false;
   configureScript = "./configure.sh";
+
+  configureFlags = [
+    "--use-system-pyzstd"
+    "--use-system-urllib"
+  ];
 
   makeFlags = [
     "PYTHONDIR=$(PREFIX)/${python3Packages.python.sitePackages}"
@@ -53,6 +72,19 @@ python3Packages.buildPythonPackage rec {
     "RELEASEDIR=${pname}-${version}"
     "SHELL_INTERPRETER=${lib.getExe bash}"
   ];
+
+  disabledTests = [
+    # Broken? Asserts that $STEAM_RUNTIME_LIBRARY_PATH is non-empty
+    # Fails with AssertionError: '' is not true : Expected two elements in STEAM_RUNTIME_LIBRARY_PATHS
+    "test_game_drive_empty"
+    "test_game_drive_libpath_empty"
+
+    # Broken? Tests parse_args with no options (./umu_run.py)
+    # Fails with AssertionError: SystemExit not raised
+    "test_parse_args_noopts"
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unified launcher for Windows games on Linux using the Steam Linux Runtime and Tools";

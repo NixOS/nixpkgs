@@ -1,0 +1,103 @@
+diff --git a/src-tauri/src/qf_client/modules/analytics.rs b/src-tauri/src/qf_client/modules/analytics.rs
+index f6f1209..e08490b 100644
+--- a/src-tauri/src/qf_client/modules/analytics.rs
++++ b/src-tauri/src/qf_client/modules/analytics.rs
+@@ -115,52 +115,6 @@ impl AnalyticsModule {
+                         }
+                     };
+                 }
+-                loop {
+-                    let send_metrics = qf.analytics().send_metrics;
+-                    if !send_metrics {
+-                        tokio::time::sleep(std::time::Duration::from_secs(60)).await;
+-                        continue;
+-                    }
+-                    if last_metric_time.elapsed() > Duration::from_secs(15)
+-                        || qf.analytics().is_user_active()
+-                    {
+-                        if last_metric_time.elapsed() > Duration::from_secs(60)
+-                            && qf.analytics().is_user_active()
+-                        {
+-                            continue;
+-                        }
+-
+-                        last_metric_time = Instant::now();
+-                        logger::info_con(
+-                            &qf.analytics().get_component("TrySendAnalytics"),
+-                            "Sending user activity",
+-                        );
+-                        match qf
+-                            .analytics()
+-                            .try_send_analytics(
+-                                "metrics/periodic",
+-                                3,
+-                                json!(qf.analytics().metricAndLabelPairsScheduledToSend),
+-                            )
+-                            .await
+-                        {
+-                            Ok(_) => {
+-                                qf.analytics().clear_metrics();
+-                            }
+-                            Err(e) => {
+-                                if e.cause().contains("Unauthorized")
+-                                    || e.cause().contains("Banned")
+-                                    || e.cause().contains("WFMBanned")
+-                                {
+-                                    error::create_log_file("analytics.log".to_string(), &e);
+-                                    break;
+-                                }
+-                                error::create_log_file("analytics.log".to_string(), &e);
+-                            }
+-                        };
+-                    }
+-                    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+-                }
+                 qf.analytics().is_init = false;
+             }
+         });
+@@ -176,44 +130,6 @@ impl AnalyticsModule {
+         mut retry_count: i64,
+         data: Value,
+     ) -> Result<(), AppError> {
+-        let mut parameters: Vec<String> = vec![];
+-        if self.is_user_active() {
+-            parameters.push(format!("Active_Page={}", self.current_page));
+-        }
+-
+-        while retry_count >= 0 {
+-            let err = match self
+-                .client
+-                .post::<Value>(
+-                    format!("analytics/{}?{}", url, parameters.join("&")).as_str(),
+-                    data.clone(),
+-                )
+-                .await
+-            {
+-                Ok(ApiResult::Success(_, _)) => {
+-                    return Ok(());
+-                }
+-                Ok(ApiResult::Error(e, _headers)) => AppError::new_api(
+-                    &self.get_component("TrySendAnalytics"),
+-                    e,
+-                    eyre!("Failed to send analytics"),
+-                    LogLevel::Error,
+-                ),
+-                Err(e) => e,
+-            };
+-            if retry_count == 0 {
+-                return Err(err);
+-            }
+-            retry_count -= 1;
+-            logger::warning_con(
+-                &self.get_component("TrySendAnalytics"),
+-                &format!(
+-                    "Failed to send analytics, retrying in 5 seconds, retries left: {}",
+-                    retry_count
+-                ),
+-            );
+-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+-        }
+-        Ok(())
++        return Ok(());
+     }
+ }

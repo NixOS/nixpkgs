@@ -7,6 +7,7 @@
   makeWrapper,
   pkg-config,
   SDL2,
+  libX11,
   dbus,
   libdecor,
   libnotify,
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Etaash-mathamsetty";
     repo = "trigger-control";
-    # upstream does not use consistant tags pattern, so we use git commit hash
+    # upstream does not use consistent tags pattern, so we use git commit hash
     # https://github.com/Etaash-mathamsetty/trigger-control/tags
     rev = "7b46e743227830d3a97720067d0a6cf20133af90";
     hash = "sha256-nWSvsgksZ4Cxy1+i0xy8pNalgsiAuaqxNVwT/CThaBI=";
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       SDL2
+      libX11
       dbus
       libnotify
     ]

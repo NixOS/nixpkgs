@@ -1,48 +1,49 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-# build inputs
-, about-time
-, aiofiles
-, aiohttp
-, aiosignal
-, alive-progress
-, async-timeout
-, attrs
-, certifi
-, charset-normalizer
-, cssselect
-, frozenlist
-, html5lib
-, idna
-, isodate
-, json-home-client
-, kdl-py
-, lxml
-, multidict
-, pillow
-, pygments
-, requests
-, result
-, setuptools
-, six
-, tenacity
-, typing-extensions
-, uri-template
-, urllib3
-, webencodings
-, widlparser
-, yarl
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  # build inputs
+  about-time,
+  aiofiles,
+  aiohttp,
+  aiosignal,
+  alive-progress,
+  async-timeout,
+  attrs,
+  certifi,
+  charset-normalizer,
+  cssselect,
+  frozenlist,
+  html5lib,
+  idna,
+  isodate,
+  json-home-client,
+  kdl-py,
+  lxml,
+  multidict,
+  pillow,
+  pygments,
+  requests,
+  result,
+  setuptools,
+  six,
+  tenacity,
+  typing-extensions,
+  uri-template,
+  urllib3,
+  webencodings,
+  widlparser,
+  yarl,
 }:
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "4.2.7";
+  version = "5.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vtZ97brCk+fd/HsA2UHdS17o8rJ/VvSOdhg0MHzlCs8=";
+    hash = "sha256-QIADVcxgJreH2pvXRVIBE5p6nEEYZtTiSo00RrpFT+E=";
   };
 
   build-system = [ setuptools ];

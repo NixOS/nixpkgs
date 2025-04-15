@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-axes";
-  version = "7.0.1";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-axes";
     tag = version;
-    hash = "sha256-Ci1+xC0MQKPxev4P70QnU+TSEAxiqYwIIOlqN1Lyido=";
+    hash = "sha256-yPHS9CgtAQeokq7ClI1fUcgR5YCjmcHjQHNcfQdTZtc=";
   };
 
   build-system = [ setuptools-scm ];

@@ -8,7 +8,7 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-annex-utils";
   version = "0.04-3-g531bb33";
   src = fetchgit {

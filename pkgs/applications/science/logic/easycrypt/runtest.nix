@@ -1,6 +1,6 @@
 { python3Packages, easycrypt }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit (easycrypt) src version;
   format = "other";
 

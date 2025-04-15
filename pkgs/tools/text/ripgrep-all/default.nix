@@ -6,7 +6,7 @@
   makeWrapper,
   ffmpeg,
   pandoc,
-  poppler_utils,
+  poppler-utils,
   ripgrep,
   Security,
   zip,
@@ -17,7 +17,7 @@ let
   path = [
     ffmpeg
     pandoc
-    poppler_utils
+    poppler-utils
     ripgrep
     zip
     fzf
@@ -34,19 +34,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ns7RL7kiG72r07LkF6RzShNg8M2SU6tU5+gXDxzUQHM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tokio-tar-0.3.1" = "sha256-oYXcZepnQyZ13zCvECwNqbXUnov3Y6uJlpkHz1zVpRo=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VbkLs5TuDSY7UHh2hA8R4dp99RU7pMmGhS1P9U9osq8=";
 
   # override debug=true set in Cargo.toml upstream
   RUSTFLAGS = "-C debuginfo=none";
 
   nativeBuildInputs = [
     makeWrapper
-    poppler_utils
+    poppler-utils
   ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 

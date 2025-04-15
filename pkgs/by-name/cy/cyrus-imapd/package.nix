@@ -27,6 +27,7 @@
   libchardet,
   libical,
   libmysqlclient,
+  libpq,
   libsrs2,
   libuuid,
   libxml2,
@@ -34,7 +35,6 @@
   openssl,
   pcre2,
   perl,
-  postgresql,
   rsync,
   shapelib,
   sqlite,
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       xapian
     ]
     ++ lib.optionals withMySQL [ libmysqlclient ]
-    ++ lib.optionals withPgSQL [ postgresql ]
+    ++ lib.optionals withPgSQL [ libpq ]
     ++ lib.optionals withSQLite [ sqlite ];
 
   enableParallelBuilding = true;

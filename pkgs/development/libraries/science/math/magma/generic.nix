@@ -13,9 +13,11 @@
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchurl,
+  fetchpatch,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
-  rocmPackages_5,
+  rocmPackages_5 ? null,
+  rocmPackages,
   lapack,
   lib,
   libpthreadstubs,
@@ -46,8 +48,8 @@ let
 
   inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
 
-  # move to newer ROCm version once supported
-  rocmPackages = rocmPackages_5;
+  effectiveRocmPackages =
+    if strings.versionOlder version "2.8.0" then rocmPackages_5 else rocmPackages;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -57,7 +59,7 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) effectiveRocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -91,7 +93,7 @@ let
       cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
-    # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
+    # "75" -> "750"  Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L200-L201
     "${minArch'}0";
 
 in
@@ -115,14 +117,19 @@ stdenv.mkDerivation {
     "test"
   ];
 
-  # Fixup for the python test runners
-  postPatch = ''
-    patchShebangs ./testing/run_{tests,summarize}.py
-    substituteInPlace ./testing/run_tests.py \
-      --replace-fail \
-        "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
-        "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
-  '';
+  postPatch =
+    ''
+      # For rocm version script invoked by cmake
+      patchShebangs tools/
+      # Fixup for the python test runners
+      patchShebangs ./testing/run_{tests,summarize}.py
+    ''
+    + lib.optionalString (strings.versionOlder version "2.9.0") ''
+      substituteInPlace ./testing/run_tests.py \
+        --replace-fail \
+          "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
+          "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
+    '';
 
   nativeBuildInputs =
     [
@@ -146,6 +153,7 @@ stdenv.mkDerivation {
     ++ lists.optionals cudaSupport (
       with effectiveCudaPackages;
       [
+        cuda_cccl # <nv/target> and <cuda/std/type_traits>
         cuda_cudart # cuda_runtime.h
         libcublas # cublas_v2.h
         libcusparse # cusparse.h
@@ -156,16 +164,16 @@ stdenv.mkDerivation {
       ++ lists.optionals (cudaAtLeast "11.8") [
         cuda_profiler_api # <cuda_profiler_api.h>
       ]
-      ++ lists.optionals (cudaAtLeast "12.0") [
-        cuda_cccl # <nv/target>
-      ]
     )
-    ++ lists.optionals rocmSupport [
-      rocmPackages.clr
-      rocmPackages.hipblas
-      rocmPackages.hipsparse
-      rocmPackages.llvm.openmp
-    ];
+    ++ lists.optionals rocmSupport (
+      with effectiveRocmPackages;
+      [
+        clr
+        hipblas
+        hipsparse
+        llvm.openmp
+      ]
+    );
 
   cmakeFlags =
     [
@@ -186,8 +194,12 @@ stdenv.mkDerivation {
       (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
     ]
     ++ lists.optionals rocmSupport [
-      (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+      # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
+      # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
+      # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
+      (strings.cmakeFeature "ROCM_CORE" "${effectiveRocmPackages.clr}")
+      (strings.cmakeFeature "CMAKE_C_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
+      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
     ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
@@ -230,15 +242,18 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
+    homepage = "https://icl.utk.edu/magma/";
+    changelog = "https://github.com/icl-utk-edu/magma/blob/v${version}/ReleaseNotes";
     platforms = platforms.linux;
     maintainers = with maintainers; [ connorbaker ];
 
-    # Cf. https://bitbucket.org/icl/magma/src/fcfe5aa61c1a4c664b36a73ebabbdbab82765e9f/CMakeLists.txt#lines-20
+    # Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L24-L31
     broken =
-      !(cudaSupport || rocmSupport) # At least one back-end enabled
+      # dynamic CUDA support is broken https://github.com/NixOS/nixpkgs/issues/239237
+      (cudaSupport && !static)
+      || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && cudaOlder "9.0")
-      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null);
+      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
+      || (rocmSupport && strings.versionOlder version "2.8.0" && rocmPackages_5 == null);
   };
 }

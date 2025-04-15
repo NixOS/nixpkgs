@@ -8,10 +8,11 @@
   bison,
   systemd,
   boost186,
+  libedit,
   openssl,
   patchelf,
   mariadb-connector-c,
-  postgresql,
+  libpq,
   zlib,
   tzdata,
   # Databases
@@ -29,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.14.3";
+  version = "2.14.5";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    hash = "sha256-QXe/+yQlyyOa78eEiudDni08SCUP3nhTYVpbmVUVKA8=";
+    hash = "sha256-5FQIcOvuq1GHX80rYuZ3jCM3CF9Fq1149nvlO1njqfA=";
   };
 
   patches = [
@@ -81,9 +82,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost186
+    libedit
     openssl
     systemd
-  ] ++ lib.optional withPostgresql postgresql;
+  ] ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
     cmake

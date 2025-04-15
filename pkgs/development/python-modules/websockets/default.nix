@@ -7,11 +7,12 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "13.1";
+  version = "15.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-Y0HDZw+H7l8+ywLLzFk66GNDCI0uWOZYypG86ozLo7c=";
+    hash = "sha256-DC1nK+TvCoCqchyWJOyT4Ul4gkTYXixu7XmTqvytqEo=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +47,10 @@ buildPythonPackage rec {
       "test_reject_invalid_server_certificate"
     ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    werkzeug
+  ];
 
   preCheck = ''
     # https://github.com/python-websockets/websockets/issues/1509
@@ -65,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
-    changelog = "https://github.com/aaugustin/websockets/blob/${version}/docs/project/changelog.rst";
+    changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.2.8";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
-    rev = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-kPH5nr+rIcF3mxl+L0kN5dn+9xvQccVa8EduwhuYboY=";
+    tag = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-Fjd4JPk6Uc7cPPQu9NiBv82XArd11TW+7sTL3wC9/+s=";
   };
 
   sourceRoot = "${src.name}/miniupnpc";
@@ -26,6 +27,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "UPNPC_BUILD_STATIC" stdenv.hostPlatform.isStatic)
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/upnpc";
+  doInstallCheck = true;
+
   doCheck = !stdenv.hostPlatform.isFreeBSD;
 
   postInstall = ''
@@ -34,15 +41,17 @@ stdenv.mkDerivation rec {
     mv $out/bin/external-ip.sh $out/bin/external-ip
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = {
     inherit (nixosTests) upnp;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Client that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = with platforms; linux ++ freebsd ++ darwin;
-    license = licenses.bsd3;
+    platforms = with lib.platforms; linux ++ freebsd ++ darwin;
+    license = lib.licenses.bsd3;
     mainProgram = "upnpc";
   };
 }

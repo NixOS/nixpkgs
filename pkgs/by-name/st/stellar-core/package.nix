@@ -5,12 +5,12 @@
   fetchFromGitHub,
   fetchpatch,
   flex,
-  git,
+  gitMinimal,
   lib,
+  libpq,
   libtool,
   libunwind,
   pkg-config,
-  postgresql,
   ripgrep,
   stdenv,
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     automake
     autoconf
-    git
+    gitMinimal
     libtool
     pkg-config
     ripgrep
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     bison
     flex
-    postgresql
+    libpq
   ];
 
   enableParallelBuilding = true;

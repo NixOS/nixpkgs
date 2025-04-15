@@ -26,7 +26,9 @@ rec {
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; };
+    gcc = {
+      abi = "elfv2";
+    };
   };
 
   sheevaplug = {
@@ -95,16 +97,28 @@ rec {
   } // platforms.fuloong2f_n32;
 
   # can execute on 32bit chip
-  mips-linux-gnu           = { config = "mips-unknown-linux-gnu";           } // platforms.gcc_mips32r2_o32;
-  mipsel-linux-gnu         = { config = "mipsel-unknown-linux-gnu";         } // platforms.gcc_mips32r2_o32;
+  mips-linux-gnu = {
+    config = "mips-unknown-linux-gnu";
+  } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu = {
+    config = "mipsel-unknown-linux-gnu";
+  } // platforms.gcc_mips32r2_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32   = { config = "mips64-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r2_n32;
-  mips64el-linux-gnuabin32 = { config = "mips64el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r2_n32;
+  mips64-linux-gnuabin32 = {
+    config = "mips64-unknown-linux-gnuabin32";
+  } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32 = {
+    config = "mips64el-unknown-linux-gnuabin32";
+  } // platforms.gcc_mips64r2_n32;
 
   # 64bit pointers
-  mips64-linux-gnuabi64    = { config = "mips64-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r2_64;
-  mips64el-linux-gnuabi64  = { config = "mips64el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r2_64;
+  mips64-linux-gnuabi64 = {
+    config = "mips64-unknown-linux-gnuabi64";
+  } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64 = {
+    config = "mips64el-unknown-linux-gnuabi64";
+  } // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -114,12 +128,20 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
-  gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu64 = {
+    config = "x86_64-unknown-linux-gnu";
+  };
   gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
-  gnu32  = { config = "i686-unknown-linux-gnu"; };
+  gnu32 = {
+    config = "i686-unknown-linux-gnu";
+  };
 
-  musl64 = { config = "x86_64-unknown-linux-musl"; };
-  musl32  = { config = "i686-unknown-linux-musl"; };
+  musl64 = {
+    config = "x86_64-unknown-linux-musl";
+  };
+  musl32 = {
+    config = "i686-unknown-linux-musl";
+  };
 
   riscv64 = riscv "64";
   riscv32 = riscv "32";
@@ -193,6 +215,10 @@ rec {
     config = "arm-none-eabi";
     libc = "newlib";
   };
+  arm-embedded-nano = {
+    config = "arm-none-eabi";
+    libc = "newlib-nano";
+  };
   armhf-embedded = {
     config = "arm-none-eabihf";
     libc = "newlib";
@@ -254,17 +280,8 @@ rec {
   #
 
   iphone64 = {
-    config = "aarch64-apple-ios";
+    config = "arm64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    darwinSdkVersion = "14.3";
-    xcodeVer = "12.3";
-    xcodePlatform = "iPhoneOS";
-    useiOSPrebuilt = true;
-  };
-
-  iphone32 = {
-    config = "armv7a-apple-ios";
-    # config = "arm-apple-darwin10";
     darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
@@ -281,26 +298,16 @@ rec {
     useiOSPrebuilt = true;
   };
 
-  iphone32-simulator = {
-    config = "i686-apple-ios";
-    # config = "i386-apple-darwin11";
-    darwinSdkVersion = "14.3";
-    xcodeVer = "12.3";
-    xcodePlatform = "iPhoneSimulator";
-    darwinPlatform = "ios-simulator";
-    useiOSPrebuilt = true;
-  };
-
   aarch64-darwin = {
-    config = "aarch64-apple-darwin";
+    config = "arm64-apple-darwin";
     xcodePlatform = "MacOSX";
-    platform = {};
+    platform = { };
   };
 
   x86_64-darwin = {
     config = "x86_64-apple-darwin";
     xcodePlatform = "MacOSX";
-    platform = {};
+    platform = { };
   };
 
   #

@@ -3,20 +3,23 @@
   stdenv,
   buildPythonApplication,
   nix-update-script,
-  python3Packages,
   fetchFromGitHub,
+  dnspython,
   iproute2,
   iptables,
+  setproctitle,
+  setuptools,
   unixtools,
 }:
 
 buildPythonApplication rec {
   pname = "vpn-slice";
   version = "0.16.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dlenski";
-    repo = pname;
+    repo = "vpn-slice";
     rev = "v${version}";
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
@@ -24,15 +27,20 @@ buildPythonApplication rec {
   postPatch =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace vpn_slice/mac.py \
-        --replace "'/sbin/route'" "'${unixtools.route}/bin/route'"
+        --replace-fail "'/sbin/route'" "'${unixtools.route}/bin/route'"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace vpn_slice/linux.py \
-        --replace "'/sbin/ip'" "'${iproute2}/bin/ip'" \
-        --replace "'/sbin/iptables'" "'${iptables}/bin/iptables'"
+        --replace-fail "'/sbin/ip'" "'${iproute2}/bin/ip'" \
+        --replace-fail "'/sbin/iptables'" "'${iptables}/bin/iptables'"
     '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    setuptools # can be removed with next package update, upstream no longer has a dependency on distutils
     setproctitle
     dnspython
   ];

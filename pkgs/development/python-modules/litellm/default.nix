@@ -8,6 +8,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  email-validator,
   fastapi,
   fastapi-sso,
   fetchFromGitHub,
@@ -16,6 +17,7 @@
   importlib-metadata,
   jinja2,
   jsonschema,
+  mcp,
   openai,
   orjson,
   poetry-core,
@@ -32,12 +34,14 @@
   rq,
   tiktoken,
   tokenizers,
+  uvloop,
   uvicorn,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.58.2";
+  version = "1.65.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,8 +49,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}";
-    hash = "sha256-trHZ8KrvdetL4q0nQyUm4YGX8WeMz4YrM+GPwcz8wtI=";
+    tag = "v${version}-stable";
+    hash = "sha256-q6FDgSwU3G41bVvdofsTBVG90xoqi+NP6zUg9geNz9I=";
   };
 
   build-system = [ poetry-core ];
@@ -54,9 +58,11 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
+    email-validator
     importlib-metadata
     jinja2
     jsonschema
+    mcp
     openai
     pydantic
     python-dotenv
@@ -78,6 +84,7 @@ buildPythonPackage rec {
       python-multipart
       pyyaml
       rq
+      uvloop
       uvicorn
     ];
     extra_proxy = [
@@ -95,12 +102,16 @@ buildPythonPackage rec {
   # access network
   doCheck = false;
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) litellm;
+  };
+
+  meta = {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

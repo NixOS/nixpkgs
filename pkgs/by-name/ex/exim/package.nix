@@ -17,7 +17,7 @@
   libmysqlclient,
   zlib,
   enablePgSQL ? false,
-  postgresql,
+  libpq,
   enableSqlite ? false,
   sqlite,
   enableAuthDovecot ? false,
@@ -39,11 +39,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.98";
+  version = "4.98.2";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-DrwQinefkpO6S0I8IIGPmj23m2AobZarxrprhaFYUvc=";
+    hash = "sha256-iLjopnwdtswLHRSBYao25mL0yi/vJdW282lNSQ5C3K4=";
   };
 
   enableParallelBuilding = true;
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       libmysqlclient
       zlib
     ]
-    ++ lib.optional enablePgSQL postgresql
+    ++ lib.optional enablePgSQL libpq
     ++ lib.optionals enableSqlite [
       sqlite
       sqlite.dev
@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
       ''}
       ${lib.optionalString enablePgSQL ''
         s:^# \(LOOKUP_PGSQL=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${postgresql.lib}/lib:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${postgresql.lib}/lib:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${libpq}/lib:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${libpq}/lib:
       ''}
       ${lib.optionalString enableSqlite ''
         s:^# \(LOOKUP_SQLITE=yes\)$:\1:

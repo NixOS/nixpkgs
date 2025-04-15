@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  nix,
+  nixVersions,
   nlohmann_json,
   boost,
   graphviz,
@@ -13,26 +13,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
-    rev = "v${version}";
-    sha256 = "sha256-WImnfkBU17SFQG1DzVUdsNq3hkiISNjAVZr2xGbgwHg=";
+    tag = "v${version}";
+    hash = "sha256-RkGPXjog2XR3ISlWMQZ1rzy3SwE5IPAKP09FIZ6LwkM=";
   };
 
-  cargoHash = "sha256-gE99nCJIi6fsuxzJuU80VWXIZqVbqwBhKM2aRlhmYco=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rrBFgE3Tz68gBQbz006RSdsqacSZqON78NM4FNi+wrk=";
 
   doCheck = true;
   nativeCheckInputs = [
-    nix
+    nixVersions.nix_2_24
     graphviz
   ];
 
   buildInputs = [
     boost
-    nix
+    nixVersions.nix_2_24
     nlohmann_json
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
@@ -48,5 +49,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.symphorien ];
     platforms = platforms.unix;
     mainProgram = "nix-du";
+    changelog = "https://github.com/symphorien/nix-du/blob/v${version}/CHANGELOG.md";
   };
 }

@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
     sed -i -e 's/chmod 2755/chmod 755/' extras/Makefile.in
   '';
 
+  # Work around failures with GCC 14, upstream is inactive unfortunately
+  # https://gcc.gnu.org/gcc-14/porting_to.html#warnings-as-errors
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=implicit-int"
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   buildInputs = [
     libxcrypt
   ];

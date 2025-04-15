@@ -1,6 +1,5 @@
 {
   stdenvNoCC,
-  fetchFromGitHub,
   bash,
   pds,
   makeBinaryWrapper,

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   systemd,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +20,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
+
+    substituteInPlace 90-brightnessctl.rules \
+      --replace-fail /bin/ ${coreutils}/bin/
   '';
 
   makeFlags = [
     "PREFIX="
     "DESTDIR=$(out)"
     "ENABLE_SYSTEMD=1"
+  ];
+
+  installTargets = [
+    "install"
+    "install_udev_rules"
   ];
 
   nativeBuildInputs = [ pkg-config ];

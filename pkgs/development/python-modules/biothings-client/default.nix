@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "biothings-client";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biothings";
     repo = "biothings_client.py";
-    rev = "v${version}";
-    hash = "sha256-rCpzBX2H+7R8ulnJgtVlBA45ASa4DaY5jQ1bO2+bAC8=";
+    tag = "v${version}";
+    hash = "sha256-uItIVoWbclF5Xkt7BxI/Q9sfKtrOJxYeJJmTd2NeGfo=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/biothings/biothings_client.py/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/biothings/biothings_client.py/blob/${src.tag}/CHANGES.txt";
     description = "Wrapper to access Biothings.api-based backend services";
     homepage = "https://github.com/biothings/biothings_client.py";
     license = lib.licenses.bsd3;

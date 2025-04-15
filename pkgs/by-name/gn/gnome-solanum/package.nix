@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Xf/b/9o6zHF1hjHSyAXb90ySoBj+DMMe31e6RfF8C4Y=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-POvKpwzi+bkEkfSDhi/vjs/ey+A2vNN5ta4Q7Ma/RBQ=";
+    hash = "sha256-jtMTW9tIf0UGbE9bJU31maub+o0agf0pDRO4s9QReyc=";
   };
 
   postPatch = ''

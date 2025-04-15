@@ -1,34 +1,35 @@
-{ fetchFromGitHub
-, fetchurl
-, fetchzip
-, lib
-, linkFarm
-, makeWrapper
-, runCommand
-, stdenv
-, stdenvNoCC
-, rustPlatform
+{
+  fetchFromGitHub,
+  fetchurl,
+  fetchzip,
+  lib,
+  linkFarm,
+  makeWrapper,
+  runCommand,
+  stdenv,
+  stdenvNoCC,
+  rustPlatform,
 
-, ant
-, cmake
-, glib
-, glibc
-, jetbrains
-, kotlin
-, libdbusmenu
-, maven
-, p7zip
-, pkg-config
-, xorg
+  ant,
+  cmake,
+  glib,
+  glibc,
+  jetbrains,
+  kotlin,
+  libdbusmenu,
+  maven,
+  p7zip,
+  pkg-config,
+  xorg,
 
-, version
-, buildNumber
-, buildType
-, ideaHash
-, androidHash
-, jpsHash
-, restarterHash
-, mvnDeps
+  version,
+  buildNumber,
+  buildType,
+  ideaHash,
+  androidHash,
+  jpsHash,
+  restarterHash,
+  mvnDeps,
 }:
 
 let
@@ -86,8 +87,15 @@ let
   libdbm = stdenv.mkDerivation {
     pname = "libdbm";
     version = buildNumber;
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ glib xorg.libX11 libdbusmenu ];
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+    buildInputs = [
+      glib
+      xorg.libX11
+      libdbusmenu
+    ];
     inherit src;
     sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
@@ -130,30 +138,42 @@ let
     cargoHash = restarterHash;
 
     # Allow static linking
-    buildInputs = [ glibc glibc.static ];
+    buildInputs = [
+      glibc
+      glibc.static
+    ];
   };
 
-  jpsRepo = runCommand "jps-bootstrap-repository"
-    {
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-      outputHash = jpsHash;
-      nativeBuildInputs = [ ant jbr ];
-    } ''
-    ant -Duser.home=$out -Dbuild.dir=/build/tmp -f ${src}/platform/jps-bootstrap/jps-bootstrap-classpath.xml
-    find $out -type f \( \
-      -name \*.lastUpdated \
-      -o -name resolver-status.properties \
-      -o -name _remote.repositories \) \
-      -delete
-  '';
+  jpsRepo =
+    runCommand "jps-bootstrap-repository"
+      {
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+        outputHash = jpsHash;
+        nativeBuildInputs = [
+          ant
+          jbr
+        ];
+      }
+      ''
+        ant -Duser.home=$out -Dbuild.dir=/build/tmp -f ${src}/platform/jps-bootstrap/jps-bootstrap-classpath.xml
+        find $out -type f \( \
+          -name \*.lastUpdated \
+          -o -name resolver-status.properties \
+          -o -name _remote.repositories \) \
+          -delete
+      '';
 
   jps-bootstrap = stdenvNoCC.mkDerivation {
     pname = "jps-bootstrap";
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/platform/jps-bootstrap";
-    nativeBuildInputs = [ ant makeWrapper jbr ];
+    nativeBuildInputs = [
+      ant
+      makeWrapper
+      jbr
+    ];
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin_2_0_21}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
@@ -206,17 +226,42 @@ let
       version = "2.0.21-RC";
     in
     fetchurl {
-      url = repoUrl + "/" + groupId + "/" + artefactId + "/" + version + "/" + artefactId + "-" + version + ".jar";
+      url =
+        repoUrl
+        + "/"
+        + groupId
+        + "/"
+        + artefactId
+        + "/"
+        + version
+        + "/"
+        + artefactId
+        + "-"
+        + version
+        + ".jar";
       hash = "sha256-jFjxP1LGjrvc1x2XqF5gg/SeKdSFNefxABBlrYl81zA=";
     };
 
-    targetClass = if buildType == "pycharm" then "intellij.pycharm.community.build" else "intellij.idea.community.build";
-    targetName = if buildType == "pycharm" then "PyCharmCommunityInstallersBuildTarget" else "OpenSourceCommunityInstallersBuildTarget";
+  targetClass =
+    if buildType == "pycharm" then
+      "intellij.pycharm.community.build"
+    else
+      "intellij.idea.community.build";
+  targetName =
+    if buildType == "pycharm" then
+      "PyCharmCommunityInstallersBuildTarget"
+    else
+      "OpenSourceCommunityInstallersBuildTarget";
 
   xplat-launcher = fetchzip {
     url = "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz";
     hash = "sha256-ttrQZUbBvvyH1BSVt1yWOoD82WwRi/hkoRfrsdCjwTA=";
     stripRoot = false;
+  };
+
+  brokenPlugins = fetchurl {
+    url = "https://web.archive.org/web/20250224030717if_/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
+    hash = "sha256-wQO+qmFfBn32F//bs/a5Q/H4Kpc171jKA9EMmeatc6w=";
   };
 
 in
@@ -225,7 +270,11 @@ stdenvNoCC.mkDerivation rec {
   inherit version buildNumber;
   name = "${pname}-${version}.tar.gz";
   inherit src;
-  nativeBuildInputs = [ p7zip jbr jps-bootstrap ];
+  nativeBuildInputs = [
+    p7zip
+    jbr
+    jps-bootstrap
+  ];
   repo = mvnRepo;
 
   patches = [
@@ -248,7 +297,7 @@ stdenvNoCC.mkDerivation rec {
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
-      --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
+      --replace-fail 'BROKEN_PLUGINS_HERE' '${brokenPlugins}'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'
