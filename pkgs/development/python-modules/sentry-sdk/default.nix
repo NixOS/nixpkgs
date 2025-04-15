@@ -66,14 +66,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.25.0";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = version;
-    hash = "sha256-HQxZczpfTURbkLaWjOqnYB86UuFHD71kE7HPPjlkUqc=";
+    hash = "sha256-wwo/9HSgFIseyFdo0AxDl+XAqYTgDah68beqt+GVUzw=";
   };
 
   postPatch = ''
@@ -212,7 +212,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Official Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    changelog = "https://github.com/getsentry/sentry-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/sentry-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
