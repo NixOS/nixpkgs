@@ -123,10 +123,14 @@ import ./make-test-python.nix (
                     assert "Web console is running in limited access mode" in driver.page_source
 
                     log("Clicking the sudo button")
+                    for button in driver.find_elements(By.TAG_NAME, "button"):
+                        if 'admin' in button.text:
+                            button.click()
                     driver.switch_to.default_content()
-                    driver.find_element(By.CSS_SELECTOR, 'button.ct-locked').click()
+                    
                     log("Checking that /nonexistent is not a thing")
                     assert '/nonexistent' not in driver.page_source
+                    assert driver.find_element(By.CSS_SELECTOR, '#machine-reconnect') is not None
 
                     driver.close()
                   '';
