@@ -8,7 +8,7 @@
   stdenv,
   ...
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "headplane";
   version = "0.5.10";
   src = fetchFromGitHub {
