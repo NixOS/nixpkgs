@@ -68,9 +68,7 @@ let
 in
 
 {
-
   options = {
-
     networking.firewall = {
       enable = lib.mkOption {
         type = lib.types.bool;
@@ -290,11 +288,9 @@ in
         '';
       };
     } // commonOptions;
-
   };
 
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
         assertion = cfg.filterForward -> config.networking.nftables.enable;
@@ -317,7 +313,5 @@ in
     boot.extraModprobeConfig = lib.optionalString cfg.autoLoadConntrackHelpers ''
       options nf_conntrack nf_conntrack_helper=1
     '';
-
   };
-
 }
