@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -29,6 +30,8 @@ buildGoModule rec {
       --fish <($out/bin/gowall completion fish) \
       --zsh <($out/bin/gowall completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Achno/gowall/releases/tag/v${version}";
