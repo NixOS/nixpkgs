@@ -1,5 +1,5 @@
 {
-config,
+  config,
   lib,
   pkgs,
   utils,
@@ -375,7 +375,9 @@ in
               b: (b.paths != null && b.paths != [ ]) || (b.dynamicFilesFrom != null && b.dynamicFilesFrom != [ ]);
             commandBackup = b: (b.command != [ ]);
           in
-          !lib.any (backup: (fileBackup backup && commandBackup backup)) (lib.attrValues config.services.restic.backups);
+          !lib.any (backup: (fileBackup backup && commandBackup backup)) (
+            lib.attrValues config.services.restic.backups
+          );
         message = "services.restic.backups.<name>: command is mutually exclusive with paths and dynamicFilesFrom";
       }
     ];
