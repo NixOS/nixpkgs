@@ -113,6 +113,19 @@ self: super: {
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
   hlint = enableCabalFlag "ghc-lib" super.hlint;
 
+  # ghc-lib >= 9.8 and friends no longer build with GHC 9.2 since they require semaphore-compat
+  ghc-lib-parser = doDistribute (
+    self.ghc-lib-parser_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
+  ghc-lib = doDistribute (
+    self.ghc-lib_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+
   # 0.2.2.3 requires Cabal >= 3.8
   shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
 

@@ -100,6 +100,19 @@ in
 
   ghc-tags = self.ghc-tags_1_6;
 
+  # ghc-lib >= 9.8 and friends no longer build with GHC 9.4 since they require semaphore-compat
+  ghc-lib-parser = doDistribute (
+    self.ghc-lib-parser_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
+  ghc-lib = doDistribute (
+    self.ghc-lib_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_6_1_3;
 
@@ -115,14 +128,15 @@ in
       let
         hls_overlay = lself: lsuper: {
           Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
+          Cabal = lself.Cabal_3_10_3_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = super.fourmolu;
-        ormolu = super.ormolu;
-        hlint = super.hlint;
-        stylish-haskell = super.stylish-haskell;
+        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
+        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
+        hlint = self.hlint_3_6_1;
+        stylish-haskell = self.stylish-haskell_0_14_5_0;
       }
     )
     haskell-language-server
