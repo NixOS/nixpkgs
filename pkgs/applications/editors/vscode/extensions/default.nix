@@ -3909,6 +3909,23 @@ let
 
       oops418.nix-env-picker = callPackage ./oops418.nix-env-picker { };
 
+      philhindle.errorlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "PhilHindle";
+          name = "errorlens";
+          version = "1.1.3";
+          hash = "sha256-kMbet43DvTGIui7fcP8amCVzS0C/KY9VBVlZ+MlTxyM=";
+        };
+        meta = {
+          changelog = "https://github.com/phindle/error-lens/blob/master/CHANGELOG.md";
+          description = "VSCode extension for improving highlighting of errors, warnings and other language diagnostics";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=PhilHindle.errorlens";
+          homepage = "https://github.com/phindle/error-lens";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
       phind.phind = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "phind";
