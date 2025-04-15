@@ -443,7 +443,7 @@ in {
                 {
                   Type = "oneshot";
                   ExecStart =
-                    [
+                    lib.optionals doBackup [
                       "${resticCmd} backup ${
                         lib.concatStringsSep " " (
                           backup.extraBackupArgs
@@ -501,7 +501,7 @@ in {
       name: backup:
         lib.nameValuePair "restic-backups-${name}" {
           wantedBy = ["timers.target"];
-        inherit (backup) timerConfig;
+          inherit (backup) timerConfig;
         }
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
