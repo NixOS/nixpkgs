@@ -53,6 +53,11 @@ rec {
         bits = 64;
       };
     };
+    isX32 = {
+      abi = {
+        abi = "x32";
+      };
+    };
     isPower = {
       cpu = {
         family = "power";
@@ -387,6 +392,7 @@ rec {
         gnueabihf
         gnuabielfv1
         gnuabielfv2
+        gnux32
       ];
     isMusl =
       with abis;
@@ -396,6 +402,7 @@ rec {
         musleabihf
         muslabin32
         muslabi64
+        muslx32
       ];
     isUClibc =
       with abis;

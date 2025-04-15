@@ -728,6 +728,13 @@ rec {
       abi = "n32";
     };
 
+    gnux32 = {
+      abi = "x32";
+    };
+    muslx32 = {
+      abi = "x32";
+    };
+
     gnuabielfv2 = {
       abi = "elfv2";
     };
@@ -1001,11 +1008,13 @@ rec {
               gnuabi64 = abis.muslabi64;
               gnuabielfv2 = abis.musl;
               gnuabielfv1 = abis.musl;
+              gnux32 = abis.muslx32;
               # The following entries ensure that this function is idempotent.
               musleabi = abis.musleabi;
               musleabihf = abis.musleabihf;
               muslabin32 = abis.muslabin32;
               muslabi64 = abis.muslabi64;
+              muslx32 = abis.muslx32;
             }
             .${parsed.abi.name} or abis.musl;
         }
