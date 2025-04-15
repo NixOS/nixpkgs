@@ -309,6 +309,9 @@ in
     ) enabledInstances;
   };
 
-  meta.maintainers = with lib.maintainers; [ soopyc ];
+  meta.maintainers = with lib.maintainers; [
+    soopyc
+    nullcube
+  ];
   meta.doc = ./anubis.md;
 }
