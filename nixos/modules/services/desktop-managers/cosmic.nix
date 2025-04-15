@@ -14,12 +14,7 @@ let
   cfg = config.services.desktopManager.cosmic;
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    thefossguy
-    HeitorAugustoLN
-    nyabinary
-    ahoneybun
-  ];
+  meta.maintainers = lib.teams.cosmic.members;
 
   options = {
     services.desktopManager.cosmic = {
@@ -45,7 +40,7 @@ in
         cosmic-applets
         cosmic-applibrary
         cosmic-bg
-        (cosmic-comp.override { useXWayland = false; })
+        cosmic-comp
         cosmic-edit
         cosmic-files
         config.services.displayManager.cosmic-greeter.package

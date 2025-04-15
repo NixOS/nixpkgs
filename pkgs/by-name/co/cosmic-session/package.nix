@@ -7,6 +7,7 @@
   dbus,
   stdenv,
   xdg-desktop-portal-cosmic,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,19 +63,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fi
   '';
 
-  passthru.providedSessions = [ "cosmic" ];
+  passthru = {
+    providedSessions = [ "cosmic" ];
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with lib.maintainers; [
-      a-kenji
-      nyabinary
-      thefossguy
-      HeitorAugustoLN
-    ];
+    maintainers = lib.teams.cosmic.members;
     platforms = lib.platforms.linux;
   };
 })

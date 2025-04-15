@@ -394,11 +394,11 @@
       "dependency": "direct main",
       "description": {
         "name": "node_interop",
-        "sha256": "3af2420c728173806f4378cf89c53ba9f27f7f67792b898561bff9d390deb98e",
+        "sha256": "4848ac408c0cdd0f70136b755df816a8e4c96c244e5377a3fb3b8f8950666150",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.0"
+      "version": "2.2.0"
     },
     "node_preamble": {
       "dependency": "direct dev",

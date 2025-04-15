@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "25.3.1";
+  version = "25.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quark-engine";
     repo = "quark-engine";
     tag = "v${version}";
-    hash = "sha256-k4jWmLoTT92ikyiVXv7iXyNoVfyGGo12ekmfthO9M3U=";
+    hash = "sha256-Z005rFKdwuS2t5mTZKv+HSO5GvEe2YqsRVaN556cM/Y=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

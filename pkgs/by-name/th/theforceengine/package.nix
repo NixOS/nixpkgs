@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   rtaudio,
   rtmidi,
@@ -16,19 +16,19 @@
 }:
 let
   # package depends on SDL2main static library
-  SDL2' = SDL2.override {
+  SDL2' = SDL2_classic.override {
     withStatic = true;
   };
 in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.22.200";
+  version = "1.22.300";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    hash = "sha256-Mvp9VrPk36wNTUwNQT83JPOEO72Xhqmhkn3/KfZhQX4=";
+    hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
   };
 
   nativeBuildInputs = [

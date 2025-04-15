@@ -5,6 +5,7 @@
   mkMesonExecutable,
 
   nix-fetchers,
+  nix-fetchers-c,
   nix-store-test-support,
 
   libgit2,
@@ -18,25 +19,11 @@
   resolvePath,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonExecutable (finalAttrs: {
   pname = "nix-fetchers-tests";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./meson.build
-    # ./meson.options
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-  ];
 
   buildInputs =
     [
@@ -44,6 +31,9 @@ mkMesonExecutable (finalAttrs: {
       nix-store-test-support
       rapidcheck
       gtest
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+      nix-fetchers-c
     ]
     ++ lib.optionals (lib.versionAtLeast version "2.27") [
       libgit2

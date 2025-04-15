@@ -9,6 +9,7 @@
   libjpeg,
   libGLU,
   libGL,
+  libX11,
   libsndfile,
   libXxf86vm,
   pcre,
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libsndfile
+    libX11
     libXxf86vm
     pcre
     SDL2

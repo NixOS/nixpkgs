@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     validatePkgConfig
-    libpq # for pg_config
+    libpq.pg_config
   ];
 
   buildInputs = [

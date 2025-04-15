@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation {
     downloadPage = "https://developer.android.com/studio";
     changelog = "https://developer.android.com/studio/releases";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = lib.teams.android.members ++ (with lib.maintainers; [ pandapip1 ]);
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ fromSource ]; # The 'binaries' are actually shell scripts
   };

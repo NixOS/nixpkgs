@@ -8,7 +8,7 @@
   llvmPackages,
   meson,
   ninja,
-  nixForLinking,
+  nixVersions,
   nix-update-script,
   nixd,
   nixf,
@@ -101,12 +101,12 @@ in
       ];
 
       buildInputs = [
-        nixForLinking
+        nixVersions.nix_2_24
         gtest
         boost
       ];
 
-      env.CXXFLAGS = "-include ${nixForLinking.dev}/include/nix/config.h";
+      env.CXXFLAGS = "-include ${nixVersions.nix_2_24.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -127,7 +127,7 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nixForLinking
+        nixVersions.nix_2_24
         nixf
         nixt
         llvmPackages.llvm
@@ -137,7 +137,7 @@ in
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
 
-      env.CXXFLAGS = "-include ${nixForLinking.dev}/include/nix/config.h";
+      env.CXXFLAGS = "-include ${nixVersions.nix_2_24.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

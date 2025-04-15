@@ -10,30 +10,33 @@
   coreutils,
 }:
 let
-  inherit (stdenv.hostPlatform) system;
-  inherit (vscode-utils) buildVscodeMarketplaceExtension;
-
-  lockfile = lib.importJSON ./lockfile.json;
-  extInfo =
-    (arch: {
-      inherit arch;
-      inherit (lockfile.${arch}) hash binaries;
-    })
-      (
-        {
-          x86_64-linux = "linux-x64";
-          aarch64-linux = "linux-arm64";
-          x86_64-darwin = "darwin-x64";
-          aarch64-darwin = "darwin-arm64";
-        }
-        .${system} or (throw "Unsupported system: ${system}")
-      );
+  extInfo = (
+    {
+      x86_64-linux = {
+        arch = "linux-x64";
+        hash = "sha256-YmlXnmLp0ZtFvHXOsI0sLySLprU+ntduywvvlZ2Riw0=";
+      };
+      aarch64-linux = {
+        arch = "linux-arm64";
+        hash = "sha256-QBon9zOXykngvJHydJQPdgjvLxy65DbWS+IUAzo638o=";
+      };
+      x86_64-darwin = {
+        arch = "darwin-x64";
+        hash = "sha256-fOfCm+XiD5NVexMlBeBfSxtTr9mTnn2HKFsJjuGBCJ0=";
+      };
+      aarch64-darwin = {
+        arch = "darwin-arm64";
+        hash = "sha256-e1cxz8A2IlO6fnN41PKXqPxthTuAOmAWy6/kRck6hsM=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+  );
 in
-buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    inherit (lockfile) version;
+    version = "2.72.27";
     inherit (extInfo) hash arch;
   };
 
@@ -52,8 +55,22 @@ buildVscodeMarketplaceExtension {
   postPatch = ''
     substituteInPlace dist/extension.js \
       --replace-fail 'uname -m' '${lib.getExe' coreutils "uname"} -m'
+  '';
 
-    chmod +x ${lib.escapeShellArgs extInfo.binaries}
+  preFixup = ''
+    (
+      shopt -s globstar
+      shopt -s dotglob
+      for file in "$out"/**/*; do
+        if [[ ! -f "$file" || "$file" == *.so || "$file" == *.dylib ]] ||
+            (! isELF "$file" && ! isMachO "$file"); then
+            continue
+        fi
+
+        echo Making "$file" executable...
+        chmod +x "$file"
+      done
+    )
   '';
 
   passthru.updateScript = ./update.sh;

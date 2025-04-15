@@ -23,31 +23,11 @@
   embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonLibrary (finalAttrs: {
   pname = "nix-store";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./meson.build
-    ./meson.options
-    ./linux/meson.build
-    ./unix/meson.build
-    ./windows/meson.build
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-    (fileset.fileFilter (file: file.hasExt "sb") ./.)
-    (fileset.fileFilter (file: file.hasExt "md") ./.)
-    (fileset.fileFilter (file: file.hasExt "sql") ./.)
-  ];
 
   nativeBuildInputs = lib.optional embeddedSandboxShell unixtools.hexdump;
 

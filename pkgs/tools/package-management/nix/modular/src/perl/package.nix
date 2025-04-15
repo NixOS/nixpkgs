@@ -12,30 +12,12 @@
   libsodium,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 perl.pkgs.toPerlModule (
   mkMesonDerivation (finalAttrs: {
     pname = "nix-perl";
     inherit version;
 
     workDir = ./.;
-    fileset = fileset.unions (
-      [
-        ./.version
-        ../../.version
-        ./MANIFEST
-        ./lib
-        ./meson.build
-        ./meson.options
-      ]
-      ++ lib.optionals finalAttrs.finalPackage.doCheck [
-        ./.yath.rc.in
-        ./t
-      ]
-    );
 
     nativeBuildInputs = [
       pkg-config

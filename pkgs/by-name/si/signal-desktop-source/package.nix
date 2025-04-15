@@ -7,11 +7,8 @@
   python3,
   makeWrapper,
   callPackage,
-  libpulseaudio,
   fetchFromGitHub,
-  runCommand,
-  fetchzip,
-  autoPatchelfHook,
+  jq,
   makeDesktopItem,
   copyDesktopItems,
   replaceVars,
@@ -21,37 +18,31 @@
 }:
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_10;
+  pnpm = pnpm_10.override { inherit nodejs; };
   electron = electron_35;
 
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
+  nodeOS =
+    {
+      "linux" = "linux";
+      "darwin" = "darwin";
+    }
+    .${stdenv.hostPlatform.parsed.kernel.name}
+      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.kernel.name}");
 
-  sqlcipher-signal-extension = callPackage ./sqlcipher-signal-extension.nix { };
+  nodeArch =
+    {
+      # https://nodejs.org/api/os.html#osarch
+      "x86_64" = "x64";
+      "aarch64" = "arm64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name}
+      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
+
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
+  signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
 
-  ringrtc = stdenv.mkDerivation (finalAttrs: {
-    pname = "ringrtc-bin";
-    version = "2.50.2";
-    src = fetchzip {
-      url = "https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v${finalAttrs.version}.tar.gz";
-      hash = "sha256-hNlz+gSulyJ//FdbPvY/5OHbtJ4rEUdi9/SHJDX6gZE=";
-    };
-
-    installPhase = ''
-      cp -r . $out
-    '';
-
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ libpulseaudio ];
-    meta = {
-      homepage = "https://github.com/signalapp/ringrtc";
-      license = lib.licenses.agpl3Only;
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    };
-  });
+  webrtc = callPackage ./webrtc.nix { };
+  ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
   # Noto Color Emoji PNG files for emoji replacement; see below.
   noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
@@ -74,16 +65,16 @@ let
     '';
   });
 
-  version = "7.48.0";
+  version = "7.50.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-/jtuGsBOFsSgJZNpRilWZ0daI0iYVziZBaF/vLvQ7NU=";
+    hash = "sha256-APdwETadRIQRJ/Wdxqnr2R5H/7Qqbacpp+SV16jesDw=";
   };
 
-  stickerCreator = stdenv.mkDerivation (finalAttrs: {
+  sticker-creator = stdenv.mkDerivation (finalAttrs: {
     pname = "signal-desktop-sticker-creator";
     inherit version;
     src = src + "/sticker-creator";
@@ -95,7 +86,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      (pnpm.override { inherit nodejs; }).configHook
+      pnpm.configHook
     ];
 
     buildPhase = ''
@@ -117,10 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    (pnpm.override { inherit nodejs; }).configHook
+    pnpm.configHook
     makeWrapper
     copyDesktopItems
     python3
+    jq
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
@@ -139,33 +131,61 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-xba5MfIjwnLHDKVM9+2KSpC3gcw6cM4cX3dn3/jqT3o="
+        "sha256-BcKHVMrD8b9u/5hNtAY5V2vjTVHItob0EG89soFSwa4="
       else
-        "sha256-I5UGY9Fz4wCa23snq0pir2uq/P+w+fAGU4Bks+CqEgk=";
+        "sha256-GdeCIUV0aTwnEV55/RnpESDBrkpcVVa+1XhUmUIgBPU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1743538878;
+    SOURCE_DATE_EPOCH = 1744232207;
   };
 
   preBuild = ''
-    cp ${sqlcipher-signal-extension}/share/sqlite3.gyp node_modules/@signalapp/better-sqlite3/deps/sqlite3.gyp
+    if [ "`jq -r '.engines.node' < package.json | head -c 2`" != `head -c 2 <<< "${nodejs.version}"` ]
+    then
+      die "nodejs version mismatch"
+    fi
 
-    cp -r ${ringrtc} node_modules/@signalapp/ringrtc/build
+    if [ "`jq -r '.devDependencies.electron' < package.json | head -c 2`" != `head -c 2 <<< "${electron.version}"` ]
+    then
+      die "electron version mismatch"
+    fi
+
+    if [ "`jq -r '.dependencies."@signalapp/libsignal-client"' < package.json`" != "${libsignal-node.version}" ]
+    then
+      die "libsignal-client version mismatch"
+    fi
+
+    if [ "`jq -r '.dependencies."@signalapp/sqlcipher"' < package.json`" != "${signal-sqlcipher.version}" ]
+    then
+      die "signal-sqlcipher version mismatch"
+    fi
+
+    if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc.version}" ]
+    then
+      die "ringrtc version mismatch"
+    fi
+
+    mkdir -p node_modules/@signalapp/ringrtc/build
+    install -D ${ringrtc}/lib/libringrtc${stdenv.hostPlatform.extensions.library} \
+      node_modules/@signalapp/ringrtc/build/${nodeOS}/libringrtc-${nodeArch}.node
 
     rm -fr node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
+
+    rm -fr node_modules/@signalapp/sqlcipher
+    cp -r ${signal-sqlcipher} node_modules/@signalapp/sqlcipher
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    export npm_config_nodedir=${electron-headers}
+    export npm_config_nodedir=${electron.headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-    cp -r ${stickerCreator} sticker-creator/dist
+    cp -r ${sticker-creator} sticker-creator/dist
 
     pnpm run generate
     pnpm exec electron-builder \
@@ -219,8 +239,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    inherit sqlcipher-signal-extension libsignal-node;
+    inherit
+      libsignal-node
+      ringrtc
+      webrtc
+      sticker-creator
+      signal-sqlcipher
+      ;
     tests.application-launch = nixosTests.signal-desktop;
+    updateScript.command = [ ./update.sh ];
   };
 
   meta = {
@@ -247,12 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ];
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-
-      # ringrtc
-      binaryNativeCode
     ];
   };
 })

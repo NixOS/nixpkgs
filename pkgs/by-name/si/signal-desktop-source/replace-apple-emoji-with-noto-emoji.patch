@@ -1,8 +1,8 @@
 diff --git a/ACKNOWLEDGMENTS.md b/ACKNOWLEDGMENTS.md
-index aed1048..e4c1f50 100644
+index 2c963f1..96edd02 100644
 --- a/ACKNOWLEDGMENTS.md
 +++ b/ACKNOWLEDGMENTS.md
-@@ -745,30 +745,6 @@ Signal Desktop makes use of the following open source projects.
+@@ -1636,30 +1636,6 @@ Signal Desktop makes use of the following open source projects.
      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      SOFTWARE.
  
@@ -46,10 +46,10 @@ index 68dceea..4b35bb1 100644
      getBadgesPath(userDataPath),
      getDraftPath(userDataPath),
 diff --git a/package.json b/package.json
-index 3a6ac26..40cdb25 100644
+index 5755fec..86125ba 100644
 --- a/package.json
 +++ b/package.json
-@@ -130,7 +130,6 @@
+@@ -137,7 +137,6 @@
      "dashdash": "2.0.0",
      "direction": "1.0.4",
      "emoji-datasource": "15.1.2",
@@ -57,11 +57,18 @@ index 3a6ac26..40cdb25 100644
      "emoji-regex": "10.4.0",
      "encoding": "0.1.13",
      "fabric": "4.6.0",
+@@ -649,4 +648,4 @@
+       "sticker-creator/dist/**"
+     ]
+   }
+-}
++}
+\ No newline at end of file
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
-index ba2f205..705e454 100644
+index f04b2b1..070fa0f 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
-@@ -169,9 +169,6 @@ importers:
+@@ -184,9 +184,6 @@ importers:
        emoji-datasource:
          specifier: 15.1.2
          version: 15.1.2
@@ -71,7 +78,7 @@ index ba2f205..705e454 100644
        emoji-regex:
          specifier: 10.4.0
          version: 10.4.0
-@@ -4790,9 +4787,6 @@ packages:
+@@ -4817,9 +4814,6 @@ packages:
      resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
      engines: {node: '>=12'}
  
@@ -81,7 +88,7 @@ index ba2f205..705e454 100644
    emoji-datasource@15.1.2:
      resolution: {integrity: sha512-tXAqGsrDVhgCRpFePtaD9P4Z8Ro2SUQSL/4MIJBG0SxqQJaMslEbin8J53OaFwEBu6e7JxFaIF6s4mw9+8acAQ==}
  
-@@ -14929,8 +14923,6 @@ snapshots:
+@@ -14990,8 +14984,6 @@ snapshots:
  
    emittery@0.13.1: {}
  
@@ -90,14 +97,42 @@ index ba2f205..705e454 100644
    emoji-datasource@15.1.2: {}
  
    emoji-regex@10.4.0: {}
-diff --git a/ts/components/conversation/Emojify.tsx b/ts/components/conversation/Emojify.tsx
-index f0b1115..7613230 100644
---- a/ts/components/conversation/Emojify.tsx
-+++ b/ts/components/conversation/Emojify.tsx
-@@ -35,8 +35,15 @@ function getImageTag({
-   }
+diff --git a/stylesheets/components/fun/FunEmoji.scss b/stylesheets/components/fun/FunEmoji.scss
+index 78c7563..83d196c 100644
+--- a/stylesheets/components/fun/FunEmoji.scss
++++ b/stylesheets/components/fun/FunEmoji.scss
+@@ -5,19 +5,9 @@
+ $emoji-sprite-sheet-grid-item-count: 62;
  
-   let srcSet: string | undefined;
+ @mixin emoji-sprite($sheet, $margin, $scale) {
+-  $size: calc($sheet * 1px * $scale);
+-  $margin-start: calc($margin * $scale);
+-  $margin-end: calc($margin * $scale);
+-  $size-outer: calc($size + $margin-start + $margin-end);
+-  $image: url('../images/emoji-sheet-#{$sheet}.webp');
+-  background-image: $image;
+-  background-size: calc($size-outer * $emoji-sprite-sheet-grid-item-count);
+-  background-position-x: calc(
+-    var(--fun-emoji-sheet-x) * ($size-outer * -1) + ($margin-start * -1)
+-  );
+-  background-position-y: calc(
+-    var(--fun-emoji-sheet-y) * ($size-outer * -1) + ($margin-start * -1)
+-  );
++  background-image: var(--fun-emoji-jumbo-image);
++  background-size: contain;
++  background-position: center;
+   background-repeat: no-repeat;
+ }
+ 
+diff --git a/ts/components/fun/FunEmoji.tsx b/ts/components/fun/FunEmoji.tsx
+index 08785e8..d25b868 100644
+--- a/ts/components/fun/FunEmoji.tsx
++++ b/ts/components/fun/FunEmoji.tsx
+@@ -10,7 +10,14 @@ export const FUN_STATIC_EMOJI_CLASS = 'FunStaticEmoji';
+ export const FUN_INLINE_EMOJI_CLASS = 'FunInlineEmoji';
+ 
+ function getEmojiJumboUrl(emoji: EmojiVariantData): string {
+-  return `emoji://jumbo?emoji=${encodeURIComponent(emoji.value)}`;
 +  const emojiToNotoName = (emoji: string): string =>
 +    `emoji_u${
 +      [...emoji]
@@ -105,25 +140,7 @@ index f0b1115..7613230 100644
 +        .map(c => c.codePointAt(0)?.toString(16).padStart(4, "0"))
 +        .join("_")
 +    }.png`;
-   if (sizeClass != null && JUMBO_SIZES.has(sizeClass)) {
--    srcSet = `emoji://jumbo?emoji=${encodeURIComponent(match)} 2x, ${img}`;
-+    srcSet = `file://@noto-emoji-pngs@/${emojiToNotoName(match)} 2x, ${img}`;
-   }
++  return `file://@noto-emoji-pngs@/${emojiToNotoName(emoji.value)}`;
+ }
  
-   return (
-diff --git a/ts/components/emoji/lib.ts b/ts/components/emoji/lib.ts
-index 9753017..cf51d3d 100644
---- a/ts/components/emoji/lib.ts
-+++ b/ts/components/emoji/lib.ts
-@@ -102,7 +102,10 @@ const ROOT_PATH = get(
- );
- 
- const makeImagePath = (src: string) => {
--  return `${ROOT_PATH}node_modules/emoji-datasource-apple/img/apple/64/${src}`;
-+  const datasourceToNoto = (name: string): string =>
-+    `emoji_u${name.slice(0,-4).split("-").filter(c => c != "fe0f").join("_")}.png`;
-+
-+  return `@noto-emoji-pngs@/${datasourceToNoto(src)}`;
- };
- 
- const imageQueue = new PQueue({
+ export type FunStaticEmojiSize =

@@ -143,6 +143,8 @@ in
           {
             wantedBy = [ "bluetooth.target" ];
             aliases = [ "dbus-org.bluez.service" ];
+            # restarting can leave people without a mouse/keyboard
+            restartIfChanged = false;
             serviceConfig = {
               ExecStart = [
                 ""
@@ -151,6 +153,7 @@ in
               CapabilityBoundingSet = [
                 "CAP_NET_BIND_SERVICE" # sockets and tethering
               ];
+              ConfigurationDirectoryMode = "0755";
               NoNewPrivileges = true;
               RestrictNamespaces = true;
               ProtectControlGroups = true;
@@ -171,8 +174,6 @@ in
 
               PrivateNetwork = false; # tethering
             };
-            # restarting can leave people without a mouse/keyboard
-            unitConfig.X-RestartIfChanged = false;
           };
       }
       // (optionalAttrs cfg.hsphfpd.enable {

@@ -5,7 +5,11 @@
   pkg-config,
   fontconfig,
   writableTmpDirAsHomeHook,
-  nix-update-script,
+  writeShellApplication,
+  hdr10plus,
+  nixVersions,
+  nix-update,
+  tomlq,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,9 +35,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf";
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "update-${finalAttrs.pname}";
+    runtimeInputs = [
+      nixVersions.latest
+      nix-update
+      tomlq
+    ];
+
+    text = ''
+      nix-update ${finalAttrs.pname}
+      src="$(nix eval -f . --raw ${finalAttrs.pname}.src)"
+      libver="$(tq -f "$src/hdr10plus/Cargo.toml" package.version)"
+      nix-update ${hdr10plus.pname} --version "$libver"
+    '';
+  });
 
   meta = {
     description = "CLI utility to work with HDR10+ in HEVC files.";

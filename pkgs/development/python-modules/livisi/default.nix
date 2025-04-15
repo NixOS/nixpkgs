@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "livisi";
-  version = "0.0.24";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "planbnet";
     repo = "livisi";
     tag = "v${version}";
-    hash = "sha256-ggEbzN9FfqT968hgOblIh5dfVibzgUEc4SoZfBGOCwo=";
+    hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
   };
 
   pythonRelaxDeps = [ "colorlog" ];

@@ -159,6 +159,12 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
+
+    # Makes man page generation respect SOURCE_DATE_EPOCH. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
+    ./fix-timestamp-reproducibility.patch
+
+    # Ensures deterministic ordering of fish shell completions. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
+    ./fix-fish-completion-ordering.patch
   ];
 
   hardeningDisable = [

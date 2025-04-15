@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     [
       graphene
       gtk3
-      libxml2
+      (libxml2.override { zlibSupport = true; })
       python3
       poppler
     ]

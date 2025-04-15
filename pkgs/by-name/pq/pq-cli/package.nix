@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pq-cli";
-  version = "1.0.2-unstable-2024-07-15";
+  version = "1.0.2-unstable-2025-04-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "pq-cli";
-    rev = "4122e936c87436552f35ff7972d6e543ba6c837b";
-    hash = "sha256-PvHkTjPjOubhl9gfPTF7yNaFgg2GLk8y+PtF09fpaII=";
+    rev = "e6d18352c5874364a7bbb65ad41a198838d907ed";
+    hash = "sha256-gT9vxz4oAtoatG8dUDJbr60yyKhglFrxNe1SQMKilb8=";
   };
 
   build-system = with python3Packages; [

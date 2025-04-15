@@ -60,7 +60,7 @@ buildPythonPackage {
     '';
     homepage = "https://github.com/robusta-dev/prometrix";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     # prometheus-api-client 0.5.5 is not working
     # https://github.com/robusta-dev/prometrix/issues/14
     broken = versionAtLeast prometheus-api-client.version "0.5.3";

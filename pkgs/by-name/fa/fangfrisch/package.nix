@@ -2,6 +2,10 @@
   lib,
   python3,
   fetchFromGitHub,
+  nix-update-script,
+
+  # support setting socks proxies in `ALL_PROXY` environment variable
+  supportSocks ? true,
 }:
 let
   version = "1.9.2";
@@ -23,12 +27,17 @@ python3.pkgs.buildPythonApplication {
     python3.pkgs.wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-    sqlalchemy
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      requests
+      sqlalchemy
+    ]
+    ++ lib.optional supportSocks pysocks;
 
   pythonImportsCheck = [ "fangfrisch" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Update and verify unofficial Clam Anti-Virus signatures";

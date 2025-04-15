@@ -43,6 +43,7 @@
   cubeb,
   useDiscordRichPresence ? true,
   rapidjson,
+  azahar,
 }:
 let
   inherit (lib)
@@ -150,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_QT" enableQt)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_SDL2" enableSDL2)
+    (cmakeBool "ENABLE_SDL2_FRONTEND" enableSDL2)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
   ];

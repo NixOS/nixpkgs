@@ -29,14 +29,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furnace";
-  version = "0.6.7";
+  version = "0.6.8.1";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-G5yjqsep+hDGXCqGNBKoMvV7JOD7ZZTxTPBl9VmG8RM=";
+    hash = "sha256-R4yQqTPVNx5i9AeY06T0QdNN22ImLvD0bH96r5ojPLo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       libsndfile
       rtmidi
       SDL2
+      libX11
       zlib
       portaudio
     ]

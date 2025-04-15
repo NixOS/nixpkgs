@@ -8,12 +8,14 @@
   pkg-config,
   gettext,
   libsodium,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   SDL_audiolib,
   flac,
   fmt,
   libpng,
+  libtiff,
+  libwebp,
   smpq,
 }:
 
@@ -98,8 +100,10 @@ stdenv.mkDerivation rec {
     bzip2
     fmt
     libpng
+    libtiff
+    libwebp
     libsodium
-    SDL2
+    SDL2_classic
     SDL2_image
     SDL_audiolib'
   ];

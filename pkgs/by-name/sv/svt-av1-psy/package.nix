@@ -6,6 +6,7 @@
   nasm,
   cpuinfo,
   libdovi,
+  hdr10plus,
   unstableGitUpdater,
 }:
 
@@ -33,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         USE_EXTERNAL_CPUINFO = true;
         LIBDOVI_FOUND = true;
-        # enable when libhdr10plus is available
-        # LIBHDR10PLUS_RS_FOUND = true;
+        LIBHDR10PLUS_RS_FOUND = true;
       };
 
   nativeBuildInputs = [
@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cpuinfo
     libdovi
+    hdr10plus
   ];
 
   passthru.updateScript = unstableGitUpdater {

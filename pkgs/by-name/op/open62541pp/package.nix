@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541pp";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "open62541pp";
     repo = "open62541pp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-593UaEEqWaheqEBUl13ijuC25sNnuPe9a6gbBo7Zo+E=";
+    hash = "sha256-xFiL+biDETGNwWzbTcfAi3GF1Dj9vvXEj2wJ+GoFz1Q=";
   };
 
   cmakeFlags = [

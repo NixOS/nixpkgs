@@ -13,6 +13,7 @@
   buildGoModule,
   fetchFromGitHub,
   acl,
+  buildPackages,
   cowsql,
   incus-ui-canonical,
   libcap,
@@ -27,11 +28,30 @@
 
 let
   pname = "incus${lib.optionalString lts "-lts"}";
+  docsPython = buildPackages.python3.withPackages (
+    py: with py; [
+      furo
+      gitpython
+      linkify-it-py
+      canonical-sphinx-extensions
+      myst-parser
+      pyspelling
+      sphinx
+      sphinx-autobuild
+      sphinx-copybutton
+      sphinx-design
+      sphinx-notfound-page
+      sphinx-remove-toctrees
+      sphinx-reredirects
+      sphinx-tabs
+      sphinxcontrib-jquery
+      sphinxext-opengraph
+    ]
+  );
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit
-    patches
     pname
     vendorHash
     version
@@ -40,14 +60,17 @@ buildGoModule rec {
   outputs = [
     "out"
     "agent_loader"
+    "doc"
   ];
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
   };
+
+  patches = [ ./docs.patch ] ++ patches;
 
   excludedPackages = [
     # statically compile these
@@ -61,6 +84,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    docsPython
   ];
 
   buildInputs = [
@@ -82,6 +106,13 @@ buildGoModule rec {
   CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
 
   postBuild = ''
+    # build docs
+    mkdir -p .sphinx/deps
+    ln -s ${buildPackages.python3.pkgs.swagger-ui-bundle.src} .sphinx/deps/swagger-ui
+    substituteInPlace Makefile --replace-fail '. $(SPHINXENV) ; ' ""
+    make doc-incremental
+
+    # build some static executables
     make incus-agent incus-migrate
   '';
 
@@ -111,18 +142,20 @@ buildGoModule rec {
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
     substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
+
+    mkdir $doc
+    cp -R doc/html $doc/
   '';
 
   passthru = {
     client = callPackage ./client.nix {
       inherit
         lts
-        meta
         patches
-        src
         vendorHash
         version
         ;
+      inherit (finalAttrs) meta src;
     };
 
     tests = if lts then nixosTests.incus-lts.all else nixosTests.incus.all;
@@ -143,4 +176,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "incus";
   };
-}
+})

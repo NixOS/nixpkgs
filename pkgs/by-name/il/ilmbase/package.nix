@@ -3,16 +3,17 @@
   lib,
   buildPackages,
   cmake,
-  openexr,
+  # explicitely depending on openexr_2 because ilmbase doesn't exist for v3
+  openexr_2,
 }:
 
 stdenv.mkDerivation {
   pname = "ilmbase";
-  version = lib.getVersion openexr;
+  version = lib.getVersion openexr_2;
 
   # the project no longer provides separate tarballs. We may even want to merge
   # the ilmbase package into openexr in the future.
-  inherit (openexr) src patches;
+  inherit (openexr_2) src patches;
 
   outputs = [
     "out"
@@ -37,5 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
+    insecure = true;
   };
 }

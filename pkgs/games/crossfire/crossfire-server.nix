@@ -9,7 +9,7 @@
   perl,
   check,
   pkg-config,
-  python39, # crossfire-server relies on a parser wich was removed in python >3.9
+  python3,
   version,
   rev,
   sha256,
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     perl
     check
     pkg-config
-    python39
+    python3
   ];
   hardeningDisable = [ "format" ];
 
@@ -49,13 +49,14 @@ stdenv.mkDerivation {
     sh autogen.sh
   '';
 
-  configureFlags = [ "--with-python=${python39}" ];
+  configureFlags = [ "--with-python=${python3}" ];
 
   postInstall = ''
     ln -s ${maps} "$out/share/crossfire/maps"
   '';
 
   meta = with lib; {
+    broken = true; # cfpython.c:63:10: fatal error: node.h: No such file or directory
     description = "Server for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
     license = licenses.gpl2Plus;

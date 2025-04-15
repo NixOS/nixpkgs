@@ -835,28 +835,50 @@ if [ -z "$rollback" ]; then
                 "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
-                in builtins.mapAttrs (n: v: v.passthru.filePath) set.${attr:+$attr.}config.system.build.images" \
+                in builtins.attrNames set.${attr:+$attr.}config.system.build.images" \
                 "${extraBuildFlags[@]}"
             )"
         elif [[ -z $flake ]]; then
             variants="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
-                "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
+                "with import <nixpkgs/nixos> {}; builtins.attrNames config.system.build.images" \
                 "${extraBuildFlags[@]}"
             )"
         else
             variants="$(
                 runCmd nix "${flakeFlags[@]}" eval --json \
                 "$flake#$flakeAttr.config.system.build.images" \
-                --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
+                --apply "builtins.attrNames" "${evalArgs[@]}" "${extraBuildFlags[@]}"
             )"
         fi
-        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" > /dev/null; then
+        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "any(. == \$variant)" > /dev/null; then
             echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
-            echo "$variants" | jq -r '. | keys | join ("\n")'
+            echo "$variants" | jq -r 'join ("\n")'
             exit 1
         fi
-        imageName="$(echo "$variants" | jq -r --arg variant "$imageVariant" ".[\$variant]")"
+
+        if [[ -z $buildingAttribute ]]; then
+            imageName="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "let
+                    value = import \"$(realpath $buildFile)\";
+                    set = if builtins.isFunction value then value {} else value;
+                in set.${attr:+$attr.}config.system.build.images.$imageVariant.v.passthru.filePath" \
+                "${extraBuildFlags[@]}"
+            )"
+        elif [[ -z $flake ]]; then
+            imageName="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "with import <nixpkgs/nixos> {}; config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}"
+            )"
+        else
+            imageName="$(
+                runCmd nix "${flakeFlags[@]}" eval --json \
+                "$flake#$flakeAttr.config.system.build.images.$imageVariant.passthru.filePath" \
+                "${evalArgs[@]}" "${extraBuildFlags[@]}"
+            )"
+        fi
 
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.images.${imageVariant}" "${extraBuildFlags[@]}")"

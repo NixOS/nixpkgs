@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       libe57format
     ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_PLUGIN_E57=${if enableE57 then "ON" else "OFF"}"
     "-DBUILD_PLUGIN_HDF=ON"
@@ -112,12 +114,20 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_app_plugin_test"
   ];
 
+  nativeCheckInputs = [
+    gdal # gdalinfo
+  ];
+
   checkPhase = ''
     runHook preCheck
     # tests are flaky and they seem to fail less often when they don't run in
     # parallel
     ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
     runHook postCheck
+  '';
+
+  postInstall = ''
+    patchShebangs --update --build $out/bin/pdal-config
   '';
 
   passthru.tests = {

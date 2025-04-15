@@ -105,6 +105,7 @@ let
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
+      mistral-rs = linux;
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
@@ -119,6 +120,7 @@ let
       rtabmap = linux;
       saga = linux;
       suitesparse = linux;
+      sunshine = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581

@@ -12,6 +12,7 @@
   appstream-glib,
   desktop-file-utils,
   intltool,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,12 +63,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
+  passthru.tests = {
+    inherit (nixosTests)
+      cosmic
+      cosmic-autologin
+      cosmic-noxwayland
+      cosmic-autologin-noxwayland
+      ;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-notifications";
     description = "Notifications for the COSMIC Desktop Environment";
     mainProgram = "cosmic-notifications";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = teams.cosmic.members;
     platforms = platforms.linux;
   };
 })

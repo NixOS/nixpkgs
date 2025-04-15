@@ -11,7 +11,6 @@
   pkg-config,
   zlib,
   unstableGitUpdater,
-  libseccomp,
   replaceVars,
 }:
 
@@ -48,7 +47,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     curlMinimal
-    libseccomp
     ncurses
     zlib
   ];
@@ -83,6 +81,5 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
-    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }

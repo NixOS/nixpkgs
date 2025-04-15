@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.29.3";
+  version = "0.30.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-zUI5awSEKJ4PuSdtRRe0XJCpr3KLLfI7R+dafUuzfRU=";
+    hash = "sha256-6nE6iKIC6ymI+NMOw/xQT4l5nshDyPdGI0YhqK7tQRE=";
   };
 
   build-system = [ setuptools ];
@@ -93,7 +93,7 @@ buildPythonPackage rec {
       keras
     ];
     hf_xet = [
-      # hf-xet
+      # hf-xet (unpackaged)
     ];
   };
 

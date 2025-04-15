@@ -70,9 +70,7 @@ let
   };
   buildEclipse =
     eclipseData:
-    buildEclipseUnversioned (
-      eclipseData // { productVersion = "${platform_major}.${platform_minor}"; }
-    );
+    buildEclipseUnversioned (eclipseData // { version = "${platform_major}.${platform_minor}"; });
 
   generateEclipse =
     id:
@@ -85,7 +83,7 @@ let
       {
         name = "eclipse-${lib.strings.toLower id}";
         value = buildEclipse {
-          name = "eclipse-${lib.strings.toLower id}-${platform_major}.${platform_minor}";
+          pname = "eclipse-${lib.strings.toLower id}";
           inherit description;
           src = fetchurl {
             url =

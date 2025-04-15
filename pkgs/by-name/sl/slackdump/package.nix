@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "slackdump";
-  version = "3.0.8";
+  version = "3.0.10";
 
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
     tag = "v${version}";
-    hash = "sha256-ufoksglrOPdvFb86rcc9kfOMC/koyHCRAXxaqUge6cU=";
+    hash = "sha256-+Q79DauC+hnUCxBa9muVsq03D9ph7lEB5pmU7ujv3Mo=";
   };
 
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.IOKitTools;

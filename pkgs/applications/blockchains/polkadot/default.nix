@@ -1,4 +1,5 @@
 {
+  cacert,
   fetchFromGitHub,
   lib,
   openssl,
@@ -18,13 +19,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "2412-4";
+  version = "2503";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${version}";
-    hash = "sha256-MYv/3bpERjceBzQxR+NkbaRJZegzkJY0fN6TaF2xn8I=";
+    hash = "sha256-nPZFmsf82JpBrOrErH5hrEcmieECfgA7JWzEyEh8AAE=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -46,15 +47,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pvB507k3eYfz8tpTaVUzJOIKvtWEckaMu3Eux89V0uE=";
+  cargoHash = "sha256-yOJyvpsEK4Ab/Bh6xmqAEHhj1Rq4u/CevcP7vJi0zxo=";
 
   buildType = "production";
   buildAndTestSubdir = "polkadot";
-
-  # NOTE: tests currently fail to compile due to an issue with cargo-auditable
-  # and resolution of features flags, potentially related to this:
-  # https://github.com/rust-secure-code/cargo-auditable/issues/66
-  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -72,11 +68,9 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
-  # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
-  # this should no longer be needed after: https://github.com/paritytech/polkadot-sdk/pull/7008
-  # since the new wasmv1-none target won't require rebuilding std.
-  SKIP_WASM_BUILD = 1;
+  checkInputs = [
+    cacert
+  ];
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";

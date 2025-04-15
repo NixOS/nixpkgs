@@ -48,26 +48,26 @@
 }:
 let
   pname = "cursor";
-  version = "0.48.6";
+  version = "0.48.8";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/linux/x64/Cursor-0.48.6-x86_64.AppImage";
-      hash = "sha256-ZiQpVRZRaFOJ8UbANRd1F+4uhv7W/t15d9wmGKshu80=";
+      url = "https://downloads.cursor.com/production/7801a556824585b7f2721900066bc87c4a09b743/linux/x64/Cursor-0.48.8-x86_64.AppImage";
+      hash = "sha256-/5mwElzN0uURppWCLYPPECs6GzXtB54v2+jQD1RHcJE=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/linux/arm64/Cursor-0.48.6-aarch64.AppImage";
-      hash = "sha256-PUnrQz/H4hfbyX4mumG5v4DcKG6N6yh6taMpnnG35hQ=";
+      url = "https://downloads.cursor.com/production/7801a556824585b7f2721900066bc87c4a09b743/linux/arm64/Cursor-0.48.8-aarch64.AppImage";
+      hash = "sha256-OXGUjTNwc0VZ8Q7arMyhfhN/bPTOCYS9Bfi1I4TJCXY=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-S2l2Kz3rG6z4iKLyGFeKVeyrWq7eb09v1+knBln+Mgk=";
+      url = "https://downloads.cursor.com/production/7801a556824585b7f2721900066bc87c4a09b743/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-uLKOjo4aYK0r69a0jFevzE4bJJ0mqg0pJEPYdtlo8tU=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-6QEH/A6qxKLyrJQQkFj4FFXF/BoVupov92ve7fO0ads=";
+      url = "https://downloads.cursor.com/production/7801a556824585b7f2721900066bc87c4a09b743/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-xSmBSK9pum6RlvXnyhNA1HM6Y88R2bRASJkLTHfxzMY=";
     };
   };
 
@@ -167,15 +167,10 @@ stdenvNoCC.mkDerivation {
 
     ${lib.optionalString hostPlatform.isDarwin ''
       APP_DIR="$out/Applications"
-      CURSOR_APP="$APP_DIR/Cursor.app"
       mkdir -p "$APP_DIR"
       cp -Rp Cursor.app "$APP_DIR"
       mkdir -p "$out/bin"
-      cat << EOF > "$out/bin/cursor"
-      #!${stdenvNoCC.shell}
-      open -na "$CURSOR_APP" --args "\$@"
-      EOF
-      chmod +x "$out/bin/cursor"
+      ln -s "$APP_DIR/Cursor.app/Contents/Resources/app/bin/cursor" "$out/bin/cursor"
     ''}
 
     runHook postInstall

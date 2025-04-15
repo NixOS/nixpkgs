@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/iterm2"
     #!${stdenvNoCC.shell}
-    open -na "$APP_DIR" --args "$@"
+    open -na "$APP_DIR" --args "\$@"
     EOF
     chmod +x "$out/bin/iterm2"
     runHook postInstall

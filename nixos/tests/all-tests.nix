@@ -8,7 +8,7 @@
 
 }:
 # The return value of this function will be an attrset with arbitrary depth and
-# the `anything` returned by callTest at its test leafs.
+# the `anything` returned by callTest at its test leaves.
 # The tests not supported by `system` will be replaced with `{}`, so that
 # `passthru.tests` can contain links to those without breaking on architectures
 # where said tests are unsupported.
@@ -177,6 +177,7 @@ in
   agate = runTest ./web-servers/agate.nix;
   agda = runTest ./agda.nix;
   age-plugin-tpm-decrypt = runTest ./age-plugin-tpm-decrypt.nix;
+  agnos = discoverTests (import ./agnos.nix);
   agorakit = runTest ./web-apps/agorakit.nix;
   airsonic = runTest ./airsonic.nix;
   akkoma = runTestOn [ "x86_64-linux" "aarch64-linux" ] {
@@ -197,6 +198,7 @@ in
   amd-sev = runTest ./amd-sev.nix;
   angie-api = runTest ./angie-api.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
+  anubis = runTest ./anubis.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
   apcupsd = runTest ./apcupsd.nix;
   apfs = runTest ./apfs.nix;
@@ -208,7 +210,7 @@ in
   armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
   atd = runTest ./atd.nix;
-  atop = handleTest ./atop.nix { };
+  atop = import ./atop.nix { inherit pkgs runTest; };
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
@@ -274,8 +276,8 @@ in
   cadvisor = handleTestOn [ "x86_64-linux" ] ./cadvisor.nix { };
   cage = handleTest ./cage.nix { };
   cagebreak = handleTest ./cagebreak.nix { };
-  calibre-web = handleTest ./calibre-web.nix { };
-  calibre-server = handleTest ./calibre-server.nix { };
+  calibre-web = runTest ./calibre-web.nix;
+  calibre-server = import ./calibre-server.nix { inherit pkgs runTest; };
   canaille = handleTest ./canaille.nix { };
   castopod = handleTest ./castopod.nix { };
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
@@ -315,7 +317,6 @@ in
   coder = handleTest ./coder.nix { };
   collectd = handleTest ./collectd.nix { };
   commafeed = handleTest ./commafeed.nix { };
-  conduwuit = runTest ./matrix/conduwuit.nix;
   connman = handleTest ./connman.nix { };
   consul = handleTest ./consul.nix { };
   consul-template = handleTest ./consul-template.nix { };
@@ -338,12 +339,36 @@ in
   containers-unified-hierarchy = handleTest ./containers-unified-hierarchy.nix { };
   convos = handleTest ./convos.nix { };
   corerad = handleTest ./corerad.nix { };
+  cosmic = runTest {
+    imports = [ ./cosmic.nix ];
+    _module.args.testName = "cosmic";
+    _module.args.enableAutologin = false;
+    _module.args.enableXWayland = true;
+  };
+  cosmic-autologin = runTest {
+    imports = [ ./cosmic.nix ];
+    _module.args.testName = "cosmic-autologin";
+    _module.args.enableAutologin = true;
+    _module.args.enableXWayland = true;
+  };
+  cosmic-noxwayland = runTest {
+    imports = [ ./cosmic.nix ];
+    _module.args.testName = "cosmic-noxwayland";
+    _module.args.enableAutologin = false;
+    _module.args.enableXWayland = false;
+  };
+  cosmic-autologin-noxwayland = runTest {
+    imports = [ ./cosmic.nix ];
+    _module.args.testName = "cosmic-autologin-noxwayland";
+    _module.args.enableAutologin = true;
+    _module.args.enableXWayland = false;
+  };
   coturn = handleTest ./coturn.nix { };
   couchdb = handleTest ./couchdb.nix { };
   crabfit = handleTest ./crabfit.nix { };
   cri-o = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix { };
   cryptpad = runTest ./cryptpad.nix;
-  cups-pdf = handleTest ./cups-pdf.nix { };
+  cups-pdf = runTest ./cups-pdf.nix;
   curl-impersonate = handleTest ./curl-impersonate.nix { };
   custom-ca = handleTest ./custom-ca.nix { };
   croc = handleTest ./croc.nix { };
@@ -480,7 +505,7 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.floorp;
   };
-  fluent-bit = handleTest ./fluent-bit.nix { };
+  fluent-bit = runTest ./fluent-bit.nix;
   fluentd = handleTest ./fluentd.nix { };
   fluidd = handleTest ./fluidd.nix { };
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix { };
@@ -511,12 +536,12 @@ in
   gemstash = handleTest ./gemstash.nix { };
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
-  gerrit = handleTest ./gerrit.nix { };
+  gerrit = runTest ./gerrit.nix;
   geth = handleTest ./geth.nix { };
   ghostunnel = handleTest ./ghostunnel.nix { };
   gitdaemon = handleTest ./gitdaemon.nix { };
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
-  github-runner = handleTest ./github-runner.nix { };
+  github-runner = runTest ./github-runner.nix;
   gitlab = runTest ./gitlab.nix;
   gitolite = handleTest ./gitolite.nix { };
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix { };
@@ -524,7 +549,7 @@ in
   glances = runTest ./glances.nix;
   glitchtip = runTest ./glitchtip.nix;
   glusterfs = handleTest ./glusterfs.nix { };
-  gnome = handleTest ./gnome.nix { };
+  gnome = runTest ./gnome.nix;
   gnome-extensions = handleTest ./gnome-extensions.nix { };
   gnome-flashback = handleTest ./gnome-flashback.nix { };
   gnome-xorg = handleTest ./gnome-xorg.nix { };
@@ -655,7 +680,7 @@ in
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = handleTest ./jotta-cli.nix { };
   k3s = handleTest ./k3s { };
-  kafka = handleTest ./kafka.nix { };
+  kafka = handleTest ./kafka { };
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = handleTest ./kanidm.nix { };
   kanidm-provisioning = handleTest ./kanidm-provisioning.nix { };
@@ -675,7 +700,7 @@ in
   keycloak = discoverTests (import ./keycloak.nix);
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
-  kimai = handleTest ./kimai.nix { };
+  kimai = runTest ./kimai.nix;
   kmonad = runTest ./kmonad.nix;
   knot = runTest ./knot.nix;
   komga = handleTest ./komga.nix { };
@@ -688,6 +713,7 @@ in
   languagetool = handleTest ./languagetool.nix { };
   lanraragi = handleTest ./lanraragi.nix { };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
+  lavalink = runTest ./lavalink.nix;
   leaps = handleTest ./leaps.nix { };
   lemmy = handleTest ./lemmy.nix { };
   libinput = handleTest ./libinput.nix { };
@@ -741,7 +767,7 @@ in
   magnetico = handleTest ./magnetico.nix { };
   mailcatcher = runTest ./mailcatcher.nix;
   mailhog = handleTest ./mailhog.nix { };
-  mailpit = handleTest ./mailpit.nix { };
+  mailpit = runTest ./mailpit.nix;
   mailman = handleTest ./mailman.nix { };
   man = handleTest ./man.nix { };
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
@@ -807,7 +833,7 @@ in
   mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
-  mumble = handleTest ./mumble.nix { };
+  mumble = runTest ./mumble.nix;
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
   musescore = handleTestOn [ "x86_64-linux" ] ./musescore.nix { };
@@ -1054,6 +1080,7 @@ in
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
       { };
   postfixadmin = handleTest ./postfixadmin.nix { };
+  postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = handleTest ./postgresql { };
   postgrest = runTest ./postgrest.nix;
   powerdns = handleTest ./powerdns.nix { };
@@ -1123,6 +1150,7 @@ in
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
   renovate = handleTest ./renovate.nix { };
   replace-dependencies = handleTest ./replace-dependencies { };
+  reposilite = runTest ./reposilite.nix;
   restartByActivationScript = handleTest ./restart-by-activation-script.nix { };
   restic-rest-server = handleTest ./restic-rest-server.nix { };
   restic = handleTest ./restic.nix { };
@@ -1292,6 +1320,7 @@ in
   systemd-portabled = handleTest ./systemd-portabled.nix { };
   systemd-repart = handleTest ./systemd-repart.nix { };
   systemd-resolved = handleTest ./systemd-resolved.nix { };
+  systemd-ssh-proxy = runTest ./systemd-ssh-proxy.nix;
   systemd-shutdown = handleTest ./systemd-shutdown.nix { };
   systemd-sysupdate = runTest ./systemd-sysupdate.nix;
   systemd-sysusers-mutable = runTest ./systemd-sysusers-mutable.nix;
@@ -1412,11 +1441,12 @@ in
   wakapi = runTest ./wakapi.nix;
   warzone2100 = handleTest ./warzone2100.nix { };
   wasabibackend = handleTest ./wasabibackend.nix { };
-  wastebin = handleTest ./wastebin.nix { };
+  wastebin = runTest ./wastebin.nix;
   watchdogd = handleTest ./watchdogd.nix { };
   webhook = runTest ./webhook.nix;
   weblate = handleTest ./web-apps/weblate.nix { };
   whisparr = handleTest ./whisparr.nix { };
+  whoami = runTest ./whoami.nix;
   whoogle-search = handleTest ./whoogle-search.nix { };
   wiki-js = runTest ./wiki-js.nix;
   wine = handleTest ./wine.nix { };

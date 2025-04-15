@@ -13,19 +13,19 @@
   typing-extensions,
 
   # passthru
-  writeScript,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.53";
+  version = "0.1.61";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${version}";
-    hash = "sha256-Mx/36+FYZi/XNHJwlNRKE/lVo6nRTXUQwtYkq7HmBu0=";
+    hash = "sha256-cwoJ/1D+oAxqt6DEmpRBxDiR2nRAqBIOfqwLOmgUcZQ=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -43,20 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
-  passthru = {
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
-
-      set -eu -o pipefail +e
-      nix-update --commit --version-regex '(.*)' python3Packages.langgraph
-      nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
-      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
-      nix-update --commit --version-regex 'checkpointduckdb==(.*)' python3Packages.langgraph-checkpoint-duckdb
-      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
-      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
-    '';
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "sdk==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

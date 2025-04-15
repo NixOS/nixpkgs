@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   versionCheckProgram = "${placeholder "out"}/bin/hmmalign";
 
-  versionCheckProgramArg = [ "-h" ];
+  versionCheckProgramArg = "-h";
 
   meta = {
     description = "Biosequence analysis using profile hidden Markov models";

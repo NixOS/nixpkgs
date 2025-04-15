@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "citus";
   version = "13.0.3";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "citus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tQ2YkMUeziz+dhfXtfuK0x8PWH3vfoJiVbE+YvQ/Gzc=";
   };
 
@@ -42,9 +42,9 @@ postgresqlBuildExtension rec {
     broken = lib.versionOlder postgresql.version "15";
     description = "Distributed PostgreSQL as an extension";
     homepage = "https://www.citusdata.com/";
-    changelog = "https://github.com/citusdata/citus/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/citusdata/citus/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };
-}
+})

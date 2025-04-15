@@ -194,7 +194,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "-h" ];
+  versionCheckProgramArg = "-h";
 
   passthru.updateScript = writeScript "mame-update-script" ''
     #!/usr/bin/env nix-shell

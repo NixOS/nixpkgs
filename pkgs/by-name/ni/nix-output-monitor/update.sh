@@ -27,4 +27,6 @@ cabal2nix \
   "https://code.maralorn.de/maralorn/nix-output-monitor/archive/${new_version}.tar.gz" \
   >> "$derivation_file"
 
+nixfmt "$derivation_file"
+
 echo "Finished."

@@ -103,7 +103,7 @@ let
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/gpu_stats";
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     meta = {
@@ -134,7 +134,7 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     __darwinAllowLocalNetworking = true;
@@ -250,6 +250,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Require docker access
     "tests/system_tests"
+
+    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
+    "tests/unit_tests/test_analytics/test_sentry.py"
   ];
 
   disabledTests =

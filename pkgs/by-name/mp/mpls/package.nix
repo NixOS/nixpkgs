@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "mpls";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "mhersson";
     repo = "mpls";
     tag = "v${version}";
-    hash = "sha256-jcSi/ZdHP9kJRUaMkQdS6BuScp2GM4+iNGIoclYMljI=";
+    hash = "sha256-sr0NZGQoaJw8LYJy13iNNos06KDHXNPbYSw3UAHi6eg=";
   };
 
   vendorHash = "sha256-xILlYrwcnMWAPACeELwVKGUBIK9QbrUSR03xVmNXsnE=";

@@ -17,8 +17,8 @@
   freetype,
   libpng,
   libtheora,
-  # glx
   libX11,
+  # glx
   libGLU,
   libGL,
   libXpm,
@@ -100,9 +100,9 @@ let
         libvorbis
         curl
         gmp
+        libX11
       ]
       ++ lib.optionals withGLX [
-        libX11
         libGLU
         libGL
         libXpm

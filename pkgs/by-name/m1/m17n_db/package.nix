@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "1.8.9";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/m17n-db-${version}.tar.gz";
-    sha256 = "sha256-SBJUo4CqnGbX9Ow6o3Kn4dL+R/w53252BEvUQBfEJKQ=";
+    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
+    hash = "sha256-SBJUo4CqnGbX9Ow6o3Kn4dL+R/w53252BEvUQBfEJKQ=";
   };
 
   nativeBuildInputs = [ gettext ];

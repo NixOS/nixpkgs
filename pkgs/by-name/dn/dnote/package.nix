@@ -110,7 +110,7 @@ buildGoModule rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/dnote-cli";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   # Fails on darwin:
   # panic: initializing context: initializing files: creating the dnote dir:
   #   initializing config dir: creating a directory at /var/empty/.config/dnote: mkdir /var/empty: file exists

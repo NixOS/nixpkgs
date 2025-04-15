@@ -82,9 +82,9 @@ let
         pname
         jdk
         extraWrapperArgs
-        extraLdPath
         extraBuildInputs
         ;
+      extraLdPath = extraLdPath ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libGL ];
       src =
         if fromSource then
           communitySources."${pname}"
@@ -336,7 +336,6 @@ rec {
         libICE
         libSM
         libX11
-        libGL
       ];
     }).overrideAttrs
       (attrs: {
@@ -378,7 +377,6 @@ rec {
           libxcrypt-legacy
           fontconfig
           xorg.libX11
-          libGL
         ]
         ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
           expat

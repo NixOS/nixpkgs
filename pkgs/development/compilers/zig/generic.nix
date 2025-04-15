@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
       nixSupport.cc-cflags =
         [
           "-target"
-          "${stdenv.targetPlatform.parsed.cpu.name}-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.abi.name}"
+          "${stdenv.targetPlatform.config}"
         ]
         ++ lib.optional (
           stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)

@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mqttui";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = "mqttui";
     tag = "v${version}";
-    hash = "sha256-q4C4YAs8Q1jHA5P2OApkFZnYM4/aZGxnE8Pd6Hmwd1I=";
+    hash = "sha256-wKqIDKng4pfqDuYtqFRh3UIeZQ4QzzFlLkQn5MXcVlU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pn4wmlMW8p6IAHrYjmvmZxNMjIJwJ2MYRsANz4D6xCU=";
+  cargoHash = "sha256-gk5nA6np7dK4+j26aySNWfMZ9t/+7nZRaPsnhlDEnes=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 

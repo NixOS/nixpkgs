@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   pkgs,
   buildPythonPackage,
@@ -9,6 +10,9 @@
   numpy,
   pillow,
   pytestCheckHook,
+  removeReferencesTo,
+  python,
+  replaceVars,
 }:
 
 let
@@ -37,6 +41,12 @@ let
       hash = "sha256-3JA7cW/xaEj/DxMHEypROwrKGo7EwUEcipRqALTvydw=";
     };
 
+    patches = [
+      (replaceVars ./fix-cc-detection.patch {
+        cc = "${stdenv.cc.targetPrefix}cc";
+      })
+    ];
+
     build-system = [
       setuptools-scm
     ];
@@ -60,6 +70,10 @@ buildPythonPackage rec {
   build-system = [
     ctypesgen
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    removeReferencesTo
   ];
 
   propagatedBuildInputs = [
@@ -103,6 +117,11 @@ buildPythonPackage rec {
                        '{"major": 133, "minor": 0, "build": ${pdfiumVersion}, "patch": 1}'
     '';
   env.PDFIUM_PLATFORM = "system:${pdfiumVersion}";
+
+  # Remove references to stdenv in comments.
+  postInstall = ''
+    remove-references-to -t ${stdenv.cc.cc} $out/${python.sitePackages}/pypdfium2_raw/bindings.py
+  '';
 
   nativeCheckInputs = [
     numpy
