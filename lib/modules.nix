@@ -2024,12 +2024,13 @@ let
           value,
           _type,
           expectedClass ? null,
+          prefix,
         }:
         paragraphs (
           [
             ''
               Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}.
-              A module is typically loaded by adding it the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
+              A module is typically loaded by adding it to the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
               Please make sure that each of the list items is a module, and not a different kind of value.
             ''
           ]
@@ -2058,7 +2059,7 @@ let
                 '')
               ]
               ++ optionalMatch {
-                # We'll no more than 5 custom suggestions here.
+                # We'll add no more than 5 custom suggestions here.
                 # Please switch to `.modules.${class}` in your Module System application.
                 "nixos" = trim ''
                   or
