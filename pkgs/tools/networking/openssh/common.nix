@@ -202,6 +202,13 @@ stdenv.mkDerivation (finalAttrs: {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    for binary in ssh sshd; do
+      $out/bin/$binary -V 2>&1 | grep -P "$(printf '^OpenSSH_\\Q%s\\E,' "$version")"
+    done
+  '';
+
   passthru = {
     inherit withKerberos;
     tests = {
