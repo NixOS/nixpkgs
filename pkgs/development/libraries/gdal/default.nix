@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -84,28 +83,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.10.2";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-PanWqieJU1opR8iAwGsAeAt5cPXNOkwT5E6D6xPNCWs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dILIEg5BXRbRcHEh6U1FfPgR/U3J0q4ypRMM6yakuwc=";
   };
-
-  patches = [
-    # Fix tests for GEOS 3.13.1
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/e873236abfb7885d0b987934041c6b61f6aea5d0.patch";
-      hash = "sha256-iThP8Dfu6k6uhb+jB5Vs5P10UVeY6rLotdDAgX1v6vE=";
-    })
-
-    # Fix tests for PROJ 9.6.0
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/49ef64108b6875e5b90a4fb6cadd089e84fe53c1.patch";
-      hash = "sha256-+HQvE5zxwCU03qRRjtzN9t7QgFfgRu4YZNZ9VRfKYEw=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -323,7 +308,7 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/gdal/blob/v${finalAttrs.version}/NEWS.md";
+    changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
