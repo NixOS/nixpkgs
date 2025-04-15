@@ -1,20 +1,27 @@
 {
   lib,
-  python,
+  python3Packages,
   fetchPypi,
 }:
 
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "alibuild";
-  version = "1.11.2";
+  version = "1.17.18";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wq2H2inUf2CjPD45krCNdjw2s4FXsEDlfOHqW8VaVKg=";
+    hash = "sha256-771XCMYNJsQzD7rb/7q5rheeIL8X2bvMWwLkA40CJ9Y=";
   };
 
-  doCheck = false;
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = with python3Packages; [ pip ];
+
+  dependencies = with python3Packages; [
     requests
     pyyaml
     boto3
@@ -22,10 +29,14 @@ python.pkgs.buildPythonApplication rec {
     distro
   ];
 
-  meta = with lib; {
+  pythonRelaxDeps = [ "boto3" ];
+
+  doCheck = false;
+
+  meta = {
     homepage = "https://alisw.github.io/alibuild/";
     description = "Build tool for ALICE experiment software";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ktf ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ktf ];
   };
 }
