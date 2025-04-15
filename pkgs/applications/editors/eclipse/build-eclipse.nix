@@ -14,7 +14,7 @@
   libXtst,
   libsecret,
   gsettings-desktop-schemas,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   makeWrapper,
   perl,
   ...
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libXtst
     libsecret
     zlib
-  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
+  ] ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1;
 
   buildCommand = ''
     # Unpack tarball.
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
             libXtst
             libsecret
           ]
-          ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0
+          ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
         )
       } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \

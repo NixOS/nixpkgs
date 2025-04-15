@@ -7,7 +7,7 @@
   gtk3-x11,
   pcre,
   pkg-config,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   xorg,
   WebKit,
   MetalKit,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       xorg.libXrandr
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_0
+      webkitgtk_4_1
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       WebKit

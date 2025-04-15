@@ -14,7 +14,7 @@
   gtk3,
   libnotify,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 
   # check inputs
@@ -96,7 +96,7 @@ buildPythonApplication rec {
       gtk3
       libnotify
       pango
-      webkitgtk_4_0
+      webkitgtk_4_1
     ]
     ++ (with gst_all_1; [
       gst-libav

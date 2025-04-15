@@ -13,7 +13,7 @@
   freetype,
   curl,
   libglvnd,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   pcre2,
   libsysprof-capture,
   util-linuxMinimal,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib # libasound.so
       libglvnd # libGL.so
-      webkitgtk_4_0 # webkit2gtk-4.0
+      webkitgtk_4_1 # webkit2gtk-4.0
       util-linuxMinimal
       libselinux
       libsepol
