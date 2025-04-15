@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "duckdb.yazi";
-  version = "25.4.8-unstable-2025-04-08";
+  version = "25.4.8-unstable-2025-04-09";
 
   src = fetchFromGitHub {
     owner = "wylie102";

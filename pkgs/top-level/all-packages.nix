@@ -282,8 +282,6 @@ with pkgs;
     extraPackages = [ jdk17 ];
   };
 
-  asitop = callPackage ../os-specific/darwin/asitop { };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   apko = callPackage ../development/tools/apko {
@@ -1027,8 +1025,6 @@ with pkgs;
   _7zz = darwin.apple_sdk_11_0.callPackage ../tools/archivers/7zz { };
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
-  acme-dns = callPackage ../servers/dns/acme-dns/default.nix { };
-
   acquire = with python3Packages; toPythonApplication acquire;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
@@ -1674,10 +1670,6 @@ with pkgs;
   twine = with python3Packages; toPythonApplication twine;
 
   amazon-qldb-shell = callPackage ../development/tools/amazon-qldb-shell {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  amber = callPackage ../tools/text/amber {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -2678,7 +2670,7 @@ with pkgs;
   patool = with python3Packages; toPythonApplication patool;
 
   pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_33;
+    electron = electron_34;
   };
 
   pueue = darwin.apple_sdk_11_0.callPackage ../applications/misc/pueue {
@@ -6611,11 +6603,15 @@ with pkgs;
 
   jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk17;
+    jdkOnBuild = buildPackages.jdk17;
   };
   jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk21;
+    jdkOnBuild = buildPackages.jdk21;
   };
-  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
+  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdkOnBuild = buildPackages.jdk;
+  };
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
@@ -6907,10 +6903,10 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_85 = callPackage ../development/compilers/rust/1_85.nix {
+  rust_1_86 = callPackage ../development/compilers/rust/1_86.nix {
     llvm_19 = llvmPackages_19.libllvm;
   };
-  rust = rust_1_85;
+  rust = rust_1_86;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -6918,8 +6914,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_85 = rust_1_85.packages.stable;
-  rustPackages = rustPackages_1_85;
+  rustPackages_1_86 = rust_1_86.packages.stable;
+  rustPackages = rustPackages_1_86;
 
   inherit (rustPackages)
     cargo
@@ -9226,9 +9222,7 @@ with pkgs;
   };
   enchant = enchant2;
 
-  libepoxy = callPackage ../development/libraries/libepoxy {
-    inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
-  };
+  libepoxy = callPackage ../development/libraries/libepoxy { };
 
   factorPackages-0_99 = callPackage ./factor-packages.nix {
     factor-unwrapped = callPackage ../development/compilers/factor-lang/0.99.nix { };
@@ -9816,8 +9810,6 @@ with pkgs;
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
 
-  hunspell = callPackage ../development/libraries/hunspell { };
-
   hunspellDicts = recurseIntoAttrs (
     callPackages ../development/libraries/hunspell/dictionaries.nix { }
   );
@@ -9826,8 +9818,7 @@ with pkgs;
     callPackages ../development/libraries/hunspell/dictionaries-chromium.nix { }
   );
 
-  hunspellWithDicts =
-    dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
+  hunspellWithDicts = dicts: callPackage ../by-name/hu/hunspell/wrapper.nix { inherit dicts; };
 
   hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_28; };
 
@@ -10757,14 +10748,6 @@ with pkgs;
   };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
-    inherit (darwin.apple_sdk.frameworks)
-      AVFoundation
-      Cocoa
-      VideoDecodeAcceleration
-      CoreMedia
-      MediaToolbox
-      Accelerate
-      ;
     pythonPackages = python3Packages;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
@@ -11174,8 +11157,9 @@ with pkgs;
   };
 
   SDL = SDL_compat;
+  SDL2 = sdl2-compat;
 
-  SDL2 = callPackage ../development/libraries/SDL2 {
+  SDL2_classic = callPackage ../by-name/sd/SDL2_classic/package.nix {
     inherit (darwin.apple_sdk.frameworks)
       AudioUnit
       Cocoa
@@ -11362,8 +11346,6 @@ with pkgs;
   tachyon = callPackage ../development/libraries/tachyon {
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
-
-  tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
 
   tclap = tclap_1_2;
 
@@ -12724,6 +12706,7 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
   zabbix64 = recurseIntoAttrs (zabbixFor "v64");
@@ -15701,10 +15684,6 @@ with pkgs;
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi { };
 
-  vivaldi-ffmpeg-codecs =
-    callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix
-      { };
-
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
   orpie = callPackage ../applications/misc/orpie {
@@ -17276,7 +17255,7 @@ with pkgs;
 
   devilutionx = callPackage ../games/devilutionx {
     fmt = fmt_9;
-    SDL2 = SDL2.override {
+    SDL2_classic = SDL2_classic.override {
       withStatic = true;
     };
   };

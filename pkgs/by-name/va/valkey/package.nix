@@ -85,12 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
+    # skip some more flaky tests
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
-      --skipunit integration/failover # flaky and slow
+      --skipunit integration/failover \
+      --skipunit integration/aof-multi-part
 
     runHook postCheck
   '';

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.28.0";
+  version = "1.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_compute";
     inherit version;
-    hash = "sha256-0Mc4DDTLvHzERiPDCqpn2lXUz4KeoE5gVz3va8hJ1Hg=";
+    hash = "sha256-EVYtOEsTaVh+DKvDQhgwE0270Z94Yg9mm6CpPL0Z0Ug=";
   };
 
   build-system = [ setuptools ];

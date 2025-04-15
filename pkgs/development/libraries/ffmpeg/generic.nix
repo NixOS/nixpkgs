@@ -424,6 +424,13 @@ stdenv.mkDerivation (
 
     patches =
       [ ]
+      ++ optionals (lib.versionOlder version "5") [
+        (fetchpatch2 {
+          name = "rename_iszero";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b27ae2c0b704e83f950980102bc3f12f9ec17cb0";
+          hash = "sha256-l1t4LcUDSW757diNu69NzvjenW5Mxb5aYtXz64Yl9gs=";
+        })
+      ]
       ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
         (fetchpatch2 {
           # this can be removed post 6.1

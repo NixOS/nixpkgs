@@ -10,6 +10,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
+  libX11,
   freetype,
   zlib,
   debug,
@@ -31,6 +32,7 @@ let
     SDL2_image
     SDL2_mixer
     SDL2_ttf
+    libX11
     freetype
   ];
 

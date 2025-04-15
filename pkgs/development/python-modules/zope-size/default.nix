@@ -1,25 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   zope-i18nmessageid,
   zope-interface,
   unittestCheckHook,
   zope-component,
+  zope-configuration,
   zope-security,
 }:
 
 buildPythonPackage rec {
   pname = "zope-size";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.size";
-    inherit version;
-    hash = "sha256-sVRT40+Bb/VFmtg82TUCmqWBxqRTRj4DxeLZe9IKQyo=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.size";
+    tag = version;
+    hash = "sha256-9r7l3RgE9gvxJ2I5rFvNn/XIztecXW3GseGeM3MzfTU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools <= 75.6.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 
@@ -33,6 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     unittestCheckHook
     zope-component
+    zope-configuration
     zope-security
   ];
 

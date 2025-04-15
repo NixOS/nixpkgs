@@ -61,7 +61,7 @@ setupMpiCheck() {
       ;;
     MPICH)
       # Fix to make mpich run in a sandbox
-      export HYDRA_IFACE=lo
+      export HYDRA_IFACE="@iface@"
       # Disable sysfs cpu topology directory discovery.
       export HWLOC_XMLFILE="@topology@"
       ;;

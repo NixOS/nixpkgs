@@ -51,6 +51,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "h2"
     "passlib"
     "protobuf"
     "pyparsing"

@@ -40,6 +40,7 @@
   libcCross ? null,
   threadsCross ? null, # for MinGW
   withoutTargetLibc ? false,
+  flex,
   gnused ? null,
   buildPackages,
   pkgsBuildTarget,
@@ -90,6 +91,18 @@ let
   is10 = majorVersion == "10";
   is9 = majorVersion == "9";
 
+  # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
+  # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
+  isSnapshot = lib.length (lib.splitVersion version) == 4;
+  # return snapshot date of gcc's given version:
+  #   "14.2.1.20250322" -> "20250322"
+  #   "14.2.0" -> ""
+  snapDate = lib.concatStrings (lib.drop 3 (lib.splitVersion version));
+  # return base version without a snapshot:
+  #   "14.2.1.20250322" -> "14.2.1"
+  #   "14.2.0" -> "14.2.0"
+  baseVersion = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
+
   disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -109,6 +122,7 @@ let
     # lets
     inherit
       majorVersion
+      isSnapshot
       version
       buildPlatform
       hostPlatform
@@ -135,6 +149,7 @@ let
       enableShared
       fetchpatch
       fetchurl
+      flex
       gettext
       gmp
       gnat-bootstrap
@@ -198,13 +213,18 @@ pipe
   ((callFile ./common/builder.nix { }) (
     {
       pname = "${crossNameAddon}${name}";
-      inherit version;
+      # retain snapshot date in package version, but not in final version
+      # as the version is frequently used to construct pathnames (at least
+      # in cc-wrapper).
+      name = "${crossNameAddon}${name}-${version}";
+      version = baseVersion;
 
       src = fetchurl {
-        url = "mirror://gcc/${
-          # TODO: Remove this before 25.05.
-          if version == "14-20241116" then "snapshots/" else "releases/gcc-"
-        }${version}/gcc-${version}.tar.xz";
+        url =
+          if isSnapshot then
+            "mirror://gcc/snapshots/${majorVersion}-${snapDate}/gcc-${majorVersion}-${snapDate}.tar.xz"
+          else
+            "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
         ${if is10 || is11 || is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
       };
 
@@ -232,31 +252,16 @@ pipe
           for configureScript in $configureScripts; do
             patchShebangs $configureScript
           done
-        ''
-        # Copy the precompiled `gcc/gengtype-lex.cc` from the 14.2.0 tarball.
-        # Since the `gcc/gengtype-lex.l` file didn’t change between 14.2.0
-        # and 14-2024116, this is safe. If it changes and we update the
-        # snapshot, we might need to vendor the compiled output in Nixpkgs.
-        #
-        # TODO: Remove this before 25.05.
-        + optionalString (version == "14-20241116") ''
-          cksum -c <<EOF
-          SHA256 (gcc/gengtype-lex.l) = 05acceeda02e673eaef47d187d3a68a1632508112fbe31b5dc2b0a898998d7ec
-          EOF
 
-          (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < ${
-            fetchurl {
-              url = "mirror://gcc/releases/gcc-14.2.0/gcc-14.2.0.tar.xz";
-              hash = "sha256-p7Obxpy/niWCbFpgqyZHcAH3wI2FzsBLwOKcq+1vPMk=";
-            }
-          }; true) | tar xf - \
-            --mode=+w \
-            --warning=no-timestamp \
-            --strip-components=1 \
-            gcc-14.2.0/gcc/gengtype-lex.cc
-
-          # Make sure Make knows it’s up‐to‐date.
-          touch gcc/gengtype-lex.cc
+          # Make sure nixpkgs versioning match upstream one
+          # to ease version-based comparisons.
+          gcc_base_version=$(< gcc/BASE-VER)
+          if [[ ${baseVersion} != $gcc_base_version ]]; then
+            echo "Please update 'version' variable:"
+            echo "  Expected: '$gcc_base_version'"
+            echo "  Actual: '${version}'"
+            exit 1
+          fi
         ''
         # This should kill all the stdinc frameworks that gcc and friends like to
         # insert into default search paths.

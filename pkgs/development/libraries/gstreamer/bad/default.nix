@@ -20,10 +20,10 @@
   opencvSupport ? false,
   opencv4,
   faad2,
+  lcevcdec,
   ldacbt,
   liblc3,
   libass,
-  libkate,
   lrdf,
   ladspaH,
   lcms2,
@@ -78,13 +78,10 @@
   svt-av1,
   fluidsynth,
   libva,
-  libvdpau,
   wayland,
   libwebp,
-  xvidcore,
   gnutls,
   mjpegtools,
-  libGLU,
   libGL,
   addDriverRunpath,
   gtk3,
@@ -106,6 +103,7 @@
   CoreVideo,
   Foundation,
   MediaToolbox,
+  directoryListingUpdater,
   enableGplPlugins ? true,
   bluezSupport ? stdenv.hostPlatform.isLinux,
   # Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
@@ -114,11 +112,13 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   guiSupport ? true,
+  gst-plugins-bad,
+  apple-sdk_13,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.24.10";
+  version = "1.26.0";
 
   outputs = [
     "out"
@@ -126,8 +126,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-FwfjEDlQybrtNkqK8roEldaxE/zTbhBi3aX1grj4kE0=";
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
+    hash = "sha256-+Ch6hMX2Y2ilpQ2l+WmZSgLEfyAiD/4coxVBk+Za8hY=";
   };
 
   patches = [
@@ -135,11 +135,13 @@ stdenv.mkDerivation rec {
     (replaceVars ./fix-paths.patch {
       inherit (addDriverRunpath) driverLink;
     })
-    # Add support for newer AJA SDK from next GStreamer release
+
+    # Fix Requires in gstreamer-analytics-1.0.pc
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8661
     (fetchpatch {
-      url = "https://github.com/GStreamer/gstreamer/commit/d68ac0db571f44cae42b57c876436b3b09df616b.patch";
-      hash = "sha256-ZXwlHzuPT8kUKt5+HkqFH5tzL9l5NusDXImabj4fBbI=";
-      relative = "subprojects/${pname}";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bc93bbf5c87ec994ea136bb40accc09dfa35ae98.patch";
+      stripLen = 2;
+      hash = "sha256-QQDpHe363iPxTuthITRbLUKaAXS2F9s5zfCn/ps14WE=";
     })
   ];
 
@@ -170,7 +172,6 @@ stdenv.mkDerivation rec {
       ldacbt
       liblc3
       libass
-      libkate
       webrtc-audio-processing_1
       libbs2b
       libmodplug
@@ -181,6 +182,7 @@ stdenv.mkDerivation rec {
       curl.dev
       fdk_aac
       gsm
+      lcevcdec
       libaom
       libdc1394
       libde265
@@ -198,9 +200,7 @@ stdenv.mkDerivation rec {
       soundtouch
       srtp
       fluidsynth
-      libvdpau
       libwebp
-      xvidcore
       gnutls
       game-music-emu
       openssl
@@ -269,7 +269,6 @@ stdenv.mkDerivation rec {
       sratom
 
       libGL
-      libGLU
     ]
     ++ lib.optionals guiSupport [
       gtk3
@@ -286,21 +285,25 @@ stdenv.mkDerivation rec {
       CoreVideo
       Foundation
       MediaToolbox
+      apple-sdk_13
     ];
 
   mesonFlags =
     [
       "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-      "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+      "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
 
       "-Damfcodec=disabled" # Windows-only
+      "-Dandroidmedia=disabled" # Requires Android system.
       "-Davtp=disabled"
+      "-Dcuda-nvmm=disabled"
       "-Ddirectshow=disabled" # Windows-only
       "-Dqt6d3d11=disabled" # Windows-only
       "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
       "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
       "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
       "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
+      "-Dlcevcencoder=disabled" # not packaged in nixpkgs as of writing
       "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
       "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
       # As of writing, with `libmpcdec` in `buildInputs` we get
@@ -314,9 +317,12 @@ stdenv.mkDerivation rec {
       # is needed, and then patching upstream to find it (though it probably
       # already works on Arch?).
       "-Dmusepack=disabled"
+      "-Dnvcomp=disabled"
+      "-Dnvdswrapper=disabled"
       "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
       "-Dopensles=disabled" # not packaged in nixpkgs as of writing
       "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
+      "-Dsvtjpegxs=disabled" # not packaged in nixpkgs as of writing
       "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
       "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
       "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
@@ -337,7 +343,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
-      "-Dnvcodec=disabled" # Linux-only
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86) [
+      "-Dnvcodec=disabled" # Linux-only, broken on non-x86
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
       "-Dva=disabled" # see comment on `libva` in `buildInputs`
@@ -406,6 +414,22 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
+  passthru = {
+    tests = {
+      full = gst-plugins-bad.override {
+        enableZbar = true;
+        faacSupport = true;
+        opencvSupport = true;
+      };
+
+      lgplOnly = gst-plugins-bad.override {
+        enableGplPlugins = false;
+      };
+    };
+
+    updateScript = directoryListingUpdater { };
+  };
+
   meta = with lib; {
     description = "GStreamer Bad Plugins";
     mainProgram = "gst-transcoder-1.0";
@@ -420,4 +444,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

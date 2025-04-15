@@ -87,13 +87,8 @@
   # An empty lists means this setting is omitted which matches upstreams default.
   enabledModules ? [ ],
 
-  AVFoundation,
-  Cocoa,
-  VideoDecodeAcceleration,
-  CoreMedia,
-  MediaToolbox,
-  Accelerate,
   bzip2,
+  apple-sdk_14, # earlier SDKs cause linking issues on x86_64
   callPackage,
 }@inputs:
 
@@ -383,10 +378,6 @@ effectiveStdenv.mkDerivation {
     ++ optionals enableFfmpeg [
       ffmpeg
     ]
-    ++ optionals (enableFfmpeg && effectiveStdenv.hostPlatform.isDarwin) [
-      bzip2
-      VideoDecodeAcceleration
-    ]
     ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
       elfutils
       gst_all_1.gst-plugins-base
@@ -426,12 +417,7 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals effectiveStdenv.hostPlatform.isDarwin [
       bzip2
-      AVFoundation
-      Cocoa
-      VideoDecodeAcceleration
-      CoreMedia
-      MediaToolbox
-      Accelerate
+      apple-sdk_14
     ]
     ++ optionals enableDocs [
       doxygen

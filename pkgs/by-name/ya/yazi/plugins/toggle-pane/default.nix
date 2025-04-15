@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "toggle-pane.yazi";
-  version = "25.2.26-unstable-2025-03-02";
+  version = "25.2.26-unstable-2025-03-19";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";

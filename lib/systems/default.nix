@@ -209,6 +209,8 @@ let
                 "ppc${optionalString final.isLittleEndian "le"}"
               else if final.isMips64 then
                 "mips64" # endianness is *not* included on mips64
+              else if final.isDarwin then
+                final.darwinArch
               else
                 final.parsed.cpu.name;
 
@@ -246,7 +248,7 @@ let
           # don't support dynamic linking, but don't get the `staticMarker`.
           # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
           # has the `staticMarker`.
-          isStatic = final.isWasi || final.isRedox;
+          isStatic = final.isWasi || final.isRedox || final.isLLVMLibc;
 
           # Just a guess, based on `system`
           inherit
@@ -303,6 +305,8 @@ let
           qemuArch =
             if final.isAarch32 then
               "arm"
+            else if final.isAarch64 then
+              "aarch64"
             else if final.isS390 && !final.isS390x then
               null
             else if final.isx86_64 then
@@ -329,12 +333,7 @@ let
             else
               final.parsed.cpu.name;
 
-          darwinArch =
-            {
-              armv7a = "armv7";
-              aarch64 = "arm64";
-            }
-            .${final.parsed.cpu.name} or final.parsed.cpu.name;
+          darwinArch = parse.darwinArch final.parsed.cpu;
 
           darwinPlatform =
             if final.isMacOS then
@@ -488,8 +487,8 @@ let
                   }
                   .${cpu.name} or cpu.name;
                 vendor_ = final.rust.platform.vendor;
-                # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
               in
+              # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
               args.rust.rustcTarget or args.rustc.config or (
                 # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
                 # We cannot know which subversion does the user want, and
