@@ -2,7 +2,7 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   boost186,
 }:
 
@@ -24,7 +24,10 @@
 
       passthru = {
         buildChatterino = args: callPackage ./common.nix args;
-        updateScript = nix-update-script { };
+        updateScript = gitUpdater {
+          rev-prefix = "v";
+          ignoredVersions = "beta";
+        };
       };
 
       meta = {
