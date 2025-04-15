@@ -23,11 +23,9 @@ import ./make-test-python.nix (
             enable = true;
             port = 7890;
             openFirewall = true;
-            settings = {
-              WebService = {
-                Origins = "https://server:7890";
-              };
-            };
+            allowed-origins = [
+              "https://server:${toString config.services.cockpit.port}"
+            ];
           };
         };
       client =
@@ -130,7 +128,7 @@ import ./make-test-python.nix (
                     
                     log("Checking that /nonexistent is not a thing")
                     assert '/nonexistent' not in driver.page_source
-                    assert driver.find_element(By.CSS_SELECTOR, '#machine-reconnect') is not None
+                    assert len(driver.find_elements(By.CSS_SELECTOR, '#machine-reconnect')) == 0
 
                     driver.close()
                   '';
