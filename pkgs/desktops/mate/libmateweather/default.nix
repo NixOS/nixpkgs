@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
   fetchurl,
   pkg-config,
   gettext,
@@ -8,7 +9,8 @@
   glib-networking,
   libxml2,
   gtk3,
-  libsoup_2_4,
+  gtk-doc,
+  libsoup_3,
   tzdata,
   mateUpdateScript,
 }:
@@ -22,17 +24,25 @@ stdenv.mkDerivation rec {
     sha256 = "VUNz3rWzk7nYSydd0spmyaSi0ObskgRPq4qlPjAy0rU=";
   };
 
+  patches = [
+    # https://github.com/mate-desktop/libmateweather/pull/133
+    ./libsoup_3_support.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoreconfHook # the libsoup patch changes the autoconf file
     pkg-config
     gettext
     glib # glib-compile-schemas
+    gtk-doc # required for autoconf
     libxml2 # xmllint
   ];
 
   buildInputs = [
-    libsoup_2_4
+    libxml2
+    libsoup_3
     tzdata
   ];
 
