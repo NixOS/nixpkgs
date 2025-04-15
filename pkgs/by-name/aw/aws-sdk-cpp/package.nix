@@ -30,16 +30,16 @@ let
       throw "Unknown host OS";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-sdk-cpp";
   # nixpkgs-update: no auto update
-  version = "1.11.448";
+  version = "1.11.547";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
-    rev = version;
-    hash = "sha256-K0UFs7vOeZeQIs3G5L4FfEWXDGTXT9ssr/vQwa1l2lw=";
+    tag = finalAttrs.version;
+    hash = "sha256-xC3+/4hieI19GA9rHm2xgiu/pGG8H96jZr5ssvM9SE8=";
   };
 
   postPatch =
@@ -48,14 +48,14 @@ stdenv.mkDerivation rec {
       # having to pass `AWS_CORE_HEADER_FILE` explicitly to cmake configure
       # when using find_package(AWSSDK CONFIG)
       substituteInPlace cmake/AWSSDKConfig.cmake \
-        --replace 'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core' \
+        --replace-fail 'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core' \
           'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core"
               "${placeholder "dev"}/include/aws/core'
 
       # Avoid blanket -Werror to evade build failures on less
       # tested compilers.
       substituteInPlace cmake/compiler_settings.cmake \
-        --replace '"-Werror"' ' '
+        --replace-fail '"-Werror"' ' '
 
       # Flaky on Hydra
       rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
@@ -157,13 +157,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface for Amazon Web Services";
     homepage = "https://github.com/aws/aws-sdk-cpp";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ orivej ];
     # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
     broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
   };
-}
+})
