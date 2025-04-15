@@ -15,6 +15,7 @@ let
 in
 {
   imports = [
+    ./service.nix
     ./settings.nix
     ./zone.nix
   ];
