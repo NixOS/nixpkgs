@@ -579,6 +579,7 @@ in
     imports = [ ./firewall.nix ];
     _module.args.backend = "nftables";
   };
+  firewalld = runTest ./firewalld.nix;
   firezone = runTest ./firezone/firezone.nix;
   fish = runTest ./fish.nix;
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
