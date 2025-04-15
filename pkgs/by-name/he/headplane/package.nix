@@ -6,7 +6,6 @@
   nodejs_22,
   pnpm_10,
   stdenv,
-  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "headplane";
