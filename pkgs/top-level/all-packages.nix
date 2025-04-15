@@ -5699,6 +5699,9 @@ with pkgs;
 
   yapf = with python3Packages; toPythonApplication yapf;
 
+  yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
+  yarn-berry_3 = yarn-berry.override { berryVersion = 3; };
+
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea {
     pkgs = pkgs.__splicedPackages;
   };
