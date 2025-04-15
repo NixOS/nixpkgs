@@ -12,10 +12,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblzf";
   version = "3.6";
-  shlib_version = "1:0:0"; # for libtool
-
   # used for changelog
-  cvsTag = "rel-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
 
   src = fetchurl {
     url = "http://dist.schmorp.de/liblzf/liblzf-${finalAttrs.version}.tar.gz";
@@ -54,10 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
         Libs: -L$${libdir} -llzf
         Cflags: -I$${includedir}
       '';
+      shlib_version = "1:0:0";
     in
     ''
       echo "${finalAttrs.version}" > VERSION
-      echo "${finalAttrs.shlib_version}" > VERSION_INFO
+      echo "${shlib_version}" > VERSION_INFO
       cp ${./Makefile.am} ./Makefile.am
       cp ${pkgConfigIn} ./liblzf.pc.in
     '';
@@ -121,7 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "http://cvs.schmorp.de/liblzf/Changes?pathrev=rel-$finalAttrs.cvsTag}";
+    changelog =
+      "http://cvs.schmorp.de/liblzf/Changes?pathrev=rel-"
+      + builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     description = "Small data compression library";
     downloadPage = "http://dist.schmorp.de/liblzf/";
     homepage = "http://software.schmorp.de/pkg/liblzf.html";
