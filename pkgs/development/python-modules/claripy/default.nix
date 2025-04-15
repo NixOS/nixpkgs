@@ -10,7 +10,6 @@
   setuptools,
   typing-extensions,
   z3-solver,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -46,12 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "claripy" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "Python abstraction layer for constraint solvers";
     homepage = "https://github.com/angr/claripy";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }
