@@ -27,6 +27,12 @@ in
       type = lib.types.listOf lib.types.package;
       description = "Packages providing firewalld zones and other files.";
     };
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "--debug" ];
+      description = "Extra arguments to pass to FirewallD.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -38,6 +44,10 @@ in
       copytruncate = true;
       minsize = "1M";
     };
+
+    environment.etc."sysconfig/firewalld".text = ''
+      FIREWALLD_ARGS=${lib.escapeShellArgs cfg.extraArgs}
+    '';
 
     systemd.packages = [ cfg.package ];
     systemd.services.firewalld = {
