@@ -1104,6 +1104,9 @@ builtins.intersectAttrs super {
   retrie_1_2_0_0 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_1_1;
 
+  # Just an executable
+  ret = enableSeparateBinOutput super.ret;
+
   # there are three very heavy test suites that need external repos, one requires network access
   hevm = dontCheck super.hevm;
 

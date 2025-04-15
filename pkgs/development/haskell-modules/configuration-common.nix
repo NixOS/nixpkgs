@@ -423,6 +423,9 @@ self: super:
     })
   ] super.gitit;
 
+  # https://github.com/schuelermine/ret/issues/3
+  ret = doJailbreak super.ret; # base < 4.19
+
   # 2025-02-13: This part from https://github.com/haskell/ThreadScope/pull/130 seems to be unreleased:
   threadscope = appendPatches [
     (fetchpatch {
