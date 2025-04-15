@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3Q690DEMgPqURTHKzJwH5iVyTLvgYqNpxuwAEV+/Lyw=";
   };
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     zig.hook
     pkg-config
