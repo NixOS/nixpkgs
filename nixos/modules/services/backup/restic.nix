@@ -11,7 +11,7 @@ let
   inherit (config.services.restic) backups;
 in
 {
-  options.services.restic.backups = lib.mkOption {
+  backups = lib.mkOption {
     description = ''
       Periodic backups to create with Restic.
     '';
@@ -252,7 +252,7 @@ in
 
             runCheck = lib.mkOption {
               type = lib.types.bool;
-              default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
+              default = builtins.length backups.${name}.checkOpts > 0;
               defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
@@ -494,14 +494,14 @@ in
           '';
         }
       )
-    ) config.services.restic.backups;
+    ) backups;
     systemd.timers = lib.mapAttrs' (
       name: backup:
       lib.nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
         inherit (backup) timerConfig;
       }
-    ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
+    ) (lib.filterAttrs (_: backup: backup.timerConfig != null) backups);
 
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (
@@ -523,6 +523,6 @@ in
 
         exec ${resticCmd} "$@"
       ''
-    ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
+    ) (lib.filterAttrs (_: v: v.createWrapper) backups);
   };
 }
