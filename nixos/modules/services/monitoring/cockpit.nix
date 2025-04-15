@@ -28,7 +28,7 @@ in
       allowed-origins = lib.mkOption {
         type = types.listOf types.str;
 
-        default = [];
+        default = [ ];
 
         description = ''
           List of allowed origins.
@@ -98,7 +98,8 @@ in
       "https://localhost:${toString config.services.cockpit.port}"
     ];
 
-    services.cockpit.settings.WebService.Origins = builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
+    services.cockpit.settings.WebService.Origins =
+      builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
   };
 
   meta.maintainers = pkgs.cockpit.meta.maintainers;

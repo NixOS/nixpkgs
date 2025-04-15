@@ -125,7 +125,7 @@ import ./make-test-python.nix (
                         if 'admin' in button.text:
                             button.click()
                     driver.switch_to.default_content()
-                    
+
                     log("Checking that /nonexistent is not a thing")
                     assert '/nonexistent' not in driver.page_source
                     assert len(driver.find_elements(By.CSS_SELECTOR, '#machine-reconnect')) == 0
