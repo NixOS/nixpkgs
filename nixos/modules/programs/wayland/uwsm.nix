@@ -18,6 +18,7 @@ let
         Comment=${opts.comment}
         Exec=${lib.getExe cfg.package} start -S -F ${opts.binPath}
         Type=Application
+        X-LightDM-Session-Type=wayland
       '';
       destination = "/share/wayland-sessions/${opts.name}-uwsm.desktop";
       derivationArgs = {
