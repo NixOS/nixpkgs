@@ -352,6 +352,9 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
 
+## _prefix module argument is available at import time and contains the prefix
+checkConfigOutput '^true$' config.foo.ok ./prefix-module-argument.nix
+
 ## deferredModule
 # default module is merged into nodes.foo
 checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
