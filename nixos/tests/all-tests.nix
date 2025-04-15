@@ -213,6 +213,7 @@ in
   atop = import ./atop.nix { inherit pkgs runTest; };
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
+  ax25 = handleTest ./ax25.nix { };
   audiobookshelf = runTest ./audiobookshelf.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
