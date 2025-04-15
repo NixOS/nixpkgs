@@ -3331,6 +3331,8 @@ let
         };
       };
 
+      ms-azuretools.vscode-bicep = callPackage ./ms-azuretools.vscode-bicep { };
+
       ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "ms-azuretools";
