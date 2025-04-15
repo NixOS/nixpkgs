@@ -16370,6 +16370,12 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
+  void-editor = callPackage ../by-name/vo/void-editor/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
+  void-editor-fhs = void-editor.fhs;
+  void-editor-fhsWithPackages = void-editor.fhsWithPackages;
+
   windsurf = callPackage ../by-name/wi/windsurf/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
