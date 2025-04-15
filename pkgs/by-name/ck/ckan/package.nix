@@ -9,6 +9,7 @@
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
       extraConfig.X-GNOME-SingleWindow = "true";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Mod manager for Kerbal Space Program";
