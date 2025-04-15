@@ -23,6 +23,7 @@ appimageTools.wrapType2 {
       pkgs.xsel
       pkgs.xclip
       pkgs.mtdev
+      pkgs.jdk17
     ]
     ++ extraPackages;
   extraInstallCommands = ''
