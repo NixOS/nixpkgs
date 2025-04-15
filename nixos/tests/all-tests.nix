@@ -550,6 +550,7 @@ in
     imports = [ ./firewall.nix ];
     _module.args.backend = "iptables";
   };
+  firewalld = runTest ./firewalld.nix;
   firewall-firewalld = runTest {
     imports = [ ./firewall.nix ];
     _module.args.backend = "firewalld";
