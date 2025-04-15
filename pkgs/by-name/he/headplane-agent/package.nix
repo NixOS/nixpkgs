@@ -1,9 +1,9 @@
 {
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   lib,
 }:
-buildGoModule (finalAttrs: {
+buildGo123Module (finalAttrs: {
   pname = "hp_agent";
   version = "0.5.10";
   src = fetchFromGitHub {
