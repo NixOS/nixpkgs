@@ -38,7 +38,6 @@
   withPAM ? stdenv.hostPlatform.isLinux,
   # Attempts to mlock the entire sshd process on startup to prevent swapping.
   withLinuxMemlock ? stdenv.hostPlatform.isLinux,
-  dsaKeysSupport ? false,
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
@@ -108,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-libedit=yes"
       "--disable-strip"
       (lib.withFeature withPAM "pam")
-      (lib.enableFeature dsaKeysSupport "dsa-keys")
     ]
     ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional (!withSecurityKey) "--disable-security-key"
