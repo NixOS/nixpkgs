@@ -143,5 +143,6 @@ in
   meta.maintainers = with lib.maintainers; [
     johnrtitor
     kai-tub
+    magic_rb
   ];
 }
