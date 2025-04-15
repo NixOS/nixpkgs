@@ -255,6 +255,23 @@ let
         };
       };
 
+      andrew-butson.vscode-openai = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "AndrewButson";
+          name = "vscode-openai";
+          version = "1.6.17";
+          hash = "sha256-nROvrAO34y9+SVb40+Day9LSKG0eJl0iU8pgQ9CuOko=";
+        };
+        meta = {
+          changelog = "https://github.com/arbs-io/vscode-openai/blob/main/CHANGELOG.md";
+          description = "VSCode extension for OpenAI providing integration with SCM, code editor and chat";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=AndrewButson.vscode-openai";
+          homepage = "https://github.com/arbs-io/vscode-openai";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
       angular.ng-template = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ng-template";
