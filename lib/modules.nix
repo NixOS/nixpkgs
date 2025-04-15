@@ -389,6 +389,7 @@ let
                 value = m;
                 _type = m._type;
                 expectedClass = class;
+                prefix = args._prefix;
               }
             )
         else if isList m then
@@ -1977,6 +1978,10 @@ let
           file != null && file != unknownModule
         ) ", while trying to load a module into ${toString file}";
 
+      into_prefix_maybe =
+        prefix:
+        optionalString (prefix != [ ]) ", while trying to load a module into ${code (showOption prefix)}";
+
       /**
         Format text with one line break between each list item.
       */
@@ -2029,7 +2034,7 @@ let
         paragraphs (
           [
             ''
-              Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}.
+              Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}${into_prefix_maybe prefix}.
               A module is typically loaded by adding it to the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
               Please make sure that each of the list items is a module, and not a different kind of value.
             ''

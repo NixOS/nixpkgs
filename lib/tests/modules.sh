@@ -606,6 +606,7 @@ checkConfigError 'Expected a module, but found a value of type .*"flake".*, whil
 checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
 checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type "configuration", while trying to load a module into .*/import-error-submodule.nix, while trying to load a module into .*foo.*\.' config.foo ./import-error-submodule.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
