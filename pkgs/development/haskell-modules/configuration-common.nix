@@ -3022,6 +3022,10 @@ self: super:
     dontCheck
   ];
 
+  copilot-theorem = lib.pipe super.copilot-theorem [
+    (addTestToolDepends (with pkgs; [ z3 ]))
+  ];
+
   # 2025-04-09: jailbreak to allow mtl >= 2.3, template-haskell >= 2.17, text >= 1.3
   egison-pattern-src-th-mode =
     assert super.egison-pattern-src-th-mode.version == "0.2.1.2";
@@ -3059,6 +3063,47 @@ self: super:
   ebird-api =
     assert super.ebird-api.version == "0.2.0.0";
     doJailbreak super.ebird-api;
+
+  # 2025-04-13: jailbreak to allow bytestring >= 0.12
+  strings =
+    assert super.strings.version == "1.1";
+    doJailbreak super.strings;
+
+  # 2025-04-13: jailbreak to allow bytestring >= 0.12
+  twain =
+    assert super.twain.version == "2.2.0.1";
+    doJailbreak super.twain;
+
+  # 2025-04-13: jailbreak to allow hedgehog >= 1.5
+  hw-bits =
+    assert super.hw-bits.version == "0.7.2.2";
+    doJailbreak super.hw-bits;
+
+  # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
+  crucible =
+    assert super.crucible.version == "0.7.2";
+    doJailbreak super.crucible;
+
+  # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
+  ktx-codec =
+    assert super.ktx-codec.version == "0.0.2.1";
+    doJailbreak super.ktx-codec;
+
+  # 2025-04-13: jailbreak to allow template-haskell >= 2.17
+  sr-extra = overrideCabal (drv: {
+    version =
+      assert super.sr-extra.version == "1.88";
+      "1.88-unstable-2025-03-30";
+    # includes https://github.com/seereason/sr-extra/pull/7
+    src = pkgs.fetchFromGitHub {
+      owner = "seereason";
+      repo = "sr-extra";
+      rev = "2b18ced8d07aa8832168971842b20ea49369e4f0";
+      hash = "sha256-jInfHA1xkLjx5PfsgQVzeQIN3OjTUpEz7dpVNOGNo3g=";
+    };
+    editedCabalFile = null;
+    revision = null;
+  }) super.sr-extra;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
