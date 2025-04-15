@@ -180,6 +180,10 @@ in
     ++ filterDoubles (matchAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnuabielfv2;
+    })
+    ++ filterDoubles (matchAttrs {
+      kernel = parse.kernels.linux;
+      abi = parse.abis.gnux32;
     });
   illumos = filterDoubles predicates.isSunOS;
   linux = filterDoubles predicates.isLinux;
