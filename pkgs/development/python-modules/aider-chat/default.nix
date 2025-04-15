@@ -124,7 +124,7 @@ let
     ];
   };
 
-  version = "0.81.2";
+  version = "0.82.0";
   aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -137,7 +137,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-zksPkqEmED2HShAhknVvkktyEc9S/kgU7bQGp1jS71A=";
+      hash = "sha256-UlPYUYAYDhPPgoIvEWRLYjCe3iQ2ltH5mT3GkX+IrGI=";
     };
 
     pythonRelaxDeps = true;
