@@ -1,15 +1,17 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
 }:
-buildGo123Module (finalAttrs: {
-  pname = "hp_agent";
+let
   version = "0.5.10";
+in
+buildGoModule {
+  pname = "hp_agent";
   src = fetchFromGitHub {
     repo = "headplane";
     owner = "tale";
-    rev = finalAttrs.version;
+    rev = version;
     hash = "sha256-0sckkbjyjrgshzmxx1biylxasybcmybarmqgfhl2cn6yy40dw6p4";
   };
 
@@ -27,4 +29,4 @@ buildGo123Module (finalAttrs: {
     mainProgram = "hp_agent";
     platforms = lib.platforms.linux;
   };
-})
+}
