@@ -258,6 +258,7 @@ let
                     specialArgs
                     ;
                   _class = class;
+                  _prefix = prefix;
                 }
                 // specialArgs
               );
