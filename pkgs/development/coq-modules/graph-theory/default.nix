@@ -6,7 +6,7 @@
   mathcomp-finmap,
   mathcomp-algebra-tactics,
   fourcolor,
-  hierarchy-builder,
+  stdlib,
   version ? null,
 }:
 
@@ -71,7 +71,7 @@ mkCoqDerivation {
     mathcomp.fingroup
     mathcomp-algebra-tactics
     fourcolor
-    hierarchy-builder
+    stdlib
   ];
 
   meta = with lib; {

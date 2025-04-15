@@ -23,7 +23,7 @@ mkCoqDerivation {
         {
           cases = [
             (range "8.16" "9.0")
-            (isGe "2.0")
+            (range "2.0" "2.3")
           ];
           out = "2.1.0";
         }
