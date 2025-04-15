@@ -47,9 +47,9 @@ let
   fakeSession = action: ''
     session_is_systemd_aware=$(
       IFS=:
-      for i in $XDG_CURRENT_DESKTOP; do
+      for i in $XDG_CURRENT_DESKTOP $XDG_SESSION_DESKTOP; do
         case $i in
-          KDE|GNOME|Pantheon|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
+          ${lib.concatStringsSep "|" cfg.displayManager.extraSystemdAwareSessions}) echo "1"; exit; ;;
           *) ;;
         esac
       done
@@ -239,6 +239,20 @@ in
         '';
       };
 
+      extraSystemdAwareSessions = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "KDE"
+          "GNOME"
+          "Pantheon"
+          "X-NIXOS-SYSTEMD-AWARE"
+        ];
+        description = ''
+          A list of sessions that are systemd aware and don't need the
+          systemd awareness workaround. This list will be checked against
+          `$XDG_SESSION_DESKTOP` and `$XDG_CURRENT_DESKTOP`.
+        '';
+      };
     };
 
   };
