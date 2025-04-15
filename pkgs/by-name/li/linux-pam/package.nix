@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linux-pam/linux-pam";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;
-    license = licenses.bsd3;
+    # license = licenses.bsd3; because of gdbm
+    license = licenses.gpl3Plus;
   };
 }
