@@ -215,6 +215,8 @@ let
 
     inputstreamhelper = callPackage ../applications/video/kodi/addons/inputstreamhelper { };
 
+    jurialmunkey = callPackage ../applications/video/kodi/addons/jurialmunkey { };
+
     kodi-six = callPackage ../applications/video/kodi/addons/kodi-six { };
 
     myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
