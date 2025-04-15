@@ -29,6 +29,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
+  postPatch = ''
+    substituteInPlace bbox/metrics.py \
+      --replace-warn round_ round
+  '';
+
   propagatedBuildInputs = [
     pyquaternion
     numpy
@@ -45,6 +50,8 @@ buildPythonPackage rec {
     # performance test, racy on busy machines
     "test_multi_jaccard_index_2d_performance"
   ];
+
+  pythonRelaxDeps = [ "numpy" ];
 
   pythonImportsCheck = [ "bbox" ];
 
