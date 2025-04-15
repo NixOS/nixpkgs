@@ -74,20 +74,7 @@ self: super: {
     }
   );
 
-  haskell-language-server = lib.pipe super.haskell-language-server [
-    (disableCabalFlag "fourmolu")
-    (disableCabalFlag "ormolu")
-    (disableCabalFlag "cabal")
-    (disableCabalFlag "stylishHaskell")
-    (
-      d:
-      d.override {
-        ormolu = null;
-        fourmolu = null;
-        stan = null;
-      }
-    )
-  ];
+  haskell-language-server = throw "haskell-language-server has dropped support for ghc 9.2 in version 2.10.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
