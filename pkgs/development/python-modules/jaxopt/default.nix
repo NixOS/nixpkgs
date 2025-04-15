@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jaxopt";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
     tag = "jaxopt-v${version}";
-    hash = "sha256-StuI9Z9wRjuvjsGoQUkcjoKbR6hNkGmOcddUc18yO3I=";
+    hash = "sha256-vPXrs8J81O+27w9P/fEFr7w4xClKb8T0IASD+iNhztQ=";
   };
 
   build-system = [ setuptools ];
