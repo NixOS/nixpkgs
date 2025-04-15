@@ -2741,6 +2741,8 @@ self: super: with self; {
 
   conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
 
+  condense-json = callPackage ../development/python-modules/condense-json { };
+
   conduit = callPackage ../development/python-modules/conduit { };
 
   conduit-mpi = callPackage ../development/python-modules/conduit { mpiSupport = true; };
@@ -6667,6 +6669,8 @@ self: super: with self; {
 
   inform = callPackage ../development/python-modules/inform { };
 
+  ingredient-parser-nlp = callPackage ../development/python-modules/ingredient-parser-nlp { };
+
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
   inifile = callPackage ../development/python-modules/inifile { };
@@ -7434,6 +7438,8 @@ self: super: with self; {
   kubernetes-validate = callPackage ../by-name/ku/kubernetes-validate/unwrapped.nix { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
+
+  kuzu = callPackage ../development/python-modules/kuzu { };
 
   l18n = callPackage ../development/python-modules/l18n { };
 
@@ -12661,6 +12667,8 @@ self: super: with self; {
   pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
+
+  pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
 
   pymodes = callPackage ../development/python-modules/pymodes { };
 
@@ -18856,6 +18864,8 @@ self: super: with self; {
   whool = callPackage ../development/python-modules/whool { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
+
+  whoosh-reloaded = callPackage ../development/python-modules/whoosh-reloaded { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 

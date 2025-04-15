@@ -217,6 +217,17 @@
     };
     meta.homepage = "https://github.com/ambroisie/tree-sitter-bp";
   };
+  brightscript = buildGrammar {
+    language = "brightscript";
+    version = "0.0.0+rev=48ce168";
+    src = fetchFromGitHub {
+      owner = "ajdelcimmuto";
+      repo = "tree-sitter-brightscript";
+      rev = "48ce1687125c6dfefcc7a1bef19fa0f0f00426cc";
+      hash = "sha256-eVHAl8qykIS90SpWHvpT6VEqjKuXCX8zIYlRGlhUm7w=";
+    };
+    meta.homepage = "https://github.com/ajdelcimmuto/tree-sitter-brightscript";
+  };
   c = buildGrammar {
     language = "c";
     version = "0.0.0+rev=2a265d6";

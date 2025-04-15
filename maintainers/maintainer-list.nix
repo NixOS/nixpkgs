@@ -2103,6 +2103,12 @@
     githubId = 21687187;
     name = "Mirza Arnaut";
   };
+  asakura = {
+    email = "mikalai.seva+nixpkgs@gmail.com";
+    github = "asakura";
+    githubId = 29058;
+    name = "Mikalai Seva";
+  };
   asappia = {
     email = "asappia@gmail.com";
     github = "asappia";
@@ -20876,6 +20882,13 @@
     github = "rorosen";
     githubId = 76747196;
     name = "Robert Rose";
+  };
+  RorySys = {
+    email = "root@rory.gay";
+    github = "TheArcaneBrony";
+    githubId = 13570458;
+    matrix = "@emma:rory.gay"; # preferred
+    name = "Rory&";
   };
   rosehobgoblin = {
     name = "J. L. Bowden";
