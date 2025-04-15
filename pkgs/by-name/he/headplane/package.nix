@@ -55,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.igor-ramazanov ];
     mainProgram = "headplane";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

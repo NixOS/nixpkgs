@@ -25,6 +25,6 @@ buildGo123Module (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.igor-ramazanov ];
     mainProgram = "hp_agent";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })
