@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "aapt2";
     homepage = "https://developer.android.com/tools/aapt2";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ linsui ];
+    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.android.members;
     platforms = lib.platforms.unix;
     badPlatforms = [
       # The linux executable only supports x86_64
