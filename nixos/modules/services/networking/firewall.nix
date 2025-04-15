@@ -68,9 +68,7 @@ let
 in
 
 {
-
   options = {
-
     networking.firewall = {
       enable = lib.mkOption {
         type = lib.types.bool;
@@ -79,6 +77,32 @@ in
           Whether to enable the firewall.  This is a simple stateful
           firewall that blocks connection attempts to unauthorised TCP
           or UDP ports on this machine.
+        '';
+      };
+
+      backend = lib.mkOption {
+        type = lib.types.enum [
+          "iptables"
+          "nftables"
+          "firewalld"
+        ];
+        default =
+          if config.services.firewalld.enable then
+            "firewalld"
+          else if config.networking.nftables.enable then
+            "nftables"
+          else
+            "iptables";
+        defaultText = lib.literalExpression ''
+          if config.services.firewalld.enable then
+            "firewalld"
+          else if config.networking.nftables.enable then
+            "nftables"
+          else
+            "iptables"
+        '';
+        description = ''
+          Underlying implementation for the firewall service.
         '';
       };
 
@@ -292,11 +316,9 @@ in
       };
     }
     // commonOptions;
-
   };
 
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
         assertion = cfg.filterForward -> config.networking.nftables.enable;
@@ -323,7 +345,5 @@ in
     boot.extraModprobeConfig = lib.optionalString cfg.autoLoadConntrackHelpers ''
       options nf_conntrack nf_conntrack_helper=1
     '';
-
   };
-
 }
