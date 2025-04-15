@@ -2,7 +2,7 @@
   lib,
   chatterino2,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   boost186,
 }:
 
@@ -23,7 +23,10 @@
         fetchSubmodules = true;
       };
 
-      passthru.updateScript = nix-update-script { };
+      passthru.updateScript = gitUpdater {
+        rev-prefix = "v";
+        ignoredVersions = "beta";
+      };
 
       meta = {
         description = "Chat client for Twitch chat";
