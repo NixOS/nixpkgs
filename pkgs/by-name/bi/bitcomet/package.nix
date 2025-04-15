@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   appimageTools,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 let
   pname = "bitcomet";
@@ -20,7 +20,7 @@ appimageTools.wrapType2 {
     pkgs: with pkgs; [
       libxml2
       libpng
-      webkitgtk_4_0
+      webkitgtk_4_1
     ];
 
   extraInstallCommands = ''
