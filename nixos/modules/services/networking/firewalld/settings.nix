@@ -126,6 +126,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.settings.FirewallBackend == "nftables" -> config.networking.nftables.enable;
+        message = ''
+          FirewallD uses nftables as the firewall backend (by default), but
+          nftables support isn't enabled. Please read the description of
+          networking.nftables.enable for possible problems. If using nftables
+          is not desired, set services.firewalld.settings.FirewallBackend to
+          "iptables", but be aware that FirewallD has deprecated support for
+          it, and will override firewall rule set by other services, if any.
+        '';
+      }
+    ];
+
     environment.etc."firewalld/firewalld.conf" = {
       source = format.generate "firewalld.conf" cfg.settings;
     };
