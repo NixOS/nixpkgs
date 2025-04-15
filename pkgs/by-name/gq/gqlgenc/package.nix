@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -18,6 +19,14 @@ buildGoModule rec {
   excludedPackages = [ "example" ];
 
   vendorHash = "sha256-h3ePmfRkGqVXdtjX2cU5y2HnX+VkmTWNwrEkhLAmrlU=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  # FAIL: TestLoadConfig_LoadSchema/correct_schema
+  # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Go tool for building GraphQL client with gqlgen";
