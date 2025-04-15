@@ -1,11 +1,11 @@
 {buildGoModule, fetchFromGitHub}:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hp_agent";
   version = "0.5.10";
   src = fetchFromGitHub {
     repo = "headplane";
     owner = "tale";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0sckkbjyjrgshzmxx1biylxasybcmybarmqgfhl2cn6yy40dw6p4";
   };
 
