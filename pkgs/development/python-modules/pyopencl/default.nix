@@ -28,10 +28,6 @@
   pocl,
 }:
 
-let
-  os-specific-buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
-in
 buildPythonPackage rec {
   pname = "pyopencl";
   version = "2025.1";
@@ -57,8 +53,9 @@ buildPythonPackage rec {
 
   buildInputs = [
     opencl-headers
+    ocl-icd
     pybind11
-  ] ++ os-specific-buildInputs;
+  ];
 
   dependencies = [
     numpy
@@ -72,6 +69,12 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ] ++ pytools.optional-dependencies.siphash;
+
+  env = {
+    CL_INC_DIR = "${opencl-headers}/include";
+    CL_LIB_DIR = "${ocl-icd}/lib";
+    CL_LIBNAME = "${ocl-icd}/lib/libOpenCL${stdenv.hostPlatform.extensions.sharedLibrary}";
+  };
 
   preCheck = ''
     rm -rf pyopencl
@@ -92,10 +95,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
-    badPlatforms = [
-      # ld: symbol(s) not found for architecture arm64/x86_64
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }
