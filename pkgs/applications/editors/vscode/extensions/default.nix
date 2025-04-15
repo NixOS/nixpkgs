@@ -1351,6 +1351,23 @@ let
         };
       };
 
+      designliquido.designliquido-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "designliquido";
+          name = "designliquido-vscode";
+          version = "0.12.24";
+          hash = "sha256-MiVRVsyhjjxnyUeqC3sWpL4QGbSyoM53gWoK4C+qdK4=";
+        };
+        meta = {
+          changelog = "https://github.com/DesignLiquido/vscode/blob/principal/CHANGELOG.md";
+          description = "VSCode extension for Delégua, LMHT, FolEs, LinConEs, Portugol dialects (VisuAlg, Portugol Studio, Mapler) and portuguese languages";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=designliquido.designliquido-vscode";
+          homepage = "https://github.com/DesignLiquido/vscode";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
       devsense.composer-php-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "composer-php-vscode";
