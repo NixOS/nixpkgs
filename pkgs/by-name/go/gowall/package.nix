@@ -21,6 +21,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export HOME=$TMPDIR
+    mkdir -p $HOME/.config
+
     installShellCompletion --cmd gowall \
       --bash <($out/bin/gowall completion bash) \
       --fish <($out/bin/gowall completion fish) \
