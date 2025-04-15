@@ -1,11 +1,12 @@
 # Test the firewall module.
 
 import ./make-test-python.nix (
-  { pkgs, nftables, ... }:
+  { pkgs, backend, ... }:
   {
-    name = "firewall" + pkgs.lib.optionalString nftables "-nftables";
+    name = "firewall-${backend}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [
+        prince213
         rvfg
         garyguo
       ];
@@ -57,7 +58,8 @@ import ./make-test-python.nix (
               ];
             };
           };
-          networking.nftables.enable = nftables;
+          networking.nftables.enable = backend == "nftables";
+          networking.firewall.firewalld.enable = backend == "firewalld";
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
 
@@ -78,7 +80,13 @@ import ./make-test-python.nix (
     testScript =
       { nodes, ... }:
       let
-        unit = if nftables then "nftables" else "firewall";
+        unit = if backend == "iptables" then "firewall" else backend;
+        openPort =
+          if backend == "firewalld" then
+            "firewall-cmd --add-port=80/tcp"
+          else
+            "nixos-firewall-tool open tcp 80";
+        reset = if backend == "firewalld" then "firewall-cmd --reload" else "nixos-firewall-tool reset";
       in
       ''
         start_all()
@@ -99,11 +107,11 @@ import ./make-test-python.nix (
         walled.succeed("ping -c 1 attacker >&2")
 
         # Open tcp port 80 at runtime
-        walled.succeed("nixos-firewall-tool open tcp 80")
+        walled.succeed("${openPort}")
         attacker.succeed("curl -v http://walled/ >&2")
 
         # Reset the firewall
-        walled.succeed("nixos-firewall-tool reset")
+        walled.succeed("${reset}")
         attacker.fail("curl --fail --connect-timeout 2 http://walled/ >&2")
 
         # If we stop the firewall, then connections should succeed.
