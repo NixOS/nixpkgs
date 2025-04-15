@@ -80,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "A portable open source (MIT-licensed) implementation of the OpenCL standard";
     homepage = "http://portablecl.org";
