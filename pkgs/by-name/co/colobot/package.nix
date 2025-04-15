@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "colobot";
   # Maybe require an update to package colobot-data as well
   # in file data.nix next to this one
-  version = "0.2.1-alpha";
+  version = "0.2.2-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
     repo = "colobot";
     tag = "colobot-gold-${finalAttrs.version}";
-    hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
+    hash = "sha256-QhNHtAG+hKq7qJhKWCJcP4ejm5YDOU8pyYtitJppVlU=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     physfs
     openal
   ];
-
-  enableParallelBuilding = false;
 
   # The binary ends in games directory
   postInstall = ''
