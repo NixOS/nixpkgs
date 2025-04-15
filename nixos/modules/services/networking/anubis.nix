@@ -224,6 +224,9 @@ in
         and socket paths.
       '';
       type = types.attrsOf (types.submodule (commonSubmodule false));
+
+      # Merge defaultOptions into each instance
+      apply = lib.mapAttrs (_: lib.recursiveUpdate cfg.defaultOptions);
     };
   };
 
