@@ -17778,11 +17778,6 @@ with pkgs;
     yquake2-all-games
     ;
 
-  zeroad-unwrapped = callPackage ../by-name/ze/zeroad-unwrapped/package.nix {
-    wxGTK = wxGTK32;
-    fmt = fmt_9;
-  };
-
   ### DESKTOP ENVIRONMENTS
 
   arcan-wrapped = arcan.wrapper.override { };
