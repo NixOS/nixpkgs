@@ -20,7 +20,7 @@ buildGoModule {
     "-s"
     "-w"
   ];
-  env.CGO_ENABLED = 0;
+  CGO_ENABLED = 0;
   meta = {
     description = "An optional sidecar process providing additional features for headplane";
     homepage = "https://github.com/tale/headplane";
