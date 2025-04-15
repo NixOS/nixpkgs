@@ -1130,6 +1130,7 @@
   ./services/networking/ferm.nix
   ./services/networking/firefox-syncserver.nix
   ./services/networking/fireqos.nix
+  ./services/networking/firewall-firewalld.nix
   ./services/networking/firewall-iptables.nix
   ./services/networking/firewall-nftables.nix
   ./services/networking/firewall.nix
