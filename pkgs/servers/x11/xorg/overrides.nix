@@ -243,17 +243,6 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
   });
 
-  libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    meta = attrs.meta // {
-      pkgConfigModules = [ "xdmcp" ];
-    };
-  });
-
   libXtst = super.libXtst.overrideAttrs (attrs: {
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];
