@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Eqdw6epFkLv4Dnw/s1pcKW0P70ApZwx/J2VkCwn50Ew=";
   };
 
+  patches = [
+    # https://gitlab.freedesktop.org/slirp/libslirp/-/commit/735904142f95d0500c0eae6bf763e4ad24b6b9fd
+    # Vendorized due to frequent instability of the upstream repository.
+    ./fix-dns-for-darwin.patch
+  ];
+
   separateDebugInfo = true;
 
   nativeBuildInputs = [
