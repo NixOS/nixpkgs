@@ -336,6 +336,23 @@ in {
           RandomizedDelaySec = "5h";
         };
       };
+      commandbackup = {
+        command = [
+          "\${lib.getExe pkgs.sudo}"
+          "-u postgres"
+          "\${pkgs.postgresql}/bin/pg_dumpall"
+        ];
+        extraBackupArgs = ["--tag database"];
+        repository = "s3:example.com/mybucket";
+        passwordFile = "/etc/nixos/secrets/restic-password";
+        environmentFile = "/etc/nixos/secrets/restic-environment";
+        pruneOpts = [
+          "--keep-daily 14"
+          "--keep-weekly 4"
+          "--keep-monthly 2"
+          "--group-by tags"
+        ];
+      };
     };
   };
 
@@ -359,10 +376,6 @@ in {
       lib.mapAttrs' (
         name: backup: let
           extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-          stdinFromCommand =
-            if backup.command != []
-            then " --stdin-from-command=true -- ${lib.concatStringsSep " " backup.command}"
-            else "";
           inhibitCmd = lib.concatStringsSep " " [
             "${pkgs.systemd}/bin/systemd-inhibit"
             "--mode='block'"
@@ -430,21 +443,19 @@ in {
                 {
                   Type = "oneshot";
                   ExecStart =
-                    (lib.optionals fileBackup [
-                      "${resticCmd} backup ${
-                        lib.concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)
-                      } --files-from=${filesFromTmpFile}"
-                    ])
-                    ++ (lib.optionals commandBackup [
+                    [
                       "${resticCmd} backup ${
                         lib.concatStringsSep " " (
                           backup.extraBackupArgs
-                          ++ excludeFlags
-                          ++ [" --stdin-from-command=true --"]
-                          ++ backup.command
+                          ++ lib.optionals fileBackup (
+                            excludeFlags ++ ["--files-from=${filesFromTmpFile}"]
+                          )
+                          ++ lib.optionals commandBackup (
+                            ["--stdin-from-command=true --"] ++ backup.command
+                          )
                         )
                       }"
-                    ])
+                    ]
                     ++ pruneCmd
                     ++ checkCmd;
                   User = backup.user;
@@ -462,13 +473,13 @@ in {
                 ${lib.optionalString (backup.backupPrepareCommand != null) ''
                   ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
                 ''}
-                ${lib.optionalString (backup.initialize) ''
+                ${lib.optionalString backup.initialize ''
                   ${resticCmd} cat config > /dev/null || ${resticCmd} init
                 ''}
                 ${lib.optionalString (backup.paths != null && backup.paths != []) ''
                   cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}
                 ''}
-                ${lib.optionalString (backup.dynamicFilesFrom != null) ''
+                ${lib.optionalString (backup.dynamicFilesFrom != null && backup.dynamicFilesFrom != []) ''
                   ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
                 ''}
               '';
@@ -490,7 +501,7 @@ in {
       name: backup:
         lib.nameValuePair "restic-backups-${name}" {
           wantedBy = ["timers.target"];
-          timerConfig = backup.timerConfig;
+        inherit (backup) timerConfig;
         }
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
@@ -507,7 +518,7 @@ in {
           ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
             (lib.filterAttrs (n: v: v != null && n != "PATH"))
             (lib.mapAttrs (_: v: "${v}"))
-            (lib.toShellVars)
+            lib.toShellVars
           ]}
           PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
