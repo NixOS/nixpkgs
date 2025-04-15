@@ -6,16 +6,16 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-common";
   # nixpkgs-update: no auto update
-  version = "0.10.3";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-common";
-    rev = "v${version}";
-    hash = "sha256-sA6CsLLHh4Ce/+ffl4OhisMSgdrD+EmXvTNGSq7/vvk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mywJ1FPCfXvZCJoonuwhXyjf+W/RvtqFl9v64cJoKrc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,14 +51,14 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       orivej
       r-burns
     ];
   };
-}
+})
