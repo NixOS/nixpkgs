@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) lightdm; };
+    tests = { inherit (nixosTests) lightdm lightdm-sway; };
   };
 
   meta = with lib; {

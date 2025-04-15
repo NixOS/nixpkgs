@@ -729,6 +729,7 @@ in
   libvirtd = handleTest ./libvirtd.nix { };
   lidarr = handleTest ./lidarr.nix { };
   lightdm = handleTest ./lightdm.nix { };
+  lightdm-sway = runTest ./lightdm-sway.nix;
   lighttpd = runTest ./lighttpd.nix;
   limesurvey = handleTest ./limesurvey.nix { };
   limine = import ./limine { inherit runTest; };
