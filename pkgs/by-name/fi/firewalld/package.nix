@@ -155,6 +155,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
+    firewalld = nixosTests.firewalld;
     firewall-firewalld = nixosTests.firewall-firewalld;
   };
 
