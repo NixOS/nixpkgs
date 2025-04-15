@@ -2103,6 +2103,12 @@
     githubId = 21687187;
     name = "Mirza Arnaut";
   };
+  asakura = {
+    email = "mikalai.seva+nixpkgs@gmail.com";
+    github = "asakura";
+    githubId = 29058;
+    name = "Mikalai Seva";
+  };
   asappia = {
     email = "asappia@gmail.com";
     github = "asappia";
