@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
   };
 
+  postPatch = ''
+    substituteInPlace src/glHelp.h --replace-fail _TTF_Font TTF_Font
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     zlib
