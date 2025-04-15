@@ -494,6 +494,7 @@ in
   firefoxpwa = handleTest ./firefoxpwa.nix { };
   firejail = handleTest ./firejail.nix { };
   firewall = handleTest ./firewall.nix { backend = "iptables"; };
+  firewalld = runTest ./firewalld.nix;
   firewall-firewalld = handleTest ./firewall.nix { backend = "firewalld"; };
   firewall-nftables = handleTest ./firewall.nix { backend = "nftables"; };
   fish = runTest ./fish.nix;
