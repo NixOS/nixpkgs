@@ -520,6 +520,20 @@ let
           revert = true;
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
+      ]
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "137") [
+        # Backport "Add more CFI suppressions for inline PipeWire functions" from M137
+        # to fix SIGKILL (ud1) when screensharing with PipeWire 1.4+ and is_cfi = true.
+        # Our chromium builds set is_official_build = true, which in turn enables is_cfi.
+        # We don't apply this patch to electron, because we build electron with
+        # is_cfi = false and as such is not affected by this.
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6421030
+        (fetchpatch {
+          name = "add-more-CFI-suppressions-for-inline-PipeWire-functions.patch";
+          url = "https://chromium.googlesource.com/chromium/src/+/0eebf40b9914bca8fe69bef8eea89522c1a5d4ce^!?format=TEXT";
+          decode = "base64 -d";
+          hash = "sha256-xMqGdu5Q8BGF/OIRdmMzPrrrMGDOSY2xElFfhRsJlDU=";
+        })
       ];
 
     postPatch =
