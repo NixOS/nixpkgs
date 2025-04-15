@@ -6,10 +6,17 @@
   jre_headless,
   nixosTests,
   callPackage,
+
+  # Keycloak config file to use for the build.
   confFile ? null,
+  # Extra plugins to add to the keycloak build.
   plugins ? [ ],
+  # Extra features to add in the keycloak build.
   extraFeatures ? [ ],
+  # Extra features to disable in the keycloak build.
   disabledFeatures ? [ ],
+  # Extra build arguments to the keycloak build.
+  extraBuildArgs ? [ ],
 }:
 
 let
@@ -21,6 +28,8 @@ let
       disabledFeatures != [ ]
     ) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
+
+  buildFlags = lib.concatStringsSep " " (map (s: "\'${s}\'") extraBuildArgs);
 in
 stdenv.mkDerivation rec {
   pname = "keycloak";
@@ -63,7 +72,7 @@ stdenv.mkDerivation rec {
       patchShebangs bin/kc.sh
       export KC_HOME_DIR=$(pwd)
       export KC_CONF_DIR=$(pwd)/conf
-      bin/kc.sh build ${featuresSubcommand}
+      bin/kc.sh build ${buildFlags} ${featuresSubcommand}
 
       runHook postBuild
     '';
