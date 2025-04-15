@@ -1,4 +1,4 @@
-{buildGoModule, fetchFromGitHub}:
+{buildGoModule, fetchFromGitHub, lib}:
 buildGoModule (finalAttrs: {
   pname = "hp_agent";
   version = "0.5.10";
@@ -12,5 +12,13 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-G0kahv3mPTL/mxU2U+0IytJaFVPXMbMBktbLMfM0BO8=";
   ldflags = ["-s" "-w"];
   env.CGO_ENABLED = 0;
-}
+  meta = {
+    description = "An optional sidecar process providing additional features for headplane";
+    homepage = "https://github.com/tale/headplane";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.igor-ramazanov ];
+    mainProgram = "hp_agent";
+    platforms = lib.platforms.all;
+  };
+})
 
