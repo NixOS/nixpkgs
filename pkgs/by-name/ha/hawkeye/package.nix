@@ -24,7 +24,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/korandoro/hawkeye";
+    homepage = "https://github.com/korandoru/hawkeye";
     description = "Simple license header checker and formatter, in multiple distribution forms";
     license = lib.licenses.asl20;
     mainProgram = "hawkeye";
