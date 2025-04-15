@@ -133,6 +133,8 @@ let
 
     raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
 
+    robotocjksc = callPackage ../applications/video/kodi/addons/robotocjksc { };
+
     skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 
     svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
