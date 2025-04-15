@@ -1,4 +1,8 @@
-{buildGoModule, fetchFromGitHub, lib}:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule (finalAttrs: {
   pname = "hp_agent";
   version = "0.5.10";
@@ -10,7 +14,10 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-G0kahv3mPTL/mxU2U+0IytJaFVPXMbMBktbLMfM0BO8=";
-  ldflags = ["-s" "-w"];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
   env.CGO_ENABLED = 0;
   meta = {
     description = "An optional sidecar process providing additional features for headplane";
@@ -21,4 +28,3 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
-
