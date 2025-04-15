@@ -15,7 +15,7 @@
   gdk-pixbuf,
   cairo,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   openssl,
   gstreamer,
   gst-libav,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     pango
     gtk3
-    webkitgtk_4_0
+    webkitgtk_4_1
     openssl
     libfixposix
   ];
