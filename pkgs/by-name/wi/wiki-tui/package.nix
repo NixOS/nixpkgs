@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   ncurses,
   openssl,
   pkg-config,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = "wiki-tui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eTDxRrTP9vX7F1lmDCuF6g1pfaZChqB8Pv1kfrd7I9w=";
   };
 
@@ -25,8 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ncurses
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
-
+  ];
   useFetchCargoVendor = true;
   cargoHash = "sha256-Pe6mNbn4GFjhpFZeWMlaRt7Bj5BLiIy789hXWkII2ps=";
 
