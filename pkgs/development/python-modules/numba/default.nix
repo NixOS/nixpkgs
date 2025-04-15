@@ -10,7 +10,6 @@
   numpy,
   numpy_1,
   llvmlite,
-  libcxx,
   replaceVars,
   writers,
   numba,
@@ -74,7 +73,7 @@ buildPythonPackage rec {
         'numpy_version >= (3, 0)'
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   build-system = [
     setuptools
