@@ -12,10 +12,11 @@
 
   nodes = {
     walled =
-      { ... }:
+      { lib, ... }:
       {
         networking.firewall = {
           enable = true;
+          inherit backend;
           logRefusedPackets = true;
           # Syntax smoke test, not actually verified otherwise
           allowedTCPPorts = [
@@ -37,23 +38,25 @@
               to = 8010;
             }
           ];
-          interfaces.eth0 = {
-            allowedTCPPorts = [ 10003 ];
-            allowedTCPPortRanges = [
-              {
-                from = 10000;
-                to = 10005;
-              }
-            ];
-          };
-          interfaces.eth3 = {
-            allowedUDPPorts = [ 10003 ];
-            allowedUDPPortRanges = [
-              {
-                from = 10000;
-                to = 10005;
-              }
-            ];
+          interfaces = lib.mkIf (backend != "firewalld") {
+            eth0 = {
+              allowedTCPPorts = [ 10003 ];
+              allowedTCPPortRanges = [
+                {
+                  from = 10000;
+                  to = 10005;
+                }
+              ];
+            };
+            eth3 = {
+              allowedUDPPorts = [ 10003 ];
+              allowedUDPPortRanges = [
+                {
+                  from = 10000;
+                  to = 10005;
+                }
+              ];
+            };
           };
         };
         networking.nftables.enable = nftables;
