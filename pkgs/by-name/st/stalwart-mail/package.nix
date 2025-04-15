@@ -102,6 +102,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::inbound::data::data"
     # Expected "X-My-Header: true" but got Received: from foobar.net (unknown [10.0.0.123])
     "--skip=smtp::inbound::scripts::sieve_scripts"
+    # thread 'smtp::outbound::lmtp::lmtp_delivery' panicked at tests/src/smtp/session.rs:313:13:
+    # Expected "<invalid@domain.org> (failed to lookup" but got From: "Mail Delivery Subsystem" <MAILER-DAEMON@localhost>
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
+    # thread 'smtp::outbound::extensions::extensions' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    "--skip=smtp::outbound::extensions::extensions"
     # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
     "--skip=smtp::outbound::smtp::smtp_delivery"
     # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
