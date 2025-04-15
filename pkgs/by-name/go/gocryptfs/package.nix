@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0iCCIAOAzLIeZ+eZYJTVXgOyKIsQnKe/XazFVECZDTM=";
+    sha256 = "sha256-lDIKMcZLAE1ehijzhpx6G966xzdhusT40Dy06LXBn74=";
   };
 
   vendorHash = "sha256-WfTJ8TuFupEa391XQMDl3hKTjrmRHJqvYb1haAGHW/U=";
