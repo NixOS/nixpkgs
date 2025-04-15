@@ -14,6 +14,7 @@
   db48,
   sqlite,
   qrencode,
+  libsystemtap,
   qtbase ? null,
   qttools ? null,
   python3,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       zeromq
       zlib
     ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
     ++ lib.optionals withWallet [ sqlite ]
     # building with db48 (for legacy descriptor wallet support) is broken on Darwin
     ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
@@ -93,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       (lib.cmakeBool "BUILD_BENCH" false)
+      (lib.cmakeBool "WITH_ZMQ" true)
+      # building with db48 (for legacy wallet support) is broken on Darwin
+      (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
+      (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
     ]
     ++ lib.optionals (!finalAttrs.doCheck) [
       (lib.cmakeBool "BUILD_TESTS" false)
