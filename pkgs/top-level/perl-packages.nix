@@ -118,11 +118,11 @@ with self;
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.8.0";
+    version = "3.8.2";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-ZAsaGzbKFaTR0XkvKkTmmurlg5HPDSH6iilmWoiV9xg=";
+      hash = "sha256-pSOfWiwS4Me05DL/1+k2/u+UWpYhpBWRx307DPRYVgs=";
     };
 
     outputs = [
@@ -143,6 +143,7 @@ with self;
       description = "Grep-like tool tailored to working with large trees of source code";
       homepage = "https://beyondgrep.com";
       license = with lib.licenses; [ artistic2 ];
+      maintainers = [ maintainers.asakura ];
     };
   };
 

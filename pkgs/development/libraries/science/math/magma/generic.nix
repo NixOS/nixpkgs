@@ -254,11 +254,6 @@ stdenv.mkDerivation {
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
       || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
-      || (rocmSupport && strings.versionOlder version "2.8.0" && rocmPackages_5 == null)
-      || (
-        rocmSupport
-        && strings.versionAtLeast version "2.8.0"
-        && strings.versionOlder rocmPackages.clr.version "6.3"
-      );
+      || (rocmSupport && strings.versionOlder version "2.8.0" && rocmPackages_5 == null);
   };
 }
