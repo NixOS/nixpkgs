@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kexec-tools";
-  version = "2.0.29";
+  version = "2.0.30";
 
   src = fetchurl {
     urls = [
       "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
       "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
-    sha256 = "sha256-Z7GsUDqt5FpU2wvHkiiogwo11dT4PO6TLP8+eoGkqew=";
+    sha256 = "sha256-dIpfp68nqAWdHekHvd/DKsUwxxibV3DIPm89iY2CEk4=";
   };
 
   patches = [
