@@ -93,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       (lib.cmakeBool "BUILD_BENCH" false)
+      (lib.cmakeBool "WITH_ZMQ" true)
+      # building with db48 (for legacy wallet support) is broken on Darwin
+      (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
     ]
     ++ lib.optionals (!finalAttrs.doCheck) [
       (lib.cmakeBool "BUILD_TESTS" false)
