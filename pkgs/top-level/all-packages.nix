@@ -11068,8 +11068,6 @@ with pkgs;
     haskellLib = haskell.lib.compose;
   };
 
-  librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
-
   librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };
 
   librdf_rasqal = callPackage ../development/libraries/librdf/rasqal.nix { };
