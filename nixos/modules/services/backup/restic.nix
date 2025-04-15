@@ -1,5 +1,5 @@
 {
-  config,
+config,
   lib,
   pkgs,
   utils,
@@ -8,10 +8,9 @@
 let
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
   inherit (utils.systemdUtils.unitOptions) unitOption;
-  inherit (config.services.restic) backups;
 in
 {
-  backups = lib.mkOption {
+  options.config.services.restic.backups = lib.mkOption {
     description = ''
       Periodic backups to create with Restic.
     '';
@@ -252,7 +251,7 @@ in
 
             runCheck = lib.mkOption {
               type = lib.types.bool;
-              default = builtins.length backups.${name}.checkOpts > 0;
+              default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
               defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
@@ -365,7 +364,7 @@ in
     assertions = [
       {
         assertion = lib.all (backup: with backup; (repository == null) != (repositoryFile == null)) (
-          lib.attrValues backups
+          lib.attrValues config.services.restic.backups
         );
         message = "services.restic.backups.<name>: exactly one of repository or repositoryFile should be set";
       }
@@ -376,7 +375,7 @@ in
               b: (b.paths != null && b.paths != [ ]) || (b.dynamicFilesFrom != null && b.dynamicFilesFrom != [ ]);
             commandBackup = b: (b.command != [ ]);
           in
-          !lib.any (backup: (fileBackup backup && commandBackup backup)) (lib.attrValues backups);
+          !lib.any (backup: (fileBackup backup && commandBackup backup)) (lib.attrValues config.services.restic.backups);
         message = "services.restic.backups.<name>: command is mutually exclusive with paths and dynamicFilesFrom";
       }
     ];
@@ -494,14 +493,14 @@ in
           '';
         }
       )
-    ) backups;
+    ) config.services.restic.backups;
     systemd.timers = lib.mapAttrs' (
       name: backup:
       lib.nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
         inherit (backup) timerConfig;
       }
-    ) (lib.filterAttrs (_: backup: backup.timerConfig != null) backups);
+    ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (
@@ -523,6 +522,6 @@ in
 
         exec ${resticCmd} "$@"
       ''
-    ) (lib.filterAttrs (_: v: v.createWrapper) backups);
+    ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }
