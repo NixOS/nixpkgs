@@ -249,7 +249,7 @@ in
           with subtest("Setup Git and SSH for Alice"):
               gitlab.succeed("git config --global user.name Alice")
               gitlab.succeed("git config --global user.email alice@nixos.invalid")
-              gitlab.succeed("mkdir -m 700 /root/.ssh")
+              gitlab.succeed("mkdir -p -m 700 /root/.ssh")
               gitlab.succeed("cat ${snakeOilPrivateKey} > /root/.ssh/id_ecdsa")
               gitlab.succeed("chmod 600 /root/.ssh/id_ecdsa")
               gitlab.succeed(
