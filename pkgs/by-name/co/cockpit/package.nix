@@ -165,8 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --run 'cd $(mktemp -d)'
 
-    wrapProgram $out/bin/cockpit-bridge \
-      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+    for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
+      chmod +x $binary
+      wrapProgram $binary \
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+    done
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
       --replace-warn libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
