@@ -16,6 +16,7 @@ in
 {
   imports = [
     ./settings.nix
+    ./zone.nix
   ];
 
   options.services.firewalld = {
