@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    # building the tests implies running them in the buildPhase
+    (lib.cmakeBool "TF_BUILD_TESTS" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+  ];
+
   doCheck = true;
 
   meta = {
