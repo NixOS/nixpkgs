@@ -180,10 +180,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs $out/share/cockpit/issue/update-issue
     wrapProgram $out/share/cockpit/issue/update-issue \
-      --prefix PATH : ${lib.makeBinPath [
-        iproute2
-        gnused
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          iproute2
+          gnused
+        ]
+      }
 
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
