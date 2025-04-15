@@ -159,6 +159,8 @@ let
 
     osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
+    texturemaker = callPackage ../applications/video/kodi/addons/texturemaker { };
+
     upnext = callPackage ../applications/video/kodi/addons/upnext { };
 
     vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
