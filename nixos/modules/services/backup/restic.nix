@@ -10,7 +10,7 @@ let
   inherit (utils.systemdUtils.unitOptions) unitOption;
 in
 {
-  options.config.services.restic.backups = lib.mkOption {
+  options.services.restic.backups = lib.mkOption {
     description = ''
       Periodic backups to create with Restic.
     '';
