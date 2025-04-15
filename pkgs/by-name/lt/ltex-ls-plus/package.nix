@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ltex-ls-plus";
-  version = "18.5.0";
+  version = "18.5.1";
 
   src = fetchurl {
     url = "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${version}/ltex-ls-plus-${version}.tar.gz";
-    sha256 = "sha256-rtRDfsZUwhH2sXJxUWKBBt0KNIrM85IobYBJtxML5Wc=";
+    sha256 = "sha256-kSs/0Hi9G5l632+dqxGhlvMJCizzKFY/dq7UyAr3uss=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

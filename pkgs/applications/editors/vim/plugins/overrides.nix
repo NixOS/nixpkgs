@@ -2558,9 +2558,15 @@ in
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      nvim-tree-lua
+      neo-tree-nvim
+      # FIXME: should propagate from neo-tree-nvim
+      nui-nvim
+      plenary-nvim
+    ];
     dependencies = [ self.nvzone-volt ];
-    # Optional nvimtree integration
-    nvimSkipModules = "menus.nvimtree";
   };
 
   nvzone-minty = super.nvzone-minty.overrideAttrs {
@@ -2580,6 +2586,10 @@ in
       telescope-nvim
     ];
     dependencies = [ self.plenary-nvim ];
+    nvimSkipModules = [
+      # Issue reproduction file
+      "minimal"
+    ];
   };
 
   octo-nvim = super.octo-nvim.overrideAttrs {
@@ -2722,6 +2732,12 @@ in
       "persisted"
       "persisted.config"
       "persisted.utils"
+    ];
+  };
+
+  persistent-breakpoints-nvim = super.persistent-breakpoints-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-dap
     ];
   };
 
