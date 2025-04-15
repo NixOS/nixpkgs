@@ -65,7 +65,7 @@ in
         API_PORT = toString cfg.port;
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
-        CRF_MODEL_PATH = "/var/lib/mealie/model.crfmodel";
+        NLTK_DATA = pkgs.nltk-data.averaged_perceptron_tagger_eng;
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {

@@ -18,6 +18,7 @@
   setuptools,
   sshtunnel,
   mock,
+  tzlocal,
 }:
 
 # this is a pythonPackage because of the ipython line magics in pgcli.magic
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     keyring
     pendulum
     sshtunnel
+    tzlocal
   ];
 
   nativeCheckInputs = [
