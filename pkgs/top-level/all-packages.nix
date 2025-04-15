@@ -9403,9 +9403,7 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gdal = callPackage ../development/libraries/gdal { };
-
-  gdalMinimal = callPackage ../development/libraries/gdal {
+  gdalMinimal = gdal.override {
     useMinimalFeatures = true;
   };
 
