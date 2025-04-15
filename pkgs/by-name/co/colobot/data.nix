@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "colobot-data";
-  version = "0.2.0-alpha";
+  version = "0.2.2-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
     repo = "colobot-data";
     tag = "colobot-gold-${finalAttrs.version}";
-    hash = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
+    hash = "sha256-Voxfc5iCFT7gyahaai5wLPi6fe7dWryYLjfNjfXpwWs=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ gettext ];
 
-  enableParallelBuilding = false;
   # Build procedure requires the data folder
   patchPhase = ''
     cp -r $src localSrc
