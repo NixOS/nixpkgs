@@ -74,20 +74,7 @@ self: super: {
     }
   );
 
-  haskell-language-server = lib.pipe super.haskell-language-server [
-    (disableCabalFlag "fourmolu")
-    (disableCabalFlag "ormolu")
-    (disableCabalFlag "cabal")
-    (disableCabalFlag "stylishHaskell")
-    (
-      d:
-      d.override {
-        ormolu = null;
-        fourmolu = null;
-        stan = null;
-      }
-    )
-  ];
+  haskell-language-server = throw "haskell-language-server has dropped support for ghc 9.2 in version 2.10.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
@@ -110,8 +97,8 @@ self: super: {
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;
 
-  # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-  hlint = enableCabalFlag "ghc-lib" super.hlint;
+  # Needs to match ghc-lib
+  hlint = doDistribute self.hlint_3_6_1;
 
   # ghc-lib >= 9.8 and friends no longer build with GHC 9.2 since they require semaphore-compat
   ghc-lib-parser = doDistribute (
