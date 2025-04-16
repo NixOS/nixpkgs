@@ -23,18 +23,22 @@ let
   clang = llvmPackages.clangUseLLVM;
   # Workaround to make sure libclang finds libgcc.a and libgcc_s.so when
   # invoked from within libpocl
-  clangWrapped = runCommand "clang-pocl" { nativeBuildInputs = [ makeWrapper ]; } ''
-    mkdir -p $out/bin
-    cp -r ${clang}/bin/* $out/bin/
-    LIBGCC_DIR=$(dirname $(find ${stdenv.cc.cc}/lib/ -name libgcc.a))
-    for F in ${clang}/bin/ld*; do
-      BASENAME=$(basename "$F")
-      rm -f $out/bin/$BASENAME
-      makeWrapper ${clang}/bin/$BASENAME $out/bin/$BASENAME \
-        --add-flags "-L$LIBGCC_DIR" \
-        --add-flags "-L${lib.getLib stdenv.cc.cc}/lib"
-    done
-  '';
+  clangWrapped =
+    if stdenv.hostPlatform.isDarwin then
+      clang
+    else
+      runCommand "clang-pocl" { nativeBuildInputs = [ makeWrapper ]; } ''
+        mkdir -p $out/bin
+        cp -r ${clang}/bin/* $out/bin/
+        LIBGCC_DIR=$(dirname $(find ${stdenv.cc.cc}/lib/ -name libgcc.a))
+        for F in ${clang}/bin/ld*; do
+          BASENAME=$(basename "$F")
+          rm -f $out/bin/$BASENAME
+          makeWrapper ${clang}/bin/$BASENAME $out/bin/$BASENAME \
+            --add-flags "-L$LIBGCC_DIR" \
+            --add-flags "-L${lib.getLib stdenv.cc.cc}/lib"
+        done
+      '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
@@ -46,6 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "acf4ea163b7346d20b3023d41c1141f094acc755";
     hash = "sha256-d/BD8YkdMYtu6yFlGNXrsz7PVIrzBvvYLU1JRv7ZJmc=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace pocld/shared_cl_context.cc --replace-fail \
+      "Dev.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>()" \
+      "static_cast<size_t>(Dev.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>())"
+  '';
 
   cmakeFlags = [
     "-DKERNELLIB_HOST_CPU_VARIANTS=distro"
@@ -67,17 +77,20 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    hwloc
-    libxml2
-    llvmPackages.llvm
-    llvmPackages.libclang
-    lttng-ust
-    opencl-headers
-    ocl-icd
-    spirv-tools
-    spirv-llvm-translator
-  ];
+  buildInputs =
+    [
+      hwloc
+      libxml2
+      llvmPackages.llvm
+      llvmPackages.libclang
+      opencl-headers
+      ocl-icd
+      spirv-tools
+      spirv-llvm-translator
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      lttng-ust
+    ];
 
   passthru.updateScript = nix-update-script { };
 
