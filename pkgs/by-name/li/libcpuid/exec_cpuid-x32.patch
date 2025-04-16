@@ -1,0 +1,66 @@
+diff --git a/libcpuid/asm-bits.c b/libcpuid/asm-bits.c
+index fb9be74..7c7cec7 100644
+--- a/libcpuid/asm-bits.c
++++ b/libcpuid/asm-bits.c
+@@ -84,57 +84,10 @@ int cpuid_exists_by_eflags(void)
+ void exec_cpuid(uint32_t *regs)
+ {
+ #  if defined(COMPILER_GCC) || defined(COMPILER_CLANG)
+-#	ifdef PLATFORM_X64
+-	__asm __volatile(
+-		"	mov	%0,	%%rdi\n"
+-
+-		"	push	%%rbx\n"
+-		"	push	%%rcx\n"
+-		"	push	%%rdx\n"
+-
+-		"	mov	(%%rdi),	%%eax\n"
+-		"	mov	4(%%rdi),	%%ebx\n"
+-		"	mov	8(%%rdi),	%%ecx\n"
+-		"	mov	12(%%rdi),	%%edx\n"
+-
+-		"	cpuid\n"
+-
+-		"	movl	%%eax,	(%%rdi)\n"
+-		"	movl	%%ebx,	4(%%rdi)\n"
+-		"	movl	%%ecx,	8(%%rdi)\n"
+-		"	movl	%%edx,	12(%%rdi)\n"
+-		"	pop	%%rdx\n"
+-		"	pop	%%rcx\n"
+-		"	pop	%%rbx\n"
+-		:
+-		:"m"(regs)
+-		:"memory", "eax", "rdi"
+-	);
+-#	elif defined(PLATFORM_X86)
+-	__asm __volatile(
+-		"	mov	%0,	%%edi\n"
+-
+-		"	push	%%ebx\n"
+-		"	push	%%ecx\n"
+-		"	push	%%edx\n"
+-
+-		"	mov	(%%edi),	%%eax\n"
+-		"	mov	4(%%edi),	%%ebx\n"
+-		"	mov	8(%%edi),	%%ecx\n"
+-		"	mov	12(%%edi),	%%edx\n"
+-
+-		"	cpuid\n"
+-
+-		"	mov	%%eax,	(%%edi)\n"
+-		"	mov	%%ebx,	4(%%edi)\n"
+-		"	mov	%%ecx,	8(%%edi)\n"
+-		"	mov	%%edx,	12(%%edi)\n"
+-		"	pop	%%edx\n"
+-		"	pop	%%ecx\n"
+-		"	pop	%%ebx\n"
+-		:
+-		:"m"(regs)
+-		:"memory", "eax", "edi"
++#	if defined(PLATFORM_X86) || defined(PLATFORM_X64)
++	__asm __volatile (
++		"cpuid"
++		: "+a"(regs[0]), "+b"(regs[1]), "+c"(regs[2]), "+d"(regs[3])::
+ 	);
+ #	else
+ 	UNUSED(regs);

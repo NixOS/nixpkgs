@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+/TTlGk1ePPTHrSTSZmPHT2h3gKs9ouCF4ElvLWHF/g=";
   };
 
+  # https://github.com/anrieff/libcpuid/pull/209
+  patches = lib.optionals stdenv.hostPlatform.isX32 [
+    ./exec_cpuid-x32.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [
