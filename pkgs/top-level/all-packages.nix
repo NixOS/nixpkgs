@@ -491,6 +491,7 @@ with pkgs;
     buildDotnetGlobalTool
     mkNugetSource
     mkNugetDeps
+    autoPatchcilHook
     ;
 
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
