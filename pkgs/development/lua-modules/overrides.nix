@@ -86,16 +86,6 @@ in
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  bit32 = prev.bit32.overrideAttrs (oa: {
-    # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
-    # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
-    # more
-    patches = [
-      ./bit32.patch
-    ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
-  });
-
   busted = prev.busted.overrideAttrs (oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
