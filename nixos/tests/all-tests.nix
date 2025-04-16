@@ -829,7 +829,7 @@ in
   mosquitto = runTest ./mosquitto.nix;
   moosefs = handleTest ./moosefs.nix { };
   movim = import ./web-apps/movim { inherit recurseIntoAttrs runTest; };
-  mpd = handleTest ./mpd.nix { };
+  mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
