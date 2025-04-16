@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "8.3.2";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     tag = "v${version}";
-    hash = "sha256-koc82UHwr3TJZAzSX878fEbyRu8vddDLNpNelbnTr/8=";
+    hash = "sha256-usRuYMEvZCBxss6E9t4OK9DC0XcJXqftOiYsrsBtSZ8=";
   };
 
   postPatch = ''
