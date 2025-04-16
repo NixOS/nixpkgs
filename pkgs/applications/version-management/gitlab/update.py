@@ -375,15 +375,12 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
         [
             "git",
             "add",
-            "data.json",
-            "rubyEnv",
-            "gitaly",
-            "gitlab-pages",
-            "gitlab-shell",
-            "gitlab-workhorse",
-            "gitlab-elasticsearch-indexer",
+            "pkgs/applications/version-management/gitlab",
+            "pkgs/by-name/gi/gitaly",
+            "pkgs/by-name/gi/gitlab-elasticsearch-indexer",
+            "pkgs/by-name/gi/gitlab-pages",
         ],
-        cwd=GITLAB_DIR,
+        cwd=NIXPKGS_PATH,
     )
     subprocess.run(
         [
@@ -392,13 +389,20 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "--message",
             f"""gitlab: {old_version} -> {new_version}\n\nhttps://gitlab.com/gitlab-org/gitlab/-/blob/{new_rev}/CHANGELOG.md""",
         ],
-        cwd=GITLAB_DIR,
+        cwd=NIXPKGS_PATH,
     )
 
 
 def commit_container_registry(old_version: str, new_version: str) -> None:
     """Commits the gitlab-container-registry changes for you"""
-    subprocess.run(["git", "add", "gitlab-container-registry"], cwd=GITLAB_DIR)
+    subprocess.run(
+        [
+            "git",
+            "add",
+            "pkgs/by-name/gi/gitlab-container-registry"
+        ],
+        cwd=NIXPKGS_PATH,
+    )
     subprocess.run(
         [
             "git",
@@ -406,7 +410,7 @@ def commit_container_registry(old_version: str, new_version: str) -> None:
             "--message",
             f"gitlab-container-registry: {old_version} -> {new_version}\n\nhttps://gitlab.com/gitlab-org/container-registry/-/blob/v{new_version}-gitlab/CHANGELOG.md",
         ],
-        cwd=GITLAB_DIR,
+        cwd=NIXPKGS_PATH,
     )
 
 
