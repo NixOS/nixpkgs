@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   pkg-config,
   which,
@@ -23,22 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sooperlooper";
-  version = "1.7.8";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
     rev = "v${version}";
-    sha256 = "sha256-Lrsz/UDCgoac63FJ3CaPVaYwvBtzkGQQRLhUi6lUusE=";
+    sha256 = "sha256-bPu/VWTJLSIMoJSEQb+/nqtTpkPtCNVuXA17XsnFSP0=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "10-build_with_wx_32.patch";
-      url = "https://sources.debian.org/data/main/s/sooperlooper/1.7.8~dfsg0-2/debian/patches/10-build_with_wx_32.patch";
-      sha256 = "sha256-NF/w+zgRBNkSTqUJhfH9kQogXSYEF70pCN+loR0hjpg=";
-    })
-  ];
 
   autoreconfPhase = ''
     patchShebangs ./autogen.sh
@@ -66,6 +57,9 @@ stdenv.mkDerivation rec {
     alsa-lib
     fftw
   ];
+
+  # see https://bugs.gentoo.org/925275
+  CPPFLAGS = "-fpermissive";
 
   enableParallelBuilding = true;
 
