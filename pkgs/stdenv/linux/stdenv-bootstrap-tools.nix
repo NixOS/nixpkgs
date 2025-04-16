@@ -66,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
           cp -d ${libc.out}/lib/libnsl*.so* $out/lib
         ''
         + ''
-          cp -d ${libc.out}/lib/libutil*.so* $out/lib
           cp -d ${libc.out}/lib/libnss*.so* $out/lib
           cp -d ${libc.out}/lib/libresolv*.so* $out/lib
           # Copy all runtime files to enable non-PIE, PIE, static PIE and profile-generated builds
