@@ -27,28 +27,19 @@
   xorg,
 }:
 let
-  version = "2.15.1";
+  version = "2.15.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-vICkRfVxzQlqhSBCieVNSGeXb6FCOx0qOnInKMy6Lhg=";
+    hash = "sha256-3IGXjMVMSbpcdwEvJcMbFuQI9GYy1TY9NWAvum14UK4=";
   };
 
-  # subpath installation is broken with uvicorn >= 0.26
-  # https://github.com/NixOS/nixpkgs/issues/298719
-  # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
       django = prev.django_5;
-
-      django-extensions = prev.django-extensions.overridePythonAttrs (_: {
-        # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
-        # probably because of django_5 but it is the latest version available and used like that in paperless-ngx
-        doCheck = false;
-      });
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
