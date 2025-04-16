@@ -2067,6 +2067,9 @@
   "setup-hook-automake": [
     "index.html#setup-hook-automake"
   ],
+  "setup-hook-autopatchcilhook": [
+    "index.html#setup-hook-autopatchcilhook"
+  ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
   ],
