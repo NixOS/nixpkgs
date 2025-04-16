@@ -12,22 +12,22 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hobbits";
   version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "Mahlet-Inc";
     repo = "hobbits";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W6QBLj+GkmM88cOVSIc1PLiVXysjv74J7citFW6SRDM=";
   };
 
   postPatch = ''
     substituteInPlace src/hobbits-core/settingsdata.cpp \
-      --replace "pythonHome = \"/usr\"" "pythonHome = \"${python3}\""
+      --replace-warn "pythonHome = \"/usr\"" "pythonHome = \"${python3}\""
     substituteInPlace cmake/gitversion.cmake \
-      --replace "[Mystery Build]" "${version}"
+      --replace-warn "[Mystery Build]" "${finalAttrs.version}"
   '';
 
   buildInputs = [
@@ -43,15 +43,15 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  cmakeFlags = [ "-DUSE_SYSTEM_PFFFT=ON" ];
+  cmakeFlags = [ (lib.cmakeBool "USE_SYSTEM_PFFFT" true) ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform GUI for bit-based analysis, processing, and visualization";
     homepage = "https://github.com/Mahlet-Inc/hobbits";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
-}
+})
