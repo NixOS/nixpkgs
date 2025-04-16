@@ -213,6 +213,7 @@ in
   atop = import ./atop.nix { inherit pkgs runTest; };
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
+  ax25 = handleTest ./ax25.nix { };
   audiobookshelf = runTest ./audiobookshelf.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
@@ -791,7 +792,7 @@ in
   mediatomb = handleTest ./mediatomb.nix { };
   mediawiki = handleTest ./mediawiki.nix { };
   meilisearch = handleTest ./meilisearch.nix { };
-  memcached = handleTest ./memcached.nix { };
+  memcached = runTest ./memcached.nix;
   merecat = handleTest ./merecat.nix { };
   metabase = handleTest ./metabase.nix { };
   mihomo = handleTest ./mihomo.nix { };
@@ -885,7 +886,7 @@ in
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix { };
   nextcloud = handleTest ./nextcloud { };
-  nextflow = handleTestOn [ "x86_64-linux" ] ./nextflow.nix { };
+  nextflow = runTestOn [ "x86_64-linux" ] ./nextflow.nix;
   nextjs-ollama-llm-ui = runTest ./web-apps/nextjs-ollama-llm-ui.nix;
   nexus = handleTest ./nexus.nix { };
   # TODO: Test nfsv3 + Kerberos
@@ -1233,7 +1234,7 @@ in
   stargazer = runTest ./web-servers/stargazer.nix;
   starship = runTest ./starship.nix;
   stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix { };
-  static-web-server = handleTest ./web-servers/static-web-server.nix { };
+  static-web-server = runTest ./web-servers/static-web-server.nix;
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
   stratis = handleTest ./stratis { };
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix { };
