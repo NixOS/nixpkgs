@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = [
+    ./cve-2025-3155.patch
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "yelp-xsl";
