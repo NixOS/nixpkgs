@@ -4,7 +4,7 @@
   cargo,
   cmake,
 
-  # plenary utilities
+  ast-grep,
   which,
   findutils,
   coreutils,
@@ -217,6 +217,19 @@ in
       runHook preCheck
       # feel free to disable/adjust the tests
       rm tests/base/test_apply.lua tests/base/test_vimscript_interpreter.lua
+
+      # Dependencies needed in special location
+      mkdir -p deps/{ripgrep,astgrep}
+      mkdir {temp_test_dir,temp_history_dir}
+      ln -s ${lib.getExe ripgrep} deps/ripgrep/rg
+      ln -s ${lib.getExe ast-grep} deps/astgrep/ast-grep
+      ln -s ${vimPlugins.mini-nvim} deps/mini.nvim
+
+      # Update dependency check to respect packaged version
+      substituteInPlace lua/grug-far/test/dependencies.lua \
+        --replace-fail "local RG_VERSION = '14.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
+        --replace-fail "local SG_VERSION = '0.35.0'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
+
       make test dir=base
       runHook postCheck
     '';
