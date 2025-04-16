@@ -63,7 +63,7 @@ let
       ln -s ${dbFile} $out/application/config/database.php
 
       # link writable directories
-      for directory in updates uploads backup logbook; do
+      for directory in updates uploads backup logbook assets/qslcard images/eqsl_card_images; do
         rm -rf $out/$directory
         ln -s ${cfg.dataDir}/$directory $out/$directory
       done
@@ -508,8 +508,11 @@ in
           "d ${cfg.dataDir}/uploads        0750 ${cfg.user} ${group} - -"
           "d ${cfg.dataDir}/backup         0750 ${cfg.user} ${group} - -"
           "d ${cfg.dataDir}/logbook        0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/assets         0750 ${cfg.user} ${group} - -"
           "d ${cfg.dataDir}/assets/json    0750 ${cfg.user} ${group} - -"
           "d ${cfg.dataDir}/assets/qslcard 0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/images         0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/images/eqsl_card_images 0750 ${cfg.user} ${group} - -"
         ];
     };
 
