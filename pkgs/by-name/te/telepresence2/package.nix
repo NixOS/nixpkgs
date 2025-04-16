@@ -68,6 +68,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       mausch
       vilsol
+      wrbbz
     ];
     mainProgram = "telepresence";
   };
