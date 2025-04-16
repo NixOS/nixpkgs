@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, opencl-headers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  opencl-headers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencl-clhpp";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bIm4tGqwWX0IPKH3BwLgkf0T7YFrkN6vemYvdPrqUpw=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   propagatedBuildInputs = [ opencl-headers ];
 

@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-m1bFljZL8vNaugepVs8u1EWNpDLtxgSSZqKGQmgrmsA=";
   };

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "isponsorblocktv";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
     tag = "v${version}";
-    hash = "sha256-4HGhPUnors7T2UVZCLVIcGX63SRU3PZ1JQ+zf2ZV8/M=";
+    hash = "sha256-/lUs4EuifHKKyA8QiLsbqz0h6mxJpsFMjovpYE8+SxY=";
   };
 
   build-system = with python3Packages; [

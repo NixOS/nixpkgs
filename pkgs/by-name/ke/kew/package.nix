@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fftwFloat,
   chafa,
+  curl,
   glib,
   libopus,
   opusfile,
@@ -13,24 +14,25 @@
   libogg,
   pkg-config,
   versionCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.0.3";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DzJ+7PanA15A9nIbFPWZ/tdxq4aDyParJORcuqHV7jc=";
+    hash = "sha256-64xdxRx4OanAcLgir9N7p/q71+gQYhffnWnxZzz93h8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     fftwFloat.dev
     chafa
+    curl.dev
     glib.dev
     libopus
     opusfile
@@ -47,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -14,7 +14,7 @@
 
 buildPythonApplication rec {
   pname = "syncplay";
-  version = "1.7.3";
+  version = "1.7.4";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     owner = "Syncplay";
     repo = "syncplay";
     tag = "v${version}";
-    sha256 = "sha256-ipo027XyN4BpMkxzXznbnaufsaG/YkHxFJYo+XWzbyE=";
+    sha256 = "sha256-23OTj+KUmYtrhzIS4A9Gq/tClOLwaeo50+Fcm1tn47M=";
   };
 
   patches = [

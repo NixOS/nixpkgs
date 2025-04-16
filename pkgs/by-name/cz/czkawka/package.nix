@@ -86,7 +86,7 @@ let
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {

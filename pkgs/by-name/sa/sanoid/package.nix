@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
           lzop
           gzip
           pigz
+          # /run/booted-system/sw/bin contains a sudo that does not work, so we need to override the override to use /run/wrappers/bin/sudo
+          "/run/wrappers"
           "/run/booted-system/sw"
           zfs
         ]

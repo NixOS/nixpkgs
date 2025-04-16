@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuifeed";
-  version = "0.3.2";
+  version = "0.4.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-JG/l6NfN5RqBpz9NVcVY3mP/iE31TXvw+Vjq8N8rNIY=";
+    hash = "sha256-CL6cd9OfvnA5N4W3rGl7XLcnlSrh3kcqA7idxexkjA4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-UlZDT/i3UB0wGGpuSBBvVPqRbzGHneDJs57pHn11E5k=";
+  cargoHash = "sha256-A7kD46gfXWK/OlFVMULlMa7Z9Q1it9/rhGo6pjFa38k=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 

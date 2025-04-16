@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aide";
-  version = "0.18.8";
+  version = "0.19";
 
   src = fetchurl {
     url = "https://github.com/aide/aide/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FmYtxjLRfixWMLgBdS+XkSqOIml8Bl694XXxzDe4OmA=";
+    sha256 = "sha256-5/ugIUvgEpnXY1m/8pdSM+0kEzLkz8//Wc0baomrpeQ=";
   };
 
   buildInputs = [

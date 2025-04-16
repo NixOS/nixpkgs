@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "splash";
-  version = "3.11.1";
+  version = "3.11.2";
 
   src = fetchFromGitHub {
     owner = "danieljprice";
     repo = "splash";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zENMQpLsm6GlqrXsFDjEnMbtODcqwhB3jGfGHLuGcYw=";
+    hash = "sha256-YB0cgxpRlya8/7fYxPKWBCovHvE/N7HY/7nwKnzYiJc=";
   };
 
   nativeBuildInputs = [

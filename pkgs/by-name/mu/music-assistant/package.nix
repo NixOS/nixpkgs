@@ -16,13 +16,13 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.34";
+        version = "1.1.45";
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
-          hash = "sha256-UxokPUnYET1XyRok0FH7e8G3RpCMvOigY4huw6Tfllo=";
+          hash = "sha256-R1KkMe9dVl5J1DjDsFhSYVebpiqBkXZSqkLrd7T8gFg=";
         };
 
         postPatch = ''
@@ -42,16 +42,20 @@ let
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
+assert
+  (lib.elem "airplay" providers)
+  -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
+
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.4.4";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-rxXEsR4EfJZp3OFGHcSRaJp1egt2OT15P8V35v35KmU=";
+    hash = "sha256-yugtL3dCuGb2OSTy49V4mil9EnfACcGrYCA1rW/lo+4=";
   };
 
   patches = [
@@ -153,6 +157,11 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
+
+  postFixup = ''
+    # binary native code, segfaults when autopatchelf'd, requires openssl 1.1 to build
+    rm $out/${python3.sitePackages}/music_assistant/providers/airplay/bin/cliraop-*
+  '';
 
   passthru = {
     inherit

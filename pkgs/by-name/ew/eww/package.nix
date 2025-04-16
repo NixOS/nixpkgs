@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.6.0-unstable-2025-02-16";
+  version = "0.6.0-unstable-2025-03-25";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "5b4cc3e7a8055afb758421f4a114ef4032806e39";
-    hash = "sha256-iA/OTtsymhuCMRDC0IJE7YXuCeFJbkuMwPaj7tAVbQw=";
+    rev = "a9aa0f96892f20e4741e94f4cd46ca31106e492c";
+    hash = "sha256-T9OZ8jke2T73Zeqt8VekH82ar23AV7llA7ta8b7HP2o=";
   };
 
   useFetchCargoVendor = true;

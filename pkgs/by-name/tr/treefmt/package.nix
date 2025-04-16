@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "treefmt";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    hash = "sha256-XD61nZhdXYrFzprv/YuazjXK/NWP5a9oCF6WBO2XTY0=";
+    hash = "sha256-gNGDqCRPvXjbfDQkEP8UsEStL9fsvUVYWPv3d8o1Bq0=";
   };
 
-  vendorHash = "sha256-0qCOpLMuuiYNCX2Lqa/DUlkmDoPIyUzUHIsghoIaG1s=";
+  vendorHash = "sha256-47yOjk3eO5K0T01GUDvheJxoAJz0ZmiV2RdqTv01pYQ=";
 
   subPackages = [ "." ];
 

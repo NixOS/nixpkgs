@@ -1,9 +1,10 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonPackages,
+  requests,
 }:
 
 buildPythonPackage {
@@ -20,7 +21,7 @@ buildPythonPackage {
     hash = "sha256-z59F7zUKZKIQSiTlE6wGbGDecPMeruNgltWUYfDf8jY=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     aiohttp
     requests
   ];

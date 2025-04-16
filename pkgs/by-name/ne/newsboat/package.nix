@@ -18,19 +18,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "newsboat";
-  version = "2.38";
+  version = "2.39";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
-    rev = "r${version}";
-    hash = "sha256-RekP88qZ4VaH5JG190BbVrBHnoUr+UVWvFmdPeyY8Yw=";
+    rev = "r${finalAttrs.version}";
+    hash = "sha256-ypAn9Z27S20f82wqsZIELO1DHN0deqcTHYA77ddtb8g=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-yIRw/WMdkuaZEzA0J1bvMzf+9JOLqc6S7lWJIfih4Gw=";
+  cargoHash = "sha256-LDv5Rrv5ZKs7cspPTWt49omvLWY01y1TDGrfl7Jea3g=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -109,7 +109,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://newsboat.org/";
-    changelog = "https://github.com/newsboat/newsboat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [
       dotlambda
@@ -119,4 +119,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "newsboat";
   };
-}
+})

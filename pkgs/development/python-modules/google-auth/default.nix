@@ -11,7 +11,6 @@
   freezegun,
   grpcio,
   mock,
-  oauth2client,
   pyasn1-modules,
   pyjwt,
   pyopenssl,
@@ -28,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.37.0";
+  version = "2.38.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_auth";
     inherit version;
-    hash = "sha256-AFRiOr8fnINJLGPT9H538KVEyqPUCy2Y4JmmEcLdXQA=";
+    hash = "sha256-goURNgfTuAo/FUO3WWJEe6ign+hXg0MqeE/e72rAlMQ=";
   };
 
   build-system = [ setuptools ];
@@ -68,24 +67,17 @@ buildPythonPackage rec {
     requests = [ requests ];
   };
 
-  nativeCheckInputs =
-    [
-      aioresponses
-      flask
-      freezegun
-      grpcio
-      mock
-    ]
-    ++ lib.optionals (pythonOlder "3.13") [
-      oauth2client
-    ]
-    ++ [
-      pytest-asyncio
-      pytest-localserver
-      pytestCheckHook
-      responses
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    aioresponses
+    flask
+    freezegun
+    grpcio
+    mock
+    pytest-asyncio
+    pytest-localserver
+    pytestCheckHook
+    responses
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [
     "google.auth"

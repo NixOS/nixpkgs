@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, cmake
-, deltachat-desktop
-, deltachat-repl
-, deltachat-rpc-server
-, openssl
-, perl
-, pkg-config
-, python3
-, rustPlatform
-, sqlcipher
-, sqlite
-, fixDarwinDylibNames
-, darwin
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  cmake,
+  deltachat-desktop,
+  deltachat-repl,
+  deltachat-rpc-server,
+  openssl,
+  perl,
+  pkg-config,
+  python3,
+  rustPlatform,
+  sqlcipher,
+  sqlite,
+  fixDarwinDylibNames,
+  darwin,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.157.3";
+  version = "1.159.1";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
     tag = "v${version}";
-    hash = "sha256-J9Tm35xuyIbHH2HGcctENYbArIlRWe7xzKyF3hGbwNA=";
+    hash = "sha256-ASEGwcmSlUgR69wqc3h53abmKObowuVC6CFP2G+H/0s=";
   };
 
   patches = [
@@ -36,29 +37,33 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "deltachat-core-rust";
     inherit version src;
-    hash = "sha256-BX0TpyG2OJkD5BUIPCij5/g3aRf6FuF9E8y9GM12o7U=";
+    hash = "sha256-gu0Cxaw+Lpu2mGqX0lFTmK1MWHt0icM8BbA1yiKVpzs=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    pkg-config
-    rustPlatform.cargoSetupHook
-    cargo
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      perl
+      pkg-config
+      rustPlatform.cargoSetupHook
+      cargo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
-  buildInputs = [
-    openssl
-    sqlcipher
-    sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlcipher
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      libiconv
+    ];
 
   nativeCheckInputs = with rustPlatform; [
     cargoCheckHook

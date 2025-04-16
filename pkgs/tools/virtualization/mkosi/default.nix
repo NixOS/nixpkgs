@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  python3,
+  python,
   systemd,
   pandoc,
   kmod,
@@ -21,11 +21,16 @@
   wheel,
   buildPythonApplication,
   pytestCheckHook,
-  pefile,
 
   # Optional dependencies
   withQemu ? false,
   qemu,
+
+  # Workaround for supporting providing additional package manager
+  # dependencies in the recursive use in the binary path.
+  # This can / should be removed once the `finalAttrs` pattern is
+  # available for Python packages.
+  extraDeps ? [ ],
 }:
 let
   # For systemd features used by mkosi, see
@@ -40,15 +45,27 @@ let
     withKernelInstall = true;
   };
 
-  python3pefile = python3.withPackages (
-    ps: with ps; [
-      pefile
+  pythonWithPefile = python.withPackages (ps: [ ps.pefile ]);
+
+  deps =
+    [
+      bash
+      btrfs-progs
+      coreutils
+      cpio
+      gnutar
+      kmod
+      systemdForMkosi
+      util-linux
     ]
-  );
+    ++ extraDeps
+    ++ lib.optionals withQemu [
+      qemu
+    ];
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "24.3-unstable-2024-08-28";
+  version = "25.3-unstable-2025-04-01";
   format = "pyproject";
 
   outputs = [
@@ -59,15 +76,16 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    rev = "8c2f828701a1bdb3dc9b80d6f2ab979f0430a6b8";
-    hash = "sha256-rO/4ki2nAJQN2slmYuHKESGBBDMXC/ikGf6dMDcKFr4=";
+    rev = "21850673a7f75125d516268ce379dae776dd816a";
+    hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
   };
 
   patches =
     [
       (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
         UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
-        PYTHON_PEFILE = "${python3pefile}/bin/python3.12";
+        PYTHON_PEFILE = lib.getExe pythonWithPefile;
+        NIX_PATH = toString (lib.makeBinPath deps);
         MKOSI_SANDBOX = null; # will be replaced in postPatch
       })
       (replaceVars ./0002-Fix-library-resolving.patch {
@@ -83,7 +101,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     # As we need the $out reference, we can't use `replaceVars` here.
-    substituteInPlace mkosi/run.py \
+    substituteInPlace mkosi/{run,__init__}.py \
       --replace-fail '@MKOSI_SANDBOX@' "\"$out/bin/mkosi-sandbox\""
   '';
 
@@ -94,20 +112,7 @@ buildPythonApplication rec {
     wheel
   ];
 
-  propagatedBuildInputs =
-    [
-      bash
-      btrfs-progs
-      coreutils
-      cpio
-      gnutar
-      kmod
-      systemdForMkosi
-      util-linux
-    ]
-    ++ lib.optional withQemu [
-      qemu
-    ];
+  dependencies = deps;
 
   postBuild = ''
     ./tools/make-man-page.sh
@@ -119,7 +124,7 @@ buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/man/man1
-    mv mkosi/resources/mkosi.1 $out/share/man/man1/
+    mv mkosi/resources/man/mkosi.1 $out/share/man/man1/
   '';
 
   meta = with lib; {
@@ -133,7 +138,5 @@ buildPythonApplication rec {
       msanft
     ];
     platforms = platforms.linux;
-    # `mkosi qemu` boot fails in the uefi shell, image isn't found.
-    broken = withQemu;
   };
 }

@@ -33,11 +33,13 @@ let
     "zlib"
 
     "core"
-    "makefile"
     "extraBuildInputs"
     "extraNativeBuildInputs"
     "libretroCore"
+    "makefile"
     "normalizeCore"
+    "passthru"
+    "meta"
   ];
 in
 stdenv.mkDerivation (
@@ -88,15 +90,12 @@ stdenv.mkDerivation (
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     } // (args.passthru or { });
 
-    meta =
-      with lib;
-      {
-        inherit mainProgram;
-        inherit (retroarch-bare.meta) platforms;
-        homepage = "https://www.libretro.com/";
-        maintainers = with maintainers; teams.libretro.members;
-      }
-      // (args.meta or { });
+    meta = {
+      inherit mainProgram;
+      inherit (retroarch-bare.meta) platforms;
+      homepage = "https://www.libretro.com/";
+      maintainers = with lib.maintainers; [ ] ++ lib.teams.libretro.members;
+    } // (args.meta or { });
   }
   // extraArgs
 )

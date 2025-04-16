@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bundlerEnv
-, bundlerUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bundlerEnv,
+  bundlerUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

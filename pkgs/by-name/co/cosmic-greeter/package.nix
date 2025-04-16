@@ -12,6 +12,7 @@
   coreutils,
   xkeyboard_config,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -69,13 +70,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
@@ -83,10 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    maintainers = lib.teams.cosmic.members;
     platforms = lib.platforms.linux;
   };
 })

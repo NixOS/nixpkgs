@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/hx";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

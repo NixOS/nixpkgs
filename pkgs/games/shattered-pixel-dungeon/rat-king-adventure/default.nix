@@ -5,13 +5,13 @@
 
 callPackage ../generic.nix rec {
   pname = "rat-king-adventure";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Rat-King-Adventure";
     rev = version;
-    hash = "sha256-mh54m2YwGOmE03fxndk3wNX/xi6UyIdXWEguiC3mDeA=";
+    hash = "sha256-01WFQ2shxFbyr5bGfKn8e7hOEB2LpjNZu9dRRVk3Fzw=";
   };
 
   desktopName = "Rat King Adventure";

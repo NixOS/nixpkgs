@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi-pack";
-  version = "0.3.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Quantco";
     repo = "pixi-pack";
     tag = "v${version}";
-    hash = "sha256-Yf0ewDGDYpdl/tk4qvhKTbFmnGceqTJFv0bExL7N9AE=";
+    hash = "sha256-th7hlxjnar9VoWINpxblzUGbxxz8hPKmLERd1y+mHKY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-W8C3d+2KYgPwb5zyC59cdUC79W9Ho4gX4McKm/xtWjU=";
+  cargoHash = "sha256-AEqhJWztOI4byViex4d0m85wBlGGYMykPNjgUfPAt6Q=";
 
   buildInputs = [ openssl ];
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

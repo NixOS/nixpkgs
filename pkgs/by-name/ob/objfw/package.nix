@@ -11,12 +11,12 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
-  version = "1.2.4";
+  version = "1.3";
 
   src = fetchfossil {
     url = "https://objfw.nil.im/home";
     rev = "${finalAttrs.version}-release";
-    hash = "sha256-IsYXg3rZ539c+mOmIAOUHtTMDZtPKuTshzlw/dOi/lg=";
+    hash = "sha256-2ESlN3BeVWZElcQLgjMs8B7HRTC0xHuYrLH362npa+Q=";
   };
 
   nativeBuildInputs = [

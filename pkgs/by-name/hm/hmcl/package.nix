@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, wrapGAppsHook3
-, copyDesktopItems
-, imagemagick
-, jre
-, xorg
-, glib
-, libGL
-, glfw
-, openal
-, libglvnd
-, alsa-lib
-, wayland
-, vulkan-loader
-, libpulseaudio
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  wrapGAppsHook3,
+  copyDesktopItems,
+  imagemagick,
+  jre,
+  xorg,
+  glib,
+  libGL,
+  glfw,
+  openal,
+  libglvnd,
+  alsa-lib,
+  wayland,
+  vulkan-loader,
+  libpulseaudio,
+  gobject-introspection,
 }:
 
 let
-  version = "3.6.11";
+  version = "3.6.12";
   icon = fetchurl {
     url = "https://github.com/huanghongxun/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
     hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/huanghongxun/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
-    hash = "sha256-ZQNJm7xbOdVSnxtx4krOnM9QBsxibFXo8wx1fCn1gJA=";
+    hash = "sha256-ofrG7CVZIODJoHE6owR9P7viBlChamYF5PEpFeeOH4E=";
   };
 
   dontUnpack = true;
@@ -68,16 +69,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-    fixupPhase =
-      let
-        libpath = lib.makeLibraryPath ([
+  fixupPhase =
+    let
+      libpath = lib.makeLibraryPath (
+        [
           libGL
           glfw
           glib
           openal
           libglvnd
           vulkan-loader
-        ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           xorg.libX11
           xorg.libXxf86vm
           xorg.libXext
@@ -87,17 +90,19 @@ stdenv.mkDerivation (finalAttrs: {
           libpulseaudio
           wayland
           alsa-lib
-        ]);
-      in ''
-        runHook preFixup
+        ]
+      );
+    in
+    ''
+      runHook preFixup
 
-        makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
-          --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
-          --set LD_LIBRARY_PATH ${libpath} \
-          ''${gappsWrapperArgs[@]}
+      makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
+        --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
+        --set LD_LIBRARY_PATH ${libpath} \
+        ''${gappsWrapperArgs[@]}
 
-        runHook postFixup
-      '';
+      runHook postFixup
+    '';
 
   meta = with lib; {
     homepage = "https://hmcl.huangyuhui.net";

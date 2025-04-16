@@ -13,19 +13,20 @@
   scipy,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.13.1";
+  version = "0.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "mizani";
     tag = "v${version}";
-    hash = "sha256-3eEOkrF3Sn5ZETnxgc5spwHlbJAiDhkJkd5LwMl0QEY=";
+    hash = "sha256-nnkGZwvSEGXyqF6hQHtfXFCQYX8IEl3YTIABxtNAl40=";
   };
 
   build-system = [ setuptools-scm ];
@@ -37,12 +38,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=mizani --cov-report=xml" ""
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "mizani" ];
 

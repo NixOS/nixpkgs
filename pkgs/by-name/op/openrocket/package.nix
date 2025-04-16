@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, ant
-, jdk17
-, makeWrapper
-, stripJavaArchivesHook
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  ant,
+  jdk17,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 let

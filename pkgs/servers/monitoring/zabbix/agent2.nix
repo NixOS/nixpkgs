@@ -83,7 +83,10 @@ import ./versions.nix (
       homepage = "https://www.zabbix.com/";
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ aanderse ];
+      maintainers = with lib.maintainers; [
+        aanderse
+        bstanderline
+      ];
       platforms = lib.platforms.unix;
     };
   }

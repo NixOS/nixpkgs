@@ -87,7 +87,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "Superposition";
-    exec = "Superposition";
+    exec = "superposition";
     genericName = "A GPU Stress test tool from the UNIGINE";
     icon = "Superposition";
     desktopName = "Superposition Benchmark";

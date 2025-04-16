@@ -85,6 +85,7 @@ configureNuget() {
     rootConfig=$(find . -maxdepth 1 -iname nuget.config -print -quit)
     if [[ -z $rootConfig ]]; then
         dotnet new nugetconfig
+        rootConfig=nuget.config
     fi
 
     (
@@ -99,6 +100,12 @@ configureNuget() {
             -i /configuration/packageSources/__new -t attr -n key -v _nix
             -i /configuration/packageSources/__new -t attr -n value -v "$nugetSource"
             -r /configuration/packageSources/__new -v add)
+
+        if [[ -n ${keepNugetConfig-} ]] &&
+            ! @xmlstarlet@/bin/xmlstarlet select -t -i "/configuration/packageSources/clear" -nl "$rootConfig" &&
+            ! @xmlstarlet@/bin/xmlstarlet select -t -i "/configuration/packageSources/add[@value='https://api.nuget.org/v3/index.json' or @key='nuget.org']" -nl "$rootConfig"; then
+            dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget.org --configfile "$rootConfig"
+        fi
 
         if [[ -z ${keepNugetConfig-} ]]; then
             xmlConfigArgs+=(-d '//configuration/*')

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gobusybox";
   version = "0.2.0-unstable-2024-03-05";
 
@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-hS6YwN6eekyDjp7E6sisW+8HO5WHTEC68XyKZFPihK4=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   subPackages = [
     "cmd/gencmddeps"
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "makebb";
   };
-}
+})

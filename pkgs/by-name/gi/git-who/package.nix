@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "git-who";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "sinclairtarget";
     repo = "git-who";
     rev = "v${version}";
-    hash = "sha256-/MCvFmZNEVnSrSezTiwH3uWPbh/a7mVxmKduc63E3LA=";
+    hash = "sha256-64Hb2+ZCXJis19V0WDyZ0SHZX99Dqxr3UGQTQZSCAp8=";
   };
 
-  vendorHash = "sha256-VdQw0mBCALeQfPMjQ4tp3DcLAzmHvW139/COIXSRT0s=";
+  vendorHash = "sha256-e2P7szjtAn4EFTy+eGi/9cYf/Raw/7O+PbYEOD8i3Hs=";
   # some automated tests require submodule to clone and will fail.
   # see project readme
   doCheck = false;

@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hoarder";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "hoarder-app";
     repo = "hoarder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SYcJfobuDl2iPXy5qGGG8ukBX/CSboSo/hF2e/8ixVw=";
+    hash = "sha256-ro2+jXfp83JfQ9HQr0imy7aohSFbH5J6Wx5bxhMT5TM=";
   };
 
   patches = [
@@ -46,17 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-patched-source";
-      phases = [
-        "unpackPhase"
-        "patchPhase"
-        "installPhase"
-      ];
-      src = finalAttrs.src;
-      patches = finalAttrs.patches;
-      installPhase = "cp -pr --reflink=auto -- . $out";
+      inherit (finalAttrs) src patches;
+      installPhase = ''
+        cp -pr --reflink=auto -- . $out
+      '';
     };
 
-    hash = "sha256-4MSNh2lyl0PFUoG29Tmk3WOZSRnW8NBE3xoppJr8ZNY=";
+    hash = "sha256-FzQPBIwe7OQ1KHaMtWaFe+RI+pXko5Ly11/jOmYSuFA=";
   };
   buildPhase = ''
     runHook preBuild
@@ -121,16 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-
+  postFixup = ''
     # Remove large dependencies that are not necessary during runtime
     rm -rf $out/lib/hoarder/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
 
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
-
-    runHook postFixup
   '';
 
   meta = {
@@ -138,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Self-hostable bookmark-everything app with a touch of AI for the data hoarders out there";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];
+    mainProgram = "hoarder-cli";
     platforms = lib.platforms.linux;
   };
 })

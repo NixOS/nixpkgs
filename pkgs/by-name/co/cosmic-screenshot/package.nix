@@ -5,6 +5,7 @@
   rustPlatform,
   just,
   pkg-config,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,11 +38,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-screenshot"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests)
+      cosmic
+      cosmic-autologin
+      cosmic-noxwayland
+      cosmic-autologin-noxwayland
+      ;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-screenshot";
     description = "Screenshot tool for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = teams.cosmic.members;
     platforms = platforms.linux;
     mainProgram = "cosmic-screenshot";
   };

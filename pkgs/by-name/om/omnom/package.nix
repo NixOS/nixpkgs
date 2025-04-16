@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   makeWrapper,
 
   # for addons
@@ -9,19 +10,21 @@
   zip,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0-unstable-2024-11-20";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
-    rev = "dbf40c9c50b74335286faea7c5070bba11dced83";
-    hash = "sha256-dl0jfFwn+Fd8/aQNhXFNEoDIMgMia2MHZntp0EKhimg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2D+hEOlyjCJQKnLBBO1cXeqTS/QUWraPWPtI8pCf9KM=";
     fetchSubmodules = true;
   };
 
   vendorHash = "sha256-dsS5w8JXIwkneWScOFzLSDiXq+clgK+RdYiMw0+FnvY=";
+
+  passthru.updateScript = nix-update-script { };
 
   patches = [ ./0001-fix-minimal-go-version.patch ];
 
@@ -36,10 +39,10 @@ buildGoModule rec {
     let
       omnom-addons = buildNpmPackage {
         pname = "omnom-addons";
-        inherit version src;
+        inherit (finalAttrs) version src;
 
         npmDepsHash = "sha256-sUn5IvcHWJ/yaqeGz9SGvGx9HHAlrcnS0lJxIxUVS6M=";
-        sourceRoot = "${src.name}/ext";
+        sourceRoot = "${finalAttrs.src.name}/ext";
         npmPackFlags = [ "--ignore-scripts" ];
 
         nativeBuildInputs = [ zip ];
@@ -81,4 +84,4 @@ buildGoModule rec {
     maintainers = lib.teams.ngi.members;
     mainProgram = "omnom";
   };
-}
+})

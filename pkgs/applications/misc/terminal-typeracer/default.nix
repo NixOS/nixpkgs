@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, pkg-config
-, libgit2
-, openssl
-, sqlite
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  pkg-config,
+  libgit2,
+  openssl,
+  sqlite,
+  libiconv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +27,16 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl sqlite ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
+  buildInputs =
+    [
+      libgit2
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+    ];
 
   OPENSSL_NO_VENDOR = 1;
   LIBGIT2_NO_VENDOR = 1;

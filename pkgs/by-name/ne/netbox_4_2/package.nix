@@ -14,7 +14,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.2.3";
+  version = "4.2.6";
 
   format = "other";
 
@@ -22,7 +22,7 @@ py.pkgs.buildPythonApplication rec {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-vdH/R88Vtu+xRLjETK0h+E4WoYRoseP0r+wROi8nMcM=";
+    hash = "sha256-SOGVMaqAYc+DeyeF5ZQ4TQr9RIhWH23Lwth3h0Y3Dtg=";
   };
 
   patches = [

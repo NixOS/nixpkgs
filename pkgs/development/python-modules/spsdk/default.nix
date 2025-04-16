@@ -121,7 +121,7 @@ buildPythonPackage rec {
     voluptuous
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Missing rotk private key

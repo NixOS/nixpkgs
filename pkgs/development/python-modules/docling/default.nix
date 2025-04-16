@@ -22,9 +22,10 @@
   openpyxl,
   pandas,
   pillow,
-  pyarrow,
+  pluggy,
   pydantic,
   pydantic-settings,
+  pylatexenc,
   pypdfium2,
   python-docx,
   python-pptx,
@@ -48,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.26.0";
+  version = "2.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-MFMOxNXA/QwQJt/WZmtmmD+OxYxY2LCnutPT4PkZzkw=";
+    hash = "sha256-uYhqnOyj0bN/v51mafSAT073fVVedppsHZHQCk7E2Rk=";
   };
 
   build-system = [
@@ -78,9 +79,10 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pillow
-    pyarrow
+    pluggy
     pydantic
     pydantic-settings
+    pylatexenc
     pypdfium2
     python-docx
     python-pptx
@@ -155,6 +157,7 @@ buildPythonPackage rec {
 
     # requires network access
     "test_page_range"
+    "test_parser_backends"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

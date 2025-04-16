@@ -1,26 +1,27 @@
-{ lib
-, fetchFromGitHub
-, libpulseaudio
-, libconfig
-# Needs a gnuradio built with qt gui support
-, gnuradio
-, log4cpp
-, thrift
-# Not gnuradioPackages'
-, codec2
-, gmp
-, gsm
-, libopus
-, libjpeg
-, libsndfile
-, libftdi
-, limesuite
-, soapysdr-with-plugins
-, protobuf
-, speex
-, speexdsp
-, cppzmq
-, uhd
+{
+  lib,
+  fetchFromGitHub,
+  libpulseaudio,
+  libconfig,
+  # Needs a gnuradio built with qt gui support
+  gnuradio,
+  log4cpp,
+  thrift,
+  # Not gnuradioPackages'
+  codec2,
+  gmp,
+  gsm,
+  libopus,
+  libjpeg,
+  libsndfile,
+  libftdi,
+  limesuite,
+  soapysdr-with-plugins,
+  protobuf,
+  speex,
+  speexdsp,
+  cppzmq,
+  uhd,
 }:
 
 gnuradio.pkgs.mkDerivation {
@@ -49,37 +50,39 @@ gnuradio.pkgs.mkDerivation {
     install -Dm644 qradiolink.desktop $out/share/applications/qradiolink.desktop
   '';
 
-  buildInputs = [
-    gnuradio.unwrapped.boost
-    codec2
-    gnuradio.unwrapped.logLib
-    # gnuradio uses it's own log library (spdlog), and qradiolink is still
-    # using the old gnuradio log library log4cpp. Perhaps this won't be needed
-    # once the gr_3.10 branch will mature enough to be merged into qradiolink's
-    # master branch.
-    log4cpp
-    gmp
-    libpulseaudio
-    libconfig
-    gsm
-    gnuradio.pkgs.osmosdr
-    libopus
-    libjpeg
-    limesuite
-    soapysdr-with-plugins
-    speex
-    speexdsp
-    gnuradio.qt.qtbase
-    gnuradio.qt.qtmultimedia
-    libftdi
-    libsndfile
-    cppzmq
-    gnuradio.qwt
-    uhd
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
-    thrift
-    gnuradio.unwrapped.python.pkgs.thrift
-  ];
+  buildInputs =
+    [
+      gnuradio.unwrapped.boost
+      codec2
+      gnuradio.unwrapped.logLib
+      # gnuradio uses it's own log library (spdlog), and qradiolink is still
+      # using the old gnuradio log library log4cpp. Perhaps this won't be needed
+      # once the gr_3.10 branch will mature enough to be merged into qradiolink's
+      # master branch.
+      log4cpp
+      gmp
+      libpulseaudio
+      libconfig
+      gsm
+      gnuradio.pkgs.osmosdr
+      libopus
+      libjpeg
+      limesuite
+      soapysdr-with-plugins
+      speex
+      speexdsp
+      gnuradio.qt.qtbase
+      gnuradio.qt.qtmultimedia
+      libftdi
+      libsndfile
+      cppzmq
+      gnuradio.qwt
+      uhd
+    ]
+    ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+      thrift
+      gnuradio.unwrapped.python.pkgs.thrift
+    ];
   nativeBuildInputs = [
     protobuf
     gnuradio.qt.qmake

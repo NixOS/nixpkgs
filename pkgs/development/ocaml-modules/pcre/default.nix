@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchurl, pcre, dune-configurator }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  pcre,
+  dune-configurator,
+}:
 
 buildDunePackage rec {
   pname = "pcre";
@@ -21,6 +27,9 @@ buildDunePackage rec {
     homepage = "https://mmottl.github.io/pcre-ocaml";
     description = "Efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ maggesi vbmithr ];
+    maintainers = with maintainers; [
+      maggesi
+      vbmithr
+    ];
   };
 }

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dlms-cosem";
-  version = "24.1.0";
+  version = "25.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
     owner = "pwitab";
     repo = "dlms-cosem";
     tag = version;
-    hash = "sha256-NeTaU8i18Zb39Y2JnYzr87Ozt7Rj074xusL4xaNe0q0=";
+    hash = "sha256-ZsF+GUVG9bZNZE5daROQJIZZgqpjAkB/bFyre2oGu+E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     attrs
     cryptography
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to parse DLMS/COSEM";
     homepage = "https://github.com/pwitab/dlms-cosem";
-    changelog = "https://github.com/pwitab/dlms-cosem/blob/${version}/HISTORY.md";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/pwitab/dlms-cosem/blob/${src.tag}/HISTORY.md";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

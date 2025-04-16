@@ -1,5 +1,10 @@
 # Nagios system/network monitoring daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.nagios;
 
@@ -10,75 +15,78 @@ let
   nagiosObjectDefs = cfg.objectDefs;
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {
-      inherit nagiosObjectDefs;
-      preferLocalBuild = true;
-    } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
+    inherit nagiosObjectDefs;
+    preferLocalBuild = true;
+  } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
 
-  nagiosCfgFile = let
-    default = {
-      log_file="${nagiosLogDir}/current";
-      log_archive_path="${nagiosLogDir}/archive";
-      status_file="${nagiosState}/status.dat";
-      object_cache_file="${nagiosState}/objects.cache";
-      temp_file="${nagiosState}/nagios.tmp";
-      lock_file="/run/nagios.lock";
-      state_retention_file="${nagiosState}/retention.dat";
-      query_socket="${nagiosState}/nagios.qh";
-      check_result_path="${nagiosState}";
-      command_file="${nagiosState}/nagios.cmd";
-      cfg_dir="${nagiosObjectDefsDir}";
-      nagios_user="nagios";
-      nagios_group="nagios";
-      illegal_macro_output_chars="`~$&|'\"<>";
-      retain_state_information="1";
-    };
-    lines = lib.mapAttrsToList (key: value: "${key}=${value}") (default // cfg.extraConfig);
-    content = lib.concatStringsSep "\n" lines;
-    file = pkgs.writeText "nagios.cfg" content;
-    validated =  pkgs.runCommand "nagios-checked.cfg" {preferLocalBuild=true;} ''
-      cp ${file} nagios.cfg
-      # nagios checks the existence of /var/lib/nagios, but
-      # it does not exist in the build sandbox, so we fake it
-      mkdir lib
-      lib=$(readlink -f lib)
-      sed -i s@=${nagiosState}@=$lib@ nagios.cfg
-      ${pkgs.nagios}/bin/nagios -v nagios.cfg && cp ${file} $out
-    '';
-    defaultCfgFile = if cfg.validateConfig then validated else file;
-  in
-  if cfg.mainConfigFile == null then defaultCfgFile else cfg.mainConfigFile;
+  nagiosCfgFile =
+    let
+      default = {
+        log_file = "${nagiosLogDir}/current";
+        log_archive_path = "${nagiosLogDir}/archive";
+        status_file = "${nagiosState}/status.dat";
+        object_cache_file = "${nagiosState}/objects.cache";
+        temp_file = "${nagiosState}/nagios.tmp";
+        lock_file = "/run/nagios.lock";
+        state_retention_file = "${nagiosState}/retention.dat";
+        query_socket = "${nagiosState}/nagios.qh";
+        check_result_path = "${nagiosState}";
+        command_file = "${nagiosState}/nagios.cmd";
+        cfg_dir = "${nagiosObjectDefsDir}";
+        nagios_user = "nagios";
+        nagios_group = "nagios";
+        illegal_macro_output_chars = "`~$&|'\"<>";
+        retain_state_information = "1";
+      };
+      lines = lib.mapAttrsToList (key: value: "${key}=${value}") (default // cfg.extraConfig);
+      content = lib.concatStringsSep "\n" lines;
+      file = pkgs.writeText "nagios.cfg" content;
+      validated = pkgs.runCommand "nagios-checked.cfg" { preferLocalBuild = true; } ''
+        cp ${file} nagios.cfg
+        # nagios checks the existence of /var/lib/nagios, but
+        # it does not exist in the build sandbox, so we fake it
+        mkdir lib
+        lib=$(readlink -f lib)
+        sed -i s@=${nagiosState}@=$lib@ nagios.cfg
+        ${pkgs.nagios}/bin/nagios -v nagios.cfg && cp ${file} $out
+      '';
+      defaultCfgFile = if cfg.validateConfig then validated else file;
+    in
+    if cfg.mainConfigFile == null then defaultCfgFile else cfg.mainConfigFile;
 
   # Plain configuration for the Nagios web-interface with no
   # authentication.
-  nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf"
-    ''
-      main_config_file=${cfg.mainConfigFile}
-      use_authentication=0
-      url_html_path=${urlPath}
-    '';
+  nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf" ''
+    main_config_file=${cfg.mainConfigFile}
+    use_authentication=0
+    url_html_path=${urlPath}
+  '';
 
-  extraHttpdConfig =
-    ''
-      ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
+  extraHttpdConfig = ''
+    ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
 
-      <Directory "${pkgs.nagios}/sbin">
-        Options ExecCGI
-        Require all granted
-        SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
-      </Directory>
+    <Directory "${pkgs.nagios}/sbin">
+      Options ExecCGI
+      Require all granted
+      SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
+    </Directory>
 
-      Alias ${urlPath} ${pkgs.nagios}/share
+    Alias ${urlPath} ${pkgs.nagios}/share
 
-      <Directory "${pkgs.nagios}/share">
-        Options None
-        Require all granted
-      </Directory>
-    '';
+    <Directory "${pkgs.nagios}/share">
+      Options None
+      Require all granted
+    </Directory>
+  '';
 
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "nagios" "urlPath" ] "The urlPath option has been removed as it is hard coded to /nagios in the nagios package.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "nagios"
+      "urlPath"
+    ] "The urlPath option has been removed as it is hard coded to /nagios in the nagios package.")
   ];
 
   meta.maintainers = with lib.maintainers; [ symphorien ];
@@ -99,7 +107,11 @@ in
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = with pkgs; [ monitoring-plugins msmtp mailutils ];
+        default = with pkgs; [
+          monitoring-plugins
+          msmtp
+          mailutils
+        ];
         defaultText = lib.literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
         description = ''
           Packages to be added to the Nagios {env}`PATH`.
@@ -121,7 +133,7 @@ in
           debug_level = "-1";
           debug_file = "/var/log/nagios/debug.log";
         };
-        default = {};
+        default = { };
         description = "Configuration to add to /etc/nagios.cfg";
       };
 
@@ -169,13 +181,12 @@ in
     };
   };
 
-
   config = lib.mkIf cfg.enable {
     users.users.nagios = {
       description = "Nagios user";
-      uid         = config.ids.uids.nagios;
-      home        = nagiosState;
-      group       = "nagios";
+      uid = config.ids.uids.nagios;
+      home = nagiosState;
+      group = "nagios";
     };
 
     users.groups.nagios = { };
@@ -187,9 +198,9 @@ in
     environment.systemPackages = [ pkgs.nagios ];
     systemd.services.nagios = {
       description = "Nagios monitoring daemon";
-      path     = [ pkgs.nagios ] ++ cfg.plugins;
+      path = [ pkgs.nagios ] ++ cfg.plugins;
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       restartTriggers = [ nagiosCfgFile ];
 
       serviceConfig = {
@@ -204,7 +215,10 @@ in
     };
 
     services.httpd.virtualHosts = lib.optionalAttrs cfg.enableWebInterface {
-      ${cfg.virtualHost.hostName} = lib.mkMerge [ cfg.virtualHost { extraConfig = extraHttpdConfig; } ];
+      ${cfg.virtualHost.hostName} = lib.mkMerge [
+        cfg.virtualHost
+        { extraConfig = extraHttpdConfig; }
+      ];
     };
   };
 }

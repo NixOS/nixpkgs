@@ -1,30 +1,34 @@
-{ lib
-, gitUpdater
-, fetchFromGitHub
-, qt6Packages
-, stdenv
-, cmake
-, extra-cmake-modules
-, inotify-tools
-, kdePackages
-, libcloudproviders
-, libp11
-, librsvg
-, libsecret
-, openssl
-, pcre
-, pkg-config
-, sphinx
-, sqlite
-, xdg-utils
-, libsysprof-capture
+{
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  qt6Packages,
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  inotify-tools,
+  kdePackages,
+  libcloudproviders,
+  libp11,
+  librsvg,
+  libsecret,
+  openssl,
+  pcre,
+  pkg-config,
+  sphinx,
+  sqlite,
+  xdg-utils,
+  libsysprof-capture,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
   version = "3.16.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
@@ -96,7 +100,10 @@ stdenv.mkDerivation rec {
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kranzes SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      kranzes
+      SuperSandro2000
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };

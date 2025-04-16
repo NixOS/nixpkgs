@@ -67,6 +67,7 @@ dhall.section.md
 dlang.section.md
 dotnet.section.md
 emscripten.section.md
+factor.section.md
 gnome.section.md
 go.section.md
 gradle.section.md

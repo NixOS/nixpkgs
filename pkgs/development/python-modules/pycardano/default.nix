@@ -76,14 +76,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [
+    "ogmios"
+    "websockets"
+  ];
 
   pythonImportsCheck = [ "pycardano" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Cardano library in Python";
     homepage = "https://github.com/Python-Cardano/pycardano";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
   };
 }

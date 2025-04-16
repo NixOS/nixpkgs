@@ -5,7 +5,6 @@
   installShellFiles,
   pkg-config,
   openssl,
-  xz,
   nix-update-script,
   versionCheckHook,
 }:
@@ -31,7 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-    xz
   ];
 
   env = {
@@ -54,11 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--workspace" ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

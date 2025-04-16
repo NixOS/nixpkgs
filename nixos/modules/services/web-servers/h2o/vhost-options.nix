@@ -152,6 +152,25 @@ in
                   '';
             };
             recommendations = tlsRecommendationsOption;
+            quic = mkOption {
+              type = types.nullOr types.attrs;
+              default = null;
+              description = ''
+                Enables HTTP/3 over QUIC on the UDP port for TLS. The attrset
+                provides fine-turning for QUIC behavior, but can be empty. See
+                <https://h2o.examp1e.net/configure/http3_directives.html#quic-attributes>.
+              '';
+              example =
+                literalExpression
+                  # nix
+                  ''
+                    {
+                      amp-limit = 2;
+                      handshake-timeout-rtt-multiplier = 300;
+                      retry = "ON";
+                    }
+                  '';
+            };
             extraSettings = mkOption {
               type = types.attrs;
               default = { };

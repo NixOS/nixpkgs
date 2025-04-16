@@ -43,6 +43,7 @@
   cubeb,
   useDiscordRichPresence ? true,
   rapidjson,
+  azahar,
 }:
 let
   inherit (lib)
@@ -53,13 +54,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2120.1";
+  version = "2120.2";
 
   src = fetchzip {
     # TODO: use this when https://github.com/azahar-emu/azahar/issues/779 is resolved
     # url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-20250322-6ecee96.tar.xz";
-    hash = "sha256-d4JHp/BZEQTKErh476NZoizQjgAldR19Waq9GQg2Ebk=";
+    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-20250329-32bb14f.tar.xz";
+    hash = "sha256-OyAc4nePQDuuwb+/ABnNe5ihPqMEoAqNeCYvME7SIio=";
   };
 
   nativeBuildInputs = [
@@ -150,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_QT" enableQt)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_SDL2" enableSDL2)
+    (cmakeBool "ENABLE_SDL2_FRONTEND" enableSDL2)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
   ];

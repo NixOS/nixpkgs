@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+}:
 
 buildKodiAddon rec {
   pname = "radioparadise";

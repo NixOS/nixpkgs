@@ -1,6 +1,12 @@
-{ lib, buildDotnetModule, dotnetCorePackages
-, fetchFromGitHub
-, SDL2, freetype, openal, lua51Packages
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  SDL2,
+  freetype,
+  openal,
+  lua51Packages,
 }:
 engine:
 
@@ -8,12 +14,16 @@ buildDotnetModule rec {
   pname = "openra-${engine.build}";
   inherit (engine) version;
 
-  src = if engine ? src then engine.src else fetchFromGitHub {
-    owner = "OpenRA";
-    repo = "OpenRA";
-    rev = "${engine.build}-${engine.version}";
-    sha256 = engine.sha256;
-  };
+  src =
+    if engine ? src then
+      engine.src
+    else
+      fetchFromGitHub {
+        owner = "OpenRA";
+        repo = "OpenRA";
+        rev = "${engine.build}-${engine.version}";
+        sha256 = engine.sha256;
+      };
 
   nugetDeps = engine.deps;
 

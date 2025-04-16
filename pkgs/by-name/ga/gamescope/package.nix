@@ -48,19 +48,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.2";
+  version = "3.16.4";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-vKl2wYAt051+1IaCGB1ylGa83WTS+neqZwtQ/4MyCck=";
+    hash = "sha256-2AxqvZA1eZaJFKMfRljCIcP0M2nMngw0FQiXsfBW7IA=";
   };
 
   patches = [
     # Make it look for data in the right place
-    ./scripts-path.patch
     ./shaders-path.patch
     # patch relative gamescopereaper path with absolute
     ./gamescopereaper.patch
@@ -70,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace-fail "@out@" "$out"
-    substituteInPlace src/Script/Script.cpp --replace-fail "@out@" "$out"
 
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py

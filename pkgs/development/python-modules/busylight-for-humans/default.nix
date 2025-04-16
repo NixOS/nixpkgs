@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.33.2";
+  version = "0.33.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
     tag = version;
-    hash = "sha256-66XJumC++/Wa6hY/A3m6IR2ALCH4vLSut9ERW8msLY4=";
+    hash = "sha256-0jmaVMN4wwqoO5wGMaV4kJefNUPOuJpWbsqHcZZ0Nh4=";
   };
 
   build-system = [ poetry-core ];

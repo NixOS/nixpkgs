@@ -85,6 +85,7 @@ with lib.maintainers;
 
   beam = {
     members = [
+      adamcstephens
       ankhers
       Br1ght0ne
       DianaOlympos
@@ -215,9 +216,28 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  cosmic = {
+    members = [
+      a-kenji
+      ahoneybun
+      drakon64
+      griffi-gh
+      HeitorAugustoLN
+      nyabinary
+      pandapip1
+      qyliss
+      thefossguy
+    ];
+    githubTeams = [ "cosmic" ];
+    shortName = "cosmic";
+    scope = "Maintain the COSMIC DE and related packages.";
+    enableFeatureFreezePing = true;
+  };
+
   cuda = {
     members = [
       connorbaker
+      prusnak
       samuela
       SomeoneSerge
     ];
@@ -330,6 +350,7 @@ with lib.maintainers;
       AndersonTorres
       adisbladis
       linj
+      panchoh
     ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
@@ -377,7 +398,6 @@ with lib.maintainers;
       leona
       osnyx
       ma27
-      laalsaas
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -594,6 +614,7 @@ with lib.maintainers;
   jitsi = {
     members = [
       cleeyv
+      novmar
       ryantm
       lassulus
       yayayayaka
@@ -760,7 +781,6 @@ with lib.maintainers;
 
   marketing = {
     members = [
-      garbas
       tomberek
     ];
     scope = "Marketing of Nix/NixOS/nixpkgs.";
@@ -784,7 +804,6 @@ with lib.maintainers;
       ma27
       fadenb
       mguentner
-      ralith
       dandellion
       nickcao
       teutat3s
@@ -810,16 +829,21 @@ with lib.maintainers;
     members = [
       _9999years
       Gabriella439
+      curran
+      lf-
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
   };
 
+  # same as https://github.com/orgs/NixOS/teams/nix-team
   nix = {
     members = [
       eelco
-      grahamc
-      pierron
+      mic92
+      tomberek
+      roberth
+      ericson2314
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";
@@ -830,6 +854,8 @@ with lib.maintainers;
     members = [
       raitobezarius
       qyriad
+      _9999years
+      lf-
     ];
     scope = "Maintain the Lix package manager inside of Nixpkgs.";
     shortName = "Lix ecosystem";
@@ -856,6 +882,19 @@ with lib.maintainers;
     githubTeams = [ "neovim" ];
     scope = "Maintain the vim and neovim text editors and related packages.";
     shortName = "Vim/Neovim";
+  };
+
+  nextcloud = {
+    members = [
+      bachp
+      britter
+      dotlambda
+      ma27
+      provokateurin
+    ];
+    scope = "Maintain Nextcloud, its tests and the integration of applications.";
+    shortName = "Nextcloud";
+    enableFeatureFreezePing = true;
   };
 
   ngi = {
@@ -1161,6 +1200,7 @@ with lib.maintainers;
       hehongbo
       lach
       sigmasquadron
+      rane
     ];
     scope = "Maintain the Xen Project Hypervisor and the related tooling ecosystem.";
     shortName = "Xen Project Hypervisor";

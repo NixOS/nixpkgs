@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shot-scraper";
-  version = "1.7";
+  version = "1.8";
   format = "setuptools";
 
   disabled = python3.pkgs.pythonOlder "3.6";
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "simonw";
     repo = "shot-scraper";
     tag = version;
-    hash = "sha256-MEPixHDiOc5NaPuIKUueGXV5A9K7SFj/WEKb4gen0lI=";
+    hash = "sha256-CSV9HOqVMHI/L+jyMTdaDyc6ACyGIkG/mmcyRza6EjQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.178.5";
+  version = "0.181.8";
 
   outputs =
     [ "out" ]
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkoIOBoR5hMt99D1bJ1yWLv7C/rY6VKC5J/7c5SMUFs=";
+    hash = "sha256-gkbiV0kfeM1Ito8jVOBVneNjaXCA4PFayXJLIUmjqn4=";
   };
 
   patches = [
@@ -118,9 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # but builds fine with our standard linker.
     # This patch removes their linker override from the cargo config.
     ./0001-linux-linker.patch
-
-    # See https://github.com/zed-industries/zed/pull/21661#issuecomment-2524161840
-    "script/patches/use-cross-platform-livekit.patch"
   ];
 
   postPatch =
@@ -128,15 +125,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
       substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-    ''
-    # nixpkgs ships cargo-about 0.7, which is a seamless upgrade from 0.6
-    + ''
-      substituteInPlace script/generate-licenses \
-        --replace-fail 'CARGO_ABOUT_VERSION="0.6"' 'CARGO_ABOUT_VERSION="0.7"'
     '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xJaiHngsm74RdcEUXaDrc/Hwy4ywZrEiJt7JYTc/NpM=";
+  cargoHash = "sha256-PMLu2PeyRNu6VbHByL+clUoY/P8Rlrc+SvP5gDKrN/E=";
 
   nativeBuildInputs =
     [

@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
       nixSupport.cc-cflags =
         [
           "-target"
-          "${stdenv.targetPlatform.parsed.cpu.name}-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.abi.name}"
+          "${stdenv.targetPlatform.config}"
         ]
         ++ lib.optional (
           stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
@@ -173,6 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andrewrk ] ++ lib.teams.zig.members;
     mainProgram = "zig";
+    # docgen fails to build
+    broken = version == "0.11.0";
     platforms = lib.platforms.unix;
   };
 })

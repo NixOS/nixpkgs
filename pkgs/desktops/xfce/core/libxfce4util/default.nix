@@ -2,6 +2,7 @@
   stdenv,
   mkXfceDerivation,
   lib,
+  python3,
   vala,
   glib,
   withIntrospection ?
@@ -14,18 +15,26 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4util";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-0qbJSCXHsVz3XILHICFhciyz92LgMZiR7XFLAESHRGQ=";
+  sha256 = "sha256-QlT5ev4NhjR/apbgYQsjrweJ2IqLySozLYLzCAnmkfM=";
 
-  nativeBuildInputs = lib.optionals withIntrospection [
-    gobject-introspection
-    vala # vala bindings require GObject introspection
-  ];
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala # vala bindings require GObject introspection
+    ];
 
   propagatedBuildInputs = [
     glib
   ];
+
+  postPatch = ''
+    patchShebangs xdt-gen-visibility
+  '';
 
   meta = with lib; {
     description = "Extension library for Xfce";

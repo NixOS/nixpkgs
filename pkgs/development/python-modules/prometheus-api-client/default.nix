@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/4n4nd/prometheus-api-client-python";
     changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

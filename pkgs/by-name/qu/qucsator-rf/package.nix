@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qucsator-rf";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucsator_rf";
     rev = version;
-    hash = "sha256-Q1hpCt3SeXRzUFX4jPUu8ZsPTx2W28LQ3YwlYtOZhqg=";
+    hash = "sha256-c9deaY9eV1q+bx/k1tNpdVrJ8Q/L2G0lSQBYaOSfoDs=";
   };
 
   # Upstream forces NO_DEFAULT_PATH on APPLE

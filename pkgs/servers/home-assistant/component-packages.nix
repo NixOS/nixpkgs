@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.3.4";
+  version = "2025.4.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -682,6 +682,10 @@
       ps: with ps; [
         bond-async
       ];
+    "bosch_alarm" =
+      ps: with ps; [
+        bosch-alarm-mode2
+      ];
     "bosch_shc" =
       ps: with ps; [
         boschshcpy
@@ -1035,7 +1039,8 @@
       ]; # missing inputs: decora
     "decora_wifi" =
       ps: with ps; [
-      ]; # missing inputs: decora-wifi
+        decora-wifi
+      ];
     "decorquip" =
       ps: with ps; [
       ];
@@ -1801,6 +1806,9 @@
     "foursquare" =
       ps: with ps; [
       ];
+    "frankever" =
+      ps: with ps; [
+      ];
     "free_mobile" =
       ps: with ps; [
       ]; # missing inputs: freesms
@@ -2264,18 +2272,21 @@
     "homeassistant_green" =
       ps: with ps; [
         aiohasupervisor
+        ha-silabs-firmware-client
         psutil-home-assistant
         universal-silabs-flasher
       ];
     "homeassistant_hardware" =
       ps: with ps; [
         aiohasupervisor
+        ha-silabs-firmware-client
         universal-silabs-flasher
       ];
     "homeassistant_sky_connect" =
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
+        ha-silabs-firmware-client
         psutil-home-assistant
         pyserial
         universal-silabs-flasher
@@ -2283,6 +2294,7 @@
     "homeassistant_yellow" =
       ps: with ps; [
         aiohasupervisor
+        ha-silabs-firmware-client
         psutil-home-assistant
         universal-silabs-flasher
       ];
@@ -2768,9 +2780,12 @@
         jellyfin-apiclient-python
       ];
     "jewish_calendar" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         hdate
-      ];
+      ]
+      ++ hdate.optional-dependencies.astral;
     "joaoapps_join" =
       ps: with ps; [
       ]; # missing inputs: python-join-api
@@ -3134,6 +3149,9 @@
     "linear_garage_door" =
       ps: with ps; [
         linear-garage-door
+      ];
+    "linkedgo" =
+      ps: with ps; [
       ];
     "linkplay" =
       ps: with ps; [
@@ -3940,6 +3958,9 @@
       ps: with ps; [
         oemthermostat
       ];
+    "ogemray" =
+      ps: with ps; [
+      ];
     "ohmconnect" =
       ps: with ps; [
         defusedxml
@@ -4117,6 +4138,7 @@
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
+        ha-silabs-firmware-client
         ifaddr
         pillow
         psutil-home-assistant
@@ -4410,6 +4432,10 @@
     "psoklahoma" =
       ps: with ps; [
       ];
+    "pterodactyl" =
+      ps: with ps; [
+        py-dactyl
+      ];
     "pulseaudio_loopback" =
       ps: with ps; [
         pulsectl
@@ -4670,6 +4696,10 @@
       ]; # missing inputs: RtmAPI
     "remote" =
       ps: with ps; [
+      ];
+    "remote_calendar" =
+      ps: with ps; [
+        ical
       ];
     "remote_rpi_gpio" =
       ps: with ps; [
@@ -5434,7 +5464,6 @@
       ];
     "sunweg" =
       ps: with ps; [
-        sunweg
       ];
     "supervisord" =
       ps: with ps; [
@@ -6504,8 +6533,7 @@
       ];
     "zengge" =
       ps: with ps; [
-        bluepy
-      ]; # missing inputs: zengge
+      ];
     "zeroconf" =
       ps: with ps; [
         ifaddr
@@ -6527,6 +6555,7 @@
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
+        ha-silabs-firmware-client
         pillow
         pyserial
         universal-silabs-flasher
@@ -6658,6 +6687,7 @@
     "bluetooth_le_tracker"
     "bmw_connected_drive"
     "bond"
+    "bosch_alarm"
     "bosch_shc"
     "braviatv"
     "bring"
@@ -7177,6 +7207,7 @@
     "prosegur"
     "proximity"
     "prusalink"
+    "pterodactyl"
     "pure_energie"
     "purpleair"
     "push"
@@ -7212,6 +7243,7 @@
     "reddit"
     "refoss"
     "remote"
+    "remote_calendar"
     "renault"
     "renson"
     "reolink"

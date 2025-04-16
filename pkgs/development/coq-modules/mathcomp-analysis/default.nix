@@ -177,11 +177,26 @@ let
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
-        { case = "single"; out = "."; }
-        { case = "analysis"; out = "theories"; }
-        { case = "experimental-reals"; out = "experimental_reals"; }
-        { case = "reals-stdlib"; out = "reals_stdlib"; }
-        { case = "analysis-stdlib"; out = "analysis_stdlib"; }
+        {
+          case = "single";
+          out = ".";
+        }
+        {
+          case = "analysis";
+          out = "theories";
+        }
+        {
+          case = "experimental-reals";
+          out = "experimental_reals";
+        }
+        {
+          case = "reals-stdlib";
+          out = "reals_stdlib";
+        }
+        {
+          case = "analysis-stdlib";
+          out = "analysis_stdlib";
+        }
       ] package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
       derivation = mkCoqDerivation ({

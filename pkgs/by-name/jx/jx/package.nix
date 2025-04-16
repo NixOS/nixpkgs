@@ -1,14 +1,21 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, nix-update-script, go }:
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  go,
+}:
 
 buildGoModule rec {
   pname = "jx";
-  version = "3.11.66";
+  version = "3.11.76";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-Ejm5Y1xyh9/d79PYYMeKQVtAhT9knFCVcwNAWoBk840=";
+    sha256 = "sha256-XoLJ1YabI3UZpfqIudH8a1rhSr/RI0oYKYHPx2FHAJQ=";
   };
 
   vendorHash = "sha256-8I4yTzLAL7E0ozHcBZDNsJLHkTh+SjT0SjDSECGRYIc=";

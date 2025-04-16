@@ -22,17 +22,19 @@
   tensorflow-bin,
   jax,
   jaxlib,
+
+  nanobind,
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.5.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
     tag = "v${version}";
-    hash = "sha256-sH+qZHd9OKDxl2yTAeDh4xLwW64k6nIToyLfd3cR6kE=";
+    hash = "sha256-1CU5aRhiVPGXLVYZzOM8ELgRwa3hz7kQSwlTYsvFE7s=";
     fetchSubmodules = true;
   };
 
@@ -49,14 +51,12 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
-  preCheck = ''
-    # TODO: added 2.2.0, re-enable on next bump
-    # https://github.com/wjakob/nanobind/issues/754
-    # "generated stubs do not match their references"
-    # > -import tensorflow.python.framework.ops
-    # > +import tensorflow
-    rm tests/test_ndarray_ext.pyi.ref
+  # nanobind check requires heavy dependencies such as tensorflow
+  # which are less than ideal to be imported in children packages that
+  # use it as build-system parameter.
+  doCheck = false;
 
+  preCheck = ''
     # build tests
     make -j $NIX_BUILD_CORES
   '';
@@ -73,6 +73,10 @@ buildPythonPackage rec {
       jax
       jaxlib
     ];
+
+  passthru.tests = {
+    pytest = nanobind.overridePythonAttrs { doCheck = true; };
+  };
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";

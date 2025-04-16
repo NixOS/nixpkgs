@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "hypopg";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "HypoPG";
     repo = "hypopg";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-88uKPSnITRZ2VkelI56jZ9GWazG/Rn39QlyHKJKSKMM=";
   };
 
@@ -31,4 +31,4 @@ postgresqlBuildExtension rec {
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

@@ -521,8 +521,19 @@ let
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "134" && lib.versionOlder rustcVersion "1.86") [
-        ./patches/chromium-134-rust-adler2.patch
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "137") [
+        # Backport "Add more CFI suppressions for inline PipeWire functions" from M137
+        # to fix SIGKILL (ud1) when screensharing with PipeWire 1.4+ and is_cfi = true.
+        # Our chromium builds set is_official_build = true, which in turn enables is_cfi.
+        # We don't apply this patch to electron, because we build electron with
+        # is_cfi = false and as such is not affected by this.
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6421030
+        (fetchpatch {
+          name = "add-more-CFI-suppressions-for-inline-PipeWire-functions.patch";
+          url = "https://chromium.googlesource.com/chromium/src/+/0eebf40b9914bca8fe69bef8eea89522c1a5d4ce^!?format=TEXT";
+          decode = "base64 -d";
+          hash = "sha256-xMqGdu5Q8BGF/OIRdmMzPrrrMGDOSY2xElFfhRsJlDU=";
+        })
       ];
 
     postPatch =
@@ -802,10 +813,12 @@ let
       runHook postConfigure
     '';
 
-    # Don't spam warnings about unknown warning options. This is useful because
+    # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE =
+      "-Wno-unknown-warning-option"
+      + lib.optionalString (chromiumVersionAtLeast "135") " -Wno-unused-command-line-argument -Wno-shadow";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";

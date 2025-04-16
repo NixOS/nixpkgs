@@ -46,8 +46,6 @@ lib.makeScope pkgs.newScope (
       withPgtk = true;
     };
 
-    emacs28-macport = callPackage (self.sources.emacs28-macport) inheritedArgs;
-
     emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
   }
 )

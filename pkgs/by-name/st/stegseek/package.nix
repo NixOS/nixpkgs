@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   # tests get stuck on aarch64-linux
-  doCheck = stdenv.isx86_64 && stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tool to crack steganography";
     longDescription = ''
       Stegseek is a lightning fast steghide cracker that can be

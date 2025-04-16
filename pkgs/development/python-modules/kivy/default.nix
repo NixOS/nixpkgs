@@ -8,6 +8,8 @@
   docutils,
   setuptools,
   kivy-garden,
+  libGL,
+  libX11,
   mtdev,
   SDL2,
   SDL2_image,
@@ -50,6 +52,8 @@ buildPythonPackage rec {
       SDL2_mixer
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
       mtdev
     ]
     ++ lib.optionals withGstreamer (

@@ -11,8 +11,10 @@
   curl,
   SDL2,
   openalSoft,
+  libGL,
   libogg,
   libvorbis,
+  libX11,
   libXi,
   wayland,
   wayland-protocols,
@@ -30,18 +32,18 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "q2pro";
-  version = "0-unstable-2025-03-20";
+  version = "0-unstable-2025-04-03";
 
   src = fetchFromGitHub {
     owner = "skullernet";
     repo = "q2pro";
-    rev = "ef4001c596344aea179fc673a07de53fc0ab6a9d";
-    hash = "sha256-PTNxh7UGKT1GZk8Rbub2l6EBLBy+n46AiS4BAyDALX8=";
+    rev = "0e00beedaa892fd5f6e50d33231978846ab2d5de";
+    hash = "sha256-xw09M7EtXJ7i6myj/Em0Rtg5CmZtpbyRWmkPhCApu7I=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "3724"; # git rev-list --count ${src.rev}
-  SOURCE_DATE_EPOCH = "1742479264"; # git show -s --format=%ct ${src.rev}
+  revCount = "3749"; # git rev-list --count ${src.rev}
+  SOURCE_DATE_EPOCH = "1743706497"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs =
     [
@@ -61,8 +63,10 @@ stdenv.mkDerivation (finalAttrs: rec {
       libjpeg
       curl
       SDL2
+      libGL
       libogg
       libvorbis
+      libX11
       ffmpeg
       openalSoft
     ]

@@ -25,14 +25,19 @@ in
 backendStdenv.mkDerivation (finalAttrs: {
 
   pname = "nccl-tests";
-  version = "2.13.11";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HHshp4fYW+dlyL9FZRxX761UCFR/pOBKNHfVme2TfJg=";
+    hash = "sha256-PntD5seMq7s0x4hOO/wBDQdElhKCY6mFrTf073mf7zM=";
   };
+
+  postPatch = ''
+    # fix build failure with GCC14
+    substituteInPlace src/Makefile --replace-fail "-std=c++11" "-std=c++14"
+  '';
 
   strictDeps = true;
 

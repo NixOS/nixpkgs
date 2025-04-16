@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "posting";
-  version = "2.3.0";
+  version = "2.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
     tag = version;
-    hash = "sha256-lL85gJxFw8/e8Js+UCE9VxBMcmWRUkHh8Cq5wTC93KA=";
+    hash = "sha256-6nFQSGCdmR4qZuleiY0xh76WgBIjs9OZtfpc16b4iws=";
   };
 
   pythonRelaxDeps = true;
@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
       httpx
       textual-autocomplete
       textual
+      openapi-pydantic
     ]
     ++ httpx.optional-dependencies.brotli
     ++ textual.optional-dependencies.syntax;

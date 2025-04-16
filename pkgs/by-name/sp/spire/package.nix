@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "spire";
-  version = "1.11.2";
+  version = "1.12.0";
 
   outputs = [
     "out"
@@ -18,10 +18,10 @@ buildGoModule rec {
     owner = "spiffe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aLAJbNnFd7fcxLJ/htoFacU5NjPnnrlC6/LiT/sVHwk=";
+    sha256 = "sha256-hNa1e6h4IhD2SfhZZ5xkwQ7e7X5x3Gk4v33nw2t+cvk=";
   };
 
-  vendorHash = "sha256-QE0+3TzJQ9Ue6V1QjNJzkrleXPZrd17lY+KqcPf/Hwg=";
+  vendorHash = "sha256-6qtR9SF6QQKqsVpKpp6YBkB9wOLFwm8C3PF0DlN0Ud0=";
 
   subPackages = [
     "cmd/spire-agent"

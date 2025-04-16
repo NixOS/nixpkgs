@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  sfml,
+  sfml_2,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ sfml ];
+  buildInputs = [ sfml_2 ];
 
   installPhase = ''
     runHook preInstall

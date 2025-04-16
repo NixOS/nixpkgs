@@ -35,13 +35,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.14.7";
+  version = "0.14.16";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${version}";
-    hash = "sha256-4RWZ1eRUvHj+PU9iNnDsq8k5qHpkAn6g4Zn0cXyUEzM=";
+    hash = "sha256-SbxoLlXa6ZouZPY4P29ol9caDrM9XyJyBl35Wemmh9Y=";
   };
 
   # Let Tauri know what version we're building
@@ -60,11 +60,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-f7FMJ4h+gFwHnKwisbn1c7Si2/aPJqxhqQ7ablNu3yo=";
+  cargoHash = "sha256-VlGHexsNOwipyKiotWYgt8E+x6C22a7xW2Zft39FeJE=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-w7DGB9OlzXMsgikCbhBcsVQzKx2atSqIOAKF+kfNoTM=";
+    hash = "sha256-Zf/n49nb1PcE3RMeBoN3EAershxQh1AO8Hx9m3NV9XM=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +109,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.concatMap excludeSpec [
       # Requires Git directories
       "but-core"
+      "but-rebase"
+      "but-workspace"
       # Fails due to the issues above and below
       "but-hunk-dependency"
       # Errors with "Lazy instance has previously been poisoned"

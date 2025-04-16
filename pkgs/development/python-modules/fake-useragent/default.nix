@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "2.0.3";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fake-useragent";
     repo = "fake-useragent";
     tag = version;
-    hash = "sha256-FmGk3Cc1Y2j6+JQsc2JK6D78ktuNCLmfkfY6dNLmpQ4=";
+    hash = "sha256-pEZfbFw9JWmR4Zf9AH0mw7zBJVbo6v9iUTU0awHSAt4=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/fake-useragent/fake-useragent/releases/tag/${version}";
+    changelog = "https://github.com/fake-useragent/fake-useragent/releases/tag/${src.tag}";
     description = "Up to date simple useragent faker with real world database";
     homepage = "https://github.com/hellysmile/fake-useragent";
     license = lib.licenses.asl20;

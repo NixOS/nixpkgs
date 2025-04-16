@@ -1,19 +1,21 @@
 {
   lib,
-  fetchFromGitHub,
   beets,
+  fetchFromGitHub,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-copyartifacts";
   version = "0.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-copyartifacts";
     owner = "adammillerio";
-    rev = "v${version}";
-    sha256 = "sha256-UTZh7T6Z288PjxFgyFxHnPt0xpAH3cnr8/jIrlJhtyU=";
+    tag = "v${version}";
+    hash = "sha256-UTZh7T6Z288PjxFgyFxHnPt0xpAH3cnr8/jIrlJhtyU=";
   };
 
   postPatch = ''
@@ -26,19 +28,22 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's/util\.py3_path/os.fsdecode/g' tests/_common.py
   '';
 
-  pytestFlagsArray = [ "-r fEs" ];
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [ six ];
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     beets
+    writableTmpDirAsHomeHook
   ];
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+
+  pytestFlagsArray = [ "-r fEs" ];
 
   meta = {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/adammillerio/beets-copyartifacts";
+    changelog = "https://github.com/adammillerio/beets-copyartifacts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     inherit (beets.meta) platforms;
   };

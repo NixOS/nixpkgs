@@ -13,7 +13,7 @@ appimageTools.wrapType2 rec {
     ;
   src = fetchurl {
     url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.AppImage";
-    hash = "sha256-S1YDg7opoYflL/3h+lP1SNwXpJHaN3+iE3waSjWtN6o=";
+    hash = "sha256-teWMDChmC2oWG3UJWTtHVXzIzi2khdkzMkMDFTTI6w8=";
   };
 
   extraPkgs = pkgs: [

@@ -1,12 +1,12 @@
 {
   lib,
-  flutter,
+  flutter327,
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
   mpv-unwrapped,
 }:
-flutter.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "jellyflix";
   version = "1.0.0";
 

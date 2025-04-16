@@ -765,6 +765,10 @@ with self;
   janestreet_cpuid = janePackage {
     pname = "janestreet_cpuid";
     hash = "sha256-3ZwEZQSkJJyFW5/+C9x8nW6+GrfVwccNFPlcs7qNcjQ=";
+    patches = fetchpatch {
+      url = "https://github.com/janestreet/janestreet_cpuid/commit/55223d9708388fe990553669d881f78a811979b9.patch";
+      hash = "sha256-aggT6GGMkQj4rRkSZK4hoPRzEfpC8z9qnIROptMDf9E=";
+    };
     meta.description = "A library for parsing CPU capabilities out of the `cpuid` instruction";
     propagatedBuildInputs = [
       core

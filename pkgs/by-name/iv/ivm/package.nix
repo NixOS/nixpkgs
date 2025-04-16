@@ -10,16 +10,17 @@
   libz,
   libxml2,
   ncurses,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttr: {
   pname = "ivm";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "inko-lang";
     repo = "ivm";
-    rev = "v${version}";
+    tag = "v${finalAttr.version}";
     hash = "sha256-pqqUvHK6mPrK1Mir2ILANxtih9OrAKDJPE0nRWc5JOY=";
   };
 
@@ -53,12 +54,14 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Cross-platform Inko version manager";
     homepage = "https://github.com/inko-lang/ivm";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.feathecutie ];
+    maintainers = [ lib.maintainers.feathecutie ] ++ lib.teams.ngi.members;
     platforms = lib.platforms.unix;
     mainProgram = "ivm";
   };
-}
+})

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux
       libsepol
     ];
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = (
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       toString [
         "-Wno-error=deprecated-non-prototype"
         "-Wno-error=format"

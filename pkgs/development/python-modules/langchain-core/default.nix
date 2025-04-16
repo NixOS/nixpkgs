@@ -28,21 +28,18 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.44";
+  version = "0.3.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-da1G/aGWbt73E1hmaGi8jkBEF1QyemHj+qIifyU8eik=";
+    hash = "sha256-s1vZ7G6Wzywf3euwX/RdCPkgzxvZTYVG0udGpHTIiQc=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -95,11 +92,9 @@ buildPythonPackage rec {
       doCheck = true;
     });
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^langchain-core==([0-9.]+)$"
-      ];
+    updateScript = {
+      command = [ ./update.sh ];
+      supportedFeatures = [ "commit" ];
     };
   };
 

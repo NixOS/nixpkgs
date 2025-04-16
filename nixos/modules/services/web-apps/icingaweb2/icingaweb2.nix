@@ -192,7 +192,7 @@ in
             )
           );
         };
-        phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
+        phpPackage = pkgs.php83.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
         phpOptions = ''
           date.timezone = "${cfg.timezone}"
         '';

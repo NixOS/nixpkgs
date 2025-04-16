@@ -7,7 +7,7 @@
   pytestCheckHook,
   language-data,
   setuptools,
-  setuptools-scm
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {

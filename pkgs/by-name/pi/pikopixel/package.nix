@@ -1,8 +1,9 @@
-{ lib
-, clangStdenv
-, fetchurl
-, gnustep-back
-, wrapGNUstepAppsHook
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  gnustep-back,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation rec {

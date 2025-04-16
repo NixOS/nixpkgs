@@ -50,6 +50,9 @@
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
   ],
+  "python-tree-sitter": [
+    "index.html#python-tree-sitter"
+  ],
   "sec-allow-broken": [
     "index.html#sec-allow-broken"
   ],
@@ -95,6 +98,9 @@
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
   ],
@@ -115,6 +121,12 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -2055,6 +2067,9 @@
   "setup-hook-automake": [
     "index.html#setup-hook-automake"
   ],
+  "setup-hook-autopatchcilhook": [
+    "index.html#setup-hook-autopatchcilhook"
+  ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
   ],
@@ -2744,6 +2759,24 @@
   ],
   "declarative-debugging": [
     "index.html#declarative-debugging"
+  ],
+  "sec-language-factor": [
+    "index.html#sec-language-factor"
+  ],
+  "ssec-factor-scaffolding": [
+    "index.html#ssec-factor-scaffolding"
+  ],
+  "ssec-factor-packaging": [
+    "index.html#ssec-factor-packaging"
+  ],
+  "ssec-factor-buildFactorApplication-func": [
+    "index.html#ssec-factor-buildFactorApplication-func"
+  ],
+  "ssec-factor-dev-env": [
+    "index.html#ssec-factor-dev-env"
+  ],
+  "ssec-factor-applications": [
+    "index.html#ssec-factor-applications"
   ],
   "sec-language-gnome": [
     "index.html#sec-language-gnome"

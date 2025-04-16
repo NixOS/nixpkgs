@@ -2,6 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  callPackage,
+  makeWrapper,
+  removeReferencesTo,
+  runCommand,
+  writeText,
+  targetPackages,
   cmake,
   ninja,
   llvm_18,
@@ -11,11 +17,6 @@
   gdb,
   unzip,
   darwin,
-  callPackage,
-  makeWrapper,
-  runCommand,
-  writeText,
-  targetPackages,
 
   ldcBootstrap ? callPackage ./bootstrap.nix { },
 }:
@@ -31,13 +32,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.39.0";
+  version = "1.40.1";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZiG0ATsY6Asu2nus3Y404fvqIwtKYoHl1JRUDU5A6mo=";
+    hash = "sha256-WdnwdH25A5oMNNY3uWG2hxnaAT+S1hNuP7LElH3uuuk=";
     fetchSubmodules = true;
   };
 
@@ -153,6 +154,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${targetPackages.stdenv.cc}/bin \
       --set-default CC ${targetPackages.stdenv.cc}/bin/cc
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${ldcBootstrap} '{}' +
+  '';
+
+  disallowedReferences = [ ldcBootstrap ];
 
   meta = with lib; {
     description = "LLVM-based D compiler";

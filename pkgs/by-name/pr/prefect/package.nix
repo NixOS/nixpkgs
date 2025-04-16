@@ -3,11 +3,12 @@
   python3Packages,
   fetchPypi,
   nixosTests,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.2.13";
+  version = "3.3.4";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -16,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NJL3KTvSIzUX1JMa/Lfpx2UzsAgqjU/mbndnkG2evTA=";
+    hash = "sha256-ii5AqUeo2asSY3oA2PYqGhRev42KInSrn/plDp4Q90Q=";
   };
 
   pythonRelaxDeps = [
@@ -163,6 +164,14 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests = {
     inherit (nixosTests) prefect;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        # avoid pre‐releases
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   # Tests are not included in the pypi source

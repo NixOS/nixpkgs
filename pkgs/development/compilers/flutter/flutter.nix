@@ -3,7 +3,11 @@
   version,
   engineVersion,
   engineHashes ? { },
-  engineUrl ? "https://github.com/flutter/engine.git@${engineVersion}",
+  engineUrl ?
+    if lib.versionAtLeast version "3.29" then
+      "https://github.com/flutter/flutter.git@${engineVersion}"
+    else
+      "https://github.com/flutter/engine.git@${engineVersion}",
   enginePatches ? [ ],
   engineRuntimeModes ? [
     "release"
@@ -102,8 +106,6 @@ let
       # Some of flutter_tools's dependencies contain static assets. The
       # application attempts to read its own package_config.json to find these
       # assets at runtime.
-      # TODO: Remove this once Flutter 3.24 is the lowest version in Nixpkgs.
-      # https://github.com/flutter/flutter/pull/150340 makes it redundant.
       mkdir -p packages/flutter_tools/.dart_tool
       ln -s '${flutterTools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
+  env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 

@@ -125,7 +125,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
-        ProcSubset = "pid";
+        ProcSubset = "all";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";

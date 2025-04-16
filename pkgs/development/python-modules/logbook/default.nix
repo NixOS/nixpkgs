@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.8.0";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "getlogbook";
     repo = "logbook";
     tag = version;
-    hash = "sha256-SpM7LQVcQ9eJ88QDpq/3rq04jr0zrrrQuTeqtz9xsng=";
+    hash = "sha256-Uq5/IdbwewfTCR+lbF8UcUhQe76EHpt4CFkbi3SLGLk=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
-    changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
+    changelog = "https://github.com/getlogbook/logbook/blob/${src.tag}/CHANGES";
     license = licenses.bsd3;
     maintainers = [ ];
   };

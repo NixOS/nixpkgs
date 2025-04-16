@@ -24,11 +24,12 @@
   xz,
   zlib,
   zstd,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "2.1.0";
+  version = "2.2.0";
 
   outputs = [
     "out"
@@ -39,14 +40,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "gnuwget";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
+    tag = "v${version}";
+    hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
-      --replace "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
+      --replace-fail "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
   '';
 
   strictDeps = true;
@@ -96,6 +97,13 @@ stdenv.mkDerivation rec {
     # TODO: https://gitlab.com/gnuwget/wget2/-/issues/537
     (lib.withFeatureAs sslSupport "ssl" "openssl")
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Successor of GNU Wget, a file and recursive website downloader";

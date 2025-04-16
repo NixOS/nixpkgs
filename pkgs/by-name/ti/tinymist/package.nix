@@ -5,9 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  libgit2,
-  openssl,
-  zlib,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -33,12 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
   ];
 
   checkFlags = [

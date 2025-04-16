@@ -16,6 +16,7 @@
   wayland,
   xorg,
   vulkan-loader,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -84,15 +85,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
   '';
 
+  passthru.tests = {
+    inherit (nixosTests)
+      cosmic
+      cosmic-autologin
+      cosmic-noxwayland
+      cosmic-autologin-noxwayland
+      ;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      ahoneybun
-      nyabinary
-    ];
+    maintainers = teams.cosmic.members;
     platforms = platforms.linux;
   };
 })

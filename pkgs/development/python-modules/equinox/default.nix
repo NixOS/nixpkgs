@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.12";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-hor2qw+aTL7yhV53E/y5DUwyDEYJA8RPRS39xxa8xcw=";
+    hash = "sha256-mw2fk+527b6Rx6FGe6QJf3ZbxZ3rjYFXKleX2g6AryU=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -54,14 +54,6 @@ buildPythonPackage rec {
     optax
     pytest-xdist
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # Since jax 0.5.3:
-    # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
-    # https://github.com/patrick-kidger/equinox/issues/979
-    "-W"
-    "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

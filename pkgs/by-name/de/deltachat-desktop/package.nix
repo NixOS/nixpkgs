@@ -1,20 +1,21 @@
-{ lib
-, copyDesktopItems
-, electron_34
-, fetchFromGitHub
-, deltachat-rpc-server
-, makeDesktopItem
-, makeWrapper
-, nodejs
-, pkg-config
-, pnpm_9
-, python3
-, rustPlatform
-, stdenv
-, darwin
-, testers
-, deltachat-desktop
-, yq
+{
+  lib,
+  copyDesktopItems,
+  electron_34,
+  fetchFromGitHub,
+  deltachat-rpc-server,
+  makeDesktopItem,
+  makeWrapper,
+  nodejs,
+  pkg-config,
+  pnpm_9,
+  python3,
+  rustPlatform,
+  stdenv,
+  darwin,
+  testers,
+  deltachat-desktop,
+  yq,
 }:
 
 let
@@ -51,16 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4VvJNpuO7P6m6BBxBWFebtRsXvqkjdAjmnBwxG+qNns=";
   };
 
-  nativeBuildInputs = [
-    yq
-    makeWrapper
-    nodejs
-    pkg-config
-    pnpm.configHook
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      yq
+      makeWrapper
+      nodejs
+      pkg-config
+      pnpm.configHook
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -113,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
+    install -Dt "$out/share/icons/hicolor/scalable/apps" images/tray/deltachat.svg
+
     runHook postInstall
   '';
 
@@ -123,7 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = finalAttrs.meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
       "x-scheme-handler/openpgp4fpr"

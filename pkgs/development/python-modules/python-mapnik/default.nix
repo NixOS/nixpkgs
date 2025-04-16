@@ -114,6 +114,7 @@ buildPythonPackage rec {
       "test_pdf_printing"
       "test_render_with_scale_factor"
       "test_raster_warping"
+      "test_pycairo_svg_surface1"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_passing_pycairo_context_png"
@@ -121,7 +122,6 @@ buildPythonPackage rec {
       "test_pycairo_pdf_surface1"
       "test_pycairo_pdf_surface2"
       "test_pycairo_pdf_surface3"
-      "test_pycairo_svg_surface1"
       "test_pycairo_svg_surface2"
       "test_pycairo_svg_surface3"
     ];

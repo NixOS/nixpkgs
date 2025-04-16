@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, libpcap }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libpcap,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dnspeep";

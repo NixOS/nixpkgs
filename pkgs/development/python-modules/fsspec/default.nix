@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2025.2.0";
+  version = "2025.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
     tag = version;
-    hash = "sha256-vJYnPbGbEMAe1p0EUBxSRZYtvBdJzjzDOesyTJsFJbU=";
+    hash = "sha256-85/IOxR77ozlVCVtZZ8hVmmIBFpSBn6v7zkv+vT445k=";
   };
 
   build-system = [
@@ -111,19 +111,30 @@ buildPythonPackage rec {
     pytest-mock
     pytest-vcr
     pytestCheckHook
+    requests
     writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # works locally on APFS, fails on hydra with AssertionError comparing timestamps
-    # darwin hydra builder uses HFS+ and has only one second timestamp resolution
-    # this two tests however, assume nanosecond resolution
-    "test_modified"
-    "test_touch"
-    # tries to access /home, ignores $HOME
-    "test_directories"
+  disabledTests =
+    [
+      # network access to aws s3
+      "test_async_cat_file_ranges"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # works locally on APFS, fails on hydra with AssertionError comparing timestamps
+      # darwin hydra builder uses HFS+ and has only one second timestamp resolution
+      # this two tests however, assume nanosecond resolution
+      "test_modified"
+      "test_touch"
+      # tries to access /home, ignores $HOME
+      "test_directories"
+    ];
+
+  disabledTestPaths = [
+    # network access to github.com
+    "fsspec/implementations/tests/test_github.py"
   ];
 
   pythonImportsCheck = [ "fsspec" ];

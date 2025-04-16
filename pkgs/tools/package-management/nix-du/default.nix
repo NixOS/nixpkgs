@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  nixForLinking,
+  nixVersions,
   nlohmann_json,
   boost,
   graphviz,
@@ -27,13 +27,13 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
   nativeCheckInputs = [
-    nixForLinking
+    nixVersions.nix_2_24
     graphviz
   ];
 
   buildInputs = [
     boost
-    nixForLinking
+    nixVersions.nix_2_24
     nlohmann_json
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 

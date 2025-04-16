@@ -40,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
   ];
 
-  checkInputs = [
-    libGL
-  ];
+  checkInputs = [ libGL ];
 
   outputs = [
     "out"
@@ -66,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
+
+  postFixup = ''
+    # allow as a drop in replacement for SDL2
+    # Can be removed after treewide switch from pkg-config to pkgconf
+    ln -s $dev/lib/pkgconfig/sdl2_compat.pc $dev/lib/pkgconfig/sdl2.pc
+  '';
 
   passthru = {
     tests =
@@ -98,7 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libsdl.org";
     changelog = "https://github.com/libsdl-org/sdl2-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ nadiaholmquist ];
+    maintainers = with lib.maintainers; [
+      nadiaholmquist
+      grimmauld
+      marcin-serwin
+    ];
     platforms = lib.platforms.all;
     pkgConfigModules = [ "sdl2_compat" ];
   };

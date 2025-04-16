@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, libsecret
-, git
-, git-credential-manager
-, gnupg
-, pass
-, testers
-, withLibsecretSupport ? true
-, withGpgSupport ? true
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  libsecret,
+  git,
+  git-credential-manager,
+  gnupg,
+  pass,
+  testers,
+  withLibsecretSupport ? true,
+  withGpgSupport ? true,
 }:
 
 buildDotnetModule rec {
@@ -27,13 +28,23 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnetInstallFlags = [ "--framework" "net8.0" ];
+  dotnetInstallFlags = [
+    "--framework"
+    "net8.0"
+  ];
   executables = [ "git-credential-manager" ];
 
-  runtimeDeps =
-    lib.optional withLibsecretSupport libsecret;
+  runtimeDeps = lib.optional withLibsecretSupport libsecret;
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath ([ git ] ++ lib.optionals withGpgSupport [ gnupg pass ])}"
+    "--prefix PATH : ${
+      lib.makeBinPath (
+        [ git ]
+        ++ lib.optionals withGpgSupport [
+          gnupg
+          pass
+        ]
+      )
+    }"
     "--inherit-argv0"
   ];
 

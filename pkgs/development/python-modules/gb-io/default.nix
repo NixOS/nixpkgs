@@ -12,30 +12,31 @@
 
 buildPythonPackage rec {
   pname = "gb-io";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "gb-io.py";
     rev = "v${version}";
-    hash = "sha256-1B7BUJ8H+pTtmDtazfPfYtlXzL/x4rAHtRIFAAsSoWs=";
+    hash = "sha256-xpyfb5pTV8w7S7g2Tagl5N3jLO+IisP2KXuYN/RDDpY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-xHptfXQXtIz7swaPIgua8VpHHMqDtlDerTNtIL6VGSo=";
+    hash = "sha256-97aEuXdq9oEqYJs6sgQU5a0vAMJmWJzu2WGjOqzxZ4c=";
   };
 
   sourceRoot = src.name;
 
   nativeBuildInputs = [
-    setuptools-rust
-    rustPlatform.cargoSetupHook
     cargo
     rustc
+    rustPlatform.cargoSetupHook
   ];
+
+  build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "etterna";
-  version = "0.74.3";
+  version = "0.74.4";
 
   src = fetchFromGitHub {
     owner = "etternagame";
     repo = "etterna";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zzCk6axISswfTAk7rRha5HFzIHQ0AjpAZyAWzH+Cn1s=";
+    hash = "sha256-ZCQt99Qcov/7jGfrSmX9WftaP2U2B1d1APK1mxrUDBs=";
   };
 
   patches = [ ./fix-download-manager.patch ];

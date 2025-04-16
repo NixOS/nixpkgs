@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "$CC"
+      --replace-fail "gcc" "$CC"
+    sed -i '40i #include <time.h>' dog.c
   '';
 
   installPhase = ''

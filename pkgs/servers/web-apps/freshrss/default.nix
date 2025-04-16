@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, nixosTests
-, php
-, writeText
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  php,
+  writeText,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -51,6 +52,9 @@ stdenvNoCC.mkDerivation rec {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
     homepage = "https://www.freshrss.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ etu stunkymonkey ];
+    maintainers = with maintainers; [
+      etu
+      stunkymonkey
+    ];
   };
 }

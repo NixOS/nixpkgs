@@ -16,9 +16,9 @@
 {
   application-insights = mkAzExtension rec {
     pname = "application-insights";
-    version = "1.2.2";
+    version = "1.2.3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
-    hash = "sha256-ijmPj8jG+s+855jly3m5wEz5myS8pxU/Scf7lRP2VvI=";
+    hash = "sha256-yUHCMtBDZmNuE1TP4AcIUhAT+IpbHnR0DYBH7EbZBZk=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
@@ -83,9 +83,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.1.0b3";
+    version = "1.1.0b4";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-BPChKCEU89/+KWIlt4ocU37gLwyDUfGBO3QCqkFQhjI=";
+    hash = "sha256-d2pqanDERA54NGQwzO1S2D+WM1q5w1dmKjYbEdbknik=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -140,9 +140,9 @@
 
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "2.0.3";
+    version = "2.1.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    hash = "sha256-ynbq8XyoC6LR7N/x6Ztl74Gu4otTN+QiWLmvy7OfGA0=";
+    hash = "sha256-3Pgwppp4IssNYhJ+USQNwMEp91XdZDwNlnNWzVWrHFM=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = with lib.maintainers; [ ];

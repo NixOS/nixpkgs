@@ -13,20 +13,21 @@
   pkg-config,
   wrapGAppsHook3,
 
-  openssl,
+  glib-networking,
   libsoup_3,
+  openssl,
   webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gale";
-  version = "1.3.1";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-cIholTqWxDb3CkKCY8qRhevxd7CQxBlBGmhJ/91K1g4=";
+    hash = "sha256-YNTmREWSsXjQ8S2bM9JTsoTdPCmPnmt/svhTOoUFEs4=";
   };
 
   postPatch = ''
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-qhH8jeRQZgx6DELzxczt6AmoILxZHUkVpVkYZoDQPRQ=";
+    hash = "sha256-EFP2Lwqg2bFaSCXXDPIAF6nfeV7/CH3XgI9fzxE+veA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-RtTqdbMZlsLNEoxdwjUd0B/3TkdbDpcjOMhH8BlshfE=";
+    hash = "sha256-AsViBPdXNzQBnN3Vv8ojfdG7fvy5DN3FiQHTzdLmxyQ=";
   };
 
   cargoRoot = "src-tauri";
@@ -66,9 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    glib-networking # needed to load icons
     libsoup_3
-    webkitgtk_4_1
     openssl
+    webkitgtk_4_1
   ];
 
   meta = {

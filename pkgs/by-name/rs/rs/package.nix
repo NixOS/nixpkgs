@@ -6,12 +6,12 @@
   libbsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rs";
   version = "20200313";
 
   src = fetchurl {
-    url = "https://www.mirbsd.org/MirOS/dist/mir/rs/rs-${version}.tar.gz";
+    url = "https://www.mirbsd.org/MirOS/dist/mir/rs/rs-${finalAttrs.version}.tar.gz";
     hash = "sha256-kZIV3J/oWiejC/Y9VkBs+1A/n8mCAyPEvTv+daajvD8=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ${stdenv.cc}/bin/cc utf8.c rs.c -o rs -lbsd
+    ${stdenv.cc}/bin/cc -DNEED_STRTONUM utf8.c rs.c -o rs -lbsd
 
     runHook postBuild
   '';
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.mirbsd.org/htman/i386/man1/rs.htm";
     description = "Reshape a data array from standard input";
     mainProgram = "rs";
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
       to control presentation of the output columns, including transposition of
       the rows and columns.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

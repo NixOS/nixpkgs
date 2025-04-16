@@ -8,6 +8,7 @@
   libmpg123,
   libopus,
   libvorbis,
+  libX11,
   makeWrapper,
   meson,
   moltenvk,
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmpg123
       libopus
       libvorbis
+      libX11
       opusfile
       vulkan-loader
     ]

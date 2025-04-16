@@ -1,6 +1,11 @@
 # This module defines global configuration for the xonsh.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -45,7 +50,9 @@ in
         example = lib.literalExpression ''
           ps: with ps; [ numpy xonsh.xontribs.xontrib-vox ]
         '';
-        type = with lib.types; coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
+        type =
+          with lib.types;
+          coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
         description = ''
           Xontribs and extra Python packages to be available in xonsh.
         '';

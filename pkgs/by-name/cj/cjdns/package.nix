@@ -5,7 +5,7 @@
   rustPlatform,
   nodejs,
   which,
-  python39,
+  python3,
   libuv,
   util-linux,
   nixosTests,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs =
     [
       which
-      python39
+      python3
       nodejs
       pkg-config
     ]
@@ -66,11 +66,11 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.basic = nixosTests.cjdns;
 
   meta = with lib; {
+    broken = true; # outdated, incompatible with supported python versions
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

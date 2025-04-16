@@ -63,10 +63,14 @@
   nix-update-script,
 }:
 
-args:
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
 
-let
-  postgresqlBuildExtension =
+  excludeDrvArgNames = [
+    "enableUpdateScript"
+  ];
+
+  extendDrvArgs =
     finalAttrs:
     {
       enableUpdateScript ? true,
@@ -86,7 +90,7 @@ let
 
       strictDeps = true;
       buildInputs = [ postgresql ] ++ prevAttrs.buildInputs or [ ];
-      nativeBuildInputs = [ postgresql ] ++ prevAttrs.nativeBuildInputs or [ ];
+      nativeBuildInputs = [ postgresql.pg_config ] ++ prevAttrs.nativeBuildInputs or [ ];
 
       installFlags = [
         "DESTDIR=${placeholder "out"}"
@@ -145,5 +149,4 @@ let
         ''
         + prevAttrs.postInstall or "";
     };
-in
-stdenv.mkDerivation (lib.extends postgresqlBuildExtension (lib.toFunction args))
+}

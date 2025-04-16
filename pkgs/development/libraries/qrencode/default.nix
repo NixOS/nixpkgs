@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchurl, pkg-config, SDL2, libpng, libiconv, libobjc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL2,
+  libpng,
+  libiconv,
+  libobjc,
+}:
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "qrencode";
   version = "4.1.1";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "man"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://fukuchi.org/works/qrencode/qrencode-${version}.tar.gz";
@@ -13,8 +27,10 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libiconv libpng ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ];
+  buildInputs = [
+    libiconv
+    libpng
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ];
 
   nativeCheckInputs = [ SDL2 ];
 

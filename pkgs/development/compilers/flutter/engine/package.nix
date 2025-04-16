@@ -37,7 +37,6 @@
   pkg-config,
   ninja,
   python312,
-  python39,
   gitMinimal,
   version,
   flutterVersion,
@@ -58,7 +57,7 @@ let
 
   constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
 
-  python3 = if lib.versionAtLeast flutterVersion "3.20" then python312 else python39;
+  python3 = python312;
 
   src = callPackage ./source.nix {
     inherit
@@ -174,7 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
-      python3
+      (python3.withPackages (
+        ps: with ps; [
+          pyyaml
+        ]
+      ))
       (tools.vpython python3)
       gitMinimal
       pkg-config
@@ -294,6 +297,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     export TERM=dumb
+
+    ${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      # ValueError: ZIP does not support timestamps before 1980
+      substituteInPlace src/flutter/build/zip.py \
+        --replace-fail "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED)" "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False)"
+    ''}
 
     ninja -C $out/out/$outName -j$NIX_BUILD_CORES
 

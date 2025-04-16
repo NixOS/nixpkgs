@@ -5,17 +5,25 @@
   stdenv,
   testers,
   yarn,
+  berryVersion ? 4,
 }:
+
+let
+  version_4 = "4.8.1";
+  version_3 = "3.8.7";
+  hash_4 = "sha256-JRQVUO5KsaGMmoC99cloW+hbFjgaFLNT3tqA29TVu34=";
+  hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-berry";
-  version = "4.7.0";
+  version = if berryVersion == 4 then version_4 else version_3;
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "berry";
-    rev = "@yarnpkg/cli/${finalAttrs.version}";
-    hash = "sha256-kf5tQ5n2C5sZfCTQYSAskNy8j7kCXoC5UUHRhbtIYZk=";
+    tag = "@yarnpkg/cli/${finalAttrs.version}";
+    hash = if berryVersion == 4 then hash_4 else hash_3;
   };
 
   buildInputs = [
@@ -50,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
+    changelog = "https://github.com/yarnpkg/berry/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, reliable, and secure dependency management";
     license = licenses.bsd2;
     maintainers = with maintainers; [

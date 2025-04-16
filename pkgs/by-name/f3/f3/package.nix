@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "f3";
-  version = "8.0";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "AltraMayor";
     repo = "f3";
     rev = "v${version}";
-    sha256 = "17l5vspfcgfbkqg7bakp3gql29yb05gzawm8n3im30ilzdr53678";
+    sha256 = "sha256-ZajlFGXJcYUVe/wUFfdPYVW8stOo1Aqe8uD2Bm9KIk0=";
   };
 
   postPatch = ''

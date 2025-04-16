@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.1.14";
+  version = "1.1.19";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-3W3UgJiXN2ryL5MXkf7ZMtlBndp8Iy7jP2CfSWm4c9s=";
+    hash = "sha256-rfn3IC3N6b7w40H7I7GmPv7xjCa+Ackh5GQ3lWbcdZY=";
   };
 
   nativeBuildInputs = [

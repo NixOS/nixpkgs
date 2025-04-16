@@ -36,6 +36,7 @@
   symlinkJoin,
   which,
   pybind11,
+  pkg-config,
   removeReferencesTo,
 
   # Build inputs
@@ -69,7 +70,13 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ? if cudaSupport then triton-cuda else triton,
+  _tritonEffective ?
+    if cudaSupport then
+      triton-cuda
+    else if rocmSupport then
+      rocmPackages.triton
+    else
+      triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
@@ -91,7 +98,7 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages_5,
+  rocmPackages,
   gpuTargets ? [ ],
 
   vulkanSupport ? false,
@@ -110,8 +117,6 @@ let
   inherit (cudaPackages) cudaFlags cudnn nccl;
 
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
-
-  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 
@@ -180,7 +185,7 @@ let
       clr
       rccl
       miopen
-      miopengemm
+      aotriton
       rocrand
       rocblas
       rocsparse
@@ -192,10 +197,12 @@ let
       rocfft
       rocsolver
       hipfft
+      hiprand
       hipsolver
+      hipblas-common
       hipblas
+      hipblaslt
       rocminfo
-      rocm-thunk
       rocm-comgr
       rocm-device-libs
       rocm-runtime
@@ -225,8 +232,6 @@ let
     # In particular, this triggered warnings from cuda's `aliases.nix`
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport && (effectiveMagma.cudaPackages.cudaVersion != cudaPackages.cudaVersion);
-    "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
-      rocmSupport;
   };
 
   unroll-src = writeShellScript "unroll-src" ''
@@ -266,7 +271,8 @@ buildPythonPackage rec {
   };
 
   patches =
-    lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+    [ ./clang19-template-warning.patch ]
+    ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
@@ -293,6 +299,11 @@ buildPythonPackage rec {
 
       # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
       sed -i -e "/from __future__ import/d" **.py
+      substituteInPlace third_party/NNPACK/CMakeLists.txt \
+        --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
+      # flag from cmakeFlags doesn't work, not clear why
+      # setting it at the top of NNPACK's own CMakeLists does
+      sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
     ''
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297
@@ -365,6 +376,10 @@ buildPythonPackage rec {
   # We only do an imports check, so do not build tests either.
   BUILD_TEST = setBool false;
 
+  # ninja hook doesn't automatically turn on ninja
+  # because pytorch setup.py is responsible for this
+  CMAKE_GENERATOR = "Ninja";
+
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
   # it by default. PyTorch currently uses its own vendored version
   # of oneDNN through Intel iDeep.
@@ -375,14 +390,19 @@ buildPythonPackage rec {
   # Also avoids pytorch exporting the headers of pybind11
   USE_SYSTEM_PYBIND11 = true;
 
-  # NB technical debt: building without NNPACK as workaround for missing `six`
-  USE_NNPACK = 0;
+  # Multicore CPU convnet support
+  USE_NNPACK = 1;
 
   # Explicitly enable MPS for Darwin
   USE_MPS = setBool stdenv.hostPlatform.isDarwin;
 
+  # building torch.distributed on Darwin is disabled by default
+  # https://pytorch.org/docs/stable/distributed.html#torch.distributed.is_available
+  USE_DISTRIBUTED = setBool true;
+
   cmakeFlags =
     [
+      (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
       # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
       (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaVersion)
     ]
@@ -440,6 +460,9 @@ buildPythonPackage rec {
     }
     // lib.optionalAttrs vulkanSupport {
       VULKAN_SDK = shaderc.bin;
+    }
+    // lib.optionalAttrs rocmSupport {
+      AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
     };
 
   nativeBuildInputs =
@@ -448,6 +471,7 @@ buildPythonPackage rec {
       which
       ninja
       pybind11
+      pkg-config
       removeReferencesTo
     ]
     ++ lib.optionals cudaSupport (
@@ -501,7 +525,10 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals tritonSupport [ _tritonEffective ]
     ++ lib.optionals MPISupport [ mpi ]
-    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+    ++ lib.optionals rocmSupport [
+      rocmtoolkit_joined
+      rocmPackages.clr # Added separately so setup hook applies
+    ];
 
   pythonRelaxDeps = [
     "sympy"
@@ -582,8 +609,15 @@ buildPythonPackage rec {
       find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
 
       mkdir $dev
+
+      # CppExtension requires that include files are packaged with the main
+      # python library output; which is why they are copied here.
       cp -r $out/${python.sitePackages}/torch/include $dev/include
-      cp -r $out/${python.sitePackages}/torch/share $dev/share
+
+      # Cmake files under /share are different and can be safely moved. This
+      # avoids unnecessary closure blow-up due to apple sdk references when
+      # USE_DISTRIBUTED is enabled.
+      mv $out/${python.sitePackages}/torch/share $dev/share
 
       # Fix up library paths for split outputs
       substituteInPlace \

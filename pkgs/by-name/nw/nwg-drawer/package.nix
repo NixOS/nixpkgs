@@ -13,16 +13,16 @@
 
 let
   pname = "nwg-drawer";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-drawer";
     rev = "v${version}";
-    hash = "sha256-LFxugvLRUyx6uNc8dzn7tB4cZp87hcI7Fi2/9hVBJx0=";
+    hash = "sha256-uctM2fi3lfSrvKSinkjAXD3bLyJOVC0DTyDoAKXgB54=";
   };
 
-  vendorHash = "sha256-3QSq4zdsQu2bvKH0oA4Sapd247jYy+GV69roy9x8WK0=";
+  vendorHash = "sha256-VW9K56pdzA6CAqyJ859WOCEtHTASW8lnQGuW1zBUJYw=";
 in
 buildGoModule {
   inherit

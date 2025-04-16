@@ -12,6 +12,7 @@
   curl,
   glib,
   gtk3,
+  libidn2,
   libssh2,
   openssl,
   wxGTK32,
@@ -41,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.2";
+  version = "14.3";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-xwIvoeWu/hgTHwAgs39nlfb3UBK/TI3yoG+9RRmw+2o=";
+    hash = "sha256-F8oIoG+SaHwhT7aA+iYp9/eWyGf6CiDIGm6Y2px0wlI=";
   };
 
   sourceRoot = ".";
@@ -72,6 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # https://freefilesync.org/forum/viewtopic.php?t=12163
+  postPatch = ''
+    substituteInPlace zen/socket.h zen/sys_error.h \
+      --replace-fail "#undef G_GNUC_UNUSED" ""
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
@@ -83,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     glib
     gtk3
+    libidn2
     libssh2
     openssl
     wxwidgets_3_3

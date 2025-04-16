@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-agent";
-  version = "0.25.2";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VuDOUhAarbl7C3ajOE2TFWIXGxRzkIJaIFa8FxdHYUQ=";
+    hash = "sha256-Z/Orl3T6NagmVcw9JYXhyy+32CK7t/xiQMdXooNcr9g=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-e21fDdV/FPNFGOe1D0P6xOYLWSG6RE8zZntgvTWUxsQ=";
+    hash = "sha256-cdbmEgwHA+2/nfc8gaLAsCxLH0FNEQ0hjfRzQvngLKI=";
   };
 
   passthru.updateScript = nix-update-script {

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "boltztrap2";
-  version = "25.2.1";
+  version = "25.3.1";
 
   pyproject = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "boltztrap2";
     inherit version;
-    hash = "sha256-vsg3VsN4sea+NFNwTk/5KiT/vwftDYRSAIflK+rwbQs=";
+    hash = "sha256-JUIGh/6AF+xYLmF3QN47/A5E9zPKdhO2lhn97giZJ48=";
   };
 
   postPatch = ''

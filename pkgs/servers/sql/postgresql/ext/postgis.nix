@@ -46,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postgis";
     repo = "postgis";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
@@ -76,6 +76,7 @@ postgresqlBuildExtension (finalAttrs: {
   dontDisableStatic = true;
 
   nativeCheckInputs = [
+    postgresql
     postgresqlTestHook
     cunit
     libxslt
@@ -93,6 +94,7 @@ postgresqlBuildExtension (finalAttrs: {
   '';
 
   configureFlags = [
+    "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
     "--with-gdalconfig=${gdal}/bin/gdal-config"
     "--with-jsondir=${json_c.dev}"
     "--disable-extension-upgrades-install"

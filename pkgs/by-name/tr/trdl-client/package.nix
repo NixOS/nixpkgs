@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "trdl-client";
-  version = "0.8.7";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "trdl";
     rev = "v${version}";
-    hash = "sha256-4RN2vrTP4horjDvuuFJbQhToL/4boIuaG+efoTbmebI=";
+    hash = "sha256-0Q0qs7lzLnJChhT3LGVCHIz1ruci/PGGLJdR9FO1RyE=";
   };
 
   sourceRoot = "${src.name}/client";
 
-  vendorHash = "sha256-f7FPeR+us3WvwqzcSQLbkKv905CCIAAm+HNV2FFF8OY=";
+  vendorHash = "sha256-veSgWyk1ytHRNHuuZJBV+1rqGDsdEb01CImm+EexFCk=";
 
   subPackages = [ "cmd/trdl" ];
 

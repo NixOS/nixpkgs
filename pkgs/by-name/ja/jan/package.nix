@@ -1,14 +1,15 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 
 let
   pname = "jan";
-  version = "0.5.15";
+  version = "0.5.16";
   src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
-    hash = "sha256-9DZl+g458iH4mSsQkNbB64NYKw33qs+bUXFnM5WZBMg=";
+    hash = "sha256-oKJSX8VuCS/CzIroYYzuEtyfviv3naxYr8jpfUccxBg=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -30,6 +31,6 @@ appimageTools.wrapType2 {
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64;
   };
 }

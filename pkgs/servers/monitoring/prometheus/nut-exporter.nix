@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "nut-exporter";
-  version = "3.1.3";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "DRuggeri";
     repo = "nut_exporter";
     rev = "v${version}";
-    sha256 = "sha256-sX0yNuUg/x8BtMLbbq1gz+4//Cce+n5Qi/zspC7/scI=";
+    sha256 = "sha256-6qexTBCLitL+dgT1Ff+414AUQqgn9s+CP5J5MkByb7s=";
   };
 
-  vendorHash = "sha256-DGCNYklINPPzC7kCdEUS7TqVvg2SnKFqe0qHs5RSmzY=";
+  vendorHash = "sha256-cMZ4GSal03LIZi7ESr/sQx8zLHNepOTZGEEsdvsNhec=";
 
   meta = with lib; {
     description = "Prometheus exporter for Network UPS Tools";

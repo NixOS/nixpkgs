@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.8.0";
+  version = "0.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    tag = "v${version}";
+    tag = version;
     hash = "sha256-4PztYdQmMH2n3dlV8arJ2UFGp08nkIK80L460UdNhV8=";
   };
 
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     description = "Python library to get Environment Canada weather data";
     homepage = "https://github.com/michaeldavie/env_canada";
     changelog = "https://github.com/michaeldavie/env_canada/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

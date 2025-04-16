@@ -22,7 +22,7 @@
   # optional-dependencies
   matplotlib,
 
-  # dependencies
+  # tests
   cloudpickle,
   keras,
   einops,
@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.4";
+  version = "0.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-+3PQPRVju9kw/4KWeifD8LhY4t6EzakhYISubMxrMw4=";
+    hash = "sha256-8ZJbuPht9vQV52HN7eMqHBaNkzRP4K6K9CSw68vSTys=";
   };
 
   build-system = [
@@ -84,12 +84,6 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [
-    # DeprecationWarning: linear_util.wrap_init is missing a DebugInfo object.
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
@@ -101,54 +95,12 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
-
-    # See https://github.com/google/flax/issues/3232.
-    "tests/jax_utils_test.py"
   ];
 
   disabledTests =
     [
-      # AttributeError: module 'jax.api_util' has no attribute 'debug_info'
-      # https://github.com/google/flax/issues/4585
-      "test_basic_seq_lengths"
-      "test_bidirectional"
-      "test_big_resnet"
-      "test_custom_merge_fn"
-      "test_jit_scan_retracing_retracing"
-      "test_lazy_init"
-      "test_lazy_init"
-      "test_lazy_init_fails_on_data_dependence"
-      "test_lazy_init_fails_on_data_dependence"
-      "test_lifted_transform"
-      "test_lifted_transform_no_rename"
-      "test_multi_method_class_transform"
-      "test_numerical_equivalence"
-      "test_numerical_equivalence_single_batch"
-      "test_numerical_equivalence_single_batch_nn_scan"
-      "test_numerical_equivalence_with_mask"
-      "test_pjit_scan_over_layers"
-      "test_remat_scan"
-      "test_return_carry"
-      "test_reverse"
-      "test_reverse_but_keep_order"
-      "test_rnn_basic_forward"
-      "test_rnn_equivalence_with_flax_linen"
-      "test_rnn_multiple_batch_dims"
-      "test_rnn_time_major"
-      "test_rnn_unroll"
-      "test_rnn_with_spatial_dimensions"
-      "test_same_key"
-      "test_scan"
-      "test_scan_compact_count"
-      "test_scan_decorated"
-      "test_scan_negative_axes"
-      "test_scan_of_setup_parameter"
-      "test_scan_over_layers"
-      "test_scan_shared_params"
-      "test_scan_unshared_params"
-      "test_scan_with_axes"
-      "test_shared_cell"
-      "test_toplevel_submodule_adoption_pytree_transform"
+      # AssertionError: [Chex] Function 'add' is traced > 1 times!
+      "PadShardUnpadTest"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!

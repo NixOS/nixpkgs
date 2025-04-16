@@ -164,5 +164,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;
     license = licenses.gpl3;
+    mainProgram = "urxvt";
   };
 }

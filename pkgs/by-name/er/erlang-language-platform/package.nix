@@ -14,14 +14,14 @@ let
 
   hashes = {
     linux-aarch64-unknown-linux-gnu = "sha256-i6XsOK8csrJ/9TDzltA7mGjdutLZONFiYGV5tqSCy8o=";
-    linux-x86_64-unknown-linux-gnu = "sha256-gBIzG0LaP9qxivkr47JpBu1z9km7o/1Wppk/6k2WslE=";
+    linux-x86_64-unknown-linux-gnu = "sha256-XK3DPWIdPDoIL10EATa8p1bnlpZaOzOdU0LnuKbj++E=";
     macos-aarch64-apple-darwin = "sha256-8e5duQYDVFyZejMjuZPuWhg1on3CBku9eBuilG5p1BY=";
     macos-x86_64-apple-darwin = "sha256-dnouUBUUAkMr1h+IJWYamxmk8IC7JdeIUS9/YI0GzOU=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2025-02-13";
+  version = "2025-04-02";
 
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/elp-${release}-otp-26.2.tar.gz";

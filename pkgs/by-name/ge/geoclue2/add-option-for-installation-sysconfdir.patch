@@ -2,14 +2,6 @@ diff --git a/data/meson.build b/data/meson.build
 index b22ff55..01c5910 100644
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -1,6 +1,6 @@
- if get_option('enable-backend')
-     conf = configuration_data()
--    conf.set('sysconfdir', sysconfdir)
-+    conf.set('sysconfdir', sysconfdir_install)
- 
-     if get_option('demo-agent')
-         conf.set('demo_agent', 'geoclue-demo-agent;')
 @@ -14,7 +14,7 @@ if get_option('enable-backend')
          conf.set('default_wifi_enable', 'false')
      endif
@@ -19,15 +11,6 @@ index b22ff55..01c5910 100644
      configure_file(output: 'geoclue.conf',
                     input: 'geoclue.conf.in',
                     configuration: conf,
-@@ -23,7 +23,7 @@ if get_option('enable-backend')
-     conf = configuration_data()
-     conf.set('libexecdir', libexecdir)
-     conf.set('dbus_srv_user', get_option('dbus-srv-user'))
--    conf.set('sysconfdir', sysconfdir)
-+    conf.set('sysconfdir', sysconfdir_install)
- 
-     confd_dir = join_paths(conf_dir, 'conf.d')
-     install_emptydir(confd_dir)
 diff --git a/demo/meson.build b/demo/meson.build
 index 1427fbe..2623f16 100644
 --- a/demo/meson.build

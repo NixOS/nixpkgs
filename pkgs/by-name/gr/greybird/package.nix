@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, sassc
-, gdk-pixbuf
-, librsvg
-, gtk-engine-murrine
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  gdk-pixbuf,
+  librsvg,
+  gtk-engine-murrine,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

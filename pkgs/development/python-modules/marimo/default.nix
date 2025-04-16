@@ -33,13 +33,13 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.11.20";
+  version = "0.12.9";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-94UP5kDKQ5JS9egEOuMQQoewSTctIRRPt0b50yYg+r8=";
+    hash = "sha256-Ikca+3BH14YYSQRyESaU7zXekxsiOq16iGKiXBcOpMU=";
   };
 
   build-system = [ hatchling ];
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";

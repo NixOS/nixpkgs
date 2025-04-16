@@ -12,15 +12,15 @@
   enableUnfree ? true,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.19.0";
+  version = "2.19.2";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
-    tag = version;
-    hash = "sha256-8E5oEEsyu247WtmR20xRO/SAI6KXYSVCrU0qta6iUB8=";
+    tag = finalAttrs.version;
+    hash = "sha256-H46lhvM6rA9J4nLRLeFArCc7tqmVmpWztsGFAboSM0k=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -55,10 +55,10 @@ postgresqlBuildExtension rec {
   meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
-    changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/timescale/timescaledb/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
     license = with lib.licenses; if enableUnfree then tsl else asl20;
     broken = lib.versionOlder postgresql.version "14";
   };
-}
+})

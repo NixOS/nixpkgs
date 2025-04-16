@@ -8,7 +8,7 @@
   postgresql,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) rec {
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) (finalAttrs: {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
@@ -17,7 +17,7 @@
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7yUbtWbYL4AnuUX8OXG4OVqYCY2Lf0pISSTlcFdPqog=";
   };
 
@@ -40,4 +40,4 @@
     platforms = postgresql.meta.platforms;
     license = lib.licenses.tsl;
   };
-}
+})

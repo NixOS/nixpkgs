@@ -18,7 +18,6 @@
   gnugrep,
   gnused,
   gsl,
-  lapack,
   libGLU,
   libGL,
   libxcrypt,
@@ -29,9 +28,8 @@
   xorg,
   xz,
   man,
-  openblas,
   openssl,
-  pcre,
+  pcre2,
   nlohmann_json,
   pkg-config,
   procps,
@@ -53,7 +51,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.04";
+  version = "6.34.08";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -61,7 +59,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-4yDFNzqOh7sptygJVMqDVa2MQpXPSSNWBvDIsgCss3Q=";
+    hash = "sha256-gGBFsVbeA/6PVmGmcOq4d/Lk0tpsI03D4x6Y4tfZb+g=";
   };
 
   clad_src = fetchgit {
@@ -90,7 +88,6 @@ stdenv.mkDerivation rec {
       gl2ps
       glew
       gsl
-      lapack
       libjpeg
       libpng
       libtiff
@@ -98,12 +95,11 @@ stdenv.mkDerivation rec {
       libxml2
       llvm_18
       lz4
-      openblas
       openssl
       patchRcPathCsh
       patchRcPathFish
       patchRcPathPosix
-      pcre
+      pcre2
       python3.pkgs.numpy
       tbb
       xrootd
@@ -132,10 +128,6 @@ stdenv.mkDerivation rec {
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      # Make sure that clad is finding the right llvm version
-      substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=''${LLVM_CMAKE_PATH}'
-
       substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
         --replace-fail 'add_clang_symlink(''${link} clang)' ""
 
@@ -145,9 +137,6 @@ stdenv.mkDerivation rec {
       # Eliminate impure reference to /System/Library/PrivateFrameworks
       substituteInPlace core/macosx/CMakeLists.txt \
         --replace-fail "-F/System/Library/PrivateFrameworks " ""
-      # Just like in libpng/12.nix to build the builtin libpng on macOS
-      substituteInPlace graf2d/asimage/src/libAfterImage/libpng/pngpriv.h \
-        --replace-fail '<fp.h>' '<math.h>'
     ''
     +
       lib.optionalString

@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  stdenv,
 
   # build-system
   hatchling,
@@ -29,7 +27,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   redis,
-  valkey,
+  redisTestHook,
   requests,
   sure,
 
@@ -37,12 +35,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.2";
+  version = "3.13.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gms2WOZowrwf6EQt94QLW3cxhUT1wVeplSd2sX6/8qI=";
+    hash = "sha256-KoZ2V0M4ezW58c65wc9vJHrYMZ2ywKUjCOietKYS94Q=";
   };
 
   build-system = [ hatchling ];
@@ -70,18 +68,10 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     redis
+    redisTestHook
     requests
     sure
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ${valkey}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-    kill $REDIS_PID
-  '';
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
@@ -97,8 +87,6 @@ buildPythonPackage rec {
     # httpx read failure
     "test_no_dangling_fds"
   ];
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 

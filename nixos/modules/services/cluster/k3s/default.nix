@@ -458,7 +458,7 @@ in
       type = with lib.types; either str (listOf str);
       default = [ ];
       example = [
-        "--no-deploy traefik"
+        "--disable traefik"
         "--cluster-cidr 10.24.0.0/16"
       ];
     };

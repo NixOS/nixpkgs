@@ -66,12 +66,16 @@ import ../make-test-python.nix (
 
     testScript = ''
       machine.wait_for_unit("incus.service")
+      machine.wait_for_unit("incus-preseed.service")
 
       # Check that the INCUS_UI environment variable is populated in the systemd unit
       machine.succeed("systemctl cat incus.service | grep 'INCUS_UI'")
 
       # Ensure the endpoint returns an HTML page with 'Incus UI' in the title
       machine.succeed("curl -kLs https://localhost:8443/ui | grep '<title>Incus UI</title>'")
+
+      # Ensure the documentation is rendering correctly
+      machine.succeed("curl -kLs https://localhost:8443/documentation/ | grep '<title>Incus documentation</title>'")
 
       # Ensure the application is actually rendered by the Javascript
       machine.succeed("PYTHONUNBUFFERED=1 selenium-script")

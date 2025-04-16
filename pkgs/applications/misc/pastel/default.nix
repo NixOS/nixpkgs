@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
     mainProgram = "pastel";
   };
 }

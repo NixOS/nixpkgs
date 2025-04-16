@@ -1,5 +1,11 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.loginDefs;
 in
@@ -35,27 +41,37 @@ in
         '';
         type = lib.types.submodule {
           freeformType = (pkgs.formats.keyValue { }).type;
-          /* There are three different sources for user/group id ranges, each of which gets
-             used by different programs:
-             - The login.defs file, used by the useradd, groupadd and newusers commands
-             - The update-users-groups.pl file, used by NixOS in the activation phase to
-               decide on which ids to use for declaratively defined users without a static
-               id
-             - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
-               by systemd for features like ConditionUser=@system and systemd-sysusers
-              */
+          /*
+            There are three different sources for user/group id ranges, each of which gets
+            used by different programs:
+            - The login.defs file, used by the useradd, groupadd and newusers commands
+            - The update-users-groups.pl file, used by NixOS in the activation phase to
+              decide on which ids to use for declaratively defined users without a static
+              id
+            - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+              by systemd for features like ConditionUser=@system and systemd-sysusers
+          */
           options = {
             DEFAULT_HOME = lib.mkOption {
               description = "Indicate if login is allowed if we can't cd to the home directory.";
               default = "yes";
-              type = lib.types.enum [ "yes" "no" ];
+              type = lib.types.enum [
+                "yes"
+                "no"
+              ];
             };
 
             ENCRYPT_METHOD = lib.mkOption {
               description = "This defines the system default encryption algorithm for encrypting passwords.";
               # The default crypt() method, keep in sync with the PAM default
               default = "YESCRYPT";
-              type = lib.types.enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
+              type = lib.types.enum [
+                "YESCRYPT"
+                "SHA512"
+                "SHA256"
+                "MD5"
+                "DES"
+              ];
             };
 
             SYS_UID_MIN = lib.mkOption {
@@ -180,7 +196,8 @@ in
 
       security.loginDefs.settings.CHFN_RESTRICT = lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
 
-      environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
+      environment.systemPackages =
+        lib.optional config.users.mutableUsers cfg.package
         ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
         ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
@@ -191,7 +208,8 @@ in
           toKeyValue = lib.generators.toKeyValue {
             mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
           };
-        in {
+        in
+        {
           # /etc/login.defs: global configuration for pwdutils.
           # You cannot login without it!
           "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
@@ -241,17 +259,17 @@ in
             inherit source;
           };
         in
-          {
-            su = mkSetuidRoot "${cfg.package.su}/bin/su";
-            sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
-            newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
-            newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
-            newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
-          }
-          // lib.optionalAttrs config.users.mutableUsers {
-            chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
-            passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
-          };
+        {
+          su = mkSetuidRoot "${cfg.package.su}/bin/su";
+          sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
+          newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
+          newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
+          newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
+        }
+        // lib.optionalAttrs config.users.mutableUsers {
+          chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
+          passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
+        };
     })
   ];
 }

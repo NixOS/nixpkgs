@@ -1,4 +1,13 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, pkg-config, glm, libGL, projectm_3 }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pkg-config,
+  glm,
+  libGL,
+  projectm_3,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "visualization-projectm";
@@ -12,7 +21,11 @@ buildKodiBinaryAddon rec {
     hash = "sha256-J3RtVl+hO8DspLyF2KAVMLDIJBiEb0bKosKhJyKy9hk=";
   };
 
-  extraBuildInputs = [ pkg-config libGL projectm_3 ];
+  extraBuildInputs = [
+    pkg-config
+    libGL
+    projectm_3
+  ];
 
   propagatedBuildInputs = [ glm ];
   meta = with lib; {

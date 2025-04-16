@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "humility";
-  version = "unstable-2023-11-08";
+  version = "0-unstable-2025-02-25";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = pname;
-    rev = "67d932edde8b32c11e5d6356a54e97d65f7b9b2b";
-    sha256 = "sha256-3EVNlOAVfx/wUFn83VBKs1N5PanS4jVADUPlhCIok5M=";
+    rev = "4e9b9f9efb455d62b44345b7c8659dcd962c73da";
+    sha256 = "sha256-BzLduU2Wu4UhmgDvvuCEXsABO/jPC7AjptDW8/zePEk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wuXlm6a0hz5E7lOQXlkjHTkD9tqU670uEBM6Gk4o+/Q=";
+  cargoHash = "sha256-GZkHPoDKiqTVwRAWXXbELXC1I/KRO+9sshY8/rGbA4A=";
 
   meta = with lib; {
     description = "Debugger for Hubris";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   clangStdenv,
   llvmPackages,
   fetchFromGitHub,
@@ -124,9 +125,20 @@ clangStdenv.mkDerivation rec {
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+
+    # The sources enable this for only apple. We turn it off globally anyway to stay
+    # consistent.
+    "-DUSE_QT6=OFF"
   ];
 
-  doCheck = true;
+  # tests rely on sysprof which is not available on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin
+  '';
 
   nativeCheckInputs = [
     mesa.llvmpipeHook
