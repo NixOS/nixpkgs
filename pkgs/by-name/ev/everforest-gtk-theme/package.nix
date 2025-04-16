@@ -6,6 +6,7 @@
   sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
+  unstableGitUpdater,
   colorVariants ? [ ],
   sizeVariants ? [ ],
   themeVariants ? [ ],
@@ -56,13 +57,13 @@ lib.checkListOfEnum "${pname}: iconVariants" iconVariantList iconVariants
 
 stdenvNoCC.mkDerivation {
   inherit pname;
-  version = "0-unstable-2023-03-20";
+  version = "0-unstable-2025-04-11";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Everforest-GTK-Theme";
-    rev = "8481714cf9ed5148694f1916ceba8fe21e14937b";
-    hash = "sha256-NO12ku8wnW/qMHKxi5TL/dqBxH0+cZbe+fU0iicb9JU=";
+    rev = "dbd1014f4f3b66d5258bf81e9135e0e75cea084d";
+    hash = "sha256-QfawNkstj3cdIEN60dLrk3a1U4lNTclF7NLB++PrnHE=";
   };
 
   propagatedUserEnvPkgs = [
@@ -79,6 +80,8 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
+  passthru.updateScript = unstableGitUpdater { };
+
   postPatch = ''
     patchShebangs themes/install.sh
   '';
@@ -89,10 +92,10 @@ stdenvNoCC.mkDerivation {
     cd themes
     mkdir -p "$out/share/themes"
     ./install.sh -n Everforest \
-      ${lib.optionalString (colorVariants != [ ]) "-c" + toString colorVariants} \
-      ${lib.optionalString (sizeVariants != [ ]) "-s" + toString sizeVariants} \
-      ${lib.optionalString (themeVariants != [ ]) "-t" + toString themeVariants} \
-      ${lib.optionalString (tweakVariants != [ ]) "--tweaks" + toString tweakVariants} \
+      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
       -d "$out/share/themes"
 
     cd ../icons
@@ -104,11 +107,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Everforest colour palette for GTK";
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jn-sena ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jn-sena ];
+    platforms = lib.platforms.unix;
   };
 }
