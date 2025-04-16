@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  bash,
+  bashNonInteractive,
   binutils,
   bootBinutils,
   bootGCC,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -d ${coreutilsMinimal.out}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
-      cp ${bash.out}/bin/bash $out/bin
+      cp ${bashNonInteractive.out}/bin/bash $out/bin
       cp ${findutils.out}/bin/find $out/bin
       cp ${findutils.out}/bin/xargs $out/bin
       cp -d ${diffutils.out}/bin/* $out/bin
