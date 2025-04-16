@@ -241,6 +241,9 @@ def update_rubyenv():
     )
     subprocess.check_output(["rm", "-rf", "vendor", "gems"], cwd=rubyenv_dir)
 
+    # Reformat gemset.nix
+    subprocess.check_output(["nix-shell", "--run", "treefmt pkgs/applications/version-management/gitlab"], cwd=NIXPKGS_PATH)
+
 
 @cli.command("update-gitaly")
 def update_gitaly():
