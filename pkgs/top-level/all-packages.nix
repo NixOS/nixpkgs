@@ -2521,10 +2521,6 @@ with pkgs;
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
-  juce = callPackage ../development/misc/juce {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-
   kaldi = callPackage ../tools/audio/kaldi {
     inherit (darwin.apple_sdk.frameworks) Accelerate;
   };
