@@ -2946,6 +2946,8 @@ self: super: with self; {
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
+  csaf-tool = callPackage ../development/python-modules/csaf-tool { };
+
   cson = callPackage ../development/python-modules/cson { };
 
   csrmesh = callPackage ../development/python-modules/csrmesh { };
@@ -7643,6 +7645,8 @@ self: super: with self; {
   lib4package = callPackage ../development/python-modules/lib4package { };
 
   lib4sbom = callPackage ../development/python-modules/lib4sbom { };
+
+  lib4vex = callPackage ../development/python-modules/lib4vex { };
 
   libagent = callPackage ../development/python-modules/libagent { };
 

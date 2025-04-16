@@ -29,6 +29,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
+  postPatch = ''
+    substituteInPlace bbox/metrics.py \
+      --replace-warn round_ round
+  '';
+
   propagatedBuildInputs = [
     pyquaternion
     numpy
@@ -46,12 +51,14 @@ buildPythonPackage rec {
     "test_multi_jaccard_index_2d_performance"
   ];
 
+  pythonRelaxDeps = [ "numpy" ];
+
   pythonImportsCheck = [ "bbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for 2D/3D bounding boxes";
     homepage = "https://github.com/varunagrawal/bbox";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }
