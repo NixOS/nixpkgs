@@ -15912,6 +15912,8 @@ self: super: with self; {
 
   slpp = callPackage ../development/python-modules/slpp { };
 
+  slskd-api = callPackage ../development/python-modules/slskd-api { };
+
   slugid = callPackage ../development/python-modules/slugid { };
 
   sly = callPackage ../development/python-modules/sly { };
