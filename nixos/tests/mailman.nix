@@ -1,4 +1,5 @@
-import ./make-test-python.nix {
+{ ... }:
+{
   name = "mailman";
 
   nodes.machine =
