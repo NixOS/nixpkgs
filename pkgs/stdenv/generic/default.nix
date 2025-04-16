@@ -105,7 +105,12 @@ let
 
     let
       defaultNativeBuildInputs =
-        extraNativeBuildInputs ++ defaultNativeBuildInputs0 ++ lib.optionals hasCC [ cc ];
+        extraNativeBuildInputs
+        ++ defaultNativeBuildInputs0
+        ++ lib.optionals hostPlatform.isX32 [
+          ../../build-support/setup-hooks/move-libx32.sh
+        ]
+        ++ lib.optionals hasCC [ cc ];
 
       defaultBuildInputs = extraBuildInputs;
 
