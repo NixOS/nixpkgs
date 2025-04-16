@@ -702,6 +702,16 @@ lib.mapAttrs mkLicense (
       spdxId = "HPND-sell-variant";
     };
 
+    hpndDoc = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation variant";
+      spdxId = "HPND-doc";
+    };
+
+    hpndDocSell = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
+      spdxId = "HPND-doc-sell";
+    };
+
     hpndUc = {
       spdxId = "HPND-UC";
       fullName = "Historical Permission Notice and Disclaimer - University of California variant";
