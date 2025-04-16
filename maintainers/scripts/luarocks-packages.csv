@@ -4,7 +4,7 @@ ansicolors,,,,,,Freed-Wu
 argparse,,,,,,
 basexx,,,,,,
 binaryheap,,,,,,vcunat
-bit32,,,,5.3.0-1,5.1,lblasc
+bit32,,,,,5.1,lblasc
 busted,,,,,,
 busted-htest,,,,,,mrcjkb
 cassowary,,,,,,alerque
