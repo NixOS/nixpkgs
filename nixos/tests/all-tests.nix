@@ -1091,21 +1091,25 @@ in
   pretalx = runTest ./web-apps/pretalx.nix;
   prefect = runTest ./prefect.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  printing-socket = handleTest ./printing.nix {
-    socket = true;
-    listenTcp = true;
+  printing-socket = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = true;
+    _module.args.listenTcp = true;
   };
-  printing-service = handleTest ./printing.nix {
-    socket = false;
-    listenTcp = true;
+  printing-service = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = false;
+    _module.args.listenTcp = true;
   };
-  printing-socket-notcp = handleTest ./printing.nix {
-    socket = true;
-    listenTcp = false;
+  printing-socket-notcp = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = true;
+    _module.args.listenTcp = false;
   };
-  printing-service-notcp = handleTest ./printing.nix {
-    socket = false;
-    listenTcp = false;
+  printing-service-notcp = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = false;
+    _module.args.listenTcp = false;
   };
   private-gpt = handleTest ./private-gpt.nix { };
   privatebin = runTest ./privatebin.nix;
