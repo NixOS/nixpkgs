@@ -49,6 +49,18 @@ let
     buildInputs = oldAttrs.buildInputs ++ lib.singleton xtl;
   });
 
+  # Nixpkgs moved to xeus-zmq 3.x, but we need 1.x
+  xeus-zmq_1x = xeus-zmq.overrideAttrs (oldAttrs: {
+    version = "1.3.0";
+
+    src = fetchFromGitHub {
+      owner = "jupyter-xeus";
+      repo = "xeus-zmq";
+      tag = "1.3.0";
+      sha256 = "sha256-CrFb0LDb6akCfFnwMSa4H3D3A8KJx9Kiejw6VeV3IDs=";
+    };
+  });
+
 in
 
 clangStdenv.mkDerivation rec {
@@ -78,7 +90,7 @@ clangStdenv.mkDerivation rec {
     openssl
     pugixml
     xeus_3_2_0
-    xeus-zmq
+    xeus-zmq_1x
     xtl
     zeromq
     zlib
