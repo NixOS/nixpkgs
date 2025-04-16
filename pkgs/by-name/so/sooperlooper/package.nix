@@ -20,14 +20,14 @@
   fftw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sooperlooper";
   version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bPu/VWTJLSIMoJSEQb+/nqtTpkPtCNVuXA17XsnFSP0=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Live looping sampler capable of immediate loop recording, overdubbing, multiplying, reversing and more";
     longDescription = ''
       It allows for multiple simultaneous multi-channel loops limited only by your computer's available memory.
@@ -73,8 +73,9 @@ stdenv.mkDerivation rec {
       and the engine can be run standalone on a computer without a monitor.
     '';
     homepage = "https://sonosaurus.com/sooperlooper/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    downloadPage = "https://github.com/essej/sooperlooper";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
-}
+})
