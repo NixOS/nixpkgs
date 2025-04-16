@@ -18,7 +18,7 @@
   libsoup_2_4,
   libsoup_3,
   gobject-introspection, # , libmemphis
-  withLibsoup3 ? false,
+  withLibsoup3 ? true,
 }:
 
 stdenv.mkDerivation rec {
