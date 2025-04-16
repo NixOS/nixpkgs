@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-4wgDftXOYm2fMP+/aTRljDi38EzbbwAJlQkuxjAMl3I=";
   };
+
+  buildInputs = [ zlib ];
 
   # Do not include --enable-static and --disable-shared flags during static compilation
   dontAddStaticConfigureFlags = true;
