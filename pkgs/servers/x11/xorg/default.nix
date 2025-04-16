@@ -9,6 +9,7 @@
   libpciaccess,
   libpthread-stubs,
   libxau,
+  libxcb,
   libxcvt,
   libxdmcp,
   lndir,
@@ -34,6 +35,7 @@ self: with self; {
     gccmakedep
     imake
     libpciaccess
+    libxcb
     libxcvt
     lndir
     luit
@@ -3102,82 +3104,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "fontenc" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libxcb = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libxslt,
-      libpthreadstubs,
-      libXau,
-      xcbproto,
-      libXdmcp,
-      python3,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libxcb";
-      version = "1.17.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libxcb-1.17.0.tar.xz";
-        sha256 = "0mbdkajqhg0j0zjc9a2z1qyv9mca797ihvifc9qyl3vijscvz7jr";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        python3
-      ];
-      buildInputs = [
-        libxslt
-        libpthreadstubs
-        libXau
-        xcbproto
-        libXdmcp
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xcb"
-          "xcb-composite"
-          "xcb-damage"
-          "xcb-dbe"
-          "xcb-dpms"
-          "xcb-dri2"
-          "xcb-dri3"
-          "xcb-ge"
-          "xcb-glx"
-          "xcb-present"
-          "xcb-randr"
-          "xcb-record"
-          "xcb-render"
-          "xcb-res"
-          "xcb-screensaver"
-          "xcb-shape"
-          "xcb-shm"
-          "xcb-sync"
-          "xcb-xevie"
-          "xcb-xf86dri"
-          "xcb-xfixes"
-          "xcb-xinerama"
-          "xcb-xinput"
-          "xcb-xkb"
-          "xcb-xprint"
-          "xcb-xselinux"
-          "xcb-xtest"
-          "xcb-xv"
-          "xcb-xvmc"
-        ];
         platforms = lib.platforms.unix;
       };
     })
