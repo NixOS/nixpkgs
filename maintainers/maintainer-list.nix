@@ -24498,8 +24498,9 @@
     githubId = 39011842;
   };
   toastal = {
+    # preferred: xmpp = "toastal@toastal.in.th";
     email = "toastal+nix@posteo.net";
-    matrix = "@toastal:mozilla.org";
+    matrix = "@toastal:clan.lol";
     github = "toastal";
     githubId = 561087;
     name = "toastal";
