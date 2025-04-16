@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     changelog = "https://github.com/swig/swig/blob/${finalAttrs.src.rev}/CHANGES.current";
     description = "Interface compiler that connects C/C++ code to higher-level languages";
