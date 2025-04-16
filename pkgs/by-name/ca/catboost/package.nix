@@ -123,7 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru = {
+    tests = {
+      python = python3.pkgs.catboost;
+    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     description = "High-performance library for gradient boosting on decision trees";
