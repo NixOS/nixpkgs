@@ -191,7 +191,7 @@ def update_rubyenv():
     # [comment]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435#note_1979750600
     # [upstream issue]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435
     subprocess.check_output(
-        ["sed", "-i", "s|gem 'sidekiq', path: 'vendor/gems/sidekiq-7.1.6', require: 'sidekiq'|gem 'sidekiq', '~> 7.1.6'|g", "Gemfile"],
+        ["sed", "-i", "s|gem 'sidekiq', path: 'vendor/gems/sidekiq', require: 'sidekiq'|gem 'sidekiq', '~> 7.3.9'|g", "Gemfile"],
         cwd=rubyenv_dir,
     )
 
