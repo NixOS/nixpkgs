@@ -678,13 +678,13 @@
     "vendorHash": null
   },
   "jetstream": {
-    "hash": "sha256-RlYl8DNx+XjLjMQ8CbVJH0p2ZwBrDNp2OCvzHxQ7zLA=",
+    "hash": "sha256-N/cKiMwPHo8581PFg06RjgOGpGB02/CCARTIFu9kH3s=",
     "homepage": "https://registry.terraform.io/providers/nats-io/jetstream",
     "owner": "nats-io",
     "repo": "terraform-provider-jetstream",
-    "rev": "v0.1.1",
+    "rev": "v0.2.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-NEGjgtrn6ZowqSF6NAK1NnSjYVUvfWuH/4R5ZPdTZSs="
+    "vendorHash": "sha256-Dd02Ikt51eh/FBEtswe8Qr6P5tgQFZJTKgO01gxPX3s="
   },
   "kafka": {
     "hash": "sha256-O8fD974eEmIgMAbLsENBkHiS1+2onx7OOrhnwv+cGoo=",
