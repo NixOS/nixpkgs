@@ -110,7 +110,9 @@ let
             (stdenv.hostPlatform.isMips && lib.versionAtLeast version "1.79")
         )
         [
-          "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
+          "address-model=${
+            if stdenv.hostPlatform.isILP32 then "32" else toString stdenv.hostPlatform.parsed.cpu.bits
+          }"
           "architecture=${
             if stdenv.hostPlatform.isMips64 then
               if lib.versionOlder version "1.78" then "mips1" else "mips"
@@ -141,6 +143,8 @@ let
               "o32"
             else if stdenv.hostPlatform.isMips64n64 then
               "n64"
+            else if stdenv.hostPlatform.isX32 then
+              "x32"
             else
               "sysv"
           }"
@@ -347,6 +351,13 @@ stdenv.mkDerivation {
     # copyPkgconfigItems will substitute these in the pkg-config file
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "out"}/lib";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isX32 {
+    # Boost build scripts want to pass -march=i686 and -m32, but that's wrong on X32
+    # https://salsa.debian.org/debian/boost/-/commit/268eacc3da80e26f3a1f13d5cf42e6e560c985e6
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isX32 "-mx32 -march=${
+      stdenv.hostPlatform.gcc.arch or "x86-64"
+    }";
   };
 
   pkgconfigItems = [
