@@ -20,7 +20,7 @@ import ./make-test-python.nix (
       machine.wait_for_open_port(1025)
       machine.wait_for_open_port(8025)
       # Test sendmail wrapper (this uses smtp, which tests the connection)
-      machine.succeed('printf "To: root@example.com\r\n\r\nthis is the body of the email" | sendmail -t -i -f sender@example.com')
+      machine.succeed('printf "To: root@example.com\r\n\r\nthis is the body of the email" | sendmail -f sender@example.com')
       res = machine.succeed(
           "curl --fail http://localhost:8025/api/v2/messages"
       )
