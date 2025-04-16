@@ -74,9 +74,9 @@ let
   };
 
   installSecrets =
-    source: target: secrets:
+    source: target: owner: secrets:
     pkgs.writeShellScript "installSecrets.sh" ''
-      install -m0600 -D ${source} "${target}"
+      install -m0600 -o${owner} -D ${source} "${target}"
       ${lib.concatLines (
         lib.forEach secrets (name: ''
           ${pkgs.replace-secret}/bin/replace-secret \
@@ -327,6 +327,23 @@ let
         description = "Whether to enable `upsmon`.";
       };
 
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = "nutmon";
+        description = ''
+          User to run `upsmon` as. `upsmon.conf` will have its owner set to this
+          user. If not specified, a default user will be created.
+        '';
+      };
+      group = lib.mkOption {
+        type = lib.types.str;
+        default = "nutmon";
+        description = ''
+          Group for the default `nutmon` user. If the default user is created
+          and this is not specified, a default group will be created.
+        '';
+      };
+
       monitor = lib.mkOption {
         type = with lib.types; attrsOf (submodule monitorOptions);
         default = { };
@@ -344,7 +361,6 @@ let
             MONITOR = <generated from config.power.ups.upsmon.monitor>
             NOTIFYCMD = "''${pkgs.nut}/bin/upssched";
             POWERDOWNFLAG = "/run/killpower";
-            RUN_AS_USER = "root";
             SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
           }
         '';
@@ -382,7 +398,6 @@ let
         );
         NOTIFYCMD = lib.mkDefault "${pkgs.nut}/bin/upssched";
         POWERDOWNFLAG = lib.mkDefault "/run/killpower";
-        RUN_AS_USER = "root"; # TODO: replace 'root' by another username.
         SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
       };
     };
@@ -581,7 +596,7 @@ in
     systemd.services.upsmon =
       let
         secrets = lib.mapAttrsToList (name: monitor: "upsmon_password_${name}") cfg.upsmon.monitor;
-        createUpsmonConf = installSecrets upsmonConf "/run/nut/upsmon.conf" secrets;
+        createUpsmonConf = installSecrets upsmonConf "/run/nut/upsmon.conf" cfg.upsmon.user secrets;
       in
       {
         enable = cfg.upsmon.enable;
@@ -591,7 +606,7 @@ in
         serviceConfig = {
           Type = "forking";
           ExecStartPre = "${createUpsmonConf}";
-          ExecStart = "${pkgs.nut}/sbin/upsmon";
+          ExecStart = "${pkgs.nut}/sbin/upsmon -u ${cfg.upsmon.user}";
           ExecReload = "${pkgs.nut}/sbin/upsmon -c reload";
           LoadCredential = lib.mapAttrsToList (
             name: monitor: "upsmon_password_${name}:${monitor.passwordFile}"
@@ -604,7 +619,7 @@ in
     systemd.services.upsd =
       let
         secrets = lib.mapAttrsToList (name: user: "upsdusers_password_${name}") cfg.users;
-        createUpsdUsers = installSecrets upsdUsers "/run/nut/upsd.users" secrets;
+        createUpsdUsers = installSecrets upsdUsers "/run/nut/upsd.users" "root" secrets;
       in
       {
         enable = cfg.upsd.enable;
@@ -696,18 +711,11 @@ in
 
     services.udev.packages = [ pkgs.nut ];
 
-    /*
-        users.users.nut =
-          { uid = 84;
-            home = "/var/lib/nut";
-            createHome = true;
-            group = "nut";
-            description = "UPnP A/V Media Server user";
-          };
-
-        users.groups."nut" =
-          { gid = 84; };
-    */
+    users.users.nutmon = lib.mkIf (cfg.upsmon.user == "nutmon") {
+      isSystemUser = true;
+      group = cfg.upsmon.group;
+    };
+    users.groups.nutmon = lib.mkIf (cfg.upsmon.user == "nutmon" && cfg.upsmon.group == "nutmon") { };
 
   };
 }
