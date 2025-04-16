@@ -6,7 +6,7 @@
   catalogue,
   cymem,
   cython_0,
-  fetchPypi,
+  fetchFromGitHub,
   git,
   hypothesis,
   jinja2,
@@ -20,7 +20,6 @@
   preshed,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   spacy-legacy,
@@ -41,16 +40,12 @@ buildPythonPackage rec {
   version = "3.8.5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OLyLh3+yT0FJBf8XliADFgfNMf5vkA1noGcwFCcVZRw=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "spaCy";
+    tag = "release-v${version}";
+    hash = "sha256-rgMstGSscUBACA5+veXD9H/lHuvWKs7hJ6hz6aKOB/0=";
   };
-
-  postPatch = ''
-    # unpin numpy, cannot use pythonRelaxDeps because it's in build-system
-    substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail ",<2.1.0" ""
-  '';
 
   build-system = [
     cymem
@@ -132,11 +127,11 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "spacy";
   };
