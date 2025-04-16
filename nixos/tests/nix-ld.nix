@@ -26,15 +26,4 @@ in
       machine.succeed("hello")
     '';
   };
-  nix-ld-rs = makeTest {
-    name = "nix-ld-rs";
-    nodes.machine = {
-      imports = [ shared ];
-      programs.nix-ld.package = pkgs.nix-ld-rs;
-    };
-    testScript = ''
-      start_all()
-      machine.succeed("hello")
-    '';
-  };
 }
