@@ -19,6 +19,7 @@ let
     ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
     ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
     LLMNR=${cfg.llmnr}
+    MulticastDNS=${cfg.multicastdns}
     DNSSEC=${cfg.dnssec}
     DNSOverTLS=${cfg.dnsovertls}
     ${config.services.resolved.extraConfig}
@@ -87,6 +88,31 @@ in
         - `"true"`: Enables full LLMNR responder and resolver support.
         - `"false"`: Disables both.
         - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+
+        Note that systemd-networkd.service(8) also maintains per-link Multicast DNS settings.
+        Multicast DNS will be enabled on a link only if the per-link and the global setting is on.
+      '';
+    };
+
+    services.resolved.multicastdns = mkOption {
+      default = "true";
+      example = "false";
+      type = types.enum [
+        "true"
+        "resolve"
+        "false"
+      ];
+      description = ''
+        Controls Link-Local Multicast Name Resolution support
+        (RFC 6762) on the local host.
+
+        If set to
+        - `"true"`: Enables full MulticastDNS responder and resolver support.
+        - `"false"`: Disables both.
+        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+
+        Note that systemd-networkd.service(8) also maintains per-link Multicast DNS settings.
+        Multicast DNS will be enabled on a link only if the per-link and the global setting is on.
       '';
     };
 
