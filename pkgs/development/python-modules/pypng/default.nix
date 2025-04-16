@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
-    rev = "refs/tags/${pname}-${version}";
+    tag = "pypng-${version}";
     hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   patches = [
     # pngsuite is imported by code/test_png.py but is not defined in
