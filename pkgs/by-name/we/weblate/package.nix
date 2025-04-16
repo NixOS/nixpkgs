@@ -152,6 +152,11 @@ python.pkgs.buildPythonApplication rec {
     postgres = with python.pkgs; [ psycopg ];
   };
 
+  pythonRelaxDeps = [
+    "celery"
+    "rapidfuzz"
+  ];
+
   # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
   GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
     pango
