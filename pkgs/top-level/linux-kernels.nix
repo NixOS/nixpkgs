@@ -364,6 +364,8 @@ in
         inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
         inherit (pkgs) dpdk; # added 2024-03
 
+        acer-wmi-battery = callPackage ../os-specific/linux/acer-wmi-battery { };
+
         acpi_call = callPackage ../os-specific/linux/acpi-call { };
 
         ajantv2 = callPackage ../os-specific/linux/ajantv2 { };
