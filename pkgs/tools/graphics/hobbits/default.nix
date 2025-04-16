@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hobbits";
-  version = "0.54.1";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "Mahlet-Inc";
     repo = "hobbits";
     rev = "v${version}";
-    hash = "sha256-SbSuw5e2ll/wU5UBV0MOlvCXb4rvPtsE4l8XzRbBiLI=";
+    hash = "sha256-W6QBLj+GkmM88cOVSIc1PLiVXysjv74J7citFW6SRDM=";
   };
 
   postPatch = ''
