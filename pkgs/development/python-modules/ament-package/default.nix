@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ament-package";
-  version = "0.17.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ament";
     repo = "ament_package";
     tag = version;
-    hash = "sha256-+Jfj8mkvrpJnd3oPhOo2E5cvVO9ujez0mrpsj2taOOU=";
+    hash = "sha256-hwDHnx17pCL6oTRP5xuiQkFPp5XnwsXIcuUfuvcrMRw=";
   };
 
   build-system = [
@@ -29,9 +29,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "ament_package" ];
-
-  # Tests currently broken
-  doCheck = false;
 
   meta = {
     description = "The parser for the manifest files in the ament buildsystem";
