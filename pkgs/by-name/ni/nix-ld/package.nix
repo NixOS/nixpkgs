@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   version = "2.0.3";
 
   src = fetchFromGitHub {
-    owner = "mic92";
+    owner = "nix-community";
     repo = "nix-ld";
     rev = version;
     hash = "sha256-NRkLjdMtVfC6dD1gEbYZWFEtbmC2xfD6ft1IP7l76Vw=";
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run unpatched dynamic binaries on NixOS";
-    homepage = "https://github.com/Mic92/nix-ld";
+    homepage = "https://github.com/nix-community/nix-ld";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.linux;
