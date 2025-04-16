@@ -30,7 +30,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-C7YuXxCrnJ+8L7JNh6TA8xi0G3y1FwFb9DQwhS+igME=";
+    npmDepsHash = "sha256-MIjQ5Lbtv6kFHUyuc12JTItUPxIHoo65iUlSjBxw9Z8=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
