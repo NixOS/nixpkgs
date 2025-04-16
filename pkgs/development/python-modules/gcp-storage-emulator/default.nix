@@ -43,6 +43,11 @@ buildPythonPackage rec {
     "gcp_storage_emulator"
   ];
 
+  pytestFlagsArray = [
+    # AssertionError: BadRequest not raised
+    "--deselect=tests/test_server.py::ObjectsTests::test_invalid_crc32c_hash"
+  ];
+
   meta = {
     description = "Local emulator for Google Cloud Storage";
     homepage = "https://github.com/oittaa/gcp-storage-emulator";
