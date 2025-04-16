@@ -3,7 +3,7 @@
   fetchpatch,
   python3,
   fetchFromGitHub,
-  wrapQtAppsHook,
+  qt5,
   cups,
 }:
 
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = pname;
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-S5IrNWVoUp1w+P7DrKlOUOyY3Q16CHSct9ndZOB3UpU=";
+    hash = "sha256-S5IrNWVoUp1w+P7DrKlOUOyY3Q16CHSct9ndZOB3UpU=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace ", 'lpr', " ", '${cups}/bin/lpr', "
   '';
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     enamlx

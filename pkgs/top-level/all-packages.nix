@@ -14914,8 +14914,6 @@ with pkgs;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
-  inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
-
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
   };
