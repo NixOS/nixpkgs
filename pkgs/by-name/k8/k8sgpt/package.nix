@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "k8sgpt";
-  version = "0.4.1";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${version}";
-    hash = "sha256-GKRI5qry2eYPP3/BTjS7qnIp7lX/uAR0s40y/oECaeY=";
+    hash = "sha256-TaJBGU+nLMVOL1uiHPan8p2DfuAWTr57Lt2BtfNq6dA=";
   };
 
-  vendorHash = "sha256-7xcCSbQ5Mvoi7MActgwHMSp/duDxfugUZBOsMbzUGhg=";
+  vendorHash = "sha256-960gfOCpqY2gCbHR+fYFeV9UjztWMRVQKHIg/n3ELxk=";
 
   # https://nixos.org/manual/nixpkgs/stable/#var-go-CGO_ENABLED
   env.CGO_ENABLED = 0;

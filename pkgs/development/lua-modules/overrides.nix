@@ -212,6 +212,27 @@ in
     '';
   });
 
+  grug-far-nvim = prev.grug-far-nvim.overrideAttrs ({
+    doCheck = lua.luaversion == "5.1" && !stdenv.hostPlatform.isDarwin;
+    nativeCheckInputs = [
+      final.busted
+      final.mini-test
+      final.nlua
+      ripgrep
+      neovim-unwrapped
+    ];
+
+    # feel free to disable the checks. They are mostly screenshot based
+    checkPhase = ''
+      runHook preCheck
+      # feel free to disable/adjust the tests
+      rm tests/base/test_apply.lua tests/base/test_vimscript_interpreter.lua
+      make test dir=base
+      runHook postCheck
+    '';
+
+  });
+
   http = prev.http.overrideAttrs (oa: {
     patches = [
       (fetchpatch {

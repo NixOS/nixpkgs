@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "magika";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q9wRU6FjcyciWmJqFVDAo5Wh1F6jPsH11GubCAI4vuA=";
+    hash = "sha256-490ixzk2Ywsc150PQS1tmlPcmbpeNwmxrFP1a8mY5jU=";
   };
 
   nativeBuildInputs = [ poetry-core ];

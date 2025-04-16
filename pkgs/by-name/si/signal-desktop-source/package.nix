@@ -8,7 +8,6 @@
   makeWrapper,
   callPackage,
   fetchFromGitHub,
-  runCommand,
   jq,
   makeDesktopItem,
   copyDesktopItems,
@@ -19,17 +18,31 @@
 }:
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_10;
+  pnpm = pnpm_10.override { inherit nodejs; };
   electron = electron_35;
 
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
+  nodeOS =
+    {
+      "linux" = "linux";
+      "darwin" = "darwin";
+    }
+    .${stdenv.hostPlatform.parsed.kernel.name}
+      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.kernel.name}");
+
+  nodeArch =
+    {
+      # https://nodejs.org/api/os.html#osarch
+      "x86_64" = "x64";
+      "aarch64" = "arm64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name}
+      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
+  signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
 
-  ringrtc-bin = callPackage ./ringrtc-bin.nix { };
+  webrtc = callPackage ./webrtc.nix { };
+  ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
   # Noto Color Emoji PNG files for emoji replacement; see below.
   noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
@@ -52,13 +65,13 @@ let
     '';
   });
 
-  version = "7.49.0";
+  version = "7.50.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-URWDSHiPK+DCh8giT8YFW2HNY0tYNokqbAKBpBWZKD0=";
+    hash = "sha256-APdwETadRIQRJ/Wdxqnr2R5H/7Qqbacpp+SV16jesDw=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -73,7 +86,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      (pnpm.override { inherit nodejs; }).configHook
+      pnpm.configHook
     ];
 
     buildPhase = ''
@@ -95,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    (pnpm.override { inherit nodejs; }).configHook
+    pnpm.configHook
     makeWrapper
     copyDesktopItems
     python3
@@ -118,15 +131,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-QBlouzA3PhRGiL94sCQS/zRSdsFbKf4VI20x3seMpE4="
+        "sha256-BcKHVMrD8b9u/5hNtAY5V2vjTVHItob0EG89soFSwa4="
       else
-        "sha256-LKSFptmJyfI0ACo1egZ2LAY5pAXexu9UNjIhD79rJ9E=";
+        "sha256-GdeCIUV0aTwnEV55/RnpESDBrkpcVVa+1XhUmUIgBPU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1743627521;
+    SOURCE_DATE_EPOCH = 1744232207;
   };
 
   preBuild = ''
@@ -145,21 +158,31 @@ stdenv.mkDerivation (finalAttrs: {
       die "libsignal-client version mismatch"
     fi
 
-    if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc-bin.version}" ]
+    if [ "`jq -r '.dependencies."@signalapp/sqlcipher"' < package.json`" != "${signal-sqlcipher.version}" ]
+    then
+      die "signal-sqlcipher version mismatch"
+    fi
+
+    if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc.version}" ]
     then
       die "ringrtc version mismatch"
     fi
 
-    cp -r ${ringrtc-bin} node_modules/@signalapp/ringrtc/build
+    mkdir -p node_modules/@signalapp/ringrtc/build
+    install -D ${ringrtc}/lib/libringrtc${stdenv.hostPlatform.extensions.library} \
+      node_modules/@signalapp/ringrtc/build/${nodeOS}/libringrtc-${nodeArch}.node
 
     rm -fr node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
+
+    rm -fr node_modules/@signalapp/sqlcipher
+    cp -r ${signal-sqlcipher} node_modules/@signalapp/sqlcipher
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    export npm_config_nodedir=${electron-headers}
+    export npm_config_nodedir=${electron.headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     cp -r ${sticker-creator} sticker-creator/dist
@@ -218,8 +241,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit
       libsignal-node
-      ringrtc-bin
+      ringrtc
+      webrtc
       sticker-creator
+      signal-sqlcipher
       ;
     tests.application-launch = nixosTests.signal-desktop;
     updateScript.command = [ ./update.sh ];
@@ -249,13 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ];
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-
-      # @signalapp/sqlcipher
-      # ringrtc
-      binaryNativeCode
     ];
   };
 })

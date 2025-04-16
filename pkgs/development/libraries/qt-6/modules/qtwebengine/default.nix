@@ -65,7 +65,6 @@
   bootstrap_cmds,
   cctools,
   xcbuild,
-  fetchpatch,
 }:
 
 qtModule {
@@ -112,32 +111,8 @@ qtModule {
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
 
-    # Fix build of vendored xnnpack on aarch64/gcc14
-    # FIXME: remove when upstream updates
-    (fetchpatch {
-      url = "https://github.com/google/XNNPACK/commit/1b11a8b0620afe8c047304273674c4c57c289755.patch";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/third_party/xnnpack/src/";
-      hash = "sha256-GUESVNR88I1K2V5xr0e09ec4j2eselMhNN06+PCcINM=";
-    })
-
-    # The latest version of Clang changed what macros it predefines on Apple
-    # targets, causing errors about predefined macros in zlib.
-    (fetchpatch {
-      url = "https://github.com/chromium/chromium/commit/2f39ac8d0a414dd65c0e1d5aae38c8f97aa06ae9.patch";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-07hWANY9JGFmqvjdOD6SFmVI6sQRRyvW+7wxGZF5GVo=";
-    })
-
-    # The latest version of Clang changed what macros it predefines on Apple
-    # targets, causing errors about predefined macros in libpng.
-    (fetchpatch {
-      url = "https://github.com/chromium/chromium/commit/66defc14abe47c0494da9faebebfa0a5b6efcf38.patch";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-FWIi1VsBZFqOoPIkPxPkcfexPkx1458rB5ldtA7T2uE=";
-    })
+    # Fix build with Pipewire 1.4
+    ./pipewire-1.4.patch
   ];
 
   postPatch =

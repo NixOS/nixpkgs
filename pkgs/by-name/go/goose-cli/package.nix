@@ -16,27 +16,27 @@ let
   gpt-4o-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/gpt-4o/resolve/31376962e96831b948abe05d420160d0793a65a4/tokenizer.json";
     hash = "sha256-Q6OtRhimqTj4wmFBVOoQwxrVOmLVaDrgsOYTNXXO8H4=";
-    meta.license = lib.licenses.unfree;
+    meta.license = lib.licenses.mit;
   };
   claude-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/claude-tokenizer/resolve/cae688821ea05490de49a6d3faa36468a4672fad/tokenizer.json";
     hash = "sha256-wkFzffJLTn98mvT9zuKaDKkD3LKIqLdTvDRqMJKRF2c=";
-    meta.license = lib.licenses.unfree;
+    meta.license = lib.licenses.mit;
   };
 in
 rustPlatform.buildRustPackage rec {
   pname = "goose-cli";
-  version = "1.0.15";
+  version = "1.0.17";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${version}";
-    hash = "sha256-9uIpwJaRpYvsWW8ysFQWgogp/4hh5b72+5dNwYQKrM8=";
+    hash = "sha256-l/lcwTNUq2xJHh0MKhnDZjRJ/5cANbdar/Vusf38esQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5qMciAnX34fbiV5Oy/+V3o7S3NwubxyRRNFXWcQK+kE=";
+  cargoHash = "sha256-1xKWzgptnM1ZP0nQXILBoaKVwL2FyXpldTUIa1ITQO0=";
 
   nativeBuildInputs = [ pkg-config ];
 

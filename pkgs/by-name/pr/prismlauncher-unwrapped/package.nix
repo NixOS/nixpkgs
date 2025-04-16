@@ -31,13 +31,13 @@ assert lib.assertMsg (
 ) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "9.2";
+  version = "9.4";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-0KDhX8mfh11pyYQS/lB6qlUvRSOcYEbQKgsdQVA+Q3U=";
+    hash = "sha256-q8ln54nepwbJhC212vGODaafsbOCtdXar7F2NacKWO4=";
   };
 
   postUnpack = ''
@@ -83,15 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "MACOSX_SPARKLE_UPDATE_FEED_URL" "''")
       (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
     ];
-
-  patches = [
-    # This patch allows Mangohud 0.8 to run correctly with Prism Launcher.
-    # This should be removed on the next Prism Launcher release.
-    (fetchpatch {
-      url = "https://github.com/PrismLauncher/PrismLauncher/commit/3295b0717a8c4805022eccb74fee2304361d8dab.patch";
-      hash = "sha256-A7DrmI00dFUNZLoMFDfym7e5rSFg6V4/MjVxAnQwT6E=";
-    })
-  ];
 
   doCheck = true;
 

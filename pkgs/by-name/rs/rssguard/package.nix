@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
-  version = "4.8.2";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = pname;
     tag = version;
-    sha256 = "sha256-C5iA5qK8+FhCUeFtyskY/vd4evaYS3TY1SHAc83/36w=";
+    sha256 = "sha256-1y3hmAuIOhh1L+x4ZOPy7ixAizVNPtQjxL3mgNWgx9A=";
   };
 
   buildInputs = [

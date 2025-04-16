@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
       "--with-openssl=${lib.getDev openssl}"
     ]
-    ++ lib.optional withPostgres "--with-pgsql=${lib.getDev libpq}/bin/pg_config"
+    ++ lib.optional withPostgres "--with-pgsql=${libpq.pg_config}/bin/pg_config"
     ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''

@@ -251,7 +251,6 @@ import ./make-test-python.nix (
       server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
 
       with subtest("manual-authkey"):
-          client.succeed("mkdir -m 700 /root/.ssh")
           client.succeed(
               '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N ""'
           )
@@ -261,9 +260,7 @@ import ./make-test-python.nix (
           public_key = public_key.strip()
           client.succeed("chmod 600 /root/.ssh/id_ed25519")
 
-          server.succeed("mkdir -m 700 /root/.ssh")
           server.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
-          server_lazy.succeed("mkdir -m 700 /root/.ssh")
           server_lazy.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
 
           client.wait_for_unit("network.target")
@@ -354,6 +351,9 @@ import ./make-test-python.nix (
               "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
               timeout=30
           )
+
+      # None of the per-connection units should have failed.
+      server_lazy.fail("systemctl is-failed 'sshd@*.service'")
     '';
   }
 )

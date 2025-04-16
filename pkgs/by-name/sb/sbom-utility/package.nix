@@ -2,11 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
+  versionCheckHook,
+  installShellFiles,
+  stdenv,
 }:
 
-buildGoModule rec {
-  pname = "sbom-utility";
+let
   version = "0.17.0";
+in
+buildGoModule {
+  pname = "sbom-utility";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
@@ -17,8 +24,38 @@ buildGoModule rec {
 
   vendorHash = "sha256-vyYSir5u6d5nv+2ScrHpasQGER4VFSoLb1FDUDIrtDM=";
 
+  patches = [
+    # work around https://github.com/CycloneDX/sbom-utility/issues/121, which otherwise
+    # breaks shell completions
+    ./name.patch
+    # Output logs to stderr rather than stdout.
+    # Patch of https://github.com/CycloneDX/sbom-utility/pull/122, adapted to apply
+    # against v0.17.0
+    ./stderr.patch
+  ];
+
+  ldflags = [
+    "-X main.Version=${version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   preCheck = ''
     cd test
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd sbom-utility \
+        --$shell <($out/bin/sbom-utility -q completion $shell)
+    done
   '';
 
   meta = with lib; {

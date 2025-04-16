@@ -31,12 +31,6 @@ let
     rev = "687106c4e37297f86fab79f77ef83599b61ab65c";
     hash = "sha256-Y0irD0jzqYobnjtD2M1+hTDRUUYnuygUx9+tE1gUoTw=";
   };
-
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
-
 in
 buildNpmPackage {
   inherit pname version src;
@@ -55,7 +49,7 @@ buildNpmPackage {
 
   npmFlags = [
     # keytar needs to be built against electron's ABI
-    "--nodedir=${electron-headers}"
+    "--nodedir=${electron.headers}"
   ];
 
   buildPhase = ''

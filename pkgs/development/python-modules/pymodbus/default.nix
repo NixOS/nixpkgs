@@ -6,12 +6,12 @@
   fetchFromGitHub,
   prompt-toolkit,
   pygments,
+  pymodbus-repl,
   pyserial,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   redis,
   setuptools,
   sqlalchemy,
@@ -21,29 +21,22 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.8.6";
+  version = "3.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
-    hash = "sha256-AnFPrjY6ukONAeCyHIzhtULm0vNjJugIxtuwACClzOo=";
+    hash = "sha256-O64r8/3AGZYr449FANo3wQCUiIJkIjN5eQ+VoTrvUHo=";
   };
 
   build-system = [ setuptools ];
 
   optional-dependencies = {
-    repl = [
-      aiohttp
-      typer
-      prompt-toolkit
-      pygments
-      click
-    ];
+    repl = [ pymodbus-repl ];
     serial = [ pyserial ];
+    simulator = [ aiohttp ];
   };
 
   nativeCheckInputs = [

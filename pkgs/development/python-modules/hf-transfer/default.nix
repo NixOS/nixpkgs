@@ -18,20 +18,20 @@
 
 buildPythonPackage rec {
   pname = "hf-transfer";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "hf_transfer";
     tag = "v${version}";
-    hash = "sha256-Uh8q14OeN0fYsywYyNrH8C3wq/qRjQKEAIufi/a5RXA=";
+    hash = "sha256-mcU3YuJVfuwBvtLfqceV3glcJcpjSX7M3VjvbvLCxZg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-q+tAqpPubQ7P/KiBcVpAjOh8i12EfIcdcRjyEQNQQFI=";
+    hash = "sha256-O4aKqVSShFpt8mdZkY3WV55j9CIczRSRkIMC7dJoGv0=";
   };
 
   build-system = [

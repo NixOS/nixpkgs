@@ -18,6 +18,22 @@ let
   format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
   configFile = format.generate "my.cnf" cfg.settings;
 
+  generateClusterAddressExpr = ''
+    if (config.services.mysql.galeraCluster.nodeAddresses == [ ]) then
+      ""
+    else
+      "gcomm://''${builtins.concatStringsSep \",\" config.services.mysql.galeraCluster.nodeAddresses}"
+      + lib.optionalString (config.services.mysql.galeraCluster.clusterPassword != "")
+        "?gmcast.seg=1:''${config.services.mysql.galeraCluster.clusterPassword}"
+  '';
+  generateClusterAddress =
+    if (cfg.galeraCluster.nodeAddresses == [ ]) then
+      ""
+    else
+      "gcomm://${builtins.concatStringsSep "," cfg.galeraCluster.nodeAddresses}"
+      + lib.optionalString (
+        cfg.galeraCluster.clusterPassword != ""
+      ) "?gmcast.seg=1:${cfg.galeraCluster.clusterPassword}";
 in
 
 {
@@ -378,22 +394,8 @@ in
           type = lib.types.str;
           description = "Full Galera cluster connection string. If nodeAddresses is set, this will be auto-generated, but you can override it with a custom value. Format is typically 'gcomm://node1,node2,node3' with optional parameters.";
           example = "gcomm://10.0.0.10,10.0.0.20,10.0.0.30?gmcast.seg=1:SomePassword";
-          default =
-            if (cfg.galeraCluster.nodeAddresses == [ ]) then
-              ""
-            else
-              "gcomm://${builtins.concatStringsSep "," cfg.galeraCluster.nodeAddresses}"
-              + lib.optionalString (
-                cfg.galeraCluster.clusterPassword != ""
-              ) "?gmcast.seg=1:${cfg.galeraCluster.clusterPassword}";
-          defaultText = lib.literalExpression ''
-            if (config.services.mysql.galeraCluster.nodeAddresses == [ ]) then
-              ""
-            else
-              "gcomm://''${builtins.concatStringsSep \",\" config.services.mysql.galeraCluster.nodeAddresses}"
-              + lib.optionalString (config.services.mysql.galeraCluster.clusterPassword != "")
-                "?gmcast.seg=1:''${config.services.mysql.galeraCluster.clusterPassword}"
-          '';
+          default = ""; # will be evaluate by generateClusterAddress
+          defaultText = lib.literalExpression generateClusterAddressExpr;
         };
 
       };
@@ -404,34 +406,30 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !cfg.galeraCluster.enable || isMariaDB;
-        message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
-      }
-      {
-        assertion =
-          !cfg.galeraCluster.enable
-          || (
+    assertions =
+      [
+        {
+          assertion = !cfg.galeraCluster.enable || isMariaDB;
+          message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
+        }
+      ]
+      # galeraCluster options checks
+      ++ lib.optionals cfg.galeraCluster.enable [
+        {
+          assertion =
             cfg.galeraCluster.localAddress != ""
-            && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "")
-          );
-        message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
-      }
-      {
-        assertion = !(cfg.galeraCluster.clusterAddress != "" && cfg.galeraCluster.clusterPassword != "");
-        message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
-      }
-      {
-        assertion =
-          !(
-            cfg.galeraCluster.enable
-            && cfg.galeraCluster.nodeAddresses != [ ]
-            && cfg.galeraCluster.clusterAddress != ""
-          );
-        message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
-      }
-    ];
+            && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
+          message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
+        }
+        {
+          assertion = cfg.galeraCluster.clusterPassword == "" || cfg.galeraCluster.clusterAddress == "";
+          message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
+        }
+        {
+          assertion = cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "";
+          message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
+        }
+      ];
 
     services.mysql.dataDir = lib.mkDefault (
       if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
@@ -475,7 +473,11 @@ in
       wsrep_provider = "${cfg.galeraCluster.package}/lib/galera/libgalera_smm.so";
 
       wsrep_cluster_name = cfg.galeraCluster.name;
-      wsrep_cluster_address = cfg.galeraCluster.clusterAddress;
+      wsrep_cluster_address =
+        if (cfg.galeraCluster.clusterAddress != "") then
+          cfg.galeraCluster.clusterAddress
+        else
+          generateClusterAddress;
 
       wsrep_node_address = cfg.galeraCluster.localAddress;
       wsrep_node_name = "${cfg.galeraCluster.localName}";

@@ -24,12 +24,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.8.3";
+  version = "0.9.2";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-b6Tpwy0DepbT80+Jil8celeiNN3W+5prt57NjgLD+u0=";
+    hash = "sha256-Xb/i25l0jLn87OeouD0+CRv11d8aOn7Sr69z3TkS6I4=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -65,12 +65,6 @@ buildDotnetModule (finalAttrs: {
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
-
-    # Bump StrawberryShake so we can drop .NET 8
-    # See https://github.com/Nexus-Mods/NexusMods.App/pull/2830
-    substituteInPlace Directory.Packages.props \
-      --replace-fail 'Include="StrawberryShake.Server" Version="14.1.0"' \
-                     'Include="StrawberryShake.Server" Version="15.0.3"'
   '';
 
   makeWrapperArgs = [

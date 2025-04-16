@@ -13,7 +13,12 @@ let
       maintainers ? [ lib.maintainers.phanirithvij ],
     }:
     fetchurl {
-      inherit hash url;
+      inherit
+        hash
+        url
+        pname
+        version
+        ;
       name = "${pname}-${version}.wasm";
       meta = {
         inherit

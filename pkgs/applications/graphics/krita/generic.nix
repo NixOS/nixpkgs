@@ -30,7 +30,7 @@
   libkdcraw,
   lcms2,
   gsl,
-  openexr_3,
+  openexr,
   giflib,
   libjxl,
   mlt,
@@ -105,7 +105,7 @@ mkDerivation rec {
     fribidi
     lcms2
     gsl
-    openexr_3
+    openexr
     lager
     libaom
     libheif

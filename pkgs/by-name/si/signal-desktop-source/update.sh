@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-update common-updater-scripts curl coreutils jq
+#!nix-shell -i bash -p bash nix-update common-updater-scripts curl coreutils jq gclient2nix
 
 set -ex
 
@@ -19,10 +19,13 @@ releaseEpoch=`date -d $releaseDate +%s`
 packageJson="`curl_github "https://raw.githubusercontent.com/signalapp/Signal-Desktop/refs/tags/$releaseTag/package.json"`"
 
 latestVersion="`jq -r '.version' <<< $packageJson`"
-nodeVersion="`jq -r '.engines.node' <<< $packageJson | head -c2`"
-electronVersion="`jq -r '.devDependencies.electron' <<< $packageJson | head -c2`"
+nodeVersion="`jq -r '.engines.node' <<< $packageJson | cut -d. -f1`"
+electronVersion="`jq -r '.devDependencies.electron' <<< $packageJson | cut -d. -f1`"
 libsignalClientVersion=`jq -r '.dependencies."@signalapp/libsignal-client"' <<< $packageJson`
+signalSqlcipherVersion=`jq -r '.dependencies."@signalapp/sqlcipher"' <<< $packageJson`
 ringrtcVersion=`jq -r '.dependencies."@signalapp/ringrtc"' <<< $packageJson`
+ringrtcVersionProperties="`curl_github "https://raw.githubusercontent.com/signalapp/ringrtc/refs/tags/v$ringrtcVersion/config/version.properties"`"
+webrtcVersion="`grep --only-matching "^webrtc.version=.*$" <<< $ringrtcVersionProperties | sed "s/webrtc.version=//g"`"
 
 sed -E -i "s/(nodejs_)../\1$nodeVersion/" $SCRIPT_DIR/package.nix
 sed -E -i "s/(electron_)../\1$electronVersion/" $SCRIPT_DIR/package.nix
@@ -44,4 +47,18 @@ update-source-version signal-desktop-source.libsignal-node \
   --ignore-same-version \
   --source-key=npmDeps
 
-update-source-version signal-desktop-source.ringrtc-bin "$ringrtcVersion"
+update-source-version signal-desktop-source.signal-sqlcipher \
+  "$signalSqlcipherVersion"
+update-source-version signal-desktop-source.signal-sqlcipher \
+  --ignore-same-version \
+  --source-key=cargoDeps.vendorStaging
+update-source-version signal-desktop-source.signal-sqlcipher \
+  --ignore-same-version \
+  --source-key=pnpmDeps
+
+update-source-version signal-desktop-source.ringrtc "$ringrtcVersion"
+update-source-version signal-desktop-source.ringrtc \
+  --ignore-same-version \
+  --source-key=cargoDeps.vendorStaging
+
+gclient2nix generate "https://github.com/signalapp/webrtc@$webrtcVersion" > $SCRIPT_DIR/webrtc-sources.json

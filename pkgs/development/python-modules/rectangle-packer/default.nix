@@ -9,25 +9,20 @@
 
 buildPythonPackage rec {
   pname = "rectangle-packer";
-  version = "2.0.2";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Penlect";
     repo = "rectangle-packer";
     rev = version;
-    hash = "sha256-YsMLB9jfAC5yB8TnlY9j6ybXM2ILireOgQ8m8wYo4ts=";
+    hash = "sha256-Tm1ZkWTecmQDGsTOa1AP2GtjdxVgxklLIYSBlTSfSiY=";
   };
 
   build-system = [
     cython
     setuptools
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'Cython<3.0.0' 'Cython'
-  '';
 
   pythonImportsCheck = [ "rpack" ];
 

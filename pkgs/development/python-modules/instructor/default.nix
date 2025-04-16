@@ -45,6 +45,8 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "rich" ];
+
   dependencies = [
     aiohttp
     docstring-parser

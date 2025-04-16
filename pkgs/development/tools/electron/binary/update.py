@@ -81,6 +81,7 @@ def get_headers(version: str) -> str:
         called_process: subprocess.CompletedProcess = subprocess.run(
             [
                 "nix-prefetch-url",
+                "--unpack",
                 f"https://artifacts.electronjs.org/headers/dist/v{version}/node-v{version}-headers.tar.gz",
             ],
             capture_output=True,

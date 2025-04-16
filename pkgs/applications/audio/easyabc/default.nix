@@ -1,9 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  fetchPypi,
   replaceVars,
-  python39,
+  python3,
   fluidsynth,
   soundfont-fluid,
   wrapGAppsHook3,
@@ -12,50 +11,17 @@
   ghostscript,
 }:
 
-let
-  # requires python39 due to https://stackoverflow.com/a/71902541 https://github.com/jwdj/EasyABC/issues/52
-  python = python39.override {
-    self = python;
-    packageOverrides = self: super: {
-      # currently broken with 4.2.1
-      # https://github.com/jwdj/EasyABC/issues/75
-      wxpython = super.wxpython.overrideAttrs (args: rec {
-        version = "4.2.0";
-        src = fetchPypi {
-          inherit version;
-          pname = "wxPython";
-          hash = "sha256-ZjzrxFCdfl0RNRiGX+J093+VQ0xdV7w4btWNZc7thsc=";
-        };
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "easyabc";
-  version = "1.3.8.6";
+  version = "1.3.8.7-unstable-2025-01-12";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "jwdj";
     repo = "easyabc";
-    rev = "6461b2c14280cb64224fc5299c31cfeef9b7d43c";
-    hash = "sha256-leC3A4HQMeJNeZXArb3YAYr2mddGPcws618NrRh2Q1Y=";
+    rev = "2cfa74d138d485523cae9b889186add3a249f2e4";
+    hash = "sha256-96Rh7hFWITIC62vs0bUtatDDgJ27UdZYhku8uqJBJew=";
   };
-
-  nativeBuildInputs = [ wrapGAppsHook3 ];
-
-  propagatedBuildInputs = with python.pkgs; [
-    cx-freeze
-    wxpython
-    pygame
-  ];
-
-  # apparently setup.py only supports Windows and Darwin
-  # everything is very non-standard in this project
-  dontBuild = true;
-  format = "other";
-
-  # https://discourse.nixos.org/t/packaging-mcomix3-python-gtk-missing-gsettings-schemas-issue/10190/2
-  strictDeps = false;
 
   patches = [
     (replaceVars ./hardcoded-paths.patch {
@@ -64,6 +30,22 @@ python.pkgs.buildPythonApplication {
       ghostscript = "${ghostscript}/bin/gs";
     })
   ];
+
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
+  dependencies = with python3.pkgs; [
+    cx-freeze
+    wxpython
+    pygame
+    pyparsing
+  ];
+
+  # apparently setup.py only supports Windows and Darwin
+  # everything is very non-standard in this project
+  dontBuild = true;
+
+  # https://discourse.nixos.org/t/packaging-mcomix3-python-gtk-missing-gsettings-schemas-issue/10190/2
+  strictDeps = false;
 
   installPhase = ''
     runHook preInstall
@@ -76,7 +58,7 @@ python.pkgs.buildPythonApplication {
     ln -s ${abcmidi}/bin/abc2abc $out/share/easyabc/bin/abc2abc
     ln -s ${abcm2ps}/bin/abcm2ps $out/share/easyabc/bin/abcm2ps
 
-    makeWrapper ${python.interpreter} $out/bin/easyabc \
+    makeWrapper ${python3.interpreter} $out/bin/easyabc \
       --set PYTHONPATH "$PYTHONPATH:$out/share/easyabc" \
       --add-flags "-O $out/share/easyabc/easy_abc.py"
 

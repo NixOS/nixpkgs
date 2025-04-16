@@ -265,7 +265,7 @@ stdenv.mkDerivation (
             hidden="$(dirname "$prog")/.$(basename "$prog")"
             mv "$prog" "$hidden"
             makeWrapper "$hidden" "$prog" \
-              --inherit-argv0 \
+              ${lib.optionalString (lib.versionAtLeast version "10.1") "--inherit-argv0"} \
               --set WINELOADER "$hidden" \
               --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
           fi
@@ -286,8 +286,8 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit pkgArches;
-      inherit (src) updateScript;
       tests = { inherit (nixosTests) wine; };
+      updateScript = src.updateScript or null;
     };
     meta = {
       inherit version;
@@ -301,9 +301,10 @@ stdenv.mkDerivation (
       inherit badPlatforms platforms;
       maintainers = with lib.maintainers; [
         avnik
-        raskin
         bendlas
         jmc-figueira
+        kira-bruneau
+        raskin
         reckenrode
       ];
       inherit mainProgram;

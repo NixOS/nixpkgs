@@ -329,6 +329,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Kakoune
 /pkgs/applications/editors/kakoune     @philiptaron
 
+# LuaPackages
+/pkgs/development/lua-modules         @NixOS/lua
+
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim
 

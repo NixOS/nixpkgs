@@ -51,6 +51,7 @@ let
     includeEmulator = "if-supported";
     includeNDK = "if-supported";
     useGoogleAPIs = true;
+    useGoogleTVAddOns = true;
 
     # Make sure everything from the last decade works since we are not using system images.
     numLatestPlatformVersions = 10;

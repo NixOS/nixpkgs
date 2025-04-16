@@ -610,7 +610,7 @@ in
     ];
   };
 
-  codeium-nvim =
+  windsurf-nvim =
     let
       # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
       codeiumVersion = "1.20.9";
@@ -648,7 +648,7 @@ in
       };
 
     in
-    super.codeium-nvim.overrideAttrs {
+    super.windsurf-nvim.overrideAttrs {
       dependencies = [ self.plenary-nvim ];
       buildPhase = ''
         cat << EOF > lua/codeium/installation_defaults.lua
@@ -2221,6 +2221,7 @@ in
       "nvchad.themes.mappings"
       "nvchad.cheatsheet.grid"
       "nvchad.cheatsheet.simple"
+      "nvchad.blink.config"
     ];
   };
 
@@ -2557,9 +2558,15 @@ in
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      nvim-tree-lua
+      neo-tree-nvim
+      # FIXME: should propagate from neo-tree-nvim
+      nui-nvim
+      plenary-nvim
+    ];
     dependencies = [ self.nvzone-volt ];
-    # Optional nvimtree integration
-    nvimSkipModules = "menus.nvimtree";
   };
 
   nvzone-minty = super.nvzone-minty.overrideAttrs {
@@ -2579,6 +2586,10 @@ in
       telescope-nvim
     ];
     dependencies = [ self.plenary-nvim ];
+    nvimSkipModules = [
+      # Issue reproduction file
+      "minimal"
+    ];
   };
 
   octo-nvim = super.octo-nvim.overrideAttrs {
@@ -2586,6 +2597,7 @@ in
       # Pickers, can use telescope or fzf-lua
       fzf-lua
       telescope-nvim
+      snacks-nvim
     ];
     dependencies = with self; [
       plenary-nvim
@@ -2720,6 +2732,12 @@ in
       "persisted"
       "persisted.config"
       "persisted.utils"
+    ];
+  };
+
+  persistent-breakpoints-nvim = super.persistent-breakpoints-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-dap
     ];
   };
 

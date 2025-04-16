@@ -55,7 +55,7 @@
   libxslt,
   lua,
   util-linux,
-  openexr_3,
+  openexr,
   openjpeg,
   osm-gps-map,
   pcre2,
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
       libwebp
       libxslt
       lua
-      openexr_3
+      openexr
       openjpeg
       osm-gps-map
       pcre2

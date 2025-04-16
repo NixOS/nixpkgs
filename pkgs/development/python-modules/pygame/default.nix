@@ -12,7 +12,7 @@
   setuptools,
 
   # nativeBuildInputs
-  SDL2,
+  SDL2_classic,
   pkg-config,
 
   # buildInputs
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    SDL2
+    SDL2_classic
     pkg-config
   ];
 
@@ -86,7 +86,7 @@ buildPythonPackage rec {
     libpng
     libX11
     portmidi
-    SDL2
+    SDL2_classic
     SDL2_image
     SDL2_mixer
     SDL2_ttf

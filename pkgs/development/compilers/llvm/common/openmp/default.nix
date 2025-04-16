@@ -25,31 +25,29 @@
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
 
-let
-  pname = "openmp";
-  src' =
-    if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/${pname} "$out"
-        ''
-      )
-    else
-      src;
-in
 stdenv.mkDerivation (
-  rec {
-    inherit pname version;
+  finalAttrs:
+  {
+    pname = "openmp";
+    inherit version;
 
-    src = src';
+    src =
+      if monorepoSrc != null then
+        runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } (
+          ''
+            mkdir -p "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "14") ''
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/openmp "$out"
+          ''
+        )
+      else
+        src;
 
-    sourceRoot = "${src.name}/${pname}";
+    sourceRoot = "${finalAttrs.src.name}/openmp";
 
     outputs = [ "out" ] ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];
 
@@ -79,11 +77,11 @@ stdenv.mkDerivation (
       [
         cmake
         python3.pythonOnBuildForHost
+        perl
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         ninja
       ]
-      ++ [ perl ]
       ++ lib.optionals (lib.versionAtLeast release_version "14") [
         pkg-config
         lit
@@ -106,12 +104,12 @@ stdenv.mkDerivation (
         (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
       ]
       ++ lib.optionals (lib.versions.major release_version == "13") [
-        "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL fails
+        (lib.cmakeBool "LIBOMPTARGET_BUILD_AMDGCN_BCLIB" false) # Building the AMDGCN device RTL fails
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "14") [
-        "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
-        "-DOPT_TOOL=${llvm}/bin/opt"
-        "-DLINK_TOOL=${llvm}/bin/llvm-link"
+        (lib.cmakeFeature "CLANG_TOOL" "${clang-unwrapped}/bin/clang")
+        (lib.cmakeFeature "OPT_TOOL" "${llvm}/bin/opt")
+        (lib.cmakeFeature "LINK_TOOL" "${llvm}/bin/llvm-link")
       ]
       ++ devExtraCmakeFlags;
 

@@ -47,7 +47,6 @@
   fetchFromGitHub,
   nixosTests,
   unstableGitUpdater,
-  nixVersions,
 }:
 
 let
@@ -80,6 +79,7 @@ let
         CryptRandPasswd
         DBDPg
         DBDSQLite
+        DBIxClassHelpers
         DataDump
         DateTime
         DigestSHA1
@@ -122,34 +122,21 @@ let
         UUID4Tiny
         XMLSimple
         YAML
-        nix.perl-bindings
+        (nix.libs.nix-perl-bindings or nix.perl-bindings)
         git
       ];
   };
 
-  nix-eval-jobs' =
-    (nix-eval-jobs.override {
-      nix = nixVersions.nix_2_25;
-    }).overrideAttrs
-      (_: {
-        version = "2.25.0-unstable-2025-02-13";
-        src = fetchFromGitHub {
-          owner = "nix-community";
-          repo = "nix-eval-jobs";
-          rev = "6d4fd5a93d7bc953ffa4dcd6d53ad7056a71eff7";
-          hash = "sha256-1dZLPw+nlFQzzswfyTxW+8VF1AJ4ZvoYvLTjlHiz1SA=";
-        };
-      });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-02-12";
+  version = "0-unstable-2025-04-07";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "c6f98202cd1b091475ae51b6a093d00b4c8060d4";
-    hash = "sha256-CEDUtkA005PiLt1wSo3sgmxfxUBikQSE74ZudyWNxfE=";
+    rev = "1c52c4c0ed596ea71de370562ed5af1604bd2183";
+    hash = "sha256-pcZA2SA7nskxsvDYp3nzF5V258b67YrZONv9G3PhLCE=";
   };
 
   outputs = [
@@ -182,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
-      nix-eval-jobs'
+      nix-eval-jobs
       coreutils
       findutils
       pixz
@@ -220,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
     python3
     libressl.nc
-    nix-eval-jobs'
+    nix-eval-jobs
     openldap
     postgresql
   ];
@@ -257,7 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
             --set NIX_RELEASE ${nix.name or "unknown"} \
-            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs'.name or "unknown"}
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
     done
   '';
 

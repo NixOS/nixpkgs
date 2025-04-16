@@ -1,7 +1,7 @@
 {
   lib,
   glibc,
-  fetchFromGitLab,
+  fetchFromGitHub,
   makeWrapper,
   buildGoModule,
   formats,
@@ -26,14 +26,14 @@ let
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
 buildGoModule rec {
-  pname = "container-toolkit/container-toolkit";
-  version = "1.15.0-rc.3";
+  pname = "nvidia-container-toolkit";
+  version = "1.17.5";
 
-  src = fetchFromGitLab {
-    owner = "nvidia";
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IH2OjaLbcKSGG44aggolAOuJkjk+GaXnnTbrXfZ0lVo=";
+    hash = "sha256-vEo8agJ3jTaBokBjdGcO2naE457y8KPUAedC8vtwD1Y=";
 
   };
 
@@ -51,22 +51,21 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    # Replace the default hookDefaultFilePath to the $out path and override
-    # default ldconfig locations to the one in nixpkgs.
-
     substituteInPlace internal/config/config.go \
-      --replace '/usr/bin/nvidia-container-runtime-hook' "$out/bin/nvidia-container-runtime-hook" \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
-
-    substituteInPlace internal/config/config_test.go \
+      --replace '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
       --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace tools/container/toolkit/toolkit.go \
       --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
-
-    substituteInPlace cmd/nvidia-ctk/hook/update-ldcache/update-ldcache.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
   '';
+
+  subPackages = [
+    "cmd/nvidia-cdi-hook"
+    "cmd/nvidia-container-runtime.cdi"
+    "cmd/nvidia-container-runtime-hook"
+    "cmd/nvidia-container-runtime.legacy"
+    "cmd/nvidia-ctk"
+  ];
 
   # Based on upstream's Makefile:
   # https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L64
@@ -104,7 +103,7 @@ buildGoModule rec {
         --prefix PATH : ${libnvidia-container}/bin
 
       mkdir -p $tools/bin
-      mv $out/bin/{containerd,crio,docker,nvidia-toolkit,toolkit} $tools/bin
+      mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
     ''
     + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
       mkdir -p $out/etc/nvidia-container-runtime

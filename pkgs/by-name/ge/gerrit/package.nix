@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   nixosTests,
 }:
 
@@ -20,6 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    updateScript = gitUpdater {
+      url = "https://gerrit.googlesource.com/gerrit";
+      rev-prefix = "v";
+      allowedVersions = "^[0-9\\.]+$";
+    };
     # A list of plugins that are part of the gerrit.war file.
     # Use `java -jar gerrit.war ls | grep plugins/` to generate that list.
     plugins = [

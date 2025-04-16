@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "6.0.3";
+  version = "9.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "simplistix";
     repo = pname;
     tag = version;
-    hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
+    hash = "sha256-ov8b8NPBbiqB/pcKgdD2D+xNSxUM1uGK8EP+20K7eGQ=";
   };
 
   build-system = [ setuptools ];

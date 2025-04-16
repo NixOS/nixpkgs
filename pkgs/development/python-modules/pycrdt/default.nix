@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.12.11";
+  version = "0.12.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     tag = version;
-    hash = "sha256-qeDhNr7ZQ0Sxmulye1u5Y2ETdAKYbmYWY0udUaAclpQ=";
+    hash = "sha256-EI8LrT5wddmmw3D5C+IhJnViGnSbHWMD3WFp/f1hY7M=";
   };
 
   postPatch = ''
@@ -51,6 +51,11 @@ buildPythonPackage rec {
     pytestCheckHook
     trio
     y-py
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestUnknownMarkWarning" # requires unpackaged pytest-mypy-testing
   ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };

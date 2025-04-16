@@ -46,14 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-patched-source";
-      phases = [
-        "unpackPhase"
-        "patchPhase"
-        "installPhase"
-      ];
-      src = finalAttrs.src;
-      patches = finalAttrs.patches;
-      installPhase = "cp -pr --reflink=auto -- . $out";
+      inherit (finalAttrs) src patches;
+      installPhase = ''
+        cp -pr --reflink=auto -- . $out
+      '';
     };
 
     hash = "sha256-FzQPBIwe7OQ1KHaMtWaFe+RI+pXko5Ly11/jOmYSuFA=";
@@ -121,16 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-
+  postFixup = ''
     # Remove large dependencies that are not necessary during runtime
     rm -rf $out/lib/hoarder/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
 
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
-
-    runHook postFixup
   '';
 
   meta = {

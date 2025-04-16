@@ -175,7 +175,13 @@ let
                 passthru = {
                   info = packageInfo;
                 };
-              })
+              }).overrideAttrs
+                (prev: {
+                  # fetchurl won't generate the correct filename if we specify pname and version,
+                  # and we still want the version attribute to show up in search, so specify these in an override
+                  pname = packageInfo.name;
+                  version = packageInfo.revision;
+                })
             ) validArchives
           )
         )
@@ -207,8 +213,11 @@ let
       # Converts things like 'extras;google;auto' to 'extras-google-auto'
       toVersionKey =
         name:
-        lib.optionalString (lib.match "^[0-9].*" name != null) "v"
-        + lib.concatStringsSep "_" (lib.splitVersion (lib.replaceStrings [ ";" ] [ "-" ] name));
+        let
+          normalizedName = lib.replaceStrings [ ";" "." ] [ "-" "_" ] name;
+          versionParts = lib.match "^([0-9][0-9\\.]*)(.*)$" normalizedName;
+        in
+        if versionParts == null then normalizedName else "v" + lib.concatStrings versionParts;
 
       recurse = lib.mapAttrs' (
         name: value:
@@ -248,14 +257,19 @@ let
     ++ extraLicenses
   );
 
-  # put a much nicer error message that includes the available options.
-  check-version =
+  # Returns true if the given version exists.
+  hasVersion =
     packages: package: version:
-    if lib.hasAttrByPath [ package version ] packages then
-      packages.${package}.${version}
+    lib.hasAttrByPath [ package (toString version) ] packages;
+
+  # Displays a nice error message that includes the available options if a version doesn't exist.
+  checkVersion =
+    packages: package: version:
+    if hasVersion packages package version then
+      packages.${package}.${toString version}
     else
       throw ''
-        The version ${version} is missing in package ${package}.
+        The version ${toString version} is missing in package ${package}.
         The only available versions are ${
           builtins.concatStringsSep ", " (builtins.attrNames packages.${package})
         }.
@@ -406,7 +420,7 @@ lib.recurseIntoAttrs rec {
       arch
       meta
       ;
-    package = check-version allArchives.packages "platform-tools" platformToolsVersion;
+    package = checkVersion allArchives.packages "platform-tools" platformToolsVersion;
   };
 
   tools = callPackage ./tools.nix {
@@ -416,7 +430,7 @@ lib.recurseIntoAttrs rec {
       arch
       meta
       ;
-    package = check-version allArchives.packages "tools" toolsVersion;
+    package = checkVersion allArchives.packages "tools" toolsVersion;
 
     postInstall = ''
       ${linkPlugin {
@@ -440,7 +454,7 @@ lib.recurseIntoAttrs rec {
         arch
         meta
         ;
-      package = check-version allArchives.packages "build-tools" version;
+      package = checkVersion allArchives.packages "build-tools" version;
 
       postInstall = ''
         ${linkPlugin {
@@ -459,7 +473,7 @@ lib.recurseIntoAttrs rec {
       arch
       meta
       ;
-    package = check-version allArchives.packages "emulator" emulatorVersion;
+    package = checkVersion allArchives.packages "emulator" emulatorVersion;
 
     postInstall = ''
       ${linkSystemImages {
@@ -474,14 +488,14 @@ lib.recurseIntoAttrs rec {
   platforms = map (
     version:
     deployAndroidPackage {
-      package = check-version allArchives.packages "platforms" (toString version);
+      package = checkVersion allArchives.packages "platforms" version;
     }
   ) platformVersions;
 
   sources = map (
     version:
     deployAndroidPackage {
-      package = check-version allArchives.packages "sources" (toString version);
+      package = checkVersion allArchives.packages "sources" version;
     }
   ) platformVersions;
 
@@ -536,7 +550,7 @@ lib.recurseIntoAttrs rec {
         arch
         meta
         ;
-      package = check-version allArchives.packages "cmake" version;
+      package = checkVersion allArchives.packages "cmake" version;
     }
   ) cmakeVersions;
 
@@ -572,27 +586,23 @@ lib.recurseIntoAttrs rec {
   # The "default" NDK bundle.
   ndk-bundle = if ndk-bundles == [ ] then null else lib.head ndk-bundles;
 
-  # Makes a Google API bundle.
-  google-apis =
-    map
-      (
-        version:
-        deployAndroidPackage {
-          package = (check-version allArchives "addons" (toString version)).google_apis;
-        }
-      )
-      (
-        builtins.filter (platformVersion: lib.versionOlder (toString platformVersion) "26") platformVersions
-      ); # API level 26 and higher include Google APIs by default
+  # Makes a Google API bundle from supported versions.
+  google-apis = map (
+    version:
+    deployAndroidPackage {
+      package = (checkVersion allArchives "addons" version).google_apis;
+    }
+  ) (lib.filter (hasVersion allArchives "addons") platformVersions);
 
+  # Makes a Google TV addons bundle from supported versions.
   google-tv-addons = map (
     version:
     deployAndroidPackage {
-      package = (check-version allArchives "addons" (toString version)).google_tv_addon;
+      package = (checkVersion allArchives "addons" version).google_tv_addon;
     }
-  ) platformVersions;
+  ) (lib.filter (hasVersion allArchives "addons") platformVersions);
 
-  cmdline-tools-package = check-version allArchives.packages "cmdline-tools" cmdLineToolsVersion;
+  cmdline-tools-package = checkVersion allArchives.packages "cmdline-tools" cmdLineToolsVersion;
 
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses

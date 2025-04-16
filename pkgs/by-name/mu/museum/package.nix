@@ -53,7 +53,6 @@ buildGoModule rec {
     homepage = "https://github.com/ente-io/ente/tree/main/server";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      surfaceflinger
       pinpox
     ];
     mainProgram = "museum";

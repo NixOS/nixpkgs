@@ -18,6 +18,7 @@
 
   # passthru / meta
   postgresql,
+  buildPackages,
 
   # GSSAPI
   gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
@@ -107,29 +108,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/socketdir-in-run-13+.patch
   ];
 
+  postPatch = ''
+    cat ${./pg_config.env.mk} >> src/common/Makefile
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    make -C src/bin/pg_config install
-    make -C src/common install
+    make -C src/common install pg_config.env
     make -C src/include install
     make -C src/interfaces/libpq install
     make -C src/port install
 
-    # Pretend pg_config is located in $out/bin to return correct paths, but
-    # actually have it in -dev to avoid pulling in all other outputs.
-    moveToOutput bin/pg_config "$dev"
-    wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
-
-    # To prevent a "pg_config: could not find own program executable" error, we fake
-    # pg_config in the default output.
-    mkdir -p "$out/bin"
-    cat << EOF > "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
-    #!${stdenv.shell}
-    echo The real pg_config can be found in the -dev output.
-    exit 1
-    EOF
-
+    install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
     moveToOutput "lib/*.a" "$dev"
 
     rm -rfv $out/share
@@ -149,6 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
       "rm -rfv $dev/lib/*.a";
 
   doCheck = false;
+
+  passthru.pg_config = buildPackages.callPackage ./pg_config.nix {
+    inherit (finalAttrs) finalPackage;
+  };
 
   meta = {
     inherit (postgresql.meta)

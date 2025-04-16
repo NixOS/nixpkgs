@@ -5,18 +5,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tlafmt";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "domodwyer";
     repo = "tlafmt";
     tag = "v${version}";
-    hash = "sha256-wZ0irWf9S4abcT1BvODFAQks9E6BO0gr43ibnSAxddo=";
+    hash = "sha256-79tCH4O7VFqiYloCAGVw7JJ5WvsFnjjKdBNmMPar+sk=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-UAYajXmKPg9Ow3iRqcEhT50YP+i4ZKWOHTTrYR1SzhI=";
+  cargoHash = "sha256-79eI2POpYr7nUThsWohetEzG17JAxMOVul5soJxYYms=";
 
   meta = {
     description = "Formatter for TLA+ specs";

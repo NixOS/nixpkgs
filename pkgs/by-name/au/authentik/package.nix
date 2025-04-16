@@ -7,6 +7,7 @@
   buildNpmPackage,
   buildGoModule,
   runCommand,
+  bash,
   chromedriver,
   openapi-generator-cli,
   nodejs,
@@ -30,7 +31,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
-    broken = stdenvNoCC.hostPlatform.isAarch64;
+    broken = stdenvNoCC.buildPlatform != stdenvNoCC.hostPlatform;
     maintainers = with maintainers; [
       jvanbruegge
       risson
@@ -44,7 +45,7 @@ let
 
     sourceRoot = "source/website";
 
-    outputHash = "sha256-GIFz1ku0bS/GaWehOp2z9Te9qpWt61DQrw0LA+z/XCk=";
+    outputHash = "sha256-lPpphGi8l2X/fR9YoJv37piAe82oqSLAKHze8oTrGNc=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -54,7 +55,7 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
-      rm -r ./cache
+      rm -r ./cache node_modules/@parcel/watcher-linux-* node_modules/.package-lock.json
     '';
 
     installPhase = ''
@@ -342,6 +343,8 @@ in
 stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     rm Makefile

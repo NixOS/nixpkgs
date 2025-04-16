@@ -5,19 +5,22 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "2.8.8";
+  version = "2.8.9";
 
   src = fetchurl {
     url = "https://pallini.di.uniroma1.it/nauty${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.tar.gz";
-    sha256 = "sha256-FZ0hVoEKa7JAQQzWHrZBrdhQiNnxXIiM2qN7hoH5Kc4=";
+    sha256 = "sha256-yXq0K/SHlqhqWYvOPpJpBHyisywU/CPgcgiiRP5SxO4=";
   };
 
   outputs = [
     "out"
     "dev"
   ];
+
+  # HACK: starting from 2.8.9, the makefile tries to copy .libs/*.a files unconditionally
+  dontDisableStatic = true;
 
   configureFlags = [
     # Prevent nauty from sniffing some cpu features. While those are very

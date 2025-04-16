@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchurl {
     url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
-    hash = "sha256-xqJYLG5PKowueihE+lx+s2Oq0lOLBS8gPHEGSd1CHMg=";
+    hash = "sha256-e2xCX3ktBtFOT1sXIE02J+LI67Qj69rpLAxkZxDT1sc=";
   };
 
   strictDeps = true;

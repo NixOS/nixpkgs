@@ -9,7 +9,7 @@
   libimobiledevice,
   gperf,
   libtirpc,
-  openexr_3,
+  openexr,
   taglib,
   shared-mime-info,
   libappimage,
@@ -34,7 +34,7 @@ mkKdeDerivation {
     libimobiledevice
     gperf
     libtirpc
-    openexr_3
+    openexr
     taglib
     libappimage
     xorg.libXcursor

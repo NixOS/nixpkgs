@@ -37,6 +37,5 @@ buildPecl rec {
     license = licenses.bsd3;
     homepage = "https://phalcon.io";
     maintainers = teams.php.members ++ [ maintainers.krzaczek ];
-    broken = lib.versionAtLeast php.version "8.4";
   };
 }

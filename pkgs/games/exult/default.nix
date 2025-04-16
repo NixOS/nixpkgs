@@ -10,6 +10,7 @@
   libogg,
   libtool,
   libvorbis,
+  libX11,
   pkg-config,
   zlib,
   enableTools ? false,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
       SDL2
       libogg
       libvorbis
+      libX11
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
