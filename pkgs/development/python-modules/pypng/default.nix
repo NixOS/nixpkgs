@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.20220715.0";
+  version = "0.20231004.0";
   pyproject = true;
 
   src = fetchFromGitLab {
