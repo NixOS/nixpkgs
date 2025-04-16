@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage = "https://github.com/drj11/pypng";
+    homepage = "https://gitlab.com/drj11/pypng";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };
