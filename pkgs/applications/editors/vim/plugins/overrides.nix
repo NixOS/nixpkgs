@@ -1204,6 +1204,10 @@ in
   fzf-lua = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.fzf-lua;
     runtimeDeps = [ fzf ];
+    nvimSkipModules = [
+      "fzf-lua.shell_helper"
+      "fzf-lua.spawn"
+    ];
   };
 
   fzf-vim = super.fzf-vim.overrideAttrs {
