@@ -3810,8 +3810,6 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  hobbits = libsForQt5.callPackage ../tools/graphics/hobbits { };
-
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };

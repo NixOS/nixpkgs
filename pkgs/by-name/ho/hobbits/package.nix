@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,7 +8,7 @@
   libpcap,
   libusb1,
   python3,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [ (lib.cmakeBool "USE_SYSTEM_PFFFT" true) ];
