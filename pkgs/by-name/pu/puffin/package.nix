@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "puffin";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "siddhantac";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5lglIiVOsxnMbeR/E3O5TaMtoR5DJACWjStE4d7hDao=";
+    hash = "sha256-1qF5KOu2Se49Dw8QrSeUYIx9Yf0MCY/nbLu9IFnHxpA=";
   };
 
   vendorHash = "sha256-ZxAqR3D5VUtbntktrpnywPG3m9rq1utO4fdum0Qe6TU=";
