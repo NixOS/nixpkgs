@@ -19,6 +19,7 @@
   wcmatch,
 
   # test
+  mercurial,
   gitMinimal,
   freezegun,
   pre-commit,
@@ -31,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.0.2";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-V5eFh2ne7ivtTH46QAxG0YPE0JN/W7Dt2fbf085hBVM=";
+    hash = "sha256-O7Ihw2AKJyOmBLReNI6TP5K3HgOFDuK1/9lN3d3/SrQ=";
   };
 
   build-system = [
@@ -66,6 +67,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    mercurial
     gitMinimal
     freezegun
     pre-commit
