@@ -12149,6 +12149,12 @@
     github = "jsimonetti";
     githubId = 5478838;
   };
+  jskrzypek = {
+    email = "jskrzypek@gmail.com";
+    name = "Joshua Skrzypek";
+    github = "jskrzypek";
+    githubId = 1513265;
+  };
   jsoo1 = {
     email = "jsoo1@asu.edu";
     github = "jsoo1";
