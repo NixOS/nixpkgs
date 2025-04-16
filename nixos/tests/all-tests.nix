@@ -791,7 +791,7 @@ in
   mediatomb = handleTest ./mediatomb.nix { };
   mediawiki = handleTest ./mediawiki.nix { };
   meilisearch = handleTest ./meilisearch.nix { };
-  memcached = handleTest ./memcached.nix { };
+  memcached = runTest ./memcached.nix;
   merecat = handleTest ./merecat.nix { };
   metabase = handleTest ./metabase.nix { };
   mihomo = handleTest ./mihomo.nix { };
