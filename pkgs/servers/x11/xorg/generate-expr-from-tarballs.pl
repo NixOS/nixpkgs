@@ -49,6 +49,12 @@ $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
 $pcMap{"\${XKBMODULE}"} = "libxkbfile";
+foreach my $mod ("xcb", "xcb-composite", "xcb-damage", "xcb-dpms", "xcb-dri2", "xcb-dri3",
+    "xcb-glx", "xcb-present", "xcb-randr", "xcb-record", "xcb-render", "xcb-res", "xcb-screensaver",
+    "xcb-shape", "xcb-shm", "xcb-sync", "xcb-xf86dri", "xcb-xfixes", "xcb-xinerama", "xcb-xinput",
+    "xcb-xkb", "xcb-xtest", "xcb-xv", "xcb-xvmc") {
+    $pcMap{$mod} = "libxcb";
+}
 foreach my $mod ("applewmproto", "bigreqsproto", "compositeproto", "damageproto", "dmxproto",
     "dpmsproto", "dri2proto", "dri3proto", "evieproto", "fixesproto", "fontcacheproto",
     "fontsproto", "glproto", "inputproto", "kbproto", "lg3dproto", "presentproto",
@@ -285,6 +291,7 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libxau,
+  libxcb,
   libxcvt,
   libxdmcp,
   lndir,
@@ -310,6 +317,7 @@ self: with self; {
     gccmakedep
     imake
     libpciaccess
+    libxcb
     libxcvt
     lndir
     luit
