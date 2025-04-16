@@ -364,7 +364,6 @@ in
           (lib.optionalString (cfg.rConSettings != null) "--rcon-password=${cfg.rConSettings.password}")
           (lib.optionalString (cfg.rConSettings != null) "--rcon-bind=${cfg.rConSettings.bindAddress}")
           (lib.optionalString (cfg.allowedPlayers != [ ]) "--use-server-whitelist")
-
         ];
 
         # Sandboxing
