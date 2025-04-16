@@ -12738,6 +12738,7 @@ with pkgs;
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
+    armTrustedFirmwareRK3568
     armTrustedFirmwareRK3588
     armTrustedFirmwareS905
     ;
@@ -13312,6 +13313,7 @@ with pkgs;
     ubootQemuArm
     ubootQemuRiscv64Smode
     ubootQemuX86
+    ubootQuartz64B
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
