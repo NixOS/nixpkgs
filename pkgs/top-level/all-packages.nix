@@ -13214,7 +13214,9 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris { };
+  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
+    inherit (pkgs) meson;
+  };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
   lutris-free = lutris.override {
     steamSupport = false;
