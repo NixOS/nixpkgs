@@ -16,6 +16,7 @@
   python3,
   runCommand,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -79,6 +80,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export OCL_ICD_VENDORS=$out/etc/OpenCL/vendors
+    $out/bin/poclcc -o poclcc.cl.pocl $src/examples/poclcc/poclcc.cl
+
+    runHook postInstallCheck
+  '';
 
   setupHook = ./setup-hook.sh;
 
