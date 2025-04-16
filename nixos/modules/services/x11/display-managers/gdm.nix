@@ -9,7 +9,7 @@ let
 
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gdm;
-  pamCfg = config.security.pam.services;
+  pamLogin = config.security.pam.services.login;
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
 
@@ -345,7 +345,7 @@ in
       gdm-autologin.text = ''
         auth      requisite     pam_nologin.so
         auth      required      pam_succeed_if.so uid >= 1000 quiet
-        ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
+        ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
@@ -369,7 +369,7 @@ in
         auth       requisite                   pam_faillock.so      preauth
         auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
         auth       required                    pam_env.so
-        ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
+        ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
