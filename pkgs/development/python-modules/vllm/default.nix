@@ -57,6 +57,15 @@
   blake3,
   depyf,
   opencv-python-headless,
+  python-multipart,
+  python-amdsmi,
+
+  awscli,
+  boto3,
+  botocore,
+  peft,
+  pytest-asyncio,
+  #tensorizer,
 
   config,
 
@@ -78,6 +87,46 @@ let
 
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+
+  rocmtoolkit_joined = symlinkJoin {
+    name = "rocm-merged";
+
+    paths = with rocmPackages; [
+      rocm-core
+      clr
+      rccl
+      miopen
+      aotriton
+      rocrand
+      rocblas
+      rocsparse
+      hipsparse
+      rocthrust
+      rocprim
+      hipcub
+      roctracer
+      rocfft
+      rocsolver
+      hipfft
+      hiprand
+      hipsolver
+      hipblas-common
+      hipblas
+      hipblaslt
+      rocminfo
+      rocm-comgr
+      rocm-device-libs
+      rocm-runtime
+      clr.icd
+      hipify
+      amdsmi
+    ];
+
+    # Fix `setuptools` not being found
+    postBuild = ''
+      rm -rf $out/nix-support
+    '';
+  };
 
   # see CMakeLists.txt, grepping for GIT_TAG near cutlass
   # https://github.com/vllm-project/vllm/blob/${version}/CMakeLists.txt
@@ -219,10 +268,50 @@ buildPythonPackage rec {
   # lags behind `ray`'s python interpreter support
   postPatch =
     ''
+      substituteInPlace csrc/quantization/compressed_tensors/int8_quant_kernels.cu \
+        --replace-fail \
+        'dst = std::clamp(dst, i8_min, i8_max);' \
+        'dst = (dst < i8_min) ? i8_min : (dst > i8_max) ? i8_max : dst;' \
+        --replace-fail \
+        'int32_t dst = std::clamp(x, i8_min, i8_max);' \
+        'int32_t dst = (x < i8_min) ? i8_min : (x > i8_max) ? i8_max : x;'
+
+
+      substituteInPlace csrc/quantization/fused_kernels/quant_conversions.cuh \
+        --replace-fail \
+        'dst = std::clamp(dst, i8_min, i8_max);' \
+        'dst = (dst < i8_min) ? i8_min : (dst > i8_max) ? i8_max : dst;'
+
+      substituteInPlace cmake/utils.cmake \
+        --replace-fail \
+        'COMMAND ''${CMAKE_SOURCE_DIR}/cmake/hipify.py' \
+        'COMMAND python ''${CMAKE_SOURCE_DIR}/cmake/hipify.py' \
+
       substituteInPlace CMakeLists.txt \
         --replace-fail \
           'set(PYTHON_SUPPORTED_VERSIONS' \
           'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+
+      # Here I just took some random comment and added the line I want.
+      # This really needs to be a patch.
+      # I have _no_ idea how vllm builds on FHS systems. I don't see how torch
+      # causes vllm to find HIP. Let's just tell cmake to find HIP.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          '# Forward the non-CUDA device extensions to external CMake scripts.' \
+          'find_package(HIP REQUIRED)'
+
+      substituteInPlace setup.py \
+        --replace-fail \
+        'and torch.version.hip is not None' \
+        ' '
+
+      # Instead of getting the version number via looking at the .so, let's
+      # just use the version via the Nix expression.
+      substituteInPlace setup.py \
+        --replace-fail \
+        'rocm_version = get_rocm_version()' \
+        'rocm_version = "${rocmPackages.rocm-core.version}"'
 
       # Relax torch dependency manually because the nonstandard requirements format
       # is not caught by pythonRelaxDeps
@@ -243,9 +332,7 @@ buildPythonPackage rec {
       pythonRelaxDepsHook
       which
     ]
-    ++ lib.optionals rocmSupport [
-      rocmPackages.hipcc
-    ]
+    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
       autoAddDriverRunpath
@@ -277,16 +364,7 @@ buildPythonPackage rec {
         libcufile
       ])
     )
-    ++ (lib.optionals rocmSupport (
-      with rocmPackages;
-      [
-        clr
-        rocthrust
-        rocprim
-        hipsparse
-        hipblas
-      ]
-    ));
+    ++ (lib.optionals rocmSupport [ rocmtoolkit_joined ]);
 
   dependencies =
     [
@@ -325,12 +403,23 @@ buildPythonPackage rec {
       xformers
       xgrammar
       numba
+      python-multipart
+
+      awscli
+      boto3
+      botocore
+      peft
+      pytest-asyncio
+      #tensorizer
     ]
     ++ uvicorn.optional-dependencies.standard
     ++ aioprometheus.optional-dependencies.starlette
     ++ lib.optionals cudaSupport [
       cupy
       pynvml
+    ]
+    ++ lib.optionals rocmSupport [
+      python-amdsmi
     ];
 
   dontUseCmakeConfigure = true;
@@ -338,6 +427,13 @@ buildPythonPackage rec {
     [
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
       (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn}")
+    ]
+    ++ lib.optionals rocmSupport [
+      (lib.cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
+      # TODO: this should become `clr.gpuTargets` in the future.
+      #(lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
+      (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" "gfx1100")
+      (lib.cmakeFeature "AMDGPU_TARGETS" "gfx1100")
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
@@ -363,8 +459,10 @@ buildPythonPackage rec {
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
       # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-      PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
-      ROCM_HOME = "${rocmPackages.clr}";
+      #PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
+      PYTORCH_ROCM_ARCH = "gfx1100";
+      ROCM_PATH = "${rocmtoolkit_joined}";
+      ROCM_HOME = "${rocmtoolkit_joined}";
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
@@ -378,10 +476,18 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
+  # The runtime check is checking for tensorizer, which isn't packages, AFAIK.
+  dontCheckRuntimeDeps = true;
   pythonImportsCheck = [ "vllm" ];
 
   # updates the cutlass fetcher instead
   passthru.skipBulkUpdate = true;
+
+  postFixup =
+    # expose runtime libraries necessary to use the gpu
+    lib.optionalString rocmSupport ''
+      wrapProgram "$out/bin/vllm" --set-default ROCM_PATH '${rocmtoolkit_joined}'
+    '';
 
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";

@@ -13785,6 +13785,8 @@ self: super: with self; {
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
+  python-amdsmi = callPackage ../development/python-modules/python-amdsmi { };
+
   python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
 
   python-apt = callPackage ../development/python-modules/python-apt { };

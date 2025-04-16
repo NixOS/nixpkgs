@@ -16,7 +16,7 @@
   tiktoken,
   torch,
   transformers,
-  triton,
+  rocmPackages,
 
   # tests
   pytestCheckHook,
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       transformers
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      triton
+      rocmPackages.triton
     ];
 
   nativeCheckInputs = [
