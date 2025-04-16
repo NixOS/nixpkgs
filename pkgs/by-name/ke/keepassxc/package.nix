@@ -23,15 +23,12 @@
   wrapGAppsHook3,
   zlib,
 
-  darwin,
-
   withKeePassBrowser ? true,
   withKeePassBrowserPasskeys ? true,
   withKeePassFDOSecrets ? stdenv.hostPlatform.isLinux,
   withKeePassKeeShare ? true,
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
-  withKeePassTouchID ? true,
   withKeePassX11 ? true,
   withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
 
@@ -153,9 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
       qrencode
       readline
       zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withKeePassTouchID) [
-      darwin.apple_sdk_11_0.frameworks.LocalAuthentication
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libsForQt5.qtmacextras
