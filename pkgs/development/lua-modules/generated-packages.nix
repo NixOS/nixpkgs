@@ -169,32 +169,31 @@ final: prev: {
   bit32 = callPackage (
     {
       buildLuarocksPackage,
-      fetchFromGitHub,
       fetchurl,
+      fetchzip,
+      luaAtLeast,
       luaOlder,
     }:
     buildLuarocksPackage {
       pname = "bit32";
-      version = "5.3.0-1";
+      version = "5.3.5.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/bit32-5.3.0-1.rockspec";
-          sha256 = "1d6xdihpksrj5a3yvsvnmf3vfk15hj6f8n1rrs65m7adh87hc0yd";
+          url = "mirror://luarocks/bit32-5.3.5.1-1.rockspec";
+          sha256 = "11mg0hmmil92hkwamm91ghih6ys9pqsakx0z9jgnqxymnl887j51";
         }).outPath;
-      src = fetchFromGitHub {
-        owner = "keplerproject";
-        repo = "lua-compat-5.2";
-        rev = "bitlib-5.3.0";
-        hash = "sha256-Ek7FMWskfHwHhEVfjTDZyL/cruHDiQo5Jmnwsvai+MY=";
+      src = fetchzip {
+        url = "https://github.com/keplerproject/lua-compat-5.3/archive/v0.10.zip";
+        sha256 = "1caxn228gx48g6kymp9w7kczgxcg0v0cd5ixsx8viybzkd60dcn4";
       };
 
-      disabled = luaOlder "5.1";
+      disabled = luaOlder "5.1" || luaAtLeast "5.5";
 
       meta = {
         homepage = "http://www.lua.org/manual/5.2/manual.html#6.7";
         description = "Lua 5.2 bit manipulation library";
         maintainers = with lib.maintainers; [ lblasc ];
-        license.fullName = "MIT/X11";
+        license.fullName = "MIT";
       };
     }
   ) { };
