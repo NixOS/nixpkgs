@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     docutils # for rst2man
+    glib
     meson
     ninja
     pkg-config
@@ -167,6 +168,12 @@ stdenv.mkDerivation (finalAttrs: {
     # need to set this ourselves, because the tests will set LD_PRELOAD=libumockdev-preload.so,
     # which can't be found because it's not in default rpath
     export LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so
+  '';
+
+  # We can't disable the installedTests output when doCheck is disabled,
+  # because that produces an infinite recursion.
+  preFixup = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    mkdir $installedTests
   '';
 
   passthru = {
