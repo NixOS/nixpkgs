@@ -766,7 +766,7 @@ in
   magic-wormhole-mailbox-server = runTest ./magic-wormhole-mailbox-server.nix;
   magnetico = handleTest ./magnetico.nix { };
   mailcatcher = runTest ./mailcatcher.nix;
-  mailhog = handleTest ./mailhog.nix { };
+  mailhog = runTest ./mailhog.nix;
   mailpit = runTest ./mailpit.nix;
   mailman = handleTest ./mailman.nix { };
   man = handleTest ./man.nix { };
