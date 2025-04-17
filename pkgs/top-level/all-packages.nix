@@ -13609,8 +13609,6 @@ with pkgs;
     version = "4.300";
   };
 
-  starship = callPackage ../tools/misc/starship { };
-
   inherit (callPackages ../data/fonts/gdouros { })
     aegan
     aegyptus
