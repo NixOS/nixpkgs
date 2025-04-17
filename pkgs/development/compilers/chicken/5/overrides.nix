@@ -327,12 +327,9 @@ in
   crypt = broken;
   hypergiant =
     old:
-    (
-      (addToBuildInputsWithPkgConfig ([
-        pkgs.libepoxy
-      ]))
-      old
-    )
+    (addToBuildInputsWithPkgConfig [
+      pkgs.libepoxy
+    ] old)
     // (addToPropagatedBuildInputs (with chickenEggs; [
       bitstring
       gl-type
