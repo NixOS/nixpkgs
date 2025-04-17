@@ -38,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    ansible-core
     pyyaml
     subprocess-tee
   ];
@@ -49,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    ansible-core
+    ansible-core # ansible-config
     flaky
     pytest-mock
     pytest-instafail
