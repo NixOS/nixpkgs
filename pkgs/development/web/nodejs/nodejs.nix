@@ -176,6 +176,8 @@ let
       done
     '';
 
+  downloadDir = if lib.strings.hasInfix "-rc." version then "download/rc" else "dist";
+
   package = stdenv.mkDerivation (
     finalAttrs:
     let
@@ -188,7 +190,7 @@ let
       inherit pname version;
 
       src = fetchurl {
-        url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+        url = "https://nodejs.org/${downloadDir}/v${version}/node-v${version}.tar.xz";
         inherit sha256;
       };
 
@@ -519,7 +521,7 @@ let
       passthru.tests = {
         version = testers.testVersion {
           package = self;
-          version = "v${version}";
+          version = "v${lib.head (lib.strings.splitString "-rc." version)}";
         };
       };
 
