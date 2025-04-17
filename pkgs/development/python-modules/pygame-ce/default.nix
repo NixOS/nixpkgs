@@ -100,7 +100,7 @@ buildPythonPackage rec {
     libpng
     portmidi
     SDL2_classic
-    SDL2_image
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
