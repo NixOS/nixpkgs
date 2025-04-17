@@ -73,6 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
+    downloadPage = "https://github.com/starship/starship";
+    changelog = "https://github.com/starship/starship/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       danth
