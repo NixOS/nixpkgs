@@ -68,7 +68,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.18.3";
+  version = "4.18.4";
 
   outputs = [
     "out"
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CB4bwLF9tBqTWvjR9vCQ+xmIk2xC/3NNFJ89AEEZ+Ls=";
+    hash = "sha256-1Hg6wVA3wsQnWo8azJT1/t4opRYkP8y5L/VKEcFXdf8=";
   };
 
   depsBuildBuild = [
