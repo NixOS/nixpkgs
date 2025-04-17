@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskflow";
   version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "taskflow";
     repo = "taskflow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-omon02xgf4vV7JzpLFtHgf2MXxR6JowI+pDyAswXMUY=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # building the tests implies running them in the buildPhase
-    (lib.cmakeBool "TF_BUILD_TESTS" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    (lib.cmakeBool "TF_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     homepage = "https://taskflow.github.io/";
     changelog =
       let
-        release = lib.replaceStrings [ "." ] [ "-" ] version;
+        release = lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
       in
       "https://taskflow.github.io/taskflow/release-${release}.html";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
