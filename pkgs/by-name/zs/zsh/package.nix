@@ -190,7 +190,7 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/zsh";
     tests = {
-      inherit (nixosTests) zsh-history oh-my-zsh;
+      inherit (nixosTests) oh-my-zsh;
     };
   };
 }

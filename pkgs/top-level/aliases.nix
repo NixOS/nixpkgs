@@ -1918,6 +1918,7 @@ mapAliases {
   zinc = zincsearch; # Added 2023-05-28
   zk-shell = throw "zk-shell has been removed as it was broken and unmaintained"; # Added 2024-08-10
   zkg = throw "'zkg' has been replaced by 'zeek'";
+  zsh-history = throw "'zsh-history' has been removed as it was unmaintained"; # Added 2025-04-17
   zq = zed.overrideAttrs (old: {
     meta = old.meta // {
       mainProgram = "zq";
