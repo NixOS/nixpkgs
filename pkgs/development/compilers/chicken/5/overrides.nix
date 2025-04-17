@@ -103,7 +103,19 @@ in
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
-  gl-utils = addPkgConfig;
+  gl-utils =
+    old:
+    (addPkgConfig old)
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      srfi-1
+      z3
+      matchable
+      miscmacros
+      srfi-42
+      srfi-99
+      epoxy
+      gl-math
+    ]) old);
   gl-math =
     old:
     {
@@ -117,7 +129,11 @@ in
         "-Wno-error=incompatible-function-pointer-types"
         "-Wno-error=int-conversion"
       ];
-    };
+    }
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      srfi-1
+      matchable
+    ]) old);
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
@@ -318,15 +334,14 @@ in
       old
     )
     // (addToPropagatedBuildInputs (with chickenEggs; [
+      bitstring
+      gl-type
       glfw3
       glls
-      gl-type
       hyperscene
       noise
-      hyperscene
       soil
       srfi-18
-      bitstring
     ]) old);
   iup = broken;
   kiwi = broken;
