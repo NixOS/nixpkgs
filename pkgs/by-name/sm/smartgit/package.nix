@@ -108,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "smartgit";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jraygauthier ];
+    maintainers = with lib.maintainers; [
+      jraygauthier
+      tmssngr
+    ];
   };
 })
