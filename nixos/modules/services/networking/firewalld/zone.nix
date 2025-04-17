@@ -164,6 +164,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.firewalld.zones = {
+      drop = {
+        target = "DROP";
+        forward = true;
+      };
+      block = {
+        forward = true;
+      };
+      trusted = {
+        target = "ACCEPT";
+        forward = true;
+      };
+    };
+
     environment.etc = lib.mapAttrs' (
       name: value:
       lib.nameValuePair "firewalld/zones/${name}.xml" {
