@@ -13374,6 +13374,12 @@
     githubId = 632767;
     name = "Guillaume Maudoux";
   };
+  LazilyStableProton = {
+    email = "LazilyStable@proton.me";
+    github = "LazyStability";
+    githubId = 120277625;
+    name = "LazilyStableProton";
+  };
   lblasc = {
     email = "lblasc@znode.net";
     github = "lblasc";
