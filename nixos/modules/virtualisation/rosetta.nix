@@ -24,6 +24,19 @@ in
       '';
     };
 
+    virtualisation.rosetta.cachingUnixSocket = lib.mkOption {
+      type = types.str;
+      description = ''
+        The unix socket path for the Rosetta AOT caching daemon.
+
+        The default corrseponds to
+        [`VZLinuxRosettaDirectoryShare.CachingOptions.defaultUnixSocket`](https://developer.apple.com/documentation/virtualization/vzlinuxrosettadirectoryshare/cachingoptions/4230791-defaultunixsocket)
+        which is also what UTM uses.
+
+      '';
+      default = "/run/rosettad/rosetta.sock";
+    };
+
     virtualisation.rosetta.mountPoint = lib.mkOption {
       type = types.str;
       default = "/run/rosetta";
@@ -80,6 +93,18 @@ in
 
       # Remove the shell wrapper and call the runtime directly
       wrapInterpreterInShell = false;
+    };
+  };
+  systemd.services.rosettad = {
+    wantedBy = [ "multi-user.target" ];
+    unitConfig = {
+      ConditionPathExists = "${cfg.mountPoint}/rosettad";
+    };
+    serviceConfig = {
+      CacheDirectory = "rosettad";
+      RuntimeDirectory = "rosettad";
+      ExecStart = "${cfg.mountPoint}/rosettad daemon $CACHE_DIRECTORY";
+      Restart = "always";
     };
   };
 }
