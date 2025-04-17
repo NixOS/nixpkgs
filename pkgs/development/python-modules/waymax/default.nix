@@ -21,7 +21,7 @@
 
 buildPythonPackage {
   pname = "waymax";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2024-03-23";
   pyproject = true;
 
   src = fetchFromGitHub {
