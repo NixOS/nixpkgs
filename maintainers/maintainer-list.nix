@@ -3379,6 +3379,11 @@
     githubId = 33910565;
     name = "Abdallah Gamal";
   };
+  bohreromir = {
+    github = "bohreromir";
+    githubId = 40412303;
+    name = "bohreromir";
+  };
   boj = {
     email = "brian@uncannyworks.com";
     github = "boj";
@@ -21836,6 +21841,11 @@
     email = "sei40kr@gmail.com";
     github = "sei40kr";
     githubId = 11665236;
+  };
+  seiarotg = {
+    name = "SEIAROTg";
+    github = "SEIAROTg";
+    githubId = 3611446;
   };
   seineeloquenz = {
     name = "Alexander Linder";

@@ -32,32 +32,32 @@ sed -E -i "s/(electron_)../\1$electronVersion/" $SCRIPT_DIR/package.nix
 sed -E -i "s/(SOURCE_DATE_EPOCH = )[0-9]+/\1$releaseEpoch/" $SCRIPT_DIR/package.nix
 
 sed -E -i "s/(withAppleEmojis \? )false/\1true/" $SCRIPT_DIR/package.nix
-nix-update signal-desktop-source --subpackage sticker-creator --version="$latestVersion"
+nix-update signal-desktop --subpackage sticker-creator --version="$latestVersion"
 sed -E -i "s/(withAppleEmojis \? )true/\1false/" $SCRIPT_DIR/package.nix
-update-source-version signal-desktop-source \
+update-source-version signal-desktop \
   --ignore-same-version \
   --source-key=pnpmDeps
 
-update-source-version signal-desktop-source.libsignal-node \
+update-source-version signal-desktop.libsignal-node \
   "$libsignalClientVersion"
-update-source-version signal-desktop-source.libsignal-node \
+update-source-version signal-desktop.libsignal-node \
   --ignore-same-version \
   --source-key=cargoDeps.vendorStaging
-update-source-version signal-desktop-source.libsignal-node \
+update-source-version signal-desktop.libsignal-node \
   --ignore-same-version \
   --source-key=npmDeps
 
-update-source-version signal-desktop-source.signal-sqlcipher \
+update-source-version signal-desktop.signal-sqlcipher \
   "$signalSqlcipherVersion"
-update-source-version signal-desktop-source.signal-sqlcipher \
+update-source-version signal-desktop.signal-sqlcipher \
   --ignore-same-version \
   --source-key=cargoDeps.vendorStaging
-update-source-version signal-desktop-source.signal-sqlcipher \
+update-source-version signal-desktop.signal-sqlcipher \
   --ignore-same-version \
   --source-key=pnpmDeps
 
-update-source-version signal-desktop-source.ringrtc "$ringrtcVersion"
-update-source-version signal-desktop-source.ringrtc \
+update-source-version signal-desktop.ringrtc "$ringrtcVersion"
+update-source-version signal-desktop.ringrtc \
   --ignore-same-version \
   --source-key=cargoDeps.vendorStaging
 

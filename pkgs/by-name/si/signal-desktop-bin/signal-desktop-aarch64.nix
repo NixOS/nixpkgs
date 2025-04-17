@@ -1,6 +1,6 @@
 { callPackage }:
 callPackage ./generic.nix { } {
-  pname = "signal-desktop";
+  pname = "signal-desktop-bin";
   version = "7.47.0-1";
 
   libdir = "usr/lib64/signal-desktop";

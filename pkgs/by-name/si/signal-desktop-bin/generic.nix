@@ -280,7 +280,7 @@ stdenv.mkDerivation rec {
       emily
       Gliczy
     ];
-    mainProgram = pname;
+    mainProgram = "signal-desktop";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
