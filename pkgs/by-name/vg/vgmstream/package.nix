@@ -10,7 +10,6 @@
   ffmpeg,
   libvorbis,
   libao,
-  jansson,
   speex,
   nix-update-script,
   buildAudaciousPlugin ? false, # only build cli by default, pkgs.audacious-plugins sets this to enable plugin support
@@ -45,7 +44,6 @@ stdenv.mkDerivation rec {
     ffmpeg
     libvorbis
     libao
-    jansson
     speex
   ] ++ lib.optional buildAudaciousPlugin audacious-bare;
 
