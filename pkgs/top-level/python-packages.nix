@@ -3042,6 +3042,8 @@ self: super: with self; {
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
+  cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
