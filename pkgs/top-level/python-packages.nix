@@ -15469,6 +15469,8 @@ self: super: with self; {
 
   sdds = callPackage ../development/python-modules/sdds { };
 
+  sdflit = callPackage ../development/python-modules/sdflit { };
+
   sdjson = callPackage ../development/python-modules/sdjson { };
 
   sdkmanager = callPackage ../development/python-modules/sdkmanager { };
