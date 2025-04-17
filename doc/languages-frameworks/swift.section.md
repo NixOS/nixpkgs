@@ -69,7 +69,13 @@ This produces some files in a directory `nix`, which will be part of your Nix
 expression. The next step is to write that expression:
 
 ```nix
-{ stdenv, swift, swiftpm, swiftpm2nix, fetchFromGitHub }:
+{
+  stdenv,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  fetchFromGitHub,
+}:
 
 let
   # Pass the generated files to the helper.
@@ -90,7 +96,10 @@ stdenv.mkDerivation rec {
   # Including SwiftPM as a nativeBuildInput provides a buildPhase for you.
   # This by default performs a release build using SwiftPM, essentially:
   #   swift build -c release
-  nativeBuildInputs = [ swift swiftpm ];
+  nativeBuildInputs = [
+    swift
+    swiftpm
+  ];
 
   # The helper provides a configure snippet that will prepare all dependencies
   # in the correct place, where SwiftPM expects them.
