@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   callPackage,
+  nixosTests,
 
   # Derivations for `plugins`:
   # All executables in PLUGINSDIR will simply be executed and their
@@ -289,6 +290,10 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) checkmk-agent;
+  };
 
   inherit (cmk-agent-ctl) meta;
 }
