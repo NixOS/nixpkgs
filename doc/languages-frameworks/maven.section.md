@@ -9,7 +9,13 @@ The following provides a list of common patterns with how to package a Maven pro
 Consider the following package:
 
 ```nix
-{ lib, fetchFromGitHub, jre, makeWrapper, maven }:
+{
+  lib,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  maven,
+}:
 
 maven.buildMavenPackage rec {
   pname = "jd-cli";
@@ -91,7 +97,7 @@ jd-cli.overrideMavenAttrs (old: rec {
 
   # old mvnHash of 1.2.0 maven dependencies
   mvnHash = "sha256-N9XC1pg6Y4sUiBWIQUf16QSXCuiAPpXEHGlgApviF4I=";
-});
+})
 ```
 :::
 
@@ -129,7 +135,7 @@ maven.buildMavenPackage rec {
     "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
-};
+}
 ```
 :::
 
@@ -246,7 +252,9 @@ This file is then given to the `buildMaven` function, and it returns 2 attribute
 Here is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/build-maven-repository.nix) of building the Maven repository
 
 ```nix
-{ pkgs ? import <nixpkgs> { } }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 with pkgs;
 (buildMaven ./project-info.json).repo
 ```
@@ -283,7 +291,11 @@ Traditionally the Maven repository is at `~/.m2/repository`. We will override th
 :::
 
 ```nix
-{ lib, stdenv, maven }:
+{
+  lib,
+  stdenv,
+  maven,
+}:
 stdenv.mkDerivation {
   name = "maven-repository";
   buildInputs = [ maven ];
@@ -337,10 +349,16 @@ If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a str
 Regardless of which strategy is chosen above, the step to build the derivation is the same.
 
 ```nix
-{ stdenv, maven, callPackage }:
+{
+  stdenv,
+  maven,
+  callPackage,
+}:
 # pick a repository derivation, here we will use buildMaven
-let repository = callPackage ./build-maven-repository.nix { };
-in stdenv.mkDerivation rec {
+let
+  repository = callPackage ./build-maven-repository.nix { };
+in
+stdenv.mkDerivation rec {
   pname = "maven-demo";
   version = "1.0";
 
@@ -393,15 +411,21 @@ We will read the Maven repository and flatten it to a single list. This list wil
 We make sure to provide this classpath to the `makeWrapper`.
 
 ```nix
-{ stdenv, maven, callPackage, makeWrapper, jre }:
+{
+  stdenv,
+  maven,
+  callPackage,
+  makeWrapper,
+  jre,
+}:
 let
   repository = callPackage ./build-maven-repository.nix { };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball
-    "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 
@@ -471,15 +495,22 @@ Main-Class: Main
 We will modify the derivation above to add a symlink to our repository so that it's accessible to our JAR during the `installPhase`.
 
 ```nix
-{ stdenv, maven, callPackage, makeWrapper, jre }:
+{
+  stdenv,
+  maven,
+  callPackage,
+  makeWrapper,
+  jre,
+}:
 # pick a repository derivation, here we will use buildMaven
-let repository = callPackage ./build-maven-repository.nix { };
-in stdenv.mkDerivation rec {
+let
+  repository = callPackage ./build-maven-repository.nix { };
+in
+stdenv.mkDerivation rec {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball
-    "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 
