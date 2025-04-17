@@ -11508,17 +11508,6 @@ with pkgs;
 
   aroccStdenv = if stdenv.cc.isArocc then stdenv else lowPrio arocc.cc.passthru.stdenv;
 
-  gsignond = callPackage ../development/libraries/gsignond {
-    plugins = [ ];
-  };
-
-  gsignondPlugins = recurseIntoAttrs {
-    sasl = callPackage ../development/libraries/gsignond/plugins/sasl.nix { };
-    oauth = callPackage ../development/libraries/gsignond/plugins/oauth.nix { };
-    lastfm = callPackage ../development/libraries/gsignond/plugins/lastfm.nix { };
-    mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
-  };
-
   ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
 
   apple-sdk_11 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "11"; };
