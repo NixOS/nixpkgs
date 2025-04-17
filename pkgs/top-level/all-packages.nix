@@ -9376,10 +9376,6 @@ with pkgs;
 
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
-  geocode-glib_2 = geocode-glib.override {
-    libsoup_2_4 = libsoup_3;
-  };
-
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
