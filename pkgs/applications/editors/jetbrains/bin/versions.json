@@ -59,10 +59,10 @@
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
-      "version": "2024.3.5",
-      "sha256": "f8e8e864f4fedddf1d366a7db23fc4132192c3a6029c614a382186ff564a78a1",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.5.tar.gz",
-      "build_number": "243.26053.27"
+      "version": "2025.1",
+      "sha256": "9946a690072f166607fd7b0d29e9e9c6a24c79fd5d7365a5600366b0b27532ec",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2025.1.tar.gz",
+      "build_number": "251.23774.435"
     },
     "mps": {
       "update-channel": "MPS RELEASE",

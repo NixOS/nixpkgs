@@ -37,7 +37,11 @@ stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
   # ...
-  buildInputs = [libbar perl ncurses];
+  buildInputs = [
+    libbar
+    perl
+    ncurses
+  ];
 }
 ```
 
@@ -217,7 +221,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -227,12 +234,22 @@ stdenv.mkDerivation rec {
       --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
-      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          dosfstools
+          mtools
+          parted
+          syslinux
+        ]
+      }
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ util-linux qemu ];
-  checkPhase = '' [elided] '';
+  nativeCheckInputs = [
+    util-linux
+    qemu
+  ];
+  checkPhase = ''[elided] '';
 }
 ```
 
@@ -272,7 +289,7 @@ This can lead to conflicting dependencies that cannot easily be resolved.
 # A propagated dependency
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 let
   bar = stdenv.mkDerivation {
     name = "bar";
@@ -442,8 +459,7 @@ If you pass a function to `mkDerivation`, it will receive as its argument the fi
 mkDerivation (finalAttrs: {
   pname = "hello";
   withFeature = true;
-  configureFlags =
-    lib.optionals finalAttrs.withFeature ["--with-feature"];
+  configureFlags = lib.optionals finalAttrs.withFeature [ "--with-feature" ];
 })
 ```
 
@@ -460,28 +476,32 @@ various bindings:
 
 ```nix
 # `pkg` is the _original_ definition (for illustration purposes)
-let pkg =
-  mkDerivation (finalAttrs: {
+let
+  pkg = mkDerivation (finalAttrs: {
     # ...
 
     # An example attribute
-    packages = [];
+    packages = [ ];
 
     # `passthru.tests` is a commonly defined attribute.
     passthru.tests.simple = f finalAttrs.finalPackage;
 
     # An example of an attribute containing a function
-    passthru.appendPackages = packages':
-      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
-        packages = super.packages ++ packages';
-      });
+    passthru.appendPackages =
+      packages':
+      finalAttrs.finalPackage.overrideAttrs (
+        newSelf: super: {
+          packages = super.packages ++ packages';
+        }
+      );
 
     # For illustration purposes; referenced as
     # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
     passthru.finalAttrs = finalAttrs;
     passthru.original = pkg;
   });
-in pkg
+in
+pkg
 ```
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
@@ -955,7 +975,7 @@ To make GDB find debug information for the `socat` package and its dependencies,
 ```nix
 let
   pkgs = import ./. {
-    config = {};
+    config = { };
     overlays = [
       (final: prev: {
         ncurses = prev.ncurses.overrideAttrs { separateDebugInfo = true; };
@@ -974,19 +994,19 @@ let
     ];
   };
 in
-  pkgs.mkShell {
+pkgs.mkShell {
 
-    NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+  NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
 
-    packages = [
-      pkgs.gdb
-      pkgs.socat
-    ];
+  packages = [
+    pkgs.gdb
+    pkgs.socat
+  ];
 
-    shellHook = ''
-      ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
-    '';
-  }
+  shellHook = ''
+    ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+  '';
+}
 ```
 
 This setup works as follows:

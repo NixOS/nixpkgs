@@ -12,6 +12,7 @@
   nixos-render-docs-redirects,
   writeShellScriptBin,
   nixpkgs ? { },
+  markdown-code-runner,
 }:
 
 stdenvNoCC.mkDerivation (
@@ -119,10 +120,14 @@ stdenvNoCC.mkDerivation (
           packages = [
             devmode'
             nixos-render-docs-redirects'
+            markdown-code-runner
           ];
         };
 
-      tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
+      tests = {
+        manpage-urls = callPackage ../tests/manpage-urls.nix { };
+        check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
+      };
     };
   }
 )
