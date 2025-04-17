@@ -19205,10 +19205,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  wiki-tui = callPackage ../misc/wiki-tui {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   winePackagesFor =
     wineBuild:
     lib.makeExtensible (
