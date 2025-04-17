@@ -693,6 +693,7 @@ let
     ];
     rjags = [ pkgs.jags ];
     rJava = with pkgs; [
+      stripJavaArchivesHook
       zlib
       bzip2.dev
       icu
