@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-system-monitor";
-  version = "48.0";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major finalAttrs.version}/gnome-system-monitor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5OWzRfvU19wvQK1sYjBa5cfMK0Zc6VmIaSpUrzR1MqM=";
+    hash = "sha256-Ezw6bihjZuZZ/S2AWCQJp71e2uRW5jxPacz2btb8Zjg=";
   };
 
   patches = [
