@@ -10,7 +10,6 @@
   lua5_2,
   curl,
   readline,
-  PCSC,
 }:
 let
   version = "0.8.4";
@@ -29,33 +28,30 @@ stdenv.mkDerivation {
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace xcode check and hard-coded PCSC framework path
     substituteInPlace configure.ac \
-      --replace 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
-      --replace 'PCSC_HEADERS=`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/*.sdk/System/Library/Frameworks/PCSC.framework/Versions/Current/Headers/ | sort | head -1`' 'PCSC_HEADERS=${PCSC}/Library/Frameworks/PCSC.framework/Headers'
+      --replace-fail 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
+      --replace-fail 'PCSC_HEADERS=`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/*.sdk/System/Library/Frameworks/PCSC.framework/Versions/Current/Headers/ | sort | head -1`' 'PCSC_HEADERS=$SDKROOT/System/Library/Frameworks/PCSC.framework/Versions/Current/Headers'
   '';
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
-  buildInputs =
-    [
-      glib
-      gtk3
-      lua5_2
-      curl
-      readline
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
-    ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
+  buildInputs = [
+    glib
+    gtk3
+    lua5_2
+    curl
+    readline
+  ] ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/L1L1/cardpeek";
     description = "Tool to read the contents of ISO7816 smart cards";
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ embr ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ embr ];
     mainProgram = "cardpeek";
   };
 }
