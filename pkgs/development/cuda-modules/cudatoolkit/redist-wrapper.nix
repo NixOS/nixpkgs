@@ -2,6 +2,7 @@
   lib,
   symlinkJoin,
   backendStdenv,
+  cudaAtLeast,
   cudaOlder,
   cudatoolkit-legacy-runfile,
   cudaVersion,
@@ -17,6 +18,7 @@
   cuda_nvprune ? null,
   cuda_nvrtc ? null,
   cuda_nvtx ? null,
+  cuda_opencl ? null,
   cuda_profiler_api ? null,
   cuda_sanitizer_api ? null,
   libcublas ? null,
@@ -25,13 +27,16 @@
   libcusolver ? null,
   libcusparse ? null,
   libnpp ? null,
+  libnvjitlink ? null,
 }:
 
 let
+  inherit (lib.attrsets) getBin getDev getLib;
+  inherit (lib.lists) concatMap map optionals;
   getAllOutputs = p: [
-    (lib.getBin p)
-    (lib.getLib p)
-    (lib.getDev p)
+    (getBin p)
+    (getLib p)
+    (getDev p)
   ];
   hostPackages = [
     cuda_cuobjdump
@@ -40,23 +45,29 @@ let
     cuda_nvdisasm
     cuda_nvprune
   ];
-  targetPackages = [
-    cuda_cccl
-    cuda_cudart
-    cuda_cupti
-    cuda_cuxxfilt
-    cuda_nvml_dev
-    cuda_nvrtc
-    cuda_nvtx
-    cuda_profiler_api
-    cuda_sanitizer_api
-    libcublas
-    libcufft
-    libcurand
-    libcusolver
-    libcusparse
-    libnpp
-  ];
+  targetPackages =
+    [
+      cuda_cccl
+      cuda_cudart
+      cuda_cudart.static # NOTE: We need the static output specifically
+      cuda_cupti
+      cuda_cuxxfilt
+      cuda_nvml_dev
+      cuda_nvrtc
+      cuda_nvtx
+      cuda_profiler_api
+      cuda_sanitizer_api
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+      libnpp
+    ]
+    ++ optionals (cudaAtLeast "12.0") [
+      cuda_opencl
+      libnvjitlink
+    ];
 
   # This assumes we put `cudatoolkit` in `buildInputs` instead of `nativeBuildInputs`:
   allPackages = (map (p: p.__spliced.buildHost or p) hostPackages) ++ targetPackages;
@@ -69,13 +80,13 @@ else
     name = "cuda-merged-${cudaVersion}";
     version = cudaVersion;
 
-    paths = builtins.concatMap getAllOutputs allPackages;
+    paths = concatMap getAllOutputs allPackages;
 
     passthru = {
       cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
       lib = symlinkJoin {
         inherit name;
-        paths = map (p: lib.getLib p) allPackages;
+        paths = map getLib allPackages;
       };
     };
 

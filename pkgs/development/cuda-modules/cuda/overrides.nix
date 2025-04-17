@@ -138,6 +138,34 @@ filterAndCreateOverrides {
         '';
     };
 
+  cuda_cupti =
+    { }:
+    prevAttrs: {
+      # CMake expects CUPTI to be in an "extras/CUPTI" directory, so we add symlinks to the actual locations.
+      postInstall =
+        prevAttrs.postInstall or ""
+        + ''
+          for outputName in $(getAllOutputNames); do
+            [[ "$outputName" == "out" ]] && continue
+            mkdir -p "''${!outputName}/extras/CUPTI"
+            case "$outputName" in
+              dev)
+                ln -s "''${!outputName}/include" "''${!outputName}/extras/CUPTI/include"
+                ;;
+              sample)
+                ln -s "''${!outputName}/samples" "''${!outputName}/extras/CUPTI/samples"
+                ;;
+              lib|static)
+                ln -s "''${!outputName}/lib" "''${!outputName}/extras/CUPTI/lib"
+                ;;
+              *)
+                echo "Unexpected output name: $outputName" >&2
+                exit 1
+            esac
+          done
+        '';
+    };
+
   cuda_compat =
     { flags, lib }:
     prevAttrs: {

@@ -124,6 +124,9 @@ let
       attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
 
     writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
+    cmake-cuda-tests = builtins.import ../development/cuda-modules/cmake-cuda-tests {
+      inherit (final) callPackage lib;
+    };
   });
 
   mkVersionedPackageName =
