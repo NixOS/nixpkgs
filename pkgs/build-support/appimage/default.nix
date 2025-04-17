@@ -95,6 +95,7 @@ rec {
               "pname"
               "version"
               "src"
+              "postExtract"
             ]
           ) args
         );
