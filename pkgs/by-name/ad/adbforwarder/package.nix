@@ -6,8 +6,6 @@
   dotnet-runtime,
   autoPatchelfHook,
   zlib,
-  gcc-unwrapped,
-  lttng-ust,
   icu,
   openssl,
   android-tools,
@@ -19,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/alvr-org/ADBForwarder/releases/download/v${version}/ADBForwarder-linux-x64.zip";
-    sha256 = "sha256-ECyaeFJbFceTDvKJLvdHC+ZJpugUN5k4p5IQbiNeZrk=";
+    hash = "sha256-ECyaeFJbFceTDvKJLvdHC+ZJpugUN5k4p5IQbiNeZrk=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +28,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dotnet-runtime
     zlib
-    gcc-unwrapped
-    lttng-ust
     icu
     openssl
     android-tools
@@ -42,16 +38,13 @@ stdenv.mkDerivation rec {
     android-tools
   ];
 
-  # Instruct autoPatchelfHook to ignore missing liblttng-ust.so.0.
   autoPatchelfIgnoreMissingDeps = [ "liblttng-ust.so.0" ];
-
-  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share/${pname}
-    cp -r source/* $out/share/${pname}/
+    cp -r ./* $out/share/${pname}/
     chmod +x $out/share/${pname}/ADBForwarder
 
     # Create the platform-tools directory that the app expects
@@ -62,18 +55,13 @@ stdenv.mkDerivation rec {
 
     # Create a wrapper script in $out/bin which will be in PATH
     makeWrapper $out/share/${pname}/ADBForwarder $out/bin/adbforwarder \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
-      --prefix PATH : ${lib.makeBinPath [ android-tools ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs}
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "ADB Forwarder for ALVR (Air Light VR)";
-    longDescription = ''
-      ADB Forwarder is a tool for ALVR that handles ADB connections to Android
-      VR headsets.
-    '';
+    description = "Handle ADB connections to Android VR headsets for ALVR";
     homepage = "https://github.com/alvr-org/ADBForwarder";
     license = licenses.mit;
     platforms = platforms.linux;
