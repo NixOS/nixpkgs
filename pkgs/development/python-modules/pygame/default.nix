@@ -122,5 +122,9 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # Several tests segfault
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
