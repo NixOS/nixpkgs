@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -12,6 +12,7 @@
   redis,
 
   # tests
+  addBinToPathHook,
   psutil,
   pytestCheckHook,
   redisTestHook,
@@ -22,8 +23,6 @@ buildPythonPackage rec {
   pname = "rq";
   version = "2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rq";
@@ -40,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     psutil
     pytestCheckHook
     redisTestHook
@@ -48,18 +48,19 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f
-    "test_clean_large_registry"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
+    "test_deleted_jobs_arent_executed"
+    "test_suspend_worker_execution"
   ];
 
   pythonImportsCheck = [ "rq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
     changelog = "https://github.com/rq/rq/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }
