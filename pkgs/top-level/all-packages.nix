@@ -4207,14 +4207,14 @@ with pkgs;
   nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
   corepack_22 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; });
 
-  nodejs_23 = callPackage ../development/web/nodejs/v23.nix { };
-  nodejs-slim_23 = callPackage ../development/web/nodejs/v23.nix { enableNpm = false; };
-  corepack_23 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_23; });
+  nodejs_24 = callPackage ../development/web/nodejs/v24.nix { };
+  nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { enableNpm = false; };
+  corepack_24 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_24; });
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_23;
-  nodejs-slim_latest = nodejs-slim_23;
-  corepack_latest = hiPrio corepack_23;
+  nodejs_latest = nodejs_24;
+  nodejs-slim_latest = nodejs-slim_24;
+  corepack_latest = hiPrio corepack_24;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
