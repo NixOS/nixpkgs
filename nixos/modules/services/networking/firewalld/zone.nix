@@ -37,6 +37,53 @@ in
       firewalld zone configuration files. See {manpage}`firewalld.zone(5)`.
     '';
     default = { };
+    example = {
+      public = {
+        forward = true;
+        services = [
+          "ssh"
+          "dhcpv6-client"
+        ];
+      };
+      external = {
+        forward = true;
+        services = [
+          "ssh"
+        ];
+        masquerade = true;
+      };
+      dmz = {
+        forward = true;
+        services = [
+          "ssh"
+        ];
+      };
+      work = {
+        forward = true;
+        services = [
+          "ssh"
+          "dhcpv6-client"
+        ];
+      };
+      home = {
+        forward = true;
+        services = [
+          "ssh"
+          "mdns"
+          "samba-client"
+          "dhcpv6-client"
+        ];
+      };
+      internal = {
+        forward = true;
+        services = [
+          "ssh"
+          "mdns"
+          "samba-client"
+          "dhcpv6-client"
+        ];
+      };
+    };
     type = attrsOf (submodule {
       options = {
         version = mkOption {
