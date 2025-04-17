@@ -26,10 +26,10 @@ buildPythonPackage rec {
     "coinmarketcapapi"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to wrap the CoinMarketCap API";
     homepage = "https://github.com/rsz44/python-coinmarketcap";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ dolphindalt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dolphindalt ];
   };
 }
