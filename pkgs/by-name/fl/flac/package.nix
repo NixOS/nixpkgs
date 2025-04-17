@@ -10,8 +10,8 @@
   pkg-config,
   stdenv,
   versionCheckHook,
+  enableManpages ? !stdenv.buildPlatform.isRiscV64 && !stdenv.buildPlatform.isLoongArch64,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
   version = "1.5.0";
@@ -27,13 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     graphviz
-    pandoc
     pkg-config
-  ];
+  ] ++ lib.optional enableManpages pandoc;
 
   buildInputs = [ libogg ];
 
-  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags =
+    lib.optionals (!stdenv.hostPlatform.isStatic) [
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optionals (!enableManpages) [
+      "-DINSTALL_MANPAGES=OFF"
+    ];
 
   CFLAGS = [
     "-O3"
@@ -44,13 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./package.patch ];
   doCheck = true;
 
-  outputs = [
-    "bin"
-    "dev"
-    "doc"
-    "man"
-    "out"
-  ];
+  outputs =
+    [
+      "bin"
+      "dev"
+      "doc"
+      "out"
+    ]
+    ++ lib.optionals enableManpages [
+      "man"
+    ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
