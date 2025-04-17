@@ -20,12 +20,12 @@ Converts Nix values to strings in the way the [`derivation` built-in function](h
 
 ```nix
 devShellTools.valueToString (builtins.toFile "foo" "bar")
-=> "/nix/store/...-foo"
+# => "/nix/store/...-foo"
 ```
 
 ```nix
 devShellTools.valueToString false
-=> ""
+# => ""
 ```
 
 :::
@@ -47,11 +47,11 @@ devShellTools.unstructuredDerivationInputEnv {
     args = [ "-c" "${./builder.sh}" ];
   };
 }
-=> {
-  name = "foo";
-  buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
-  builder = "/nix/store/...-bash";
-}
+# => {
+#   name = "foo";
+#   buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
+#   builder = "/nix/store/...-bash";
+# }
 ```
 
 Note that `args` is not included, because Nix does not added it to the builder process environment.
