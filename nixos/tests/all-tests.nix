@@ -1176,7 +1176,7 @@ in
   rustls-libssl = handleTest ./rustls-libssl.nix { };
   rxe = handleTest ./rxe.nix { };
   sabnzbd = handleTest ./sabnzbd.nix { };
-  samba = handleTest ./samba.nix { };
+  samba = runTest ./samba.nix;
   samba-wsdd = handleTest ./samba-wsdd.nix { };
   sane = handleTest ./sane.nix { };
   sanoid = handleTest ./sanoid.nix { };
