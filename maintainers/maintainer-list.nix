@@ -5020,6 +5020,12 @@
     githubId = 6470493;
     name = "Craige McWhirter";
   };
+  craigf = {
+    email = "craig@craigfurman.dev";
+    github = "craigfurman";
+    githubId = 4772216;
+    name = "Craig Furman";
+  };
   cransom = {
     email = "cransom@hubns.net";
     github = "cransom";
@@ -24472,6 +24478,12 @@
     github = "tmplt";
     githubId = 6118602;
     name = "Viktor";
+  };
+  tmssngr = {
+    email = "nixpkgs@syntevo.com";
+    github = "tmssngr";
+    githubId = 6029561;
+    name = "Thomas Singer";
   };
   tne = {
     email = "tne@garudalinux.org";
