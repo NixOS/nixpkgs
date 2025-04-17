@@ -26,17 +26,20 @@
   util-linux,
   libXdmcp,
   libXtst,
+  mesa-demos,
+  makeWrapper,
+  dmidecode,
 }:
 
 stdenv.mkDerivation (finalAtrs: {
   pname = "hardinfo2";
-  version = "2.2.7";
+  version = "2.2.10";
 
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
     tag = "release-${finalAtrs.version}";
-    hash = "sha256-IIH2SH4Ph25VFx652RQFZX8rL0ZlwjjfVrb+txLF3Ks=";
+    hash = "sha256-Ea1uhzAQEn8oDvWslGzrqoI2yzVDGxwTqbthfKEkYyQ=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +47,7 @@ stdenv.mkDerivation (finalAtrs: {
     pkg-config
     wrapGAppsHook4
     libsForQt5.wrapQtAppsHook
+    makeWrapper
   ];
 
   preFixup = ''
@@ -79,6 +83,11 @@ stdenv.mkDerivation (finalAtrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
     (lib.cmakeFeature "CMAKE_INSTALL_SERVICEDIR" "${placeholder "out"}/lib")
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/hardinfo2 \
+      --prefix PATH : "${dmidecode}/bin:${mesa-demos}/bin"
+  '';
 
   meta = {
     homepage = "http://www.hardinfo2.org";
