@@ -103,7 +103,7 @@ let
   });
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "signal-desktop-source";
+  pname = "signal-desktop";
   inherit src version;
 
   nativeBuildInputs = [

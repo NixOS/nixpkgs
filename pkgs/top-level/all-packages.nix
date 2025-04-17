@@ -7009,9 +7009,7 @@ with pkgs;
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
-  cargo-vet = callPackage ../development/tools/rust/cargo-vet {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-vet = callPackage ../development/tools/rust/cargo-vet { };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
     inherit (darwin.apple_sdk.frameworks) Foundation Cocoa;
   };
@@ -19261,10 +19259,6 @@ with pkgs;
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 
   yamale = with python3Packages; toPythonApplication yamale;
-
-  yandex-browser-beta = yandex-browser.override { edition = "beta"; };
-
-  yandex-browser-corporate = yandex-browser.override { edition = "corporate"; };
 
   zap-chip-gui = zap-chip.override { withGui = true; };
 
