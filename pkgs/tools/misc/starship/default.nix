@@ -10,6 +10,7 @@
   Security,
   Foundation,
   Cocoa,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -50,12 +51,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mkdir -p $presetdir
       cp docs/public/presets/toml/*.toml $presetdir
     ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd starship \
-        --bash <($out/bin/starship completions bash) \
-        --fish <($out/bin/starship completions fish) \
-        --zsh <($out/bin/starship completions zsh)
-    '';
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        installShellCompletion --cmd starship \
+          --bash <(${emulator} $out/bin/starship completions bash) \
+          --fish <(${emulator} $out/bin/starship completions fish) \
+          --zsh <(${emulator} $out/bin/starship completions zsh)
+      ''
+    );
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-B2CCrSH2aTcGEX96oBxl/27hNMdDpdd2vxdt0/nlN6I=";
