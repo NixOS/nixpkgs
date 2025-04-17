@@ -18433,6 +18433,8 @@ self: super: with self; {
 
   unrpa = callPackage ../development/python-modules/unrpa { };
 
+  unsloth-zoo = callPackage ../development/python-modules/unsloth-zoo { };
+
   unstructured = callPackage ../development/python-modules/unstructured { };
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
