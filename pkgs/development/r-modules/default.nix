@@ -787,6 +787,10 @@ let
       libtiff
       curl
     ];
+    fio = with pkgs; [
+      cargo
+      rustc
+    ];
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
@@ -1731,6 +1735,10 @@ let
           'python_cmds <- c(python_cmds, file.path("${lib.getBin pkgs.python3}", "bin", "python3"))
            python_cmds[which(python_cmds != "")]'
       '';
+    });
+
+    fio = old.fio.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     alcyon = old.alcyon.overrideAttrs (attrs: {
