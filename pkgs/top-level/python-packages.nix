@@ -8120,6 +8120,8 @@ self: super: with self; {
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
+  llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
+
   llmx = callPackage ../development/python-modules/llmx { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
