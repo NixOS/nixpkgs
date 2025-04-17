@@ -474,7 +474,8 @@ let
             n: x:
             let
               module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-              collectedImports = collectStructuredModules module._file module.key module.imports args;
+              imports = concatLists (pushDownProperties module.imports);
+              collectedImports = collectStructuredModules module._file module.key imports args;
             in
             {
               key = module.key;
@@ -1162,6 +1163,16 @@ let
     optionalValue = if isDefined then { value = mergedValue; } else { };
   };
 
+  # map elements of list or attribute set
+  mapAny =
+    f: x:
+    if isAttrs x then
+      mapAttrs (n: f) x
+    else if isList x then
+      map f x
+    else
+      throw "Cannot map over ${x} using `mapAny`.";
+
   /**
     Given a config set, expand mkMerge properties, and push down the
     other properties into the children.  The result is a list of
@@ -1189,9 +1200,9 @@ let
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      map (mapAny (v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      map (mapAny (v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     # FIXME: handle mkOrder?
     else
       [ cfg ];
