@@ -51,24 +51,26 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.6";
+  version = "0.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-LwonbORSoNKi1dHmKxjI2H3G+ZtEGFSpQGwPi/2lRv4=";
+    hash = "sha256-27sgU9ugSkStDOg64W1RgiqmlbOzrdxg7kz2AztfERA=";
   };
 
+  # 'rich' is also somehow checked when building the wheel,
+  # pythonRelaxDepsHook modifies the wheel METADATA in postBuild
+  pypaBuildFlags = [ "--skip-dependency-check" ];
+
   pythonRelaxDeps = [
+    # needed
+    "rich"
+    # preventative
     "fastapi"
     "gunicorn"
-  ];
-
-  pythonRemoveDeps = [
-    "setuptools"
-    "build"
   ];
 
   build-system = [ hatchling ];
