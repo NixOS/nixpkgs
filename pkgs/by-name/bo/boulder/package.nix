@@ -4,6 +4,7 @@
   buildGoModule,
   testers,
   boulder,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -318,9 +319,12 @@ buildGoModule rec {
     done
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = boulder;
-    inherit version;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = boulder;
+      inherit version;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
