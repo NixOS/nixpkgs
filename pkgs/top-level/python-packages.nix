@@ -17667,6 +17667,8 @@ self: super: with self; {
 
   tritonclient = callPackage ../development/python-modules/tritonclient { };
 
+  trl = callPackage ../development/python-modules/trl { };
+
   trlib = toPythonModule (
     pkgs.trlib.override {
       pythonSupport = true;
