@@ -6,6 +6,7 @@
   attrs,
   build,
   charset-normalizer,
+  ruff,
   dill,
   distro,
   fastapi,
@@ -50,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.5";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-uHlLItjONHGnuE4t2UOcVRYxcDDbRldUwHd8mPn7JfY=";
+    hash = "sha256-LwonbORSoNKi1dHmKxjI2H3G+ZtEGFSpQGwPi/2lRv4=";
   };
 
   pythonRelaxDeps = [
@@ -76,6 +77,7 @@ buildPythonPackage rec {
     alembic
     build # used in custom_components/custom_components.py
     charset-normalizer
+    ruff
     dill
     distro
     fastapi
@@ -111,6 +113,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     python-dotenv
+    ruff
     playwright
     attrs
     numpy
