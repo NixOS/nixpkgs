@@ -14707,9 +14707,7 @@ with pkgs;
 
   scheherazade-new = callPackage ../data/fonts/scheherazade { };
 
-  starship = callPackage ../tools/misc/starship {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
-  };
+  starship = callPackage ../tools/misc/starship { };
 
   inherit (callPackages ../data/fonts/gdouros { })
     aegan

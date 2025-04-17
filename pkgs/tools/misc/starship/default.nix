@@ -5,11 +5,9 @@
   rustPlatform,
   installShellFiles,
   cmake,
+  writableTmpDirAsHomeHook,
   git,
   nixosTests,
-  Security,
-  Foundation,
-  Cocoa,
   buildPackages,
 }:
 
@@ -29,16 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    Foundation
-    Cocoa
-  ];
-
-  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-framework"
-    "AppKit"
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ writableTmpDirAsHomeHook ];
 
   # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
   preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
