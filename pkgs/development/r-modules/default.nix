@@ -697,6 +697,7 @@ let
       bzip2.dev
       icu
       xz.dev
+      zstd.dev
       pcre.dev
       jdk
       libzip
