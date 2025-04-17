@@ -12,14 +12,14 @@
   Cocoa,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
   version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YoLi4wxBK9TFTtZRm+2N8HO5ZiC3V2GMqKFKKLHq++s=";
   };
 
@@ -70,15 +70,15 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) starship;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       danth
       Br1ght0ne
       Frostman
     ];
     mainProgram = "starship";
   };
-}
+})
