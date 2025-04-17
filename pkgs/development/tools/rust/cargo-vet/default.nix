@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-vet";
-  version = "0.8.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-VnOqQ1dKgNZSHTzJrD7stoCzNGrSkYxcLDJAsrJUsEQ=";
+    rev = "v${version}";
+    sha256 = "sha256-HSEhFCcdC79OA8MP73De+iLIjcr1XMHxfJ9a1Q3JJYI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-8QbXZtf5kry0/QDrnUVQCtqK4/6EMliOI4Z410QR2Ec=";
+  cargoHash = "sha256-+X6DLxWPWMcGzJMVZAj3C5P5MyywIb4ml0Jsyo9/uAE=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
