@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferrishot";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nik-rev";
     repo = "ferrishot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1jKwbhn85KcIQrSakWTIfxPso7VZuuvPrUbTCF1NerM=";
+    hash = "sha256-QnIHLkxqL/4s6jgIbGmzR5tqCjH7yJcfpx0AhdxqVKc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-NPReNHKOS4PQIt2lmY5w19lVHPDjznR9gv5vHDXyqaI=";
+  cargoHash = "sha256-TJWS8LzLTQSr+0uw0x38mNJrjYvMzr90URYI8UcRQqc=";
 
   nativeBuildInputs =
     [
