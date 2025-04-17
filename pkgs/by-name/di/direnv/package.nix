@@ -6,6 +6,7 @@
   bash,
   fish,
   zsh,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
@@ -36,11 +37,15 @@ buildGoModule rec {
   nativeCheckInputs = [
     fish
     zsh
+    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
-    export HOME=$(mktemp -d)
+    runHook preCheck
+
     make test-go test-bash test-fish test-zsh
+
+    runHook postCheck
   '';
 
   meta = with lib; {
