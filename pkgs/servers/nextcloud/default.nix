@@ -67,8 +67,8 @@ in
   };
 
   nextcloud29 = generic {
-    version = "29.0.15";
-    hash = "sha256-iqvCDILYxxJk7oxAmXaaBbwzUWKAAd5aNHAswRKBfMA=";
+    version = "29.0.16";
+    hash = "sha256-SZv2GrGe3NTlQq+GYJJDxbT0QOtbsGwrp9oML6pSUyI=";
     packages = nextcloud29Packages;
   };
 
