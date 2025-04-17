@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "puredata";
-  version = "0.54-1";
+  version = "0.55-2";
 
   src = fetchurl {
     url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
-    hash = "sha256-hcPUvTYgtAHntdWEeHoFIIKylMTE7us1g9dwnZP9BMI=";
+    hash = "sha256-EIKX+NHdGQ346LtKSsNIeSrM9wT5ogUtk8uoybi7Wls=";
   };
 
   patches = [
