@@ -62,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ${python.interpreter} -m django compilemessages
+    ${python.pythonOnBuildForHost.interpreter} -m django compilemessages
   '';
 
   optional-dependencies = {
