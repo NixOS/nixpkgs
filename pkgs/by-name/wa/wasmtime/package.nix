@@ -3,7 +3,6 @@
   rustPlatform,
   cmake,
   fetchFromGitHub,
-  Security,
   stdenv,
 }:
 let
@@ -37,7 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ cmake ];
 
   doCheck =
