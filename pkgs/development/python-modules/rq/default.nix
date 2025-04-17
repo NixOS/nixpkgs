@@ -17,6 +17,7 @@
   pytestCheckHook,
   redisTestHook,
   sentry-sdk,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +45,9 @@ buildPythonPackage rec {
     pytestCheckHook
     redisTestHook
     sentry-sdk
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
