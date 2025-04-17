@@ -17490,6 +17490,8 @@ with pkgs;
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
+  jnethack = callPackage ../games/nethack/jnethack.nix { };
+
   nile = python3Packages.callPackage ../games/nile { };
 
   npush = callPackage ../games/npush { };
