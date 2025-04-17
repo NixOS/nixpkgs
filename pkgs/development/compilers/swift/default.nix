@@ -36,7 +36,19 @@ let
       # default clang’s stdenv. Using the default libc++ avoids issues (such as crashes)
       # that can happen when a Swift application dynamically links different versions
       # of libc++ and libc++abi than libraries it links are using.
-      if stdenv'.cc.libcxx != null then overrideLibcxx stdenv' else stdenv';
+      if stdenv'.cc.libcxx != null then
+        if pkgs.stdenv.hostPlatform.isDarwin && stdenv'.cc.libcxx == darwin.libcxx then
+          overrideCC stdenv' (
+            clang.override {
+              # Use the same system libc++ headers from the SDK required by Swift.
+              # This avoids issues where the clang version used to build Swift is too old for the libc++ headers.
+              libcxx = darwin.libcxx.override { apple-sdk = pkgs.apple-sdk_13; };
+            }
+          )
+        else
+          overrideLibcxx stdenv'
+      else
+        stdenv';
 
     swift-unwrapped = callPackage ./compiler {
       inherit (darwin) DarwinTools sigtool;
