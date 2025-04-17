@@ -19288,10 +19288,6 @@ with pkgs;
 
   yamale = with python3Packages; toPythonApplication yamale;
 
-  yandex-browser-beta = yandex-browser.override { edition = "beta"; };
-
-  yandex-browser-corporate = yandex-browser.override { edition = "corporate"; };
-
   zap-chip-gui = zap-chip.override { withGui = true; };
 
   myEnvFun = callPackage ../misc/my-env {
