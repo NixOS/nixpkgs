@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  overrideSDK,
   fetchFromGitHub,
 
   # Native build inputs
@@ -32,15 +33,23 @@
   nix-update-script,
 }:
 
+let
+  # Rebind this in a separate let-binding so that we can then rebind stdenv without infrec below
+  stdenv' = stdenv;
+in
+let
+  stdenv = if stdenv'.hostPlatform.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
-  version = "8.0.6";
+  version = "8.0.7";
 
   src = fetchFromGitHub {
     owner = "juce-framework";
     repo = "juce";
     tag = finalAttrs.version;
-    hash = "sha256-uwZVBrvb5O9LEh00y93UeEu4u4rd+tLRCdQdxsMpXNg=";
+    hash = "sha256-nl4pUSkUKqpMoehzq0MS5pjHpYDkrFpUsY8BwpQObCM=";
   };
 
   patches = [

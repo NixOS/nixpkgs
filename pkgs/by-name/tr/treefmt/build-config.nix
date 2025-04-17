@@ -24,6 +24,7 @@ settingsFile.overrideAttrs {
   passthru = {
     format = settingsFormat;
     settings = configuration.config;
-    inherit (configuration) _module options type;
+    inherit (configuration) _module options;
+    optionType = configuration.type;
   };
 }

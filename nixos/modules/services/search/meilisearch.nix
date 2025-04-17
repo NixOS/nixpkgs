@@ -108,6 +108,21 @@ in
       type = lib.types.str;
     };
 
+    # TODO: turn on by default when it stops being experimental
+    dumplessUpgrade = lib.mkOption {
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable (experimental) dumpless upgrade.
+
+        Allows upgrading from Meilisearch >=v1.12 to Meilisearch >=v1.13 without manually
+        dumping and importing the database.
+
+        More information at https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade
+      '';
+      type = lib.types.bool;
+    };
+
   };
 
   ###### implementation
@@ -129,6 +144,7 @@ in
         MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
+        MEILI_EXPERIMENTAL_DUMPLESS_UPGRADE = lib.boolToString cfg.dumplessUpgrade;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/meilisearch";
