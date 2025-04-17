@@ -18277,6 +18277,8 @@ self: super: with self; {
 
   typst = callPackage ../development/python-modules/typst { };
 
+  tyro = callPackage ../development/python-modules/tyro { };
+
   tzdata = callPackage ../development/python-modules/tzdata { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
