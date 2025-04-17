@@ -17438,6 +17438,15 @@ with pkgs;
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
+  minetest-mods = callPackage ../games/minetest/mods { };
+
+  minetestWithMods = import ../games/minetest/minetest-with-mods.nix
+                                pkgs
+                                {
+                                    inherit minetest-mods;
+                                    inherit minetest;
+                                  };
+
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
   };
