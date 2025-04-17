@@ -10106,10 +10106,6 @@ with pkgs;
     callPackage ../development/libraries/libgnome-games-support/2.0.nix
       { };
 
-  libgrss = callPackage ../development/libraries/libgrss {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;
-  };
-
   libiio = callPackage ../development/libraries/libiio {
     inherit (darwin.apple_sdk.frameworks) CFNetwork CoreServices;
     python = python3;
