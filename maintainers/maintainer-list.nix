@@ -6494,6 +6494,12 @@
     githubId = 472846;
     name = "Sebastian Krohn";
   };
+  dramforever = {
+    name = "Vivian Wang";
+    email = "dramforever@live.com";
+    github = "dramforever";
+    githubId = 2818072;
+  };
   drawbu = {
     email = "nixpkgs@drawbu.dev";
     github = "drawbu";
