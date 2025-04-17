@@ -1,14 +1,12 @@
 {
   lib,
-  rustPlatform,
-  cmake,
-  fetchFromGitHub,
-  Security,
   stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
-let
-  inherit (stdenv.targetPlatform.rust) cargoShortTarget;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
   version = "31.0.0";
@@ -37,7 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ cmake ];
 
   doCheck =
@@ -52,6 +49,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       !isAarch64;
 
   postInstall =
+    let
+      inherit (stdenv.targetPlatform.rust) cargoShortTarget;
+    in
     ''
       # move libs from out to dev
       install -d -m 0755 $dev/lib
@@ -73,6 +73,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         $dev/lib/libwasmtime.dylib \
         $dev/lib/libwasmtime.dylib
     '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
