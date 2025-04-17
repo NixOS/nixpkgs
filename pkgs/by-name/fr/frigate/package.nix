@@ -12,14 +12,14 @@
 }:
 
 let
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-qgiVE5UUjxRLya0mD2vfKdzdTdy5ThYOrHAGoFQ9PWA=";
+    hash = "sha256-rnsc2VXaypIPVtYQHTGe9lg7PuAyjfjz4aeATmFzp5s=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -207,7 +207,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/v${version}";
+    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
       A complete and local NVR designed for Home Assistant with AI

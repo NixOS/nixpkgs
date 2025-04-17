@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "smokeping_prober";
-  version = "0.9.0";
+  version = "0.10.0";
 
   ldflags =
     let
@@ -31,9 +31,9 @@ buildGoModule rec {
     owner = "SuperQ";
     repo = "smokeping_prober";
     rev = "v${version}";
-    sha256 = "sha256-TOt0YKgzcASQVY0ohoIwRJhjoH/Q0cuPabaItPnhv+w=";
+    sha256 = "sha256-dsdwXBTAPkMjaAWBjkNiJEaKi5cIcr1qctVDTuzmjAo=";
   };
-  vendorHash = "sha256-m6jOZx4zuVl1Bay4OCvPTF/pRFXfBfitWfQ+S10xe9I=";
+  vendorHash = "sha256-anc4YtkfkPt8mXRZcVD8kQt2X2O3SCpRWPIqV4yz92E=";
 
   doCheck = true;
 
