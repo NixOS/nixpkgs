@@ -5,6 +5,9 @@
   nix-update-script,
   gitlab-ci-local,
   testers,
+  makeBinaryWrapper,
+  rsync,
+  gitMinimal,
 }:
 
 buildNpmPackage rec {
@@ -20,10 +23,24 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-fndSJd15sZ/sIFvh+MzNw25kuP9D9+Qc0mDqgnvjnPo=";
 
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
   postPatch = ''
     # remove cleanup which runs git commands
     substituteInPlace package.json \
       --replace-fail "npm run cleanup" "true"
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/gitlab-ci-local \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          rsync
+          gitMinimal
+        ]
+      }"
   '';
 
   passthru = {

@@ -767,7 +767,7 @@ in
   magic-wormhole-mailbox-server = runTest ./magic-wormhole-mailbox-server.nix;
   magnetico = handleTest ./magnetico.nix { };
   mailcatcher = runTest ./mailcatcher.nix;
-  mailhog = handleTest ./mailhog.nix { };
+  mailhog = runTest ./mailhog.nix;
   mailpit = runTest ./mailpit.nix;
   mailman = runTest ./mailman.nix;
   man = handleTest ./man.nix { };
@@ -830,7 +830,7 @@ in
   mosquitto = runTest ./mosquitto.nix;
   moosefs = handleTest ./moosefs.nix { };
   movim = import ./web-apps/movim { inherit recurseIntoAttrs runTest; };
-  mpd = handleTest ./mpd.nix { };
+  mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
@@ -1176,7 +1176,7 @@ in
   rustls-libssl = handleTest ./rustls-libssl.nix { };
   rxe = handleTest ./rxe.nix { };
   sabnzbd = handleTest ./sabnzbd.nix { };
-  samba = handleTest ./samba.nix { };
+  samba = runTest ./samba.nix;
   samba-wsdd = handleTest ./samba-wsdd.nix { };
   sane = handleTest ./sane.nix { };
   sanoid = handleTest ./sanoid.nix { };
