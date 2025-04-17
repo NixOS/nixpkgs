@@ -49,6 +49,8 @@ buildPythonPackage rec {
     "demo/futures/test_futures.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
     inherit mpi;
   };
