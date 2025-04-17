@@ -5,6 +5,7 @@
   installShellFiles,
   scdoc,
   ffmpeg,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,6 +39,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
@@ -70,10 +72,6 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     scdoc < twitch-dl.1.scd > twitch-dl.1
     installManPage twitch-dl.1
-  '';
-
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
   '';
 
   meta = with lib; {
