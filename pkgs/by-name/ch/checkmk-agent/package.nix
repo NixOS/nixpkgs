@@ -5,6 +5,7 @@
   makeWrapper,
   gzip,
   lib,
+  nixosTests,
   # derivations for `plugins`:
   # All executables in PLUGINSDIR will simply be executed and their
   # ouput appended to the output of the agent. Plugins define their own
@@ -213,6 +214,10 @@ stdenv.mkDerivation {
         )
       }:$out/bin
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) cmk-agent;
+  };
 
   meta = {
     description = "The checkmk agent to monitor *nix style systems.";
