@@ -27,9 +27,6 @@
   SDL2,
   SDL2_mixer,
   wayland-protocols,
-  Carbon,
-  CoreServices,
-  OpenCL,
 
   callPackage,
   nixosTests,
@@ -45,6 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-8rGnW+VtqNJYqUqQDp0yOVIQd7w+cq7PIpqqIQPhkbE=";
   };
+
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Disable code signing on macOS
+    substituteInPlace cmake/macros.cmake --replace-fail "codesign" "true"
+    substituteInPlace cmake/system/apple.cmake --replace-fail "if(APPLE)" "if(false)"
+
+    # calls otool -L on /usr/lib/libSystem.B.dylib and fails because it doesn't exist
+    substituteInPlace cmake/applebundle.cmake --replace-fail 'fixup_bundle("''${TARGET_BUNDLE_DIR}" "" "")' ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -73,14 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDL2_mixer
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreServices
-      OpenCL
-    ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
-
-  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # error: "The plain signature for target_link_libraries has already been used"
   doCheck = false;
@@ -89,17 +88,24 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  # Set the data directory for each executable. We cannot set it at build time
-  # with the PKGDATADIR cmake variable because each executable needs a specific
-  # one.
-  # This is not needed on darwin, since on that platform data files are saved
-  # in *.app/Contents/Resources/ too, and are picked up automatically.
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" \
-        --set CORE_PATH $out/share/$(basename "$prog")/
-    done
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv $out/*.app $out/Applications/
+      ''
+    else
+      # Set the data directory for each executable. We cannot set it at build time
+      # with the PKGDATADIR cmake variable because each executable needs a specific
+      # one.
+      # This is not needed on darwin, since on that platform data files are saved
+      # in *.app/Contents/Resources/ too, and are picked up automatically.
+      ''
+        for prog in $out/bin/*; do
+          wrapProgram "$prog" \
+            --set CORE_PATH $out/share/$(basename "$prog")/
+        done
+      '';
 
   passthru.tests = {
     voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
@@ -124,6 +130,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
