@@ -25,10 +25,7 @@ in
             in
             tcpPorts ++ udpPorts;
         };
-        nixos-fw-trusted = {
-          target = "ACCEPT";
-          interfaces = cfg.trustedInterfaces;
-        };
+        trusted.interfaces = cfg.trustedInterfaces;
       };
     };
   };
