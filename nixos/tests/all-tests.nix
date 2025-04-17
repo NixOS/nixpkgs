@@ -914,7 +914,7 @@ in
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix { };
   nix-config = handleTest ./nix-config.nix { };
-  nix-ld = handleTest ./nix-ld.nix { };
+  nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-upgrade = handleTest ./nix/upgrade.nix { inherit (pkgs) nixVersions; };
   nix-required-mounts = runTest ./nix-required-mounts;
