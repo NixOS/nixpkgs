@@ -13,7 +13,7 @@
   metis,
   parmetis,
   withExamples ? false,
-  fortranSupport ? stdenv.hostPlatform.isLinux,
+  fortranSupport ? true,
   enableOpenMP ? true,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withParmetis [
       metis
       parmetis
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      gfortran.cc.lib
     ];
 
   propagatedBuildInputs = [ blas ];
