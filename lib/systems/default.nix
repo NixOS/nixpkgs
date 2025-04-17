@@ -104,6 +104,8 @@ let
           # Derived meta-data
           useLLVM = final.isFreeBSD || final.isOpenBSD;
 
+          useBolt = false;
+
           libc =
             if final.isDarwin then
               "libSystem"

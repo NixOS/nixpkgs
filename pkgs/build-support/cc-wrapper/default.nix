@@ -845,6 +845,14 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
 
+    ###
+    ### Bolt support
+    ### Binaries need to be linked with relocations.
+    ###
+    + optionalString targetPlatform.useBolt ''
+      echo " --emit-relocs" >> $out/nix-support/cc-ldflags
+    ''
+
     ##
     ## Extra custom steps
     ##
