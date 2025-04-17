@@ -98,7 +98,7 @@ stdenvNoCC.mkDerivation rec {
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-S2L1mQSO8yCnYbrL7rcfh4T143O5dqnVOz7ngR8ZsAQ=";
+        hash = "sha256-aKFU/xvpaFG00ah8xRl/An74Crea+j1FhxUPrlw0w24=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
