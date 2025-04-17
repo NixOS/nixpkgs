@@ -51,7 +51,10 @@ Note the use of `mirror://cpan/`, and the `pname` and `version` in the URL defin
 ```nix
 {
   foo = import ../path/to/foo.nix {
-    inherit stdenv fetchurl /* ... */;
+    inherit
+      stdenv
+      fetchurl # ...
+      ;
     inherit (perlPackages) ClassC3;
   };
 }
@@ -74,7 +77,11 @@ So what does `buildPerlPackage` do? It does the following:
 `buildPerlPackage` is built on top of `stdenv`, so everything can be customised in the usual way. For instance, the `BerkeleyDB` module has a `preConfigure` hook to generate a configuration file used by `Makefile.PL`:
 
 ```nix
-{ buildPerlPackage, fetchurl, db }:
+{
+  buildPerlPackage,
+  fetchurl,
+  db,
+}:
 
 buildPerlPackage rec {
   pname = "BerkeleyDB";
@@ -104,7 +111,10 @@ Dependencies on other Perl packages can be specified in the `buildInputs` and `p
       hash = "sha256-ASO9rV/FzJYZ0BH572Fxm2ZrFLMZLFATJng1NuU4FHc=";
     };
     propagatedBuildInputs = [
-      ClassC3 ClassInspector TestException MROCompat
+      ClassC3
+      ClassInspector
+      TestException
+      MROCompat
     ];
   };
 }
@@ -113,7 +123,13 @@ Dependencies on other Perl packages can be specified in the `buildInputs` and `p
 On Darwin, if a script has too many `-Idir` flags in its first line (its “shebang line”), it will not run. This can be worked around by calling the `shortenPerlShebang` function from the `postInstall` phase:
 
 ```nix
-{ lib, stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
+{
+  lib,
+  stdenv,
+  buildPerlPackage,
+  fetchurl,
+  shortenPerlShebang,
+}:
 
 {
   ImageExifTool = buildPerlPackage {
