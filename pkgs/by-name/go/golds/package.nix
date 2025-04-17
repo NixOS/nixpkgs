@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "golds";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "go101";
     repo = "golds";
     tag = "v${version}";
-    hash = "sha256-maYkVZlr8VW3nsNLVD+ib8TfltBkDrgWiC7VyeEJIy4=";
+    hash = "sha256-j6k68+hiXsXW5WLnmbN/iFLFpyU64z/1+DKuaAnNbac=";
   };
 
   # nixpkgs is not using the go distpack archive and missing a VERSION file in the source
