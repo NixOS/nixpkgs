@@ -14707,8 +14707,6 @@ with pkgs;
 
   scheherazade-new = callPackage ../data/fonts/scheherazade { };
 
-  starship = callPackage ../tools/misc/starship { };
-
   inherit (callPackages ../data/fonts/gdouros { })
     aegan
     aegyptus
