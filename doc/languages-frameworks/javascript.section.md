@@ -323,7 +323,7 @@ buildNpmPackage {
     npmRoot = ./.;
     fetcherOpts = {
       # Pass 'curlOptsList' to 'pkgs.fetchurl' while fetching 'axios'
-      { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
+      "node_modules/axios" = { curlOptsList = [ "--verbose" ]; };
     };
   };
 
@@ -410,7 +410,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";
 
-  src = ...;
+  src = {
+    # ...;
+  };
 
   nativeBuildInputs = [
     nodejs
@@ -439,7 +441,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";
 
-  src = ...;
+  src = {
+    # ...;
+  };
 
   pnpmInstallFlags = [ "--shamefully-hoist" ];
 
@@ -466,14 +470,16 @@ Assuming the following directory structure, we can define `sourceRoot` and `pnpm
 ```
 
 ```nix
-  ...
+{
+  # ...
   pnpmDeps = pnpm.fetchDeps {
-    ...
+    # ...
     sourceRoot = "${finalAttrs.src.name}/frontend";
   };
 
   # by default the working directory is the extracted source
   pnpmRoot = "frontend";
+}
 ```
 
 #### PNPM Workspaces {#javascript-pnpm-workspaces}
@@ -484,11 +490,13 @@ which will make PNPM only install dependencies for those workspace packages.
 For example:
 
 ```nix
-...
+{
+# ...
 pnpmWorkspaces = [ "@astrojs/language-server" ];
 pnpmDeps = pnpm.fetchDeps {
   inherit (finalAttrs) pnpmWorkspaces;
-  ...
+  # ...
+};
 }
 ```
 
@@ -498,6 +506,7 @@ Note that you do not need to set `sourceRoot` to make this work.
 Usually in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
 
 ```nix
+{
 buildPhase = ''
   runHook preBuild
 
@@ -505,6 +514,7 @@ buildPhase = ''
 
   runHook postBuild
 '';
+}
 ```
 
 #### Additional PNPM Commands and settings {#javascript-pnpm-extraCommands}
@@ -513,13 +523,15 @@ If you require setting an additional PNPM configuration setting (such as `dedupe
 set `prePnpmInstall` to the right commands to run. For example:
 
 ```nix
+{
 prePnpmInstall = ''
   pnpm config set dedupe-peer-dependants false
 '';
 pnpmDeps = pnpm.fetchDeps {
   inherit (finalAttrs) prePnpmInstall;
-  ...
+  # ...
 };
+}
 ```
 
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
