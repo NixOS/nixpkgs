@@ -28,7 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-kp2S3xnclMktEi6aqMBahQVZQeLriSigq77mRu+7A9I=";
   };
 
-  pythonRelaxDeps = [ "pipdeptree" ];
+  pythonRelaxDeps = [
+    "pipdeptree"
+    "rich"
+  ];
 
   build-system = [ poetry-core ];
 
@@ -55,10 +58,10 @@ buildPythonPackage rec {
   # no tests on pypi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Reflex Hosting CLI";
     homepage = "https://pypi.org/project/reflex-hosting-cli/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }
