@@ -17,6 +17,7 @@
   gdk-pixbuf,
   libmediainfo,
   vmtouch,
+  gitUpdater,
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
@@ -117,6 +118,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
       "''${qtWrapperArgs[@]}"
     )
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "a.*";
+  };
 
   meta = with lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
