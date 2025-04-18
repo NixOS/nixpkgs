@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "bark-server";
-  version = "2.1.9";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Finb";
     repo = "bark-server";
     tag = "v${version}";
-    hash = "sha256-bZWX47krx9V0qXg6Yl8yQbX1zd5DtsWkIBLi0bDxrpA=";
+    hash = "sha256-c3kMGD4JuLAP/Ms2dJBAl85urvranGGIicTmx4gIhNM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -35,9 +35,12 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    ldflags+=" -X \"main.buildDate=$(cat SOURCE_DATE_EPOCH)\""
-    ldflags+=" -X main.commitID==$(cat COMMIT)"
+    ldflags+=" -X \"main.buildDate=$(<SOURCE_DATE_EPOCH)\""
+    ldflags+=" -X main.commitID==$(<COMMIT)"
   '';
+
+  # All tests require network
+  doCheck = false;
 
   doInstallCheck = true;
 
