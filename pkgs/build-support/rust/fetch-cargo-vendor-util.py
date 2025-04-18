@@ -6,6 +6,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import tomllib
 from pathlib import Path
 from typing import Any, TypedDict, cast
@@ -59,19 +60,51 @@ def download_file_with_checksum(session: requests.Session, url: str, destination
     return checksum
 
 
-def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
-    # TODO: support other registries
-    #       maybe fetch config.json from the registry root and get the dl key
-    #       See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-    if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
-        raise Exception("Only the default crates.io registry is supported.")
+# get the .dl key from the config.json
+# See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+def get_dl_for_registry(registry_uri: str, session: requests.Session) -> str:
+    if registry_uri.startswith("sparse+"):
+        root_url = registry_uri[7:].rstrip("/")
+        with session.get(root_url + "/config.json") as response:
+            registry_config: dict[str, str] = response.json()
+    elif registry_uri.startswith("registry+"):
+        # use spare-checkout to only get the config.json file from the registry's git repo
+        url = registry_uri[9:]
+        tmp_dir = Path(tempfile.mkdtemp())
+        cmd = ["nix-prefetch-git", "--builder", "--quiet", "--url", url, "--rev", "HEAD", "--sparse-checkout", "config.json", "--out", str(tmp_dir)]
+        subprocess.check_output(cmd)
+        with open(tmp_dir / "config.json") as f:
+            registry_config: dict[str, str] = json.load(f)
+    else:
+        raise Exception(f"Unknown registry format in URI: {registry_uri}")
 
-    return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
+    return registry_config["dl"]
 
 
-def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
+# See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-files
+def name_to_prefix(name: str) -> str:
+    l = len(name)
+    if l <= 2:
+        return str(l)
+    if l == 3:
+        return "3/" + name[0]
+    return name[0:2] + "/" + name[2:4]
 
-    url = get_download_url_for_tarball(pkg)
+
+# See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+def get_download_url_for_tarball(pkg: dict[str, Any], dl: str) -> str:
+    prefix = name_to_prefix(pkg["name"])
+    url = dl if "{" in dl else dl + "/{crate}/{version}/download"
+    url = url.replace("{crate}", pkg["name"])
+    url = url.replace("{version}", pkg["version"])
+    url = url.replace("{prefix}", prefix)
+    url = url.replace("{lowerprefix}", prefix.lower())
+    url = url.replace("{sha256-checksum}", pkg["checksum"])
+    return url
+
+
+def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path, dl: str) -> None:
+    url = get_download_url_for_tarball(pkg, dl)
     filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
 
     # TODO: allow legacy checksum specification, see importCargoLock for example
@@ -137,7 +170,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
         if source.startswith("git+"):
             git_packages.append(pkg)
-        elif source.startswith("registry+"):
+        elif source.startswith("registry+") or source.startswith("sparse+"):
             registry_packages.append(pkg)
         else:
             raise Exception(f"Can't process source: {source}.")
@@ -146,6 +179,13 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     for pkg in git_packages:
         source_info = parse_git_source(pkg["source"], lockfile_version)
         git_sha_rev_to_url[source_info["git_sha_rev"]] = source_info["url"]
+
+    registry_to_dl = {}
+    session_0 = create_http_session()
+    for pkg in registry_packages:
+        registry_uri = pkg["source"]
+        if registry_uri not in registry_to_dl:
+            registry_to_dl[registry_uri] = get_dl_for_registry(registry_uri, session_0)
 
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
@@ -161,7 +201,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
         if len(registry_packages) != 0:
             (out_dir / "tarballs").mkdir()
             session = create_http_session()
-            tarball_args_gen = ((session, pkg, out_dir) for pkg in registry_packages)
+            tarball_args_gen = ((session, pkg, out_dir, registry_to_dl[pkg["source"]]) for pkg in registry_packages)
             pool.starmap(download_tarball, tarball_args_gen)
 
 
