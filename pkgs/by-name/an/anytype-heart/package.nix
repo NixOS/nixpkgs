@@ -11,12 +11,12 @@
 
 let
   pname = "anytype-heart";
-  version = "0.39.11";
+  version = "0.40.19";
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${version}";
-    hash = "sha256-+H63bc4aJPERfclzKh4E3uYEEwNycLfe0BCPSlilqCc=";
+    hash = "sha256-BUQZmZ7jKWdbBcWtx7rbbeEJbo5FncYHmp/5FVd0vdI=";
   };
 
   arch =
@@ -34,7 +34,7 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-fbZ1DiRcD9dnS8e7BMrKPYApqZmQbaH6DsSSO1knDmo=";
+  vendorHash = "sha256-xsxgeoS1wIi0/LNGmZZyWKWzhkMJUnCEslXcIz+Dw8U=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [
