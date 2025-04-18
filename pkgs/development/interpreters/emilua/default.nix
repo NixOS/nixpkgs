@@ -22,6 +22,7 @@
   cmake,
   asciidoctor,
   makeWrapper,
+  versionCheckHook,
   gitUpdater,
   enableIoUring ? false,
   emilua, # this package
@@ -118,6 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/nix-support/setup-hook \
       --replace-fail @sitePackages@ "${finalAttrs.passthru.sitePackages}"
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
