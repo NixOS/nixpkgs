@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-0qK9dWkKnoXbIIBMN3p5noPEke/bgC8Bjtmf6lwtyr4=";
   };
 
+  cargoHash = "sha256-EoRu8p6cUe1li54nVUkf+3qywIsDXh4ptIVLluJ3eFs=";
+
   nativeBuildInputs = [
     git
     pkg-config
@@ -33,9 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [ openssl ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EoRu8p6cUe1li54nVUkf+3qywIsDXh4ptIVLluJ3eFs=";
 
   checkFlags = [
     # Makes a network request
