@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "A portable open source (MIT-licensed) implementation of the OpenCL standard";
+    description = "portable open source (MIT-licensed) implementation of the OpenCL standard";
     homepage = "http://portablecl.org";
     changelog = "https://github.com/pocl/pocl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
