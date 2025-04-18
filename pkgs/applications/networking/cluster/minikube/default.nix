@@ -80,7 +80,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       ebzzry
-      copumpkin
       vdemeester
       atkinschang
       Chili-Man
