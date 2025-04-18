@@ -88,8 +88,8 @@ in
 {
   charles4 = (
     generic {
-      version = "4.6.4";
-      sha256 = "KEQYb90kt41dS3TJLZqdaV9P3mQA9UPsEyiFb/knm3w=";
+      version = "4.6.8";
+      sha256 = "sha256-AaS+zmQTWsGoLEhyGHA/UojmctE7IV0N9fnygNhEPls=";
       platform = "_amd64";
       jdk = jdk11;
     }
