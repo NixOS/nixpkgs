@@ -845,6 +845,15 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
 
+    ###
+    ### LTO support
+    ###
+
+    + optionalString (targetPlatform.useLTO) ''
+      echo " -flto -fuse-linker-plugin" >> $out/nix-support/cc-cflags
+      echo " -flto -fuse-linker-plugin" >> $out/nix-support/cc-ldflags
+    ''
+
     ##
     ## Extra custom steps
     ##
