@@ -134,6 +134,9 @@ buildGoModule {
           # test for a dev util which helps to fork golang.org/x/crypto/acme
           # not necessary and fails to match
           "TestSyncedToUpstream" # tempfork/acme
+
+          # flaky: https://github.com/tailscale/tailscale/issues/7030
+          "TestConcurrent"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat

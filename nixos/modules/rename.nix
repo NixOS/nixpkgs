@@ -299,6 +299,9 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+    (mkRemovedOptionModule [ "services" "gsignond" ] ''
+      The corresponding package was unmaintained, abandoned upstream, used outdated library and thus removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "haka" ] ''
       The corresponding package was broken and removed from nixpkgs.
     '')

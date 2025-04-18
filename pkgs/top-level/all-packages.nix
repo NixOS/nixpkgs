@@ -9376,10 +9376,6 @@ with pkgs;
 
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
-  geocode-glib_2 = geocode-glib.override {
-    libsoup_2_4 = libsoup_3;
-  };
-
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
@@ -10103,10 +10099,6 @@ with pkgs;
   libgnome-games-support_2_0 =
     callPackage ../development/libraries/libgnome-games-support/2.0.nix
       { };
-
-  libgrss = callPackage ../development/libraries/libgrss {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;
-  };
 
   libiio = callPackage ../development/libraries/libiio {
     inherit (darwin.apple_sdk.frameworks) CFNetwork CoreServices;
@@ -11515,17 +11507,6 @@ with pkgs;
   arocc = aroccPackages.latest;
 
   aroccStdenv = if stdenv.cc.isArocc then stdenv else lowPrio arocc.cc.passthru.stdenv;
-
-  gsignond = callPackage ../development/libraries/gsignond {
-    plugins = [ ];
-  };
-
-  gsignondPlugins = recurseIntoAttrs {
-    sasl = callPackage ../development/libraries/gsignond/plugins/sasl.nix { };
-    oauth = callPackage ../development/libraries/gsignond/plugins/oauth.nix { };
-    lastfm = callPackage ../development/libraries/gsignond/plugins/lastfm.nix { };
-    mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
-  };
 
   ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
 

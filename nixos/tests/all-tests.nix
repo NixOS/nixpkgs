@@ -966,7 +966,7 @@ in
   nzbhydra2 = handleTest ./nzbhydra2.nix { };
   ocis = handleTest ./ocis.nix { };
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
-  obs-studio = handleTest ./obs-studio.nix { };
+  obs-studio = runTest ./obs-studio.nix;
   oh-my-zsh = handleTest ./oh-my-zsh.nix { };
   ollama = runTest ./ollama.nix;
   ollama-cuda = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-cuda.nix;
@@ -1092,21 +1092,25 @@ in
   pretalx = runTest ./web-apps/pretalx.nix;
   prefect = runTest ./prefect.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  printing-socket = handleTest ./printing.nix {
-    socket = true;
-    listenTcp = true;
+  printing-socket = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = true;
+    _module.args.listenTcp = true;
   };
-  printing-service = handleTest ./printing.nix {
-    socket = false;
-    listenTcp = true;
+  printing-service = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = false;
+    _module.args.listenTcp = true;
   };
-  printing-socket-notcp = handleTest ./printing.nix {
-    socket = true;
-    listenTcp = false;
+  printing-socket-notcp = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = true;
+    _module.args.listenTcp = false;
   };
-  printing-service-notcp = handleTest ./printing.nix {
-    socket = false;
-    listenTcp = false;
+  printing-service-notcp = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = false;
+    _module.args.listenTcp = false;
   };
   private-gpt = handleTest ./private-gpt.nix { };
   privatebin = runTest ./privatebin.nix;
@@ -1459,7 +1463,7 @@ in
   wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
   wordpress = runTest ./wordpress.nix;
   wrappers = handleTest ./wrappers.nix { };
-  writefreely = handleTest ./web-apps/writefreely.nix { };
+  writefreely = import ./web-apps/writefreely.nix { inherit pkgs runTest; };
   wstunnel = runTest ./wstunnel.nix;
   xandikos = runTest ./xandikos.nix;
   xautolock = runTest ./xautolock.nix;
