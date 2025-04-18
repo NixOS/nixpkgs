@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchsvn,
+  fetchgit,
   cmake,
   pkg-config,
   perl,
@@ -17,24 +17,23 @@
   xorg,
   util-linux,
   curl,
-  SDL,
-  SDL_image,
-  SDL_mixer,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
   libselinux,
   libsepol,
   version,
   rev,
-  sha256,
+  hash,
 }:
 
 stdenv.mkDerivation {
   pname = "crossfire-client";
   version = rev;
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/client/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/crossfire/crossfire-client";
+    inherit hash rev;
   };
 
   nativeBuildInputs = [
@@ -55,9 +54,9 @@ stdenv.mkDerivation {
     xorg.libpthreadstubs
     xorg.libXdmcp
     curl
-    SDL
-    SDL_image
-    SDL_mixer
+    SDL2
+    SDL2_image
+    SDL2_mixer
     util-linux
     libselinux
     libsepol
