@@ -7,10 +7,12 @@ Typst can be configured to include packages from [Typst Universe](https://typst.
 You can create a custom Typst environment with a selected set of packages from **Typst Universe** using the following code. It is also possible to specify a Typst package with a specific version (e.g., `cetz_0_3_0`). A package without a version number will always refer to its latest version.
 
 ```nix
-typst.withPackages (p: with p; [
-  polylux_0_4_0
-  cetz_0_3_0
-])
+typst.withPackages (
+  p: with p; [
+    polylux_0_4_0
+    cetz_0_3_0
+  ]
+)
 ```
 
 ### Handling Outdated Package Hashes {#typst-handling-outdated-package-hashes}
@@ -18,18 +20,24 @@ typst.withPackages (p: with p; [
 Since **Typst Universe** does not provide a way to fetch a package with a specific hash, the package hashes in `nixpkgs` can sometimes be outdated. To resolve this issue, you can manually override the package source using the following approach:
 
 ```nix
-typst.withPackages.override (old: {
-  typstPackages = old.typstPackages.extend (_: previous: {
-    polylux_0_4_0 = previous.polylux_0_4_0.overrideAttrs (oldPolylux: {
-      src = oldPolylux.src.overrideAttrs {
-        outputHash = YourUpToDatePolyluxHash;
-      };
-    });
-  });
-}) (p: with p; [
-  polylux_0_4_0
-  cetz_0_3_0
-])
+typst.withPackages.override
+  (old: {
+    typstPackages = old.typstPackages.extend (
+      _: previous: {
+        polylux_0_4_0 = previous.polylux_0_4_0.overrideAttrs (oldPolylux: {
+          src = oldPolylux.src.overrideAttrs {
+            outputHash = YourUpToDatePolyluxHash;
+          };
+        });
+      }
+    );
+  })
+  (
+    p: with p; [
+      polylux_0_4_0
+      cetz_0_3_0
+    ]
+  )
 ```
 
 ## Custom Packages {#typst-custom-packages}
@@ -39,12 +47,15 @@ typst.withPackages.override (old: {
 Here's how to define a custom Typst package:
 
 ```nix
-{ buildTypstPackage, typstPackages, fetchzip }:
+{
+  buildTypstPackage,
+  typstPackages,
+}:
 
 buildTypstPackage (finalAttrs: {
   pname = "my-typst-package";
   version = "0.0.1";
-  src = fetchzip { ... };
+  src = ./.;
   typstDeps = with typstPackages; [ cetz_0_3_0 ];
 })
 ```
