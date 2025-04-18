@@ -38,14 +38,12 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.3";
+  version = "3.8.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-galn3D1qWgqaslBVlIP+IJIwZYKpGS+Yvnpjvc4nl/c=";
+    hash = "sha256-OLyLh3+yT0FJBf8XliADFgfNMf5vkA1noGcwFCcVZRw=";
   };
 
   postPatch = ''
