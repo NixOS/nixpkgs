@@ -5,7 +5,7 @@
   git,
   pkg-config,
   openssl,
-  erlang,
+  erlang_27,
   nodejs,
   bun,
   deno,
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     git
     pkg-config
-    erlang
+    erlang_27
     nodejs
     bun
     deno
