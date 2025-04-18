@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Nixpkgs channel for television";
+    description = "Fuzzy search for Nix packages";
     homepage = "https://github.com/3timeslazy/nix-search-tv";
     changelog = "https://github.com/3timeslazy/nix-search-tv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
