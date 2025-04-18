@@ -10203,9 +10203,7 @@ with pkgs;
     memHierarchy = "L3:16/64/8192K,L2:16/64/2048K,L1:8/64/16K";
   };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
-  };
+  libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   # GNU libc provides libiconv so systems with glibc don't need to
   # build libiconv separately. Additionally, Apple forked/repackaged

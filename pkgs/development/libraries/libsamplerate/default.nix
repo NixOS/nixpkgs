@@ -4,15 +4,8 @@
   fetchurl,
   pkg-config,
   libsndfile,
-  ApplicationServices,
-  Carbon,
-  CoreServices,
 }:
 
-let
-  inherit (lib) optionals optionalString;
-
-in
 stdenv.mkDerivation rec {
   pname = "libsamplerate";
   version = "0.2.2";
@@ -23,12 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ libsndfile ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      CoreServices
-    ];
+  buildInputs = [ libsndfile ];
 
   configureFlags = [ "--disable-fftw" ];
 
@@ -36,12 +24,6 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
   ];
-
-  postConfigure = optionalString stdenv.hostPlatform.isDarwin ''
-    # need headers from the Carbon.framework in /System/Library/Frameworks to
-    # compile this on darwin -- not sure how to handle
-    NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
-  '';
 
   meta = with lib; {
     description = "Sample Rate Converter for audio";
