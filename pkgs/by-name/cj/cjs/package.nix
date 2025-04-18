@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   gobject-introspection,
   pkg-config,
@@ -8,7 +8,7 @@
   glib,
   readline,
   libsysprof-capture,
-  spidermonkey_115,
+  spidermonkey_128,
   meson,
   mesonEmulatorHook,
   dbus,
@@ -17,15 +17,15 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cjs";
-  version = "6.4.0";
+  version = "128.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
-    rev = version;
-    hash = "sha256-2lkIWroOo3hxu9/L/Ty7CADzVrZ0ohyHVmm65NoNlD4=";
+    tag = finalAttrs.version;
+    hash = "sha256-B9N/oNRvsnr3MLkpcH/aBST6xOJSFdvSUFuD6EldE38=";
   };
 
   outputs = [
@@ -53,12 +53,10 @@ stdenv.mkDerivation rec {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_115
+    spidermonkey_128
   ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isMusl [
     "-Dprofiler=disabled"
@@ -68,22 +66,19 @@ stdenv.mkDerivation rec {
     patchShebangs --build build/choose-tests-locale.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
-
     longDescription = ''
       This module contains JavaScript bindings based on gobject-introspection.
     '';
-
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
       mit
       mpl11
     ];
-
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
-}
+})
