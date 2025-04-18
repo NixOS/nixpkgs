@@ -18,9 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-backend-test-runs"
   ];
 
+  enableParallelBuilding = true;
+
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doCheck = true;
+  enableParallelChecking = true;
   doInstallCheck = true;
 
   versionCheckProgram = [ "${placeholder "out"}/bin/otf2-config" ];
