@@ -21,6 +21,7 @@ in
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
   enableShared ? !stdenv.hostPlatform.isStatic,
+  enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
   # WARN: Enabling all targets increases output size to a multiple.
   withAllTargets ? false,
 }:
@@ -223,8 +224,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
     ++ lib.optionals enableGold [
       "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
-      "--enable-plugins"
     ]
+    ++ lib.optional (enableGold || enableLTO) "--enable-plugins"
     ++ (
       if enableShared then
         [
@@ -237,6 +238,9 @@ stdenv.mkDerivation (finalAttrs: {
           "--enable-static"
         ]
     )
+    ++ lib.optionals enableLTO [
+      "--enable-lto"
+    ]
     ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
       [
         # lld17+ passes `--no-undefined-version` by default and makes this a hard
