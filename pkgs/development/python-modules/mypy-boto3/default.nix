@@ -350,8 +350,8 @@ rec {
       "sha256-5rf6lym+LUdtellsFlCOPcL7ZR44cxL7ozMG77QBp4U=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.37.0"
-      "sha256-xDjzytVFmlZuYKcvzgMsVfyT8Xn9X0a4/OHZzLW80pI=";
+    buildMypyBoto3Package "connectcases" "1.37.35"
+      "sha256-Lnnfhpgau08hnTT73wGvGi3ssGIzGzZanRb/BO8JHXU=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.37.0"
@@ -470,8 +470,8 @@ rec {
       "sha256-uKccWDS0zhFrs6CQ9ve6by4rYL43T6iFZ3rjNy7SiyI=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.37.24"
-      "sha256-Fh3hdSfyUHT9DTHjp7GVk4GPDbI1IbK1+u2LIbFGhY4=";
+    buildMypyBoto3Package "eks" "1.37.35"
+      "sha256-Uk7r11ayOnQl6HSiFHlfpj7whRFjSz8nJMxxs0ZZn/w=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
@@ -518,8 +518,8 @@ rec {
       "sha256-jKo/VYOtHEWPFh3w0Q3rg3nlreizEcNG7C/eADRNy88=";
 
   mypy-boto3-events =
-    buildMypyBoto3Package "events" "1.37.28"
-      "sha256-U8L97t7Tql+SpCSpfOTF22RRKLFvN+2SoTkweGAMe0c=";
+    buildMypyBoto3Package "events" "1.37.35"
+      "sha256-HIZTGaVSNsddZxDxenpzNFWZDvV7Hl21ZKVfbGYYF9g=";
 
   mypy-boto3-evidently =
     buildMypyBoto3Package "evidently" "1.37.0"
@@ -1118,8 +1118,8 @@ rec {
       "sha256-031skcPZd/jBWIod9JAbIc9NUcEBBN33UxIoGc2IiAA=";
 
   mypy-boto3-resource-groups =
-    buildMypyBoto3Package "resource-groups" "1.37.0"
-      "sha256-38L7Iirnj8n6MnWSCY1ZylCAECSW4wo3gvddKq74aIs=";
+    buildMypyBoto3Package "resource-groups" "1.37.35"
+      "sha256-ae1MUUGAapRCLaWrMzlzQvNc+9ijTQxFMlxqvOFD4WI=";
 
   mypy-boto3-resourcegroupstaggingapi =
     buildMypyBoto3Package "resourcegroupstaggingapi" "1.37.0"
@@ -1238,8 +1238,8 @@ rec {
       "sha256-toCWU6Bh5IJ5lupehKJ6EvsMKZz5s/uPWG9qF+4P5uM=";
 
   mypy-boto3-servicecatalog =
-    buildMypyBoto3Package "servicecatalog" "1.37.0"
-      "sha256-/MJaP0iTix/cyCxJrTuTWHf0lSCt8dfJI67Y6+PdJF4=";
+    buildMypyBoto3Package "servicecatalog" "1.37.35"
+      "sha256-blNOCdn3J1XNwGjWMo5eN+a2SzKqCt/1at8l8AzNZsg=";
 
   mypy-boto3-servicecatalog-appregistry =
     buildMypyBoto3Package "servicecatalog-appregistry" "1.37.0"
