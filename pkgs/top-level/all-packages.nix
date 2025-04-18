@@ -16411,9 +16411,7 @@ with pkgs;
 
   tests-stdenv-gcc-stageCompare = callPackage ../test/stdenv/gcc-stageCompare.nix { };
 
-  t-rec = callPackage ../misc/t-rec {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  t-rec = callPackage ../misc/t-rec { };
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
