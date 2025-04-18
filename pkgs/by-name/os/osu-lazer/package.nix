@@ -16,6 +16,7 @@
   xorg,
   udev,
   vulkan-loader,
+  nix-update-script,
   nativeWayland ? false,
 }:
 
@@ -95,7 +96,7 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
