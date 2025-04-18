@@ -1,6 +1,7 @@
 {
   lib,
   mkXfceDerivation,
+  fetchpatch,
   ffmpegthumbnailer,
   gdk-pixbuf,
   glib,
@@ -57,6 +58,14 @@ mkXfceDerivation {
   postFixup = ''
     wrapGApp $out/lib/tumbler-1/tumblerd
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "only-use-embedded-pdf-thumbnail-if-resolution-suffices.patch";
+      url = "https://gitlab.xfce.org/xfce/tumbler/-/merge_requests/35.patch";
+      hash = "sha256-aFJoWWzTaikqCw6C1LH+BFxst/uKkOGT1QK9Mx8/8/c=";
+    })
+  ];
 
   meta = with lib; {
     description = "D-Bus thumbnailer service";
