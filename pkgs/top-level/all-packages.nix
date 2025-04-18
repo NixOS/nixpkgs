@@ -4462,9 +4462,7 @@ with pkgs;
     hdf5 = hdf5-mpi.override { usev110Api = true; };
   };
 
-  netcdffortran = callPackage ../development/libraries/netcdf-fortran {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices SystemConfiguration;
-  };
+  netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
 
   inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
 
