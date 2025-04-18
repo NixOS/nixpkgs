@@ -1,0 +1,12 @@
+diff --git a/src/client/get.rs b/src/client/get.rs
+index 5e38e02..27355fa 100644
+--- a/src/client/get.rs
++++ b/src/client/get.rs
+@@ -3,6 +3,7 @@ use std::{
+     path::{Path, PathBuf},
+     sync::Arc,
+     time::Instant,
++    mem::size_of,
+ };
+ 
+ use anyhow::bail;
