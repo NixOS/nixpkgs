@@ -2,6 +2,7 @@
   lib,
   appimageTools,
   fetchurl,
+  writeScript,
 }:
 let
   pname = "chatbox";
@@ -25,7 +26,7 @@ appimageTools.wrapType2 {
       --replace-fail 'Icon=xyz.chatboxapp.app' 'Icon=chatbox'
   '';
 
-  passthru.updateScript = ''
+  passthru.updateScript = writeScript "update-chatbox" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     version=$(curl -I -X GET https://chatboxai.app/install_chatbox/linux | grep -oP 'Chatbox-\K[0-9]+\.[0-9]+\.[0-9]+')
