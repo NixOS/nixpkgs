@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Language server for Koto";
     homepage = "https://github.com/koto-lang/koto-ls";
-    changelog = "https://github.com/koto-lang/koto-ls/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/koto-lang/koto-ls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "koto-ls";
