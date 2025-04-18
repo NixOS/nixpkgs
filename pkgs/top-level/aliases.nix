@@ -392,6 +392,7 @@ mapAliases {
   cargo-inspect = throw "'cargo-inspect' has been removed due to lack of upstream maintenance. Upstream recommends cargo-expand."; # Added 2025-01-26
   cargo-web = throw "'cargo-web' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
+  centerim = throw "centerim has been removed due to upstream disappearing"; # Added 2025-04-18
   certmgr-selfsigned = certmgr; # Added 2023-11-30
   cgal_4 = throw "cgal_4 has been removed as it is obsolete use cgal instead"; # Added 2024-12-30
   cgal_5 = cgal; # Added 2024-12-30
