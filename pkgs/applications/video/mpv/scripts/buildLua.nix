@@ -81,14 +81,12 @@ lib.makeOverridable (
             inherit scriptName;
           }
           // lib.optionalAttrs (runtime-dependencies != [ ]) {
-            extraWrapperArgs =
-              [
-                "--prefix"
-                "PATH"
-                ":"
-              ]
-              ++ (map lib.makeBinPath runtime-dependencies)
-              ++ args.passthru.extraWrapperArgs or [ ];
+            extraWrapperArgs = [
+              "--prefix"
+              "PATH"
+              ":"
+              (lib.makeBinPath runtime-dependencies)
+            ] ++ args.passthru.extraWrapperArgs or [ ];
           };
         meta =
           {
