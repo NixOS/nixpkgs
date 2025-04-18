@@ -11,13 +11,13 @@
   docbook-xsl-nons,
   gobject-introspection,
   gnome,
-  libsoup_2_4,
+  libsoup_3,
   json-glib,
   glib,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geocode-glib";
   version = "3.26.4";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geocode-glib/${lib.versions.majorMinor version}/geocode-glib-${version}.tar.xz";
+    url = "mirror://gnome/sources/geocode-glib/${lib.versions.majorMinor finalAttrs.version}/geocode-glib-${finalAttrs.version}.tar.xz";
     sha256 = "LZpoJtFYRwRJoXOHEiFZbaD4Pr3P+YuQxwSQiQVqN6o=";
   };
 
@@ -53,28 +53,30 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup_2_4
+    libsoup_3
     json-glib
   ];
 
   mesonFlags = [
-    "-Dsoup2=${lib.boolToString (lib.versionOlder libsoup_2_4.version "2.99")}"
+    "-Dsoup2=false"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "geocode-glib";
     };
     tests = {
       installed-tests = nixosTests.installed-tests.geocode-glib;
     };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/geocode-glib/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Convenience library for the geocoding and reverse geocoding using Nominatim service";
-    license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    homepage = "https://gitlab.gnome.org/GNOME/geocode-glib";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.unix;
   };
-}
+})
