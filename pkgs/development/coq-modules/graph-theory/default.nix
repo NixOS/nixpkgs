@@ -18,6 +18,7 @@ mkCoqDerivation {
   release."0.9.2".sha256 = "sha256-DPYCZS8CzkfgpR+lmYhV2v20ezMtyWp8hdWpuh0OOQU=";
   release."0.9.3".sha256 = "sha256-9WX3gsw+4btJLqcGg2W+7Qy+jaZtkfw7vCp8sXYmaWw=";
   release."0.9.4".sha256 = "sha256-fXTAsRdPisNhg8Umaa7S7gZ1M8zuPGg426KP9fAkmXQ=";
+  release."0.9.6".sha256 = "sha256-fvGb970tRE4xj1pBIhNBDaqssDd6kNQ/+s0c+aOO5IE=";
 
   releaseRev = v: "v${v}";
 
@@ -27,6 +28,13 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
+        {
+          cases = [
+            (range "8.18" "9.0")
+            (range "2.0.0" "2.4.0")
+          ];
+          out = "0.9.6";
+        }
         {
           cases = [
             (range "8.16" "8.19")
