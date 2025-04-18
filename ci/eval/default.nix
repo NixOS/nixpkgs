@@ -179,6 +179,8 @@ let
           xargs -I{} -P"$cores" \
           ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir"
 
+        cp -r "$chunkOutputDir"/stats $out/stats-by-chunk
+
         if (( chunkSize * chunkCount != attrCount )); then
           # A final incomplete chunk would mess up the stats, don't include it
           rm "$chunkOutputDir"/stats/"$seq_end"
@@ -253,6 +255,12 @@ let
           done
         } |
           jq -s from_entries > $out/stats.json
+
+        mkdir -p $out/stats
+
+        for d in ${resultsDir}/*; do
+          cp -r "$d"/stats-by-chunk $out/stats/$(basename "$d")
+        done
       '';
 
   compare = import ./compare {
