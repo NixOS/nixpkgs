@@ -8952,9 +8952,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
-  arrayfire = callPackage ../development/libraries/arrayfire {
-    cudaPackages = cudaPackages_12;
-  };
+  arrayfire = callPackage ../development/libraries/arrayfire { };
 
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
   asio = callPackage ../development/libraries/asio { };
@@ -17372,7 +17370,6 @@ with pkgs;
 
   katagoWithCuda = katago.override {
     backend = "cuda";
-    cudaPackages = cudaPackages_12;
   };
 
   katagoCPU = katago.override {
@@ -17381,7 +17378,6 @@ with pkgs;
 
   katagoTensorRT = katago.override {
     backend = "tensorrt";
-    cudaPackages = cudaPackages_12;
   };
 
   koboredux = callPackage ../games/koboredux { };
