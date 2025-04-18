@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
         ln -s $out/bin/gpg $out/bin/gpg2
 
         # Make libexec tools available in PATH
-        for f in $out/libexec/; do
+        for f in $out/libexec/*; do
           if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
           ln -s $f $out/bin/$(basename $f)
         done
