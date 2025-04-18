@@ -579,6 +579,10 @@ self: super:
     else
       dontDistribute (markBroken super.fclabels);
 
+  # Bounds on base are too strict.
+  # https://github.com/phadej/regex-applicative-text/issues/13
+  regex-applicative-text = doJailbreak super.regex-applicative-text;
+
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
 
