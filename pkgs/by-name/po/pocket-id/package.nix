@@ -12,12 +12,12 @@
 }:
 
 let
-  version = "0.45.0";
+  version = "0.47.0";
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${version}";
-    hash = "sha256-x5Y3ArkIPxiE6avk9DNyFdfkc/pY6h3JH3PZCS8U/GM=";
+    hash = "sha256-YFoh30uMQItoeY1j08flPbxUhybeKJTEhd9hsiMaCJQ=";
   };
 
   backend = buildGoModule {
@@ -39,7 +39,7 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-cpmZzlz+wusfRLN4iIGdk+I4SWrX/gk2fbhg+Gg3paw=";
+    npmDepsHash = "sha256-CKxa0uL7pBQJiA2LPDA/HQvRk8sjphZ9nur8jb7BnU8=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     nativeBuildInputs = [
@@ -53,7 +53,7 @@ let
       # it still needs a few packages from node_modules, try to strip that
       npm prune --omit=dev --omit=optional $npmFlags
       # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,bits-ui,jiti,@swc,.bin}
+      rm -r node_modules/{lucide-svelte,jiti,@swc,.bin}
       # unused file types
       for pattern in '*.map' '*.map.js' '*.ts'; do
         find . -type f -name "$pattern" -exec rm {} +
