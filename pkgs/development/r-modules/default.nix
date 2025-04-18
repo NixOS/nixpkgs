@@ -797,7 +797,10 @@ let
       geos
     ];
     tok = [ pkgs.cargo ];
-    rshift = [ pkgs.cargo ];
+    rshift = with pkgs; [
+      cargo
+      rustc
+    ];
     arcgisutils = with pkgs; [
       cargo
       rustc
@@ -1716,6 +1719,10 @@ let
     });
 
     arcpbf = old.arcpbf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    rshift = old.rshift.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
