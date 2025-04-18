@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bark-server";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Finb";
     repo = "bark-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c3kMGD4JuLAP/Ms2dJBAl85urvranGGIicTmx4gIhNM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   preBuild = ''
@@ -53,9 +53,9 @@ buildGoModule rec {
   meta = {
     description = "Backend of Bark, an iOS App which allows you to push customed notifications to your iPhone";
     homepage = "https://github.com/Finb/bark-server";
-    changelog = "https://github.com/Finb/bark-server/releases/tag/v${version}";
+    changelog = "https://github.com/Finb/bark-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "bark-server";
   };
-}
+})
