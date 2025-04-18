@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "pgroll";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "xataio";
     repo = "pgroll";
     tag = "v${version}";
-    hash = "sha256-XjjoyJZVy/Zjac35enaBRCWU92YA9xFzFRhlsR8G9Bg=";
+    hash = "sha256-3ZA3qLAwwu0sT9R6R26GB/FF6vLxbofO5HUfPSBLcrg=";
   };
 
   proxyVendor = true;

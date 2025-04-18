@@ -16110,18 +16110,7 @@ self: super: with self; {
 
   soxr = callPackage ../development/python-modules/soxr { libsoxr = pkgs.soxr; };
 
-  spacy = callPackage ../development/python-modules/spacy {
-    # fix error: ‘_PyCFrame’ has no member named ‘use_tracing’
-    # see: https://aur.archlinux.org/packages/python-spacy
-    cython_0 = cython_0.overridePythonAttrs (old: rec {
-      version = "0.29.37";
-      src = pkgs.fetchPypi {
-        pname = "Cython";
-        inherit version;
-        hash = "sha256-+BPUpt2Ure5dT/JmGR0dlb9tQWSk+sxTVCLAIbJQTPs=";
-      };
-    });
-  };
+  spacy = callPackage ../development/python-modules/spacy { };
 
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
 
