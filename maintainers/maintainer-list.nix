@@ -11152,6 +11152,11 @@
     github = "jdupak";
     githubId = 22683640;
   };
+  jeancaspar = {
+    name = "Jean Caspar";
+    github = "JeanCASPAR";
+    githubId = 55629512;
+  };
   jecaro = {
     email = "jeancharles.quillet@gmail.com";
     github = "jecaro";
