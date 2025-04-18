@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
-    repo = pname;
-    tag = "v${version}";
+    repo = "gleam";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0qK9dWkKnoXbIIBMN3p5noPEke/bgC8Bjtmf6lwtyr4=";
   };
 
@@ -48,8 +48,8 @@ rustPlatform.buildRustPackage rec {
     description = "Statically typed language for the Erlang VM";
     mainProgram = "gleam";
     homepage = "https://gleam.run/";
-    changelog = "https://github.com/gleam-lang/gleam/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.beam.members ++ [ lib.maintainers.philtaken ];
+    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})
