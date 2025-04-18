@@ -535,6 +535,10 @@ self: super:
         }
       else
         {
+          outputs = [
+            "out"
+            "dev"
+          ];
           nativeBuildInputs = attrs.nativeBuildInputs ++ [
             autoreconfHook
             bootstrap_cmds
@@ -610,8 +614,14 @@ self: super:
             ln -s Xquartz $out/bin/X
 
             cp ${darwinOtherX}/share/man -rT $out/share/man
+
+            mkdir -p $dev/{lib,include,share}
+            cp ${darwinOtherX.dev}/share/aclocal -rT $dev/share/aclocal
+            cp ${darwinOtherX.dev}/lib/pkgconfig -rT $dev/lib/pkgconfig
+            cp ${darwinOtherX.dev}/include -rT $dev/include
           '';
           passthru = attrs.passthru // {
+            darwinXorg = darwinOtherX;
             inherit version;
           };
         }
