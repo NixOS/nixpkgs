@@ -93,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         mkdir -p $out/Applications
         mv $out/*.app $out/Applications/
+
+        mkdir -p $out/bin
+        ln -s $out/Applications/vengi-voxconvert.app/Contents/MacOS/vengi-voxconvert $out/bin/vengi-voxconvert
       ''
     else
       # Set the data directory for each executable. We cannot set it at build time
