@@ -7292,8 +7292,6 @@ with pkgs;
     jdk = graalvmPackages.graalvm-ce;
   };
 
-  cliscord = callPackage ../misc/cliscord { };
-
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
     jre = jre8;
   };
