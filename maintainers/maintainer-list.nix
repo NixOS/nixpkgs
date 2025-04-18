@@ -4503,6 +4503,11 @@
     githubId = 3956062;
     name = "Simon Lackerbauer";
   };
+  cilki = {
+    github = "cilki";
+    githubId = 10459406;
+    name = "Tyler Cook";
+  };
   cimm = {
     email = "8k9ft8m5gv@astil.be";
     github = "cimm";
@@ -4940,12 +4945,6 @@
     github = "contrun";
     githubId = 32609395;
     name = "B YI";
-  };
-  copumpkin = {
-    email = "pumpkingod@gmail.com";
-    github = "copumpkin";
-    githubId = 2623;
-    name = "Dan Peebles";
   };
   corbanr = {
     email = "corban@raunco.co";
@@ -21397,6 +21396,11 @@
     email = "emre@cebi.io";
     github = "samemrecebi";
     githubId = 64419750;
+  };
+  samfundev = {
+    name = "samfundev";
+    github = "samfundev";
+    githubId = 6759716;
   };
   samhug = {
     email = "s@m-h.ug";
