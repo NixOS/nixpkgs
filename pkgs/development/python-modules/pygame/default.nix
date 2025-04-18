@@ -124,6 +124,7 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     badPlatforms = [
       # Several tests segfault
+      # https://github.com/pygame/pygame/issues/4486
       lib.systems.inspect.patterns.isDarwin
     ];
   };
