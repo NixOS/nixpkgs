@@ -42,9 +42,15 @@ This function does not support `__structuredAttrs`, but does support `passAsFile
 devShellTools.unstructuredDerivationInputEnv {
   drvAttrs = {
     name = "foo";
-    buildInputs = [ hello figlet ];
+    buildInputs = [
+      hello
+      figlet
+    ];
     builder = bash;
-    args = [ "-c" "${./builder.sh}" ];
+    args = [
+      "-c"
+      "${./builder.sh}"
+    ];
   };
 }
 # => {
@@ -69,7 +75,10 @@ Takes the relevant parts of a derivation and returns a set of environment variab
 let
   pkg = hello;
 in
-devShellTools.derivationOutputEnv { outputList = pkg.outputs; outputMap = pkg; }
+devShellTools.derivationOutputEnv {
+  outputList = pkg.outputs;
+  outputMap = pkg;
+}
 ```
 
 :::
