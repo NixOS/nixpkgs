@@ -321,7 +321,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.requests
       ps.zstandard
     ]
-    ++ lib.optional openUsdSupport [ pyPkgsOpenusd ];
+    ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ];
 
   blenderExecutable =
     placeholder "out"
