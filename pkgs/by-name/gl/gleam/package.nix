@@ -9,6 +9,7 @@
   nodejs,
   bun,
   deno,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -40,6 +41,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Makes a network request
     "--skip=tests::echo::echo_dict"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
