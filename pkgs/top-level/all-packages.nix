@@ -17963,10 +17963,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  iv = callPackage ../applications/science/biology/iv {
-    neuron-version = neuron.version;
-  };
-
   kallisto = callPackage ../applications/science/biology/kallisto {
     autoconf = buildPackages.autoconf269;
   };
