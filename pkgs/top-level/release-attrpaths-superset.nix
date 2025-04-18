@@ -57,6 +57,7 @@ let
     pkgsx86_64Darwin = true;
     pkgsi686Linux = true;
     pkgsLinux = true;
+    pkgsLTO = true;
     pkgsExtraHardening = true;
   };
 
