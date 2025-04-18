@@ -175,7 +175,8 @@ The `goDeps` attribute can be imported from a separate `nix` file that defines w
 
 ```nix
 # deps.nix
-[ # goDeps is a list of Go dependencies.
+[
+  # goDeps is a list of Go dependencies.
   {
     # goPackagePath specifies Go package import path.
     goPackagePath = "gopkg.in/yaml.v2";

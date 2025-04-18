@@ -117,12 +117,19 @@ After you have identified the correct system, you need to override your package 
 For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
-  {
-    dat = prev.dat.override (oldAttrs: {
-      buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-      meta = oldAttrs.meta // { broken = since "12"; };
-    });
-  }
+{
+  dat = prev.dat.override (oldAttrs: {
+    buildInputs = [
+      final.node-gyp-build
+      pkgs.libtool
+      pkgs.autoconf
+      pkgs.automake
+    ];
+    meta = oldAttrs.meta // {
+      broken = since "12";
+    };
+  });
+}
 ```
 
 ### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
@@ -185,7 +192,11 @@ It works by utilizing npm's cache functionality -- creating a reproducible cache
 Here's an example:
 
 ```nix
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
 buildNpmPackage rec {
   pname = "flood";
@@ -323,7 +334,9 @@ buildNpmPackage {
     npmRoot = ./.;
     fetcherOpts = {
       # Pass 'curlOptsList' to 'pkgs.fetchurl' while fetching 'axios'
-      "node_modules/axios" = { curlOptsList = [ "--verbose" ]; };
+      "node_modules/axios" = {
+        curlOptsList = [ "--verbose" ];
+      };
     };
   };
 
@@ -403,7 +416,7 @@ When packaging an application that includes a `pnpm-lock.yaml`, you need to fetc
   stdenv,
   nodejs,
   # This is pinned as { pnpm = pnpm_9; }
-  pnpm
+  pnpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -491,12 +504,12 @@ For example:
 
 ```nix
 {
-# ...
-pnpmWorkspaces = [ "@astrojs/language-server" ];
-pnpmDeps = pnpm.fetchDeps {
-  inherit (finalAttrs) pnpmWorkspaces;
   # ...
-};
+  pnpmWorkspaces = [ "@astrojs/language-server" ];
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pnpmWorkspaces;
+    # ...
+  };
 }
 ```
 
@@ -507,13 +520,13 @@ Usually in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> bu
 
 ```nix
 {
-buildPhase = ''
-  runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-  pnpm --filter=@astrojs/language-server build
+    pnpm --filter=@astrojs/language-server build
 
-  runHook postBuild
-'';
+    runHook postBuild
+  '';
 }
 ```
 
@@ -524,13 +537,13 @@ set `prePnpmInstall` to the right commands to run. For example:
 
 ```nix
 {
-prePnpmInstall = ''
-  pnpm config set dedupe-peer-dependants false
-'';
-pnpmDeps = pnpm.fetchDeps {
-  inherit (finalAttrs) prePnpmInstall;
-  # ...
-};
+  prePnpmInstall = ''
+    pnpm config set dedupe-peer-dependants false
+  '';
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) prePnpmInstall;
+    # ...
+  };
 }
 ```
 
@@ -690,7 +703,11 @@ To fix this we will specify different versions of build inputs to use, as well a
 mkYarnPackage rec {
   pkgConfig = {
     node-sass = {
-      buildInputs = with final;[ python libsass pkg-config ];
+      buildInputs = with final; [
+        python
+        libsass
+        pkg-config
+      ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi

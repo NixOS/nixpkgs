@@ -72,10 +72,11 @@ The first is to add the derivation arguments required for getting the
 package. Using the pdftk example above:
 
 ```nix
-{ lib
-, stdenv
-# ...
-, pdftk
+{
+  lib,
+  stdenv,
+  # ...
+  pdftk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -94,13 +95,16 @@ true };`), so this is the preferred way.
 The second is to create a `let` binding for the package, like this:
 
 ```nix
-let self = stdenv.mkDerivation {
-  # ...
-  mitmCache = gradle.fetchDeps {
-    pkg = self;
-    data = ./deps.json;
+let
+  self = stdenv.mkDerivation {
+    # ...
+    mitmCache = gradle.fetchDeps {
+      pkg = self;
+      data = ./deps.json;
+    };
   };
-}; in self
+in
+self
 ```
 
 This is useful if you can't easily pass the derivation as its own

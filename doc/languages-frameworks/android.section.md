@@ -9,7 +9,7 @@ Use the `android-studio-full` attribute for a very complete Android SDK, includi
 
 ```nix
 {
-buildInputs = [ android-studio-full ];
+  buildInputs = [ android-studio-full ];
 }
 ```
 
@@ -17,7 +17,7 @@ This is identical to:
 
 ```nix
 {
-buildInputs = [ androidStudioPackages.stable.full ];
+  buildInputs = [ androidStudioPackages.stable.full ];
 }
 ```
 
@@ -25,11 +25,13 @@ Alternatively, you can pass composeAndroidPackages to the `withSdk` passthru:
 
 ```nix
 {
-buildInputs = [
-  (android-studio.withSdk (androidenv.composeAndroidPackages {
-    includeNDK = true;
-  }).androidsdk)
-];
+  buildInputs = [
+    (android-studio.withSdk
+      (androidenv.composeAndroidPackages {
+        includeNDK = true;
+      }).androidsdk
+    )
+  ];
 }
 ```
 
@@ -41,7 +43,7 @@ in the specified Android build environment.
 Alternatively, you can deploy the SDK separately with a desired set of plugins, or subsets of an SDK.
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 let
   androidComposition = androidenv.composeAndroidPackages {
@@ -51,14 +53,21 @@ let
     buildToolsVersions = [ "30.0.3" ];
     includeEmulator = false;
     emulatorVersion = "30.3.4";
-    platformVersions = [ "28" "29" "30" ];
+    platformVersions = [
+      "28"
+      "29"
+      "30"
+    ];
     includeSources = false;
     includeSystemImages = false;
     systemImageTypes = [ "google_apis_playstore" ];
-    abiVersions = [ "armeabi-v7a" "arm64-v8a" ];
+    abiVersions = [
+      "armeabi-v7a"
+      "arm64-v8a"
+    ];
     cmakeVersions = [ "3.10.2" ];
     includeNDK = true;
-    ndkVersions = ["22.0.7026061"];
+    ndkVersions = [ "22.0.7026061" ];
     useGoogleAPIs = false;
     useGoogleTVAddOns = false;
     includeExtras = [
@@ -164,7 +173,7 @@ We can also deploy subsets of the Android SDK. For example, to only the
 `platform-tools` package, you can evaluate the following expression:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 let
   androidComposition = androidenv.composeAndroidPackages {
@@ -182,7 +191,7 @@ to use a predefined composition that contains a fairly complete set of Android p
 The following Nix expression can be used to deploy the entire SDK:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.androidPkgs.androidsdk
 ```
@@ -190,7 +199,7 @@ androidenv.androidPkgs.androidsdk
 It is also possible to use one plugin only:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.androidPkgs.platform-tools
 ```
@@ -204,7 +213,7 @@ An emulator spawn script can be configured by invoking the `emulateApp {}`
 function:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
@@ -220,7 +229,7 @@ It is also possible to specify an APK to deploy inside the emulator
 and the package and activity names to launch it:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
@@ -347,7 +356,7 @@ requires. Most newer Android projects use Gradle, and this is included for histo
 purposes.
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 androidenv.buildApp {
   name = "MyAndroidApp";
