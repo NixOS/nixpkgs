@@ -4870,6 +4870,8 @@ let
         };
       };
 
+      tecosaur.latex-utilities = callPackage ./tecosaur.latex-utilities { };
+
       tekumara.typos-vscode = callPackage ./tekumara.typos-vscode { };
 
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
