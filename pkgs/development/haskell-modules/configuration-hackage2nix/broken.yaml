@@ -4781,7 +4781,6 @@ broken-packages:
   - refresht # failure in job https://hydra.nixos.org/build/233245243 at 2023-09-02
   - refty # failure in job https://hydra.nixos.org/build/233215083 at 2023-09-02
   - reg-alloc # failure in job https://hydra.nixos.org/build/233195081 at 2023-09-02
-  - regex-applicative-text # failure in job https://hydra.nixos.org/build/252717881 at 2024-03-16
   - regex-dfa # failure in job https://hydra.nixos.org/build/233242994 at 2023-09-02
   - regexdot # failure in job https://hydra.nixos.org/build/233217389 at 2023-09-02
   - regex-generator # failure in job https://hydra.nixos.org/build/233239502 at 2023-09-02
