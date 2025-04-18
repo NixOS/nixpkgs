@@ -899,6 +899,12 @@
     "project_path": "documentation/hig-kde-org",
     "repo_path": "documentation/hig-kde-org"
   },
+  "documentation-kstars-docs-kde-org": {
+    "description": "Documentation for KStars",
+    "name": "documentation-kstars-docs-kde-org",
+    "project_path": "documentation/kstars-docs-kde-org",
+    "repo_path": "documentation/kstars-docs-kde-org"
+  },
   "documentation-openraster-org": {
     "description": "Sphinx setup for the Openraster.org (ORA specification) website",
     "name": "documentation-openraster-org",
@@ -2428,6 +2434,12 @@
     "name": "kdsoap-ws-discovery-client",
     "project_path": "playground/libs/kdsoap-ws-discovery-client",
     "repo_path": "libraries/kdsoap-ws-discovery-client"
+  },
+  "kecolab": {
+    "description": "Measuring Energy Usage Remotely with Online Portal",
+    "name": "kecolab",
+    "project_path": "playground/sdk/kecolab",
+    "repo_path": "sdk/kecolab"
   },
   "keditbookmarks": {
     "description": "Bookmarks editor",
@@ -5992,6 +6004,12 @@
     "name": "quanta",
     "project_path": "playground/devtools/quanta",
     "repo_path": "unmaintained/quanta"
+  },
+  "qxmpp": {
+    "description": "C++ XMPP client and server library",
+    "name": "qxmpp",
+    "project_path": "playground/libs/qxmpp",
+    "repo_path": "libraries/qxmpp"
   },
   "qyoto": {
     "description": ".NET/Mono bindings for the Qt libraries.",
