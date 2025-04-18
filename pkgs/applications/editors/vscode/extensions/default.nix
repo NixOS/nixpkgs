@@ -2957,8 +2957,8 @@ let
           mktplcRef = {
             name = "vscode-cfn-lint";
             publisher = "kddejong";
-            version = "0.26.4";
-            hash = "sha256-SeLkZurILFc6qVOgbr9epOhspqfOe8EQ+WerrGfh548=";
+            version = "0.26.5";
+            hash = "sha256-/DSGwHkXu6auCN1KZ3pJnMC6PnCHIhXDkCD5oE2fYdk=";
           };
 
           nativeBuildInputs = [
