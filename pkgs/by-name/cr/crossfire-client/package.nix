@@ -22,18 +22,16 @@
   SDL2_mixer,
   libselinux,
   libsepol,
-  version,
-  rev,
-  hash,
 }:
 
 stdenv.mkDerivation {
   pname = "crossfire-client";
-  version = rev;
+  version = "2025-01";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/crossfire/crossfire-client";
-    inherit hash rev;
+    hash = "sha256-iFm9yVEIBwngr8/0f9TRS4Uw0hnjrW6ngMRfsWY6TX0=";
+    rev = "c69f578add358c1db567f6b46f532dd038d2ade0";
   };
 
   nativeBuildInputs = [

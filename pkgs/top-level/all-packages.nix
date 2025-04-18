@@ -17238,12 +17238,10 @@ with pkgs;
 
   crawl = callPackage ../games/crawl { };
 
-  inherit (import ../games/crossfire pkgs)
-    crossfire-server
-    crossfire-arch
-    crossfire-maps
-    crossfire-client
-    ;
+  crossfire-arch = callPackage ../by-name/cr/crossfire-arch/package.nix { };
+  crossfire-client = callPackage ../by-name/cr/crossfire-client/package.nix { };
+  crossfire-maps = callPackage ../by-name/cr/crossfire-maps/package.nix { };
+  crossfire-server = callPackage ../by-name/cr/crossfire-server/package.nix { };
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
