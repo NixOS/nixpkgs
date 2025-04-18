@@ -6,10 +6,12 @@
   fetchFromGitHub,
   fetchYarnDeps,
 
-  cargo-tauri_1,
+  cargo-tauri,
   desktop-file-utils,
   installShellFiles,
+  jq,
   makeBinaryWrapper,
+  moreutils,
   nodejs,
   pkg-config,
   yarnConfigHook,
@@ -17,21 +19,20 @@
 
   glib-networking,
   libayatana-appindicator,
-  libsoup_2_4,
   openssl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 
   testers,
 }:
 
 let
-  version = "0.5.20";
+  version = "0.6.15";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "devpod";
     tag = "v${version}";
-    hash = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
+    hash = "sha256-fLUJeEwNDyzMYUEYVQL9XGQv/VAxjH4IZ1SJa6jx4Mw=";
   };
 
   meta = {
@@ -83,14 +84,14 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/desktop/yarn.lock";
-      hash = "sha256-vUV4yX+UvEKrP0vHxjGwtW2WyONGqHVmFor+WqWbkCc=";
+      hash = "sha256-0Ov+Ik+th2IiuuqJyiO9t8vTyMqxDa9juEwbwHFaoi4=";
     };
 
     cargoRoot = "src-tauri";
     buildAndTestSubdir = "src-tauri";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-HD9b7OWilltL5Ymj28zoZwv5TJV3HT3LyCdagMqLH6E=";
+    cargoHash = "sha256-BwuV5nAQcTAtdfK4+NKEt8Cj7gqnatRwHh/BYJJrIPo=";
 
     patches = [
       # don't create a .desktop file automatically registered to open the devpod:// URI scheme
@@ -102,11 +103,18 @@ let
       # and don't show popup where it prompts you to press the above mentioned button
       # we'll symlink it manually to $out/bin/devpod in postInstall
       ./dont-copy-sidecar-out-of-store.patch
+
+      # otherwise it's going to get stuck in an endless error cycle, quickly increasing the log file size
+      ./exit-update-checker-loop.patch
     ];
 
     postPatch =
       ''
         ln -s ${lib.getExe devpod} src-tauri/bin/devpod-cli-${stdenv.hostPlatform.rust.rustcTarget}
+
+        # disable upstream updater
+        jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
+          | sponge src-tauri/tauri.conf.json
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
@@ -115,7 +123,9 @@ let
 
     nativeBuildInputs =
       [
-        cargo-tauri_1.hook
+        cargo-tauri.hook
+        jq
+        moreutils
         nodejs
         yarnConfigHook
       ]
@@ -131,9 +141,8 @@ let
     buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libayatana-appindicator
-      libsoup_2_4
       openssl
-      webkitgtk_4_0
+      webkitgtk_4_1
     ];
 
     postInstall =
@@ -141,16 +150,24 @@ let
         # replace sidecar binary with symlink
         ln -sf ${lib.getExe devpod} "$out/Applications/DevPod.app/Contents/MacOS/devpod-cli"
 
-        makeWrapper "$out/Applications/DevPod.app/Contents/MacOS/DevPod" "$out/bin/dev-pod"
+        makeWrapper "$out/Applications/DevPod.app/Contents/MacOS/DevPod Desktop" "$out/bin/DevPod Desktop"
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         # replace sidecar binary with symlink
         ln -sf ${lib.getExe devpod} "$out/bin/devpod-cli"
 
         # set up scheme handling
-        desktop-file-edit "$out/share/applications/dev-pod.desktop" \
-          --set-key="Exec"     --set-value="dev-pod %u" \
+        desktop-file-edit "$out/share/applications/DevPod.desktop" \
+          --set-key="Exec"     --set-value="\"DevPod Desktop\" %u" \
           --set-key="MimeType" --set-value="x-scheme-handler/devpod"
+
+        # whitespace in the icon name causes gtk-update-icon-cache to fail
+        desktop-file-edit "$out/share/applications/DevPod.desktop" \
+          --set-key="Icon"     --set-value="DevPod-Desktop"
+
+        for dir in "$out"/share/icons/hicolor/*/apps; do
+          mv "$dir/DevPod Desktop.png" "$dir/DevPod-Desktop.png"
+        done
       ''
       + ''
         # propagate the `devpod` command
@@ -161,11 +178,11 @@ let
     dontWrapGApps = true;
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapGApp "$out/bin/dev-pod"
+      wrapGApp "$out/bin/DevPod Desktop"
     '';
 
     meta = meta // {
-      mainProgram = "dev-pod";
+      mainProgram = "DevPod Desktop";
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
   };
