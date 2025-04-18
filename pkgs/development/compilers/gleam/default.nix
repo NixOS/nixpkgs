@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   git,
@@ -10,9 +9,7 @@
   nodejs,
   bun,
   deno,
-  Security,
   nix-update-script,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,14 +32,7 @@ rustPlatform.buildRustPackage rec {
     deno
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-EoRu8p6cUe1li54nVUkf+3qywIsDXh4ptIVLluJ3eFs=";
