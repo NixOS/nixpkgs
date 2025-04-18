@@ -60,21 +60,21 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       # avoid the runtime linker pulling in a different llvm e.g. from graphics drivers
-      "-DSTATIC_LLVM=ON"
-      "-DENABLE_POCL_BUILDING=OFF"
-      "-DPOCL_ICD_ABSOLUTE_PATH=ON"
-      "-DENABLE_ICD=ON"
-      "-DCLANG=${clangWrapped}/bin/clang"
-      "-DCLANGXX=${clangWrapped}/bin/clang++"
-      "-DENABLE_REMOTE_CLIENT=ON"
-      "-DENABLE_REMOTE_SERVER=ON"
+      (lib.cmakeBool "STATIC_LLVM" true)
+      (lib.cmakeBool "ENABLE_POCL_BUILDING" false)
+      (lib.cmakeBool "POCL_ICD_ABSOLUTE_PATH" true)
+      (lib.cmakeBool "ENABLE_ICD" true)
+      (lib.cmakeBool "ENABLE_REMOTE_CLIENT" true)
+      (lib.cmakeBool "ENABLE_REMOTE_SERVER" true)
+      (lib.cmakeFeature "CLANG" "${clangWrapped}/bin/clang")
+      (lib.cmakeFeature "CLANGXX" "${clangWrapped}/bin/clang++")
     ]
     # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      "-DKERNELLIB_HOST_CPU_VARIANTS=distro"
+      (lib.cmakeFeature "KERNELLIB_HOST_CPU_VARIANTS" "distro")
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      "-DLLC_HOST_CPU=generic"
+      (lib.cmakeFeature "LLC_HOST_CPU" "generic")
     ];
 
   nativeBuildInputs = [
