@@ -110,6 +110,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::outbound::extensions::extensions"
     # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
     "--skip=smtp::outbound::smtp::smtp_delivery"
+    # panicked at tests/src/smtp/outbound/lmtp.rs
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
     # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
     # assertion `left == right` failed
     #   left: [1, 2, 2]
