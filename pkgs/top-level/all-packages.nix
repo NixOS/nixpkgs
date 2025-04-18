@@ -18330,7 +18330,7 @@ with pkgs;
 
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
 
-  calaos_installer = libsForQt5.callPackage ../misc/calaos/installer { };
+  calaos_installer = callPackage ../misc/calaos/installer { };
 
   clinfo = callPackage ../tools/system/clinfo {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
