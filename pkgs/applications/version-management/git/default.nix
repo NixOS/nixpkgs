@@ -37,7 +37,7 @@
   nlsSupport ? true,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
-  withManual ? true,
+  withManual ? perlSupport,
   pythonSupport ? true,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
