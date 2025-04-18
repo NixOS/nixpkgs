@@ -1,20 +1,19 @@
 {
   stdenv,
   lib,
-  fetchsvn,
+  fetchgit,
   version,
   rev,
-  sha256,
+  hash,
 }:
 
 stdenv.mkDerivation {
   pname = "crossfire-maps";
   version = rev;
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/maps/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/crossfire/crossfire-maps";
+    inherit hash rev;
   };
 
   installPhase = ''
