@@ -6370,11 +6370,6 @@ with pkgs;
     }
   );
 
-  gleam = callPackage ../development/compilers/gleam {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-    erlang = erlang_27;
-  };
-
   # Haskell and GHC
 
   haskell = callPackage ./haskell-packages.nix { };
@@ -8483,10 +8478,6 @@ with pkgs;
   };
 
   lit = with python3Packages; toPythonApplication lit;
-
-  lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
-
-  lttng-ust_2_12 = callPackage ../development/tools/misc/lttng-ust/2.12.nix { };
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
@@ -15917,22 +15908,8 @@ with pkgs;
     withXineBackend = true;
   };
 
-  qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (__splicedPackages.qt6Packages)
-      qtbase
-      qtwebengine
-      wrapQtAppsHook
-      qtwayland
-      ;
-  };
-
-  qutebrowser-qt5 = callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (__splicedPackages.libsForQt5)
-      qtbase
-      qtwebengine
-      wrapQtAppsHook
-      qtwayland
-      ;
+  qutebrowser-qt5 = qutebrowser.override {
+    qt6Packages = libsForQt5;
   };
 
   rakarrack = callPackage ../applications/audio/rakarrack {
@@ -16393,9 +16370,7 @@ with pkgs;
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
-  tunefish = callPackage ../applications/audio/tunefish {
-    stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
-  };
+  tunefish = callPackage ../applications/audio/tunefish { };
 
   tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
     tuxclocker-plugins = tuxclocker-plugins-with-unfree;

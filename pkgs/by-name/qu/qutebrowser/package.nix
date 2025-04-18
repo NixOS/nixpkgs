@@ -4,7 +4,6 @@
   fetchurl,
   fetchzip,
   python3,
-  wrapQtAppsHook,
   glib-networking,
   asciidoc,
   docbook_xml_dtd_45,
@@ -14,9 +13,7 @@
   withPdfReader ? true,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
-  qtwayland,
-  qtbase,
-  qtwebengine,
+  qt6Packages,
   enableWideVine ? false,
   widevine-cdm,
   # can cause issues on some graphics chips
@@ -25,18 +22,18 @@
 }:
 
 let
-  isQt6 = lib.versions.major qtbase.version == "6";
+  isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "4.2.67";
+      version = "5.1.91";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-7kfT3+ZwoGqZ5OwkO9h3DIuBFd0v8fRlcufxoBdcy8c=";
+      hash = "sha256-e1zBpH9F8TI4ET4FvkxJsoOYVKLWJBP2KaNNC2kpaVk=";
       stripRoot = false;
     };
 
-  version = "3.4.0";
+  version = "3.5.0";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -46,7 +43,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-gUEkwO0zdDDmE6HaNm1eOJBMsgSa+xUFlxRWylymIj4=";
+    hash = "sha256-+hQsjRwoJbBotxs2BKiy1oLi7YShTD5ott54RDMdgLs=";
   };
 
   # Needs tox
@@ -54,11 +51,11 @@ python3.pkgs.buildPythonApplication {
 
   buildInputs =
     [
-      qtbase
+      qt6Packages.qtbase
       glib-networking
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
+      qt6Packages.qtwayland
     ];
 
   build-system = with python3.pkgs; [
@@ -66,7 +63,7 @@ python3.pkgs.buildPythonApplication {
   ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     asciidoc
     docbook_xml_dtd_45
     docbook_xsl
@@ -148,7 +145,7 @@ python3.pkgs.buildPythonApplication {
           --set-default QSG_RHI_BACKEND vulkan
         ''}
         ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
-        --set QTWEBENGINE_RESOURCES_PATH "${qtwebengine}/resources"
+        --set QTWEBENGINE_RESOURCES_PATH "${qt6Packages.qtwebengine}/resources"
       )
     '';
 
@@ -158,7 +155,7 @@ python3.pkgs.buildPythonApplication {
     description = "Keyboard-focused browser with a minimal GUI";
     license = licenses.gpl3Plus;
     mainProgram = "qutebrowser";
-    platforms = if enableWideVine then [ "x86_64-linux" ] else qtwebengine.meta.platforms;
+    platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
     maintainers = with maintainers; [
       jagajaga
       rnhmjoj
