@@ -7,6 +7,7 @@
   pkg-config,
   audiofile,
   SDL2,
+  libGL,
   hexdump,
   sm64baserom,
   region ? "us",
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     audiofile
     SDL2
+    libGL
   ];
 
   enableParallelBuilding = true;
