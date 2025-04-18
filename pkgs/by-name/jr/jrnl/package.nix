@@ -41,6 +41,8 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
+  pythonRelaxDeps = [ "rich" ];
+
   nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
     pytest-xdist
