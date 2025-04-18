@@ -22,14 +22,49 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.34";
+  version = "0.9.36";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "rapid-photo-downloader";
     rev = "v${version}";
-    hash = "sha256-4VC1fwQh9L3c5tgLUaC36p9QHL4dR2vkWc2XlNl0Xzw=";
+    hash = "sha256-fFmIbqymYkg2Z1/x0mNsCNlDCOyqVg65CM4a67t+kPQ=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      ifuse
+      libimobiledevice
+      # Python dependencies
+      pyqt5
+      pygobject3
+      gphoto2
+      pyzmq
+      tornado
+      psutil
+      pyxdg
+      arrow
+      python-dateutil
+      easygui
+      babel
+      colour
+      pillow
+      pymediainfo
+      sortedcontainers
+      requests
+      colorlog
+      pyprind
+      setuptools
+      show-in-file-manager
+      tenacity
+    ]
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   postPatch = ''
     # Drop broken version specifier
@@ -72,36 +107,6 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   #       launching fails with:
   #       "Namespace [Notify / GExiv2 / GUdev] not available"
   strictDeps = false;
-
-  propagatedBuildInputs =
-    with python3Packages;
-    [
-      ifuse
-      libimobiledevice
-      pyqt5
-      pygobject3
-      gphoto2
-      pyzmq
-      tornado
-      psutil
-      pyxdg
-      arrow
-      python-dateutil
-      easygui
-      babel
-      colour
-      pillow
-      pyheif
-      pymediainfo
-      sortedcontainers
-      requests
-      colorlog
-      pyprind
-      setuptools
-      show-in-file-manager
-      tenacity
-    ]
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   preFixup = ''
     makeWrapperArgs+=(
