@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -49,6 +50,8 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Backend of Bark, an iOS App which allows you to push customed notifications to your iPhone";
