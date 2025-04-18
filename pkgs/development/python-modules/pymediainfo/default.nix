@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymediainfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the mediainfo library";
     homepage = "https://github.com/sbraz/pymediainfo";
     changelog = "https://github.com/sbraz/pymediainfo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ philipdb ];
   };
 }
