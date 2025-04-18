@@ -9,21 +9,21 @@ rec {
 
   crossfire-server = callPackage ./crossfire-server.nix {
     version = "latest";
-    rev = "22111";
-    sha256 = "04fjif6zv642n2zlw27cgzkak2kknwrxqzg42bvzl7q901bsr9l7";
+    rev = "5f742b9f9f785e4a59a3a463bee1f31c9bc67098";
+    hash = "sha256-e7e3xN7B1cv9+WkZGzOJgrFer50Cs0L/2dYB9RmGCiE=";
     maps = crossfire-maps;
     arch = crossfire-arch;
   };
 
   crossfire-arch = callPackage ./crossfire-arch.nix {
     version = "latest";
-    rev = "22111";
-    sha256 = "0l4rp3idvbhknpxxs0w4i4nqfg01wblzm4v4j375xwxxbf00j0ms";
+    rev = "876eb50b9199e9aa06175b7a7d85832662be3f78";
+    hash = "sha256-jDiAKcjWYvjGiD68LuKlZS4sOR9jW3THp99kAEdE+y0=";
   };
 
   crossfire-maps = callPackage ./crossfire-maps.nix {
     version = "latest";
-    rev = "22111";
-    sha256 = "1dwfc84acjvbjgjakkb8z8pdlksbsn90j0z8z8rq37lqx0kx1sap";
+    rev = "ec57d473064ed1732adb1897415b56f96fbd9382";
+    hash = "sha256-hJOMa8c80T4/NC37NKM270LDHNqWK6NZfKvKnFno9TE=";
   };
 }
