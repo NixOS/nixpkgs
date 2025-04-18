@@ -6,26 +6,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "markdown-code-runner";
-  version = "0-unstable-2025-04-13";
+  version = "0-unstable-2025-04-18";
 
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "markdown-code-runner";
-    rev = "b39cdf8990e1a25adc958f58e87a12544724ca9d";
-    hash = "sha256-JvsxS+qRrYzWzPlrCAccaPYPROGULCh1Gs5RAlL7dBo=";
+    rev = "9907df63574d714abcd78f9dfdf4bdda73ff30d6";
+    hash = "sha256-Bn+IsZzV07bm5TNRX3+OOuxi3kj7d73gYPzcdIxWMi8=";
   };
 
-  cargoHash = "sha256-JVbBigWKramdtQR9VPRY777vODOw7Fkz+kyNPSnSCJg=";
-  dontUseCargoParallelTests = true;
+  cargoHash = "sha256-HOJCnuzd6i4v1SpR4jstlpNkvSgH/4kvvE6Lsr4cgbI=";
 
-  checkFlags = [
-    # Flaky tests
-    "--skip=test_check_mode_detects_differences"
-    "--skip=test_check_mode_no_changes_returns_zero"
-    "--skip=test_dry_run_allows_command_failure"
-    "--skip=test_dry_run_does_not_fail_on_error"
-    "--skip=test_dry_run_outputs_warning_but_does_not_write"
-  ];
+  dontUseCargoParallelTests = true;
 
   meta = {
     description = "A configurable Markdown code runner that executes and optionally replaces code blocks using external commands";
