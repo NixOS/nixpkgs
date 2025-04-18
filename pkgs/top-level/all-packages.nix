@@ -12667,8 +12667,6 @@ with pkgs;
       # so as not to have the newly bound xorg items already in scope,  which would
       # have created a cycle.
       overrides = lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
-        inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
-        inherit (darwin.apple_sdk.libs) Xplugin;
         inherit (buildPackages.darwin) bootstrap_cmds;
         udev = if stdenv.hostPlatform.isLinux then udev else null;
         libdrm = if stdenv.hostPlatform.isLinux then libdrm else null;
