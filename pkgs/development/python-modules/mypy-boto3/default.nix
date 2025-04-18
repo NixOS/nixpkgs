@@ -674,8 +674,8 @@ rec {
       "sha256-eEq8LDmORpA464IecxTI6FqVIitn3t+t4ElsHkfSAs4=";
 
   mypy-boto3-iotfleetwise =
-    buildMypyBoto3Package "iotfleetwise" "1.37.30"
-      "sha256-DYuNsbiLD2E+oJAcrqBppujmpyFye0m73b8YsE0Pydo=";
+    buildMypyBoto3Package "iotfleetwise" "1.37.36"
+      "sha256-Rua+n9vvAiLAzy/DwDd6ErujD04q1Xsts0nle0KbUH0=";
 
   mypy-boto3-iotsecuretunneling =
     buildMypyBoto3Package "iotsecuretunneling" "1.37.0"
