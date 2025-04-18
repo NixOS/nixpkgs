@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
+      name = "signal";
       desktopName = "Signal";
       exec = "${finalAttrs.meta.mainProgram} %U";
       type = "Application";
