@@ -6370,11 +6370,6 @@ with pkgs;
     }
   );
 
-  gleam = callPackage ../development/compilers/gleam {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-    erlang = erlang_27;
-  };
-
   # Haskell and GHC
 
   haskell = callPackage ./haskell-packages.nix { };
