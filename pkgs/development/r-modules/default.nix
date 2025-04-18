@@ -421,6 +421,7 @@ let
       which
     ];
     audio = [ pkgs.portaudio ];
+    BayesChange = [ pkgs.gsl ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
     BayesXsrc = with pkgs; [
