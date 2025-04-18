@@ -2345,8 +2345,8 @@ let
         mktplcRef = {
           publisher = "haskell";
           name = "haskell";
-          version = "2.5.3";
-          hash = "sha256-3HbUH5+YCPqypGlsaSDwwyN/PoG9KO0YnZ1Ps7ZLQ48=";
+          version = "2.6.0";
+          hash = "sha256-2lvG7yZ+QAoafwyWQkVwyl2MsP8zWWQkTw8hBtib+C0=";
         };
         meta = {
           license = lib.licenses.mit;
