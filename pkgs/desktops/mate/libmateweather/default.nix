@@ -12,7 +12,6 @@
   tzdata,
   mateUpdateScript,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmateweather";
   version = "1.28.0";
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-zoneinfo-dir=${tzdata}/share/zoneinfo"
-    "--enable-locations-compression"
   ];
 
   preFixup = "rm -f $out/share/icons/mate/icon-theme.cache";
