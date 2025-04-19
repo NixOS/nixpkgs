@@ -503,6 +503,7 @@ mapAliases {
   dleyna-core = dleyna; # Added 2025-04-19
   dleyna-connector-dbus = dleyna; # Added 2025-04-19
   dleyna-renderer = dleyna; # Added 2025-04-19
+  dleyna-server = dleyna; # Added 2025-04-19
   dnnl = throw "'dnnl' has been renamed to/replaced by 'oneDNN'"; # Converted to throw 2024-10-17
   dnscrypt-wrapper = throw "dnscrypt-wrapper was removed because it has been effectively unmaintained since 2018. Use DNSCcrypt support in dnsdist instead"; # Added 2024-09-14
   docear = throw "Docear was removed because it was unmaintained upstream. JabRef, Zotero, or Mendeley are potential replacements."; # Added 2024-11-02
