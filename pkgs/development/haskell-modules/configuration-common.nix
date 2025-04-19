@@ -3108,6 +3108,9 @@ self: super:
     editedCabalFile = null;
     revision = null;
   }) super.sr-extra;
+
+  # 2025-04-19: Tests randomly fail 6 out of 10 times
+  coinor-clp = dontCheck super.coinor-clp;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
