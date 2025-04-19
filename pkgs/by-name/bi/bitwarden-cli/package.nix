@@ -22,6 +22,8 @@ buildNpmPackage rec {
     hash = "sha256-SFwDyff3BHx0QKQZbhESUvjPT906/HGxGr1bA0PAvTQ=";
   };
 
+  patches = [ ./remove-ad.patch ];
+
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
