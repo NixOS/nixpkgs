@@ -1,13 +1,13 @@
 {
   lib,
   buildNpmPackage,
-  electron,
+  electron_33,
   fetchFromGitHub,
   buildPackages,
   python3,
   pkg-config,
   libsecret,
-  nodejs_22,
+  nodejs_20,
 }:
 
 let
@@ -20,7 +20,7 @@ let
     buildNpmPackage rec {
       pname = name;
       version = "2025.4.0";
-      nodejs = nodejs_22;
+      nodejs = nodejs_20;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
@@ -76,14 +76,14 @@ in
 
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version} \
+        -c.electronDist=${electron_33.dist} \
+        -c.electronVersion=${electron_33.version} \
         -c.npmRebuild=false
 
       mkdir -p $out/share/bitwarden-directory-connector $out/bin
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/bitwarden-directory-connector
 
-      makeWrapper ${lib.getExe electron} $out/bin/bitwarden-directory-connector \
+      makeWrapper ${lib.getExe electron_33} $out/bin/bitwarden-directory-connector \
         --add-flags $out/share/bitwarden-directory-connector/resources/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set-default ELECTRON_IS_DEV 0 \
