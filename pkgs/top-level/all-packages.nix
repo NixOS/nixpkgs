@@ -17240,6 +17240,7 @@ with pkgs;
 
   crossfire-arch = callPackage ../by-name/cr/crossfire-arch/package.nix { };
   crossfire-client = callPackage ../by-name/cr/crossfire-client/package.nix { };
+  crossfire-gridarta = callPackage ../by-name/cr/crossfire-gridarta/package.nix { };
   crossfire-jxclient = callPackage ../by-name/cr/crossfire-jxclient/package.nix { };
   crossfire-maps = callPackage ../by-name/cr/crossfire-maps/package.nix { };
   crossfire-server = callPackage ../by-name/cr/crossfire-server/package.nix { };

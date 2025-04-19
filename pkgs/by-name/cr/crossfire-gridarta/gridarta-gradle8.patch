@@ -1,0 +1,94 @@
+From ac157ff74befe799185b521861afb398849059eb Mon Sep 17 00:00:00 2001
+From: Rebecca Kelly <bk@ancilla.ca>
+Date: Sat, 19 Apr 2025 10:21:29 -0400
+Subject: [PATCH] Updates for Gradle 5 -> 8
+
+---
+ build.gradle               | 4 ++++
+ src/atrinik/build.gradle   | 4 ++--
+ src/crossfire/build.gradle | 5 +++--
+ src/daimonin/build.gradle  | 4 ++--
+ 4 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/build.gradle b/build.gradle
+index c12d39555..b663f645a 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -28,6 +28,10 @@ allprojects {
+     repositories {
+         maven {
+             url "$rootDir/repo"
++            metadataSources {
++              mavenPom()
++              artifact()
++            }
+         }
+     }
+ }
+diff --git a/src/atrinik/build.gradle b/src/atrinik/build.gradle
+index 866597237..6b2249ef3 100644
+--- a/src/atrinik/build.gradle
++++ b/src/atrinik/build.gradle
+@@ -69,14 +69,14 @@ task configureCreateEditorJar {
+ task createEditorJar(type: Jar, dependsOn: assemble) {
+     description = 'Creates the AtrinikEditor.jar archive.'
+     dependsOn configureCreateEditorJar
+-    baseName = applicationName
++    archiveBaseName = applicationName
+     manifest.attributes 'Main-Class': mainClassName
+     manifest.attributes 'SplashScreen-Image': 'icons/CFIntro.gif'
+     from sourceSets.main.output
+     licenseFiles().each {
+         from it
+     }
+-    inputs.files configurations.runtime
++    inputs.files configurations.runtimeClasspath
+ }
+
+ task preparePublish {
+diff --git a/src/crossfire/build.gradle b/src/crossfire/build.gradle
+index 64075aee9..c465cc4e2 100644
+--- a/src/crossfire/build.gradle
++++ b/src/crossfire/build.gradle
+@@ -69,14 +69,15 @@ task configureCreateEditorJar {
+ task createEditorJar(type: Jar, dependsOn: assemble) {
+     description = 'Creates the CrossfireEditor.jar archive.'
+     dependsOn configureCreateEditorJar
+-    baseName = applicationName
++    archiveBaseName = applicationName
+     manifest.attributes 'Main-Class': mainClassName
+     manifest.attributes 'SplashScreen-Image': 'icons/CFIntro.gif'
+     from sourceSets.main.output
+     licenseFiles().each {
+         from it
+     }
+-    inputs.files configurations.runtime
++    inputs.files configurations.runtimeClasspath
++    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+ }
+
+ task preparePublish {
+diff --git a/src/daimonin/build.gradle b/src/daimonin/build.gradle
+index f825896fe..153e83209 100644
+--- a/src/daimonin/build.gradle
++++ b/src/daimonin/build.gradle
+@@ -69,14 +69,14 @@ task configureCreateEditorJar {
+ task createEditorJar(type: Jar, dependsOn: assemble) {
+     description = 'Creates the DaimoninEditor.jar archive.'
+     dependsOn configureCreateEditorJar
+-    baseName = applicationName
++    archiveBaseName = applicationName
+     manifest.attributes 'Main-Class': mainClassName
+     manifest.attributes 'SplashScreen-Image': 'icons/CFIntro.gif'
+     from sourceSets.main.output
+     licenseFiles().each {
+         from it
+     }
+-    inputs.files configurations.runtime
++    inputs.files configurations.runtimeClasspath
+ }
+
+ task preparePublish {
+--
+2.47.2
+
