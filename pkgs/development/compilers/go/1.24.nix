@@ -28,6 +28,7 @@ let
       "armv6l" = "arm";
       "armv7l" = "arm";
       "i686" = "386";
+      "loongarch64" = "loong64";
       "mips" = "mips";
       "mips64el" = "mips64le";
       "mipsel" = "mipsle";
