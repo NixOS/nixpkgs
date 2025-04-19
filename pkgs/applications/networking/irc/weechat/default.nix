@@ -99,12 +99,12 @@ let
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
 in
-assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
-stdenv.mkDerivation rec {
-  version = "4.6.2";
-  pname = "weechat";
 
-  hardeningEnable = [ "pie" ];
+assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
+
+stdenv.mkDerivation rec {
+  pname = "weechat";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
@@ -121,19 +121,22 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DENABLE_MAN=ON"
-      "-DENABLE_DOC=ON"
-      "-DENABLE_DOC_INCOMPLETE=ON"
-      "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
+      (lib.cmakeBool "ENABLE_MAN" true)
+      (lib.cmakeBool "ENABLE_DOC" true)
+      (lib.cmakeBool "ENABLE_DOC_INCOMPLETE" true)
+      (lib.cmakeBool "ENABLE_TESTS" enableTests)
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" ]
-    ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeFeature "ICONV_LIBRARY" "${libiconv}/lib/libiconv.dylib")
+    ]
+    ++ map (p: lib.cmakeBool p.cmakeFlag p.enabled) plugins;
 
   nativeBuildInputs = [
     cmake
     pkg-config
     asciidoctor
   ] ++ lib.optional enableTests cpputest;
+
   buildInputs =
     [
       ncurses
@@ -153,6 +156,8 @@ stdenv.mkDerivation rec {
     ++ lib.concatMap (p: p.buildInputs) enabledPlugins
     ++ extraBuildInputs;
 
+  hardeningEnable = [ "pie" ];
+
   env.NIX_CFLAGS_COMPILE =
     "-I${python}/include/${python.libPrefix}"
     # Fix '_res_9_init: undefined symbol' error
@@ -168,6 +173,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/weechat --version
   '';
