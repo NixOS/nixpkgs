@@ -65,6 +65,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.alloy = {
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       reloadTriggers = lib.mapAttrsToList (_: v: v.source or null) (
         lib.filterAttrs (n: _: lib.hasPrefix "alloy/" n && lib.hasSuffix ".alloy" n) config.environment.etc

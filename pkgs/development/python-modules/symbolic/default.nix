@@ -9,12 +9,11 @@
   milksnake,
   cffi,
   pytestCheckHook,
-  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "symbolic";
-  version = "12.14.1"; # glitchtip currently only works with symbolic 10.x
+  version = "12.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -22,16 +21,12 @@ buildPythonPackage rec {
     repo = "symbolic";
     tag = version;
     hash = "sha256-u3nEYvnt2P+W/0zYctikMgdkalej86eCYhfWj9LW4pU=";
-    # for some reason the `py` directory in the tarball is empty, so we fetch the source via git instead
+    # the `py` directory is not included in the tarball, so we fetch the source via git instead
     forceFetchGit = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      ;
+    inherit pname version src;
     hash = "sha256-X8IjmSQD32bougiUFyuk8OOGIzIQgk/TjVM5bgUey5M=";
   };
 
@@ -58,8 +53,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
-
-  passthru.tests = { inherit (nixosTests) glitchtip; };
 
   meta = {
     description = "Python library for dealing with symbol files and more";
