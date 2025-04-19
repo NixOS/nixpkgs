@@ -770,7 +770,7 @@ in
   mailhog = runTest ./mailhog.nix;
   mailpit = runTest ./mailpit.nix;
   mailman = runTest ./mailman.nix;
-  man = handleTest ./man.nix { };
+  man = runTest ./man.nix;
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
   marytts = handleTest ./marytts.nix { };
   mastodon = pkgs.recurseIntoAttrs (handleTest ./web-apps/mastodon { inherit handleTestOn; });
