@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  fetchurl,
   makeWrapper,
   nodejs,
   stdenvNoCC,
@@ -12,12 +11,12 @@
 }:
 
 let
-  version = "0.47.0";
+  version = "0.48.0";
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${version}";
-    hash = "sha256-YFoh30uMQItoeY1j08flPbxUhybeKJTEhd9hsiMaCJQ=";
+    hash = "sha256-ax5E3e3GUrQLVsQREUhjmORjXQgKrEBVa9ySJr5ZLUY=";
   };
 
   backend = buildGoModule {
@@ -26,7 +25,7 @@ let
 
     sourceRoot = "${src.name}/backend";
 
-    vendorHash = "sha256-mqpBP+A2X5ome1Ppg/Kki0C+A77jFtWzUjI/RN+ZCzg=";
+    vendorHash = "sha256-0LAlltXd7YNQu7ymdjUSy75hMBz6MpvmUtgct43BU7M=";
 
     preFixup = ''
       mv $out/bin/cmd $out/bin/pocket-id-backend
@@ -70,7 +69,7 @@ let
   });
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "pocket-id";
   inherit
     version
@@ -112,6 +111,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       gepbird
+      marcusramberg
       ymstnt
     ];
     platforms = lib.platforms.unix;
