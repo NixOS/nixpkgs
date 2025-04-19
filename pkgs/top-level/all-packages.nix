@@ -17141,10 +17141,6 @@ with pkgs;
 
   beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
 
-  black-hole-solver = callPackage ../games/black-hole-solver {
-    inherit (perlPackages) PathTiny;
-  };
-
   bugdom = callPackage ../games/bugdom {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
