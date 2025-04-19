@@ -82,6 +82,10 @@ python3.pkgs.buildPythonApplication rec {
       xray
     ]);
 
+  postPatch = ''
+    sed -i '/filterwarnings =/{n;s/\(\s*\)error/\1default/;}' pytest.ini
+  '';
+
   postFixup = ''
     # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
     wrapProgram $out/bin/sam \
@@ -107,9 +111,6 @@ python3.pkgs.buildPythonApplication rec {
 
   pytestFlagsArray = [
     "tests"
-    # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
