@@ -6,7 +6,7 @@
   babl,
   dbus,
   desktop-file-utils,
-  dleyna-renderer,
+  dleyna,
   gdk-pixbuf,
   gegl,
   geocode-glib_2,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     babl
     dbus
-    dleyna-renderer
+    dleyna
     gdk-pixbuf
     gegl
     geocode-glib_2
