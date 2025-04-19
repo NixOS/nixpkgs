@@ -41,8 +41,6 @@ let
               if [ "$(readlink "$out/etc/$target")" != "$src" ]; then
                 echo "mismatched duplicate entry $(readlink "$out/etc/$target") <-> $src"
                 ret=1
-
-                continue
               fi
             fi
 
