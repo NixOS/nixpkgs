@@ -16532,10 +16532,6 @@ with pkgs;
       if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.virtualglLib else null;
   };
 
-  primusLib = callPackage ../tools/X11/primus/lib.nix {
-    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
-  };
-
   primus = callPackage ../tools/X11/primus {
     stdenv_i686 = pkgsi686Linux.stdenv;
     primusLib_i686 =
