@@ -17,6 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "dev"
     "lib"
     "man"
   ];
@@ -28,8 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ccW4YjEf++tkdIJLze2x8B/SWbBBXnYt8UV9OH8+KGU=";
   };
 
+  # Possibly upstream these patches.
   patches = [
     ./0001-otf2-backend-cross.patch # To fix cross.
+    ./0002-absolute-cmake-install-paths.patch # To fix generated .pc file
   ];
 
   postPatch = ''
@@ -68,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     otf2 # `otf2-print` needed by compiler_instrumentation_tests,pthread_tests,posixio_tests
   ];
+
+  postInstall = ''
+    moveToOutput bin/eztrace_create_plugin "$dev"
+  '';
 
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
