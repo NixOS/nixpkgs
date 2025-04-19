@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "mox";
-  version = "0.0.14";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "mjl-";
     repo = "mox";
     tag = "v${version}";
-    hash = "sha256-cBTY4SjQxdM5jXantLws1ckGVn3/b0/iVPFunBy09YQ=";
+    hash = "sha256-apIV+nClXTUbmCssnvgG9UwpTNTHTe6FgLCxp14/s0A=";
   };
 
   # set the version during buildtime
