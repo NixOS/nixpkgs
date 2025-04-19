@@ -171,10 +171,15 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-precision=${precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
+    ++ lib.optionals (!mpiSupport) [
+      "--with-cc=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "gcc" else "clang"}"
+      "--with-cxx=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "g++" else "clang++"}"
+      "--with-fc=${gfortran}/bin/gfortran"
+    ]
     ++ lib.optionals mpiSupport [
-      "--CC=mpicc"
-      "--with-cxx=mpicxx"
-      "--with-fc=mpif90"
+      "--with-cc=${lib.getDev mpi}/bin/mpicc"
+      "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
+      "--with-fc=${lib.getDev mpi}/bin/mpif90"
     ]
     ++ lib.optionals (!debug) [
       "--with-debugging=0"
@@ -208,6 +213,28 @@ stdenv.mkDerivation (finalAttrs: {
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
+
+  # Ensure petscvariables contains absolute paths for compilers and flags so that downstream
+  # packages relying on PETSc's runtime configuration (e.g. form compilers, code generators)
+  # can correctly compile and link generated code
+  postInstall = lib.concatStringsSep "\n" (
+    map (
+      package:
+      let
+        pname = package.pname or package.name;
+        prefix =
+          if (pname == "blas" || pname == "lapack") then
+            "BLASLAPACK"
+          else
+            lib.toUpper (builtins.elemAt (lib.splitString "-" pname) 0);
+      in
+      ''
+        substituteInPlace $out/lib/petsc/conf/petscvariables \
+          --replace-fail "${prefix}_INCLUDE =" "${prefix}_INCLUDE = -I${lib.getDev package}/include" \
+          --replace-fail "${prefix}_LIB =" "${prefix}_LIB = -L${lib.getLib package}/lib"
+      ''
+    ) finalAttrs.buildInputs
+  );
 
   # This is needed as the checks need to compile and link the test cases with
   # -lpetsc, which is not available in the checkPhase, which is executed before
