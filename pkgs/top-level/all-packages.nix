@@ -2266,8 +2266,6 @@ with pkgs;
     wlroots = wlroots_0_18;
   };
 
-  swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
-
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
@@ -7283,10 +7281,6 @@ with pkgs;
   dbqn-native = dbqn.override {
     buildNativeImage = true;
     jdk = graalvmPackages.graalvm-ce;
-  };
-
-  cliscord = callPackage ../misc/cliscord {
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
@@ -16344,10 +16338,6 @@ with pkgs;
 
   tests-stdenv-gcc-stageCompare = callPackage ../test/stdenv/gcc-stageCompare.nix { };
 
-  t-rec = callPackage ../misc/t-rec {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
   terminal-typeracer = callPackage ../applications/misc/terminal-typeracer {
@@ -16527,17 +16517,6 @@ with pkgs;
     stdenv_i686 = pkgsi686Linux.stdenv;
     primusLib_i686 =
       if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null;
-  };
-
-  bumblebee = callPackage ../tools/X11/bumblebee {
-    nvidia_x11 = linuxPackages.nvidia_x11;
-    nvidia_x11_i686 =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
-      else
-        null;
-    libglvnd_i686 =
-      if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.libglvnd else null;
   };
 
   vlc-bin-universal = vlc-bin.override { variant = "universal"; };
@@ -16781,13 +16760,6 @@ with pkgs;
   };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
-
-  xpra = callPackage ../tools/X11/xpra { };
-  xpraWithNvenc = callPackage ../tools/X11/xpra {
-    withNvenc = true;
-    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
-  };
-  libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
 
   xmp = callPackage ../applications/audio/xmp {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;

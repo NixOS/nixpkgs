@@ -30,7 +30,9 @@
   xorgserver,
   kmod,
   xf86videonouveau,
-  nvidia_x11,
+  nvidia_x11 ? linuxPackages.nvidia_x11,
+  linuxPackages,
+  pkgsi686Linux,
   virtualgl,
   libglvnd,
   automake111x,
@@ -38,8 +40,13 @@
   # The below should only be non-null in a x86_64 system. On a i686
   # system the above nvidia_x11 and virtualgl will be the i686 packages.
   # TODO: Confusing. Perhaps use "SubArch" instead of i686?
-  nvidia_x11_i686 ? null,
-  libglvnd_i686 ? null,
+  nvidia_x11_i686 ?
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
+    else
+      null,
+  libglvnd_i686 ?
+    if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.libglvnd else null,
   useDisplayDevice ? false,
   extraNvidiaDeviceOptions ? "",
   extraNouveauDeviceOptions ? "",
