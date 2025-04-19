@@ -5,19 +5,20 @@
 # Other distributions do the same.
 {
   stdenv,
-  stdenv_i686,
+  pkgsi686Linux,
   lib,
   primusLib,
   writeScriptBin,
   runtimeShell,
-  primusLib_i686 ? null,
+  primusLib_i686 ?
+    if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null,
   useNvidia ? true,
 }:
 
 let
   # We override stdenv in case we need different ABI for libGL
   primusLib_ = primusLib.override { inherit stdenv; };
-  primusLib_i686_ = primusLib_i686.override { stdenv = stdenv_i686; };
+  primusLib_i686_ = primusLib_i686.override { stdenv = pkgsi686Linux.stdenv; };
 
   primus = if useNvidia then primusLib_ else primusLib_.override { nvidia_x11 = null; };
   primus_i686 =
