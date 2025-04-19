@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   gitUpdater,
   cmake,
   nasm,
@@ -22,12 +23,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WS9awjnJV0ok6ePlLcpHPAr2gsZjbZcdFSDEmyx7vwk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    nasm
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/commit/ec699561b51f3204e2df6d4c2578eea1f7bd52be.patch?full_index=1";
+      hash = "sha256-QVdvqWWT5tlNKBX9pQJwWgaOq+wNkYiBJTSeytRxrwo=";
+    })
   ];
 
-  buildInputs = [
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      nasm
+    ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
     cpuinfo
   ];
 
