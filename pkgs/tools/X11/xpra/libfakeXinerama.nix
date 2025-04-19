@@ -6,12 +6,12 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfakeXinerama";
   version = "0.1.0";
 
   src = fetchurl {
-    url = "https://www.xpra.org/src/${pname}-${version}.tar.bz2";
+    url = "https://www.xpra.org/src/libfakeXinerama-${finalAttrs.version}.tar.bz2";
     sha256 = "0gxb8jska2anbb3c1m8asbglgnwylgdr44x9lr8yh91hjxsqadkx";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.nickcao ];
     license = lib.licenses.mit;
   };
-}
+})
