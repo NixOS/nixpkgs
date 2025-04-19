@@ -4,15 +4,10 @@
   fetchFromGitHub,
   rustPlatform,
   just,
+  libcosmicAppHook,
   which,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
-  appstream-glib,
-  desktop-file-utils,
-  intltool,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,25 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-utip7E8NST88mPaKppkuOcdW+QkFoRqWy3a2McvMHo8=";
 
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
   nativeBuildInputs = [
     just
     which
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
-    appstream-glib
-    desktop-file-utils
-    intltool
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
+  # Runs the default checkPhase instead
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -58,26 +43,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-notifications"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-notifications \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
-  '';
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  passthru.tests = {
-    inherit (nixosTests)
-      cosmic
-      cosmic-autologin
-      cosmic-noxwayland
-      cosmic-autologin-noxwayland
-      ;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-notifications";
     description = "Notifications for the COSMIC Desktop Environment";
     mainProgram = "cosmic-notifications";
-    license = licenses.gpl3Only;
-    maintainers = teams.cosmic.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.cosmic.members;
+    platforms = lib.platforms.linux;
   };
 })

@@ -19,7 +19,6 @@
   cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
   darwin,
   autoAddDriverRunpath,
-  versionCheckHook,
 
   # passthru
   nixosTests,
@@ -246,10 +245,6 @@ goBuild {
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  nativeInstallCheck = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
 
   passthru = {
     tests =

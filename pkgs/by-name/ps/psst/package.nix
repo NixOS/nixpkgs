@@ -33,17 +33,17 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "psst";
-  version = "0-unstable-2025-02-22";
+  version = "0-unstable-2025-04-18";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = "psst";
-    rev = "dd47c302147677433d70b398b1bcd7f1ade87638";
-    hash = "sha256-EMjY8Tu+ssO30dD2qsvi3FAkt/UlXwM/ss2/FcyNNgI=";
+    rev = "062ed4bca8119ec77a8e50e5d6b71281356f2642";
+    hash = "sha256-xYGGfbuxKb42kGOSbGsQCs6SNPreW4k6/SfpVXx8t5E=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0UllCmIe6oEl2Ecl4nqSk9ODdgso5ucX8T5nG3dVwbE=";
+  cargoHash = "sha256-gt2EDrZ+XXig5JUsmQksSLaFd7UArnttOT4UiTVASXw=";
 
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";

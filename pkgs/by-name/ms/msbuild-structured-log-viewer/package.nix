@@ -27,7 +27,7 @@ buildDotnetModule (finalAttrs: rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = [ "src/StructuredLogViewer.Avalonia/StructuredLogViewer.Avalonia.csproj" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   # HACK: Clear out RuntimeIdentifiers that's set in StructuredLogViewer.Avalonia.csproj, otherwise our --runtime has no effect
   dotnetFlags = [ "-p:RuntimeIdentifiers=" ];
