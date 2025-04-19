@@ -14,6 +14,7 @@
   grafana-discourse-datasource = callPackage ./grafana-discourse-datasource { };
   grafana-github-datasource = callPackage ./grafana-github-datasource { };
   grafana-googlesheets-datasource = callPackage ./grafana-googlesheets-datasource { };
+  grafana-logs-drilldown = callPackage ./grafana-logs-drilldown { };
   grafana-mqtt-datasource = callPackage ./grafana-mqtt-datasource { };
   grafana-oncall-app = callPackage ./grafana-oncall-app { };
   grafana-opensearch-datasource = callPackage ./grafana-opensearch-datasource { };
