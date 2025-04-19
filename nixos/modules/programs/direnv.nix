@@ -153,9 +153,9 @@ in
       ];
 
       etc = {
-        "direnv/direnv.toml".source = lib.mkIf (cfg.settings != { }) (
-          format.generate "direnv.toml" cfg.settings
-        );
+        "direnv/direnv.toml" = lib.mkIf (cfg.settings != { }) {
+          source = format.generate "direnv.toml" cfg.settings;
+        };
         "direnv/direnvrc".text = ''
           ${lib.optionalString cfg.nix-direnv.enable ''
             #Load nix-direnv
