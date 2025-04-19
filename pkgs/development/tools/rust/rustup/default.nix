@@ -22,14 +22,14 @@ let
   ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
   version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
   };
 
@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/nix-support/ld-wrapper.sh
   '';
 
-  env = lib.optionalAttrs (pname == "rustup") {
+  env = lib.optionalAttrs (finalAttrs.pname == "rustup") {
     inherit (stdenv.cc.bintools)
       expandResponseParams
       shell
@@ -150,4 +150,4 @@ rustPlatform.buildRustPackage rec {
       mic92
     ];
   };
-}
+})
