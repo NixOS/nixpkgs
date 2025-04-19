@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.0.0-beta6";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.1";
+  scipVersion = "9.2.2";
 
   # Take the SCIPOptSuite source since no other source exists publicly.
   src = fetchzip {
