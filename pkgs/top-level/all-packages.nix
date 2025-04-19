@@ -19234,10 +19234,6 @@ with pkgs;
 
   zap-chip-gui = zap-chip.override { withGui = true; };
 
-  myEnvFun = callPackage ../misc/my-env {
-    inherit (stdenv) mkDerivation;
-  };
-
   znc = callPackage ../applications/networking/znc { };
 
   zncModules = recurseIntoAttrs (callPackage ../applications/networking/znc/modules.nix { });
