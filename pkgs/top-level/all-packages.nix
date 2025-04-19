@@ -13290,12 +13290,6 @@ with pkgs;
     ubootWandboard
     ;
 
-  # Upstream Barebox:
-  inherit (callPackage ../misc/barebox { })
-    buildBarebox
-    bareboxTools
-    ;
-
   eudev = callPackage ../by-name/eu/eudev/package.nix {
     util-linux = util-linuxMinimal;
   };
