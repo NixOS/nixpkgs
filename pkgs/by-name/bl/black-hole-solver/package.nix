@@ -3,11 +3,10 @@
   lib,
   fetchurl,
   cmake,
-  perl,
+  buildPackages,
   pkg-config,
   python3,
   rinutils,
-  PathTiny,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,24 +20,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    perl
+    (buildPackages.perl.withPackages (ps: [ ps.PathTiny ]))
     pkg-config
     python3
   ];
-
   buildInputs = [
     rinutils
-    PathTiny
   ];
 
   prePatch = ''
     patchShebangs ./scripts
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Solver for Solitaire variants Golf, Black Hole, and All in a Row";
     mainProgram = "black-hole-solve";
     homepage = "https://www.shlomifish.org/open-source/projects/black-hole-solitaire-solver/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -22,6 +22,7 @@
   cmake,
   asciidoctor,
   makeWrapper,
+  versionCheckHook,
   gitUpdater,
   enableIoUring ? false,
   emilua, # this package
@@ -51,15 +52,15 @@ let
   };
 in
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emilua";
-  version = "0.11.1";
+  version = "0.11.4";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
-    tag = "v${self.version}";
-    hash = "sha256-Kl2atD3ejPSbwk9ByQrZrqBrHT4Wk+3AY3tvRC3jOCI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CVEBFySsGT0f16Dim1Pw1GdDM0fWUKieRZyxHaDH3O4=";
   };
 
   propagatedBuildInputs = [
@@ -116,13 +117,19 @@ stdenv.mkDerivation (self: {
     mkdir -p $out/nix-support
     cp ${./setup-hook.sh} $out/nix-support/setup-hook
     substituteInPlace $out/nix-support/setup-hook \
-      --replace @sitePackages@ "${self.passthru.sitePackages}"
+      --replace-fail @sitePackages@ "${finalAttrs.passthru.sitePackages}"
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
     inherit boost;
-    sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
+    sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion finalAttrs.version)))}";
     tests.with-io-uring = emilua.override { enableIoUring = true; };
   };
 
