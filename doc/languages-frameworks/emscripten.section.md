@@ -41,7 +41,7 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 (pkgs.zlib.override {
   stdenv = pkgs.emscriptenStdenv;
 }).overrideAttrs
-  (old: rec {
+  (old: {
     buildInputs = old.buildInputs ++ [ pkg-config ];
     # we need to reset this setting!
     env = (old.env or { }) // {
@@ -119,8 +119,9 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 This `xmlmirror` example features an Emscripten package that is defined completely from this context and no `pkgs.zlib.override` is used.
 
 ```nix
-pkgs.buildEmscriptenPackage rec {
-  name = "xmlmirror";
+pkgs.buildEmscriptenPackage {
+  pname = "xmlmirror";
+  version = "1.2.3";
 
   buildInputs = [
     pkg-config
