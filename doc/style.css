@@ -113,7 +113,7 @@ html {
 
 body {
     font-size: 1rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 300;
     color: #000000;
     background-color: #ffffff;
@@ -214,7 +214,7 @@ h6 {
     font-weight: 800;
     line-height: 110%;
     margin-bottom: 1rem;
-    font-size: 120%
+    font-size: 120%;
 }
 
 strong {
@@ -226,13 +226,13 @@ p {
     margin-bottom: 1rem;
 }
 
-dt>*:first-child,
-dd>*:first-child {
+dt > *:first-child,
+dd > *:first-child {
     margin-top: 0;
 }
 
-dt>*:last-child,
-dd>*:last-child {
+dt > *:last-child,
+dd > *:last-child {
     margin-bottom: 0;
 }
 
@@ -277,16 +277,16 @@ div.appendix .important {
     background: #f4f4f4;
 }
 
-div.book .note>.title,
-div.book .tip>.title,
-div.book .warning>.title,
-div.book .caution>.title,
-div.book .important>.title,
-div.appendix .note>.title,
-div.appendix .tip>.title,
-div.appendix .warning>.title,
-div.appendix .caution>.title,
-div.appendix .important>.title {
+div.book .note > .title,
+div.book .tip > .title,
+div.book .warning > .title,
+div.book .caution > .title,
+div.book .important > .title,
+div.appendix .note > .title,
+div.appendix .tip > .title,
+div.appendix .warning > .title,
+div.appendix .caution > .title,
+div.appendix .important > .title {
     font-weight: 800;
     /* font-family: 'Overpass', serif; */
     line-height: 110%;
@@ -295,29 +295,29 @@ div.appendix .important>.title {
     margin-bottom: 0;
 }
 
-div.book .note> :first-child,
-div.book .tip> :first-child,
-div.book .warning> :first-child,
-div.book .caution> :first-child,
-div.book .important> :first-child,
-div.appendix .note> :first-child,
-div.appendix .tip> :first-child,
-div.appendix .warning> :first-child,
-div.appendix .caution> :first-child,
-div.appendix .important> :first-child {
+div.book .note > :first-child,
+div.book .tip > :first-child,
+div.book .warning > :first-child,
+div.book .caution > :first-child,
+div.book .important > :first-child,
+div.appendix .note > :first-child,
+div.appendix .tip > :first-child,
+div.appendix .warning > :first-child,
+div.appendix .caution > :first-child,
+div.appendix .important > :first-child {
     margin-top: 0;
 }
 
-div.book .note> :last-child,
-div.book .tip> :last-child,
-div.book .warning> :last-child,
-div.book .caution> :last-child,
-div.book .important> :last-child,
-div.appendix .note> :last-child,
-div.appendix .tip> :last-child,
-div.appendix .warning> :last-child,
-div.appendix .caution> :last-child,
-div.appendix .important> :last-child {
+div.book .note > :last-child,
+div.book .tip > :last-child,
+div.book .warning > :last-child,
+div.book .caution > :last-child,
+div.book .important > :last-child,
+div.appendix .note > :last-child,
+div.appendix .tip > :last-child,
+div.appendix .warning > :last-child,
+div.appendix .caution > :last-child,
+div.appendix .important > :last-child {
     margin-bottom: 0;
 }
 
@@ -358,8 +358,8 @@ div.appendix div.example details[open] {
     border-radius: 4px;
 }
 
-div.book div.example details>summary,
-div.appendix div.example details>summary {
+div.book div.example details > summary,
+div.appendix div.example details > summary {
     cursor: pointer;
 }
 
@@ -368,13 +368,13 @@ div.appendix br.example-break {
     display: none;
 }
 
-div.book div.footnotes>hr,
-div.appendix div.footnotes>hr {
+div.book div.footnotes > hr,
+div.appendix div.footnotes > hr {
     border-color: #d8d8d8;
 }
 
-div.book div.footnotes>br,
-div.appendix div.footnotes>br {
+div.book div.footnotes > br,
+div.appendix div.footnotes > br {
     display: none;
 }
 
