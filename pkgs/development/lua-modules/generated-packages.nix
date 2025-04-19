@@ -3625,15 +3625,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lzextras";
-      version = "0.4.0-1";
+      version = "0.4.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lzextras-0.4.0-1.rockspec";
-          sha256 = "12s4jy3xqzb1dcan0gmgza6c9wyh44h348f4m3zzj29icffx4vyv";
+          url = "mirror://luarocks/lzextras-0.4.2-1.rockspec";
+          sha256 = "1awxr7bmf5hfgvn5vjra1rdn57dcsmv9v33b5pgp13q6yjhr750s";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/BirdeeHub/lzextras/archive/v0.4.0.zip";
-        sha256 = "1c92vm5q9vrr1imc3h9z9vvpkhlayywgk1n3wfkqbfi37ni066kw";
+        url = "https://github.com/BirdeeHub/lzextras/archive/v0.4.2.zip";
+        sha256 = "1apgv3g9blwh25hqjhz1b7la3m2c3pfzalg42kg7y0x66ga78qf0";
       };
 
       disabled = luaOlder "5.1";
