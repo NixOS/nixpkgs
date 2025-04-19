@@ -25,7 +25,6 @@ let
       brotli
       celery
       celery-batches
-      dj-stripe
       django
       django-allauth
       django-anymail
@@ -39,7 +38,6 @@ let
       django-organizations
       django-prometheus
       django-redis
-      django-sql-utils
       django-storages
       google-cloud-logging
       gunicorn
@@ -47,7 +45,7 @@ let
       psycopg
       pydantic
       sentry-sdk
-      symbolic
+      symbolic_10
       user-agents
       uvicorn
       uwsgi-chunked
@@ -69,14 +67,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "4.2.5";
+  version = "4.2.10";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OTf2rvx+ONnB7pLB7rinztXL7l2eZfIuI7PosCXaOH8=";
+    hash = "sha256-EGk/mhDlqGrJm/j5rTKeKRkJ/fRTspwtPJ+5OHwplfM=";
   };
 
   propagatedBuildInputs = pythonPackages;
