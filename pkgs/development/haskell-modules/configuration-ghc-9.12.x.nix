@@ -173,6 +173,13 @@ with haskellLib;
   # https://github.com/sjakobi/newtype-generics/pull/28/files
   newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 
+  # Test failure because of GHC bug:
+  #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
+  #   https://github.com/sol/interpolate/issues/20
+  interpolate =
+    assert super.ghc.version == "9.12.2";
+    dontCheck super.interpolate;
+
   #
   # Multiple issues
   #
