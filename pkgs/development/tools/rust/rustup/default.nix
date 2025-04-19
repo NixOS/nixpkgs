@@ -9,11 +9,13 @@
   pkg-config,
   openssl,
   curl,
+  installShellFiles,
   zlib,
   Security,
   CoreServices,
   libiconv,
   xz,
+  buildPackages,
 }:
 
 let
@@ -39,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
+    installShellFiles
   ];
 
   buildInputs =
@@ -107,15 +110,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export HOME=$(mktemp -d)
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
 
-    # generate completion scripts for rustup
-    $out/bin/rustup completions bash rustup > "$out/share/bash-completion/completions/rustup"
-    $out/bin/rustup completions fish rustup > "$out/share/fish/vendor_completions.d/rustup.fish"
-    $out/bin/rustup completions zsh rustup >  "$out/share/zsh/site-functions/_rustup"
+    ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        # generate completion scripts for rustup
+        installShellCompletion --cmd rustup \
+          --bash <(${emulator} $out/bin/rustup completions bash rustup) \
+          --fish <(${emulator} $out/bin/rustup completions fish rustup) \
+          --zsh <(${emulator} $out/bin/rustup completions zsh rustup)
 
-    # generate completion scripts for cargo
-    # Note: fish completion script is not supported.
-    $out/bin/rustup completions bash cargo > "$out/share/bash-completion/completions/cargo"
-    $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
+        # generate completion scripts for cargo
+        # Note: fish completion script is not supported.
+        installShellCompletion --cmd cargo \
+          --bash <(${emulator} $out/bin/rustup completions bash cargo) \
+          --zsh <(${emulator} $out/bin/rustup completions zsh cargo)
+      ''
+    )}
 
     # add a wrapper script for ld.lld
     mkdir -p $out/nix-support
