@@ -651,7 +651,11 @@ It's important to use the `--offline` flag. For example if you script is `"build
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     yarn --offline build
+
+    runHook postBuild
   '';
 }
 ```

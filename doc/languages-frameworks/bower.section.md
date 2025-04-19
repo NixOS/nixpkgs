@@ -110,8 +110,12 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     cp --reflink=auto --no-preserve=mode -R $bowerComponents/bower_components . # note 2
     ${pkgs.nodePackages.gulp}/bin/gulp build # note 4
+
+    runHook postBuild
   '';
 
   installPhase = "mv gulpdist $out";
