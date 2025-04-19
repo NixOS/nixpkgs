@@ -21330,6 +21330,13 @@
     githubId = 255667;
     name = "Linus Karl";
   };
+  reubenj = {
+    name = "Reuben Gardos Reid";
+    email = "reuben@reuben.gr.com";
+    github = "reubenj";
+    githubId = 5456207;
+    keys = [ { fingerprint = "15F6 C0B6 3BFD 555A 6C7F  B50D CA2B 4722 79C4 937B"; } ];
+  };
   revol-xut = {
     email = "revol-xut@protonmail.com";
     name = "Tassilo Tanneberger";
