@@ -7,7 +7,7 @@
 
 let
   pname = "lefthook";
-  version = "1.11.5";
+  version = "1.11.10";
 in
 buildGoModule {
   inherit pname version;
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-JBDEVgMUVZceXSppq26xJcsKRlHmIBK5UN5uehmG/VU=";
+    hash = "sha256-WhveZtkwG2HbshT1xbA7wnhfxP6vmQ0h+rCxqgbwO5g=";
   };
 
-  vendorHash = "sha256-0d+lr6wo4FbyVvpG15MdXesGfgnkSozANyGhjWZFRvI=";
+  vendorHash = "sha256-aINRFg3TByOEjFgoPr33bDL6TFnlW/b9DqDTEJWNnGI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
