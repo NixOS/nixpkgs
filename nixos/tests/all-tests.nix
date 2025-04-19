@@ -460,7 +460,7 @@ in
   evcc = runTest ./evcc.nix;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = handleTest ./fakeroute.nix { };
-  fancontrol = handleTest ./fancontrol.nix { };
+  fancontrol = runTest ./fancontrol.nix;
   fanout = handleTest ./fanout.nix { };
   fcitx5 = handleTest ./fcitx5 { };
   fedimintd = runTest ./fedimintd.nix;
@@ -697,7 +697,7 @@ in
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix { };
   kernel-rust = handleTest ./kernel-rust.nix { };
   keter = handleTest ./keter.nix { };
-  kexec = handleTest ./kexec.nix { };
+  kexec = runTest ./kexec.nix;
   keycloak = discoverTests (import ./keycloak.nix);
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
@@ -767,7 +767,7 @@ in
   magic-wormhole-mailbox-server = runTest ./magic-wormhole-mailbox-server.nix;
   magnetico = handleTest ./magnetico.nix { };
   mailcatcher = runTest ./mailcatcher.nix;
-  mailhog = handleTest ./mailhog.nix { };
+  mailhog = runTest ./mailhog.nix;
   mailpit = runTest ./mailpit.nix;
   mailman = runTest ./mailman.nix;
   man = handleTest ./man.nix { };
@@ -830,7 +830,7 @@ in
   mosquitto = runTest ./mosquitto.nix;
   moosefs = handleTest ./moosefs.nix { };
   movim = import ./web-apps/movim { inherit recurseIntoAttrs runTest; };
-  mpd = handleTest ./mpd.nix { };
+  mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
@@ -966,7 +966,7 @@ in
   nzbhydra2 = handleTest ./nzbhydra2.nix { };
   ocis = handleTest ./ocis.nix { };
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
-  obs-studio = handleTest ./obs-studio.nix { };
+  obs-studio = runTest ./obs-studio.nix;
   oh-my-zsh = handleTest ./oh-my-zsh.nix { };
   ollama = runTest ./ollama.nix;
   ollama-cuda = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-cuda.nix;
@@ -1092,21 +1092,25 @@ in
   pretalx = runTest ./web-apps/pretalx.nix;
   prefect = runTest ./prefect.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  printing-socket = handleTest ./printing.nix {
-    socket = true;
-    listenTcp = true;
+  printing-socket = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = true;
+    _module.args.listenTcp = true;
   };
-  printing-service = handleTest ./printing.nix {
-    socket = false;
-    listenTcp = true;
+  printing-service = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = false;
+    _module.args.listenTcp = true;
   };
-  printing-socket-notcp = handleTest ./printing.nix {
-    socket = true;
-    listenTcp = false;
+  printing-socket-notcp = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = true;
+    _module.args.listenTcp = false;
   };
-  printing-service-notcp = handleTest ./printing.nix {
-    socket = false;
-    listenTcp = false;
+  printing-service-notcp = runTest {
+    imports = [ ./printing.nix ];
+    _module.args.socket = false;
+    _module.args.listenTcp = false;
   };
   private-gpt = handleTest ./private-gpt.nix { };
   privatebin = runTest ./privatebin.nix;
@@ -1176,7 +1180,7 @@ in
   rustls-libssl = handleTest ./rustls-libssl.nix { };
   rxe = handleTest ./rxe.nix { };
   sabnzbd = handleTest ./sabnzbd.nix { };
-  samba = handleTest ./samba.nix { };
+  samba = runTest ./samba.nix;
   samba-wsdd = handleTest ./samba-wsdd.nix { };
   sane = handleTest ./sane.nix { };
   sanoid = handleTest ./sanoid.nix { };
@@ -1201,7 +1205,7 @@ in
   shadowsocks = handleTest ./shadowsocks { };
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix { };
   shiori = handleTest ./shiori.nix { };
-  signal-desktop = handleTest ./signal-desktop.nix { };
+  signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = handleTest ./silverbullet.nix { };
   simple = handleTest ./simple.nix { };
   sing-box = handleTest ./sing-box.nix { };
@@ -1459,7 +1463,7 @@ in
   wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
   wordpress = runTest ./wordpress.nix;
   wrappers = handleTest ./wrappers.nix { };
-  writefreely = handleTest ./web-apps/writefreely.nix { };
+  writefreely = import ./web-apps/writefreely.nix { inherit pkgs runTest; };
   wstunnel = runTest ./wstunnel.nix;
   xandikos = runTest ./xandikos.nix;
   xautolock = runTest ./xautolock.nix;

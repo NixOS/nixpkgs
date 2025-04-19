@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "fleeting-plugin-aws";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     owner = "gitlab-org/fleeting/plugins";
     repo = "aws";
     tag = "v${version}";
-    hash = "sha256-8vEduf+xh9R3+GoouXJS2h/ELlzKXDmLBLekaXGn7SE=";
+    hash = "sha256-3m7t2uGO7Rlfckb8mdYVutW0/ng0OiUAH5XTBoB//ZU=";
   };
 
-  vendorHash = "sha256-bfEzPPP280peOK4Jyu1fyfFCaFnRLoPmsjJ+G1BoVW4=";
+  vendorHash = "sha256-hfuszGVWfMreGz22+dkx0/cxznjq2XZf7pAn4TWOQ5M=";
 
   subPackages = [ "cmd/fleeting-plugin-aws" ];
 

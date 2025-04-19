@@ -313,6 +313,7 @@
   ./programs/system-config-printer.nix
   ./programs/systemtap.nix
   ./programs/tcpdump.nix
+  ./programs/television.nix
   ./programs/thefuck.nix
   ./programs/thunar.nix
   ./programs/thunderbird.nix
@@ -367,6 +368,7 @@
   ./security/auditd.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
+  ./security/default.nix
   ./security/dhparams.nix
   ./security/doas.nix
   ./security/duosec.nix
@@ -554,7 +556,6 @@
   ./services/desktops/gnome/rygel.nix
   ./services/desktops/gnome/sushi.nix
   ./services/desktops/gnome/tinysparql.nix
-  ./services/desktops/gsignond.nix
   ./services/desktops/gvfs.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix

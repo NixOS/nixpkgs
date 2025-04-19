@@ -13,7 +13,6 @@
   protobuf,
   speex,
   libcap,
-  utf8proc,
   alsa-lib,
   python3,
   rnnoise,
@@ -100,7 +99,6 @@ let
           qt5.qtsvg
           rnnoise
           speex
-          utf8proc
         ]
         ++ lib.optional (!jackSupport) alsa-lib
         ++ lib.optional jackSupport libjack2

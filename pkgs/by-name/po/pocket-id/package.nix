@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  fetchurl,
   makeWrapper,
   nodejs,
   stdenvNoCC,
@@ -12,12 +11,12 @@
 }:
 
 let
-  version = "0.45.0";
+  version = "0.48.0";
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${version}";
-    hash = "sha256-x5Y3ArkIPxiE6avk9DNyFdfkc/pY6h3JH3PZCS8U/GM=";
+    hash = "sha256-ax5E3e3GUrQLVsQREUhjmORjXQgKrEBVa9ySJr5ZLUY=";
   };
 
   backend = buildGoModule {
@@ -26,7 +25,7 @@ let
 
     sourceRoot = "${src.name}/backend";
 
-    vendorHash = "sha256-mqpBP+A2X5ome1Ppg/Kki0C+A77jFtWzUjI/RN+ZCzg=";
+    vendorHash = "sha256-0LAlltXd7YNQu7ymdjUSy75hMBz6MpvmUtgct43BU7M=";
 
     preFixup = ''
       mv $out/bin/cmd $out/bin/pocket-id-backend
@@ -39,7 +38,7 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-cpmZzlz+wusfRLN4iIGdk+I4SWrX/gk2fbhg+Gg3paw=";
+    npmDepsHash = "sha256-CKxa0uL7pBQJiA2LPDA/HQvRk8sjphZ9nur8jb7BnU8=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     nativeBuildInputs = [
@@ -53,7 +52,7 @@ let
       # it still needs a few packages from node_modules, try to strip that
       npm prune --omit=dev --omit=optional $npmFlags
       # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,bits-ui,jiti,@swc,.bin}
+      rm -r node_modules/{lucide-svelte,jiti,@swc,.bin}
       # unused file types
       for pattern in '*.map' '*.map.js' '*.ts'; do
         find . -type f -name "$pattern" -exec rm {} +
@@ -70,7 +69,7 @@ let
   });
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "pocket-id";
   inherit
     version
@@ -112,6 +111,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       gepbird
+      marcusramberg
       ymstnt
     ];
     platforms = lib.platforms.unix;

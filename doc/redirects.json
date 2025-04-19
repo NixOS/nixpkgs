@@ -413,6 +413,24 @@
   "tester-testEqualArrayOrMap-return": [
     "index.html#tester-testEqualArrayOrMap-return"
   ],
+  "typst": [
+    "index.html#typst",
+    "doc/languages-frameworks/typst.section.md#typst"
+  ],
+  "typst-custom-environment": [
+    "index.html#typst-custom-environment",
+    "doc/languages-frameworks/typst.section.md#typst-custom-environment"
+  ],
+  "typst-custom-packages": [
+    "index.html#typst-custom-packages",
+    "doc/languages-frameworks/typst.section.md#typst-custom-packages"
+  ],
+  "typst-handling-outdated-package-hashes": [
+    "index.html#typst-handling-outdated-package-hashes"
+  ],
+  "typst-package-scope-and-usage": [
+    "index.html#typst-package-scope-and-usage"
+  ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
   ],
