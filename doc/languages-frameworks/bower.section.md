@@ -105,9 +105,12 @@ pkgs.stdenv.mkDerivation {
     src = myWebApp;
   };
 
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook # note 3
+  ];
+
   buildPhase = ''
     cp --reflink=auto --no-preserve=mode -R $bowerComponents/bower_components . # note 2
-    export HOME=$PWD # note 3
     ${pkgs.nodePackages.gulp}/bin/gulp build # note 4
   '';
 

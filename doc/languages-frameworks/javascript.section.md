@@ -646,8 +646,11 @@ It's important to use the `--offline` flag. For example if you script is `"build
 
 ```nix
 {
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   buildPhase = ''
-    export HOME=$(mktemp -d)
     yarn --offline build
   '';
 }

@@ -118,6 +118,7 @@ pkgs.buildEmscriptenPackage rec {
   ];
   nativeBuildInputs = [
     pkg-config
+    writableTmpDirAsHomeHook
     zlib
   ];
 
@@ -140,7 +141,6 @@ pkgs.buildEmscriptenPackage rec {
   '';
 
   buildPhase = ''
-    HOME=$TMPDIR
     make -f Makefile.emEnv
   '';
 

@@ -173,6 +173,7 @@ let
       (writeShellScript "force-tex-output.sh" ''
         out="''${tex-}"
       '')
+      writableTmpDirAsHomeHook # Need a writable $HOME for latexmk
     ];
 
     dontConfigure = true;
@@ -184,7 +185,6 @@ let
       latex foiltex.ins
 
       # Generate the documentation
-      export HOME=.
       latexmk -pdf foiltex.dtx
 
       runHook postBuild
