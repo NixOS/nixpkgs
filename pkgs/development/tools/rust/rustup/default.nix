@@ -139,13 +139,15 @@ rustPlatform.buildRustPackage rec {
     hardening_unsupported_flags = "";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with lib.maintainers; [
+      mic92
+    ];
   };
 }
