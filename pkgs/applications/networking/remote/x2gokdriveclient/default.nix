@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     mainProgram = "x2gokdriveclient";
     homepage = "http://x2go.org/";
     maintainers = with maintainers; [ juliabru ];
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     platforms = platforms.linux;
   };
 }
