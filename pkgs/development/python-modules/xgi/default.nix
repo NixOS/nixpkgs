@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/xgi-org/xgi/blob/main/CHANGELOG.md#${
-      builtins.replaceStrings ["."] [""] version
+      builtins.replaceStrings [ "." ] [ "" ] version
     }";
     description = "Software for higher-order networks";
     homepage = "https://xgi.readthedocs.io/";
