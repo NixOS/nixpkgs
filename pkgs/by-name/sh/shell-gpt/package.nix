@@ -33,9 +33,14 @@ python3.pkgs.buildPythonApplication rec {
     click
     distro
     instructor
+    litellm
     openai
     rich
     typer
+  ];
+
+  buildInputs = with python3.pkgs; [
+    litellm
   ];
 
   # Tests want to read the OpenAI API key from stdin
