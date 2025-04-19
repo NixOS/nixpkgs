@@ -15,7 +15,6 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = final.django_5;
-      django-extensions = prev.django-extensions.overridePythonAttrs { doCheck = false; };
       symbolic = prev.symbolic.overridePythonAttrs rec {
         version = "10.2.1";
         src = fetchFromGitHub {
