@@ -14,6 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "lib"
+    "doc"
   ];
 
   src = fetchurl {
