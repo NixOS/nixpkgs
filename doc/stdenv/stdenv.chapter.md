@@ -53,13 +53,23 @@ Often it is necessary to override or modify some aspect of the build. To make th
 stdenv.mkDerivation {
   pname = "fnord";
   version = "4.5";
+
   # ...
+
   buildPhase = ''
+    runHook preBuild
+
     gcc foo.c -o foo
+
+    runHook postBuild
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp foo $out/bin
+
+    runHook postInstall
   '';
 }
 ```
@@ -225,6 +235,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
   ];
+
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -249,8 +260,8 @@ stdenv.mkDerivation rec {
     util-linux
     qemu
   ];
-  checkPhase = ''[elided] '';
-}
+  checkPhase = ''[elided]'';
+})
 ```
 
 - `makeWrapper` is a setup hook, i.e., a shell script sourced by the generic builder of `stdenv`.
