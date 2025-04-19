@@ -92,6 +92,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       slbtty
       michojel
+      linsui
     ];
     license = licenses.gpl3Plus;
   };
