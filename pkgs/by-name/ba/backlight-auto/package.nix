@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
+    # Does not support zig 0.12 or newer, hasn't been updated in 2 years.
+    broken = lib.versionAtLeast zig.version "0.12";
     description = "Automatically set screen brightness with a webcam";
     mainProgram = "backlight-auto";
     homepage = "https://len.falken.directory/backlight-auto.html";
