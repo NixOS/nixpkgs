@@ -54,12 +54,14 @@ buildPythonPackage rec {
   # propogating from matplotlib. see matplotlib/default.nix.
   doCheck = false;
 
-  pythonImportsCheck = ["xgi"];
+  pythonImportsCheck = [ "xgi" ];
 
   meta = with lib; {
-    changelog = "https://github.com/xgi-org/xgi/blob/main/CHANGELOG.md#${builtins.replaceStrings ["."] [""] version}";
+    changelog = "https://github.com/xgi-org/xgi/blob/main/CHANGELOG.md#${
+      builtins.replaceStrings ["."] [""] version
+    }";
     description = "Software for higher-order networks";
     homepage = "https://xgi.readthedocs.io/";
-    license = with licenses; [bsd3];
+    license = with licenses; [ bsd3 ];
   };
 }
