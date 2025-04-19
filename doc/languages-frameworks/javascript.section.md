@@ -205,7 +205,7 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jesec";
     repo = pname;
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };
 
