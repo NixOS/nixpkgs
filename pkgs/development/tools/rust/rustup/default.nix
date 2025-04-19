@@ -142,7 +142,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod +x $out/nix-support/ld-wrapper.sh
   '';
 
-  env = lib.optionalAttrs (finalAttrs.pname == "rustup") {
+  env = {
     inherit (stdenv.cc.bintools)
       expandResponseParams
       shell
