@@ -23,18 +23,18 @@
   wayland-scanner,
   withXwayland ? true,
   xwayland,
-  wlroots,
+  wlroots_0_18,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cagebreak";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
-    repo = pname;
-    rev = version;
-    hash = "sha256-GAANZIEUtuONPBpk0E3fErgOZtm3wB+gWJNwfO6VOTo=";
+    repo = "cagebreak";
+    tag = finalAttrs.version;
+    hash = "sha256-eJLYv9CalBTOQEOMRg/5ctHByrkA44pfS7K3H4XTdSc=";
   };
 
   nativeBuildInputs = [
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     systemd
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_18
   ];
 
   mesonFlags = [
     "-Dman-pages=true"
-    "-Dversion_override=${version}"
+    "-Dversion_override=${finalAttrs.version}"
     "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
@@ -83,15 +83,15 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/project-repo/cagebreak";
     description = "Wayland tiling compositor inspired by ratpoison";
-    license = licenses.mit;
-    maintainers = with maintainers; [ berbiche ];
-    platforms = platforms.linux;
-    changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
+    changelog = "https://github.com/project-repo/cagebreak/blob/${finalAttrs.version}/Changelog.md";
     mainProgram = "cagebreak";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;
-}
+})
