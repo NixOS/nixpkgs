@@ -740,7 +740,7 @@ in
   localsend = handleTest ./localsend.nix { };
   locate = handleTest ./locate.nix { };
   login = handleTest ./login.nix { };
-  logrotate = handleTest ./logrotate.nix { };
+  logrotate = runTest ./logrotate.nix;
   loki = handleTest ./loki.nix { };
   luks = handleTest ./luks.nix { };
   lvm2 = handleTest ./lvm2 { };
