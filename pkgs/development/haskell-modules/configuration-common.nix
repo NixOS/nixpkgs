@@ -3111,6 +3111,9 @@ self: super:
 
   # 2025-04-19: Tests randomly fail 6 out of 10 times
   coinor-clp = dontCheck super.coinor-clp;
+
+  # 2025-04-19: Tests randomly fail 5 out of 10 times
+  fft = dontCheck super.fft;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
