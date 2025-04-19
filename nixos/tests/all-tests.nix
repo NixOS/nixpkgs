@@ -460,7 +460,7 @@ in
   evcc = runTest ./evcc.nix;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = handleTest ./fakeroute.nix { };
-  fancontrol = handleTest ./fancontrol.nix { };
+  fancontrol = runTest ./fancontrol.nix;
   fanout = handleTest ./fanout.nix { };
   fcitx5 = handleTest ./fcitx5 { };
   fedimintd = runTest ./fedimintd.nix;
