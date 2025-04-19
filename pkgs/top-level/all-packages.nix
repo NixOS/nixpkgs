@@ -18615,7 +18615,6 @@ with pkgs;
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
   jack2 = callPackage ../misc/jackaudio {
-    libopus = libopus.override { withCustomModes = true; };
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio Accelerate;
     inherit (darwin) libobjc;
   };

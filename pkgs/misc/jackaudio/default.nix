@@ -7,7 +7,6 @@
   python3Packages,
   makeWrapper,
   libsamplerate,
-  celt,
   wafHook,
   # Darwin Dependencies
   aften,
@@ -23,7 +22,6 @@
   dbus ? null,
   libffado ? null,
   alsa-lib ? null,
-  libopus ? null,
 
   # Extra options
   prefix ? "",
@@ -42,7 +40,6 @@ let
   optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
   optLibffado = if libOnly then null else shouldUsePkg libffado;
   optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
-  optLibopus = shouldUsePkg libopus;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
@@ -68,12 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       libsamplerate
-      celt
       optDbus
       optPythonDBus
       optLibffado
       optAlsaLib
-      optLibopus
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       aften
