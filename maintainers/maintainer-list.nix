@@ -12397,6 +12397,12 @@
     githubId = 62934740;
     keys = [ { fingerprint = "E9C6 44C7 F6AA A865 4CB9  2723 22C8 B0CE B9AC 4AFF"; } ];
   };
+  juliabru = {
+    name = "Julia Brunenberg";
+    email = "julia@jjim.de";
+    github = "juliadin";
+    githubId = 7837969;
+  };
   JulianFP = {
     name = "Julian Partanen";
     github = "JulianFP";
