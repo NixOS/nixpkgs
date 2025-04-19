@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
-    rev = version;
-    sha256 = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
+    tag = version;
+    hash = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
   };
 
   useFetchCargoVendor = true;
