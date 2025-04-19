@@ -38,6 +38,7 @@
   pcre2,
   libargon2,
   extraBuildInputs ? [ ],
+  writeScript,
 }:
 
 let
@@ -169,6 +170,20 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/weechat --version
+  '';
+
+  passthru.updateScript = writeScript "update-weechat" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p coreutils gawk git gnugrep common-updater-scripts
+    set -eu -o pipefail
+
+    version="$(git ls-remote --refs https://github.com/weechat/weechat | \
+      awk '{ print $2 }' | \
+      grep "refs/tags/v" | \
+      sed -E -e 's,refs/tags/v(.*)$,\1,' | \
+      sort --version-sort --reverse | \
+      head -n1)"
+    update-source-version weechat-unwrapped "$version"
   '';
 
   meta = {
