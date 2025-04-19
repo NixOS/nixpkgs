@@ -204,7 +204,7 @@ buildNpmPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "jesec";
-    repo = pname;
+    repo = "flood";
     tag = "v${finalAttrs.version}";
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };

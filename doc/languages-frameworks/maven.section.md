@@ -23,7 +23,7 @@ maven.buildMavenPackage rec {
 
   src = fetchFromGitHub {
     owner = "intoolswetrust";
-    repo = pname;
+    repo = "jd-cli";
     tag = "jd-cli-${version}";
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
