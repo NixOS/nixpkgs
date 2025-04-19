@@ -17389,8 +17389,6 @@ with pkgs;
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
-  nile = python3Packages.callPackage ../games/nile { };
-
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
 
