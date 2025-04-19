@@ -575,7 +575,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "tokenizers";
     tag = "python-v${version}";
     hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
   };
