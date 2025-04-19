@@ -854,6 +854,11 @@ stdenvNoCC.mkDerivation {
       echo " -flto -fuse-linker-plugin" >> $out/nix-support/cc-ldflags
     ''
 
+    + optionalString (targetPlatform.useLTO && isGNU) ''
+      echo " -fuse-linker-plugin -Wl,--plugin=${cc}/libexec/gcc/${targetPlatform.config}/14.2.1/liblto_plugin.so" >> $out/nix-support/cc-cflags
+      echo " -fuse-linker-plugin --plugin=${cc}/libexec/gcc/${targetPlatform.config}/14.2.1/liblto_plugin.so" >> $out/nix-support/cc-ldflags
+    ''
+
     ##
     ## Extra custom steps
     ##
