@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   cmake,
   pkg-config,
   hwloc,
@@ -98,8 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       lttng-ust
     ];
-
-  passthru.updateScript = nix-update-script { };
 
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook
