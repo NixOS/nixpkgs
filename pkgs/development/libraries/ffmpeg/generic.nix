@@ -56,7 +56,7 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withHeadlessDeps, # CELT decoder
+  withCelt ? withFullDeps, # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
