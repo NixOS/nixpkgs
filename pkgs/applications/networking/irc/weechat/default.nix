@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://weechat.org/";
-    changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
+    changelog = "https://github.com/weechat/weechat/releases/tag/v${version}";
     description = "Fast, light and extensible chat client";
     longDescription = ''
       You can find more documentation as to how to customize this package
