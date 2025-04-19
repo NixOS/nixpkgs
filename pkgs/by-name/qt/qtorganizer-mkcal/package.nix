@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
   ];
 
   buildInputs =
     [
-      extra-cmake-modules
       mkcal
     ]
     ++ (with libsForQt5; [
