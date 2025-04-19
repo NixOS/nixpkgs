@@ -17287,8 +17287,6 @@ with pkgs;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
 
-  gogdl = python3Packages.callPackage ../games/gogdl { };
-
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
   gshogi = callPackage ../games/gshogi { };
