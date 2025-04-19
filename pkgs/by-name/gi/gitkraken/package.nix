@@ -6,7 +6,6 @@
   fetchzip,
   makeDesktopItem,
   makeWrapper,
-  nix-update-script,
   adwaita-icon-theme,
   alsa-lib,
   at-spi2-atk,
@@ -93,12 +92,15 @@ let
     mainProgram = "gitkraken";
   };
 
+  passthru.updateScript = ./update.sh;
+
   linux = stdenv.mkDerivation rec {
     inherit
       pname
       version
       src
       meta
+      passthru
       ;
 
     dontBuild = true;
@@ -228,6 +230,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [
