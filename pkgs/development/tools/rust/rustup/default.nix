@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs =
     [
-      (curl.override { inherit openssl; })
+      openssl
+      curl
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
