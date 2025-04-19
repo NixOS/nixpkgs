@@ -10,9 +10,11 @@
   # dependencies
   aiohttp,
   docstring-parser,
+  jinja2,
   jiter,
   openai,
   pydantic,
+  requests,
   rich,
   tenacity,
   typer,
@@ -22,7 +24,6 @@
   diskcache,
   fastapi,
   google-generativeai,
-  jinja2,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
@@ -50,9 +51,11 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     docstring-parser
+    jinja2
     jiter
     openai
     pydantic
+    requests
     rich
     tenacity
     typer
@@ -63,7 +66,6 @@ buildPythonPackage rec {
     diskcache
     fastapi
     google-generativeai
-    jinja2
     pytest-asyncio
     pytestCheckHook
     python-dotenv
