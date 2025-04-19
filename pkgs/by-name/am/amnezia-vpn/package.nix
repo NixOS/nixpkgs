@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   kdePackages,
@@ -64,6 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # Temporary patch header file to fix build with QT 6.9
+  patches = [
+    (fetchpatch {
+      name = "add-missing-include.patch";
+      url = "https://github.com/amnezia-vpn/amnezia-client/commit/c44ce0d77cc3acdf1de48a12459a1a821d404a1c.patch";
+      hash = "sha256-Q6UMD8PlKAcI6zNolT5+cULECnxNrYrD7cifvNg1ZrY=";
+    })
+  ];
+
   postPatch =
     ''
       substituteInPlace client/platforms/linux/daemon/wireguardutilslinux.cpp \
@@ -125,11 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -m444 ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    # Temporary unwrap non-binary executable until qt6.wrapQtAppsHook is fixed
-    mv $out/libexec/.update-resolv-conf.sh-wrapped $out/libexec/update-resolv-conf.sh
   '';
 
   passthru = {
