@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
       --replace-warn "-o root -g root" ""
   '';
 
-
-
   makeFlags = [
     "PREFIX=$(out)"
     "ETCDIR=$(out)/etc"
