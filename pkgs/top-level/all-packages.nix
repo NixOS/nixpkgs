@@ -1372,6 +1372,10 @@ with pkgs;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
+  forgejo = callPackage ../by-name/fo/forgejo/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   gfold = callPackage ../applications/version-management/gfold { };
