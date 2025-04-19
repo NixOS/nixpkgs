@@ -7,7 +7,8 @@
   nodejs,
   python3,
   makeWrapper,
-  electron,
+  # Upstream uses EOL Electron 31.  Use next oldest version.
+  electron_33,
   vulkan-helper,
   gogdl,
   legendary-heroic,
@@ -15,6 +16,9 @@
   comet-gog,
 }:
 
+let
+  electron = electron_33;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
   version = "2.16.1";
