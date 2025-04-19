@@ -7,25 +7,29 @@ body {
     margin: 0;
 }
 
-.book {
+.book,
+.appendix {
     margin: auto;
     width: 100%;
 }
 
 @media screen and (min-width: 768px) {
-    .book {
+    .book,
+    .appendix {
         max-width: 46rem;
     }
 }
 
 @media screen and (min-width: 992px) {
-    .book {
+    .book,
+    .appendix {
         max-width: 60rem;
     }
 }
 
 @media screen and (min-width: 1200px) {
-    .book {
+    .book,
+    .appendix {
         max-width: 73rem;
     }
 }
