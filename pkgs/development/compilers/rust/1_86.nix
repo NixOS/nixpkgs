@@ -130,6 +130,8 @@ import ./default.nix
       powerpc64le-unknown-linux-gnu = "9b104428e2b0377dbdb9dc094eb4d9f4893ada0b80d2b315f0c4ea2135ed9007";
       riscv64gc-unknown-linux-gnu = "b74cd0bf5ddeb759cd75fb4d7f3f90972dbab6e77569484491ab7ecf073558a8";
       s390x-unknown-linux-gnu = "721121bcb8f96b98942289f627f9054ded92215c391d48f459527d4b0c63114f";
+      loongarch64-unknown-linux-gnu = "0e7827b14c77ce3ede5ba414de9806b52c655940f95fddd3e07873b8fe46c8bf";
+      loongarch64-unknown-linux-musl = "d769fb639a9116c77d5b35cb0abe4fd3bc85b6d578fe7e4440c218530e32e1cf";
       x86_64-unknown-freebsd = "fc424d582cd45df010f3b3ff76768f6c87942002421f8896daf7e3989a8f72b4";
     };
 
