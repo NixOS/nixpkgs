@@ -16532,12 +16532,6 @@ with pkgs;
       if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.virtualglLib else null;
   };
 
-  primus = callPackage ../tools/X11/primus {
-    stdenv_i686 = pkgsi686Linux.stdenv;
-    primusLib_i686 =
-      if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null;
-  };
-
   vlc-bin-universal = vlc-bin.override { variant = "universal"; };
 
   libvlc = vlc.override {
