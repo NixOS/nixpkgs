@@ -21,17 +21,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.2.10";
+  version = "2.2.11";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Tuoxvatfm3edkUiMDGmCZdl/jLKr7WH8WCXR14jKT4=";
+    hash = "sha256-6mRu1B02bX7Ax0d7MgI1cGalIKOqFMN+xP8ii+pUJWE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wH+y93loozkgCZZeCR1EVNGBUPY/+OYwZRFeAIcVNTg=";
+  cargoHash = "sha256-YZ6O31R/1L7m25Z+6Xq6b44cRAX1jgRFPlhmoFVYFok=";
 
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857

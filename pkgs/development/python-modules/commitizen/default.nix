@@ -46,6 +46,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "argcomplete"
     "decli"
+    "termcolor"
   ];
 
   build-system = [ poetry-core ];
