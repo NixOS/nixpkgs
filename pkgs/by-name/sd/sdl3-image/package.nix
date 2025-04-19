@@ -9,8 +9,11 @@
   cmake,
   fetchFromGitHub,
   validatePkgConfig,
+  libpng,
+  libjpeg,
   # Boolean flags
   enableTests ? true,
+  enableSTB ? true,
   enableImageIO ? stdenv.hostPlatform.isDarwin,
 }:
 
@@ -39,18 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs = [
-    sdl3
-    libtiff
-    libwebp
-    libavif
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation);
+  buildInputs =
+    [
+      sdl3
+      libtiff
+      libwebp
+      libavif
+    ]
+    ++ (lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation)
+    ++ (lib.optionals (!enableSTB) [
+      libpng
+      libjpeg
+    ]);
 
   cmakeFlags = [
     # fail when a dependency could not be found
     (lib.cmakeBool "SDLIMAGE_STRICT" true)
     # disable shared dependencies as they're opened at runtime using SDL_LoadObject otherwise.
     (lib.cmakeBool "SDLIMAGE_DEPS_SHARED" false)
+    # disable stbi
+    (lib.cmakeBool "SDLIMAGE_BACKEND_STB" enableSTB)
     # enable imageio backend
     (lib.cmakeBool "SDLIMAGE_BACKEND_IMAGEIO" enableImageIO)
     # enable tests
