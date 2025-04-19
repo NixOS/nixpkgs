@@ -3038,6 +3038,8 @@ self: super: with self; {
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
 
+  cusfpredict = callPackage ../development/python-modules/cusfpredict { };
+
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
   cvelib = callPackage ../development/python-modules/cvelib { };
