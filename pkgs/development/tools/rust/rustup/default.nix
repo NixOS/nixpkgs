@@ -9,6 +9,7 @@
   pkg-config,
   openssl,
   curl,
+  writableTmpDirAsHomeHook,
   installShellFiles,
   zlib,
   Security,
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
+    writableTmpDirAsHomeHook
     installShellFiles
   ];
 
@@ -107,7 +109,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/rustup --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .rustup
-    export HOME=$(mktemp -d)
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
 
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
