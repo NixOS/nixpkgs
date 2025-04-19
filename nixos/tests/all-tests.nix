@@ -636,7 +636,7 @@ in
   home-assistant = runTest ./home-assistant.nix;
   hostname = handleTest ./hostname.nix { };
   hound = handleTest ./hound.nix { };
-  hub = handleTest ./git/hub.nix { };
+  hub = runTest ./git/hub.nix;
   hydra = runTest ./hydra;
   i3wm = handleTest ./i3wm.nix { };
   icingaweb2 = runTest ./icingaweb2.nix;
