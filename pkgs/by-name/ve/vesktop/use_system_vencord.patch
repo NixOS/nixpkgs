@@ -1,5 +1,5 @@
 diff --git a/src/main/constants.ts b/src/main/constants.ts
-index 40d91a5..7b46bbf 100644
+index 01bdd80..e72b065 100644
 --- a/src/main/constants.ts
 +++ b/src/main/constants.ts
 @@ -49,7 +49,7 @@ export const VENCORD_THEMES_DIR = join(DATA_DIR, "themes");
@@ -11,3 +11,17 @@ index 40d91a5..7b46bbf 100644
  
  export const USER_AGENT = `Vesktop/${app.getVersion()} (https://github.com/Vencord/Vesktop)`;
  
+diff --git a/src/main/utils/vencordLoader.ts b/src/main/utils/vencordLoader.ts
+index 85b6112..5cdf4bc 100644
+--- a/src/main/utils/vencordLoader.ts
++++ b/src/main/utils/vencordLoader.ts
+@@ -63,8 +63,7 @@ const existsAsync = (path: string) =>
+         .catch(() => false);
+ 
+ export async function isValidVencordInstall(dir: string) {
+-    const results = await Promise.all(["package.json", ...FILES_TO_DOWNLOAD].map(f => existsAsync(join(dir, f))));
+-    return !results.includes(false);
++    return true;
+ }
+ 
+ export async function ensureVencordFiles() {
