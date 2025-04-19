@@ -36,6 +36,7 @@
   withHypre ? withCommonDeps && mpiSupport,
   withFftw ? withCommonDeps,
   withSuperLu ? withCommonDeps,
+  withSuperLuDist ? withCommonDeps && mpiSupport,
   withSuitesparse ? withCommonDeps,
 
   # External libraries
@@ -52,6 +53,7 @@
   hypre,
   fftw,
   superlu,
+  superlu_dist,
   suitesparse,
 
   # Used in passthru.tests
@@ -69,6 +71,7 @@ assert withPtscotch -> (mpiSupport && withZlib);
 assert withScalapack -> mpiSupport;
 assert (withMumps && mpiSupport) -> withScalapack;
 assert withHypre -> mpiSupport;
+assert withSuperLuDist -> mpiSupport;
 
 let
   petscPackages = lib.makeScope newScope (self: {
@@ -99,6 +102,7 @@ let
     hypre = self.callPackage hypre.override { };
     fftw = self.callPackage fftw.override { };
     superlu = self.callPackage superlu.override { };
+    superlu_dist = self.callPackage superlu_dist.override { };
     suitesparse = self.callPackage suitesparse.override { };
   });
 in
@@ -141,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withMumps petscPackages.mumps
     ++ lib.optional withHypre petscPackages.hypre
     ++ lib.optional withSuperLu petscPackages.superlu
+    ++ lib.optional withSuperLuDist petscPackages.superlu_dist
     ++ lib.optional withFftw petscPackages.fftw
     ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
@@ -191,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withHdf5 "--with-hdf5=1"
     ++ lib.optional withHypre "--with-hypre=1"
     ++ lib.optional withSuperLu "--with-superlu=1"
+    ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
     ++ lib.optional withFftw "--with-fftw=1"
     ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
