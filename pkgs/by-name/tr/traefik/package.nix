@@ -3,6 +3,7 @@
   fetchzip,
   buildGo124Module,
   nixosTests,
+  nix-update-script,
 }:
 
 buildGo124Module rec {
@@ -38,6 +39,8 @@ buildGo124Module rec {
   passthru.tests = {
     inherit (nixosTests) traefik;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://traefik.io";
