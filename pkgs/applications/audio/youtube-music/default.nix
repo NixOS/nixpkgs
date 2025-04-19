@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "youtube-music";
+      name = "com.github.th_ch.youtube_music";
       exec = "youtube-music %u";
       icon = "youtube-music";
       desktopName = "YouTube Music";
