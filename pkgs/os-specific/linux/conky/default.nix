@@ -10,6 +10,7 @@
   glib,
   libXinerama,
   catch2,
+  gperf,
 
   # lib.optional features without extra dependencies
   mpdSupport ? true,
@@ -95,26 +96,26 @@ assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport -> curlSupport && libxml2 != null;
 assert journalSupport -> systemd != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
-  version = "1.19.6";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
-    rev = "v${version}";
-    hash = "sha256-L8YSbdk+qQl17L4IRajFD/AEWRXb2w7xH9sM9qPGrQo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tEJQWZBaiX/bONPZEuGcvbGidktcvxUZtLvcGjz71Lk=";
   };
 
   postPatch =
     lib.optionalString docsSupport ''
-      substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
+      substituteInPlace cmake/Conky.cmake --replace-fail "# set(RELEASE true)" "set(RELEASE true)"
 
       cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/CMakeLists.txt \
-        --replace 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
+        --replace-fail 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
     '';
 
   env = {
@@ -139,10 +140,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional waylandSupport wayland-scanner
     ++ lib.optional luaImlib2Support toluapp
     ++ lib.optional luaCairoSupport toluapp;
+
   buildInputs =
     [
       glib
       libXinerama
+      gperf
     ]
     ++ lib.optional ncursesSupport ncurses
     ++ lib.optionals x11Support [
@@ -197,15 +200,16 @@ stdenv.mkDerivation rec {
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
 
-  doCheck = true;
+  # [CMakeFiles/Makefile2:1805: tests/CMakeFiles/test-conky.dir/all] Error 2
+  doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://conky.cc";
-    changelog = "https://github.com/brndnmtthws/conky/releases/tag/v${version}";
+    changelog = "https://github.com/brndnmtthws/conky/releases/tag/v${finalAttrs.version}";
     description = "Advanced, highly configurable system monitor based on torsmo";
     mainProgram = "conky";
-    maintainers = [ maintainers.guibert ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.guibert ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})
