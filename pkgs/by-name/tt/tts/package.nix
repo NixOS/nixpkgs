@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
         "trainer"
         "spacy\\[ja\\]"
         "transformers"
+        "num2words"
       ];
     in
     ''
