@@ -18403,9 +18403,7 @@ with pkgs;
 
   qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
-  xyce = callPackage ../applications/science/electronics/xyce { };
-
-  xyce-parallel = callPackage ../applications/science/electronics/xyce {
+  xyce-parallel = callPackage ../by-name/xy/xyce/package.nix {
     withMPI = true;
     trilinos = trilinos-mpi;
   };
