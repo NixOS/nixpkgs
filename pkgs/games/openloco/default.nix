@@ -11,6 +11,7 @@
   pkg-config,
   yaml-cpp,
   fmt,
+  xorg,
 }:
 let
   sfl-src = fetchFromGitHub {
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     openal
     yaml-cpp
     fmt
+    xorg.libX11
   ];
 
   meta = {
