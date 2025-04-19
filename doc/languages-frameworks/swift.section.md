@@ -82,15 +82,15 @@ let
   generated = swiftpm2nix.helpers ./nix;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "myproject";
   version = "0.0.0";
 
   src = fetchFromGitHub {
     owner = "nixos";
-    repo = pname;
-    rev = version;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    repo = "myproject";
+    tag = finalAttrs.version;
+    hash = "";
   };
 
   # Including SwiftPM as a nativeBuildInput provides a buildPhase for you.
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-}
+})
 ```
 
 ### Custom build flags {#ssec-swiftpm-custom-build-flags}
