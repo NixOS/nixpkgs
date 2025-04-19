@@ -6,9 +6,6 @@
   hdf5,
   curl,
   gfortran,
-  CoreFoundation,
-  CoreServices,
-  SystemConfiguration,
 }:
 stdenv.mkDerivation rec {
   pname = "netcdf-fortran";
@@ -22,23 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs =
-    [
-      netcdf
-      hdf5
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      CoreServices
-      SystemConfiguration
-    ];
-  env.NIX_LDFLAGS = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "-F${CoreServices}/Library/Frameworks"
-      "-F${SystemConfiguration}/Library/Frameworks"
-    ]
-  );
+  buildInputs = [
+    netcdf
+    hdf5
+    curl
+  ];
+
   doCheck = true;
 
   FFLAGS = [ "-std=legacy" ];

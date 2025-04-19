@@ -4455,9 +4455,7 @@ with pkgs;
     hdf5 = hdf5-mpi.override { usev110Api = true; };
   };
 
-  netcdffortran = callPackage ../development/libraries/netcdf-fortran {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices SystemConfiguration;
-  };
+  netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
 
   inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
 
@@ -10155,9 +10153,7 @@ with pkgs;
     memHierarchy = "L3:16/64/8192K,L2:16/64/2048K,L1:8/64/16K";
   };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
-  };
+  libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   # GNU libc provides libiconv so systems with glibc don't need to
   # build libiconv separately. Additionally, Apple forked/repackaged
@@ -12602,8 +12598,6 @@ with pkgs;
       # so as not to have the newly bound xorg items already in scope,  which would
       # have created a cycle.
       overrides = lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
-        inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
-        inherit (darwin.apple_sdk.libs) Xplugin;
         inherit (buildPackages.darwin) bootstrap_cmds;
         udev = if stdenv.hostPlatform.isLinux then udev else null;
         libdrm = if stdenv.hostPlatform.isLinux then libdrm else null;
@@ -13043,8 +13037,6 @@ with pkgs;
   };
 
   odin = callPackage ../by-name/od/odin/package.nix {
-    inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
-    inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
     llvmPackages = llvmPackages_18;
   };
 
@@ -19208,13 +19200,9 @@ with pkgs;
 
   zncModules = recurseIntoAttrs (callPackage ../applications/networking/znc/modules.nix { });
 
-  bullet = callPackage ../development/libraries/bullet {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-  };
+  bullet = callPackage ../development/libraries/bullet { };
 
-  bullet-roboschool = callPackage ../development/libraries/bullet/roboschool-fork.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-  };
+  bullet-roboschool = callPackage ../development/libraries/bullet/roboschool-fork.nix { };
 
   dart = callPackage ../development/compilers/dart { };
 
