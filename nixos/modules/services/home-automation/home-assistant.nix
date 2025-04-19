@@ -842,6 +842,7 @@ in
 
             # Custom components, maintained manually.
             "amshan"
+            "benqprojector"
           ];
         in
         {
