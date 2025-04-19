@@ -28,14 +28,14 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = pname;
-    rev = version;
+    repo = "ripgrep";
+    tag = finalAttrs.version;
     hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.unlicense;
     maintainers = [ ];
   };
-}
+})
 ```
 
 `buildRustPackage` requires a `cargoHash` attribute, computed over all crate sources of this package.
@@ -114,20 +114,20 @@ be made invariant to the version by setting `cargoDepsName` to
 `pname`:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
-  cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
-  cargoDepsName = pname;
+  cargoHash = "sha256-iDYh52rj1M5Uupvbx2WeDd/jvQZ+2A50V5rp5e2t7q4=";
+  cargoDepsName = finalAttrs.pname;
 
   # ...
-}
+})
 ```
 
 ### Importing a `Cargo.lock` file {#importing-a-cargo.lock-file}
@@ -193,7 +193,7 @@ The output hash of each dependency that uses a git source must be
 specified in the `outputHashes` attribute. For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
@@ -218,7 +218,7 @@ For usage outside nixpkgs, `allowBuiltinFetchGit` could be used to
 avoid having to specify `outputHashes`. For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
@@ -244,7 +244,7 @@ If you want to use different features for check phase, you can use
 For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
@@ -436,7 +436,7 @@ source code in a reproducible way. If it is missing or out-of-date one can use
 the `cargoPatches` attribute to update or add it.
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   # ...
   cargoPatches = [
     # a patch file to add/update Cargo.lock in the source code
@@ -724,7 +724,7 @@ Some projects, especially GNOME applications, are built with the Meson Build Sys
   tinysparql,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "health";
   version = "0.95.0";
 
@@ -732,12 +732,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "health";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
     hash = "sha256-8fa3fa+sFi5H+49B5sr2vYPkp9C9s6CcE0zv4xB8gww=";
   };
 
@@ -759,7 +759,7 @@ stdenv.mkDerivation rec {
   ];
 
   # ...
-}
+})
 ```
 
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
@@ -1019,19 +1019,20 @@ let
   };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
 
+  # Tests require network access. Skipping.
   doCheck = false;
 
   meta = {
@@ -1043,7 +1044,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ ];
   };
-}
+})
 ```
 
 Follow the below steps to try that snippet.

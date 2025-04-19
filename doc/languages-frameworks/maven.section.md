@@ -286,7 +286,7 @@ let
   # pick a repository derivation, here we will use buildMaven
   repository = callPackage ./build-maven-repository.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
@@ -309,7 +309,7 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-}
+})
 ```
 
 ::: {.tip}
@@ -357,7 +357,7 @@ We make sure to provide this classpath to the `makeWrapper`.
 let
   repository = callPackage ./build-maven-repository.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
@@ -380,16 +380,16 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     classpath=$(find ${repository} -name "*.jar" -printf ':%h/%f');
-    install -Dm644 target/${pname}-${version}.jar $out/share/java
+    install -Dm644 target/maven-demo-${finalAttrs.version}.jar $out/share/java
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-          --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
+    makeWrapper ${jre}/bin/java $out/bin/maven-demo \
+          --add-flags "-classpath $out/share/java/maven-demo-${finalAttrs.version}.jar:''${classpath#:}" \
           --add-flags "Main"
 
     runHook postInstall
   '';
-}
+})
 ```
 
 #### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
@@ -450,7 +450,7 @@ let
   # pick a repository derivation, here we will use buildMaven
   repository = callPackage ./build-maven-repository.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
@@ -475,15 +475,15 @@ stdenv.mkDerivation rec {
     # create a symbolic link for the repository directory
     ln -s ${repository} $out/repository
 
-    install -Dm644 target/${pname}-${version}.jar $out/share/java
+    install -Dm644 target/maven-demo-${finalAttrs.version}.jar $out/share/java
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-          --add-flags "-jar $out/share/java/${pname}-${version}.jar"
+    makeWrapper ${jre}/bin/java $out/bin/maven-demo \
+          --add-flags "-jar $out/share/java/maven-demo-${finalAttrs.version}.jar"
 
     runHook postInstall
   '';
-}
+})
 ```
 ::: {.note}
 Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.
