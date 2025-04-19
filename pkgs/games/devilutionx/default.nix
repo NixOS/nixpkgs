@@ -70,13 +70,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
     rev = version;
-    sha256 = "sha256-4cA2OHTc51U8XIk3iS16En7JJExkcn4a4VdtjNkZfH8=";
+    sha256 = "sha256-F23MTe7vMOgIBH6qm7X1+8gIMmN9E+d/GZnFsQZt2cM=";
   };
 
   postPatch = ''
