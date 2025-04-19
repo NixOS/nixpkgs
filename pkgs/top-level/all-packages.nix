@@ -2266,8 +2266,6 @@ with pkgs;
     wlroots = wlroots_0_18;
   };
 
-  swaytools = callPackage ../tools/wayland/swaytools { };
-
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
