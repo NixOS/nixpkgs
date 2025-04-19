@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn "pythonHome = \"/usr\"" "pythonHome = \"${python3}\""
     substituteInPlace cmake/gitversion.cmake \
       --replace-warn "[Mystery Build]" "${finalAttrs.version}"
+    substituteInPlace CMakeLists.txt \
+      --replace-warn "SELF_CONTAINED_APP OR APPLE" "SELF_CONTAINED_APP"
   '';
 
   buildInputs = [
@@ -46,11 +48,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/hobbits.app $out/Applications
+    wrapProgram $out/Applications/hobbits.app/Contents/MacOS/hobbits \
+      --prefix DYLD_LIBRARY_PATH : $out/Applications/hobbits.app/Contents/Frameworks
+    ln -s $out/Applications/hobbits.app/Contents/MacOS/hobbits $out/bin/hobbits
+    # Prevent wrapping
+    find $out/Applications -type f -name "*.dylib" -exec chmod -x {} \;
+  '';
+
   meta = {
     description = "Multi-platform GUI for bit-based analysis, processing, and visualization";
     homepage = "https://github.com/Mahlet-Inc/hobbits";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
