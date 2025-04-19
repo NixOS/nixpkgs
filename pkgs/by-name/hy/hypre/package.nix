@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "hypre";
+  pname = "hypre";
   version = "2.33.0";
 
   src = fetchFromGitHub {
