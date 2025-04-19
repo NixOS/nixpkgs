@@ -8124,6 +8124,8 @@ self: super: with self; {
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
+  llm-openai-plugin = callPackage ../development/python-modules/llm-openai-plugin { };
+
   llmx = callPackage ../development/python-modules/llmx { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
