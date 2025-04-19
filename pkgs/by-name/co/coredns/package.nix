@@ -6,7 +6,7 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-mp+0/DQTNsgAZTnLqcQq1HVLAfKr5vUGYSZlIvM7KpE=",
+  vendorHash ? "sha256-i4eQ7LwkLTfFxRUlZ68qdtqrj2k+aWNQevyhU4Iv2lw=",
 }:
 
 let
@@ -14,13 +14,13 @@ let
 in
 buildGoModule rec {
   pname = "coredns";
-  version = "1.11.3";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-8LZMS1rAqEZ8k1IWSRkQ2O650oqHLP0P31T8oUeE4fw=";
+    sha256 = "sha256-ALGQWUUvSGXbsOoLW5e62lPv3JU5WvJMeZYkEWiRhu4=";
   };
 
   inherit vendorHash;
@@ -95,16 +95,17 @@ buildGoModule rec {
   postPatch =
     ''
       substituteInPlace test/file_cname_proxy_test.go \
-        --replace "TestZoneExternalCNAMELookupWithProxy" \
-                  "SkipZoneExternalCNAMELookupWithProxy"
+        --replace-fail \
+          "TestZoneExternalCNAMELookupWithProxy" \
+          "SkipZoneExternalCNAMELookupWithProxy"
 
       substituteInPlace test/readme_test.go \
-        --replace "TestReadme" "SkipReadme"
+        --replace-fail "TestReadme" "SkipReadme"
 
       # this test fails if any external plugins were imported.
       # it's a lint rather than a test of functionality, so it's safe to disable.
       substituteInPlace test/presubmit_test.go \
-        --replace "TestImportOrdering" "SkipImportOrdering"
+        --replace-fail "TestImportOrdering" "SkipImportOrdering"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # loopback interface is lo0 on macos
@@ -112,7 +113,7 @@ buildGoModule rec {
 
       # test is apparently outdated but only exhibits this on darwin
       substituteInPlace test/corefile_test.go \
-        --replace "TestCorefile1" "SkipCorefile1"
+        --replace-fail "TestCorefile1" "SkipCorefile1"
     '';
 
   postInstall = ''
