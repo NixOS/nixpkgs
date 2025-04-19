@@ -5,7 +5,8 @@
   fetchpatch,
   libX11,
   libGL,
-  nvidia_x11 ? null,
+  linuxPackages,
+  nvidia_x11 ? linuxPackages.nvidia_x11.override { libsOnly = true; },
   libglvnd,
 }:
 
