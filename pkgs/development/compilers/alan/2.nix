@@ -17,9 +17,15 @@ stdenv.mkDerivation {
 
   makefile = "Makefile.unix";
 
-  # Add a workarounf for -fno-common tollchains like upstream gcc-10.
-  # alan-3 is already fixed, but the backport is nontrivial.
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Add a workaround for -fno-common toolchains like upstream gcc-10.
+    # alan-3 is already fixed, but the backport is nontrivial.
+    "-fcommon"
+    # smScSema.c:142:11: error: assignment to 'unsigned char *' from incompatible pointer type 'unsigned char **' [-Wincompatible-pointer-types]
+    "-Wno-error=incompatible-pointer-types"
+    # smScSema.c:183:10: error: implicit declaration of function 'read'; did you mean 'fread'? [-Wimplicit-function-declaration]
+    "-Wno-error=implicit-function-declaration"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/alan2
