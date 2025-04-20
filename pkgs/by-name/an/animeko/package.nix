@@ -79,13 +79,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "4.8.2";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y6ox1IgXsnFEU6NY1i3m8Jn+vwjrQpTz6kRKrd2F8SQ=";
+    hash = "sha256-fxnnOczLs88/OWYqHKTrWQyzqnqeODMKfoE3aQweQTc=";
     fetchSubmodules = true;
   };
 
