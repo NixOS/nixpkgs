@@ -5307,7 +5307,7 @@ with pkgs;
 
   texmaker = qt6Packages.callPackage ../applications/editors/texmaker { };
 
-  textadept = libsForQt5.callPackage ../applications/editors/textadept { };
+  textadept = callPackage ../applications/editors/textadept { };
 
   texworks = qt6Packages.callPackage ../applications/editors/texworks { };
 
