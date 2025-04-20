@@ -55,13 +55,13 @@
 # Qmmp installs working .desktop file(s) all by itself, so we don't need to
 # handle that.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmmp";
-  version = "2.1.8";
+  version = "2.2.4";
 
   src = fetchurl {
-    url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
-    hash = "sha256-hGphQ8epqym47C9doiSOQd3yc28XwV2UsNc7ivhaae4=";
+    url = "https://qmmp.ylsoftware.com/files/qmmp/${lib.versions.majorMinor finalAttrs.version}/qmmp-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-SJ2w3SvtMro8rlq4svgNMel+gb38Xb18gkh8KeMlz4E=";
   };
 
   nativeBuildInputs = [
@@ -110,12 +110,12 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based audio player that looks like Winamp";
     mainProgram = "qmmp";
     homepage = "https://qmmp.ylsoftware.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})
