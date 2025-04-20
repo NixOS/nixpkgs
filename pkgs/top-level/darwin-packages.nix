@@ -26,13 +26,10 @@ let
           pkg
       ) (old.extraBuildInputs or [ ]);
     });
-
-  mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
 in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
-  extra = spliced: spliced.apple_sdk.frameworks;
   f = lib.extends aliases (
     self:
     let
@@ -44,72 +41,13 @@ makeScopeWithSplicing' {
         directory = ../os-specific/darwin/apple-source-releases;
       };
 
-      # Compatibility packages that aren’t necessary anymore
-      apple-source-headers = {
-        libresolvHeaders = lib.getDev self.libresolv;
-        libutilHeaders = lib.getDev self.libutil;
-      };
-
       # Must use pkgs.callPackage to avoid infinite recursion.
       impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
-
-      # macOS 11.0 SDK
-      apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
-
-      # macOS 12.3 SDK
-      apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
-
-      apple_sdk = apple_sdk_11_0;
-
-      stubs =
-        {
-          inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
-          libobjc = self.objc4;
-        }
-        // lib.genAttrs [
-          "CF"
-          "CarbonHeaders"
-          "CommonCrypto"
-          "CoreSymbolication"
-          "IOKit"
-          "Libc"
-          "Libinfo"
-          "Libm"
-          "Libnotify"
-          "Librpcsvc"
-          "Libsystem"
-          "LibsystemCross"
-          "Security"
-          "architecture"
-          "configd"
-          "configdHeaders"
-          "darwin-stubs"
-          "dtrace"
-          "eap8021x"
-          "hfs"
-          "hfsHeaders"
-          "launchd"
-          "libclosure"
-          "libdispatch"
-          "libmalloc"
-          "libplatform"
-          "libpthread"
-          "mDNSResponder"
-          "objc4"
-          "ppp"
-          "xnu"
-        ] (mkStub apple_sdk.version);
     in
 
     impure-cmds
     // apple-source-packages
-    // apple-source-headers
-    // stubs
     // {
-
-      stdenvNoCF = stdenv.override {
-        extraBuildInputs = [ ];
-      };
 
       inherit (self.adv_cmds) ps;
 
