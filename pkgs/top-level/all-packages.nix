@@ -13816,8 +13816,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  bluefish = callPackage ../applications/editors/bluefish { };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   cage = callPackage ../applications/window-managers/cage {
