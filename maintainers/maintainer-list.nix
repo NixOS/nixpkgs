@@ -11109,17 +11109,17 @@
     githubId = 16307070;
     name = "iosmanthus";
   };
-  iqubic = {
-    email = "sophia.b.caspe@gmail.com";
-    github = "iqubic";
-    githubId = 22628816;
-    name = "Sophia Caspe";
-  };
   ipsavitsky = {
     email = "ipsavitsky234@gmail.com";
     github = "ipsavitsky";
     githubId = 33558632;
     name = "Ilya Savitsky";
+  };
+  iqubic = {
+    email = "sophia.b.caspe@gmail.com";
+    github = "iqubic";
+    githubId = 22628816;
+    name = "Sophia Caspe";
   };
   iquerejeta = {
     github = "iquerejeta";
