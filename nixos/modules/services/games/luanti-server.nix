@@ -41,7 +41,44 @@ let
     );
 
   flag = val: name: lib.optionals (val != null) ["--${name}" (toString val)];
+
+  oldCfg = config.services.minetest-server;
 in {
+  imports = [
+    (lib.mkRemovedOptionModule ["services" "minetest-server"] ''
+      The Minetest server module has been replaced by the Luanti multi-instance configuration.
+      
+      Instead of:
+        services.minetest-server = { ... };
+      
+      Use:
+        services.luanti-servers.<instanceName> = { ... };
+      
+      See https://<your-docs-url> for migration guide.
+    '')
+  ];
+
+  # Add assertions for specific old options
+  assertions = [
+    {
+      assertion = oldCfg.enable;
+      message = ''
+        The minetest-server service has been replaced by luanti-servers!
+        
+        Update your configuration from:
+          services.minetest-server = { ... };
+        to:
+          services.luanti-servers.<instanceName> = { 
+            enable = true;
+            # Old options map to:
+            port = <old-port>;
+            gameId = <old-gameId>;
+            # ... etc ...
+          };
+      '';
+    }
+  ];
+
   options.services.luanti-servers = lib.mkOption {
     type = lib.types.attrsOf (lib.types.submodule {
       options = {
