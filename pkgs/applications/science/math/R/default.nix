@@ -34,7 +34,6 @@
   lapack,
   curl,
   libobjc,
-  libcxx,
   tzdata,
   withRecommendedPackages ? true,
   enableStrictBarrier ? false,
@@ -116,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      libcxx
     ];
   strictDeps = true;
 
@@ -169,8 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
       --disable-R-framework
       --without-x
       OBJC="clang"
-      CPPFLAGS="-isystem ${lib.getDev libcxx}/include/c++/v1"
-      LDFLAGS="-L${lib.getLib libcxx}/lib"
+      CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+      LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
     ''
     + ''
       )

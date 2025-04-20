@@ -28,7 +28,6 @@
   freetype,
   gst_all_1,
   harfbuzz,
-  libcxx,
   libGL,
   libunwind,
   libxkbcommon,
@@ -131,10 +130,9 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
-      libcxx
     ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
