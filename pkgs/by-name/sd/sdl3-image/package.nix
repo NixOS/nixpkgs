@@ -10,6 +10,7 @@
   validatePkgConfig,
   libpng,
   libjpeg,
+  nix-update-script,
   # Boolean flags
   enableTests ? true,
   enableSTB ? true,
@@ -65,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     # enable tests
     (lib.cmakeBool "SDLIMAGE_TESTS" enableTests)
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(3\\..*)"
+    ];
+  };
 
   meta = {
     description = "SDL image library";
