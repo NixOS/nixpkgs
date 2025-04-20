@@ -31,14 +31,14 @@ let
       "${repo}@${version}"
     ) attrs;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "coredns";
   version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-ALGQWUUvSGXbsOoLW5e62lPv3JU5WvJMeZYkEWiRhu4=";
   };
 
@@ -104,15 +104,22 @@ buildGoModule rec {
     kubernetes-multi-node = nixosTests.kubernetes.dns-multi-node;
   };
 
-  meta = with lib; {
-    homepage = "https://coredns.io";
-    description = "DNS server that runs middleware";
-    mainProgram = "coredns";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      rushmorem
-      rtreffer
-      deltaevo
-    ];
-  };
-}
+  meta =
+    let
+      inherit (lib)
+        licenses
+        maintainers
+        ;
+    in
+    {
+      homepage = "https://coredns.io";
+      description = "DNS server that runs middleware";
+      mainProgram = "coredns";
+      license = licenses.asl20;
+      maintainers = with maintainers; [
+        rushmorem
+        rtreffer
+        deltaevo
+      ];
+    };
+})
