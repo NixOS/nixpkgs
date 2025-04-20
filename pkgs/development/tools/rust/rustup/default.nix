@@ -163,5 +163,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       mic92
     ];
+    mainProgram = "rustup";
   };
 })
