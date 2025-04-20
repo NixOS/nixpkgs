@@ -13982,8 +13982,6 @@ with pkgs;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
-  dfilemanager = libsForQt5.callPackage ../applications/file-managers/dfilemanager { };
-
   direwolf = callPackage ../applications/radio/direwolf {
     hamlib = hamlib_4;
   };
