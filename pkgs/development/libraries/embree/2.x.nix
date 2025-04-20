@@ -5,25 +5,26 @@
   cmake,
   pkg-config,
   ispc,
-  tbb,
+  tbb_2020_3,
   glfw,
   openimageio,
   libjpeg,
   libpng,
   libpthreadstubs,
   libX11,
+  python3Packages,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "embree";
-  version = "2.17.4";
+  version = "2.17.7";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
     tag = "v${finalAttrs.version}";
-    sha256 = "0q3r724r58j4b6cbyy657fsb78z7a2c7d5mwdp7552skynsn2mn9";
+    hash = "sha256-FD/ITZBJnYy1F+x4jLTVTsGsNKy/mS7OYWP06NoHZqc=";
   };
 
   cmakeFlags = [ "-DEMBREE_TUTORIALS=OFF" ];
@@ -34,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     ispc
-    tbb
+    # tbb_2021_0 is not backward compatible
+    tbb_2020_3
     glfw
     openimageio
     libjpeg
@@ -49,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
         "--version-regex"
         "v(2.*)"
       ];
+    };
+    tbb = tbb_2020_3;
+    tests = {
+      inherit (python3Packages) embreex;
     };
   };
 
