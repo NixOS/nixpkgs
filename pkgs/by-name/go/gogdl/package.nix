@@ -1,15 +1,12 @@
 {
   lib,
   writeScript,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  requests,
   cacert,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gogdl";
   version = "1.1.2";
   format = "pyproject";
@@ -21,9 +18,9 @@ buildPythonApplication rec {
     hash = "sha256-pK6JeTJeBq9qVfflNSYs3s4HuD0Kz6k9DDUVHL81FV0=";
   };
 
-  disabled = pythonOlder "3.8";
+  disabled = python3Packages.pythonOlder "3.8";
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     setuptools
     requests
   ];

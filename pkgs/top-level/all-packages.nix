@@ -17023,13 +17023,6 @@ with pkgs;
     fteqcc
     ;
 
-  heroic-unwrapped = callPackage ../games/heroic {
-    # Upstream uses EOL Electron 31.  Use next oldest version.
-    electron = electron_33;
-  };
-
-  heroic = callPackage ../games/heroic/fhsenv.nix { };
-
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
   vanillatd = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillatd"; };
@@ -17280,8 +17273,6 @@ with pkgs;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
 
-  gogdl = python3Packages.callPackage ../games/gogdl { };
-
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
   gshogi = callPackage ../games/gshogi { };
@@ -17390,8 +17381,6 @@ with pkgs;
   };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
-
-  nile = python3Packages.callPackage ../games/nile { };
 
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
