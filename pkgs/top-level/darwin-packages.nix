@@ -263,12 +263,6 @@ makeScopeWithSplicing' {
         propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
       } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
 
-      # Formerly the CF attribute. Use this is you need the open source release.
-      swift-corelibs-foundation = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
-
-      # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
-      # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
-
       # See doc/packages/darwin-builder.section.md
       linux-builder = lib.makeOverridable (
         { modules }:
