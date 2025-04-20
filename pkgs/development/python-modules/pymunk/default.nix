@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -8,7 +7,6 @@
   cffi,
   pytestCheckHook,
   pythonOlder,
-  ApplicationServices,
 }:
 
 buildPythonPackage rec {
@@ -28,8 +26,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [ cffi ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace

@@ -7,7 +7,6 @@
   libxml2,
   popt,
   libiconv,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,19 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libxml2
-      popt
-      libiconv
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        IOKit
-        DiskArbitration
-      ]
-    );
+  buildInputs = [
+    libxml2
+    popt
+    libiconv
+  ];
 
   propagatedBuildInputs = [ libcdio ];
 

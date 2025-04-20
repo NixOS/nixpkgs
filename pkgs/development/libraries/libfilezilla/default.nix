@@ -9,7 +9,6 @@
   pkg-config,
   libiconv,
   libxcrypt,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation {
@@ -36,7 +35,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      ApplicationServices
     ];
 
   enableParallelBuilding = true;

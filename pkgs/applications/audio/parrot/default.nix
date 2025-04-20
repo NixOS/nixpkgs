@@ -9,9 +9,7 @@
   unstableGitUpdater,
   openssl,
   pkg-config,
-  stdenv,
   yt-dlp,
-  Security,
 }:
 rustPlatform.buildRustPackage {
   pname = "parrot";
@@ -36,7 +34,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     libopus
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/parrot \

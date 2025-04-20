@@ -41,8 +41,6 @@
   pythonSupport ? true,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
-  Security,
-  CoreServices,
   nixosTests,
   withLibsecret ? false,
   pkg-config,
@@ -160,10 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
       tk
     ]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      CoreServices
-    ]
     ++ lib.optionals withLibsecret [
       glib
       libsecret

@@ -15,7 +15,6 @@
   pkg-config,
   diffutils,
   glibc ? !stdenv.hostPlatform.isDarwin,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
     xz
     zstd
     libmd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  ];
   nativeBuildInputs = [
     makeWrapper
     perl

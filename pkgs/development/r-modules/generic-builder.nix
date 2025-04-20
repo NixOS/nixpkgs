@@ -5,8 +5,6 @@
   libcxx,
   xvfb-run,
   util-linux,
-  Cocoa,
-  Foundation,
   gettext,
   gfortran,
   libiconv,
@@ -32,8 +30,6 @@ stdenv.mkDerivation (
         xvfb-run
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Cocoa
-        Foundation
         gfortran
         libiconv
       ];

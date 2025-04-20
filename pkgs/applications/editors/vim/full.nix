@@ -30,11 +30,6 @@
   makeWrapper,
   wrapGAppsHook3,
 
-  # apple frameworks
-  CoreServices,
-  CoreData,
-  Cocoa,
-  Foundation,
   libobjc,
 
   features ? "huge", # One of tiny, small, normal, big or huge
@@ -196,10 +191,6 @@ stdenv.mkDerivation {
     ++ lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ lib.optional (guiSupport == "gtk3") gtk3-x11
     ++ lib.optionals darwinSupport [
-      CoreServices
-      CoreData
-      Cocoa
-      Foundation
       libobjc
     ]
     ++ lib.optional luaSupport lua

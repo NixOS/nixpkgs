@@ -7,7 +7,6 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   meta = with lib; {
     description = "Free/Libre Action Roleplaying Engine";

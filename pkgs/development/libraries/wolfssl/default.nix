@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Security,
   autoreconfHook,
   util-linux,
   openssl,
@@ -86,10 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "lib"
     "out"
-  ];
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
   ];
 
   nativeBuildInputs = [

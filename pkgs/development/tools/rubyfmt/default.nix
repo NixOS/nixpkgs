@@ -15,8 +15,6 @@
   libxcrypt,
   libyaml,
   rust-jemalloc-sys-unprefixed,
-  Foundation,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,8 +48,6 @@ rustPlatform.buildRustPackage rec {
       libiconv
       libobjc
       libunwind
-      Foundation
-      Security
     ];
 
   preConfigure = ''

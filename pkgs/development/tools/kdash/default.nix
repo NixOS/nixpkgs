@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
@@ -8,7 +7,6 @@
   python3,
   openssl,
   xorg,
-  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     xorg.xcbutil
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-72DuM64wj8WW6soagodOFIeHvVn1CPpb1T3Y7GQYsbs=";

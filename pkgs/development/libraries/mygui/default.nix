@@ -13,7 +13,6 @@
   libGL,
   libGLU,
   libX11,
-  Cocoa,
 }:
 
 let
@@ -55,9 +54,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
     ];
 
   # Tools are disabled due to compilation failures.

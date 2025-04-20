@@ -7,8 +7,6 @@
   pkg-config,
   ronn,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,11 +29,7 @@ rustPlatform.buildRustPackage rec {
     ronn
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "--bin"

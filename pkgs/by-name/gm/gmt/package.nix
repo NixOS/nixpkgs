@@ -48,21 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
       dcw-gmt
       gshhg-gmt
     ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        with darwin.apple_sdk.frameworks;
-        [
-          Accelerate
-          CoreGraphics
-          CoreVideo
-        ]
-      else
-        [
-          fftwSinglePrec
-          blas
-          lapack
-        ]
-    );
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      fftwSinglePrec
+      blas
+      lapack
+    ];
 
   propagatedBuildInputs = [ ghostscript ];
 

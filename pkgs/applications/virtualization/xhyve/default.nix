@@ -2,9 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  Hypervisor,
-  vmnet,
-  xpc,
   libobjc,
   zlib,
 }:
@@ -21,9 +18,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    Hypervisor
-    vmnet
-    xpc
     libobjc
     zlib
   ];

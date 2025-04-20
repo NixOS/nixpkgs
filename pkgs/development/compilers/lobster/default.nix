@@ -9,13 +9,6 @@
   libGL,
   xorg,
 
-  # Darwin deps
-  CoreFoundation,
-  Cocoa,
-  AudioToolbox,
-  OpenGL,
-  Foundation,
-  ForceFeedback,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,22 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        CoreFoundation
-        Cocoa
-        AudioToolbox
-        OpenGL
-        Foundation
-        ForceFeedback
-      ]
-    else
-      [
-        libGL
-        xorg.libX11
-        xorg.libXext
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    xorg.libX11
+    xorg.libXext
+  ];
 
   preConfigure = ''
     cd dev

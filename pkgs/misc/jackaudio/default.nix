@@ -11,10 +11,7 @@
   wafHook,
   # Darwin Dependencies
   aften,
-  AudioUnit,
-  CoreAudio,
   libobjc,
-  Accelerate,
 
   # BSD Dependencies
   freebsd,
@@ -77,9 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       aften
-      AudioUnit
-      CoreAudio
-      Accelerate
       libobjc
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [

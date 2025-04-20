@@ -6,8 +6,6 @@
   help2man,
   installShellFiles,
   libiconv,
-  Security,
-  CoreServices,
   nix-update-script,
 }:
 
@@ -34,8 +32,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
-    CoreServices
   ];
 
   # When we cross compile we cannot run the output executable to

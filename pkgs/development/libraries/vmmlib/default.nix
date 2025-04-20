@@ -6,9 +6,6 @@
   pkg-config,
   boost,
   lapack,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,16 +27,10 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
   ];
-  buildInputs =
-    [
-      boost
-      lapack
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreGraphics
-      CoreVideo
-    ];
+  buildInputs = [
+    boost
+    lapack
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

@@ -7,7 +7,6 @@
   fetchFromGitHub,
   fetchpatch2,
   runCommand,
-  Security,
   pkgs,
   pkgsi686Linux,
   pkgsStatic,
@@ -26,7 +25,6 @@ let
       (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
       {
         inherit
-          Security
           storeDir
           stateDir
           confDir
@@ -44,7 +42,6 @@ let
     args:
     nixDependencies.callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
       inherit
-        Security
         storeDir
         stateDir
         confDir

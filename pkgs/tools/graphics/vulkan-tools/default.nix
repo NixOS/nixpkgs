@@ -20,8 +20,6 @@
   wayland-protocols,
   wayland-scanner,
   moltenvk,
-  AppKit,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,8 +62,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       moltenvk
       moltenvk.dev
-      AppKit
-      Cocoa
     ];
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];

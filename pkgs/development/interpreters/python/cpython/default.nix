@@ -27,7 +27,6 @@
 
   # platform-specific dependencies
   bashNonInteractive,
-  darwin,
   windows,
 
   # optional dependencies
@@ -230,9 +229,6 @@ let
     ]
     ++ optionals bluezSupport [
       bluez
-    ]
-    ++ optionals enableFramework [
-      darwin.apple_sdk.frameworks.Cocoa
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn

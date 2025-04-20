@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   libobjc,
-  IOKit,
   nixosTests,
 }:
 
@@ -62,7 +61,6 @@ buildGoModule rec {
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
-    IOKit
   ];
 
   passthru.tests = { inherit (nixosTests) geth; };

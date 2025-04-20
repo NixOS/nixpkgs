@@ -3,10 +3,6 @@
   fetchFromGitHub,
   mkDerivation,
   stdenv,
-  Cocoa,
-  CoreAudio,
-  CoreFoundation,
-  MediaPlayer,
   SDL2,
   cmake,
   libGL,
@@ -59,12 +55,6 @@ mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreAudio
-      CoreFoundation
-      MediaPlayer
     ];
 
   nativeBuildInputs = [

@@ -6,7 +6,6 @@
   pkg-config,
   pcsclite,
   libusb-compat-0_1,
-  IOKit,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +26,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pcsclite
     libusb-compat-0_1
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
+  ];
 
   preBuild = ''
     makeFlagsArray=(usbdropdir="$out/pcsc/drivers");

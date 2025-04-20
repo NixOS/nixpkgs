@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  Foundation,
   dbusSupport ? stdenv.hostPlatform.isLinux,
   dbus,
   # rustls will be used for TLS if useOpenSSL=false
@@ -28,10 +27,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-lyjTl0kbtfQdqSqxti1181+oDVYP4U++v2JEOYvI7aM=";
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux pkg-config;
-  buildInputs =
-    lib.optionals dbusSupport [ dbus ]
-    ++ lib.optionals useOpenSSL [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
+  buildInputs = lib.optionals dbusSupport [ dbus ] ++ lib.optionals useOpenSSL [ openssl ];
 
   buildFeatures = lib.optional notificationSupport "desktop-notifications";
 

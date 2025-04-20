@@ -10,7 +10,6 @@
   libpng,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
-  Carbon,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,9 +50,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withSystemd [
       systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
     ];
 
   propagatedBuildInputs = [

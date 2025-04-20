@@ -62,8 +62,6 @@
   gmp,
   libiconv,
   qemu,
-  Carbon,
-  AppKit,
 
   # Options
   enableCeph ? false,
@@ -237,8 +235,6 @@ stdenv.mkDerivation rec {
       util-linux
     ]
     ++ lib.optionals isDarwin [
-      AppKit
-      Carbon
       gmp
       libiconv
     ]

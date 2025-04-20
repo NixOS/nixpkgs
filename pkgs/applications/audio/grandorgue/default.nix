@@ -16,7 +16,6 @@
   libicns,
   yaml-cpp,
   makeWrapper,
-  Cocoa,
   includeDemo ? true,
 }:
 
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
       alsa-lib
       udev
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags =

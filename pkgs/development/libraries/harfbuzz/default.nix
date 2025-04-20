@@ -16,8 +16,6 @@
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
-  ApplicationServices,
-  CoreText,
   withCoreText ? false,
   withIcu ? false, # recommended by upstream as default, but most don't needed and it's big
   withGraphite2 ? true, # it is small and major distros do include it
@@ -91,15 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
   ] ++ lib.optional withIntrospection gobject-introspection;
 
-  buildInputs =
-    [
-      glib
-      freetype
-    ]
-    ++ lib.optionals withCoreText [
-      ApplicationServices
-      CoreText
-    ];
+  buildInputs = [
+    glib
+    freetype
+  ];
 
   propagatedBuildInputs =
     lib.optional withGraphite2 graphite2

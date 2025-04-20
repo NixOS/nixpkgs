@@ -11,7 +11,6 @@
   pkg-config,
   pcsclite,
   help2man,
-  darwin,
   libiconv,
 }:
 
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
       pcsclite.dev
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.PCSC
       libiconv
     ];
 

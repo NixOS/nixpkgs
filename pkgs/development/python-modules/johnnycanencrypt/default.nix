@@ -6,7 +6,6 @@
   httpx,
   libiconv,
   nettle,
-  PCSC,
   pcsclite,
   pkg-config,
   pytestCheckHook,
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     [ nettle ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      PCSC
       libiconv
     ];
 

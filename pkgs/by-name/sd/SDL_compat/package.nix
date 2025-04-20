@@ -17,7 +17,6 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
   inherit (darwin) autoSignDarwinBinariesHook;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Cocoa
     ]
     ++ lib.optionals openglSupport [ libGLU ];
 

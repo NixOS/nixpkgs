@@ -18,7 +18,6 @@
   withJACK ? stdenv.hostPlatform.isUnix,
   libjack2,
   withGUI ? true,
-  darwin,
   portaudio,
   alsa-lib,
   # Enable GL/GLES rendering
@@ -73,13 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-      ]
-    );
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_GUI" withGUI)

@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   libobjc,
-  IOKit,
 }:
 
 buildGoModule rec {
@@ -39,7 +38,6 @@ buildGoModule rec {
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
-    IOKit
   ];
 
   ldflags = [

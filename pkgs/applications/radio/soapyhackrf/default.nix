@@ -7,8 +7,6 @@
   hackrf,
   soapysdr,
   libobjc,
-  IOKit,
-  Security,
 }:
 
 let
@@ -37,8 +35,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      IOKit
-      Security
     ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];

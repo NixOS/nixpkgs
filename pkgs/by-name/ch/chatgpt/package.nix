@@ -1,7 +1,6 @@
 {
   lib,
   stdenvNoCC,
-  darwin,
   fetchurl,
   _7zz,
   undmg,

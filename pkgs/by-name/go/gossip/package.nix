@@ -1,6 +1,5 @@
 {
   cmake,
-  darwin,
   fetchFromGitHub,
   SDL2,
   ffmpeg_6,
@@ -65,14 +64,6 @@ rustPlatform.buildRustPackage rec {
       libGL
       libxkbcommon
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.ForceFeedback
-      darwin.apple_sdk.frameworks.AVFoundation
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland

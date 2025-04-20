@@ -2,7 +2,6 @@
   stdenv,
   lib,
   overrideSDK,
-  darwin,
   fetchFromGitHub,
   fetchpatch,
   cmake,

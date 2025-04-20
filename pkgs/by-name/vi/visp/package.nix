@@ -1,7 +1,6 @@
 {
   cmake,
   coin3d,
-  darwin,
   doxygen,
   eigen,
   fetchFromGitHub,
@@ -88,8 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       coin3d
       v4l-utils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.IOKit ];
+    ];
 
   doCheck = true;
 

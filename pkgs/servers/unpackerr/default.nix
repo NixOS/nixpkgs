@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
-  Cocoa,
-  WebKit,
 }:
 
 buildGoModule rec {
@@ -19,11 +16,6 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-wWIw0gNn5tqRq0udzPy/n2OkiIVESpSotOSn2YlBNS4=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    WebKit
-  ];
 
   ldflags = [
     "-s"

@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-8Ry3rpGTNcvMIA3Q10Cb3uJHOBQin9AhlLNRekaKw/0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      SystemConfiguration
-    ]
-  );
 
   meta = with lib; {
     description = "Tool to send files and directories, based on iroh";

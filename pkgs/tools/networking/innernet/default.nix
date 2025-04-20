@@ -5,7 +5,6 @@
   fetchFromGitHub,
   sqlite,
   installShellFiles,
-  Security,
   libiconv,
   innernet,
   testers,
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage rec {
       sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ];
 

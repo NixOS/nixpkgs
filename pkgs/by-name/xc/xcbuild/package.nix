@@ -10,11 +10,6 @@
   stdenv,
   zlib,
 
-  # These arguments are obsolete but required to avoid evaluation errors (for now).
-  CoreGraphics ? null,
-  CoreServices ? null,
-  ImageIO ? null,
-
   # These are deprecated and do nothing. They’re needed for compatibility and will
   # warn eventually once in-tree uses are cleaned up.
   xcodePlatform ? null,
