@@ -90,4 +90,8 @@ mapAliases ({
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23
+
+  ### S ###
+
+  stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # added 2025-04-20
 })
