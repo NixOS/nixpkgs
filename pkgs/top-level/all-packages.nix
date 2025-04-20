@@ -3295,9 +3295,7 @@ with pkgs;
 
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
-  zee = callPackage ../applications/editors/zee {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  zee = callPackage ../applications/editors/zee { };
 
   zeek = darwin.apple_sdk_11_0.callPackage ../applications/networking/ids/zeek { };
 
