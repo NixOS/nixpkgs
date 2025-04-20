@@ -5,6 +5,7 @@
   stdenv,
   testers,
   yarn,
+  callPackage,
   berryVersion ? 4,
 }:
 
@@ -48,13 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
     };
-  };
+  } // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
