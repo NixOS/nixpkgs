@@ -31,7 +31,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corehunt = libsForQt5.callPackage ../applications/misc/cubocore-packages/corehunt {
+      corehunt = callPackage ../applications/misc/cubocore-packages/corehunt {
         inherit libcprime libcsys;
       };
 
