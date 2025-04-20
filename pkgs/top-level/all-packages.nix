@@ -8399,8 +8399,6 @@ with pkgs;
   gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
 
   gperf = callPackage ../development/tools/misc/gperf { };
-  # 3.1 changed some parameters from int to size_t, leading to mismatches.
-  gperf_3_0 = callPackage ../development/tools/misc/gperf/3.0.x.nix { };
 
   griffe = with python3Packages; toPythonApplication griffe;
 
