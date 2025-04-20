@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://data.iana.org/root-anchors/";
+    homepage = "https://www.iana.org/domains/root/files";
     description = "DNS root data including root zone and DNSSEC key";
     maintainers = with maintainers; [
       fpletz
