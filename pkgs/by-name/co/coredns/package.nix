@@ -116,6 +116,8 @@ buildGoModule (finalAttrs: {
         --replace-fail "TestCorefile1" "SkipCorefile1"
     '';
 
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     installManPage man/*
   '';
