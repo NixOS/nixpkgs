@@ -297,6 +297,8 @@ lib.makeScope pkgs.newScope (
 
         event = callPackage ../development/php-packages/event { };
 
+        excimer = callPackage ../development/php-packages/excimer { };
+
         gnupg = callPackage ../development/php-packages/gnupg { };
 
         grpc = callPackage ../development/php-packages/grpc { };
