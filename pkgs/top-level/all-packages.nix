@@ -13822,9 +13822,7 @@ with pkgs;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
-  cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_18;
-  };
+  cage = callPackage ../applications/window-managers/cage { };
 
   calf = callPackage ../applications/audio/calf {
     inherit (gnome2) libglade;
