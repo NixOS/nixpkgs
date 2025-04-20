@@ -152,9 +152,6 @@ self: super:
     }) super.OpenGLRaw;
     bindings-GLFW = overrideCabal (drv: {
       librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.CF
-      ];
     }) super.bindings-GLFW;
 
     # cabal2nix likes to generate dependencies on hinotify when hfsevents is
