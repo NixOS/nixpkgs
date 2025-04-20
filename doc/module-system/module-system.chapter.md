@@ -102,16 +102,16 @@ The real work of module evaluation happens while computing the values in `config
 If you do reference multiple `config` (or `options`) from before and after `extendModules`, evaluation performance is the same as with multiple `evalModules` invocations, because the new modules' ability to override existing configuration fundamentally requires constructing a new `config` and `options` fixpoint.
 :::
 
-#### `_module` {#module-system-lib-evalModules-return-value-_module}
+#### `_module` {#module-system-lib-evalModules-return-value--module}
 
 A portion of the configuration tree which is elided from `config`.
 
 <!-- TODO: when markdown migration is complete, make _module docs visible again and reference _module docs. Maybe move those docs into this chapter? -->
 
-#### `_type` {#module-system-lib-evalModules-return-value-_type}
+#### `_type` {#module-system-lib-evalModules-return-value--type}
 
 A nominal type marker, always `"configuration"`.
 
-#### `class` {#module-system-lib-evalModules-return-value-_configurationClass}
+#### `class` {#module-system-lib-evalModules-return-value--configurationClass}
 
 The [`class` argument](#module-system-lib-evalModules-param-class).
