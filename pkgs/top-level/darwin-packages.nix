@@ -11,19 +11,6 @@
 }:
 
 let
-  # Prefix for binaries. Customarily ends with a dash separator.
-  #
-  # TODO(@Ericson2314) Make unconditional, or optional but always true by
-  # default.
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
-    stdenv.targetPlatform.config + "-"
-  );
-
-  # Bootstrap `fetchurl` needed to build SDK packages without causing an infinite recursion.
-  fetchurlBoot = import ../build-support/fetchurl/boot.nix {
-    inherit (stdenv) system;
-  };
-
   aliases =
     self: super:
     lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
