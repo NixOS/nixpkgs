@@ -1,3 +1,7 @@
 [presets.nixfmt]
 language = "nix"
 command = ["nixfmt"]
+
+[presets.ruff]
+language = "python"
+command = ["ruff", "format", "-"]
