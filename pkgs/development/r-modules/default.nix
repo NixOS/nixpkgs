@@ -543,6 +543,7 @@ let
       bzip2.dev
       xz.dev
     ];
+    HiCParser = [ pkgs.zlib ];
     yyjsonr = with pkgs; [ zlib.dev ];
     RNifti = with pkgs; [ zlib.dev ];
     RNiftyReg = with pkgs; [ zlib.dev ];
