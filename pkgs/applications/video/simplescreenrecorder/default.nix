@@ -20,7 +20,7 @@
   qttools,
   cmake,
   ninja,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
 mkDerivation {
@@ -70,7 +70,7 @@ mkDerivation {
     qtx11extras
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Screen recorder for Linux";
