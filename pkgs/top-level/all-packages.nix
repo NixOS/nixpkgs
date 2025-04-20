@@ -9010,15 +9010,6 @@ with pkgs;
     botan3
     ;
 
-  box2d = callPackage ../development/libraries/box2d {
-    inherit (darwin.apple_sdk.frameworks)
-      Carbon
-      Cocoa
-      Kernel
-      OpenGL
-      ;
-  };
-
   c-ares = callPackage ../development/libraries/c-ares { };
 
   c-aresMinimal = callPackage ../development/libraries/c-ares {
