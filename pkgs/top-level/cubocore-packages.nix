@@ -39,7 +39,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coreinfo = libsForQt5.callPackage ../applications/misc/cubocore-packages/coreinfo {
+      coreinfo = callPackage ../applications/misc/cubocore-packages/coreinfo {
         inherit libcprime libcsys;
       };
 
