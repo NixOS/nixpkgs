@@ -43,7 +43,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corekeyboard = libsForQt5.callPackage ../applications/misc/cubocore-packages/corekeyboard {
+      corekeyboard = callPackage ../applications/misc/cubocore-packages/corekeyboard {
         inherit libcprime libcsys;
       };
 
