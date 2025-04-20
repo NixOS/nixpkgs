@@ -8712,17 +8712,6 @@ with pkgs;
   # pandoc takes long to build and documentation isn't needed for just running the cli
   shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
-  slint-lsp = callPackage ../by-name/sl/slint-lsp/package.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks)
-      AppKit
-      CoreGraphics
-      CoreServices
-      CoreText
-      Foundation
-      OpenGL
-      ;
-  };
-
   sloc = nodePackages.sloc;
 
   slurm = callPackage ../by-name/sl/slurm/package.nix {
