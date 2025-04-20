@@ -8,25 +8,27 @@
   xz,
   zlib,
   zstd,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
     rev = version;
-    hash = "sha256-WO1fetu39fcLGcrbzFh+toHpnyxWuDVHtmjuH203hzQ=";
+    hash = "sha256-rwoda/qDBQCSt2ZR40P4r4suohufp/rmjd+SenrC2Ag=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LBigtb8kYAgPb4X+L0a/mzPLPEUk5aEHigZuI4Y8N+k=";
+  cargoHash = "sha256-yukwNx0CwVJV5RIXCVxQdjUjgmd4YtKITzzR1NAKZiY=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -37,6 +39,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildFeatures = [ "zstd/pkg-config" ];
+
+  nativeCheckInputs = [
+    git
+  ];
 
   preCheck = ''
     substituteInPlace tests/ui.rs \
