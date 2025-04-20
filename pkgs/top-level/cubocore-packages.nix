@@ -27,7 +27,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coregarage = libsForQt5.callPackage ../applications/misc/cubocore-packages/coregarage {
+      coregarage = callPackage ../applications/misc/cubocore-packages/coregarage {
         inherit libcprime libcsys;
       };
 
