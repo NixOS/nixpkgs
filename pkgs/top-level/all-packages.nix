@@ -18175,19 +18175,13 @@ with pkgs;
   isabelle = callPackage ../by-name/is/isabelle/package.nix {
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
-      version = "2024";
+      version = "2025";
       configureFlags = [
         "--enable-intinf-as-int"
         "--with-gmp"
         "--disable-shared"
       ];
       buildFlags = [ "compiler" ];
-      src = fetchFromGitHub {
-        owner = "polyml";
-        repo = "polyml";
-        rev = "v5.9.1";
-        hash = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
-      };
     };
 
     java = openjdk21;
