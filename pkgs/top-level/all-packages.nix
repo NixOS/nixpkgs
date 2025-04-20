@@ -7927,7 +7927,9 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  inherit (cosmopolitan) cosmocc;
+  cogl = callPackage ../development/libraries/cogl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   ctranslate2 = callPackage ../development/libraries/ctranslate2 rec {
     stdenv = if withCUDA then gcc11Stdenv else pkgs.stdenv;
