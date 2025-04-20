@@ -1,11 +1,11 @@
 {
-  "packageVersion": "137.0.1-1",
+  "packageVersion": "137.0.2-1",
   "source": {
-    "rev": "137.0.1-1",
-    "hash": "sha256-4C9RcdkNOYX215uom94yOi9ZQM0zEVgETNFFTsgkPns="
+    "rev": "137.0.2-1",
+    "hash": "sha256-PZapXnpVGdQrTXWjlNuFj3idqelTKTpwapuwx+XuwW8="
   },
   "firefox": {
-    "version": "137.0.1",
-    "hash": "sha512-zCy+PdZWloScGxl7kIiHwREIP6i1CJqk6ubzPuQE2ynFZmGcSLd/tJWtf53JSi2dkQ5bKq+GRNsdADaAkfnctg=="
+    "version": "137.0.2",
+    "hash": "sha512-ghQMQyUjPqLi9XkIjOu5jA6NuISLQBjP+V1O1Cv4RwSe1lIPwFHZMO4melrLAIkIFwgl04FYnaDRCcoEph4cJA=="
   }
 }
