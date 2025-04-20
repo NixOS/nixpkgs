@@ -223,4 +223,20 @@
       path = ../19;
     }
   ];
+  "libcxx/libcxx-add-libcxxabi-reexports.patch" = [
+    {
+      before = "15";
+      path = ../12;
+    }
+    {
+      after = "15";
+      path = ../15;
+    }
+  ];
+  "libcxx/libcxx-reexport-libcxxabi-symbols.patch" = [
+    {
+      after = "19";
+      path = ../19;
+    }
+  ];
 }

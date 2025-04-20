@@ -6,7 +6,6 @@
   gitUpdater,
   apple-sdk_15,
   cereal,
-  libcxx,
   glslang,
   spirv-cross,
   spirv-headers,
@@ -103,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString (
     [
-      "-isystem ${lib.getDev libcxx}/include/c++/v1"
+      "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
       "-I${lib.getDev spirv-cross}/include/spirv_cross"
       "-I${lib.getDev spirv-headers}/include/spirv/unified1"
 

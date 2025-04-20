@@ -7,28 +7,38 @@
   src ? null,
   runCommand,
   cmake,
+  darwin,
   lndir,
   ninja,
   python3,
   fixDarwinDylibNames,
   version,
   freebsd,
-  cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null,
+  cxxabi ?
+    if stdenv.hostPlatform.isFreeBSD then
+      freebsd.libcxxrt
+    else if stdenv.hostPlatform.isDarwin then
+      darwin.libcxxabi
+    else
+      null,
   libunwind,
   enableShared ? stdenv.hostPlatform.hasSharedLibraries,
   devExtraCmakeFlags ? [ ],
   substitute,
+  getVersionFile,
   fetchpatch,
 }:
 
-# external cxxabi is not supported on Darwin as the build will not link libcxx
-# properly and not re-export the cxxabi symbols into libcxx
-# https://github.com/NixOS/nixpkgs/issues/166205
-# https://github.com/NixOS/nixpkgs/issues/269548
-assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
-  cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
+  cxxabiName =
+    lib.optionalString (
+      stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "14"
+    ) "system-"
+    + "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
+
+  # Darwin needs to use a different ABI namespace to avoid conflicting with the system libc++.
+  abiNamespace = if stdenv.hostPlatform.isDarwin then "__nix1" else "__1";
 
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
@@ -107,6 +117,28 @@ let
       (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
       (lib.cmakeBool "LIBCXX_ENABLE_EXCEPTIONS" false)
     ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      # libc++ 12 and 13 do not support specifying `system-libc++abi` for `LIBCXX_CXX_ABI`, but they do support linking
+      # against an external libc++abi, which can happen to be the system libc++abi.
+      lib.optionals (lib.versionOlder release_version "14") [
+        (lib.cmakeFeature "LIBCXX_CXX_ABI_LIBRARY_PATH" "${lib.getLib darwin.libcxxabi}/lib")
+        (lib.cmakeBool "LIBCXX_STANDALONE_BUILD" true)
+      ]
+      # Make sure that system libc++abi symbols are reexported.
+      ++ lib.optional (lib.versionOlder release_version "19") (
+        lib.cmakeBool "LIBCXX_OSX_REEXPORT_LIBCXXABI_SYMBOLS" true
+      )
+      ++ [
+        # Avoid ODR violations when using libc++ from LLVM on Darwin with system frameworks that use libc++.
+        # While the system libc++ is derived from LLVM, it is considered distinct from LLVM’s and not compatible.
+        # See: https://discourse.llvm.org/t/apples-libc-now-provides-std-type-descriptor-t-functionality-not-found-in-upstream-libc/73881/3
+        (lib.cmakeFeature "LIBCXX_ABI_NAMESPACE" abiNamespace)
+        # LLVM’s headers assume that Darwin will use availability annotations to limit features to what is supported by
+        # the system libc++ based on deployment target. Since nixpkgs ships and links its own libc++, disable the
+        # availability annotations to ensure that all features are supported regardless of deployment target.
+        (lib.cmakeBool "LIBCXX_ENABLE_VENDOR_AVAILABILITY_ANNOTATIONS" false)
+      ]
+    )
     ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
       (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
     ];
@@ -134,52 +166,69 @@ let
 
 in
 
-stdenv.mkDerivation (
-  finalAttrs:
-  {
-    pname = "libcxx";
-    inherit version cmakeFlags;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libcxx";
+  inherit version cmakeFlags;
 
-    src =
-      if monorepoSrc != null then
-        runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out/llvm"
-          ''
-          + (lib.optionalString (lib.versionAtLeast release_version "14") ''
-            cp -r ${monorepoSrc}/cmake "$out"
-          '')
-          + ''
-            cp -r ${monorepoSrc}/libcxx "$out"
-            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-          ''
-          + (lib.optionalString (lib.versionAtLeast release_version "14") ''
-            cp -r ${monorepoSrc}/third-party "$out"
-          '')
-          + (lib.optionalString (lib.versionAtLeast release_version "20") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          '')
-          + ''
-            cp -r ${monorepoSrc}/runtimes "$out"
-          ''
-          + (lib.optionalString (cxxabi == null) ''
-            cp -r ${monorepoSrc}/libcxxabi "$out"
-          '')
-        )
-      else
-        src;
+  src =
+    if monorepoSrc != null then
+      runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (
+        ''
+          mkdir -p "$out/llvm"
+        ''
+        + (lib.optionalString (lib.versionAtLeast release_version "14") ''
+          cp -r ${monorepoSrc}/cmake "$out"
+        '')
+        + ''
+          cp -r ${monorepoSrc}/libcxx "$out"
+          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+        ''
+        + (lib.optionalString (lib.versionAtLeast release_version "14") ''
+          cp -r ${monorepoSrc}/third-party "$out"
+        '')
+        + (lib.optionalString (lib.versionAtLeast release_version "20") ''
+          cp -r ${monorepoSrc}/libc "$out"
+        '')
+        + ''
+          cp -r ${monorepoSrc}/runtimes "$out"
+        ''
+        + (lib.optionalString (cxxabi == null || cxxabi == darwin.libcxxabi) ''
+          cp -r ${monorepoSrc}/libcxxabi "$out"
+        '')
+      )
+    else
+      src;
 
-    outputs = [
-      "out"
-      "dev"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-    preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
-      patchShebangs utils/cat_files.py
-    '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
+    patchShebangs utils/cat_files.py
+  '';
 
-    patches = lib.optionals (lib.versionOlder release_version "16") (
+  patches =
+    lib.optionals stdenv.hostPlatform.isDarwin (
+      [
+        # Add libc++abi reexports logic to `HandleLibCXXABI.cmake` from libcxxabi. It’s needed by libc++ to know which
+        # symbols to reexport from libc++abi (since not all of them should be).
+        (substitute {
+          src = getVersionFile "libcxx/libcxx-add-libcxxabi-reexports.patch";
+          substitutions = [
+            "--subst-var-by"
+            "libcxxabi-build-support"
+            darwin.libcxxabi.build-support
+          ];
+        })
+      ]
+      # libc++ 19+ do not support reexporting symbols from the system libc++abi, but support can be trivially restored.
+      ++ lib.optional (lib.versionAtLeast release_version "19") (
+        getVersionFile "libcxx/libcxx-reexport-libcxxabi-symbols.patch"
+      )
+    )
+    ++ lib.optionals (lib.versionOlder release_version "16") (
       lib.optional (lib.versions.major release_version == "15")
         # See:
         #   - https://reviews.llvm.org/D133566
@@ -211,94 +260,105 @@ stdenv.mkDerivation (
       })
     );
 
-    nativeBuildInputs =
-      [
-        cmake
-        ninja
-        python3
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-      ++ lib.optional (cxxabi != null) lndir;
-
-    buildInputs =
-      [ cxxabi ]
-      ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [
-        libunwind
-      ];
-
-    # libc++.so is a linker script which expands to multiple libraries,
-    # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
-    # support linker scripts so the external cxxabi needs to be symlinked in
-    postInstall =
-      lib.optionalString (cxxabi != null) ''
-        lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
-        lndir ${lib.getLib cxxabi}/lib $out/lib
-        libcxxabi=$out/lib/lib${cxxabi.libName}.a
+  postPatch =
+    (lib.optionalString
+      (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "15")
       ''
-      # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for LLVM < 16 or
-      # external cxxabi libraries so merge libc++abi.a into libc++.a ourselves.
+        # fix CMake error when static and LIBCXXABI_USE_LLVM_UNWINDER=ON. aren't
+        # building unwind so don't need to depend on it
+        substituteInPlace libcxx/src/CMakeLists.txt \
+          --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
+      ''
+    )
+    # The system libc++abi does not support `__cxa_init_primary_exception` until macOS 15.
+    # This can be removed once macOS 15 is the minimum deployment target in nixpkgs (for 26.11).
+    +
+      lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder (lib.getVersion cxxabi) "15")
+        (
+          (lib.optionalString (lib.versions.major release_version == "18") ''
+            substituteInPlace libcxx/include/__availability \
+              --replace-fail '#  define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION 1' '#  define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION 0'
+          '')
+          + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+            substituteInPlace libcxx/include/__configuration/availability.h \
+              --replace-fail '#define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION _LIBCPP_INTRODUCED_IN_LLVM_18' '#define _LIBCPP_AVAILABILITY_HAS_INIT_PRIMARY_EXCEPTION 0'
+          '')
+        )
+    + ''
+      cd runtimes
+    '';
 
-      # GNU binutils emits objects in LIFO order in MRI scripts so after the merge
-      # the objects are in reversed order so a second MRI script is required so the
-      # objects in the archive are listed in proper order (libc++.a, libc++abi.a)
-      + lib.optionalString (cxxabi != null || lib.versionOlder release_version "16") ''
-        libcxxabi=''${libcxxabi-$out/lib/libc++abi.a}
-        if [[ -f $out/lib/libc++.a && -e $libcxxabi ]]; then
-          $AR -M <<MRI
-            create $out/lib/libc++.a
-            addlib $out/lib/libc++.a
-            addlib $libcxxabi
-            save
-            end
-        MRI
-          $AR -M <<MRI
-            create $out/lib/libc++.a
-            addlib $out/lib/libc++.a
-            save
-            end
-        MRI
-        fi
-      '';
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      python3
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
+    ++ lib.optional (cxxabi != null) lndir;
 
-    passthru = {
-      isLLVM = true;
-    };
+  buildInputs =
+    [ cxxabi ]
+    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [
+      libunwind
+    ];
 
-    meta = llvm_meta // {
-      homepage = "https://libcxx.llvm.org/";
-      description = "C++ standard library";
-      longDescription = ''
-        libc++ is an implementation of the C++ standard library, targeting C++11,
-        C++14 and above.
-      '';
-      # "All of the code in libc++ is dual licensed under the MIT license and the
-      # UIUC License (a BSD-like license)":
-      license = with lib.licenses; [
-        mit
-        ncsa
-      ];
-    };
-  }
-  // (
-    if (lib.versionOlder release_version "16" || lib.versionAtLeast release_version "17") then
-      {
-        postPatch =
-          (lib.optionalString
-            (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "15")
-            ''
-              # fix CMake error when static and LIBCXXABI_USE_LLVM_UNWINDER=ON. aren't
-              # building unwind so don't need to depend on it
-              substituteInPlace libcxx/src/CMakeLists.txt \
-                --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
-            ''
-          )
-          + ''
-            cd runtimes
-          '';
-      }
-    else
-      {
-        sourceRoot = "${finalAttrs.src.name}/runtimes";
-      }
-  )
-)
+  # libc++.so is a linker script which expands to multiple libraries,
+  # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
+  # support linker scripts so the external cxxabi needs to be symlinked in
+  postInstall =
+    # Older versions of libc++ install their headers to `$out` instead of `$dev`. This is normally handled by a fixup
+    # hook, but that causes the following to fail when cxxabi is non-null.
+    lib.optionalString (lib.versionOlder release_version "14") ''
+      moveToOutput include/c++/v1 $dev
+    ''
+    + lib.optionalString (cxxabi != null) ''
+      lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
+      lndir ${lib.getLib cxxabi}/lib $out/lib
+      libcxxabi=$out/lib/lib${cxxabi.libName}.a
+    ''
+    # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for LLVM < 16 or
+    # external cxxabi libraries so merge libc++abi.a into libc++.a ourselves.
+
+    # GNU binutils emits objects in LIFO order in MRI scripts so after the merge
+    # the objects are in reversed order so a second MRI script is required so the
+    # objects in the archive are listed in proper order (libc++.a, libc++abi.a)
+    + lib.optionalString (cxxabi != null || lib.versionOlder release_version "16") ''
+      libcxxabi=''${libcxxabi-$out/lib/libc++abi.a}
+      if [[ -f $out/lib/libc++.a && -e $libcxxabi ]]; then
+        $AR -M <<MRI
+          create $out/lib/libc++.a
+          addlib $out/lib/libc++.a
+          addlib $libcxxabi
+          save
+          end
+      MRI
+        $AR -M <<MRI
+          create $out/lib/libc++.a
+          addlib $out/lib/libc++.a
+          save
+          end
+      MRI
+      fi
+    '';
+
+  passthru = {
+    inherit abiNamespace;
+    isLLVM = true;
+  };
+
+  meta = llvm_meta // {
+    homepage = "https://libcxx.llvm.org/";
+    description = "C++ standard library";
+    longDescription = ''
+      libc++ is an implementation of the C++ standard library, targeting C++11,
+      C++14 and above.
+    '';
+    # "All of the code in libc++ is dual licensed under the MIT license and the
+    # UIUC License (a BSD-like license)":
+    license = with lib.licenses; [
+      mit
+      ncsa
+    ];
+  };
+})

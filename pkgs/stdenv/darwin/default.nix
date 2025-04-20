@@ -133,7 +133,14 @@ let
 
             isClang = true;
             libc = prevStage.darwin.libSystem;
-            inherit (prevStage.llvmPackages) libcxx;
+            # TODO: replace with `darwin.libcxx` once the bootstrap tools no longer have libc++.
+            libcxx =
+              if
+                prevStage.darwin.libcxx == null || name == "bootstrap-stage1" || name == "bootstrap-stage-xclang"
+              then
+                prevStage.llvmPackages.libcxx
+              else
+                prevStage.darwin.libcxx;
 
             inherit lib;
             inherit (prevStage) coreutils gnugrep;
@@ -297,6 +304,7 @@ let
 
   # LLVM tools packages are staged separately (xclang, stage3) from LLVM libs (xclang).
   llvmLibrariesPackages = prevStage: { inherit (prevStage.llvmPackages) compiler-rt libcxx; };
+  llvmLibrariesDarwinDepsNoCC = prevStage: { inherit (prevStage.darwin) libcxx; };
   llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {
@@ -364,6 +372,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       darwin = {
         binutils = null;
         binutils-unwrapped = null;
+        libcxx = null;
         libSystem = null;
         sigtool = null;
       };
@@ -710,6 +719,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isFromNixpkgs [
       (darwinPackagesNoCC prevStage)
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
 
@@ -777,6 +787,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -808,7 +819,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             darwin = super.darwin.overrideScope (
               selfDarwin: superDarwin:
-              darwinPackages prevStage
+              llvmLibrariesDarwinDepsNoCC prevStage
+              // darwinPackages prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped;
                 # Rewrap binutils so it uses the rebuilt Libsystem.
@@ -862,6 +874,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -887,6 +900,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             darwin = super.darwin.overrideScope (
               selfDarwin: superDarwin:
               darwinPackages prevStage
+              // llvmLibrariesDarwinDepsNoCC prevStage
               // sdkDarwinPackages prevStage
               # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
@@ -941,6 +955,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -963,7 +978,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             # Rebuild locales and sigtool with the new clang.
             darwin = super.darwin.overrideScope (
               _: superDarwin:
-              sdkDarwinPackages prevStage
+              llvmLibrariesDarwinDepsNoCC prevStage
+              // sdkDarwinPackages prevStage
               // {
                 inherit (prevStage.darwin) binutils-unwrapped libSystem;
                 binutils = superDarwin.binutils.override {
@@ -981,7 +997,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                   _: _:
                   llvmToolsPackages prevStage
                   // {
-                    libcxxClang = super.wrapCCWith rec {
+                    systemLibcxxClang = super.wrapCCWith rec {
                       nativeTools = false;
                       nativeLibc = false;
 
@@ -1003,7 +1019,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
                       isClang = true;
                       libc = self.darwin.libSystem;
-                      inherit (self.llvmPackages) libcxx;
+                      inherit (self.darwin) libcxx;
 
                       inherit lib;
                       inherit (self)
@@ -1056,6 +1072,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isFromNixpkgs [
+      (llvmLibrariesDarwinDepsNoCC prevStage)
       (darwinPackagesNoCC prevStage)
       (sdkPackagesNoCC prevStage)
     ];
@@ -1155,6 +1172,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ]
           ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
+            libcxx
             libiconv.out
             libresolv.out
             libsbuf.out
@@ -1167,8 +1185,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             (lib.getLib clang-unwrapped)
             compiler-rt
             compiler-rt.dev
-            libcxx
-            libcxx.dev
             lld
             llvm
             llvm.lib
@@ -1203,7 +1219,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
               darwin = super.darwin.overrideScope (
                 _: _:
-                sdkDarwinPackages prevStage
+                llvmLibrariesDarwinDepsNoCC prevStage
+                // sdkDarwinPackages prevStage
                 // {
                   inherit (prevStage.darwin) libSystem locale sigtool;
                 }
@@ -1262,7 +1279,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.clang-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libllvm;
-    assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxx;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.compiler-rt;
 
     # Make sure these evaluate since they were disabled explicitly in the bootstrap.
