@@ -86,7 +86,10 @@ stdenv.mkDerivation rec {
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [
+      diogotcorreia
+      Profpatsch
+    ];
     platforms = platforms.linux;
   };
 }
