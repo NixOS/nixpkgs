@@ -5,6 +5,7 @@
   makeWrapper,
   jq,
   glow,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenvNoCC.mkDerivation rec {
       }"
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Shell script which checks your $HOME for unwanted files and directories";
