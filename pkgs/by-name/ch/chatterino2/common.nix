@@ -7,6 +7,7 @@
   boost,
   openssl,
   libsecret,
+  libnotify,
   libavif,
   kdePackages,
 }:
@@ -24,13 +25,17 @@ stdenv.mkDerivation {
       qtsvg
       qt5compat
       qtkeychain
+      qtimageformats
     ])
     ++ [
       boost
       openssl
       libsecret
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      kdePackages.qtwayland
+      libnotify
+    ]
     ++ lib.optional enableAvifSupport libavif;
 
   cmakeFlags = [
