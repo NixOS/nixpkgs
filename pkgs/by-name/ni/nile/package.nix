@@ -1,22 +1,14 @@
 {
   lib,
   gitUpdater,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  requests,
-  protobuf,
-  pycryptodome,
-  zstandard,
-  json5,
-  platformdirs,
 }:
 
 let
   version = "1.1.2";
 in
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "nile";
   inherit version;
   format = "pyproject";
@@ -28,9 +20,9 @@ buildPythonApplication {
     hash = "sha256-/C4b8wPKWHGgiheuAN7AvU+KcD5aj5i6KzgFSdTIkNI=";
   };
 
-  disabled = pythonOlder "3.8";
+  disabled = python3Packages.pythonOlder "3.8";
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     setuptools
     requests
     protobuf
