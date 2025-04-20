@@ -59,7 +59,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corepins = libsForQt5.callPackage ../applications/misc/cubocore-packages/corepins {
+      corepins = callPackage ../applications/misc/cubocore-packages/corepins {
         inherit libcprime libcsys;
       };
 
