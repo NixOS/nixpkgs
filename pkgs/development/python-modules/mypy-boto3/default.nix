@@ -1174,8 +1174,8 @@ rec {
       "sha256-c0vXkW5sR7JkdzvsS/rMFme9EwY1x5eZAbRWYKew0v4=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.37.27"
-      "sha256-DgY+LFW6PzwYsFbJ7Fjs4fzlWe45ZEAa2zo1is87a8Y=";
+    buildMypyBoto3Package "sagemaker" "1.37.37"
+      "sha256-wzoSSsiKVLf1Vk5v87Fz7HEpsppnOHXCGWnqabz6W2k=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.37.0"
@@ -1234,8 +1234,8 @@ rec {
       "sha256-p8UzqjJKotp078KSppX0SidBrCOfGY1/AocYHO5xVmc=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.37.0"
-      "sha256-toCWU6Bh5IJ5lupehKJ6EvsMKZz5s/uPWG9qF+4P5uM=";
+    buildMypyBoto3Package "service-quotas" "1.37.37"
+      "sha256-34/LgfRPto8cRGKpxf6Xc43jD0BE4VMFTw5FeJfRV3c=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.37.35"
