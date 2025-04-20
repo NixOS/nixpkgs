@@ -10,7 +10,7 @@
 }@args:
 
 let
-  version = "5.10.234-rt127"; # updated by ./update-rt.sh
+  version = "5.10.235-rt129"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in
@@ -25,7 +25,7 @@ buildLinux (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";
-      sha256 = "1rgb4v6dvqlw1mgzsli0hxaj2d5d4m1nylgcrwm4bkpiwbzc95wm";
+      sha256 = "1k7iq4np3pflkq3d71ya8xs5czhslhy2iha4ls9lma81269y6fwm";
     };
 
     kernelPatches =
@@ -34,7 +34,7 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "1pmfba5sjmhai2hbzgbwhak46jhc45rcxf7zdgx5hbhbpgbl9d49";
+            sha256 = "1zjj34zjy7zvzcbsh3a20p82pj9g8bsg2mm8k2kjp89ngzb2790v";
           };
         };
       in
