@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/{qlog.app,Applications}
+    ln -s $out/Applications/qlog.app/Contents/MacOS/qlog $out/bin/qlog
+  '';
+
   meta = {
     description = "Amateur radio logbook software";
     mainProgram = "qlog";
