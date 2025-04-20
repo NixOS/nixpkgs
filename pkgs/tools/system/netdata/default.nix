@@ -28,7 +28,6 @@
   ninja,
   nixosTests,
   openssl,
-  overrideSDK,
   pkg-config,
   protobuf,
   snappy,
@@ -49,10 +48,7 @@
   zlib,
   withNdsudo ? false,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.47.5";
   pname = "netdata";
 
