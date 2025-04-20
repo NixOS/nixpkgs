@@ -11,7 +11,6 @@
   wafHook,
   # Darwin Dependencies
   aften,
-  libobjc,
 
   # BSD Dependencies
   freebsd,
@@ -74,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       aften
-      libobjc
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
       freebsd.libsysinfo

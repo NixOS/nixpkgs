@@ -10,7 +10,6 @@
   zlib,
   readline,
   libiconv,
-  libobjc,
   libunwind,
   libxcrypt,
   libyaml,
@@ -46,7 +45,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       readline
       libiconv
-      libobjc
       libunwind
     ];
 

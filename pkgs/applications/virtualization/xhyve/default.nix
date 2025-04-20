@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libobjc,
   zlib,
 }:
 
@@ -18,7 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libobjc
     zlib
   ];
 

@@ -17,7 +17,6 @@
   bison,
   autoconf,
   libiconv,
-  libobjc,
   libunwind,
   buildEnv,
   bundler,
@@ -120,7 +119,6 @@ let
           bundler,
           bundix,
           libiconv,
-          libobjc,
           libunwind,
           makeBinaryWrapper,
           buildRubyGem,
@@ -183,7 +181,6 @@ let
             ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
             ++ ops stdenv.hostPlatform.isDarwin [
               libiconv
-              libobjc
               libunwind
             ];
           propagatedBuildInputs = op jemallocSupport jemalloc;

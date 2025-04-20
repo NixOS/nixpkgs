@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  darwin,
   fetchgit,
   fetchpatch,
   cctools,
@@ -55,7 +54,6 @@ stdenv.mkDerivation {
     python3
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
     cctools
   ];
 

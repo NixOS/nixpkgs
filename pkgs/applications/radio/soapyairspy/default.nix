@@ -5,7 +5,6 @@
   cmake,
   airspy,
   soapysdr,
-  libobjc,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      airspy
-      soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+  buildInputs = [
+    airspy
+    soapysdr
+  ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
