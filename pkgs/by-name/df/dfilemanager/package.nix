@@ -1,15 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
+  libsForQt5,
   file,
-  qtbase,
-  qttools,
-  solid,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "dfilemanager";
   version = "unstable-2021-02-20";
 
@@ -17,15 +15,18 @@ mkDerivation {
     owner = "probonopd";
     repo = "dfilemanager";
     rev = "61179500a92575e05cf9a71d401c388726bfd73d";
-    sha256 = "sha256-BHd2dZDVxy82vR6PyXIS5M6zBGJ4bQfOhdBCdOww4kc=";
+    hash = "sha256-BHd2dZDVxy82vR6PyXIS5M6zBGJ4bQfOhdBCdOww4kc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
   buildInputs = [
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.solid
     file
-    solid
   ];
 
   cmakeFlags = [ "-DQT5BUILD=true" ];
@@ -36,5 +37,6 @@ mkDerivation {
     mainProgram = "dfm";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }
