@@ -204,8 +204,6 @@ makeScopeWithSplicing' {
 
       openwith = callPackage ../os-specific/darwin/openwith { };
 
-      stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
-
       trash = callPackage ../os-specific/darwin/trash { };
 
       inherit (self.file_cmds) xattr;
