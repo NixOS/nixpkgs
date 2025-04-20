@@ -84,7 +84,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coretime = libsForQt5.callPackage ../applications/misc/cubocore-packages/coretime {
+      coretime = callPackage ../applications/misc/cubocore-packages/coretime {
         inherit libcprime libcsys;
       };
 
