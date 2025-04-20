@@ -174,15 +174,6 @@ makeScopeWithSplicing' {
 
       DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
-      print-reexports = callPackage ../os-specific/darwin/print-reexports { };
-
-      rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
-
-      checkReexportsHook = pkgs.makeSetupHook {
-        name = "darwin-check-reexports-hook";
-        propagatedBuildInputs = [ pkgs.darwin.print-reexports ];
-      } ../os-specific/darwin/print-reexports/setup-hook.sh;
-
       libunwind = callPackage ../os-specific/darwin/libunwind { };
 
       sigtool = callPackage ../os-specific/darwin/sigtool { };
