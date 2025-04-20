@@ -19,7 +19,7 @@
   libpng,
   libX11,
   portmidi,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
@@ -60,8 +60,6 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
   ];
 
   postPatch =
@@ -101,7 +99,7 @@ buildPythonPackage rec {
     libjpeg
     libpng
     portmidi
-    SDL2
+    SDL2_classic
     SDL2_image
     SDL2_mixer
     SDL2_ttf
@@ -117,7 +115,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2_classic) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
