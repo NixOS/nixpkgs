@@ -71,7 +71,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corestats = libsForQt5.callPackage ../applications/misc/cubocore-packages/corestats {
+      corestats = callPackage ../applications/misc/cubocore-packages/corestats {
         inherit libcprime libcsys;
       };
 
