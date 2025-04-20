@@ -18,6 +18,7 @@ let
       "armv7l" = "armv6l";
       "powerpc64le" = "ppc64le";
       "riscv64" = "riscv64";
+      "loongarch64" = "loong64";
     }
     .${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
 

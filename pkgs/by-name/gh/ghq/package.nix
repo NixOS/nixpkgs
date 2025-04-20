@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   testers,
   nix-update-script,
   ghq,
@@ -26,9 +27,13 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    install -m 444 -D ${src}/misc/zsh/_ghq $out/share/zsh/site-functions/_ghq
-    install -m 444 -D ${src}/misc/bash/_ghq $out/share/bash-completion/completions/_ghq
+    installShellCompletion \
+      --bash $src/misc/bash/_ghq \
+      --fish $src/misc/fish/ghq.fish \
+      --zsh $src/misc/zsh/_ghq
   '';
 
   passthru = {

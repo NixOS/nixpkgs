@@ -4973,8 +4973,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  qlog = qt6Packages.callPackage ../applications/radio/qlog { };
-
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
@@ -7938,9 +7936,9 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
-  electron = electron_34;
-  electron-bin = electron_34-bin;
-  electron-chromedriver = electron-chromedriver_34;
+  electron = electron_35;
+  electron-bin = electron_35-bin;
+  electron-chromedriver = electron-chromedriver_35;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
@@ -8981,10 +8979,6 @@ with pkgs;
 
   aws-spend-summary = haskellPackages.aws-spend-summary.bin;
 
-  backlight-auto = callPackage ../by-name/ba/backlight-auto/package.nix {
-    zig = buildPackages.zig_0_11;
-  };
-
   inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
 
   bc-soci = callPackage ../development/libraries/soci/bc-soci.nix { };
@@ -9015,15 +9009,6 @@ with pkgs;
     botan2
     botan3
     ;
-
-  box2d = callPackage ../development/libraries/box2d {
-    inherit (darwin.apple_sdk.frameworks)
-      Carbon
-      Cocoa
-      Kernel
-      OpenGL
-      ;
-  };
 
   c-ares = callPackage ../development/libraries/c-ares { };
 
@@ -11470,13 +11455,11 @@ with pkgs;
     (rec {
       zigPackages = recurseIntoAttrs (callPackage ../development/compilers/zig { });
 
-      zig_0_11 = zigPackages."0.11";
       zig_0_12 = zigPackages."0.12";
       zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
     })
     zigPackages
-    zig_0_11
     zig_0_12
     zig_0_13
     zig_0_14
@@ -13288,12 +13271,6 @@ with pkgs;
     ubootWandboard
     ;
 
-  # Upstream Barebox:
-  inherit (callPackage ../misc/barebox { })
-    buildBarebox
-    bareboxTools
-    ;
-
   eudev = callPackage ../by-name/eu/eudev/package.nix {
     util-linux = util-linuxMinimal;
   };
@@ -13834,10 +13811,6 @@ with pkgs;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
-  cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_18;
-  };
-
   calf = callPackage ../applications/audio/calf {
     inherit (gnome2) libglade;
   };
@@ -14049,8 +14022,7 @@ with pkgs;
     buildServerGui = false;
   };
 
-  drawterm = callPackage ../tools/admin/drawterm { config = "unix"; };
-  drawterm-wayland = callPackage ../tools/admin/drawterm { config = "linux"; };
+  drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { withWayland = true; };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
@@ -16545,16 +16517,6 @@ with pkgs;
       if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.virtualglLib else null;
   };
 
-  primusLib = callPackage ../tools/X11/primus/lib.nix {
-    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
-  };
-
-  primus = callPackage ../tools/X11/primus {
-    stdenv_i686 = pkgsi686Linux.stdenv;
-    primusLib_i686 =
-      if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null;
-  };
-
   vlc-bin-universal = vlc-bin.override { variant = "universal"; };
 
   libvlc = vlc.override {
@@ -17036,13 +16998,6 @@ with pkgs;
     fteqcc
     ;
 
-  heroic-unwrapped = callPackage ../games/heroic {
-    # Upstream uses EOL Electron 31.  Use next oldest version.
-    electron = electron_33;
-  };
-
-  heroic = callPackage ../games/heroic/fhsenv.nix { };
-
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
   vanillatd = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillatd"; };
@@ -17293,8 +17248,6 @@ with pkgs;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
 
-  gogdl = python3Packages.callPackage ../games/gogdl { };
-
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
   gshogi = callPackage ../games/gshogi { };
@@ -17403,8 +17356,6 @@ with pkgs;
   };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
-
-  nile = python3Packages.callPackage ../games/nile { };
 
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
@@ -18224,19 +18175,13 @@ with pkgs;
   isabelle = callPackage ../by-name/is/isabelle/package.nix {
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
-      version = "2024";
+      version = "2025";
       configureFlags = [
         "--enable-intinf-as-int"
         "--with-gmp"
         "--disable-shared"
       ];
       buildFlags = [ "compiler" ];
-      src = fetchFromGitHub {
-        owner = "polyml";
-        repo = "polyml";
-        rev = "v5.9.1";
-        hash = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
-      };
     };
 
     java = openjdk21;
