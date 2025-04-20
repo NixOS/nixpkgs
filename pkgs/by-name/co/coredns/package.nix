@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ALGQWUUvSGXbsOoLW5e62lPv3JU5WvJMeZYkEWiRhu4=";
+    hash = "sha256-ALGQWUUvSGXbsOoLW5e62lPv3JU5WvJMeZYkEWiRhu4=";
   };
 
   inherit vendorHash;
