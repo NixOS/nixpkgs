@@ -49,6 +49,10 @@ buildPythonPackage rec {
   ];
   versionCheckProgramArg = "--version";
 
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
