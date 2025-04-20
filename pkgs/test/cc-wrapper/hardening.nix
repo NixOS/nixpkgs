@@ -281,16 +281,13 @@ nameDrvAfterAttrName (
     );
 
     # musl implementation is effectively FORTIFY_SOURCE=1-only,
-    # clang-on-glibc also only appears to support FORTIFY_SOURCE=1 (!)
-    fortifyExplicitEnabledExecTest =
-      brokenIf (stdenv.hostPlatform.isMusl || (stdenv.cc.isClang && stdenv.hostPlatform.libc == "glibc"))
-        (
-          fortifyExecTest (
-            f2exampleWithStdEnv stdenv {
-              hardeningEnable = [ "fortify" ];
-            }
-          )
-        );
+    fortifyExplicitEnabledExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTest (
+        f2exampleWithStdEnv stdenv {
+          hardeningEnable = [ "fortify" ];
+        }
+      )
+    );
 
     fortify3ExplicitEnabled = brokenIf (!stdenv.cc.isGNU || lib.versionOlder stdenv.cc.version "12") (
       checkTestBin
