@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "alan-if";
     repo = "alan";
     rev = "71f23ec79f7f5d66aa5ae9fd3f9b8dae41a89f15";
-    sha256 = "066jknqz1v6sismvfxjfffl35h14v8qwgcq99ibhp08dy2fwraln";
+    hash = "sha256-lqrMnfANgQtXTAmzxzHaJMAyqHNOdrerjtrs8LGd0hg=";
   };
 
   makefile = "Makefile.unix";
@@ -28,17 +28,21 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/alan2
     cp compiler/alan $out/bin/alan2
     cp interpreter/arun $out/bin/arun2
     cp alan.readme ChangeLog $out/share/alan2
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alanif.se/";
     description = "Alan interactive fiction language (legacy version)";
-    license = licenses.artistic2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ neilmayhew ];
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ neilmayhew ];
   };
 }
