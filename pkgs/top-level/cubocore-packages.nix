@@ -15,7 +15,7 @@ let
       libcsys = libsForQt5.callPackage ../applications/misc/cubocore-packages/libcsys { };
 
       # Apps
-      coreaction = libsForQt5.callPackage ../applications/misc/cubocore-packages/coreaction {
+      coreaction = callPackage ../applications/misc/cubocore-packages/coreaction {
         inherit libcprime libcsys;
       };
 
