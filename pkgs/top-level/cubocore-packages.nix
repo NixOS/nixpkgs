@@ -75,7 +75,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corestuff = libsForQt5.callPackage ../applications/misc/cubocore-packages/corestuff {
+      corestuff = callPackage ../applications/misc/cubocore-packages/corestuff {
         inherit libcprime libcsys;
       };
 
