@@ -22,7 +22,7 @@ let
   kissatPkgConfig = stdenv.mkDerivation {
     name = "kissat-pkgconfig";
     inherit (kissat) version;
-    
+
     dontUnpack = true;
     dontConfigure = true;
     dontBuild = true;
