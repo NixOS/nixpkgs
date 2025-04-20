@@ -94,7 +94,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utilities for encoding and decoding binary files in MIME";
     license = licenses.free;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ tomodachi94 ];
   };
 }
