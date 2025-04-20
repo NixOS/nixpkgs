@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       cd $out
       git branch --show-current > GIT_BRANCH
       git rev-parse --short=7 HEAD > GIT_COMMIT_HASH
-      git describe --tags --abbrev=0 --exact-match HEAD > GIT_COMMIT_TAG
+      (git describe --tags --abbrev=0 --exact-match HEAD 2>/dev/null || echo "") > GIT_COMMIT_TAG
       rm -rf .git
     '';
   };
@@ -213,10 +213,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
+    port_ver=$(grep CMAKE_PROJECT_VERSION: "$PWD/CMakeCache.txt" | cut -d= -f2)
     cp ${gamecontrollerdb}/gamecontrollerdb.txt gamecontrollerdb.txt
     mv ../libultraship/src/graphic/Fast3D/shaders ../soh/assets/custom
     pushd ../OTRExporter
-    python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.otr --port-ver ${finalAttrs.version}
+    python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.otr --port-ver $port_ver
     popd
   '';
 
