@@ -22,8 +22,7 @@ let
     ) ''""" can't be on its own line in a minetest config.'';
     "${name} = \"\"\"\n${value}\n\"\"\"\n";
 
-  toConf =
-    values:
+  toConf = values:
     lib.concatStrings (
       lib.mapAttrsToList (
         name: value:
@@ -37,148 +36,155 @@ let
               toConfMultiline name value
             else
               "${name} = ${value}\n";
-        }
-        .${builtins.typeOf value}
+        }.${builtins.typeOf value}
       ) values
     );
 
-  cfg = config.services.minetest-server;
-  flag =
-    val: name:
-    lib.optionals (val != null) [
-      "--${name}"
-      "${toString val}"
-    ];
+  flag = val: name: lib.optionals (val != null) ["--${name}" (toString val)];
+in {
+  options.services.minetest-server = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule {
+      options = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to enable this Minetest server instance.";
+        };
 
-  flags =
-    [
-      "--server"
-    ]
-    ++ (
-      if cfg.configPath != null then
-        [
-          "--config"
-          cfg.configPath
-        ]
-      else
-        [
-          "--config"
-          (builtins.toFile "minetest.conf" (toConf cfg.config))
-        ]
-    )
-    ++ (flag cfg.gameId "gameid")
-    ++ (flag cfg.world "world")
-    ++ (flag cfg.logPath "logfile")
-    ++ (flag cfg.port "port")
-    ++ cfg.extraArgs;
-in
-{
-  options = {
-    services.minetest-server = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "If enabled, starts a Minetest Server.";
+        package = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs.minetest;
+          defaultText = lib.literalExpression "pkgs.minetest";
+          description = "Minetest server package to use";
+        };
+
+        gameId = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Game ID to use (run 'minetestserver --gameid list' for options). If not set and there is only one game in the server folder, will use that.";
+        };
+
+        world = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "World directory name to use";
+        };
+
+        configPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to custom config file";
+        };
+
+        config = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
+          default = {};
+          description = "Configuration settings (ignored if configPath is set). All options here: https://github.com/minetest/minetest/blob/master/minetest.conf.example";
+        };
+
+        logPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to log file (null for stdout)";
+        };
+
+        port = lib.mkOption {
+          type = lib.types.port;
+          default = 30000;
+          description = "Port to listen on (default: 30000)";
+        };
+
+        openFirewall = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to open the UDP port in the firewall for this instance.";
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [];
+          description = "Additional command-line arguments";
+        };
+
+        fetchGame = lib.mkOption {
+          type = lib.types.nullOr lib.types.package;
+          default = pkgs.fetchFromGitHub {
+            owner = "luanti-org";
+            repo  = "minetest_game";
+            rev   = "838ad60";  # latest commit on Apr 19, 2025
+            sha256 = "sha256-UVKsbfOQG5WD2/w6Yxdn6bMfgcexs09OBY+wdWtNuE0=";
+          };
+          description = "Derivation containing game files";
+          #example = 
+        };
       };
-
-      gameId = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = ''
-          Id of the game to use. To list available games run
-          `minetestserver --gameid list`.
-
-          If only one game exists, this option can be null.
-        '';
-      };
-
-      world = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = ''
-          Name of the world to use. To list available worlds run
-          `minetestserver --world list`.
-
-          If only one world exists, this option can be null.
-        '';
-      };
-
-      configPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = ''
-          Path to the config to use.
-
-          If set to null, the config of the running user will be used:
-          `~/.minetest/minetest.conf`.
-        '';
-      };
-
-      config = lib.mkOption {
-        type = lib.types.attrsOf lib.types.anything;
-        default = { };
-        description = ''
-          Settings to add to the minetest config file.
-
-          This option is ignored if `configPath` is set.
-        '';
-      };
-
-      logPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = ''
-          Path to logfile for logging.
-
-          If set to null, logging will be output to stdout which means
-          all output will be caught by systemd.
-        '';
-      };
-
-      port = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
-        default = null;
-        description = ''
-          Port number to bind to.
-
-          If set to null, the default 30000 will be used.
-        '';
-      };
-
-      extraArgs = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = ''
-          Additional command line flags to pass to the minetest executable.
-        '';
-      };
-    };
+    });
+    default = {};
+    description = "Multiple Minetest server instances";
   };
 
-  config = lib.mkIf cfg.enable {
-    users.users.minetest = {
-      description = "Minetest Server Service user";
-      home = "/var/lib/minetest";
-      createHome = true;
-      uid = config.ids.uids.minetest;
-      group = "minetest";
-    };
-    users.groups.minetest.gid = config.ids.gids.minetest;
+  config = let
+    cfg = config.services.minetest-server;
+    enabledInstances = lib.filterAttrs (_: ic: ic.enable) cfg;
+  in lib.mkIf (enabledInstances != {}) {
+    networking.firewall.allowedUDPPorts = lib.concatMap (ic: # open firewall
+      lib.optional ic.openFirewall ic.port
+    ) (lib.attrValues enabledInstances);
 
-    systemd.services.minetest-server = {
-      description = "Minetest Server Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+  systemd.services = lib.mapAttrs' (name: instanceCfg: {
+      name = "minetest-server-${name}";
+      value = {
+        description = "minetest Server Instance: ${name}";
+        wantedBy = ["multi-user.target"];
+        after = ["network.target"];
 
-      serviceConfig.Restart = "always";
-      serviceConfig.User = "minetest";
-      serviceConfig.Group = "minetest";
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "minetest-${name}"; # will be /var/lib/minetest-${name}
+          Restart = "always";
+          WorkingDirectory = "/var/lib/minetest-${name}";
+        };
+        environment = {
+          HOME = "/var/lib/minetest-${name}";
+        };
 
-      script = ''
-        cd /var/lib/minetest
+        preStart = let
+          fetchGame = instanceCfg.fetchGame;
+        in ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+          target_dir="/var/lib/minetest-${name}/.minetest/games/${instanceCfg.gameId}"
+          mkdir -p "$target_dir"
 
-        exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
-      '';
-    };
+          # Directory source (fetchFromGitHub/fetchgit)
+          ${pkgs.rsync}/bin/rsync -a --delete \
+            "${fetchGame}/" \
+            "$target_dir/"
+        '';
+
+        script = let
+          flags = [
+              "--server"
+            ]
+            ++ (if instanceCfg.configPath != null then [
+              "--config" instanceCfg.configPath
+            ] else [
+              "--config" (builtins.toFile "minetest-${name}.conf" (toConf instanceCfg.config))
+            ])
+            ++ (flag instanceCfg.gameId "gameid")
+            ++ (if instanceCfg.world != null then
+                  [ "--world"   "worlds/${instanceCfg.world}" ]
+                else
+                  []
+              )
+            ++ (flag instanceCfg.logPath "logfile")
+            ++ (flag instanceCfg.port "port")
+            ++ instanceCfg.extraArgs;
+        in ''
+          cd "$STATE_DIRECTORY"
+          exec ${instanceCfg.package}/bin/minetest ${lib.escapeShellArgs flags}
+        '';
+      };
+    }) enabledInstances;
   };
 }
