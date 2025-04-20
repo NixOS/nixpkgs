@@ -3,17 +3,16 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  copyDesktopItems,
   inih,
-  ninja,
-  pkg-config,
   libsForQt5,
   makeDesktopItem,
-  copyDesktopItems,
+  ninja,
+  pkg-config,
 }:
-
 stdenv.mkDerivation {
   pname = "qzdl";
-  version = "unstable-2025-01-04";
+  version = "3.3.0.0-unstable-2025-01-04";
 
   src = fetchFromGitHub {
     owner = "qbasicer";
@@ -54,12 +53,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ZDoom WAD Launcher";
     homepage = "https://zdl.vectec.net";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (libsForQt5.qtbase.meta) platforms;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ lib.maintainers.azahi ];
     mainProgram = "zdl";
   };
 }
