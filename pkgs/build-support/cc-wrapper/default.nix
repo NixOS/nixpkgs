@@ -490,6 +490,11 @@ stdenvNoCC.mkDerivation {
       elif [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
+
+      if [ -e $ccPath/${targetPrefix}gcc-nm ]; then
+        export plugin="${cc}/libexec/gcc/${targetPlatform.config}/14.2.1/liblto_plugin.so"
+        wrap ${targetPrefix}gcc-nm ${./bintools-wrapper.sh} $ccPath/${targetPrefix}gcc-nm
+      fi
     ''
 
     # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
