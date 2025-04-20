@@ -13,7 +13,7 @@
   makeWrapper,
   gcc,
   go,
-  flutter,
+  flutter329,
 }:
 
 let
@@ -94,7 +94,7 @@ buildFHSEnv {
     [
       binutils
       dejavu_fonts
-      flutter
+      flutter329
       gcc
       go
       hover
