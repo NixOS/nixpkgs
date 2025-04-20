@@ -5,7 +5,6 @@
   fetchpatch,
   cmake,
   bluez,
-  libobjc,
 }:
 stdenv.mkDerivation rec {
 
@@ -38,11 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ bluez ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 

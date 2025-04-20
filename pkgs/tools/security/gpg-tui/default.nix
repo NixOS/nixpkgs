@@ -8,7 +8,6 @@
   pkg-config,
   python3,
   libiconv,
-  libobjc,
   libresolv,
   x11Support ? true,
   libxcb,
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      libobjc
       libresolv
     ];
 

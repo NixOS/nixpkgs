@@ -30,8 +30,6 @@
   makeWrapper,
   wrapGAppsHook3,
 
-  libobjc,
-
   features ? "huge", # One of tiny, small, normal, big or huge
   wrapPythonDrv ? false,
   guiSupport ? config.vim.gui or (if stdenv.hostPlatform.isDarwin then "gtk2" else "gtk3"),
@@ -190,9 +188,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ lib.optionals darwinSupport [
-      libobjc
-    ]
     ++ lib.optional luaSupport lua
     ++ lib.optional pythonSupport python3
     ++ lib.optional tclSupport tcl

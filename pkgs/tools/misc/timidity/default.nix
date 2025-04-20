@@ -4,7 +4,6 @@
   fetchurl,
   nixosTests,
   pkg-config,
-  libobjc,
   libjack2,
   ncurses,
   alsa-lib,
@@ -44,9 +43,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
     ]
     ++ lib.optionals enableVorbis [
       libvorbis

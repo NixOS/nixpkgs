@@ -33,7 +33,6 @@
   blas,
   lapack,
   curl,
-  libobjc,
   tzdata,
   withRecommendedPackages ? true,
   enableStrictBarrier ? false,
@@ -74,48 +73,44 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
     which
   ];
-  buildInputs =
-    [
-      bzip2
-      gfortran
-      libX11
-      libXmu
-      libXt
-      libXt
-      libjpeg
-      libpng
-      libtiff
-      ncurses
-      pango
-      pcre2
-      readline
-      (texliveSmall.withPackages (
-        ps: with ps; [
-          inconsolata
-          helvetic
-          ps.texinfo
-          fancyvrb
-          cm-super
-          rsfs
-        ]
-      ))
-      xz
-      zlib
-      less
-      texinfo
-      graphviz
-      icu
-      which
-      blas
-      lapack
-      curl
-      tcl
-      tk
-      jdk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+  buildInputs = [
+    bzip2
+    gfortran
+    libX11
+    libXmu
+    libXt
+    libXt
+    libjpeg
+    libpng
+    libtiff
+    ncurses
+    pango
+    pcre2
+    readline
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        inconsolata
+        helvetic
+        ps.texinfo
+        fancyvrb
+        cm-super
+        rsfs
+      ]
+    ))
+    xz
+    zlib
+    less
+    texinfo
+    graphviz
+    icu
+    which
+    blas
+    lapack
+    curl
+    tcl
+    tk
+    jdk
+  ];
   strictDeps = true;
 
   patches = [

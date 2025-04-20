@@ -2373,7 +2373,7 @@ with pkgs;
   glslviewer = callPackage ../development/tools/glslviewer { };
 
   gpg-tui = callPackage ../tools/security/gpg-tui {
-    inherit (darwin) libobjc libresolv;
+    inherit (darwin) libresolv;
   };
 
   greg = callPackage ../applications/audio/greg {
@@ -2430,9 +2430,7 @@ with pkgs;
 
   krill = callPackage ../servers/krill { };
 
-  lapce = callPackage ../applications/editors/lapce {
-    inherit (darwin) libobjc;
-  };
+  lapce = callPackage ../applications/editors/lapce { };
 
   languagetool-rust = callPackage ../tools/text/languagetool-rust { };
 
@@ -4224,9 +4222,7 @@ with pkgs;
 
   mkgmap-splitter = callPackage ../applications/misc/mkgmap/splitter { };
 
-  op-geth = callPackage ../applications/blockchains/optimism/geth.nix {
-    inherit (darwin) libobjc;
-  };
+  op-geth = callPackage ../applications/blockchains/optimism/geth.nix { };
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
@@ -4830,9 +4826,7 @@ with pkgs;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
-  softhsm = callPackage ../tools/security/softhsm {
-    inherit (darwin) libobjc;
-  };
+  softhsm = callPackage ../tools/security/softhsm { };
 
   soundkonverter = libsForQt5.soundkonverter;
 
@@ -5236,9 +5230,7 @@ with pkgs;
     wlroots = wlroots_0_17;
   };
 
-  wiiuse = callPackage ../development/libraries/wiiuse {
-    inherit (darwin) libobjc;
-  };
+  wiiuse = callPackage ../development/libraries/wiiuse { };
 
   wring = nodePackages.wring;
 
@@ -6351,19 +6343,11 @@ with pkgs;
 
   mono = mono6;
 
-  mono4 = lowPrio (
-    callPackage ../development/compilers/mono/4.nix {
-      inherit (darwin) libobjc;
-    }
-  );
+  mono4 = lowPrio (callPackage ../development/compilers/mono/4.nix { });
 
-  mono5 = callPackage ../development/compilers/mono/5.nix {
-    inherit (darwin) libobjc;
-  };
+  mono5 = callPackage ../development/compilers/mono/5.nix { };
 
-  mono6 = callPackage ../development/compilers/mono/6.nix {
-    inherit (darwin) libobjc;
-  };
+  mono6 = callPackage ../development/compilers/mono/6.nix { };
 
   mozart2 = callPackage ../development/compilers/mozart {
     emacs = emacs-nox;
@@ -6599,9 +6583,7 @@ with pkgs;
   # many packages still fail with latest version
   tbb = tbb_2020_3;
 
-  terra = callPackage ../development/compilers/terra {
-    inherit (darwin) libobjc;
-  };
+  terra = callPackage ../development/compilers/terra { };
 
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
@@ -7181,9 +7163,7 @@ with pkgs;
 
   inherit (ocamlPackages) reason rtop;
 
-  buildRubyGem = callPackage ../development/ruby-modules/gem {
-    inherit (darwin) libobjc;
-  };
+  buildRubyGem = callPackage ../development/ruby-modules/gem { };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
     inherit (darwin) DarwinTools autoSignDarwinBinariesHook;
   };
@@ -7195,13 +7175,11 @@ with pkgs;
 
   solargraph = rubyPackages.solargraph;
 
-  rubyfmt = callPackage ../development/tools/rubyfmt {
-    inherit (darwin) libobjc;
-  };
+  rubyfmt = callPackage ../development/tools/rubyfmt { };
 
   inherit
     (callPackage ../development/interpreters/ruby {
-      inherit (darwin) libobjc libunwind;
+      inherit (darwin) libunwind;
     })
     mkRubyVersion
     mkRuby
@@ -7230,15 +7208,9 @@ with pkgs;
 
   inherit
     ({
-      spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix {
-        inherit (darwin) libobjc;
-      };
-      spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
-        inherit (darwin) libobjc;
-      };
-      spidermonkey_128 = callPackage ../development/interpreters/spidermonkey/128.nix {
-        inherit (darwin) libobjc;
-      };
+      spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix { };
+      spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix { };
+      spidermonkey_128 = callPackage ../development/interpreters/spidermonkey/128.nix { };
     })
     spidermonkey_91
     spidermonkey_115
@@ -9413,9 +9385,7 @@ with pkgs;
     doCheck = false;
   };
 
-  libftdi = callPackage ../development/libraries/libftdi {
-    inherit (darwin) libobjc;
-  };
+  libftdi = callPackage ../development/libraries/libftdi { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
@@ -9601,9 +9571,7 @@ with pkgs;
 
   libstatgrab = callPackage ../development/libraries/libstatgrab { };
 
-  libticalcs2 = callPackage ../development/libraries/libticalcs2 {
-    inherit (darwin) libobjc;
-  };
+  libticalcs2 = callPackage ../development/libraries/libticalcs2 { };
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
@@ -9632,9 +9600,7 @@ with pkgs;
 
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix { };
 
-  libusb1 = callPackage ../development/libraries/libusb1 {
-    inherit (darwin) libobjc;
-  };
+  libusb1 = callPackage ../development/libraries/libusb1 { };
 
   libunicode = callPackage ../by-name/li/libunicode/package.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
@@ -10388,19 +10354,13 @@ with pkgs;
     scheme = guile;
   };
 
-  soapyairspy = callPackage ../applications/radio/soapyairspy {
-    inherit (darwin) libobjc;
-  };
+  soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
   soapyaudio = callPackage ../applications/radio/soapyaudio { };
 
-  soapybladerf = callPackage ../applications/radio/soapybladerf {
-    inherit (darwin) libobjc;
-  };
+  soapybladerf = callPackage ../applications/radio/soapybladerf { };
 
-  soapyhackrf = callPackage ../applications/radio/soapyhackrf {
-    inherit (darwin) libobjc;
-  };
+  soapyhackrf = callPackage ../applications/radio/soapyhackrf { };
 
   soapysdr = callPackage ../applications/radio/soapysdr { };
 
@@ -10418,13 +10378,9 @@ with pkgs;
     ];
   };
 
-  soapyrtlsdr = callPackage ../applications/radio/soapyrtlsdr {
-    inherit (darwin) libobjc;
-  };
+  soapyrtlsdr = callPackage ../applications/radio/soapyrtlsdr { };
 
-  soapyuhd = callPackage ../applications/radio/soapyuhd {
-    inherit (darwin) libobjc;
-  };
+  soapyuhd = callPackage ../applications/radio/soapyuhd { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
@@ -10920,7 +10876,6 @@ with pkgs;
   R = callPackage ../applications/science/math/R {
     # TODO: split docs into a separate output
     withRecommendedPackages = false;
-    inherit (darwin) libobjc;
   };
 
   rWrapper = callPackage ../development/r-modules/wrapper.nix {
@@ -13591,9 +13546,7 @@ with pkgs;
 
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 
-  qrencode = callPackage ../development/libraries/qrencode {
-    inherit (darwin) libobjc;
-  };
+  qrencode = callPackage ../development/libraries/qrencode { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
@@ -15232,9 +15185,7 @@ with pkgs;
     timeshift-minimal
     ;
 
-  timidity = callPackage ../tools/misc/timidity {
-    inherit (darwin) libobjc;
-  };
+  timidity = callPackage ../tools/misc/timidity { };
 
   tiny = callPackage ../applications/networking/irc/tiny { };
 
@@ -15348,11 +15299,7 @@ with pkgs;
       }
     );
 
-  vim-full = vimUtils.makeCustomizable (
-    callPackage ../applications/editors/vim/full.nix {
-      inherit (darwin) libobjc;
-    }
-  );
+  vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/full.nix { });
 
   vim-darwin =
     (vim-full.override {
@@ -15549,7 +15496,6 @@ with pkgs;
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
 
   weechat-unwrapped = callPackage ../applications/networking/irc/weechat {
-    inherit (darwin) libobjc;
     inherit (darwin) libresolv;
     guile = guile_3_0;
   };
@@ -15806,10 +15752,6 @@ with pkgs;
   };
 
   fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
-
-  go-ethereum = callPackage ../by-name/go/go-ethereum/package.nix {
-    inherit (darwin) libobjc;
-  };
 
   gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
     boost = boost179;
@@ -17433,7 +17375,6 @@ with pkgs;
 
   jack2 = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
-    inherit (darwin) libobjc;
   };
 
   libjack2 = jack2.override { prefix = "lib"; };
@@ -17931,9 +17872,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  xhyve = callPackage ../applications/virtualization/xhyve {
-    inherit (darwin) libobjc;
-  };
+  xhyve = callPackage ../applications/virtualization/xhyve { };
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix { };
 
