@@ -12,7 +12,7 @@ let
       # Libs
       libcprime = callPackage ../applications/misc/cubocore-packages/libcprime { };
 
-      libcsys = libsForQt5.callPackage ../applications/misc/cubocore-packages/libcsys { };
+      libcsys = callPackage ../applications/misc/cubocore-packages/libcsys { };
 
       # Apps
       coreaction = callPackage ../applications/misc/cubocore-packages/coreaction {
