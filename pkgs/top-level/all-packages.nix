@@ -5803,8 +5803,6 @@ with pkgs;
     jdk = jdk8;
   };
 
-  alan_2 = callPackage ../development/compilers/alan/2.nix { };
-
   armips = callPackage ../development/compilers/armips {
     stdenv = gcc10Stdenv;
   };
