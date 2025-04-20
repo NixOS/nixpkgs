@@ -14,7 +14,7 @@
   dfhack,
   enableSoundSense ? false,
   soundSense,
-  jdk,
+  jre,
   expect,
   xvfb-run,
   writeText,
@@ -235,7 +235,7 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
       + lib.optionalString enableSoundSense ''
         substitute $runSoundSense $out/bin/soundsense \
           --subst-var-by stdenv_shell ${stdenv.shell} \
-          --subst-var-by jre ${jdk.jre} \
+          --subst-var-by jre ${jre} \
           --subst-var dfInit
         chmod 755 $out/bin/soundsense
       '';
