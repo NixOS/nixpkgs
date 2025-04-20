@@ -9,13 +9,13 @@
 }:
 let
   pname = "workout-tracker";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     tag = "v${version}";
-    hash = "sha256-m/mQRFBIlffw+o0exBCejU3F5nSQhGEu3PGrw/M9l7M=";
+    hash = "sha256-TSRHsVpl/qfu4Dwttj1pYhD+4zzxCt48y9FF4zP1drY=";
   };
 
   assets = buildNpmPackage {
