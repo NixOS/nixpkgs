@@ -44,7 +44,7 @@ tree = parser.parse(
           println!("Hello, world!");
         }
         """,
-        "utf8"
+        "utf8",
     )
 )
 

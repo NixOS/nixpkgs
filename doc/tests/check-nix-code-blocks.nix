@@ -2,6 +2,7 @@
   runCommand,
   markdown-code-runner,
   nixfmt-rfc-style,
+  ruff,
 }:
 
 runCommand "manual_check-nix-code-blocks"
@@ -9,6 +10,7 @@ runCommand "manual_check-nix-code-blocks"
     nativeBuildInputs = [
       markdown-code-runner
       nixfmt-rfc-style
+      ruff
     ];
   }
   ''
