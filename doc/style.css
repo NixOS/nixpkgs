@@ -119,8 +119,8 @@ body {
     font-size: 1rem;
     font-family: "Roboto", sans-serif;
     font-weight: 300;
-    color: #000000;
-    background-color: #ffffff;
+    color: var(--main-text-color);
+    background-color: var(--background);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -136,7 +136,7 @@ body {
 a {
     text-decoration: none;
     border-bottom: 1px solid;
-    color: #405d99;
+    color: var(--link-color);
 }
 
 ul {
@@ -167,7 +167,7 @@ h1 {
     line-height: 110%;
     font-size: 200%;
     margin-bottom: 1rem;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 h2 {
@@ -175,7 +175,7 @@ h2 {
     line-height: 110%;
     font-size: 170%;
     margin-bottom: 0.625rem;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 h2:not(:first-child) {
@@ -187,7 +187,7 @@ h3 {
     line-height: 110%;
     margin-bottom: 1rem;
     font-size: 150%;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 .note h3,
@@ -203,7 +203,7 @@ h4 {
     line-height: 110%;
     margin-bottom: 1rem;
     font-size: 140%;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 h5 {
@@ -211,7 +211,7 @@ h5 {
     line-height: 110%;
     margin-bottom: 1rem;
     font-size: 130%;
-    color: #6a6a6a;
+    color: var(--small-heading-color);
 }
 
 h6 {
@@ -260,8 +260,8 @@ div.appendix .programlisting {
     border-radius: 0.5rem;
     padding: 1rem;
     overflow: auto;
-    background: #f2f8fd;
-    color: #000000;
+    background: var(--codeblock-background);
+    color: var(--codeblock-text-color);
 }
 
 div.book .note,
@@ -292,7 +292,6 @@ div.appendix .warning > .title,
 div.appendix .caution > .title,
 div.appendix .important > .title {
     font-weight: 800;
-    /* font-family: 'Overpass', serif; */
     line-height: 110%;
     margin-bottom: 1rem;
     color: inherit;
@@ -329,16 +328,16 @@ div.book .note,
 div.book .tip,
 div.appendix .note,
 div.appendix .tip {
-    color: #5277c3;
-    background: #f2f8fd;
+    color: var(--note-text-color);
+    background: var(--note-background);
 }
 
 div.book .warning,
 div.book .caution,
 div.appendix .warning,
 div.appendix .caution {
-    color: #cc3900;
-    background-color: #fff5e1;
+    color: var(--warning-text-color);
+    background-color: var(--warning-background);
 }
 
 div.book .section,
@@ -447,4 +446,43 @@ div.appendix .variablelist .term {
 .hljs-meta.prompt_ {
     user-select: none;
     -webkit-user-select: none;
+}
+
+:root {
+    --background: #fff;
+    --main-text-color: #000;
+    --link-color: #405d99;
+    --heading-color: #6586c8;
+    --small-heading-color: #6a6a6a;
+    --note-text-color: #5277c3;
+    --note-background: #f2f8fd;
+    --warning-text-color: #cc3900;
+    --warning-background: #fff5e1;
+    --codeblock-background: #f2f8fd;
+    --codeblock-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #242424;
+        --main-text-color: #fff;
+        --link-color: #6586c8;
+        --small-heading-color: #fff;
+        --note-background: none;
+        --warning-background: none;
+        --codeblock-background: #393939;
+        --codeblock-text-color: #fff;
+    }
+
+    div.book .note,
+    div.book .tip,
+    div.appendix .note,
+    div.appendix .tip,
+    div.book .warning,
+    div.book .caution,
+    div.appendix .warning,
+    div.appendix .caution {
+        border: 2px solid;
+        font-weight: 400;
+    }
 }

@@ -23,7 +23,7 @@ code.hljs {
     font-weight: bold;
 }
 .hljs-comment {
-    color: #738191;
+    color: var(--color-1);
 }
 .hljs-string,
 .hljs-title,
@@ -37,7 +37,7 @@ code.hljs {
 .hljs-name,
 .hljs-selector-id,
 .hljs-selector-class {
-    color: #0048ab;
+    color: var(--color-2);
 }
 .hljs-meta,
 .hljs-subst,
@@ -49,8 +49,22 @@ code.hljs {
 .hljs-template-variable,
 .hljs-link,
 .hljs-bullet {
-    color: #4c81c9;
+    color: var(--color-3);
 }
 .hljs-emphasis {
     font-style: italic;
+}
+
+:root {
+    --color-1: #738191;
+    --color-2: #0048ab;
+    --color-3: #4c81c9;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-1: #8b9caf;
+        --color-2: #3b85e7;
+        --color-3: #5795e7;
+    }
 }
