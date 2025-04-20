@@ -10,7 +10,7 @@ let
     self: with self; {
 
       # Libs
-      libcprime = libsForQt5.callPackage ../applications/misc/cubocore-packages/libcprime { };
+      libcprime = callPackage ../applications/misc/cubocore-packages/libcprime { };
 
       libcsys = libsForQt5.callPackage ../applications/misc/cubocore-packages/libcsys { };
 
