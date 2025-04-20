@@ -70,8 +70,8 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
       ${unstableVersionMajor} =
         let
-          rev = "391a74625c1222dd180f069f1b61c3e069a3ba8c";
-          hash = "sha256-fUY0dBj85k0QhnAoDzyBmmKmRh9oCYC6r6X4ukt7/L0=";
+          rev = "1830e09888597b372fad192b0d246aefe555540c";
+          hash = "sha256-svVcg2AMk2GHmg1Szny10KCLZQ6Cly1RrSVNGmf7Fdg=";
         in
         dedicatedServer: {
           version = "${unstableVersionMajor}-${builtins.substring 0 8 rev}";
