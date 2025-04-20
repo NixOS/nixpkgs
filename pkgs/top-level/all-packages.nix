@@ -7931,9 +7931,9 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
-  electron = electron_34;
-  electron-bin = electron_34-bin;
-  electron-chromedriver = electron-chromedriver_34;
+  electron = electron_35;
+  electron-bin = electron_35-bin;
+  electron-chromedriver = electron-chromedriver_35;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
@@ -8973,10 +8973,6 @@ with pkgs;
   };
 
   aws-spend-summary = haskellPackages.aws-spend-summary.bin;
-
-  backlight-auto = callPackage ../by-name/ba/backlight-auto/package.nix {
-    zig = buildPackages.zig_0_11;
-  };
 
   inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
 
@@ -11463,13 +11459,11 @@ with pkgs;
     (rec {
       zigPackages = recurseIntoAttrs (callPackage ../development/compilers/zig { });
 
-      zig_0_11 = zigPackages."0.11";
       zig_0_12 = zigPackages."0.12";
       zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
     })
     zigPackages
-    zig_0_11
     zig_0_12
     zig_0_13
     zig_0_14
