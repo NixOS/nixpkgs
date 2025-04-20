@@ -1,6 +1,7 @@
 {
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   lib,
   udev,
@@ -18,13 +19,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9FuTnRQHKYJzMqhhgyTVq2R+drn4HAr3GDNjQgc3r+w=";
   };
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoPatches = [
+    (fetchpatch {
+      name = "add_cargo_lock.patch";
+      url = "https://github.com/ryankurte/rust-streamdeck/commit/d8497c34898daebafca21885f464f241c29ff9d7.patch";
+      hash = "sha256-cwt4nvtuME//t9KpHgIXHCwLQgpybs2CqV2jO02umfE=";
+    })
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-OiXpG45jwWydbpRHnbIlECOaa75CzUOmdWxZ3WE5+hY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
