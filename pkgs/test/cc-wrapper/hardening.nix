@@ -37,6 +37,8 @@ let
   f2exampleWithStdEnv = writeCBinWithStdenv ./fortify2-example.c;
   f3exampleWithStdEnv = writeCBinWithStdenv ./fortify3-example.c;
 
+  flexArrF2ExampleWithStdEnv = writeCBinWithStdenv ./flex-arrays-fortify-example.c;
+
   # for when we need a slightly more complicated program
   helloWithStdEnv =
     stdenv': env:
@@ -146,13 +148,15 @@ let
     })
   );
 
+  fortifyExecTest = fortifyExecTestFull true "012345 7" "0123456 7";
+
   # returning a specific exit code when aborting due to a fortify
   # check isn't mandated. so it's better to just ensure that a
   # nonzero exit code is returned when we go a single byte beyond
   # the buffer, with the example programs being designed to be
   # unlikely to genuinely segfault for such a small overflow.
-  fortifyExecTest =
-    testBin:
+  fortifyExecTestFull =
+    expectProtection: saturatedArgs: oneTooFarArgs: testBin:
     runCommand "exec-test"
       {
         buildInputs = [
@@ -164,9 +168,15 @@ let
         (
           export PATH=$HOST_PATH
           echo "Saturated buffer:" # check program isn't completly broken
-          test-bin 012345 7
-          echo "One byte too far:" # eighth byte being the null terminator
-          (! test-bin 0123456 7) || (echo 'Expected failure, but succeeded!' && exit 1)
+          test-bin ${saturatedArgs}
+          echo "One byte too far:" # overflow byte being the null terminator?
+          (
+            ${if expectProtection then "!" else ""} test-bin ${oneTooFarArgs}
+          ) || (
+            echo 'Expected ${if expectProtection then "failure" else "success"}, but ${
+              if expectProtection then "succeeded" else "failed"
+            }!' && exit 1
+          )
         )
         echo "Expected behaviour observed"
         touch $out
@@ -310,6 +320,128 @@ nameDrvAfterAttrName (
           )
         );
 
+    sfa1explicitEnabled =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        })
+        {
+          ignoreFortify = false;
+        };
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa1explicitEnabledExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull true "012345" "0123456" (
+        flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        }
+      )
+    );
+
+    sfa1explicitEnabledDoesntProtectDefLen1 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        };
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa1explicitEnabledDoesntProtectDefLen1ExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull false "''" "0" (
+        flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        }
+      )
+    );
+
+    sfa3explicitEnabledProtectsDefLen1 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        })
+        {
+          ignoreFortify = false;
+        };
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa3explicitEnabledProtectsDefLen1ExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull true "''" "0" (
+        flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        }
+      )
+    );
+
+    sfa3explicitEnabledDoesntProtectCorrectFlex =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=";
+          };
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        };
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa3explicitEnabledDoesntProtectCorrectFlexExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull false "" "0" (
+        flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=";
+          };
+        }
+      )
+    );
+
     pieExplicitEnabled = brokenIf stdenv.hostPlatform.isStatic (
       checkTestBin
         (f2exampleWithStdEnv stdenv {
@@ -420,6 +552,99 @@ nameDrvAfterAttrName (
           ignoreFortify = false;
         };
 
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa1explicitDisabled = brokenIf stdenv.hostPlatform.isMusl (
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [ "fortify" ];
+          hardeningDisable = [ "strictflexarrays1" ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        }
+    );
+
+    sfa1explicitDisabledExecTest = fortifyExecTestFull false "012345" "0123456" (
+      flexArrF2ExampleWithStdEnv stdenv {
+        hardeningEnable = [ "fortify" ];
+        hardeningDisable = [ "strictflexarrays1" ];
+        env = {
+          TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+        };
+      }
+    );
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa1explicitDisabledDisablesSfa3 = brokenIf stdenv.hostPlatform.isMusl (
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          hardeningDisable = [ "strictflexarrays1" ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        }
+    );
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa1explicitDisabledDisablesSfa3ExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull false "''" "0" (
+        flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          hardeningDisable = [ "strictflexarrays1" ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        }
+      )
+    );
+
+    sfa3explicitDisabledDoesntDisableSfa1 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          hardeningDisable = [ "strictflexarrays3" ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        })
+        {
+          ignoreFortify = false;
+        };
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa3explicitDisabledDoesntDisableSfa1ExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull true "012345" "0123456" (
+        flexArrF2ExampleWithStdEnv stdenv {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          hardeningDisable = [ "strictflexarrays3" ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        }
+      )
+    );
+
     pieExplicitDisabled = brokenIf (stdenv.hostPlatform.isMusl && stdenv.cc.isClang) (
       checkTestBin
         (f2exampleWithStdEnv stdenv {
@@ -527,6 +752,90 @@ nameDrvAfterAttrName (
       }
     );
 
+    sfa1StdenvUnsupp =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv
+          (stdenvUnsupport [
+            "strictflexarrays1"
+            "strictflexarrays3"
+          ])
+          {
+            hardeningEnable = [
+              "fortify"
+              "strictflexarrays1"
+            ];
+            env = {
+              TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+            };
+          }
+        )
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        };
+
+    sfa3StdenvUnsupp =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv (stdenvUnsupport [ "strictflexarrays3" ]) {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        };
+
+    sfa1StdenvUnsuppUnsupportsSfa3 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv (stdenvUnsupport [ "strictflexarrays1" ]) {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays3"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        };
+
+    sfa3StdenvUnsuppDoesntUnsuppSfa1 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv (stdenvUnsupport [ "strictflexarrays3" ]) {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        })
+        {
+          ignoreFortify = false;
+        };
+
+    # musl implementation is effectively FORTIFY_SOURCE=1-only
+    sfa3StdenvUnsuppDoesntUnsuppSfa1ExecTest = brokenIf stdenv.hostPlatform.isMusl (
+      fortifyExecTestFull true "012345" "0123456" (
+        flexArrF2ExampleWithStdEnv (stdenvUnsupport [ "strictflexarrays3" ]) {
+          hardeningEnable = [
+            "fortify"
+            "strictflexarrays1"
+          ];
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        }
+      )
+    );
+
     stackProtectorStdenvUnsupp =
       checkTestBin
         (f2exampleWithStdEnv (stdenvUnsupport [ "stackprotector" ]) {
@@ -624,6 +933,58 @@ nameDrvAfterAttrName (
           postConfigure = ''
             export NIX_HARDENING_ENABLE="fortify"
           '';
+        })
+        {
+          ignoreFortify = false;
+          expectFailure = true;
+        };
+
+    sfa3EnabledEnvEnablesSfa1 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningDisable = [
+            "strictflexarrays1"
+            "strictflexarrays3"
+          ];
+          postConfigure = ''
+            export NIX_HARDENING_ENABLE="fortify strictflexarrays3"
+          '';
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+          };
+        })
+        {
+          ignoreFortify = false;
+        };
+
+    sfa3EnabledEnvEnablesSfa1ExecTest = fortifyExecTestFull true "012345" "0123456" (
+      f1exampleWithStdEnv stdenv {
+        hardeningDisable = [
+          "strictflexarrays1"
+          "strictflexarrays3"
+        ];
+        postConfigure = ''
+          export NIX_HARDENING_ENABLE="fortify strictflexarrays3"
+        '';
+        env = {
+          TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=7";
+        };
+      }
+    );
+
+    sfa1EnabledEnvDoesntEnableSfa3 =
+      checkTestBin
+        (flexArrF2ExampleWithStdEnv stdenv {
+          hardeningDisable = [
+            "strictflexarrays1"
+            "strictflexarrays3"
+          ];
+          postConfigure = ''
+            export NIX_HARDENING_ENABLE="fortify strictflexarrays1"
+          '';
+          env = {
+            TEST_EXTRA_FLAGS = "-DBUFFER_DEF_SIZE=1";
+          };
         })
         {
           ignoreFortify = false;
