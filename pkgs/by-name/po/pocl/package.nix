@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
+  unstableGitUpdater,
+  writeShellScript,
   cmake,
   pkg-config,
   hwloc,
@@ -76,7 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-llvm-translator
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    tagConverter = writeShellScript "tag-converter" ''
+      sed -e 's/^v//g' -e 's/-RC.*//g'
+    '';
+  };
 
   meta = {
     description = "A portable open source (MIT-licensed) implementation of the OpenCL standard";
