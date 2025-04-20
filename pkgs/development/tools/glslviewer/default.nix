@@ -14,7 +14,6 @@
   libGLU,
   ffmpeg,
   ncurses,
-  Cocoa,
 }:
 stdenv.mkDerivation rec {
   pname = "glslviewer";
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     libGLU
     ncurses
     ffmpeg
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   meta = with lib; {
     description = "Live GLSL coding renderer";

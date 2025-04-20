@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   copyDesktopItems,
-  darwin,
   desktopToDarwinBundle,
   fetchFromGitHub,
   fetchYarnDeps,
@@ -156,11 +155,6 @@ rec {
           gtk3
           libayatana-appindicator
           webkitgtk_4_0
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          darwin.apple_sdk.frameworks.Carbon
-          darwin.apple_sdk.frameworks.Cocoa
-          darwin.apple_sdk.frameworks.WebKit
         ];
 
       desktopItems = [

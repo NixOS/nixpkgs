@@ -10,7 +10,6 @@
   boehmgc,
   xorg,
   binaryen,
-  darwin,
 }:
 
 let
@@ -75,9 +74,6 @@ stdenv.mkDerivation {
   buildInputs =
     [
       binaryen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       xorg.libX11

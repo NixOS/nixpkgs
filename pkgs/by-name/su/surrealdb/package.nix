@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -8,7 +7,6 @@
   rocksdb,
   testers,
   surrealdb,
-  darwin,
   protobuf,
 }:
 rustPlatform.buildRustPackage rec {
@@ -45,7 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   doCheck = false;
 

@@ -25,7 +25,6 @@
   libunistring,
   withP11-kit ? !stdenv.hostPlatform.isStatic,
   p11-kit,
-  Security, # darwin Security.framework
   # certificate compression - only zlib now, more possible: zstd, brotli
 
   # for passthru.tests
@@ -168,10 +167,7 @@ stdenv.mkDerivation rec {
       util-linux
     ];
 
-  propagatedBuildInputs =
-    [ nettle ]
-    # Builds dynamically linking against gnutls seem to need the framework now.
-    ++ lib.optional isDarwin Security;
+  propagatedBuildInputs = [ nettle ];
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.

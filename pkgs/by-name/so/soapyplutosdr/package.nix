@@ -34,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
       soapysdr
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.IOKit
       darwin.libobjc
     ];
 

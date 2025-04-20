@@ -10,7 +10,6 @@
   zlib,
   perl538Packages,
   autoreconfHook,
-  Security,
   # Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
   # on a package that isn't really maintained anymore:
   withCyrusSaslXoauth2 ? false,
@@ -48,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     db
     cyrus_sasl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \

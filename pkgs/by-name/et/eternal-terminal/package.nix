@@ -9,7 +9,6 @@
   protobuf,
   zlib,
   catch2,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {

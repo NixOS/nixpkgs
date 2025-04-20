@@ -67,9 +67,6 @@
   enableNbagg ? false,
   ipykernel,
 
-  # darwin
-  Cocoa,
-
   # required for headless detection
   libX11,
   wayland,
@@ -127,8 +124,7 @@ buildPythonPackage rec {
     ++ lib.optionals enableGtk3 [
       cairo
       gtk3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+    ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];

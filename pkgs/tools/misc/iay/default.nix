@@ -5,10 +5,6 @@
   rustPlatform,
   openssl,
   pkg-config,
-  AppKit,
-  Cocoa,
-  Foundation,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,16 +23,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      Foundation
-      Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework"

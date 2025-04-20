@@ -5,7 +5,6 @@
   pkg-config,
   fontconfig,
   autoreconfHook,
-  DiskArbitration,
   withJava ? false,
   jdk17,
   ant,
@@ -44,10 +43,7 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs =
-    [ fontconfig ]
-    ++ lib.optional withMetadata libxml2
-    ++ lib.optional withFonts freetype
-    ++ lib.optional stdenv.hostPlatform.isDarwin DiskArbitration;
+    [ fontconfig ] ++ lib.optional withMetadata libxml2 ++ lib.optional withFonts freetype;
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 

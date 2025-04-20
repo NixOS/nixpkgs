@@ -19,7 +19,6 @@
   libiconv,
   libobjc,
   libunwind,
-  Foundation,
   buildEnv,
   bundler,
   bundix,
@@ -123,7 +122,6 @@ let
           libiconv,
           libobjc,
           libunwind,
-          Foundation,
           makeBinaryWrapper,
           buildRubyGem,
           defaultGemConfig,
@@ -187,7 +185,6 @@ let
               libiconv
               libobjc
               libunwind
-              Foundation
             ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 

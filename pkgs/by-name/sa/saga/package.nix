@@ -20,7 +20,6 @@
   vigra,
   pdal,
   libpq,
-  darwin,
   unixODBC,
   poppler,
   hdf5,
@@ -80,7 +79,6 @@ stdenv.mkDerivation rec {
     # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
     # for why the have additional buildInputs on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
       unixODBC
       poppler
       netcdf

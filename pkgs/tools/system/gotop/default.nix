@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  IOKit,
   writableTmpDirAsHomeHook,
 }:
 
@@ -34,9 +32,6 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
-
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''

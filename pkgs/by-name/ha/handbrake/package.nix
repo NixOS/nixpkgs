@@ -87,11 +87,6 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AudioToolbox
-    Foundation
-    VideoToolbox
-    ;
   inherit (darwin) libobjc;
   version = "1.9.2";
 
@@ -296,10 +291,7 @@ let
       ]
       ++ optional useFdk fdk_aac
       ++ optionals stdenv.hostPlatform.isDarwin [
-        AudioToolbox
-        Foundation
         libobjc
-        VideoToolbox
       ]
       # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
       # look at ./make/configure.py search "enable_nvenc"

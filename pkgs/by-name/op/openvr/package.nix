@@ -1,9 +1,7 @@
 {
-  AppKit,
   cmake,
   fetchFromGitHub,
   fetchpatch2,
-  Foundation,
   jsoncpp,
   lib,
   libGL,
@@ -48,15 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
-    ];
+  buildInputs = [
+    jsoncpp
+    libGL
+  ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_JSONCPP=ON"

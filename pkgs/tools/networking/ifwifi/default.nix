@@ -6,7 +6,6 @@
   makeWrapper,
   networkmanager,
   iw,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +23,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-oxuOc9FSKYq6UjimZPLayJ+5xsWzh3gZV/mVpPbPWHk=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     wrapProgram "$out/bin/ifwifi" \

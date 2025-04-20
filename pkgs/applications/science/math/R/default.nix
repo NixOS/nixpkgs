@@ -33,8 +33,6 @@
   blas,
   lapack,
   curl,
-  Cocoa,
-  Foundation,
   libobjc,
   libcxx,
   tzdata,
@@ -117,8 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
       jdk
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Foundation
       libobjc
       libcxx
     ];

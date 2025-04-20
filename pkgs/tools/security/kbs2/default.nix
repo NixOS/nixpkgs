@@ -6,8 +6,6 @@
   installShellFiles,
   python3,
   libxcb,
-  AppKit,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,13 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      SystemConfiguration
-      AppKit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   preCheck = ''
     export HOME=$TMPDIR

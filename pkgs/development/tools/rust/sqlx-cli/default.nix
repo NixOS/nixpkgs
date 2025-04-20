@@ -9,9 +9,6 @@
   libiconv,
   testers,
   sqlx-cli,
-  CoreFoundation,
-  Security,
-  SystemConfiguration,
   nix-update-script,
 }:
 
@@ -51,9 +48,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Security
-      SystemConfiguration
       libiconv
     ];
 

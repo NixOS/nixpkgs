@@ -15,7 +15,6 @@
   itstool,
   poppler,
   nautilus,
-  darwin,
   djvulibre,
   libspectre,
   libarchive,
@@ -100,9 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals supportNautilus [
       nautilus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ];
 
   mesonFlags =

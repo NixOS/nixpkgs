@@ -3,8 +3,6 @@
   stdenv,
   fetchurl,
   libusb-compat-0_1,
-  Security,
-  IOKit,
   libobjc,
 }:
 
@@ -21,8 +19,6 @@ stdenv.mkDerivation rec {
     [ libusb-compat-0_1 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      Security
-      IOKit
     ];
 
   propagatedBuildInputs = [ libusb-compat-0_1 ];

@@ -5,8 +5,6 @@
   cmake,
   perl,
   stdenv,
-  CoreFoundation,
-  Security,
   pythonOlder,
 }:
 
@@ -21,11 +19,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-qNY6fcxkhMXBZ1sxqNG2cmw9yFsTeW+xQ9+wByJgk14=";
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
 

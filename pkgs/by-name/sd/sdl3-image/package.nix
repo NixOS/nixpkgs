@@ -1,7 +1,6 @@
 {
   lib,
   sdl3,
-  darwin,
   libavif,
   libtiff,
   libwebp,
@@ -44,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     libavif
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation);
+  ];
 
   cmakeFlags = [
     # fail when a dependency could not be found

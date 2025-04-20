@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitea,
   installShellFiles,
   lib,
@@ -27,18 +26,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      let
-        d = darwin.apple_sdk.frameworks;
-      in
-      [
-        d.CoreServices
-        d.Security
-        d.SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd berg \

@@ -6,7 +6,6 @@
   xar,
   undmg,
   libtapi,
-  DiskArbitration,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
     undmg
     libtapi
   ];
-  propagatedBuildInputs = [ DiskArbitration ];
 
   postUnpack = ''
     xar -xf 'Install macFUSE.pkg'

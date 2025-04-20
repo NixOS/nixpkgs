@@ -7,8 +7,6 @@
   libgpg-error,
   pkg-config,
   python3,
-  AppKit,
-  Foundation,
   libiconv,
   libobjc,
   libresolv,
@@ -48,8 +46,6 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
       libiconv
       libobjc
       libresolv

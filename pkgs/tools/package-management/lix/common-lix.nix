@@ -59,7 +59,6 @@ assert lib.assertMsg (
   python3,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
   util-linuxMinimal,
   removeReferencesTo,
@@ -183,7 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals hasExternalLixDoc [ lix-doc ]
     ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
     # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
     # libunwind library path directly in the wrappers, but it does inject
     # -lunwind without injecting the library path...

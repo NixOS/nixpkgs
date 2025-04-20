@@ -5,8 +5,6 @@
   rustPlatform,
   pkg-config,
   nix-update-script,
-  Security,
-  SystemConfiguration,
   openssl,
 }:
 
@@ -32,12 +30,7 @@ rustPlatform.buildRustPackage {
   # 0.5.6 release has failing tests
   doCheck = false;
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     updateScript = nix-update-script { };

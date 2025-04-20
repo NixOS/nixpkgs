@@ -5,7 +5,6 @@
   cargo,
   fetchFromGitHub,
   libiconv,
-  Foundation,
   rustPlatform,
   rustc,
   setuptools-rust,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Foundation
   ];
   nativeBuildInputs = [
     setuptools-rust

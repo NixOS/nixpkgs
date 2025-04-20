@@ -14,7 +14,6 @@
   opusfile,
   SDL2,
   the-foundation,
-  AppKit,
   zip,
   enableTUI ? false,
   ncurses,
@@ -53,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enableTUI [
       ncurses
       sealcurses
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TUI" enableTUI)

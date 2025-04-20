@@ -11,7 +11,6 @@
   popt,
   libtool,
   libiconv,
-  CoreServices,
   # Sound sub-systems
   alsaSupport ? (!stdenv.hostPlatform.isDarwin),
   alsa-lib,
@@ -125,7 +124,6 @@ stdenv.mkDerivation {
     ++ lib.optional samplerateSupport libsamplerate
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      CoreServices
     ];
 
   configureFlags = [

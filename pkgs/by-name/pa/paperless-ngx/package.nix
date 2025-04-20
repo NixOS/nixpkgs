@@ -8,7 +8,6 @@
   gettext,
   python3,
   giflib,
-  darwin,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -91,7 +90,6 @@ let
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           giflib
-          darwin.apple_sdk.frameworks.CoreText
         ];
 
       CYPRESS_INSTALL_BINARY = "0";

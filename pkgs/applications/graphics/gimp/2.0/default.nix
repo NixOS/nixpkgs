@@ -47,8 +47,6 @@
   libgudev,
   openexr,
   desktopToDarwinBundle,
-  AppKit,
-  Cocoa,
   gtk-mac-integration-gtk2,
   withPython ? false,
   python2,
@@ -144,8 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
       mypaint-brushes1
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
       gtk-mac-integration-gtk2
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

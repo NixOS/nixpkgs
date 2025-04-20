@@ -6,7 +6,6 @@
   autoreconfHook,
   autoconf-archive,
   pkg-config,
-  CoreAudio,
   enableAlsa ? true,
   alsa-lib,
   enableLibao ? true,
@@ -84,8 +83,7 @@ stdenv.mkDerivation {
       amrnb
       amrwb
     ]
-    ++ lib.optional enableLibpulseaudio libpulseaudio
-    ++ lib.optional stdenv.hostPlatform.isDarwin CoreAudio;
+    ++ lib.optional enableLibpulseaudio libpulseaudio;
 
   enableParallelBuilding = true;
 

@@ -5,9 +5,7 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  Security,
   libiconv,
-  Libsystem,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,9 +34,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
     libiconv
-    Libsystem
   ];
 
   meta = with lib; {
