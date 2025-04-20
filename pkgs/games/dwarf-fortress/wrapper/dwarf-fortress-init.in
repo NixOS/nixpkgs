@@ -112,6 +112,27 @@ go() {
   cd "$NIXPKGS_DF_HOME"
   debug "Executing: $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE"
 
+  # Handle library paths on Darwin.
+  if [ "$os_name" == Darwin ]; then
+    if [ "${os_rev%%.*}" -ge 11 ]; then
+      export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+      export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+    else
+      export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+      export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+    fi
+  fi
+
+  if [ "$os_name" == Linux ]; then
+    # We have to preload the audio plugin for audio to work. See Nix Pill #12 for this pattern:
+    # https://nixos.org/guides/nix-pills/12-inputs-design-pattern.html
+    if [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ] && [ -f "$NIXPKGS_DF_HOME/libfmod.so.13" ]; then
+      export LD_PRELOAD="$NIXPKGS_DF_HOME/libfmod.so.13${LD_PRELOAD:+:}${LD_PRELOAD:-}"
+    else
+      export LD_PRELOAD="@SDL2_mixer@${LD_PRELOAD:+:}${LD_PRELOAD:-}"
+    fi
+  fi
+
   # If we make it past here, we want to log.
   # shellcheck disable=SC2093
   exec -a "$NIXPKGS_DF_EXE" "$NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE" "$@"
@@ -168,9 +189,13 @@ EOF
 cd "$NIXPKGS_DF_ENV"
 
 # All potential important files in DF 50 and below.
-for path in dwarfort dwarfort.exe df *.so libs raw data/init/* data/!(init|index|announcement); do
+for path in dwarfort dwarfort.exe df *.so* libs raw data/init/* data/!(init|index|announcement); do
   force_delete=0
-  if [[ "$path" == libfmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
+  if [[ "$path" == *fmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
+    # Delete fmod plugins if we're using SDL_mixer.
+    force_delete=1
+  elif [[ "$path" == *mixer*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -ne 0 ]; then
+    # Delete SDL_mixer plugins if we're using fmod.
     force_delete=1
   fi
 
@@ -185,14 +210,3 @@ done
 for path in index announcement help dipscript; do
   forcecopy_path "data/$path"
 done
-
-# Handle library paths on Darwin.
-if [ "$os_name" == Darwin ]; then
-  if [ "${os_rev%%.*}" -ge 11 ]; then
-    export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
-    export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
-  else
-    export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
-    export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
-  fi
-fi
