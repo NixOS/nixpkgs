@@ -40,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       SDL2
-      giflib
-      libXpm
       libtiff
       libwebp
       zlib
@@ -49,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!enableSTB) [
       libjpeg
       libpng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+    ];
 
   configureFlags =
     [
