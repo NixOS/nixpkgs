@@ -23,7 +23,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corefm = libsForQt5.callPackage ../applications/misc/cubocore-packages/corefm {
+      corefm = callPackage ../applications/misc/cubocore-packages/corefm {
         inherit libcprime libcsys;
       };
 
