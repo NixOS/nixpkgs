@@ -110,9 +110,10 @@ buildGoModule (finalAttrs: {
     mainProgram = "coredns";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      rushmorem
-      rtreffer
       deltaevo
+      djds
+      rtreffer
+      rushmorem
     ];
   };
 })
