@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    # When upstream use GNUInstallDirs this can be removed.
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+  ];
+
   meta = with lib; {
     description = "Audio resampling library";
     homepage = "https://soxr.sourceforge.net";
