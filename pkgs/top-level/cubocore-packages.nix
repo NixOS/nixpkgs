@@ -88,7 +88,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coretoppings = libsForQt5.callPackage ../applications/misc/cubocore-packages/coretoppings {
+      coretoppings = callPackage ../applications/misc/cubocore-packages/coretoppings {
         inherit libcprime libcsys;
       };
 
