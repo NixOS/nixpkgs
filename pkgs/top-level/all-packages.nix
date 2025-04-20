@@ -2890,9 +2890,7 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
-  clamav = callPackage ../tools/security/clamav {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
+  clamav = callPackage ../tools/security/clamav { };
 
   cmdpack = callPackages ../tools/misc/cmdpack { };
 
@@ -5122,7 +5120,7 @@ with pkgs;
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt-1.11.1";
 
   wasmedge = callPackage ../development/tools/wasmedge {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else llvmPackages.stdenv;
+    stdenv = clangStdenv;
   };
 
   whatweb = callPackage ../tools/security/whatweb { };
@@ -6507,12 +6505,7 @@ with pkgs;
   cargo-audit = callPackage ../development/tools/rust/cargo-audit { };
   cargo-c = callPackage ../development/tools/rust/cargo-c { };
   cargo-clone = callPackage ../development/tools/rust/cargo-clone { };
-  cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed {
-    rustPlatform = makeRustPlatform {
-      stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-      inherit rustc cargo;
-    };
-  };
+  cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit { };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
@@ -7982,7 +7975,6 @@ with pkgs;
   mkdocs = with python3Packages; toPythonApplication mkdocs;
 
   mold = callPackage ../by-name/mo/mold/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     tbb = tbb_2021_11;
   };
 
@@ -8337,38 +8329,10 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES
 
-  abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix {
-    # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv =
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else
-        stdenv;
-  };
-  abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix {
-    # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv =
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else
-        stdenv;
-  };
-  abseil-cpp_202401 = callPackage ../development/libraries/abseil-cpp/202401.nix {
-    # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv =
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else
-        stdenv;
-  };
-  abseil-cpp_202407 = callPackage ../development/libraries/abseil-cpp/202407.nix {
-    # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv =
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else
-        stdenv;
-  };
+  abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
+  abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix { };
+  abseil-cpp_202401 = callPackage ../development/libraries/abseil-cpp/202401.nix { };
+  abseil-cpp_202407 = callPackage ../development/libraries/abseil-cpp/202407.nix { };
   abseil-cpp = abseil-cpp_202501;
 
   acl = callPackage ../development/libraries/acl { };
@@ -8546,7 +8510,6 @@ with pkgs;
 
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
     ssl_implementation = mbedtls_2;
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   cxxtest = python3Packages.callPackage ../development/libraries/cxxtest { };
@@ -8961,13 +8924,6 @@ with pkgs;
   goocanvas = callPackage ../development/libraries/goocanvas { };
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
   goocanvas3 = callPackage ../development/libraries/goocanvas/3.x.nix { };
-  grpc = callPackage ../by-name/gr/grpc/package.nix {
-    stdenv =
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else
-        stdenv;
-  };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
@@ -9159,9 +9115,7 @@ with pkgs;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
-  imgui = callPackage ../development/libraries/imgui {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
+  imgui = callPackage ../development/libraries/imgui { };
 
   imlib2Full = imlib2.override {
     # Compilation error on Darwin with librsvg. For more information see:
@@ -9398,7 +9352,6 @@ with pkgs;
   };
 
   libfive = libsForQt5.callPackage ../development/libraries/libfive {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
   };
 
@@ -10162,6 +10115,7 @@ with pkgs;
         makeScopeWithSplicing'
         generateSplicesForMkScope
         lib
+        stdenv
         fetchurl
         fetchpatch
         fetchgit
@@ -10177,13 +10131,11 @@ with pkgs;
         gtk3
         python3
         llvmPackages_15
-        overrideSDK
         overrideLibcxx
         darwin
         ;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
       inherit config;
-      stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     }
   );
 
@@ -12227,9 +12179,7 @@ with pkgs;
 
   sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
 
-  sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "12.3" else stdenv;
-  };
+  sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel { };
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
@@ -12728,9 +12678,7 @@ with pkgs;
 
   ### APPLICATIONS / GIS
 
-  grass = callPackage ../applications/gis/grass {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
+  grass = callPackage ../applications/gis/grass { };
 
   qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
 
@@ -13011,14 +12959,6 @@ with pkgs;
   darktable = callPackage ../by-name/da/darktable/package.nix {
     lua = lua5_4;
     pugixml = pugixml.override { shared = true; };
-    stdenv =
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        overrideSDK llvmPackages_18.stdenv {
-          darwinMinVersion = "10.14";
-          darwinSdkVersion = "11.0";
-        }
-      else
-        stdenv;
   };
 
   datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
@@ -15026,11 +14966,7 @@ with pkgs;
     # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
     # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
     # with --cores 32 on clang).
-    stdenv =
-      if stdenv.hostPlatform.isDarwin then
-        overrideSDK llvmPackages.stdenv "11.0"
-      else
-        llvmPackages.stdenv;
+    stdenv = clangStdenv;
   };
 
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
@@ -15300,10 +15236,6 @@ with pkgs;
   typstPackages = typst.packages;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
-
-  ueberzugpp = callPackage ../by-name/ue/ueberzugpp/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
 
   uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix { });
   uefitool = uefitoolPackages.new-engine;
@@ -15971,9 +15903,7 @@ with pkgs;
 
   beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
 
-  bugdom = callPackage ../games/bugdom {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
+  bugdom = callPackage ../games/bugdom { };
 
   cataclysmDDA = callPackage ../games/cataclysm-dda { };
 

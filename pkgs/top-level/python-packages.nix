@@ -11490,10 +11490,7 @@ self: super: with self; {
 
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
-  psutil = callPackage ../development/python-modules/psutil {
-    stdenv =
-      if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-  };
+  psutil = callPackage ../development/python-modules/psutil { };
 
   psutil-home-assistant = callPackage ../development/python-modules/psutil-home-assistant { };
 
