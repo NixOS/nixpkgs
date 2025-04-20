@@ -65,6 +65,14 @@ stdenv.mkDerivation rec {
     "-Dcurated=false"
   ];
 
+  postPatch = ''
+    # Since we do not build libxml2 with legacy support,
+    # we cannot use compressed appstream metadata.
+    # https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7f14537727bf6845d0eea08cd1fdc30accc2a53
+    substituteInPlace src/Core/FlatpakBackend.vala \
+      --replace-fail ".xml.gz" ".xml"
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
