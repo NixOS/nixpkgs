@@ -8,15 +8,15 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xdg-ninja";
-  version = "0.2.0.2";
+  version = "0.2.0.2-unstable-2025-03-09";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
-    rev = "v${version}";
-    sha256 = "sha256-ASJIFQ/BpZMQGRtw8kPhtMCbXC1eb/X8TWQz+CAnaSM=";
+    rev = "a964a4a4a9b2e34eb3f684f72f5c751c18b27348";
+    hash = "sha256-rFGVRbjpXBDS8qae9xv9pL6dNlZNN/WYC3taUFK8O2U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
