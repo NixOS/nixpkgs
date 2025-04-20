@@ -49,8 +49,8 @@ qtModule {
     # Backport patch to fix qmlsc crash on "if + for"
     # FIXME: remove for 6.9.1
     (fetchpatch2 {
-      url = "https://github.com/qt/qtdeclarative/commit/d1aa2e8466bab73c3e4d120356238b482b55f02a.patch";
-      hash = "sha256-uD3OM6Abt5O6txAjhYPY2wTlz5ZWfD7s5bsfqeOB0W0=";
+      url = "https://github.com/qt/qtdeclarative/commit/d1aa2e8466bab73c3e4d120356238b482b55f02a.patch?full_index=1";
+      hash = "sha256-8W1xpULqESP81S4UbQugoU/D6KFy7DoTbJ3xfK9Q5PI=";
     })
   ];
 
