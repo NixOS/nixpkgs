@@ -9,6 +9,7 @@
   gawk,
   dwarf-fortress,
   dwarf-therapist,
+  SDL2_mixer,
   enableDFHack ? false,
   dfhack,
   enableSoundSense ? false,
@@ -181,7 +182,7 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
   "dwarf-fortress: text mode and TWBT are mutually exclusive"
 
   stdenv.mkDerivation
-  rec {
+  {
     pname = "dwarf-fortress";
     version = dwarf-fortress.dfVersion;
 
@@ -195,6 +196,7 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
       mkdir = "${coreutils}/bin/mkdir";
       printf = "${coreutils}/bin/printf";
       uname = "${coreutils}/bin/uname";
+      SDL2_mixer = "${SDL2_mixer}/lib/libSDL2_mixer.so";
     };
 
     runDF = ./dwarf-fortress.in;
