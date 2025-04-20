@@ -6,9 +6,9 @@
 }:
 let
   inherit (lib)
-    mapAttrs
     mkIf
     mkOption
+    mkPackageOption
     optional
     optionals
     types
@@ -38,6 +38,8 @@ in
         type = types.bool;
         default = false;
       };
+
+      package = mkPackageOption pkgs "kmscon" { };
 
       hwRender = mkOption {
         description = "Whether to use 3D hardware acceleration to render the console.";
@@ -100,7 +102,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.packages = [ pkgs.kmscon ];
+    systemd.packages = [ cfg.package ];
 
     systemd.services."kmsconvt@" = {
       after = [
@@ -112,7 +114,7 @@ in
       serviceConfig.ExecStart = [
         ""
         ''
-          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
+          ${cfg.package}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
         ''
       ];
 
