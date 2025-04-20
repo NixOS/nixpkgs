@@ -55,7 +55,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corepdf = libsForQt5.callPackage ../applications/misc/cubocore-packages/corepdf {
+      corepdf = callPackage ../applications/misc/cubocore-packages/corepdf {
         inherit libcprime libcsys;
       };
 
