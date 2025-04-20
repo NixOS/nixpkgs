@@ -63,7 +63,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corerenamer = libsForQt5.callPackage ../applications/misc/cubocore-packages/corerenamer {
+      corerenamer = callPackage ../applications/misc/cubocore-packages/corerenamer {
         inherit libcprime libcsys;
       };
 
