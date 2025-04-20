@@ -33,8 +33,8 @@ stdenv.mkDerivation {
     ''
     + lib.optionalString useWgpu ''
       substituteInPlace vendor/wgpu/wgpu.odin \
-          --replace-fail "BINDINGS_VERSION        :: [4]u8{22, 1, 0, 1}" "BINDINGS_VERSION        :: [4]u8{22, 1, 0, 5}" \
-          --replace-fail "BINDINGS_VERSION_STRING :: \"22.1.0.1\"" "BINDINGS_VERSION_STRING :: \"22.1.0.5\"" \
+          --replace-fail "BINDINGS_VERSION        :: [4]u8{22, 1, 0, 1}" "BINDINGS_VERSION        :: [4]u8{24, 0, 3, 1}" \
+          --replace-fail "BINDINGS_VERSION_STRING :: \"22.1.0.1\"" "BINDINGS_VERSION_STRING :: \"24.0.3.1\"" \
           ${lib.optionalString (
             !stdenv.hostPlatform.isStatic
           ) "--replace-fail \"#config(WGPU_SHARED, false)\" \"#config(WGPU_SHARED, true)\""}
