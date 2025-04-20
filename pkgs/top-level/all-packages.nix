@@ -12227,9 +12227,7 @@ with pkgs;
 
   sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
 
-  sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "12.3" else stdenv;
-  };
+  sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel { };
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
