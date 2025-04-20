@@ -15579,7 +15579,7 @@ self: super: with self; {
 
   sentinels = callPackage ../development/python-modules/sentinels { };
 
-  sentry-sdk = sentry-sdk_1;
+  sentry-sdk = sentry-sdk_2;
 
   sentry-sdk_1 = callPackage ../development/python-modules/sentry-sdk/1.nix { };
 
