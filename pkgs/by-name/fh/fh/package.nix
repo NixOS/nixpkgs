@@ -5,7 +5,6 @@
   installShellFiles,
   stdenv,
   gcc,
-  libcxx,
   cacert,
 }:
 
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
+    NIX_CFLAGS_COMPILE = "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

@@ -526,6 +526,7 @@ with lib.maintainers;
       cdepillabout
       maralorn
       sternenseemann
+      wolfgangwalther
     ];
     githubTeams = [ "haskell" ];
     scope = "Maintain Haskell packages and infrastructure.";
