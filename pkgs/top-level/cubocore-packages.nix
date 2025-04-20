@@ -35,7 +35,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coreimage = libsForQt5.callPackage ../applications/misc/cubocore-packages/coreimage {
+      coreimage = callPackage ../applications/misc/cubocore-packages/coreimage {
         inherit libcprime libcsys;
       };
 
