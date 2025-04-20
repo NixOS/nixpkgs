@@ -1,7 +1,6 @@
 {
   lib,
   sdl3,
-  darwin,
   libavif,
   libtiff,
   libwebp,
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       libwebp
       libavif
     ]
-    ++ (lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation)
     ++ (lib.optionals (!enableSTB) [
       libpng
       libjpeg
