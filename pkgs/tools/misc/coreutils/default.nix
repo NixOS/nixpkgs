@@ -97,6 +97,9 @@ stdenv.mkDerivation rec {
 
       # intermittent failures on builders, unknown reason
       sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
+
+      # fails when syscalls related to acl not being available, e.g. in sandboxed environment
+      sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
     ''
     + (optionalString (stdenv.hostPlatform.libc == "musl") (
       concatStringsSep "\n" [
