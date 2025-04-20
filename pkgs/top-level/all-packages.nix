@@ -7466,7 +7466,6 @@ with pkgs;
         newScope
         lxqt
         lib
-        libsForQt5
         ;
     }
   );

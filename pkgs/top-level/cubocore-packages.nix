@@ -1,8 +1,7 @@
 {
+  lib,
   newScope,
   lxqt,
-  lib,
-  libsForQt5,
 }:
 
 let
@@ -92,7 +91,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coreuniverse = libsForQt5.callPackage ../applications/misc/cubocore-packages/coreuniverse {
+      coreuniverse = callPackage ../applications/misc/cubocore-packages/coreuniverse {
         inherit libcprime libcsys;
       };
     };
