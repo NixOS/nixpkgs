@@ -83,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
       --inherit-argv0
   '';
 
+  patches = [
+    # MPRIS's DesktopEntry property needs to match the desktop entry basename
+    ./fix-mpris-desktop-entry.patch
+  ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "com.github.th_ch.youtube_music";
