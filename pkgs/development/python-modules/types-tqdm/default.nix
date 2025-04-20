@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "types-tqdm";
-  version = "4.67.0.20250404";
+  version = "4.67.0.20250417";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_tqdm";
     inherit version;
-    hash = "sha256-6Zl8ZV/7ujq3j0QYtVEcBaVOdoJNBz0hIWbcc6pWx2g=";
+    hash = "sha256-v8xAmdjUjfVOU/PqZHCMvMHRxAOcp2GVlBidqMA8e+I=";
   };
 
   build-system = [ setuptools ];
