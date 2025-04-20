@@ -108,7 +108,10 @@ let
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
-  hasNoMaintainers = attrs: attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
+  hasNoMaintainers =
+    attrs:
+    (attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0)
+    && (attrs ? meta.teams && (length attrs.meta.teams) == 0);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -368,6 +371,7 @@ let
         ];
       sourceProvenance = listOf attrs;
       maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
@@ -534,7 +538,7 @@ let
       {
         valid = "warn";
         reason = "maintainerless";
-        errormsg = "has no maintainers";
+        errormsg = "has no maintainers or teams";
       }
     # -----
     else

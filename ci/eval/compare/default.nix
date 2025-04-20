@@ -9,6 +9,7 @@
   beforeResultDir,
   afterResultDir,
   touchedFilesJson,
+  byName ? false,
 }:
 let
   /*
@@ -119,6 +120,7 @@ let
   maintainers = import ./maintainers.nix {
     changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
+    inherit byName;
   };
 in
 runCommand "compare"
