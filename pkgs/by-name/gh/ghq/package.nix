@@ -32,6 +32,7 @@ buildGoModule rec {
   postInstall = ''
     installShellCompletion \
       --bash $src/misc/bash/_ghq \
+      --fish $src/misc/fish/ghq.fish \
       --zsh $src/misc/zsh/_ghq
   '';
 
