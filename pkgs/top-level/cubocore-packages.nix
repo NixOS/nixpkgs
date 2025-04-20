@@ -51,7 +51,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corepaint = libsForQt5.callPackage ../applications/misc/cubocore-packages/corepaint {
+      corepaint = callPackage ../applications/misc/cubocore-packages/corepaint {
         inherit libcprime libcsys;
       };
 
