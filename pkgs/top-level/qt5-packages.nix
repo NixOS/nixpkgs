@@ -191,8 +191,6 @@ makeScopeWithSplicing' {
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
         libopenshot = callPackage ../development/libraries/libopenshot {
-          stdenv =
-            if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
           python3 = pkgs.python311;
         };
 
@@ -243,8 +241,6 @@ makeScopeWithSplicing' {
         pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
         qca = callPackage ../development/libraries/qca {
-          stdenv =
-            if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
           inherit (libsForQt5) qtbase;
         };
         qca-qt5 = self.qca;
@@ -273,10 +269,7 @@ makeScopeWithSplicing' {
 
         qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
-        qtkeychain = callPackage ../development/libraries/qtkeychain {
-          stdenv =
-            if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-        };
+        qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
         qtmpris = callPackage ../development/libraries/qtmpris { };
 

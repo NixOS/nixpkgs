@@ -4,12 +4,8 @@
   fetchFromGitHub,
   cmake,
   qt6,
-  overrideSDK,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notes";
   version = "2.3.1";
 
