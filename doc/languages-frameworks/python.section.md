@@ -708,8 +708,9 @@ Sometimes, we have a script whose header looks like this:
 ```python
 #!/usr/bin/env python3
 import numpy as np
-a = np.array([1,2])
-b = np.array([3,4])
+
+a = np.array([1, 2])
+b = np.array([3, 4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
@@ -730,8 +731,9 @@ without that bit of knowledge. That can be done by using `nix-shell` as a
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.numpy ])"
 import numpy as np
-a = np.array([1,2])
-b = np.array([3,4])
+
+a = np.array([1, 2])
+b = np.array([3, 4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
@@ -760,8 +762,9 @@ can make it fully reproducible by pinning the `nixpkgs` import:
 #!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.numpy ])"
 #!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/e51209796c4262bfb8908e3d6d72302fe4e96f5f.tar.gz
 import numpy as np
-a = np.array([1,2])
-b = np.array([3,4])
+
+a = np.array([1, 2])
+b = np.array([3, 4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
