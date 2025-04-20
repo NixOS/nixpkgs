@@ -3,32 +3,36 @@
   stdenv,
   fetchurl,
   libffi,
+  getopt,
+  llvmPackages,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "copper";
-  version = "4.6";
+  version = "9.0";
+
   src = fetchurl {
-    url = "https://tibleiz.net/download/copper-${version}-src.tar.gz";
-    sha256 = "sha256-tyxAMJp4H50eBz8gjt2O3zj5fq6nOIXKX47wql8aUUg=";
+    url = "https://tibleiz.net/download/copper-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-P6CuAeO7y69uDvkivaSX/8EHkihgk3/Co7K0Skg4ApI=";
   };
-  buildInputs = [
-    libffi
-  ];
+
   postPatch = ''
     patchShebangs .
   '';
-  buildPhase = ''
-    make BACKEND=elf64 boot-elf64
-    make BACKEND=elf64 COPPER=stage3/copper-elf64 copper-elf64
-  '';
-  installPhase = ''
-    make BACKEND=elf64 install prefix=$out
-  '';
-  meta = with lib; {
+
+  nativeBuildInputs = [
+    getopt
+    llvmPackages.libllvm
+  ];
+
+  buildInputs = [ libffi ];
+
+  makeFlags = [ "prefix=$(out)" ];
+
+  meta = {
     description = "Simple imperative language, statically typed with type inference and genericity";
     homepage = "https://tibleiz.net/copper/";
-    license = licenses.bsd2;
-    platforms = platforms.x86_64;
-    broken = true;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.x86_64;
   };
-}
+})
