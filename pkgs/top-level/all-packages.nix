@@ -9947,7 +9947,7 @@ with pkgs;
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
-  libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
+  libarchive-qt = callPackage ../development/libraries/libarchive-qt { };
 
   libaribcaption = callPackage ../by-name/li/libaribcaption/package.nix {
     inherit (darwin.apple_sdk.frameworks)
