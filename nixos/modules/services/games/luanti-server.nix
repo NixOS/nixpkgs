@@ -12,14 +12,14 @@ let
   RESERVED_VALUE_RE = "[[:space:]]*(\"\"\"|\\{)[[:space:]]*";
   NEEDS_MULTILINE_RE = "${CONTAINS_NEWLINE_RE}|${RESERVED_VALUE_RE}";
 
-  # There is no way to encode """ on its own line in a Minetest config.
+  # There is no way to encode """ on its own line in a Luanti config.
   UNESCAPABLE_RE = ".*\n\"\"\"\n.*";
 
   toConfMultiline =
     name: value:
     assert lib.assertMsg (
       (builtins.match UNESCAPABLE_RE value) == null
-    ) ''""" can't be on its own line in a minetest config.'';
+    ) ''""" can't be on its own line in a luanti config.'';
     "${name} = \"\"\"\n${value}\n\"\"\"\n";
 
   toConf = values:
@@ -42,26 +42,26 @@ let
 
   flag = val: name: lib.optionals (val != null) ["--${name}" (toString val)];
 in {
-  options.services.minetest-server = lib.mkOption {
+  options.services.luanti-servers = lib.mkOption {
     type = lib.types.attrsOf (lib.types.submodule {
       options = {
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "Whether to enable this Minetest server instance.";
+          description = "Whether to enable this Luanti server instance.";
         };
 
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.minetest;
-          defaultText = lib.literalExpression "pkgs.minetest";
-          description = "Minetest server package to use";
+          default = pkgs.luanti;
+          defaultText = lib.literalExpression "pkgs.luanti";
+          description = "Luanti server package to use";
         };
 
         gameId = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           default = null;
-          description = "Game ID to use (run 'minetestserver --gameid list' for options). If not set and there is only one game in the server folder, will use that.";
+          description = "Game ID to use (run 'luantiserver --gameid list' for options). If not set and there is only one game in the server folder, will use that.";
         };
 
         world = lib.mkOption {
@@ -79,7 +79,7 @@ in {
         config = lib.mkOption {
           type = lib.types.attrsOf lib.types.anything;
           default = {};
-          description = "Configuration settings (ignored if configPath is set). All options here: https://github.com/minetest/minetest/blob/master/minetest.conf.example";
+          description = "Configuration settings (ignored if configPath is set). All options here: https://github.com/luanti-org/luanti/blob/master/minetest.conf.example";
         };
 
         logPath = lib.mkOption {
@@ -115,16 +115,47 @@ in {
             sha256 = "sha256-UVKsbfOQG5WD2/w6Yxdn6bMfgcexs09OBY+wdWtNuE0=";
           };
           description = "Derivation containing game files";
-          #example = 
+          example = ''
+          pkgs.fetchgit {
+            url = "https://codeberg.org/mineclonia/mineclonia.git";
+            rev = "0.114.0";
+            sha256 = "sha256-3dnbQZQkHjYwfb6ACAckkJ6Sss25wNvPrt6toqiesDo=";
+          };
+          '';
         };
       };
     });
     default = {};
-    description = "Multiple Minetest server instances";
+    description = "Multiple Luanti server instances";
+    example = '' 
+    {
+      testServer = {
+        enable = true;
+        port = 30000;
+        openFirewall = true;
+        config = {
+          # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
+          serverName = "VoxeLiber server";
+          serverDescription = "👍";
+          defaultGame = "mineclone2";
+          serverAnnounce = false;
+          enableDamage = true;
+          creativeMode = false;
+        };
+        world = "world";
+        fetchGame = pkgs.fetchgit {
+          url       = "https://git.minetest.land/VoxeLibre/VoxeLibre.git";
+          rev       = "refs/tags/0.89.2"; # or simply "0.89.2"
+          sha256 = "sha256-57nrDr8W7SadNH15FRaFp1+cCUelyhwEdij79H8Fwhs=";
+        };
+        gameId = "mineclone2";
+      };
+    };
+    '';
   };
 
   config = let
-    cfg = config.services.minetest-server;
+    cfg = config.services.luanti-servers;
     enabledInstances = lib.filterAttrs (_: ic: ic.enable) cfg;
   in lib.mkIf (enabledInstances != {}) {
     networking.firewall.allowedUDPPorts = lib.concatMap (ic: # open firewall
@@ -132,20 +163,20 @@ in {
     ) (lib.attrValues enabledInstances);
 
   systemd.services = lib.mapAttrs' (name: instanceCfg: {
-      name = "minetest-server-${name}";
+      name = "luanti-server-${name}";
       value = {
-        description = "minetest Server Instance: ${name}";
+        description = "luanti Server Instance: ${name}";
         wantedBy = ["multi-user.target"];
         after = ["network.target"];
 
         serviceConfig = {
           DynamicUser = true;
-          StateDirectory = "minetest-${name}"; # will be /var/lib/minetest-${name}
+          StateDirectory = "luanti-${name}"; # will be /var/lib/luanti-${name}
           Restart = "always";
-          WorkingDirectory = "/var/lib/minetest-${name}";
+          WorkingDirectory = "/var/lib/luanti-${name}";
         };
         environment = {
-          HOME = "/var/lib/minetest-${name}";
+          HOME = "/var/lib/luanti-${name}";
         };
 
         preStart = let
@@ -153,7 +184,7 @@ in {
         in ''
           #!${pkgs.bash}/bin/bash
           set -euo pipefail
-          target_dir="/var/lib/minetest-${name}/.minetest/games/${instanceCfg.gameId}"
+          target_dir="/var/lib/luanti-${name}/.luanti/games/${instanceCfg.gameId}"
           mkdir -p "$target_dir"
 
           # Directory source (fetchFromGitHub/fetchgit)
@@ -169,7 +200,7 @@ in {
             ++ (if instanceCfg.configPath != null then [
               "--config" instanceCfg.configPath
             ] else [
-              "--config" (builtins.toFile "minetest-${name}.conf" (toConf instanceCfg.config))
+              "--config" (builtins.toFile "luanti-${name}.conf" (toConf instanceCfg.config))
             ])
             ++ (flag instanceCfg.gameId "gameid")
             ++ (if instanceCfg.world != null then
@@ -182,7 +213,7 @@ in {
             ++ instanceCfg.extraArgs;
         in ''
           cd "$STATE_DIRECTORY"
-          exec ${instanceCfg.package}/bin/minetest ${lib.escapeShellArgs flags}
+          exec ${instanceCfg.package}/bin/luanti ${lib.escapeShellArgs flags}
         '';
       };
     }) enabledInstances;
