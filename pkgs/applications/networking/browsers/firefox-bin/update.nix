@@ -60,27 +60,28 @@ writeScript "update-${pname}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep '\.tar\.[a-z0-9]\+'`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep '\.\(tar\.[a-z0-9]\+\|dmg\)$' | grep -v mac-EME-free`
 
   cat > $tmpfile <<EOF
   {
     version = "$version";
     sources = [
   EOF
-  for arch in linux-x86_64 linux-i686 linux-aarch64; do
+  for arch in linux-x86_64 linux-i686 linux-aarch64 mac; do
     # retriving a list of all tarballs for each arch
     #  - only select tarballs for current arch
     #  - only select tarballs for current version
     #  - rename space with colon so that for loop doesnt
     #  - inteprets sha and path as 2 lines
+    IFS=$'\n'
     for line in `echo "$shasums" | \
                  grep $arch | \
-                 grep "${baseName}-$version"'\.tar\.[a-z0-9]\+$' | \
-                 tr " " ":"`; do
+                 grep -i "${baseName}.$version"'\.\(tar\.[a-z0-9]\+\|dmg\)$' | \
+                 sed "s/ /:/ ; s/ /:/"`; do
       # create an entry for every locale
       cat >> $tmpfile <<EOF
       {
-        url = "$url$version/`echo $line | cut -d":" -f3`";
+        url = "$url$version/`echo $line | cut -d":" -f3 | sed "s/ /%20/"`";
         locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
         arch = "$arch";
         sha256 = "`echo $line | cut -d":" -f1`";
