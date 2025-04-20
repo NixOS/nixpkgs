@@ -3295,8 +3295,6 @@ with pkgs;
 
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
-  zee = callPackage ../applications/editors/zee { };
-
   zeek = darwin.apple_sdk_11_0.callPackage ../applications/networking/ids/zeek { };
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
