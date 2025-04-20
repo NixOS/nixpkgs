@@ -79,6 +79,43 @@ stdenv.mkDerivation {
           aarch64-windows = "windows-aarch64";
         }
         .${stdenv.hostPlatform.system};
+
+      wgpuInstallScript =
+        {
+          # switch-case
+
+          x86_64-linux = ''
+            mkdir $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+            ln -s ${wgpu-native}/lib/libwgpu_native.so $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+          '';
+          aarch64-linux = ''
+            mkdir $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+            ln -s ${wgpu-native}/lib/libwgpu_native.so $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+          '';
+
+          x86_64-darwin = ''
+            mkdir $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+            ln -s ${wgpu-native}/lib/libwgpu_native.dylib $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+          '';
+          aarch64-darwin = ''
+            mkdir $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+            ln -s ${wgpu-native}/lib/libwgpu_native.dylib $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+          '';
+
+
+          x86_64-windows = ''
+            mkdir -p $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+            cp ${wgpu-native}/lib/wgpu_native.dll $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+          '';
+          aarch64-windows = ''
+            mkdir -p $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+            cp ${wgpu-native}/lib/wgpu_native.dll $out/share/vendor/wgpu/lib/wgpu-${wgpuDirSysName}-release/
+          '';
+
+        }
+        .${stdenv.hostPlatform.system};
+
+
     in
     ''
       runHook preInstall
