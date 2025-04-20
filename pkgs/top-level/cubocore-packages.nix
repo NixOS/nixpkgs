@@ -47,7 +47,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corepad = libsForQt5.callPackage ../applications/misc/cubocore-packages/corepad {
+      corepad = callPackage ../applications/misc/cubocore-packages/corepad {
         inherit libcprime libcsys;
       };
 
