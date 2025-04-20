@@ -6,8 +6,7 @@
   inih,
   ninja,
   pkg-config,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -32,12 +31,12 @@ stdenv.mkDerivation {
     copyDesktopItems
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     inih
-    qtbase
+    libsForQt5.qtbase
   ];
 
   postInstall = ''
@@ -59,7 +58,7 @@ stdenv.mkDerivation {
     description = "ZDoom WAD Launcher";
     homepage = "https://zdl.vectec.net";
     license = licenses.gpl3Only;
-    inherit (qtbase.meta) platforms;
+    inherit (libsForQt5.qtbase.meta) platforms;
     maintainers = with maintainers; [ azahi ];
     mainProgram = "zdl";
   };
