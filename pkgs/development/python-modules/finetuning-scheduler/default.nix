@@ -37,6 +37,10 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    sed -e 's/"setuptools[<>].*"/"setuptools"/' -i pyproject.toml
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
