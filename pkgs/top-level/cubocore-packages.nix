@@ -67,7 +67,7 @@ let
         inherit libcprime libcsys;
       };
 
-      coreshot = libsForQt5.callPackage ../applications/misc/cubocore-packages/coreshot {
+      coreshot = callPackage ../applications/misc/cubocore-packages/coreshot {
         inherit libcprime libcsys;
       };
 
