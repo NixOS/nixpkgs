@@ -4,7 +4,7 @@
   fetchurl,
   wrapGAppsHook3,
   pkg-config,
-  gtk,
+  gtk3,
   libxml2,
   enchant,
   gucharmap,
@@ -12,13 +12,13 @@
   adwaita-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bluefish";
   version = "2.2.17";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bluefish/bluefish-${version}.tar.bz2";
-    sha256 = "sha256-Onn2Ql4Uk56hNPlsFCTjqsBb7pWQS+Q0WBiDB4p7clM=";
+    url = "mirror://sourceforge/bluefish/bluefish-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Onn2Ql4Uk56hNPlsFCTjqsBb7pWQS+Q0WBiDB4p7clM=";
   };
 
   nativeBuildInputs = [
@@ -27,19 +27,19 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     adwaita-icon-theme
-    gtk
+    gtk3
     libxml2
     enchant
     gucharmap
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful editor targeted towards programmers and webdevelopers";
     homepage = "https://bluefish.openoffice.nl/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vbgl ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.all;
     mainProgram = "bluefish";
   };
-}
+})
