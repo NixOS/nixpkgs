@@ -19,7 +19,7 @@ let
         inherit libcprime libcsys;
       };
 
-      corearchiver = libsForQt5.callPackage ../applications/misc/cubocore-packages/corearchiver {
+      corearchiver = callPackage ../applications/misc/cubocore-packages/corearchiver {
         inherit libcprime libcsys;
       };
 
