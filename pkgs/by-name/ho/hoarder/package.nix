@@ -78,6 +78,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # Remove dev dependencies
+    pnpm --ignore-scripts --prod prune
+
+    # Remove large dependencies that are not necessary during runtime
+    rm -rf node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist,@hoarder/prettier-config}
+
+    # Remove file types not needed for production
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+
+    # Remove broken symlinks
+    find . -type l ! -exec test -e {} \; -delete
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -115,14 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$HOARDER_LIB_PATH/hoarder-cli" $out/bin/
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    # Remove large dependencies that are not necessary during runtime
-    rm -rf $out/lib/hoarder/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
-
-    # Remove broken symlinks
-    find $out -type l ! -exec test -e {} \; -delete
   '';
 
   meta = {
