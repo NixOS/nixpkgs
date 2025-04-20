@@ -4,7 +4,9 @@
   fetchFromGitHub,
   fetchpatch,
   unstableGitUpdater,
+  libGL,
   libpng,
+  libX11,
   perl,
   SDL2,
   zlib,
@@ -62,6 +64,8 @@ gccStdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
+      libGL
+      libX11
       SDL2
     ];
 
