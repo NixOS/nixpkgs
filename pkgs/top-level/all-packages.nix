@@ -13816,9 +13816,7 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  bluefish = callPackage ../applications/editors/bluefish {
-    gtk = gtk3;
-  };
+  bluefish = callPackage ../applications/editors/bluefish { };
 
   breezy = with python3Packages; toPythonApplication breezy;
 
