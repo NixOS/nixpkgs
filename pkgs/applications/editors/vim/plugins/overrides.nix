@@ -374,6 +374,12 @@ in
       '';
   };
 
+  claude-code-nvim = super.claude-code-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  };
+
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${lib.getLib llvmPackages.clang.cc}/lib/libclang.so')|" \
