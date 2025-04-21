@@ -42,7 +42,10 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://pythonhosted.org/uncertainties/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+    maintainers = with lib.maintainers; [
+      rnhmjoj
+      doronbehar
+    ];
     license = lib.licenses.bsd3;
   };
 }
