@@ -23,14 +23,14 @@ In Nixpkgs, `cargo-tauri.hook` overrides the default build and install phases.
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
-  # . . .
+rustPlatform.buildRustPackage (finalAttrs: {
+  # ...
 
   cargoHash = "...";
 
   # Assuming our app's frontend uses `npm` as a package manager
   npmDeps = fetchNpmDeps {
-    name = "${pname}-npm-deps-${version}";
+    name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
     inherit src;
     hash = "...";
   };
@@ -60,8 +60,8 @@ rustPlatform.buildRustPackage rec {
   # And make sure we build there too
   buildAndTestSubdir = cargoRoot;
 
-  # . . .
-}
+  # ...
+})
 ```
 
 ## Variables controlling cargo-tauri {#tauri-hook-variables-controlling}
