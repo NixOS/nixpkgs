@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   cmake,
 
@@ -18,14 +19,10 @@
 
   # lib.optional features with extra dependencies
 
-  # ouch, this is ugly, but this gives the man page
   docsSupport ? true,
-  docbook2x,
-  libxslt ? null,
-  man ? null,
-  less ? null,
-  docbook_xsl ? null,
-  docbook_xml_dtd_44 ? null,
+  buildPackages,
+  pandoc,
+  python3,
 
   ncursesSupport ? true,
   ncurses ? null,
@@ -60,22 +57,16 @@
   curlSupport ? true,
   curl ? null,
   rssSupport ? curlSupport,
-  weatherMetarSupport ? curlSupport,
-  weatherXoapSupport ? curlSupport,
   journalSupport ? true,
   systemd ? null,
   libxml2 ? null,
+
+  extrasSupport ? true,
+
+  versionCheckHook,
 }:
 
-assert
-  docsSupport
-  ->
-    docbook2x != null
-    && libxslt != null
-    && man != null
-    && less != null
-    && docbook_xsl != null
-    && docbook_xml_dtd_44 != null;
+assert docsSupport -> pandoc != null && python3 != null;
 
 assert ncursesSupport -> ncurses != null;
 
@@ -92,9 +83,9 @@ assert pulseSupport -> libpulseaudio != null;
 
 assert curlSupport -> curl != null;
 assert rssSupport -> curlSupport && libxml2 != null;
-assert weatherMetarSupport -> curlSupport;
-assert weatherXoapSupport -> curlSupport && libxml2 != null;
 assert journalSupport -> systemd != null;
+
+assert extrasSupport -> python3 != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
@@ -107,37 +98,37 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tEJQWZBaiX/bONPZEuGcvbGidktcvxUZtLvcGjz71Lk=";
   };
 
-  postPatch =
-    lib.optionalString docsSupport ''
-      substituteInPlace cmake/Conky.cmake --replace-fail "# set(RELEASE true)" "set(RELEASE true)"
+  patches = [
+    # Upstream patch to install extra syntax files, remove after next release
+    (fetchpatch {
+      name = "install-extra-syntax-files";
+      url = "https://github.com/brndnmtthws/conky/commit/c67d8c27d1d091968a98ee49b313935eb7ea67fd.patch";
+      hash = "sha256-NaQlQm+7iJWtdKYErTak5CPLNUBlsWb7sECNg0i3fWY=";
+    })
+  ];
 
-      cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
-    ''
-    + lib.optionalString waylandSupport ''
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
-    '';
+  # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
+  postPatch = ''
+    substituteInPlace cmake/ConkyPlatformChecks.cmake \
+      --replace-fail "pkg_get_variable(Wayland_SCANNER wayland-scanner wayland_scanner)" "set(Wayland_SCANNER ${lib.getExe buildPackages.wayland-scanner})"
+  '';
 
-  env = {
-    # For some reason -Werror is on by default, causing the project to fail compilation.
-    NIX_CFLAGS_COMPILE = "-Wno-error";
-    NIX_LDFLAGS = "-lgcc_s";
-  };
+  strictDeps = true;
 
   nativeBuildInputs =
     [
       cmake
       pkg-config
+      gperf
     ]
-    ++ lib.optionals docsSupport [
-      docbook2x
-      docbook_xsl
-      docbook_xml_dtd_44
-      libxslt
-      man
-      less
-    ]
-    ++ lib.optional waylandSupport wayland-scanner
+    ++ lib.optional docsSupport pandoc
+    ++ lib.optional (docsSupport || extrasSupport) (
+      # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
+      buildPackages.python3.withPackages (ps: [
+        ps.jinja2
+        ps.pyyaml
+      ])
+    )
     ++ lib.optional luaImlib2Support toluapp
     ++ lib.optional luaCairoSupport toluapp;
 
@@ -145,7 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       glib
       libXinerama
-      gperf
     ]
     ++ lib.optional ncursesSupport ncurses
     ++ lib.optionals x11Support [
@@ -169,43 +159,44 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional wirelessSupport wirelesstools
     ++ lib.optional curlSupport curl
     ++ lib.optional rssSupport libxml2
-    ++ lib.optional weatherXoapSupport libxml2
     ++ lib.optional nvidiaSupport libXNVCtrl
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional journalSupport systemd;
 
-  cmakeFlags =
-    [ ]
-    ++ lib.optional docsSupport "-DMAINTAINER_MODE=ON"
-    ++ lib.optional curlSupport "-DBUILD_CURL=ON"
-    ++ lib.optional (!ibmSupport) "-DBUILD_IBM=OFF"
-    ++ lib.optional imlib2Support "-DBUILD_IMLIB2=ON"
-    ++ lib.optional luaCairoSupport "-DBUILD_LUA_CAIRO=ON"
-    ++ lib.optional luaImlib2Support "-DBUILD_LUA_IMLIB2=ON"
-    ++ lib.optional (!mpdSupport) "-DBUILD_MPD=OFF"
-    ++ lib.optional (!ncursesSupport) "-DBUILD_NCURSES=OFF"
-    ++ lib.optional rssSupport "-DBUILD_RSS=ON"
-    ++ lib.optional (!x11Support) "-DBUILD_X11=OFF"
-    ++ lib.optional waylandSupport "-DBUILD_WAYLAND=ON"
-    ++ lib.optional xdamageSupport "-DBUILD_XDAMAGE=ON"
-    ++ lib.optional doubleBufferSupport "-DBUILD_XDBE=ON"
-    ++ lib.optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
-    ++ lib.optional weatherXoapSupport "-DBUILD_WEATHER_XOAP=ON"
-    ++ lib.optional wirelessSupport "-DBUILD_WLAN=ON"
-    ++ lib.optional nvidiaSupport "-DBUILD_NVIDIA=ON"
-    ++ lib.optional pulseSupport "-DBUILD_PULSEAUDIO=ON"
-    ++ lib.optional journalSupport "-DBUILD_JOURNAL=ON";
+  cmakeFlags = [
+    (lib.cmakeBool "REPRODUCIBLE_BUILD" true)
+    (lib.cmakeBool "RELEASE" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_EXTRAS" extrasSupport)
+    (lib.cmakeBool "BUILD_DOCS" docsSupport)
+    (lib.cmakeBool "BUILD_CURL" curlSupport)
+    (lib.cmakeBool "BUILD_IBM" ibmSupport)
+    (lib.cmakeBool "BUILD_IMLIB2" imlib2Support)
+    (lib.cmakeBool "BUILD_LUA_CAIRO" luaCairoSupport)
+    (lib.cmakeBool "BUILD_LUA_IMLIB2" luaImlib2Support)
+    (lib.cmakeBool "BUILD_MPD" mpdSupport)
+    (lib.cmakeBool "BUILD_NCURSES" ncursesSupport)
+    (lib.cmakeBool "BUILD_RSS" rssSupport)
+    (lib.cmakeBool "BUILD_X11" x11Support)
+    (lib.cmakeBool "BUILD_WAYLAND" waylandSupport)
+    (lib.cmakeBool "BUILD_XDAMAGE" xdamageSupport)
+    (lib.cmakeBool "BUILD_XDBE" doubleBufferSupport)
+    (lib.cmakeBool "BUILD_WLAN" wirelessSupport)
+    (lib.cmakeBool "BUILD_NVIDIA" nvidiaSupport)
+    (lib.cmakeBool "BUILD_PULSEAUDIO" pulseSupport)
+    (lib.cmakeBool "BUILD_JOURNAL" journalSupport)
+    (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
+  ];
 
-  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
-  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
-  enableParallelBuilding = false;
+  doCheck = true;
 
-  # [CMakeFiles/Makefile2:1805: tests/CMakeFiles/test-conky.dir/all] Error 2
-  doCheck = false;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://conky.cc";
-    changelog = "https://github.com/brndnmtthws/conky/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/brndnmtthws/conky/releases/tag/${finalAttrs.src.tag}";
     description = "Advanced, highly configurable system monitor based on torsmo";
     mainProgram = "conky";
     maintainers = [ lib.maintainers.guibert ];
