@@ -8,6 +8,7 @@ lib.makeScope pkgs.newScope (
   {
     firedecor = callPackage ./firedecor.nix { };
     focus-request = callPackage ./focus-request.nix { };
+    qwf-overview = callPackage ./qwf-overview.nix { };
     wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };
     wayfire-shadows = callPackage ./wayfire-shadows.nix { };
     wcm = callPackage ./wcm.nix { };
