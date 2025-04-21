@@ -159,29 +159,28 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional journalSupport systemd;
 
-  cmakeFlags =
-    [
-      "-DREPRODUCIBLE_BUILD=ON"
-    ]
-    ++ lib.optional (finalAttrs.doCheck) "-DBUILD_TESTING=ON"
-    ++ lib.optional extrasSupport "-DBUILD_EXTRAS=ON"
-    ++ lib.optional docsSupport "-DBUILD_DOCS=ON"
-    ++ lib.optional curlSupport "-DBUILD_CURL=ON"
-    ++ lib.optional (!ibmSupport) "-DBUILD_IBM=OFF"
-    ++ lib.optional imlib2Support "-DBUILD_IMLIB2=ON"
-    ++ lib.optional luaCairoSupport "-DBUILD_LUA_CAIRO=ON"
-    ++ lib.optional luaImlib2Support "-DBUILD_LUA_IMLIB2=ON"
-    ++ lib.optional (!mpdSupport) "-DBUILD_MPD=OFF"
-    ++ lib.optional (!ncursesSupport) "-DBUILD_NCURSES=OFF"
-    ++ lib.optional rssSupport "-DBUILD_RSS=ON"
-    ++ lib.optional (!x11Support) "-DBUILD_X11=OFF"
-    ++ lib.optional waylandSupport "-DBUILD_WAYLAND=ON"
-    ++ lib.optional xdamageSupport "-DBUILD_XDAMAGE=ON"
-    ++ lib.optional doubleBufferSupport "-DBUILD_XDBE=ON"
-    ++ lib.optional wirelessSupport "-DBUILD_WLAN=ON"
-    ++ lib.optional nvidiaSupport "-DBUILD_NVIDIA=ON"
-    ++ lib.optional pulseSupport "-DBUILD_PULSEAUDIO=ON"
-    ++ lib.optional journalSupport "-DBUILD_JOURNAL=ON";
+  cmakeFlags = [
+    (lib.cmakeBool "REPRODUCIBLE_BUILD" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_EXTRAS" extrasSupport)
+    (lib.cmakeBool "BUILD_DOCS" docsSupport)
+    (lib.cmakeBool "BUILD_CURL" curlSupport)
+    (lib.cmakeBool "BUILD_IBM" ibmSupport)
+    (lib.cmakeBool "BUILD_IMLIB2" imlib2Support)
+    (lib.cmakeBool "BUILD_LUA_CAIRO" luaCairoSupport)
+    (lib.cmakeBool "BUILD_LUA_IMLIB2" luaImlib2Support)
+    (lib.cmakeBool "BUILD_MPD" mpdSupport)
+    (lib.cmakeBool "BUILD_NCURSES" ncursesSupport)
+    (lib.cmakeBool "BUILD_RSS" rssSupport)
+    (lib.cmakeBool "BUILD_X11" x11Support)
+    (lib.cmakeBool "BUILD_WAYLAND" waylandSupport)
+    (lib.cmakeBool "BUILD_XDAMAGE" xdamageSupport)
+    (lib.cmakeBool "BUILD_XDBE" doubleBufferSupport)
+    (lib.cmakeBool "BUILD_WLAN" wirelessSupport)
+    (lib.cmakeBool "BUILD_NVIDIA" nvidiaSupport)
+    (lib.cmakeBool "BUILD_PULSEAUDIO" pulseSupport)
+    (lib.cmakeBool "BUILD_JOURNAL" journalSupport)
+  ];
 
   doCheck = true;
 
