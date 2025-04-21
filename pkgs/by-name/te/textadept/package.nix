@@ -5,12 +5,11 @@
   fetchurl,
   cmake,
   withQt ? true,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
   withCurses ? false,
   ncurses,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "12.4";
   pname = "textadept";
 
@@ -18,13 +17,13 @@ stdenv.mkDerivation rec {
     name = "textadept11";
     owner = "orbitalquark";
     repo = "textadept";
-    rev = "textadept_${version}";
-    sha256 = "sha256-nPgpQeBq5Stv2o0Ke4W2Ltnx6qLe5TIC5a8HSYVkmfI=";
+    tag = "textadept_${finalAttrs.version}";
+    hash = "sha256-nPgpQeBq5Stv2o0Ke4W2Ltnx6qLe5TIC5a8HSYVkmfI=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ libsForQt5.wrapQtAppsHook ];
 
-  buildInputs = lib.optionals withQt [ qtbase ] ++ lib.optionals withCurses ncurses;
+  buildInputs = lib.optionals withQt [ libsForQt5.qtbase ] ++ lib.optionals withCurses ncurses;
 
   cmakeFlags =
     lib.optional withQt [ "-DQT=ON" ]
@@ -44,16 +43,18 @@ stdenv.mkDerivation rec {
       ) (import ./deps.nix)
     );
 
-  meta = with lib; {
+  meta = {
     description = "Extensible text editor based on Scintilla with Lua scripting";
     homepage = "http://foicica.com/textadept";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    downloadPage = "https://github.com/orbitalquark/textadept";
+    changelog = "https://github.com/orbitalquark/textadept/releases/tag/textadept_${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raskin
       mirrexagon
       arcuru
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "textadept";
   };
-}
+})
