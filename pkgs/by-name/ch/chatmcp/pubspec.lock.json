@@ -296,16 +296,6 @@
       "source": "hosted",
       "version": "1.0.8"
     },
-    "curl_logger_dio_interceptor": {
-      "dependency": "direct main",
-      "description": {
-        "name": "curl_logger_dio_interceptor",
-        "sha256": "f20d89187a321d2150e1412bca30ebf4d89130bafc648ce21bd4f1ef4062b214",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.0.0"
-    },
     "dart_style": {
       "dependency": "transitive",
       "description": {
@@ -315,26 +305,6 @@
       },
       "source": "hosted",
       "version": "3.0.1"
-    },
-    "dio": {
-      "dependency": "direct main",
-      "description": {
-        "name": "dio",
-        "sha256": "253a18bbd4851fecba42f7343a1df3a9a4c1d31a2c1b37e221086b4fa8c8dbc9",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "5.8.0+1"
-    },
-    "dio_web_adapter": {
-      "dependency": "transitive",
-      "description": {
-        "name": "dio_web_adapter",
-        "sha256": "e485c7a39ff2b384fa1d7e09b4e25f755804de8384358049124830b04fc4f93a",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.1.0"
     },
     "dotenv": {
       "dependency": "direct main",
@@ -431,6 +401,16 @@
       },
       "source": "hosted",
       "version": "5.2.1"
+    },
+    "flutter_form_builder": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_form_builder",
+        "sha256": "aa3901466c70b69ae6c7f3d03fcbccaec5fde179d3fded0b10203144b546ad28",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "10.0.1"
     },
     "flutter_highlight": {
       "dependency": "direct main",
@@ -658,6 +638,16 @@
       "source": "hosted",
       "version": "2.0.24"
     },
+    "flutter_popup": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_popup",
+        "sha256": "8f93cb4ec7341330ee585b4624ac6596f02587aaefc47297344cb7b5af26aa07",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.3.4"
+    },
     "flutter_statusbarcolor_ns": {
       "dependency": "direct main",
       "description": {
@@ -678,6 +668,16 @@
       "source": "hosted",
       "version": "2.0.17"
     },
+    "flutter_switch": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_switch",
+        "sha256": "b91477f926bba135d2d203d7b24367492662d8d9c3aa6adb960b14c1087d3c41",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.3.2"
+    },
     "flutter_test": {
       "dependency": "direct dev",
       "description": "flutter",
@@ -689,6 +689,16 @@
       "description": "flutter",
       "source": "sdk",
       "version": "0.0.0"
+    },
+    "form_builder_validators": {
+      "dependency": "direct main",
+      "description": {
+        "name": "form_builder_validators",
+        "sha256": "cd617fa346250293ff3e2709961d0faf7b80e6e4f0ff7b500126b28d7422dd67",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "11.1.2"
     },
     "frontend_server_client": {
       "dependency": "transitive",
@@ -761,7 +771,7 @@
       "version": "1.3.2"
     },
     "http": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "http",
         "sha256": "fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f",
@@ -839,6 +849,16 @@
       },
       "source": "hosted",
       "version": "4.9.0"
+    },
+    "jsonc": {
+      "dependency": "direct main",
+      "description": {
+        "name": "jsonc",
+        "sha256": "326a3c5c774a77c3c4e327f359e0268bff34135d0c16078beee6d921c49a16ed",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.3"
     },
     "keyboard_dismisser": {
       "dependency": "direct main",
@@ -1958,7 +1978,7 @@
     }
   },
   "sdks": {
-    "dart": ">=3.7.0-0 <4.0.0",
-    "flutter": ">=3.27.0"
+    "dart": ">=3.7.0 <4.0.0",
+    "flutter": ">=3.29.0"
   }
 }
