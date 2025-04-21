@@ -35,7 +35,8 @@ self: super: {
           | .main_library.reexported_libraries[].names[] |= select([.] | inside($libs) | not)
         ' > usr/lib/$libSystem~
         # Convert libSystem back to tbd-v4 because not all tooling supports the JSON-based format yet.
-        llvm-readtapi -delete-input --filetype=tbd-v4 usr/lib/$libSystem~ -o usr/lib/$libSystem
+        llvm-readtapi --filetype=tbd-v4 usr/lib/$libSystem~ -o usr/lib/$libSystem
+        rm usr/lib/$libSystem~
       done
     '';
 }
