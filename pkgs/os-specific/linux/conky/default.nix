@@ -60,8 +60,6 @@
   curlSupport ? true,
   curl ? null,
   rssSupport ? curlSupport,
-  weatherMetarSupport ? curlSupport,
-  weatherXoapSupport ? curlSupport,
   journalSupport ? true,
   systemd ? null,
   libxml2 ? null,
@@ -92,8 +90,6 @@ assert pulseSupport -> libpulseaudio != null;
 
 assert curlSupport -> curl != null;
 assert rssSupport -> curlSupport && libxml2 != null;
-assert weatherMetarSupport -> curlSupport;
-assert weatherXoapSupport -> curlSupport && libxml2 != null;
 assert journalSupport -> systemd != null;
 
 stdenv.mkDerivation (finalAttrs: {
@@ -169,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional wirelessSupport wirelesstools
     ++ lib.optional curlSupport curl
     ++ lib.optional rssSupport libxml2
-    ++ lib.optional weatherXoapSupport libxml2
     ++ lib.optional nvidiaSupport libXNVCtrl
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional journalSupport systemd;
@@ -189,8 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional waylandSupport "-DBUILD_WAYLAND=ON"
     ++ lib.optional xdamageSupport "-DBUILD_XDAMAGE=ON"
     ++ lib.optional doubleBufferSupport "-DBUILD_XDBE=ON"
-    ++ lib.optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
-    ++ lib.optional weatherXoapSupport "-DBUILD_WEATHER_XOAP=ON"
     ++ lib.optional wirelessSupport "-DBUILD_WLAN=ON"
     ++ lib.optional nvidiaSupport "-DBUILD_NVIDIA=ON"
     ++ lib.optional pulseSupport "-DBUILD_PULSEAUDIO=ON"
