@@ -22,9 +22,9 @@ If the build fails and Nix is run with the `-K/--keep-failed` option, a script `
 
 ### Attributes {#vm-tools-runInLinuxVM-attributes}
 
-* `preVM` (optional). Shell command to be evaluated *before* the VM is started (i.e., on the host).
-* `memSize` (optional, default `512`). The memory size of the VM in MiB.
-* `diskImage` (optional). A file system image to be attached to `/dev/sda`.
+- `preVM` (optional): Shell command to be evaluated *before* the VM is started (i.e., on the host).
+- `memSize` (optional, default `512`): The memory size of the VM in MiB.
+- `diskImage` (optional): A file system image to be attached to `/dev/sda`.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
 
 ### Examples {#vm-tools-runInLinuxVM-examples}
@@ -67,9 +67,9 @@ Takes a file, such as an ISO, and extracts its contents into the store.
 
 ### Attributes {#vm-tools-extractFs-attributes}
 
-* `file`. Path to the file to be extracted.
+- `file`: Path to the file to be extracted.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
-* `fs` (optional). Filesystem of the contents of the file.
+- `fs` (optional): Filesystem of the contents of the file.
 
 ### Examples {#vm-tools-extractFs-examples}
 
@@ -136,8 +136,8 @@ A set of functions that build a predefined set of minimal Linux distributions im
 
 ### Attributes {#vm-tools-diskImageFuns-attributes}
 
-* `size` (optional, defaults to `4096`). The size of the image, in MiB.
-* `extraPackages` (optional). A list names of additional packages from the distribution that should be included in the image.
+* `size` (optional, defaults to `4096`): The size of the image, in MiB.
+* `extraPackages` (optional): A list names of additional packages from the distribution that should be included in the image.
 
 ### Examples {#vm-tools-diskImageFuns-examples}
 

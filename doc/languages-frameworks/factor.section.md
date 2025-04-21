@@ -186,46 +186,30 @@ This enables the standard pattern for application packages to specify all runtim
 `buildFactorApplication` is a wrapper around `stdenv.mkDerivation` and takes all of its attributes.
 Additional attributes that are understood by `buildFactorApplication`:
 
-*`buildDesc`* (Function or attribute set)
+- *`buildDesc`* (Function or attribute set): A build description similar to `stdenv.mkDerivation` with the following attributes:
 
-: A build description similar to `stdenv.mkDerivation` with the following attributes:
-
-  `vocabName` (String; _optional_)
-
-  : is the path to the vocabulary to be deployed relative to the source root.
+  - `vocabName` (String; _optional_): is the path to the vocabulary to be deployed relative to the source root.
     So, directory `foo/` from the example above could be `extra/deep/down/foo`.
     This allows you to maintain Factor's vocabulary hierarchy and distribute the same source tree as a stand-alone application and as a library in the Factor development environment via the `extraVocabs` attribute.
 
-  `binName` (String; _optional_)
-
-  : is the name of the resulting binary in `/bin/`.
+  - `binName` (String; _optional_): is the name of the resulting binary in `/bin/`.
     It defaults to the last directory component in `vocabName`.
     It is also added as the `meta.mainProgram` attribute to facilitate `nix run`.
 
-  `enableUI` (Boolean; _optional_)
-
-  : is `false` by default.
+  - `enableUI` (Boolean; _optional_): is `false` by default.
     Set this to `true` when you ship a graphical application.
 
-  `extraLibs` (List; _optional_)
-
-  : adds additional libraries as runtime dependencies.
+  - `extraLibs` (List; _optional_): adds additional libraries as runtime dependencies.
     Defaults to `[]` and is concatenated with `runtimeLibs` from the used factor-lang package.
     Use `factor-minimal` to minimize the closure of runtime libraries.
 
-  `extraPaths` (List; _optional_)
-
-  : adds additional binaries to the runtime PATH environment variable (without adding their libraries, as well).
+  - `extraPaths` (List; _optional_): adds additional binaries to the runtime PATH environment variable (without adding their libraries, as well).
     Defaults to `[]` and is concatenated with `defaultBins` and `binPackages` from the used factor-lang package.
     Use `factor-minimal` to minimize the closure of runtime libraries.
 
-  `deployScriptText` (String; _optional_)
-
-  : is the actual deploy Factor file that is executed to deploy the application.
+  - `deployScriptText` (String; _optional_): is the actual deploy Factor file that is executed to deploy the application.
     You can change it if you need to perform additional computation during deployment.
 
-  `factor-lang` (Package; _optional_)
-
-  : overrides the Factor package to use to deploy this application, which also affects the default library bindings and programs in the runtime PATH.
+  - `factor-lang` (Package; _optional_): overrides the Factor package to use to deploy this application, which also affects the default library bindings and programs in the runtime PATH.
     It defaults to `factor-lang` when `enableUI` is turned on and `factor-no-gui` when it is turned off.
     Applications that use only Factor libraries without external bindings or programs may set this to `factor-minimal` or `factor-minimal-gui`.
