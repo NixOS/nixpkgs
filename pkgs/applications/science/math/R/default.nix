@@ -256,6 +256,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
 
-    maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
+    maintainers = with maintainers; [ jbedo ];
+    teams = [ teams.sage ];
   };
 })

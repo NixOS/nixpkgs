@@ -28,6 +28,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://magerun.net/";
     license = lib.licenses.mit;
     mainProgram = "n98-magerun2";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

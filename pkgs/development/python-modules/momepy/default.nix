@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Urban Morphology Measuring Toolkit";
     homepage = "https://github.com/pysal/momepy";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

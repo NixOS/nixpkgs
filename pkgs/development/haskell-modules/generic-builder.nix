@@ -107,6 +107,7 @@ in
   license,
   enableParallelBuilding ? true,
   maintainers ? null,
+  teams ? null,
   changelog ? null,
   mainProgram ? null,
   doCoverage ? false,
@@ -982,6 +983,7 @@ lib.fix (
         // optionalAttrs (args ? broken) { inherit broken; }
         // optionalAttrs (args ? description) { inherit description; }
         // optionalAttrs (args ? maintainers) { inherit maintainers; }
+        // optionalAttrs (args ? teams) { inherit teams; }
         // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
         // optionalAttrs (args ? badPlatforms) { inherit badPlatforms; }
         // optionalAttrs (args ? changelog) { inherit changelog; }

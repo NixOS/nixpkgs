@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCm/rocSOLVER";
     license = with licenses; [ bsd2 ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours

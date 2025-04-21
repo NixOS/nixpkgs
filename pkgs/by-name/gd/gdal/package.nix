@@ -312,13 +312,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
-    maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
-        marcweber
-        dotlambda
-      ];
+    maintainers = with maintainers; [
+      marcweber
+      dotlambda
+    ];
+    teams = [ teams.geospatial ];
     platforms = platforms.unix;
   };
 })

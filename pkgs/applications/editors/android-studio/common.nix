@@ -324,11 +324,19 @@ let
           platforms = [ "x86_64-linux" ];
           maintainers =
             rec {
-              stable =
-                lib.teams.android.members
-                ++ (with lib.maintainers; [
-                  alapshin
-                ]);
+              stable = with lib.maintainers; [
+                alapshin
+              ];
+              beta = stable;
+              canary = stable;
+              dev = stable;
+            }
+            ."${channel}";
+          teams =
+            rec {
+              stable = with lib.teams; [
+                android
+              ];
               beta = stable;
               canary = stable;
               dev = stable;

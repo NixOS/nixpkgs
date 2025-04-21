@@ -299,7 +299,7 @@ stdenv.mkDerivation {
     {
       homepage = "http://www.gitlab.com/";
       platforms = platforms.linux;
-      maintainers = teams.gitlab.members;
+      teams = [ teams.gitlab ];
     }
     // (
       if gitlabEnterprise then

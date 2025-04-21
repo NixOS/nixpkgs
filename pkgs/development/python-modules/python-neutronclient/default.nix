@@ -91,6 +91,6 @@ buildPythonPackage rec {
     description = "Python bindings for the OpenStack Networking API";
     homepage = "https://github.com/openstack/python-neutronclient/";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

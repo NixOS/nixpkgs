@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/SharePreview";
     license = lib.licenses.gpl3Plus;
     mainProgram = "share-preview";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
   };
 })

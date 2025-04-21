@@ -65,6 +65,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.deshaw.members;
+    teams = [ lib.teams.deshaw ];
   };
 }

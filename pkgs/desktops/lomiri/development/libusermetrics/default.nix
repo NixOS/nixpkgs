@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/libusermetrics";
     changelog = "https://gitlab.com/ubports/development/core/libusermetrics/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     mainProgram = "usermetricsinput";
     pkgConfigModules = [

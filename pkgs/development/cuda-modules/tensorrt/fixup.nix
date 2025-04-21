@@ -113,7 +113,8 @@ finalAttrs: prevAttrs: {
       prevAttrs.meta.badPlatforms or [ ]
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
+    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ maintainers.aidalgol ];
+    teams = prevAttrs.meta.teams or [ ];
 
     # Building TensorRT on Hydra is impossible because of the non-redistributable
     # license and because the source needs to be manually downloaded from the

@@ -43,6 +43,7 @@ buildPythonPackage rec {
     mainProgram = "aggregate6";
     homepage = "https://github.com/job/aggregate6";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = lib.teams.wdz.members ++ (with lib.maintainers; [ marcel ]);
+    maintainers = with lib.maintainers; [ marcel ];
+    teams = [ lib.teams.wdz ];
   };
 }
