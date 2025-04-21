@@ -2,7 +2,7 @@ diff --git a/llm/cli.py b/llm/cli.py
 index af37feb..18b078a 100644
 --- a/llm/cli.py
 +++ b/llm/cli.py
-@@ -1014,18 +1014,7 @@ def templates_path():
+@@ -2306,18 +2306,7 @@ def templates_path():
  )
  def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
      """Install packages from PyPI into the same environment as LLM"""
@@ -22,7 +22,7 @@ index af37feb..18b078a 100644
  
  
  @cli.command()
-@@ -1033,8 +1022,7 @@ def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
+@@ -2325,8 +2314,7 @@ def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
  @click.option("-y", "--yes", is_flag=True, help="Don't ask for confirmation")
  def uninstall(packages, yes):
      """Uninstall Python packages from the LLM environment"""
