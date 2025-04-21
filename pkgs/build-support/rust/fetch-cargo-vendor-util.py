@@ -46,7 +46,7 @@ def create_http_session() -> requests.Session:
 
 def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
     sha256_hash = hashlib.sha256()
-    with session.get(url, stream=True) as response:
+    with session.get(url, stream=True, timeout=(1, 300)) as response:
         if not response.ok:
             raise Exception(f"Failed to fetch file from {url}. Status code: {response.status_code}")
         with open(destination_path, "wb") as file:
