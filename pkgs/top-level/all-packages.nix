@@ -18217,17 +18217,6 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  inherit (callPackages ../applications/science/logic/z3 { python = python3; })
-    z3_4_14
-    z3_4_13
-    z3_4_12
-    z3_4_11
-    z3_4_8
-    z3_4_8_5
-    ;
-  z3 = z3_4_13;
-  z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix { };
-
   tlaplus = callPackage ../applications/science/logic/tlaplus {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
