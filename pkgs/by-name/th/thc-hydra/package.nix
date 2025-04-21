@@ -6,7 +6,7 @@
   openssl,
   ncurses,
   libidn,
-  pcre,
+  pcre2,
   libssh,
   libmysqlclient,
   libpq,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     openssl
     ncurses
     libidn
-    pcre
+    pcre2
     libssh
     libmysqlclient
     libpq
