@@ -160,7 +160,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional journalSupport systemd;
 
   cmakeFlags =
-    [ ]
+    [
+      "-DREPRODUCIBLE_BUILD=ON"
+    ]
     ++ lib.optional extrasSupport "-DBUILD_EXTRAS=ON"
     ++ lib.optional docsSupport "-DBUILD_DOCS=ON"
     ++ lib.optional curlSupport "-DBUILD_CURL=ON"
