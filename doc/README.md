@@ -267,7 +267,7 @@ Keep examples as the last nested heading, and link to the examples wherever appl
 
 The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
 An example:
-```
+```markdown
 ## buildImage
 
 Some explanation about the function here.

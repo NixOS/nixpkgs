@@ -66,7 +66,7 @@ The result is a script that will validate the file you pass as the first argumen
 It can be any format that `cue vet` supports, i.e. YAML or JSON for example.
 
 Here is an example, named `example.json`, given the following JSON:
-```
+```json
 { "field1": "abc" }
 ```
 
