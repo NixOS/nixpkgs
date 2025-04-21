@@ -14,6 +14,7 @@
   stdenv,
   zlib,
   # Boolean flags
+  enableSTB ? true,
   ## Darwin headless will hang when trying to run the SDL test program
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
@@ -36,16 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    giflib
-    libXpm
-    libjpeg
-    libpng
-    libtiff
-    libwebp
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  buildInputs =
+    [
+      SDL2
+      libtiff
+      libwebp
+      zlib
+    ]
+    ++ lib.optionals (!enableSTB) [
+      libjpeg
+      libpng
+    ];
 
   configureFlags =
     [
@@ -54,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature false "png-shared")
       (lib.enableFeature false "tif-shared")
       (lib.enableFeature false "webp-shared")
+      (lib.enableFeature enableSTB "stb-image")
       (lib.enableFeature enableSdltest "sdltest")
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
