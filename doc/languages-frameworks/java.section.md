@@ -7,7 +7,9 @@ stdenv.mkDerivation {
   pname = "...";
   version = "...";
 
-  src = fetchurl { /* ... */ };
+  src = fetchurl {
+    # ...
+  };
 
   nativeBuildInputs = [
     ant
@@ -95,7 +97,7 @@ let
   something = (pkgs.something.override { jre = my_jre; });
   other = (pkgs.other.override { jre = my_jre; });
 in
-  <...>
+<...>
 ```
 
 You can also specify what JDK your JRE should be based on, for example
@@ -122,7 +124,10 @@ OpenJDK. For instance, to use the GNU Java Compiler:
 
 ```nix
 {
-  nativeBuildInputs = [ gcj ant ];
+  nativeBuildInputs = [
+    gcj
+    ant
+  ];
 }
 ```
 

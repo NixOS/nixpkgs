@@ -145,7 +145,7 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
 ```nix
 {
   meta.platforms = lib.platforms.linux;
-  meta.hydraPlatforms = [];
+  meta.hydraPlatforms = [ ];
 }
 ```
 
@@ -169,7 +169,12 @@ This means that `broken` can be used to express constraints, for example:
 
   ```nix
   {
-    meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ]);
+    meta.broken = lib.all (
+      map (p: p.meta.broken) [
+        glibc
+        musl
+      ]
+    );
   }
   ```
 
