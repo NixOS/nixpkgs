@@ -65,18 +65,14 @@ The `buildOctavePackage` does several things to make sure things work properly.
 
 In Octave packages, there are four sets of dependencies that can be specified:
 
-`nativeBuildInputs`
-: Just like other packages, `nativeBuildInputs` is intended for architecture-dependent build-time-only dependencies.
+- `nativeBuildInputs`: Just like other packages, `nativeBuildInputs` is intended for architecture-dependent build-time-only dependencies.
 
-`buildInputs`
-: Like other packages, `buildInputs` is intended for architecture-independent build-time-only dependencies.
+- `buildInputs`: Like other packages, `buildInputs` is intended for architecture-independent build-time-only dependencies.
 
-`propagatedBuildInputs`
-: Similar to other packages, `propagatedBuildInputs` is intended for packages that are required for both building and running of the package.
-See [Symbolic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/octave-modules/symbolic/default.nix) for how this works and why it is needed.
+- `propagatedBuildInputs`: Similar to other packages, `propagatedBuildInputs` is intended for packages that are required for both building and running of the package.
+  See [Symbolic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/octave-modules/symbolic/default.nix) for how this works and why it is needed.
 
-`requiredOctavePackages`
-: This is a special dependency that ensures the specified Octave packages are dependent on others, and are made available simultaneously when loading them in Octave.
+- `requiredOctavePackages`: This is a special dependency that ensures the specified Octave packages are dependent on others, and are made available simultaneously when loading them in Octave.
 
 ### Installing Octave Packages {#sssec-installing-octave-packages}
 

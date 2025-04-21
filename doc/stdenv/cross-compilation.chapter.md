@@ -26,49 +26,31 @@ In Nixpkgs, these three platforms are defined as attribute sets under the names 
 }
 ```
 
-`buildPlatform`
+- `buildPlatform`: The "build platform" is the platform on which a package is built. Once someone has a built package, or pre-built binary package, the build platform should not matter and can be ignored.
 
-: The "build platform" is the platform on which a package is built. Once someone has a built package, or pre-built binary package, the build platform should not matter and can be ignored.
+- `hostPlatform`: The "host platform" is the platform on which a package will be run. This is the simplest platform to understand, but also the one with the worst name.
 
-`hostPlatform`
+- `targetPlatform`: The "target platform" attribute is, unlike the other two attributes, not actually fundamental to the process of building software. Instead, it is only relevant for compatibility with building certain specific compilers and build tools. It can be safely ignored for all other packages.
 
-: The "host platform" is the platform on which a package will be run. This is the simplest platform to understand, but also the one with the worst name.
+  The build process of certain compilers is written in such a way that the compiler resulting from a single build can itself only produce binaries for a single platform. The task of specifying this single "target platform" is thus pushed to build time of the compiler. The root cause of this is that the compiler (which will be run on the host) and the standard library/runtime (which will be run on the target) are built by a single build process.
 
-`targetPlatform`
+  There is no fundamental need to think about a single target ahead of time like this. If the tool supports modular or pluggable backends, both the need to specify the target at build time and the constraint of having only a single target disappear. An example of such a tool is LLVM.
 
-: The "target platform" attribute is, unlike the other two attributes, not actually fundamental to the process of building software. Instead, it is only relevant for compatibility with building certain specific compilers and build tools. It can be safely ignored for all other packages.
+  Although the existence of a "target platform" is arguably a historical mistake, it is a common one: examples of tools that suffer from it are GCC, Binutils, GHC and Autoconf. Nixpkgs tries to avoid sharing in the mistake where possible. Still, because the concept of a target platform is so ingrained, it is best to support it as is.
 
-: The build process of certain compilers is written in such a way that the compiler resulting from a single build can itself only produce binaries for a single platform. The task of specifying this single "target platform" is thus pushed to build time of the compiler. The root cause of this is that the compiler (which will be run on the host) and the standard library/runtime (which will be run on the target) are built by a single build process.
+  The exact schema these fields follow is a bit ill-defined due to a long and convoluted evolution, but this is slowly being cleaned up. You can see examples of ones used in practice in `lib.systems.examples`; note how they are not all very consistent. For now, here are few fields can count on them containing:
 
-: There is no fundamental need to think about a single target ahead of time like this. If the tool supports modular or pluggable backends, both the need to specify the target at build time and the constraint of having only a single target disappear. An example of such a tool is LLVM.
+- `system`: This is a two-component shorthand for the platform. Examples of this would be "x86_64-darwin" and "i686-linux"; see `lib.systems.doubles` for more. The first component corresponds to the CPU architecture of the platform and the second to the operating system of the platform (`[cpu]-[os]`). This format has built-in support in Nix, such as the `builtins.currentSystem` impure string.
 
-: Although the existence of a "target platform" is arguably a historical mistake, it is a common one: examples of tools that suffer from it are GCC, Binutils, GHC and Autoconf. Nixpkgs tries to avoid sharing in the mistake where possible. Still, because the concept of a target platform is so ingrained, it is best to support it as is.
+- `config`: This is a 3- or 4- component shorthand for the platform. Examples of this would be `x86_64-unknown-linux-gnu` and `aarch64-apple-darwin14`. This is a standard format called the "LLVM target triple", as they are pioneered by LLVM. In the 4-part form, this corresponds to `[cpu]-[vendor]-[os]-[abi]`. This format is strictly more informative than the "Nix host double", as the previous format could analogously be termed. This needs a better name than `config`!
 
-The exact schema these fields follow is a bit ill-defined due to a long and convoluted evolution, but this is slowly being cleaned up. You can see examples of ones used in practice in `lib.systems.examples`; note how they are not all very consistent. For now, here are few fields can count on them containing:
+- `parsed`: This is a Nix representation of a parsed LLVM target triple with white-listed components. This can be specified directly, or actually parsed from the `config`. See `lib.systems.parse` for the exact representation.
 
-`system`
+- `libc`: This is a string identifying the standard C library used. Valid identifiers include "glibc" for GNU libc, "libSystem" for Darwin's Libsystem, and "uclibc" for µClibc. It should probably be refactored to use the module system, like `parse`.
 
-: This is a two-component shorthand for the platform. Examples of this would be "x86_64-darwin" and "i686-linux"; see `lib.systems.doubles` for more. The first component corresponds to the CPU architecture of the platform and the second to the operating system of the platform (`[cpu]-[os]`). This format has built-in support in Nix, such as the `builtins.currentSystem` impure string.
+- `is*`: These predicates are defined in `lib.systems.inspect`, and slapped onto every platform. They are superior to the ones in `stdenv` as they force the user to be explicit about which platform they are inspecting. Please use these instead of those.
 
-`config`
-
-: This is a 3- or 4- component shorthand for the platform. Examples of this would be `x86_64-unknown-linux-gnu` and `aarch64-apple-darwin14`. This is a standard format called the "LLVM target triple", as they are pioneered by LLVM. In the 4-part form, this corresponds to `[cpu]-[vendor]-[os]-[abi]`. This format is strictly more informative than the "Nix host double", as the previous format could analogously be termed. This needs a better name than `config`!
-
-`parsed`
-
-: This is a Nix representation of a parsed LLVM target triple with white-listed components. This can be specified directly, or actually parsed from the `config`. See `lib.systems.parse` for the exact representation.
-
-`libc`
-
-: This is a string identifying the standard C library used. Valid identifiers include "glibc" for GNU libc, "libSystem" for Darwin's Libsystem, and "uclibc" for µClibc. It should probably be refactored to use the module system, like `parse`.
-
-`is*`
-
-: These predicates are defined in `lib.systems.inspect`, and slapped onto every platform. They are superior to the ones in `stdenv` as they force the user to be explicit about which platform they are inspecting. Please use these instead of those.
-
-`platform`
-
-: This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
+- `platform`: This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
 
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 

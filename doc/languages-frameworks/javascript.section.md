@@ -353,17 +353,13 @@ This is to be used together with `importNpmLock.hooks.linkNodeModulesHook` to fa
 
 It accepts an argument with the following attributes:
 
-`npmRoot` (Path; optional)
-: Path to package directory containing the source tree. If not specified, the `package` and `packageLock` arguments must both be specified.
+- `npmRoot` (Path; optional): Path to package directory containing the source tree. If not specified, the `package` and `packageLock` arguments must both be specified.
 
-`package` (Attrset; optional)
-: Parsed contents of `package.json`, as returned by `lib.importJSON ./my-package.json`. If not specified, the `package.json` in `npmRoot` is used.
+- `package` (Attrset; optional): Parsed contents of `package.json`, as returned by `lib.importJSON ./my-package.json`. If not specified, the `package.json` in `npmRoot` is used.
 
-`packageLock` (Attrset; optional)
-: Parsed contents of `package-lock.json`, as returned `lib.importJSON ./my-package-lock.json`. If not specified, the `package-lock.json` in `npmRoot` is used.
+- `packageLock` (Attrset; optional): Parsed contents of `package-lock.json`, as returned `lib.importJSON ./my-package-lock.json`. If not specified, the `package-lock.json` in `npmRoot` is used.
 
-`derivationArgs` (`mkDerivation` attrset; optional)
-: Arguments passed to `stdenv.mkDerivation`
+- `derivationArgs` (`mkDerivation` attrset; optional): Arguments passed to `stdenv.mkDerivation`
 
 For example:
 

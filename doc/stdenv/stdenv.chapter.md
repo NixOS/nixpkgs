@@ -1337,11 +1337,9 @@ patchShebangs [--build | --host] PATH...
 
 ##### Flags {#patch-shebangs.sh-invocation-flags}
 
-`--build`
-: Look up commands available at build time
+- `--build`: Look up commands available at build time
 
-`--host`
-: Look up commands available at run time
+- `--host`: Look up commands available at run time
 
 ##### Examples {#patch-shebangs.sh-invocation-examples}
 
