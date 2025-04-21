@@ -259,13 +259,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall =
     lib.optionalString osxkeychainSupport ''
+      mkdir -p $out/libexec/git-core
+      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
+
+      # ideally unneeded, but added for backwards compatibility
       mkdir -p $out/bin
-      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
+      ln -s $out/libexec/git-core/git-credential-osxkeychain $out/bin/
+
       rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
     ''
     + lib.optionalString withLibsecret ''
+      mkdir -p $out/libexec/git-core
+      ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/libexec/git-core/
+
+      # ideally unneeded, but added for backwards compatibility
       mkdir -p $out/bin
-      ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
+      ln -s $out/libexec/git-core/git-credential-libsecret $out/bin/
+
       rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
     '';
 
@@ -334,8 +344,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString perlSupport ''
       # wrap perl commands
-      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
+      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/libexec/git-core/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
+      # ideally unneeded, but added for backwards compatibility
+      ln -s $out/libexec/git-core/git-credential-netrc $out/bin/
+
       wrapProgram $out/libexec/git-core/git-cvsimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
@@ -413,7 +426,6 @@ stdenv.mkDerivation (finalAttrs: {
         ''
     )
     + lib.optionalString osxkeychainSupport ''
-      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
       # enable git-credential-osxkeychain on darwin if desired (default)
       mkdir -p $out/etc
       cat > $out/etc/gitconfig << EOF
