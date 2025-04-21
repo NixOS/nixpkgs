@@ -99,10 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     lib.optionalString docsSupport ''
       substituteInPlace cmake/Conky.cmake --replace-fail "# set(RELEASE true)" "set(RELEASE true)"
-    ''
-    + lib.optionalString waylandSupport ''
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
     '';
 
   env = {
