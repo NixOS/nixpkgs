@@ -162,5 +162,12 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # loading pygame.tests.font_test
+      # /nix/store/mrvg4qq09d51w5s95v15y4ym05q009fd-stdenv-darwin/setup: line 1771: 64131 Segmentation fault: 11
+      #
+      # https://github.com/NixOS/nixpkgs/issues/400378
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
