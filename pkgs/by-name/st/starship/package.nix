@@ -75,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       danth
       Br1ght0ne
       Frostman
+      sigmasquadron
     ];
     mainProgram = "starship";
   };
