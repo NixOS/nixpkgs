@@ -16,9 +16,7 @@ If you need that to be available, see [`dockerTools.binSh`](#sssec-pkgs-dockerTo
 `fakeNss` is made available in Nixpkgs as a package rather than a function, but it has two attributes that can be overridden and might be useful in particular cases.
 For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](#sec-pkg-override).
 
-`extraPasswdLines` (List of Strings; _optional_)
-
-: A list of lines that will be added to `/etc/passwd`.
+- `extraPasswdLines` (List of Strings; _optional_): A list of lines that will be added to `/etc/passwd`.
   Useful if extra users need to exist in the output of `fakeNss`.
   If `extraPasswdLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
   Those entries will always exist.
@@ -27,9 +25,7 @@ For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](
 
   _Default value:_ `[]`.
 
-`extraGroupLines` (List of Strings; _optional_)
-
-: A list of lines that will be added to `/etc/group`.
+- `extraGroupLines` (List of Strings; _optional_): A list of lines that will be added to `/etc/group`.
   Useful if extra groups need to exist in the output of `fakeNss`.
   If `extraGroupLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
   Those entries will always exist.

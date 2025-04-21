@@ -168,11 +168,9 @@ Text for the example.
 For defining a group of terms:
 
 ```markdown
-pear
-:   green or yellow bulbous fruit
+- pear: green or yellow bulbous fruit
 
-watermelon
-:   green fruit with red flesh
+- watermelon: green fruit with red flesh
 ```
 
 ## Commit conventions
@@ -313,19 +311,13 @@ Description of what `callPackage` does.
 If something's special about `coolFunction`'s general argument handling, you can say so here.
 Otherwise, just describe the single argument or start the arguments' definition list without introduction.
 
-*`name`* (String)
+ - *`name`* (String): The name of the resulting image.
 
-: The name of the resulting image.
+ - *`config`* (Attribute set): Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
 
-*`config`* (Attribute set)
+ - `outputHash` (String; _optional_): A brief explanation including when and when not to pass this attribute.
 
-: Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
-
-  `outputHash` (String; _optional_)
-
-  : A brief explanation including when and when not to pass this attribute.
-
-  : _Default:_ the output path's hash.
+   _Default:_ the output path's hash.
 ```
 
 Checklist:

@@ -179,8 +179,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `fetchurl` requires an attribute set with the following attributes:
 
-`url` (String; _optional_)
-: The URL to download from.
+- `url` (String; _optional_): The URL to download from.
 
   :::{.note}
   Either `url` or `urls` must be specified, but not both.
@@ -190,8 +189,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`urls` (List of String; _optional_)
-: A list of URLs, specifying download locations for the same content.
+- `urls` (List of String; _optional_): A list of URLs, specifying download locations for the same content.
   Each URL will be tried in order until one of them succeeds with some content or all of them fail.
   See [](#ex-fetchers-fetchurl-nixpkgs-version-multiple-urls) to understand how this attribute affects the behaviour of `fetchurl`.
 
@@ -201,8 +199,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `[]`.
 
-`hash` (String; _optional_)
-: Hash of the derivation output of `fetchurl`, following the format for integrity metadata as defined by [SRI](https://www.w3.org/TR/SRI/).
+- `hash` (String; _optional_): Hash of the derivation output of `fetchurl`, following the format for integrity metadata as defined by [SRI](https://www.w3.org/TR/SRI/).
   For more information, see [](#chap-pkgs-fetchers-caveats).
 
   :::{.note}
@@ -213,8 +210,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`outputHash` (String; _optional_)
-: Hash of the derivation output of `fetchurl` in the format expected by Nix.
+- `outputHash` (String; _optional_): Hash of the derivation output of `fetchurl` in the format expected by Nix.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
@@ -225,8 +221,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`outputHashAlgo` (String; _optional_)
-: Algorithm used to generate the value specified in `outputHash`.
+- `outputHashAlgo` (String; _optional_): Algorithm used to generate the value specified in `outputHash`.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashAlgo) for more information about the values it supports.
 
   :::{.note}
@@ -237,8 +232,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`sha1` (String; _optional_)
-: SHA-1 hash of the derivation output of `fetchurl` in the format expected by Nix.
+- `sha1` (String; _optional_): SHA-1 hash of the derivation output of `fetchurl` in the format expected by Nix.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
@@ -247,8 +241,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`sha256` (String; _optional_)
-: SHA-256 hash of the derivation output of `fetchurl` in the format expected by Nix.
+- `sha256` (String; _optional_): SHA-256 hash of the derivation output of `fetchurl` in the format expected by Nix.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
@@ -257,8 +250,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`sha512` (String; _optional_)
-: SHA-512 hash of the derivation output of `fetchurl` in the format expected by Nix.
+- `sha512` (String; _optional_): SHA-512 hash of the derivation output of `fetchurl` in the format expected by Nix.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
@@ -267,14 +259,12 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`name` (String; _optional_)
-: The symbolic name of the downloaded file when saved in the Nix store.
+- `name` (String; _optional_): The symbolic name of the downloaded file when saved in the Nix store.
   See [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl) for details on how the name of the file is decided.
 
   _Default value:_ `""`.
 
-`pname` (String; _optional_)
-: A base name, which will be combined with `version` to form the symbolic name of the downloaded file when saved in the Nix store.
+- `pname` (String; _optional_): A base name, which will be combined with `version` to form the symbolic name of the downloaded file when saved in the Nix store.
   See [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl) for details on how the name of the file is decided.
 
   :::{.note}
@@ -283,27 +273,23 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`version` (String; _optional_)
-: A version, which will be combined with `pname` to form the symbolic name of the downloaded file when saved in the Nix store.
+- `version` (String; _optional_): A version, which will be combined with `pname` to form the symbolic name of the downloaded file when saved in the Nix store.
   See [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl) for details on how the name of the file is decided.
 
   _Default value:_ `""`.
 
-`recursiveHash` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash}
-: If set to `true`, will signal to Nix that the hash given to `fetchurl` was calculated using the `"recursive"` mode.
+- `recursiveHash` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash}: If set to `true`, will signal to Nix that the hash given to `fetchurl` was calculated using the `"recursive"` mode.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashMode) for more information about the existing modes.
 
   By default, `fetchurl` uses `"recursive"` mode when the `executable` attribute is set to `true`, so you don't need to specify `recursiveHash` in this case.
 
   _Default value:_ `false`.
 
-`executable` (Boolean; _optional_)
-: If `true`, sets the executable bit on the downloaded file.
+- `executable` (Boolean; _optional_): If `true`, sets the executable bit on the downloaded file.
 
   _Default value_: `false`.
 
-`downloadToTemp` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp}
-: If `true`, saves the downloaded file to a temporary location instead of the expected Nix store location.
+- `downloadToTemp` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp}: If `true`, saves the downloaded file to a temporary location instead of the expected Nix store location.
   This is useful when used in conjunction with `postFetch` attribute, otherwise `fetchurl` will not produce any meaningful output.
 
   The location of the downloaded file will be set in the `$downloadedFile` variable, which should be used by the script in the `postFetch` attribute.
@@ -311,15 +297,13 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `false`.
 
-`postFetch` (String; _optional_)
-: Script executed after the file has been downloaded successfully, and before `fetchurl` finishes running.
+- `postFetch` (String; _optional_): Script executed after the file has been downloaded successfully, and before `fetchurl` finishes running.
   Useful for post-processing, to check or transform the file in some way.
   See [](#ex-fetchers-fetchurl-nixpkgs-version-postfetch) to understand how to work with this attribute.
 
   _Default value:_ `""`.
 
-`netrcPhase` (String or Null; _optional_)
-: Script executed to create a {manpage}`netrc(5)` file to be used with {manpage}`curl(1)`.
+- `netrcPhase` (String or Null; _optional_): Script executed to create a {manpage}`netrc(5)` file to be used with {manpage}`curl(1)`.
   The script should create the `netrc` file (note that it does not begin with a ".") in the directory it's currently running in (`$PWD`).
 
   The script is executed during the setup done by `fetchurl` before it runs any of its code to download the specified content.
@@ -336,8 +320,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value_: `null`.
 
-`netrcImpureEnvVars` (List of String; _optional_)
-: If specified, `fetchurl` will add these environment variable names to the list of [impure environment variables](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-impureEnvVars), which will be passed from the environment of the calling user to the builder running the `fetchurl` code.
+- `netrcImpureEnvVars` (List of String; _optional_): If specified, `fetchurl` will add these environment variable names to the list of [impure environment variables](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-impureEnvVars), which will be passed from the environment of the calling user to the builder running the `fetchurl` code.
 
   This is useful when used with `netrcPhase` to hide any secrets that are used in it, because the script in `netrcPhase` only needs to reference the environment variables with the secrets in them instead.
   However, note that these are called _impure_ variables for a reason:
@@ -345,46 +328,39 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `[]`.
 
-`curlOpts` (String; _optional_)
-: If specified, this value will be appended to the invocation of {manpage}`curl(1)` when downloading the URL(s) given to `fetchurl`.
+- `curlOpts` (String; _optional_): If specified, this value will be appended to the invocation of {manpage}`curl(1)` when downloading the URL(s) given to `fetchurl`.
   Multiple arguments can be separated by spaces normally, but values with whitespaces will be interpreted as multiple arguments (instead of a single value), even if the value is escaped.
   See `curlOptsList` for a way to pass values with whitespaces in them.
 
   _Default value:_ `""`.
 
-`curlOptsList` (List of String; _optional_)
-: If specified, each element of this list will be passed as an argument to the invocation of {manpage}`curl(1)` when downloading the URL(s) given to `fetchurl`.
+- `curlOptsList` (List of String; _optional_): If specified, each element of this list will be passed as an argument to the invocation of {manpage}`curl(1)` when downloading the URL(s) given to `fetchurl`.
   This allows passing values that contain spaces, with no escaping needed.
 
   _Default value:_ `[]`.
 
-`showURLs` (Boolean; _optional_)
-: If set to `true`, this will stop `fetchurl` from downloading anything at all.
+- `showURLs` (Boolean; _optional_): If set to `true`, this will stop `fetchurl` from downloading anything at all.
   Instead, it will output a list of all the URLs it would've used to download the content (after resolving `mirror://` URLs, for example).
   This is useful for debugging.
 
   _Default value:_ `false`.
 
-`meta` (Attribute Set; _optional_)
-: Specifies any [meta-attributes](#chap-meta) for the derivation returned by `fetchurl`.
+- `meta` (Attribute Set; _optional_): Specifies any [meta-attributes](#chap-meta) for the derivation returned by `fetchurl`.
 
   _Default value:_ `{}`.
 
-`passthru` (Attribute Set; _optional_)
-: Specifies any extra [`passthru`](#chap-passthru) attributes for the derivation returned by `fetchurl`.
+- `passthru` (Attribute Set; _optional_): Specifies any extra [`passthru`](#chap-passthru) attributes for the derivation returned by `fetchurl`.
   Note that `fetchurl` defines [`passthru` attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
   Attributes specified in `passthru` can override the default attributes returned by `fetchurl`.
 
   _Default value:_ `{}`.
 
-`preferLocalBuild` (Boolean; _optional_)
-: This is the same attribute as [defined in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-preferLocalBuild).
+- `preferLocalBuild` (Boolean; _optional_): This is the same attribute as [defined in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-preferLocalBuild).
   It is `true` by default because making a remote machine download the content just duplicates network traffic (since the local machine might download the results from the derivation anyway), but this could be useful in cases where network access is restricted on local machines.
 
   _Default value:_ `true`.
 
-`nativeBuildInputs` (List of Attribute Set; _optional_)
-: Additional packages needed to download the content.
+- `nativeBuildInputs` (List of Attribute Set; _optional_): Additional packages needed to download the content.
   This is useful if you need extra packages for `postFetch` or `netrcPhase`, for example.
   Has the same semantics as in [](#var-stdenv-nativeBuildInputs).
   See [](#ex-fetchers-fetchurl-nixpkgs-version-postfetch) to understand how this can be used with `postFetch`.
@@ -395,9 +371,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `fetchurl` also defines its own [`passthru`](#chap-passthru) attributes:
 
-`url` (String)
-
-: The same `url` attribute passed in the argument to `fetchurl`.
+- `url` (String): The same `url` attribute passed in the argument to `fetchurl`.
 
 ### Examples {#ssec-pkgs-fetchers-fetchurl-examples}
 
@@ -540,18 +514,15 @@ This can extended by specifying additional attributes, see [](#ex-fetchers-fetch
 
 The attributes below are treated differently by `fetchzip` when compared to what `fetchurl` expects:
 
-`name` (String; _optional_)
-: Works as defined in `fetchurl`, but has a different default value than `fetchurl`.
+- `name` (String; _optional_): Works as defined in `fetchurl`, but has a different default value than `fetchurl`.
 
   _Default value:_ `"source"`.
 
-`nativeBuildInputs` (List of Attribute Set; _optional_)
-: Works as defined in `fetchurl`, but it is also augmented by `fetchzip` to include packages to deal with additional archives (such as `.zip`).
+- `nativeBuildInputs` (List of Attribute Set; _optional_): Works as defined in `fetchurl`, but it is also augmented by `fetchzip` to include packages to deal with additional archives (such as `.zip`).
 
   _Default value:_ `[]`.
 
-`postFetch` (String; _optional_)
-: Works as defined in `fetchurl`, but it is also augmented with the code needed to make `fetchzip` work.
+- `postFetch` (String; _optional_): Works as defined in `fetchurl`, but it is also augmented with the code needed to make `fetchzip` work.
 
   :::{.caution}
   It is only safe to modify files in `$out` in `postFetch`.
@@ -560,8 +531,7 @@ The attributes below are treated differently by `fetchzip` when compared to what
 
   _Default value:_ `""`.
 
-`stripRoot` (Boolean; _optional_)
-: If `true`, the decompressed contents are moved one level up the directory tree.
+- `stripRoot` (Boolean; _optional_): If `true`, the decompressed contents are moved one level up the directory tree.
 
   This is useful for archives that decompress into a single directory which commonly includes some values that change with time, such as version numbers.
   When this is the case (and `stripRoot` is `true`), `fetchzip` will remove this directory and make the decompressed contents available in the top-level directory.
@@ -572,8 +542,7 @@ The attributes below are treated differently by `fetchzip` when compared to what
 
   _Default value:_ `true`.
 
-`extension` (String or Null; _optional_)
-: If set, the archive downloaded by `fetchzip` will be renamed to a filename with the extension specified in this attribute.
+- `extension` (String or Null; _optional_): If set, the archive downloaded by `fetchzip` will be renamed to a filename with the extension specified in this attribute.
 
   This is useful when making `fetchzip` support additional types of archives, because the implementation may use the extension of an archive to determine whether they can decompress it.
   If the URL you're using to download the contents doesn't end with the extension associated with the archive, use this attribute to fix the filename of the archive.
@@ -582,18 +551,15 @@ The attributes below are treated differently by `fetchzip` when compared to what
 
   _Default value:_ `null`.
 
-`recursiveHash` (Boolean; _optional_)
-: Works [as defined in `fetchurl`](#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash), but its default value is different than for `fetchurl`.
+- `recursiveHash` (Boolean; _optional_): Works [as defined in `fetchurl`](#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash), but its default value is different than for `fetchurl`.
 
   _Default value:_ `true`.
 
-`downloadToTemp` (Boolean; _optional_)
-: Works [as defined in `fetchurl`](#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp), but its default value is different than for `fetchurl`.
+- `downloadToTemp` (Boolean; _optional_): Works [as defined in `fetchurl`](#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp), but its default value is different than for `fetchurl`.
 
   _Default value:_ `true`.
 
-`extraPostFetch` **DEPRECATED**
-: This attribute is deprecated.
+- `extraPostFetch` **DEPRECATED**: This attribute is deprecated.
   Please use `postFetch` instead.
 
   This attribute is **not** passed through to `fetchurl`.
@@ -783,25 +749,21 @@ Additionally, the following optional arguments can be given:
 : Shell code executed after the repository has been fetched successfully.
   This can do things like check or transform the file.
 
-*`leaveDotGit`* (Boolean)
-
-: Whether the `.git` directory of the clone should *not* be removed after checkout.
+- *`leaveDotGit`* (Boolean): Whether the `.git` directory of the clone should *not* be removed after checkout.
 
   Be warned though that the git repository format is not stable and this flag is therefore not suitable for actual use by itself.
   Only use this for testing purposes or in conjunction with removing the `.git` directory in `postFetch`.
 
-*`deepClone`* (Boolean)
-
-: Clone the entire repository as opposing to just creating a shallow clone.
+- *`deepClone`* (Boolean): Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
 
-*`fetchTags`* (Boolean)
+- *`fetchTags`* (Boolean)
 
-: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
+  Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
 
-*`sparseCheckout`* (List of String)
+- *`sparseCheckout`* (List of String)
 
-: Prevent git from fetching unnecessary blobs from server.
+  Prevent git from fetching unnecessary blobs from server.
   This is useful if only parts of the repository are needed.
 
   ::: {.example #ex-fetchgit-sparseCheckout}
@@ -944,4 +906,3 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
-

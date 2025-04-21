@@ -27,38 +27,28 @@ package.
 
 The function `mkOption` accepts the following arguments.
 
-`type`
-
-:   The type of the option (see [](#sec-option-types)). This
+- `type`: The type of the option (see [](#sec-option-types)). This
     argument is mandatory for nixpkgs modules. Setting this is highly
     recommended for the sake of documentation and type checking. In case it is
     not set, a fallback type with unspecified behavior is used.
 
-`default`
-
-:   The default value used if no value is defined by any module. A
+- `default`: The default value used if no value is defined by any module. A
     default is not required; but if a default is not given, then users
     of the module will have to define the value of the option, otherwise
     an error will be thrown.
 
-`defaultText`
-
-:   A textual representation of the default value to be rendered verbatim in
+- `defaultText`: A textual representation of the default value to be rendered verbatim in
     the manual. Useful if the default value is a complex expression or depends
     on other values or packages.
     Use `lib.literalExpression` for a Nix expression, `lib.literalMD` for
     a plain English description in [Nixpkgs-flavored Markdown](
     https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
 
-`example`
-
-:   An example value that will be shown in the NixOS manual.
+- `example`: An example value that will be shown in the NixOS manual.
     You can use `lib.literalExpression` and `lib.literalMD` in the same way
     as in `defaultText`.
 
-`description`
-
-:   A textual description of the option in [Nixpkgs-flavored Markdown](
+- `description`: A textual description of the option in [Nixpkgs-flavored Markdown](
     https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format that will be
     included in the NixOS manual.
 

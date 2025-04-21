@@ -27,14 +27,10 @@ Note that no user namespace is created, which means that you won't be able to ru
 
 `buildContainer` expects an argument with the following attributes:
 
-`args` (List of String)
-
-: Specifies a set of arguments to run inside the container.
+- `args` (List of String): Specifies a set of arguments to run inside the container.
   Any packages referenced by `args` will be made available inside the container.
 
-`mounts` (Attribute Set; _optional_)
-
-: Would specify additional mounts that the runtime must make available to the container.
+- `mounts` (Attribute Set; _optional_): Would specify additional mounts that the runtime must make available to the container.
 
   :::{.warning}
   As explained in [issue #290879](https://github.com/NixOS/nixpkgs/issues/290879), this attribute is currently ignored.
@@ -46,23 +42,17 @@ Note that no user namespace is created, which means that you won't be able to ru
 
   _Default value:_ `{}`.
 
-`readonly` (Boolean; _optional_)
-
-: If `true`, sets the container's root filesystem as read-only.
+- `readonly` (Boolean; _optional_): If `true`, sets the container's root filesystem as read-only.
 
   _Default value:_ `false`.
 
-`os` **DEPRECATED**
-
-: Specifies the operating system on which the container filesystem is based on.
+- `os` **DEPRECATED**: Specifies the operating system on which the container filesystem is based on.
   If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
   According to the linked specification, all possible values for `$GOOS` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `darwin` or `linux`.
 
   _Default value:_ `"linux"`.
 
-`arch` **DEPRECATED**
-
-: Used to specify the architecture for which the binaries in the container filesystem have been compiled.
+- `arch` **DEPRECATED**: Used to specify the architecture for which the binaries in the container filesystem have been compiled.
   If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
   According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
 

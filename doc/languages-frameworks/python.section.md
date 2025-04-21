@@ -1310,21 +1310,13 @@ Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 `pytestCheckHook` recognizes the following attributes:
 
-`enabledTestPaths` and `disabledTestPaths`
+- `enabledTestPaths` and `disabledTestPaths`:   To specify path globs (files or directories) or test items.
 
-:   To specify path globs (files or directories) or test items.
+- `enabledTests` and `disabledTests`:   To specify keywords for class names or test method names.
 
-`enabledTests` and `disabledTests`
+- `enabledTestMarks` and `disabledTestMarks`:   To specify test marks.
 
-:   To specify keywords for class names or test method names.
-
-`enabledTestMarks` and `disabledTestMarks`
-
-:   To specify test marks.
-
-`pytestFlags`
-
-:   To append additional command-line arguments to `pytest`.
+- `pytestFlags`:   To append additional command-line arguments to `pytest`.
 
 By default, `pytest` automatically discovers which tests to run.
 If tests are explicitly enabled, only those tests will run.
