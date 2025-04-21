@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "3.6.0";
 
   src = fetchFromGitHub {
-    owner = "viperML";
+    owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
     hash = "sha256-k8rz5RF1qi7RXzQYWGbw5pJRNRFIdX85SIYN+IHiVL4=";
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Yet another nix cli helper";
-    homepage = "https://github.com/viperML/nh";
+    homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
