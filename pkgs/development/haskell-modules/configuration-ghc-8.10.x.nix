@@ -98,7 +98,7 @@ self: super: {
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
   # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+  ghc-tags = doDistribute self.ghc-tags_1_5;
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
