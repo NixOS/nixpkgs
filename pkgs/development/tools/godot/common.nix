@@ -241,6 +241,14 @@ let
         runHook post Install
       '';
 
+    # patching $debug can crash patchelf
+    # (https://github.com/NixOS/patchelf/issues/373), so explicitly patch $out
+    dontAutoPatchelf = true;
+
+    postFixup = ''
+      autoPatchelf "$out"
+    '';
+
     passthru = {
       tests =
         let

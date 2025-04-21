@@ -6484,11 +6484,6 @@ with pkgs;
     stdenv = gcc10Stdenv;
   };
 
-  fstar = callPackage ../development/compilers/fstar {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-    z3 = z3_4_8_5;
-  };
-
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
   gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
@@ -9009,15 +9004,6 @@ with pkgs;
     botan2
     botan3
     ;
-
-  box2d = callPackage ../development/libraries/box2d {
-    inherit (darwin.apple_sdk.frameworks)
-      Carbon
-      Cocoa
-      Kernel
-      OpenGL
-      ;
-  };
 
   c-ares = callPackage ../development/libraries/c-ares { };
 
@@ -18184,19 +18170,13 @@ with pkgs;
   isabelle = callPackage ../by-name/is/isabelle/package.nix {
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
-      version = "2024";
+      version = "2025";
       configureFlags = [
         "--enable-intinf-as-int"
         "--with-gmp"
         "--disable-shared"
       ];
       buildFlags = [ "compiler" ];
-      src = fetchFromGitHub {
-        owner = "polyml";
-        repo = "polyml";
-        rev = "v5.9.1";
-        hash = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
-      };
     };
 
     java = openjdk21;

@@ -10,7 +10,7 @@
   libxslt,
   perl,
   perlPackages,
-  box2d,
+  box2d_2,
   gettext,
   zlib,
   libjpeg,
@@ -397,7 +397,7 @@ stdenv.mkDerivation (finalAttrs: {
       ant
       bluez5
       boost
-      box2d
+      box2d_2
       cairo
       clucene_core_2
       cppunit
