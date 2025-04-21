@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   znc,
+  python3,
+  cmake,
 }:
 
 let
@@ -11,7 +13,7 @@ let
       pname,
       src,
       module_name,
-      buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
+      buildPhase ? "${znc}/bin/znc-buildmod-old ${module_name}.cpp",
       installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so",
       ...
     }:
@@ -21,7 +23,9 @@ let
         inherit buildPhase;
         inherit installPhase;
 
-        buildInputs = znc.buildInputs;
+        buildInputs = znc.buildInputs ++ [ python3 ];
+        nativeBuildInputs = znc.nativeBuildInputs;
+        dontUseCmakeConfigure = true;
 
         meta = a.meta // {
           platforms = lib.platforms.unix;
@@ -33,7 +37,7 @@ let
 in
 {
 
-  backlog = zncDerivation {
+  backlog = zncDerivation rec {
     pname = "znc-backlog";
     version = "unstable-2017-06-13";
     module_name = "backlog";

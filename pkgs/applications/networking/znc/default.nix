@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch2,
+  cmake,
   openssl,
   pkg-config,
   withPerl ? false,
@@ -23,22 +24,33 @@
 
 stdenv.mkDerivation rec {
   pname = "znc";
-  version = "1.8.2";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://znc.in/releases/archive/${pname}-${version}.tar.gz";
-    sha256 = "03fyi0j44zcanj1rsdx93hkdskwfvhbywjiwd17f9q1a7yp8l8zz";
+    sha256 = "sha256-6KfPgOGarVELTigur2G1a8MN+I6i4PZPrc3TA8SJTzw=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "CVE-2024-39844.patch";
-      url = "https://github.com/znc/znc/commit/8cbf8d628174ddf23da680f3f117dc54da0eb06e.patch";
-      hash = "sha256-JeKirXReiCiNDUS9XodI0oHASg2mPDvQYtV6P4L0mHM=";
-    })
+    ./module_builds.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = ''
+    substituteInPlace znc.pc.cmake.in \
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace znc-buildmod-old.cmake.in \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
+      --replace-fail @prefix@ $out \
+      --replace-fail @openssl@ ${openssl} \
+      --replace-fail @icu@ ${icu}
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs =
     [ openssl ]
@@ -63,6 +75,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    changelog = "https://github.com/znc/znc/blob/znc-${version}/ChangeLog.md";
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";
     maintainers = with maintainers; [
