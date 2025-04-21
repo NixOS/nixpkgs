@@ -5,49 +5,57 @@
   testers,
   paretosecurity,
   nixosTests,
+  pkg-config,
+  gtk3,
+  webkitgtk_4_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    gtk3
+    webkitgtk_4_1
+  ];
   pname = "paretosecurity";
-  version = "0.1.3";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
-    rev = version;
-    hash = "sha256-ovyfHqLCf5U3UR1HfoA+UQhqLZ6IaILcpqptPRQsb60=";
+    rev = finalAttrs.version;
+    hash = "sha256-KJs4xC3EtGG4116UE+oIEwAMcuDWIm9gqgZY+Bv14ac=";
   };
 
-  vendorHash = "sha256-7mKAFkKGpBOjXc3J/sfF3k3pJF53tFybXZgbfJInuSY=";
+  vendorHash = "sha256-3plpvwLe32AsGuVzdM2fSmTPkKwRFmhi651NEIRdOxw=";
   proxyVendor = true;
 
   ldflags = [
     "-s"
-    "-X=github.com/ParetoSecurity/agent/shared.Version=${version}"
-    "-X=github.com/ParetoSecurity/agent/shared.Commit=${src.rev}"
+    "-X=github.com/ParetoSecurity/agent/shared.Version=${finalAttrs.version}"
+    "-X=github.com/ParetoSecurity/agent/shared.Commit=${finalAttrs.src.rev}"
     "-X=github.com/ParetoSecurity/agent/shared.Date=1970-01-01T00:00:00Z"
   ];
 
   postInstall = ''
     # Install global systemd files
-    install -Dm400 ${src}/apt/paretosecurity.socket $out/lib/systemd/system/paretosecurity.socket
-    install -Dm400 ${src}/apt/paretosecurity.service $out/lib/systemd/system/paretosecurity.service
+    install -Dm400 ${finalAttrs.src}/apt/paretosecurity.socket $out/lib/systemd/system/paretosecurity.socket
+    install -Dm400 ${finalAttrs.src}/apt/paretosecurity.service $out/lib/systemd/system/paretosecurity.service
     substituteInPlace $out/lib/systemd/system/paretosecurity.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
 
     # Install user systemd files
-    install -Dm444 ${src}/apt/paretosecurity-user.timer $out/lib/systemd/user/paretosecurity-user.timer
-    install -Dm444 ${src}/apt/paretosecurity-user.service $out/lib/systemd/user/paretosecurity-user.service
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-user.timer $out/lib/systemd/user/paretosecurity-user.timer
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-user.service $out/lib/systemd/user/paretosecurity-user.service
     substituteInPlace $out/lib/systemd/user/paretosecurity-user.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
-    install -Dm444 ${src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
     substituteInPlace $out/lib/systemd/user/paretosecurity-trayicon.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
   '';
 
   passthru.tests = {
     version = testers.testVersion {
-      version = "${version}";
+      inherit (finalAttrs) version;
       package = paretosecurity;
     };
     integration_test = nixosTests.paretosecurity;
@@ -80,4 +88,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zupo ];
     mainProgram = "paretosecurity";
   };
-}
+})
