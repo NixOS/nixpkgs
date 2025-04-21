@@ -694,6 +694,7 @@ mapAliases ({
   scikits-samplerate = throw "scikits-samplerate has been removed, it was unsed and unmaintained since 2015"; # added 2024-05-23
   selectors2 = throw "selectors2 has been removed: archived by upstream."; # added 2024-07-27
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
+  sentry-sdk_2 = sentry-sdk; # added 2025-04-20
   sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
   setuptools_dso = setuptools-dso; # added 2024-03-03
   setuptools_scm = setuptools-scm; # added 2021-06-03

@@ -17,7 +17,6 @@ let
   python = python3.override {
     packageOverrides = final: prev: {
       django = prev.django_5;
-      sentry-sdk = prev.sentry-sdk_2;
       djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
         # https://github.com/encode/django-rest-framework/discussions/9342
         disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
