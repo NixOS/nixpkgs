@@ -38,6 +38,8 @@ flutter327.buildFlutterApplication rec {
     install -Dm0644 assets/icon.png $out/share/pixmaps/proxypin.png
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Capture HTTP(S) traffic software";
     homepage = "https://github.com/wanghongenpin/proxypin";
