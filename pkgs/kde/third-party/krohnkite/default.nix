@@ -1,5 +1,6 @@
 {
   lib,
+  nix-update-script,
   buildNpmPackage,
   fetchFromGitHub,
   nodejs_22,
@@ -7,14 +8,14 @@
   kpackage,
   zip,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
   version = "0.9.8.5";
 
   src = fetchFromGitHub {
     owner = "anametologin";
     repo = "krohnkite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DcNU0nx6KHztfMPFs5PZtZIeu4hDxNYIJa5E1fwMa0Q=";
   };
 
@@ -46,9 +47,12 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Dynamic Tiling Extension for KWin 6";
     homepage = "https://github.com/anametologin/krohnkite";
+    changelog = "https://github.com/anametologin/krohnkite/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ben9986
@@ -56,4 +60,4 @@ buildNpmPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
