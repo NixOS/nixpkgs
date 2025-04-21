@@ -2,37 +2,47 @@
   lib,
   stdenv,
   buildPythonPackage,
-  callPackage,
-  catalogue,
+  fetchFromGitHub,
+
+  # build-system
   cymem,
   cython_0,
-  fetchFromGitHub,
-  git,
-  hypothesis,
+  murmurhash,
+  numpy,
+  preshed,
+  thinc,
+
+  # dependencies
+  catalogue,
   jinja2,
   langcodes,
-  mock,
-  murmurhash,
-  nix-update,
-  nix,
-  numpy,
   packaging,
-  preshed,
   pydantic,
-  pytestCheckHook,
   requests,
   setuptools,
   spacy-legacy,
   spacy-loggers,
-  spacy-lookups-data,
-  spacy-transformers,
   srsly,
-  thinc,
   tqdm,
   typer,
   wasabi,
   weasel,
+
+  # optional-dependencies
+  spacy-transformers,
+  spacy-lookups-data,
+
+  # tests
+  pytestCheckHook,
+  hypothesis,
+  mock,
+
+  # passthru
   writeScript,
+  git,
+  nix,
+  nix-update,
+  callPackage,
 }:
 
 buildPythonPackage rec {
@@ -80,16 +90,16 @@ buildPythonPackage rec {
     weasel
   ];
 
+  optional-dependencies = {
+    transformers = [ spacy-transformers ];
+    lookups = [ spacy-lookups-data ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     mock
   ];
-
-  optional-dependencies = {
-    transformers = [ spacy-transformers ];
-    lookups = [ spacy-lookups-data ];
-  };
 
   # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
   preCheck = ''
@@ -113,8 +123,8 @@ buildPythonPackage rec {
       set -eou pipefail
       PATH=${
         lib.makeBinPath [
-          nix
           git
+          nix
           nix-update
         ]
       }
