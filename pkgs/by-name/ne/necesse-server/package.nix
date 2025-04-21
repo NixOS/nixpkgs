@@ -39,6 +39,8 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://necessegame.com/server/";
     description = "Dedicated server for Necesse";
