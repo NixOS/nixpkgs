@@ -59,7 +59,7 @@ import ./make-test-python.nix (
 
         environment.systemPackages = [ pkgs.jq ];
 
-        services.postgresql.package = pkgs.postgresql_13;
+        services.postgresql.package = pkgs.postgresql_15;
 
         services.discourse = {
           enable = true;
@@ -104,7 +104,6 @@ import ./make-test-python.nix (
         services.dovecot2 = {
           enable = true;
           protocols = [ "imap" ];
-          modules = [ pkgs.dovecot_pigeonhole ];
         };
 
         services.postfix = {
