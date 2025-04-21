@@ -101,7 +101,7 @@ in
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
-  ghc-tags = self.ghc-tags_1_6;
+  ghc-tags = doDistribute (doJailbreak self.ghc-tags_1_7); # aeson < 2.2
 
   # ghc-lib >= 9.8 and friends no longer build with GHC 9.4 since they require semaphore-compat
   ghc-lib-parser = doDistribute (

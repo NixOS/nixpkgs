@@ -77,7 +77,6 @@ extra-packages:
   - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for 9.10 HLS
   - ghc-source-gen < 0.4.6.0            # 2024-12-31: support GHC < 9.0
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
-  - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
   - happy == 1.19.12                    # for ghcjs
