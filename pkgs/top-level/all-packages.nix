@@ -2101,10 +2101,11 @@ with pkgs;
 
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
-  charles = charles4;
+  charles = charles5;
   inherit (callPackages ../applications/networking/charles { })
     charles3
     charles4
+    charles5
     ;
 
   quaternion-qt5 =
@@ -19327,12 +19328,6 @@ with pkgs;
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
   };
-
-  honeymarker = callPackage ../servers/tracing/honeycomb/honeymarker { };
-
-  honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
-
-  honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 

@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     name = "${pname}-${version}";
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/MoeLI-3.0.zip";
-    hash = "sha256-/X5jPtjOvJTUbiKV5r2dWIFL5ft0iemdwj+Zt+Q13OA=";
+    hash = "sha256-bDQtLugYPWwJJNusBLEJrgIVufocRK4NIR0CCGaTkyw=";
   };
 
   installPhase = ''
