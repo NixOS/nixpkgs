@@ -90,6 +90,11 @@ stdenvNoCC.mkDerivation (
         ln -s "${sdkName}" "$sdkpath/MacOSX${sdkMajor}.sdk"
         ln -s "${sdkName}" "$sdkpath/MacOSX.sdk"
 
+        # Swift adds these locations to its search paths. Avoid spurious warnings by making sure they exist.
+        mkdir -p "$platformPath/Developer/Library/Frameworks"
+        mkdir -p "$platformPath/Developer/Library/PrivateFrameworks"
+        mkdir -p "$platformPath/Developer/usr/lib"
+
         runHook postInstall
       '';
 
