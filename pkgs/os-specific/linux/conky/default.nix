@@ -97,8 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     lib.optionalString docsSupport ''
       substituteInPlace cmake/Conky.cmake --replace-fail "# set(RELEASE true)" "set(RELEASE true)"
-
-      cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/CMakeLists.txt \
@@ -163,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "-DREPRODUCIBLE_BUILD=ON"
     ]
+    ++ lib.optional (finalAttrs.doCheck) "-DBUILD_TESTING=ON"
     ++ lib.optional extrasSupport "-DBUILD_EXTRAS=ON"
     ++ lib.optional docsSupport "-DBUILD_DOCS=ON"
     ++ lib.optional curlSupport "-DBUILD_CURL=ON"
@@ -186,8 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
 
-  # [CMakeFiles/Makefile2:1805: tests/CMakeFiles/test-conky.dir/all] Error 2
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     homepage = "https://conky.cc";
