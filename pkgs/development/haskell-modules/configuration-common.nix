@@ -2597,6 +2597,10 @@ self: super:
   # https://github.com/haskellari/lattices/issues/132
   lattices = doJailbreak super.lattices;
 
+  # Too strict bounds on tasty <1.5 and tasty-quickcheck <0.11
+  # https://github.com/phadej/aeson-extra/issues/62
+  aeson-extra = doJailbreak super.aeson-extra;
+
   # Support tasty-quickcheck 0.11: https://github.com/Bodigrim/mod/pull/26
   mod = appendPatch (fetchpatch {
     url = "https://github.com/Bodigrim/mod/commit/30596fb9d85b69ec23ecb05ef9a7c91d67901cfd.patch";
