@@ -56,10 +56,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_filter"
-  ];
+  disabledTests =
+    [
+      # AssertionError: assert '<function te...n.<locals>.f>' == '<function f>'
+      # https://github.com/patrick-kidger/equinox/issues/1008
+      "test_function"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+      "test_filter"
+    ];
 
   pythonImportsCheck = [ "equinox" ];
 

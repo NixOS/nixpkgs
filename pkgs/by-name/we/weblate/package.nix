@@ -155,6 +155,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "celery"
     "rapidfuzz"
+    "weblate-schemas"
   ];
 
   # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
