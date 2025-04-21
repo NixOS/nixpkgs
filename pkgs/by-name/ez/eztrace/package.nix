@@ -9,6 +9,7 @@
   libbfd,
   libopcodes,
   otf2,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
                      "find_program(OTF2_CONFIG "${lib.getExe' otf2 "otf2-config"}" REQUIRED)" \
       --replace-fail "find_program(OTF2_PRINT otf2-print REQUIRED)" \
                      "find_program(OTF2_PRINT "${lib.getExe' otf2 "otf2-print"}" REQUIRED)"
+    # 2.1.1 incorrectly reports 2.1.0. TODO: Remove after next release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "2.1.0" "${finalAttrs.version}"
     patchShebangs test
   '';
 
@@ -75,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput bin/eztrace_create_plugin "$dev"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
