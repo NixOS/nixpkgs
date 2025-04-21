@@ -4028,6 +4028,8 @@ self: super: with self; {
 
   dockerfile-parse = callPackage ../development/python-modules/dockerfile-parse { };
 
+  dockerflow = callPackage ../development/python-modules/dockerflow { };
+
   dockerpty = callPackage ../development/python-modules/dockerpty { };
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
