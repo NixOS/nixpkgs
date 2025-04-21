@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uncertainties" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pythonhosted.org/uncertainties/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
-    maintainers = with maintainers; [ rnhmjoj ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    license = lib.licenses.bsd3;
   };
 }
