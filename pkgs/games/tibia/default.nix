@@ -9,12 +9,14 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tibia";
   version = "10.90";
 
   src = fetchurl {
-    url = "http://static.tibia.com/download/tibia${lib.replaceStrings [ "." ] [ "" ] version}.tgz";
+    url = "http://static.tibia.com/download/tibia${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.tgz";
     sha256 = "11mkh2dynmbpay51yfaxm5dmcys3rnpk579s9ypfkhblsrchbkhx";
   };
 
@@ -70,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-linux" ];
     maintainers = [ ];
   };
-}
+})

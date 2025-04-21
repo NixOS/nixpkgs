@@ -9,14 +9,14 @@ let
   generic =
     ver: source:
     let
-      pname = "descent${toString ver}";
+      shortName = "descent${toString ver}";
     in
-    stdenv.mkDerivation rec {
-      name = "${pname}-assets-${version}";
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "${shortName}-assets";
       version = "2.0.0.7";
 
       src = requireFile rec {
-        name = "setup_descent12_${version}.exe";
+        name = "setup_descent12_${finalAttrs.version}.exe";
         sha256 = "1r1drbfda6czg21f9qqiiwgnkpszxgmcn5bafp5ljddh34swkn3f";
         message = ''
           While the Descent ${toString ver} game engine is free, the game assets are not.
@@ -38,10 +38,10 @@ let
       installPhase = ''
         runHook preInstall
 
-        mkdir -p $out/share/{games/${pname},doc/${pname}/examples}
+        mkdir -p $out/share/{games/${shortName},doc/${shortName}/examples}
         pushd "app/${source}"
-        mv dosbox*.conf $out/share/doc/${pname}/examples
-        mv *.txt *.pdf  $out/share/doc/${pname}
+        mv dosbox*.conf $out/share/doc/${shortName}/examples
+        mv *.txt *.pdf  $out/share/doc/${shortName}
         cp -r * $out/share/games/descent${toString ver}
         popd
 
@@ -55,7 +55,7 @@ let
         maintainers = with maintainers; [ peterhoeg ];
         hydraPlatforms = [ ];
       };
-    };
+    });
 
 in
 {

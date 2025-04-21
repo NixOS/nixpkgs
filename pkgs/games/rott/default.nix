@@ -7,7 +7,6 @@
   SDL_mixer,
   makeDesktopItem,
   copyDesktopItems,
-  runtimeShell,
   buildShareware ? false,
 }:
 
@@ -22,12 +21,12 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rott";
   version = "1.1.2";
 
   src = fetchurl {
-    url = "https://icculus.org/rott/releases/${pname}-${version}.tar.gz";
+    url = "https://icculus.org/rott/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1zr7v5dv2iqx40gzxbg8mhac7fxz3kqf28y6ysxv1xhjqgl1c98h";
   };
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     SDL_mixer
   ];
 
-  sourceRoot = "rott-${version}/rott";
+  sourceRoot = "rott-${finalAttrs.version}/rott";
 
   makeFlags = [
     "SHAREWARE=${if buildShareware then "1" else "0"}"
@@ -71,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
   };
-}
+})

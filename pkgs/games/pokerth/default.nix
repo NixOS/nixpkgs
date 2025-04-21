@@ -19,14 +19,14 @@
   target ? "client",
 }:
 
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "pokerth-${target}";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "pokerth";
     repo = "pokerth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j4E3VMpaPqX7+hE3wYRZZUeRD//F+K2Gp8oPmJqX5FQ=";
   };
 
@@ -91,4 +91,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ obadz ];
     platforms = platforms.all;
   };
-}
+})

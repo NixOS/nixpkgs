@@ -12,14 +12,14 @@
   qtbase,
 }:
 
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "qtads";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "realnc";
-    repo = pname;
-    rev = "v${version}";
+    repo = "qtads";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-KIqufpvl7zeUtDBXUOAZxBIbfv+s51DoSaZr3jol+bw=";
   };
 
@@ -45,4 +45,4 @@ mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];
   };
-}
+})

@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "leela-zero";
   version = "0.17";
 
   src = fetchFromGitHub {
     owner = "gcp";
     repo = "leela-zero";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
     fetchSubmodules = true;
   };
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
   };
-}
+})

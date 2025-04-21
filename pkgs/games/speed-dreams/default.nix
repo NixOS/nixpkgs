@@ -40,7 +40,7 @@ let
   version = "2.3.0-r8786";
   shortVersion = builtins.substring 0 5 version;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
   pname = "speed-dreams";
 
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     echo Unpacking data
-    tar -xf ${cars-and-tracks}
-    tar -xf ${more-cars-and-tracks}
-    tar -xf ${wip-cars-and-tracks}
+    tar -xf ${finalAttrs.cars-and-tracks}
+    tar -xf ${finalAttrs.more-cars-and-tracks}
+    tar -xf ${finalAttrs.wip-cars-and-tracks}
   '';
 
   preBuild = ''
@@ -154,4 +154,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})

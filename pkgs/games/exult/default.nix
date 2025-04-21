@@ -18,14 +18,14 @@
   AudioUnit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exult";
   version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "exult";
   };
-}
+})

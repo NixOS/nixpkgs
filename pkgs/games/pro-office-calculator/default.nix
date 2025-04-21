@@ -7,14 +7,14 @@
   qtbase,
   qtmultimedia,
 }:
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   version = "1.0.13";
   pname = "pro-office-calculator";
 
   src = fetchFromGitHub {
     owner = "RobJinman";
     repo = "pro_office_calc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1v75cysargmp4fk7px5zgib1p6h5ya4w39rndbzk614fcnv0iipd";
   };
 
@@ -34,4 +34,4 @@ mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
   };
-}
+})
