@@ -58,6 +58,8 @@
   journalSupport ? true,
   systemd ? null,
   libxml2 ? null,
+
+  extrasSupport ? true,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -78,6 +80,8 @@ assert pulseSupport -> libpulseaudio != null;
 assert curlSupport -> curl != null;
 assert rssSupport -> curlSupport && libxml2 != null;
 assert journalSupport -> systemd != null;
+
+assert extrasSupport -> python3 != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
@@ -113,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
     ]
     ++ lib.optional docsSupport pandoc
-    ++ lib.optional docsSupport (
+    ++ lib.optional (docsSupport || extrasSupport) (
       python3.withPackages (ps: [
         ps.jinja2
         ps.pyyaml
@@ -157,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [ ]
+    ++ lib.optional extrasSupport "-DBUILD_EXTRAS=ON"
     ++ lib.optional docsSupport "-DBUILD_DOCS=ON"
     ++ lib.optional curlSupport "-DBUILD_CURL=ON"
     ++ lib.optional (!ibmSupport) "-DBUILD_IBM=OFF"
