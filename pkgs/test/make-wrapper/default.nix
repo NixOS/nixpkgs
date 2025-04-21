@@ -46,6 +46,25 @@ let
         makeWrapper "${wrapped}" "$out/bin/${name}" ${lib.escapeShellArgs args}
       '';
 
+  mkArgTest =
+    cmd: toExpect:
+    let
+      args = lib.escapeShellArgs toExpect;
+    in
+    ''
+      output=( $(${cmd}) )
+      args=( ${args} )
+      if [[ "''${output[@]}" != "''${args[@]}" ]]; then
+        echo "test failed: the output of ${cmd} was "\'"''${output[@]}', expected '"${args}"'"
+        echo "the wrapper contents:"
+        for i in ${cmd}; do
+          if [[ $i =~ ^test- ]]; then
+            cat $(which $i)
+          fi
+        done
+        exit 1
+      fi
+    '';
   mkTest = cmd: toExpect: ''
     output="$(${cmd})"
     if [[ "$output" != '${toExpect}' ]]; then
@@ -119,6 +138,16 @@ runCommand "make-wrapper-test"
           "abc"
           "--append-flags"
           "xyz"
+        ];
+        wrapped = wrappedBinaryArgs;
+      })
+      (mkWrapperBinary {
+        name = "test-arg";
+        args = [
+          "--add-flag"
+          "abc 'aaaaa' jkhhjk"
+          "--append-flag"
+          "xyz ggg"
         ];
         wrapped = wrappedBinaryArgs;
       })
@@ -225,7 +254,15 @@ runCommand "make-wrapper-test"
     + mkTest "VAR=foo test-unset" "VAR="
 
     # --add-flags and --append-flags work
-    + mkTest "test-args" "abc xyz"
+    + mkArgTest "test-args" [
+      "abc"
+      "xyz"
+    ]
+    # --add-flag and --append-flag work
+    + mkArgTest "test-arg" [
+      "abc 'aaaaa' jkhhjk"
+      "xyz ggg"
+    ]
     # given flags are kept
     + mkTest "test-args foo" "abc foo xyz"
 

@@ -22,10 +22,14 @@ assertExecutable() {
 # --unset        VAR     : remove VAR from the environment
 # --chdir        DIR     : change working directory (use instead of --run "cd DIR")
 # --run          COMMAND : run command before the executable
-# --add-flags    ARGS    : prepend ARGS to the invocation of the executable
+# --add-flags    ARGS    : prepend ARGS to the invocation of the executable, to be split as if provided to a command
 #                          (that is, *before* any arguments passed on the command line)
-# --append-flags ARGS    : append ARGS to the invocation of the executable
+# --append-flags ARGS    : append ARGS to the invocation of the executable, to be split as if provided to a command
 #                          (that is, *after* any arguments passed on the command line)
+# --add-flag    ARG      : prepend ARG to the invocation of the executable, escaped as a single argument
+#                           (these are added before arguments provided to --add-flags)
+# --append-flag ARG      : append ARG to the invocation of the executable, escaped as a single argument
+#                           (these are added before arguments provided to --append-flags)
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -39,7 +43,7 @@ makeShellWrapper() {
     local original="$1"
     local wrapper="$2"
     local params varName value command separator n fileNames
-    local argv0 flagsBefore flagsAfter flags
+    local argv0 flagsBefore flagsAfter flags flagAfter flagBefore
 
     assertExecutable "$original"
 
@@ -164,6 +168,14 @@ makeShellWrapper() {
                 contents="$(cat "$fileName")"
                 addValue "$p" "$varName" "$separator" "$contents"
             done
+        elif [[ "$p" == "--add-flag" ]]; then
+            flags="$(printf '%q' "${params[$((n + 1))]}")"
+            n=$((n + 1))
+            flagBefore="${flagBefore-} $flags"
+        elif [[ "$p" == "--append-flag" ]]; then
+            flags="$(printf '%q' "${params[$((n + 1))]}")"
+            n=$((n + 1))
+            flagAfter="${flagAfter-} $flags"
         elif [[ "$p" == "--add-flags" ]]; then
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
@@ -187,7 +199,7 @@ makeShellWrapper() {
     done
 
     echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
-         "${flagsBefore-}" '"$@"' "${flagsAfter-}" >> "$wrapper"
+         "${flagBefore-}" "${flagsBefore-}" '"$@"' "${flagAfter-}" "${flagsAfter-}" >> "$wrapper"
 
     chmod +x "$wrapper"
 }
