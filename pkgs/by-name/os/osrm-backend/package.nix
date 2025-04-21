@@ -10,11 +10,14 @@
   boost,
   lua,
   luabind,
-  tbb,
+  tbb_2021_11,
   expat,
   nixosTests,
 }:
 
+let
+  tbb = tbb_2021_11;
+in
 stdenv.mkDerivation {
   pname = "osrm-backend";
   version = "5.27.1-unstable-2024-11-03";
