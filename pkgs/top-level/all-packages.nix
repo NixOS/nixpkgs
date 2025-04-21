@@ -17135,9 +17135,9 @@ with pkgs;
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
-  dwarf-fortress = dwarf-fortress-packages.dwarf-fortress;
+  inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
 
-  dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
+  dfhack = dwarf-fortress-packages.dwarf-fortress-full;
 
   dxx-rebirth = callPackage ../games/dxx-rebirth { };
 
