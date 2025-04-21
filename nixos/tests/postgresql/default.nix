@@ -37,6 +37,5 @@ in
   # extensions
   anonymizer = importWithArgs ./anonymizer.nix;
   pgjwt = importWithArgs ./pgjwt.nix;
-  pgvecto-rs = importWithArgs ./pgvecto-rs.nix;
   wal2json = importWithArgs ./wal2json.nix;
 }
