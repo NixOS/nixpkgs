@@ -33,8 +33,6 @@
   libslirp,
   apple-sdk_13,
   darwinMinVersionHook,
-  rez,
-  setfile,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -179,8 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       sigtool
-      rez
-      setfile
     ]
     ++ lib.optionals (!userOnly) [ dtc ];
 
@@ -262,6 +258,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-qemu-ga.patch
+
+    # On macOS, QEMU uses `Rez(1)` and `SetFile(1)` to attach its icon
+    # to the binary. Unfortunately, those commands are proprietary,
+    # deprecated since Xcode 6, and operate on resource forks, which
+    # these days are stored in extended attributes, which aren’t
+    # supported in the Nix store. So we patch out the calls.
+    ./skip-macos-icon.patch
 
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
     (fetchpatch {

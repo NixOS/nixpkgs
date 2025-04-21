@@ -14620,7 +14620,6 @@ with pkgs;
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
   };
 

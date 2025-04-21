@@ -90,4 +90,14 @@ mapAliases ({
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23
+  print-reexports = throw "'darwin.print-reexports' has been removed as it was unused"; # added 2025-04-20
+
+  ### R ###
+
+  rewrite-tbd = throw "'darwin.rewrite-tbd' has been removed, as it was unused and replaced by `llvm-readtapi(1)`"; # added 2025-04-20
+
+  ### S ###
+
+  stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # added 2025-04-20
+  swift-corelibs-foundation = throw "'darwin.swift-corelibs-foundation' has been removed, as it was broken and is no longer used"; # added 2025-04-20
 })
