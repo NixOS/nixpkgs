@@ -79,6 +79,14 @@ stdenv.mkDerivation rec {
       })
     ];
 
+  # Make mingw-w64 provide a dummy alarm() function
+  #
+  # Method borrowed from
+  # https://github.com/msys2/MINGW-packages/commit/35830ab27e5ed35c2a8d486961ab607109f5af50
+  #
+  # `null` is used to avoid mass rebuild, will fix on staging.
+  CFLAGS = if !stdenv.hostPlatform.isMinGW then null else "-D__USE_MINGW_ALARM -D_POSIX";
+
   # This install error is caused by a very old libtool. We can't autoreconfHook this package,
   # so this is the best we've got!
   postInstall = lib.optionalString stdenv.hostPlatform.isOpenBSD ''
