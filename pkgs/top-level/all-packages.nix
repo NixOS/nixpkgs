@@ -2101,10 +2101,11 @@ with pkgs;
 
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
-  charles = charles4;
+  charles = charles5;
   inherit (callPackages ../applications/networking/charles { })
     charles3
     charles4
+    charles5
     ;
 
   quaternion-qt5 =
