@@ -595,7 +595,6 @@ in
     inherit handleTestOn;
     package = pkgs.hadoop2;
   };
-  haka = handleTest ./haka.nix { };
   haste-server = handleTest ./haste-server.nix { };
   haproxy = handleTest ./haproxy.nix { };
   hardened = handleTest ./hardened.nix { };
