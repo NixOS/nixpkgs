@@ -232,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Need to build the main Git documentation before building the
       # contrib/subtree documentation, as the latter depends on the
       # asciidoc.conf file created by the former.
-      make -C Documentation "''${flagsArray[@]}"
+      make -C Documentation PERL_PATH=${lib.getExe buildPackages.perlPackages.perl} "''${flagsArray[@]}"
     ''
     + ''
       make -C contrib/subtree "''${flagsArray[@]}" all ${lib.optionalString withManual "doc"}
