@@ -412,6 +412,7 @@ in
   dovecot = handleTest ./dovecot.nix { };
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = handleTest ./drbd.nix { };
+  dufs = runTest ./dufs.nix;
   druid = handleTestOn [ "x86_64-linux" ] ./druid { };
   drbd-driver = handleTest ./drbd-driver.nix { };
   dublin-traceroute = handleTest ./dublin-traceroute.nix { };
