@@ -26,8 +26,17 @@ let
       x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
-in
 
+  # The program recommends reading stress.txt, but the text files are not included in the source zip.
+  # So we also download the binary tarball, to extract the text files from.
+  # The next source release should contain the txt files so we can remove this hack.
+  # Note: 30.19b20 is the latest binary version at the time of writing, and is not the same as the actual source below.
+  binSrc = fetchzip {
+    url = "https://www.mersenne.org/download/software/v30/30.19/p95v3019b20.linux64.tar.gz";
+    hash = "sha256-JJQ2HYq4nH42sigVajZMJQkbzVsiP8QKnJnGK/a/QmA=";
+    stripRoot = false;
+  };
+in
 stdenv.mkDerivation {
   pname = "mprime";
   version = "30.19b21";
@@ -44,6 +53,13 @@ stdenv.mkDerivation {
     substituteInPlace ${srcDir}/makefile \
       --replace-fail '-Wl,-Bstatic'  "" \
       --replace-fail '-Wl,-Bdynamic' ""
+    # The program refers the user to these files, make them easier to find and open
+    substituteInPlace ${srcDir}/menu.c \
+      --replace-fail "stress.txt" "$out/share/mprime/doc/stress.txt" \
+      --replace-fail "readme.txt" "$out/share/mprime/doc/readme.txt"
+    substituteInPlace commonb.c \
+      --replace-fail "stress.txt" "$out/share/mprime/doc/stress.txt" \
+      --replace-fail "readme.txt" "$out/share/mprime/doc/readme.txt"
   '';
 
   buildInputs = [
@@ -62,6 +78,12 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -Dm555 -t $out/bin ${srcDir}/mprime
+
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/license.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/readme.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/stress.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/undoc.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/whatsnew.txt
   '';
 
   meta = {
