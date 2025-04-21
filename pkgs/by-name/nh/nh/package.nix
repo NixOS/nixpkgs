@@ -11,20 +11,19 @@
   nix-output-monitor,
 }:
 let
-  version = "3.6.0";
   runtimeDeps = [
     nvd
     nix-output-monitor
   ];
 in
-rustPlatform.buildRustPackage {
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "viperML";
     repo = "nh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-k8rz5RF1qi7RXzQYWGbw5pJRNRFIdX85SIYN+IHiVL4=";
   };
 
@@ -68,4 +67,4 @@ rustPlatform.buildRustPackage {
       viperML
     ];
   };
-}
+})
