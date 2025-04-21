@@ -17,11 +17,6 @@ let
           settings.server.port = 1234;
         };
       };
-    testScript = ''
-      machine.wait_for_unit("suwayomi-server.service")
-      machine.wait_for_open_port(1234)
-      machine.succeed("curl --fail http://localhost:1234/")
-    '';
   };
 in
 
@@ -29,6 +24,12 @@ in
   without-auth = makeTest (
     recursiveUpdate baseTestConfig {
       name = "suwayomi-server-without-auth";
+
+      testScript = ''
+        machine.wait_for_unit("suwayomi-server.service")
+        machine.wait_for_open_port(1234)
+        machine.succeed("curl --fail http://localhost:1234/")
+      '';
     }
   );
 
@@ -50,6 +51,12 @@ in
             };
           };
         };
+
+      testScript = ''
+        machine.wait_for_unit("suwayomi-server.service")
+        machine.wait_for_open_port(1234)
+        machine.succeed("curl --fail -u alice:pass http://localhost:1234/")
+      '';
     }
   );
 }
