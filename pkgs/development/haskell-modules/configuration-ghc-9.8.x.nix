@@ -87,6 +87,17 @@ self: super:
   # 2023-12-23: It needs this to build under ghc-9.6.3.
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
+
+  # 2025-04-21: "flavor" for GHC 9.8.5 is missing a fix introduced for 9.8.4. See:
+  # https://github.com/digital-asset/ghc-lib/pull/571#discussion_r2052684630
+  ghc-lib-parser =
+    assert super.ghc-lib-parser.version == "9.8.5.20250214";
+    overrideCabal {
+      postPatch = ''
+        substituteInPlace compiler/cbits/genSym.c \
+          --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
+      '';
+    } super.ghc-lib-parser;
 }
 // lib.optionalAttrs (lib.versionAtLeast super.ghc.version "9.8.3") {
   # Breakage related to GHC 9.8.3 / deepseq 1.5.1.0
