@@ -1,0 +1,34 @@
+diff --git a/examples/cpp/CMakeLists.txt b/examples/cpp/CMakeLists.txt
+index 514c70c06..6bb95c6fd 100644
+--- a/examples/cpp/CMakeLists.txt
++++ b/examples/cpp/CMakeLists.txt
+@@ -257,12 +257,12 @@ private_data(
+     LOCATION nn_archive_yolo_v6_tar_xz
+ )
+ 
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/recording.tar"
+-    SHA1 "b1e31a26c83dc1e315132c9226097da4b1a5cbb7"
+-    FILE "recording.tar"
+-    LOCATION recording_path
+-)
++#private_data(
++#    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/recording.tar"
++#    SHA1 "b1e31a26c83dc1e315132c9226097da4b1a5cbb7"
++#    FILE "recording.tar"
++#    LOCATION recording_path
++#)
+ 
+ # Camera
+ dai_add_example(camera Camera/camera_output.cpp ON OFF)
+@@ -323,8 +323,8 @@ dai_add_example(visualizer_yolo Visualizer/visualizer_yolo.cpp ON OFF)
+ dai_set_example_test_labels(visualizer_yolo ondevice rvc2_all rvc4)
+ 
+ include(FetchContent)
+-FetchContent_Declare(rerun_sdk URL  https://github.com/rerun-io/rerun/releases/download/0.16.1/rerun_cpp_sdk.zip)
+-FetchContent_MakeAvailable(rerun_sdk)
++#FetchContent_Declare(rerun_sdk URL  https://github.com/rerun-io/rerun/releases/download/0.16.1/rerun_cpp_sdk.zip)
++#FetchContent_MakeAvailable(rerun_sdk)
+ dai_add_example(rgbd RGBD/rgbd.cpp ON OFF)
+ target_link_libraries(rgbd PRIVATE rerun_sdk)
+
