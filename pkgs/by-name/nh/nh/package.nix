@@ -9,6 +9,7 @@
   nix-update-script,
   nvd,
   nix-output-monitor,
+  buildPackages,
 }:
 let
   runtimeDeps = [
@@ -38,14 +39,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  preFixup = ''
-    mkdir completions
-    $out/bin/nh completions --shell bash > completions/nh.bash
-    $out/bin/nh completions --shell zsh > completions/nh.zsh
-    $out/bin/nh completions --shell fish > completions/nh.fish
+  preFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      mkdir completions
+      ${emulator} $out/bin/nh completions --shell bash > completions/nh.bash
+      ${emulator} $out/bin/nh completions --shell zsh > completions/nh.zsh
+      ${emulator} $out/bin/nh completions --shell fish > completions/nh.fish
 
-    installShellCompletion completions/*
-  '';
+      installShellCompletion completions/*
+    ''
+  );
 
   postFixup = ''
     wrapProgram $out/bin/nh \
