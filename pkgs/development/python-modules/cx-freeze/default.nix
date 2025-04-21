@@ -33,7 +33,8 @@ buildPythonPackage rec {
     sed -i /patchelf/d pyproject.toml
     # Build system requirements
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=70.1,<76" "setuptools"
+      --replace-fail "setuptools>=70.1,<=78.1.0" "setuptools" \
+      --replace-fail "setuptools>=65.6.3,<=78.1.0" "setuptools"
   '';
 
   build-system = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
       distutils
       packaging
       setuptools
+      filelock
     ]
     ++ lib.optionals (pythonOlder "3.11") [
       tomli
@@ -55,7 +57,6 @@ buildPythonPackage rec {
       importlib-metadata
       typing-extensions
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux filelock
     ++ lib.optional stdenv.hostPlatform.isDarwin dmgbuild;
 
   makeWrapperArgs = [
