@@ -4,6 +4,7 @@
   fetchFromGitHub,
   llvmPackages,
   openssl,
+  shards,
   makeWrapper,
   _experimental-update-script-combinators,
   crystal2nix,
@@ -13,7 +14,7 @@
 }:
 
 let
-  version = "0.15.0";
+  version = "0.17.1";
 in
 crystal.buildCrystalPackage rec {
   pname = "crystalline";
@@ -23,7 +24,7 @@ crystal.buildCrystalPackage rec {
     owner = "elbywan";
     repo = "crystalline";
     rev = "v${version}";
-    hash = "sha256-6ZAogEuOJH1QQ6NSJ+8KZUSFSgQAcvd4U9vWNAGix/M=";
+    hash = "sha256-SIfInDY6KhEwEPZckgobOrpKXBDDd0KhQt/IjdGBhWo=";
   };
 
   format = "crystal";
@@ -33,6 +34,7 @@ crystal.buildCrystalPackage rec {
     llvmPackages.llvm
     openssl
     makeWrapper
+    shards
   ];
 
   doCheck = false;
