@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "uncertainties";
     tag = version;
-    hash = "sha256-cm0FeJCxyBLN0GCKPnscBCx9p9qCDQdwRfhBRgQIhAo=";
+    hash = "sha256-YapujmwTlmUfTQwHsuh01V+jqsBbTd0Q9adGNiE8Go0=";
   };
 
   build-system = [
