@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "JupyterLab/Jupyter Notebook 7+ extension integrating collaborative shared models";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-docprovider";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

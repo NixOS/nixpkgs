@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://geoserver.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     platforms = platforms.all;
   };
 })

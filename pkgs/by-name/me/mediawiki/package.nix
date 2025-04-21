@@ -44,6 +44,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
+    teams = [ teams.c3d2 ];
   };
 }

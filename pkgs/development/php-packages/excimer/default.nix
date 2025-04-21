@@ -23,6 +23,6 @@ buildPecl {
     description = "PHP extension that provides an interrupting timer and a low-overhead sampling profiler";
     license = lib.licenses.asl20;
     homepage = "https://mediawiki.org/wiki/Excimer";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

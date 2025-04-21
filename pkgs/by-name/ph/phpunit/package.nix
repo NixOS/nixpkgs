@@ -36,6 +36,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpunit.de";
     license = lib.licenses.bsd3;
     mainProgram = "phpunit";
-    maintainers = with lib.maintainers; [ onny ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [ onny ];
+    teams = [ lib.teams.php ];
   };
 })

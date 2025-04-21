@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pop-os/cosmic-idle";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-idle";
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };

@@ -78,6 +78,6 @@ buildPythonPackage rec {
     mainProgram = "nova";
     homepage = "https://github.com/openstack/python-novaclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

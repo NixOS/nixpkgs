@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
     changelog = "https://github.com/CycloneDX/cyclonedx-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.cyberus.members;
+    teams = [ lib.teams.cyberus ];
     mainProgram = "cyclonedx-py";
   };
 }

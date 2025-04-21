@@ -39,12 +39,10 @@ buildGoModule rec {
     homepage = "https://github.com/bazelbuild/buildtools";
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers =
-      with maintainers;
-      [
-        elasticdog
-        uri-canva
-      ]
-      ++ lib.teams.bazel.members;
+    maintainers = with maintainers; [
+      elasticdog
+      uri-canva
+    ];
+    teams = [ teams.bazel ];
   };
 }

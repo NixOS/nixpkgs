@@ -151,6 +151,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "evince";
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    teams = [
+      teams.gnome
+      teams.pantheon
+    ];
   };
 })

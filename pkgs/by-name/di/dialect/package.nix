@@ -78,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/dialect-app/dialect";
     description = "Translation app for GNOME";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "dialect";

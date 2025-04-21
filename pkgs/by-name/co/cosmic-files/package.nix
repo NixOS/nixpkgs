@@ -115,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "File Manager for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-files";
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

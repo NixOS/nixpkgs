@@ -39,6 +39,6 @@ buildPythonPackage rec {
     '';
     changelog = "https://github.com/netinvent/command_runner/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

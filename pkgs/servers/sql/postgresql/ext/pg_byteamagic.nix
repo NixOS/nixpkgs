@@ -44,7 +44,7 @@ postgresqlBuildExtension (finalAttrs: {
     homepage = "https://github.com/nmandery/pg_byteamagic";
     changelog = "https://raw.githubusercontent.com/nmandery/pg_byteamagic/refs/tags/v${finalAttrs.version}/Changes";
     license = lib.licenses.bsd2WithViews;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
     platforms = postgresql.meta.platforms;
   };
 })

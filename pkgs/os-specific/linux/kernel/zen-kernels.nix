@@ -157,6 +157,7 @@ let
             jerrysm64
             axertheaxe
           ];
+          teams = [ ];
           description =
             "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads."
             + lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";

@@ -214,14 +214,12 @@ rec {
             binaryNativeCode
           ];
           license = licenses.asl20;
-          maintainers =
-            with maintainers;
-            [
-              britter
-              liff
-              lorenzleutgeb
-            ]
-            ++ lib.teams.java.members;
+          maintainers = with maintainers; [
+            britter
+            liff
+            lorenzleutgeb
+          ];
+          teams = [ lib.teams.java ];
           mainProgram = "gradle";
         }
         // meta;

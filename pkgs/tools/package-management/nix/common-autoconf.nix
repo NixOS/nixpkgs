@@ -11,10 +11,11 @@
     inherit hash;
   },
   patches ? [ ],
-  maintainers ? lib.teams.nix.members ++ [
+  maintainers ? [
     lib.maintainers.lovesegfault
     lib.maintainers.artturin
   ],
+  teams ? [ lib.teams.nix ],
   self_attribute_name,
 }@args:
 assert (hash == null) -> (src != null);
@@ -343,7 +344,7 @@ let
       '';
       homepage = "https://nixos.org/";
       license = licenses.lgpl21Plus;
-      inherit maintainers;
+      inherit maintainers teams;
       platforms = platforms.unix;
       outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       mainProgram = "nix";

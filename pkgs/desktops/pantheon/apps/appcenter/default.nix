@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "Open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.appcenter";
   };
 }

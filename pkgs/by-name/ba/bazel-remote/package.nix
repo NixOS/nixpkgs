@@ -33,7 +33,7 @@ buildGoModule rec {
     mainProgram = "bazel-remote";
     changelog = "https://github.com/buchgr/bazel-remote/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = lib.teams.bazel.members;
+    teams = [ lib.teams.bazel ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 }
