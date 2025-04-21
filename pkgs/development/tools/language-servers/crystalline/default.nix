@@ -11,6 +11,8 @@
   runCommand,
   writeShellScript,
   gitUpdater,
+  testers,
+  crystalline,
 }:
 
 let
@@ -76,6 +78,11 @@ crystal.buildCrystalPackage rec {
     shardLock = runCommand "shard.lock" { inherit src; } ''
       cp $src/shard.lock $out
     '';
+
+    # Since doInstallCheck causes another test error, versionCheckHook is avoided.
+    tests.version = testers.testVersion {
+      package = crystalline;
+    };
   };
 
   meta = {
