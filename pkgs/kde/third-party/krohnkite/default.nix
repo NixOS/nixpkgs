@@ -10,13 +10,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
-  version = "0.9.8.5";
+  version = "0.9.9.0";
 
   src = fetchFromGitHub {
     owner = "anametologin";
     repo = "krohnkite";
     tag = finalAttrs.version;
-    hash = "sha256-DcNU0nx6KHztfMPFs5PZtZIeu4hDxNYIJa5E1fwMa0Q=";
+    hash = "sha256-23GNKxP/ItGJgElS8gK2lMMkjZ/3LITr40LXo9/o6Iw=";
   };
 
   npmDepsHash = "sha256-Q/D6s0wOPSEziE1dBXgTakjhXCGvzhvLVS7zXcZlPCI=";
@@ -41,7 +41,12 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     substituteInPlace Makefile --replace-fail '7z a -tzip' 'zip -r'
-    make KWINPKG_FILE=krohnkite.kwinscript krohnkite.kwinscript
+    # Override PROJECT_VER and PROJECT_REV because we don't have .git
+    make \
+      KWINPKG_FILE=krohnkite.kwinscript \
+      PROJECT_REV=${finalAttrs.version} \
+      PROJECT_VER=${finalAttrs.version} \
+      krohnkite.kwinscript
     kpackagetool6 --type=KWin/Script --install=krohnkite.kwinscript --packageroot=$out/share/kwin/scripts
 
     runHook postInstall
