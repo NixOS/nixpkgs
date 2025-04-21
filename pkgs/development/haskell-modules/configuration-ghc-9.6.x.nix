@@ -84,7 +84,8 @@ self: super:
   th-extras = doJailbreak super.th-extras;
 
   # not in Stackage, needs to match ghc-lib
-  ghc-tags = doDistribute self.ghc-tags_1_7;
+  # since expression is generated for 9.8, ghc-lib dep needs to be added manually
+  ghc-tags = doDistribute (addBuildDepends [ self.ghc-lib ] self.ghc-tags_1_8);
 
   #
   # Too strict bounds without upstream fix
