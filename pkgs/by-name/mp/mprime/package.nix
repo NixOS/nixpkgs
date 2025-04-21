@@ -1,8 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  unzip,
+  fetchzip,
   boost,
   curl,
   hwloc,
@@ -33,9 +32,10 @@ stdenv.mkDerivation {
   pname = "mprime";
   version = "30.19b21";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://www.mersenne.org/download/software/v30/30.19/p95v3019b21.source.zip";
-    hash = "sha256-vchDpUem+R3GcASj77zZmFivfbB17Nd7cYiyPlrCzio=";
+    hash = "sha256-ThZ1A29ZP8RyXGBBdO12+OIBppN0pzNBkXgo/J/z6XQ=";
+    stripRoot = false;
   };
 
   postPatch = ''
@@ -45,10 +45,6 @@ stdenv.mkDerivation {
       --replace-fail '-Wl,-Bstatic'  "" \
       --replace-fail '-Wl,-Bdynamic' ""
   '';
-
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ unzip ];
 
   buildInputs = [
     boost
