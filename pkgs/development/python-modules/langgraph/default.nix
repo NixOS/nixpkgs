@@ -32,6 +32,9 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
+
+  # passthru
+  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "langgraph";
@@ -125,9 +128,11 @@ buildPythonPackage rec {
     "tests/test_pregel_async.py"
   ];
 
-  passthru = {
-    inherit (langgraph-sdk) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {
