@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       figsoda
       psibi
+      krovuxdev
     ];
     mainProgram = "ouch";
   };
