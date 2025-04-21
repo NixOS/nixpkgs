@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "8.0.0";
+  version = "8.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "cx_freeze";
+    pname = "cx_Freeze";
     inherit version;
-    hash = "sha256-gOH4e7FS7Q+X98ZDXgI31Eqt6Zl5knxGJ3cTIqJdVQ0=";
+    hash = "sha256-23hXovh4235rFMZrhW0SAggTquebJbAsxzqY+fBfeuA=";
   };
 
   postPatch = ''
