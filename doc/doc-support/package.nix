@@ -13,6 +13,7 @@
   writeShellScriptBin,
   nixpkgs ? { },
   markdown-code-runner,
+  roboto,
 }:
 
 stdenvNoCC.mkDerivation (
@@ -91,6 +92,8 @@ stdenvNoCC.mkDerivation (
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
       mv "$dest/index.html" "$dest/manual.html"
+
+      cp ${roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dest/Roboto.ttf"
 
       cp ${epub} "$dest/nixpkgs-manual.epub"
 
