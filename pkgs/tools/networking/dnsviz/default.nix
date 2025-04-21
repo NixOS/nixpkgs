@@ -1,21 +1,18 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  dnspython,
-  m2crypto,
-  pygraphviz,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "dnsviz";
-  version = "0.9.4";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "dnsviz";
     repo = "dnsviz";
-    rev = "v${version}";
-    sha256 = "sha256-x6LdPVQFfsJIuKde1+LbFKz5bBEi+Mri9sVH0nGsbCU=";
+    tag = "v${version}";
+    hash = "sha256-JlPikEvRPFhHcTyRJ2ZgmQOrrc6qzhbAO6+NtiN+Wqo=";
   };
 
   patches = [
@@ -23,22 +20,23 @@ buildPythonApplication rec {
     ./fix-path.patch
   ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace dnsviz/config.py.in \
+      --replace-fail '@out@' $out
+  '';
+
+  dependencies = with python3Packages; [
     dnspython
     m2crypto
     pygraphviz
   ];
-
-  postPatch = ''
-    substituteInPlace dnsviz/config.py.in --replace '@out@' $out
-  '';
 
   # Tests require network connection and /etc/resolv.conf
   doCheck = false;
 
   pythonImportsCheck = [ "dnsviz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool suite for analyzing and visualizing DNS and DNSSEC behavior";
     mainProgram = "dnsviz";
     longDescription = ''
@@ -47,7 +45,7 @@ buildPythonApplication rec {
 
       This tool suite powers the Web-based analysis available at https://dnsviz.net/
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }
