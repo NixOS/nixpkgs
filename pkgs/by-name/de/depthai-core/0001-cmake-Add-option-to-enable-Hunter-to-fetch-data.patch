@@ -1,0 +1,541 @@
+From 3b739fb02c6354fe2080daff19ae81016464fdea Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@protonmail.com>
+Date: Mon, 21 Apr 2025 18:24:31 +0200
+Subject: [PATCH] cmake: Add option to enable Hunter to fetch data
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0c0507105..b0c28b2a2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ cmake_minimum_required(VERSION 3.20)
+ # Early options
+ option(DEPTHAI_ENABLE_LIBUSB "Enable usage of libusb and interaction with USB devices" ON)
++option(ENABLE_HUNTER_DOWNLOAD "Enable Hunter to fetch all dependencies" ON)
+ # Build AprilTag node code (note, that even if set to OFF, an AprilTagNode can be used with setRunOnHost(false))
+ option(DEPTHAI_ENABLE_APRIL_TAG "Enable AprilTag node" ON)
+ option(DEPTHAI_RTABMAP_SUPPORT "Enable optional RTABMap support" OFF)
+diff --git a/examples/cpp/CMakeLists.txt b/examples/cpp/CMakeLists.txt
+index 514c70c06..995c2fbf9 100644
+--- a/examples/cpp/CMakeLists.txt
++++ b/examples/cpp/CMakeLists.txt
+@@ -122,147 +122,148 @@ endfunction()
+ 
+ 
+ # Hunter test data download
++if(ENABLE_HUNTER_DOWNLOAD)
++    # NeuralNetwork node, mobilenet example
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.4_6shave.blob"
++        SHA1 "4f4506726e3083981064938a0faaf9af6180d2c6"
++        FILE "mobilenet-ssd_openvino_2021.4_6shave.blob"
++        LOCATION mobilenet_blob
++    )
++
++    # YoloV3 resource
++    private_data(
++        URL "http://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/yolo-v3-tiny-tf_openvino_2021.4_6shave.blob"
++        SHA1 "dedb2d4d96b23e42d15c15e454b8f02eca2713de"
++        FILE "yolo-v3-tiny-tf_openvino_2021.4_6shave.blob"
++        LOCATION tiny_yolo_v3_blob
++    )
++
++    # YoloV4 resource
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
++        SHA1 "d8d09b697dac298fe83cf8856740a21b1a61ab89"
++        FILE "yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
++        LOCATION tiny_yolo_v4_blob
++    )
++
++    # NeuralNetwork node, mobilenet example, 5 shaves
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.4_5shave.blob"
++        SHA1 "14ab3ef446b8a649d6694d94c2fc8b798efd74a3"
++        FILE "mobilenet-ssd_openvino_2021.4_5shave.blob"
++        LOCATION mobilenet_5shaves_blob
++    )
++
++    # NeuralNetwork node, mobilenet example, 8 shaves
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.4_8shave.blob"
++        SHA1 "7e7ea9a680668f3ca9e8f1d22cc8f3f1a02ac018"
++        FILE "mobilenet-ssd_openvino_2021.4_8shave.blob"
++        LOCATION mobilenet_8shaves_blob
++    )
+ 
+-# NeuralNetwork node, mobilenet example
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.4_6shave.blob"
+-    SHA1 "4f4506726e3083981064938a0faaf9af6180d2c6"
+-    FILE "mobilenet-ssd_openvino_2021.4_6shave.blob"
+-    LOCATION mobilenet_blob
+-)
+-
+-# YoloV3 resource
+-private_data(
+-    URL "http://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/yolo-v3-tiny-tf_openvino_2021.4_6shave.blob"
+-    SHA1 "dedb2d4d96b23e42d15c15e454b8f02eca2713de"
+-    FILE "yolo-v3-tiny-tf_openvino_2021.4_6shave.blob"
+-    LOCATION tiny_yolo_v3_blob
+-)
+-
+-# YoloV4 resource
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
+-    SHA1 "d8d09b697dac298fe83cf8856740a21b1a61ab89"
+-    FILE "yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"
+-    LOCATION tiny_yolo_v4_blob
+-)
+-
+-# NeuralNetwork node, mobilenet example, 5 shaves
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.4_5shave.blob"
+-    SHA1 "14ab3ef446b8a649d6694d94c2fc8b798efd74a3"
+-    FILE "mobilenet-ssd_openvino_2021.4_5shave.blob"
+-    LOCATION mobilenet_5shaves_blob
+-)
+-
+-# NeuralNetwork node, mobilenet example, 8 shaves
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.4_8shave.blob"
+-    SHA1 "7e7ea9a680668f3ca9e8f1d22cc8f3f1a02ac018"
+-    FILE "mobilenet-ssd_openvino_2021.4_8shave.blob"
+-    LOCATION mobilenet_8shaves_blob
+-)
+-
+-# Video file with objects to detect
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/construction_vest.mp4"
+-    SHA1 "271d8d0b702e683ce02957db7c100843de5ceaec"
+-    FILE "construction_vest.mp4"
+-    LOCATION construction_vest
+-)
+-
+-# Calibration Sample files
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/depthai_calib.json"
+-    SHA1 "ec50a47496473116c51cec1c8249bff2679383c3"
+-    FILE "depthai_calib.json"
+-    LOCATION calib_v6
+-)
+-
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/depthai_v5.calib"
+-    SHA1 "adfe9976b9aacfdaa76ac7138810999988177e71"
+-    FILE "depthai_v5.calib"
+-    LOCATION calib_v5
+-)
+-
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/BW1098OBC.json"
+-    SHA1 "1e84b6c339ac51e3b254775090b91235a40fac71"
+-    FILE "BW1098OBC.json"
+-    LOCATION device_config
+-)
+-
+-# person-detection
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/person-detection-retail-0013_openvino_2021.4_7shave.blob"
+-    SHA1 "946d102874b287292cdb5952fa66356c8d36025f"
+-    FILE "person-detection-retail-0013_openvino_2021.4_7shave.blob"
+-    LOCATION person_detection
+-)
+-
+-# concat model
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/concat_openvino_2021.4_6shave.blob"
+-    SHA1 "e4af6fb2bed39648a2a4424d8bdc5bac56d616df"
+-    FILE "concat_openvino_2021.4_6shave.blob"
+-    LOCATION concat_model
+-)
+-
+-# normalization model
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/normalize_openvino_2021.4_4shave.blob"
+-    SHA1 "1435f6d11e0dfdbc60f2dfa45aecd3d530b6153b"
+-    FILE "normalize_openvino_2021.4_4shave.blob"
+-    LOCATION normalization_model
+-)
+-
+-# mobilnet xml model for S3 example
+-private_data(
+-    URL "https://download.01.org/opencv/2021/openvinotoolkit/2021.1/open_model_zoo/models_bin/1/person-detection-0202/FP32/person-detection-0202.xml"
+-    SHA1 "87f9cf8833043162f1b728e9afa6f38ba177d9db"
+-    FILE "person-detection-0202.xml"
+-    LOCATION person_detection_xml
+-)
+-
+-# mobilnet xml model for S3 example
+-private_data(
+-    URL "https://download.01.org/opencv/2021/openvinotoolkit/2021.1/open_model_zoo/models_bin/1/person-detection-0202/FP32/person-detection-0202.bin"
+-    SHA1 "1560bf2ee372a0640539780ea8bd061278a6cc20"
+-    FILE "person-detection-0202.bin"
+-    LOCATION person_detection_bin
+-)
+-
+-# yolo xml model for S3 example
+-private_data(
+-    URL "https://github.com/luxonis/depthai-model-zoo/raw/main/models/yolov4_tiny_coco_416x416/yolov4_tiny_coco_416x416.xml"
+-    SHA1 "423069bdff250643cf080c76e15594cfd72cb816"
+-    FILE "yolov4_tiny_coco_416x416.xml"
+-    LOCATION tiny-vechicle-detection_xml
+-)
+-
+-# yolo bin model for S3 example
+-private_data(
+-    URL "https://robothub.fra1.cdn.digitaloceanspaces.com/models/yolov4_tiny_coco_416x416/yolov4_tiny_coco_416x416.bin"
+-    SHA1 "a7627c074ee76ceb9ff9bb8529b67867e3e440bc"
+-    FILE "yolov4_tiny_coco_416x416.bin"
+-    LOCATION tiny-vechicle-detection_bin
+-)
+-
+-# yolo v5 nn archive
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo-v6-openvino_2022.1_6shave-rvc2.tar.xz"
+-    SHA1 "63a5bb29d1ca0d3b019f13d66401e634539aac82"
+-    FILE "yolo-v6-openvino_2022.1_6shave-rvc2.tar.xz"
+-    LOCATION nn_archive_yolo_v6_tar_xz
+-)
+-
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/recording.tar"
+-    SHA1 "b1e31a26c83dc1e315132c9226097da4b1a5cbb7"
+-    FILE "recording.tar"
+-    LOCATION recording_path
+-)
++    # Video file with objects to detect
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/construction_vest.mp4"
++        SHA1 "271d8d0b702e683ce02957db7c100843de5ceaec"
++        FILE "construction_vest.mp4"
++        LOCATION construction_vest
++    )
++
++    # Calibration Sample files
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/depthai_calib.json"
++        SHA1 "ec50a47496473116c51cec1c8249bff2679383c3"
++        FILE "depthai_calib.json"
++        LOCATION calib_v6
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/depthai_v5.calib"
++        SHA1 "adfe9976b9aacfdaa76ac7138810999988177e71"
++        FILE "depthai_v5.calib"
++        LOCATION calib_v5
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/BW1098OBC.json"
++        SHA1 "1e84b6c339ac51e3b254775090b91235a40fac71"
++        FILE "BW1098OBC.json"
++        LOCATION device_config
++    )
++
++    # person-detection
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/person-detection-retail-0013_openvino_2021.4_7shave.blob"
++        SHA1 "946d102874b287292cdb5952fa66356c8d36025f"
++        FILE "person-detection-retail-0013_openvino_2021.4_7shave.blob"
++        LOCATION person_detection
++    )
++
++    # concat model
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/concat_openvino_2021.4_6shave.blob"
++        SHA1 "e4af6fb2bed39648a2a4424d8bdc5bac56d616df"
++        FILE "concat_openvino_2021.4_6shave.blob"
++        LOCATION concat_model
++    )
++
++    # normalization model
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/normalize_openvino_2021.4_4shave.blob"
++        SHA1 "1435f6d11e0dfdbc60f2dfa45aecd3d530b6153b"
++        FILE "normalize_openvino_2021.4_4shave.blob"
++        LOCATION normalization_model
++    )
++
++    # mobilnet xml model for S3 example
++    private_data(
++        URL "https://download.01.org/opencv/2021/openvinotoolkit/2021.1/open_model_zoo/models_bin/1/person-detection-0202/FP32/person-detection-0202.xml"
++        SHA1 "87f9cf8833043162f1b728e9afa6f38ba177d9db"
++        FILE "person-detection-0202.xml"
++        LOCATION person_detection_xml
++    )
++
++    # mobilnet xml model for S3 example
++    private_data(
++        URL "https://download.01.org/opencv/2021/openvinotoolkit/2021.1/open_model_zoo/models_bin/1/person-detection-0202/FP32/person-detection-0202.bin"
++        SHA1 "1560bf2ee372a0640539780ea8bd061278a6cc20"
++        FILE "person-detection-0202.bin"
++        LOCATION person_detection_bin
++    )
++
++    # yolo xml model for S3 example
++    private_data(
++        URL "https://github.com/luxonis/depthai-model-zoo/raw/main/models/yolov4_tiny_coco_416x416/yolov4_tiny_coco_416x416.xml"
++        SHA1 "423069bdff250643cf080c76e15594cfd72cb816"
++        FILE "yolov4_tiny_coco_416x416.xml"
++        LOCATION tiny-vechicle-detection_xml
++    )
++
++    # yolo bin model for S3 example
++    private_data(
++        URL "https://robothub.fra1.cdn.digitaloceanspaces.com/models/yolov4_tiny_coco_416x416/yolov4_tiny_coco_416x416.bin"
++        SHA1 "a7627c074ee76ceb9ff9bb8529b67867e3e440bc"
++        FILE "yolov4_tiny_coco_416x416.bin"
++        LOCATION tiny-vechicle-detection_bin
++    )
++
++    # yolo v5 nn archive
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo-v6-openvino_2022.1_6shave-rvc2.tar.xz"
++        SHA1 "63a5bb29d1ca0d3b019f13d66401e634539aac82"
++        FILE "yolo-v6-openvino_2022.1_6shave-rvc2.tar.xz"
++        LOCATION nn_archive_yolo_v6_tar_xz
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/recording.tar"
++        SHA1 "b1e31a26c83dc1e315132c9226097da4b1a5cbb7"
++        FILE "recording.tar"
++        LOCATION recording_path
++    )
++endif()
+ 
+ # Camera
+ dai_add_example(camera Camera/camera_output.cpp ON OFF)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 9d44ab4f9..971c6d88c 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -110,115 +110,122 @@ function(dai_test_compile_definitions)
+ endfunction()
+ 
+ # Mobilenet network
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.2_8shave.blob"
+-    SHA1 "3329bb8f3a9c881ef9756d232055f9d6f38aa07b"
+-    FILE "mobilenet-ssd_openvino_2021.2_8shave.blob"
+-    LOCATION mobilenet_blob
+-)
++if(ENABLE_HUNTER_DOWNLOAD)
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/mobilenet-ssd_openvino_2021.2_8shave.blob"
++        SHA1 "3329bb8f3a9c881ef9756d232055f9d6f38aa07b"
++        FILE "mobilenet-ssd_openvino_2021.2_8shave.blob"
++        LOCATION mobilenet_blob
++    )
+ 
+-# OpenVINO 2020.3 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2020.3_4shave.blob"
+-    SHA1 "f0134c9b843fe414f6d98b17a70f069d1ab0f3d8"
+-    FILE "text-image-super-resolution-0001_2020.3_4shave.blob"
+-    LOCATION openvino_2020_3_blob
+-)
+-# OpenVINO 2020.4 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2020.4_4shave.blob"
+-    SHA1 "25dcf0b146da8c85c9c4cba00ad5fdd4ed02a1b6"
+-    FILE "text-image-super-resolution-0001_2020.4_4shave.blob"
+-    LOCATION openvino_2020_4_blob
+-)
++    # OpenVINO 2020.3 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2020.3_4shave.blob"
++        SHA1 "f0134c9b843fe414f6d98b17a70f069d1ab0f3d8"
++        FILE "text-image-super-resolution-0001_2020.3_4shave.blob"
++        LOCATION openvino_2020_3_blob
++    )
+ 
+-# OpenVINO 2021.1 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.1_4shave.blob"
+-    SHA1 "39c4f47f2a75627b7561e97dd7cdfcd0b1925a1e"
+-    FILE "text-image-super-resolution-0001_2021.1_4shave.blob"
+-    LOCATION openvino_2021_1_blob
+-)
+-# OpenVINO 2021.2 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.2_4shave.blob"
+-    SHA1 "a204467f86aa4ad63d31782ada271bea6f57f789"
+-    FILE "text-image-super-resolution-0001_2021.2_4shave.blob"
+-    LOCATION openvino_2021_2_blob
+-)
+-# OpenVINO 2021.3 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.3_4shave.blob"
+-    SHA1 "af19470feb59317e74d045bc31d93ca129c46674"
+-    FILE "text-image-super-resolution-0001_2021.3_4shave.blob"
+-    LOCATION openvino_2021_3_blob
+-)
+-# OpenVINO 2021.4.2 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.4.2_4shave.blob"
+-    SHA1 "164b6b2ae48d38bc4f07cc8296b8bcb7644a1578"
+-    FILE "text-image-super-resolution-0001_2021.4.2_4shave.blob"
+-    LOCATION openvino_2021_4_2_blob
+-)
+-# OpenVINO 2022.1.0 blob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2022.1.0_4shave.blob"
+-    SHA1 "98e94b865b9c48a92eaebd1ddc883712dfe7cfcb"
+-    FILE "text-image-super-resolution-0001_2022.1.0_4shave.blob"
+-    LOCATION openvino_2022_1_blob
+-)
+-# YoloV4 resource
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/yolo-v4-tiny-tf_openvino_2021.4_4shave.blob"
+-    SHA1 "7da2f96f7300e3828940557e6a86ac6f243eef7e"
+-    FILE "yolo-v4-tiny-tf_openvino_2021.4_4shave.blob"
+-    LOCATION tiny_yolo_v4_2021-4_4shave_blob
+-)
++    # OpenVINO 2020.4 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2020.4_4shave.blob"
++        SHA1 "25dcf0b146da8c85c9c4cba00ad5fdd4ed02a1b6"
++        FILE "text-image-super-resolution-0001_2020.4_4shave.blob"
++        LOCATION openvino_2020_4_blob
++    )
+ 
+-# Superblob
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/person-reidentification-retail-0277_openvino_2022.1_8shave.superblob"
+-    SHA1 "6f14e3a5388946d6de849ff4f6432702601b1003"
+-    FILE "person-reidentification-retail-0277_openvino_2022.1_8shave.superblob"
+-    LOCATION superblob_path
+-)
++    # OpenVINO 2021.1 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.1_4shave.blob"
++        SHA1 "39c4f47f2a75627b7561e97dd7cdfcd0b1925a1e"
++        FILE "text-image-super-resolution-0001_2021.1_4shave.blob"
++        LOCATION openvino_2021_1_blob
++    )
+ 
+-# NNarchives of different types
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo_blob_nnarchive.tar.xz"
+-    SHA1 "6b9697e5aaf1560efbdea7f8d7487bae51def619"
+-    FILE "yolo_blob_nnarchive.tar.xz"
+-    LOCATION yolo_blob_nnarchive_path
+-)
++    # OpenVINO 2021.2 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.2_4shave.blob"
++        SHA1 "a204467f86aa4ad63d31782ada271bea6f57f789"
++        FILE "text-image-super-resolution-0001_2021.2_4shave.blob"
++        LOCATION openvino_2021_2_blob
++    )
+ 
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo_superblob_nnarchive.tar.xz"
+-    SHA1 "2356fd7e5a203446211a891a74f0b23e0912eaf6"
+-    FILE "yolo_superblob_nnarchive.tar.xz"
+-    LOCATION yolo_superblob_nnarchive_path
+-)
++    # OpenVINO 2021.3 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.3_4shave.blob"
++        SHA1 "af19470feb59317e74d045bc31d93ca129c46674"
++        FILE "text-image-super-resolution-0001_2021.3_4shave.blob"
++        LOCATION openvino_2021_3_blob
++    )
+ 
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo_onnx_nnarchive.tar.xz"
+-    SHA1 "7abb6a8c05c5f66897cd2c5c6b4f0170620dff8b"
+-    FILE "yolo_onnx_nnarchive.tar.xz"
+-    LOCATION yolo_onnx_nnarchive_path
+-)
++    # OpenVINO 2021.4.2 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2021.4.2_4shave.blob"
++        SHA1 "164b6b2ae48d38bc4f07cc8296b8bcb7644a1578"
++        FILE "text-image-super-resolution-0001_2021.4.2_4shave.blob"
++        LOCATION openvino_2021_4_2_blob
++    )
+ 
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/images/lenna.png"
+-    SHA1 "3ee0d360dc12003c0d43e3579295b52b64906e85"
+-    FILE "lenna.png"
+-    LOCATION lenna_png
+-)
++    # OpenVINO 2022.1.0 blob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/text-image-super-resolution-0001_2022.1.0_4shave.blob"
++        SHA1 "98e94b865b9c48a92eaebd1ddc883712dfe7cfcb"
++        FILE "text-image-super-resolution-0001_2022.1.0_4shave.blob"
++        LOCATION openvino_2022_1_blob
++    )
+ 
+-private_data(
+-    URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/recording.tar"
+-    SHA1 "b1e31a26c83dc1e315132c9226097da4b1a5cbb7"
+-    FILE "recording.tar"
+-    LOCATION recording_path
+-)
++    # YoloV4 resource
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/yolo-v4-tiny-tf_openvino_2021.4_4shave.blob"
++        SHA1 "7da2f96f7300e3828940557e6a86ac6f243eef7e"
++        FILE "yolo-v4-tiny-tf_openvino_2021.4_4shave.blob"
++        LOCATION tiny_yolo_v4_2021-4_4shave_blob
++    )
++
++    # Superblob
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/person-reidentification-retail-0277_openvino_2022.1_8shave.superblob"
++        SHA1 "6f14e3a5388946d6de849ff4f6432702601b1003"
++        FILE "person-reidentification-retail-0277_openvino_2022.1_8shave.superblob"
++        LOCATION superblob_path
++    )
+ 
++    # NNarchives of different types
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo_blob_nnarchive.tar.xz"
++        SHA1 "6b9697e5aaf1560efbdea7f8d7487bae51def619"
++        FILE "yolo_blob_nnarchive.tar.xz"
++        LOCATION yolo_blob_nnarchive_path
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo_superblob_nnarchive.tar.xz"
++        SHA1 "2356fd7e5a203446211a891a74f0b23e0912eaf6"
++        FILE "yolo_superblob_nnarchive.tar.xz"
++        LOCATION yolo_superblob_nnarchive_path
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/network/nnarchive/yolo_onnx_nnarchive.tar.xz"
++        SHA1 "7abb6a8c05c5f66897cd2c5c6b4f0170620dff8b"
++        FILE "yolo_onnx_nnarchive.tar.xz"
++        LOCATION yolo_onnx_nnarchive_path
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/images/lenna.png"
++        SHA1 "3ee0d360dc12003c0d43e3579295b52b64906e85"
++        FILE "lenna.png"
++        LOCATION lenna_png
++    )
++
++    private_data(
++        URL "https://artifacts.luxonis.com/artifactory/luxonis-depthai-data-local/misc/recording.tar"
++        SHA1 "b1e31a26c83dc1e315132c9226097da4b1a5cbb7"
++        FILE "recording.tar"
++        LOCATION recording_path
++    )
++endif()
+ ### Helper script to wrap the tests with a timeout ############################
+ 
+ add_executable(test_wrapper src/helpers/test_wrapper.cpp)
+-- 
+2.48.1
+
