@@ -50,7 +50,10 @@ buildNpmPackage rec {
     description = "Dynamic Tiling Extension for KWin 6";
     homepage = "https://github.com/anametologin/krohnkite";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ben9986 ];
+    maintainers = with lib.maintainers; [
+      ben9986
+      dramforever
+    ];
     platforms = lib.platforms.all;
   };
 }
