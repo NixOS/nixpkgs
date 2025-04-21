@@ -6488,7 +6488,6 @@ with pkgs;
   cargo-ndk = callPackage ../development/tools/rust/cargo-ndk { };
   cargo-rdme = callPackage ../by-name/ca/cargo-rdme/package.nix { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps { };
-  cargo-vet = callPackage ../development/tools/rust/cargo-vet { };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch { };
   cargo-whatfeatures = callPackage ../development/tools/rust/cargo-whatfeatures { };
 
