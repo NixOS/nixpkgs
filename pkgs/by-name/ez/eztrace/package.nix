@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
     homepage = "https://eztrace.gitlab.io/eztrace/index.html";
+    downloadPage = "https://gitlab.com/eztrace/eztrace/";
     license = lib.licenses.cecill-b;
     maintainers = [ lib.maintainers.xokdvium ];
     mainProgram = "eztrace";
