@@ -20,14 +20,14 @@ stdenv.mkDerivation {
 **Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs**, as it allows us to reuse the version easily:
 
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfoo";
   version = "1.2.3";
   src = fetchurl {
-    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    url = "http://example.org/libfoo-source-${finalAttrs.version}.tar.bz2";
     hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
-}
+})
 ```
 
 Many packages have dependencies that are not provided in the standard environment. It’s usually sufficient to specify those dependencies in the `buildInputs` attribute:
@@ -53,13 +53,24 @@ Often it is necessary to override or modify some aspect of the build. To make th
 stdenv.mkDerivation {
   pname = "fnord";
   version = "4.5";
+
   # ...
+
   buildPhase = ''
+    runHook preBuild
+
     gcc foo.c -o foo
+
+    runHook postBuild
   '';
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp foo $out/bin
+
+    runHook postInstall
   '';
 }
 ```
@@ -212,12 +223,12 @@ These dependencies are only injected when [`doCheck`](#var-stdenv-doCheck) is se
 
 Consider for example this simplified derivation for `solo5`, a sandboxing tool:
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solo5";
   version = "0.7.5";
 
   src = fetchurl {
-    url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
+    url = "https://github.com/Solo5/solo5/releases/download/v${finalAttrs.version}/solo5-v${finalAttrs.version}.tar.gz";
     hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
@@ -225,6 +236,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
   ];
+
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -249,8 +261,8 @@ stdenv.mkDerivation rec {
     util-linux
     qemu
   ];
-  checkPhase = ''[elided] '';
-}
+  checkPhase = ''[elided]'';
+})
 ```
 
 - `makeWrapper` is a setup hook, i.e., a shell script sourced by the generic builder of `stdenv`.

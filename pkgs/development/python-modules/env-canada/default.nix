@@ -3,6 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   geopy,
   imageio,
   lxml,
@@ -13,6 +14,7 @@
   python-dateutil,
   pythonOlder,
   setuptools,
+  syrupy,
   voluptuous,
 }:
 
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     owner = "michaeldavie";
     repo = "env_canada";
     tag = version;
-    hash = "sha256-4PztYdQmMH2n3dlV8arJ2UFGp08nkIK80L460UdNhV8=";
+    hash = "sha256-YDosRPROWpjG27MyCErCTvP99mAlzg/GfmU73cBVUTo=";
   };
 
   build-system = [ setuptools ];
@@ -44,7 +46,11 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+    syrupy
+  ];
 
   disabledTests = [
     # Tests require network access

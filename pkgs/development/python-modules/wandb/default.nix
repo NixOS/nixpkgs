@@ -28,7 +28,7 @@
   pydantic,
   pyyaml,
   requests,
-  sentry-sdk_2,
+  sentry-sdk,
   setproctitle,
   setuptools,
   pythonOlder,
@@ -188,7 +188,7 @@ buildPythonPackage rec {
       pydantic
       pyyaml
       requests
-      sentry-sdk_2
+      sentry-sdk
       setproctitle
       # setuptools is necessary since pkg_resources is required at runtime.
       setuptools
