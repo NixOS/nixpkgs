@@ -2226,6 +2226,8 @@ in
       "nvchad.cheatsheet.grid"
       "nvchad.cheatsheet.simple"
       "nvchad.blink.config"
+      # Circular dependency with base46
+      "nvchad.utils"
     ];
   };
 
