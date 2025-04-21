@@ -96,11 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tEJQWZBaiX/bONPZEuGcvbGidktcvxUZtLvcGjz71Lk=";
   };
 
-  postPatch =
-    lib.optionalString docsSupport ''
-      substituteInPlace cmake/Conky.cmake --replace-fail "# set(RELEASE true)" "set(RELEASE true)"
-    '';
-
   env = {
     # For some reason -Werror is on by default, causing the project to fail compilation.
     NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -157,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "REPRODUCIBLE_BUILD" true)
+    (lib.cmakeBool "RELEASE" true)
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
     (lib.cmakeBool "BUILD_EXTRAS" extrasSupport)
     (lib.cmakeBool "BUILD_DOCS" docsSupport)
