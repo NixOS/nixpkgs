@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "flowmc";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
     tag = "flowMC-${version}";
-    hash = "sha256-M0FrIe7q0YI6f+IwQeMsZKahw9wcQd42hf/dmXJp2Fk=";
+    hash = "sha256-hyrsL8agY+bNcRcEmgEtv97cFROgeLFxxtKTfx0HoH8=";
   };
 
   build-system = [ hatchling ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Normalizing-flow enhanced sampling package for probabilistic inference in Jax";
     homepage = "https://github.com/kazewong/flowMC";
-    changelog = "https://github.com/kazewong/flowMC/releases/tag/flowMC-${version}";
+    changelog = "https://github.com/kazewong/flowMC/releases/tag/flowMC-${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
