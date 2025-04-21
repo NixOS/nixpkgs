@@ -18,14 +18,9 @@
 
   # lib.optional features with extra dependencies
 
-  # ouch, this is ugly, but this gives the man page
   docsSupport ? true,
-  docbook2x,
-  libxslt ? null,
-  man ? null,
-  less ? null,
-  docbook_xsl ? null,
-  docbook_xml_dtd_44 ? null,
+  pandoc,
+  python3,
 
   ncursesSupport ? true,
   ncurses ? null,
@@ -65,15 +60,7 @@
   libxml2 ? null,
 }:
 
-assert
-  docsSupport
-  ->
-    docbook2x != null
-    && libxslt != null
-    && man != null
-    && less != null
-    && docbook_xsl != null
-    && docbook_xml_dtd_44 != null;
+assert docsSupport -> pandoc != null && python3 != null;
 
 assert ncursesSupport -> ncurses != null;
 
@@ -125,14 +112,13 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       pkg-config
     ]
-    ++ lib.optionals docsSupport [
-      docbook2x
-      docbook_xsl
-      docbook_xml_dtd_44
-      libxslt
-      man
-      less
-    ]
+    ++ lib.optional docsSupport pandoc
+    ++ lib.optional docsSupport (
+      python3.withPackages (ps: [
+        ps.jinja2
+        ps.pyyaml
+      ])
+    )
     ++ lib.optional waylandSupport wayland-scanner
     ++ lib.optional luaImlib2Support toluapp
     ++ lib.optional luaCairoSupport toluapp;
@@ -171,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [ ]
-    ++ lib.optional docsSupport "-DMAINTAINER_MODE=ON"
+    ++ lib.optional docsSupport "-DBUILD_DOCS=ON"
     ++ lib.optional curlSupport "-DBUILD_CURL=ON"
     ++ lib.optional (!ibmSupport) "-DBUILD_IBM=OFF"
     ++ lib.optional imlib2Support "-DBUILD_IMLIB2=ON"
