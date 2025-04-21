@@ -227,6 +227,7 @@ with lib.maintainers;
       pandapip1
       qyliss
       thefossguy
+      michaelBelsanti
     ];
     githubTeams = [ "cosmic" ];
     shortName = "cosmic";
