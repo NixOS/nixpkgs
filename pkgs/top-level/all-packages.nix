@@ -3171,7 +3171,7 @@ with pkgs;
 
   deluge-2_x = deluge;
 
-  dnsviz = python3Packages.callPackage ../tools/networking/dnsviz { };
+  dnsviz = callPackage ../tools/networking/dnsviz { };
 
   diffoscopeMinimal = diffoscope.override {
     enableBloat = false;
