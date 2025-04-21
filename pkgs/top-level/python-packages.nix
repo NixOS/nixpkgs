@@ -12256,10 +12256,7 @@ self: super: with self; {
 
   pygame = callPackage ../development/python-modules/pygame { };
 
-  pygame-ce = callPackage ../development/python-modules/pygame-ce {
-    SDL2_image = pkgs.SDL2_image_2_0;
-    SDL2_mixer = pkgs.SDL2_mixer_2_0;
-  };
+  pygame-ce = callPackage ../development/python-modules/pygame-ce { };
 
   pygame-gui = callPackage ../development/python-modules/pygame-gui { };
 
