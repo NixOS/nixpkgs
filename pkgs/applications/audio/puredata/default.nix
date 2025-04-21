@@ -10,6 +10,7 @@
   tk,
   fftw,
   portaudio,
+  portmidi,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,12 +42,12 @@ stdenv.mkDerivation rec {
       alsa-lib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      portmidi
       portaudio
     ];
 
   configureFlags =
     [
-      "--enable-universal"
       "--enable-fftw"
       "--enable-jack"
     ]
@@ -55,7 +56,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--enable-portaudio"
+      "--enable-portmidi"
       "--without-local-portaudio"
+      "--without-local-portmidi"
       "--disable-jack-framework"
       "--with-wish=${tk}/bin/wish8.6"
     ];
