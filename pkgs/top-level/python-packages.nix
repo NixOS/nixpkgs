@@ -4028,6 +4028,8 @@ self: super: with self; {
 
   dockerfile-parse = callPackage ../development/python-modules/dockerfile-parse { };
 
+  dockerflow = callPackage ../development/python-modules/dockerflow { };
+
   dockerpty = callPackage ../development/python-modules/dockerpty { };
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
@@ -9744,6 +9746,8 @@ self: super: with self; {
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   nested-lookup = callPackage ../development/python-modules/nested-lookup { };
+
+  nested-multipart-parser = callPackage ../development/python-modules/nested-multipart-parser { };
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
 
