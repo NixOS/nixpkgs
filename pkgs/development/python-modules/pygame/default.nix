@@ -87,7 +87,7 @@ buildPythonPackage rec {
     libX11
     portmidi
     SDL2_classic
-    SDL2_image
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
   ];
