@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-Tsu+q3PeJSIVdW5wRB1RRk4oolXpj58ZbBQ20gaHJ7o=";
+    hash = "sha256-Iyiuvt86pfz8MmpwgDecKJFVOw+fKpEaA9m1MBA9Yxs=";
   };
 
   build-system = [
