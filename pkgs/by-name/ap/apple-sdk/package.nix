@@ -41,7 +41,7 @@ let
     # Avoid infinite recursions by not propagating certain packages, so they can themselves build with the SDK.
     ++ lib.optionals (!enableBootstrap) [
       (callPackage ./common/propagate-inputs.nix { })
-      (callPackage ./common/propagate-xcrun.nix { })
+      (callPackage ./common/propagate-xcrun.nix { inherit sdkVersion; })
     ]
     # This has to happen last.
     ++ [
