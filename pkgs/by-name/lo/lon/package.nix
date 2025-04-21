@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lock & update Nix dependencies";
     homepage = "https://github.com/nikstur/lon";
+    changelog = "https://github.com/nikstur/lon/blob/${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       ma27
       nikstur
