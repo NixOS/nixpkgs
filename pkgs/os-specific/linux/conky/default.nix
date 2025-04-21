@@ -60,6 +60,8 @@
   libxml2 ? null,
 
   extrasSupport ? true,
+
+  versionCheckHook,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -182,6 +184,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional journalSupport "-DBUILD_JOURNAL=ON";
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://conky.cc";
