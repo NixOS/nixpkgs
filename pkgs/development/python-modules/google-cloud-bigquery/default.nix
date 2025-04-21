@@ -108,6 +108,7 @@ buildPythonPackage rec {
     "test_list_rows_scalars"
     "test_list_rows_scalars_extreme"
     "test_session"
+    "test_to_arrow_query_with_empty_result"
 
     # Mocking of _ensure_bqstorage_client fails
     "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
@@ -131,6 +132,9 @@ buildPythonPackage rec {
     "tests/system/test_job_retry.py"
     "tests/system/test_pandas.py"
     "tests/system/test_query.py"
+
+    # ModuleNotFoundError: No module named 'google.cloud.resourcemanager_v3'
+    "tests/system/test_client.py"
   ];
 
   pythonImportsCheck = [
