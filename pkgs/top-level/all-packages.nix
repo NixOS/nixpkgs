@@ -4965,8 +4965,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  qlog = qt6Packages.callPackage ../applications/radio/qlog { };
-
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
@@ -13273,12 +13271,6 @@ with pkgs;
     ubootWandboard
     ;
 
-  # Upstream Barebox:
-  inherit (callPackage ../misc/barebox { })
-    buildBarebox
-    bareboxTools
-    ;
-
   eudev = callPackage ../by-name/eu/eudev/package.nix {
     util-linux = util-linuxMinimal;
   };
@@ -13819,10 +13811,6 @@ with pkgs;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
-  cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_18;
-  };
-
   calf = callPackage ../applications/audio/calf {
     inherit (gnome2) libglade;
   };
@@ -14034,8 +14022,7 @@ with pkgs;
     buildServerGui = false;
   };
 
-  drawterm = callPackage ../tools/admin/drawterm { config = "unix"; };
-  drawterm-wayland = callPackage ../tools/admin/drawterm { config = "linux"; };
+  drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { withWayland = true; };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
@@ -16530,16 +16517,6 @@ with pkgs;
       if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.virtualglLib else null;
   };
 
-  primusLib = callPackage ../tools/X11/primus/lib.nix {
-    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
-  };
-
-  primus = callPackage ../tools/X11/primus {
-    stdenv_i686 = pkgsi686Linux.stdenv;
-    primusLib_i686 =
-      if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null;
-  };
-
   vlc-bin-universal = vlc-bin.override { variant = "universal"; };
 
   libvlc = vlc.override {
@@ -17021,13 +16998,6 @@ with pkgs;
     fteqcc
     ;
 
-  heroic-unwrapped = callPackage ../games/heroic {
-    # Upstream uses EOL Electron 31.  Use next oldest version.
-    electron = electron_33;
-  };
-
-  heroic = callPackage ../games/heroic/fhsenv.nix { };
-
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
   vanillatd = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillatd"; };
@@ -17278,8 +17248,6 @@ with pkgs;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
 
-  gogdl = python3Packages.callPackage ../games/gogdl { };
-
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
   gshogi = callPackage ../games/gshogi { };
@@ -17388,8 +17356,6 @@ with pkgs;
   };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
-
-  nile = python3Packages.callPackage ../games/nile { };
 
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };

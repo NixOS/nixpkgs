@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eigenmath";
-  version = "338-unstable-2025-04-03";
+  version = "338-unstable-2025-04-18";
 
   src = fetchFromGitHub {
     owner = "georgeweigt";
     repo = pname;
-    rev = "d12a72a9d6a01d0eaf84a8a9bfe255674b9ef1d3";
-    hash = "sha256-rmIxgLTXWN0lrtmdMp4morAjHbmhKiHv2WW6yGg8C7Q=";
+    rev = "2e11a03c19d9f8194a14b8578bcffc3d76d3b113";
+    hash = "sha256-Clsch47VfLqGi6RaQF8T+6cSRpsZjjJDMUYTK3tSidg=";
   };
 
   checkPhase =
