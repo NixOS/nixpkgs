@@ -62,7 +62,7 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
   generated Neovim configuration via its  `-u` argument, i.e. : `-u /nix/store/...generatedInit.lua`. This has side effects like preventing Neovim from reading your config in `$XDG_CONFIG_HOME` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#_initialization) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse while reusing the logic of the nixpkgs wrapper and access the generated config via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
 
-```
+```nix
 wrapNeovimUnstable neovim-unwrapped {
   autoconfigure = true;
   autowrapRuntimeDeps = true;
@@ -82,7 +82,10 @@ wrapNeovimUnstable neovim-unwrapped {
         map <Leader>$ <Cmd>Obsession<CR>
       '';
     }
-    (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
+    (nvim-treesitter.withPlugins (p: [
+      p.nix
+      p.python
+    ]))
     hex-nvim
   ];
 }
