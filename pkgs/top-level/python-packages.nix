@@ -7274,6 +7274,13 @@ self: super: with self; {
 
   kaggle = callPackage ../development/python-modules/kaggle { };
 
+  kahip = toPythonModule (
+    pkgs.kahip.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
 
   kajiki = callPackage ../development/python-modules/kajiki { };
@@ -15538,11 +15545,7 @@ self: super: with self; {
 
   sentinels = callPackage ../development/python-modules/sentinels { };
 
-  sentry-sdk = sentry-sdk_1;
-
-  sentry-sdk_1 = callPackage ../development/python-modules/sentry-sdk/1.nix { };
-
-  sentry-sdk_2 = callPackage ../development/python-modules/sentry-sdk/default.nix { };
+  sentry-sdk = callPackage ../development/python-modules/sentry-sdk/default.nix { };
 
   sepaxml = callPackage ../development/python-modules/sepaxml { };
 

@@ -12,7 +12,7 @@
   rustc,
   wrapGAppsHook4,
   gdk-pixbuf,
-  clapper,
+  clapper-unwrapped,
   gtk4,
   libadwaita,
   libxml2,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      clapper
+      clapper-unwrapped
       gtk4
       libadwaita
       libxml2

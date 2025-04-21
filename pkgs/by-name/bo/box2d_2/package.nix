@@ -2,22 +2,27 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
+  pkg-config,
+
+  # buildInputs
+  glfw3,
   libGLU,
-  libGL,
-  libglut,
   libX11,
   libXcursor,
+  libXi,
   libXinerama,
   libXrandr,
+  libglut,
   xorgproto,
-  libXi,
-  pkg-config,
-  settingsFile ? "include/box2d/b2_settings.h",
+
+  nix-update-script,
 }:
 
 let
-  inherit (lib) cmakeBool optionals;
+  inherit (lib) cmakeBool;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "erincatto";
     repo = "box2d";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yvhpgiZpjTPeSY7Ma1bh4LwIokUUKB10v2WHlamL9D8=";
   };
 
@@ -37,34 +42,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    glfw3
     libGLU
-    libGL
-    libglut
     libX11
     libXcursor
+    libXi
     libXinerama
     libXrandr
+    libglut
     xorgproto
-    libXi
   ];
 
   cmakeFlags = [
     (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  prePatch = ''
-    substituteInPlace ${settingsFile}  \
-      --replace-fail 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
-  '';
-
-  # tests are broken on 2.4.2 and 2.3.x doesn't have tests: https://github.com/erincatto/box2d/issues/677
-  doCheck = lib.versionAtLeast finalAttrs.version "2.4.2";
-
-  meta = with lib; {
+  meta = {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.zlib;
+    changelog = "https://github.com/erincatto/box2d/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.zlib;
   };
 })

@@ -300,42 +300,41 @@ This provides us with some useful documentation for using our packages.  However
 
 ```nix
 {
-  packageOverrides =
-    pkgs: with pkgs; rec {
-      myProfile = writeText "my-profile" ''
-        export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
-        export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
-      '';
-      myPackages = pkgs.buildEnv {
-        name = "my-packages";
-        paths = [
-          (runCommand "profile" { } ''
-            mkdir -p $out/etc/profile.d
-            cp ${myProfile} $out/etc/profile.d/my-profile.sh
-          '')
-          aspell
-          bc
-          coreutils
-          ffmpeg
-          man
-          nix
-          emscripten
-          jq
-          nox
-          silver-searcher
-        ];
-        pathsToLink = [
-          "/share/man"
-          "/share/doc"
-          "/bin"
-          "/etc"
-        ];
-        extraOutputsToInstall = [
-          "man"
-          "doc"
-        ];
-      };
+  packageOverrides = pkgs: {
+    myProfile = pkgs.writeText "my-profile" ''
+      export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+      export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+    '';
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = with pkgs; [
+        (runCommand "profile" { } ''
+          mkdir -p $out/etc/profile.d
+          cp ${myProfile} $out/etc/profile.d/my-profile.sh
+        '')
+        aspell
+        bc
+        coreutils
+        ffmpeg
+        man
+        nix
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
+      pathsToLink = [
+        "/share/man"
+        "/share/doc"
+        "/bin"
+        "/etc"
+      ];
+      extraOutputsToInstall = [
+        "man"
+        "doc"
+      ];
     };
+  };
 }
 ```
 
@@ -360,54 +359,53 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
 
 ```nix
 {
-  packageOverrides =
-    pkgs: with pkgs; rec {
-      myProfile = writeText "my-profile" ''
-        export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
-        export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
-        export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
+  packageOverrides = pkgs: {
+    myProfile = pkgs.writeText "my-profile" ''
+      export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+      export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+      export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
+    '';
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = with pkgs; [
+        (runCommand "profile" { } ''
+          mkdir -p $out/etc/profile.d
+          cp ${myProfile} $out/etc/profile.d/my-profile.sh
+        '')
+        aspell
+        bc
+        coreutils
+        ffmpeg
+        man
+        nix
+        emscripten
+        jq
+        nox
+        silver-searcher
+        texinfoInteractive
+      ];
+      pathsToLink = [
+        "/share/man"
+        "/share/doc"
+        "/share/info"
+        "/bin"
+        "/etc"
+      ];
+      extraOutputsToInstall = [
+        "man"
+        "doc"
+        "info"
+      ];
+      postBuild = ''
+        if [ -x $out/bin/install-info -a -w $out/share/info ]; then
+          shopt -s nullglob
+          for i in $out/share/info/*.info $out/share/info/*.info.gz; do
+              $out/bin/install-info $i $out/share/info/dir
+          done
+        fi
       '';
-      myPackages = pkgs.buildEnv {
-        name = "my-packages";
-        paths = [
-          (runCommand "profile" { } ''
-            mkdir -p $out/etc/profile.d
-            cp ${myProfile} $out/etc/profile.d/my-profile.sh
-          '')
-          aspell
-          bc
-          coreutils
-          ffmpeg
-          man
-          nix
-          emscripten
-          jq
-          nox
-          silver-searcher
-          texinfoInteractive
-        ];
-        pathsToLink = [
-          "/share/man"
-          "/share/doc"
-          "/share/info"
-          "/bin"
-          "/etc"
-        ];
-        extraOutputsToInstall = [
-          "man"
-          "doc"
-          "info"
-        ];
-        postBuild = ''
-          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
-            shopt -s nullglob
-            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
-                $out/bin/install-info $i $out/share/info/dir
-            done
-          fi
-        '';
-      };
     };
+  };
 }
 ```
 
