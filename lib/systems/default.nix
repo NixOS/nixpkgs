@@ -360,7 +360,7 @@ let
             null;
         # The canonical name for this attribute is darwinSdkVersion, but some
         # platforms define the old name "sdkVer".
-        darwinSdkVersion = final.sdkVer or "11.3";
+        darwinSdkVersion = final.sdkVer or "14.4";
         darwinMinVersion = final.darwinSdkVersion;
         darwinMinVersionVariable =
           if final.isMacOS then
