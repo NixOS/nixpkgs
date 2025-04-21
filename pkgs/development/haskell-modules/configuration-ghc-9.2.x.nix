@@ -94,8 +94,8 @@ self: super: {
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  # Needs to match ghc version
-  ghc-tags = doDistribute self.ghc-tags_1_5;
+  # Needs to match ghc-lib version
+  ghc-tags = doDistribute (doJailbreak self.ghc-tags_1_7);
 
   # Needs to match ghc-lib
   hlint = doDistribute self.hlint_3_6_1;
