@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   cmake,
 
@@ -96,6 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tEJQWZBaiX/bONPZEuGcvbGidktcvxUZtLvcGjz71Lk=";
   };
 
+  patches = [
+    # Upstream patch to install extra syntax files, remove after next release
+    (fetchpatch {
+      name = "install-extra-syntax-files";
+      url = "https://github.com/brndnmtthws/conky/commit/c67d8c27d1d091968a98ee49b313935eb7ea67fd.patch";
+      hash = "sha256-NaQlQm+7iJWtdKYErTak5CPLNUBlsWb7sECNg0i3fWY=";
+    })
+  ];
+
   env = {
     # For some reason -Werror is on by default, causing the project to fail compilation.
     NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -172,6 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_NVIDIA" nvidiaSupport)
     (lib.cmakeBool "BUILD_PULSEAUDIO" pulseSupport)
     (lib.cmakeBool "BUILD_JOURNAL" journalSupport)
+    (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
   ];
 
   doCheck = true;
