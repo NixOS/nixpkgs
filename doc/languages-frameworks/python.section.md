@@ -2135,8 +2135,9 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 #### Common issues {#common-issues}
 
-* Tests that attempt to access `$HOME` can be fixed by using the following
-  work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+* Tests that attempt to access `$HOME` can be fixed by using `writableTmpDirAsHomeHook` in
+  `nativeCheckInputs`, which sets up a writable temporary directory as the home directory. Alternatively,
+  you can achieve the same effect manually (e.g. in `preCheck`) with: `export HOME=$(mktemp -d)`.
 * Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
   This can be fixed with two changes in the derivation: 1) replacing `pytest` with
   `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run

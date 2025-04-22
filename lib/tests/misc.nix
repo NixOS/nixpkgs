@@ -851,8 +851,8 @@ runTests {
   };
 
   testEscapeC = {
-    expr = strings.escapeC [ " " ] "Hello World";
-    expected = "Hello\\x20World";
+    expr = strings.escapeC [ "\n" " " ] "Hello World\n";
+    expected = "Hello\\x20World\\x0a";
   };
 
   testEscapeURL = testAllTrue [

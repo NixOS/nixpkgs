@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/pd --prefix PATH : ${lib.makeBinPath [ tk ]}
+    wrapProgram $out/bin/pd-gui --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
   meta = with lib; {

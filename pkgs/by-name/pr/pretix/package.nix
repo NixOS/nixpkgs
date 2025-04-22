@@ -25,16 +25,6 @@ let
         };
       });
 
-      geoip2 = super.geoip2.overridePythonAttrs rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "geoip2";
-          inherit version;
-          hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
-        };
-      };
-
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -46,8 +36,6 @@ let
       };
 
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
-
-      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
