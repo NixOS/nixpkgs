@@ -3099,6 +3099,9 @@ self: super:
     assert super.crucible.version == "0.7.2";
     doJailbreak super.crucible;
 
+  # Test suite no longer compiles with hspec-hedgehog >= 0.3
+  finitary = dontCheck super.finitary;
+
   # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
   ktx-codec =
     assert super.ktx-codec.version == "0.0.2.1";
