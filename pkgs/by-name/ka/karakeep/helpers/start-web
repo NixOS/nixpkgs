@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
-HOARDER_LIB_PATH=
+KARAKEEP_LIB_PATH=
 RELEASE=
+NODEJS=
 NODE_ENV=production
 
 [[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
 
 export RELEASE NODE_ENV
-exec "$HOARDER_LIB_PATH/node_modules/.bin/tsx" "$HOARDER_LIB_PATH/packages/db/migrate.ts" "$@"
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/server.js"
