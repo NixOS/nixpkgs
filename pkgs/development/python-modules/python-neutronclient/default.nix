@@ -7,7 +7,6 @@
   pbr,
   cliff,
   debtcollector,
-  iso8601,
   netaddr,
   openstacksdk,
   osc-lib,
@@ -51,7 +50,6 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     debtcollector
-    iso8601
     netaddr
     openstacksdk
     osc-lib

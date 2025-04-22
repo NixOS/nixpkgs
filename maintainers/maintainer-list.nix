@@ -13204,6 +13204,12 @@
     githubId = 70764075;
     name = "kud";
   };
+  kuflierl = {
+    email = "kuflierl@gmail.com";
+    github = "kuflierl";
+    name = "Kennet Flierl";
+    githubId = 41301536;
+  };
   kugland = {
     email = "kugland@gmail.com";
     github = "kugland";
