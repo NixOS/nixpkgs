@@ -14,6 +14,7 @@
   nix-update-script,
   hwdata,
   fuse3,
+  autoAddDriverRunpath,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     wrapGAppsHook4
     rustPlatform.bindgenHook
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
