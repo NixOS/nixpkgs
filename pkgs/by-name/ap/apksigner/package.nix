@@ -62,12 +62,17 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/lib/apksigner.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to sign and verify Android APKs";
     mainProgram = "apksigner";
-    homepage = "https://developer.android.com/studio/command-line/apksigner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ linsui ] ++ lib.teams.android.members;
-    platforms = platforms.unix;
+    homepage = "https://developer.android.com/tools/apksigner";
+    downloadPage = "https://android.googlesource.com/platform/tools/apksig/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      linsui
+      fliegendewurst
+    ];
+    teams = [ lib.teams.android ];
+    platforms = lib.platforms.unix;
   };
 }
