@@ -1,23 +1,21 @@
 {
-  fetchFromGitHub,
   lib,
-  mkDerivation,
-  fetchpatch,
-  qmake,
-  qtbase,
-  qtmultimedia,
   stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  writableTmpDirAsHomeHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlv-app";
   version = "1.15";
 
   src = fetchFromGitHub {
     owner = "ilia3101";
     repo = "MLV-App";
-    rev = "QTv${version}";
-    sha256 = "sha256-boYnIGDowV4yRxdE98U5ngeAwqi5HTRDFh5gVwW/kN8=";
+    rev = "QTv${finalAttrs.version}";
+    hash = "sha256-boYnIGDowV4yRxdE98U5ngeAwqi5HTRDFh5gVwW/kN8=";
   };
 
   patches = [
@@ -27,24 +25,20 @@ mkDerivation rec {
     })
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm555 -t $out/bin                mlvapp
-    install -Dm444 -t $out/share/applications mlvapp.desktop
-    install -Dm444 -t $out/share/icons/hicolor/512x512/apps RetinaIMG/MLVAPP.png
-    runHook postInstall
-  '';
-
   qmakeFlags = [ "MLVApp.pro" ];
 
   preConfigure = ''
-    export HOME=$TMPDIR
     cd platform/qt/
   '';
 
+  nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qmake
+    writableTmpDirAsHomeHook
+  ];
   buildInputs = [
-    qtmultimedia
-    qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qtbase
   ];
 
   dontWrapQtApps = true;
@@ -53,16 +47,22 @@ mkDerivation rec {
     wrapQtApp "$out/bin/mlvapp"
   '';
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  installPhase = ''
+    runHook preInstall
+    install -Dm555 -t $out/bin                mlvapp
+    install -Dm444 -t $out/share/applications mlvapp.desktop
+    install -Dm444 -t $out/share/icons/hicolor/512x512/apps RetinaIMG/MLVAPP.png
+    runHook postInstall
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "All in one MLV processing app that is pretty great";
     homepage = "https://mlv.app";
-    license = licenses.gpl3;
+    downloadPage = "https://github.com/ilia3101/MLV-App";
+    changelog = "https://github.com/ilia3101/MLV-App/releases/tag/QTv${finalAttrs.version}";
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mlvapp";
   };
-}
+})
