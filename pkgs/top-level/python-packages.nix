@@ -2041,6 +2041,8 @@ self: super: with self; {
 
   brelpy = callPackage ../development/python-modules/brelpy { };
 
+  brevo-python = callPackage ../development/python-modules/brevo-python { };
+
   brian2 = callPackage ../development/python-modules/brian2 { };
 
   bring-api = callPackage ../development/python-modules/bring-api { };
