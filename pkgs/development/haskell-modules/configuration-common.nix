@@ -3151,6 +3151,10 @@ self: super:
     assert super.ktx-codec.version == "0.0.2.1";
     doJailbreak super.ktx-codec;
 
+  # 2025-04-23: jailbreak to allow text >= 2.1
+  # https://github.com/wereHamster/haskell-css-syntax/issues/8
+  css-syntax = doJailbreak super.css-syntax;
+
   # 2025-04-13: jailbreak to allow template-haskell >= 2.17
   sr-extra = overrideCabal (drv: {
     version =
