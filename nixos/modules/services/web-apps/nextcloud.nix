@@ -420,7 +420,6 @@ in
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud29"
         "nextcloud30"
         "nextcloud31"
       ];
@@ -1041,8 +1040,7 @@ in
             nextcloud31
         );
 
-      services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "29" then pkgs.php82 else pkgs.php83;
+      services.nextcloud.phpPackage = pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
