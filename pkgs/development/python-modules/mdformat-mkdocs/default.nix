@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   mdformat,
-  mdformat-admon,
   mdformat-gfm,
   mdit-py-plugins,
   more-itertools,
@@ -31,7 +30,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     mdformat
-    mdformat-admon
     mdformat-gfm
     mdit-py-plugins
     more-itertools
