@@ -3113,6 +3113,9 @@ self: super:
   # Too strict bounds on base <4.19 and tasty <1.5
   # https://github.com/maoe/ghc-prof/issues/25
   ghc-prof = doJailbreak super.ghc-prof;
+  # aeson <2.2, bytestring <0.12, text <2.1
+  # https://github.com/jaspervdj/profiteur/issues/43
+  profiteur = doJailbreak super.profiteur;
 
   # 2025-04-19: Tests randomly fail 6 out of 10 times
   coinor-clp = dontCheck super.coinor-clp;
