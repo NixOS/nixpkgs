@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "trace";
-  version = "0.5";
+  version = "0.9.1";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/c-cube/ocaml-trace/releases/download/v${version}/trace-${version}.tbz";
-    hash = "sha256-l0NvWPGBd1WR+b50WXEYfptuCUjda8MlZ/o5YngRNIg=";
+    hash = "sha256-lznV9GvstAfpaUP08NbQkZ4DwUKZq5wt27jUa296PqQ=";
   };
 
   meta = {
