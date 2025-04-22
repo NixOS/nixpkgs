@@ -1713,10 +1713,6 @@ with pkgs;
 
   asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
 
-  atomicparsley = callPackage ../tools/video/atomicparsley {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo124Module;
     pnpm = pnpm_10;
