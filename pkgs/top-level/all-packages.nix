@@ -17373,10 +17373,6 @@ with pkgs;
     buildShareware = true;
   };
 
-  starsector = callPackage ../games/starsector {
-    openjdk = openjdk17;
-  };
-
   scummvm = callPackage ../games/scummvm {
     inherit (darwin.apple_sdk.frameworks)
       Cocoa
