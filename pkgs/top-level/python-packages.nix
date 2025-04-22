@@ -7165,6 +7165,8 @@ self: super: with self; {
 
   julius = callPackage ../development/python-modules/julius { };
 
+  june-analytics-python = callPackage ../development/python-modules/june-analytics-python { };
+
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junit2html = callPackage ../development/python-modules/junit2html { };
