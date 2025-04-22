@@ -30,7 +30,6 @@
   pythonOlder,
   pyyaml,
   setuptools,
-  tzdata,
   vine,
 }:
 
@@ -56,7 +55,6 @@ buildPythonPackage rec {
     click-repl
     kombu
     python-dateutil
-    tzdata
     vine
   ];
 
