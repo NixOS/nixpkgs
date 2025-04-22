@@ -3139,6 +3139,10 @@ self: super:
   # https://github.com/mrkkrp/wave/issues/48
   wave = doJailbreak super.wave;
 
+  # 2025-04-23: disable bounds microlens <0.5, QuickCheck < 2.16
+  # https://github.com/debug-ito/wild-bind/issues/7
+  wild-bind = doJailbreak super.wild-bind;
+
   # Test suite no longer compiles with hspec-hedgehog >= 0.3
   finitary = dontCheck super.finitary;
 
