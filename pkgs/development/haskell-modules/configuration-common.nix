@@ -3107,6 +3107,34 @@ self: super:
     assert super.crucible.version == "0.7.2";
     doJailbreak super.crucible;
 
+  # 2025-04-23: jailbreak to allow megaparsec >= 9.7
+  # 2025-04-23: test data missing from tarball
+  crucible-syntax = doJailbreak (dontCheck super.crucible-syntax);
+  # 2025-04-23: missing test data
+  crucible-debug = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      (lib.concatStringsSep "&&" [
+        "!/backtrace.txt/"
+        "!/block.txt/"
+        "!/call-basic.txt/"
+        "!/clear.txt/"
+        "!/frame.txt/"
+        "!/load-empty.txt/"
+        "!/obligation-false.txt/"
+        "!/prove-false.txt/"
+        "!/prove-true.txt/"
+        "!/test-data\\/.break.txt/"
+        "!/test-data\\/.reg.txt/"
+        "!/test-data\\/.reg.txt/"
+        "!/test-data\\/.trace.txt/"
+        "!/test-data\\/complete\\/.break.txt/"
+      ])
+    ];
+  }) super.crucible-debug;
+  # 2025-04-23: missing test data
+  llvm-pretty-bc-parser = dontCheck super.llvm-pretty-bc-parser;
+
   # 2025-04-23: Allow bytestring >= 0.12
   # https://github.com/mrkkrp/wave/issues/48
   wave = doJailbreak super.wave;
