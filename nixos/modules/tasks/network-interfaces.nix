@@ -604,17 +604,21 @@ in
     networking.fqdnOrHostName = mkOption {
       readOnly = true;
       type = types.str;
-      default = if cfg.domain == null then cfg.hostName else cfg.fqdn;
+      default =
+        if (cfg.domain != null || opt.fqdn.highestPrio < (mkOptionDefault { }).priority) then
+          cfg.fqdn
+        else
+          cfg.hostName;
       defaultText = literalExpression ''
-        if cfg.domain == null then cfg.hostName else cfg.fqdn
+        if config.networking.domain != null || config.networking.fqdn is set then config.networking.fqdn else config.networking.hostName
       '';
       description = ''
         Either the fully qualified domain name (FQDN), or just the host name if
-        it does not exists.
+        it does not exist.
 
         This is a convenience option for modules to read instead of `fqdn` when
         a mere `hostName` is also an acceptable value; this option does not
-        throw an error when `domain` is unset.
+        throw an error when `domain` or `fqdn` is unset.
       '';
     };
 
