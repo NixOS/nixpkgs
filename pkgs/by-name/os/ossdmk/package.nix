@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+  runHook preInstall
+
     mkdir -p $out/bin
     cp -r ./ossdmk $out/bin/ossdmk
   '';
