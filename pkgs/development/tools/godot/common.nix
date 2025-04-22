@@ -24,6 +24,7 @@
   libXrandr,
   libXrender,
   makeWrapper,
+  perl,
   pkg-config,
   runCommand,
   scons,
@@ -168,6 +169,11 @@ let
         ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
       ];
 
+      postPatch = ''
+        # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE
+        perl -pi -e '{ $r += s:(env = Environment\(.*):\1\nenv["ENV"] = os.environ: } END { exit ($r != 1) }' SConstruct
+      '';
+
       depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
         buildPackages.stdenv.cc
         pkg-config
@@ -179,6 +185,7 @@ let
         [
           autoPatchelfHook
           installShellFiles
+          perl
           pkg-config
           scons
         ]
