@@ -3110,6 +3110,10 @@ self: super:
     revision = null;
   }) super.sr-extra;
 
+  # Too strict bounds on base <4.19 and tasty <1.5
+  # https://github.com/maoe/ghc-prof/issues/25
+  ghc-prof = doJailbreak super.ghc-prof;
+
   # 2025-04-19: Tests randomly fail 6 out of 10 times
   coinor-clp = dontCheck super.coinor-clp;
 
