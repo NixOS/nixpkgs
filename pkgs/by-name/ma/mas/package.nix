@@ -3,18 +3,18 @@
   pkgs,
   fetchFromGitHub,
   fetchurl,
-  version ? "1.9.0",
+  version ? "2.1.0",
   repoRev ? "v${version}",
   repoSrc ? fetchFromGitHub {
     owner = "mas-cli";
     repo = "mas";
     rev = repoRev;
-    hash = "sha256-2Hvz1616cYItsgUK/FI0/s0f+GJ1qI2ZfEVLmw6iqdk=";
+    hash = "sha256-zBfh7uI840wDVYhABtaj3R0jHBevMDCMDpDnWURpXYg=";
     name = "mas-${version}-source";
   },
   releaseSrc ? fetchurl {
     url = "https://github.com/mas-cli/mas/releases/download/${repoRev}/mas-${version}.pkg";
-    hash = "sha256-MiSrCHLby3diTAzDPCYX1ZwdmzcHwOx/UJuWrlRJe54=";
+    hash = "sha256-pT8W/ZdNP7Fv5nyTX9vKbTa2jIk3THN1HVCmuEIibfc=";
     name = "mas-${version}.pkg";
   },
   enableSwiftDylibFix ? false,
