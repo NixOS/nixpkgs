@@ -53,6 +53,11 @@ self: super:
         )
       );
 
+  # Needs matching version of Cabal
+  Cabal-hooks = super.Cabal-hooks.override {
+    Cabal = self.Cabal_3_14_1_1;
+  };
+
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
   inherit
