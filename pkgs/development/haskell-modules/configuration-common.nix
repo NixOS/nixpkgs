@@ -3094,6 +3094,14 @@ self: super:
     assert super.hw-bits.version == "0.7.2.2";
     doJailbreak super.hw-bits;
 
+  # 2025-04-23: jailbreak to allow bytestring >= 0.12
+  brillo-rendering = lib.warnIf (
+    super.brillo-rendering.version != "1.13.3"
+  ) "haskellPackages.brillo-rendering override can be dropped" doJailbreak super.brillo-rendering;
+  brillo = lib.warnIf (
+    super.brillo.version != "1.13.3"
+  ) "haskellPackages.brillo override can be dropped" doJailbreak super.brillo;
+
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible =
     assert super.crucible.version == "0.7.2";
