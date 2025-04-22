@@ -2,7 +2,6 @@
   lib,
   stdenv,
   cmocka,
-  darwin,
   fetchFromGitHub,
   gtk3,
   meson,
@@ -33,15 +32,9 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        darwin.libobjc
-      ]
-    else
-      [
-        gtk3
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gtk3
+  ];
 
   mesonFlags = [
     (lib.mesonBool "examples" (!stdenv.hostPlatform.isDarwin))

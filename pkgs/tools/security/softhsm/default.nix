@@ -4,7 +4,6 @@
   fetchurl,
   botan2,
   sqlite,
-  libobjc,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,10 +22,6 @@ stdenv.mkDerivation rec {
     "--with-objectstore-backend-db"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
-  ];
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libobjc
   ];
 
   buildInputs = [

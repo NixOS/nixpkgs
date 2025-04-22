@@ -6,7 +6,6 @@
   pkg-config,
   libbladeRF,
   soapysdr,
-  libobjc,
 }:
 
 let
@@ -28,14 +27,10 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      libbladeRF
-      soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+  buildInputs = [
+    libbladeRF
+    soapysdr
+  ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 

@@ -6,7 +6,6 @@
   pkg-config,
   hackrf,
   soapysdr,
-  libobjc,
 }:
 
 let
@@ -28,14 +27,10 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      hackrf
-      soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+  buildInputs = [
+    hackrf
+    soapysdr
+  ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 

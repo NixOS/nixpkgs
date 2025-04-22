@@ -1,7 +1,6 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchFromGitHub,
   pkg-config,
   stdenv,
@@ -28,10 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     SDL2
     pkg-config
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
   ];
 
   propagatedBuildInputs = [ SDL2 ];

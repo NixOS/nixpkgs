@@ -165,12 +165,6 @@ self: super:
     # http://openradar.appspot.com/10207999 and similar issues.
     fsnotify = dontCheck super.fsnotify;
 
-    FractalArt = overrideCabal (drv: {
-      librarySystemDepends = [
-        darwin.libobjc
-      ] ++ (drv.librarySystemDepends or [ ]);
-    }) super.FractalArt;
-
     HTF = overrideCabal (drv: {
       # GNU find is not prefixed in stdenv
       postPatch =
