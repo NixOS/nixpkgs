@@ -13883,12 +13883,6 @@
     githubId = 74221543;
     name = "Moritz Goltdammer";
   };
-  linuxmobile = {
-    email = "bdiez19@gmail.com";
-    github = "linuxmobile";
-    githubId = 10554636;
-    name = "Braian A. Diez";
-  };
   linuxwhata = {
     email = "linuxwhata@qq.com";
     matrix = "@lwa:envs.net";

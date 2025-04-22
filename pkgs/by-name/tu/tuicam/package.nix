@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hlsxx/tuicam";
     changelog = "https://github.com/hlsxx/tuicam/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ linuxmobile ];
     platforms = lib.platforms.linux;
     mainProgram = "tuicam";
   };

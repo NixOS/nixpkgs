@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/qxb3/fum";
     changelog = "https://github.com/qxb3/fum/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ linuxmobile ];
     platforms = lib.platforms.linux;
     mainProgram = "fum";
   };
