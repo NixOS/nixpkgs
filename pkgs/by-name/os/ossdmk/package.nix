@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "udontur";
     repo = "ossdmk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QF3VJHxkw4K4BjpaL0+OA02cU9mSpLQkI70kBgxkGH0=";
   };
 
