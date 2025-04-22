@@ -405,6 +405,8 @@ lib.makeScope pkgs.newScope (
 
         vld = callPackage ../development/php-packages/vld { };
 
+        wikidiff2 = callPackage ../development/php-packages/wikidiff2 { };
+
         xdebug = callPackage ../development/php-packages/xdebug { };
 
         yaml = callPackage ../development/php-packages/yaml { };
