@@ -1670,6 +1670,11 @@ self: super:
     revision = null;
   }) super.svgcairo;
 
+  # Too strict upper bound on tasty-hedgehog (<1.5)
+  # https://github.com/typeclasses/ascii-predicates/pull/1
+  ascii-predicates = doJailbreak super.ascii-predicates;
+  ascii-numbers = doJailbreak super.ascii-numbers;
+
   # Upstream PR: https://github.com/jkff/splot/pull/9
   splot = appendPatch (fetchpatch {
     url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
