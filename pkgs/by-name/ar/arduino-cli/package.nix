@@ -71,16 +71,16 @@ let
       unset HOME
     '';
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = [
-        licenses.gpl3Only
-        licenses.asl20
+      license = with lib.licenses; [
+        gpl3Only
+        asl20
       ];
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         ryantm
         sfrijters
       ];
