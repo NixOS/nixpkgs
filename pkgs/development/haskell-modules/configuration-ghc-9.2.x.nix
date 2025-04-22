@@ -135,6 +135,9 @@ self: super: {
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_5_0;
 
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
+
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
