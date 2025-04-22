@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
   python3,
   freetype,
@@ -24,11 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]; # $out contains all the config
 
-  src = fetchurl {
-    url =
-      with finalAttrs;
-      "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
-    hash = "sha256-ajPcVVzJuosQyvdpWHjvE07rNtCvNmBB9jmx2ptu0iA=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "fontconfig";
+    repo = "fontconfig";
+    tag = finalAttrs.version;
+    hash = "sha256-ELn1WL2kueFj97GfjvjDa82iAJKFv4J5mkHon9vqtXE=";
   };
 
   nativeBuildInputs = [
@@ -86,9 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
-    # We don't keep section 3 of the manpages, as they are quite large and
-    # probably not so useful.
-    rm -r $bin/share/man/man3
   '';
 
   passthru.tests = {
