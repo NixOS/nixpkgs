@@ -4,15 +4,23 @@
   qt5,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      numpy = super.numpy_1;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "linien-gui";
   pyproject = true;
 
-  inherit (python3.pkgs.linien-common) src version;
+  inherit (python.pkgs.linien-common) src version;
 
   sourceRoot = "${src.name}/linien-gui";
 
-  build-system = with python3.pkgs; [
+  build-system = with python.pkgs; [
     setuptools
   ];
   nativeBuildInputs = [
@@ -25,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     qt5.qtwayland
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python.pkgs; [
     appdirs
     click
     pyqtgraph
@@ -40,6 +48,12 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  passthru = {
+    # Useful for creating .withPackages environments, see NOTE near
+    # `python3Packages.linien-common.meta.broken`.
+    inherit python;
+  };
 
   meta = {
     description = "Graphical user interface of the Linien spectroscopy lock application";
