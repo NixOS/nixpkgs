@@ -1,42 +1,188 @@
 import functools
 import hashlib
 import json
-import multiprocessing as mp
+import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import tomllib
+from concurrent.futures import FIRST_EXCEPTION, Future, ThreadPoolExecutor, wait
+from dataclasses import dataclass, field
 from os.path import islink, realpath
 from pathlib import Path
-from typing import Any, TypedDict, cast
+from typing import Any, cast
 from urllib.parse import unquote
 
 import requests
 import tomli_w
 from requests.adapters import HTTPAdapter, Retry
 
+# Constants for controlling how the crates are downloaded from the registries via `requests`
+# These do not affect the fetching of git dependencies
+MAX_WORKERS = min(5, os.cpu_count() or 1)  # number of workers in the ThreadPoolExecutor
+CONNECT_TIMEOUT = 2  # max seconds for establishing initial connection
+READ_TIMEOUT = 10  # max seconds between receiving data packets
+RETRY_COUNT = 3  # number of retries for fetching an url
+BACKOFF_FACTOR = 0.5  # seconds to wait between retries (gets multiplied by 2 after every retry)
+
 eprint = functools.partial(print, file=sys.stderr)
 
 
-def load_toml(path: Path) -> dict[str, Any]:
-    with open(path, "rb") as f:
-        return tomllib.load(f)
+@dataclass
+class RegistrySource:
+    raw: str
+    url: str
+    is_sparse: bool
+    ind: int = field(init=False)
 
 
-def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
-    # lockfile v1 and v2 don't have the `version` key, so assume v2
-    version = cargo_lock_toml.get("version", 2)
+@dataclass
+class RegistryPackage:
+    name: str
+    version: str
+    source: RegistrySource
+    checksum: str
 
-    # TODO: add logic for differentiating between v1 and v2
 
-    return version
+GIT_SOURCE_REGEX = re.compile(r"git\+(?P<url>[^?]+)(\?(?P<type>rev|tag|branch)=(?P<value>.*))?#(?P<git_sha_rev>.*)")
+
+
+@dataclass
+class GitSource:
+    raw: str
+    url: str
+    type: str | None
+    value: str | None
+    git_sha_rev: str
+    ind: int = field(init=False)
+
+
+@dataclass
+class GitPackage:
+    name: str
+    version: str
+    source: GitSource
+
+
+Source = RegistrySource | GitSource
+Package = RegistryPackage | GitPackage
+
+
+@dataclass
+class Lockfile:
+    version: int
+    sources: list[Source]
+    packages: list[Package]
+
+
+def parse_git_source(raw_source: str, lockfile_version: int) -> GitSource:
+    match = GIT_SOURCE_REGEX.match(raw_source)
+    if match is None:
+        raise Exception(f"Unable to process git source: {raw_source}.")
+
+    parsed_dict = match.groupdict(default=None)
+    url = cast(str, parsed_dict["url"])
+    git_sha_rev = cast(str, parsed_dict["git_sha_rev"])
+
+    source = GitSource(raw_source, url, parsed_dict["type"], parsed_dict["value"], git_sha_rev)
+
+    # the source URL is URL-encoded in lockfile_version >=4
+    # since we just used regex to parse it we have to manually decode the escaped branch/tag name
+    if lockfile_version >= 4 and source.value is not None:
+        source.value = unquote(source.value)
+
+    return source
+
+
+def parse_source(raw_source: str, lockfile_version: int) -> Source:
+    if raw_source.startswith("git+"):
+        return parse_git_source(raw_source, lockfile_version)
+    elif raw_source.startswith("registry+"):
+        return RegistrySource(raw=raw_source, url=raw_source[9:], is_sparse=False)
+    elif raw_source.startswith("sparse+"):
+        return RegistrySource(raw=raw_source, url=raw_source[7:].rstrip("/"), is_sparse=True)
+    raise Exception(f"Cannot process source: {raw_source}.")
+
+
+def load_lockfile(path: Path) -> Lockfile:
+    with path.open("rb") as f:
+        cargo_lock_toml = tomllib.load(f)
+
+    # lockfile v1 and v2 don't have the `version` key, so assume v2 for now
+    lockfile_version = cargo_lock_toml.get("version", 2)
+
+    raw_packages: list[dict[str, str]] = cargo_lock_toml["package"]
+
+    sources: list[Source] = []
+    raw_source_to_source: dict[str, Source] = {}
+
+    # we'll mark every source with an index in order of appearance
+    # both git and registry sources have a different incrementing index
+    # we reserve registry index 0 for both of the default crates-io registries
+
+    for raw_source in ["registry+https://github.com/rust-lang/crates.io-index", "sparse+https://index.crates.io/"]:
+        source = parse_source(raw_source, lockfile_version)
+        source.ind = 0
+        sources.append(source)
+        raw_source_to_source[source.raw] = source
+
+    next_registry_ind = 1
+    next_git_ind = 0
+
+    for raw_pkg in raw_packages:
+        raw_source = raw_pkg.get("source", None)
+        if raw_source is None:  # Skip local dependencies
+            continue
+        if raw_source in raw_source_to_source:
+            continue
+
+        source = parse_source(raw_source, lockfile_version)
+        match source:
+            case RegistrySource():
+                source.ind = next_registry_ind
+                next_registry_ind += 1
+            case GitSource():
+                source.ind = next_git_ind
+                next_git_ind += 1
+
+        sources.append(source)
+        raw_source_to_source[source.raw] = source
+
+    packages: list[Package] = []
+
+    for raw_pkg in raw_packages:
+        name = raw_pkg["name"]
+        version = raw_pkg["version"]
+        raw_source = raw_pkg.get("source", None)
+        if raw_source is None:  # Skip local dependencies
+            continue
+        source = raw_source_to_source[raw_source]
+
+        match source:
+            case RegistrySource():
+                checksum = raw_pkg.get("checksum", None)
+
+                # lockfile v1 has the checksum values in a separate metadata table
+                if checksum is None:
+                    lockfile_version = 1
+                    checksum_key = f"checksum {name} {version} ({source})"
+                    checksum = cargo_lock_toml["metadata"][checksum_key]
+
+                pkg = RegistryPackage(name, version, source, checksum)
+            case GitSource():
+                pkg = GitPackage(name, version, source)
+
+        packages.append(pkg)
+
+    return Lockfile(lockfile_version, sources, packages)
 
 
 def create_http_session() -> requests.Session:
     retries = Retry(
-        total=5,
-        backoff_factor=0.5,
+        total=RETRY_COUNT,
+        backoff_factor=BACKOFF_FACTOR,
         status_forcelist=[500, 502, 503, 504]
     )
     session = requests.Session()
@@ -47,10 +193,10 @@ def create_http_session() -> requests.Session:
 
 def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
     sha256_hash = hashlib.sha256()
-    with session.get(url, stream=True) as response:
+    with session.get(url, stream=True, timeout=(CONNECT_TIMEOUT, READ_TIMEOUT)) as response:
         if not response.ok:
             raise Exception(f"Failed to fetch file from {url}. Status code: {response.status_code}")
-        with open(destination_path, "wb") as file:
+        with destination_path.open("wb") as file:
             for chunk in response.iter_content(1024):  # Download in chunks
                 if chunk:  # Filter out keep-alive chunks
                     file.write(chunk)
@@ -61,29 +207,54 @@ def download_file_with_checksum(session: requests.Session, url: str, destination
     return checksum
 
 
-def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
-    # TODO: support other registries
-    #       maybe fetch config.json from the registry root and get the dl key
-    #       See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-    if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
-        raise Exception("Only the default crates.io registry is supported.")
+# Fetch the config.json file and get the .dl key from it
+# See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+def fetch_dl_for_registry_source(source: RegistrySource, session: requests.Session) -> str:
+    if source.is_sparse:
+        with session.get(source.url + "/config.json", timeout=(CONNECT_TIMEOUT, READ_TIMEOUT)) as response:
+            registry_config: dict[str, str] = response.json()
+    else:
+        # use spare-checkout to only get the config.json file from the registry's git repo
+        tmp_dir = Path(tempfile.mkdtemp())
+        cmd = ["nix-prefetch-git", "--builder", "--quiet", "--url", source.url, "--rev", "HEAD", "--sparse-checkout", "config.json", "--out", str(tmp_dir)]
+        subprocess.check_output(cmd)
+        with (tmp_dir / "config.json").open("rb") as f:
+            registry_config: dict[str, str] = json.load(f)
 
-    return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
+    dl = registry_config["dl"]
+    auth_required = registry_config.get("auth-required", False)
+    if auth_required:
+        eprint(f'Warning: Registry "{source.url}" requires authentication!')
+    return dl
 
 
-def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
+# See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-files
+def name_to_prefix(name: str) -> str:
+    nl = len(name)
+    if nl <= 2:
+        return str(nl)
+    if nl == 3:
+        return "3/" + name[0]
+    return name[0:2] + "/" + name[2:4]
 
-    url = get_download_url_for_tarball(pkg)
-    filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
 
-    # TODO: allow legacy checksum specification, see importCargoLock for example
-    #       also, don't forget about the other usage of the checksum
-    expected_checksum = pkg["checksum"]
+# See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+def make_download_url_for_tarball(pkg: RegistryPackage, dl: str) -> str:
+    prefix = name_to_prefix(pkg.name)
+    url = dl if "{" in dl else dl + "/{crate}/{version}/download"
+    url = url.replace("{crate}", pkg.name)
+    url = url.replace("{version}", pkg.version)
+    url = url.replace("{prefix}", prefix)
+    url = url.replace("{lowerprefix}", prefix.lower())
+    url = url.replace("{sha256-checksum}", pkg.checksum)
+    return url
 
-    tarball_out_dir = out_dir / "tarballs" / filename
-    eprint(f"Fetching {url} -> tarballs/{filename}")
 
-    calculated_checksum = download_file_with_checksum(session, url, tarball_out_dir)
+def download_crate_tarball(session: requests.Session, url: str, out_path: Path, expected_checksum: str) -> None:
+    out_path.parent.mkdir(exist_ok=True)
+
+    eprint(f"Fetching {url} -> {out_path}")
+    calculated_checksum = download_file_with_checksum(session, url, out_path)
 
     if calculated_checksum != expected_checksum:
         raise Exception(f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}.")
@@ -98,73 +269,58 @@ def download_git_tree(url: str, git_sha_rev: str, out_dir: Path) -> None:
     subprocess.check_output(cmd)
 
 
-GIT_SOURCE_REGEX = re.compile("git\\+(?P<url>[^?]+)(\\?(?P<type>rev|tag|branch)=(?P<value>.*))?#(?P<git_sha_rev>.*)")
-
-
-class GitSourceInfo(TypedDict):
-    url: str
-    type: str | None
-    value: str | None
-    git_sha_rev: str
-
-
-def parse_git_source(source: str, lockfile_version: int) -> GitSourceInfo:
-    match = GIT_SOURCE_REGEX.match(source)
-    if match is None:
-        raise Exception(f"Unable to process git source: {source}.")
-
-    source_info = cast(GitSourceInfo, match.groupdict(default=None))
-
-    # the source URL is URL-encoded in lockfile_version >=4
-    # since we just used regex to parse it we have to manually decode the escaped branch/tag name
-    if lockfile_version >= 4 and source_info["value"] is not None:
-        source_info["value"] = unquote(source_info["value"])
-
-    return source_info
-
-
 def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
-    cargo_lock_toml = load_toml(lockfile_path)
-    lockfile_version = get_lockfile_version(cargo_lock_toml)
+    lockfile = load_lockfile(lockfile_path)
 
-    git_packages: list[dict[str, Any]] = []
-    registry_packages: list[dict[str, Any]] = []
+    git_sources = [source for source in lockfile.sources if isinstance(source, GitSource)]
+    registry_sources = [source for source in lockfile.sources if isinstance(source, RegistrySource)]
+    registry_packages = [pkg for pkg in lockfile.packages if isinstance(pkg, RegistryPackage)]
 
-    for pkg in cargo_lock_toml["package"]:
-        # ignore local dependenices
-        if "source" not in pkg.keys():
-            eprint(f"Skipping local dependency: {pkg["name"]}")
-            continue
-        source = pkg["source"]
+    session = create_http_session()
 
-        if source.startswith("git+"):
-            git_packages.append(pkg)
-        elif source.startswith("registry+"):
-            registry_packages.append(pkg)
-        else:
-            raise Exception(f"Can't process source: {source}.")
-
-    git_sha_rev_to_url: dict[str, str] = {}
-    for pkg in git_packages:
-        source_info = parse_git_source(pkg["source"], lockfile_version)
-        git_sha_rev_to_url[source_info["git_sha_rev"]] = source_info["url"]
+    raw_registry_source_to_dl: dict[str, str] = {}
+    for source in registry_sources:
+        raw_registry_source_to_dl[source.raw] = fetch_dl_for_registry_source(source, session)
 
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
     # fetch git trees sequentially, since fetching concurrently leads to flaky behaviour
-    if len(git_packages) != 0:
+    if len(git_sources) != 0:
         (out_dir / "git").mkdir()
-        for git_sha_rev, url in git_sha_rev_to_url.items():
-            download_git_tree(url, git_sha_rev, out_dir)
+        for source in git_sources:
+            download_git_tree(source.url, source.git_sha_rev, out_dir)
 
-    # run tarball download jobs in parallel, with at most 5 concurrent download jobs
-    with mp.Pool(min(5, mp.cpu_count())) as pool:
-        if len(registry_packages) != 0:
-            (out_dir / "tarballs").mkdir()
-            session = create_http_session()
-            tarball_args_gen = ((session, pkg, out_dir) for pkg in registry_packages)
-            pool.starmap(download_tarball, tarball_args_gen)
+    if len(registry_packages) != 0:
+        (out_dir / "tarballs").mkdir()
+
+        eprint(f"Downloading tarballs with {MAX_WORKERS} workers...")
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures: list[Future[None]] = []
+
+            for pkg in registry_packages:
+                source = pkg.source
+
+                # the download directory name must be kept "tarballs" for crates-io registries for legacy reasons
+                dir_name = "tarballs" if source.ind == 0 else f"registry-{source.ind}"
+                dl = raw_registry_source_to_dl[source.raw]
+                url = make_download_url_for_tarball(pkg, dl)
+
+                checksum = pkg.checksum
+                filename = f'{pkg.name}-{pkg.version}.tar.gz'
+                out_path = out_dir / dir_name / filename
+
+                future = executor.submit(download_crate_tarball, session, url, out_path, checksum)
+                futures.append(future)
+
+            # fail early if a worker raises an exception
+            done, _ = wait(futures, return_when=FIRST_EXCEPTION)
+            for f in done:
+                e = f.exception()
+                if e is None:
+                    continue
+                executor.shutdown(cancel_futures=True)
+                raise Exception(f"Failed to download tarball: {e}")
 
 
 def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
@@ -241,8 +397,7 @@ def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_
     shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func)
     crate_out_dir.chmod(0o755)
 
-    with open(crate_manifest_path, "r") as f:
-        manifest_data = f.read()
+    manifest_data = crate_manifest_path.read_text()
 
     if "workspace" in manifest_data:
         crate_manifest_metadata = get_manifest_metadata(crate_manifest_path)
@@ -265,16 +420,16 @@ def extract_crate_tarball_contents(tarball_path: Path, crate_out_dir: Path) -> N
     subprocess.check_output(cmd)
 
 
-def make_git_source_selector(source_info: GitSourceInfo) -> dict[str, str]:
+def make_git_source_selector(source: GitSource) -> dict[str, str]:
     selector = {}
-    selector["git"] = source_info["url"]
-    if source_info["type"] is not None:
-        selector[source_info["type"]] = source_info["value"]
+    selector["git"] = source.url
+    if source.type is not None:
+        selector[source.type] = source.value
     return selector
 
 
-def make_registry_source_selector(source: str) -> dict[str, str]:
-    registry = source[9:] if source.startswith("registry+") else source
+def make_registry_source_selector(source: RegistrySource) -> dict[str, str]:
+    registry = source.raw if source.is_sparse else source.url
     selector = {}
     selector["registry"] = registry
     return selector
@@ -285,13 +440,9 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
-    cargo_lock_toml = load_toml(lockfile_path)
-    lockfile_version = get_lockfile_version(cargo_lock_toml)
+    lockfile = load_lockfile(lockfile_path)
 
-    source_to_ind: dict[str, str] = {}
     source_config = {}
-    next_registry_ind = 0
-    next_git_ind = 0
 
     def add_source_replacement(
         orig_key: str,
@@ -304,93 +455,69 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
         source_config[orig_key] = orig_selector
         source_config[orig_key]["replace-with"] = vendored_key
 
-    # we reserve registry index 0 for crates-io
-    source_to_ind["registry+https://github.com/rust-lang/crates.io-index"] = "registry-0"
-    source_to_ind["sparse+https://index.crates.io/"] = "registry-0"
     add_source_replacement(
         orig_key="crates-io",
         orig_selector={},  # there is an internal selector defined for the `crates-io` source
         vendored_key="vendored-source-registry-0",
         vendored_dir="@vendor@/source-registry-0"
     )
-    next_registry_ind += 1
 
-    for pkg in cargo_lock_toml["package"]:
-        # ignore local dependencies
-        if "source" not in pkg.keys():
-            continue
-        source: str = pkg["source"]
-        if source in source_to_ind:
-            continue
-
-        if source.startswith("git+"):
-            ind = f"git-{next_git_ind}"
-            next_git_ind += 1
-            source_info = parse_git_source(source, lockfile_version)
-            selector = make_git_source_selector(source_info)
-        elif source.startswith("registry+") or source.startswith("sparse+"):
-            ind = f"registry-{next_registry_ind}"
-            next_registry_ind += 1
-            selector = make_registry_source_selector(source)
-        else:
-            raise Exception(f"Can't process source: {source}.")
-
-        source_to_ind[source] = ind
-        add_source_replacement(
-            orig_key=f"original-source-{ind}",
-            orig_selector=selector,
-            vendored_key=f"vendored-source-{ind}",
-            vendored_dir=f"@vendor@/source-{ind}"
-        )
+    for source in lockfile.sources:
+        match source:
+            case RegistrySource():
+                if source.ind == 0:  # crates-io was already handled separately
+                    continue
+                add_source_replacement(
+                    orig_key=f"original-source-registry-{source.ind}",
+                    orig_selector=make_registry_source_selector(source),
+                    vendored_key=f"vendored-source-registry-{source.ind}",
+                    vendored_dir=f"@vendor@/source-registry-{source.ind}"
+                )
+            case GitSource():
+                add_source_replacement(
+                    orig_key=f"original-source-git-{source.ind}",
+                    orig_selector=make_git_source_selector(source),
+                    vendored_key=f"vendored-source-git-{source.ind}",
+                    vendored_dir=f"@vendor@/source-git-{source.ind}"
+                )
 
     config_path = out_dir / ".cargo" / "config.toml"
     config_path.parent.mkdir()
 
-    with open(config_path, "wb") as config_file:
+    with config_path.open("wb") as config_file:
         tomli_w.dump({"source": source_config}, config_file)
 
-    for pkg in cargo_lock_toml["package"]:
+    for pkg in lockfile.packages:
+        match pkg:
+            case GitPackage():
+                crate_out_dir = out_dir / f"source-git-{pkg.source.ind}" / f"{pkg.name}-{pkg.version}"
+                crate_out_dir.parent.mkdir(exist_ok=True)
 
-        # ignore local dependenices
-        if "source" not in pkg.keys():
-            continue
+                git_sha_rev = pkg.source.git_sha_rev
+                git_tree = vendor_staging_dir / "git" / git_sha_rev
 
-        source: str = pkg["source"]
-        source_ind = source_to_ind[source]
-        crate_dir_name = f"{pkg["name"]}-{pkg["version"]}"
-        source_dir_name = f"source-{source_ind}"
-        crate_out_dir = out_dir / source_dir_name / crate_dir_name
-        crate_out_dir.parent.mkdir(exist_ok=True)
+                copy_and_patch_git_crate_subtree(git_tree, pkg.name, crate_out_dir)
 
-        if source.startswith("git+"):
+                # git based crates allow having no checksum information
+                with (crate_out_dir / ".cargo-checksum.json").open("w") as f:
+                    json.dump({"files": {}}, f)
 
-            source_info = parse_git_source(source, lockfile_version)
+            case RegistryPackage():
+                crate_out_dir = out_dir / f"source-registry-{pkg.source.ind}" / f"{pkg.name}-{pkg.version}"
+                crate_out_dir.parent.mkdir(exist_ok=True)
 
-            git_sha_rev = source_info["git_sha_rev"]
-            git_tree = vendor_staging_dir / "git" / git_sha_rev
+                filename = f"{pkg.name}-{pkg.version}.tar.gz"
 
-            copy_and_patch_git_crate_subtree(git_tree, pkg["name"], crate_out_dir)
+                # the download directory name must be kept "tarballs" for crates-io registries for legacy reasons
+                dir_name = "tarballs" if pkg.source.ind == 0 else f"registry-{pkg.source.ind}"
 
-            # git based crates allow having no checksum information
-            with open(crate_out_dir / ".cargo-checksum.json", "w") as f:
-                json.dump({"files": {}}, f)
+                tarball_path = vendor_staging_dir / dir_name / filename
 
-        elif source.startswith("registry+") or source.startswith("sparse+"):
-            filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
+                extract_crate_tarball_contents(tarball_path, crate_out_dir)
 
-            # TODO: change this when non-crates-io registries are supported
-            dir_name = "tarballs"
-
-            tarball_path = vendor_staging_dir / dir_name / filename
-
-            extract_crate_tarball_contents(tarball_path, crate_out_dir)
-
-            # non-git based crates need the package checksum at minimum
-            with open(crate_out_dir / ".cargo-checksum.json", "w") as f:
-                json.dump({"files": {}, "package": pkg["checksum"]}, f)
-
-        else:
-            raise Exception(f"Can't process source: {source}.")
+                # non-git based crates need the package checksum at minimum
+                with (crate_out_dir / ".cargo-checksum.json").open("w") as f:
+                    json.dump({"files": {}, "package": pkg.checksum}, f)
 
 
 def main() -> None:
