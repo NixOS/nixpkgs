@@ -16,11 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-  runHook preInstall
-
+    runHook preInstall
     install -Dm755 ./ossdmk $out/bin/ossdmk
-  
-  runHook postInstall
+    runHook postInstall
   '';
 
   meta = {
