@@ -7290,6 +7290,13 @@ self: super: with self; {
 
   kaggle = callPackage ../development/python-modules/kaggle { };
 
+  kahip = toPythonModule (
+    pkgs.kahip.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
 
   kajiki = callPackage ../development/python-modules/kajiki { };
@@ -12271,11 +12278,10 @@ self: super: with self; {
 
   pygal = callPackage ../development/python-modules/pygal { };
 
-  pygame = callPackage ../development/python-modules/pygame { SDL2_image = pkgs.SDL2_image_2_0; };
+  pygame = callPackage ../development/python-modules/pygame { };
 
   pygame-ce = callPackage ../development/python-modules/pygame-ce {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
-    SDL2_image = pkgs.SDL2_image_2_0;
     SDL2_mixer = pkgs.SDL2_mixer_2_0;
   };
 
@@ -15579,11 +15585,7 @@ self: super: with self; {
 
   sentinels = callPackage ../development/python-modules/sentinels { };
 
-  sentry-sdk = sentry-sdk_1;
-
-  sentry-sdk_1 = callPackage ../development/python-modules/sentry-sdk/1.nix { };
-
-  sentry-sdk_2 = callPackage ../development/python-modules/sentry-sdk/default.nix { };
+  sentry-sdk = callPackage ../development/python-modules/sentry-sdk/default.nix { };
 
   sepaxml = callPackage ../development/python-modules/sepaxml { };
 
