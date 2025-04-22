@@ -4,6 +4,7 @@
   fetchCrate,
   stdenv,
   darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Server for FunctionTrace, a graphical Python profiler";
