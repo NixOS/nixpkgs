@@ -1787,6 +1787,14 @@ let
       '';
     });
 
+    PICS = old.PICS.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/segment.c" \
+        --replace-fail "Calloc" "R_Calloc"
+      '';
+    });
+
     lwgeom = old.lwgeom.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
