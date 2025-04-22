@@ -10,7 +10,6 @@
   cudaPackages,
   enableCUDA ? false,
   libffi,
-  libobjc,
   libpfm,
 }:
 
@@ -63,10 +62,7 @@ stdenv.mkDerivation rec {
       libxml2
     ]
     ++ lib.optionals enableCUDA [ cuda ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
     let

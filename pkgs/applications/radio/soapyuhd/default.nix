@@ -7,7 +7,6 @@
   uhd,
   boost,
   soapysdr,
-  libobjc,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,15 +24,11 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      uhd
-      boost
-      soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-    ];
+  buildInputs = [
+    uhd
+    boost
+    soapysdr
+  ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
