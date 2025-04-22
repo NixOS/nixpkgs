@@ -6347,7 +6347,6 @@ with pkgs;
 
   nextpnrWithGui = libsForQt5.callPackage ../by-name/ne/nextpnr/package.nix {
     enableGui = true;
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
   obliv-c = callPackage ../development/compilers/obliv-c {

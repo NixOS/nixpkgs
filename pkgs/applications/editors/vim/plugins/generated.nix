@@ -3508,6 +3508,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  dailies-nvim = buildVimPlugin {
+    pname = "dailies.nvim";
+    version = "2025-04-15";
+    src = fetchFromGitHub {
+      owner = "JachymPutta";
+      repo = "dailies.nvim";
+      rev = "4507da852e8166f35598409656166629141e1d8c";
+      sha256 = "1mk29mh6d2h6680yspd773jhwc87ajfb271cm8xyqnp1rgvml7m7";
+    };
+    meta.homepage = "https://github.com/JachymPutta/dailies.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   darkearth-nvim = buildVimPlugin {
     pname = "darkearth-nvim";
     version = "2025-03-28";
