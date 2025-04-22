@@ -495,7 +495,7 @@ self: super:
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0jr4crq52qvnn85qxw077bdpzrgvamm7fmrqn6ygrhlyk1lb9n9x";
+      sha256 = "sha256-jaU8bEOo4X5pgolAIjKtsIha/1bYRhI2d2FAcmCs+YI=";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -505,17 +505,16 @@ self: super:
       '';
     };
 
-    patches = drv.patches or [ ] ++ [
-      # Prevent .desktop files from being installed to $out/usr/share.
-      # TODO(@sternenseemann): submit upstreamable patch resolving this
-      # (this should be possible by also taking PREFIX into account).
-      ./patches/git-annex-no-usr-prefix.patch
-    ];
-
     postPatch = ''
       substituteInPlace Makefile \
         --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
                        'InstallDesktopFile git-annex'
+
+      # Prevent .desktop files from being installed to $out/usr/share.
+      # TODO(@sternenseemann): submit upstreamable patch resolving this
+      # (this should be possible by also taking PREFIX into account).
+      substituteInPlace Utility/FreeDesktop.hs \
+        --replace-fail '"/usr/share"' '"/share"'
     '';
   }) super.git-annex;
 
