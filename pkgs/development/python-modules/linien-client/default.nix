@@ -42,5 +42,7 @@ buildPythonPackage rec {
       fsagbuya
       doronbehar
     ];
+    # See comment near linien-common.meta.broken
+    broken = lib.versionAtLeast numpy.version "2";
   };
 }
