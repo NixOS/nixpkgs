@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pettingzoo";
-  version = "1.25.1";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
     tag = version;
-    hash = "sha256-e25+UNCGjBOAt2f440d6W4lvhxKXRmwLfDvNxeC2Jfk=";
+    hash = "sha256-hQe/TMlLG//Bn8aaSo0/FPOUvOEyKfztuTIS7SMsUQ4=";
   };
 
   build-system = [
