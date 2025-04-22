@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
@@ -52,12 +53,16 @@ buildGoModule rec {
   # No tests
   doCheck = false;
   doInstallCheck = true;
+  installCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+  # NOTE: Can't use `versionCheckHook` since a writeable $HOME is required and
+  # `versionCheckHook` uses --ignore-environment
   installCheckPhase = ''
-    export HOME=$(mktemp -d)
     echo checking the version print of pdfcpu
     $out/bin/pdfcpu version | grep ${version}
-    $out/bin/pdfcpu version | grep $(cat COMMIT | cut -c1-8)
-    $out/bin/pdfcpu version | grep $(cat SOURCE_DATE)
+    $out/bin/pdfcpu version | grep -q $(cat COMMIT | cut -c1-8)
+    $out/bin/pdfcpu version | grep -q $(cat SOURCE_DATE)
   '';
 
   subPackages = [ "cmd/pdfcpu" ];
