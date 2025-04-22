@@ -60,9 +60,14 @@ buildGoModule rec {
   # `versionCheckHook` uses --ignore-environment
   installCheckPhase = ''
     echo checking the version print of pdfcpu
-    $out/bin/pdfcpu version | grep ${version}
-    $out/bin/pdfcpu version | grep -q $(cat COMMIT | cut -c1-8)
-    $out/bin/pdfcpu version | grep -q $(cat SOURCE_DATE)
+    versionOutput="$($out/bin/pdfcpu version)"
+    for part in ${version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
+      if [[ ! "$versionOutput" =~ "$part" ]]; then
+          echo version output did not contain expected part $part . Output was:
+          echo "$versionOutput"
+          exit 3
+      fi
+    done
   '';
 
   subPackages = [ "cmd/pdfcpu" ];
