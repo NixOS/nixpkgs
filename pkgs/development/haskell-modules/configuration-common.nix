@@ -34,7 +34,7 @@ self: super:
       Cabal-syntax = self.Cabal-syntax_3_12_1_0;
     }
   );
-  Cabal_3_14_1_1 =
+  Cabal_3_14_2_0 =
     overrideCabal
       (drv: {
         # Revert increased lower bound on unix since we have backported
@@ -47,15 +47,15 @@ self: super:
       })
       (
         doDistribute (
-          super.Cabal_3_14_1_1.override {
-            Cabal-syntax = self.Cabal-syntax_3_14_1_0;
+          super.Cabal_3_14_2_0.override {
+            Cabal-syntax = self.Cabal-syntax_3_14_2_0;
           }
         )
       );
 
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
-    Cabal = self.Cabal_3_14_1_1;
+    Cabal = self.Cabal_3_14_2_0;
   };
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -67,8 +67,8 @@ self: super:
         cabalInstallOverlay =
           cself: csuper:
           lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
-            Cabal = cself.Cabal_3_14_1_1;
-            Cabal-syntax = cself.Cabal-syntax_3_14_1_0;
+            Cabal = cself.Cabal_3_14_2_0;
+            Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
           };
       in
       {
