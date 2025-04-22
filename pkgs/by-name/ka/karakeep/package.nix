@@ -14,14 +14,14 @@ let
   pnpm = pnpm_9;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hoarder";
-  version = "0.23.0";
+  pname = "karakeep";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
-    owner = "hoarder-app";
-    repo = "hoarder";
+    owner = "karakeep-app";
+    repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ro2+jXfp83JfQ9HQr0imy7aohSFbH5J6Wx5bxhMT5TM=";
+    hash = "sha256-Cm6e1XEmMHzQ3vODxa9+Yuwt+9zLvQ9S7jmwAozjA/k=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    hash = "sha256-FzQPBIwe7OQ1KHaMtWaFe+RI+pXko5Ly11/jOmYSuFA=";
+    hash = "sha256-HZb11CAbnlGSmP/Gxyjncd/RuIWkPv3GvwYs9QZ12Ss=";
   };
   buildPhase = ''
     runHook preBuild
@@ -81,56 +81,56 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/doc/hoarder
-    cp README.md LICENSE $out/share/doc/hoarder
+    mkdir -p $out/share/doc/karakeep
+    cp README.md LICENSE $out/share/doc/karakeep
 
-    # Copy necessary files into lib/hoarder while keeping the directory structure
+    # Copy necessary files into lib/karakeep while keeping the directory structure
     LIB_TO_COPY="node_modules apps/web/.next/standalone apps/cli/dist apps/workers packages/db packages/shared packages/trpc"
-    HOARDER_LIB_PATH="$out/lib/hoarder"
+    KARAKEEP_LIB_PATH="$out/lib/karakeep"
     for DIR in $LIB_TO_COPY; do
-      mkdir -p "$HOARDER_LIB_PATH/$DIR"
-      cp -a $DIR/{.,}* "$HOARDER_LIB_PATH/$DIR"
-      chmod -R u+w "$HOARDER_LIB_PATH/$DIR"
+      mkdir -p "$KARAKEEP_LIB_PATH/$DIR"
+      cp -a $DIR/{.,}* "$KARAKEEP_LIB_PATH/$DIR"
+      chmod -R u+w "$KARAKEEP_LIB_PATH/$DIR"
     done
 
     # NextJS requires static files are copied in a specific way
     # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output#automatically-copying-traced-files
-    cp -r ./apps/web/public "$HOARDER_LIB_PATH/apps/web/.next/standalone/apps/web/"
-    cp -r ./apps/web/.next/static "$HOARDER_LIB_PATH/apps/web/.next/standalone/apps/web/.next/"
+    cp -r ./apps/web/public "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/"
+    cp -r ./apps/web/.next/static "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/.next/"
 
     # Copy and patch helper scripts
     for HELPER_SCRIPT in ${./helpers}/*; do
       HELPER_SCRIPT_NAME="$(basename "$HELPER_SCRIPT")"
-      cp "$HELPER_SCRIPT" "$HOARDER_LIB_PATH/"
-      substituteInPlace "$HOARDER_LIB_PATH/$HELPER_SCRIPT_NAME" \
-        --replace-warn "HOARDER_LIB_PATH=" "HOARDER_LIB_PATH=$HOARDER_LIB_PATH" \
+      cp "$HELPER_SCRIPT" "$KARAKEEP_LIB_PATH/"
+      substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
+        --replace-warn "KARAKEEP_LIB_PATH=" "KARAKEEP_LIB_PATH=$KARAKEEP_LIB_PATH" \
         --replace-warn "RELEASE=" "RELEASE=${finalAttrs.version}" \
         --replace-warn "NODEJS=" "NODEJS=${nodejs}"
-      chmod +x "$HOARDER_LIB_PATH/$HELPER_SCRIPT_NAME"
-      patchShebangs "$HOARDER_LIB_PATH/$HELPER_SCRIPT_NAME"
+      chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
+      patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
 
     # The cli should be in bin/
     mkdir -p $out/bin
-    mv "$HOARDER_LIB_PATH/hoarder-cli" $out/bin/
+    mv "$KARAKEEP_LIB_PATH/karakeep" $out/bin/
 
     runHook postInstall
   '';
 
   postFixup = ''
     # Remove large dependencies that are not necessary during runtime
-    rm -rf $out/lib/hoarder/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
+    rm -rf $out/lib/karakeep/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
 
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
   meta = {
-    homepage = "https://github.com/hoarder-app/hoarder";
-    description = "Self-hostable bookmark-everything app with a touch of AI for the data hoarders out there";
+    homepage = "https://karakeep.app/";
+    description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];
-    mainProgram = "hoarder-cli";
+    mainProgram = "karakeep";
     platforms = lib.platforms.linux;
   };
 })
