@@ -639,6 +639,7 @@ mapAliases {
   flutter323 = throw "flutter323 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
   fluxus = throw "fluxus has been removed because it hasn't been updated in 9 years and depended on insecure Racket 7.9"; # Added 2024-12-06
   fmt_8 = throw "fmt_8 has been removed as it is obsolete and was no longer used in the tree"; # Added 2024-11-12
+  fntsample = throw "fntsample has been removed as it is unmaintained upstream"; # Added 2025-04-21
   foldingathome = throw "'foldingathome' has been renamed to/replaced by 'fahclient'"; # Converted to throw 2024-10-17
   forgejo-actions-runner = forgejo-runner; # Added 2024-04-04
   fornalder = throw "'fornalder' has been removed as it is unmaintained upstream"; # Added 2025-01-25
@@ -1206,6 +1207,18 @@ mapAliases {
   neocities-cli = neocities; # Added 2024-07-31
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
+  nextcloud29 = throw ''
+    Nextcloud v29 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2025-04. Please upgrade to at least Nextcloud v30 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud30;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 28 you have to upgrade to Nextcloud 29
+    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2025-04-11
+  nextcloud29Packages = throw "Nextcloud 29 is EOL!"; # Added 2025-04-11
   nextcloud28 = throw ''
     Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring
