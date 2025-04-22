@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/fonts/
-    mv *.ttf $out/share/fonts/
+    mv eduSong_Unicode*.ttf $out/share/fonts/eduSong_Unicode\(2024年12月\).ttf
   '';
 
   meta = {
