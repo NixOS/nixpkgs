@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp -r ./ossdmk $out/bin/ossdmk
+  
+  runHook postInstall
   '';
 
   meta = {
