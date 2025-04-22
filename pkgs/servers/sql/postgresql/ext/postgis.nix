@@ -125,31 +125,15 @@ postgresqlBuildExtension (finalAttrs: {
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
     sql =
-      let
-        expectedVersion = "${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1";
-      in
       ''
         CREATE EXTENSION postgis;
         CREATE EXTENSION postgis_raster;
         CREATE EXTENSION postgis_topology;
-        select postgis_version();
-        do $$
-        begin
-          if postgis_version() <> '${expectedVersion}' then
-            raise '"%" does not match "${expectedVersion}"', postgis_version();
-          end if;
-        end$$;
         -- st_makepoint goes through c code
         select st_makepoint(1, 1);
       ''
       + lib.optionalString withSfcgal ''
         CREATE EXTENSION postgis_sfcgal;
-        do $$
-        begin
-          if postgis_sfcgal_version() <> '${sfcgal.version}' then
-            raise '"%" does not match "${sfcgal.version}"', postgis_sfcgal_version();
-          end if;
-        end$$;
         CREATE TABLE geometries (
           name varchar,
           geom geometry(PolygonZ) NOT NULL
@@ -161,6 +145,19 @@ postgresqlBuildExtension (finalAttrs: {
 
         SELECT name from geometries where cg_isplanar(geom);
       '';
+    asserts =
+      [
+        {
+          query = "postgis_version()";
+          expected = "'${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1'";
+          description = "postgis_version() returns correct values.";
+        }
+      ]
+      ++ lib.optional withSfcgal {
+        query = "postgis_sfcgal_version()";
+        expected = "'${sfcgal.version}'";
+        description = "postgis_sfcgal_version() returns correct value.";
+      };
   };
 
   meta = {
