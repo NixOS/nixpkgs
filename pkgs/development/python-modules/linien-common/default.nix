@@ -56,5 +56,33 @@ buildPythonPackage rec {
       fsagbuya
       doronbehar
     ];
+    # Numpy 2 is not supported yet, because the server linien, (installed on the
+    # RedPitaya) must use the same Numpy version as the client (installed with
+    # Nix). The server linien is bound to use Numpy 1 because Numpy maintainers
+    # don't distribute pre-built wheels for the armv7l architecture of
+    # RedPitaya, and it is unfeasible to build it natively there - something
+    # that `pip install numpy` naively tries to do. Hence, we are bound to use
+    # on the server the preinstalled Numpy 1 sourced in the .deb package that
+    # comes with the RedPitaya OS. See also:
+    #
+    # - https://github.com/linien-org/linien/commit/ebbb2276b500a18826d11893bb43699b65692c5e
+    # - https://github.com/linien-org/linien/issues/377
+    #
+    # To evaluate this package with python3.withPackages, use:
+    #
+    # pythonEnv = python3.override {
+    #   packageOverrides = self: super: {
+    #     numpy = super.numpy_1;
+    #   };
+    # }.withPackages(ps: {
+    #   ps.linien-common
+    #   # Other packages...
+    # });
+    #
+    # NOTE that the above Python environment will use Numpy 1 throughout all
+    # packages wrapped there, and this may trigger rebuilds for dependencies
+    # that depend on Numpy too. Be ready to also add more `packageOverrides` to
+    # make sure these other dependencies do build with numpy_1.
+    broken = lib.versionAtLeast numpy.version "2";
   };
 }
