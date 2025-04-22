@@ -11,6 +11,7 @@
   dejavu_fonts,
   autoreconfHook,
   testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -89,10 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
   '';
 
-  passthru.tests = {
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
