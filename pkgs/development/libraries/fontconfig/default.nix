@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.16.0";
+  version = "2.16.2";
 
   outputs = [
     "bin"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fontconfig";
     repo = "fontconfig";
     tag = finalAttrs.version;
-    hash = "sha256-ELn1WL2kueFj97GfjvjDa82iAJKFv4J5mkHon9vqtXE=";
+    hash = "sha256-R2y5H4JbtpCLRW7BvLXj5H6NrzVZf6+DsaQCuIhibzM=";
   };
 
   nativeBuildInputs = [
