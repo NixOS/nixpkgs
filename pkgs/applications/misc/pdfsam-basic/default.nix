@@ -6,6 +6,7 @@
   jdk21,
   wrapGAppsHook3,
   glib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "application/pdf" ];
     categories = [ "Office" ];
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/torakiki/pdfsam";
