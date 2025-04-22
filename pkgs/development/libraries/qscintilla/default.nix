@@ -71,7 +71,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
-    # ld: library not found for -lcups
-    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
 })
