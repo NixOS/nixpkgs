@@ -2,6 +2,8 @@
   lib,
   python313,
   fetchFromGitLab,
+  fetchFromGitHub,
+  rustPlatform,
   callPackage,
   stdenv,
   makeWrapper,
@@ -10,9 +12,27 @@
 
 let
   python = python313.override {
+    self = python;
     packageOverrides = final: prev: {
       django = final.django_5;
-      django-extensions = prev.django-extensions.overridePythonAttrs { doCheck = false; };
+      symbolic = prev.symbolic.overridePythonAttrs rec {
+        version = "10.2.1";
+        src = fetchFromGitHub {
+          owner = "getsentry";
+          repo = "symbolic";
+          tag = version;
+          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
+          # the `py` directory is not included in the tarball, so we fetch the source via git instead
+          forceFetchGit = true;
+        };
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit src postPatch;
+          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
+        };
+        postPatch = ''
+          ln -s ${./symbolic_Cargo.lock} Cargo.lock
+        '';
+      };
     };
   };
 
@@ -45,7 +65,7 @@ let
       psycopg
       pydantic
       sentry-sdk
-      symbolic_10
+      symbolic
       user-agents
       uvicorn
       uwsgi-chunked
