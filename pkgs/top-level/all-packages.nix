@@ -5566,16 +5566,15 @@ with pkgs;
 
   inherit (callPackages ../servers/varnish { })
     varnish60
-    varnish75
     varnish76
+    varnish77
     ;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages
-    varnish75Packages
     varnish76Packages
+    varnish77Packages
     ;
-
-  varnishPackages = varnish75Packages;
+  varnishPackages = varnish77Packages;
   varnish = varnishPackages.varnish;
 
   viceroy = callPackage ../development/tools/viceroy {
@@ -11800,14 +11799,6 @@ with pkgs;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
 
-  cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    python = python2;
-  };
-  cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    python = python2;
-  };
   cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
     # Effective Cassandra 4.0.2 there is full Java 11 support
     #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
@@ -12577,8 +12568,6 @@ with pkgs;
   zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
-  zabbix64 = recurseIntoAttrs (zabbixFor "v64");
-  zabbix50 = recurseIntoAttrs (zabbixFor "v50");
 
   zabbix = zabbix60;
 

@@ -38,12 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  # Missing 'sincos()' implementation fails linking projects
+  # like 'freeciv_sdl2'.
+  env.NIX_LDFLAGS = "-lm";
+
   configureFlags = [
     (lib.enableFeature enableMmx "mmx")
     (lib.enableFeature enableSdltest "sdltest")
   ];
 
   strictDeps = true;
+
+  enableParallelBuilding = true;
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
