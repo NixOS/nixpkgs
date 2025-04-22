@@ -14,7 +14,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   rustc,
   Security,
   stdenv,
@@ -91,7 +91,7 @@ let
 
     pnpmDeps =
       if pnpmHash != null then
-        pnpm_9.fetchDeps {
+        pnpm_10.fetchDeps {
           inherit src pname version;
           hash = pnpmHash;
         }
@@ -112,7 +112,7 @@ let
       ]
       ++ (
         if lib.versionAtLeast version "16" then
-          [ pnpm_9.configHook ]
+          [ pnpm_10.configHook ]
         else
           [
             yarn

@@ -94,18 +94,18 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 - TeX Live packages are also available under `texlive.pkgs` as derivations with outputs `out`, `tex`, `texdoc`, `texsource`, `tlpkg`, `man`, `info`. They cannot be installed outside of `texlive.combine` but are available for other uses. To repackage a font, for instance, use
 
   ```nix
-  stdenvNoCC.mkDerivation rec {
+  stdenvNoCC.mkDerivation (finalAttrs: {
     src = texlive.pkgs.iwona;
     dontUnpack = true;
 
-    inherit (src) pname version;
+    inherit (finalAttrs.src) pname version;
 
     installPhase = ''
       runHook preInstall
       install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
       runHook postInstall
     '';
-  }
+  })
   ```
 
   See `biber`, `iwona` for complete examples.
@@ -173,6 +173,7 @@ let
       (writeShellScript "force-tex-output.sh" ''
         out="''${tex-}"
       '')
+      writableTmpDirAsHomeHook # Need a writable $HOME for latexmk
     ];
 
     dontConfigure = true;
@@ -184,7 +185,6 @@ let
       latex foiltex.ins
 
       # Generate the documentation
-      export HOME=.
       latexmk -pdf foiltex.dtx
 
       runHook postBuild

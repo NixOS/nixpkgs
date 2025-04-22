@@ -198,14 +198,14 @@ Here's an example:
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood";
   version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
-    repo = pname;
-    rev = "v${version}";
+    repo = "flood";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };
 
@@ -222,7 +222,7 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ winter ];
   };
-}
+})
 ```
 
 In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`.
@@ -646,9 +646,16 @@ It's important to use the `--offline` flag. For example if you script is `"build
 
 ```nix
 {
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    runHook preBuild
+
     yarn --offline build
+
+    runHook postBuild
   '';
 }
 ```
