@@ -275,8 +275,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    julm
-    grimmauld
-  ];
+  meta.maintainers = lib.teams.apparmor.members;
 }
