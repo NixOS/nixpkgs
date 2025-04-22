@@ -46,10 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/TheR1D/shell_gpt";
     changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      mglolenstine
-      SohamG
-    ];
+    maintainers = with maintainers; [ SohamG ];
     mainProgram = "sgpt";
   };
 }
