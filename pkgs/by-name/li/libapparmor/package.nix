@@ -98,11 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Only
       lgpl21Only
     ];
-    maintainers = with lib.maintainers; [
-      julm
-      thoughtpolice
-      grimmauld
-    ];
+    maintainers = lib.teams.apparmor.members;
     platforms = lib.platforms.linux;
   };
 })
