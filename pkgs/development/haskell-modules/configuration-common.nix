@@ -2978,10 +2978,6 @@ self: super:
   # jailbreak to allow deepseq >= 1.5, https://github.com/jumper149/blucontrol/issues/3
   blucontrol = doJailbreak super.blucontrol;
 
-  # Stackage LTS 23.17 has 0.1.5, which was marked deprecated as it was broken.
-  # Can probably be dropped for Stackage LTS >= 23.18
-  network-control = doDistribute self.network-control_0_1_6;
-
   # Needs to match pandoc, see:
   # https://github.com/jgm/pandoc/commit/97b36ecb7703b434ed4325cc128402a9eb32418d
   commonmark-pandoc = doDistribute self.commonmark-pandoc_0_2_2_3;
