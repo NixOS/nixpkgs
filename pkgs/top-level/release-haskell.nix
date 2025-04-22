@@ -568,7 +568,11 @@ let
         compilerNames.ghc947
         compilerNames.ghc948
       ] released;
-      Cabal_3_10_3_0 = released;
+      Cabal_3_10_3_0 = lib.subtractLists [
+        # time < 1.13 conflicts with time == 1.14.*
+        compilerNames.ghc9121
+        compilerNames.ghc9122
+      ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_1_1 = released;
       cabal2nix = released;
