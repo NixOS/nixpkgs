@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       ((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isAarch32))
     then
       ''
-        sed -i -E 's:test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
-        sed -i -E 's:test-sigsegv-catch-stackoverflow[12]::g' gnulib-tests/Makefile.in
+        sed -i -E 's:[[:space:]]test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
+        sed -i -E 's:[[:space:]]test-sigsegv-catch-stackoverflow[12]\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
       ''
     else
       null;
