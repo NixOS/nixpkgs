@@ -47,7 +47,10 @@ stdenvNoCC.mkDerivation rec {
     description = "Xbox One wireless dongle firmware";
     homepage = "https://www.xbox.com/en-NZ/accessories/adapters/wireless-adapter-windows";
     license = licenses.unfree;
-    maintainers = with maintainers; [ rhysmdnz ];
+    maintainers = with maintainers; [
+      rhysmdnz
+      fazzi
+    ];
     platforms = platforms.linux;
   };
 }
