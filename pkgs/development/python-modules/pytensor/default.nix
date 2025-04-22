@@ -39,6 +39,9 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+    '';
     hash = "sha256-Iyiuvt86pfz8MmpwgDecKJFVOw+fKpEaA9m1MBA9Yxs=";
   };
 
