@@ -4,6 +4,7 @@
   mecab,
   nixosTests,
   postgresql,
+  postgresqlTestExtension,
   stdenv,
 }:
 
@@ -35,7 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     mv dbinit_libtsja.txt $out/share/postgresql/extension/libtsja_dbinit.sql
   '';
 
-  passthru.tests = nixosTests.postgresql.tsja.passthru.override postgresql;
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql = ''
+      \i ${finalAttrs.finalPackage}/share/postgresql/extension/libtsja_dbinit.sql
+    '';
+    asserts = [
+      {
+        query = "EXISTS (SELECT 1 FROM ts_debug('japanese', 'PostgreSQLで日本語のテキスト検索ができます。') WHERE lexemes = '{日本語}')";
+        expected = "true";
+        description = "make sure '日本語' is parsed as a separate lexeme";
+      }
+    ];
+  };
 
   meta = {
     description = "PostgreSQL extension implementing Japanese text search";

@@ -6,6 +6,7 @@
   lz4,
   postgresql,
   postgresqlBuildExtension,
+  postgresqlTestExtension,
   stdenv,
 }:
 
@@ -34,6 +35,33 @@ postgresqlBuildExtension (finalAttrs: {
     curl
     lz4
   ];
+
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    postgresqlExtraSettings = ''
+      shared_preload_libraries=citus
+    '';
+    sql = ''
+      CREATE EXTENSION citus;
+
+      CREATE TABLE examples (
+        id bigserial,
+        shard_key int,
+        PRIMARY KEY (id, shard_key)
+      );
+
+      SELECT create_distributed_table('examples', 'shard_key');
+
+      INSERT INTO examples (shard_key) SELECT shard % 10 FROM generate_series(1,1000) shard;
+    '';
+    asserts = [
+      {
+        query = "SELECT count(*) FROM examples";
+        expected = "1000";
+        description = "Distributed table can be queried successfully.";
+      }
+    ];
+  };
 
   meta = {
     # "Our soft policy for Postgres version compatibility is to support Citus'
