@@ -641,6 +641,7 @@ broken-packages:
   - cal-layout # failure in job https://hydra.nixos.org/build/233191194 at 2023-09-02
   - call-haskell-from-anything # failure in job https://hydra.nixos.org/build/233222493 at 2023-09-02
   - call-plantuml # failure in job https://hydra.nixos.org/build/233241670 at 2023-09-02
+  - calligraphy # only supports ghc < 9.6
   - canon # failure in job https://hydra.nixos.org/build/233235027 at 2023-09-02
   - canonical-filepath # failure in job https://hydra.nixos.org/build/233233390 at 2023-09-02
   - canteven-listen-http # failure in job https://hydra.nixos.org/build/233210500 at 2023-09-02

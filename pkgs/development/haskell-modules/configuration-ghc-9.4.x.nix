@@ -66,6 +66,9 @@ in
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
+
   # Jailbreaks & Version Updates
 
   hashable-time = doJailbreak super.hashable-time;

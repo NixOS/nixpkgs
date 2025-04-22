@@ -64,6 +64,9 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
+
   # Only required for ghc >= 9.2
   nothunks = super.nothunks.override {
     wherefrom-compat = null;
