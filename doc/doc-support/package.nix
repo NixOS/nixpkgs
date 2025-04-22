@@ -15,7 +15,6 @@
   markdown-code-runner,
   roboto,
 }:
-
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
@@ -97,14 +96,14 @@ stdenvNoCC.mkDerivation (
       dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
-      mv "$dest/index.html" "$dest/manual.html"
+      cp "$dest/index.html" "$dest/manual.html"
 
       cp ${roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dest/Roboto.ttf"
 
       cp ${epub} "$dest/nixpkgs-manual.epub"
 
       mkdir -p $out/nix-support/
-      echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+      echo "doc manual $dest index.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
 
       runHook postInstall
@@ -123,7 +122,7 @@ stdenvNoCC.mkDerivation (
         let
           devmode' = devmode.override {
             buildArgs = toString ../.;
-            open = "/share/doc/nixpkgs/manual.html";
+            open = "/share/doc/nixpkgs/index.html";
           };
           nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
         in
