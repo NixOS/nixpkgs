@@ -1419,13 +1419,13 @@ in
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish60;
   };
-  varnish75 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish75;
-  };
   varnish76 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish76;
+  };
+  varnish77 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish77;
   };
   vault = handleTest ./vault.nix { };
   vault-agent = handleTest ./vault-agent.nix { };
