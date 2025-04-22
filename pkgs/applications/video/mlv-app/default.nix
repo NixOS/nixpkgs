@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   mkDerivation,
+  fetchpatch,
   qmake,
   qtbase,
   qtmultimedia,
@@ -18,6 +19,13 @@ mkDerivation rec {
     rev = "QTv${version}";
     sha256 = "sha256-boYnIGDowV4yRxdE98U5ngeAwqi5HTRDFh5gVwW/kN8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ilia3101/MLV-App/commit/b7643b1031955f085ade30e27974ddd889a4641f.patch";
+      hash = "sha256-DQkoB+fjshWDLzKouhEQXzpqn78WL+eqo5oTfE9ltEk=";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
