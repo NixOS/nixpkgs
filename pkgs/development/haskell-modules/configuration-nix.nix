@@ -818,6 +818,13 @@ builtins.intersectAttrs super {
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
+  # Test suite requires yices to be in PATH
+  crucible-symio = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.yices
+    ];
+  }) super.crucible-symio;
+
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark =
     overrideCabal
