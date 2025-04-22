@@ -117,6 +117,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       figsoda
       atemu
+      cything
     ];
     platforms = lib.platforms.linux;
     mainProgram = "lact";
