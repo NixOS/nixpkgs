@@ -3,6 +3,7 @@
   fetchPypi,
   hypothesis,
   lib,
+  nix-update-script,
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
@@ -40,6 +41,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jsonschema_rs" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "High-performance JSON Schema validator for Python";
