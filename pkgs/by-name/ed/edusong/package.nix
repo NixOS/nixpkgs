@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "edusong";
-  version = "1.0"; # The upstream doesn't provide the version
+  version = "4.0";
 
   src = fetchzip {
     name = "${pname}-${version}";
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/eduSong_Unicode.zip";
-    hash = "sha256-pIG1EbFGf2O2AzM4+HCCvGPodBBwUt7ozpb+BpPk5Kw=";
+    hash = "sha256-4NBnwMrYufeZbgSiD2fAhe4tuy0aAA5u9tWwjQQjEQk=";
   };
 
   installPhase = ''
