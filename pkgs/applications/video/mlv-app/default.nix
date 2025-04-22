@@ -10,19 +10,14 @@
 
 mkDerivation rec {
   pname = "mlv-app";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "ilia3101";
     repo = "MLV-App";
     rev = "QTv${version}";
-    sha256 = "sha256-RfZXHmWSjZBxNFwQ/bzHppsLS0LauURIdnkAzxAIBcU=";
+    sha256 = "sha256-boYnIGDowV4yRxdE98U5ngeAwqi5HTRDFh5gVwW/kN8=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isAarch64 [
-    # remove optimization flags with x86 only instruction sets
-    ./aarch64-flags.patch
-  ];
 
   installPhase = ''
     runHook preInstall
@@ -59,7 +54,7 @@ mkDerivation rec {
     homepage = "https://mlv.app";
     license = licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "mlvapp";
   };
 }
