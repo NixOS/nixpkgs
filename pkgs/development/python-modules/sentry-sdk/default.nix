@@ -62,6 +62,7 @@
   pytest-xdist,
   pytest-watch,
   responses,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -166,6 +167,11 @@ buildPythonPackage rec {
   ] ++ optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # darwin: 'profiler should not be running'
+    "tests/profiler/test_continuous_profiler.py"
+  ];
 
   disabledTests = [
     # depends on git revision
