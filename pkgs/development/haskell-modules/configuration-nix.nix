@@ -784,6 +784,14 @@ builtins.intersectAttrs super {
       pkgs.z3
     ];
   }) super.copilot-libraries;
+  # tests need to execute the built executable
+  ogma-cli = overrideCabal (drv: {
+    preCheck =
+      ''
+        export PATH=dist/build/ogma:$PATH
+      ''
+      + (drv.preCheck or "");
+  }) super.ogma-cli;
 
   # Expects z3 to be on path so we replace it with a hard
   #
