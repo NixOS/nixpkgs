@@ -8007,6 +8007,8 @@ self: super: with self; {
 
   littleutils = callPackage ../development/python-modules/littleutils { };
 
+  livekit-api = callPackage ../development/python-modules/livekit-api { };
+
   livekit-protocol = callPackage ../development/python-modules/livekit-protocol { };
 
   livelossplot = callPackage ../development/python-modules/livelossplot { };
