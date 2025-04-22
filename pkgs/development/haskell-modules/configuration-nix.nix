@@ -778,6 +778,13 @@ builtins.intersectAttrs super {
   # through $PATH but they aren't in $PATH
   dhall-lsp-server = dontCheck super.dhall-lsp-server;
 
+  # Test suite requires z3 to be in PATH
+  copilot-libraries = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.z3
+    ];
+  }) super.copilot-libraries;
+
   # Expects z3 to be on path so we replace it with a hard
   #
   # The tests expect additional solvers on the path, replace the
