@@ -3,7 +3,6 @@
   buildDunePackage,
   fetchurl,
   makeWrapper,
-  fetchpatch,
   curly,
   fmt,
   bos,
@@ -43,23 +42,12 @@ let
 in
 buildDunePackage rec {
   pname = "dune-release";
-  version = "2.0.0";
-  duneVersion = "3";
-
-  minimalOCamlVersion = "4.06";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    hash = "sha256-u8TgaoeDaDLenu3s1Km/Kh85WHMtvUy7C7Q+OY588Ss=";
+    hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
   };
-
-  patches = [
-    # Update tests for dune 3.14 https://github.com/tarides/dune-release/pull/486
-    (fetchpatch {
-      url = "https://github.com/tarides/dune-release/commit/fd0e11cb6d9db2acd772f5cadfb94c72bbcf67a8.patch";
-      hash = "sha256-At24bduds6UwGKGs8cqOn1qaZKElP9TPMSNPimMd1zQ=";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [
