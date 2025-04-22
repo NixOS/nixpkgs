@@ -3099,6 +3099,10 @@ self: super:
     assert super.crucible.version == "0.7.2";
     doJailbreak super.crucible;
 
+  # 2025-04-23: Allow bytestring >= 0.12
+  # https://github.com/mrkkrp/wave/issues/48
+  wave = doJailbreak super.wave;
+
   # Test suite no longer compiles with hspec-hedgehog >= 0.3
   finitary = dontCheck super.finitary;
 
