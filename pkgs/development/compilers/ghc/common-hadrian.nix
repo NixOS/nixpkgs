@@ -181,9 +181,42 @@
       in
 
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-      lib.optionals (lib.versionOlder version "9.8") [
+      lib.optionals (lib.versionOlder version "9.6.7") [
         ./docs-sphinx-7.patch
       ]
+      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.5") [
+        # Fix aarch64-linux builds of 9.6.0 - 9.6.4.
+        # Fixes a pointer type mismatch in the RTS.
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/24348
+        (fetchpatch {
+          name = "fix-incompatible-pointer-types.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1e48c43483693398001bfb0ae644a3558bf6a9f3.diff";
+          hash = "sha256-zUlzpX7J1n+MCEv9AWpj69FTy2uzJH8wrQDkTexGbgM=";
+        })
+      ]
+      ++
+        lib.optionals
+          (
+            # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
+            lib.versionOlder version "9.11"
+            && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
+            && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+          )
+          [
+            # Determine size of time related types using hsc2hs instead of assuming CLong.
+            # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+            # https://github.com/haskell/ghcup-hs/issues/1107
+            # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+            # Note that in normal situations this shouldn't be the case since nixpkgs
+            # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+            (fetchpatch {
+              name = "unix-fix-ctimeval-size-32-bit.patch";
+              url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+              sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+              stripLen = 1;
+              extraPrefix = "libraries/unix/";
+            })
+          ]
       ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
         (fetchpatch {
           name = "fix-fully_static.patch";

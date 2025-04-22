@@ -46,7 +46,7 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -60,6 +60,20 @@ self: super: {
   # These core package only exist for GHC >= 9.4. The best we can do is feign
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
+
+  # Only required for ghc >= 9.2
+  nothunks = super.nothunks.override {
+    wherefrom-compat = null;
+  };
+
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   # For GHC < 9.2, os-string is not required.
@@ -77,6 +91,9 @@ self: super: {
       );
   hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
 
@@ -84,7 +101,7 @@ self: super: {
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
   # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+  ghc-tags = doDistribute self.ghc-tags_1_5;
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -133,8 +150,16 @@ self: super: {
   # bundled with GHC < 9.0.
   wai-extra = dontHaddock super.wai-extra;
 
-  # Overly-strict bounds introduced by a revision in version 0.3.2.
-  text-metrics = doJailbreak super.text-metrics;
+  # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
+  tar = overrideCabal (drv: {
+    jailbreak = true;
+    buildDepends = drv.buildDepends or [ ] ++ [
+      self.bytestring-handle
+    ];
+  }) self.tar_0_6_0_0;
+  # text-metrics >= 0.3.3 requires GHC2021
+  text-metrics = doDistribute (doJailbreak self.text-metrics_0_3_2);
+  bytestring-handle = unmarkBroken (doDistribute super.bytestring-handle);
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
