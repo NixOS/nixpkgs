@@ -3098,6 +3098,12 @@ self: super:
   brillo-rendering = lib.warnIf (
     super.brillo-rendering.version != "1.13.3"
   ) "haskellPackages.brillo-rendering override can be dropped" doJailbreak super.brillo-rendering;
+  brillo-examples = lib.warnIf (
+    super.brillo-examples.version != "1.13.3"
+  ) "haskellPackages.brillo-examples override can be dropped" doJailbreak super.brillo-examples;
+  brillo-juicy = lib.warnIf (
+    super.brillo-juicy.version != "0.2.4"
+  ) "haskellPackages.brillo-juicy override can be dropped" doJailbreak super.brillo-juicy;
   brillo = lib.warnIf (
     super.brillo.version != "1.13.3"
   ) "haskellPackages.brillo override can be dropped" doJailbreak super.brillo;
