@@ -8,7 +8,7 @@
   python3,
   makeWrapper,
   # Upstream uses EOL Electron 31.  Use next oldest version.
-  electron_33,
+  electron_34,
   vulkan-helper,
   gogdl,
   legendary-heroic,
@@ -17,7 +17,7 @@
 }:
 
 let
-  electron = electron_33;
+  electron = electron_34;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
