@@ -13,6 +13,7 @@
   pkg-config,
   sqlite,
   ragel,
+  fasttext,
   icu,
   vectorscan,
   jemalloc,
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
       pcre
       sqlite
       ragel
+      fasttext
       icu
       jemalloc
       libsodium
@@ -81,6 +83,7 @@ stdenv.mkDerivation rec {
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"
     "-DENABLE_BLAS=${if withBlas then "ON" else "OFF"}"
+    "-DENABLE_FASTTEXT=ON"
     "-DENABLE_JEMALLOC=ON"
     "-DSYSTEM_DOCTEST=ON"
     "-DSYSTEM_FMT=ON"
