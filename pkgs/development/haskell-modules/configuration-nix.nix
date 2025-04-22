@@ -1015,7 +1015,8 @@ builtins.intersectAttrs super {
     in
     lib.pipe
       (super.spago.override {
-        versions = self.versions_5_0_5;
+        # base <4.19, text <2.1
+        versions = doJailbreak self.versions_5_0_5;
         fsnotify = self.fsnotify_0_3_0_1;
       })
       [
