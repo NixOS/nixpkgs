@@ -24,7 +24,6 @@
         rPackages
         roundcubePlugins
         sourceHanPackages
-        zabbix50
         zabbix60
         ;
 
