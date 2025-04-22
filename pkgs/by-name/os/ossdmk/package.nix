@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   runHook preInstall
 
     mkdir -p $out/bin
-    cp -r ./ossdmk $out/bin/ossdmk
+    install -Dm755 ./ossdmk $out/bin/ossdmk
   
   runHook postInstall
   '';
