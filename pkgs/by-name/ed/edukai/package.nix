@@ -20,12 +20,9 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Standard Kai Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
+    description = "The MOE Kai font, a regular-script-style Chinese character typeface";
     longDescription = ''
-      The MOE Standard Kai Font is a kai (regular srcipt) font
-      provided by
-      the Midistry of Education, Republic of China (Taiwan).
-      It currently includes 13,076 Chinese characters.
+        A regular-script-style Chinese character typeface published by the Ministry of Education of the Republic of China (Taiwan). Regular script is also referred to as 楷書, 楷书, kǎishū, 真書, 真书, zhēnshū, 正楷, zhèngkǎi, 楷體, 楷体, kǎitǐ, 正書, 正书, or zhèngshū in Chinese; khải thư in Vietnamese; 楷書, かいしょ, or Kaisho in Japanese.
     '';
     homepage = "http://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=47";
     license = lib.licenses.cc-by-nd-30;
