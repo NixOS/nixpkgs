@@ -15,22 +15,16 @@
   fmt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openimageio";
-  version = "2.5.16.0";
+  version = "2.5.17.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
-    rev = "v${version}";
-    hash = "sha256-hUCwlzQW5mJH5HYPbLWOcupc36nxM12CV0sakZhiGzo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d5LqRcqWj6E9jJYY/Pa5e7/MeuQGMjUo/hMCYRKsKeU=";
   };
-
-  # Workaround broken zlib version detection in CMake < 3.37.
-  postPatch = ''
-    substituteInPlace ./src/cmake/Config.cmake.in \
-      --replace " @ZLIB_VERSION@" ""
-  '';
 
   outputs = [
     "bin"
@@ -73,11 +67,11 @@ stdenv.mkDerivation rec {
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openimageio.org";
     description = "Library and tools for reading and writing images";
-    license = licenses.bsd3;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yzx9 ];
+    platforms = lib.platforms.unix;
   };
-}
+})
