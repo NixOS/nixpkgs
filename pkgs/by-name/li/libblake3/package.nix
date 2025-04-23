@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals useTBB [
+  propagatedBuildInputs = lib.optionals useTBB [
     # 2022.0 crashes on macOS at the moment
     tbb_2021_11
   ];
