@@ -5124,6 +5124,8 @@ self: super: with self; {
 
   flynt = callPackage ../development/python-modules/flynt { };
 
+  fmpy = callPackage ../development/python-modules/fmpy { };
+
   fnllm = callPackage ../development/python-modules/fnllm { };
 
   fnv-hash-fast = callPackage ../development/python-modules/fnv-hash-fast { };
