@@ -10959,6 +10959,11 @@
     github = "jaredmontoya";
     githubId = 49511278;
   };
+  jaroslavpesek = {
+    name = "Jaroslav Pesek";
+    github = "jaroslavpesek";
+    githubId = 81391249;
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
