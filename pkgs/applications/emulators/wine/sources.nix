@@ -96,6 +96,13 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
+
+      # fix for binutils 2.44 from wine 10.2
+      # see https://github.com/NixOS/nixpkgs/issues/399714
+      (pkgs.fetchpatch {
+        url = "https://gitlab.winehq.org/wine/wine/-/merge_requests/7328.patch";
+        hash = "sha256-cRrLZYdFXBBXGjpjoQeAsKi2K4OyrO146aM14fbMVe0=";
+      })
     ];
 
     updateScript = writeShellScript "update-wine-stable" (''
