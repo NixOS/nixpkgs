@@ -263,6 +263,9 @@ stdenv.mkDerivation rec {
       "-DQT_FEATURE_system_sqlite=ON"
       "-DQT_FEATURE_openssl_linked=ON"
       "-DQT_FEATURE_vulkan=ON"
+      # don't leak OS version into the final output
+      # https://bugreports.qt.io/browse/QTBUG-136060
+      "-DCMAKE_SYSTEM_VERSION="
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       "-DQT_FEATURE_sctp=ON"
