@@ -26330,6 +26330,13 @@
     github = "x3rAx";
     githubId = 2268851;
   };
+  x807x = {
+    name = "x807x";
+    email = "s10855168@gmail.com";
+    matrix = "@x807x:matrix.org";
+    github = "x807x";
+    githubId = 86676478;
+  };
   xanderio = {
     name = "Alexander Sieg";
     email = "alex@xanderio.de";
