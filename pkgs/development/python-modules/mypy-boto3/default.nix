@@ -1070,8 +1070,8 @@ rec {
       "sha256-H8fPe/MPZxP4cz/oneQaZK5DPROzJNcgmB64sNulTgs=";
 
   mypy-boto3-qldb-session =
-    buildMypyBoto3Package "qldb-session" "1.37.0"
-      "sha256-WqMrD+uGG7YQIQagu8L5pUOYMNHeneEQCYzkWrIZ+nA=";
+    buildMypyBoto3Package "qldb-session" "1.38.0"
+      "sha256-UKBld+nE46MZiJhlbY3tbiCxILSo/TEjhDW4z4jTdq0=";
 
   mypy-boto3-quicksight =
     buildMypyBoto3Package "quicksight" "1.37.32"
