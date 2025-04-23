@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.14";
+  version = "4.8.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${version}";
-    hash = "sha256-NM60H8Fx0pe4JEF7K8A+1i1MbxKhgab5cGcCD8wl9l8=";
+    hash = "sha256-Eb8ndWtc8TxQGO/7BCa+gU/3SUVPaOvZQBtj7YHT3PA=";
   };
 
   pythonRemoveDeps = [ "pip" ];
