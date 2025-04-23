@@ -26609,6 +26609,7 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from EPEL
+      badPlatforms = lib.platforms.darwin;
     };
   };
 

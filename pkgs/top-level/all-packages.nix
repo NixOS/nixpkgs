@@ -9636,12 +9636,15 @@ with pkgs;
   #
   # Android NDK provides an OpenGL implementation, we can just use that.
   #
-  # On macOS, we use the OpenGL framework. Packages that still need GLX
-  # specifically can pull in libGLX instead. If you have a package that
-  # should work without X11 but it can’t find the library, it may help
-  # to add the path to `NIX_CFLAGS_COMPILE`:
+  # On macOS, the SDK provides the OpenGL framework in `stdenv`.
+  # Packages that still need GLX specifically can pull in `libGLX`
+  # instead. If you have a package that should work without X11 but it
+  # can’t find the library, it may help to add the path to
+  # `$NIX_CFLAGS_COMPILE`:
   #
-  #     -L${libGL}/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries
+  #    preConfigure = ''
+  #      export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
+  #    '';
   #
   # If you still can’t get it working, please don’t hesitate to ping
   # @NixOS/darwin-maintainers to ask an expert to take a look.
@@ -9649,25 +9652,26 @@ with pkgs;
     if stdenv.hostPlatform.useAndroidPrebuilt then
       stdenv
     else if stdenv.hostPlatform.isDarwin then
-      darwin.apple_sdk.frameworks.OpenGL
+      null
     else
       libglvnd;
 
-  # On macOS, we use the OpenGL framework. Packages that use libGLX on
-  # macOS may need to depend on mesa_glu directly if this doesn’t work.
-  libGLU = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk.frameworks.OpenGL else mesa_glu;
+  # On macOS, the SDK provides the OpenGL framework in `stdenv`.
+  # Packages that use `libGLX` on macOS may need to depend on
+  # `mesa_glu` directly if this doesn’t work.
+  libGLU = if stdenv.hostPlatform.isDarwin then null else mesa_glu;
 
-  # libglvnd does not work (yet?) on macOS.
+  # `libglvnd` does not work (yet?) on macOS.
   libGLX = if stdenv.hostPlatform.isDarwin then mesa else libglvnd;
 
-  # On macOS, we use the GLUT framework. Packages that use libGLX on
-  # macOS may need to depend on freeglut directly if this doesn’t work.
-  libglut = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk.frameworks.GLUT else freeglut;
+  # On macOS, the SDK provides the GLUT framework in `stdenv`. Packages
+  # that use `libGLX` on macOS may need to depend on `freeglut`
+  # directly if this doesn’t work.
+  libglut = if stdenv.hostPlatform.isDarwin then null else freeglut;
 
   mesa =
     if stdenv.hostPlatform.isDarwin then
-      callPackage ../development/libraries/mesa/darwin.nix {
-      }
+      callPackage ../development/libraries/mesa/darwin.nix { }
     else
       callPackage ../development/libraries/mesa { };
 
