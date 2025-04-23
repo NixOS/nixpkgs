@@ -120,10 +120,16 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
+        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+        };
 
         patches =
           [
             ./patch/cmake-includedir.patch
+            # patch for musl compatibility
+            ./patch/include-cstdint-full.patch
           ]
           # Fixes a build issue as documented on
           # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073

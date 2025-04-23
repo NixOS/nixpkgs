@@ -1,19 +1,23 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   bash,
+  bison,
   buildGoModule,
   cmake,
   cups,
   curl,
   darwin,
+  dlib,
+  fetchFromGitHub,
+  fetchurl,
+  flex,
   freeipmi,
   go,
   google-cloud-cpp,
   grpc,
   jemalloc,
   json_c,
+  lib,
+  libbacktrace,
   libbpf,
   libcap,
   libelf,
@@ -32,60 +36,55 @@
   overrideSDK,
   pkg-config,
   protobuf,
+  replaceVars,
   snappy,
+  stdenv,
   systemd,
-  withCloud ? false,
+  zlib,
+
   withCloudUi ? false,
   withConnPrometheus ? false,
   withConnPubSub ? false,
   withCups ? false,
-  withDBengine ? true,
+  withDBengine ? false,
   withDebug ? false,
   withEbpf ? false,
   withIpmi ? (stdenv.hostPlatform.isLinux),
+  withLibbacktrace ? true,
+  withNdsudo ? false,
   withNetfilter ? (stdenv.hostPlatform.isLinux),
   withNetworkViewer ? (stdenv.hostPlatform.isLinux),
   withSsl ? true,
   withSystemdJournal ? (stdenv.hostPlatform.isLinux),
-  zlib,
-  withNdsudo ? false,
+  withML ? true,
 }:
 let
   stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "1.47.5";
+  version = "2.4.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash =
-      if withCloudUi then
-        "sha256-+cPYwjxg/+A5bNa517zg9xKEjUa8uPM9WD67tToPH5o="
-      # we delete the v2 GUI after fetching
-      else
-        "sha256-0aiBUkDymmdIT/u1y2PG30QYAvb8Zc4i8ZgjOtlzt+A=";
+    hash = "sha256-egHsWmhnrl8D59gr7uD5hBnleCOI8gVEBGwdO5GSnOg=";
     fetchSubmodules = true;
-
-    # Remove v2 dashboard distributed under NCUL1. Make sure an empty
-    # Makefile.am exists, as autoreconf will get confused otherwise.
-    postFetch = lib.optionalString (!withCloudUi) ''
-      rm -rf $out/src/web/gui/v2/*
-      touch $out/src/web/gui/v2/Makefile.am
-    '';
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    bison
     cmake
-    pkg-config
-    makeWrapper
+    flex
     go
+    makeWrapper
     ninja
+    pkg-config
   ] ++ lib.optionals withCups [ cups.dev ];
+
   # bash is only used to rewrite shebangs
   buildInputs =
     [
@@ -94,8 +93,10 @@ stdenv'.mkDerivation (finalAttrs: {
       jemalloc
       json_c
       libuv
-      zlib
       libyaml
+      lz4
+      protobuf
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
@@ -110,34 +111,44 @@ stdenv'.mkDerivation (finalAttrs: {
       libuuid
       lm_sensors
     ]
-    ++ lib.optionals withCups [ cups ]
-    ++ lib.optionals withDBengine [ lz4 ]
-    ++ lib.optionals withIpmi [ freeipmi ]
-    ++ lib.optionals withNetfilter [
-      libmnl
-      libnetfilter_acct
-    ]
+    ++ lib.optionals withConnPrometheus [ snappy ]
     ++ lib.optionals withConnPubSub [
       google-cloud-cpp
       grpc
     ]
-    ++ lib.optionals withConnPrometheus [ snappy ]
+    ++ lib.optionals withCups [ cups ]
     ++ lib.optionals withEbpf [
-      libelf
       libbpf
+      libelf
     ]
-    ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
-    ++ lib.optionals withSystemdJournal [ systemd ]
-    ++ lib.optionals withSsl [ openssl ];
+    ++ lib.optionals withIpmi [ freeipmi ]
+    ++ lib.optionals withLibbacktrace [ libbacktrace ]
+    ++ lib.optionals withNetfilter [
+      libmnl
+      libnetfilter_acct
+    ]
+    ++ lib.optionals withSsl [ openssl ]
+    ++ lib.optionals withSystemdJournal [ systemd ];
 
-  patches = [
-    # Allow ndsudo to use non-hardcoded `PATH`
-    # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
-    #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
-    ./ndsudo-fix-path.patch
-    # Allow building without non-free v2 dashboard.
-    ./dashboard-v2-removal.patch
-  ];
+  patches =
+    [
+      # Allow ndsudo to use non-hardcoded `PATH`
+      # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+      #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+      ./ndsudo-fix-path.patch
+
+      ./use-local-libbacktrace.patch
+    ]
+    ++ lib.optional withCloudUi (
+      replaceVars ./dashboard-v3-add.patch {
+        # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
+        # last update 03/16/2025 23:56:24
+        dashboardTarball = fetchurl {
+          url = "https://web.archive.org/web/20250316235624/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-Vtw+CbBgqGRenkis0ZR2/TLsoM83NjNA6mbndb95EK8=";
+        };
+      }
+    );
 
   # Guard against unused build-time development inputs in closure. Without
   # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
@@ -146,7 +157,7 @@ stdenv'.mkDerivation (finalAttrs: {
   # We pick zlib.dev as a simple canary package with pkg-config input.
   disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
-  donStrip = withDebug;
+  donStrip = withDebug || withLibbacktrace;
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall =
@@ -177,10 +188,6 @@ stdenv'.mkDerivation (finalAttrs: {
       ${lib.optionalString withNetworkViewer ''
         mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
            $out/libexec/netdata/plugins.d/network-viewer.plugin.org
-      ''}
-      ${lib.optionalString (!withCloudUi) ''
-        rm -rf $out/share/netdata/web/index.html
-        cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
       ''}
       ${lib.optionalString withNdsudo ''
         mv $out/libexec/netdata/plugins.d/ndsudo \
@@ -215,27 +222,29 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail 'set(libconfigdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(libconfigdir_POST "${placeholder "out"}/share/netdata/conf.d")' \
       --replace-fail 'set(cachedir_POST "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(libconfigdir_POST "/var/cache/netdata")' \
       --replace-fail 'set(registrydir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata/registry")' 'set(registrydir_POST "/var/lib/netdata/registry")' \
-      --replace-fail 'set(varlibdir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")'
+      --replace-fail 'set(varlibdir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")' \
+      --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
   '';
 
   cmakeFlags = [
     "-DWEB_DIR=share/netdata/web"
-    (lib.cmakeBool "ENABLE_CLOUD" withCloud)
-    # ACLK is agent cloud link.
-    (lib.cmakeBool "ENABLE_ACLK" withCloud)
-    (lib.cmakeBool "ENABLE_DASHBOARD_V2" withCloudUi)
-    (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
-    (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
-    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
-    (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
-    (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
-    (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
-    (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
+    (lib.cmakeBool "ENABLE_DASHBOARD" withCloudUi)
+    # FIXME uncomment when https://github.com/netdata/netdata/issues/19901#issuecomment-2819701451 resolved
+    (lib.cmakeBool "ENABLE_DBENGINE" true)
+    # (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
     (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
+    (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
+    (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
+    (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
+    (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
+    (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
+    (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
+    (lib.cmakeBool "ENABLE_ML" withML)
     # Suggested by upstream.
     "-G Ninja"
-  ];
+  ] ++ lib.optional withML "-DNETDATA_DLIB_SOURCE_PATH=${dlib.src}";
 
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
@@ -260,7 +269,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-NZ1tg+lvXNgypqmjjb5f7dHH6DIA9VOa4PMM4eq11n0=";
+        vendorHash = "sha256-PgQs3+++iD9Lg8psTBVzF4b+kGJzhV5yNQBkw/+Dqks=";
         doCheck = false;
         proxyVendor = true;
 
@@ -291,6 +300,7 @@ stdenv'.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       mkg20001
+      rhoriguchi
     ];
   };
 })

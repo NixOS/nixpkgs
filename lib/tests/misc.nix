@@ -1357,6 +1357,69 @@ runTests {
     )
   ];
 
+  testTakeEnd =
+    let
+      inherit (lib) takeEnd;
+    in
+    testAllTrue [
+      (
+        takeEnd 0 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        takeEnd 1 [
+          1
+          2
+          3
+        ] == [ 3 ]
+      )
+      (
+        takeEnd 2 [
+          1
+          2
+          3
+        ] == [
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 3 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 4 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (takeEnd 0 [ ] == [ ])
+      (takeEnd 1 [ ] == [ ])
+      (
+        takeEnd (-1) [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (takeEnd (-1) [ ] == [ ])
+    ];
+
   testDrop =
     let
       inherit (lib) drop;

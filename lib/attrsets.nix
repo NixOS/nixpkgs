@@ -301,9 +301,9 @@ rec {
     Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
-    x.a.b == getAttrByPath ["a" "b"] x
+    x.a.b == getAttrFromPath ["a" "b"] x
     # and
-    x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
+    x.${f p}."example.com" == getAttrFromPath [ (f p) "example.com" ] x
     ```
 
     # Inputs

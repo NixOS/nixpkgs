@@ -245,8 +245,7 @@ in
     services.system-config-printer.enable = config.services.printing.enable;
 
     # For BCC's Sharing panel.
-    services.dleyna-renderer.enable = mkDefault true;
-    services.dleyna-server.enable = mkDefault true;
+    services.dleyna.enable = mkDefault true;
     services.gnome.gnome-user-share.enable = mkDefault true;
     services.gnome.rygel.enable = mkDefault true;
 
