@@ -27,6 +27,10 @@ appimageTools.wrapType2 {
     # disable creating a desktop file and icon in the home folder during runtime
     linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
     echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
+
+    # disable auto-updates
+    substituteInPlace $out/resources/app/build/main/main-entry-*.mjs --replace-fail \
+      "userConf.auto_update_disabled" "true"
   '';
 
   extraInstallCommands = ''
