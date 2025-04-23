@@ -422,10 +422,12 @@ lib.makeScope pkgs.newScope (
               { name = "calendar"; }
               {
                 name = "ctype";
-                postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                  # Broken test on aarch64-darwin
-                  rm ext/ctype/tests/lc_ctype_inheritance.phpt
-                '';
+                postPatch =
+                  lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast php.version "8.2")
+                    # Broken test on aarch64-darwin
+                    ''
+                      rm ext/ctype/tests/lc_ctype_inheritance.phpt
+                    '';
               }
               {
                 name = "curl";
