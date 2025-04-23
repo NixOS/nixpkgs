@@ -6,6 +6,7 @@
   kernelModuleMakeFlags,
   kmod,
   pahole,
+  gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
