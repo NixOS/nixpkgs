@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       jfb
       raboof
+      NotAShelf
     ];
     platforms = lib.platforms.linux;
   };
