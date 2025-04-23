@@ -20,7 +20,7 @@
   wayland-scanner,
   rust-bindgen,
 }:
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";
   version = "0.10.4";
 
@@ -28,11 +28,11 @@ llvmPackages.stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O47b1CHCEwUSigjk0Ml3uLhRRxcPC6Phj2cnIlX1Hkg=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-c561GpU2XENILSzk0Zka0qrtXZm7xaq/hiJA4Iv++QI=";
   };
 
@@ -77,10 +77,10 @@ llvmPackages.stdenv.mkDerivation rec {
       makes application forwarding similar to ssh -X feasible.
     '';
     homepage = "https://mstoeckl.com/notes/gsoc/blog.html";
-    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
+    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "waypipe";
   };
-}
+})
