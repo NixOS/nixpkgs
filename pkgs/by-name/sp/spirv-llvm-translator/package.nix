@@ -44,7 +44,7 @@ let
       hash = "sha256-RnGbBHUUGjIBcakQJO4nAm3/oIrQ8nkx+BC8Evw6Jmc=";
     };
     "14" = {
-      version = "14.0.0+unstable-2025-01-28";
+      version = "14.0.11+unstable-2025-01-28";
       rev = "9df26b6af308cb834a4013deb8094f386f29accd";
       hash = "sha256-8VRQwXFbLcYgHtWKs73yuTsy2kkCgYgPqD+W/GPy1BM=";
     };
