@@ -60,19 +60,6 @@ import ../make-test-python.nix (
           ...
         }:
         {
-          # Setup image archives to be imported by rke2
-          systemd.tmpfiles.settings."10-rke2" = {
-            "/var/lib/rancher/rke2/agent/images/rke2-images-core.tar.zst" = {
-              "L+".argument = "${coreImages}";
-            };
-            "/var/lib/rancher/rke2/agent/images/rke2-images-canal.tar.zst" = {
-              "L+".argument = "${canalImages}";
-            };
-            "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
-              "L+".argument = "${helloImage}";
-            };
-          };
-
           # Canal CNI with VXLAN
           networking.firewall.allowedUDPPorts = [ 8472 ];
           networking.firewall.allowedTCPPorts = [
@@ -104,6 +91,11 @@ import ../make-test-python.nix (
               "rke2-snapshot-controller"
               "rke2-snapshot-controller-crd"
               "rke2-snapshot-validation-webhook"
+            ];
+            images = [
+              coreImages
+              canalImages
+              helloImage
             ];
             manifests = {
               canal-config.content = canalConfig;
@@ -146,19 +138,6 @@ import ../make-test-python.nix (
           ...
         }:
         {
-          # Setup image archives to be imported by rke2
-          systemd.tmpfiles.settings."10-rke2" = {
-            "/var/lib/rancher/rke2/agent/images/rke2-images-core.linux-amd64.tar.zst" = {
-              "L+".argument = "${coreImages}";
-            };
-            "/var/lib/rancher/rke2/agent/images/rke2-images-canal.linux-amd64.tar.zst" = {
-              "L+".argument = "${canalImages}";
-            };
-            "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
-              "L+".argument = "${helloImage}";
-            };
-          };
-
           # Canal CNI health checks
           networking.firewall.allowedTCPPorts = [ 9099 ];
           # Canal CNI with VXLAN
@@ -176,6 +155,11 @@ import ../make-test-python.nix (
             serverAddr = "https://${nodes.server.networking.primaryIPAddress}:9345";
             nodeIP = config.networking.primaryIPAddress;
             manifests.canal-config.content = canalConfig;
+            images = [
+              coreImages
+              canalImages
+              helloImage
+            ];
           };
         };
     };

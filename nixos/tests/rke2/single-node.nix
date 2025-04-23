@@ -45,19 +45,6 @@ import ../make-test-python.nix (
         ...
       }:
       {
-        # Setup image archives to be imported by rke2
-        systemd.tmpfiles.settings."10-rke2" = {
-          "/var/lib/rancher/rke2/agent/images/rke2-images-core.tar.zst" = {
-            "L+".argument = "${coreImages}";
-          };
-          "/var/lib/rancher/rke2/agent/images/rke2-images-canal.tar.zst" = {
-            "L+".argument = "${canalImages}";
-          };
-          "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
-            "L+".argument = "${helloImage}";
-          };
-        };
-
         # RKE2 needs more resources than the default
         virtualisation.cores = 4;
         virtualisation.memorySize = 4096;
@@ -77,6 +64,11 @@ import ../make-test-python.nix (
             "rke2-snapshot-controller"
             "rke2-snapshot-controller-crd"
             "rke2-snapshot-validation-webhook"
+          ];
+          images = [
+            coreImages
+            canalImages
+            helloImage
           ];
           manifests = {
             test-job.content = {

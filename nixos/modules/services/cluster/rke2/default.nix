@@ -7,6 +7,7 @@
 let
   cfg = config.services.rke2;
   manifestDir = "/var/lib/rancher/rke2/server/manifests";
+  imageDir = "/var/lib/rancher/rke2/agent/images";
   # Manifests need a json suffix to be respected by rke2
   mkManifestTarget = name: if (lib.hasSuffix ".json" name) then name else name + ".json";
 
@@ -369,6 +370,28 @@ in
         for further information.
       '';
     };
+
+    images = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = [ ];
+      example = lib.literalExpression ''
+        [
+          (pkgs.dockerTools.pullImage {
+            imageName = "nginx";
+            imageDigest = "sha256:4ff102c5d78d254a6f0da062b3cf39eaf07f01eec0927fd21e219d0af8bc0591";
+            hash = "sha256-Fh9hWQWgY4g+Cu/0iER4cXAMvCc0JNiDwGCPa+V/FvA=";
+            finalImageTag = "1.27.4-alpine";
+          })
+
+          config.services.rke2.package.images-core-linux-amd64-tar-zst
+          config.services.rke2.package.images-canal-linux-amd64-tar-zst
+        ]
+      '';
+      description = ''
+        List of derivations that provide container images. All images are automatically imported
+        by RKE2 during startup.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -425,8 +448,16 @@ in
             "L+".argument = "${manifest.source}";
           };
         };
+        # Make a systemd-tmpfiles rule to link a container image derivation
+        mkImageRule = image: {
+          name = "${imageDir}/${image.name}";
+          value = {
+            "L+".argument = "${image}";
+          };
+        };
       in
-      (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests);
+      (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
+      // (builtins.listToAttrs (map mkImageRule cfg.images));
 
     systemd.services."rke2-${cfg.role}" = {
       description = "Rancher Kubernetes Engine v2";
