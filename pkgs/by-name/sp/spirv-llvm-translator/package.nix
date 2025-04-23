@@ -34,9 +34,9 @@ let
       hash = "sha256-Ba4GZS7Rc93Fphj2xaBZ3AqwXvxB9UU0gzPNoDEoaQM=";
     };
     "16" = rec {
-      version = "16.0.0";
+      version = "16.0.11";
       rev = "v${version}";
-      hash = "sha256-EUabcYqSjXshbPmcs1DRLvCSL1nd9rEdpqELBrItCW8=";
+      hash = "sha256-PI4cT/PGqpaF5SysOTrEE4D+OcIUsIOMzww4CRPtwBQ=";
     };
     "15" = rec {
       version = "15.0.13";
@@ -64,30 +64,14 @@ stdenv.mkDerivation {
     inherit (branch) rev hash;
   };
 
-  patches =
-    lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "17") [
-      # Fixes build after spirv-headers breaking change
-      (fetchpatch {
-        url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";
-        excludes = [ "spirv-headers-tag.conf" ];
-        hash = "sha256-17JJG8eCFVphElY5fVT/79hj0bByWxo8mVp1ZNjQk/M=";
-      })
-    ]
-    ++ lib.optionals (llvmMajor == "16") [
-      # Fixes builds that link against external LLVM dynamic library
-      (fetchpatch {
-        url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/f3b9b604d7eda18d0d1029d94a6eebd33aa3a3fe.patch";
-        hash = "sha256-opDjyZcy7O4wcSfm/A51NCIiDyIvbcmbv9ns1njdJbc=";
-      })
-    ]
-    ++ lib.optionals (llvmMajor == "14") [
-      (fetchpatch {
-        # tries to install llvm-spirv into llvm nix store path
-        url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/cce9a2f130070d799000cac42fe24789d2b777ab.patch";
-        revert = true;
-        hash = "sha256-GbFacttZRDCgA0jkUoFA4/B3EDn3etweKvM09OwICJ8=";
-      })
-    ];
+  patches = lib.optionals (llvmMajor == "14") [
+    (fetchpatch {
+      # tries to install llvm-spirv into llvm nix store path
+      url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/cce9a2f130070d799000cac42fe24789d2b777ab.patch";
+      revert = true;
+      hash = "sha256-GbFacttZRDCgA0jkUoFA4/B3EDn3etweKvM09OwICJ8=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
