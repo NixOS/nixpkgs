@@ -15450,6 +15450,8 @@ self: super: with self; {
 
   scs = callPackage ../development/python-modules/scs { };
 
+  scspell = callPackage ../development/python-modules/scspell { };
+
   sdds = callPackage ../development/python-modules/sdds { };
 
   sdjson = callPackage ../development/python-modules/sdjson { };
