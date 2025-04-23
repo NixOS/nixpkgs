@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   curl,
-  darwin,
+  apple-sdk,
   fftwSinglePrec,
   netcdf,
   pcre,
@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE =
       lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration "
       + lib.optionalString (
-        stdenv.hostPlatform.isDarwin
-        && lib.versionOlder (darwin.apple_sdk.MacOSX-SDK.version or darwin.apple_sdk.sdk.version) "13.3"
+        stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "13.3"
       ) "-D__LAPACK_int=int";
   };
 
