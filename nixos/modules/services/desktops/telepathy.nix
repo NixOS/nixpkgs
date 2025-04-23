@@ -41,6 +41,7 @@
     # Enable runtime optional telepathy in gnome-shell
     services.xserver.desktopManager.gnome.sessionPath = with pkgs; [
       telepathy-glib
+      telepathy-logger
     ];
   };
 
