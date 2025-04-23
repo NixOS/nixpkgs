@@ -502,8 +502,8 @@ rec {
       "sha256-EG/qlpfpGaRJJhYPUACHM+TlHSwY+bYpgG5VxBAYTh0=";
 
   mypy-boto3-emr-containers =
-    buildMypyBoto3Package "emr-containers" "1.37.0"
-      "sha256-qBDRNmLpGei/Vwdl6FViIL6qLphVQfJwBpDvauDP1Ns=";
+    buildMypyBoto3Package "emr-containers" "1.38.0"
+      "sha256-Lr2cpSBkWl30iIS3fc4qiOWBTbIu5L0MMW5O9Au+COM=";
 
   mypy-boto3-emr-serverless =
     buildMypyBoto3Package "emr-serverless" "1.37.0"
