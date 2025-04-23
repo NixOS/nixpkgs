@@ -1434,6 +1434,6 @@ rec {
       "sha256-XF/GzodpRAVz5IZaP2tQPng34aXFvF0XwRqdzabMHIk=";
 
   mypy-boto3-xray =
-    buildMypyBoto3Package "xray" "1.37.0"
-      "sha256-nJhGLgVx7bYXpX5iizDXyyGOSUCF0qf3JcsV6NNHrXw=";
+    buildMypyBoto3Package "xray" "1.38.0"
+      "sha256-E9rdQr458LPhOdPToAIcJOYX1n64sNCdrD19d5WzA4Q=";
 }
