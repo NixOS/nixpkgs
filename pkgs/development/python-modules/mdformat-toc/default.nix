@@ -38,5 +38,6 @@ buildPythonPackage rec {
       aldoborrero
       polarmutex
     ];
+    broken = true; # broken test due to changes in mdformat; compare https://github.com/KyleKing/mdformat-admon/issues/25
   };
 }
