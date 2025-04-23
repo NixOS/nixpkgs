@@ -1034,8 +1034,8 @@ rec {
       "sha256-ngtpdcngtRFMnEHoH/42IvNvmWmD+Y0gYDlZuKgN0K4=";
 
   mypy-boto3-pinpoint-email =
-    buildMypyBoto3Package "pinpoint-email" "1.37.0"
-      "sha256-w/oYhtW5+iYRpyFEPshdKn80dyLIicq5/HhvNP/Ne0g=";
+    buildMypyBoto3Package "pinpoint-email" "1.38.0"
+      "sha256-blXjXeKjdoQvCyux7RjEtZT+LaK/Hs4PhEHnede3hOk=";
 
   mypy-boto3-pinpoint-sms-voice =
     buildMypyBoto3Package "pinpoint-sms-voice" "1.37.0"
