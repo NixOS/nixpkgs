@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
+  fetchurl,
   pkg-config,
   python3,
   freetype,
@@ -12,7 +12,7 @@
   autoreconfHook,
   versionCheckHook,
   testers,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,12 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]; # $out contains all the config
 
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "fontconfig";
-    repo = "fontconfig";
-    tag = finalAttrs.version;
-    hash = "sha256-R2y5H4JbtpCLRW7BvLXj5H6NrzVZf6+DsaQCuIhibzM=";
+  # GitLab repositrory does not include pre-generated man pages.
+  # ref: https://github.com/NixOS/nixpkgs/pull/401037#discussion_r2055430206
+  src = fetchurl {
+    url = "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/${finalAttrs.version}/fontconfig-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FluP0qEZhkyHRksjOYbEobwJ77CcZd4cpAzB6F/7d+I=";
   };
 
   nativeBuildInputs = [
@@ -89,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
+    # We don't keep section 3 of the manpages, as they are quite large and
+    # probably not so useful.
+    rm -r $bin/share/man/man3
   '';
 
   nativeInstallCheckInputs = [
@@ -105,7 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig.git";
+    };
   };
 
   meta = with lib; {
