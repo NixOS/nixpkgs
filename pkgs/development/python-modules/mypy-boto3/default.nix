@@ -1046,8 +1046,8 @@ rec {
       "sha256-9J+o3TVTM6XAlCl8jXiWrF5LHhHMBS08RM6SdM6izMw=";
 
   mypy-boto3-pipes =
-    buildMypyBoto3Package "pipes" "1.37.0"
-      "sha256-/Wr+oP8wfgSoeynyZDJ0fTS0T2oeBXR8DctO25S7qPU=";
+    buildMypyBoto3Package "pipes" "1.38.0"
+      "sha256-q8MNFH9lbM6e+F98rBkPkmZUnAAm8Ex4ePQ6GRrlorg=";
 
   mypy-boto3-polly =
     buildMypyBoto3Package "polly" "1.37.21"
