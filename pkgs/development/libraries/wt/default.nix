@@ -80,7 +80,7 @@ let
 in
 {
   wt4 = generic {
-    version = "4.11.3";
-    sha256 = "sha256-YEzuif+8DACSVu2U4uaLncvE1WaVonJVnCf2rAc/sUc=";
+    version = "4.11.4";
+    sha256 = "sha256-ynmOUONHo8VTq8nmD+/SpDPR7bHILw8mArvY2DZJ5Hk=";
   };
 }
