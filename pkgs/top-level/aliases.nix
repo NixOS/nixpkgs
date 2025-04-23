@@ -1287,6 +1287,9 @@ mapAliases {
 
   nixosTest = testers.nixosTest; # Added 2022-05-05
   nmap-unfree = throw "'nmap-unfree' has been renamed to/replaced by 'nmap'"; # Converted to throw 2024-10-17
+  nodejs_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed"; # Added 2025-04-23
+  nodejs-slim_18 = nodejs_18; # Added 2025-04-23
+  corepack_18 = nodejs_18; # Added 2025-04-23
   nodejs-18_x = nodejs_18; # Added 2022-11-06
   nodejs-slim-18_x = nodejs-slim_18; # Added 2022-11-06
   nomad_1_4 = throw "nomad_1_4 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade"; # Added 2025-02-02
