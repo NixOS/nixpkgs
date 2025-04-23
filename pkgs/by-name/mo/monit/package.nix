@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    sha256 = "sha256-l2DDqihhH8FDhmZUCs4A1XKk8pdCo6VG1lYodEr19HQ=";
+    hash = "sha256-6VIqeLlU6u6TPEgQ23uZo2+UHgIsorAVcBhdTOQdjxI=";
   };
 
   nativeBuildInputs =
