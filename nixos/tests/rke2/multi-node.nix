@@ -31,46 +31,21 @@ import ../make-test-python.nix (
         ];
       };
     };
-    # A daemonset that responds 'hello' on port 8000
-    networkTestDaemonset = pkgs.writeText "test.yml" ''
-      apiVersion: apps/v1
-      kind: DaemonSet
-      metadata:
-        name: test
-        labels:
-          name: test
-      spec:
-        selector:
-          matchLabels:
-            name: test
-        template:
-          metadata:
-            labels:
-              name: test
-          spec:
-            containers:
-            - name: test
-              image: test.local/hello:local
-              imagePullPolicy: Never
-              resources:
-                limits:
-                  memory: 20Mi
-              command: ["socat", "TCP4-LISTEN:8000,fork", "EXEC:echo hello"]
-    '';
     tokenFile = pkgs.writeText "token" "p@s$w0rd";
     agentTokenFile = pkgs.writeText "agent-token" "agentP@s$w0rd";
     # Let flannel use eth1 to enable inter-node communication in tests
-    canalConfig = pkgs.writeText "rke2-canal-config.yaml" ''
-      apiVersion: helm.cattle.io/v1
-      kind: HelmChartConfig
-      metadata:
-        name: rke2-canal
-        namespace: kube-system
-      spec:
-        valuesContent: |-
-          flannel:
-            iface: "eth1"
-    '';
+    canalConfig = {
+      apiVersion = "helm.cattle.io/v1";
+      kind = "HelmChartConfig";
+      metadata = {
+        name = "rke2-canal";
+        namespace = "kube-system";
+      };
+      # spec.valuesContent needs to a string, either json or yaml
+      spec.valuesContent = builtins.toJSON {
+        flannel.iface = "eth1";
+      };
+    };
   in
   {
     name = "${rke2.name}-multi-node";
@@ -95,10 +70,6 @@ import ../make-test-python.nix (
             };
             "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
               "L+".argument = "${helloImage}";
-            };
-            # Copy the canal config so that rke2 can write the remaining default values to it
-            "/var/lib/rancher/rke2/server/manifests/rke2-canal-config.yaml" = {
-              "C".argument = "${canalConfig}";
             };
           };
 
@@ -134,6 +105,36 @@ import ../make-test-python.nix (
               "rke2-snapshot-controller-crd"
               "rke2-snapshot-validation-webhook"
             ];
+            manifests = {
+              canal-config.content = canalConfig;
+              # A daemonset that responds 'hello' on port 8000
+              network-test.content = {
+                apiVersion = "apps/v1";
+                kind = "DaemonSet";
+                metadata = {
+                  name = "test";
+                  labels.name = "test";
+                };
+                spec = {
+                  selector.matchLabels.name = "test";
+                  template = {
+                    metadata.labels.name = "test";
+                    spec.containers = [
+                      {
+                        name = "hello";
+                        image = "${helloImage.imageName}:${helloImage.imageTag}";
+                        imagePullPolicy = "Never";
+                        command = [
+                          "socat"
+                          "TCP4-LISTEN:8000,fork"
+                          "EXEC:echo hello"
+                        ];
+                      }
+                    ];
+                  };
+                };
+              };
+            };
           };
         };
 
@@ -156,9 +157,6 @@ import ../make-test-python.nix (
             "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
               "L+".argument = "${helloImage}";
             };
-            "/var/lib/rancher/rke2/server/manifests/rke2-canal-config.yaml" = {
-              "C".argument = "${canalConfig}";
-            };
           };
 
           # Canal CNI health checks
@@ -177,6 +175,7 @@ import ../make-test-python.nix (
             tokenFile = agentTokenFile;
             serverAddr = "https://${nodes.server.networking.primaryIPAddress}:9345";
             nodeIP = config.networking.primaryIPAddress;
+            manifests.canal-config.content = canalConfig;
           };
         };
     };
@@ -199,8 +198,7 @@ import ../make-test-python.nix (
         server.succeed("${kubectl} cluster-info")
         server.wait_until_succeeds("${kubectl} get serviceaccount default")
 
-        # Now create a pod on each node via a daemonset and verify they can talk to each other.
-        server.succeed("${kubectl} apply -f ${networkTestDaemonset}")
+        # Now verify that each daemonset pod can talk to each other.
         server.wait_until_succeeds(
             f'[ "$(${kubectl} get ds test -o json | ${jq} .status.numberReady)" -eq {len(machines)} ]'
         )
@@ -217,9 +215,9 @@ import ../make-test-python.nix (
             server.wait_until_succeeds(f"ping -c 1 {pod_ip}", timeout=5)
             agent.wait_until_succeeds(f"ping -c 1 {pod_ip}", timeout=5)
             # Verify the server can exec into the pod
-            # for pod in pods:
-            #     resp = server.succeed(f"${kubectl} exec {pod} -- socat TCP:{pod_ip}:8000 -")
-            #     assert resp.strip() == "hello", f"Unexpected response from hello daemonset: {resp.strip()}"
+            for pod in pods:
+                resp = server.succeed(f"${kubectl} exec {pod} -- socat TCP:{pod_ip}:8000 -").strip()
+                assert resp == "hello", f"Unexpected response from hello daemonset: {resp}"
       '';
   }
 )

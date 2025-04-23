@@ -6,6 +6,74 @@
 }:
 let
   cfg = config.services.rke2;
+  manifestDir = "/var/lib/rancher/rke2/server/manifests";
+  # Manifests need a json suffix to be respected by rke2
+  mkManifestTarget = name: if (lib.hasSuffix ".json" name) then name else name + ".json";
+
+  manifestModule = lib.types.submodule (
+    {
+      name,
+      config,
+      options,
+      ...
+    }:
+    {
+      options = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether this manifest file should be generated.";
+        };
+
+        target = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          example = "my-manifest.json";
+          description = ''
+            Name of the symlink (relative to {file}`${manifestDir}`). Defaults to the attribute
+            name with a `.json` suffix. Target names should avoid `.yaml` endings, as RKE2 tries
+            to open all YAML manifests with write permissions during startup, which will not work
+            with generated files in the Nix store.
+          '';
+        };
+
+        content = lib.mkOption {
+          type = with lib.types; nullOr (either attrs (listOf attrs));
+          default = null;
+          description = ''
+            Content of the manifest file. A list of attribute sets will generate multiple objects
+            in a single manifest file.
+          '';
+        };
+
+        source = lib.mkOption {
+          type = lib.types.path;
+          example = lib.literalExpression "./manifests/app.yaml";
+          description = ''
+            Path of the source manifest file. This will override the `content` option.
+          '';
+        };
+      };
+
+      config = {
+        target = lib.mkDefault (mkManifestTarget name);
+        source = lib.mkIf (config.content != null) (
+          let
+            name' = "rke2-manifest-" + builtins.baseNameOf name;
+            mkSource =
+              content:
+              builtins.toFile name' (
+                builtins.toJSON {
+                  apiVersion = "v1";
+                  kind = "List";
+                  items = lib.toList content;
+                }
+              );
+          in
+          lib.mkDerivedConfig options.content mkSource
+        );
+      };
+    }
+  );
 in
 {
   imports = [ ];
@@ -212,6 +280,95 @@ in
         HOME = "/root";
       };
     };
+
+    manifests = lib.mkOption {
+      type = lib.types.attrsOf manifestModule;
+      default = { };
+      example = lib.literalExpression ''
+        {
+          deployment.source = ../manifests/deployment.yaml;
+          my-service = {
+            enable = false;
+            target = "app-service.yaml";
+            content = {
+              apiVersion = "v1";
+              kind = "Service";
+              metadata = {
+                name = "app-service";
+              };
+              spec = {
+                selector = {
+                  "app.kubernetes.io/name" = "MyApp";
+                };
+                ports = [
+                  {
+                    name = "name-of-service-port";
+                    protocol = "TCP";
+                    port = 80;
+                    targetPort = "http-web-svc";
+                  }
+                ];
+              };
+            };
+          };
+
+          nginx.content = [
+            {
+              apiVersion = "v1";
+              kind = "Pod";
+              metadata = {
+                name = "nginx";
+                labels = {
+                  "app.kubernetes.io/name" = "MyApp";
+                };
+              };
+              spec = {
+                containers = [
+                  {
+                    name = "nginx";
+                    image = "nginx:1.14.2";
+                    ports = [
+                      {
+                        containerPort = 80;
+                        name = "http-web-svc";
+                      }
+                    ];
+                  }
+                ];
+              };
+            }
+            {
+              apiVersion = "v1";
+              kind = "Service";
+              metadata = {
+                name = "nginx-service";
+              };
+              spec = {
+                selector = {
+                  "app.kubernetes.io/name" = "MyApp";
+                };
+                ports = [
+                  {
+                    name = "name-of-service-port";
+                    protocol = "TCP";
+                    port = 80;
+                    targetPort = "http-web-svc";
+                  }
+                ];
+              };
+            }
+          ];
+        };
+      '';
+      description = ''
+        Auto-deploying manifests (AddOns) that are automatically deployed to Kubernetes in a manner
+        similar to `kubectl apply`. Note that removig manifests will not remove or otherwise modify
+        the resources it created. Use the the `--disable` flag or disable AddOns in the config file
+        to delete/disable AddOns. See the
+        [auto-deploying manifests docs](https://docs.rke2.io/advanced#auto-deploying-manifests)
+        for further information.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -257,6 +414,19 @@ in
       "kernel.panic" = 10;
       "kernel.panic_on_oops" = 1;
     };
+
+    systemd.tmpfiles.settings."10-rke2" =
+      let
+        enabledManifests = lib.filterAttrs (_: v: v.enable) cfg.manifests;
+        # Make a systemd-tmpfiles rule to link a manifest file
+        mkManifestRule = manifest: {
+          name = "${manifestDir}/${manifest.target}";
+          value = {
+            "L+".argument = "${manifest.source}";
+          };
+        };
+      in
+      (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests);
 
     systemd.services."rke2-${cfg.role}" = {
       description = "Rancher Kubernetes Engine v2";
