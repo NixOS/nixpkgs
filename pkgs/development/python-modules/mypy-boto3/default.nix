@@ -1330,8 +1330,8 @@ rec {
       "sha256-sf4N+fCsuoJtLnpRzAj0Ze9H5szFig0d+1XbO8IoCpE=";
 
   mypy-boto3-sts =
-    buildMypyBoto3Package "sts" "1.37.0"
-      "sha256-SnXlBwReZAM7px6zEif1iY+nRFsnnrWNRf2SDZW+yqA=";
+    buildMypyBoto3Package "sts" "1.38.0"
+      "sha256-FDqW8GvRfsS7sSDgS2XmRstDReLQ1MPFlviqBFjRJwc=";
 
   mypy-boto3-support =
     buildMypyBoto3Package "support" "1.37.0"
