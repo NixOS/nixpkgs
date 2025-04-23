@@ -14,6 +14,7 @@
   tmux,
   util-linux,
   xdg-utils,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D fzf-git.sh $out/share/${pname}/fzf-git.sh
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/junegunn/fzf-git.sh";
