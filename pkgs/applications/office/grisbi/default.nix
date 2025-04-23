@@ -1,38 +1,44 @@
 {
-  fetchurl,
+  fetchFromGitHub,
   lib,
   stdenv,
   gtk,
   pkg-config,
   libgsf,
   libofx,
+  autoreconfHook,
   intltool,
   wrapGAppsHook3,
-  libsoup_2_4,
   adwaita-icon-theme,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grisbi";
-  version = "2.0.5";
+  version = "3.0.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-vTrbq/xLTfwF7/YtKzZFiiSw8A0HzzWin2ry8gPHej8=";
+  src = fetchFromGitHub {
+    owner = "grisbi";
+    repo = "grisbi";
+    tag = "upstream_version_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-3E57M/XE4xyo3ppVceDA4OFDnVicosCY8ikE2gDJoUQ=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
     intltool
+    autoreconfHook
   ];
+
   buildInputs = [
     gtk
     libgsf
     libofx
-    libsoup_2_4
     adwaita-icon-theme
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Personnal accounting application";
@@ -50,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;
   };
-}
+})
