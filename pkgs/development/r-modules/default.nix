@@ -1940,6 +1940,14 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    AneuFinder = old.AneuFinder.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace src/utility.cpp src/densities.cpp src/loghmm.cpp src/scalehmm.cpp \
+          --replace-fail "Calloc(" "R_Calloc(" \
+          --replace-fail "Free(" "R_Free("
+      '';
+    });
+
     b64 = old.b64.overrideAttrs (attrs: {
       nativeBuildInputs =
         with pkgs;
