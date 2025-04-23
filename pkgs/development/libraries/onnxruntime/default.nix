@@ -201,6 +201,7 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
   ] ++ lib.optionals openvinoSupport [
     (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
+    (lib.cmakeFeature "onnxruntime_USE_OPENVINO_AUTO" (if effectiveStdenv.hostPlatform.system == "x86_64-linux" then "NPU,GPU,CPU" else "GPU"))
     (lib.cmakeBool "onnxruntime_USE_OPENVINO_GPU" true)
     (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
     (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
