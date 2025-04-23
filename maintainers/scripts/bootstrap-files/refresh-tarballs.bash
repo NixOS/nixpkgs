@@ -97,6 +97,7 @@ CROSS_TARGETS=(
     riscv64-unknown-linux-gnu
     s390x-unknown-linux-gnu
     x86_64-unknown-freebsd
+    loongarch64-unknown-linux-gnu
 )
 
 is_cross() {
