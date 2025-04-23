@@ -1066,8 +1066,8 @@ rec {
       "sha256-2atVs2RwoZ97crB/mmjk9S1X23CClMHkJF/Q3/UmrSs=";
 
   mypy-boto3-qldb =
-    buildMypyBoto3Package "qldb" "1.37.0"
-      "sha256-CE6/prrf6ZCoWTG5aPejO1Bz+FIFBeqYDS21UwMfmPM=";
+    buildMypyBoto3Package "qldb" "1.38.0"
+      "sha256-H8fPe/MPZxP4cz/oneQaZK5DPROzJNcgmB64sNulTgs=";
 
   mypy-boto3-qldb-session =
     buildMypyBoto3Package "qldb-session" "1.37.0"
