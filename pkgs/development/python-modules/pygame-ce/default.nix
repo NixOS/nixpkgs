@@ -126,6 +126,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
   '';
 
   checkPhase = ''
