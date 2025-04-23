@@ -4,6 +4,7 @@
   python3,
   plugins ? _ps: [ ],
   nixosTests,
+  nix-update-script,
 }:
 let
   py = python3.override {
@@ -112,6 +113,7 @@ py.pkgs.buildPythonApplication rec {
       netbox = nixosTests.netbox_4_2;
       inherit (nixosTests) netbox-upgrade;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
