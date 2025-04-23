@@ -2518,6 +2518,7 @@
   };
   awwpotato = {
     email = "awwpotato@voidq.com";
+    matrix = "@awwpotato:envs.net";
     github = "awwpotato";
     githubId = 153149335;
     name = "awwpotato";
@@ -8488,6 +8489,12 @@
     githubId = 12715461;
     name = "Anders Bo Rasmussen";
   };
+  fvckgrimm = {
+    email = "nixpkgs@grimm.wtf";
+    github = "fvckgrimm";
+    githubId = 55907409;
+    name = "Grimm";
+  };
   fwc = {
     github = "fwc";
     githubId = 29337229;
@@ -13893,12 +13900,6 @@
     github = "linuxissuper";
     githubId = 74221543;
     name = "Moritz Goltdammer";
-  };
-  linuxmobile = {
-    email = "bdiez19@gmail.com";
-    github = "linuxmobile";
-    githubId = 10554636;
-    name = "Braian A. Diez";
   };
   linuxwhata = {
     email = "linuxwhata@qq.com";
@@ -26322,6 +26323,13 @@
     email = "nix@x3ro.dev";
     github = "x3rAx";
     githubId = 2268851;
+  };
+  x807x = {
+    name = "x807x";
+    email = "s10855168@gmail.com";
+    matrix = "@x807x:matrix.org";
+    github = "x807x";
+    githubId = 86676478;
   };
   xanderio = {
     name = "Alexander Sieg";
