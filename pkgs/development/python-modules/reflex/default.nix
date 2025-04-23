@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.7";
+  version = "0.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-27sgU9ugSkStDOg64W1RgiqmlbOzrdxg7kz2AztfERA=";
+    hash = "sha256-/Kf1V1goGaoYarhJ9wlZ2lf6e3BUH/F7UJqoPEnMnk0=";
   };
 
   # 'rich' is also somehow checked when building the wheel,

@@ -138,8 +138,8 @@ rec {
       "sha256-4eY2gziQLvX2t39e201UitkV/Cs0E2RSP4yAG6/OdbI=";
 
   mypy-boto3-arc-zonal-shift =
-    buildMypyBoto3Package "arc-zonal-shift" "1.37.21"
-      "sha256-m88NXN/OxX65E92CnQoIZ9+Uq/D1idXzq3NvYQqEilM=";
+    buildMypyBoto3Package "arc-zonal-shift" "1.37.38"
+      "sha256-tCBeOSdgTbAYXxRfA9mH7ON5aAeXxbz3jNuRRoNxj5Q=";
 
   mypy-boto3-athena =
     buildMypyBoto3Package "athena" "1.37.0"
@@ -178,8 +178,8 @@ rec {
       "sha256-qGK4daMp3zODuppGz335Or5hpggK6uTkbQqfXOKq6eM=";
 
   mypy-boto3-budgets =
-    buildMypyBoto3Package "budgets" "1.37.0"
-      "sha256-M1WWs/HMcN0L9qK2eu4x+JmZsvbEbmxZzQBkjU5gfh4=";
+    buildMypyBoto3Package "budgets" "1.37.38"
+      "sha256-WdJfpMdYkmqNyh+YDnMJZ+q0gUC83e/L9lEnHsCQfrk=";
 
   mypy-boto3-ce =
     buildMypyBoto3Package "ce" "1.37.30"
@@ -534,8 +534,8 @@ rec {
       "sha256-MNUVaGlc2+UUEePFnslKpti//rJddHW4NZ8yZdOuQBU=";
 
   mypy-boto3-firehose =
-    buildMypyBoto3Package "firehose" "1.37.0"
-      "sha256-+OaeV4txp25XN9UB9GSLc9me9Isha918q2Hn3gyAPHM=";
+    buildMypyBoto3Package "firehose" "1.37.38"
+      "sha256-yJ0qwf+3vVS7l4tXqCPC44vvCTXJrDDQ5q5cArRSjqM=";
 
   mypy-boto3-fis =
     buildMypyBoto3Package "fis" "1.37.0"
@@ -890,8 +890,8 @@ rec {
       "sha256-g/KoroOmWZgWPfC0HMgLGQrGpr9QWEirTL3S9t7iMjs=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.37.21"
-      "sha256-SssQmTozr5f/uwsbwmMZpkXKG4SWG43IkEmehVG53Lw=";
+    buildMypyBoto3Package "mediatailor" "1.37.38"
+      "sha256-TobCXyGJhfpcRO8s6n6tl/gXxEHo4m8DXR5k1IkzWdw=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.37.0"
