@@ -7,14 +7,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "reddit-tui";
-  version = "0.3.4";
+  version = "0.3.5";
   src = fetchFromGitHub {
     owner = "tonymajestro";
     repo = "reddit-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FlGprSbt1/jTRe2p/aXt5f5aZAxnQlb6M70wvUdE9qk=";
+    hash = "sha256-M6GYfsKKvqVlDzEndaX92Zo5wwqVgrYGUKtbs94Krz4=";
   };
-  vendorHash = "sha256-H2ukIIi30b8kGOjESXJGv/VW5pPgfxG2c3H6S4jRAA4=";
+  vendorHash = "sha256-Yqo80adzA9gtSD3qzM+fObzRt3WbcMATQef0g7/z2Dw=";
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
