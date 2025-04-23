@@ -127,6 +127,9 @@ py.pkgs.buildPythonApplication rec {
     description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
     mainProgram = "netbox";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "Netbox version ${version} is EOL; please upgrade by following the current release notes instructions."
+    ];
     maintainers = with lib.maintainers; [
       minijackson
       raitobezarius
