@@ -17,6 +17,7 @@
   python3,
   # Misc dependencies
   code-minimap,
+  dailies,
   dasht,
   deno,
   direnv,
@@ -888,6 +889,12 @@ in
       patchShebangs .
       ./install.sh
     '';
+  };
+
+  dailies-nvim = super.dailies-nvim.overrideAttrs {
+    runtimeDeps = [
+      dailies
+    ];
   };
 
   darkearth-nvim = super.darkearth-nvim.overrideAttrs {

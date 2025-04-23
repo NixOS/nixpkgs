@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     desktop-file-utils # for update-desktop-database
+    gtk4 # for gtk4-update-icon-cache
     shared-mime-info # for update-mime-database
     vala
   ];
@@ -69,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     mkdir -p $out/share/gsettings-schemas
-    cp -r $lib/share/gsettings-schemas/clapper-unwrapped-$version $out/share/gsettings-schemas/clapper-$version
+    # alias clapper-unwrapped schemas to also provide clapper schemas.
+    # the precise schema patch can vary based on host platform.
+    schemas=$(basename $lib/share/gsettings-schemas/clapper-unwrapped-*)
+    cp -r $lib/share/gsettings-schemas/$schemas $out/share/gsettings-schemas/''${schemas/clapper-unwrapped-/clapper-}
   '';
 
   meta = {
