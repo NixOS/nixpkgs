@@ -16285,9 +16285,7 @@ with pkgs;
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
-  vengi-tools = darwin.apple_sdk_11_0.callPackage ../applications/graphics/vengi-tools {
-    inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
-  };
+  vengi-tools = callPackage ../applications/graphics/vengi-tools { };
 
   veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
 
