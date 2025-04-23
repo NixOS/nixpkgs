@@ -15028,6 +15028,17 @@
     githubId = 3139724;
     name = "Matteo Pacini";
   };
+  mattfield = {
+    email = "matt@mild.systems";
+    github = "mattfield";
+    githubId = 686826;
+    name = "Matt Field";
+    keys = [
+      {
+        fingerprint = "8BEE 1295 D9EC 9560 0273  7E57 45B8 21B5 CB29 C07A";
+      }
+    ];
+  };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
     github = "matthewbauer";
