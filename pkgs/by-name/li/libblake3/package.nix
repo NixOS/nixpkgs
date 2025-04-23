@@ -5,18 +5,23 @@
   fetchFromGitHub,
   tbb_2021_11,
 
-  useTBB ? true,
+  # Until we have a release with
+  # https://github.com/BLAKE3-team/BLAKE3/pull/461 and similar, or those
+  # PRs are patched onto this current release. Even then, I think we
+  # still need to disable for MinGW build because
+  # https://github.com/BLAKE3-team/BLAKE3/issues/467
+  useTBB ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
-  version = "1.8.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
     tag = finalAttrs.version;
-    hash = "sha256-IABVErXWYQFXZcwsFKfQhm3ox7UZUcW5uzVrGwsSp94=";
+    hash = "sha256-Krh0yVNZKL6Mb0McqWTIMNownsgM3MUEX2IP+F/fu+k=";
   };
 
   sourceRoot = finalAttrs.src.name + "/c";
