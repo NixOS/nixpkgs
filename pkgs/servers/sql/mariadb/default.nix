@@ -362,13 +362,8 @@ let
     };
 in
 self: {
+  mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'.";
   # see https://mariadb.org/about/#maintenance-policy for EOLs
-  mariadb_105 = self.callPackage generic {
-    # Supported until 2025-06-24
-    version = "10.5.28";
-    hash = "sha256-C1BwII2gEWZA8gvQhfETZSf5mMwjJocVvL81Lnt/PME=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-  };
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
     version = "10.6.21";

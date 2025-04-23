@@ -2129,6 +2129,11 @@
     githubId = 11493130;
     name = "Asbjørn Olling";
   };
+  aschleck = {
+    name = "April Schleck";
+    github = "aschleck";
+    githubId = 115766;
+  };
   ascii17 = {
     name = "Allen Conlon";
     email = "software@conlon.dev";
@@ -12834,6 +12839,12 @@
     github = "kivikakk";
     githubId = 1915;
     name = "Asherah Connor";
+  };
+  kiyotoko = {
+    email = "karl.zschiebsch@gmail.com";
+    github = "Kiyotoko";
+    githubId = 49951907;
+    name = "Karl Zschiebsch";
   };
   kjeremy = {
     email = "kjeremy@gmail.com";
