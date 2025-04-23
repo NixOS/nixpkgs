@@ -15,6 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0C2zxZJu2Hf4gXuBzR+S9T73TKjG21Q/u6AnGzTzk+w=";
   };
 
+  patches = [
+    # Remove on next release.
+    ./upstream-darwin-clock-nanosleep-fix.patch
+  ];
+
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
