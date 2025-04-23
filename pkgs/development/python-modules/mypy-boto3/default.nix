@@ -326,8 +326,8 @@ rec {
       "sha256-J8e5j7Xs7W4HpbC7FxF1BnssPA1rOgTHjwZHTdepUlQ=";
 
   mypy-boto3-comprehendmedical =
-    buildMypyBoto3Package "comprehendmedical" "1.37.0"
-      "sha256-03PbYwj3MnAzmiM1ln9ay6Bn05qPyPhF2UxXZpBSqsU=";
+    buildMypyBoto3Package "comprehendmedical" "1.38.0"
+      "sha256-VPJP8laiJsNC/uxn/K2jaH2jrQWfltP46xLJEg1erx0=";
 
   mypy-boto3-compute-optimizer =
     buildMypyBoto3Package "compute-optimizer" "1.37.0"
