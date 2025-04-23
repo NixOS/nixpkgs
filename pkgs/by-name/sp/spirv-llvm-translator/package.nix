@@ -18,9 +18,9 @@ let
 
   # ROCm, if actively updated will always be at the latest version
   versions = {
-    "19" = {
-      version = "19.1.0";
-      rev = "dad1f0eaab8047a4f73c50ed5f3d1694b78aae97";
+    "19" = rec {
+      version = "19.1.6";
+      rev = "v${version}";
       hash = "sha256-mUvDF5y+cBnqUaHjyiiE8cJGH5MfQMqGFy6bYv9vCVY=";
     };
     "18" = rec {
