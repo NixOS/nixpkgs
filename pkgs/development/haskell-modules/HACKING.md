@@ -7,28 +7,30 @@ there are no Haskell-related evaluation errors or build errors that get into
 the Nixpkgs `master` branch.
 
 We do this by periodically merging an updated set of Haskell packages on the
-`haskell-updates` branch into the `master` branch.  Each member of the team
+`haskell-updates` branch into the `staging` branch.  Each member of the team
 takes a two week period where they are in charge of merging the
-`haskell-updates` branch into `master`.  This is the documentation for this
+`haskell-updates` branch into `staging`.  This is the documentation for this
 workflow.
 
 The workflow generally proceeds in three main steps:
 
 1. create the initial `haskell-updates` PR, and update Stackage and Hackage snapshots
 1. wait for contributors to fix newly broken Haskell packages
-1. merge `haskell-updates` into `master`
+1. merge `haskell-updates` into `staging`
 
 Each of these steps is described in a separate section.
 
 There is a script that automates the workflow for merging the currently open
-`haskell-updates` PR into `master` and opening the next PR.  It is described
+`haskell-updates` PR into `staging` and opening the next PR.  It is described
 at the end of this document.
 
 ## Initial `haskell-updates` PR
 
-In this section we create the PR for merging `haskell-updates` into `master`.
+In this section we create the PR for merging `haskell-updates` into `staging`.
 
-1.  Make sure the `haskell-updates` branch is up-to-date with `master`.
+1.  Make sure the `haskell-updates` branch is up-to-date with a _merge base_ of
+    `staging` and `master`. `haskell-updates` is not based _on_ `staging`,
+    so that it can share binary cache with `master`.
 
 1.  Update the Stackage Nightly resolver used by Nixpkgs and create a commit:
 
@@ -50,7 +52,7 @@ In this section we create the PR for merging `haskell-updates` into `master`.
 
 1.  Push these commits to the `haskell-updates` branch of the NixOS/nixpkgs repository.
 
-1.  Open a PR on Nixpkgs for merging `haskell-updates` into `master`.  The recommended
+1.  Open a PR on Nixpkgs for merging `haskell-updates` into `staging`.  The recommended
     PR title and body text are described in the `merge-and-open-pr.sh` section.
 
 ## Notify Maintainers and Fix Broken Packages
@@ -85,7 +87,7 @@ most recent build report.
 
 Maintainers should be given at least 7 days to fix up their packages when they
 break.  If maintainers don't fix up their packages within 7 days, then they
-may be marked broken before merging `haskell-updates` into `master`.
+may be marked broken before merging `haskell-updates` into `staging`.
 
 ### Fix Broken Packages
 
@@ -153,7 +155,7 @@ following will happen:
 
 -   All updated files will be committed.
 
-## Merge `haskell-updates` into `master`
+## Merge `haskell-updates` into `staging`
 
 Now it is time to merge the `haskell-updates` PR you opened above.
 
@@ -168,33 +170,12 @@ Before doing this, make sure of the following:
     have been pinged on GitHub and given at least a week to fix their packages.
     This is especially important for widely-used packages like `cachix`.
 
--   Make sure you first merge the `master` branch into `haskell-updates`.  Wait
-    for Hydra to evaluate the new `haskell-updates` jobset.  Make sure you only
-    merge `haskell-updates` into `master` when there are no evaluation errors.
-
--   Due to Hydra having only a small number of Darwin build machines, the
-    `haskell-updates` jobset on Hydra often has many queued Darwin jobs.
-    In order to not have these queued Darwin jobs prevent the `haskell-updates`
-    branch from being merged to `master` in a timely manner, we have special
-    rules for Darwin jobs.
-
-    -   It is alright to merge the `haskell-updates` branch to `master` if
-        there are remaining queued Darwin jobs on Hydra.
-
-    -   We would like to keep GHC and the `mergeable` job building on Darwin.
-        Do not merge the `haskell-updates` branch to `master` if GHC is failing
-        to build, or the `mergeable` job has failing Darwin constituent jobs.
-
-        If GHC and the `mergeable` job are not failing, but merely queued,
-        it is alright to merge the `haskell-updates` branch to `master`.
-
-    -   We do not need to keep the `maintained` job building on Darwin.
-        If `maintained` packages are failing on Darwin, it is helpful to
-        mark them as broken on that platform.
-
-When you've double-checked these points, go ahead and merge the `haskell-updates` PR.
-After merging, **make sure not to delete the `haskell-updates` branch**, since it
-causes all currently open Haskell-related pull-requests to be automatically closed on GitHub.
+-   Keep an eye on the next `staging-next` iteration (which is branched off
+    from `staging`) to confirm that there are no show stopping issues stemming
+    from interactions between changes on `staging` and `haskell-updates`.
+    Also be aware that build or eval regressions from a `haskell-updates`
+    iteration may only become apparent on `staging-next`, especially when the
+    `haskell-updates` jobset had e.g. Darwin builds disabled.
 
 ## Script for Merging `haskell-updates` and Opening a New PR
 
@@ -233,10 +214,6 @@ opening the next one.  When you want to merge the currently open
     $ ./maintainers/scripts/haskell/mark-broken.sh --do-commit
     ```
 
-1.  Merge `master` into `haskell-updates` and make sure to push to the
-    `haskell-updates` branch.  (This can be skipped if `master` has recently
-    been merged into `haskell-updates`.)
-
 1.  Go to https://hydra.nixos.org/jobset/nixpkgs/haskell-updates and force an
     evaluation of the `haskell-updates` jobset.  See one of the following
     sections for how to do this.  Make sure there are no evaluation errors.  If
@@ -270,11 +247,14 @@ opening the next one.  When you want to merge the currently open
 
 ## Update Hackage Version Information
 
-After merging into `master` you can update what Hackage displays as the current
+Remember to regularly update what Hackage displays as the current
 version in NixOS for every individual package.  To do this you run
-`maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh`.  See the
-script for how to provide credentials. Once you have configured credentials,
-running this takes only a few seconds.
+`maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh` on a checkout
+of `master` (or `nixpkgs-unstable`).  See the script for how to provide credentials.
+Once you have configured credentials, running this takes only a few seconds.
+
+The best time to do this is after `staging-next` has been merged since this is
+the way Haskell package updates propagate to `master`.
 
 ## Additional Info
 

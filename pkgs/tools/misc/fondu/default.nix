@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +16,6 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace /System/Library/Frameworks/CoreServices.framework/CoreServices "-framework CoreServices"
   '';
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

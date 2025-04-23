@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openSUSE/libsolv";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

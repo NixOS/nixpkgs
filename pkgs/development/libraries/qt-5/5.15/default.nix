@@ -27,7 +27,6 @@
   gtk3,
   dconf,
   llvmPackages_15,
-  overrideSDK,
   overrideLibcxx,
   darwin,
 

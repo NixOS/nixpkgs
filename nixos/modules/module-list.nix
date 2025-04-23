@@ -290,6 +290,7 @@
   ./programs/quark-goldleaf.nix
   ./programs/regreet.nix
   ./programs/rog-control-center.nix
+  ./programs/rush.nix
   ./programs/rust-motd.nix
   ./programs/ryzen-monitor-ng.nix
   ./programs/screen.nix
@@ -313,6 +314,7 @@
   ./programs/system-config-printer.nix
   ./programs/systemtap.nix
   ./programs/tcpdump.nix
+  ./programs/television.nix
   ./programs/thefuck.nix
   ./programs/thunar.nix
   ./programs/thunderbird.nix
@@ -367,6 +369,7 @@
   ./security/auditd.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
+  ./security/default.nix
   ./security/dhparams.nix
   ./security/doas.nix
   ./security/duosec.nix
@@ -554,7 +557,6 @@
   ./services/desktops/gnome/rygel.nix
   ./services/desktops/gnome/sushi.nix
   ./services/desktops/gnome/tinysparql.nix
-  ./services/desktops/gsignond.nix
   ./services/desktops/gvfs.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
@@ -1055,6 +1057,8 @@
   ./services/networking/atticd.nix
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
+  ./services/networking/ax25/axlisten.nix
+  ./services/networking/ax25/axports.nix
   ./services/networking/babeld.nix
   ./services/networking/bee.nix
   ./services/networking/biboumi.nix
@@ -1171,6 +1175,7 @@
   ./services/networking/kea.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
+  ./services/networking/kismet.nix
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
@@ -1348,6 +1353,7 @@
   ./services/networking/veilid.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
+  ./services/networking/vwifi.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
   ./services/networking/wg-access-server.nix
@@ -1402,6 +1408,7 @@
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
+  ./services/security/e-imzo.nix
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix
   ./services/security/esdm.nix
@@ -1559,6 +1566,7 @@
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
+  ./services/web-apps/karakeep.nix
   ./services/web-apps/kasmweb/default.nix
   ./services/web-apps/kanboard.nix
   ./services/web-apps/kavita.nix

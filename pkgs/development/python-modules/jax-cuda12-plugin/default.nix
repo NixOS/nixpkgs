@@ -40,42 +40,42 @@ let
     "3.10-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp310";
-      hash = "sha256-uiVVln+bbDgci075+wPQW8Vewl7P7lz+RcWs4099QVI=";
+      hash = "sha256-pwDhcYI84lUQIALkDJR4j6ho8hYle30/BWjQn+dcEHs=";
     };
     "3.10-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp310";
-      hash = "sha256-YXGu0vSzvdX8E3gt4QcsamNPzhNzG3XQywpquPTm5lA=";
+      hash = "sha256-UwrYUcpGKZHOgtsmrUfwKwjOvkg8nI0MADfp4np7Up8=";
     };
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-qqcEpe9UdZXQItscHkh4oGdxFkEqk2DBFdZ/9LZOFZY=";
+      hash = "sha256-DZ7O3mbEAlhwKkImHoaM21ahA1UafDyISzX1Mcms1I4=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp311";
-      hash = "sha256-KY0tdo8QKbdKCx0BJw5Uk0nSw33Adlh5ZULNqWfre9M=";
+      hash = "sha256-fNG0iKVKMInolYjMr2dwiZUsglKefQQD4LBQGZ5SVBg=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-IDDPEgjOTqcO5WysYd3SOfl5hpX8Obt3OcUKJdbp2kQ=";
+      hash = "sha256-5w608IRpbD474StekJ7xIFyfVu/j3OzyYhvZtatZVNU=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp312";
-      hash = "sha256-wlF6fCGG+HCIlGluJs+W69YLeHnOyjmLLEarso0slsg=";
+      hash = "sha256-oqOvX5iIDYb40kartGpVLlou9J12e/xKdMjDV3UgB8Y=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-GGJZWyttgVZ50R4OiJ5SMYXuVKRtRuAiaJ9w/EVU3ZE=";
+      hash = "sha256-6W891KlCUWroeMn2l+au/teOFI8JAYynPuKLI0JqfYo=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp313";
-      hash = "sha256-If7BtWyYeD6gVpt0elZ1Hx+f8hh7SKzBHHANO/xeGjE=";
+      hash = "sha256-o0LyznxLH1nUA/Zlo1qGuGUCU7sl3jRkf7IlxFzrCgQ=";
     };
   };
 in

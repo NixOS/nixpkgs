@@ -6,10 +6,6 @@
   pkg-config,
   openssl,
 
-  # darwin
-  Security,
-  SystemConfiguration,
-
   # tests
   firefox-esr-unwrapped,
   firefox-unwrapped,
@@ -37,14 +33,9 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   checkFlags = [
     # Disable tests that require network access

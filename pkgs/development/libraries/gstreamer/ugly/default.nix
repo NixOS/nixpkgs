@@ -16,15 +16,13 @@
   x264,
   libintl,
   lib,
-  IOKit,
-  CoreFoundation,
-  DiskArbitration,
   enableGplPlugins ? true,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
   gst-plugins-ugly,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,9 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       x264
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      CoreFoundation
-      DiskArbitration
+      apple-sdk_gstreamer
     ];
 
   mesonFlags =

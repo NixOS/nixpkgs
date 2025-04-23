@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +19,6 @@ stdenv.mkDerivation rec {
     "CC=cc"
     "PREFIX=$(out)"
   ];
-
-  buildInputs = [ Foundation ];
 
   meta = with lib; {
     mainProgram = "defaultbrowser";

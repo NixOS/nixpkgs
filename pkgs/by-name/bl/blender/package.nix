@@ -1,9 +1,4 @@
 {
-  Cocoa,
-  CoreGraphics,
-  ForceFeedback,
-  OpenAL,
-  OpenGL,
   SDL,
   addDriverRunpath,
   alembic,
@@ -53,6 +48,7 @@
   llvmPackages,
   makeWrapper,
   mesa,
+  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openal,
   opencollada-blender,
   opencolorio,
@@ -92,7 +88,6 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
-  openUsdSupport = !stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
@@ -112,12 +107,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.0";
+  version = "4.4.1";
 
   srcs = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pAzOayAPyRYgTixAyg2prkUtI70uFulRuBYhgU9ZNw4=";
+    hash = "sha256-5MsJ7UFpwwtaq905CiTkas/qPYOaeiacSSl3qu9h5w0=";
   };
 
   patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
@@ -281,11 +276,6 @@ stdenv'.mkDerivation (finalAttrs: {
         ]
       else
         [
-          Cocoa
-          CoreGraphics
-          ForceFeedback
-          OpenAL
-          OpenGL
           SDL
           brotli
           llvmPackages.openmp

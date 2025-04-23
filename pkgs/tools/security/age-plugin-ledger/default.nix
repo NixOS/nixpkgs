@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   libusb1,
   openssl,
   rage,
-  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libusb1
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
+  ];
 
   nativeCheckInputs = [
     rage

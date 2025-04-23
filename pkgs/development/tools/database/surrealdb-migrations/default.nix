@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   testers,
-  Security,
   surrealdb-migrations,
   nix-update-script,
 }:
@@ -25,8 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-l59RbKohfPsAp/70UaT/bhy5Z4orVf7fuJgU+0fuyk4=";
-
-  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   # Error: No such file or directory (os error 2)
   # failures:

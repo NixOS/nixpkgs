@@ -15,6 +15,7 @@
   libGLU,
   xorg,
   opencascade-occt,
+  llvmPackages,
   python ? null,
   enablePython ? false,
 }:
@@ -54,12 +55,12 @@ stdenv.mkDerivation rec {
       xorg.libSM
       xorg.libICE
     ]
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
     ++ lib.optional enablePython python;
 
   enableParallelBuilding = true;
 
   patches = [
-    ./fix-python.patch
     (fetchpatch {
       url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/7d5094fb0a5245cb435afd3f3e8c35e2ecfe70fd.patch";
       hash = "sha256-3atm1NGsMI4KEct2xakRG6EasRpF6YRI4raoVYxBV4g=";
@@ -67,7 +68,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace api/gmsh.py --subst-var-by LIBPATH ${placeholder "out"}/lib/libgmsh.so
+    substituteInPlace api/gmsh.py \
+      --replace-fail 'find_library("gmsh")' \"$out/lib/libgmsh${stdenv.hostPlatform.extensions.sharedLibrary}\"
   '';
 
   # N.B. the shared object is used by bindings

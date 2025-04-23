@@ -4,7 +4,6 @@
   rustPlatform,
   stdenv,
   python3,
-  AppKit,
   libxcb,
 }:
 
@@ -24,10 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   meta = with lib; {
     description = "Command-line pager for JSON data";

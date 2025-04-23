@@ -131,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
       gst-plugins-bad
+      # Something seems borked with bad's h264 decoder, add libav as a workaround
+      # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
+      gst-libav
       # maybe add ugly to cover all kinds of formats?
     ]);
 

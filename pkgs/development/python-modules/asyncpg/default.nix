@@ -39,6 +39,7 @@ buildPythonPackage rec {
     libpq.pg_config
     uvloop
     postgresql
+    postgresql.pg_config
     pytest-xdist
     pytestCheckHook
     distro

@@ -5,17 +5,25 @@
   stdenv,
   testers,
   yarn,
+  berryVersion ? 4,
 }:
+
+let
+  version_4 = "4.9.1";
+  version_3 = "3.8.7";
+  hash_4 = "sha256-znxB827TFLAEfCeHrwBsmRlkZz1LVWsBFhjZANiIW/4=";
+  hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-berry";
-  version = "4.8.1";
+  version = if berryVersion == 4 then version_4 else version_3;
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "berry";
     tag = "@yarnpkg/cli/${finalAttrs.version}";
-    hash = "sha256-JRQVUO5KsaGMmoC99cloW+hbFjgaFLNT3tqA29TVu34=";
+    hash = if berryVersion == 4 then hash_4 else hash_3;
   };
 
   buildInputs = [

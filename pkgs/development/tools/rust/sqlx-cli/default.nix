@@ -9,25 +9,22 @@
   libiconv,
   testers,
   sqlx-cli,
-  CoreFoundation,
-  Security,
-  SystemConfiguration,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    hash = "sha256-kAZUconMYUF9gZbLSg7KW3fVb7pkTq/d/yQyVzscxRw=";
+    hash = "sha256-R6T8sXuHlunXvqxQ95EKd+fdkPUZU8nTFkg9WBJWeRA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-d+VOtFC+OTp6MQnzEIOfIxk1ARAcNYvS7U2+IJ1hqSs=";
+  cargoHash = "sha256-ILv9sVBKhF+KDPfTsxYorRlx33tPolNE8KSNdNajzBc=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -51,9 +48,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Security
-      SystemConfiguration
       libiconv
     ];
 

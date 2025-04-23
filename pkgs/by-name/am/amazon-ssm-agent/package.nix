@@ -176,7 +176,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      copumpkin
       manveru
       anthonyroussel
       arianvp

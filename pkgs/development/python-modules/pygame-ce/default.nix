@@ -12,14 +12,13 @@
   ninja,
   meson-python,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
   libpng,
   libX11,
   portmidi,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
@@ -60,8 +59,6 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
   ];
 
   postPatch =
@@ -101,11 +98,11 @@ buildPythonPackage rec {
     libjpeg
     libpng
     portmidi
-    SDL2
-    SDL2_image
+    SDL2_classic
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -117,7 +114,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2_classic) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
@@ -164,5 +161,12 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # loading pygame.tests.font_test
+      # /nix/store/mrvg4qq09d51w5s95v15y4ym05q009fd-stdenv-darwin/setup: line 1771: 64131 Segmentation fault: 11
+      #
+      # https://github.com/NixOS/nixpkgs/issues/400378
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

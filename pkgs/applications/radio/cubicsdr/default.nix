@@ -14,8 +14,6 @@
   soapysdr-with-plugins,
   wxGTK32,
   enableDigitalLab ? false,
-  Cocoa,
-  WebKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,10 +52,6 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libGL
       libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      WebKit
     ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";

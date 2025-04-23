@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  Security,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,13 +16,11 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-4fYQM+GQ5yqES8HQ23ft4wfM5mwDdcWuE5Ed2LST9Gw=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
-
   meta = with lib; {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
     mainProgram = "spr";
-    homepage = "https://github.com/getcord/spr";
+    homepage = "https://github.com/spacedentist/spr";
     license = licenses.mit;
-    maintainers = with maintainers; [ sven-of-cord ];
+    maintainers = with maintainers; [ spacedentist ];
   };
 }

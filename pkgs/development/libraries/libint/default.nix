@@ -128,7 +128,7 @@ assert (
 
 let
   pname = "libint";
-  version = "2.9.0";
+  version = "2.10.2";
 
   meta = {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
@@ -151,7 +151,7 @@ let
       owner = "evaleev";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-y+Mo8J/UWDrkkNEDAoostb/k6jrhYYeU0u9Incrd2cE=";
+      hash = "sha256-pxSqW3K76RURy1nhWJKtFNWsiSpU8jPtd+ZMICEr0IY=";
     };
 
     # Replace hardcoded "/bin/rm" with normal "rm"

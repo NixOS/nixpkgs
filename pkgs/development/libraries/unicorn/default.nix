@@ -4,7 +4,6 @@
   cctools,
   cmake,
   fetchFromGitHub,
-  IOKit,
   pkg-config,
 }:
 
@@ -27,8 +26,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
     ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";

@@ -32,17 +32,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.29.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
     rev = "v${version}";
-    hash = "sha256-+6/hpOFyAdYxh+HkOlc85utqIY4s4gyZoVQxin9hbkU=";
+    hash = "sha256-IApPudo8oD6YkYJkGpowqpaqrsl2/Q2VFyYfYQI3mN0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9ki6/KDoa1yLg7mZS7tB7ZjjiZIWOne4Ol7fIK4YPSo=";
+  cargoHash = "sha256-ixxUz+XJPzPu51sxHpXs92Tis2gj9SElqYtNiN+n2EY=";
 
   dontWrapGApps = true;
 

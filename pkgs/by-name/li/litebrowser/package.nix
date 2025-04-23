@@ -7,7 +7,6 @@
   gtk3,
   gtkmm3,
   curl,
-  poco,
   gumbo, # litehtml dependency
 }:
 
@@ -32,7 +31,6 @@ stdenv.mkDerivation {
     gtk3
     gtkmm3
     curl
-    poco
     gumbo
   ];
 

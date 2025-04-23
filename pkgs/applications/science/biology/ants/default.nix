@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   itk,
   vtk,
-  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,14 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  buildInputs =
-    [
-      itk
-      vtk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    itk
+    vtk
+  ];
 
   cmakeFlags = [
     "-DANTS_SUPERBUILD=FALSE"

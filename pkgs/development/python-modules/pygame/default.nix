@@ -87,7 +87,7 @@ buildPythonPackage rec {
     libX11
     portmidi
     SDL2_classic
-    SDL2_image
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
   ];
@@ -122,5 +122,10 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # Several tests segfault
+      # https://github.com/pygame/pygame/issues/4486
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

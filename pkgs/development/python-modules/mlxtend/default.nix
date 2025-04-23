@@ -7,7 +7,6 @@
   pytestCheckHook,
   scipy,
   numpy,
-  numpy_1,
   scikit-learn,
   pandas,
   matplotlib,

@@ -209,8 +209,9 @@ stdenv.mkDerivation (finalAttrs: {
     npm rebuild --verbose
 
     # remove most references to electron.headers
-    # TODO: track down the remaining references
-    find node_modules -type f \( -name "*.target.mk" -o -name "config.gypi" -o -name "Makefile" \) -delete
+    shopt -s globstar
+    rm -r node_modules/**/{*.target.mk,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
 
     popd
 

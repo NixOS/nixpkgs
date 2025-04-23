@@ -6,7 +6,7 @@
   catch2,
   cmake,
   ninja,
-  cudaPackages_11_8,
+  cudaPackages_11,
   cudaPackages_12,
   boost,
   fmt_9,
@@ -24,7 +24,7 @@ let
   # The runtime closure, thankfully, is quite small as it does not
   # include the CUDA libraries.
   cudaPackageSets = [
-    cudaPackages_11_8
+    cudaPackages_11
     cudaPackages_12
   ];
 

@@ -17,7 +17,6 @@ let
   python = python3.override {
     packageOverrides = final: prev: {
       django = prev.django_5;
-      sentry-sdk = prev.sentry-sdk_2;
       djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
         # https://github.com/encode/django-rest-framework/discussions/9342
         disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
@@ -27,7 +26,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.10.4";
+  version = "5.11";
 
   pyproject = true;
 
@@ -40,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-ReODTMaKMkvbaR8JETSeOrXxQIsL1Vy1pjKYWo5mw+A=";
+    hash = "sha256-A1XnXr97DhAZpDlttsMTBjOgdSO/bEN5jfOgZrzcxQo=";
   };
 
   patches = [
@@ -89,6 +88,7 @@ python.pkgs.buildPythonApplication rec {
       cyrtranslit
       dateparser
       diff-match-patch
+      disposable-email-domains
       django-appconf
       django-celery-beat
       django-compressor
@@ -152,6 +152,12 @@ python.pkgs.buildPythonApplication rec {
     postgres = with python.pkgs; [ psycopg ];
   };
 
+  pythonRelaxDeps = [
+    "celery"
+    "rapidfuzz"
+    "weblate-schemas"
+  ];
+
   # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
   GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
     pango
@@ -171,14 +177,15 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    license = with licenses; [
+    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/weblate-${version}";
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

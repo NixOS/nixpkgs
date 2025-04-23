@@ -14,7 +14,7 @@
   desktop-file-utils,
   openssl,
   gst_all_1,
-  clapper,
+  clapper-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,10 +49,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libadwaita
     desktop-file-utils
-    clapper
+    clapper-unwrapped
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
   ];
 
   meta = {

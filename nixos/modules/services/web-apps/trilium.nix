@@ -108,11 +108,11 @@ in
     };
   };
 
+  meta.maintainers = with lib.maintainers; [ fliegendewurst ];
+
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        meta.maintainers = with lib.maintainers; [ fliegendewurst ];
-
         users.groups.trilium = { };
         users.users.trilium = {
           description = "Trilium User";

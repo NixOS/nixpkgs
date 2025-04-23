@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
   ];
 
+  patches = [
+    ./cve-2025-3155.patch
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "yelp";

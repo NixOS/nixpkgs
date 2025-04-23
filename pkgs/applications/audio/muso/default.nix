@@ -5,7 +5,6 @@
   rustPlatform,
   pkg-config,
   wrapGAppsHook3,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   preConfigure = ''
     substituteInPlace lib/utils.rs \

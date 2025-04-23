@@ -2,7 +2,6 @@
   lib,
   stdenv,
   bash,
-  darwin,
   fetchFromGitHub,
   libiconv,
   makeWrapper,
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
     ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

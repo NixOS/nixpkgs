@@ -1,26 +1,22 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     tag = "v${version}";
-    hash = "sha256-7MPNs2vAzCo5TPJZFhd3xaZW0YbF724gfKNLB08IU8A=";
+    hash = "sha256-GFkssVTOohEdczIi4+OV7qKHBPqa2yFZNhAoMAIBZN0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eWox5NrvZr+mEGGwxYbAW5EgEOQ8WQUy2pughBlpXgM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  cargoHash = "sha256-4RDnIWr0Z6FGnUQxh+yk7L/mg/Jw6JROns4DXkYIbuE=";
 
   meta = with lib; {
     description = "Terminal-based HTTP/REST client";

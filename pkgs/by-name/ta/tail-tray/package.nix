@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     description = "Tray icon to manage Tailscale";
     homepage = "https://github.com/SneWs/tail-tray";
     changelog = "https://github.com/SneWs/tail-tray/releases/tag/${version}";
+    mainProgram = "tail-tray";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Svenum ];
     platforms = lib.platforms.linux;

@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -32,6 +34,15 @@ buildGoModule rec {
     # Test requires network access
     substituteInPlace internal/cli/universal_login_customize_test.go \
       --replace-fail "TestFetchUniversalLoginBrandingData" "SkipFetchUniversalLoginBrandingData"
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd auth0 \
+      --bash <($out/bin/auth0 completion bash) \
+      --fish <($out/bin/auth0 completion fish) \
+      --zsh <($out/bin/auth0 completion zsh)
   '';
 
   subPackages = [ "cmd/auth0" ];

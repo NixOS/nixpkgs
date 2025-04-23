@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitLab,
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-F3qW0yZBjJ8pmLEW4dWKBFvnyiw5F732DKAI+eLcL+g=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
+  '';
 
   build-system = [ setuptools ];
 

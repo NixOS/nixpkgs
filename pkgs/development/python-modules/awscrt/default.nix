@@ -5,27 +5,20 @@
   cmake,
   perl,
   stdenv,
-  CoreFoundation,
-  Security,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.25.7";
+  version = "0.26.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nd4fqCQqlRo7pbOl6P+/kdTGpr/o5IjIMIrP6KDFe3w=";
+    hash = "sha256-qNY6fcxkhMXBZ1sxqNG2cmw9yFsTeW+xQ9+wByJgk14=";
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
 

@@ -104,7 +104,6 @@
   shared-mime-info,
   libthai,
   libdatrie,
-  CoreServices,
   DarwinTools,
   cctools,
   libtool,
@@ -627,10 +626,6 @@ in
         substituteInPlace src/ruby/ext/grpc/extconf.rb \
           --replace 'apple_toolchain = ' 'apple_toolchain = false && '
       '';
-  };
-
-  hitimes = attrs: {
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
   };
 
   hpricot = attrs: {

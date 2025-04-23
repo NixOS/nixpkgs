@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-lBHqvwZrnkSfmMXBmnhovbDn+pf5iLJepJjO/FKT1wY=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";

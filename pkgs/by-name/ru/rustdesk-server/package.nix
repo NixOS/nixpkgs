@@ -1,11 +1,9 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   libsodium,
-  Security,
   sqlite,
   nix-update-script,
   testers,
@@ -41,14 +39,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libsodium
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    libsodium
+    sqlite
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

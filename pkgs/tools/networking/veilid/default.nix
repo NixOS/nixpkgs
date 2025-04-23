@@ -1,8 +1,5 @@
 {
   lib,
-  stdenv,
-  AppKit,
-  Security,
   fetchFromGitLab,
   rustPlatform,
   protobuf,
@@ -31,11 +28,6 @@ rustPlatform.buildRustPackage rec {
     capnproto
     cmake
     protobuf
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Security
   ];
 
   cargoBuildFlags = [

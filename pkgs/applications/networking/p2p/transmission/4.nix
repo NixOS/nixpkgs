@@ -23,7 +23,6 @@
   dht,
   libnatpmp,
   libiconv,
-  Foundation,
   # Build options
   enableGTK3 ? false,
   gtkmm3,

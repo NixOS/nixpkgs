@@ -32,12 +32,8 @@
   which,
   writeScript,
   zlib,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-in
 stdenv.mkDerivation rec {
   pname = "mame";
   version = "0.276";
@@ -105,8 +101,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libpcap
-      CoreAudioKit
-      ForceFeedback
     ];
 
   nativeBuildInputs = [

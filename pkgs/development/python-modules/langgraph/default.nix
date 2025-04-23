@@ -110,6 +110,10 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+
+    # pydantic.errors.PydanticForbiddenQualifier,
+    # see https://github.com/langchain-ai/langgraph/issues/4360
+    "test_state_schema_optional_values"
   ];
 
   disabledTestPaths = [

@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";
@@ -29,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   postPatch = ''
     rm -rf "ui/public"

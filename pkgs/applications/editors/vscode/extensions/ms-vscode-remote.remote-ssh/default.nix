@@ -61,7 +61,7 @@ let
 
     if ! nodeVersion=$($serverNode -v); then
       echo "Unable to fix Node binary, quitting"
-      fail_with_exitcode ''${o.InstallExitCode.ServerTransferFailed}
+      fail_with_exitcode ''${f.UnifiedStatusCode.ServerTransferFailed}
     fi
 
     ${lib.optionalString useLocalExtensions ''

@@ -139,10 +139,22 @@ buildPythonPackage rec {
     watchfiles
   ];
 
-  optional-dependencies = rec {
-    adag = cgraph;
-    air = lib.unique (data ++ serve ++ tune ++ train);
-    all = lib.flatten (builtins.attrValues optional-dependencies);
+  optional-dependencies = lib.fix (self: {
+    adag = self.cgraph;
+    air = lib.unique (self.data ++ self.serve ++ self.tune ++ self.train);
+    all = lib.unique (
+      self.adag
+      ++ self.air
+      ++ self.cgraph
+      ++ self.client
+      ++ self.data
+      ++ self.default
+      ++ self.observability
+      ++ self.rllib
+      ++ self.serve
+      ++ self.train
+      ++ self.tune
+    );
     cgraph = [
       cupy
     ];
@@ -190,16 +202,16 @@ buildPythonPackage rec {
         uvicorn
         watchfiles
       ]
-      ++ default
+      ++ self.default
     );
     serve-grpc = lib.unique (
       [
         grpcio
         pyopenssl
       ]
-      ++ serve
+      ++ self.serve
     );
-    train = tune;
+    train = self.tune;
     tune = [
       fsspec
       pandas
@@ -207,7 +219,7 @@ buildPythonPackage rec {
       requests
       tensorboardx
     ];
-  };
+  });
 
   postInstall = ''
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}

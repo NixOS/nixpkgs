@@ -2,7 +2,6 @@
   lib,
   stdenv,
   alsa-lib,
-  darwin,
   fetchFromGitHub,
   pkg-config,
   protobuf,
@@ -32,13 +31,9 @@ rustPlatform.buildRustPackage rec {
       pkg-config
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AudioUnit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   meta = {
     description = "Extensible music player daemon written in Rust";

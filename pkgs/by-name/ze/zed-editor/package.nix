@@ -43,6 +43,7 @@
 
   withGLES ? false,
   buildRemoteServer ? true,
+  zed-editor,
 }:
 
 assert withGLES -> stdenv.hostPlatform.isLinux;
@@ -98,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.181.5";
+  version = "0.182.11";
 
   outputs =
     [ "out" ]
@@ -110,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wp8CoWEOSScQP2Q+lQJgstzTNNwiy0ONHOy6PjIlFBo=";
+    hash = "sha256-q7kE+CdQtUboL/NSBDx8E8Hktkr+CnygxwzOS0Athf4=";
   };
 
   patches = [
@@ -128,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-FATdeVwbSUA/zfWV9TdoS4/fT9KWsekKGjQ34HJW4rk=";
+  cargoHash = "sha256-rQImMVrFNOT43tdDpoSrRAqk7K5V8f+gzqEdrwJfO90=";
 
   nativeBuildInputs =
     [
@@ -319,7 +320,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        withGles = finalAttrs.finalPackage.override { withGLES = true; };
+        withGles = zed-editor.override { withGLES = true; };
       };
   };
 

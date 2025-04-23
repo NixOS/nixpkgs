@@ -6,7 +6,6 @@
   autoreconfHook,
   pkg-config,
   pcsclite,
-  PCSC,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +27,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ PCSC ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-deprecated-non-prototype";
 

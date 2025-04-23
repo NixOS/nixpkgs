@@ -10,8 +10,6 @@
   openssl,
   curl,
   zlib,
-  Security,
-  CoreServices,
   libiconv,
   xz,
 }:
@@ -47,8 +45,6 @@ rustPlatform.buildRustPackage rec {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
       libiconv
       xz
     ];

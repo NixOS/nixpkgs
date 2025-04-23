@@ -3,7 +3,6 @@
   stdenv,
   config,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   pkg-config,
   mesa,
@@ -44,12 +43,6 @@
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libpulseaudio,
-  AudioUnit,
-  Cocoa,
-  CoreAudio,
-  CoreServices,
-  ForceFeedback,
-  OpenGL,
   audiofile,
   libiconv,
   withStatic ? stdenv.hostPlatform.isMinGW,
@@ -71,13 +64,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.32.2";
+  version = "2.32.4";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-Gtg8G1tRouGZbes1KhsXpYbItpNHYqJCiQKW/L77b+U=";
+    hash = "sha256-4yUJkttUAbDC/5IdcCFY5ZTIG1qsxEEOjTTuplXV/p4=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [
@@ -92,11 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     # but on NixOS they're spread across different paths.
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
     ./find-headers.patch
-    # https://github.com/libsdl-org/SDL/issues/12224
-    (fetchpatch {
-      url = "https://github.com/libsdl-org/SDL/commit/9e079fe9c7931738ed63d257b1d7fb8a07b66824.diff";
-      hash = "sha256-G8gAivCtw5zuPVI9wvEq2oIo/NxFdnPqyLwrmHG1EJ4=";
-    })
   ];
 
   postPatch = ''
@@ -160,15 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     [ libiconv ]
     ++ finalAttrs.dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
-    ++ lib.optionals waylandSupport [ wayland-protocols ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreAudio
-      CoreServices
-      ForceFeedback
-      OpenGL
-    ];
+    ++ lib.optionals waylandSupport [ wayland-protocols ];
 
   enableParallelBuilding = true;
 

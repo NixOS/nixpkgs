@@ -24,15 +24,15 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
-      x64-linux_hash = "sha256-bVPUN500vTUdWCz6U1oP0uqLW+LChbCKZMhnYInQ54I=";
-      arm64-linux_hash = "sha256-qYG1uFyn26J6ElTeeI8Ozf6kVhm6EZKKMJ+4UFRhlqQ=";
-      x64-osx_hash = "sha256-qQK9KDX8KFAIzCdSpc7SWggYZm9cD8bv80BTdmT2MqA=";
+      x64-linux_hash = "sha256-QHZ6pdeCIld5pkgK6ZBhxKho6kM/IBCx0BlxM1xiTXk=";
+      arm64-linux_hash = "sha256-FoRKTsuCCTS9Y56GR6xfvLrmLmqVIoEk8P7RGzE3NU0=";
+      x64-osx_hash = "sha256-Wj3JVkwJXrtgAGBYcv8e2kGzSGGzYeG9TL+Dtt/ulpI=";
     }
     ."${arch}-${os}_hash";
 in
 stdenv.mkDerivation rec {
   pname = "readarr";
-  version = "0.4.13.2760";
+  version = "0.4.14.2782";
 
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";

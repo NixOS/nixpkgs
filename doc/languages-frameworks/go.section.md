@@ -13,14 +13,14 @@ The following is an example expression using `buildGoModule`:
 
 ```nix
 {
-  pet = buildGoModule rec {
+  pet = buildGoModule (finalAttrs: {
     pname = "pet";
     version = "0.3.4";
 
     src = fetchFromGitHub {
       owner = "knqyf263";
       repo = "pet";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
     };
 
@@ -32,7 +32,7 @@ The following is an example expression using `buildGoModule`:
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ kalbasit ];
     };
-  };
+  });
 }
 ```
 

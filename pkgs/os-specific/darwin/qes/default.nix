@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Carbon,
 }:
 
 stdenv.mkDerivation {
@@ -15,8 +14,6 @@ stdenv.mkDerivation {
     rev = "ddedf008f0c38b134501ad9f328447b671423d34"; # no tag
     sha256 = "1w9ppid7jg6f4q7pq40lhm0whg7xmnxcmf3pb9xqfkq2zj2f7dxv";
   };
-
-  buildInputs = [ Carbon ];
 
   makeFlags = [ "BUILD_PATH=$(out)/bin" ];
 

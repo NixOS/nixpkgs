@@ -7,8 +7,6 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,16 +28,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    curl
+    libgit2
+    openssl
+    zlib
+  ];
 
   meta = with lib; {
     description = "Cargo subcommand for displaying when different versions of a same dependency are pulled in";

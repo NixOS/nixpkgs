@@ -6,8 +6,6 @@
   pkg-config,
   openssl,
   libiconv,
-  Security,
-  SystemConfiguration,
   nix-update-script,
 }:
 
@@ -32,8 +30,6 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
-      SystemConfiguration
     ];
 
   checkFlags = [ "--skip=tests::cli" ];

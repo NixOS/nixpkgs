@@ -5,7 +5,6 @@
   openssl,
   pkg-config,
   rustPlatform,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   meta = with lib; {
     homepage = "https://github.com/azur1s/octofetch";

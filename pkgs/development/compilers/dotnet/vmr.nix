@@ -44,7 +44,7 @@ let
     buildPlatform
     targetPlatform
     ;
-  inherit (swiftPackages) apple_sdk swift;
+  inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
   inherit (releaseManifest) release sourceRepository tag;
@@ -111,24 +111,12 @@ stdenv.mkDerivation rec {
       krb5
       lttng-ust_2_12
     ]
-    ++ lib.optionals isDarwin (
-      with apple_sdk.frameworks;
-      [
-        xcbuild
-        swift
-        (krb5.overrideAttrs (old: {
-          # the propagated build inputs break swift compilation
-          buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
-          propagatedBuildInputs = [ ];
-        }))
-        sigtool
-        Foundation
-        CoreFoundation
-        CryptoKit
-        System
-      ]
-      ++ lib.optional (lib.versionAtLeast version "9") GSS
-    );
+    ++ lib.optionals isDarwin [
+      xcbuild
+      swift
+      krb5
+      sigtool
+    ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.

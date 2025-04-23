@@ -197,7 +197,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.3";
+  version = "257.5";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-GvRn55grHWR6M+tA86RMzqinuXNpPZzRB4ApuGN/ZvU=";
+    hash = "sha256-mn/JB/nrOz2TOobu2d+XBH2dVH3vn/HPvWN4Zz6s+SM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -336,11 +336,13 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
       "trivialautovarinit"
-      # breaks clang -target bpf; should be fixed to filter target?
     ]
     ++ (lib.optionals withLibBPF [
+      # breaks clang -target bpf; should be fixed to not use
+      # a wrapped clang?
       "zerocallusedregs"
       "shadowstack"
+      "pacret"
     ]);
 
   nativeBuildInputs =

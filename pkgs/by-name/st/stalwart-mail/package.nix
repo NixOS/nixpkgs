@@ -10,7 +10,6 @@
   foundationdb,
   zstd,
   stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
   rocksdb,
@@ -37,19 +36,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    sqlite
+    zstd
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
@@ -110,6 +102,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::outbound::extensions::extensions"
     # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
     "--skip=smtp::outbound::smtp::smtp_delivery"
+    # panicked at tests/src/smtp/outbound/lmtp.rs
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
     # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
     # assertion `left == right` failed
     #   left: [1, 2, 2]

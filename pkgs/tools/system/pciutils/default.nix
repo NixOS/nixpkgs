@@ -8,7 +8,6 @@
   which,
   hwdata,
   static ? stdenv.hostPlatform.isStatic,
-  IOKit,
   gitUpdater,
 }:
 
@@ -24,13 +23,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      which
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
+  buildInputs = [
+    which
+    zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
   preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""

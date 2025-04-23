@@ -4,8 +4,6 @@
   fetchurl,
   fetchpatch,
   alsa-lib,
-  AudioUnit,
-  CoreServices,
 }:
 
 let
@@ -27,14 +25,9 @@ stdenv.mkDerivation rec {
   pname = "audiofile";
   version = "0.3.6";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      AudioUnit
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   src = fetchurl {
     url = "https://audiofile.68k.org/audiofile-${version}.tar.gz";

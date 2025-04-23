@@ -205,7 +205,7 @@ let
             'class' => '\\OC\\Files\\ObjectStore\\S3',
             'arguments' => [
               'bucket' => '${s3.bucket}',
-              'autocreate' => ${boolToString s3.autocreate},
+              'verify_bucket_exists' => ${boolToString s3.verify_bucket_exists},
               'key' => '${s3.key}',
               'secret' => nix_read_secret('s3_secret'),
               ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
@@ -344,6 +344,10 @@ in
       [ "services" "nextcloud" "extraOptions" ]
       [ "services" "nextcloud" "settings" ]
     )
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "objectstore" "s3" "autocreate" ]
+      [ "services" "nextcloud" "config" "objectstore" "s3" "verify_bucket_exists" ]
+    )
   ];
 
   options.services.nextcloud = {
@@ -420,7 +424,6 @@ in
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud29"
         "nextcloud30"
         "nextcloud31"
       ];
@@ -654,10 +657,11 @@ in
               The name of the S3 bucket.
             '';
           };
-          autocreate = mkOption {
+          verify_bucket_exists = mkOption {
             type = types.bool;
+            default = true;
             description = ''
-              Create the objectstore if it does not exist.
+              Create the objectstore bucket if it does not exist.
             '';
           };
           key = mkOption {
@@ -1041,8 +1045,7 @@ in
             nextcloud31
         );
 
-      services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "29" then pkgs.php82 else pkgs.php83;
+      services.nextcloud.phpPackage = pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)

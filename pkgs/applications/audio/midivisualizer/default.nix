@@ -12,13 +12,6 @@
   libXcursor,
   gtk3,
   ffmpeg-full,
-  AppKit,
-  Carbon,
-  Cocoa,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
-  Kernel,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,15 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXinerama
       libXcursor
       gtk3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Carbon
-      Cocoa
-      CoreAudio
-      CoreMIDI
-      CoreServices
-      Kernel
     ];
 
   installPhase =

@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
-  SystemConfiguration,
   installShellFiles,
 }:
 
@@ -18,11 +15,6 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-eeQjezB6pRdnPADLgDLo8b+bUSP12gfBhFNt/uYCwHU=";
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-3YKFKngyLg2ah4GY+LlbPbnVks7/xFawnMf3D1gjmwI=";

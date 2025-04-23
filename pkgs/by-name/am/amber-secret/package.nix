@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
 }:
@@ -20,8 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Gwj0rnbKWifja5NJwskcrFpPoK15HjSQHXolGbgV784=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = {
     description = "Manage secret values in-repo via public key cryptography";

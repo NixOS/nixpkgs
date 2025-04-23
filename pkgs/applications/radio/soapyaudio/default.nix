@@ -11,8 +11,6 @@
   libjack2,
   libusb1,
   soapysdr,
-  Accelerate,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,10 +39,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libpulseaudio
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreAudio
     ];
 
   cmakeFlags = [
