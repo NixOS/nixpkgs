@@ -552,7 +552,15 @@ In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by t
 
 ### Yarn {#javascript-yarn}
 
-Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies. Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
+Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies.
+
+To package yarn-based applications, you need to distinguish by the version pointers in the `yarn.lock` file. See the following sections.
+
+#### Yarn v1 {#javascript-yarn-v1}
+
+Yarn v1 lockfiles contain a comment `# yarn lockfile v1` at the beginning of the file.
+
+Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
 
 - `yarnConfigHook`: Fetches the dependencies from the offline cache and installs them into `node_modules`.
 - `yarnBuildHook`: Runs `yarn build` or a specified `yarn` command that builds the project.
@@ -602,28 +610,28 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-#### `yarnConfigHook` arguments {#javascript-yarnconfighook}
+##### `yarnConfigHook` arguments {#javascript-yarnconfighook}
 
 By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or `${offlineCache}` if the former is not set) to find the location of the offline cache produced by `fetchYarnDeps`. To disable this phase, you can set `dontYarnInstallDeps = true` or override the `configurePhase`.
 
-#### `yarnBuildHook` arguments {#javascript-yarnbuildhook}
+##### `yarnBuildHook` arguments {#javascript-yarnbuildhook}
 
 This script by default runs `yarn --offline build`, and it relies upon the project's dependencies installed at `node_modules`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
 - `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
 - `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
 
-#### `yarnInstallHook` arguments {#javascript-yarninstallhook}
+##### `yarnInstallHook` arguments {#javascript-yarninstallhook}
 
 To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
 
-### yarn2nix {#javascript-yarn2nix}
+#### yarn2nix {#javascript-yarn2nix}
 
-WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
+WARNING: The `yarn2nix` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `yarn2nix` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
-#### Preparation {#javascript-yarn2nix-preparation}
+##### Preparation {#javascript-yarn2nix-preparation}
 
 You will need at least a `yarn.lock` file. If upstream does not have one you need to generate it and reference it in your package definition.
 
@@ -638,7 +646,7 @@ If the downloaded files contain the `package.json` and `yarn.lock` files they ca
 }
 ```
 
-#### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
+##### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
 
 `mkYarnPackage` will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React, WebPack, ...), you will need to explicitly override the build step with your instructions.
 
@@ -689,7 +697,7 @@ or if you need a writeable node_modules directory:
 }
 ```
 
-#### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
+##### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
 
 This will generate a derivation including the `node_modules` directory.
 If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
@@ -724,7 +732,7 @@ mkYarnPackage rec {
 }
 ```
 
-#### Pitfalls {#javascript-yarn2nix-pitfalls}
+##### Pitfalls {#javascript-yarn2nix-pitfalls}
 
 - If version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the [package.json section](#javascript-upstream-package-json)
 - Having trouble with `node-gyp`? Try adding these lines to the `yarnPreBuild` steps:
@@ -743,6 +751,116 @@ mkYarnPackage rec {
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
 - `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
+
+#### Yarn Berry v3/v4 {#javascript-yarn-v3-v4}
+Yarn Berry (v3 / v4) have similar formats, they start with blocks like these:
+
+```yaml
+__metadata:
+  version: 6
+  cacheKey: 8[cX]
+```
+
+```yaml
+__metadata:
+  version: 8
+  cacheKey: 10[cX]
+```
+
+For these packages, we have some helpers exposed under the respective `yarn-berry_3` and `yarn-berry_4` packages:
+
+- `yarn-berry-fetcher`
+- `fetchYarnBerryDeps`
+- `yarnBerryConfigHook`
+
+It's recommended to ensure you're explicitly pinning the major version used, for example by capturing the `yarn-berry_Xn` argument and then re-defining it as a `yarn-berry` `let` binding.
+
+```nix
+{
+  stdenv,
+  nodejs,
+  yarn-berry_4,
+}:
+
+let
+  yarn-berry = yarn-berry_4;
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    #...
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry.yarnBerryConfigHook
+  ];
+
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src;
+    hash = "...";
+  };
+})
+```
+
+##### `yarn-berry_X.fetchYarnBerryDeps` {#javascript-fetchYarnBerryDeps}
+`fetchYarnBerryDeps` runs `yarn-berry-fetcher fetch` in a fixed-output-derivation. It is a custom fetcher designed to reproducibly download all files in the `yarn.lock` file, validating their hashes in the process. For git dependencies, it creates a checkout at `${offlineCache}/checkouts/<40-character-commit-hash>` (relying on the git commit hash to describe the contents of the checkout).
+
+To produce the `hash` argument for `fetchYarnBerryDeps` function call, the `yarn-berry-fetcher prefetch` command can be used:
+
+```console
+$ yarn-berry-fetcher prefetch </path/to/yarn.lock> [/path/to/missing-hashes.json]
+```
+
+This prints the hash to stdout and can be used in update scripts to recalculate the hash for a new version of `yarn.lock`.
+
+##### `yarn-berry_X.yarnBerryConfigHook` {#javascript-yarnBerryConfigHook}
+`yarnBerryConfigHook` uses the store path `offlineCache` points to, to run a `yarn install` during the build, producing a usable `node_modules` directory from the downloaded dependencies.
+
+Internally, this uses a patched version of Yarn to ensure git dependencies are re-packed and any attempted downloads fail immediately.
+
+##### Patching upstream `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
+In case patching the upstream `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e. `inherit (finalAttrs) patches`.
+
+##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
+Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
+
+To compensate for this, the `yarn-berry-fetcher missing-hashes` subcommand can be used to produce all missing hashes. These are usually stored in a `missing-hashes.json` file, which needs to be passed to both the build itself, as well as the `fetchYarnBerryDeps` helper:
+
+```nix
+{
+  stdenv,
+  nodejs,
+  yarn-berry_4,
+}:
+
+let
+  yarn-berry = yarn-berry_4;
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    #...
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry.yarnBerryConfigHook
+  ];
+
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "...";
+  };
+})
+```
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}
 
