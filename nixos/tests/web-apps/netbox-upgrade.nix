@@ -1,8 +1,8 @@
 import ../make-test-python.nix (
   { lib, pkgs, ... }:
   let
-    oldNetbox = pkgs.netbox_3_7;
-    newNetbox = pkgs.netbox_4_1;
+    oldNetbox = pkgs.netbox_4_1;
+    newNetbox = pkgs.netbox_4_2;
   in
   {
     name = "netbox-upgrade";
