@@ -1110,8 +1110,8 @@ rec {
       "sha256-AwopW1hKgKmC2ZXfEoUXg57FwWOkgSu2e2q20ukogc8=";
 
   mypy-boto3-resiliencehub =
-    buildMypyBoto3Package "resiliencehub" "1.37.0"
-      "sha256-wLY1vGfvF5yWbCY88AVzLZ2bJlpuGAn4F+H+G0DezBQ=";
+    buildMypyBoto3Package "resiliencehub" "1.38.0"
+      "sha256-xJSQ4m36XC98qB7wSgKcjIK4knHvf7pL47xxIiKInsc=";
 
   mypy-boto3-resource-explorer-2 =
     buildMypyBoto3Package "resource-explorer-2" "1.37.0"
