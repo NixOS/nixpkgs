@@ -45,11 +45,16 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "tensorflow_metadata" ];
+  pythonImportsCheck = [
+    "tensorflow_metadata"
+    "tensorflow_metadata.proto.v0"
+    "google.protobuf.runtime_version"
+  ];
 
   meta = {
     description = "Standard representations for metadata that are useful when training machine learning models with TensorFlow";
     homepage = "https://github.com/tensorflow/metadata";
+    changelog = "https://github.com/tensorflow/metadata/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
