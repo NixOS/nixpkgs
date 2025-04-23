@@ -762,8 +762,8 @@ rec {
       "sha256-PKOF/jd1Wjz8lCwbCd4cfHeStkvcDhQu7a7bpHaizgU=";
 
   mypy-boto3-kms =
-    buildMypyBoto3Package "kms" "1.37.0"
-      "sha256-5wgeRfBkLbX35PGmGBciTx8gVS8Uqsh5WG8NeQwmEJs=";
+    buildMypyBoto3Package "kms" "1.38.0"
+      "sha256-s1D6mzq5T7G8jm2nxUr7Kq6QeT3oDBOF4yafahD+fq4=";
 
   mypy-boto3-lakeformation =
     buildMypyBoto3Package "lakeformation" "1.37.13"
