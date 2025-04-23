@@ -15,7 +15,9 @@ vimUtils.buildVimPlugin {
     hash = "sha256-EUwuIFFe4tmw8u6RqEvOLL0Yi8J5cLBQx7ICxnmkT4k=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://gitlab.com/schrieveslaach/sonarlint.nvim";
