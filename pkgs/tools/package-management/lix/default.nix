@@ -12,6 +12,7 @@
   ncurses,
   stdenv,
   clangStdenv,
+  nix-fast-build,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -84,6 +85,10 @@ let
 
         nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) {
           stdenv = lixStdenv;
+        };
+
+        nix-fast-build = nix-fast-build.override {
+          inherit (self) nix-eval-jobs;
         };
       }
     );
