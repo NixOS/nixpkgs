@@ -62,8 +62,8 @@ rec {
       "sha256-zp0Z4N8MRsKjQn7UaGC+MPkBT1mTP0wbJ0a5+p6A3/s=";
 
   mypy-boto3-amp =
-    buildMypyBoto3Package "amp" "1.37.36"
-      "sha256-odOqacsjn2opQla0k+jj1oAOIqjWUq6vmkX7tLK93/s=";
+    buildMypyBoto3Package "amp" "1.38.0"
+      "sha256-nvTTdi/Mwtl8TE/CGonuuuFFd8b1tEPltEmO71KD5Cg=";
 
   mypy-boto3-amplify =
     buildMypyBoto3Package "amplify" "1.37.17"
