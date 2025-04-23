@@ -1074,8 +1074,8 @@ rec {
       "sha256-UKBld+nE46MZiJhlbY3tbiCxILSo/TEjhDW4z4jTdq0=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.37.32"
-      "sha256-L5erTREMsMlqd/GlOxCY3V9Tj0sZa2m5gwXMmhOB3hs=";
+    buildMypyBoto3Package "quicksight" "1.38.0"
+      "sha256-mQBTT6IX9mssBGnpCYqq2oKNHfjereOMRwVYsei2M4s=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.37.0"
