@@ -374,8 +374,8 @@ rec {
       "sha256-du5cZjwXzIW8FP2N7e9Ob9Cm9pPlReSY65EQkfsa+bg=";
 
   mypy-boto3-dataexchange =
-    buildMypyBoto3Package "dataexchange" "1.37.0"
-      "sha256-WjBX9obty7j01aUFloCvJloDiETU55F6ECFI3qXI6G4=";
+    buildMypyBoto3Package "dataexchange" "1.38.0"
+      "sha256-0ys8v/ATJ7c0+MJoAiSqIBoCcgO022HB9C/Jg7vFgNc=";
 
   mypy-boto3-datapipeline =
     buildMypyBoto3Package "datapipeline" "1.37.0"
