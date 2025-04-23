@@ -19,6 +19,7 @@
   autoPatchelfHook,
   wayland-scanner,
   rust-bindgen,
+  nix-update-script,
 }:
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";
@@ -68,6 +69,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ffmpeg.lib
     vulkan-loader
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Network proxy for Wayland clients (applications)";
