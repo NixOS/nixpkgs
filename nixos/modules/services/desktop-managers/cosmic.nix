@@ -13,6 +13,7 @@
 
 let
   cfg = config.services.desktopManager.cosmic;
+  excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
   # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
   corePkgs =
     with pkgs;
@@ -46,6 +47,10 @@ in
   options = {
     services.desktopManager.cosmic = {
       enable = lib.mkEnableOption "Enable the COSMIC desktop environment";
+
+      showExcludedPkgsWarning = lib.mkEnableOption "Disable the warning for excluding core packages." // {
+        default = true;
+      };
 
       xwayland.enable = lib.mkEnableOption "Xwayland support for the COSMIC compositor" // {
         default = true;
@@ -152,5 +157,22 @@ in
     services.power-profiles-daemon.enable = lib.mkDefault (
       !config.hardware.system76.power-daemon.enable
     );
+
+    warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [
+      ''
+        The `environment.cosmic.excludePackages` option was used to exclude some
+        packages from the environment which also includes some packages that the
+        maintainers of the COSMIC DE deem necessary for the COSMIC DE to start
+        and initialize. Excluding said packages creates a high probability that
+        the COSMIC DE will fail to initialize properly, or completely. This is an
+        unsupported use case. If this was not intentional, please assign an empty
+        list to the `environment.cosmic.excludePackages` option. If you want to
+        exclude non-essential packages, please look at the NixOS module for the
+        COSMIC DE and look for the essential packages in the `corePkgs` list.
+
+        You can stop this warning from appearing by setting the option
+        `services.desktopManager.cosmic.showExcludedPkgsWarning` to `false`.
+      ''
+    ];
   };
 }
