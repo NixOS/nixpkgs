@@ -94,7 +94,10 @@
   withLcms2 ? withFullDeps, # ICC profile support via lcms2
   withLzma ? withHeadlessDeps, # xz-utils
   withMetal ? false, # Unfree and requires manual downloading of files
-  withMfx ? withFullDeps && !(lib.versionAtLeast version "6.0") && (with stdenv.hostPlatform; isLinux && !isAarch), # Hardware acceleration via intel-media-sdk/libmfx
+  withMfx ?
+    withFullDeps
+    && !(lib.versionAtLeast version "6.0")
+    && (with stdenv.hostPlatform; isLinux && !isAarch), # Hardware acceleration via intel-media-sdk/libmfx
   withModplug ? withFullDeps && !stdenv.hostPlatform.isDarwin, # ModPlug support
   withMp3lame ? withHeadlessDeps, # LAME MP3 encoder
   withMysofa ? withFullDeps, # HRTF support via SOFAlizer
