@@ -12,6 +12,7 @@
   freetype,
   libsndfile,
   libX11,
+  libGL,
   rtmidi,
   SDL2,
   zlib,
@@ -62,9 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
       libsndfile
       rtmidi
       SDL2
-      libX11
       zlib
       portaudio
+    ]
+    ++ lib.optionals withGL [
+      libGL
     ]
     ++ lib.optionals withJACK [
       libjack2
@@ -72,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
       alsa-lib
+      libX11
     ];
 
   cmakeFlags = [

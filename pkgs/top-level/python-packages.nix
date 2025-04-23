@@ -8879,6 +8879,8 @@ self: super: with self; {
 
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
 
+  mlcroissant = callPackage ../development/python-modules/mlcroissant { };
+
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
