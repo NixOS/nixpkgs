@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     swiftpm
   ];
 
+  # Can't find libdispatch without this on NixOS. (swift 5.8)
+  LD_LIBRARY_PATH = lib.optionalString stdenv.isLinux "${swiftPackages.Dispatch}/lib";
+
   postPatch =
     let
       swift-crypto = fetchFromGitHub {
@@ -58,6 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
       remko
     ];
     mainProgram = "age-plugin-se";
-    platforms = lib.platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 })
