@@ -24,9 +24,9 @@ let
       hash = "sha256-mUvDF5y+cBnqUaHjyiiE8cJGH5MfQMqGFy6bYv9vCVY=";
     };
     "18" = rec {
-      version = "18.1.0";
+      version = "18.1.11";
       rev = "v${version}";
-      hash = "sha256-64guZiuO7VpaX01wNIjV7cnjEAe6ineMdY44S6sA33k=";
+      hash = "sha256-VoALyFqShKL3bpeoOIdKoseNfDWiRE+j0ppHapXOmEU=";
     };
     "17" = rec {
       version = "17.0.0";
@@ -65,16 +65,7 @@ stdenv.mkDerivation {
   };
 
   patches =
-    lib.optionals (llvmMajor == "18") [
-      # Fixes build after SPV_INTEL_maximum_registers breaking change
-      # TODO: remove on next spirv-headers release
-      (fetchpatch {
-        url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/d970c9126c033ebcbb7187bc705eae2e54726b74.patch";
-        revert = true;
-        hash = "sha256-71sJuGqVjTcB549eIiCO0LoqAgxkdEHCoxh8Pd/Qzz8=";
-      })
-    ]
-    ++ lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "18") [
+    lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "18") [
       # Fixes build after spirv-headers breaking change
       (fetchpatch {
         url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";
