@@ -9,6 +9,7 @@
   llvm,
   spirv-headers,
   spirv-tools,
+  pkgs,
 }:
 
 let
@@ -16,45 +17,42 @@ let
   isROCm = lib.hasPrefix "rocm" llvm.pname;
 
   # ROCm, if actively updated will always be at the latest version
+  versions = {
+    "19" = {
+      version = "19.1.0";
+      rev = "dad1f0eaab8047a4f73c50ed5f3d1694b78aae97";
+      hash = "sha256-mUvDF5y+cBnqUaHjyiiE8cJGH5MfQMqGFy6bYv9vCVY=";
+    };
+    "18" = rec {
+      version = "18.1.0";
+      rev = "v${version}";
+      hash = "sha256-64guZiuO7VpaX01wNIjV7cnjEAe6ineMdY44S6sA33k=";
+    };
+    "17" = rec {
+      version = "17.0.0";
+      rev = "v${version}";
+      hash = "sha256-Rzm5Py9IPFtS9G7kME+uSwZ/0gPGW6MlL35ZWk4LfHM=";
+    };
+    "16" = rec {
+      version = "16.0.0";
+      rev = "v${version}";
+      hash = "sha256-EUabcYqSjXshbPmcs1DRLvCSL1nd9rEdpqELBrItCW8=";
+    };
+    "15" = rec {
+      version = "15.0.13";
+      rev = "v${version}";
+      hash = "sha256-RnGbBHUUGjIBcakQJO4nAm3/oIrQ8nkx+BC8Evw6Jmc=";
+    };
+    "14" = {
+      version = "14.0.0+unstable-2025-01-28";
+      rev = "9df26b6af308cb834a4013deb8094f386f29accd";
+      hash = "sha256-8VRQwXFbLcYgHtWKs73yuTsy2kkCgYgPqD+W/GPy1BM=";
+    };
+  };
+
   branch =
-    if llvmMajor == "19" then
-      {
-        version = "19.1.0";
-        rev = "dad1f0eaab8047a4f73c50ed5f3d1694b78aae97";
-        hash = "sha256-mUvDF5y+cBnqUaHjyiiE8cJGH5MfQMqGFy6bYv9vCVY=";
-      }
-    else if llvmMajor == "18" then
-      rec {
-        version = "18.1.0";
-        rev = "v${version}";
-        hash = "sha256-64guZiuO7VpaX01wNIjV7cnjEAe6ineMdY44S6sA33k=";
-      }
-    else if llvmMajor == "17" || isROCm then
-      rec {
-        version = "17.0.0";
-        rev = "v${version}";
-        hash = "sha256-Rzm5Py9IPFtS9G7kME+uSwZ/0gPGW6MlL35ZWk4LfHM=";
-      }
-    else if llvmMajor == "16" then
-      rec {
-        version = "16.0.0";
-        rev = "v${version}";
-        hash = "sha256-EUabcYqSjXshbPmcs1DRLvCSL1nd9rEdpqELBrItCW8=";
-      }
-    else if llvmMajor == "15" then
-      rec {
-        version = "15.0.13";
-        rev = "v${version}";
-        hash = "sha256-RnGbBHUUGjIBcakQJO4nAm3/oIrQ8nkx+BC8Evw6Jmc=";
-      }
-    else if llvmMajor == "14" then
-      {
-        version = "14.0.0+unstable-2025-01-28";
-        rev = "9df26b6af308cb834a4013deb8094f386f29accd";
-        hash = "sha256-8VRQwXFbLcYgHtWKs73yuTsy2kkCgYgPqD+W/GPy1BM=";
-      }
-    else
-      throw "Incompatible LLVM version.";
+    versions."${if isROCm then "17" else llvmMajor}"
+      or (throw "Incompatible LLVM version ${llvmMajor}");
 in
 stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
@@ -140,6 +138,10 @@ stdenv.mkDerivation {
       install_name_tool $out/bin/llvm-spirv \
         -change @rpath/libLLVMSPIRVLib.dylib $out/lib/libLLVMSPIRVLib.dylib
     '';
+
+  passthru.tests = lib.genAttrs (lib.attrNames versions) (
+    version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvm_${version}"; }
+  );
 
   meta = with lib; {
     homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
