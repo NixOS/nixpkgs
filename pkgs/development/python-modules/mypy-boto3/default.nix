@@ -1398,8 +1398,8 @@ rec {
       "sha256-ndTROc1T2APmQHL7EsSeU3XxWPYzp1e32tzqe4UDs/8=";
 
   mypy-boto3-wafv2 =
-    buildMypyBoto3Package "wafv2" "1.37.21"
-      "sha256-EiksZIqxgX/H/YF7Yo0B2YIQzgIYqcFhol81jDL9gKk=";
+    buildMypyBoto3Package "wafv2" "1.38.0"
+      "sha256-j50nk+lk4EaSjKHQ94ZWz0euxQSubBx3pTRSRObxBtc=";
 
   mypy-boto3-wellarchitected =
     buildMypyBoto3Package "wellarchitected" "1.37.0"
