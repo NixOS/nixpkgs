@@ -1,11 +1,14 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   openssl,
   pkg-config,
   versionCheckHook,
   nix-update-script,
+  installShellFiles,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,7 +30,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   buildInputs = [ openssl ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd moon \
+        --bash <(${emulator} $out/bin/moon completions --shell bash) \
+        --fish <(${emulator} $out/bin/moon completions --shell fish) \
+        --zsh <(${emulator} $out/bin/moon completions --shell zsh)
+    ''
+  );
 
   # Some tests fail, because test using internet connection and install NodeJS by example
   doCheck = false;
