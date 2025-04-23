@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
-    rev = finalAttrs.version;
-    hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ll4thDS8fHxkm2IuGjePPVPyPPrz7yDzpKVloFuk/yE=";
   };
 
   postPatch = ''
