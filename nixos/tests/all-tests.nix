@@ -149,6 +149,7 @@ in
   anki-sync-server = handleTest ./anki-sync-server.nix { };
   anuko-time-tracker = handleTest ./anuko-time-tracker.nix { };
   apcupsd = handleTest ./apcupsd.nix { };
+  anubis = runTest ./anubis.nix;
   apfs = runTest ./apfs.nix;
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   appliance-repart-image-verity-store = runTest ./appliance-repart-image-verity-store.nix;
