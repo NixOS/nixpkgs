@@ -1294,8 +1294,8 @@ rec {
       "sha256-Oa68Ehov4g+WL9g7YX/ZFgA2Bdb2hR/fGVM3oKpCj+E=";
 
   mypy-boto3-ssm =
-    buildMypyBoto3Package "ssm" "1.37.19"
-      "sha256-bopkgSzOq7haz6di3A/v4GVJfSJ0oJU266uxygLPhfk=";
+    buildMypyBoto3Package "ssm" "1.38.0"
+      "sha256-rG5lzAWqKDIzuotrQFF28w5K4zOXReNu0ztVwHpeMyU=";
 
   mypy-boto3-ssm-contacts =
     buildMypyBoto3Package "ssm-contacts" "1.37.0"
