@@ -1206,8 +1206,8 @@ rec {
       "sha256-7old3PAOBcxk+WTKU59Wr0RgqDTuaDWoi/DtBCf6TY0=";
 
   mypy-boto3-scheduler =
-    buildMypyBoto3Package "scheduler" "1.37.0"
-      "sha256-XU/tZnffFHZRe0aVlN43v3vApOZHmw0+w0mHuUWP0MA=";
+    buildMypyBoto3Package "scheduler" "1.38.0"
+      "sha256-3uD6pOOy2Godau+D8UhwPdBGfXNsdL4zqS1/A513wzQ=";
 
   mypy-boto3-schemas =
     buildMypyBoto3Package "schemas" "1.37.0"
