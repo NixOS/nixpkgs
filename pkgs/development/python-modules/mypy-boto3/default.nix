@@ -486,8 +486,8 @@ rec {
       "sha256-oqjyD+OlTHxrUenbecGYt8GjXHoip07zsgbb+siCUqw=";
 
   mypy-boto3-elastictranscoder =
-    buildMypyBoto3Package "elastictranscoder" "1.37.0"
-      "sha256-h1hUoDGwVC3shOU236Z7GvphwsFnm+6lVMVYz7hjadM=";
+    buildMypyBoto3Package "elastictranscoder" "1.38.0"
+      "sha256-RhnEiyQBYzORnzvPZH6UCfZa6zPf82P+9AovEeff9GM=";
 
   mypy-boto3-elb =
     buildMypyBoto3Package "elb" "1.37.0"
