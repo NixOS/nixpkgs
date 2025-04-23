@@ -10,6 +10,7 @@
   gperf,
   dejavu_fonts,
   autoreconfHook,
+  versionCheckHook,
   testers,
   nix-update-script,
 }:
@@ -89,6 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "bin"}/bin/fc-list";
+  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
