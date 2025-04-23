@@ -1290,8 +1290,8 @@ rec {
       "sha256-Dny+ycWR2w48WsvjrTxH37DljvlsE6rUnCfJ/eo9Rig=";
 
   mypy-boto3-sqs =
-    buildMypyBoto3Package "sqs" "1.37.0"
-      "sha256-7VbfcklEJdTn0OBI8jIcwXUU+ju+38QQu7i3CcS/9WQ=";
+    buildMypyBoto3Package "sqs" "1.38.0"
+      "sha256-Oa68Ehov4g+WL9g7YX/ZFgA2Bdb2hR/fGVM3oKpCj+E=";
 
   mypy-boto3-ssm =
     buildMypyBoto3Package "ssm" "1.37.19"
