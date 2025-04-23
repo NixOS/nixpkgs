@@ -29,9 +29,9 @@ let
       hash = "sha256-VoALyFqShKL3bpeoOIdKoseNfDWiRE+j0ppHapXOmEU=";
     };
     "17" = rec {
-      version = "17.0.0";
+      version = "17.0.11";
       rev = "v${version}";
-      hash = "sha256-Rzm5Py9IPFtS9G7kME+uSwZ/0gPGW6MlL35ZWk4LfHM=";
+      hash = "sha256-Ba4GZS7Rc93Fphj2xaBZ3AqwXvxB9UU0gzPNoDEoaQM=";
     };
     "16" = rec {
       version = "16.0.0";
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   };
 
   patches =
-    lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "18") [
+    lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "17") [
       # Fixes build after spirv-headers breaking change
       (fetchpatch {
         url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";
