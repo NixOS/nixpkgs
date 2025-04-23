@@ -13,6 +13,32 @@
 
 let
   cfg = config.services.desktopManager.cosmic;
+  # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
+  corePkgs =
+    with pkgs;
+    [
+      cosmic-applets
+      cosmic-applibrary
+      cosmic-bg
+      cosmic-comp
+      cosmic-files
+      config.services.displayManager.cosmic-greeter.package
+      cosmic-idle
+      cosmic-launcher
+      cosmic-notifications
+      cosmic-osd
+      cosmic-panel
+      cosmic-session
+      cosmic-settings
+      cosmic-settings-daemon
+      cosmic-workspaces-epoch
+    ]
+    ++ lib.optionals cfg.xwayland.enable [
+      # Why would you want to enable XWayland but exclude the package
+      # providing XWayland support? Doesn't make sense. Add `xwayland` to the
+      # `corePkgs` list.
+      xwayland
+    ];
 in
 {
   meta.maintainers = lib.teams.cosmic.members;
@@ -41,44 +67,30 @@ in
       "/share/cosmic"
     ];
     environment.systemPackages = utils.removePackagesByName (
-      with pkgs;
-      [
-        adwaita-icon-theme
-        alsa-utils
-        cosmic-applets
-        cosmic-applibrary
-        cosmic-bg
-        cosmic-comp
-        cosmic-edit
-        cosmic-files
-        config.services.displayManager.cosmic-greeter.package
-        cosmic-icons
-        cosmic-idle
-        cosmic-launcher
-        cosmic-notifications
-        cosmic-osd
-        cosmic-panel
-        cosmic-player
-        cosmic-randr
-        cosmic-screenshot
-        cosmic-session
-        cosmic-settings
-        cosmic-settings-daemon
-        cosmic-term
-        cosmic-wallpapers
-        cosmic-workspaces-epoch
-        hicolor-icon-theme
-        playerctl
-        pop-icon-theme
-        pop-launcher
-        xdg-user-dirs
-      ]
-      ++ lib.optionals cfg.xwayland.enable [
-        xwayland
-      ]
-      ++ lib.optionals config.services.flatpak.enable [
-        cosmic-store
-      ]
+      corePkgs
+      ++ (
+        with pkgs;
+        [
+          adwaita-icon-theme
+          alsa-utils
+          cosmic-edit
+          cosmic-icons
+          cosmic-player
+          cosmic-randr
+          cosmic-screenshot
+          cosmic-term
+          cosmic-wallpapers
+          hicolor-icon-theme
+          playerctl
+          pop-icon-theme
+          pop-launcher
+          xdg-user-dirs
+        ]
+        ++ lib.optionals config.services.flatpak.enable [
+          # User may have Flatpaks enabled but might not want the `cosmic-store` package.
+          cosmic-store
+        ]
+      )
     ) config.environment.cosmic.excludePackages;
 
     # Distro-wide defaults for graphical sessions
