@@ -1274,8 +1274,8 @@ rec {
       "sha256-cwswYTKcjKq/L6/nLYJ74OQ7pyZNeMxN1yHQWBpwT40=";
 
   mypy-boto3-sms-voice =
-    buildMypyBoto3Package "sms-voice" "1.37.0"
-      "sha256-BOr9Z7pTzVV25ihSAlHdvYR8y6AGDGe9WvbNetJER5M=";
+    buildMypyBoto3Package "sms-voice" "1.38.0"
+      "sha256-qWnTJxM1h3pmY2PnI8PjT7u4+xODrSQM41IK8QsJCfM=";
 
   mypy-boto3-snow-device-management =
     buildMypyBoto3Package "snow-device-management" "1.37.0"
