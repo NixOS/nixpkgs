@@ -199,6 +199,43 @@ in
       '';
     };
 
+    boot.kernelModuleSigning = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          This enables kernel module signing with externally
+          provided keys in impure mode in order to not include
+          the private key into the nix store and be able to use
+          PKCS#11 modules.
+        '';
+      };
+
+      publicKeyPath = mkOption {
+        type = types.path;
+        description = ''
+          The public key path for module signing to be included
+          into the kernel when building it.
+        '';
+      };
+
+      privateKeyPathOrUri = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          The private key path or URI for module signing.
+        '';
+      };
+
+      hashAlgorithm = mkOption {
+        type = types.str;
+        default = "sha512";
+        description = ''
+          The hash algorithm used to sign kernel modules.
+        '';
+      };
+    };
+
     boot.initrd.availableKernelModules = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -252,8 +289,18 @@ in
       apply =
         let
           kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+          modulesDirect = modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
         in
-        modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
+        if config.boot.kernelModuleSigning.enable then
+          modules: (pkgs.signModules {
+            modules = modulesDirect modules;
+            pubKeyPath = config.boot.kernelModuleSigning.publicKeyPath;
+            privKeyPathOrUri = config.boot.kernelModuleSigning.privateKeyPathOrUri;
+            hashAlgorithm = config.boot.kernelModuleSigning.hashAlgorithm;
+          }).override { name = kernel-name + "-modules-signed"; }
+        else
+          modulesDirect
+      ;
     };
 
     system.requiredKernelConfig = mkOption {
