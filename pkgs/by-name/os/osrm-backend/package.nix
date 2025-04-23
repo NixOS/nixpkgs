@@ -10,26 +10,24 @@
   boost,
   lua,
   luabind,
-  tbb,
+  tbb_2022_0,
   expat,
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+let
+  tbb = tbb_2022_0;
+in
+stdenv.mkDerivation rec {
   pname = "osrm-backend";
-  version = "5.27.1-unstable-2024-11-03";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Project-OSRM";
     repo = "osrm-backend";
-    rev = "3614af7f6429ee35c3f2e836513b784a74664ab6";
-    hash = "sha256-iix++G49cC13wZGZIpXu1SWGtVAcqpuX3GhsIaETzUU=";
+    tag = "V${version}";
+    hash = "sha256-R2Sx+DbT6gROI8X1fkxqOGbMqgmsnNiw2rUX6gSZuTs=";
   };
-
-  patches = [
-    # Taken from https://github.com/Project-OSRM/osrm-backend/pull/7073.
-    ./boost187-compat.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -60,9 +58,9 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = "https://github.com/Project-OSRM/osrm-backend/wiki";
+    homepage = "https://project-osrm.org/";
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
-    changelog = "https://github.com/Project-OSRM/osrm-backend/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/Project-OSRM/osrm-backend/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ erictapen ];
     platforms = lib.platforms.unix;
