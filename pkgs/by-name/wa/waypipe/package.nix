@@ -69,7 +69,7 @@ llvmPackages.stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network proxy for Wayland clients (applications)";
     longDescription = ''
       waypipe is a proxy for Wayland clients. It forwards Wayland messages and
@@ -78,9 +78,9 @@ llvmPackages.stdenv.mkDerivation rec {
     '';
     homepage = "https://mstoeckl.com/notes/gsoc/blog.html";
     changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "waypipe";
   };
 }
