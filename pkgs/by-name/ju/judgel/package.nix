@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Simple local C++ CLI judge";
     homepage = "https://github.com/udontur/judgel";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ udontur ];
+    # maintainers = with lib.maintainers; [ udontur ];
     mainProgram = "judgel";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
   };
