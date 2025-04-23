@@ -7,6 +7,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -24,6 +25,13 @@ in
         default = true;
       };
     };
+
+    environment.cosmic.excludePackages = lib.mkOption {
+      description = "List of packages to exclude from the COSMIC environment.";
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.cosmic-player ]";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -32,7 +40,7 @@ in
       "/share/backgrounds"
       "/share/cosmic"
     ];
-    environment.systemPackages =
+    environment.systemPackages = utils.removePackagesByName (
       with pkgs;
       [
         adwaita-icon-theme
@@ -70,7 +78,8 @@ in
       ]
       ++ lib.optionals config.services.flatpak.enable [
         cosmic-store
-      ];
+      ]
+    ) config.environment.cosmic.excludePackages;
 
     # Distro-wide defaults for graphical sessions
     services.graphical-desktop.enable = true;
