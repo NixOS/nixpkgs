@@ -4164,9 +4164,9 @@ with pkgs;
   nodejs-slim = nodejs-slim_22;
   corepack = hiPrio corepack_22;
 
-  nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
-  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix { enableNpm = false; };
-  corepack_18 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_18; });
+  nodejs_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed";
+  nodejs-slim_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed";
+  corepack_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed";
 
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
@@ -11986,7 +11986,7 @@ with pkgs;
   };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs_18;
+    nodejs = nodejs_20;
   };
 
   mailmanPackages = callPackage ../servers/mail/mailman { };
@@ -16460,7 +16460,7 @@ with pkgs;
   };
 
   openvscode-server = callPackage ../servers/openvscode-server {
-    nodejs = nodejs_18;
+    nodejs = nodejs_20;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
   };
 
