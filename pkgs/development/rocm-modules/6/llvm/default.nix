@@ -15,7 +15,7 @@
   zlib,
   gcc-unwrapped,
   glibc,
-  substituteAll,
+  replaceVars,
   libffi,
   libxml2,
   removeReferencesTo,
@@ -319,8 +319,7 @@ rec {
             })
             # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
             # Once we can switch to overrideScope this can be removed
-            (substituteAll {
-              src = ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch;
+            (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
               libllvmLibdir = "${llvm.lib}/lib";
             })
           ];
