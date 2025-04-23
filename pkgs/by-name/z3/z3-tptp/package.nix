@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
   meta = {
     inherit (z3.meta) license homepage platforms;
     description = "TPTP wrapper for Z3 prover";
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = z3.meta.maintainers ++ [ lib.maintainers.raskin ];
   };
 }
