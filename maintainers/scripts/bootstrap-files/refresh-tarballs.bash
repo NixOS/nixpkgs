@@ -264,14 +264,14 @@ EOF
 
             # individual file entries
             cat <<EOF
-$attr = import <nix/fetchurl.nix> {
+  $attr = import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/${s3_prefix}/${nixpkgs_revision}/$fname";
     hash = "${sri}";$(
     [[ -n ${executable_nix} ]] && printf "\n    %s" "${executable_nix}"
     [[ -n ${name_nix} ]]       && printf "\n    %s" "${name_nix}"
     [[ -n ${unpack_nix} ]]     && printf "\n    %s" "${unpack_nix}"
     )
-};
+  };
 EOF
     done
     # footer
