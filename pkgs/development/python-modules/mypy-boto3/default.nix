@@ -198,8 +198,8 @@ rec {
       "sha256-L7YEHQnuVHvdJvtCGvQZtZVJmdqASXih6Q2mqvxQ15g=";
 
   mypy-boto3-chime-sdk-meetings =
-    buildMypyBoto3Package "chime-sdk-meetings" "1.37.0"
-      "sha256-k/OxG9pwEz+dUNohIHocantP82rho4C407lnaU9LA/8=";
+    buildMypyBoto3Package "chime-sdk-meetings" "1.38.0"
+      "sha256-1ikmW6i2DRdaHne8IRypCGkz2BOBdP8YciwVVbXUi0Q=";
 
   mypy-boto3-chime-sdk-messaging =
     buildMypyBoto3Package "chime-sdk-messaging" "1.37.0"
