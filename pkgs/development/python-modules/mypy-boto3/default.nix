@@ -106,8 +106,8 @@ rec {
       "sha256-tlXyfbwuw6OIWaioqEPT3QUl84NgkMLXFh8RHUBokyE=";
 
   mypy-boto3-appintegrations =
-    buildMypyBoto3Package "appintegrations" "1.37.0"
-      "sha256-tyUEvQdkjZZYaGytrQOK2TOGrhKlVikdxyECl6Zz57M=";
+    buildMypyBoto3Package "appintegrations" "1.38.0"
+      "sha256-5AFYyCJk6eHKDaqBSl8Po/jj6Fkwr5JYgMtxGrdWGRQ=";
 
   mypy-boto3-application-autoscaling =
     buildMypyBoto3Package "application-autoscaling" "1.37.32"
