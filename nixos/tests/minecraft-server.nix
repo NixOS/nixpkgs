@@ -31,6 +31,19 @@ import ./make-test-python.nix (
             "rcon.password" = rcon-pass;
             "rcon.port" = rcon-port;
           };
+          ops = [
+            # not real users, just random UUIDs
+            {
+              name = "TestUser1";
+              uuid = "74e97cae-d9c5-483f-a7ab-c90389975955";
+              level = 1;
+              bypassesPlayerLimit = true;
+            }
+            {
+              name = "TestUser2";
+              uuid = "c95bf5db-6181-4787-a44c-cbd23598f262";
+            }
+          ];
         };
 
         virtualisation.memorySize = 2047;

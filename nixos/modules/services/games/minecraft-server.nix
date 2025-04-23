@@ -13,6 +13,8 @@ let
     eula=true
   '';
 
+  opsFile = pkgs.writeText "ops.json" (builtins.toJSON cfg.ops);
+
   whitelistFile = pkgs.writeText "whitelist.json" (
     builtins.toJSON (
       lib.mapAttrsToList (n: v: {
@@ -83,6 +85,7 @@ in
         description = ''
           Whether to use a declarative Minecraft server configuration.
           Only if set to `true`, the options
+          {option}`services.minecraft-server.ops`,
           {option}`services.minecraft-server.whitelist` and
           {option}`services.minecraft-server.serverProperties` will be
           applied.
@@ -113,6 +116,57 @@ in
         default = false;
         description = ''
           Whether to open ports in the firewall for the server.
+        '';
+      };
+
+      ops = lib.mkOption {
+        type =
+          let
+            minecraftUUID =
+              lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              // {
+                description = "Minecraft UUID";
+              };
+          in
+          lib.types.listOf (
+            lib.types.submodule {
+              options = {
+                name = lib.mkOption {
+                  description = "Minecraft username of the operator";
+                  type = lib.types.str;
+                };
+                uuid = lib.mkOption {
+                  description = "Minecraft uuid of the operator.  You can use https://mcuuid.net/ to get a Minecraft UUID for a username.";
+                  type = minecraftUUID;
+                };
+                level = lib.mkOption {
+                  type = lib.types.ints.between 1 4;
+                  description = "operator level to give the user (1: moderator; 2: gamemaster; 3: admin; 4: owner)";
+                  default = 4;
+                };
+                bypassesPlayerLimit = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "If true, this user can connect to the server even if max-players (defined in serverProperties) has been reached";
+                };
+              };
+            }
+          );
+        default = [ ];
+        description = ''
+          Operators. Only has an effect when
+          {option}`services.minecraft-server.declarative` is
+          `true`.
+        '';
+        example = lib.literalExpression ''
+          [
+            {
+              name = "username1";
+              uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+              level = 3;
+              bypassesPlayerLimit = true;
+            }
+          };
         '';
       };
 
@@ -273,12 +327,14 @@ in
 
                 # Was declarative before, no need to back up anything
                 ln -sf ${whitelistFile} whitelist.json
+                ln -sf ${opsFile} ops.json
                 cp -f ${serverPropertiesFile} server.properties
 
               else
 
                 # Declarative for the first time, backup stateful files
                 ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+                ln -sb --suffix=.stateful ${opsFile} ops.json
                 cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
                 # server.properties must have write permissions, because every time
