@@ -178,8 +178,8 @@ rec {
       "sha256-D6YNRjQeNVKBBaqpVYyx3k/YHD7CdxNtSV+DSSARdaw=";
 
   mypy-boto3-budgets =
-    buildMypyBoto3Package "budgets" "1.37.38"
-      "sha256-WdJfpMdYkmqNyh+YDnMJZ+q0gUC83e/L9lEnHsCQfrk=";
+    buildMypyBoto3Package "budgets" "1.38.0"
+      "sha256-WXMpTKmBXa1q51tnLTE5sOxJyn0LLqOwpV2wdZfM1v0=";
 
   mypy-boto3-ce =
     buildMypyBoto3Package "ce" "1.37.30"
