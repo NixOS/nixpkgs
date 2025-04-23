@@ -8175,9 +8175,7 @@ with pkgs;
     jdk = jdk11;
   };
 
-  valgrind = callPackage ../development/tools/analysis/valgrind {
-    inherit (buildPackages.darwin) xnu bootstrap_cmds;
-  };
+  valgrind = callPackage ../development/tools/analysis/valgrind { };
   valgrind-light = (res.valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
     meta = oldAttrs.meta // {
       description = "${oldAttrs.meta.description} (without GDB)";
