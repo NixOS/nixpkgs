@@ -2733,12 +2733,12 @@ self: super:
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "12.2.7";
+          version = "12.2.11";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-4lKA+U7J8maKiDX9CWxWGjepGKSUu4ZOAA188yMt0bU=";
+            hash = "sha256-ArKq+IDkGOPwGT42unwPogx+xVdK4iFcJh2GCO8eLXE=";
           };
         })
         # 2024-11-03: Fixes build on aarch64-darwin. Can be removed after updating to 13+.
