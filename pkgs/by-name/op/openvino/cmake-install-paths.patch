@@ -19,7 +19,7 @@
 -    set(OV_CPACK_PYTHONDIR python)
 +    find_package(Python QUIET REQUIRED COMPONENTS Interpreter Development)
 +    set(OV_CPACK_PYTHONDIR "${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
- 
+
      if(USE_BUILD_TYPE_SUBFOLDER)
          set(build_type ${CMAKE_BUILD_TYPE})
 @@ -49,11 +50,11 @@ macro(ov_archive_cpack_set_dirs)
@@ -36,7 +36,7 @@
 -    set(OV_CPACK_PLUGINSDIR ${OV_CPACK_RUNTIMEDIR})
 +    set(OV_CPACK_PLUGINSDIR "${OV_CPACK_RUNTIMEDIR}/openvino")
  endmacro()
- 
+
  ov_archive_cpack_set_dirs()
 @@ -78,9 +79,9 @@ macro(ov_define_component_include_rules)
      # licensing
@@ -66,22 +66,22 @@
 +++ b/src/plugins/intel_npu/tools/compile_tool/CMakeLists.txt
 @@ -28,7 +28,7 @@ ov_add_target(ADD_CPPLINT
                        npu_tools_utils)
- 
+
  set_target_properties(${TARGET_NAME} PROPERTIES
 -                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR}
 +                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_NAME ov-${TARGET_NAME}
                            CXX_STANDARD 17)
- 
+
  # TODO: fix warnings and remove this exception
 @@ -41,13 +41,13 @@ endif()
  #
- 
+
  install(TARGETS ${TARGET_NAME}
 -        RUNTIME DESTINATION "tools/${TARGET_NAME}"
 +        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
          COMPONENT ${NPU_INTERNAL_COMPONENT}
          ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
- 
+
  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
      install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
 -            DESTINATION "tools/${TARGET_NAME}"
@@ -93,22 +93,22 @@
 +++ b/src/plugins/intel_npu/tools/protopipe/CMakeLists.txt
 @@ -52,7 +52,7 @@ ov_add_target(ADD_CPPLINT
                LINK_LIBRARIES PRIVATE ${DEPENDENCIES})
- 
+
  set_target_properties(${TARGET_NAME} PROPERTIES
 -                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR}
 +                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_NAME ov-${TARGET_NAME}
                            CXX_STANDARD 17)
- 
+
  #
 @@ -60,13 +60,13 @@ set_target_properties(${TARGET_NAME} PROPERTIES
  #
- 
+
  install(TARGETS ${TARGET_NAME}
 -        RUNTIME DESTINATION "tools/${TARGET_NAME}"
 +        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
          COMPONENT ${NPU_INTERNAL_COMPONENT}
          ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
- 
+
  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
      install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
 -            DESTINATION "tools/${TARGET_NAME}"
@@ -120,22 +120,22 @@
 +++ b/src/plugins/intel_npu/tools/single-image-test/CMakeLists.txt
 @@ -50,7 +50,7 @@ ov_add_target(ADD_CPPLINT
  ov_set_threading_interface_for(${TARGET_NAME})
- 
+
  set_target_properties(${TARGET_NAME} PROPERTIES
 -                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR}
 +                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_NAME ov-${TARGET_NAME}
                            CXX_STANDARD 17)
- 
+
  # TODO: fix warnings and remove this exception
 @@ -63,13 +63,13 @@ endif()
  #
- 
+
  install(TARGETS ${TARGET_NAME}
 -        RUNTIME DESTINATION "tools/${TARGET_NAME}"
 +        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
          COMPONENT ${NPU_INTERNAL_COMPONENT}
          ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
- 
+
  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
      install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
 -            DESTINATION "tools/${TARGET_NAME}"

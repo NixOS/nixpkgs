@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
       hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
     })
+    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
+    ./cmake-install-paths.patch
   ];
 
   outputs = [
@@ -103,10 +105,6 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_nvcc
   ];
 
-  patches = [
-    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
-    ./cmake-install-paths.patch
-  ];
 
   postPatch = ''
     mkdir -p temp/tbbbind_${tbbbind_version}

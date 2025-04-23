@@ -31,6 +31,7 @@
   cudaPackages ? { },
   rocmPackages,
   openvino,
+  onnxruntime,
 }@inputs:
 
 let
