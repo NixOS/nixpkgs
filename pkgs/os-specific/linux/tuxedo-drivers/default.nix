@@ -6,19 +6,19 @@
   kernelModuleMakeFlags,
   kmod,
   pahole,
-  gitUpdater
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.12.1";
+  version = "4.12.2";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZsfPs8VvvgguyNLSVi6n5hs0OzNwiK3bkooQ267mKtA=";
+    hash = "sha256-tVpuyZGpJJqv9Ilwjxvi9zN9MwwRI2CjjKFReCmXsEA=";
   };
 
   buildInputs = [ pahole ];
