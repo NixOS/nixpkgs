@@ -19005,7 +19005,7 @@ with pkgs;
     wordpress_6_7
     ;
 
-  wordpressPackages = (
+  wordpressPackages = recurseIntoAttrs (
     callPackage ../servers/web-apps/wordpress/packages {
       plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
       themes = lib.importJSON ../servers/web-apps/wordpress/packages/themes.json;
