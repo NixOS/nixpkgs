@@ -4248,6 +4248,8 @@ self: super: with self; {
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
+  dwfpy = callPackage ../development/python-modules/dwfpy { };
+
   dyn = callPackage ../development/python-modules/dyn { };
 
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
