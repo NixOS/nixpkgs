@@ -70,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
       drupol
+      NotAShelf
       viperML
     ];
   };
