@@ -347,6 +347,7 @@ let
         toSentenceCase
         addContextFrom
         splitString
+        splitStringBy
         removePrefix
         removeSuffix
         versionOlder

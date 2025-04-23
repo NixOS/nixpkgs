@@ -51,9 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/icons
   '';
 
-  # clean up wrongly created dirs in `install.sh` and broken .desktop file
   postInstall = ''
-    grep -v "Version=#VERSION#" $src/LINUX/die.desktop > $out/share/applications/die.desktop
+    cp -r $src/XYara/yara_rules $out/lib/die/
   '';
 
   meta = {
