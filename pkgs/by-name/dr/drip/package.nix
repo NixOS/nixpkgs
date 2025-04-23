@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.epl10;
     homepage = "https://github.com/ninjudd/drip";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.rybern ];
+    maintainers = with lib.maintainers; [
+      rybern
+      awwpotato
+    ];
   };
 })
