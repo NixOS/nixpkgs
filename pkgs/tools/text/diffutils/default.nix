@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    hash = "sha256-pz7wX+N91YX32HBo5KBjl2BBn4EBOL11xh3aofniEx4=";
+    hash = "sha256-fIt/n8hgkUH96pzs6FJJ0whiQ5H/Yd7a9Sj8szdyff0=";
   };
 
   outputs = [
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }
