@@ -44,11 +44,12 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/1193.patch";
       hash = "sha256-ZQbwUmuIZoGVBof8QNR3V8vU385e2X7EvU3+Fbj4+M8=";
     })
-  ];
-
-  cmakeFlags = [
-    # Skip tests to work around https://github.com/uxlfoundation/oneTBB/issues/1695
-    (lib.cmakeBool "TBB_TEST" (!stdenv.hostPlatform.isWindows))
+    # Fix tests on FreeBSD and Windows
+    (fetchpatch {
+      name = "fix-tbb-freebsd-and-windows-tests.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1696.patch";
+      hash = "sha256-yjX2FkOK8bz29a/XSA7qXgQw9lxzx8VIgEBREW32NN4=";
+    })
   ];
 
   # Fix build with modern gcc
