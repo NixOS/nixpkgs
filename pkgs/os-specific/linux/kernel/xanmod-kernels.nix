@@ -13,10 +13,12 @@ let
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
   variants = {
+    # ./update-xanmod.sh lts
     lts = {
       version = "6.12.23";
       hash = "sha256-OBsKzXcFLwqidotHDmPwKFtBX9zRC7DoDR4hhWZUv/E=";
     };
+    # ./update-xanmod.sh main
     main = {
       version = "6.13.11";
       hash = "sha256-hv93f1poaCmjdy2G39+T2crnYMS26FxD2Dn2hmTGZB8=";
@@ -69,6 +71,12 @@ let
           RCU_BOOST_DELAY = freeform "0";
           RCU_EXP_KTHREAD = yes;
         };
+
+        passthru.updateScript = [
+          ./update-xanmod.sh
+          variant
+          variants.${variant}.version
+        ];
 
         extraMeta = {
           branch = lib.versions.majorMinor version;
