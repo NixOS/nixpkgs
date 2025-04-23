@@ -9062,6 +9062,8 @@ self: super: with self; {
 
   mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
 
+  mozjpeg-lossless-optimization = callPackage ../development/python-modules/mozjpeg-lossless-optimization { };
+
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpegdash = callPackage ../development/python-modules/mpegdash { };
