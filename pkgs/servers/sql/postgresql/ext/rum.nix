@@ -3,7 +3,7 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  postgresqlTestHook,
+  postgresqlTestExtension,
   stdenv,
 }:
 
@@ -20,32 +20,13 @@ postgresqlBuildExtension (finalAttrs: {
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    inherit (finalAttrs) version;
-    pname = "rum-test";
-
-    dontUnpack = true;
-    doCheck = true;
-    nativeCheckInputs = [
-      postgresqlTestHook
-      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
-    ];
-    failureHook = "postgresqlStop";
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    passAsFile = [ "sql" ];
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
     sql = ''
       CREATE EXTENSION rum;
       CREATE TABLE test_table (t text, v tsvector);
       CREATE INDEX test_table_rumindex ON test_table USING rum (v rum_tsvector_ops);
     '';
-    checkPhase = ''
-      runHook preCheck
-
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
   };
 
   meta = {

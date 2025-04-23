@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  setuptools,
+  hatchling,
   pytestCheckHook,
 }:
 
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-Ev2uZNBmT/v6/a39weyP5XGs0OcaYveSM9072giNOcI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [ "otpauth" ];
 
   meta = with lib; {
     description = "Implements one time password of HOTP/TOTP";

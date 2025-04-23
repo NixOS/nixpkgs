@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  Carbon,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +22,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/koekeishiya/khd/commit/4765ae0b4c7d4ca56319dc92ff54393cd9e03fbc.patch";
       sha256 = "0kvf5hxi5bf6pf125qib7wn7hys0ag66zzpp4srj1qa87lxyf7np";
     })
-  ];
-
-  buildInputs = [
-    Carbon
-    Cocoa
   ];
 
   buildPhase = ''

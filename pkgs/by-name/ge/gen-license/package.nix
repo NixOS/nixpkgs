@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-xXzUobB8RMyJOC4lKayE+6SKC7NW1dNWGUUH3i1TaW0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   meta = with lib; {
     description = "Create licenses for your projects right from your terminal";

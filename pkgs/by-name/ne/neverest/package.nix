@@ -4,7 +4,6 @@
   fetchFromGitHub,
   stdenv,
   pkg-config,
-  darwin,
   installShellFiles,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -36,17 +35,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ] ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        Cocoa
-        Security
-      ]
-    )
-    ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
+  buildInputs = lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
 
   # TODO: unit tests temporarily broken, remove this line for the next
   # beta.2 release

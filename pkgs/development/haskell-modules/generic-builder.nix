@@ -126,7 +126,9 @@ in
   benchmarkHaskellDepends ? [ ],
   benchmarkSystemDepends ? [ ],
   benchmarkFrameworkDepends ? [ ],
+  # testTarget is deprecated. Use testTargets instead.
   testTarget ? "",
+  testTargets ? lib.strings.splitString " " testTarget,
   testFlags ? [ ],
   broken ? false,
   preCompileBuildDriver ? null,
@@ -537,6 +539,11 @@ let
     exec "$@"
   '';
 
+  testTargetsString =
+    lib.warnIf (testTarget != "")
+      "haskellPackages.mkDerivation: testTarget is deprecated. Use testTargets instead"
+      (lib.concatStringsSep " " testTargets);
+
 in
 lib.fix (
   drv:
@@ -765,7 +772,7 @@ lib.fix (
           ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
         )
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
-        ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+        ${setupCommand} test ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
         runHook postCheck
       '';
 

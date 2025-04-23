@@ -31,7 +31,6 @@
   openldap,
   openssl_1_1,
   openssl,
-  overrideSDK,
   pam,
   pcre2,
   bison,
@@ -284,18 +283,15 @@ lib.makeScope pkgs.newScope (
 
         couchbase = callPackage ../development/php-packages/couchbase { };
 
-        datadog_trace = callPackage ../development/php-packages/datadog_trace {
-          buildPecl = buildPecl.override {
-            stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-          };
-          inherit (pkgs) darwin;
-        };
+        datadog_trace = callPackage ../development/php-packages/datadog_trace { };
 
         decimal = callPackage ../development/php-packages/decimal { };
 
         ds = callPackage ../development/php-packages/ds { };
 
         event = callPackage ../development/php-packages/event { };
+
+        excimer = callPackage ../development/php-packages/excimer { };
 
         gnupg = callPackage ../development/php-packages/gnupg { };
 
@@ -324,9 +320,7 @@ lib.makeScope pkgs.newScope (
 
         memprof = callPackage ../development/php-packages/memprof { };
 
-        mongodb = callPackage ../development/php-packages/mongodb {
-          inherit (pkgs) darwin;
-        };
+        mongodb = callPackage ../development/php-packages/mongodb { };
 
         msgpack = callPackage ../development/php-packages/msgpack { };
 
@@ -383,9 +377,7 @@ lib.makeScope pkgs.newScope (
 
         smbclient = callPackage ../development/php-packages/smbclient { };
 
-        snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
-          inherit (pkgs) darwin;
-        };
+        snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
 
         spx = callPackage ../development/php-packages/spx { };
 
@@ -402,6 +394,8 @@ lib.makeScope pkgs.newScope (
         uv = callPackage ../development/php-packages/uv { };
 
         vld = callPackage ../development/php-packages/vld { };
+
+        wikidiff2 = callPackage ../development/php-packages/wikidiff2 { };
 
         xdebug = callPackage ../development/php-packages/xdebug { };
 
@@ -430,10 +424,12 @@ lib.makeScope pkgs.newScope (
               { name = "calendar"; }
               {
                 name = "ctype";
-                postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                  # Broken test on aarch64-darwin
-                  rm ext/ctype/tests/lc_ctype_inheritance.phpt
-                '';
+                postPatch =
+                  lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast php.version "8.2")
+                    # Broken test on aarch64-darwin
+                    ''
+                      rm ext/ctype/tests/lc_ctype_inheritance.phpt
+                    '';
               }
               {
                 name = "curl";

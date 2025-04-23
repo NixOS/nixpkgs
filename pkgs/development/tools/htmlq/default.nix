@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-QUlR6PuOLbeAHzARtTo7Zn7fmjs2ET6TdXT4VgCYEVg=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   doCheck = false;
 

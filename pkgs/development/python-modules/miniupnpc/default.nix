@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   setuptools,
   cctools,
   which,
@@ -18,15 +17,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-XCHRKwUEm1Amoth0ekzYCwe5rmG4mLXcZiSXzHsbmTU=";
   };
-
-  patches = [
-    # TODO: remove this patch when updating to the next release
-    (fetchpatch {
-      url = "https://github.com/miniupnp/miniupnp/commit/f79ae6738d10af633844dcf3ecd9c587e8f9508d.patch";
-      stripLen = 1;
-      hash = "sha256-g+D9Cw5knTy5a7M0wAQkw8MZ6iZR8RQUT6A0WAc6Q5U=";
-    })
-  ];
 
   build-system = [
     setuptools

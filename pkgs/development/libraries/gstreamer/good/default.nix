@@ -33,7 +33,6 @@
   libpulseaudio,
   libintl,
   libxml2,
-  Cocoa,
   lame,
   mpg123,
   twolame,
@@ -62,6 +61,7 @@
   hotdoc,
   gst-plugins-good,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -194,9 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
         qtwayland
       ]
     )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libdrm
       libGL
@@ -205,6 +202,9 @@ stdenv.mkDerivation (finalAttrs: {
       libavc1394
       libiec61883
       libgudev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
     ]
     ++ lib.optionals enableWayland [
       wayland

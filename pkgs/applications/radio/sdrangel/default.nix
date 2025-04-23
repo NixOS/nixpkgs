@@ -3,6 +3,7 @@
   stdenv,
   airspy,
   airspyhf,
+  apple-sdk_12,
   aptdec,
   boost,
   cm256cc,
@@ -113,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [

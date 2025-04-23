@@ -413,6 +413,27 @@
   "tester-testEqualArrayOrMap-return": [
     "index.html#tester-testEqualArrayOrMap-return"
   ],
+  "typst": [
+    "index.html#typst",
+    "doc/languages-frameworks/typst.section.md#typst"
+  ],
+  "typst-custom-environment": [
+    "index.html#typst-custom-environment",
+    "doc/languages-frameworks/typst.section.md#typst-custom-environment"
+  ],
+  "typst-custom-packages": [
+    "index.html#typst-custom-packages",
+    "doc/languages-frameworks/typst.section.md#typst-custom-packages"
+  ],
+  "typst-handling-outdated-package-hashes": [
+    "index.html#typst-handling-outdated-package-hashes"
+  ],
+  "typst-package-scope-and-usage": [
+    "index.html#typst-package-scope-and-usage"
+  ],
+  "var-meta-teams": [
+    "index.html#var-meta-teams"
+  ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
   ],
@@ -2066,6 +2087,9 @@
   ],
   "setup-hook-automake": [
     "index.html#setup-hook-automake"
+  ],
+  "setup-hook-autopatchcilhook": [
+    "index.html#setup-hook-autopatchcilhook"
   ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"

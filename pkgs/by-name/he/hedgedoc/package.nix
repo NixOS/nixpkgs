@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     makeBinaryWrapper
     (python3.withPackages (ps: with ps; [ setuptools ])) # required to build sqlite3 bindings
     yarn
+    writableTmpDirAsHomeHook # A writable home directory is required for yarn
   ];
 
   buildInputs = [
@@ -67,7 +68,6 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$(mktemp -d)
     yarn config set enableTelemetry 0
     yarn config set cacheFolder ${offlineCache}
     export npm_config_nodedir=${nodejs} # prevent node-gyp from downloading headers

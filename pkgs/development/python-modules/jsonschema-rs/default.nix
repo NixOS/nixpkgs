@@ -3,6 +3,7 @@
   fetchPypi,
   hypothesis,
   lib,
+  nix-update-script,
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-rs";
-  version = "0.29.1";
+  version = "0.30.0";
 
   pyproject = true;
 
@@ -20,13 +21,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jsonschema_rs";
-    hash = "sha256-qfiWqeRRdjA3TxdTZHBYNsIvCdW9W7sG7AYRMytnAv0=";
+    hash = "sha256-KfmI0ik3HWrv1WDFsT5xvxyRyXKg2DpmxeuUHOR9MZM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-kVi4EFig0ZGnOSVjzfJuGeR7BiEngP1Jhj6NvbhMVy4=";
+    hash = "sha256-LNT2wQnOaVMBrI+fW6wbIRaTYPvw3ESinI5KY8wjp1o=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -40,6 +41,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jsonschema_rs" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "High-performance JSON Schema validator for Python";

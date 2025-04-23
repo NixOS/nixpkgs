@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   webkitgtk_4_1,
   mpv,
   rustPlatform,
@@ -13,13 +13,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-xF3qvmEGctYXE7HWka89G4W6ytMTVGw75o26h/Ql0Aw=";
+    hash = "sha256-kvwssyVjce9VipANRED5k3a2pdJRAhio6GtM7+5nd38=";
   };
 
   metaCommon = {
@@ -38,14 +38,14 @@ let
 
     useFetchCargoVendor = true;
 
-    cargoHash = "sha256-WkWNgjTA50cOztuF9ZN6v8l38kldarqUOMXNFJDI0Ds=";
+    cargoHash = "sha256-vGu5e5M6CFpaLodEpt8v8DGhu2S5h/E4vvqSNOKkWns=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter327.buildFlutterApplication {
+flutter329.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -74,18 +74,11 @@ flutter327.buildFlutterApplication {
       };
   };
 
-  gitHashes =
-    let
-      media_kit-hash = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
-    in
-    {
-      desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
-      flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
-      media_kit_libs_windows_video = media_kit-hash;
-      media_kit_video = media_kit-hash;
-      media_kit = media_kit-hash;
-      flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-    };
+  gitHashes = {
+    desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
+    flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
+    flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
+  };
 
   nativeBuildInputs = [ copyDesktopItems ];
 

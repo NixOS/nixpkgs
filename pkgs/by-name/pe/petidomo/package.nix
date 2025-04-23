@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   doInstallCheck = true;
-  nativeInstallCheck = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     homepage = "https://petidomo.sourceforge.net/";

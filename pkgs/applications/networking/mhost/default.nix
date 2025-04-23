@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,11 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-n+ZVsdR+X7tMqZFYsjsWSUr6OkD90s44EFORqRldCNE=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
 
   CARGO_CRATE_NAME = "mhost";
 

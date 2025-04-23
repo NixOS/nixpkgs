@@ -245,6 +245,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://code.videolan.org/videolan/vlc/-/commit/ba5dc03aecc1d96f81b76838f845ebde7348cf62.diff";
       hash = "sha256-s6AI9O0V3AKOyw9LbQ9CgjaCi5m5+nLacKNLl5ZLC6Q=";
     })
+    # make the plugins.dat file generation reproducible
+    # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/7149
+    ./deterministic-plugin-cache.diff
   ];
 
   postPatch =

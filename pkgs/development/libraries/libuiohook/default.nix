@@ -5,9 +5,6 @@
   nixosTests,
   cmake,
   pkg-config,
-  AppKit,
-  ApplicationServices,
-  Carbon,
   libX11,
   libxkbcommon,
   xinput,
@@ -30,29 +27,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        AppKit
-        ApplicationServices
-        Carbon
-      ]
-    else
-      [
-        libX11
-        libxkbcommon
-        xinput
-      ]
-      ++ (with xorg; [
-        libXau
-        libXdmcp
-        libXi
-        libXinerama
-        libXt
-        libXtst
-        libXext
-        libxkbfile
-      ]);
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) (
+    [
+      libX11
+      libxkbcommon
+      xinput
+    ]
+    ++ (with xorg; [
+      libXau
+      libXdmcp
+      libXi
+      libXinerama
+      libXt
+      libXtst
+      libXext
+      libxkbfile
+    ])
+  );
 
   outputs = [
     "out"

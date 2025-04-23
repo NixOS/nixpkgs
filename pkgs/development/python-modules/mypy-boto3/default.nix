@@ -46,8 +46,8 @@ let
 in
 rec {
   mypy-boto3-accessanalyzer =
-    buildMypyBoto3Package "accessanalyzer" "1.37.0"
-      "sha256-mm2NgDfVTGN4LqbUR0YJhMwmcsftMRpyg3QZNo/p2Ko=";
+    buildMypyBoto3Package "accessanalyzer" "1.37.36"
+      "sha256-eCSfYW61ednEn1fbQoTJ5Wgl4S5kjevMlz2hzr5n2AQ=";
 
   mypy-boto3-account =
     buildMypyBoto3Package "account" "1.37.0"
@@ -62,8 +62,8 @@ rec {
       "sha256-rq8i4Hs7gv8pwAXd9qJcLCvXIt7qiCnMaCuU80hCEs8=";
 
   mypy-boto3-amp =
-    buildMypyBoto3Package "amp" "1.37.0"
-      "sha256-rxpBCIXOkSl5UeP1e0Rz8VK4tU3qD7nqG77YiGTv/0U=";
+    buildMypyBoto3Package "amp" "1.37.36"
+      "sha256-odOqacsjn2opQla0k+jj1oAOIqjWUq6vmkX7tLK93/s=";
 
   mypy-boto3-amplify =
     buildMypyBoto3Package "amplify" "1.37.17"
@@ -150,8 +150,8 @@ rec {
       "sha256-wH8zPvix4Yd0uBbz71EJmk6YWe/bBZz4v+QHjl2yud0=";
 
   mypy-boto3-autoscaling =
-    buildMypyBoto3Package "autoscaling" "1.37.0"
-      "sha256-C28bRk0IhJreEN0Zs/SfyBrhnvV12+Lbojp2oGJenfc=";
+    buildMypyBoto3Package "autoscaling" "1.37.36"
+      "sha256-H2w6UEQv1NraYA3jPWXI+PL4MYNOphsnx1AImYk3OHU=";
 
   mypy-boto3-autoscaling-plans =
     buildMypyBoto3Package "autoscaling-plans" "1.37.0"
@@ -338,8 +338,8 @@ rec {
       "sha256-ZksL1EtJj4H12D8JvRS8sTDnhKc2j+1UiRlMTN3yHGc=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.37.10"
-      "sha256-5oHBPdOYeB+6eAXrw0xPy7uLAORtflFbYzG8fGgzrXE=";
+    buildMypyBoto3Package "connect" "1.37.36"
+      "sha256-Hl1LkaaJ1UQkr0zKzT+RO3ISWQfu/AJKHUk3tCpgPAE=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.37.33"
@@ -350,8 +350,8 @@ rec {
       "sha256-5rf6lym+LUdtellsFlCOPcL7ZR44cxL7ozMG77QBp4U=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.37.0"
-      "sha256-xDjzytVFmlZuYKcvzgMsVfyT8Xn9X0a4/OHZzLW80pI=";
+    buildMypyBoto3Package "connectcases" "1.37.35"
+      "sha256-Lnnfhpgau08hnTT73wGvGi3ssGIzGzZanRb/BO8JHXU=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.37.0"
@@ -462,16 +462,16 @@ rec {
       "sha256-7Sz4g1+0B99ZybhrzJOS0K71thybaDPUYmF4+SN1sGc=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.37.26"
-      "sha256-RsP/geW/mnQQuzglIlPgNMkBs5Q862S8fUBxLe6x7og=";
+    buildMypyBoto3Package "ecs" "1.37.36"
+      "sha256-9bjyK1uqd81ecObI8jPW5hooS/07pqTdiVFcBzMQvTs=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.37.0"
       "sha256-uKccWDS0zhFrs6CQ9ve6by4rYL43T6iFZ3rjNy7SiyI=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.37.24"
-      "sha256-Fh3hdSfyUHT9DTHjp7GVk4GPDbI1IbK1+u2LIbFGhY4=";
+    buildMypyBoto3Package "eks" "1.37.35"
+      "sha256-Uk7r11ayOnQl6HSiFHlfpj7whRFjSz8nJMxxs0ZZn/w=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
@@ -518,8 +518,8 @@ rec {
       "sha256-jKo/VYOtHEWPFh3w0Q3rg3nlreizEcNG7C/eADRNy88=";
 
   mypy-boto3-events =
-    buildMypyBoto3Package "events" "1.37.28"
-      "sha256-U8L97t7Tql+SpCSpfOTF22RRKLFvN+2SoTkweGAMe0c=";
+    buildMypyBoto3Package "events" "1.37.35"
+      "sha256-HIZTGaVSNsddZxDxenpzNFWZDvV7Hl21ZKVfbGYYF9g=";
 
   mypy-boto3-evidently =
     buildMypyBoto3Package "evidently" "1.37.0"
@@ -674,8 +674,8 @@ rec {
       "sha256-eEq8LDmORpA464IecxTI6FqVIitn3t+t4ElsHkfSAs4=";
 
   mypy-boto3-iotfleetwise =
-    buildMypyBoto3Package "iotfleetwise" "1.37.30"
-      "sha256-DYuNsbiLD2E+oJAcrqBppujmpyFye0m73b8YsE0Pydo=";
+    buildMypyBoto3Package "iotfleetwise" "1.37.36"
+      "sha256-Rua+n9vvAiLAzy/DwDd6ErujD04q1Xsts0nle0KbUH0=";
 
   mypy-boto3-iotsecuretunneling =
     buildMypyBoto3Package "iotsecuretunneling" "1.37.0"
@@ -898,8 +898,8 @@ rec {
       "sha256-bySahvnK2ZFX2wETtu+PQyhbMYyH2RdcYMNEDnYMTzM=";
 
   mypy-boto3-memorydb =
-    buildMypyBoto3Package "memorydb" "1.37.0"
-      "sha256-88OSler+2SJ2zDYtLmM5NeOPafKIf5zaLV8MMLRb5es=";
+    buildMypyBoto3Package "memorydb" "1.37.36"
+      "sha256-9WLf5gu0g3GBaSumy9HaWQrG5w5z9v++SNxYbk+iyTk=";
 
   mypy-boto3-meteringmarketplace =
     buildMypyBoto3Package "meteringmarketplace" "1.37.33"
@@ -966,8 +966,8 @@ rec {
       "sha256-XJE33wPIGIlSVxrJ3qE09AmFLkYwKR6zWXXtDnEVvSA=";
 
   mypy-boto3-omics =
-    buildMypyBoto3Package "omics" "1.37.0"
-      "sha256-L+XFhueTb9fq32oyVVbysBMXgds1UlXryqRwiDOI+Io=";
+    buildMypyBoto3Package "omics" "1.37.36"
+      "sha256-sJXXQ3pKKNmXDplUe24dEboelzNpQe/Mkj+DNTjAg08=";
 
   mypy-boto3-opensearch =
     buildMypyBoto3Package "opensearch" "1.37.27"
@@ -1118,8 +1118,8 @@ rec {
       "sha256-031skcPZd/jBWIod9JAbIc9NUcEBBN33UxIoGc2IiAA=";
 
   mypy-boto3-resource-groups =
-    buildMypyBoto3Package "resource-groups" "1.37.0"
-      "sha256-38L7Iirnj8n6MnWSCY1ZylCAECSW4wo3gvddKq74aIs=";
+    buildMypyBoto3Package "resource-groups" "1.37.35"
+      "sha256-ae1MUUGAapRCLaWrMzlzQvNc+9ijTQxFMlxqvOFD4WI=";
 
   mypy-boto3-resourcegroupstaggingapi =
     buildMypyBoto3Package "resourcegroupstaggingapi" "1.37.0"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-c0vXkW5sR7JkdzvsS/rMFme9EwY1x5eZAbRWYKew0v4=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.37.27"
-      "sha256-DgY+LFW6PzwYsFbJ7Fjs4fzlWe45ZEAa2zo1is87a8Y=";
+    buildMypyBoto3Package "sagemaker" "1.37.37"
+      "sha256-wzoSSsiKVLf1Vk5v87Fz7HEpsppnOHXCGWnqabz6W2k=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.37.0"
@@ -1234,12 +1234,12 @@ rec {
       "sha256-p8UzqjJKotp078KSppX0SidBrCOfGY1/AocYHO5xVmc=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.37.0"
-      "sha256-toCWU6Bh5IJ5lupehKJ6EvsMKZz5s/uPWG9qF+4P5uM=";
+    buildMypyBoto3Package "service-quotas" "1.37.37"
+      "sha256-34/LgfRPto8cRGKpxf6Xc43jD0BE4VMFTw5FeJfRV3c=";
 
   mypy-boto3-servicecatalog =
-    buildMypyBoto3Package "servicecatalog" "1.37.0"
-      "sha256-/MJaP0iTix/cyCxJrTuTWHf0lSCt8dfJI67Y6+PdJF4=";
+    buildMypyBoto3Package "servicecatalog" "1.37.35"
+      "sha256-blNOCdn3J1XNwGjWMo5eN+a2SzKqCt/1at8l8AzNZsg=";
 
   mypy-boto3-servicecatalog-appregistry =
     buildMypyBoto3Package "servicecatalog-appregistry" "1.37.0"

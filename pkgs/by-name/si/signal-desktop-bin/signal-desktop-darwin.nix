@@ -5,7 +5,7 @@
   _7zz,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "signal-desktop";
+  pname = "signal-desktop-bin";
   version = "7.47.0";
 
   src = fetchurl {

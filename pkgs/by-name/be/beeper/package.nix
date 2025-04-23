@@ -1,54 +1,43 @@
 {
   lib,
-  stdenvNoCC,
   fetchurl,
   appimageTools,
   makeWrapper,
   writeShellApplication,
   curl,
-  yq,
   common-updater-scripts,
 }:
 let
   pname = "beeper";
-  version = "3.110.1";
+  version = "4.0.623";
   src = fetchurl {
-    url = "https://download.beeper.com/versions/3.110.1/linux/appImage/x64";
-    hash = "sha256-AwPYwA93zOxExxhkLpCUKsQC/ylKSAygdHBUjd5ZKZk=";
+    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}.AppImage";
+    hash = "sha256-K043RQ5BoS1ysnmY+LpRixBmMx2XCbRzhWnWsxg26dg=";
   };
-  appimage = appimageTools.wrapType2 {
-    inherit version pname src;
-    extraPkgs = pkgs: [ pkgs.libsecret ];
-  };
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit version pname src;
   };
 in
-stdenvNoCC.mkDerivation rec {
-  inherit pname version;
+appimageTools.wrapType2 {
+  inherit pname version src;
 
-  src = appimage;
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  postExtract = ''
+    # disable creating a desktop file and icon in the home folder during runtime
+    linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
+    echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
+  '';
 
-  installPhase = ''
-    runHook preInstall
+  extraInstallCommands = ''
+    install -Dm 644 ${appimageContents}/beepertexts.png $out/share/icons/hicolor/512x512/apps/beepertexts.png
+    install -Dm 644 ${appimageContents}/beepertexts.desktop -t $out/share/applications/
+    substituteInPlace $out/share/applications/beepertexts.desktop --replace-fail "AppRun" "beeper"
 
-    mkdir -p $out/
-    cp -r bin $out/bin
-
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/locales $out/share/${pname}
-    cp -a ${appimageContents}/resources $out/share/${pname}
-    cp -a ${appimageContents}/usr/share/icons $out/share/
-    install -Dm 644 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-
-    substituteInPlace $out/share/applications/${pname}.desktop --replace "AppRun" "${pname}"
-
-    wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
-
-    runHook postInstall
+    . ${makeWrapper}/nix-support/setup-hook
+    wrapProgram $out/bin/beeper \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
+      --set APPIMAGE beeper
   '';
 
   passthru = {
@@ -56,14 +45,13 @@ stdenvNoCC.mkDerivation rec {
       name = "update-beeper";
       runtimeInputs = [
         curl
-        yq
         common-updater-scripts
       ];
       text = ''
         set -o errexit
-        latestLinux="$(curl -s https://download.todesktop.com/2003241lzgn20jd/latest-linux.yml)"
-        version="$(echo "$latestLinux" | yq -r .version)"
-        update-source-version beeper "$version" "" "https://download.beeper.com/versions/$version/linux/appImage/x64" --source-key=src.src
+        latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
+        version="$(echo "$latestLinux" |  grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
+        update-source-version beeper "$version"
       '';
     });
   };
@@ -81,6 +69,7 @@ stdenvNoCC.mkDerivation rec {
       jshcmpbll
       mjm
       edmundmiller
+      zh4ngx
     ];
     platforms = [ "x86_64-linux" ];
   };

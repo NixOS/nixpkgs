@@ -810,12 +810,6 @@ let
           osx-dictionary =
             if pkgs.stdenv.hostPlatform.isDarwin then
               super.osx-dictionary.overrideAttrs (old: {
-                buildInputs =
-                  old.buildInputs
-                  ++ (with pkgs.darwin.apple_sdk.frameworks; [
-                    CoreServices
-                    Foundation
-                  ]);
                 postBuild =
                   (old.postBuild or "")
                   + ''

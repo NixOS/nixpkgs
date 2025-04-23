@@ -181,6 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ostreedev.github.io/ostree/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 })

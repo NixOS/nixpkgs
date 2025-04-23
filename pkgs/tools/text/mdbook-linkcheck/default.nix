@@ -5,7 +5,6 @@
   rustPlatform,
   pkg-config,
   openssl,
-  Security,
   testers,
   mdbook-linkcheck,
 }:
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-Tt7ljjWv2CMtP/ELZNgSH/ifmBk/42+E0r9ZXQEJNP8=";
 
-  buildInputs = if stdenv.hostPlatform.isDarwin then [ Security ] else [ openssl ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
-  Security,
   curl,
   pkg-config,
   openssl,
@@ -41,7 +40,6 @@ rustPlatform.buildRustPackage rec {
   # ROCKSDB_LIB_DIR="${rocksdb}/lib";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
     curl
   ];
 

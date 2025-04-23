@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -20,12 +21,21 @@ rustPlatform.buildRustPackage {
     hash = "sha256-/6p23JW3ZaSuDf34IWcTggR92/zUTMRerQ32bTsRujo=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-aX8nm/V0ug2g40QeFU9AWxjuFAnW+gYTR8RC5CV7wRQ=";
 
   cargoBuildFlags = [ "--workspace" ];
+
+  # TODO: Upstream also provides Elvish and PowerShell completions,
+  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
+  postInstall = ''
+    installShellCompletion completions/{_lla,lla{.bash,.fish}}
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/lla \

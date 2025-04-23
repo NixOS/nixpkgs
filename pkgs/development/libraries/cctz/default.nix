@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +16,6 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   installTargets =
     [ "install_hdrs" ]

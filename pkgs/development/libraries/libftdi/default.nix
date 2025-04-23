@@ -3,9 +3,6 @@
   stdenv,
   fetchurl,
   libusb-compat-0_1,
-  Security,
-  IOKit,
-  libobjc,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,13 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 
-  buildInputs =
-    [ libusb-compat-0_1 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-      Security
-      IOKit
-    ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   propagatedBuildInputs = [ libusb-compat-0_1 ];
 

@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  Foundation,
   freetype,
   lib,
   lua5_4,
@@ -29,16 +28,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      freetype
-      lua5_4
-      pcre2
-      SDL2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    freetype
+    lua5_4
+    pcre2
+    SDL2
+  ];
 
   mesonFlags = [
     "-Duse_system_lua=true"

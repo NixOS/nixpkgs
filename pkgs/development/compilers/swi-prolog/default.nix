@@ -13,7 +13,6 @@
   readline,
   libedit,
   libarchive,
-  Security,
 
   # optional dependencies
   withDb ? true,
@@ -113,7 +112,6 @@ let
       freetype
       fontconfig
     ])
-    ++ (lib.optional stdenv.hostPlatform.isDarwin Security)
     ++ extraLibraries';
 in
 stdenv.mkDerivation {

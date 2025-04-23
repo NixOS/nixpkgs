@@ -36,6 +36,7 @@ let
         "device_grouped_conv2d_fwd_instance"
         "device_grouped_conv2d_fwd_dynamic_op_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     grouped_conv_bwd_3d = {
       targets = [
@@ -46,6 +47,7 @@ let
         "device_grouped_conv3d_bwd_weight_bilinear_instance"
         "device_grouped_conv3d_bwd_weight_scale_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     grouped_conv_fwd_3d = {
       targets = [
@@ -60,6 +62,7 @@ let
         "device_grouped_conv3d_fwd_scaleadd_ab_instance"
         "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     batched_gemm = {
       targets = [
@@ -77,6 +80,7 @@ let
         "device_grouped_gemm_fixed_nk_multi_abd_instance"
         "device_grouped_gemm_tile_loop_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     gemm_universal = {
       targets = [
@@ -108,6 +112,7 @@ let
         "device_gemm_splitk_instance"
         "device_gemm_streamk_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     conv = {
       targets = [
@@ -118,6 +123,7 @@ let
         "device_conv2d_fwd_bias_relu_add_instance"
         "device_conv3d_bwd_data_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     pool = {
       targets = [
@@ -139,6 +145,7 @@ let
         "device_normalization_bwd_gamma_beta_instance"
         "device_normalization_fwd_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
     other2 = {
       targets = [
@@ -150,6 +157,7 @@ let
         "device_softmax_instance"
         "device_transpose_instance"
       ];
+      requiredSystemFeatures = [ "big-parallel" ];
     };
   };
   tensorOpBuilder =

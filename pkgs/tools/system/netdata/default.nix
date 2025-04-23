@@ -7,7 +7,6 @@
   cmake,
   cups,
   curl,
-  darwin,
   freeipmi,
   go,
   google-cloud-cpp,
@@ -29,7 +28,6 @@
   ninja,
   nixosTests,
   openssl,
-  overrideSDK,
   pkg-config,
   protobuf,
   snappy,
@@ -50,10 +48,7 @@
   zlib,
   withNdsudo ? false,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.47.5";
   pname = "netdata";
 
@@ -97,14 +92,10 @@ stdenv'.mkDerivation (finalAttrs: {
       zlib
       libyaml
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        IOKit
-        libossp_uuid
-      ]
-    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libossp_uuid
+    ]
+
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       libcap
       libuuid
@@ -287,6 +278,7 @@ stdenv'.mkDerivation (finalAttrs: {
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
+    mainProgram = "netdata";
     platforms = platforms.unix;
     maintainers = with maintainers; [
       mkg20001

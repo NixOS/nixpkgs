@@ -6,7 +6,6 @@
   pkg-config,
   enableWX ? false,
   wxGTK32,
-  Cocoa,
   enableXWin ? false,
   xorg,
   enablePNG ? false,
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optional enableWX wxGTK32
-    ++ lib.optional (enableWX && stdenv.hostPlatform.isDarwin) Cocoa
     ++ lib.optional enableXWin xorg.libX11
     ++ lib.optionals enablePNG [
       cairo

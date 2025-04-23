@@ -7,7 +7,6 @@
   lhapdf,
   root5,
   zlib,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     lhapdf
     root5
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   patches = [
     ./bad_code.patch

@@ -7,8 +7,6 @@
   pkg-config,
   openssl,
   installShellFiles,
-  Security,
-  AppKit,
 
   x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD,
   xclip ? null,
@@ -70,14 +68,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        Security
-        AppKit
-      ]
-    else
-      [ openssl ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then

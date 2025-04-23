@@ -16,6 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-8VupkPiHebVtOqMdtkBflAI1zPRdDSvHCEq3ghjASaE=";
   };
 
+  pythonRelaxDeps = [ "rich" ];
+
   build-system = with python3.pkgs; [
     poetry-core
     poetry-dynamic-versioning

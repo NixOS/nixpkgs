@@ -24,6 +24,7 @@
   setuptools,
   sphinxHook,
   stestr,
+  stevedore,
   testtools,
 }:
 
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     oslo-utils
     prettytable
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [

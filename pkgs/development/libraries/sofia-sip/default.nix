@@ -7,7 +7,6 @@
   openssl,
   pkg-config,
   autoreconfHook,
-  SystemConfiguration,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin SystemConfiguration;
+  ];
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

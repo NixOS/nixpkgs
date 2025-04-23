@@ -29,6 +29,13 @@ postgresqlBuildExtension (finalAttrs: {
         CREATE EXTENSION byteamagic;
         SELECT byteamagic_mime('test');
       '';
+      asserts = [
+        {
+          query = "SELECT byteamagic_mime('test')";
+          expected = "'text/plain'";
+          description = "`byteamagic_mime(...) should return proper mimetype.";
+        }
+      ];
     };
   };
 

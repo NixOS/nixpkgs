@@ -35,10 +35,7 @@
   wayland-protocols,
   enableAlsa ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  # TODO: fix once x86_64-darwin sdk updated
-  enableCocoa ? (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
-  Cocoa,
-  OpenGL,
+  enableCocoa ? stdenv.hostPlatform.isDarwin,
   enableGl ? (enableX11 || enableWayland || enableCocoa),
   enableCdparanoia ? (!stdenv.hostPlatform.isDarwin),
   cdparanoia,
@@ -48,6 +45,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -109,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenGL
+      apple-sdk_gstreamer
     ]
     ++ lib.optionals enableAlsa [
       alsa-lib
@@ -123,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
       wayland-protocols
     ]
-    ++ lib.optional enableCocoa Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs =

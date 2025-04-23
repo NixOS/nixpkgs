@@ -34,11 +34,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.40.4";
+  version = "2.41";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-XB2vczsE6YWa/cO9h8xIEYDuD4i1wJRrFv3skxl1+3k=";
+    hash = "sha256-ge6Ts8/f6318QJDO3rode7zpFB/QtQG2hrP+R13cpMY=";
   };
 
   patches = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      patchShebangs tests/run.sh tools/all_syscalls
+      patchShebangs tests/run.sh tools/all_syscalls tools/all_errnos
 
       substituteInPlace sys-utils/eject.c \
         --replace "/bin/umount" "$bin/bin/umount"
@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
       (lib.withFeature systemdSupport "systemd")
       (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
       (lib.withFeatureAs systemdSupport "tmpfilesdir" "${placeholder "out"}/lib/tmpfiles.d")
+      (lib.withFeatureAs systemdSupport "sysusersdir" "${placeholder "out"}/lib/sysusers.d")
       (lib.enableFeature translateManpages "poman")
       "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
     ]

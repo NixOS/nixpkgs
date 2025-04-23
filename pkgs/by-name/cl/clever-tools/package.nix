@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_18,
+  nodejs_20,
   installShellFiles,
   makeWrapper,
   stdenv,
@@ -13,7 +13,7 @@ buildNpmPackage rec {
 
   version = "3.12.0";
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "CleverCloud";

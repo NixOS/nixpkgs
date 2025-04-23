@@ -5,7 +5,6 @@
   fetchFromGitHub,
   protobuf,
   pkg-config,
-  darwin,
   rustc,
 }:
 rustPlatform.buildRustPackage rec {
@@ -24,13 +23,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-o7YFyqRWAMjq23mcAqDrcN4infdBgp1KNvviYOLR35s=";
 
-  buildInputs =
-    [ rustc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ rustc ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libkclvm_cli_cdylib.dylib $out/lib/libkclvm_cli_cdylib.dylib

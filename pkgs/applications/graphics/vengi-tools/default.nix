@@ -27,9 +27,7 @@
   SDL2,
   SDL2_mixer,
   wayland-protocols,
-  Carbon,
   CoreServices,
-  OpenCL,
 
   callPackage,
   nixosTests,
@@ -73,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       SDL2_mixer
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreServices
-      OpenCL
-    ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";

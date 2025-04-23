@@ -3,13 +3,10 @@
   rustPlatform,
   fetchFromGitHub,
   protobuf,
-  stdenv,
   pkg-config,
   openssl,
   rust-jemalloc-sys,
   nix-update-script,
-  Security,
-  SystemConfiguration,
   rust-jemalloc-sys-unprefixed,
 }:
 
@@ -34,16 +31,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      rust-jemalloc-sys
-      rust-jemalloc-sys-unprefixed
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    rust-jemalloc-sys
+    rust-jemalloc-sys-unprefixed
+  ];
 
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;

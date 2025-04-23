@@ -37,6 +37,7 @@ let
       timstott
       savannidgerinel
       sebtm
+      bdd
     ];
     platforms = builtins.attrNames sources.${channel};
     mainProgram = "1password";

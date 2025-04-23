@@ -6,8 +6,6 @@
   pkg-config,
   qtbase,
   qttools,
-  CoreFoundation,
-  Security,
   libsecret,
 }:
 
@@ -32,16 +30,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ [
-      qtbase
-      qttools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Security
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ] ++ [
+    qtbase
+    qttools
+  ];
 
   doInstallCheck = true;
 

@@ -9,12 +9,12 @@
   curses-library ? if stdenv.hostPlatform.isWindows then termcap else ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "readline";
-  version = "8.2p${toString (builtins.length upstreamPatches)}";
+  version = "8.2p${toString (builtins.length finalAttrs.upstreamPatches)}";
 
   src = fetchurl {
-    url = "mirror://gnu/readline/readline-${meta.branch}.tar.gz";
+    url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}.tar.gz";
     sha256 = "sha256-P+txcfFqhO6CyhijbXub4QmlLAT0kqBTMx19EJUAfDU=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       patch =
         nr: sha256:
         fetchurl {
-          url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline82-${nr}";
+          url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}-patches/readline82-${nr}";
           inherit sha256;
         };
     in
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ [
       ./no-arch_only-8.2.patch
     ]
-    ++ upstreamPatches
+    ++ finalAttrs.upstreamPatches
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       (fetchpatch {
         name = "0001-sigwinch.patch";
@@ -78,6 +78,12 @@ stdenv.mkDerivation rec {
         hash = "sha256-dk4343KP4EWXdRRCs8GRQlBgJFgu1rd79RfjwFD/nJc=";
       })
     ];
+
+  # Make mingw-w64 provide a dummy alarm() function
+  #
+  # Method borrowed from
+  # https://github.com/msys2/MINGW-packages/commit/35830ab27e5ed35c2a8d486961ab607109f5af50
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isMinGW "-D__USE_MINGW_ALARM -D_POSIX";
 
   # This install error is caused by a very old libtool. We can't autoreconfHook this package,
   # so this is the best we've got!
@@ -113,4 +119,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix ++ platforms.windows;
     branch = "8.2";
   };
-}
+})

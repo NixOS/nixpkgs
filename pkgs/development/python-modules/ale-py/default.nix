@@ -73,6 +73,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Fatal Python error: Aborted
+    # line 414 in test_display_screen
+    "test_display_screen"
+
     # test_atari_env.py tests fail on the majority of the environments because the ROM are missing.
     # The user is expected to manually download the roms:
     # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else

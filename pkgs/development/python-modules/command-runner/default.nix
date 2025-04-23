@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "command-runner";
-  version = "1.7.2";
+  version = "1.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "netinvent";
     repo = "command_runner";
     tag = "v${version}";
-    hash = "sha256-2+Tvp0nFDcD6D99z/13RGRTrioFR0dhPDnicX9ZbIxY=";
+    hash = "sha256-BNjMMs44eDnGmcFXiMydJIU0RpsFOyd2TjH7BOGQP2E=";
   };
 
   build-system = [ setuptools ];

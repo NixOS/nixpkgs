@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pybotvac";
-  version = "0.0.26";
+  version = "0.0.27";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dUYbVDCQU8rKu7y70rdIS1+kXDTysmr7tI1C7HRF5rc=";
+    hash = "sha256-viMklBbC8KAh6cCuWs5nSbBF0BwVkPXV3Z2ydj08d9c=";
   };
 
   postPatch = ''

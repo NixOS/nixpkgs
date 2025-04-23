@@ -26,8 +26,6 @@
   libXt,
   libXxf86vm,
   xorgproto,
-  # darwin
-  darwin,
   # optional
   withNvidiaCg ? false,
   nvidia_cg_toolkit,
@@ -97,9 +95,6 @@ let
           libXt
           libXxf86vm
           xorgproto
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          darwin.apple_sdk.frameworks.Cocoa
         ]
         ++ lib.optionals withNvidiaCg [
           nvidia_cg_toolkit

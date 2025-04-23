@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "microfetch";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "NotAShelf";
     repo = "microfetch";
     tag = "v${version}";
-    hash = "sha256-qpwzuzEqXsGO4y3ClaY25Q4rFm2RyPl/X3yNcQz3R4E=";
+    hash = "sha256-iNx1/My72i+Ni/WVqF2HFgLjqH6W6WPupdOkH6UQH9E=";
   };
 
   useFetchCargoVendor = true;

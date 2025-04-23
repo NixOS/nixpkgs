@@ -14,7 +14,6 @@ import ./versions.nix (
   {
     version,
     hash,
-    vendorHash ? throw "unsupported version ${version} for zabbix-agent2",
     ...
   }:
   buildGoModule {
@@ -28,7 +27,7 @@ import ./versions.nix (
 
     modRoot = "src/go";
 
-    inherit vendorHash;
+    vendorHash = null;
 
     nativeBuildInputs = [
       autoreconfHook

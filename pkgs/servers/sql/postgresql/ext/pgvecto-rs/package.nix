@@ -9,6 +9,7 @@
   openssl,
   pkg-config,
   postgresql,
+  postgresqlTestExtension,
   replaceVars,
   rustPlatform,
 }:
@@ -80,7 +81,39 @@ in
 
     passthru = {
       updateScript = nix-update-script { };
-      tests = nixosTests.postgresql.pgvecto-rs.passthru.override postgresql;
+      tests.extension = postgresqlTestExtension {
+        inherit (finalAttrs) finalPackage;
+        postgresqlExtraSettings = ''
+          shared_preload_libraries='vectors'
+        '';
+        sql = ''
+          CREATE EXTENSION vectors;
+
+          CREATE TABLE items (
+            id bigserial PRIMARY KEY,
+            content text NOT NULL,
+            embedding vectors.vector(3) NOT NULL -- 3 dimensions
+          );
+
+          INSERT INTO items (content, embedding) VALUES
+            ('a fat cat sat on a mat and ate a fat rat', '[1, 2, 3]'),
+            ('a fat dog sat on a mat and ate a fat rat', '[4, 5, 6]'),
+            ('a thin cat sat on a mat and ate a thin rat', '[7, 8, 9]'),
+            ('a thin dog sat on a mat and ate a thin rat', '[10, 11, 12]');
+        '';
+        asserts = [
+          {
+            query = "SELECT default_version FROM pg_available_extensions WHERE name = 'vectors'";
+            expected = "'${finalAttrs.version}'";
+            description = "Extension vectors has correct version.";
+          }
+          {
+            query = "SELECT COUNT(embedding) FROM items WHERE to_tsvector('english', content) @@ 'cat & rat'::tsquery";
+            expected = "2";
+            description = "Stores and returns vectors.";
+          }
+        ];
+      };
     };
 
     meta = {

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
   bison,
   flex,
   zlib,
@@ -15,22 +14,17 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.34.4";
+  version = "5.35.0";
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    sha256 = "sha256-72B8+qv9N2fUC5ueMgMvdIvuvE1oaDH2ER4OaPvRtGk=";
+    sha256 = "sha256-l2DDqihhH8FDhmZUCs4A1XKk8pdCo6VG1lYodEr19HQ=";
   };
 
-  nativeBuildInputs =
-    [
-      bison
-      flex
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.DiskArbitration
-      darwin.apple_sdk.frameworks.System
-    ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
   buildInputs =
     [

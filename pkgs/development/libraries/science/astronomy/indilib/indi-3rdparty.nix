@@ -45,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-WYvinfAbMxgF5Q9iB/itQTMsVmG83lY45JriUo3kzFg=";
+    hash = "sha256-REmeIP0Cl5FfwUnL40u0dqZaJugBlLGT/Bts5j1bvgw=";
   };
 
   buildIndi3rdParty =
@@ -120,29 +120,6 @@ let
           // meta;
       }
     );
-
-  libahp-gt = buildIndi3rdParty {
-    pname = "libahp-gt";
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
-    };
-  };
-
-  # broken: needs libdfu
-  libahp-xc = buildIndi3rdParty {
-    pname = "libahp-xc";
-    buildInputs = [
-      libusb-compat-0_1
-      urjtag
-      libftdi1
-    ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      broken = true;
-      platforms = [ ];
-    };
-  };
 
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
@@ -505,13 +482,12 @@ in
     buildInputs = [
       cfitsio
       indilib
-      libahp-xc
       libnova
       zlib
     ];
     meta = {
-      platforms = libahp-xc.meta.platforms;
-      # libahc-xc needs libdfu, which is not packaged
+      platforms = [ ];
+      # libahc-xc not packaged
       broken = true;
     };
   };
@@ -677,11 +653,9 @@ in
       indilib
       gsl
       gtest
-      libahp-gt
       libnova
       zlib
     ];
-    meta.platforms = libahp-gt.meta.platforms;
   };
 
   indi-ffmv = buildIndi3rdParty {

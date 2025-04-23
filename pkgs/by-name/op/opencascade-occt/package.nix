@@ -13,7 +13,6 @@
   libXext,
   libXmu,
   libXi,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     libXmu
     libXi
     rapidjson
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
   cmakeFlags = [ "-DUSE_RAPIDJSON=ON" ];

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codipack";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "SciCompKL";
     repo = "CoDiPack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZD9P4yWcF9zGeTyw6ENAcGoPyc8QcBdNZNnqRV4MH8s=";
+    hash = "sha256-feYtPDV0t7b49NIL5s6ZoBttRG2Bkwc0gOX6R6xDIbs=";
   };
 
   nativeBuildInputs = [

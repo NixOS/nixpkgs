@@ -5,7 +5,6 @@
   rustPlatform,
   openssl,
   pkg-config,
-  Security,
   testers,
   tmux-sessionizer,
   installShellFiles,
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage {
     pkg-config
     installShellFiles
   ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tms \

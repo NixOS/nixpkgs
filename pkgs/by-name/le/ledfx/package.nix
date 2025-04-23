@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ledfx";
   version = "2.0.108";
   pyproject = true;

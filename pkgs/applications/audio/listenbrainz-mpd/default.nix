@@ -7,9 +7,6 @@
   openssl,
   libiconv,
   sqlite,
-  Security,
-  SystemConfiguration,
-  CoreFoundation,
   installShellFiles,
   asciidoctor,
 }:
@@ -41,9 +38,6 @@ rustPlatform.buildRustPackage rec {
       if stdenv.hostPlatform.isDarwin then
         [
           libiconv
-          Security
-          SystemConfiguration
-          CoreFoundation
         ]
       else
         [

@@ -199,13 +199,6 @@ in
       monospace = mkDefault [ "Hack" ];
     };
 
-    # Qt application style.
-    qt = {
-      enable = mkDefault true;
-      style = mkDefault "gtk2";
-      platformTheme = mkDefault "gtk2";
-    };
-
     environment.pathsToLink = [
       "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
     ];

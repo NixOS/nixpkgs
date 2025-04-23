@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   wxGTK32,
-  boost,
+  boost186,
   lua,
   zlib,
   bzip2,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     wxGTK32
-    boost
+    boost186
     lua
     zlib
     bzip2

@@ -1975,6 +1975,7 @@ with self;
     pname = "virtual_dom";
     hash = "sha256-5T+/N1fELa1cR9mhWLUgS3Fwr1OQXJ3J6T3YaHT9q7U=";
     meta.description = "OCaml bindings for the virtual-dom library";
+    meta.broken = lib.versionAtLeast ocaml.version "5.3";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [
       base64

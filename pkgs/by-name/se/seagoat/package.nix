@@ -7,18 +7,21 @@
   gitMinimal,
   ripgrep,
   writableTmpDirAsHomeHook,
+
+  versionCheckHook,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "0.54.6";
+  version = "0.54.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-KEFA1DUfsJpeNkWui/WKazImGCSwTFlPD8qsGFJNtr0=";
+    hash = "sha256-BfZbYQ6ylMj8cn7q2AavU570/ci83ffdDbeB+F/wZlk=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -26,6 +29,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "chromadb"
     "psutil"
+    "setuptools"
   ];
 
   dependencies = with python3Packages; [
@@ -59,8 +63,10 @@ python3Packages.buildPythonApplication rec {
     ++ [
       gitMinimal
       ripgrep
+      versionCheckHook
       writableTmpDirAsHomeHook
     ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = import ./failing_tests.nix;
 
@@ -79,6 +85,10 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/seagoat-server \
       --prefix PATH : "${ripgrep}/bin"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Local-first semantic code search engine";

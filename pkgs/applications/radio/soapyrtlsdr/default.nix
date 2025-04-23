@@ -6,9 +6,6 @@
   pkg-config,
   rtl-sdr,
   soapysdr,
-  libobjc,
-  IOKit,
-  Security,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,16 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      rtl-sdr
-      soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-      IOKit
-      Security
-    ];
+  buildInputs = [
+    rtl-sdr
+    soapysdr
+  ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 

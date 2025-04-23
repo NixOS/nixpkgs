@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   openssl,
   libsodium,
   xz,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     libsodium
     xz
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin Security);
+  ];
 
   meta = with lib; {
     description = "Data deduplication with compression and public key encryption";

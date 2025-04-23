@@ -5,11 +5,6 @@
   unzip,
   cmake,
   alsa-lib,
-  Carbon,
-  CoreAudio,
-  CoreFoundation,
-  CoreMIDI,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,17 +41,9 @@ stdenv.mkDerivation rec {
     unzip
     cmake
   ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreAudio
-      CoreFoundation
-      CoreMIDI
-      CoreServices
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   hardeningDisable = [ "format" ];
 

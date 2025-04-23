@@ -18,10 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   sourceRoot = "${finalAttrs.src.name}/OrthancFramework/SharedLibrary";
-  outputs = [
-    "out"
-    "dev"
-  ];
 
   buildInputs = orthanc.buildInputs ++ [
     icu

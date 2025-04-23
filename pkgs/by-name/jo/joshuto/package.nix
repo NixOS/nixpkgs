@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,10 +21,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-By7vwdNocNDQAbeD6CUcp0OOlqs5oZ2WLdE4VHSh3cI=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd joshuto \

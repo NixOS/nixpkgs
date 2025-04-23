@@ -10,7 +10,6 @@
   installShellFiles,
   asciidoctor,
   libiconv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
         [
           curl
           libiconv
-          Security
         ]
       else
         [ openssl ]

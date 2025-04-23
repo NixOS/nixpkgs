@@ -9,7 +9,7 @@
   libgeotiff,
   xorg,
   motif,
-  pcre,
+  pcre2,
   perl,
   proj,
   graphicsmagick,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     xorg.libXpm
     xorg.libXt
     motif
-    pcre
+    pcre2
     perl
     proj
     graphicsmagick

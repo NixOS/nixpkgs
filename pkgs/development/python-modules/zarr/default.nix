@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.5";
+  version = "2.18.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yWW/JbWCX8/PM5vabDKaVskJl98SMkNeJ7ZKoTbxQsc=";
+    hash = "sha256-srj2bxTaxK9msYDSM4gZmBuYH3Dhlsmmbmv6qeWVcvU=";
   };
 
   build-system = [

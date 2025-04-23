@@ -56,7 +56,7 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withHeadlessDeps, # CELT decoder
+  withCelt ? withFullDeps, # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
@@ -1019,6 +1019,10 @@ stdenv.mkDerivation (
   }
   // lib.optionalAttrs withCudaLLVM {
     # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
-    hardeningDisable = [ "zerocallusedregs" ];
+    hardeningDisable = [
+      "pacret"
+      "shadowstack"
+      "zerocallusedregs"
+    ];
   }
 )

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  IOKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-4bscAhYE3JNk4ikTH+Sw2kGDDsBWcCZZ88weg9USjC0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   # many tests are failing
   doCheck = false;

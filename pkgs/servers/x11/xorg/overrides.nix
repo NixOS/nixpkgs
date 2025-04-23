@@ -48,10 +48,6 @@
   libxslt,
   libxcrypt,
   hwdata,
-  ApplicationServices,
-  Carbon,
-  Cocoa,
-  Xplugin,
   xorg,
   windows,
   libgbm,
@@ -277,8 +273,10 @@ self: super:
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      xorg.utilmacros
+    ];
     meta = attrs.meta // {
       platforms = lib.platforms.darwin;
     };
@@ -1220,9 +1218,6 @@ self: super:
             bootstrap_cmds
             automake
             autoconf
-            Xplugin
-            Carbon
-            Cocoa
             mesa
           ];
           propagatedBuildInputs = commonPropagatedBuildInputs ++ [
@@ -1281,7 +1276,6 @@ self: super:
           preConfigure = ''
             mkdir -p $out/Applications
             export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
-            substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${ApplicationServices}
           '';
           postInstall = ''
             rm -fr $out/share/X11/xkb/compiled
@@ -1322,15 +1316,12 @@ self: super:
         "--without-dtrace"
       ];
 
-    buildInputs =
-      old.buildInputs
-      ++ [
-        xorg.pixman
-        xorg.libXfont2
-        xorg.xtrans
-        xorg.libxcvt
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin [ Xplugin ];
+    buildInputs = old.buildInputs ++ [
+      xorg.pixman
+      xorg.libXfont2
+      xorg.xtrans
+      xorg.libxcvt
+    ];
   });
 
   lndir = super.lndir.overrideAttrs (attrs: {

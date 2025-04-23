@@ -2,11 +2,8 @@
   stdenv,
   lib,
   R,
-  libcxx,
   xvfb-run,
   util-linux,
-  Cocoa,
-  Foundation,
   gettext,
   gfortran,
   libiconv,
@@ -32,13 +29,11 @@ stdenv.mkDerivation (
         xvfb-run
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Cocoa
-        Foundation
         gfortran
         libiconv
       ];
 
-    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
     enableParallelBuilding = true;
 
