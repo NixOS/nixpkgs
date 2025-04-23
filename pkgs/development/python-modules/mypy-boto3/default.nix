@@ -302,8 +302,8 @@ rec {
       "sha256-B9Aq+hh9BOzCIYMkS21IZYb3tNCnKnV2OpSIo48aeJM=";
 
   mypy-boto3-codestar-connections =
-    buildMypyBoto3Package "codestar-connections" "1.37.0"
-      "sha256-Ma3UNZxFnVHhXZRryWJS1HE2NAJAGTy5aDSXizECTWg=";
+    buildMypyBoto3Package "codestar-connections" "1.38.0"
+      "sha256-xv85IiUoOprlI7Rb7+dn6+Jo9oxuBZgV4m58FIYR6Yk=";
 
   mypy-boto3-codestar-notifications =
     buildMypyBoto3Package "codestar-notifications" "1.37.0"
