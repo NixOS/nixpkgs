@@ -19,7 +19,6 @@
   xmessage,
   xterm,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
   version = "4.0.2";
@@ -31,8 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
   };
 
-  # error: 'PATH_MAX' undeclared
   postPatch = ''
+    # Fix build failure due missing headers
+    sed -i '1i#define _POSIX_C_SOURCE 200809L' mod_notionflux/notionflux/notionflux.c
+    sed -i '2i#include <stdio.h>' mod_notionflux/notionflux/notionflux.c
+    sed -i '3i#include <string.h>' mod_notionflux/notionflux/notionflux.c
+
+    # error: 'PATH_MAX' undeclared
     sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
   '';
 
