@@ -279,6 +279,7 @@ let
         naturalSort
         compareLists
         take
+        takeEnd
         drop
         dropEnd
         sublist
