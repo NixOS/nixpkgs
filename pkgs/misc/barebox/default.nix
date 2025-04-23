@@ -24,11 +24,11 @@ let
     stdenv.mkDerivation rec {
       pname = "barebox-${defconfig}";
 
-      version = "2020.12.0";
+      version = "2025.04.0";
 
       src = fetchurl {
         url = "https://www.barebox.org/download/barebox-${version}.tar.bz2";
-        sha256 = "06vsd95ihaa2nywpqy6k0c7xwk2pzws4yvbp328yd2pfiigachrv";
+        sha256 = "sha256-MSTzwradnOBRKy1A+hfKzpw1b2XwBaY9oEdDh7iDnEE=";
       };
 
       postPatch = ''
@@ -100,6 +100,7 @@ in
       "scripts/omap4_usbboot"
       "scripts/omap3-usb-loader"
       "scripts/kwboot"
+      "scripts/rk-usb-loader"
     ];
   };
 }
