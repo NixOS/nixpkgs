@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "redu";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "drdo";
     repo = "redu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3DcBTpog5tWv2qdmhOlDLHFY77Cug6mCpDQEAtViw74=";
+    hash = "sha256-iea3tt1WB0/5XPNeCAk38/UoCHVSngXfNmfZQyspmsw=";
   };
 
-  cargoHash = "sha256-Rp8y2tBnpzBVEoLP4fTMulIJpu1j2TpJNh5M9kjnuEo=";
+  cargoHash = "sha256-fiMZIFIVeFnBnRBgmdUB8E5A2pM5nrTfUgD1LS6a4LQ=";
 
   env.RUSTC_BOOTSTRAP = 1;
 
