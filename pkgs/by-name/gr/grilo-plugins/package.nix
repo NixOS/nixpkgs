@@ -26,7 +26,7 @@
   json-glib,
   avahi,
   tinysparql,
-  dleyna-server,
+  dleyna,
   itstool,
   totem-pl-parser,
 }:
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     avahi
     libmediaart
     tinysparql
-    dleyna-server
+    dleyna
     gst_all_1.gstreamer
   ];
 

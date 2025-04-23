@@ -509,6 +509,10 @@ mapAliases {
   dibbler = throw "dibbler was removed because it is not maintained anymore"; # Added 2024-05-14
   dillong = throw "'dillong' has been removed, as upstream is abandoned since 2021-12-13. Use either 'dillo' or 'dillo-plus'. The latter integrates features from dillong."; # Added 2024-10-07
   diskonaut = throw "'diskonaut' was removed due to lack of upstream maintenance"; # Added 2025-01-25
+  dleyna-core = dleyna; # Added 2025-04-19
+  dleyna-connector-dbus = dleyna; # Added 2025-04-19
+  dleyna-renderer = dleyna; # Added 2025-04-19
+  dleyna-server = dleyna; # Added 2025-04-19
   dnnl = throw "'dnnl' has been renamed to/replaced by 'oneDNN'"; # Converted to throw 2024-10-17
   dnscrypt-wrapper = throw "dnscrypt-wrapper was removed because it has been effectively unmaintained since 2018. Use DNSCcrypt support in dnsdist instead"; # Added 2024-09-14
   docear = throw "Docear was removed because it was unmaintained upstream. JabRef, Zotero, or Mendeley are potential replacements."; # Added 2024-11-02
