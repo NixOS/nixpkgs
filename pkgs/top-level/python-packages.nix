@@ -2956,6 +2956,8 @@ self: super: with self; {
 
   csaf-tool = callPackage ../development/python-modules/csaf-tool { };
 
+  csaps = callPackage ../development/python-modules/csaps { };
+
   cson = callPackage ../development/python-modules/cson { };
 
   csrmesh = callPackage ../development/python-modules/csrmesh { };
@@ -6796,6 +6798,8 @@ self: super: with self; {
   ipy = callPackage ../development/python-modules/ipy { };
 
   ipycanvas = callPackage ../development/python-modules/ipycanvas { };
+
+  ipydatagrid = callPackage ../development/python-modules/ipydatagrid { };
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
@@ -11471,6 +11475,8 @@ self: super: with self; {
     callPackage ../development/python-modules/proton-vpn-network-manager
       { };
 
+  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
+
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
   protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib {
@@ -11722,6 +11728,8 @@ self: super: with self; {
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
+
+  py2vega = callPackage ../development/python-modules/py2vega { };
 
   py3buddy = callPackage ../development/python-modules/py3buddy { };
 

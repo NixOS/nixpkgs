@@ -185,7 +185,7 @@ in
   config = {
     hardware.enableAllHardware = true;
 
-    fileSystems = {
+    fileSystems = lib.mkImageMediaOverride {
       "/boot/firmware" = {
         device = "/dev/disk/by-label/${config.sdImage.firmwarePartitionName}";
         fsType = "vfat";

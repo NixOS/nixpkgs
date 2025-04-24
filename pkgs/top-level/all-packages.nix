@@ -13056,6 +13056,7 @@ with pkgs;
     {
       greetd = callPackage ../applications/display-managers/greetd { };
       gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
+      qtgreet = callPackage ../applications/display-managers/greetd/qtgreet.nix { };
       regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };
       tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
       wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
