@@ -32,6 +32,7 @@
   prefix ? "",
 
   testers,
+  portaudio,
 }:
 
 let
@@ -41,11 +42,14 @@ let
 
   libOnly = prefix == "lib";
 
+  optLibsamplerate =  if (stdenv.hostPlatform.isWindows) then null else shouldUsePkg libsamplerate;
+  optReadline =  if (stdenv.hostPlatform.isWindows) then null else shouldUsePkg readline;
   optDbus = if stdenv.hostPlatform.isDarwin then null else shouldUsePkg dbus;
   optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
   optLibffado = if libOnly then null else shouldUsePkg libffado;
   optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
   optLibopus = shouldUsePkg libopus;
+  platform = if stdenv.hostPlatform.isWindows then "msys" else stdenv.hostPlatform.parsed.kernel.name;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
@@ -70,9 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (optDbus != null) [ makeWrapper ];
   buildInputs =
     [
-      libsamplerate
+      optLibsamplerate
       libsndfile
-      readline
+      optReadline
       eigen
       celt
       optDbus
@@ -90,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
       freebsd.libsysinfo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      portaudio
     ];
 
   patches = [
@@ -99,7 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/jackaudio/jack2/commit/250420381b1a6974798939ad7104ab1a4b9a9994.patch";
       hash = "sha256-M/H72lLTeddefqth4BSkEfySZRYMIzLErb7nIgVN0u8=";
     })
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isWindows
+    (fetchpatch2 { name = "remove_include_dir.patch";
+                  url = "https://raw.githubusercontent.com/msys2/MINGW-packages/b3e9553aa603dc446af4a0610187c23ac8c9d97f/mingw-w64-jack2/0001-wscript-remove-hardcoded-includedir.patch";
+                  hash = "sha256-1HN2NfO2sTCWnwU2uNVw7ZXJxfCprRLpLatXUNGYkbU=";
+                });
 
   postPatch = ''
     patchShebangs --build svnversion_regenerate.sh
@@ -115,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (optAlsaLib != null) "--alsa"
     ++ lib.optional (
       stdenv.hostPlatform != stdenv.buildPlatform
-    ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
+    ) "--platform=${platform}";
 
   postInstall = (
     if libOnly then

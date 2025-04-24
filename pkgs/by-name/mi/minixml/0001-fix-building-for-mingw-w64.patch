@@ -1,0 +1,44 @@
+From de4aedb2b5a2e637dc71918f621c86da8ce40b5d Mon Sep 17 00:00:00 2001
+From: Daniel Hill <daniel@gluo.nz>
+Date: Sun, 20 Apr 2025 23:49:23 +1200
+Subject: [PATCH] fix building for mingw-w64
+
+---
+ Makefile.in | 6 ++++++
+ mxml-file.c | 2 --
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 5df074e..387bbbd 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -148,6 +148,12 @@ install:	$(TARGETS) install-$(LIBMXML) install-libmxml.a
+ 	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man3
+ 	$(INSTALL_MAN) doc/mxml.3 $(BUILDROOT)$(mandir)/man3/mxml.3
+ 
++install-mxml1.dll: mxml1.dll
++	echo Installing mxml1.dll to $(BUILDROOT)$(libdir)...
++	$(INSTALL_DIR) $(BUILDROOT)$(libdir)
++	$(INSTALL_LIB) mxml1.dll $(BUILDROOT)$(libdir)
++	$(RM) $(BUILDROOT)$(libdir)/mxml1.dll
++
+ install-libmxml.a:	libmxml.a
+ 	echo Installing libmxml.a to $(BUILDROOT)$(libdir)...
+ 	$(INSTALL_DIR) $(BUILDROOT)$(libdir)
+diff --git a/mxml-file.c b/mxml-file.c
+index 07bdc24..bbc0809 100644
+--- a/mxml-file.c
++++ b/mxml-file.c
+@@ -13,9 +13,7 @@
+  * Include necessary headers...
+  */
+ 
+-#ifndef _WIN32
+ #  include <unistd.h>
+-#endif /* !_WIN32 */
+ #include "mxml-private.h"
+ 
+ 
+-- 
+2.48.1
+

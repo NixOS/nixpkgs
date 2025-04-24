@@ -22,11 +22,11 @@
   dssiSupport ? false,
   dssi,
   ladspaH,
-  jackSupport ? true,
+  jackSupport ? (!stdenv.hostPlatform.isWindows),
   libjack2,
   lashSupport ? false,
   lash,
-  ossSupport ? true,
+  ossSupport ? (!stdenv.hostPlatform.isWindows),
   portaudioSupport ? true,
   portaudio,
   sndioSupport ? stdenv.hostPlatform.isOpenBSD,
@@ -45,6 +45,8 @@
   # Test dependencies
   cxxtest,
   ruby,
+  windows,
+  makeStaticLibraries,
 }:
 
 assert builtins.any (g: guiModule == g) [
@@ -55,6 +57,7 @@ assert builtins.any (g: guiModule == g) [
 ];
 
 let
+  makeStatic = p: p.override { isStatic = stdenv.hostPlatform.isWindows; };
   guiName =
     {
       "fltk" = "FLTK";
@@ -79,8 +82,9 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
-    "doc"
-  ];
+  ]
+    # mkDerivation bug? avoids: Not linking DLLs in the non-existent folder for doc
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) "doc";
 
   patches = [
     # Lazily expand ZYN_DATADIR to fix builtin banks across updates
@@ -88,6 +92,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/zynaddsubfx/zynaddsubfx/commit/853aa03f4f92a180b870fa62a04685d12fca55a7.patch";
       hash = "sha256-4BsRZ9keeqKopr6lCQJznaZ3qWuMgD1/mCrdMiskusg=";
     })
+#    (./0001-Statically-link-core-gcc-libraries.patch)
   ];
 
   postPatch = ''
@@ -96,16 +101,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    makeWrapper
     pkg-config
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper;
 
   buildInputs =
     [
-      fftw
-      liblo
-      minixml
-      zlib
+      (makeStatic fftw)
+      (makeStatic liblo)
+      (makeStatic minixml)
+      (zlib.override { static = stdenv.hostPlatform.isWindows;
+                       shared = (!stdenv.hostPlatform.isWindows); })
     ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals dssiSupport [
@@ -114,7 +119,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals lashSupport [ lash ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
+    ++ lib.optionals portaudioSupport [ (portaudio) ]
     ++ lib.optionals sndioSupport [ sndio ]
     ++ lib.optionals (guiModule == "fltk") [
       fltk
@@ -126,10 +131,11 @@ stdenv.mkDerivation rec {
       cairo
       libXpm
     ]
-    ++ lib.optionals (guiModule == "zest") [
+    ++ lib.optionals (guiModule == "zest" && (!stdenv.hostPlatform.isWindows)) [
       libGL
       libX11
-    ];
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [ windows.mingw_w64_pthreads ];
 
   cmakeFlags =
     [
@@ -140,11 +146,25 @@ stdenv.mkDerivation rec {
     # Must explicitly disable if support is not wanted.
     ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
     # Find FLTK without requiring an OpenGL library in buildInputs
-    ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
+    ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON"
+    ++ lib.optional portaudioSupport "-DDefaultOutput=pa"
+
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+#    "-DCMAKE_TOOLCHAIN_FILE=${./mingw.cmake}"
+      #(lib.cmakeFeature "CMAKE_C_FLAGS" "-static-libstdc++")
+      #(lib.cmakeFeature "CMAKE_CXX_FLAGS" "-static-libstdc++")
+ ];
 
   CXXFLAGS = [
     # GCC 13: error: 'uint8_t' does not name a type
     "-include cstdint"
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "-static" "-static-libgcc" "-static-libstdc++"
+  ];
+
+  NIX_CFLAGS_LINK = [
+    "-static-libstdc++"
+    "-Wl,-Bstatic -lmcfgthread"
   ];
 
   doCheck = true;
@@ -174,6 +194,22 @@ stdenv.mkDerivation rec {
       runHook postCheck
     '';
 
+  installPhase = lib.optionalString (stdenv.hostPlatform.isWindows) ''
+  mkdir -p $out/bin
+
+  cp src/zynaddsubfx.exe $out/bin
+  cp src/Plugin/ZynAddSubFX/vst/ZynAddSubFX.dll $out/bin
+
+  cp -r ../instruments/banks $out/bin
+
+	mkdir -p $out/bin/qml
+	touch $out/bin/qml/MainWindow.qml
+
+	ln -s ${mruby-zest}/bin/{font,schema} $out/bin
+	ln -s ${mruby-zest}/bin/zest.exe $out/bin/zyn-fusion.exe
+	ln -s ${mruby-zest}/bin/libzest.dll $out/bin
+  '';
+
   # Use Zyn-Fusion logo for zest build
   # An SVG version of the logo isn't hosted anywhere we can fetch, I
   # had to manually derive it from the code that draws it in-app:
@@ -186,7 +222,7 @@ stdenv.mkDerivation rec {
 
   # When building with zest GUI, patch plugins
   # and standalone executable to properly locate zest
-  postFixup = lib.optionalString (guiModule == "zest") ''
+  postFixup = lib.optionalString (guiModule == "zest" && (!stdenv.hostPlatform.isWindows)) ''
     for lib in "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so" "$out/lib/vst/ZynAddSubFX.so"; do
       patchelf --set-rpath "${mruby-zest}:$(patchelf --print-rpath "$lib")" "$lib"
     done
