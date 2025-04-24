@@ -740,6 +740,9 @@ rec {
     };
     uclibc = { };
 
+    # LLVM libc
+    llvm = { };
+
     unknown = { };
   };
 
