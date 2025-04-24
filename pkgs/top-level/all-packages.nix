@@ -6732,22 +6732,11 @@ with pkgs;
 
   mono = mono6;
 
-  mono4 = lowPrio (
-    callPackage ../development/compilers/mono/4.nix {
-      inherit (darwin) libobjc;
-      inherit (darwin.apple_sdk.frameworks) Foundation;
-    }
-  );
+  mono4 = lowPrio (callPackage ../development/compilers/mono/4.nix { });
 
-  mono5 = callPackage ../development/compilers/mono/5.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  mono5 = callPackage ../development/compilers/mono/5.nix { };
 
-  mono6 = callPackage ../development/compilers/mono/6.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  mono6 = callPackage ../development/compilers/mono/6.nix { };
 
   mozart2 = callPackage ../development/compilers/mozart {
     emacs = emacs-nox;
