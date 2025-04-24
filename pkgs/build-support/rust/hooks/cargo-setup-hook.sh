@@ -32,7 +32,8 @@ cargoSetupPostUnpackHook() {
 EOF
 
     substituteInPlace .cargo/config.toml \
-      --subst-var-by vendor "$cargoDepsCopy"
+      --subst-var-by vendor "$cargoDepsCopy" \
+      --subst-var-by BUILD_TOP "${NIX_BUILD_TOP:-/build}"
 
     echo "Finished cargoSetupPostUnpackHook"
 }

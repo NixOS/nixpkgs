@@ -91,6 +91,8 @@
             lib.concatStringsSep ", " (
               [
                 ''"-Ctarget-feature=${if stdenv.targetPlatform.isStatic then "+" else "-"}crt-static"''
+                ''"--remap-path-prefix"''
+                ''"@BUILD_TOP@=/build"''
               ]
               ++ lib.optional (!stdenv.targetPlatform.isx86_32) ''"-Cforce-frame-pointers=yes"''
             )
@@ -100,7 +102,13 @@
           [target."${stdenv.hostPlatform.rust.rustcTarget}"]
           "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
           "rustflags" = [ ${
-            lib.optionalString (!stdenv.hostPlatform.isx86_32) ''"-Cforce-frame-pointers=yes"''
+            lib.concatStringsSep ", " (
+              [
+                ''"--remap-path-prefix"''
+                ''"@BUILD_TOP@=/build"''
+              ]
+              ++ lib.optional (!stdenv.hostPlatform.isx86_32) ''"-Cforce-frame-pointers=yes"''
+            )
           } ]
         '';
     };
