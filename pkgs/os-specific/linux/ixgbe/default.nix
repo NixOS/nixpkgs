@@ -8,7 +8,7 @@
   linuxHeaders,
   fetchFromGitHub,
   which,
-  kernelModuleMakeFlags
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     rev = "v6.0.6";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies ++ [which];
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ which ];
 
   hardeningDisable = [ "pic" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KVER="${kernel.modDirVersion}";
+  KVER = "${kernel.modDirVersion}";
   KHEADERS = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source";
 
   configurePhase = ''
