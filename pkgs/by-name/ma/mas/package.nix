@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mas";
-  version = "1.9.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}.pkg";
-    hash = "sha256-MiSrCHLby3diTAzDPCYX1ZwdmzcHwOx/UJuWrlRJe54=";
+    hash = "sha256-pT8W/ZdNP7Fv5nyTX9vKbTa2jIk3THN1HVCmuEIibfc=";
   };
 
   nativeBuildInputs = [

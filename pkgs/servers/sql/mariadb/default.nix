@@ -120,10 +120,16 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
+        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+        };
 
         patches =
           [
             ./patch/cmake-includedir.patch
+            # patch for musl compatibility
+            ./patch/include-cstdint-full.patch
           ]
           # Fixes a build issue as documented on
           # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
@@ -362,13 +368,8 @@ let
     };
 in
 self: {
+  mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'.";
   # see https://mariadb.org/about/#maintenance-policy for EOLs
-  mariadb_105 = self.callPackage generic {
-    # Supported until 2025-06-24
-    version = "10.5.28";
-    hash = "sha256-C1BwII2gEWZA8gvQhfETZSf5mMwjJocVvL81Lnt/PME=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-  };
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
     version = "10.6.21";

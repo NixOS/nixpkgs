@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-KAHCeM1rAPGi98PrcVJtzkhTWGWFwf37VuSQTjqXSEg=";
+    hash = "sha256-7V/MExL1OJ+mBPlLcYiK6HTjvbHbIbrf13Rak+Za3d4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LwBTDBrsigt8H6PFuuGndiMlj5d8v68dyHipVYOGKVk=";
+  cargoHash = "sha256-4QxxwCBiPYd83rKEcoRJhHhQArzq9oQ287UBVrjbElg=";
 
   nativeBuildInputs =
     [

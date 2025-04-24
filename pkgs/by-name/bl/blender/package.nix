@@ -112,12 +112,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.0";
+  version = "4.4.1";
 
   srcs = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pAzOayAPyRYgTixAyg2prkUtI70uFulRuBYhgU9ZNw4=";
+    hash = "sha256-5MsJ7UFpwwtaq905CiTkas/qPYOaeiacSSl3qu9h5w0=";
   };
 
   patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;

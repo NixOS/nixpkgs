@@ -2665,6 +2665,10 @@ self: super: with self; {
 
   colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
 
+  colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
+
+  colcon-notification = callPackage ../development/python-modules/colcon-notification { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
@@ -8898,6 +8902,8 @@ self: super: with self; {
 
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
 
+  mlcroissant = callPackage ../development/python-modules/mlcroissant { };
+
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
@@ -14783,6 +14789,8 @@ self: super: with self; {
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
+  reactionmenu = callPackage ../development/python-modules/reactionmenu { };
+
   reactivex = callPackage ../development/python-modules/reactivex { };
 
   readabilipy = callPackage ../development/python-modules/readabilipy { };
@@ -15492,6 +15500,8 @@ self: super: with self; {
   scs = callPackage ../development/python-modules/scs {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate;
   };
+
+  scspell = callPackage ../development/python-modules/scspell { };
 
   sdds = callPackage ../development/python-modules/sdds { };
 
@@ -19222,12 +19232,7 @@ self: super: with self; {
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
 
-  z3-solver =
-    (toPythonModule (
-      (pkgs.z3.override { inherit python; }).overrideAttrs (_: {
-        pname = "z3-solver";
-      })
-    )).python;
+  z3-solver = (toPythonModule (pkgs.z3.override { python3 = python; })).python;
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 

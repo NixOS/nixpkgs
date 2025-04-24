@@ -8,6 +8,14 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-pkgs-replace-vars": [
+    "index.html#ex-pkgs-replace-vars",
+    "index.html#ex-pkgs-substituteAll",
+    "index.html#ex-pkgs-substitute-all-files"
+  ],
+  "ex-pkgs-replace-vars-with": [
+    "index.html#ex-pkgs-replace-vars-with"
+  ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
   ],
@@ -34,6 +42,14 @@
   ],
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
+  ],
+  "pkgs-replacevars": [
+    "index.html#pkgs-replacevars",
+    "index.html#pkgs-substituteall",
+    "index.html#pkgs-substituteallfiles"
+  ],
+  "pkgs-replacevarswith": [
+    "index.html#pkgs-replacevarswith"
   ],
   "preface": [
     "index.html#preface"
@@ -4192,18 +4208,6 @@
   ],
   "ex-pkgs-substitute": [
     "index.html#ex-pkgs-substitute"
-  ],
-  "pkgs-substituteall": [
-    "index.html#pkgs-substituteall"
-  ],
-  "ex-pkgs-substituteAll": [
-    "index.html#ex-pkgs-substituteAll"
-  ],
-  "pkgs-substituteallfiles": [
-    "index.html#pkgs-substituteallfiles"
-  ],
-  "ex-pkgs-substitute-all-files": [
-    "index.html#ex-pkgs-substitute-all-files"
   ],
   "part-development": [
     "index.html#part-development"

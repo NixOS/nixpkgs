@@ -214,7 +214,7 @@ code, while others choose not to.
 
 In Nix, there are multiple approaches to building a Composer-based project.
 
-One such method is the `php.buildComposerProject` helper function, which serves
+One such method is the `php.buildComposerProject2` helper function, which serves
 as a wrapper around `mkDerivation`.
 
 Using this function, you can build a PHP project that includes both a
@@ -249,19 +249,19 @@ To customize the PHP version, you can specify the `php` attribute. Similarly, if
 you wish to modify the Composer version, use the `composer` attribute. It is
 important to note that both attributes should be of the `derivation` type.
 
-Here's an example of working code example using `php.buildComposerProject`:
+Here's an example of working code example using `php.buildComposerProject2`:
 
 ```nix
 { php, fetchFromGitHub }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "php-app";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "git-owner";
     repo = "git-repo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
   };
 

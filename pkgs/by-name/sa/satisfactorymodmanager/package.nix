@@ -8,6 +8,8 @@
   wails,
   wrapGAppsHook3,
   glib-networking,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 buildGoModule rec {
@@ -40,6 +42,7 @@ buildGoModule rec {
     pnpm_8.configHook
     wails
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -78,8 +81,24 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 build/bin/SatisfactoryModManager -t "$out/bin"
+
+    for i in 16 32 64 128 256 512; do
+      install -D ./icons/"$i"x"$i".png "$out"/share/icons/hicolor/"$i"x"$i"/apps/SatisfactoryModManager.png
+    done
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "SatisfactoryModManager";
+      desktopName = "Satisfactory Mod Manager";
+      exec = "SatisfactoryModManager %u";
+      mimeTypes = [ "x-scheme-handler/smmanager" ];
+      icon = "SatisfactoryModManager";
+      terminal = false;
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
