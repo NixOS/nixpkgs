@@ -30,13 +30,12 @@ substitute {
 ```
 :::
 
-## `pkgs.substituteAll` {#pkgs-substituteall}
+## `pkgs.replaceVars` {#pkgs-replacevars}
 
-`pkgs.substituteAll` substitutes all instances of `@varName@` (`@`s included) in file `src` with the value of the corresponding environment variable.
-As this uses the [`substituteAll`] (#fun-substitute) function, its limitations regarding variable names that will or will not be replaced also apply here.
+`pkgs.replaceVars <src> <replacements>` replaces all instances of `@varName@` (`@`s included) in file `src` with the respective value in the attribute set `replacements`.
 
-:::{.example #ex-pkgs-substituteAll}
-# Usage of `pkgs.substituteAll`
+:::{.example #ex-pkgs-replace-vars}
+# Usage of `pkgs.replaceVars`
 
 If `say-goodbye.sh` contains the following:
 
@@ -51,16 +50,14 @@ the following derivation will make substitutions to `@bash@`, `@hello@`, and `@g
 
 ```nix
 {
-  substituteAll,
+  replaceVars,
   bash,
   hello,
 }:
-substituteAll {
-  src = ./say-goodbye.sh;
-  env = {
-    inherit bash hello;
-    greeting = "goodbye";
-  };
+replaceVars ./say-goodbye.sh {
+  inherit bash hello;
+  greeting = "goodbye";
+  unchanged = null;
 }
 ```
 
@@ -72,31 +69,37 @@ such that `$out` will result in something like the following:
 echo @unchanged@
 /nix/store/566f5isbvw014h7knmzmxa5l6hshx43k-hello-2.12.1/bin/hello --greeting goodbye
 ```
+
+Note that, in contrast to the old `substituteAll`, `unchanged = null` must explicitly be set.
+Any unreferenced `@...@` pattern in the source file will throw an error.
 :::
 
-## `pkgs.substituteAllFiles` {#pkgs-substituteallfiles}
+## `pkgs.replaceVarsWith` {#pkgs-replacevarswith}
 
-`pkgs.substituteAllFiles` replaces `@varName@` with the value of the environment variable `varName`.
-It expects `src` to be a directory and requires a `files` argument that specifies which files will be subject to replacements; only these files will be placed in `$out`.
+`pkgs.replaceVarsWith` works the same way as [pkgs.replaceVars](#pkgs-replacevars), but additionally allows more options.
 
-As it also uses the `substituteAll` function, it is subject to the same limitations on environment variables as discussed in [pkgs.substituteAll](#pkgs-substituteall).
+:::{.example #ex-pkgs-replace-vars-with}
+# Usage of `pkgs.replaceVarsWith`
 
-:::{.example #ex-pkgs-substitute-all-files}
-# Usage of `pkgs.substituteAllFiles`
-
-If the current directory contains `{foo,bar,baz}.txt` and the following `default.nix`
+With the example file `say-goodbye.sh`, consider:
 
 ```nix
-{ substituteAllFiles }:
-substituteAllFiles {
-  src = ./.;
-  files = [
-    "foo.txt"
-    "bar.txt"
-  ];
-  hello = "there";
+{ replaceVarsWith }:
+replaceVarsWith {
+  src = ./say-goodbye.sh;
+
+  replacements = {
+    inherit bash hello;
+    greeting = "goodbye";
+    unchanged = null;
+  };
+
+  name = "say-goodbye";
+  dir = "bin";
+  isExecutable = true;
+  meta.mainProgram = "say-goodbye";
 }
 ```
 
-in the resulting derivation, every instance of `@hello@` will be replaced with `there` in `$out/foo.txt` and `$out/bar.txt`; `baz.txt` will not be processed nor will it appear in `$out`.
+This will make the resulting file executable, put it in `bin/say-goodbye` and set `meta` attributes respectively.
 :::

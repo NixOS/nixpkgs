@@ -19,13 +19,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "3.6.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k8rz5RF1qi7RXzQYWGbw5pJRNRFIdX85SIYN+IHiVL4=";
+    hash = "sha256-Pqff6gVSNP2kA0Oo0t9CUy9cdf2yGnwSfwlOvS5LtKM=";
   };
 
   strictDeps = true;
@@ -45,9 +45,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       mkdir completions
-      ${emulator} $out/bin/nh completions --shell bash > completions/nh.bash
-      ${emulator} $out/bin/nh completions --shell zsh > completions/nh.zsh
-      ${emulator} $out/bin/nh completions --shell fish > completions/nh.fish
+      ${emulator} $out/bin/nh completions bash > completions/nh.bash
+      ${emulator} $out/bin/nh completions zsh > completions/nh.zsh
+      ${emulator} $out/bin/nh completions fish > completions/nh.fish
 
       installShellCompletion completions/*
     ''
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Csh8M5BquAD2vUYIu0nNWSvznTZxno1WxvkEhBVN+9c=";
+  cargoHash = "sha256-alZFjeBJskp4vu+uaEy9tMkdS1aXcv8d6AQ8jeJKEOA=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -70,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
       drupol
+      NotAShelf
       viperML
     ];
   };
