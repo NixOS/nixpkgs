@@ -46,9 +46,13 @@ buildPythonPackage rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # manually install the python binding
     mkdir -p $out/${python.sitePackages}/proton/vpn/
     cp ./target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libpython_proton_vpn_local_agent.so $out/${python.sitePackages}/proton/vpn/local_agent.so
+
+    runHook postInstall
   '';
 
   pythonImportsCheck = [ "proton.vpn.local_agent" ];
