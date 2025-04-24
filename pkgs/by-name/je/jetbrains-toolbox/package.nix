@@ -11,7 +11,7 @@
 
 let
   pname = "jetbrains-toolbox";
-  version = "2.5.4.38621";
+  version = "2.6.1.40902";
 
   passthru.updateScript = ./update.sh;
 
@@ -53,8 +53,8 @@ let
         fetchzip {
           url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${arch}.tar.gz";
           hash = selectSystem {
-            x86_64-linux = "sha256-rq0Hn9g+/u9C8vbEVH2mv62c1dvxr+t9tBhf26swQgI=";
-            aarch64-linux = "sha256-52wFejaKBSg/eeJu3NDGl1AdZLsJdi/838YeROD4Loc=";
+            x86_64-linux = "sha256-P4kv6ca6mGtl334HKNkdo9Iib/Cgu3ROrbQKlQqxUj4=";
+            aarch64-linux = "sha256-mG8GAVPi2I0A13rKhXoXxiRIHK1QOWPv4gZxfm0+DKs=";
           };
         }
         + "/jetbrains-toolbox";
@@ -91,8 +91,8 @@ let
       fetchurl {
         url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${finalAttrs.version}${arch}.dmg";
         hash = selectSystem {
-          x86_64-darwin = "sha256-y0zXQEqY5lj/e440dRtyBfaw8CwqqgzO3Ujreb37Z/I=";
-          aarch64-darwin = "sha256-9Bj5puG9NUHO53oXBRlB5DvX9jGTmrkDgjV2QPH9qg0=";
+          x86_64-darwin = "sha256-Dw1CqthgvKIlHrcQIoOpYbAG5c6uvq/UgzaO4n25YJY=";
+          aarch64-darwin = "sha256-b/z8Pq8h6n34junSMyxRS3Y/TQ3tu05Bh77xlvMvEtI=";
         };
       };
 
