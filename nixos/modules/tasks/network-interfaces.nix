@@ -604,17 +604,17 @@ in
     networking.fqdnOrHostName = mkOption {
       readOnly = true;
       type = types.str;
-      default = if cfg.domain == null then cfg.hostName else cfg.fqdn;
-      defaultText = literalExpression ''
-        if cfg.domain == null then cfg.hostName else cfg.fqdn
-      '';
+      default =  if (cfg.hostName == "" || cfg.domain == null)
+        then cfg.hostName
+        else cfg.fqdn;
+      defaultText = literalExpression ''if (cfg.hostName == "" || cfg.domain == null) then cfg.hostName else cfg.fqdn;'';
       description = ''
         Either the fully qualified domain name (FQDN), or just the host name if
         it does not exists.
 
         This is a convenience option for modules to read instead of `fqdn` when
         a mere `hostName` is also an acceptable value; this option does not
-        throw an error when `domain` is unset.
+        throw an error when `domain` or `hostName` is unset.
       '';
     };
 
