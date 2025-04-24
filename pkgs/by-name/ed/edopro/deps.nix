@@ -4,7 +4,7 @@
   assets-hash = "sha256-vZhkWJ1ZoNEwdc5kM1S0hyXnWmupiTOanCi9DCuqw/k=";
   edopro-version = "40.1.4";
   edopro-rev = "c713e23491a1e55c9d8e91257e5f2b5873696b9b";
-  edopro-hash = "sha256-mj0xEJsFcnY//za0uJosAPOPbU/jlduNX0YSNmvduLE=";
+  edopro-hash = "sha256-2E1cjG0FONu/fbr67/3qRCKQ1W/wPznClEWsMa1FAzo=";
   irrlicht-version = "1.9.0-unstable-2023-02-18";
   irrlicht-rev = "7edde28d4f8c0c3589934c398a3a441286bb7c22";
   irrlicht-hash = "sha256-Q2tNiYE/enZPqA5YhUe+Tkvmqtmmz2E0OqTRUDnt+UA=";

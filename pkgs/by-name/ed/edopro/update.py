@@ -53,7 +53,7 @@ def get_hash(owner: str, repo: str, rev: str, submodule: bool = False) -> str:
     return out_json["hash"]
 
 
-edopro_hash = get_hash("edo9300", "edopro", edopro.commit.sha)
+edopro_hash = get_hash("edo9300", "edopro", edopro.commit.sha, submodule=True)
 irrlicht_hash = get_hash("edo9300", "irrlicht1-8-4", irrlicht.sha)
 
 asset_legacy_hash: str = (
