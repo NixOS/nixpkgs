@@ -19,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove on next release.
     ./upstream-darwin-clock-nanosleep-fix.patch
     ./upstream-lockwait-test-fixes.patch
+    ./upstream-musl-ssize_t-fix.patch
   ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
