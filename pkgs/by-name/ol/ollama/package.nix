@@ -271,7 +271,6 @@ goBuild (finalAttrs: {
       dit7ya
       elohmeier
       prusnak
-      roydubnium
     ];
   };
 })
