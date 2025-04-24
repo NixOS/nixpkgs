@@ -16,13 +16,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Ak1eOLwmz3XkWpRrzgf0ayzb8Q9B6uWXfkhrdBLA2Uw=";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
-
   buildInputs = [ curl ];
+
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "all"
+      "shared"
+    ]
+    ++ (lib.optional (stdenv.isDarwin) [
+      "shared_osx"
+    ]);
 
   meta = {
     description = "Discord API wrapper library made in C";
-    homepage = "https://cogmasters.github.io/concord/";
+    homepage = "https://cogmasters.github.io/concord";
     changelog = "https://github.com/Cogmasters/concord/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
