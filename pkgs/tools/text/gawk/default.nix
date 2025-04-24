@@ -7,6 +7,7 @@
   texinfo,
   interactive ? false,
   readline,
+  apple-sdk_12,
   autoreconfHook, # no-pma fix
 
   /*
@@ -65,6 +66,11 @@ stdenv.mkDerivation rec {
       readline
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Relies on `<spawn.h>` propagating `_NSGetExecutablePath`, which
+      # doesn’t happen in the macOS 11.3 SDK. Upstream is unlikely to
+      # care as it only causes an error when built with a much newer
+      # Clang than shipped with the corresponding version of Xcode.
+      apple-sdk_12
       locale
     ];
 
