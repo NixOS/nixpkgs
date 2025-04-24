@@ -12,7 +12,9 @@
   rtl-sdr,
   soapysdr-with-plugins,
   csdr,
+  csdreti,
   pycsdr,
+  pycsdreti,
   pydigiham,
   direwolf,
   sox,
@@ -49,13 +51,13 @@ let
 
   owrx_connector = stdenv.mkDerivation rec {
     pname = "owrx_connector";
-    version = "0.6.0";
+    version = "0.6.5";
 
     src = fetchFromGitHub {
-      owner = "jketterl";
+      owner = "luarvique";
       repo = pname;
-      rev = version;
-      sha256 = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
+      rev = "870285269143048f850151346980942a12ccf24b";
+      sha256 = "sha256-e0VEv9t4gVDxJEbDJm1aKSJeqlmhT/QimC3x4JJ6ke8=";
     };
 
     nativeBuildInputs = [
@@ -72,7 +74,7 @@ let
     ];
 
     meta = with lib; {
-      homepage = "https://github.com/jketterl/owrx_connector";
+      homepage = "https://github.com/luarvique/owrx_connector";
       description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
       license = licenses.gpl3Only;
       platforms = platforms.unix;
@@ -83,20 +85,21 @@ let
 in
 buildPythonApplication rec {
   pname = "openwebrx";
-  version = "1.2.2";
+  version = "1.2.82";
   format = "setuptools";
-
   src = fetchFromGitHub {
-    owner = "jketterl";
-    repo = pname;
-    rev = version;
-    hash = "sha256-i3Znp5Sxs/KtJazHh2v9/2P+3cEocWB5wIpF7E4pK9s=";
+    owner = "luarvique";
+    repo = "openwebrx";
+    rev = "0e13d5f290430d127cf0accd4e3c29e7435ee645";
+    hash = "sha256-fwU1aMsjMMiq3zffFs8tksnR5bhTdeoeDQTaaLM0p7M=";
   };
 
   propagatedBuildInputs = [
     setuptools
     csdr
+    csdreti
     pycsdr
+    pycsdreti
     pydigiham
     js8py
     soapysdr-with-plugins
@@ -118,7 +121,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/jketterl/openwebrx";
+    homepage = "https://github.com/luarvique/openwebrx";
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     mainProgram = "openwebrx";
     license = licenses.gpl3Only;
