@@ -46,14 +46,14 @@
 }:
 buildPythonPackage rec {
   pname = "gdsfactory";
-  version = "9.5.1";
+  version = "9.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "gdsfactory";
     tag = "v${version}";
-    hash = "sha256-z8zKPbWLl554MZq6/Iy3ecvwWiRpy57VYji8xHR+JBo=";
+    hash = "sha256-BcFEMcHt0qUQ0hTLSznuIH37rAk+10JGrPdrhE/sTfU=";
   };
 
   build-system = [ flit-core ];
@@ -111,7 +111,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to generate GDS layouts";
     homepage = "https://github.com/gdsfactory/gdsfactory";
-    changelog = "https://github.com/gdsfactory/gdsfactory/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gdsfactory/gdsfactory/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbeffa ];
   };
