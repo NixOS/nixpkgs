@@ -136,6 +136,8 @@ let
             "uclibc"
           else if final.isAndroid then
             "bionic"
+          else if final.isLLVMLibc then
+            "llvm"
           else if
             final.isLinux # default
           then
@@ -261,7 +263,7 @@ let
         # don't support dynamic linking, but don't get the `staticMarker`.
         # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
         # has the `staticMarker`.
-        isStatic = final.isWasi || final.isRedox;
+        isStatic = final.isWasi || final.isRedox || final.isLLVMLibc;
 
         # Just a guess, based on `system`
         inherit
