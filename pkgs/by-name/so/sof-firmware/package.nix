@@ -27,20 +27,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${version}";
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       isc
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lblasc
       evenbrenden
       hmenke
     ];
-    platforms = with platforms; linux;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = with lib.platforms; linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
