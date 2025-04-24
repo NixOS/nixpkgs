@@ -27,6 +27,7 @@
   libX11,
   libxkbcommon,
   libXxf86vm,
+  lua5_3,
   mono,
   nlohmann_json,
   openal,
@@ -57,6 +58,14 @@ let
   ];
 
   deps = import ./deps.nix;
+
+  edopro-src = fetchFromGitHub {
+    owner = "edo9300";
+    repo = "edopro";
+    rev = deps.edopro-rev;
+    fetchSubmodules = true;
+    hash = deps.edopro-hash;
+  };
 in
 let
   assets = fetchzip {
@@ -107,16 +116,67 @@ let
     };
   };
 
+  ocgcore = stdenv.mkDerivation {
+    pname = "ocgcore-edopro";
+    version = deps.edopro-version;
+
+    src = edopro-src;
+    sourceRoot = "${edopro-src.name}/ocgcore";
+
+    patches = [
+      # Fix linking against our Lua (different name mangling, C in Lua vs C++ in ocgcore)
+      ./ocgcore-lua-symbols.patch
+    ];
+
+    nativeBuildInputs = [
+      premake5
+    ];
+
+    # Drop when edopro version >= 41
+    buildInputs = [ lua5_3 ];
+    preBuild = ''
+      premake5 gmake2 \
+        --lua-path="${lua5_3}"
+    '';
+
+    enableParallelBuilding = true;
+
+    buildFlags = [
+      "verbose=true"
+      "config=release"
+      "ocgcoreshared"
+    ];
+
+    makeFlags = [
+      "-C"
+      "build"
+    ];
+
+    # To make sure linking errors are discovered at build time, not when edopro runs into them during loading
+    env.NIX_LDFLAGS = "--unresolved-symbols=report-all";
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm644 -t $out/lib bin/release/libocgcore*${stdenv.hostPlatform.extensions.sharedLibrary}
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "YGOPro script engine";
+      homepage = "https://github.com/edo9300/ygopro-core";
+      license = lib.licenses.agpl3Plus;
+      inherit maintainers;
+      platforms = lib.platforms.unix;
+    };
+  };
+
   edopro = stdenv.mkDerivation {
     pname = "edopro";
     version = deps.edopro-version;
 
-    src = fetchFromGitHub {
-      owner = "edo9300";
-      repo = "edopro";
-      rev = deps.edopro-rev;
-      hash = deps.edopro-hash;
-    };
+    src = edopro-src;
 
     nativeBuildInputs = [
       makeWrapper
@@ -150,9 +210,14 @@ let
     ];
 
     # nixpkgs' gcc stack currently appears to not support LTO
+    # Override where bundled ocgcore get looked up in, so we can supply ours
+    # (can't use --prebuilt-core or let it build a core on its own without making core updates impossible)
     postPatch = ''
       substituteInPlace premake5.lua \
         --replace-fail 'flags "LinkTimeOptimization"' 'removeflags "LinkTimeOptimization"'
+
+      substituteInPlace gframe/game.cpp \
+        --replace-fail 'ocgcore = LoadOCGcore(Utils::GetWorkingDirectory())' 'ocgcore = LoadOCGcore("${lib.getLib ocgcore}/lib/")'
 
       touch ocgcore/premake5.lua
     '';
