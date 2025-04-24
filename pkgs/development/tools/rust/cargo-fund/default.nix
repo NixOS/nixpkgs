@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
-  Security,
   curl,
   openssl,
   libiconv,
@@ -32,7 +31,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
       curl
     ];

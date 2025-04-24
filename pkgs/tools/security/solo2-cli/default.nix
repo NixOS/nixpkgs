@@ -7,10 +7,6 @@
   pkg-config,
   pcsclite,
   udev,
-  PCSC,
-  IOKit,
-  CoreFoundation,
-  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,12 +33,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       pcsclite
       udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      PCSC
-      IOKit
-      CoreFoundation
-      AppKit
     ];
 
   postInstall = ''

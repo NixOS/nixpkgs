@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
-  stdenv,
   openssl,
   pkg-config,
 }:
@@ -27,12 +25,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
   # Some tests fail, because test using internet connection and install NodeJS by example

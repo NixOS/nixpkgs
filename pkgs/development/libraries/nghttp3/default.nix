@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  CoreServices,
   curlHTTP3,
 }:
 
@@ -26,9 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC_LIB" false)

@@ -4,9 +4,6 @@
   fetchFromGitHub,
   SDL2,
   libGL,
-  IOKit,
-  Foundation,
-  OpenGL,
   cmake,
   makeWrapper,
 }:
@@ -32,16 +29,11 @@ stdenv.mkDerivation rec {
     sed -i '/plutil/d' CMakeLists.txt
   '';
 
-  buildInputs =
-    [
-      SDL2
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Foundation
-      OpenGL
-    ];
+  buildInputs = [
+
+    SDL2
+    libGL
+  ];
 
   nativeBuildInputs = [
     cmake

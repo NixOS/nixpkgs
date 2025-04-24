@@ -4,8 +4,6 @@
   fetchCrate,
   pkg-config,
   libusb1,
-  stdenv,
-  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libusb1 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = [ libusb1 ];
 
   meta = with lib; {
     description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders";

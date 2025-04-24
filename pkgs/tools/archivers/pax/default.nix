@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  utmp,
   musl-fts,
 }:
 
@@ -15,9 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
   };
 
-  buildInputs =
-    lib.optional stdenv.hostPlatform.isDarwin utmp
-    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs = lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 

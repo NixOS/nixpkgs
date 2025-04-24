@@ -15,7 +15,6 @@
   pcre2,
   libmspack,
   systemd,
-  Foundation,
   json_c,
   check,
   rustc,
@@ -50,23 +49,20 @@ stdenv.mkDerivation rec {
     cargo
     python3
   ];
-  buildInputs =
-    [
-      zlib
-      bzip2
-      libxml2
-      openssl
-      ncurses
-      curl
-      libiconv
-      libmilter
-      pcre2
-      libmspack
-      json_c
-      check
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux systemd
-    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
+  buildInputs = [
+    zlib
+    bzip2
+    libxml2
+    openssl
+    ncurses
+    curl
+    libiconv
+    libmilter
+    pcre2
+    libmspack
+    json_c
+    check
+  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   libiconv,
   makeBinaryWrapper,
   pkg-config,
@@ -24,7 +23,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-3zN7t3yplRm4/P0m316uSooDftgJicvWIvz34jzOmBY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
   ];
   nativeBuildInputs = [

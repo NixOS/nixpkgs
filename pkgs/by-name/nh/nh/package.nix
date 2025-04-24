@@ -4,7 +4,6 @@
   rustPlatform,
   installShellFiles,
   makeBinaryWrapper,
-  darwin,
   fetchFromGitHub,
   nix-update-script,
   nvd,
@@ -33,10 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   preFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (

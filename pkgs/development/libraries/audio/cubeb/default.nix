@@ -9,9 +9,6 @@
   libpulseaudio,
   sndio,
   speexdsp,
-  AudioUnit,
-  CoreAudio,
-  CoreServices,
   lazyLoad ? !stdenv.hostPlatform.isDarwin,
 }:
 
@@ -44,18 +41,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [ speexdsp ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          AudioUnit
-          CoreAudio
-          CoreServices
-        ]
-      else
-        backendLibs
-    );
+  buildInputs = [ speexdsp ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) backendLibs;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

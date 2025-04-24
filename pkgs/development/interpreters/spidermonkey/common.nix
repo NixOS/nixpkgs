@@ -27,7 +27,6 @@
   nspr,
   readline,
   zlib,
-  libobjc,
   libiconv,
 }:
 
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: rec {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
       libiconv
     ];
 

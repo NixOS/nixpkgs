@@ -1,16 +1,15 @@
 {
   lib,
+  stdenv,
   aws-sdk-cpp,
   boehmgc,
   callPackage,
   fetchgit,
   fetchFromGitHub,
   rustPlatform,
-  Security,
   newScope,
   editline,
   ncurses,
-  stdenv,
   clangStdenv,
   nix-fast-build,
 
@@ -32,7 +31,6 @@ let
       self:
       lib.recurseIntoAttrs {
         inherit
-          Security
           storeDir
           stateDir
           confDir

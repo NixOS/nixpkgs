@@ -7,9 +7,6 @@
   linkFarm,
   jam,
   openssl,
-  CoreServices,
-  Foundation,
-  Security,
   testers,
 }:
 
@@ -52,12 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ jam ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    Foundation
-    Security
-  ];
 
   outputs = [
     "out"

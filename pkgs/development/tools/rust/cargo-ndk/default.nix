@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  CoreGraphics,
-  Foundation,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,11 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Kt4GLvbGK42RjivLpL5W5z5YBfDP5B83mCulWz6Bisw=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreGraphics
-    Foundation
-  ];
 
   meta = with lib; {
     description = "Cargo extension for building Android NDK projects";

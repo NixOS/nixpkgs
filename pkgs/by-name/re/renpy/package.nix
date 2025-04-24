@@ -65,20 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       tkinter
     ]);
 
-  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" [
-    ffmpeg.lib
-    freetype
-    fribidi
-    glew.dev
-    harfbuzz.dev
-    libGL
-    libGLU
-    libpng
-    SDL2
-    (lib.getDev SDL2)
-    zlib
-  ];
-
   enableParallelBuilding = true;
 
   patches = [

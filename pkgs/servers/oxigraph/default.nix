@@ -1,11 +1,8 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  IOKit,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,10 +23,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     installShellFiles
-  ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    IOKit
-    Security
   ];
 
   buildAndTestSubdir = "cli";

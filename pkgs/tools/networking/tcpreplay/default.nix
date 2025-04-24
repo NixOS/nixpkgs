@@ -4,8 +4,6 @@
   fetchurl,
   libpcap,
   tcpdump,
-  Carbon,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Leeb/Wfsksqa4v+1BFbdHVP/QPP6cbQixl6AYgE8noU=";
   };
 
-  buildInputs =
-    [ libpcap ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreServices
-    ];
+  buildInputs = [ libpcap ];
 
   configureFlags = [
     "--disable-local-libopts"

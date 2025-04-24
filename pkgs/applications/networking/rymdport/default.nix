@@ -1,13 +1,10 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
   libGL,
   xorg,
-  Carbon,
-  Cocoa,
 }:
 
 buildGoModule rec {
@@ -27,23 +24,16 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs =
-    with xorg;
-    [
-      libGL
-      libX11
-      libXcursor
-      libXext
-      libXi
-      libXinerama
-      libXrandr
-      libXxf86vm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-      IOKit
-    ];
+  buildInputs = with xorg; [
+    libGL
+    libX11
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libXrandr
+    libXxf86vm
+  ];
 
   postInstall = ''
     for res in $(ls internal/assets/icons | sed -e 's/icon-//g' -e 's/.png//g'); do

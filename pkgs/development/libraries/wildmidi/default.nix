@@ -5,8 +5,6 @@
   writeTextFile,
   cmake,
   alsa-lib,
-  OpenAL,
-  CoreAudioKit,
   freepats,
 }:
 
@@ -26,15 +24,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    lib.optionals stdenv.buildPlatform.isLinux [
-      alsa-lib
-      stdenv.cc.libc # couldn't find libm
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      OpenAL
-      CoreAudioKit
-    ];
+  buildInputs = lib.optionals stdenv.buildPlatform.isLinux [
+    alsa-lib
+    stdenv.cc.libc # couldn't find libm
+  ];
 
   preConfigure = ''
     # https://github.com/Mindwerks/wildmidi/issues/236

@@ -2,10 +2,8 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  darwin,
   openssl,
   pkg-config,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-WjTfIKWu5fivPXmlGXduHWA5dKmKz2620tprtuoJbD4=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     homepage = "https://github.com/alesbrelih/gitlab-ci-ls";

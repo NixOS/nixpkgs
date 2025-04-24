@@ -8,7 +8,6 @@
   nix,
   openssl,
   pkg-config,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [ openssl ];
 
   # needed for nix-prefetch-url
   postInstall =

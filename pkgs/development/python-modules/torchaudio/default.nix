@@ -76,39 +76,27 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
+
+  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-BRn4EZ7bIujGA6b/tdMu9yDqJNEaf/f1Kj45aLHC/JI=";
+    hash = "sha256-WNdDBB2nShbPPW7GU5cMij00u5PUdN+j5pm41yrKnCA=";
   };
 
   patches = [
     ./0001-setup.py-propagate-cmakeFlags.patch
-
-    # fix missing FLT_MAX symbol (dropped in CUDA 12.5)
-    # https://github.com/pytorch/audio/pull/3811
-    # drop after update to torchaudio 2.6.0
-    (fetchpatch {
-      url = "https://github.com/pytorch/audio/commit/7797f83e1d66ff78872763e1da3a5fb2f0534c40.patch";
-      hash = "sha256-mHFCWuHhveyUP9cN0Kn6GXZsC3njTcM2ONVaB/qK1zU=";
-    })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace setup.py \
-        --replace 'print(" --- Initializing submodules")' "return" \
-        --replace "_fetch_archives(_parse_sources())" "pass"
-    ''
-    + lib.optionalString rocmSupport ''
-      # There is no .info/version-dev, only .info/version
-      substituteInPlace cmake/LoadHIP.cmake \
-        --replace "/.info/version-dev" "/.info/version"
-    '';
+  postPatch = lib.optionalString rocmSupport ''
+    # There is no .info/version-dev, only .info/version
+    substituteInPlace cmake/LoadHIP.cmake \
+      --replace-fail "/.info/version-dev" "/.info/version"
+  '';
 
   env = {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
@@ -163,16 +151,16 @@ buildPythonPackage rec {
 
   doCheck = false; # requires sox backend
 
+  pythonImportsCheck = [ "torchaudio" ];
+
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     license = lib.licenses.bsd2;
-    platforms = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms =
+      lib.platforms.linux
+      ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

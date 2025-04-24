@@ -10,7 +10,6 @@
   libuuid,
   libunwind,
   openssl,
-  darwin,
   lttng-ust,
   pam,
   testers,
@@ -58,9 +57,6 @@ stdenv.mkDerivation rec {
       libuuid
       libunwind
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       lttng-ust

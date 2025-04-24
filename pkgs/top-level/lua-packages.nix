@@ -251,7 +251,6 @@ rec {
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
-    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
   vicious = callPackage (

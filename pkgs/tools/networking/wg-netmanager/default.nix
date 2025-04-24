@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-LtZTfmVVUqxc9GAM6mLLmlJXBhLqnfrvBZWh0RWrR/0=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
   doCheck = true;

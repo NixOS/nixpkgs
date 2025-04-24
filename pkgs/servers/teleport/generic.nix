@@ -5,8 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
-  CoreFoundation,
-  AppKit,
   binaryen,
   cargo,
   libfido2,
@@ -15,7 +13,6 @@
   pkg-config,
   pnpm_10,
   rustc,
-  Security,
   stdenv,
   xdg-utils,
   wasm-bindgen-cli,
@@ -50,12 +47,7 @@ let
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
 
-    buildInputs =
-      [ openssl ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        CoreFoundation
-        Security
-      ];
+    buildInputs = [ openssl ];
     nativeBuildInputs = [ pkg-config ];
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
@@ -144,16 +136,10 @@ buildGoModule rec {
     "webassets_embed"
   ] ++ lib.optional withRdpClient "desktop_access_rdp";
 
-  buildInputs =
-    [
-      openssl
-      libfido2
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withRdpClient) [
-      CoreFoundation
-      Security
-      AppKit
-    ];
+  buildInputs = [
+    openssl
+    libfido2
+  ];
   nativeBuildInputs = [
     makeWrapper
     pkg-config

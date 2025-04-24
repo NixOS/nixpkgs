@@ -12,7 +12,6 @@
   curl,
   gsoap,
   rapidjson,
-  Security,
   enableTools ? true,
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
       openssl
       rapidjson
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Security
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
     ++ lib.optional (enableThirdPartyCopy) gsoap;
 

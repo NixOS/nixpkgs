@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   cacert,
   nixosTests,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
@@ -20,10 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-1zPLnkNZvuZS5z9AEJvhyIv+8/y+YhqFcj5Mu7RSqnE=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   postInstall = ''
     install -D contrib/redlib.service $out/lib/systemd/system/redlib.service

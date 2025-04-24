@@ -4,7 +4,6 @@
   fetchFromGitHub,
   withOpenCL ? true,
   stdenv,
-  OpenCL,
   ocl-icd,
 }:
 
@@ -22,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-8Z/bfSDjSrvGbPOVpvIYzOz5wxjkMsuwOWASnOA8ziM=";
 
-  buildInputs = lib.optional withOpenCL (if stdenv.hostPlatform.isDarwin then OpenCL else ocl-icd);
+  buildInputs = lib.optional (withOpenCL && (!stdenv.hostPlatform.isDarwin)) ocl-icd;
 
   buildNoDefaultFeatures = !withOpenCL;
 

@@ -32,7 +32,6 @@
   curl,
   texinfo,
   texliveSmall,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -126,15 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libGL
       libglvnd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        GLUT
-        Cocoa
-      ]
-    );
+    ];
 
   dontWrapQtApps = true;
 

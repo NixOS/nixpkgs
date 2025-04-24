@@ -14,7 +14,6 @@
   guile,
   python,
   qtbase,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -43,7 +42,7 @@ stdenv.mkDerivation {
     guile
     python
     qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
+  ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \

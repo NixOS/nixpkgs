@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  darwin,
   distutils,
   doxygen,
   draco,
@@ -142,7 +141,7 @@ buildPythonPackage rec {
       libX11
       libXt
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
+
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
     ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [

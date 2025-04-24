@@ -7,10 +7,6 @@
   alsa-lib,
   SDL2,
   libiconv,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +26,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      CoreAudio
-      CoreMIDI
-      CoreServices
-      Cocoa
     ];
 
   passthru.tests = {

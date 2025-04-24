@@ -7,7 +7,6 @@
   libiconv,
   openssl,
   pkg-config,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
     ];
 
   checkFlags = [

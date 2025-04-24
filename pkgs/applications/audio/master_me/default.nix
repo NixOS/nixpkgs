@@ -8,7 +8,6 @@
   libXrandr,
   pkg-config,
   python3,
-  Cocoa,
 }:
 stdenv.mkDerivation rec {
   pname = "master_me";
@@ -28,7 +27,6 @@ stdenv.mkDerivation rec {
       libGL
       python3
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
       libXext

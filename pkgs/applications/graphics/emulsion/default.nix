@@ -16,11 +16,6 @@
   libxcb,
   libxkbcommon,
   wayland,
-  AppKit,
-  CoreGraphics,
-  CoreServices,
-  Foundation,
-  OpenGL,
 }:
 let
   rpathLibs =
@@ -59,15 +54,7 @@ rustPlatform.buildRustPackage rec {
     python3
   ];
 
-  buildInputs =
-    rpathLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      CoreGraphics
-      CoreServices
-      Foundation
-      OpenGL
-    ];
+  buildInputs = rpathLibs;
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/emulsion

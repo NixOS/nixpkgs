@@ -16,7 +16,6 @@
   wavpack,
   icoutils,
   nixosTests,
-  Cocoa,
   buildClient ? true,
 }:
 
@@ -78,9 +77,6 @@ stdenv.mkDerivation rec {
       lua5_3
       zlib
       wavpack
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
     ]
     ++ lib.optionals buildClient (
       [

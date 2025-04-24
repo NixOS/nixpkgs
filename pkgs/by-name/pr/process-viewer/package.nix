@@ -4,8 +4,6 @@
   fetchCrate,
   pkg-config,
   gtk4,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ gtk4 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Foundation
-    ];
+  buildInputs = [ gtk4 ];
 
   postInstall = ''
     install -Dm644 assets/fr.guillaume_gomez.ProcessViewer.desktop -t $out/share/applications

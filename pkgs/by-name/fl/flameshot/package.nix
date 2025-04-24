@@ -1,8 +1,6 @@
 {
   stdenv,
   lib,
-  overrideSDK,
-  darwin,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -18,11 +16,7 @@
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-
-stdenv'.mkDerivation {
+stdenv.mkDerivation {
   pname = "flameshot";
   # wlr screenshotting is currently only available on unstable version (>12.1.0)
   version = "12.1.0-unstable-2025-04-07";

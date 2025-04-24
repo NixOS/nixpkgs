@@ -15,7 +15,6 @@
   makeWrapper,
   rustPlatform,
   pkg-config,
-  Security,
   stdenv,
   testers,
   tl-expected,
@@ -55,19 +54,15 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      boost
-      db62
-      libevent
-      libsodium
-      tl-expected
-      utf8cpp
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    boost
+    db62
+    libevent
+    libsodium
+    tl-expected
+    utf8cpp
+    zeromq
+  ];
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.

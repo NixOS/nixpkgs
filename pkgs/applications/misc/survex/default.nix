@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  Carbon,
-  Cocoa,
   ffmpeg,
   glib,
   libGLU,
@@ -42,10 +40,6 @@ stdenv.mkDerivation rec {
       proj
       gdal
       wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # TODO: libGLU doesn't build for macOS because of Mesa issues

@@ -7,7 +7,6 @@
   ncurses,
   pkg-config,
   readline,
-  Security,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libedit
       ncurses
-      Security
     ];
 
   makeFlags = [ "DESTDIR=$(out)" ];

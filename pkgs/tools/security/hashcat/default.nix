@@ -12,10 +12,6 @@
   ocl-icd,
   xxHash,
   zlib,
-  Foundation,
-  IOKit,
-  Metal,
-  OpenCL,
   libiconv,
 }:
 
@@ -54,10 +50,6 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      IOKit
-      Metal
-      OpenCL
       libiconv
     ];
 

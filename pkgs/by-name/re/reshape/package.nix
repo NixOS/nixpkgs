@@ -2,10 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
-  darwin,
   postgresqlTestHook,
   postgresql,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-lK54SEayI015f2AQ6h4zadgkECLp4jCeJO7enBG0LeM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
 
   nativeCheckInputs = [
     postgresqlTestHook

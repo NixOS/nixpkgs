@@ -21,7 +21,6 @@
   gstreamerSupport ? false,
   gst_all_1,
   harfbuzz,
-  OpenGL,
 }:
 
 stdenv.mkDerivation rec {
@@ -100,13 +99,11 @@ stdenv.mkDerivation rec {
       gst_all_1.gst-plugins-base
     ];
 
-  buildInputs =
-    lib.optionals pangoSupport [
-      pango
-      cairo
-      harfbuzz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
+  buildInputs = lib.optionals pangoSupport [
+    pango
+    cairo
+    harfbuzz
+  ];
 
   env =
     {

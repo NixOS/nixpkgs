@@ -6,7 +6,6 @@
   pkg-config,
   openssl,
   installShellFiles,
-  Security,
   curl,
 }:
 
@@ -27,7 +26,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       curl
     ];
   nativeBuildInputs = [
