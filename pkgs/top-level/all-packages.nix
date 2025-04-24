@@ -427,6 +427,7 @@ with pkgs;
     hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
     cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
+    ddns = python3Packages.callPackage ../tools/networking/octodns/providers/ddns { };
   };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
@@ -4135,7 +4136,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
   netdataCloud = netdata.override {
-    withCloud = true;
     withCloudUi = true;
   };
 
@@ -4159,10 +4159,6 @@ with pkgs;
   nodejs = hiPrio nodejs_22;
   nodejs-slim = nodejs-slim_22;
   corepack = hiPrio corepack_22;
-
-  nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
-  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix { enableNpm = false; };
-  corepack_18 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_18; });
 
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
@@ -9094,10 +9090,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
   };
 
-  eigen = callPackage ../development/libraries/eigen { };
-
-  eigen2 = callPackage ../development/libraries/eigen/2.0.nix { };
-
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   vmmlib = callPackage ../development/libraries/vmmlib {
@@ -11981,7 +11973,7 @@ with pkgs;
   };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs_18;
+    nodejs = nodejs_20;
   };
 
   mailmanPackages = callPackage ../servers/mail/mailman { };
@@ -12126,9 +12118,6 @@ with pkgs;
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
   opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
   opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
-  osrm-backend = callPackage ../servers/osrm-backend {
-    tbb = tbb_2021_11;
-  };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
@@ -16287,9 +16276,7 @@ with pkgs;
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
-  vengi-tools = darwin.apple_sdk_11_0.callPackage ../applications/graphics/vengi-tools {
-    inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
-  };
+  vengi-tools = callPackage ../applications/graphics/vengi-tools { };
 
   veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
 
@@ -16458,7 +16445,7 @@ with pkgs;
   };
 
   openvscode-server = callPackage ../servers/openvscode-server {
-    nodejs = nodejs_18;
+    nodejs = nodejs_20;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
   };
 
@@ -18124,17 +18111,6 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  inherit (callPackages ../applications/science/logic/z3 { python = python3; })
-    z3_4_14
-    z3_4_13
-    z3_4_12
-    z3_4_11
-    z3_4_8
-    z3_4_8_5
-    ;
-  z3 = z3_4_13;
-  z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix { };
-
   tlaplus = callPackage ../applications/science/logic/tlaplus {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
@@ -19007,7 +18983,7 @@ with pkgs;
     wordpress_6_7
     ;
 
-  wordpressPackages = (
+  wordpressPackages = recurseIntoAttrs (
     callPackage ../servers/web-apps/wordpress/packages {
       plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
       themes = lib.importJSON ../servers/web-apps/wordpress/packages/themes.json;

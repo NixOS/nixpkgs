@@ -4,7 +4,7 @@
   autoconf,
   automake,
   pkg-config,
-  substituteAll,
+  replaceVars,
   lib,
   perl,
   flex,
@@ -41,9 +41,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     # build tools with a build compiler
-    (substituteAll {
-      src = ./native-tools.patch;
+    (replaceVars ./native-tools.patch {
       cc_for_build = lib.getExe buildPackages.stdenv.cc;
+      # patch context
+      FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT_TRUE = null;
+      HAVE_RUNNABLE_TESTS_TRUE = null;
     })
   ];
 

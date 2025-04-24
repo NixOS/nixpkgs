@@ -20,6 +20,7 @@
   qtbase,
   qtsvg,
   qtmacextras,
+  fetchpatch,
   ghostscriptX ? null,
   extraFonts ? false,
   chineseFonts ? false,
@@ -78,6 +79,14 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       qtmacextras
     ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-compile-clang-19.5.patch";
+      url = "https://github.com/texmacs/texmacs/commit/e72783b023f22eaa0456d2e4cc76ae509d963672.patch";
+      hash = "sha256-oJCiXWTY89BdxwbgtFvfThid0WM83+TAUThSihfr0oA=";
+    })
+  ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "TEXMACS_GUI" "Qt")
