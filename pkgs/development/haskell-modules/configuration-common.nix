@@ -1287,8 +1287,8 @@ self: super:
   dhall-yaml = self.generateOptparseApplicativeCompletions [ "dhall-to-yaml-ng" "yaml-to-dhall" ] (
     doJailbreak super.dhall-yaml
   ); # bytestring <0.12, text<2.1
+  # 2025-02-14: see also https://github.com/dhall-lang/dhall-haskell/issues/2638
   dhall-bash = doJailbreak super.dhall-bash; # bytestring <0.12, text <2.1
-  # see also https://github.com/dhall-lang/dhall-haskell/issues/2638
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1712,14 +1712,11 @@ self: super:
   # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
 
-  # - Deps are required during the build for testing and also during execution,
-  #   so add them to build input and also wrap the resulting binary so they're in
-  #   PATH.
-  # - Patch can be removed on next package set bump (for v0.2.11)
-
-  # 2023-06-26: Test failure: https://hydra.nixos.org/build/225081865
   update-nix-fetchgit =
     let
+      # Deps are required during the build for testing and also during execution,
+      # so add them to build input and also wrap the resulting binary so they're in
+      # PATH.
       deps = [
         pkgs.git
         pkgs.nix
@@ -1727,6 +1724,7 @@ self: super:
       ];
     in
     lib.pipe super.update-nix-fetchgit [
+      # 2023-06-26: Test failure: https://hydra.nixos.org/build/225081865
       dontCheck
       (self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ])
       (overrideCabal (drv: {
