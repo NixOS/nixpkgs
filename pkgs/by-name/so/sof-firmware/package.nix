@@ -4,12 +4,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sof-firmware";
   version = "2025.01.1";
 
   src = fetchurl {
-    url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-${version}.tar.gz";
+    url = "https://github.com/thesofproject/sof-bin/releases/download/v${finalAttrs.version}/sof-bin-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-o2IQ2cJF6BsNlnTWsn0f1BIpaM+SWu/FW0htNlD4gyM=";
   };
 
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${version}";
+    changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${finalAttrs.version}";
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
     license = with lib.licenses; [
@@ -43,4 +43,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = with lib.platforms; linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
