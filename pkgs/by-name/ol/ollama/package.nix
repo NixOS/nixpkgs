@@ -229,6 +229,12 @@ goBuild (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # required for github.com/ollama/ollama/detect's tests
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (subpath "/System/Library/Extensions"))
+    (allow iokit-open (iokit-user-client-class "AGXDeviceUserClient"))
+  '';
+
   passthru = {
     tests =
       {
@@ -261,7 +267,6 @@ goBuild (finalAttrs: {
       dit7ya
       elohmeier
       prusnak
-      roydubnium
     ];
   };
 })

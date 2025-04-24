@@ -58,6 +58,11 @@ stdenv.mkDerivation {
     hash = rpcs3Hash;
   };
 
+  patches = [
+    # Modified from https://github.com/RPCS3/rpcs3/pull/17009; doesn't apply cleanly due to intermediate commits
+    ./fix-qt6.9-compilation.patch
+  ];
+
   passthru.updateScript = ./update.sh;
 
   preConfigure = ''
