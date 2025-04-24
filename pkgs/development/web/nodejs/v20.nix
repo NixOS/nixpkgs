@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   callPackage,
   fetchpatch2,
   openssl,
@@ -27,6 +29,24 @@ buildNodejs {
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    # Fix builds with shared llhttp
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
+      hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/4454d09e8f7225ec1b576ef86c8705bca63a136c.patch?full_index=1";
+      hash = "sha256-M6eme92cY1dhu1I5/v7Tcd3iSlQi5ZeC48qwLoYj2iA=";
+    })
+    # update tests for nghttp2 1.65
+    ./deprecate-http2-priority-signaling.patch
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
+      hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
+      includes = [ "test/*" ];
+    })
   ]
   ++ gypPatches;
 }
