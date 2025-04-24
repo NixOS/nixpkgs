@@ -3,28 +3,26 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  copyDesktopItems,
   inih,
+  libsForQt5,
+  makeDesktopItem,
   ninja,
   pkg-config,
-  qtbase,
-  wrapQtAppsHook,
-  makeDesktopItem,
-  copyDesktopItems,
 }:
-
 stdenv.mkDerivation {
   pname = "qzdl";
-  version = "unstable-2023-04-04";
+  version = "3.3.0.0-unstable-2025-01-04";
 
   src = fetchFromGitHub {
     owner = "qbasicer";
     repo = "qzdl";
-    rev = "44aaec0182e781a3cef373e5c795c9dbd9cd61bb";
-    hash = "sha256-K/mJQb7uO2H94krWJIJtFRYd6BAe2TX1xBt6fGBb1tA=";
+    rev = "a03191777152b932b9bf15f45d439bf38e8c7679";
+    hash = "sha256-YRWJBuYY1QI/liiGw5zYFqsrK+DyvW1Lpava6CkmVnQ=";
   };
 
   patches = [
-    ./non-bundled-inih.patch
+    ./cmake.patch
   ];
 
   nativeBuildInputs = [
@@ -32,12 +30,12 @@ stdenv.mkDerivation {
     copyDesktopItems
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     inih
-    qtbase
+    libsForQt5.qtbase
   ];
 
   postInstall = ''
@@ -55,12 +53,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ZDoom WAD Launcher";
     homepage = "https://zdl.vectec.net";
-    license = licenses.gpl3Only;
-    inherit (qtbase.meta) platforms;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.gpl3Only;
+    inherit (libsForQt5.qtbase.meta) platforms;
+    maintainers = [ lib.maintainers.azahi ];
     mainProgram = "zdl";
   };
 }
