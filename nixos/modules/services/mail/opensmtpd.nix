@@ -137,7 +137,7 @@ in
       in
       {
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        after = [ "network-online.target" ];
         serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
         environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
       };
