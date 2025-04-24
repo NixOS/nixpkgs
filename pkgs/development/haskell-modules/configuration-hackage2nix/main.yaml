@@ -23,6 +23,7 @@
 # WARNING: We import a list of default-package-overrides from stackage which is
 # tracked in stackage.yaml. Adding conflicting overrides with stackage here will
 # not work.
+# keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
@@ -36,7 +37,9 @@ default-package-overrides:
   - htree < 0.2.0.0
   # 2025-01-17: need to match stackage version of hosc
   - hsc3 < 0.21
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no numeric=yes
 extra-packages:
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal == 3.10.*
@@ -119,7 +122,9 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no
 package-maintainers:
   abbradar:
     - Agda
@@ -668,7 +673,9 @@ package-maintainers:
   wolfgangwalther:
     - postgres-websockets
     - postgrest
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
   bdcs-api:                                     [ platforms.darwin ]
@@ -871,6 +878,7 @@ supported-platforms:
   Win32-services-wrapper:                       [ platforms.windows ]
   XInput:                                       [ platforms.windows ]
   yesod-auth-simple:                            [ platforms.x86 ] # requires scrypt which only supports x86
+# keep-sorted end
 
 dont-distribute-packages:
   # Depends on shine, which is a ghcjs project.
