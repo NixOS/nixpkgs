@@ -182,31 +182,29 @@ mkDerivation (finalAttrs: {
   patches =
     patches fetchpatch
     ++ lib.optionals withNativeCompilation [
-      (replaceVars ./native-comp-driver-options-30.patch
-        {
-          backendPath = (
-            lib.concatStringsSep " " (
-              builtins.map (x: ''"-B${x}"'') (
-                [
-                  # Paths necessary so the JIT compiler finds its libraries:
-                  "${lib.getLib libgccjit}/lib"
-                ]
-                ++ libGccJitLibraryPaths
-                ++ [
-                  # Executable paths necessary for compilation (ld, as):
-                  "${lib.getBin stdenv.cc.cc}/bin"
-                  "${lib.getBin stdenv.cc.bintools}/bin"
-                  "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-                ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                  # The linker needs to know where to find libSystem on Darwin.
-                  "${apple-sdk.sdkroot}/usr/lib"
-                ]
-              )
+      (replaceVars ./native-comp-driver-options-30.patch {
+        backendPath = (
+          lib.concatStringsSep " " (
+            builtins.map (x: ''"-B${x}"'') (
+              [
+                # Paths necessary so the JIT compiler finds its libraries:
+                "${lib.getLib libgccjit}/lib"
+              ]
+              ++ libGccJitLibraryPaths
+              ++ [
+                # Executable paths necessary for compilation (ld, as):
+                "${lib.getBin stdenv.cc.cc}/bin"
+                "${lib.getBin stdenv.cc.bintools}/bin"
+                "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                # The linker needs to know where to find libSystem on Darwin.
+                "${apple-sdk.sdkroot}/usr/lib"
+              ]
             )
-          );
-        }
-      )
+          )
+        );
+      })
     ];
 
   postPatch = lib.concatStringsSep "\n" [
