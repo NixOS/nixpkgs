@@ -77,7 +77,6 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    broken = true; # ModuleNotFoundError: No module named 'proton.vpn.local_agent'
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";
     license = lib.licenses.gpl3Only;
