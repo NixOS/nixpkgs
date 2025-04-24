@@ -5,6 +5,7 @@
   fetchpatch,
   libsForQt5,
   writableTmpDirAsHomeHook,
+  ffmpeg-headless,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-DQkoB+fjshWDLzKouhEQXzpqn78WL+eqo5oTfE9ltEk=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace platform/qt/MainWindow.cpp \
+      --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg-headless}"'
+  '';
 
   qmakeFlags = [ "MLVApp.pro" ];
 
