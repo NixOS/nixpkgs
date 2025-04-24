@@ -5,7 +5,6 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  nixosTests,
   openssl,
   pkg-config,
   postgresql,
