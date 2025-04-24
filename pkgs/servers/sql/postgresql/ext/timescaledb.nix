@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
   libkrb5,
-  nixosTests,
   openssl,
   postgresql,
   postgresqlBuildExtension,
