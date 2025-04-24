@@ -27,7 +27,7 @@
   gst_all_1,
   libgudev,
   umockdev,
-  substituteAll,
+  replaceVars,
   enableGeoLocation ? true,
   enableSystemd ? true,
 }:
@@ -51,14 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
     # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
-    (substituteAll {
-      src = ./fix-icon-validation.patch;
+    (replaceVars ./fix-icon-validation.patch {
       inherit (builtins) storeDir;
     })
 
     # Same for the sound validator, except the gdk-pixbuf part.
-    (substituteAll {
-      src = ./fix-sound-validation.patch;
+    (replaceVars ./fix-sound-validation.patch {
       inherit (builtins) storeDir;
     })
 
