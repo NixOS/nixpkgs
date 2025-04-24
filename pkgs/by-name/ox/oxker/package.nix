@@ -2,19 +2,22 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oxker";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-szsC6EniAmcjZaSunvNY0fP3tx0hEbP6oUO0NNbjgTY=";
+    hash = "sha256-2xLTR5+0xtyYhc5+gYG78EMP/B5Vk6ZqEGsZwM2bAok=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-77oMoKzhe+vrdAwn85A6tj35EOz/ylZh5imdmRjkR3k=";
+  cargoHash = "sha256-d6jaOtB6S8R6cdqLUnuPhDP6q9Hl6FTieFEiBibiDDE=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Simple tui to view & control docker containers";
