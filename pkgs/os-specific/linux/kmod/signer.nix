@@ -11,7 +11,6 @@
   pubKeyPath,
   privKeyPathOrUri,
   hashAlgorithm,
-  compressionAlgorithm,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,8 +61,10 @@ stdenv.mkDerivation rec {
     for mod in `find . -name "*.ko.*"`; do
       mod_filename=`basename "$mod"`
       mod_filename_ko=$mod_filename
+      # get potential compression type
+      mod_filetype=`echo $mod_filename | sed 's/^.*\.//'`
       # strip compression type
-      if [ "${compressionAlgorithm}" != "none" ]; then
+      if [ "$mod_filetype" != "ko" ]; then
         mod_filename_ko=`echo $mod_filename | sed 's/\.[^.]*$//'`
       fi
       mod_dir=`dirname "$mod"`
@@ -75,10 +76,10 @@ stdenv.mkDerivation rec {
       echo "signing $mod_filename"
 
       # may decompress
-      case "${compressionAlgorithm}" in
+      case "$mod_filetype" in
         xz) xz -d "$mod_filename" ;;
-        gzip) gzip -d "$mod_filename" ;;
-        zstd) zstd --rm -d "$mod_filename" ;;
+        gz) gzip -d "$mod_filename" ;;
+        zst) zstd --rm -d "$mod_filename" ;;
       esac
 
       # sign
@@ -88,10 +89,10 @@ stdenv.mkDerivation rec {
         "$mod_filename_ko"
 
       # compress, sync with "scripts/Makefile.modinst" in kernel
-      case "${compressionAlgorithm}" in
+      case "$mod_filetype" in
         xz) xz --check=crc32 --lzma2=dict=1MiB -f "$mod_filename_ko" ;;
-        gzip) gzip -n -f "$mod_filename_ko" ;;
-        zstd) zstd -T0 --rm -f -q "$mod_filename_ko" ;;
+        gz) gzip -n -f "$mod_filename_ko" ;;
+        zst) zstd -T0 --rm -f -q "$mod_filename_ko" ;;
       esac
 
       chmod -w "$mod_filename"

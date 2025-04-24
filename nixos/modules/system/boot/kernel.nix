@@ -297,20 +297,6 @@ in
             pubKeyPath = config.boot.kernelModuleSigning.publicKeyPath;
             privKeyPathOrUri = config.boot.kernelModuleSigning.privateKeyPathOrUri;
             hashAlgorithm = config.boot.kernelModuleSigning.hashAlgorithm;
-            compressionAlgorithm =
-              let
-                cfg = config.boot.kernelPackages.kernel.config;
-                isYes = config.lib.kernelConfig.isYes;
-              in
-                if ((isYes "MODULE_COMPRESS_NONE").assertion cfg) then
-                  "none"
-                else if ((isYes "MODULE_COMPRESS_GZIP").assertion cfg) then
-                  "gzip"
-                else if ((isYes "MODULE_COMPRESS_XZ").assertion cfg) then
-                  "xz"
-                else
-                  "zstd"
-              ;
           }).override { name = kernel-name + "-modules-signed"; }
         else
           modulesUnsigned
