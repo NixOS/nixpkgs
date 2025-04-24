@@ -123,24 +123,25 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
+  cmakeFlags = [
+    "-DOPENMP=ON"
+    "-DTOOLS=ON"
+    "-DHDF5=ON"
+    "-DFDE=ON"
+    "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
+    (lib.strings.cmakeBool "DMRG" enableQcmaquis)
+    (lib.strings.cmakeBool "NEVPT2" enableQcmaquis)
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    "-DLINALG=Manual"
+    (lib.strings.cmakeBool "DGA" enableMpi)
+    (lib.strings.cmakeBool "MPI" enableMpi)
+  ];
+
   preConfigure =
     ''
-      cmakeFlagsArray+=(
-        "-DOPENMP=ON"
-        "-DTOOLS=ON"
-        "-DHDF5=ON"
-        "-DFDE=ON"
-        "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
-        ${lib.strings.cmakeBool "DMRG" enableQcmaquis}
-        ${lib.strings.cmakeBool "NEVPT2" enableQcmaquis}
-        "-DCMAKE_SKIP_BUILD_RPATH=ON"
-        ${lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic}
-        ${lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)}
-        "-DLINALG=Manual"
-        "-DLINALG_LIBRARIES=-lblas -llapack"
-        ${lib.strings.cmakeBool "DGA" enableMpi}
-        ${lib.strings.cmakeBool "MPI" enableMpi}
-      )
+      cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
     ''
     + lib.optionalString enableMpi ''
       export GAROOT=${globalarrays};
