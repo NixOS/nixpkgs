@@ -1618,6 +1618,7 @@
   ./services/web-apps/plausible.nix
   ./services/web-apps/porn-vault/default.nix
   ./services/web-apps/powerdns-admin.nix
+  ./services/web-apps/pr-tracker.nix
   ./services/web-apps/pretalx.nix
   ./services/web-apps/pretix.nix
   ./services/web-apps/privatebin.nix
