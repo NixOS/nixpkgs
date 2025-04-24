@@ -16,7 +16,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.1";
+  version = "2.6.0";
   pname = "jacktrip";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "jacktrip";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-WXUqMKCfZ/ZQLKpfye5cwju4IynitcBPEJwlQ2/+aoo=";
+    hash = "sha256-3Ae84x3QL+dfoJJJ0+XrBgo1wKwNYrR9AVQCnahS1sE=";
   };
 
   preConfigure = ''
