@@ -23,9 +23,6 @@ buildHomeAssistantComponent rec {
     pymiele
   ];
 
-  # Makefile only used for bumping the version
-  dontBuild = true;
-
   meta = with lib; {
     changelog = "https://github.com/astrandb/miele/releases/tag/v${version}";
     description = "Modern integration for Miele devices in Home Assistant";
