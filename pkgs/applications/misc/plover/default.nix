@@ -13,7 +13,7 @@
     with python3Packages;
     mkDerivationWith buildPythonPackage rec {
       pname = "plover";
-      version = "4.0.0.dev10";
+      version = "4.0.1";
 
       meta = with lib; {
         broken = stdenv.hostPlatform.isDarwin;
@@ -28,8 +28,8 @@
       src = fetchFromGitHub {
         owner = "openstenoproject";
         repo = "plover";
-        rev = "v${version}";
-        sha256 = "sha256-oJ7+R3ZWhUbNTTAw1AfMg2ur8vW1XEbsa5FgSTam1Ns=";
+        tag = "v${version}";
+        sha256 = "sha256-khi33oWBUqFhO0+JJ25Q4ctQU01y/lTRBYJtHKjOJU4=";
       };
 
       # I'm not sure why we don't find PyQt5 here but there's a similar
