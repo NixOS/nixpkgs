@@ -6,7 +6,7 @@
 }:
 let
   node-forbiddenDependencies-fail = nixos (
-    { ... }:
+    { config, ... }:
     {
       system.forbiddenDependenciesRegexes = [ "-dev$" ];
       environment.etc."dev-dependency" = {
@@ -15,16 +15,22 @@ let
       documentation.enable = false;
       fileSystems."/".device = "ignore-root-device";
       boot.loader.grub.enable = false;
+
+      # Don't do this in an actual config
+      system.stateVersion = config.system.nixos.release;
     }
   );
   node-forbiddenDependencies-succeed = nixos (
-    { ... }:
+    { config, ... }:
     {
       system.forbiddenDependenciesRegexes = [ "-dev$" ];
       system.extraDependencies = [ expect.dev ];
       documentation.enable = false;
       fileSystems."/".device = "ignore-root-device";
       boot.loader.grub.enable = false;
+
+      # Don't do this in an actual config
+      system.stateVersion = config.system.nixos.release;
     }
   );
 in
