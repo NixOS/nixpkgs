@@ -1777,17 +1777,6 @@ let
       ];
     });
 
-    scDDboost = old.scDDboost.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/scDDboost/commit/f704a727c906075a2e271e9e2db93cf31e3822f5
-        substituteInPlace "DESCRIPTION" \
-          --replace-fail "c++11" "c++14"
-        # https://code.bioconductor.org/browse/scDDboost/commit/74d46e266957b38fe77185fa3ce683f891706538
-        substituteInPlace "src/Makevars" \
-          --replace-fail "#CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
-    });
-
     sf = old.sf.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
