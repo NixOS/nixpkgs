@@ -70,7 +70,7 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-qJ1xP02tdoZmAlrO5J8wxRYdNeg420NN27Tt2gaNPFc=";
+    hash = "sha256-tpQjEa4xeD4fmrucynt8WVVXZ3uN5WxjSF8YcjE6HLU=";
   };
 
   disallowedRequisites = [ offlineCache ];
