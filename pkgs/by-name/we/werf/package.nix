@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     [
       "-s"
       "-w"
-      "-X github.com/werf/werf/v2/pkg/werf.Version=${finalAttrs.src.rev}"
+      "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
     ]
     ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
       "-extldflags=-static"
@@ -103,7 +103,7 @@ buildGoModule (finalAttrs: {
       Buildah.
     '';
     homepage = "https://werf.io";
-    changelog = "https://github.com/werf/werf/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/werf/werf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "werf";
