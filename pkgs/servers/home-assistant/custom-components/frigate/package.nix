@@ -29,8 +29,6 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ hass-web-proxy-lib ];
 
-  dontBuild = true;
-
   nativeCheckInputs =
     [
       homeassistant
