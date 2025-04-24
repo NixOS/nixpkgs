@@ -35,7 +35,10 @@ buildGoModule rec {
   meta = with lib; {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
-    teams = with teams; [ gitlab cyberus ];
+    teams = with teams; [
+      gitlab
+      cyberus
+    ];
     platforms = platforms.unix;
   };
 }
