@@ -6,12 +6,14 @@
   fetchzip,
   makeWrapper,
   premake5,
-  writeShellScriptBin,
+  writeShellApplication,
   runCommandLocal,
   symlinkJoin,
+  writeText,
   imagemagick,
   bzip2,
   curl,
+  envsubst,
   flac,
   # Use fmt 10+ after release 40.1.4+
   fmt_9,
@@ -35,6 +37,7 @@
   sqlite,
   wayland,
   egl-wayland,
+  zenity,
   covers_url ? "https://pics.projectignis.org:2096/pics/cover/{}.jpg",
   fields_url ? "https://pics.projectignis.org:2096/pics/field/{}.png",
   # While ygoprodeck has higher quality images, "spamming" of their api results in a ban.
@@ -309,21 +312,62 @@ let
         "textures"
         "WindBot"
       ];
+      wrapperZenityMessageTemplate = writeText "edopro-wrapper-multiple-versions-message.txt.in" ''
+        Nixpkgs' EDOPro wrapper has found more than 1 directory in: ''${EDOPRO_BASE_DIR}
+
+        We expected the only directory to be: ''${EDOPRO_DIR}
+
+        There may have been an update, requiring you to migrate any files you care about from an older version.
+
+        Examples include:
+
+        - decks/*
+        - config/system.conf - which has your client's settings
+        - any custom things you may have installed into: fonts, skins, script, sound, ...
+        - anything you wish to preserve from: replay, screenshots
+
+        Once you have copied over everything important to ''${EDOPRO_DIR}, delete the old version's path.
+      '';
     in
-    writeShellScriptBin "edopro" ''
-      set -eu
-      EDOPRO_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/edopro"
+    writeShellApplication {
+      name = "edopro";
+      runtimeInputs = [
+        envsubst
+        zenity
+      ];
+      text = ''
+        export EDOPRO_VERSION="${deps.edopro-version}"
+        export EDOPRO_BASE_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/edopro"
+        export EDOPRO_DIR="''${EDOPRO_BASE_DIR}/''${EDOPRO_VERSION}"
 
-      if [ ! -d $EDOPRO_DIR ]; then
-          mkdir -p $EDOPRO_DIR
-          cp -r --no-preserve=all ${assets}/{${assetsToCopy}} $EDOPRO_DIR
-          chmod -R go-rwx $EDOPRO_DIR
+        # If versioned directory doesn't exist yet, make it & copy over assets
+        if [ ! -d "$EDOPRO_DIR" ]; then
+            mkdir -p "$EDOPRO_DIR"
+            cp -r --no-preserve=all ${assets}/{${assetsToCopy}} "$EDOPRO_DIR"
+            chmod -R go-rwx "$EDOPRO_DIR"
 
-          rm $EDOPRO_DIR/config/io.github.edo9300.EDOPro.desktop.in
-      fi
+            rm "$EDOPRO_DIR"/config/io.github.edo9300.EDOPro.desktop.in
+        fi
 
-      exec ${lib.getExe edopro} -C $EDOPRO_DIR $@
-    '';
+        # Different versions provide different assets. Some are necessary for the game to run properly (configs for
+        # where to get incremental updates from, online servers, card scripting, certificates for communication etc),
+        # and some are optional nice-haves (example decks). It's also possible to override assets with custom skins.
+        #
+        # Don't try to manage all of this across versions, just inform the user that they may need to migrate their
+        # files if it looks like there are multiple versions.
+
+        edoproTopDirs="$(find "$EDOPRO_BASE_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l)"
+        if [ "$edoproTopDirs" -ne 1 ]; then
+          zenity \
+            --info \
+            --title='[NIX] Multiple asset copies found' \
+            --text="$(envsubst < ${wrapperZenityMessageTemplate})" \
+            --ok-label='Continue to EDOPro'
+        fi
+
+        exec ${lib.getExe edopro} -C "$EDOPRO_DIR" "$@"
+      '';
+    };
 
   edopro-desktop = runCommandLocal "io.github.edo9300.EDOPro.desktop" { } ''
     mkdir -p $out/share/applications
