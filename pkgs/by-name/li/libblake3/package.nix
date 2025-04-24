@@ -10,25 +10,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
     tag = finalAttrs.version;
-    hash = "sha256-Krh0yVNZKL6Mb0McqWTIMNownsgM3MUEX2IP+F/fu+k=";
+    hash = "sha256-IABVErXWYQFXZcwsFKfQhm3ox7UZUcW5uzVrGwsSp94=";
   };
 
   sourceRoot = finalAttrs.src.name + "/c";
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    lib.optionals useTBB [
-      # 2022.0 crashes on macOS at the moment
-      tbb_2021_11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.13") ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.13") ];
+
+  propagatedBuildInputs = lib.optionals useTBB [
+    # 2022.0 crashes on macOS at the moment
+    tbb_2021_11
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
