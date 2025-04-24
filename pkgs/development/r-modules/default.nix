@@ -1900,14 +1900,6 @@ let
       postPatch = "patchShebangs configure";
     });
 
-    bandle = old.bandle.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/bandle/commit/e8f7aaa29c1ba772cee5d51e09b1f500bfee44b8
-        substituteInPlace "src/Makevars" \
-          --replace-fail "CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
-    });
-
     graper = old.graper.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace "src/Makevars" \
