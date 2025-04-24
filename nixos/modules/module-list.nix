@@ -344,6 +344,7 @@
   ./programs/winbox.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
+  ./programs/xivlauncher.nix
   ./programs/wshowkeys.nix
   ./programs/xfconf.nix
   ./programs/xfs_quota.nix
