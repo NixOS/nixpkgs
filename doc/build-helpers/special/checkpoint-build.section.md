@@ -26,7 +26,9 @@ To change a normal derivation to a checkpoint based build, these steps must be t
 
 ## Example {#sec-checkpoint-build-example}
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 let
   inherit (pkgs.checkpointBuildTools)
     prepareCheckpointBuild
@@ -39,5 +41,6 @@ let
       sed -i 's/Hello, world!/Hello, Nix!/g' src/hello.c
     '';
   });
-in mkCheckpointBuild changedHello helloCheckpoint
+in
+mkCheckpointBuild changedHello helloCheckpoint
 ```

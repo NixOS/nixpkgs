@@ -29,7 +29,7 @@ Xcode.
 
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
 
   xcodeenv = import ./xcodeenv {
     inherit (pkgs) stdenv;
@@ -63,7 +63,7 @@ executing the `xcodeenv.buildApp {}` function:
 
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
 
   xcodeenv = import ./xcodeenv {
     inherit (pkgs) stdenv;
@@ -159,7 +159,7 @@ instances:
 
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
 
   xcodeenv = import ./xcodeenv {
     inherit (pkgs) stdenv;
@@ -193,7 +193,7 @@ app in the requested simulator instance:
 
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
 
   xcodeenv = import ./xcodeenv {
     inherit (pkgs) stdenv;

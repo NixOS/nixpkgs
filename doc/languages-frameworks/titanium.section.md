@@ -25,7 +25,10 @@ titaniumenv.buildApp {
   release = true;
 
   androidsdkArgs = {
-    platformVersions = [ "25" "26" ];
+    platformVersions = [
+      "25"
+      "26"
+    ];
   };
   androidKeyStore = ./keystore;
   androidKeyAlias = "myfirstapp";

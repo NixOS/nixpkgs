@@ -5394,6 +5394,23 @@ let
         };
       };
 
+      woberg.godot-dotnet-tools = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "woberg";
+          name = "godot-dotnet-tools";
+          version = "0.5.1";
+          hash = "sha256-qZdQiW1RvzUR5+5QlVdMPBY82IOPUPs3GNOl6bOhnWM=";
+        };
+        meta = {
+          description = "VSCode extension for Godot 4 Mono supporting C# language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=woberg.godot-dotnet-tools";
+          homepage = "https://github.com/williamoberg/godot-dotnet-tools";
+          license = lib.licenses.mit;
+          # For instructions on configuring this extension see:
+          # https://wiki.nixos.org/wiki/Godot-Mono
+        };
+      };
+
       xadillax.viml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "viml";

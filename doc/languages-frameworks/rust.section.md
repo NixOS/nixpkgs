@@ -22,16 +22,20 @@ or use [community maintained Rust toolchains](#using-community-maintained-rust-t
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
 ```nix
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = pname;
-    rev = version;
+    repo = "ripgrep";
+    tag = finalAttrs.version;
     hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
@@ -43,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.unlicense;
     maintainers = [ ];
   };
-}
+})
 ```
 
 `buildRustPackage` requires a `cargoHash` attribute, computed over all crate sources of this package.
@@ -110,20 +114,20 @@ be made invariant to the version by setting `cargoDepsName` to
 `pname`:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
-  cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
-  cargoDepsName = pname;
+  cargoHash = "sha256-iDYh52rj1M5Uupvbx2WeDd/jvQZ+2A50V5rp5e2t7q4=";
+  cargoDepsName = finalAttrs.pname;
 
   # ...
-}
+})
 ```
 
 ### Importing a `Cargo.lock` file {#importing-a-cargo.lock-file}
@@ -160,11 +164,13 @@ rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
-  cargoLock = let
-    fixupLockFile = path: f (builtins.readFile path);
-  in {
-    lockFileContents = fixupLockFile ./Cargo.lock;
-  };
+  cargoLock =
+    let
+      fixupLockFile = path: f (builtins.readFile path);
+    in
+    {
+      lockFileContents = fixupLockFile ./Cargo.lock;
+    };
 
   # ...
 }
@@ -187,7 +193,7 @@ The output hash of each dependency that uses a git source must be
 specified in the `outputHashes` attribute. For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
@@ -212,7 +218,7 @@ For usage outside nixpkgs, `allowBuiltinFetchGit` could be used to
 avoid having to specify `outputHashes`. For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
@@ -238,12 +244,15 @@ If you want to use different features for check phase, you can use
 For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "color" "net" ];
+  buildFeatures = [
+    "color"
+    "net"
+  ];
 
   # disable network features in tests
   checkFeatures = [ "color" ];
@@ -292,7 +301,10 @@ where they are known to differ. But there are ways to customize the argument:
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
        rust.rustcTarget = "thumb-crazy";
-       rust.platform = { foo = ""; bar = ""; };
+       rust.platform = {
+         foo = "";
+         bar = "";
+       };
      };
    }
    ```
@@ -319,7 +331,7 @@ so:
 
 ```nix
 rustPlatform.buildRustPackage {
-  /* ... */
+  # ...
   checkType = "debug";
 }
 ```
@@ -362,7 +374,7 @@ This can be achieved with `--skip` in `checkFlags`:
 
 ```nix
 rustPlatform.buildRustPackage {
-  /* ... */
+  # ...
   checkFlags = [
     # reason for disabling test
     "--skip=example::tests:example_test"
@@ -379,7 +391,7 @@ adapted to be compatible with cargo-nextest.
 
 ```nix
 rustPlatform.buildRustPackage {
-  /* ... */
+  # ...
   useNextest = true;
 }
 ```
@@ -391,7 +403,7 @@ sometimes it may be necessary to disable this so the tests run consecutively.
 
 ```nix
 rustPlatform.buildRustPackage {
-  /* ... */
+  # ...
   dontUseCargoParallelTests = true;
 }
 ```
@@ -403,7 +415,7 @@ should be built in `debug` mode, it can be configured like so:
 
 ```nix
 rustPlatform.buildRustPackage {
-  /* ... */
+  # ...
   buildType = "debug";
 }
 ```
@@ -424,7 +436,7 @@ source code in a reproducible way. If it is missing or out-of-date one can use
 the `cargoPatches` attribute to update or add it.
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   # ...
   cargoPatches = [
     # a patch file to add/update Cargo.lock in the source code
@@ -567,12 +579,13 @@ directory of the `tokenizers` project's source archive, we use
 `sourceRoot` to point the tooling to this directory:
 
 ```nix
-{ fetchFromGitHub
-, buildPythonPackage
-, cargo
-, rustPlatform
-, rustc
-, setuptools-rust
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
 }:
 
 buildPythonPackage rec {
@@ -581,13 +594,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    rev = "python-v${version}";
+    repo = "tokenizers";
+    tag = "python-v${version}";
     hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src sourceRoot;
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
     hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
@@ -612,12 +630,12 @@ following example, the crate is in `src/rust`, as specified in the
 path for `fetchCargoTarball`.
 
 ```nix
-
-{ buildPythonPackage
-, fetchPypi
-, rustPlatform
-, setuptools-rust
-, openssl
+{
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  setuptools-rust,
+  openssl,
 }:
 
 buildPythonPackage rec {
@@ -651,10 +669,11 @@ builds the `retworkx` Python package. `fetchCargoTarball` and
 `maturinBuildHook` is used to perform the build.
 
 ```nix
-{ lib
-, buildPythonPackage
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -665,7 +684,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
-    rev = version;
+    tag = version;
     hash = "sha256-11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20=";
   };
 
@@ -674,7 +693,10 @@ buildPythonPackage rec {
     hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
   };
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
   # ...
 }
@@ -685,23 +707,24 @@ buildPythonPackage rec {
 Some projects, especially GNOME applications, are built with the Meson Build System instead of calling Cargo directly. Using `rustPlatform.buildRustPackage` may successfully build the main program, but related files will be missing. Instead, you need to set up Cargo dependencies with `fetchCargoTarball` and `cargoSetupHook` and leave the rest to Meson. `rust` and `cargo` are still needed in `nativeBuildInputs` for Meson to use.
 
 ```nix
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, cargo
-, wrapGAppsHook4
-, blueprint-compiler
-, libadwaita
-, libsecret
-, tinysparql
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  blueprint-compiler,
+  libadwaita,
+  libsecret,
+  tinysparql,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "health";
   version = "0.95.0";
 
@@ -709,12 +732,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "health";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
     hash = "sha256-8fa3fa+sFi5H+49B5sr2vYPkp9C9s6CcE0zv4xB8gww=";
   };
 
@@ -736,7 +759,7 @@ stdenv.mkDerivation rec {
   ];
 
   # ...
-}
+})
 ```
 
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
@@ -763,8 +786,8 @@ Starting from that file, one can add more overrides, to add features
 or build inputs by overriding the hello crate in a separate file.
 
 ```nix
-with import <nixpkgs> {};
-((import ./hello.nix).hello {}).override {
+with import <nixpkgs> { };
+((import ./hello.nix).hello { }).override {
   crateOverrides = defaultCrateOverrides // {
     hello = attrs: { buildInputs = [ openssl ]; };
   };
@@ -783,15 +806,17 @@ the override above can be read, as in the following example, which
 patches the derivation:
 
 ```nix
-with import <nixpkgs> {};
-((import ./hello.nix).hello {}).override {
+with import <nixpkgs> { };
+((import ./hello.nix).hello { }).override {
   crateOverrides = defaultCrateOverrides // {
-    hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
-      postPatch = ''
-        substituteInPlace lib/zoneinfo.rs \
-          --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-      '';
-    };
+    hello =
+      attrs:
+      lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
+        postPatch = ''
+          substituteInPlace lib/zoneinfo.rs \
+            --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+        '';
+      };
   };
 }
 ```
@@ -804,10 +829,10 @@ dependencies. For instance, to override the build inputs for crate
 crate, we could do:
 
 ```nix
-with import <nixpkgs> {};
-((import hello.nix).hello {}).override {
+with import <nixpkgs> { };
+((import hello.nix).hello { }).override {
   crateOverrides = defaultCrateOverrides // {
-    libc = attrs: { buildInputs = []; };
+    libc = attrs: { buildInputs = [ ]; };
   };
 }
 ```
@@ -820,27 +845,27 @@ general. A number of other parameters can be overridden:
 - The version of `rustc` used to compile the crate:
 
   ```nix
-  (hello {}).override { rust = pkgs.rust; }
+  (hello { }).override { rust = pkgs.rust; }
   ```
 
 - Whether to build in release mode or debug mode (release mode by
   default):
 
   ```nix
-  (hello {}).override { release = false; }
+  (hello { }).override { release = false; }
   ```
 
 - Whether to print the commands sent to `rustc` when building
   (equivalent to `--verbose` in cargo:
 
   ```nix
-  (hello {}).override { verbose = false; }
+  (hello { }).override { verbose = false; }
   ```
 
 - Extra arguments to be passed to `rustc`:
 
   ```nix
-  (hello {}).override { extraRustcOpts = "-Z debuginfo=2"; }
+  (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
 - Phases, just like in any other derivation, can be specified using
@@ -852,9 +877,9 @@ general. A number of other parameters can be overridden:
   before running the build script:
 
   ```nix
-  (hello {}).override {
+  (hello { }).override {
     preConfigure = ''
-       echo "pub const PATH=\"${hi.out}\";" >> src/path.rs"
+      echo "pub const PATH=\"${hi.out}\";" >> src/path.rs"
     '';
   }
   ```
@@ -875,12 +900,13 @@ Using the example `hello` project above, we want to do the following:
 A typical `shell.nix` might look like:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 stdenv.mkDerivation {
   name = "rust-env";
   nativeBuildInputs = [
-    rustc cargo
+    rustc
+    cargo
 
     # Example Build-time Additional Dependencies
     pkg-config
@@ -936,15 +962,13 @@ Here is a simple `shell.nix` that provides Rust nightly (default profile) using 
 ```nix
 with import <nixpkgs> { };
 let
-  fenix = callPackage
-    (fetchFromGitHub {
-      owner = "nix-community";
-      repo = "fenix";
-      # commit from: 2023-03-03
-      rev = "e2ea04982b892263c4d939f1cc3bf60a9c4deaa1";
-      hash = "sha256-AsOim1A8KKtMWIxG+lXh5Q4P2bhOZjoUhFWJ1EuZNNk=";
-    })
-    { };
+  fenix = callPackage (fetchFromGitHub {
+    owner = "nix-community";
+    repo = "fenix";
+    # commit from: 2023-03-03
+    rev = "e2ea04982b892263c4d939f1cc3bf60a9c4deaa1";
+    hash = "sha256-AsOim1A8KKtMWIxG+lXh5Q4P2bhOZjoUhFWJ1EuZNNk=";
+  }) { };
 in
 mkShell {
   name = "rust-env";
@@ -983,8 +1007,7 @@ You can also use Rust nightly to build rust packages using `makeRustPlatform`.
 The below snippet demonstrates invoking `buildRustPackage` with a Rust toolchain from oxalica's overlay:
 
 ```nix
-with import <nixpkgs>
-{
+with import <nixpkgs> {
   overlays = [
     (import (fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
   ];
@@ -996,28 +1019,32 @@ let
   };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
 
+  # Tests require network access. Skipping.
   doCheck = false;
 
   meta = {
     description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = with lib.licenses; [ mit unlicense ];
-    maintainers = with lib.maintainers; [];
+    license = with lib.licenses; [
+      mit
+      unlicense
+    ];
+    maintainers = with lib.maintainers; [ ];
   };
-}
+})
 ```
 
 Follow the below steps to try that snippet.
@@ -1047,19 +1074,28 @@ with the path into which you have `git clone`d the `rustc` git
 repository:
 
 ```nix
- (final: prev: /*lib.optionalAttrs prev.stdenv.targetPlatform.isAarch64*/ {
-   rust_1_72 =
-     lib.updateManyAttrsByPath [{
-       path = [ "packages" "stable" ];
-       update = old: old.overrideScope(final: prev: {
-         rustc-unwrapped = prev.rustc-unwrapped.overrideAttrs (_: {
-           src = lib.cleanSource /git/scratch/rust;
-           # do *not* put passthru.isReleaseTarball=true here
-         });
-       });
-     }]
-       prev.rust_1_72;
- })
+(
+  final: prev: # lib.optionalAttrs prev.stdenv.targetPlatform.isAarch64
+  {
+    rust_1_72 = lib.updateManyAttrsByPath [
+      {
+        path = [
+          "packages"
+          "stable"
+        ];
+        update =
+          old:
+          old.overrideScope (
+            final: prev: {
+              rustc-unwrapped = prev.rustc-unwrapped.overrideAttrs (_: {
+                src = lib.cleanSource /git/scratch/rust;
+                # do *not* put passthru.isReleaseTarball=true here
+              });
+            }
+          );
+      }
+    ] prev.rust_1_72;
+  })
 ```
 
 If the problem you're troubleshooting only manifests when

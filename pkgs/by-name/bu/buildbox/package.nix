@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    makeWrapper $out/bin/buildbox-run-bubblewrap $out/bin/buildbox-run --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
+    wrapProgram $out/bin/buildbox-run --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
   '';
 
   meta = {

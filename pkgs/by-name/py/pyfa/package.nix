@@ -8,7 +8,7 @@
   gdk-pixbuf,
 }:
 let
-  version = "2.62.2";
+  version = "2.62.3";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-7YFObKV4vXiTWgCfek7k4yVq7IG3JMtaB36Jhu7rGjk=";
+    hash = "sha256-PqiwZwok7Mv1M4txU3D5MZYu8WxDCetLmvTqZ30rypY=";
   };
 
   build-system = [ python3Packages.setuptools ];

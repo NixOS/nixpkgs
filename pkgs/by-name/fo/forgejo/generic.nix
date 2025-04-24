@@ -40,9 +40,9 @@ let
     pname = "forgejo-frontend";
     inherit src version npmDepsHash;
 
-    patches = [
-      ./package-json-npm-build-frontend.patch
-    ];
+    buildPhase = ''
+      ./node_modules/.bin/webpack
+    '';
 
     # override npmInstallHook
     installPhase = ''
@@ -127,6 +127,10 @@ buildGoModule rec {
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  preInstall = lib.optionalString (lib.versionAtLeast version "11") ''
+    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/gitea"
+  '';
 
   postInstall = ''
     mkdir $data

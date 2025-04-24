@@ -1372,6 +1372,10 @@ with pkgs;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
+  forgejo = callPackage ../by-name/fo/forgejo/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   gfold = callPackage ../applications/version-management/gfold { };
@@ -4598,8 +4602,6 @@ with pkgs;
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
   maubot = with python3Packages; toPythonApplication maubot;
-
-  mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
@@ -12602,6 +12604,11 @@ with pkgs;
   };
   buildGo123Package = callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_23;
+  };
+
+  go_1_24 = callPackage ../development/compilers/go/1.24.nix { };
+  buildGo124Module = callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_24;
   };
 
   ### DEVELOPMENT / HARE

@@ -571,6 +571,18 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line 
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
+# specialArgs._class
+checkConfigOutput '"nixos"' config.nixos.config.foo ./specialArgs-class.nix
+checkConfigOutput '"bar"' config.conditionalImportAsNixos.config.foo ./specialArgs-class.nix
+checkConfigError 'attribute .*bar.* not found' config.conditionalImportAsNixos.config.bar ./specialArgs-class.nix
+checkConfigError 'attribute .*foo.* not found' config.conditionalImportAsDarwin.config.foo ./specialArgs-class.nix
+checkConfigOutput '"foo"' config.conditionalImportAsDarwin.config.bar ./specialArgs-class.nix
+checkConfigOutput '"nixos"' config.sub.nixos.foo ./specialArgs-class.nix
+checkConfigOutput '"bar"' config.sub.conditionalImportAsNixos.foo ./specialArgs-class.nix
+checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNixos.bar ./specialArgs-class.nix
+checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
+checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "135.0.7049.84",
+    "version": "135.0.7049.95",
     "chromedriver": {
-      "version": "135.0.7049.85",
-      "hash_darwin": "sha256-L4x/MSCbVt2UIQwbHREDV8br6DmdfuqTJ3//7opK2IU=",
-      "hash_darwin_aarch64": "sha256-vixXGqbc2UYpydg1RILhrtmr5DdbJ5I1sD8aNikejQU="
+      "version": "135.0.7049.96",
+      "hash_darwin": "sha256-MmL/hQGPk/kGBtbXSekE+lHktucPCv3HFr8VYTnff5w=",
+      "hash_darwin_aarch64": "sha256-TGiVrAYgeLGniGBZ2dHUBk6Hg996ouBSJHZm9hXExQ4="
     },
     "deps": {
       "depot_tools": {
@@ -20,8 +20,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "6c019e56001911b3fd467e03bf68c435924d62f4",
-        "hash": "sha256-BFw1o2cIHBeBudeigH6YTOuLGsp/+pTOeE1lXBO3aio=",
+        "rev": "de2eb485a1951079e63bdb57ce25544d2dc79c15",
+        "hash": "sha256-6ydyJWsDawt0bfYAFHotTB9ujmIYsqUUpNwB6q6RNQE=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -566,8 +566,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "9afffebfa895ea6cdcc05516908c50bd7fe72797",
-        "hash": "sha256-89rJdhwUJtJCMO7FvVoTYO80swFRkoWUB/ZYs1tOLzE="
+        "rev": "2919d07ee57020e3e4b66cce45c61104d80304d2",
+        "hash": "sha256-zE6a0R8NZ3SE0bHwPan3dTh5kmq5JmYTbDQIvyNICeg="
       },
       "src/third_party/perfetto": {
         "url": "https://android.googlesource.com/platform/external/perfetto.git",
@@ -616,8 +616,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "6e445bdea696eb6b6a46681dfc1a63edaa517edb",
-        "hash": "sha256-mSup6nKsEPjJ/HBV7PwjBI4PP7/RdwFm/dnavKeRqzI="
+        "rev": "5a44cdd70f04aa65fa063caa1a7e3028d75236f8",
+        "hash": "sha256-QX3b+S0IuxJKmlMudL6420+bXRhDkWYC7GNRKxKNm8A="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -787,7 +787,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "135.0.7049.84",
+    "version": "135.0.7049.95",
     "deps": {
       "depot_tools": {
         "rev": "85ec2718b5a29990c7eb67778348c9f76a00f392",
@@ -798,16 +798,16 @@
         "hash": "sha256-8NynNvLNCHxy8EYmsnPovKhXu9DcDcYBhg4A6d2QIfY="
       },
       "ungoogled-patches": {
-        "rev": "135.0.7049.84-1",
-        "hash": "sha256-Cncp+sLFWC8nuepXCbkeHZYgAw2cFIAIaQe9wgun/AA="
+        "rev": "135.0.7049.95-1",
+        "hash": "sha256-kLLtJti5GIF9TT0cH8zvsxywJzD22X8u2bB/tqENSjo="
       },
       "npmHash": "sha256-wNrZaugdKJCyV1WchkKXzr/I1OW1AtjiC2p7qTZZOqU="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "6c019e56001911b3fd467e03bf68c435924d62f4",
-        "hash": "sha256-BFw1o2cIHBeBudeigH6YTOuLGsp/+pTOeE1lXBO3aio=",
+        "rev": "de2eb485a1951079e63bdb57ce25544d2dc79c15",
+        "hash": "sha256-6ydyJWsDawt0bfYAFHotTB9ujmIYsqUUpNwB6q6RNQE=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1352,8 +1352,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "9afffebfa895ea6cdcc05516908c50bd7fe72797",
-        "hash": "sha256-89rJdhwUJtJCMO7FvVoTYO80swFRkoWUB/ZYs1tOLzE="
+        "rev": "2919d07ee57020e3e4b66cce45c61104d80304d2",
+        "hash": "sha256-zE6a0R8NZ3SE0bHwPan3dTh5kmq5JmYTbDQIvyNICeg="
       },
       "src/third_party/perfetto": {
         "url": "https://android.googlesource.com/platform/external/perfetto.git",
@@ -1402,8 +1402,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "6e445bdea696eb6b6a46681dfc1a63edaa517edb",
-        "hash": "sha256-mSup6nKsEPjJ/HBV7PwjBI4PP7/RdwFm/dnavKeRqzI="
+        "rev": "5a44cdd70f04aa65fa063caa1a7e3028d75236f8",
+        "hash": "sha256-QX3b+S0IuxJKmlMudL6420+bXRhDkWYC7GNRKxKNm8A="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",

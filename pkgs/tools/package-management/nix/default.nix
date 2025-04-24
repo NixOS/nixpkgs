@@ -293,7 +293,7 @@ lib.makeExtensible (
         ) (lib.range 4 17)
       )
       // {
-        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
 
         unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
