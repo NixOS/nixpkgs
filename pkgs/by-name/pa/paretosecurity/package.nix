@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "paretosecurity";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = version;
-    hash = "sha256-ovyfHqLCf5U3UR1HfoA+UQhqLZ6IaILcpqptPRQsb60=";
+    hash = "sha256-qHHpqcVrjWTzYtRSufogceUiroeNru0J7qRFNlGCYC0=";
   };
 
   vendorHash = "sha256-7mKAFkKGpBOjXc3J/sfF3k3pJF53tFybXZgbfJInuSY=";
@@ -43,6 +43,17 @@ buildGoModule rec {
     install -Dm444 ${src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
     substituteInPlace $out/lib/systemd/user/paretosecurity-trayicon.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install .desktop files
+     install -Dm444 ${src}/apt/ParetoSecurity.desktop $out/share/applications/ParetoSecurity.desktop
+     substituteInPlace $out/share/applications/ParetoSecurity.desktop \
+         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+     install -Dm444 ${src}/apt/ParetoSecurityLink.desktop $out/share/applications/ParetoSecurityLink.desktop
+     substituteInPlace $out/share/applications/ParetoSecurityLink.desktop \
+         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+     # Install icon
+     install -Dm444 ${src}/assets/icon.png $out/share/icons/hicolor/512x512/apps/ParetoSecurity.png
   '';
 
   passthru.tests = {
