@@ -30,13 +30,13 @@ assert enableViewer -> wrapGAppsHook3 != null;
 
 stdenv.mkDerivation rec {
   pname = "aravis";
-  version = "0.8.33";
+  version = "0.8.34";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = "aravis";
-    rev = version;
-    sha256 = "sha256-D6zcTCaFJxJ2VhhsgEFu5+3Xx1MJov4ryrtA0VkjZlY=";
+    tag = version;
+    hash = "sha256-6tCV2QyzlMNnkXlRz41JT05FeBcRckHXM50VGY5/BnM=";
   };
 
   outputs = [
@@ -81,6 +81,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!enablePacketSocket) "-Dpacket-socket=disabled";
 
   doCheck = true;
+
+  # needed for fakegv tests
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library for video acquisition using GenICam cameras";
