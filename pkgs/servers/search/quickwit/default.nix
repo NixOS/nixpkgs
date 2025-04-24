@@ -7,7 +7,6 @@
   nix-update-script,
   protobuf,
   rust-jemalloc-sys,
-  Security,
   nodejs,
   yarn,
   fetchYarnDeps,
@@ -84,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

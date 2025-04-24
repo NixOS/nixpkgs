@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  Carbon,
   libjpeg,
   libpng,
   withJpegSupport ? true, # support jpeg output
@@ -17,10 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CSA8ECMRFJ9d9cw2dAn5bHJXQmZtGcJNtbqZTVqBpvU=";
   };
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-    ]
-    ++ lib.optionals withJpegSupport [
+    lib.optionals withJpegSupport [
       libjpeg
     ]
     ++ lib.optionals withPngSupport [

@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-QylZkqE8my2ldCjtg3++6TTDm0om3SVp0jwYUZ9qVes=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure

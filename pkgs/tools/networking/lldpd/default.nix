@@ -1,6 +1,5 @@
 {
   stdenv,
-  Foundation,
   fetchurl,
   lib,
   libevent,
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     readline
     net-snmp
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  ];
 
   enableParallelBuilding = true;
 

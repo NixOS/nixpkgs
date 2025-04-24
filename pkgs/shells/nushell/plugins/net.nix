@@ -2,9 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  IOKit,
-  CoreFoundation,
   nix-update-script,
 }:
 
@@ -23,11 +20,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-8IlCUI0HOsr06vsSv0WBxfoaEe1Dz21tZdWZ6jrNkaw=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    IOKit
-  ];
 
   passthru.updateScript = nix-update-script { };
 

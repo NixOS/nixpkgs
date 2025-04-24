@@ -8,7 +8,6 @@
   asio,
   catch2,
   spdlog,
-  IOKit,
   udev,
 }:
 
@@ -57,9 +56,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       udev

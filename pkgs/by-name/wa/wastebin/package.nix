@@ -5,8 +5,6 @@
   pkg-config,
   sqlite,
   zstd,
-  stdenv,
-  darwin,
   nixosTests,
 }:
 
@@ -28,14 +26,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

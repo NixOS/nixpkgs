@@ -12,7 +12,7 @@ let
 
     # nom has unit-tests and golden-tests
     # golden-tests call nix and thus can’t be run in a nix build.
-    testTarget = "unit-tests";
+    testTargets = [ "unit-tests" ];
 
     buildTools = [ installShellFiles ];
     postInstall = ''

@@ -18,8 +18,6 @@
   wxGTK32,
   gtk3,
   xdg-utils,
-  CoreServices,
-  Security,
 }:
 
 stdenv.mkDerivation {
@@ -43,26 +41,21 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      dbus
-      gettext
-      gnutls
-      libfilezilla
-      libidn
-      nettle
-      pugixml
-      sqlite
-      tinyxml
-      wxGTK32
-      gtk3
-      xdg-utils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-    ];
+  buildInputs = [
+    boost
+    dbus
+    gettext
+    gnutls
+    libfilezilla
+    libidn
+    nettle
+    pugixml
+    sqlite
+    tinyxml
+    wxGTK32
+    gtk3
+    xdg-utils
+  ];
 
   enableParallelBuilding = true;
 

@@ -3,10 +3,8 @@
   stdenv,
   fetchCrate,
   rustPlatform,
-  Security,
   openssl,
   pkg-config,
-  SystemConfiguration,
   libiconv,
 }:
 
@@ -24,8 +22,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
       libiconv
     ];
 

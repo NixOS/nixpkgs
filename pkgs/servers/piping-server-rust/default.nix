@@ -2,9 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  CoreServices,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,11 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-m6bYkewBE0ZloDVUhUslS+dgPyoK+eay7rrP3+c00mo=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    Security
-  ];
 
   meta = with lib; {
     description = "Infinitely transfer between every device over pure HTTP with pipes or browsers";

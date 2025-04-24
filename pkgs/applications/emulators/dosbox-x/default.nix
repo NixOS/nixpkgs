@@ -3,10 +3,7 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
-  AudioUnit,
   autoreconfHook,
-  Carbon,
-  Cocoa,
   ffmpeg,
   fluidsynth,
   freetype,
@@ -86,11 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       alsa-lib
       libxkbfile
       libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Carbon
-      Cocoa
     ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory

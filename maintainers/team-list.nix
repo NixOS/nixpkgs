@@ -68,6 +68,16 @@ with lib.maintainers;
     ];
   };
 
+  apparmor = {
+    scope = "AppArmor-related modules, userspace tool packages and profiles";
+    shortName = "apparmor";
+    members = [
+      julm
+      thoughtpolice
+      grimmauld
+    ];
+  };
+
   bazel = {
     members = [
       mboes

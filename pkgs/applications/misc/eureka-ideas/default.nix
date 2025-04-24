@@ -5,8 +5,6 @@
   pkg-config,
   libgit2,
   openssl,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,14 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   useNextest = true;
 

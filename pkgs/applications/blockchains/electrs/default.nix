@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   rocksdb_7_10,
-  Security,
 }:
 
 let
@@ -30,8 +28,6 @@ rustPlatform.buildRustPackage rec {
   # link rocksdb dynamically
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.updateScript = ./update.sh;
 

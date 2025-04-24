@@ -13,7 +13,6 @@
   pkg-config,
   libgcrypt,
   cmake,
-  libobjc,
   libresolv,
   libiconv,
   asciidoctor, # manpages
@@ -150,7 +149,6 @@ stdenv.mkDerivation rec {
       libgcrypt
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
       libresolv
     ]
     ++ lib.concatMap (p: p.buildInputs) enabledPlugins

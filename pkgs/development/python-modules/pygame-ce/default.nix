@@ -12,7 +12,6 @@
   ninja,
   meson-python,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
@@ -103,7 +102,7 @@ buildPythonPackage rec {
     (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  ];
 
   nativeCheckInputs = [
     numpy

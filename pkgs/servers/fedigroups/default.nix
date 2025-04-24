@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitea,
   rustPlatform,
   pkg-config,
   git,
   openssl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,7 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   meta = with lib; {
     homepage = "https://git.ondrovo.com/MightyPork/group-actor#fedi-groups";

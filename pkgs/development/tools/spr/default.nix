@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  Security,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,8 +15,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-4fYQM+GQ5yqES8HQ23ft4wfM5mwDdcWuE5Ed2LST9Gw=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";

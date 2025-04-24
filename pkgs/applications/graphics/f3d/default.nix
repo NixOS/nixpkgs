@@ -11,8 +11,6 @@
   # See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
   vtk_9,
   autoPatchelfHook,
-  Cocoa,
-  OpenGL,
   python3Packages,
   opencascade-occt,
   assimp,
@@ -63,10 +61,6 @@ stdenv.mkDerivation rec {
       opencascade-occt
       assimp
       fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      OpenGL
     ]
     ++ lib.optionals withPythonBinding [
       python3Packages.python

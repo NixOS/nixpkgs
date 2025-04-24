@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
   unixtools,
 }:
 
@@ -29,10 +28,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeCheckInputs = [

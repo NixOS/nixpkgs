@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   libusb1,
-  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libusb1 ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
+  buildInputs = [ libusb1 ];
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d

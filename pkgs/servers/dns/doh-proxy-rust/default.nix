@@ -3,7 +3,6 @@
   rustPlatform,
   fetchCrate,
   stdenv,
-  Security,
   libiconv,
   nixosTests,
 }:
@@ -22,7 +21,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-eYJoHFIC0NF3OAbZXDWB57IOFC9JDV4IXHQgzIWMT04=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
     libiconv
   ];
 

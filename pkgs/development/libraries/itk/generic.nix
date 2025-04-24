@@ -30,7 +30,6 @@
   vtk,
   which,
   zlib,
-  Cocoa,
   enablePython ? false,
   enableRtk ? true,
 }:
@@ -145,7 +144,6 @@ stdenv.mkDerivation {
       libuuid
     ]
     ++ lib.optionals (lib.versionAtLeast version "5.4") [ eigen ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optionals enablePython [ python ]
     ++ lib.optionals withVtk [ vtk ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9

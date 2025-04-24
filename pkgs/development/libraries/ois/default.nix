@@ -4,9 +4,6 @@
   fetchFromGitHub,
   cmake,
   libX11,
-  Cocoa,
-  IOKit,
-  Kernel,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      IOKit
-      Kernel
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"

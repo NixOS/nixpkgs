@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  AppKit,
   DarwinTools,
   alsa-utils,
   at-spi2-core,
@@ -85,9 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
       dbus
       flac
       gitMinimal
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      AppKit
     ]
     ++ [
       glew

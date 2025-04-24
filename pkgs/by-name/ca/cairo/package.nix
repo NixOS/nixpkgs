@@ -21,7 +21,6 @@
   glib,
   xcbSupport ? x11Support,
   libxcb,
-  darwin,
   testers,
 }:
 
@@ -60,19 +59,9 @@ stdenv.mkDerivation (
       python3
     ];
 
-    buildInputs =
-      [
-        docbook_xsl
-      ]
-      ++ optionals stdenv.hostPlatform.isDarwin (
-        with darwin.apple_sdk.frameworks;
-        [
-          CoreGraphics
-          CoreText
-          ApplicationServices
-          Carbon
-        ]
-      );
+    buildInputs = [
+      docbook_xsl
+    ];
 
     patches = [
       # Pull upstream fix to fix "out of memory" errors:

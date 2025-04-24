@@ -5,7 +5,6 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,10 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-QXkKqEEbNEDcypErDIFarJLuIoYWOZj/9jCbslxrOXs=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   meta = with lib; {
     description = "Expose your local web server to the internet with a public URL";

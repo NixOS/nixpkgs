@@ -2,7 +2,6 @@
   lib,
   stdenv,
   icu,
-  expat,
   zlib,
   bzip2,
   zstd,
@@ -87,8 +86,6 @@ let
       "variant=${variant}"
       "threading=${threading}"
       "link=${link}"
-      "-sEXPAT_INCLUDE=${expat.dev}/include"
-      "-sEXPAT_LIBPATH=${expat.out}/lib"
     ]
     ++ lib.optionals (lib.versionAtLeast version "1.85") [
       (
@@ -345,7 +342,6 @@ stdenv.mkDerivation {
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [
-      expat
       zlib
       bzip2
       libiconv

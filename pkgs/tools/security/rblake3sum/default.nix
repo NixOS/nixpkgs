@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security,
 }:
 rustPlatform.buildRustPackage {
   pname = "rblake3sum";
@@ -18,8 +16,6 @@ rustPlatform.buildRustPackage {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-cxPNqUVNMkNY9Ov7/ajTAwnBd2j/gKDHVLXPtd1aPVA=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Recursive blake3 digest (hash) of a file-system path";

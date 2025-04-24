@@ -4,8 +4,6 @@
   fetchurl,
   nixosTests,
   pkg-config,
-  CoreAudio,
-  libobjc,
   libjack2,
   ncurses,
   alsa-lib,
@@ -45,10 +43,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      libobjc
     ]
     ++ lib.optionals enableVorbis [
       libvorbis

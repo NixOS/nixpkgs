@@ -4,7 +4,6 @@
   fetchurl,
   ocaml,
   findlib,
-  darwin,
   ocaml-lsp,
   dune-release,
 }:
@@ -25,10 +24,6 @@ else
     nativeBuildInputs = [
       ocaml
       findlib
-    ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
     ];
 
     strictDeps = true;

@@ -3,9 +3,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  AppKit,
-  Cocoa,
-  Foundation,
   installShellFiles,
 }:
 
@@ -25,12 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (

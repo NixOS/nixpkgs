@@ -7,9 +7,6 @@
   makeWrapper,
   webkitgtk_4_0,
   zenity,
-  Cocoa,
-  Security,
-  WebKit,
   withGui ? true,
 }:
 
@@ -31,13 +28,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    lib.optional stdenv.hostPlatform.isDarwin Security
-    ++ lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_0
-    ++ lib.optionals (withGui && stdenv.hostPlatform.isDarwin) [
-      Cocoa
-      WebKit
-    ];
+  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_0;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";

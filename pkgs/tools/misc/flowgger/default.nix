@@ -1,12 +1,10 @@
 {
   lib,
   rustPlatform,
-  stdenv,
   fetchCrate,
   pkg-config,
   openssl,
   capnproto,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     capnproto
   ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
+  buildInputs = [ openssl ];
 
   checkFlags = [
     # test failed

@@ -43,12 +43,6 @@
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libpulseaudio,
-  AudioUnit,
-  Cocoa,
-  CoreAudio,
-  CoreServices,
-  ForceFeedback,
-  OpenGL,
   audiofile,
   libiconv,
   withStatic ? stdenv.hostPlatform.isMinGW,
@@ -154,15 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     [ libiconv ]
     ++ finalAttrs.dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
-    ++ lib.optionals waylandSupport [ wayland-protocols ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreAudio
-      CoreServices
-      ForceFeedback
-      OpenGL
-    ];
+    ++ lib.optionals waylandSupport [ wayland-protocols ];
 
   enableParallelBuilding = true;
 

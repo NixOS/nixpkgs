@@ -66,7 +66,11 @@ let
       icu,
 
       # JIT
-      jitSupport, # not default on purpose, this is set via "_jit or not" attributes
+      jitSupport ?
+        stdenv.hostPlatform.canExecute stdenv.buildPlatform
+        # Building with JIT in pkgsStatic fails like this:
+        #   fatal error: 'stdio.h' file not found
+        && !stdenv.hostPlatform.isStatic,
       llvmPackages,
       nukeReferences,
       overrideCC,
@@ -135,10 +139,8 @@ let
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
-      pname = "postgresql";
-
       stdenv' =
-        if jitSupport && !stdenv.cc.isClang then
+        if !stdenv.cc.isClang then
           overrideCC llvmPackages.stdenv (
             llvmPackages.stdenv.cc.override {
               # LLVM bintools are not used by default, but are needed to make -flto work below.
@@ -150,7 +152,7 @@ let
     in
     stdenv'.mkDerivation (finalAttrs: {
       inherit version;
-      pname = pname + lib.optionalString jitSupport "-jit";
+      pname = "postgresql";
 
       src = fetchFromGitHub {
         owner = "postgres";
@@ -162,8 +164,6 @@ let
 
       __structuredAttrs = true;
 
-      hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
-
       outputs =
         [
           "out"
@@ -172,51 +172,69 @@ let
           "lib"
           "man"
         ]
+        ++ lib.optionals jitSupport [ "jit" ]
         ++ lib.optionals perlSupport [ "plperl" ]
         ++ lib.optionals pythonSupport [ "plpython3" ]
         ++ lib.optionals tclSupport [ "pltcl" ];
-      outputChecks = {
-        out = {
-          disallowedReferences = [
-            "dev"
-            "doc"
-            "man"
-          ];
-          disallowedRequisites = [
-            stdenv'.cc
-            llvmPackages.llvm.out
-          ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-        };
 
-        lib = {
-          disallowedReferences = [
-            "out"
-            "dev"
-            "doc"
-            "man"
-          ];
-          disallowedRequisites = [
-            stdenv'.cc
-            llvmPackages.llvm.out
-          ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-        };
+      outputChecks =
+        {
+          out = {
+            disallowedReferences = [
+              "dev"
+              "doc"
+              "man"
+            ] ++ lib.optionals jitSupport [ "jit" ];
+            disallowedRequisites = [
+              stdenv'.cc
+              llvmPackages.llvm.out
+              llvmPackages.llvm.lib
+            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+          };
 
-        doc = {
-          disallowedReferences = [
-            "out"
-            "dev"
-            "man"
-          ];
-        };
+          lib = {
+            disallowedReferences = [
+              "out"
+              "dev"
+              "doc"
+              "man"
+            ] ++ lib.optionals jitSupport [ "jit" ];
+            disallowedRequisites = [
+              stdenv'.cc
+              llvmPackages.llvm.out
+              llvmPackages.llvm.lib
+            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+          };
 
-        man = {
-          disallowedReferences = [
-            "out"
-            "dev"
-            "doc"
-          ];
+          doc = {
+            disallowedReferences = [
+              "out"
+              "dev"
+              "man"
+            ] ++ lib.optionals jitSupport [ "jit" ];
+          };
+
+          man = {
+            disallowedReferences = [
+              "out"
+              "dev"
+              "doc"
+            ] ++ lib.optionals jitSupport [ "jit" ];
+          };
+        }
+        // lib.optionalAttrs jitSupport {
+          jit = {
+            disallowedReferences = [
+              "dev"
+              "doc"
+              "man"
+            ];
+            disallowedRequisites = [
+              stdenv'.cc
+              llvmPackages.llvm.out
+            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+          };
         };
-      };
 
       strictDeps = true;
 
@@ -271,9 +289,16 @@ let
           # flags will remove unused sections from all shared libraries and binaries - including
           # those paths. This avoids a lot of circular dependency problems with different outputs,
           # and allows splitting them cleanly.
-          CFLAGS =
-            "-fdata-sections -ffunction-sections"
-            + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+          CFLAGS = "-fdata-sections -ffunction-sections -flto";
+
+          # This flag was introduced upstream in:
+          # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
+          # It causes errors when linking against libpq.a in pkgsStatic:
+          #   undefined reference to `pg_encoding_to_char'
+          # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
+          # to have initdb load a libpq.so from a different major version and how to avoid that.
+          # This doesn't apply to us with Nix.
+          NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
         }
         // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
         // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
@@ -364,11 +389,25 @@ let
 
       installTargets = [ "install-world" ];
 
-      postPatch = ''
-        substituteInPlace "src/Makefile.global.in" --subst-var out
-        substituteInPlace "src/common/config_info.c" --subst-var dev
-        cat ${./pg_config.env.mk} >> src/common/Makefile
-      '';
+      postPatch =
+        ''
+          substituteInPlace "src/Makefile.global.in" --subst-var out
+          substituteInPlace "src/common/config_info.c" --subst-var dev
+          cat ${./pg_config.env.mk} >> src/common/Makefile
+        ''
+        # This check was introduced upstream to prevent calls to "exit" inside libpq.
+        # However, this doesn't work reliably with static linking, see this and following:
+        # https://postgr.es/m/flat/20210703001639.GB2374652%40rfd.leadboat.com#52584ca4bd3cb9dac376f3158c419f97
+        # Thus, disable the check entirely, as it would currently fail with this:
+        # > libpq.so.5.17:                  U atexit
+        # > libpq.so.5.17:                  U pthread_exit
+        # > libpq must not be calling any function which invokes exit
+        # Don't mind the fact that this checks libpq.**so** in pkgsStatic - that's correct, since PostgreSQL
+        # still needs a shared library internally.
+        + lib.optionalString (atLeast "15" && stdenv'.hostPlatform.isStatic) ''
+          substituteInPlace src/interfaces/libpq/Makefile \
+            --replace-fail "echo 'libpq must not be calling any function which invokes exit'; exit 1;" "echo;"
+        '';
 
       postInstall =
         ''
@@ -415,6 +454,9 @@ let
 
           # Stop lib depending on the -dev output of llvm
           remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
+
+          moveToOutput "lib/bitcode" "$jit"
+          moveToOutput "lib/llvmjit*" "$jit"
         ''
         + lib.optionalString stdenv'.hostPlatform.isDarwin ''
           # The darwin specific Makefile for PGXS contains a reference to the postgres
@@ -457,23 +499,23 @@ let
           # the tests works fine most of the time. But once the tests (or any package using
           # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
           # will be stuck around, and any future builds with the tests enabled *will* fail.
-          !(stdenv'.hostPlatform.isDarwin);
+          !(stdenv'.hostPlatform.isDarwin)
+        &&
+          # Regression tests currently fail in pkgsMusl because of a difference in EXPLAIN output.
+          !(stdenv'.hostPlatform.isMusl);
       installCheckTarget = "check-world";
 
       passthru =
         let
           this = self.callPackage generic args;
-          jitToggle = this.override {
-            jitSupport = !jitSupport;
-          };
         in
         {
           inherit dlSuffix;
 
           psqlSchema = lib.versions.major version;
 
-          withJIT = if jitSupport then this else jitToggle;
-          withoutJIT = if jitSupport then jitToggle else this;
+          withJIT = this.withPackages (_: [ this.jit ]);
+          withoutJIT = this;
 
           pkgs =
             let
@@ -583,18 +625,38 @@ let
         inherit installedExtensions;
         inherit (postgresql)
           pg_config
+          pkgs
           psqlSchema
           version
           ;
 
         withJIT = postgresqlWithPackages {
-          inherit buildEnv lib makeBinaryWrapper;
-          postgresql = postgresql.withJIT;
-        } f;
+          inherit
+            buildEnv
+            lib
+            makeBinaryWrapper
+            postgresql
+            ;
+        } (_: installedExtensions ++ [ postgresql.jit ]);
         withoutJIT = postgresqlWithPackages {
-          inherit buildEnv lib makeBinaryWrapper;
-          postgresql = postgresql.withoutJIT;
-        } f;
+          inherit
+            buildEnv
+            lib
+            makeBinaryWrapper
+            postgresql
+            ;
+        } (_: lib.remove postgresql.jit installedExtensions);
+
+        withPackages =
+          f':
+          postgresqlWithPackages {
+            inherit
+              buildEnv
+              lib
+              makeBinaryWrapper
+              postgresql
+              ;
+          } (ps: installedExtensions ++ f' ps);
       };
     };
 

@@ -10,11 +10,6 @@
   stdenv,
   zlib,
 
-  # These arguments are obsolete but required to avoid evaluation errors (for now).
-  CoreGraphics ? null,
-  CoreServices ? null,
-  ImageIO ? null,
-
   # These are deprecated and do nothing. They’re needed for compatibility and will
   # warn eventually once in-tree uses are cleaned up.
   xcodePlatform ? null,
@@ -95,7 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch =
-    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    ''
+      substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
+        --replace-fail "/usr/bin/touch" "touch"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Fix build on gcc-13 due to missing includes
       sed -e '1i #include <cstdint>' -i \
         Libraries/libutil/Headers/libutil/Permissions.h \

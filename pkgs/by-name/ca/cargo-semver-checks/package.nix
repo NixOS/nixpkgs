@@ -4,8 +4,6 @@
   fetchFromGitHub,
   cmake,
   zlib,
-  stdenv,
-  darwin,
   testers,
   cargo-semver-checks,
   nix-update-script,
@@ -29,13 +27,9 @@ rustPlatform.buildRustPackage rec {
     cmake
   ];
 
-  buildInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    zlib
+  ];
 
   checkFlags = [
     # requires internet access
