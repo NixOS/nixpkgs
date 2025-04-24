@@ -1,0 +1,104 @@
+--- a/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h
++++ b/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h
+@@ -43,85 +43,7 @@
+ #endif
+ 
+ #if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
+-# define VCL_GCC
+-# if (__GNUC__ < 4)
+-#  error "forget it."
+-# elif (__GNUC__==4)
+-#  define VCL_GCC_4
+-#  if (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_41
+-#  else
+-#   define VCL_GCC_40
+-#  endif
+-# elif (__GNUC__==5)
+-#  define VCL_GCC_5
+-#  if (__GNUC_MINOR__ > 2 )
+-#   define VCL_GCC_53
+-#  elif (__GNUC_MINOR__ > 1 )
+-#   define VCL_GCC_52
+-#  elif (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_51
+-#  else
+-#   define VCL_GCC_50
+-#  endif
+-# elif (__GNUC__==6)
+-#  define VCL_GCC_6
+-#  if (__GNUC_MINOR__ > 2 )
+-#   define VCL_GCC_63
+-#  elif (__GNUC_MINOR__ > 1 )
+-#   define VCL_GCC_62
+-#  elif (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_61
+-#  else
+-#   define VCL_GCC_60
+-#  endif
+-# elif (__GNUC__==7)
+-#  define VCL_GCC_7
+-#  if (__GNUC_MINOR__ > 2 )
+-#   define VCL_GCC_73
+-#  elif (__GNUC_MINOR__ > 1 )
+-#   define VCL_GCC_72
+-#  elif (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_71
+-#  else
+-#   define VCL_GCC_70
+-#  endif
+-# elif (__GNUC__==8)
+-#  define VCL_GCC_8
+-#  if (__GNUC_MINOR__ > 2 )
+-#   define VCL_GCC_83
+-#  elif (__GNUC_MINOR__ > 1 )
+-#   define VCL_GCC_82
+-#  elif (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_81
+-#  else
+-#   define VCL_GCC_80
+-#  endif
+-# elif (__GNUC__==9)
+-#  define VCL_GCC_9
+-#  if (__GNUC_MINOR__ > 2 )
+-#   define VCL_GCC_93
+-#  elif (__GNUC_MINOR__ > 1 )
+-#   define VCL_GCC_92
+-#  elif (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_91
+-#  else
+-#   define VCL_GCC_90
+-#  endif
+-# elif (__GNUC__==10)
+-#  define VCL_GCC_10
+-#  if (__GNUC_MINOR__ > 2 )
+-#   define VCL_GCC_103
+-#  elif (__GNUC_MINOR__ > 1 )
+-#   define VCL_GCC_102
+-#  elif (__GNUC_MINOR__ > 0 )
+-#   define VCL_GCC_101
+-#  else
+-#   define VCL_GCC_100
+-#  endif
+-# else
+-#  error "Dunno about this gcc"
+-# endif
++# define VCL_GCC_73
+ #endif
+ 
+ #if defined(_WIN32) || defined(WIN32)
+--- a/Modules/ThirdParty/VNL/src/vxl/vcl/tests/test_preprocessor.cxx
++++ b/Modules/ThirdParty/VNL/src/vxl/vcl/tests/test_preprocessor.cxx
+@@ -64,6 +64,12 @@
+   ++minor_count;
+ #endif
+ 
++#ifdef VCL_GCC_73
++  ++compiler_count;
++  ++major_count;
++  ++minor_count;
++#endif
++
+ #ifdef VCL_VC
+   ++compiler_count;
+ #endif

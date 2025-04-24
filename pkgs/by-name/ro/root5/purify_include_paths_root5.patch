@@ -1,0 +1,204 @@
+diff --git a/cint/cint/src/loadfile.cxx b/cint/cint/src/loadfile.cxx
+--- a/cint/cint/src/loadfile.cxx
++++ b/cint/cint/src/loadfile.cxx
+@@ -1365,92 +1365,6 @@ int G__statfilename(const char *filenamein, struct stat *statBuf,
+          }
+       }         
+ #endif /* G__EDU_VERSION */
+-      
+-#ifdef G__VISUAL
+-      /**********************************************
+-       * try /msdev/include
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         workname.Format("/msdev/include/%s%s",filename(),addpost[i2]);
+-         res = stat( workname, statBuf );         
+-         if (res==0) {
+-            if (fullPath) fullPath->Swap(workname);
+-            return res;
+-         }
+-      }
+-#endif /* G__VISUAL */
+-         
+-#ifdef G__SYMANTEC
+-      /**********************************************
+-       * try /sc/include
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         workname.Format("/sc/include/%s%s",filename(),addpost[i2]);
+-         res = stat( workname, statBuf );         
+-         if (res==0) {
+-            if (fullPath) fullPath->Swap(workname);
+-            return res;
+-         }
+-      }
+-#endif // G__SYMANTEC
+-         
+-#ifndef G__WIN32
+-      /**********************************************
+-       * try /usr/include/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         workname.Format("/usr/include/%s%s",filename(),addpost[i2]);
+-         res = stat( workname, statBuf );         
+-         if (res==0) {
+-            if (fullPath) fullPath->Swap(workname);
+-            return res;
+-         }
+-      }
+-#endif
+-      
+-#ifdef __GNUC__
+-      /**********************************************
+-       * try /usr/include/g++/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         workname.Format("/usr/include/g++/%s%s",filename(),addpost[i2]);
+-         res = stat( workname, statBuf );         
+-         if (res==0) {
+-            if (fullPath) fullPath->Swap(workname);
+-            return res;
+-         }
+-      }
+-#endif /* __GNUC__ */
+-      
+-#ifndef G__WIN32
+-      /* #ifdef __hpux */
+-      /**********************************************
+-       * try /usr/include/CC/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         workname.Format("/usr/include/CC/%s%s",filename(),addpost[i2]);
+-         res = stat( workname, statBuf );         
+-         if (res==0) {
+-            if (fullPath) fullPath->Swap(workname);
+-            return res;
+-         }
+-      }         
+-#endif
+-         
+-#ifndef G__WIN32
+-      /**********************************************
+-       * try /usr/include/codelibs/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         workname.Format("/usr/include/codelibs/%s%s"
+-                         ,filename(),addpost[i2]);
+-         res = stat( workname, statBuf );         
+-         if (res==0) {
+-            if (fullPath) fullPath->Swap(workname);
+-            return res;
+-         }
+-      }
+-#endif
+    }
+    return -1;
+ }
+@@ -1960,107 +1874,6 @@ int G__loadfile(const char *filenamein)
+       }
+       if(G__ifile.fp) break;
+ #endif /* G__EDU_VERSION */
+-
+-#ifdef G__VISUAL
+-      /**********************************************
+-       * try /msdev/include
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         G__snprintf(G__ifile.name,G__MAXFILENAME,"/msdev/include/%s%s",filename(),addpost[i2]);
+-#ifndef G__WIN32
+-        G__ifile.fp = fopen(G__ifile.name,"r");
+-#else
+-        G__ifile.fp = fopen(G__ifile.name,"rb");
+-#endif
+-        G__globalcomp=G__store_globalcomp;
+-      }
+-      if(G__ifile.fp) break;
+-#endif /* G__VISUAL */
+-
+-#ifdef G__SYMANTEC
+-      /**********************************************
+-       * try /sc/include
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         G__snprintf(G__ifile.name,G__MAXFILENAME,"/sc/include/%s%s",filename(),addpost[i2]);
+-#ifndef G__WIN32
+-        G__ifile.fp = fopen(G__ifile.name,"r");
+-#else
+-        G__ifile.fp = fopen(G__ifile.name,"rb");
+-#endif
+-        G__globalcomp=G__store_globalcomp;
+-      }
+-      if(G__ifile.fp) break;
+-#endif /* G__SYMANTEC */
+-
+-#ifndef G__WIN32
+-      /**********************************************
+-       * try /usr/include/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         G__snprintf(G__ifile.name,G__MAXFILENAME,"/usr/include/%s%s",filename(),addpost[i2]);
+-#ifndef G__WIN32
+-        G__ifile.fp = fopen(G__ifile.name,"r");
+-#else
+-        G__ifile.fp = fopen(G__ifile.name,"rb");
+-#endif
+-        G__globalcomp=G__store_globalcomp;
+-      }
+-      if(G__ifile.fp) break;
+-#endif
+-
+-#ifdef __GNUC__
+-      /**********************************************
+-       * try /usr/include/g++/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         G__snprintf(G__ifile.name,G__MAXFILENAME,"/usr/include/g++/%s%s",filename(),addpost[i2]);
+-#ifndef G__WIN32
+-        G__ifile.fp = fopen(G__ifile.name,"r");
+-#else
+-        G__ifile.fp = fopen(G__ifile.name,"rb");
+-#endif
+-        G__globalcomp=G__store_globalcomp;
+-      }
+-      if(G__ifile.fp) break;
+-#endif /* __GNUC__ */
+-
+-#ifndef G__WIN32
+-/* #ifdef __hpux */
+-      /**********************************************
+-       * try /usr/include/CC/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-         G__snprintf(G__ifile.name,G__MAXFILENAME,"/usr/include/CC/%s%s",filename(),addpost[i2]);
+-#ifndef G__WIN32
+-        G__ifile.fp = fopen(G__ifile.name,"r");
+-#else
+-        G__ifile.fp = fopen(G__ifile.name,"rb");
+-#endif
+-        G__globalcomp=G__store_globalcomp;
+-      }
+-      if(G__ifile.fp) break;
+-/* #endif __hpux */
+-#endif
+-
+-#ifndef G__WIN32
+-/* #ifdef __hpux */
+-      /**********************************************
+-       * try /usr/include/codelibs/filename
+-       **********************************************/
+-      if('\0'!=G__cintsysdir[0]) {
+-        G__snprintf(G__ifile.name,G__MAXFILENAME,"/usr/include/codelibs/%s%s"
+-                    ,filename(),addpost[i2]);
+-#ifndef G__WIN32
+-        G__ifile.fp = fopen(G__ifile.name,"r");
+-#else
+-        G__ifile.fp = fopen(G__ifile.name,"rb");
+-#endif
+-        G__globalcomp=G__store_globalcomp;
+-      }
+-      if(G__ifile.fp) break;
+-/* #endif __hpux */
+-#endif
+     }
+   }
+ 

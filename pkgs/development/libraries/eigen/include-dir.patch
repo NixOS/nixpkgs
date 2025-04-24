@@ -1,0 +1,57 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # cmake_minimum_require must be the first command of the file
+-cmake_minimum_required(VERSION 3.5.0)
++cmake_minimum_required(VERSION 3.7.0)
+ 
+ project(Eigen3)
+ 
+@@ -443,7 +443,7 @@ set(PKGCONFIG_INSTALL_DIR
+     CACHE PATH "The directory relative to CMAKE_INSTALL_PREFIX where eigen3.pc is installed"
+     )
+ 
+-foreach(var INCLUDE_INSTALL_DIR CMAKEPACKAGE_INSTALL_DIR PKGCONFIG_INSTALL_DIR)
++foreach(var CMAKEPACKAGE_INSTALL_DIR PKGCONFIG_INSTALL_DIR)
+   # If an absolute path is specified, make it relative to "{CMAKE_INSTALL_PREFIX}".
+   if(IS_ABSOLUTE "${${var}}")
+     file(RELATIVE_PATH "${var}" "${CMAKE_INSTALL_PREFIX}" "${${var}}")
+@@ -466,13 +466,6 @@ install(FILES
+   DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+   )
+ 
+-if(EIGEN_BUILD_PKGCONFIG)
+-    configure_file(eigen3.pc.in eigen3.pc @ONLY)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eigen3.pc
+-        DESTINATION ${PKGCONFIG_INSTALL_DIR}
+-        )
+-endif()
+-
+ install(DIRECTORY Eigen DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+ 
+ 
+@@ -593,8 +586,15 @@ set ( EIGEN_VERSION_MAJOR  ${EIGEN_WORLD_VERSION} )
+ set ( EIGEN_VERSION_MINOR  ${EIGEN_MAJOR_VERSION} )
+ set ( EIGEN_VERSION_PATCH  ${EIGEN_MINOR_VERSION} )
+ set ( EIGEN_DEFINITIONS "")
+-set ( EIGEN_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}" )
+ set ( EIGEN_ROOT_DIR ${CMAKE_INSTALL_PREFIX} )
++GNUInstallDirs_get_absolute_install_dir(EIGEN_INCLUDE_DIR INCLUDE_INSTALL_DIR)
++
++if(EIGEN_BUILD_PKGCONFIG)
++    configure_file(eigen3.pc.in eigen3.pc @ONLY)
++    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eigen3.pc
++        DESTINATION ${PKGCONFIG_INSTALL_DIR}
++        )
++endif()
+ 
+ include (CMakePackageConfigHelpers)
+ 
+--- a/eigen3.pc.in
++++ b/eigen3.pc.in
+@@ -6,4 +6,4 @@ Description: A C++ template library for linear algebra: vectors, matrices, and r
+ Requires:
+ Version: @EIGEN_VERSION_NUMBER@
+ Libs:
+-Cflags: -I${prefix}/@INCLUDE_INSTALL_DIR@
++Cflags: -I@EIGEN_INCLUDE_DIR@
