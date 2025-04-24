@@ -7,7 +7,6 @@
   cmake,
   darwinMinVersionHook,
   dbus,
-  fcitx5,
   fetchFromGitHub,
   ibus,
   installShellFiles,
@@ -100,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
     ]
     ++ lib.optionals ibusSupport [
-      fcitx5
       ibus
     ]
     ++ lib.optional waylandSupport zenity;
