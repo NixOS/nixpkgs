@@ -4332,7 +4332,6 @@ with pkgs;
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = pkgsi686Linux.mangohud;
-    inherit (python3Packages) mako;
   };
 
   marimo = with python3Packages; toPythonApplication marimo;
