@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxker";
   version = "0.10.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2xLTR5+0xtyYhc5+gYG78EMP/B5Vk6ZqEGsZwM2bAok=";
   };
 
@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "Simple tui to view & control docker containers";
+  meta = {
+    description = "Simple TUI to view & control docker containers";
     homepage = "https://github.com/mrjackwills/oxker";
-    changelog = "https://github.com/mrjackwills/oxker/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siph ];
+    changelog = "https://github.com/mrjackwills/oxker/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siph ];
     mainProgram = "oxker";
   };
-}
+})
