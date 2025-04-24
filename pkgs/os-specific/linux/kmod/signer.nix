@@ -100,13 +100,6 @@ stdenv.mkDerivation rec {
       popd > /dev/null
     done
 
-    # Regenerate the depmod map files.  Be sure to pass an explicit
-    # kernel version number, otherwise depmod will use `uname -r'.
-    if test -w $./lib/modules/$kernelVersion; then
-        rm -f $./lib/modules/$kernelVersion/modules.!(builtin*|order*)
-        ${kmod}/bin/depmod -b . -C ./etc/depmod.d -a $kernelVersion
-    fi
-
     # needed to make modules writeable for signing, remove again here
     chmod -w lib -R
   '';
