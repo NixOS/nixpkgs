@@ -17,16 +17,16 @@ buildGoModule (finalAttrs: {
     webkitgtk_4_1
   ];
   pname = "paretosecurity";
-  version = "0.1.9";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = finalAttrs.version;
-    hash = "sha256-KJs4xC3EtGG4116UE+oIEwAMcuDWIm9gqgZY+Bv14ac=";
+    hash = "sha256-skBxDPC+C8JU1CW6g3SA2C4IawaoPzVi8pdl5BCutUY=";
   };
 
-  vendorHash = "sha256-3plpvwLe32AsGuVzdM2fSmTPkKwRFmhi651NEIRdOxw=";
+  vendorHash = "sha256-YnyACP/hJYxi4AWMwr0We4YUTbWwahKAIYN6RnHmzls=";
   proxyVendor = true;
 
   ldflags = [
@@ -51,6 +51,17 @@ buildGoModule (finalAttrs: {
     install -Dm444 ${finalAttrs.src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
     substituteInPlace $out/lib/systemd/user/paretosecurity-trayicon.service \
         --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install .desktop files
+    install -Dm444 ${finalAttrs.src}/apt/ParetoSecurity.desktop $out/share/applications/ParetoSecurity.desktop
+    substituteInPlace $out/share/applications/ParetoSecurity.desktop \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+    install -Dm444 ${finalAttrs.src}/apt/ParetoSecurityLink.desktop $out/share/applications/ParetoSecurityLink.desktop
+    substituteInPlace $out/share/applications/ParetoSecurityLink.desktop \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install icon
+    install -Dm444 ${finalAttrs.src}/assets/icon.png $out/share/icons/hicolor/512x512/apps/ParetoSecurity.png
   '';
 
   passthru.tests = {
@@ -74,10 +85,11 @@ buildGoModule (finalAttrs: {
       root helper that allows you to run the checker in userspace. Some checks
       require root permissions, and the checker asks the helper to run those.
 
-      Additionally, if you enable `services.paretosecurity.trayIcon`, you get a
-      little Vilfredo Pareto living in your systray showing your the current
-      status of checks. This will also enable a systemd timer to update the
-      status of checks once per hour.
+      Additionally, using the NixOS module gets you a little Vilfredo Pareto
+      living in your systray showing your the current status of checks. The
+      NixOS Module also installs a systemd timer to update the status of checks
+      once per hour. If you want to use just the CLI mode, set
+      `services.paretosecurity.trayIcon` to `false`.
 
       Finally, you can run `paretosecurity link` to configure the agent
       to send the status of checks to https://dash.paretosecurity.com to make
