@@ -24,6 +24,7 @@
   rustc,
   rustfmt,
   xdotool,
+  xdg-user-dirs,
   pipewire,
   cargo-expand,
   yq,
@@ -203,6 +204,10 @@ flutter.buildFlutterApplication rec {
     mkdir -p $out/share/polkit-1/actions $out/share/icons/hicolor/{256x256,scalable}/apps
     cp ../res/128x128@2x.png $out/share/icons/hicolor/256x256/apps/rustdesk.png
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
+  '';
+
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   desktopItems = [
