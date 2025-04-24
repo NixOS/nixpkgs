@@ -229,7 +229,7 @@ in
 
       hashAlgorithm = mkOption {
         type = types.str;
-        default = "sha512";
+        default = "sha3-512";
         description = ''
           The hash algorithm used to sign kernel modules.
         '';
@@ -289,17 +289,31 @@ in
       apply =
         let
           kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-          modulesDirect = modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
+          modulesUnsigned = modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
         in
         if config.boot.kernelModuleSigning.enable then
           modules: (pkgs.signModules {
-            modules = modulesDirect modules;
+            modules = modulesUnsigned modules;
             pubKeyPath = config.boot.kernelModuleSigning.publicKeyPath;
             privKeyPathOrUri = config.boot.kernelModuleSigning.privateKeyPathOrUri;
             hashAlgorithm = config.boot.kernelModuleSigning.hashAlgorithm;
+            compressionAlgorithm =
+              let
+                cfg = config.boot.kernelPackages.kernel.config;
+                isYes = config.lib.kernelConfig.isYes;
+              in
+                if ((isYes "MODULE_COMPRESS_NONE").assertion cfg) then
+                  "none"
+                else if ((isYes "MODULE_COMPRESS_GZIP").assertion cfg) then
+                  "gzip"
+                else if ((isYes "MODULE_COMPRESS_XZ").assertion cfg) then
+                  "xz"
+                else
+                  "zstd"
+              ;
           }).override { name = kernel-name + "-modules-signed"; }
         else
-          modulesDirect
+          modulesUnsigned
       ;
     };
 

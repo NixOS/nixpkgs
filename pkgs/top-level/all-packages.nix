@@ -12923,11 +12923,12 @@ with pkgs;
       pubKeyPath,
       privKeyPathOrUri,
       hashAlgorithm,
+      compressionAlgorithm,
     }@args:
     callPackage ../os-specific/linux/kmod/signer.nix {
       inherit (buildPackages) kmod;
-      inherit (buildPackages.linuxPackages) sign-file;
-      inherit (args) modules pubKeyPath privKeyPathOrUri hashAlgorithm;
+      inherit (buildPackages.linuxPackages) module-signing;
+      inherit (args) modules pubKeyPath privKeyPathOrUri hashAlgorithm compressionAlgorithm;
     }
   ;
 
