@@ -29,6 +29,7 @@
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  libxml2,
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -114,7 +115,21 @@ let
   tools = lib.makeExtensible (
     tools:
     let
-      callPackage = newScope (tools // args // metadata);
+      callPackage = newScope (
+        tools
+        // args
+        // metadata
+        // {
+          libxml2 =
+            if stdenv.targetPlatform.libc == "llvm" then
+              libxml2.override {
+                pythonSupport = false;
+              }
+            else
+              libxml2;
+        }
+      );
+
       clangVersion =
         if (lib.versionOlder metadata.release_version "16") then
           metadata.release_version
@@ -577,9 +592,18 @@ let
             if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
           python3 =
             if stdenv.targetPlatform.libc == "llvm" then
-              buildPackages.python3Minimal
+              # Prevent infinite-recursion within openssl
+              buildPackages.python3Minimal.override { openssl = null; }
             else
               buildPackages.python3;
+          ninja =
+            if stdenv.targetPlatform.libc == "llvm" then
+              buildPackages.ninja.override {
+                # Prevent infinite-recursion within openssl
+                buildDocs = false;
+              }
+            else
+              buildPackages.ninja;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
