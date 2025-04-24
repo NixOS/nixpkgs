@@ -6,7 +6,15 @@
   python,
   zlib,
   libuv,
+  ada,
+  brotli,
+  c-ares,
+  nghttp3,
+  ngtcp2,
+  simdjson,
+  simdutf,
   sqlite,
+  zstd,
   http-parser,
   icu,
   bash,
@@ -125,17 +133,33 @@ let
 
   useSharedHttpParser =
     !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
+  useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
   useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps =
     {
-      inherit openssl zlib libuv;
+      inherit
+        brotli
+        c-ares
+        libuv
+        nghttp3
+        ngtcp2
+        openssl
+        zlib
+        ;
     }
     // (lib.optionalAttrs useSharedHttpParser {
       inherit http-parser;
     })
+    // (lib.optionalAttrs useSharedAdaAndSimd {
+      inherit ada simdjson simdutf;
+    })
     // (lib.optionalAttrs useSharedSQLite {
       inherit sqlite;
+    })
+    // (lib.optionalAttrs useSharedZstd {
+      inherit zstd;
     });
 
   copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
@@ -213,14 +237,22 @@ let
       # NB: technically, we do not need bash in build inputs since all scripts are
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
-      buildInputs = [
-        zlib
-        libuv
-        openssl
-        http-parser
-        icu
-        bash
-      ] ++ lib.optionals useSharedSQLite [ sqlite ];
+      buildInputs =
+        [
+          bash
+          http-parser
+          icu
+          libuv
+          openssl
+          zlib
+        ]
+        ++ lib.optionals useSharedAdaAndSimd [
+          ada
+          simdjson
+          simdutf
+        ]
+        ++ lib.optionals useSharedSQLite [ sqlite ]
+        ++ lib.optionals useSharedZstd [ zstd ];
 
       nativeBuildInputs =
         [
@@ -274,8 +306,10 @@ let
         ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
         ++ lib.optionals (!enableNpm) [ "--without-npm" ]
         ++ lib.concatMap (name: [
-          "--shared-${name}"
-          "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
+          "--shared-${builtins.replaceStrings [ "c-ares" ] [ "cares" ] name}"
+          "--shared-${builtins.replaceStrings [ "c-ares" ] [ "cares" ] name}-libpath=${
+            lib.getLib sharedLibDeps.${name}
+          }/lib"
           /**
             Closure notes: we explicitly avoid specifying --shared-*-includes,
             as that would put the paths into bin/nodejs.
@@ -410,6 +444,10 @@ let
                 "test-runner-run"
                 "test-runner-watch-mode"
                 "test-watch-mode-files_watcher"
+              ]
+              ++ lib.optionals useSharedAdaAndSimd [
+                # Different versions of Ada affect the WPT tests
+                "test-url"
               ]
               ++ lib.optionals (!lib.versionAtLeast version "22") [
                 "test-tls-multi-key"
