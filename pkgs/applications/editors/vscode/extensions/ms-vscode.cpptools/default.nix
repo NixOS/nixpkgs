@@ -39,6 +39,7 @@
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   isx86Linux = stdenv.hostPlatform.system == "x86_64-linux";
+  isDarwin = stdenv.hostPlatform.isDarwin;
   supported = {
     x86_64-linux = {
       hash = "sha256-KWr+nfODCRoZq67qwswzbcPW5WMmf9kvRwNFKpjyt4k=";
@@ -47,6 +48,10 @@ let
     aarch64-linux = {
       hash = "sha256-a6PwlSo3q1hLVx0JDSTwPGfjfk7CtdYCuFccSpPg7U8=";
       arch = "linux-arm64";
+    };
+    aarch64-darwin = {
+      hash = "sha256-B6Dmcbk8Z8qPr/0Xv9GfBxL6+7DaVmYNVRfBY9geCoY=";
+      arch = "darwin-arm64";
     };
   };
 
@@ -68,13 +73,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   buildInputs = [
     jq
-    lttng-ust
     libkrb5
     zlib
     (lib.getLib stdenv.cc.cc)
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ lttng-ust ];
 
-  dontAutoPatchelf = isx86Linux;
+  dontAutoPatchelf = isx86Linux || isDarwin;
 
   postPatch =
     ''
@@ -97,10 +101,15 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
       # Patching binaries
       chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
     ''
     + lib.optionalString isx86Linux ''
       chmod +x bin/libc.so
+    ''
+    + lib.optionalString isDarwin ''
+      chmod +x debugAdapters/lldb-mi/bin/lldb-mi
     '';
 
   # On aarch64 the binaries are statically linked
@@ -128,6 +137,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
