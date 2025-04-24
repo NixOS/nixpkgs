@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -34,11 +33,9 @@ buildPythonPackage rec {
     owner = "wjakob";
     repo = "nanobind";
     tag = "v${version}";
-    hash = "sha256-ex5svqDp9XJtiNCxu0249ORL6LbG679U6PvKQaWANmE=";
     fetchSubmodules = true;
+    hash = "sha256-ex5svqDp9XJtiNCxu0249ORL6LbG679U6PvKQaWANmE=";
   };
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     cmake
@@ -68,7 +65,7 @@ buildPythonPackage rec {
       scipy
       torch
     ]
-    ++ lib.optionals (!(builtins.elem stdenv.hostPlatform.system tensorflow-bin.meta.badPlatforms)) [
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
       tensorflow-bin
       jax
       jaxlib
