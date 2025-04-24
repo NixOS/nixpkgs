@@ -3746,8 +3746,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  ham = pkgs.perlPackages.ham;
-
   hdf5 = callPackage ../tools/misc/hdf5 {
     fortranSupport = false;
     fortran = gfortran;
