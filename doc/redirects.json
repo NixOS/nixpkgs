@@ -3227,6 +3227,12 @@
   "javascript-yarn": [
     "index.html#javascript-yarn"
   ],
+  "javascript-yarn-v1": [
+    "index.html#javascript-yarn-v1"
+  ],
+  "javascript-yarn-v3-v4": [
+    "index.html#javascript-yarn-v3-v4"
+  ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
   ],
@@ -3253,6 +3259,18 @@
   ],
   "javascript-yarn2nix-pitfalls": [
     "index.html#javascript-yarn2nix-pitfalls"
+  ],
+  "javascript-yarnBerry-missing-hashes": [
+    "index.html#javascript-yarnBerry-missing-hashes"
+  ],
+  "javascript-yarnBerryConfigHook": [
+    "index.html#javascript-yarnBerryConfigHook"
+  ],
+  "javascript-yarnBerry-patching": [
+    "index.html#javascript-yarnBerry-patching"
+  ],
+  "javascript-fetchYarnBerryDeps": [
+    "index.html#javascript-fetchYarnBerryDeps"
   ],
   "javascript-outside-nixpkgs": [
     "index.html#javascript-outside-nixpkgs"
