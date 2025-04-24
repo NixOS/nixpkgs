@@ -2,7 +2,7 @@
 #!nix-shell -p curl -p jq -p common-updater-scripts -i bash
 set -e
 
-entryPointURL='https://customerconnect.omnissa.com/channel/public/api/v1.0/products/getRelatedDLGList?locale=en_US&category=desktop_end_user_computing&product=vmware_horizon_clients&version=horizon_8&dlgType=PRODUCT_BINARY'
+entryPointURL='https://customerconnect.omnissa.com/channel/public/api/v1.0/products/getRelatedDLGList?locale=en_US&category=desktop_end_user_computing&product=omnissa_horizon_clients&version=8&dlgType=PRODUCT_BINARY'
 
 function getTarballMetaUrl {
     curl "$entryPointURL" | jq -r '
@@ -23,5 +23,5 @@ echo "version: $ver"
 echo "tar url: $url"
 echo " sha256: $sum"
 
-cd "$(dirname "$0")/../../../../.."
-update-source-version vmware-horizon-client.unwrapped "$ver" "$sum" "$url"
+cd "$(dirname "$0")/../../../.."
+update-source-version omnissa-horizon-client.unwrapped "$ver" "$sum" "$url"
