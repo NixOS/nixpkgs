@@ -1,0 +1,81 @@
+diff --git a/packages/plugin-essentials/sources/commands/install.ts b/packages/plugin-essentials/sources/commands/install.ts
+index 90ba553..ef5368c 100644
+--- a/packages/plugin-essentials/sources/commands/install.ts
++++ b/packages/plugin-essentials/sources/commands/install.ts
+@@ -302,6 +302,7 @@ export default class YarnCommand extends BaseCommand {
+ 
+         for (const rule of LOCKFILE_MIGRATION_RULES) {
+           if (rule.selector(lockfileLastVersion) && typeof configuration.sources.get(rule.name) === `undefined`) {
++            throw new Error(`Tried to use yarn-berry_4.yarnConfigHook (nixpkgs) which expects lockfile version 8, but found lockfile version ${lockfileLastVersion}`);
+             configuration.use(`<compat>`, {[rule.name]: rule.value}, project.cwd, {overwrite: true});
+             newSettings[rule.name] = rule.value;
+           }
+diff --git a/packages/plugin-git/sources/GitFetcher.ts b/packages/plugin-git/sources/GitFetcher.ts
+index d9f8d85..4db9f90 100644
+--- a/packages/plugin-git/sources/GitFetcher.ts
++++ b/packages/plugin-git/sources/GitFetcher.ts
+@@ -50,7 +50,11 @@ export class GitFetcher implements Fetcher {
+   async cloneFromRemote(locator: Locator, opts: FetchOptions) {
+     const repoUrlParts = gitUtils.splitRepoUrl(locator.reference);
+ 
+-    const cloneTarget = await gitUtils.clone(locator.reference, opts.project.configuration);
++    if (repoUrlParts.treeish.protocol !== "commit") {
++        throw new Error(`Missing source for git dependency ${locator.reference}`);
++    };
++
++    const cloneTarget = opts.cache.checkoutPath(repoUrlParts.treeish.request);
+     const projectPath = ppath.resolve(cloneTarget, repoUrlParts.extra.cwd ?? PortablePath.dot);
+ 
+     const packagePath = ppath.join(projectPath, `package.tgz`);
+diff --git a/packages/plugin-npm/sources/NpmSemverFetcher.ts b/packages/plugin-npm/sources/NpmSemverFetcher.ts
+index 7347859..ea5767f 100644
+--- a/packages/plugin-npm/sources/NpmSemverFetcher.ts
++++ b/packages/plugin-npm/sources/NpmSemverFetcher.ts
+@@ -45,6 +45,7 @@ export class NpmSemverFetcher implements Fetcher {
+   }
+ 
+   private async fetchFromNetwork(locator: Locator, opts: FetchOptions) {
++    throw new Error(`Missing sources for ${structUtils.prettyLocator(opts.project.configuration, locator)}`);
+     let sourceBuffer;
+     try {
+       sourceBuffer = await npmHttpUtils.get(NpmSemverFetcher.getLocatorUrl(locator), {
+diff --git a/packages/yarnpkg-core/sources/Cache.ts b/packages/yarnpkg-core/sources/Cache.ts
+index b712ecf..c7effbc 100644
+--- a/packages/yarnpkg-core/sources/Cache.ts
++++ b/packages/yarnpkg-core/sources/Cache.ts
+@@ -225,6 +225,10 @@ export class Cache {
+     }
+   }
+ 
++  checkoutPath(commit: string): string {
++    return ppath.join(ppath.join(this.cwd, "../checkouts"), commit);
++  }
++
+   async fetchPackageFromCache(locator: Locator, expectedChecksum: string | null, {onHit, onMiss, loader, ...opts}: {onHit?: () => void, onMiss?: () => void, loader?: () => Promise<ZipFS>} & CacheOptions): Promise<[FakeFS<PortablePath>, () => void, string | null]> {
+     const mirrorPath = this.getLocatorMirrorPath(locator);
+ 
+diff --git a/packages/yarnpkg-core/sources/scriptUtils.ts b/packages/yarnpkg-core/sources/scriptUtils.ts
+index 2dcd7e5..fe40fbb 100644
+--- a/packages/yarnpkg-core/sources/scriptUtils.ts
++++ b/packages/yarnpkg-core/sources/scriptUtils.ts
+@@ -287,10 +287,6 @@ export async function prepareExternalProject(cwd: PortablePath, outputPath: Port
+             // Run an install; we can't avoid it unless we inspect the
+             // package.json, which I don't want to do to keep the codebase
+             // clean (even if it has a slight perf cost when cloning v1 repos)
+-            const install = await execUtils.pipevp(`yarn`, [`install`], {cwd, env, stdin, stdout, stderr, end: execUtils.EndStrategy.ErrorCode});
+-            if (install.code !== 0)
+-              return install.code;
+-
+             stdout.write(`\n`);
+ 
+             const pack = await execUtils.pipevp(`yarn`, [...workspaceCli, `pack`, `--filename`, npath.fromPortablePath(outputPath)], {cwd, env, stdin, stdout, stderr});
+@@ -375,9 +371,6 @@ export async function prepareExternalProject(cwd: PortablePath, outputPath: Port
+             // We can't use `npm ci` because some projects don't have npm
+             // lockfiles that are up-to-date. Hopefully npm won't decide
+             // to change the versions randomly.
+-            const install = await execUtils.pipevp(`npm`, [`install`, `--legacy-peer-deps`], {cwd, env, stdin, stdout, stderr, end: execUtils.EndStrategy.ErrorCode});
+-            if (install.code !== 0)
+-              return install.code;
+ 
+             const packStream = new PassThrough();
+             const packPromise = miscUtils.bufferStream(packStream);
