@@ -26,8 +26,6 @@ buildHomeAssistantComponent rec {
     python-miio
   ];
 
-  dontBuild = true;
-
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9.]+)$" ]; };
 
   meta = {

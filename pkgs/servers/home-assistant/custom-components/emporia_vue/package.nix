@@ -25,8 +25,6 @@ buildHomeAssistantComponent rec {
     "pyemvue"
   ];
 
-  dontBuild = true;
-
   meta = with lib; {
     description = "Reads data from the Emporia Vue energy monitor into Home Assistant";
     homepage = "https://github.com/magico13/ha-emporia-vue";
