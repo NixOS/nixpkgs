@@ -11115,6 +11115,12 @@
     githubId = 22628816;
     name = "Sophia Caspe";
   };
+  ipsavitsky = {
+    email = "ipsavitsky234@gmail.com";
+    github = "ipsavitsky";
+    githubId = 33558632;
+    name = "Ilya Savitsky";
+  };
   iquerejeta = {
     github = "iquerejeta";
     githubId = 31273774;
