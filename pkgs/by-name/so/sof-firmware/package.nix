@@ -17,13 +17,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/lib/firmware/intel
-    cp -av sof $out/lib/firmware/intel/sof
-    cp -av sof-tplg $out/lib/firmware/intel/sof-tplg
-    cp -av sof-ace-tplg $out/lib/firmware/intel/sof-ace-tplg
-    cp -av sof-ipc4 $out/lib/firmware/intel/sof-ipc4
-    cp -av sof-ipc4-tplg $out/lib/firmware/intel/sof-ipc4-tplg
-    cp -av sof-ipc4-lib $out/lib/firmware/intel/sof-ipc4-lib
+    # copy sof and sof-* recursively, preserving symlinks
+    cp -R -d sof{,-*} $out/lib/firmware/intel/
+
     runHook postInstall
   '';
 
