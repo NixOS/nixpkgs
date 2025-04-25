@@ -27,10 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FqualaTkirB+gBcgkThQpSBHhM4iaXkiGujwBUnUX0E=";
   };
 
+  patches = [
+    ./wasm-bindgen.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     name = "share-preview-${finalAttrs.version}";
-    hash = "sha256-XY48fQ5HLvZ1nxLk6rbuxSBAHAPUcnwu/5AwgTWhfbg=";
+    hash = "sha256-lDSRXe+AjJzWT0hda/aev6kNJAvHblGmmAYXdYhrnQs=";
   };
 
   nativeBuildInputs = [
