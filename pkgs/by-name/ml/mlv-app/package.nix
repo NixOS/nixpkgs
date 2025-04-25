@@ -6,6 +6,7 @@
   libsForQt5,
   writableTmpDirAsHomeHook,
   ffmpeg-headless,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 -t $out/share/icons/hicolor/512x512/apps RetinaIMG/MLVAPP.png
     runHook postInstall
   '';
+
+  updateScript = nix-update-script { };
 
   meta = {
     description = "All in one MLV processing app that is pretty great";
