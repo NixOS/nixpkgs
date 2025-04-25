@@ -6,7 +6,7 @@
   php,
   phpCfg ? null,
   withPostgreSQL ? true, # “strongly recommended” according to docs
-  withMySQL ? false,
+  withMariaDB ? false,
   minifyStaticFiles ? false, # default files are often not minified
   esbuild,
   lightningcss,
@@ -71,7 +71,7 @@ php.buildComposerProject2 (finalAttrs: {
           all.pdo_pgsql
           all.pgsql
         ]
-        ++ lib.optionals withMySQL [
+        ++ lib.optionals withMariaDB [
           all.mysqli
           all.mysqlnd
           all.pdo_mysql
