@@ -10,6 +10,7 @@ lib.makeOverridable (
   { ... }@typstPkgs:
   f:
   buildEnv {
+    inherit (typst) meta;
     name = "${typst.name}-env";
 
     paths = lib.foldl' (acc: p: acc ++ lib.singleton p ++ p.propagatedBuildInputs) [ ] (f typstPkgs);
