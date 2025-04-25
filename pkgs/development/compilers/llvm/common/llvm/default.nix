@@ -135,6 +135,10 @@ stdenv.mkDerivation (
           stripLen = 1;
         })
       ]
+      # Fix tests nondeterministically hanging: https://github.com/llvm/llvm-project/pull/132861
+      ++ lib.optional (lib.versionAtLeast release_version "17") (
+        getVersionFile "llvm/llvm-exegesis-timeout.patch"
+      )
       ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         # Running the tests involves invoking binaries (like `opt`) that depend on
