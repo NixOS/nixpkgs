@@ -20,8 +20,8 @@ let
     sha256Hash = "sha256-VNXErfb4PhljcJwGq863ldh/3i8fMdJirlwolEIk+fI=";
   };
   betaVersion = {
-    version = "2024.3.2.11"; # "Android Studio Meerkat Feature Drop | 2024.3.2 RC 2"
-    sha256Hash = "sha256-pE17kbLnsEMRtaQencKqckW3uke9IliLkoHP6q3NrQg=";
+    version = "2024.3.2.12"; # "Android Studio Meerkat Feature Drop | 2024.3.2 RC 3"
+    sha256Hash = "sha256-wmCPkYV88/OwuPqm10t3jT1x+cFRK+7Mgy683Au1P3g=";
   };
   latestVersion = {
     version = "2025.1.1.7"; # "Android Studio Narwhal | 2025.1.1 Canary 7"
