@@ -469,6 +469,13 @@ stdenv.mkDerivation (
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
         })
       ]
+      ++ optionals (lib.versionOlder version "7" && stdenv.hostPlatform.isAarch32) [
+        (fetchpatch2 {
+          name = "binutils-2-43-compat.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/654bd47716c4f36719fb0f3f7fd8386d5ed0b916";
+          hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
+        })
+      ]
       ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
         ./fix-fate-ffmpeg-spec-disposition-7.1.patch
       ]
