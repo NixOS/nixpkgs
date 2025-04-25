@@ -6365,6 +6365,8 @@ self: super: with self; {
 
   gyp = callPackage ../development/python-modules/gyp { };
 
+  gz-math = callPackage ../development/python-modules/gz-math { };
+
   h11 = callPackage ../development/python-modules/h11 { };
 
   h2 = callPackage ../development/python-modules/h2 { };
