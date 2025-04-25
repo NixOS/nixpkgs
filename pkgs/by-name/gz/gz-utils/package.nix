@@ -2,11 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
   gz-cmake,
+
+  # buildInputs
   spdlog,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
   version = "3.1.1";
@@ -21,8 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gz-cmake
-    spdlog
   ];
+
+  buildInputs = [ spdlog ];
 
   meta = {
     description = "General purpose utility classes and functions for the Gazebo libraries";
