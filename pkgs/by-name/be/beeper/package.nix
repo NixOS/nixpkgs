@@ -21,6 +21,12 @@ let
       # disable creating a desktop file and icon in the home folder during runtime
       linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
       echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
+
+      # disable auto update
+      sed -i 's/[^=]*\.auto_update_disabled/true/' $out/resources/app/build/main/main-entry-*.mjs
+
+      # prevent updates
+      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
     '';
   };
 in
