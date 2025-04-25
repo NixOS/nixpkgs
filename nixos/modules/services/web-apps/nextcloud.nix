@@ -1376,6 +1376,7 @@ in
           ({
             datadirectory = lib.mkDefault "${datadir}/data";
             trusted_domains = [ cfg.hostName ];
+            "upgrade.disable-web" = true;
           })
           (lib.mkIf cfg.configureRedis {
             "memcache.distributed" = ''\OC\Memcache\Redis'';
