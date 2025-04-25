@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
         --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
     '';
 
+  # Ensures that libstemmer.a can be linked into a shared library for e.g. pystemmer
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
+
   makeTarget = "libstemmer.a";
 
   installPhase = ''
