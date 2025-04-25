@@ -25,6 +25,9 @@ buildGoModule {
     changelog = "https://github.com/keidarcy/e1s/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "e1s";
-    maintainers = with maintainers; [ zelkourban ];
+    maintainers = with maintainers; [
+      zelkourban
+      carlossless
+    ];
   };
 }
