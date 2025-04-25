@@ -10,22 +10,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.7";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
-    rev = "epoch-${version}";
-    hash = "sha256-rkzcu5lXKVQ5RfilcKQjTzeKZv+FpqrtARZgGGlYKK4=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-vozm4vcXV3RB9Pk6om1UNCfGh80vIVJvSwbzwGDQw3Y=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cosmic-notifications-util-0.1.0" = "sha256-GmTT7SFBqReBMe4GcNSym1YhsKtFQ/0hrDcwUqXkaBw=";
-      "launch-pad-0.1.0" = "sha256-c+uawTQlg5SW8x7DOBG2Idv/AfIaCFNtLQLUz8ifT2I=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-68budhhbt8wPY7sfDqwIs4MWB/NBXsswK6HbC2AnHqE=";
 
   postPatch = ''
     substituteInPlace Justfile \
@@ -46,13 +41,29 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "prefix"
     (placeholder "out")
+    "--set"
+    "cosmic_dconf_profile"
+    "${placeholder "out"}/etc/dconf/profile/cosmic"
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.XDP_COSMIC = lib.getExe xdg-desktop-portal-cosmic;
+  env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
 
-  passthru.providedSessions = [ "cosmic" ];
+  passthru = {
+    providedSessions = [ "cosmic" ];
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
     license = licenses.gpl3Only;
