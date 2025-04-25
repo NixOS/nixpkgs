@@ -38,6 +38,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blockbuster" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Utility to detect blocking calls in the async event loop";
     homepage = "https://github.com/cbornet/blockbuster";
