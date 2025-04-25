@@ -8,6 +8,7 @@
   gz-cmake,
 
   # buildInputs
+  cli11,
   spdlog,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
     gz-cmake
   ];
 
-  buildInputs = [ spdlog ];
+  buildInputs = [
+    cli11
+    spdlog
+  ];
+
+  # Indicate to CMake that we are not using the vendored CLI11 library.
+  # The integration tests make (unintentional?) unconditional usage of the vendored
+  # CLI11 library, so we can't remove that.
+  cmakeFlags = [
+    (lib.cmakeBool "GZ_UTILS_VENDOR_CLI11" false)
+  ];
 
   meta = {
     description = "General purpose utility classes and functions for the Gazebo libraries";
