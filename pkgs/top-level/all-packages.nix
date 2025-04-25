@@ -11963,7 +11963,7 @@ with pkgs;
     nodejs-slim = nodejs-slim_22;
     python3 = python311;
     ruby = ruby_3_3;
-    yarn-berry = yarn-berry.override { nodejs = nodejs-slim_22; };
+    yarn-berry = yarn-berry_4.override { nodejs = nodejs-slim_22; };
   };
 
   micro-full = micro.wrapper.override {
