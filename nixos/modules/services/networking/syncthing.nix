@@ -309,9 +309,8 @@ in
         default = null;
         description = ''
           Path to a text file containing the API key to set in syncthing.
-          Use this instead of
-          [`settings.options.gui.apiKey`](#opt-services.syncthing.settings.options.gui.apiKey)
-          to avoid leaking the plaintext key to the Nix store.
+          Use this instead of `settings.gui.apiKey` to avoid
+          leaking the plaintext key to the Nix store.
         '';
       };
 
