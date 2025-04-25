@@ -15,6 +15,7 @@
   stdenv,
   zlib,
   zstd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ];
+
+  passthru.tests = nixosTests.pgbackrest;
 
   meta = {
     description = "Reliable PostgreSQL backup & restore";
