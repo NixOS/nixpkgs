@@ -147,17 +147,6 @@ with haskellLib;
     ];
   }) super.doctest_0_24_0;
 
-  # https://github.com/typeable/generic-arbitrary/issues/18
-  generic-arbitrary = overrideCabal (drv: {
-    patches = drv.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        name = "hellwolf:fix-recursive-test-hidding-unit";
-        url = "https://github.com/typeable/generic-arbitrary/commit/133b80be93e6744f21e0e5ed4180a24c589f92e4.patch";
-        sha256 = "sha256-z9EVcD1uNAYUOVTwmCCnrEFFOvFB7lD94Y6BwGVwVRQ=";
-      })
-    ];
-  }) super.generic-arbitrary;
-
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
   generic-lens = dontCheck super.generic-lens;
 
