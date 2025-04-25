@@ -885,16 +885,6 @@ self: super:
   # "base" dependency.
   haddock-cheatsheet = doJailbreak super.haddock-cheatsheet;
 
-  # https://github.com/Gabriella439/Haskell-MVC-Updates-Library/pull/1
-  mvc-updates = appendPatches [
-    (pkgs.fetchpatch {
-      name = "rename-pretraverse.patch";
-      url = "https://github.com/Gabriella439/Haskell-MVC-Updates-Library/commit/47b31202b761439947ffbc89ec1c6854c1520819.patch";
-      sha256 = "sha256-a6k3lWtXNYUIjWXR+vRAHz2bANq/2eM0F5FLL8Qt2lA=";
-      includes = [ "src/MVC/Updates.hs" ];
-    })
-  ] (doJailbreak super.mvc-updates);
-
   # Too strict bounds on bytestring < 0.12
   # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/issues/18
   pipes-http = doJailbreak super.pipes-http;
