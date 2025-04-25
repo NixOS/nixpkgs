@@ -24,7 +24,7 @@
   ninja,
   numpy,
   opencolorio,
-  openimageio,
+  openimageio_2,
   opensubdiv,
   osl,
   ptex,
@@ -132,7 +132,7 @@ buildPythonPackage rec {
       imath
       materialx
       opencolorio
-      openimageio
+      openimageio_2
       opensubdiv
       ptex
       tbb
