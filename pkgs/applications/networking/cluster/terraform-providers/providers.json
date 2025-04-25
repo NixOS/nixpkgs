@@ -390,13 +390,13 @@
     "vendorHash": "sha256-WZqwBkVXoFmDikIyt9GWszLA/9YBoQHAdBuWbGKZBZw="
   },
   "docker": {
-    "hash": "sha256-0GMZnrmuRKWnI3Fu97MPtKiNh9XSUkFO/U35+ym2xLk=",
+    "hash": "sha256-dhHhalHUHvM5vIyqXBmmYSYWPVXfYZEkQeREg17Clu8=",
     "homepage": "https://registry.terraform.io/providers/kreuzwerker/docker",
     "owner": "kreuzwerker",
     "repo": "terraform-provider-docker",
-    "rev": "v3.1.2",
+    "rev": "v3.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-YTxWawv5KbitMD9CoiDLt8FjZUvjyIjcoqQVmz9xZGs="
+    "vendorHash": "sha256-yxa2MTNsmbcZTG8QjnYHkWhow6s1IeutPmww/A0K3zw="
   },
   "doppler": {
     "hash": "sha256-VzdtksB/zrsf3z3J/1UEehiuQYM7cyxTef892PGYrxo=",
