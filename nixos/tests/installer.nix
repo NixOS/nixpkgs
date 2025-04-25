@@ -680,95 +680,97 @@ let
         in
         {
           # The configuration of the system used to run "nixos-install".
-          installer = {
-            imports = [
-              commonConfig
-              ../modules/profiles/installation-device.nix
-              ../modules/profiles/base.nix
-              extraInstallerConfig
-              ./common/auto-format-root-device.nix
-            ];
+          installer =
+            { config, ... }:
+            {
+              imports = [
+                commonConfig
+                ../modules/profiles/installation-device.nix
+                ../modules/profiles/base.nix
+                extraInstallerConfig
+                ./common/auto-format-root-device.nix
+              ];
 
-            # In systemdStage1, also automatically format the device backing the
-            # root filesystem.
-            virtualisation.fileSystems."/".autoFormat = systemdStage1;
+              # In systemdStage1, also automatically format the device backing the
+              # root filesystem.
+              virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
-            boot.initrd.systemd.enable = systemdStage1;
+              boot.initrd.systemd.enable = systemdStage1;
 
-            # Use a small /dev/vdb as the root disk for the
-            # installer. This ensures the target disk (/dev/vda) is
-            # the same during and after installation.
-            virtualisation.emptyDiskImages = [ 512 ];
-            virtualisation.rootDevice = "/dev/vdb";
+              # Use a small /dev/vdb as the root disk for the
+              # installer. This ensures the target disk (/dev/vda) is
+              # the same during and after installation.
+              virtualisation.emptyDiskImages = [ 512 ];
+              virtualisation.rootDevice = "/dev/vdb";
 
-            hardware.enableAllFirmware = mkForce false;
-            nix.package = selectNixPackage pkgs;
+              nix.package = selectNixPackage pkgs;
+              hardware.enableAllFirmware = mkForce false;
 
-            # The test cannot access the network, so any packages we
-            # need must be included in the VM.
-            system.extraDependencies =
-              with pkgs;
-              [
-                bintools
-                brotli
-                brotli.dev
-                brotli.lib
-                desktop-file-utils
-                docbook5
-                docbook_xsl_ns
-                kbd.dev
-                kmod.dev
-                libarchive.dev
-                libxml2.bin
-                libxslt.bin
-                nixos-artwork.wallpapers.simple-dark-gray-bottom
-                ntp
-                perlPackages.ConfigIniFiles
-                perlPackages.FileSlurp
-                perlPackages.JSON
-                perlPackages.ListCompare
-                perlPackages.XMLLibXML
-                # make-options-doc/default.nix
-                (python3.withPackages (p: [ p.mistune ]))
-                shared-mime-info
-                sudo
-                switch-to-configuration-ng
-                texinfo
-                unionfs-fuse
-                xorg.lndir
-                shellcheck-minimal
-
-                # add curl so that rather than seeing the test attempt to download
-                # curl's tarball, we see what it's trying to download
-                curl
-              ]
-              ++ optionals (bootLoader == "grub") (
-                let
-                  zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
-                in
+              # The test cannot access the network, so any packages we
+              # need must be included in the VM.
+              system.extraDependencies =
+                with pkgs;
                 [
-                  (pkgs.grub2.override { inherit zfsSupport; })
-                  (pkgs.grub2_efi.override { inherit zfsSupport; })
-                  pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
-                  pkgs.perlPackages.FileCopyRecursive
-                  pkgs.perlPackages.XMLSAX
-                  pkgs.perlPackages.XMLSAXBase
-                ]
-              )
-              ++ optionals (bootLoader == "systemd-boot") [
-                pkgs.zstd.bin
-                pkgs.mypy
-                pkgs.bootspec
-              ]
-              ++ optionals clevisTest [ pkgs.klibc ]
-              ++ optional systemdStage1 pkgs.chroot-realpath;
+                  bintools
+                  brotli
+                  brotli.dev
+                  brotli.lib
+                  desktop-file-utils
+                  docbook5
+                  docbook_xsl_ns
+                  kbd.dev
+                  kmod.dev
+                  libarchive.dev
+                  libxml2.bin
+                  libxslt.bin
+                  nixos-artwork.wallpapers.simple-dark-gray-bottom
+                  ntp
+                  perlPackages.ConfigIniFiles
+                  perlPackages.FileSlurp
+                  perlPackages.JSON
+                  perlPackages.ListCompare
+                  perlPackages.XMLLibXML
+                  # make-options-doc/default.nix
+                  (python3.withPackages (p: [ p.mistune ]))
+                  shared-mime-info
+                  sudo
+                  switch-to-configuration-ng
+                  texinfo
+                  unionfs-fuse
+                  xorg.lndir
+                  shellcheck-minimal
 
-            nix.settings = {
-              substituters = mkForce [ ];
-              hashed-mirrors = null;
-              connect-timeout = 1;
+                  # add curl so that rather than seeing the test attempt to download
+                  # curl's tarball, we see what it's trying to download
+                  curl
+                ]
+                ++ optionals (bootLoader == "grub") (
+                  let
+                    zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
+                  in
+                  [
+                    (pkgs.grub2.override { inherit zfsSupport; })
+                    (pkgs.grub2_efi.override { inherit zfsSupport; })
+                    pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
+                    pkgs.perlPackages.FileCopyRecursive
+                    pkgs.perlPackages.XMLSAX
+                    pkgs.perlPackages.XMLSAXBase
+                  ]
+                )
+                ++ optionals (bootLoader == "systemd-boot") [
+                  pkgs.zstd.bin
+                  pkgs.mypy
+                  config.boot.bootspec.package
+                ]
+                ++ optionals clevisTest [ pkgs.klibc ]
+                ++ optional systemdStage1 pkgs.chroot-realpath;
+
+              nix.settings = {
+                substituters = mkForce [ ];
+                hashed-mirrors = null;
+                connect-timeout = 1;
+              };
             };
-          };
 
           target = {
             imports = [ commonConfig ];
