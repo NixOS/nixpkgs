@@ -23,7 +23,6 @@ buildHomeAssistantComponent rec {
 
   #skip phases with nothing to do
   dontConfigure = true;
-  dontBuild = true;
   doCheck = false;
 
   meta = with lib; {
