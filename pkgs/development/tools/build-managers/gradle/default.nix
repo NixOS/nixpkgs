@@ -288,7 +288,7 @@ rec {
             tests = {
               toolchains =
                 let
-                  javaVersion = lib.substring 0 2 (lib.getVersion jdk23);
+                  javaVersion = lib.versions.major (lib.getVersion jdk23);
                 in
                 runCommand "detects-toolchains-from-nix-env"
                   {
