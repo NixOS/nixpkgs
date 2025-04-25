@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
-  version = "2.1.5";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
     tag = "v${version}";
-    hash = "sha256-yO3k2kT043/KkiCjDnNUlqxX86kQqMZ+CghD+yon3r4=";
+    hash = "sha256-/8p2qR1je65k1irXFcCre2e16rhGjcu0+u6RChMYTWQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
