@@ -6,6 +6,7 @@
   numpy,
   pillow,
   pooch,
+  pythonAtLeast,
   scooby,
   setuptools,
   typing-extensions,
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyvista" ];
 
   meta = with lib; {
+    broken = pythonAtLeast "3.13"; # segfault
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
     changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
