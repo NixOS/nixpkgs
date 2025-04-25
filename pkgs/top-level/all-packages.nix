@@ -17020,8 +17020,6 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  devilutionx = callPackage ../games/devilutionx { };
-
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
