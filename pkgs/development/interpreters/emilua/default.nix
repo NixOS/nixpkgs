@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "emilua";
     repo = "emilua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0mv3z7zbpl7z7amcak0f0w7hg4w39fap2wvw33chj0pw1929zxdg=";
+    hash = "sha256-r/WfRAr8AgnZGHxzcZVLg5MHDwcOTMWqOv/Qu/75Y1c=";
   };
 
   propagatedBuildInputs = [
