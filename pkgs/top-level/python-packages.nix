@@ -9933,6 +9933,8 @@ self: super: with self; {
 
   nkdfu = callPackage ../development/python-modules/nkdfu { };
 
+  nlopt = callPackage ../development/python-modules/nlopt { };
+
   nlpcloud = callPackage ../development/python-modules/nlpcloud { };
 
   nlpo3 = callPackage ../development/python-modules/nlpo3 { };
