@@ -43,10 +43,16 @@ in
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   options.openstackImage = {
-    ramMB = mkOption {
+    ramMiB = mkOption {
       type = types.int;
       default = (3 * 1024);
       description = "RAM allocation for build VM";
+    };
+
+    ramMB = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      description = "Deprecated. Use `ramMiB` instead.";
     };
 
     format = mkOption {
@@ -100,9 +106,9 @@ in
 
       includeChannel = copyChannel;
 
-      bootSize = 1000; # MiB
-      memSize = cfg.ramMB; # MiB
-      rootSize = config.virtualisation.diskSize; # MiB
+      bootSize = 1000;
+      memSize = cfg.ramMB or cfg.ramMiB;
+      rootSize = config.virtualisation.diskSize;
       rootPoolProperties = {
         ashift = 12;
         autoexpand = "on";
