@@ -22,6 +22,7 @@
   json-glib,
   duplicity,
   rclone,
+  restic,
   nix-update-script,
 }:
 
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dduplicity_command=${lib.getExe duplicity}"
     "-Drclone_command=${lib.getExe rclone}"
+    (lib.mesonOption "restic_command" (lib.getExe restic))
   ];
 
   preFixup = ''
