@@ -15,19 +15,21 @@ let
     hash = "sha256-K043RQ5BoS1ysnmY+LpRixBmMx2XCbRzhWnWsxg26dg=";
   };
   appimageContents = appimageTools.extract {
-    inherit version pname src;
+    inherit pname version src;
+
+    postExtract = ''
+      # disable creating a desktop file and icon in the home folder during runtime
+      linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
+      echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
+    '';
   };
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
+appimageTools.wrapAppImage {
+  inherit pname version;
+
+  src = appimageContents;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
-
-  postExtract = ''
-    # disable creating a desktop file and icon in the home folder during runtime
-    linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
-    echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
-  '';
 
   extraInstallCommands = ''
     install -Dm 644 ${appimageContents}/beepertexts.png $out/share/icons/hicolor/512x512/apps/beepertexts.png
@@ -50,10 +52,13 @@ appimageTools.wrapType2 {
       text = ''
         set -o errexit
         latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
-        version="$(echo "$latestLinux" |  grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
+        version="$(echo "$latestLinux" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
         update-source-version beeper "$version"
       '';
     });
+
+    # needed for nix-update
+    inherit src;
   };
 
   meta = with lib; {
