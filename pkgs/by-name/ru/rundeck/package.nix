@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck";
-  version = "5.10.0-20250312";
+  version = "5.11.1-20250415";
 
   src = fetchurl {
     url = "https://packagecloud.io/pagerduty/rundeck/packages/java/org.rundeck/rundeck-${finalAttrs.version}.war/artifacts/rundeck-${finalAttrs.version}.war/download?distro_version_id=167";
-    hash = "sha256-BwO7FM1LP0OrjG7opz4qqDuJQdtBmmFtZTtigV99ssE=";
+    hash = "sha256-WOxY2GGtll+2xkSbJUKOvgsr408nIvRcEuBULcawijc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.liberodark ];
+    maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "rundeck";
   };
 })
