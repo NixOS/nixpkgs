@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-YTaoGBYQvuUbMYe4FKmtgxcAxeesU/ruVXPOjZXGLGU=";
+    hash = "sha256-idz14x6ErHqkbAYzEpBmZFpv2lY+dJqhM2ChJys+Ed8=";
     leaveDotGit = true;
   };
 
