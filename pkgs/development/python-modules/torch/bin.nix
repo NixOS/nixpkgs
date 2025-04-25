@@ -154,6 +154,9 @@ buildPythonPackage {
       "x86_64-linux"
     ];
     hydraPlatforms = [ ]; # output size 3.2G on 1.11.0
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }
