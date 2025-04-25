@@ -6,6 +6,8 @@
   # nativeBuildInputs
   cmake,
   gz-cmake,
+  doxygen,
+  graphviz,
 
   # buildInputs
   cli11,
@@ -28,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fYzysdB608jfMb/EbqiGD4hXmPxcaVTUrt9Wx0dBlto=";
   };
 
+  outputs = [
+    "doc"
+    "out"
+  ];
+
   # Remove vendored gtest, use nixpkgs' version instead.
   postPatch = ''
     rm -r test/gtest_vendor
@@ -39,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gz-cmake
+    doxygen
+    graphviz
   ];
 
   buildInputs = [
@@ -52,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GZ_UTILS_VENDOR_CLI11" false)
   ];
+
+  postBuild = ''
+    make doc
+    cp -r doxygen/html $doc
+  '';
 
   nativeCheckInputs = [ python3 ];
 
