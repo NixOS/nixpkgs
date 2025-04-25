@@ -55,7 +55,7 @@ in
   config = {
     # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
-    virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
+    virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024); # MiB
 
     system.nixos.tags = [ "hyperv" ];
     image.extension = "vhdx";

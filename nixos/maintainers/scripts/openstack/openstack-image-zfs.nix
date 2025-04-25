@@ -76,7 +76,7 @@ in
 
     # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
-    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024); # MiB
     virtualisation.diskSizeAutoSupported = false;
 
     image.extension = cfg.format;
@@ -100,9 +100,9 @@ in
 
       includeChannel = copyChannel;
 
-      bootSize = 1000;
-      memSize = cfg.ramMB;
-      rootSize = config.virtualisation.diskSize;
+      bootSize = 1000; # MiB
+      memSize = cfg.ramMB; # MiB
+      rootSize = config.virtualisation.diskSize; # MiB
       rootPoolProperties = {
         ashift = 12;
         autoexpand = "on";

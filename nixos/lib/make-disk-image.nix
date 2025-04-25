@@ -96,19 +96,23 @@
   # The NixOS configuration to be installed onto the disk image.
   config,
 
-  # The size of the disk, in megabytes.
+  # The size of the disk, in mebibytes.
   # if "auto" size is calculated based on the contents copied to it and
   #   additionalSpace is taken into account.
   diskSize ? "auto",
 
   # additional disk space to be added to the image if diskSize "auto"
-  # is used
+  # is used.
+  # Represents number of bytes, capital binary prefix without whitespace and
+  # "iB" can be used (e.g., "1K", "1M").
   additionalSpace ? "512M",
 
-  # size of the boot partition, is only used if partitionTableType is
-  # either "efi" or "hybrid"
-  # This will be undersized slightly, as this is actually the offset of
-  # the end of the partition. Generally it will be 1MiB smaller.
+  # Size of the boot partition, is only used if partitionTableType is either
+  # "efi" or "hybrid".
+  # Represents number of bytes, capital binary prefix without whitespace and
+  # "iB" can be used (e.g., "1K", "1M").
+  # This will be undersized slightly, as this is actually the offset of the end
+  # of the partition. Generally it will be 1 MiB smaller.
   bootSize ? "256M",
 
   # The files and directories to be placed in the target file system.
@@ -152,7 +156,7 @@
   # Shell code executed after the VM has finished.
   postVM ? "",
 
-  # Guest memory size
+  # Guest memory size in mebibytes.
   memSize ? 1024,
 
   # Copy the contents of the Nix store to the root of the image and
