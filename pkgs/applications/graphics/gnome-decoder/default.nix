@@ -28,20 +28,20 @@
 
 clangStdenv.mkDerivation rec {
   pname = "gnome-decoder";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
     rev = version;
-    hash = "sha256-QAd5z+Qi6SVfI/JZktRvHszNazk7/ThonbMO5lGHAIU=";
+    hash = "sha256-lLZ8tll/R9cwk3t/MULmrR1KWZ1e+zneXL93035epPE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-oQwgY6gLc6BScfu7GUwXenJtbTv0pL7KEaW8B7lZaw0=";
+    hash = "sha256-USfC7HSL1TtjP1SmBRTKkPyKE4DkSn6xeH4mzfIBQWg=";
   };
 
   preFixup = ''
