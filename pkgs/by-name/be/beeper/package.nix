@@ -27,6 +27,9 @@ let
 
       # prevent updates
       sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
+
+      # hide version status element on about page otherwise a error message is shown
+      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/PrefsPanes-*.css
     '';
   };
 in
