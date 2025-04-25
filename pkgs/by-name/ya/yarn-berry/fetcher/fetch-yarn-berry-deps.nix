@@ -58,6 +58,8 @@ stdenv.mkDerivation (
 
     outputHashMode = "recursive";
 
+    dontFixup = true; # fixup phase does the patching of the shebangs, and FODs must never contain nix store paths.
+
     passthru = {
       inherit berryVersion;
     };
