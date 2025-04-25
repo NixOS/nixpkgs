@@ -88,6 +88,31 @@ in
 {
   imports = [
     ./repart-verity-store.nix
+    ./file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFileBasename"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFile"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
   ];
 
   options.image.repart = {
@@ -107,23 +132,6 @@ in
       default = config.system.image.version;
       defaultText = lib.literalExpression "config.system.image.version";
       description = "Version of the image";
-    };
-
-    imageFileBasename = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Basename of the image filename without any extension (e.g. `image_1`).
-      '';
-    };
-
-    imageFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Filename of the image including all extensions (e.g `image_1.raw` or
-        `image_1.raw.zst`).
-      '';
     };
 
     compression = {
@@ -253,7 +261,6 @@ in
   };
 
   config = {
-
     assertions = lib.mapAttrsToList (
       fileName: partitionConfig:
       let
@@ -295,10 +302,14 @@ in
       ) cfg.partitions
     );
 
-    image.repart =
+    image.baseName =
       let
         version = config.image.repart.version;
         versionInfix = if version != null then "_${version}" else "";
+      in
+      cfg.name + versionInfix;
+    image.extension =
+      let
         compressionSuffix =
           lib.optionalString cfg.compression.enable
             {
@@ -308,6 +319,11 @@ in
             }
             ."${cfg.compression.algorithm}";
 
+      in
+      "raw" + compressionSuffix;
+
+    image.repart =
+      let
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
 
         # Add the closure of the provided Nix store paths to cfg.partitions so
@@ -321,9 +337,6 @@ in
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
-        imageFileBasename = cfg.name + versionInfix;
-        imageFile = cfg.imageFileBasename + ".raw" + compressionSuffix;
-
         compression = {
           # Generally default to slightly faster than default compression
           # levels under the assumption that most of the building will be done
@@ -357,10 +370,10 @@ in
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
+        imageFileBasename = config.image.baseName;
         inherit (cfg)
           name
           version
-          imageFileBasename
           compression
           split
           seed
