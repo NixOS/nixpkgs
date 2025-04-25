@@ -71,7 +71,7 @@ buildPythonPackage rec {
     "tests/contrib/test_swift_smoke.py"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
 
