@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "unifi-controller";
-  version = "9.0.114";
+  version = "9.1.119";
 
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${version}/unifi_sysvinit_all.deb";
-    hash = "sha256-3xumIIzr+tx60kPhPfSs2Kz2iJ39Kt5934Vca/MpUu4=";
+    hash = "sha256-YKioJZG8lnVCIh1hrMxFElBKLPHurxWiGJMHKDlX1yE=";
   };
 
   nativeBuildInputs = [ dpkg ];
