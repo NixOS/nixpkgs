@@ -5,15 +5,11 @@
 
   # nativeBuildInputs
   cmake,
-  gz-cmake,
 
   # buildInputs
   cli11,
+  gz-cmake, # and checkInputs
   spdlog,
-
-  # checkInputs
-  python3,
-  gtest,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
@@ -36,10 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    gz-cmake
   ];
 
+  # Use `gz-cmake`'s `propagatedNativeBuildInputs` during building
+  # by passing it in `buildInputs`.
   buildInputs = [
+    (gz-cmake.override { withDocs = true; })
     cli11
     spdlog
   ];
@@ -51,9 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GZ_UTILS_VENDOR_CLI11" false)
   ];
 
+  # Use gz-cmake's `propagatedNativeBuildInputs` for tests
+  # by passing `gz-cmake` in `checkInputs`
   checkInputs = [
-    python3
-    gtest
+    (gz-cmake.override {
+      withTests = finalAttrs.doCheck;
+    })
   ];
 
   doCheck = true;
