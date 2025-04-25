@@ -1393,7 +1393,7 @@ in
   ulogd = handleTest ./ulogd/ulogd.nix { };
   umurmur = handleTest ./umurmur.nix { };
   unbound = handleTest ./unbound.nix { };
-  unifi = handleTest ./unifi.nix { };
+  unifi = runTest ./unifi.nix;
   unit-php = runTest ./web-servers/unit-php.nix;
   unit-perl = handleTest ./web-servers/unit-perl.nix { };
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
