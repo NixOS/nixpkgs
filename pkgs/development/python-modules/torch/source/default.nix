@@ -731,6 +731,7 @@ buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       teh
       thoughtpolice
       tscholak
