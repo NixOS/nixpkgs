@@ -19031,6 +19031,12 @@
     githubId = 7536431;
     name = "Jonas Fierlings";
   };
+  pigsinablanket = {
+    email = "nixpkgs@pigs.dev";
+    github = "pigsinspace";
+    githubId = 28584473;
+    name = "Daniel Reimer";
+  };
   pimeys = {
     email = "julius@nauk.io";
     github = "pimeys";
