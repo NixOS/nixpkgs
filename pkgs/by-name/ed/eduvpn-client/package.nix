@@ -40,6 +40,10 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
+  postInstall = ''
+    ln -s $out/${python3Packages.python.sitePackages}/eduvpn/data/share/ $out/share
+  '';
+
   checkInputs = with python3Packages; [
     pytestCheckHook
   ];
