@@ -2293,7 +2293,6 @@ broken-packages:
   - HaGL # failure in job https://hydra.nixos.org/build/234457220 at 2023-09-13
   - hahp # failure in job https://hydra.nixos.org/build/233250101 at 2023-09-02
   - haiji # failure in job https://hydra.nixos.org/build/233232272 at 2023-09-02
-  - hail # failure in job https://hydra.nixos.org/build/233219127 at 2023-09-02
   - hailgun-send # failure in job https://hydra.nixos.org/build/282936164 at 2024-12-24
   - hairy # failure in job https://hydra.nixos.org/build/233226903 at 2023-09-02
   - hakaru # failure in job https://hydra.nixos.org/build/233231467 at 2023-09-02
