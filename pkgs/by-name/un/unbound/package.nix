@@ -213,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = platforms.unix ++ platforms.windows;
   };
 })
