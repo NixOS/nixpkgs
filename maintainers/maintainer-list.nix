@@ -12392,6 +12392,12 @@
     github = "kaeeraa";
     githubId = 99148867;
   };
+  kagehisa = {
+    name = "Sven Woelfel";
+    email = "woelfel.pub@gmail.com";
+    github = "kagehisa";
+    githubId = 37015428;
+  };
   kaiha = {
     email = "kai.harries@gmail.com";
     github = "KaiHa";
