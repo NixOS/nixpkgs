@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
 }:
-assert version == "2.6.0";
+assert version == "2.7.0";
 (rec {
   src_asmjit = fetchFromGitHub {
     owner = "asmjit";
@@ -45,8 +45,14 @@ assert version == "2.6.0";
   src_composable_kernel = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
-    rev = "50ee4267e27b875d149e642f4cebd47be1dc3b57";
-    hash = "sha256-COkyf+FZzX6OdOPCHkP2bXsVvSXK9UR9s7RHWRtIXUE=";
+    rev = "8086bbe3a78d931eb96fe12fdc014082e18d18d3";
+    hash = "sha256-fyL1SzRs5CXW5CWy6kCN1y1xX6cG+ur7iQlbKX2zbCM=";
+  };
+  src_composable_kernel_flash-attention = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "composable_kernel";
+    rev = "888317e698e9803c62bd38568abc9e05d7709f33";
+    hash = "sha256-0FAiGf7AErBzGxhOFcLQ4ceshqp0Esqo4ee7NsjfJUo=";
   };
   src_cpp-httplib = fetchFromGitHub {
     owner = "yhirose";
@@ -75,20 +81,26 @@ assert version == "2.6.0";
   src_cudnn-frontend = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
-    rev = "936021bfed8c91dc416af1588b2c4eca631a9e45";
-    hash = "sha256-hKqIWGxVco1qkKxDZjc+pUisIcYJwFjZobJZg1WgDvY=";
+    rev = "91b7532f3386768bba4f444ee7672b497f34da8a";
+    hash = "sha256-Ks07ApADA3xQQ+N5BIfvDG+djCvxYL9btF8Aw7TuMvQ=";
   };
   src_cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "bbe579a9e3beb6ea6626d9227ec32d0dae119a49";
-    hash = "sha256-81O80F3MMOn22N9UaXLU6/9DTVWenYvKhLTHoxw8EEU=";
+    rev = "afa1772203677c5118fcd82537a9c8fefbcc7008";
+    hash = "sha256-oIzlbKRdOh6gp6nRZ8udLSqleBFoFtgM7liCBlHZLOk=";
   };
   src_cutlass_fbgemm = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     rev = "fc9ebc645b63f3a6bc80aaefde5c063fb72110d6";
     hash = "sha256-e2SwXNNwjl/1fV64b+mOJvwGDYeO1LFcqZGbNten37U=";
+  };
+  src_cutlass_flash-attention = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "cutlass";
+    rev = "c506e16788cb08416a4a57e11a9067beeee29420";
+    hash = "sha256-P/BgJ7MdNTzNgsqoTjxrOQwvKfhAS+rmBw3sC/SdO1I=";
   };
   src_DCGM = fetchFromGitHub {
     owner = "NVIDIA";
@@ -121,6 +133,12 @@ assert version == "2.6.0";
     rev = "7e1e1fe3858c63c251c637ae41a20de425dde96f";
     hash = "sha256-PsgUHtCE3dNR2QdUnRjrXb0ZKZNGwFkA8RWYkZEklEY=";
   };
+  src_flash-attention = fetchFromGitHub {
+    owner = "Dao-AILab";
+    repo = "flash-attention";
+    rev = "979702c87a8713a8e0a5e9fee122b90d2ef13be5";
+    hash = "sha256-7jk8TD+EkkOPrVT5Nzoc+zoZ4jH/C1AtjLcP12hBrp0=";
+  };
   src_flatbuffers = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
@@ -130,8 +148,8 @@ assert version == "2.6.0";
   src_fmt = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
-    rev = "0c9fce2ffefecfdce794e1859584e25877b7b592";
-    hash = "sha256-IKNt4xUoVi750zBti5iJJcCk3zivTt7nU12RIf8pM+0=";
+    rev = "123913715afeb8a437e6388b4473fcc4753e1c9a";
+    hash = "sha256-sUbxlYi/Aupaox3JjWFqXIjcaQa0LFjclQAOleT+FRA=";
   };
   src_fmt_dynolog = fetchFromGitHub {
     owner = "fmtlib";
@@ -250,8 +268,8 @@ assert version == "2.6.0";
   src_ideep = fetchFromGitHub {
     owner = "intel";
     repo = "ideep";
-    rev = "c7ccd5bdbe5434ba156f4e856dcef0601637334b";
-    hash = "sha256-/u3wJQl49tBw/QNVDBXL+eNSRCuvltso7g1+siIhlXM=";
+    rev = "719d8e6cd7f7a0e01b155657526d693acf97c2b3";
+    hash = "sha256-WX1lluqYeoB2IuwJX1vqZ6nr8W8KsWxUDIvKNA3CAxo=";
   };
   src_ittapi = fetchFromGitHub {
     owner = "intel";
@@ -280,8 +298,14 @@ assert version == "2.6.0";
   src_kineto = fetchFromGitHub {
     owner = "pytorch";
     repo = "kineto";
-    rev = "338140f58a28d599da3434ced4fd2d75dd1a213d";
-    hash = "sha256-ydHUYB2m7dbbqBtLordZUCraewU0Q4m/ohBXNKtqHnw=";
+    rev = "a054a4be0db117c579a21747debf19c863631f26";
+    hash = "sha256-FyxMiDoDrjI8JZZNxK4S18yjULkKLUvqLQsCyxaTLSg=";
+  };
+  src_kleidiai = fetchFromGitHub {
+    owner = "ARM-software";
+    repo = "kleidiai";
+    rev = "ef685a13cfbe8d418aa2ed34350e21e4938358b6";
+    hash = "sha256-5RS2o+163/6Q+0y0FuWz6OBXw3FKxZINDkGOqlmd2N0=";
   };
   src_libnop = fetchFromGitHub {
     owner = "google";
@@ -304,14 +328,8 @@ assert version == "2.6.0";
   src_mkl-dnn = fetchFromGitHub {
     owner = "intel";
     repo = "mkl-dnn";
-    rev = "66f0cb9eb66affd2da3bf5f8d897376f04aae6af";
-    hash = "sha256-/ERkk6bgGEKoJEVdnBxMFEzB8pii71t3zQZNtyg+TdQ=";
-  };
-  src_nccl = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "nccl";
-    rev = "ab2b89c4c339bd7f816fbc114a4b05d386b66290";
-    hash = "sha256-IF2tILwW8XnzSmfn7N1CO7jXL95gUp02guIW5n1eaig=";
+    rev = "8d263e693366ef8db40acc569cc7d8edf644556d";
+    hash = "sha256-+4z5l0mJsw0SOW245GfZh41mdHGZ8u+xED7afm6pQjs=";
   };
   src_NNPACK = fetchFromGitHub {
     owner = "Maratyszcza";
@@ -386,10 +404,10 @@ assert version == "2.6.0";
     hash = "sha256-lV+VZi2b4SQlRYrhKx9Dxc6HlDEFz3newvcBjTekupo=";
   };
   src_pthreadpool = fetchFromGitHub {
-    owner = "google";
+    owner = "Maratyszcza";
     repo = "pthreadpool";
-    rev = "b92447772365661680f486e39a91dfe6675adafc";
-    hash = "sha256-lRY+5sYv/KOuVngsrODRa4/yj1CDmZBW2HuKEbjsY+0=";
+    rev = "4fe0e1e183925bf8cfa6aae24237e724a96479b8";
+    hash = "sha256-R4YmNzWEELSkAws/ejmNVxqXDTJwcqjLU/o/HvgRn2E=";
   };
   src_pybind11 = fetchFromGitHub {
     owner = "pybind";
@@ -412,14 +430,14 @@ assert version == "2.6.0";
   src_pytorch = fetchFromGitHub {
     owner = "pytorch";
     repo = "pytorch";
-    rev = "v2.6.0";
-    hash = "sha256-X58OPtnPplEFtzOrQzyYRwdTmaoWEOGWWF5v6y+vaWo=";
+    rev = "v2.7.0";
+    hash = "sha256-ReXyzy+OuYxEQwU+t2WL3+jqd7ItdW6w8MiS0f9t+aY=";
   };
   src_sleef = fetchFromGitHub {
     owner = "shibatch";
     repo = "sleef";
-    rev = "60e76d2bce17d278b439d9da17177c8f957a9e9b";
-    hash = "sha256-JfARLkdt4je8ll+oqPGJqzUCQbsXoJ0bbX3jf0aHd0o=";
+    rev = "56e1f79cb140fb9326d612d0be06b5250565cade";
+    hash = "sha256-5hha7c/Lu6fkbXGlDieoJP6n2bnjY5iPp+hm0f//0ek=";
   };
   src_tensorpipe = fetchFromGitHub {
     owner = "pytorch";
@@ -442,8 +460,8 @@ assert version == "2.6.0";
   src_XNNPACK = fetchFromGitHub {
     owner = "google";
     repo = "XNNPACK";
-    rev = "4ea82e595b36106653175dcb04b2aa532660d0d8";
-    hash = "sha256-5IubxhCW5E6xzrOLfJzWPrPeftaxXApTx09p6B3NPgo=";
+    rev = "51a0103656eff6fc9bfd39a4597923c4b542c883";
+    hash = "sha256-nhowllqv/hBs7xHdTwbWtiKJ1mvAYsVIyIZ35ZGsmkg=";
   };
   src_asmjit_recursive = src_asmjit;
   src_benchmark_recursive = src_benchmark;
@@ -452,6 +470,7 @@ assert version == "2.6.0";
   src_civetweb_recursive = src_civetweb;
   src_clang-cindex-python3_recursive = src_clang-cindex-python3;
   src_composable_kernel_recursive = src_composable_kernel;
+  src_composable_kernel_flash-attention_recursive = src_composable_kernel_flash-attention;
   src_cpp-httplib_recursive = src_cpp-httplib;
   src_cpr_recursive = src_cpr;
   src_cpuinfo_recursive = src_cpuinfo;
@@ -459,6 +478,7 @@ assert version == "2.6.0";
   src_cudnn-frontend_recursive = src_cudnn-frontend;
   src_cutlass_recursive = src_cutlass;
   src_cutlass_fbgemm_recursive = src_cutlass_fbgemm;
+  src_cutlass_flash-attention_recursive = src_cutlass_flash-attention;
   src_DCGM_recursive = src_DCGM;
   src_dynolog_recursive = runCommand "dynolog" { } ''
     cp -r ${src_dynolog} $out
@@ -494,6 +514,13 @@ assert version == "2.6.0";
     cp -r ${src_hipify_torch_recursive}/* $out/third_party/hipify_torch
   '';
   src_fbjni_recursive = src_fbjni;
+  src_flash-attention_recursive = runCommand "flash-attention" { } ''
+    cp -r ${src_flash-attention} $out
+    chmod u+w $out/csrc/composable_kernel
+    cp -r ${src_composable_kernel_flash-attention_recursive}/* $out/csrc/composable_kernel
+    chmod u+w $out/csrc/cutlass
+    cp -r ${src_cutlass_flash-attention_recursive}/* $out/csrc/cutlass
+  '';
   src_flatbuffers_recursive = src_flatbuffers;
   src_fmt_recursive = src_fmt;
   src_fmt_dynolog_recursive = src_fmt_dynolog;
@@ -537,11 +564,11 @@ assert version == "2.6.0";
     chmod u+w $out/libkineto/third_party/googletest
     cp -r ${src_googletest_kineto_recursive}/* $out/libkineto/third_party/googletest
   '';
+  src_kleidiai_recursive = src_kleidiai;
   src_libnop_recursive = src_libnop;
   src_libuv_recursive = src_libuv;
   src_mimalloc_recursive = src_mimalloc;
   src_mkl-dnn_recursive = src_mkl-dnn;
-  src_nccl_recursive = src_nccl;
   src_NNPACK_recursive = src_NNPACK;
   src_NVTX_recursive = src_NVTX;
   src_onnx_recursive = runCommand "onnx" { } ''
@@ -616,6 +643,8 @@ assert version == "2.6.0";
     cp -r ${src_eigen_recursive}/* $out/third_party/eigen
     chmod u+w $out/third_party/fbgemm
     cp -r ${src_fbgemm_recursive}/* $out/third_party/fbgemm
+    chmod u+w $out/third_party/flash-attention
+    cp -r ${src_flash-attention_recursive}/* $out/third_party/flash-attention
     chmod u+w $out/third_party/flatbuffers
     cp -r ${src_flatbuffers_recursive}/* $out/third_party/flatbuffers
     chmod u+w $out/third_party/fmt
@@ -636,10 +665,10 @@ assert version == "2.6.0";
     cp -r ${src_ittapi_recursive}/* $out/third_party/ittapi
     chmod u+w $out/third_party/kineto
     cp -r ${src_kineto_recursive}/* $out/third_party/kineto
+    chmod u+w $out/third_party/kleidiai
+    cp -r ${src_kleidiai_recursive}/* $out/third_party/kleidiai
     chmod u+w $out/third_party/mimalloc
     cp -r ${src_mimalloc_recursive}/* $out/third_party/mimalloc
-    chmod u+w $out/third_party/nccl/nccl
-    cp -r ${src_nccl_recursive}/* $out/third_party/nccl/nccl
     chmod u+w $out/third_party/nlohmann
     cp -r ${src_json_recursive}/* $out/third_party/nlohmann
     chmod u+w $out/third_party/NNPACK
