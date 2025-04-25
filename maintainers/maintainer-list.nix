@@ -5172,6 +5172,12 @@
     githubId = 202474;
     name = "Jens Reimann";
   };
+  ctucx = {
+    email = "katja@ctu.cx";
+    github = "katjakwast";
+    githubId = 176372446;
+    name = "Katja Kwast";
+  };
   curran = {
     email = "curran@mercury.com";
     github = "curranosaurus";
