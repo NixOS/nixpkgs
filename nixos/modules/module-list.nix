@@ -45,6 +45,7 @@
   ./config/xdg/sounds.nix
   ./config/xdg/terminal-exec.nix
   ./config/zram.nix
+  ./config/zswap.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix

@@ -1500,6 +1500,7 @@ in
   zram-generator = runTest ./zram-generator.nix;
   zrepl = runTest ./zrepl.nix;
   zsh-history = runTest ./zsh-history.nix;
+  zswap = runTest ./zswap.nix;
   zwave-js = runTest ./zwave-js.nix;
   zwave-js-ui = runTest ./zwave-js-ui.nix;
 }
