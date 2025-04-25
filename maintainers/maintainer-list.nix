@@ -4182,6 +4182,21 @@
     githubId = 40013212;
     name = "Han Jeongjun";
   };
+  chadac = {
+    email = "chad@cacrawford.org";
+    matrix = "@chadac:matrix.org";
+    github = "chadac";
+    githubId = 5606757;
+    name = "Chad Crawford";
+    keys = [
+      {
+        fingerprint = "8BEC 8219 4053 C4D4 D3C4  00BC 91C7 9F35 36BA AA53";
+      }
+      {
+        fingerprint = "A98C B10C F2C7 5DCE 3FF5  E19F 728D B65C 0159 25A8";
+      }
+    ];
+  };
   chaduffy = {
     email = "charles@dyfis.net";
     github = "charles-dyfis-net";
