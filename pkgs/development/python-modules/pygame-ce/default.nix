@@ -20,9 +20,9 @@
   libX11,
   portmidi,
   SDL2_classic,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  SDL2_classic_image,
+  SDL2_classic_mixer_2_0,
+  SDL2_classic_ttf,
   numpy,
 
   pygame-gui,
@@ -100,9 +100,9 @@ buildPythonPackage rec {
     libpng
     portmidi
     SDL2_classic
-    (SDL2_image.override { enableSTB = false; })
-    SDL2_mixer
-    SDL2_ttf
+    (SDL2_classic_image.override { enableSTB = false; })
+    SDL2_classic_mixer_2_0
+    SDL2_classic_ttf
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   nativeCheckInputs = [
@@ -126,6 +126,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
   '';
 
   checkPhase = ''
@@ -162,12 +164,5 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.unix;
-    badPlatforms = [
-      # loading pygame.tests.font_test
-      # /nix/store/mrvg4qq09d51w5s95v15y4ym05q009fd-stdenv-darwin/setup: line 1771: 64131 Segmentation fault: 11
-      #
-      # https://github.com/NixOS/nixpkgs/issues/400378
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }
