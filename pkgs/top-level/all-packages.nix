@@ -8452,8 +8452,6 @@ with pkgs;
     '';
   };
 
-  moon = callPackage ../development/tools/build-managers/moon/default.nix { };
-
   mopsa = ocamlPackages.mopsa.bin;
 
   haskell-ci =
