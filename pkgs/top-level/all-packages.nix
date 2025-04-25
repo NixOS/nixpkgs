@@ -10477,8 +10477,6 @@ with pkgs;
 
   mlt = darwin.apple_sdk_11_0.callPackage ../development/libraries/mlt { };
 
-  mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
-
   mpeg2dec = libmpeg2;
 
   msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
