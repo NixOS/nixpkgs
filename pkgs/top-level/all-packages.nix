@@ -10631,7 +10631,6 @@ with pkgs;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
     enableLto = false;
-    openexr = openexr_2;
   };
 
   opencv4WithoutCuda = opencv4.override {
