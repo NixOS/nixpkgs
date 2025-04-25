@@ -1001,6 +1001,7 @@ let
     ];
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
+    transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
     unrtf = with pkgs; [
       xz.dev
