@@ -12,6 +12,7 @@
   libGL,
   libGLU,
   libpng,
+  binutils,
   makeDesktopItem,
 }:
 
@@ -32,10 +33,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     copyDesktopItems
     graphicsmagick
+    SDL # for sdl-config during build time
+  ];
+
+  depsBuildBuild = [
+    binutils # build calls `ar`
   ];
 
   buildInputs =
