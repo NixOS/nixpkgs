@@ -14358,7 +14358,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  openimageio = callPackage ../development/libraries/openimageio { };
+  openimageio_2 = callPackage ../by-name/op/openimageio/2.nix { };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };

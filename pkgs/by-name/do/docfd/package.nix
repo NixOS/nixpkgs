@@ -14,7 +14,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "10.1.3";
+  version = "10.2.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-ZD1nKl/hfidlTGdBnNINt2EmlUmFWaJjSvY3wkyJJcg=";
+    hash = "sha256-wVhsZTG8yEkxKA0ta3IDe7O/ER5RuBuFOPKHP8xS2GA=";
   };
 
   nativeBuildInputs = [
