@@ -83,7 +83,7 @@ in
 
   # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
   # to avoid breaking existing configs using that.
-  config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024); # MiB
+  config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
   config.system.nixos.tags = [ "amazon" ];
@@ -119,7 +119,7 @@ in
 
         bootSize = 1000; # 1000 MiB is the minimum EBS volume
 
-        rootSize = config.virtualisation.diskSize; # MiB
+        rootSize = config.virtualisation.diskSize;
         rootPoolProperties = {
           ashift = 12;
           autoexpand = "on";

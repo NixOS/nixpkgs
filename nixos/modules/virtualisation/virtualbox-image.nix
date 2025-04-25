@@ -193,7 +193,7 @@ in
   config = {
     # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
-    virtualisation.diskSize = lib.mkOverride 1490 (50 * 1024); # MiB
+    virtualisation.diskSize = lib.mkOverride 1490 (50 * 1024);
 
     virtualbox.params = lib.mkMerge [
       (lib.mapAttrs (name: lib.mkDefault) {
