@@ -77,6 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/46c83b1265b4230668da472d9ef6926941678418.patch";
       hash = "sha256-qnA8iBEctZbE86qIPudI1vMbgFy4xDWrxxej517ORws=";
     })
+
+    # Add override for overlay-key to prevent crash with mutter-common v48-rc
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/683
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/c24091bb424abe99ebcdd33eedd37068f735ad2a.patch";
+      hash = "sha256-4WEkscftOGZmzH7imMTmcTDPH6eHMeEhgto+R5NNlh0=";
+    })
   ];
 
   nativeBuildInputs = [
