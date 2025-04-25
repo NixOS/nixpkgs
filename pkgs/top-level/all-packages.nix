@@ -1113,15 +1113,6 @@ with pkgs;
 
   fontbakery = with python3Packages; toPythonApplication fontbakery;
 
-  weylus = callPackage ../applications/graphics/weylus {
-    inherit (darwin.apple_sdk.frameworks)
-      ApplicationServices
-      Carbon
-      Cocoa
-      VideoToolbox
-      ;
-  };
-
   genealogos-api = genealogos-cli.override {
     crate = "api";
   };

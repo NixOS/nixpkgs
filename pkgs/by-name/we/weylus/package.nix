@@ -19,33 +19,25 @@
   autoconf,
   libtool,
   typescript,
-  ApplicationServices,
-  Carbon,
-  Cocoa,
-  VideoToolbox,
+  wayland,
+  libxkbcommon,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "weylus";
-  version = "unstable-2022-06-07";
+  version = "unstable-2025-02-24";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
     repo = pname;
-    rev = "b169a6be2bf3e8d105273d92f032cca5438de53a";
-    sha256 = "sha256-J9eVFIfmyBviVuT1MYKb5yoacbPqOAT3A8jahWv5qw8=";
+    rev = "5202806798ccca67c24da52ba51ee50b973b7089";
+    sha256 = "sha256-lx1ZVp5DkQiL9/vw6PAZ34Lge+K8dfEVh6vLnCUNf7M=";
   };
 
   buildInputs =
     [
       ffmpeg
       x264
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Carbon
-      Cocoa
-      VideoToolbox
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       dbus
@@ -64,6 +56,8 @@ rustPlatform.buildRustPackage rec {
       xorg.libXv
       pango
       libdrm
+      wayland
+      libxkbcommon
     ];
 
   nativeBuildInputs =
@@ -111,7 +105,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Use your tablet as graphic tablet/touch screen on your computer";
     mainProgram = "weylus";
     homepage = "https://github.com/H-M-H/Weylus";
