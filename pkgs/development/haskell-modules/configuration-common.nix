@@ -248,20 +248,6 @@ self: super:
     sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
   }) super.weeder;
 
-  # Allow aeson == 2.1.*
-  # https://github.com/hdgarrood/aeson-better-errors/issues/23
-  aeson-better-errors = lib.pipe super.aeson-better-errors [
-    doJailbreak
-    (appendPatches [
-      # https://github.com/hdgarrood/aeson-better-errors/pull/25
-      (fetchpatch {
-        name = "mtl-2-3.patch";
-        url = "https://github.com/hdgarrood/aeson-better-errors/commit/1ec49ab7d1472046b680b5a64ae2930515b47714.patch";
-        hash = "sha256-xuuocWxSoBDclVp0bJ9UrDamVcDVOAFgJIi/un1xBvk=";
-      })
-    ])
-  ];
-
   # Version 2.1.1 is deprecated, but part of Stackage LTS at the moment.
   # https://github.com/commercialhaskell/stackage/issues/7500
   # https://github.com/yesodweb/shakespeare/issues/280
