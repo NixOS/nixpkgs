@@ -90,6 +90,9 @@ buildPythonPackage rec {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }
