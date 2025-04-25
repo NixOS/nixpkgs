@@ -267,6 +267,25 @@ let
         ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
         curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
       '')
+    + (throwIf (hasAttrByPath [ "gui" "apiKey" ] cfg.settings)
+      ''
+        The option `services.syncthing.settings.gui.apiKey` should
+        not be used because it leaks the plaintext value to the Nix store.
+        Use `services.syncthing.apiKeyFile` instead.
+      ''
+      (
+        lib.optionalString (cfg.apiKeyFile != null) ''
+          # apiKey is part of gui section. We need to merge it because
+          # otherwise the other gui options would get cleared.
+          new_apiKey=$(cat ${lib.escapeShellArg cfg.apiKeyFile})
+          initial_guiConfig=$(echo ${
+            lib.escapeShellArg (builtins.toJSON (if cleanedConfig ? gui then cleanedConfig.gui else { }))
+          })
+          updated_guiConfig=$(echo $initial_guiConfig | ${jq} ".apiKey = \"$new_apiKey\"")
+          curl -X PUT -d "$updated_guiConfig" ${curlAddressArgs "/rest/config/gui"}
+        ''
+      )
+    )
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -306,6 +325,17 @@ in
         default = null;
         description = ''
           Path to file containing the plaintext password for Syncthing's GUI.
+        '';
+      };
+
+      apiKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to a text file containing the API key to set in syncthing.
+          Use this instead of
+          [`settings.options.gui.apiKey`](#opt-services.syncthing.settings.options.gui.apiKey)
+          to avoid leaking the plaintext key to the Nix store.
         '';
       };
 
