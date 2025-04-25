@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "wagtail";
     repo = "Willow";
     tag = "v${version}";
-    hash = "sha256-H/UXE6gA6x849aqBcUgl3JYZ87OMNpuFyWGSsgqW1Rk=";
+    hash = "sha256-eJqrBopHsiI7jbM80x2lI5+aLSOPFuFZD/0fx6tLVnQ=";
   };
 
   build-system = [ flit-core ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";
-    changelog = "https://github.com/wagtail/Willow/releases/tag/v${version}";
+    changelog = "https://github.com/wagtail/Willow/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };
