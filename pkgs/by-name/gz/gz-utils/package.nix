@@ -10,6 +10,12 @@
   # buildInputs
   cli11,
   spdlog,
+
+  # nativeCheckInputs
+  python3,
+
+  # checkInputs
+  gtest,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
@@ -21,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "gz-utils${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
     hash = "sha256-fYzysdB608jfMb/EbqiGD4hXmPxcaVTUrt9Wx0dBlto=";
   };
+
+  # Remove vendored gtest, use nixpkgs' version instead.
+  postPatch = ''
+    rm -r test/gtest_vendor
+
+    substituteInPlace test/CMakeLists.txt --replace-fail \
+      "add_subdirectory(gtest_vendor)" "# add_subdirectory(gtest_vendor)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -38,6 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GZ_UTILS_VENDOR_CLI11" false)
   ];
+
+  nativeCheckInputs = [ python3 ];
+
+  checkInputs = [ gtest ];
+
+  doCheck = true;
 
   meta = {
     description = "General purpose utility classes and functions for the Gazebo libraries";
