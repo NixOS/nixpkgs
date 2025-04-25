@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fYzysdB608jfMb/EbqiGD4hXmPxcaVTUrt9Wx0dBlto=";
   };
 
+  outputs = [
+    "doc"
+    "out"
+  ];
+
   # Remove vendored gtest, use nixpkgs' version instead.
   postPatch = ''
     rm -r test/gtest_vendor
@@ -48,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GZ_UTILS_VENDOR_CLI11" false)
   ];
+
+  postBuild = ''
+    make doc
+
+    cp -r doxygen/html $doc
+  '';
 
   # Use gz-cmake's `propagatedNativeBuildInputs` for tests
   # by passing `gz-cmake` in `checkInputs`
