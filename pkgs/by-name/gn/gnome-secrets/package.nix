@@ -19,15 +19,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "10.4";
-  format = "other";
+  version = "11.1.1";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
-    rev = version;
-    hash = "sha256-FyBtw7Gkvd5XONkM7OVGxE+S5FpuUIl7KWLFHoQeoN4=";
+    tag = version;
+    hash = "sha256-w2sOSHMfnB6JxSzQbZAmaeRKY3ywF7hyfiIsjn8KEtI=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     construct
     pykcs11
@@ -61,21 +61,19 @@ python3Packages.buildPythonApplication rec {
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
   dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mvnetbiz ] ++ lib.teams.gnome-circle.members;
+    changelog = "https://gitlab.gnome.org/World/secrets/-/releases/${version}";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mvnetbiz ] ++ lib.teams.gnome-circle.members;
     mainProgram = "secrets";
   };
 }
