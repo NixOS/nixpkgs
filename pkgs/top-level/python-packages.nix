@@ -6007,6 +6007,8 @@ self: super: with self; {
 
   grpc-interceptor = callPackage ../development/python-modules/grpc-interceptor { };
 
+  grpc-stubs = callPackage ../development/python-modules/grpc-stubs { };
+
   grpcio = callPackage ../development/python-modules/grpcio { };
 
   grpcio-channelz = callPackage ../development/python-modules/grpcio-channelz { };
