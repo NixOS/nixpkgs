@@ -52,6 +52,10 @@ buildNpmPackage {
     "--nodedir=${electron.headers}"
   ];
 
+  patches = [
+    ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
+  ];
+
   buildPhase = ''
     runHook preBuild
 
