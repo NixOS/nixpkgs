@@ -108,7 +108,6 @@ let
           libvorbis
           qt5.qtsvg
           rnnoise
-          utf8proc
           microsoft-gsl
           nlohmann_json
         ]
