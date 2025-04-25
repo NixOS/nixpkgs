@@ -3,8 +3,6 @@
   SDL2,
   autoreconfHook,
   fetchurl,
-  giflib,
-  libXpm,
   libjpeg,
   libpng,
   libtiff,

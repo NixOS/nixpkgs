@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: figure out a better way to unbreak _NSGetExecutablePath invocations
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
+
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
