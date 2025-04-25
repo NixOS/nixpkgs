@@ -20,6 +20,7 @@ let
     filter
     filterAttrsRecursive
     flatten
+    getAttr
     hasAttrByPath
     isAttrs
     isDerivation
@@ -111,7 +112,9 @@ let
     hasAttrByPath (splitString "." component) cfg.config
     || useComponentPlatform component
     || useExplicitComponent component
-    || builtins.elem component (cfg.extraComponents ++ cfg.defaultIntegrations);
+    || builtins.elem component (
+      cfg.extraComponents ++ cfg.defaultIntegrations ++ map (getAttr "domain") cfg.customComponents
+    );
 
   # Final list of components passed into the package to include required dependencies
   extraComponents = filter useComponent availableComponents;
@@ -842,6 +845,7 @@ in
 
             # Custom components, maintained manually.
             "amshan"
+            "benqprojector"
           ];
         in
         {

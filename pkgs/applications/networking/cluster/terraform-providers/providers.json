@@ -317,13 +317,13 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-7V4nSuksCvy2fSyQbzVo0RlEaevUwCIlX61y3GEBqVk=",
+    "hash": "sha256-bRC17BNrJYaEcqRUuuywhCAJSHe/NLJ5syayQGk8k6k=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.59.1",
+    "rev": "v3.60.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vOg972dcpX9MEZ/GaPGcm0OIC1xu+p6KMcflEUPx0hU="
+    "vendorHash": "sha256-Q3D0YEJkDKiDOqUIewATOrctHbLDEn85EFEgyUW9W+8="
   },
   "deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
@@ -534,13 +534,13 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-uWRFi0jYGwlZ1b8qvVoL/NslI6e5bv76QmlWL5C7fA8=",
+    "hash": "sha256-uPvG2/miG5CCZkSinFwGUj1wmGBPyI2jCkYS31559NY=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v3.22.2",
+    "rev": "v3.22.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-wqGNczKE2IFq/wLb8fj5+k07Vh1dR1oXwW06fIWV6Eg="
+    "vendorHash": "sha256-8KsQan5KxNj3/NSzj/M+IR44PiQ5E7PL/K4vVC5KovA="
   },
   "gridscale": {
     "hash": "sha256-Ygt3L/dzwycccQZmuwbcaLHp9FBGNHgU19wSNmY8PzQ=",
@@ -831,13 +831,13 @@
     "vendorHash": "sha256-1nm2Y4T9/mCWMXMjXEzBz3w08AYHjQJeb9mYPQeWPs0="
   },
   "mongodbatlas": {
-    "hash": "sha256-V1kQPFNW0/C1Rw6gbHpQ1+yK5L8dO+zFIHkQs93a56Y=",
+    "hash": "sha256-9fgaBOzly/B1kTvTmevoaEHs6s3/i3kGokFqzKWKwwg=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.32.0",
+    "rev": "v1.33.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-VznDrCvaY6O8n1bl/fx/PIdKfFD32pQaGn5Ti1sJucU="
+    "vendorHash": "sha256-yKNhCFxs2BRU4X9P7ZREmR64u5/8QFFGMk8khXyqUsA="
   },
   "namecheap": {
     "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
@@ -1102,11 +1102,11 @@
     "vendorHash": "sha256-lkooWo0DbpL4zjNQ20TRw+hsHXWZP9u7u95n1WyzTQk="
   },
   "rootly": {
-    "hash": "sha256-bIn3TshuK06MCNznghPeFS5jfFMshz2Zmc9DKoHUEWs=",
+    "hash": "sha256-HvUvRDoRalOzHHnCM0uBR+xc0i0ItfglgoJ0H1QLovg=",
     "homepage": "https://registry.terraform.io/providers/rootlyhq/rootly",
     "owner": "rootlyhq",
     "repo": "terraform-provider-rootly",
-    "rev": "v2.26.5",
+    "rev": "v2.26.8",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-IJJjA7SCQib5GdqbS2rnZtbBNB8sYYPYH+vHMGf1Bfk="
   },

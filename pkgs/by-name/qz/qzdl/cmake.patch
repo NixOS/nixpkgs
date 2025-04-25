@@ -1,10 +1,10 @@
 diff --git i/CMakeLists.txt w/CMakeLists.txt
-index 10a8fb6..dcab540 100644
+index 364f72b..2d5070d 100644
 --- i/CMakeLists.txt
 +++ w/CMakeLists.txt
-@@ -6,16 +6,8 @@ set(CMAKE_AUTOMOC ON)
- project(qzdl LANGUAGES C CXX)
- find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+@@ -7,16 +7,8 @@ project(qzdl LANGUAGES C CXX)
+ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
+ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets REQUIRED)
  
 -include(FetchContent)
 -FetchContent_Declare(
@@ -14,14 +14,14 @@ index 10a8fb6..dcab540 100644
 -)
 -FetchContent_GetProperties(inih)
 -if (NOT inih_POPULATED)
--	FetchContent_Populate(inih)
+-	FetchContent_MakeAvailable(inih)
 -endif()
 +find_package(PkgConfig)
 +pkg_check_modules(INIH inih)
  
  add_executable(
  	zdl
-@@ -45,9 +37,8 @@ add_executable(
+@@ -46,9 +38,9 @@ add_executable(
  	libwad.cpp
  	qzdl.cpp
  	${PROJECT_SOURCE_DIR}/zdlconf/zdlconf.cpp
@@ -30,7 +30,8 @@ index 10a8fb6..dcab540 100644
  
 -target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf)
 -target_include_directories(zdl PRIVATE ${inih_SOURCE_DIR})
--target_link_libraries(zdl Qt5::Core Qt5::Widgets)
-+target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf ${INIH_INCLUDEDIR})
-+target_link_libraries(zdl Qt5::Core Qt5::Widgets ${INIH_LDFLAGS})
+-target_link_libraries(zdl Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets)
++target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf ${inih_INCLUDE_DIR})
++target_link_libraries(zdl Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets ${INIH_LDFLAGS})
++
 +install(TARGETS zdl RUNTIME DESTINATION "bin")
