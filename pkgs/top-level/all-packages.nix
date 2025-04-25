@@ -3446,14 +3446,6 @@ with pkgs;
 
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
-  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
-
-  inherit (fdbPackages)
-    foundationdb73
-    ;
-
-  foundationdb = foundationdb73;
-
   fuse-ext2 = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/fuse-ext2 { };
 
   fwknop = callPackage ../tools/security/fwknop {
