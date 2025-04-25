@@ -15,6 +15,7 @@
   granite,
   libgee,
   libhandy,
+  gala,
   gnome-desktop,
   gnome-settings-daemon,
   mutter,
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     elementary-icon-theme
+    gala # for io.elementary.desktop.background
     gnome-desktop
     gnome-settings-daemon
     gdk-pixbuf
