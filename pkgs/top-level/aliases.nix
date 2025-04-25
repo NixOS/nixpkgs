@@ -509,6 +509,7 @@ mapAliases {
   dibbler = throw "dibbler was removed because it is not maintained anymore"; # Added 2024-05-14
   dillong = throw "'dillong' has been removed, as upstream is abandoned since 2021-12-13. Use either 'dillo' or 'dillo-plus'. The latter integrates features from dillong."; # Added 2024-10-07
   diskonaut = throw "'diskonaut' was removed due to lack of upstream maintenance"; # Added 2025-01-25
+  dispad = throw "dispad has been remove because it doesn't compile and has been unmaintained since 2014"; # Added 2025-04-25
   dleyna-core = dleyna; # Added 2025-04-19
   dleyna-connector-dbus = dleyna; # Added 2025-04-19
   dleyna-renderer = dleyna; # Added 2025-04-19
