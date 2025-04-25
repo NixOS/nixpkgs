@@ -37,8 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pL7MsEFsKJV+a+z45Ns16SPdQB3i2D6T3x7tBqWtm1s=";
   };
 
-  # I would like to find the original sources of the quake3-live-sounds.pk3 and zpack-weapons.pk3 files
-  # Any hints are welcome
+  # According to the @diegoulloao (see https://github.com/diegoulloao/ioquake3-mac-install/issues/23#issuecomment-2817031996)
+  # quake3-live-sounds.pk3 is likely a custom repack from https://www.moddb.com/addons/quake-live-announcers-pack
+  # zpack-weapons.pk3 is an amalgamation of multiple mods, where he can't recall which ones he used exactly.
+  # It still makes him the authorative source for these file.
   ioquake3_mac = fetchFromGitHub {
     owner = "diegoulloao";
     repo = "ioquake3-mac-install";
