@@ -162,6 +162,9 @@ buildPythonPackage rec {
     platforms =
       lib.platforms.linux
       ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }
