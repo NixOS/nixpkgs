@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "11.0";
+  version = "11.1.1";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     tag = version;
-    hash = "sha256-FGSRxujj4CfWxVIEkXvu/gJvtJ7F8t1nQZxqD8EwwCg=";
+    hash = "sha256-w2sOSHMfnB6JxSzQbZAmaeRKY3ywF7hyfiIsjn8KEtI=";
   };
 
   nativeBuildInputs = [
