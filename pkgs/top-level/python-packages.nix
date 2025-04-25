@@ -15341,6 +15341,8 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rospkg = callPackage ../development/python-modules/rospkg { };
+
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
