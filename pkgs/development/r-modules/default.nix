@@ -1000,6 +1000,10 @@ let
       libdeflate
     ];
     island = [ pkgs.gsl.dev ];
+    knowYourCG = with pkgs; [
+      zlib.dev
+      ncurses.dev
+    ];
     svKomodo = [ pkgs.which ];
     ulid = [ pkgs.zlib.dev ];
     unrtf = with pkgs; [
