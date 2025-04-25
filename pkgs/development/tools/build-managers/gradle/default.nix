@@ -306,7 +306,7 @@ rec {
                     cp -a $src/* .
                     substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaVersion}'
                     env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
-                     gradle run --no-daemon --quiet --console plain > $out
+                    gradle run --no-daemon --quiet --console plain > $out
                     grep -q "JAVA_VERSION: ${javaVersion}" $out || exit 1
                   '';
             } // gradle.tests;
