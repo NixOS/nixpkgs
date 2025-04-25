@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pocket-id";
-  version = "0.48.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ax5E3e3GUrQLVsQREUhjmORjXQgKrEBVa9ySJr5ZLUY=";
+    hash = "sha256-fyyeYArjhsS/R9VsZsRM3oO5fz8EUqjNIuvFJpGZbds=";
   };
 
   backend = buildGoModule {
