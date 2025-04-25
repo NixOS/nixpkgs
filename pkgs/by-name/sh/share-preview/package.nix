@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Preview and debug websites metadata tags for social media share";
     homepage = "https://apps.gnome.org/SharePreview";
+    downloadPage = "https://github.com/rafaelmardojai/share-preview";
+    changelog = "https://github.com/rafaelmardojai/share-preview/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "share-preview";
     maintainers = lib.teams.gnome-circle.members;
