@@ -2203,8 +2203,8 @@ let
         mktplcRef = {
           name = "gleam";
           publisher = "gleam";
-          version = "2.11.1";
-          hash = "sha256-tySY6vPg71QQKeKivCoJzcAH73nML/NWhtr+TgaSKRg=";
+          version = "2.12.0";
+          hash = "sha256-kAs3+ecfMl2IcL+I4TXhbzq55AbHZ9NiQLhK6Eg+iZI=";
         };
         meta = {
           description = "Support for the Gleam programming language";
