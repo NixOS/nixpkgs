@@ -1,0 +1,52 @@
+From c04bc71b535885609878b2a8b830cf87097fa18d Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Sun, 4 May 2025 14:01:44 +0200
+Subject: [PATCH] cmake: install package details into system
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index db17c85..3c92fc5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -100,7 +100,7 @@ configure_package_config_file(cmake/config.cmake.in
+ )
+ 
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_LC}-config.cmake
+-    DESTINATION ${LIB_INSTALL_DIR}/../
++    DESTINATION ${LIB_INSTALL_DIR}/cmake/
+ )
+ 
+ if (NOT NANORPC_PURE_CORE)
+@@ -115,3 +115,15 @@ if (NOT NANORPC_PURE_CORE)
+ endif()
+ 
+ install(DIRECTORY include/${PROJECT_LC} DESTINATION include)
++
++# Create pkg-config file
++configure_file(
++    ${CMAKE_SOURCE_DIR}/cmake/nanorpc.pc.in
++    ${CMAKE_BINARY_DIR}/nanorpc.pc
++    @ONLY
++)
++
++install(
++    FILES ${CMAKE_BINARY_DIR}/nanorpc.pc
++    DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
++)
+diff --git a/cmake/nanorpc.pc.in b/cmake/nanorpc.pc.in
+new file mode 100644
+index 0000000..c49a7e2
+--- /dev/null
++++ b/cmake/nanorpc.pc.in
+@@ -0,0 +1,8 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++includedir=${prefix}/include
++
++Name: nanorpc
++Description: The nanorpc library
++Version: @PROJECT_VERSION@
++Cflags: -I${includedir}
+-- 
+2.49.0
+
