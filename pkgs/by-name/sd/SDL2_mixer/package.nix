@@ -1,7 +1,6 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchFromGitHub,
   flac,
   fluidsynth,
@@ -20,10 +19,6 @@
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
-
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_mixer";
   version = "2.8.1";
@@ -38,12 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     SDL2
     pkg-config
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AudioToolbox
-    AudioUnit
-    CoreServices
   ];
 
   propagatedBuildInputs = [
