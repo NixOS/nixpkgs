@@ -1,27 +1,27 @@
 {
-  cargo,
+  lib,
+  stdenv,
+  rustPlatform,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
-  rustPlatform,
-  lib,
-  stdenv,
+  cmake,
+  libiconv,
+  cargo,
   gcc,
   mold,
   rustc,
-  cmake,
-  libiconv,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evcxr";
   version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8PjZFWUH76QrA8EI9Cx0sBCzocvSmnp84VD7Nv9QMc8=";
   };
 
@@ -85,14 +85,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Evaluation context for Rust";
     homepage = "https://github.com/google/evcxr";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       protoben
       ma27
     ];
     mainProgram = "evcxr";
   };
-}
+})
