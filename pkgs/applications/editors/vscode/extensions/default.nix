@@ -5394,8 +5394,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "2.2.8";
-          hash = "sha256-efEeTq/y4al38Tdut3bHVdluf3tUYqc6CFPX+ch1gLg=";
+          version = "2.2.10";
+          hash = "sha256-cQxDoKDfzifcGTkhS8rC+JUQofbxMfXmkJF1CwiU1nc=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
