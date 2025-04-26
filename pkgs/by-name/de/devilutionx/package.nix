@@ -8,10 +8,10 @@
   pkg-config,
   gettext,
   libsodium,
-  SDL2_classic,
+  SDL2,
   SDL2_image,
   SDL_audiolib,
-  flac,
+  simpleini,
   fmt,
   libpng,
   libtiff,
@@ -48,36 +48,20 @@ let
     rev = "d6c6a069a5041a3e89594c447ced3f15d77618b8";
     sha256 = "sha256-ttRJLfaGHzhS4jd8db7BNPWROCti3ZxuRouqsL/M5ew=";
   };
-
-  # breaks without this version
-  SDL_audiolib' = SDL_audiolib.overrideAttrs (oldAttrs: {
-    src = fetchFromGitHub {
-      owner = "realnc";
-      repo = "SDL_audiolib";
-      rev = "cc1bb6af8d4cf5e200259072bde1edd1c8c5137e";
-      sha256 = "sha256-xP7qlwwOkqVeTlCEZLinnvmx8LbU2co5+t//cf4n190=";
-    };
-
-    buildInputs = oldAttrs.buildInputs ++ [ flac ];
-  });
-
-  # missing pkg-config and/or cmake file
-  simpleini = fetchurl {
-    url = "https://github.com/brofield/simpleini/archive/56499b5af5d2195c6acfc58c4630b70e0c9c4c21.tar.gz";
-    sha256 = "sha256-29tQoz0+33kfwmIjCdnD1wGi+35+K0A9P6UE4E8K3g4=";
-  };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "devilutionx";
   version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
-    rev = version;
-    sha256 = "sha256-F23MTe7vMOgIBH6qm7X1+8gIMmN9E+d/GZnFsQZt2cM=";
+    tag = finalAttrs.version;
+    hash = "sha256-F23MTe7vMOgIBH6qm7X1+8gIMmN9E+d/GZnFsQZt2cM=";
   };
+
+  patches = [ ./add-nix-share-path-to-mpq-search.patch ];
 
   postPatch = ''
     substituteInPlace 3rdParty/asio/CMakeLists.txt --replace-fail "${asio.url}" "${asio}"
@@ -86,7 +70,8 @@ stdenv.mkDerivation rec {
     substituteInPlace 3rdParty/libzt/CMakeLists.txt \
       --replace-fail "GIT_REPOSITORY https://github.com/diasurgical/libzt.git" "" \
       --replace-fail "GIT_TAG ${libzt.rev}" "SOURCE_DIR ${libzt}"
-    substituteInPlace 3rdParty/simpleini/CMakeLists.txt --replace-fail "${simpleini.url}" "${simpleini}"
+    substituteInPlace Source/init.cpp \
+      --replace-fail "@assets@" "$out/share/diasurgical/devilutionx/"
   '';
 
   nativeBuildInputs = [
@@ -103,49 +88,22 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libsodium
-    SDL2_classic
+    SDL2
     SDL2_image
-    SDL_audiolib'
+    SDL_audiolib
+    simpleini
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
-
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir -p $out/Applications
-          mv devilutionx.app $out/Applications
-        ''
-      else
-        ''
-          install -Dm755 -t $out/bin devilutionx
-          install -Dm755 -t $out/bin devilutionx.mpq
-          install -Dm755 -t $out/share/diasurgical/devilutionx devilutionx.mpq
-          install -Dm755 -t $out/share/applications ../Packaging/nix/devilutionx-hellfire.desktop ../Packaging/nix/devilutionx.desktop
-          install -Dm755 ../Packaging/resources/icon.png $out/share/icons/hicolor/512x512/apps/devilutionx.png
-          install -Dm755 ../Packaging/resources/hellfire.png $out/share/icons/hicolor/512x512/apps/devilutionx-hellfire.png
-          install -Dm755 ../Packaging/resources/icon_32.png $out/share/icons/hicolor/32x32/apps/devilutionx.png
-          install -Dm755 ../Packaging/resources/hellfire_32.png $out/share/icons/hicolor/32x32/apps/devilutionx-hellfire.png
-        ''
-    )
-    + ''
-
-      runHook postInstall
-    '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/diasurgical/devilutionX";
     description = "Diablo build for modern operating systems";
     mainProgram = "devilutionx";
     longDescription = "In order to play this game a copy of diabdat.mpq is required. Place a copy of diabdat.mpq in ~/.local/share/diasurgical/devilution before executing the game.";
-    license = licenses.sustainableUse;
-    maintainers = with maintainers; [
+    license = lib.licenses.sustainableUse;
+    maintainers = with lib.maintainers; [
       karolchmist
       aanderse
     ];
-    platforms = platforms.linux ++ platforms.windows;
+    platforms = with lib.platforms; linux ++ windows;
   };
-}
+})

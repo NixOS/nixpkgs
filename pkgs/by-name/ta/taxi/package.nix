@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   pname = "taxi";
   version = "2.0.2-unstable-2024-12-26";
 
+  # Temporarily disable nixpkgs-update before we have a tagged release.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "ellie-commons";
     repo = "taxi";

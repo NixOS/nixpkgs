@@ -344,6 +344,7 @@ let
             ."${channel}";
           mainProgram = pname;
           sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+          position = "pkgs/applications/editors/android-studio/common.nix:303";
         };
       }
       ''
