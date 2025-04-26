@@ -5,6 +5,7 @@
   font-alias,
   font-util,
   gccmakedep,
+  ico,
   imake,
   libpciaccess,
   libpthread-stubs,
@@ -35,6 +36,7 @@ self: with self; {
   inherit
     bdftopcf
     gccmakedep
+    ico
     imake
     libpciaccess
     libxcb
@@ -1687,42 +1689,6 @@ self: with self; {
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libICE
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  ico = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "ico";
-      version = "1.0.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/ico-1.0.6.tar.xz";
-        sha256 = "01a4kykayckxzi4jzggaz3wh9qjcr6f4iykhvq7jhlz767a6kwrq";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
         xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

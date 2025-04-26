@@ -290,6 +290,7 @@ print OUT <<EOF;
   font-alias,
   font-util,
   gccmakedep,
+  ico,
   imake,
   libpciaccess,
   libpthread-stubs,
@@ -320,6 +321,7 @@ self: with self; {
   inherit
     bdftopcf
     gccmakedep
+    ico
     imake
     libpciaccess
     libxcb
