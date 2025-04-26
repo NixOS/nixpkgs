@@ -1111,8 +1111,6 @@ with pkgs;
 
   fontbakery = with python3Packages; toPythonApplication fontbakery;
 
-  weylus = callPackage ../applications/graphics/weylus { };
-
   genealogos-api = genealogos-cli.override {
     crate = "api";
   };
@@ -7897,8 +7895,6 @@ with pkgs;
       wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/mold
     '';
   };
-
-  moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
   mopsa = ocamlPackages.mopsa.bin;
 
@@ -17653,6 +17649,7 @@ with pkgs;
   inherit (callPackage ../servers/web-apps/wordpress { })
     wordpress
     wordpress_6_7
+    wordpress_6_8
     ;
 
   wordpressPackages = recurseIntoAttrs (
