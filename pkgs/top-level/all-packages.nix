@@ -8309,7 +8309,6 @@ with pkgs;
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gradle-packages = import ../development/tools/build-managers/gradle {
     inherit
-      jdk11
       jdk17
       jdk21
       jdk23
