@@ -11,6 +11,7 @@
   rustc,
   cmake,
   libiconv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -81,6 +82,8 @@ rustPlatform.buildRustPackage rec {
       ${wrap "evcxr_jupyter"}
       rm $out/bin/testing_runtime
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Evaluation context for Rust";
