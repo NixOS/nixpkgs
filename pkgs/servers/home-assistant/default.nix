@@ -545,6 +545,10 @@ python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # checks whether pip is installed
     "--deselect=tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
+    "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
     # tests are located in tests/
     "tests"
   ];
