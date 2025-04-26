@@ -477,7 +477,6 @@ self: super:
 
   oclock = addMainProgram super.oclock { };
   smproxy = addMainProgram super.smproxy { };
-  transset = addMainProgram super.transset { };
 
   viewres = addMainProgram super.viewres { };
 
