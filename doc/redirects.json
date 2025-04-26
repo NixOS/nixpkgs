@@ -5,6 +5,18 @@
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "cmake-ctest": [
+    "index.html#cmake-ctest"
+  ],
+  "cmake-ctest-disabled-tests": [
+    "index.html#cmake-ctest-disabled-tests"
+  ],
+  "cmake-ctest-flags": [
+    "index.html#cmake-ctest-flags"
+  ],
+  "cmake-ctest-variables": [
+    "index.html#cmake-ctest-variables"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
