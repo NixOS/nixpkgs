@@ -33,8 +33,9 @@
   trio,
 
   # passthru
-  wgpu-py,
+  pkgs,
   testers,
+  wgpu-py,
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
@@ -114,52 +115,40 @@ buildPythonPackage rec {
   # As such, we delegate testing to `passthru`.
   doCheck = false;
 
-  passthru = {
-    tests =
-      {
-        version = testers.testVersion {
-          package = wgpu-py;
-          command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
-        };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
-        tests = testers.runCommand {
-          name = "tests";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-
-        examples = testers.runCommand {
-          name = "examples";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/examples
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-
-        codegen = testers.runCommand {
-          name = "codegen";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/codegen
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-
-        tests_mem = testers.runCommand {
-          name = "tests_mem";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests_mem
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+  passthru.tests =
+    {
+      version = testers.testVersion {
+        package = wgpu-py;
+        command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
       };
-  };
+    }
+    // lib.optionalAttrs stdenv.buildPlatform.isDarwin (
+      let
+        runWGpuPyTestCommand =
+          name: text:
+          pkgs.runCommandNoCC name {
+            nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
+            env.WGPU_LIB_PATH = "${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library}";
+          } text;
+      in
+      {
+        tests = runWGpuPyTestCommand "tests" ''
+          pytest -v ${wgpu-py.src}/tests
+        '';
+
+        examples = runWGpuPyTestCommand "examples" ''
+          pytest -v ${wgpu-py.src}/examples
+        '';
+
+        codegen = runWGpuPyTestCommand "codegen" ''
+          pytest -v ${wgpu-py.src}/codegen
+        '';
+
+        tests_mem = runWGpuPyTestCommand "tests_mem" ''
+          pytest -v ${wgpu-py.src}/tests_mem
+        '';
+      }
+    );
 
   meta = {
     description = "WebGPU for Python";
