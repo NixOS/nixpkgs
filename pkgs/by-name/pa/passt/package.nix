@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IE0BMM24lrl5NHeQGkAZZVwmAsvkhDN64pARdEiOM6s=";
   };
 
+  separateDebugInfo = true;
+
   postPatch = ''
     substituteInPlace Makefile --replace-fail \
       'PAGE_SIZE=$(shell getconf PAGE_SIZE)' \
