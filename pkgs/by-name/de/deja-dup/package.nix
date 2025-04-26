@@ -22,19 +22,20 @@
   json-glib,
   duplicity,
   rclone,
+  restic,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "47.0";
+  version = "48.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
-    rev = finalAttrs.version;
-    hash = "sha256-MjZ+NkNAzwEnC9R48Q5Cb3+c5jM7ooOv7+5TQ6Xo4LM=";
+    tag = finalAttrs.version;
+    hash = "sha256-pB5J+ElSnAE7rX74mgQBgnbOTVFJk/zOUBsJmnVETUE=";
   };
 
   patches = [
@@ -66,8 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dduplicity_command=${lib.getExe duplicity}"
-    "-Drclone_command=${lib.getExe rclone}"
+    (lib.mesonOption "duplicity_command" (lib.getExe duplicity))
+    (lib.mesonOption "restic_command" (lib.getExe rclone))
+    (lib.mesonOption "restic_command" (lib.getExe restic))
   ];
 
   preFixup = ''
@@ -81,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \
@@ -89,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
       and uses duplicity as the backend.
     '';
     homepage = "https://apps.gnome.org/DejaDup/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ] ++ lib.teams.gnome-circle.members;
+    platforms = lib.platforms.linux;
     mainProgram = "deja-dup";
   };
 })
