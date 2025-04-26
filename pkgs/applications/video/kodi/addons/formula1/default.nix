@@ -31,6 +31,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/jaylinski/kodi-addon-formula1";
     description = "Videos from the Formula 1 website";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -160,6 +160,7 @@ lib.makeExtensible (
           ];
           self_attribute_name = "nix_2_3";
           maintainers = with lib.maintainers; [ flokli ];
+          teams = [ ];
         }).overrideAttrs
           {
             # https://github.com/NixOS/nix/issues/10222
@@ -191,7 +192,7 @@ lib.makeExtensible (
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.29pre20250409_${lib.substring 0 8 src.rev}";
-        inherit (self.nix_2_24.meta) maintainers;
+        inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";

@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = teams.c3d2.members;
+    teams = [ teams.c3d2 ];
   };
 }

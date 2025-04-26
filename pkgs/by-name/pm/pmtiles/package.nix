@@ -31,7 +31,8 @@ buildGoModule rec {
     description = "Single-file utility for creating and working with PMTiles archives";
     homepage = "https://github.com/protomaps/go-pmtiles";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ theaninova ]);
+    maintainers = with lib.maintainers; [ theaninova ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "pmtiles";
   };
 }

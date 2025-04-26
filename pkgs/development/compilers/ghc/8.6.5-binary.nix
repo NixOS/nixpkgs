@@ -253,11 +253,9 @@ stdenv.mkDerivation rec {
     ];
     # build segfaults, use ghc8107Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
-    maintainers =
-      with lib.maintainers;
-      [
-        guibou
-      ]
-      ++ lib.teams.haskell.members;
+    maintainers = with lib.maintainers; [
+      guibou
+    ];
+    teams = [ lib.teams.haskell ];
   };
 }

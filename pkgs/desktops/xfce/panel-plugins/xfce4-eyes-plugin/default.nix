@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "Rolling eyes (following mouse pointer) plugin for the Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

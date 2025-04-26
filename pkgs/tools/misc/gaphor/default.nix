@@ -106,7 +106,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/gaphor/gaphor";
     changelog = "https://github.com/gaphor/gaphor/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ] ++ lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 }

@@ -270,7 +270,7 @@ stdenv.mkDerivation (
         asl20
         vim
       ];
-      maintainers = lib.teams.neovim.members;
+      teams = [ lib.teams.neovim ];
       platforms = lib.platforms.unix;
     };
   }

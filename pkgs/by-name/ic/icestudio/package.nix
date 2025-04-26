@@ -112,15 +112,13 @@ buildNpmPackage rec {
     description = "Visual editor for open FPGA boards";
     homepage = "https://github.com/FPGAwars/icestudio/";
     license = lib.licenses.gpl2Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        kiike
-        jleightcap
-        rcoeurjoly
-        amerino
-      ]
-      ++ lib.teams.ngi.members;
+    maintainers = with lib.maintainers; [
+      kiike
+      jleightcap
+      rcoeurjoly
+      amerino
+    ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "icestudio";
     platforms = lib.platforms.linux;
   };

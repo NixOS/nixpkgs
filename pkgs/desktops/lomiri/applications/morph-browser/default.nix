@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
     ];
     mainProgram = "morph-browser";
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.linux;
   };
 })

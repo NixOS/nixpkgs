@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     mainProgram = "pcmanfm-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

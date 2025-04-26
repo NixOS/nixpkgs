@@ -85,6 +85,6 @@ buildPythonApplication rec {
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

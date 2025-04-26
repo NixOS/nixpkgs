@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
     changelog = "https://gitlab.gnome.org/YaLTeR/identity/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "identity";
     platforms = lib.platforms.linux;
   };

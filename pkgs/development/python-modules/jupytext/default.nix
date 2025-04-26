@@ -85,7 +85,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwouts/jupytext";
     changelog = "https://github.com/mwouts/jupytext/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupytext";
   };
 }

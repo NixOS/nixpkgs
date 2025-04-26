@@ -286,7 +286,8 @@ let
               inherit javaLibs;
               propagatedBuildInputs = args.propagatedBuildInputs or [ ] ++ lispLibs ++ javaLibs ++ nativeLibs;
               meta = (args.meta or { }) // {
-                maintainers = args.meta.maintainers or lib.teams.lisp.members;
+                maintainers = args.meta.maintainers or [ ];
+                teams = args.meta.teams or [ lib.teams.lisp ];
               };
             }
           )

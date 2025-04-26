@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/conmon";
     description = "OCI container runtime monitor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
     platforms = platforms.linux;
     mainProgram = "conmon";
   };

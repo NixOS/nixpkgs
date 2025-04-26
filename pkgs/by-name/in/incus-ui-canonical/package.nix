@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     description = "Web user interface for Incus";
     homepage = "https://github.com/zabbly/incus-ui-canonical";
     license = lib.licenses.gpl3;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
   };
 }

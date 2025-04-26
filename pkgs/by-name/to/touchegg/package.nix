@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     mainProgram = "touchegg";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }
