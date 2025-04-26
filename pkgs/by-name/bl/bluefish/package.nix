@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  # infb_gui.c:143:61: error: implicit declaration of function 'xmlNanoHTTPFetch' [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   meta = {
     description = "Powerful editor targeted towards programmers and webdevelopers";
     homepage = "https://bluefish.openoffice.nl/";
