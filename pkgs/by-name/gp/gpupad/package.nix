@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpupad";
-  version = "2.4.0";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "gpupad";
     tag = finalAttrs.version;
-    hash = "sha256-yCoLvocfqYOwbsGn2r3+2iThDZCkRAUrNI71fIH7XXU=";
+    hash = "sha256-ajT4mctCfNJVUfhVsHzEoz2M9HjMJ6uNgf1hieDjhtY=";
     fetchSubmodules = true;
   };
 
