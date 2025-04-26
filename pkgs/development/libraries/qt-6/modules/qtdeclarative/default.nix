@@ -21,12 +21,13 @@ qtModule {
   ];
   strictDeps = true;
 
-  patches = [
-    # prevent headaches from stale qmlcache data
-    ./disable-disk-cache.patch
-    # add version specific QML import path
-    ./use-versioned-import-path.patch
-  ]
+  patches =
+    [
+      # prevent headaches from stale qmlcache data
+      ./disable-disk-cache.patch
+      # add version specific QML import path
+      ./use-versioned-import-path.patch
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # The build attempts to sign qmltestrunner, which may already be signed, causing it to fail unless forced.
       (fetchpatch2 {
