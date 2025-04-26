@@ -24,7 +24,6 @@
   openssl,
   pythonSupport ? false,
   python310,
-  ...
 }:
 
 stdenv.mkDerivation rec {
