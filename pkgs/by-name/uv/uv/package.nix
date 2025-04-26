@@ -20,17 +20,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.6.16";
+  version = "0.6.17";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-udghrau7ZpLngjwL4mOMvUJT8G609HuBL51Te+h66YY=";
+    hash = "sha256-Cbk7doAz7meokxUhDMMMB21t6WMr2s+ypvYbVEmmGM8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1eq5gsHcf8iAR2z89WnZNdcoToE0Cpl4HgsiffSg1wk=";
+  cargoHash = "sha256-jruywuF3CEfBV58QKq/22Y7ueXoEKQWPJ0DmAdo7hrY=";
 
   buildInputs = [
     rust-jemalloc-sys
