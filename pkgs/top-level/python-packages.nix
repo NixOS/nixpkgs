@@ -4122,6 +4122,8 @@ self: super: with self; {
 
   dotwiz = callPackage ../development/python-modules/dotwiz { };
 
+  download = callPackage ../development/python-modules/download { };
+
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
   dparse = callPackage ../development/python-modules/dparse { };
