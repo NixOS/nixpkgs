@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/crun";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
     mainProgram = "crun";
   };
 }

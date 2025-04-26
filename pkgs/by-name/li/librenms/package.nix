@@ -127,7 +127,8 @@ phpPackage.buildComposerProject2 rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    maintainers = with maintainers; [ netali ];
+    teams = [ teams.wdz ];
     platforms = platforms.linux;
   };
 }

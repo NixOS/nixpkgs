@@ -109,15 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://matomo.org/";
     changelog = "https://github.com/matomo-org/matomo/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.all;
-    maintainers =
-      with lib.maintainers;
-      [
-        florianjacob
-        sebbel
-        twey
-        boozedog
-        niklaskorz
-      ]
-      ++ lib.teams.flyingcircus.members;
+    maintainers = with lib.maintainers; [
+      florianjacob
+      sebbel
+      twey
+      boozedog
+      niklaskorz
+    ];
+    teams = [ lib.teams.flyingcircus ];
   };
 })

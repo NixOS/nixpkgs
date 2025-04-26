@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = teams.cosmic.members;
+    teams = [ teams.cosmic ];
     platforms = platforms.linux;
   };
 })

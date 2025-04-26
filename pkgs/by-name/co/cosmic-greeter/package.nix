@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

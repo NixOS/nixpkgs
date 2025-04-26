@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Themes, graphics and icons for LXQt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

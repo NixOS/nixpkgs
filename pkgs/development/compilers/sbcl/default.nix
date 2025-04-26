@@ -287,7 +287,7 @@ stdenv.mkDerivation (self: {
     homepage = "https://sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
     mainProgram = "sbcl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host

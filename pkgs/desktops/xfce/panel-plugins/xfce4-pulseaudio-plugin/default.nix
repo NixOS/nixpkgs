@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Adjust the audio volume of the PulseAudio sound system";
     homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-pulseaudio-plugin";
     license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.xfce.members;
+    teams = [ lib.teams.xfce ];
     platforms = lib.platforms.linux;
   };
 })

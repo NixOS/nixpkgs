@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pantheon-tweaks/pantheon-tweaks";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "pantheon-tweaks";
   };
 }

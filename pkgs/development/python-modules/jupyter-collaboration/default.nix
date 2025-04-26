@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
     changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

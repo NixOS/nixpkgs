@@ -87,6 +87,6 @@ buildGoModule rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
   };
 }

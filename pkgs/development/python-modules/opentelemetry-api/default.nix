@@ -65,7 +65,8 @@ let
       description = "OpenTelemetry Python API";
       changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${src.tag}";
       license = licenses.asl20;
-      maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
+      maintainers = [ maintainers.natsukium ];
+      teams = [ teams.deshaw ];
     };
   };
 in
