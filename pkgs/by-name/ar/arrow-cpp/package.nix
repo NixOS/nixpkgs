@@ -51,9 +51,13 @@
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
+  # Disable also on RiscV
+  # configure: error: cannot determine number of significant virtual address bits
+  enableJemalloc ?
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
-  enableGcs ? !stdenv.hostPlatform.isDarwin,
+  # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
 }:
 
 let
