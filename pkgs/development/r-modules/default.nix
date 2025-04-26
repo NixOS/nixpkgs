@@ -1753,6 +1753,13 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    hypeR = old.hypeR.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace NAMESPACE R/db_msig.R --replace-fail \
+        "msigdbr_show_species" "msigdbr_species"
+      '';
+    });
+
     alcyon = old.alcyon.overrideAttrs (attrs: {
       configureFlags = [
         "--enable-force-openmp"
