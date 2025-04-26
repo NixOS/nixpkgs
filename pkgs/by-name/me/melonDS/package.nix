@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -46,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       SDL2
       enet
-      extra-cmake-modules
       libarchive
       libslirp
       libGL

@@ -25,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     gettext
     go
   ];
 
   buildInputs = [
     fcitx5
-    extra-cmake-modules
   ];
 
   preConfigure = ''
