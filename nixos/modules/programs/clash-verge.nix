@@ -48,6 +48,34 @@
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/clash-verge-service";
           Restart = "on-failure";
+          ProtectSystem = "strict";
+          NoNewPrivileges = true;
+          ProtectHostname = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          SystemCallArchitectures = "native";
+          PrivateTmp = true;
+          PrivateMounts = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          ProtectClock = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          RestrictNamespaces = [ "~user cgroup ipc mnt uts" ];
+          RestrictAddressFamilies = [
+            "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_RAW"
+          ];
+          CapabilityBoundingSet = [
+            "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"
+          ];
+          SystemCallFilter = [
+            "~@aio @chown @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @pkey @privileged @raw-io @reboot @sandbox @setuid @swap @timer"
+          ];
+          SystemCallErrorNumber = "EPERM";
         };
         wantedBy = [ "multi-user.target" ];
       };
