@@ -1,0 +1,13 @@
+diff --git a/commands.c b/commands.c
+index a83f1d5..b3f217a 100644
+--- a/commands.c
++++ b/commands.c
+@@ -152,1 +152,7 @@ build_symlink_name(const char *path_to_bin, const struct cmd_info *cmd)
+-	snprintf(link_name, FILENAME_MAX, "%s/%s", path_to_bin, cmd->name);
++	int result = snprintf(link_name, FILENAME_MAX, "%s/%s", path_to_bin, cmd->name);
++
++	if (result >= FILENAME_MAX) {
++		link_name[FILENAME_MAX - 1] = '\0';
++	} else if (result < 0) {
++		link_name[0] = '\0';
++	}
