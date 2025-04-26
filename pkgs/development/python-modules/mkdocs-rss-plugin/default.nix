@@ -7,6 +7,7 @@
   gitpython,
   jsonfeed,
   mkdocs,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -27,10 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-Qa8EgjucJaxvKivE45kXSUgTx5RnLEpYCNZJRTO2E1Q=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -42,6 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     feedparser
     jsonfeed
+    pytest-cov-stub
     pytestCheckHook
     validator-collection
   ];
