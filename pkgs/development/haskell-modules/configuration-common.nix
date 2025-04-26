@@ -248,20 +248,6 @@ self: super:
     sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
   }) super.weeder;
 
-  # Allow aeson == 2.1.*
-  # https://github.com/hdgarrood/aeson-better-errors/issues/23
-  aeson-better-errors = lib.pipe super.aeson-better-errors [
-    doJailbreak
-    (appendPatches [
-      # https://github.com/hdgarrood/aeson-better-errors/pull/25
-      (fetchpatch {
-        name = "mtl-2-3.patch";
-        url = "https://github.com/hdgarrood/aeson-better-errors/commit/1ec49ab7d1472046b680b5a64ae2930515b47714.patch";
-        hash = "sha256-xuuocWxSoBDclVp0bJ9UrDamVcDVOAFgJIi/un1xBvk=";
-      })
-    ])
-  ];
-
   # Version 2.1.1 is deprecated, but part of Stackage LTS at the moment.
   # https://github.com/commercialhaskell/stackage/issues/7500
   # https://github.com/yesodweb/shakespeare/issues/280
@@ -898,16 +884,6 @@ self: super:
   # Package exists only to be example of documentation, yet it has restrictive
   # "base" dependency.
   haddock-cheatsheet = doJailbreak super.haddock-cheatsheet;
-
-  # https://github.com/Gabriella439/Haskell-MVC-Updates-Library/pull/1
-  mvc-updates = appendPatches [
-    (pkgs.fetchpatch {
-      name = "rename-pretraverse.patch";
-      url = "https://github.com/Gabriella439/Haskell-MVC-Updates-Library/commit/47b31202b761439947ffbc89ec1c6854c1520819.patch";
-      sha256 = "sha256-a6k3lWtXNYUIjWXR+vRAHz2bANq/2eM0F5FLL8Qt2lA=";
-      includes = [ "src/MVC/Updates.hs" ];
-    })
-  ] (doJailbreak super.mvc-updates);
 
   # Too strict bounds on bytestring < 0.12
   # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/issues/18
@@ -2904,14 +2880,6 @@ self: super:
         '';
     }
   ) super.feedback;
-
-  # https://github.com/maralorn/haskell-taskwarrior/pull/12
-  taskwarrior = appendPatches [
-    (fetchpatch {
-      url = "https://github.com/maralorn/haskell-taskwarrior/commit/b846c6ae64e716dca2d44488f60fee3697b5322d.patch";
-      sha256 = "sha256-fwBYBmw9Jva2UEPQ6E/5/HBA8ZDiM7/QQQDBp3diveU=";
-    })
-  ] super.taskwarrior;
 
   testcontainers = lib.pipe super.testcontainers [
     dontCheck # Tests require docker
