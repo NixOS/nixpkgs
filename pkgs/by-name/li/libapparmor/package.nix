@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       ncurses
       which
       dejagnu
+      perl # podchecker
     ]
     ++ lib.optionals withPython [
       python3Packages.setuptools
@@ -62,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3Packages.pythonImportsCheckHook
-    perl
   ];
 
   buildInputs =
