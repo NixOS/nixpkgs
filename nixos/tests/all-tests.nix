@@ -743,12 +743,17 @@ in
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   incron = runTest ./incron.nix;
   incus = recurseIntoAttrs (
-    handleTest ./incus {
+    import ./incus {
+      inherit runTest;
       lts = false;
-      inherit system pkgs;
     }
   );
-  incus-lts = recurseIntoAttrs (handleTest ./incus { inherit system pkgs; });
+  incus-lts = recurseIntoAttrs (
+    import ./incus {
+      inherit runTest;
+      lts = true;
+    }
+  );
   influxdb = runTest ./influxdb.nix;
   influxdb2 = runTest ./influxdb2.nix;
   initrd-luks-empty-passphrase = runTest ./initrd-luks-empty-passphrase.nix;
