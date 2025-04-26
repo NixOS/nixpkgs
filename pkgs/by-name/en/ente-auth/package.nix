@@ -8,6 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  jdk17_headless,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,
@@ -17,14 +18,14 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.3.2";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-/WWodQcMibwXVexI+XbTZYRkIMtfNHk3bJVBPJHcoqI=";
+    hash = "sha256-kM1y3Q5Z8J84qHhki9A+I/uY7xYQNMlfh2ZhxzpUBHM=";
   };
 
   sourceRoot = "${src.name}/auth";
@@ -51,6 +52,12 @@ flutter324.buildFlutterApplication rec {
     webkitgtk_4_0
     sqlite
     libayatana-appindicator
+    # The networking client used by ente-auth (native_dio_adapter)
+    # introduces a transitive dependency on Java, which technically
+    # is only needed for the Android implementation.
+    # Unfortunately, attempts to remove it from the build entirely were
+    # unsuccessful.
+    jdk17_headless # JDK version used by upstream CI
   ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
@@ -84,6 +91,9 @@ flutter324.buildFlutterApplication rec {
 
     # For backwards compatibility
     ln -s $out/bin/enteauth $out/bin/ente_auth
+
+    # Not required at runtime as it's only used on Android
+    rm $out/app/ente-auth/lib/libdartjni.so
   '';
 
   passthru.updateScript = ./update.sh;
