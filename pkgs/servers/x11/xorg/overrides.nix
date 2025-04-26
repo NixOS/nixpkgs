@@ -147,7 +147,6 @@ self: super:
   });
 
   iceauth = addMainProgram super.iceauth { };
-  ico = addMainProgram super.ico { };
 
   mkfontdir = xorg.mkfontscale;
 

@@ -292,6 +292,7 @@ print OUT <<EOF;
   font-encodings,
   font-util,
   gccmakedep,
+  ico,
   imake,
   libfontenc,
   libpciaccess,
@@ -324,6 +325,7 @@ self: with self; {
   inherit
     bdftopcf
     gccmakedep
+    ico
     imake
     libfontenc
     libpciaccess
