@@ -398,6 +398,7 @@ buildStdenv.mkDerivation {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
     ++ lib.optionals crashreporterSupport [
       dump_syms
       patchelf
@@ -573,7 +574,6 @@ buildStdenv.mkDerivation {
       libGL
       libGLU
       libstartup_notification
-      nasm
       perl
       zip
     ]

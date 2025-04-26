@@ -7,12 +7,12 @@
 
 let
   pname = "altus";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchurl {
     name = "altus-${version}.AppImage";
     url = "https://github.com/amanharwara/altus/releases/download/${version}/Altus-${version}.AppImage";
-    hash = "sha256-75mNEXH+C/gRptq3Cx2GUdm3+goDbIvHzpYl0tU3WoU=";
+    hash = "sha256-G0jKBnobMKJWZmLtyYLpdruNxEVGt5rZHPFJYJkY8Y4=";
   };
 
   appimageContents = appimageTools.extractType2 {

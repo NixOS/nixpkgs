@@ -863,7 +863,7 @@ if [ -z "$rollback" ]; then
                 "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
-                in set.${attr:+$attr.}config.system.build.images.$imageVariant.v.passthru.filePath" \
+                in set.${attr:+$attr.}config.system.build.images.$imageVariant.passthru.filePath" \
                 "${extraBuildFlags[@]}" \
                 | jq -r .
             )"

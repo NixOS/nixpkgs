@@ -8,7 +8,7 @@
   python3,
   makeWrapper,
   # Upstream uses EOL Electron 31.  Use next oldest version.
-  electron_33,
+  electron_34,
   vulkan-helper,
   gogdl,
   legendary-heroic,
@@ -17,7 +17,7 @@
 }:
 
 let
-  electron = electron_33;
+  electron = electron_34;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
@@ -53,11 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # set nodedir to prevent node-gyp from downloading headers
-    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${electron.headers}
 
     pnpm --offline electron-vite build
     pnpm --offline electron-builder \

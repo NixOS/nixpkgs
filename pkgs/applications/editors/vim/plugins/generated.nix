@@ -4355,6 +4355,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ecolog-nvim = buildVimPlugin {
+    pname = "ecolog.nvim";
+    version = "2025-04-23";
+    src = fetchFromGitHub {
+      owner = "t3ntxcl3s";
+      repo = "ecolog.nvim";
+      rev = "cfd19e7a8841c538fdb706ee6ba3a22943d45ca6";
+      sha256 = "12mlhmzqgv45v98gi5jvqkn9bkl6nfixlgvb76b6ci6rzdkyxg52";
+    };
+    meta.homepage = "https://github.com/t3ntxcl3s/ecolog.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   edge = buildVimPlugin {
     pname = "edge";
     version = "2025-04-16";
@@ -11828,6 +11841,19 @@ final: prev: {
       sha256 = "04kg7g6v6k6jv2pmapaqvkvf6py1i211l822m3lsvf26jcyfs3ag";
     };
     meta.homepage = "https://github.com/steelsojka/pears.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  peek-nvim = buildVimPlugin {
+    pname = "peek.nvim";
+    version = "2024-04-09";
+    src = fetchFromGitHub {
+      owner = "toppair";
+      repo = "peek.nvim";
+      rev = "5820d937d5414baea5f586dc2a3d912a74636e5b";
+      sha256 = "01bdrk1h1xaq2bbbgwsrb2h2cc9j2d88kjcx2k3p8j8kgk20yql4";
+    };
+    meta.homepage = "https://github.com/toppair/peek.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

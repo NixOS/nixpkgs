@@ -2744,6 +2744,10 @@ in
     ];
   };
 
+  peek-nvim = super.peek-nvim.overrideAttrs {
+    runtimeDeps = [ deno ];
+  };
+
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
       # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)

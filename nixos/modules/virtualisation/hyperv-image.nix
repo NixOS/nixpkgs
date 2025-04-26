@@ -73,15 +73,17 @@ in
       inherit config lib pkgs;
     };
 
-    fileSystems."/" = {
-      device = "/dev/disk/by-label/nixos";
-      autoResize = true;
-      fsType = "ext4";
-    };
+    fileSystems = lib.mkImageMediaOverride {
+      "/" = {
+        device = "/dev/disk/by-label/nixos";
+        autoResize = true;
+        fsType = "ext4";
+      };
 
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-label/ESP";
-      fsType = "vfat";
+      "/boot" = {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+      };
     };
 
     boot.growPartition = true;
