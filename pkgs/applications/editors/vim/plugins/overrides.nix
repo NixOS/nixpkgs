@@ -3871,6 +3871,15 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
+  xmake-nvim = super.xmake-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # attempt to index upvalue 'options' (a nil value)
+      "xmake.action"
+      "xmake.command"
+      "xmake.runner_wrapper"
+    ];
+  };
+
   yanky-nvim = super.yanky-nvim.overrideAttrs {
     nvimSkipModules = [
       # Optional telescope integration

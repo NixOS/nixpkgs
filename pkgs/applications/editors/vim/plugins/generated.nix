@@ -21298,6 +21298,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  xmake-nvim = buildVimPlugin {
+    pname = "xmake.nvim";
+    version = "2025-04-01";
+    src = fetchFromGitHub {
+      owner = "Mythos-404";
+      repo = "xmake.nvim";
+      rev = "4f03aa221ebb462f3ce013fc48d4d32b88b6ded8";
+      sha256 = "0ldrz485r092fd35wqvh8nknv2gslag7wj2v4dichmihn81701ry";
+    };
+    meta.homepage = "https://github.com/Mythos-404/xmake.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   xptemplate = buildVimPlugin {
     pname = "xptemplate";
     version = "2022-09-08";
