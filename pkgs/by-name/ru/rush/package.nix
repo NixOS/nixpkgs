@@ -19,15 +19,20 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ bash ];
 
-  # Make sure that Rush looks for rush.rc in a directory that users can
-  # modify easily.
-  configureFlags = [ "--sysconfdir=/etc" ];
-  # Prevent “make install” from trying to copy something to
-  # /etc/rush.rc.
+  configureFlags = [
+    # Make sure that rushwho can read/write to its database at /var/rush.
+    "--localstatedir=/var"
+
+    # Make sure that rush looks for rush.rc in a directory that users can modify easily.
+    "--sysconfdir=/etc"
+  ];
+
+  # Prevent “make install” from trying to copy something to /etc/rush.rc.
   installFlags = [ "sysconfdir=$(out)/etc" ];
+
   postInstall = ''
     substituteInPlace $out/bin/rush-po \
-      --replace "exec perl" "exec ${lib.getExe perl}"
+      --replace-fail "exec perl" "exec ${lib.getExe perl}"
   '';
 
   doCheck = true;
