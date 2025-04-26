@@ -45,7 +45,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland QT/qml utility apps";
     homepage = "https://github.com/hyprwm/hyprland-qtutils";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
     platforms = lib.platforms.linux;
   };
 })

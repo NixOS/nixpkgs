@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
 })

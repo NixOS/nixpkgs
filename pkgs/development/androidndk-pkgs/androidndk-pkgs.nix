@@ -141,7 +141,7 @@ lib.recurseIntoAttrs rec {
     meta = {
       description = "The Android NDK toolchain, tuned for other platforms";
       license = with lib.licenses; [ unfree ];
-      maintainers = lib.teams.android.members;
+      teams = [ lib.teams.android ];
     };
   };
 

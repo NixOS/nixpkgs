@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     description = "Distributed version control system - with Gitaly patches";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
-    maintainers = lib.teams.gitlab.members;
+    teams = [ lib.teams.gitlab ];
   };
 }

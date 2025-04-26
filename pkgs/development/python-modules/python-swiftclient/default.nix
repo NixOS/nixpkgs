@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Python bindings to the OpenStack Object Storage API";
     mainProgram = "swift";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

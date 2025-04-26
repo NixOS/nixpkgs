@@ -48,6 +48,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       cc-by-sa-40
     ];
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
   };
 })

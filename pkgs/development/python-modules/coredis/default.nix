@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

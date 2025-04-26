@@ -67,7 +67,8 @@ rustPlatform.buildRustPackage rec {
     description = "Language for building concurrent software with confidence";
     homepage = "https://inko-lang.org/";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.feathecutie ] ++ lib.teams.ngi.members;
+    maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "inko";
   };

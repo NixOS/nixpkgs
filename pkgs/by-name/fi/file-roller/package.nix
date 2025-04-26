@@ -70,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Archive manager for the GNOME desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    teams = [
+      teams.gnome
+      teams.pantheon
+    ];
     mainProgram = "file-roller";
   };
 })

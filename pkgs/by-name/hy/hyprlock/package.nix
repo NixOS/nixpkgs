@@ -78,11 +78,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
     license = lib.licenses.bsd3;
-    maintainers =
-      lib.teams.hyprland.members
-      ++ (with lib.maintainers; [
-        iynaix
-      ]);
+    maintainers = with lib.maintainers; [
+      iynaix
+    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprlock";
     platforms = lib.platforms.linux;
   };

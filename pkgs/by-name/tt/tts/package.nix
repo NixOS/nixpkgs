@@ -188,6 +188,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/v${version}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

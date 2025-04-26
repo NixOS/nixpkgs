@@ -37,6 +37,6 @@ buildKodiAddon rec {
     homepage = "http://python-requests.org";
     description = "Python HTTP for Humans";
     license = licenses.asl20;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }
