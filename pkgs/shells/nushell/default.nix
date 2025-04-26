@@ -16,6 +16,7 @@
   testers,
   nushell,
   nix-update-script,
+  curlMinimal,
 }:
 
 let
@@ -58,8 +59,6 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
-
   checkPhase = ''
     runHook preCheck
     (
@@ -75,6 +74,10 @@ rustPlatform.buildRustPackage {
     )
     runHook postCheck
   '';
+
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    curlMinimal
+  ];
 
   passthru = {
     shellPath = "/bin/nu";
