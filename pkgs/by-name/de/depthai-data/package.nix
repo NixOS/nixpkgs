@@ -6,13 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "depthai-data";
-  version = "3.0.0-alpha.14";
+  # DepthAI v3 alpha 15
+  version = "0-unstable-2025-04-21";
 
   src = fetchFromGitHub {
     owner = "phodina";
     repo = "depthai-data";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-myNBYWyQifQf+hyCKpLGS01iW/oRrb5tzW6dQqZbCHg=";
+    rev = "2c7e6a5cf55d95eb94e522a1cd512441524d031c";
+    hash = "sha256-T4qLkmLtQUei509tqTPfnzz8AQRQ1MiHniZzH172im8=";
   };
 
   # No build phase needed, this is just data
