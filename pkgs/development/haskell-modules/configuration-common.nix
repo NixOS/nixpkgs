@@ -1436,22 +1436,7 @@ self: super:
   hjsmin = dontCheck super.hjsmin;
 
   # Remove for hail > 0.2.0.0
-  hail = overrideCabal (drv: {
-    patches = [
-      (fetchpatch {
-        # Relax dependency constraints,
-        # upstream PR: https://github.com/james-preston/hail/pull/13
-        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/13.patch";
-        sha256 = "039p5mqgicbhld2z44cbvsmam3pz0py3ybaifwrjsn1y69ldsmkx";
-      })
-      (fetchpatch {
-        # Relax dependency constraints,
-        # upstream PR: https://github.com/james-preston/hail/pull/16
-        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/16.patch";
-        sha256 = "0dpagpn654zjrlklihsg911lmxjj8msylbm3c68xa5aad1s9gcf7";
-      })
-    ];
-  }) super.hail;
+  hail = doJailbreak super.hail;
 
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
