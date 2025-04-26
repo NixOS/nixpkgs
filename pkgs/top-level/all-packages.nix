@@ -12101,7 +12101,6 @@ with pkgs;
   };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
-  opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
