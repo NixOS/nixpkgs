@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-oa6Lmo2yb66IjtEKkZyJBgM/p7rdvmrKfgNd2rAM/Lk=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "-arch i386 -arch x86_64" ""
+  '';
+
   buildFlags = [ "dist" ];
 
   makeFlags = [
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/igrr/mkspiffs";
     maintainers = with maintainers; [ haslersn ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.all;
     mainProgram = "mkspiffs";
   };
 }
