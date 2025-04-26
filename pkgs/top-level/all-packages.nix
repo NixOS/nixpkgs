@@ -17010,13 +17010,6 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  devilutionx = callPackage ../games/devilutionx {
-    fmt = fmt_9;
-    SDL2_classic = SDL2_classic.override {
-      withStatic = true;
-    };
-  };
-
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
