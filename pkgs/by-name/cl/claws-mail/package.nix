@@ -55,7 +55,7 @@
   enablePluginClamd ? true,
   enablePluginDillo ? true,
   enablePluginFancy ? true,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   enablePluginFetchInfo ? true,
   enablePluginKeywordWarner ? true,
   enablePluginLibravatar ? enablePluginRavatar,
@@ -147,7 +147,7 @@ let
     {
       flags = [ "fancy-plugin" ];
       enabled = enablePluginFancy;
-      deps = [ webkitgtk_4_0 ];
+      deps = [ webkitgtk_4_1 ];
     }
     {
       flags = [ "fetchinfo-plugin" ];

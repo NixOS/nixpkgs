@@ -2,7 +2,7 @@
   lib,
   flutter324,
   fetchFromGitHub,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   sqlite,
   libayatana-appindicator,
   makeDesktopItem,
@@ -48,7 +48,7 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk_4_0
+    webkitgtk_4_1
     sqlite
     libayatana-appindicator
   ];

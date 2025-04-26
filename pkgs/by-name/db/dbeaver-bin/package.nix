@@ -10,7 +10,7 @@
   wrapGAppsHook3,
   gtk3,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   glib-networking,
   override_xmx ? "1024m",
 }:
@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             lib.makeLibraryPath [
               gtk3
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
               glib-networking
             ]
           }"
