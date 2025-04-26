@@ -37,6 +37,7 @@ $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
 $pcMap{"dmx"} = "libdmx";
+$pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
@@ -295,6 +296,7 @@ print OUT <<EOF;
   imake,
   libapplewm,
   libdmx,
+  libfontenc,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -327,6 +329,7 @@ self: with self; {
     ico
     imake
     libdmx
+    libfontenc
     libpciaccess
     libxcb
     libxcvt
