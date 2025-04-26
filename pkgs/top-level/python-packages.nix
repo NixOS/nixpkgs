@@ -7520,6 +7520,8 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+  langchain-anthropic = callPackage ../development/python-modules/langchain-anthropic { };
+
   langchain-aws = callPackage ../development/python-modules/langchain-aws { };
 
   langchain-azure-dynamic-sessions =
