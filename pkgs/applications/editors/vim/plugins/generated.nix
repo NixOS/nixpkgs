@@ -8863,6 +8863,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neomodern-nvim = buildVimPlugin {
+    pname = "neomodern.nvim";
+    version = "2025-04-26";
+    src = fetchFromGitHub {
+      owner = "cdmill";
+      repo = "neomodern.nvim";
+      rev = "1ef8dcde62ff7179c94da8cba9879a5ddd1b4e2d";
+      sha256 = "1cn9227i1pdjd2ljk0nawyma5gaav256nhhf970ibwsgffn6n5d0";
+    };
+    meta.homepage = "https://github.com/cdmill/neomodern.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neomru-vim = buildVimPlugin {
     pname = "neomru.vim";
     version = "2020-02-05";
