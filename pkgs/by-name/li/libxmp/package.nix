@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       over 90 mainstream and obscure module formats including Protracker (MOD),
       Scream Tracker 3 (S3M), Fast Tracker II (XM), and Impulse Tracker (IT).
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
