@@ -127,13 +127,13 @@ in
         "systemd-journal-catalog-update.service"
         "systemd-journald-sync@.service"
       ]
-      ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket")
+      ++ lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket"
       ++ [
         "systemd-journald-dev-log.socket"
         "syslog.socket"
       ];
 
-    systemd.sockets.systemd-journald-audit.wantedBy = [
+    systemd.sockets.systemd-journald-audit.wantedBy = lib.mkIf (!config.boot.isContainer) [
       "systemd-journald.service"
       "sockets.target"
     ];
