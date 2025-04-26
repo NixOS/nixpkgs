@@ -215,25 +215,9 @@ PATH
       omniauth (~> 2.0)
 
 PATH
-  remote: vendor/gems/ruby-saml
-  specs:
-    ruby-saml (1.18.0)
-      nokogiri (>= 1.13.10)
-      rexml
-
-PATH
-  remote: vendor/gems/sidekiq-7.2.4
-  specs:
-    sidekiq (7.2.4)
-      concurrent-ruby (< 2)
-      connection_pool (>= 2.3.0)
-      rack (>= 2.2.4)
-      redis-client (>= 0.19.0)
-
-PATH
   remote: vendor/gems/sidekiq-reliable-fetch
   specs:
-    gitlab-sidekiq-fetcher (0.12.0)
+    gitlab-sidekiq-fetcher (0.12.1)
       json (>= 2.5)
       sidekiq (~> 7.0)
 
@@ -245,7 +229,7 @@ GEM
       nkf
       rexml
     RedCloth (4.3.4)
-    acme-client (2.0.20)
+    acme-client (2.0.21)
       base64 (~> 0.2.0)
       faraday (>= 1.0, < 3.0.0)
       faraday-retry (>= 1.0, < 3.0.0)
@@ -344,7 +328,7 @@ GEM
     asciidoctor-plantuml (0.0.16)
       asciidoctor (>= 2.0.17, < 3.0.0)
     ast (2.4.2)
-    async (2.23.0)
+    async (2.23.1)
       console (~> 1.29)
       fiber-annotation
       io-event (~> 1.9)
@@ -482,7 +466,7 @@ GEM
       git
     css_parser (1.14.0)
       addressable
-    cssbundling-rails (1.4.2)
+    cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.0)
     cvss-suite (3.3.0)
@@ -535,7 +519,7 @@ GEM
       thor (>= 0.19, < 2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
-    devfile (0.1.1)
+    devfile (0.4.0)
     device_detector (1.0.0)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -748,7 +732,7 @@ GEM
       terminal-table (>= 1.5.1)
     gitlab-chronic (0.10.6)
       numerizer (~> 0.2)
-    gitlab-cloud-connector (1.0.0)
+    gitlab-cloud-connector (1.6.0)
       activesupport (~> 7.0)
       jwt (~> 2.9.3)
     gitlab-dangerfiles (4.8.1)
@@ -767,7 +751,7 @@ GEM
       mime-types
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
-    gitlab-glfm-markdown (0.0.28)
+    gitlab-glfm-markdown (0.0.29)
       rb_sys (~> 0.9.109)
     gitlab-kas-grpc (17.9.1)
       grpc (~> 1.0)
@@ -792,12 +776,14 @@ GEM
       activesupport (>= 5.2.0)
       rake (~> 13.0)
       snowplow-tracker (~> 0.8.0)
-    gitlab-secret_detection (0.19.0)
-      grpc (~> 1.63)
+    gitlab-secret_detection (0.23.0)
+      grpc (~> 1.63.0)
       grpc-tools (~> 1.63)
       grpc_reflection (~> 0.1)
       parallel (~> 1)
       re2 (~> 2.7)
+      sentry-ruby (~> 5.22)
+      stackprof (~> 0.2.27)
       toml-rb (~> 2.2)
     gitlab-security_report_schemas (0.1.2.min15.0.0.max15.2.1)
       activesupport (>= 6, < 8)
@@ -952,13 +938,7 @@ GEM
     grape_logging (1.8.4)
       grape
       rack
-    graphlient (0.8.0)
-      faraday (~> 2.0)
-      graphql-client
     graphlyte (1.0.0)
-    graphql-client (0.23.0)
-      activesupport (>= 3.0)
-      graphql (>= 1.13.0)
     graphql-docs (5.0.0)
       commonmarker (~> 0.23, >= 0.23.6)
       escape_utils (~> 1.2)
@@ -1064,7 +1044,7 @@ GEM
       character_set (~> 1.4)
       regexp_parser (~> 2.5)
       regexp_property_values (~> 1.0)
-    json (2.10.1)
+    json (2.10.2)
     json-jwt (1.16.6)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -1120,8 +1100,9 @@ GEM
       railties (>= 6.1)
       rexml
     libyajl2 (2.1.0)
-    license_finder (7.1.0)
+    license_finder (7.2.1)
       bundler
+      csv (~> 3.2)
       rubyzip (>= 1, < 3)
       thor (~> 1.2)
       tomlrb (>= 1.3, < 2.1)
@@ -1226,7 +1207,7 @@ GEM
     nio4r (2.7.0)
     nkf (0.2.0)
     no_proxy_fix (0.1.2)
-    nokogiri (1.18.3)
+    nokogiri (1.18.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     notiffany (0.1.3)
@@ -1290,9 +1271,9 @@ GEM
     omniauth-oauth2-generic (0.2.8)
       omniauth-oauth2 (~> 1.0)
       rake
-    omniauth-saml (2.2.2)
+    omniauth-saml (2.2.3)
       omniauth (~> 2.1)
-      ruby-saml (~> 1.17)
+      ruby-saml (~> 1.18)
     omniauth-shibboleth-redux (2.0.0)
       omniauth (>= 2.0.0)
     omniauth_openid_connect (0.8.0)
@@ -1460,7 +1441,7 @@ GEM
     peek (1.1.0)
       railties (>= 4.0.0)
     pg (1.5.9)
-    pg_query (6.0.0)
+    pg_query (6.1.0)
       google-protobuf (>= 3.25.3)
     plist (3.7.0)
     png_quantizator (0.2.1)
@@ -1503,7 +1484,7 @@ GEM
     pyu-ruby-sasl (0.0.3.3)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.11)
+    rack (2.2.13)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-attack (6.7.0)
@@ -1707,7 +1688,7 @@ GEM
     ruby-fogbugz (0.3.0)
       crack (~> 0.4)
       multipart-post (~> 2.0)
-    ruby-lsp (0.23.10)
+    ruby-lsp (0.23.13)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 4)
@@ -1719,6 +1700,9 @@ GEM
     ruby-magic (0.6.0)
       mini_portile2 (~> 2.8)
     ruby-progressbar (1.11.0)
+    ruby-saml (1.18.0)
+      nokogiri (>= 1.13.10)
+      rexml
     ruby-statistics (4.1.0)
     ruby2_keywords (0.0.5)
     rubyntlm (0.6.3)
@@ -1764,6 +1748,12 @@ GEM
     shellany (0.0.1)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
+    sidekiq (7.3.9)
+      base64
+      connection_pool (>= 2.3.0)
+      logger
+      rack (>= 2.2.4)
+      redis-client (>= 0.22.2)
     sidekiq-cron (1.12.0)
       fugit (~> 1.8)
       globalid (>= 1.0.1)
@@ -1812,7 +1802,7 @@ GEM
     sorbet-runtime (0.5.11647)
     spamcheck (1.3.3)
       grpc (~> 1.63)
-    spring (4.1.0)
+    spring (4.3.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprite-factory (1.7.1)
@@ -1916,11 +1906,12 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
-    undercover (0.6.3)
+    undercover (0.6.4)
+      base64
       bigdecimal
       imagen (>= 0.2.0)
       rainbow (>= 2.1, < 4.0)
-      rugged (>= 0.27, < 1.8)
+      rugged (>= 0.27, < 1.10)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
@@ -2054,7 +2045,7 @@ DEPENDENCIES
   coverband (= 6.1.4)
   creole (~> 0.5.0)
   crystalball (~> 0.7.0)
-  cssbundling-rails (= 1.4.2)
+  cssbundling-rails (= 1.4.3)
   csv_builder!
   cvss-suite (~> 3.3.0)
   database_cleaner-active_record (~> 2.2.0)
@@ -2062,7 +2053,7 @@ DEPENDENCIES
   declarative_policy (~> 1.1.0)
   deprecation_toolkit (~> 1.5.1)
   derailed_benchmarks
-  devfile (~> 0.1.1)
+  devfile (~> 0.4.0)
   device_detector
   devise (~> 4.9.3)
   devise-pbkdf2-encryptable (~> 0.0.0)!
@@ -2108,12 +2099,12 @@ DEPENDENCIES
   gitlab-active-context!
   gitlab-backup-cli!
   gitlab-chronic (~> 0.10.5)
-  gitlab-cloud-connector (~> 1.0.0)
+  gitlab-cloud-connector (~> 1.5)
   gitlab-dangerfiles (~> 4.8.0)
   gitlab-duo-workflow-service-client (~> 0.1)!
   gitlab-experiment (~> 0.9.1)
   gitlab-fog-azure-rm (~> 2.2.0)
-  gitlab-glfm-markdown (~> 0.0.27)
+  gitlab-glfm-markdown (~> 0.0.29)
   gitlab-housekeeper!
   gitlab-http!
   gitlab-kas-grpc (~> 17.9.0.pre.rc2)
@@ -2160,7 +2151,6 @@ DEPENDENCIES
   grape-swagger (~> 2.1.2)
   grape-swagger-entity (~> 0.5.5)
   grape_logging (~> 1.8, >= 1.8.4)
-  graphlient (~> 0.8.0)
   graphlyte (~> 1.0.0)
   graphql (= 2.4.11)!
   graphql-docs (~> 5.0.0)
@@ -2269,7 +2259,7 @@ DEPENDENCIES
   parslet (~> 1.8)
   peek (~> 1.1)
   pg (~> 1.5.6)
-  pg_query (~> 6.0.0)
+  pg_query (~> 6.1.0)
   png_quantizator (~> 0.2.1)
   premailer-rails (~> 1.12.0)
   prometheus-client-mmap (~> 1.2.9)
@@ -2312,7 +2302,7 @@ DEPENDENCIES
   ruby-lsp-rspec (~> 0.1.10)
   ruby-magic (~> 0.6)
   ruby-progressbar (~> 1.10)
-  ruby-saml (~> 1.18.0)!
+  ruby-saml (~> 1.18)
   rubyzip (~> 2.3.2)
   rugged (~> 1.6)
   sanitize (~> 6.0.2)
@@ -2324,7 +2314,7 @@ DEPENDENCIES
   sentry-ruby (~> 5.22.0)
   sentry-sidekiq (~> 5.22.0)
   shoulda-matchers (~> 6.4.0)
-  sidekiq!
+  sidekiq (~> 7.3.9)
   sidekiq-cron (~> 1.12.0)
   sigdump (~> 0.2.4)
   simple_po_parser (~> 1.1.6)
@@ -2335,7 +2325,7 @@ DEPENDENCIES
   snowplow-tracker (~> 0.8.0)
   solargraph (~> 0.47.2)
   spamcheck (~> 1.3.0)
-  spring (~> 4.1.0)
+  spring (~> 4.3.0)
   spring-commands-rspec (~> 1.0.4)
   sprite-factory (~> 1.7)
   sprockets (~> 3.7.0)
@@ -2372,6 +2362,7 @@ DEPENDENCIES
   webrick (~> 1.8.1)
   wikicloth (= 0.8.1)
   yajl-ruby (~> 1.4.3)
+  yard (~> 0.9)
 
 BUNDLED WITH
-   2.5.22
+   2.6.6
