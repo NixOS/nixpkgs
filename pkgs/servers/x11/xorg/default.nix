@@ -3,6 +3,7 @@
   lib,
   bdftopcf,
   font-alias,
+  font-encodings,
   font-util,
   gccmakedep,
   ico,
@@ -85,6 +86,7 @@ self: with self; {
     xwininfo
     xwud
     ;
+  encodings = font-encodings;
   fontalias = font-alias;
   fontutil = font-util;
   libAppleWM = libapplewm;
@@ -232,41 +234,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  encodings = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "encodings";
-      version = "1.1.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/encodings-1.1.0.tar.xz";
-        sha256 = "0xg99nmpvik6vaz4h03xay7rx0r3bf5a8azkjlpa3ksn2xi3rwcz";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        mkfontscale
-      ];
-      buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];

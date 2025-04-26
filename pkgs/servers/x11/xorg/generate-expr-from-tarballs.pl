@@ -296,6 +296,7 @@ print OUT <<EOF;
   lib,
   bdftopcf,
   font-alias,
+  font-encodings,
   font-util,
   gccmakedep,
   ico,
@@ -378,6 +379,7 @@ self: with self; {
     xwininfo
     xwud
     ;
+  encodings = font-encodings;
   fontalias = font-alias;
   fontutil = font-util;
   libAppleWM = libapplewm;
