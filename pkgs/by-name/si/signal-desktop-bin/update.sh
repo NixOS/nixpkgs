@@ -21,11 +21,20 @@ update-source-version signal-desktop-bin "$latestVersion" \
   --system=x86_64-linux \
   --file="$SCRIPT_DIR/signal-desktop.nix"
 
+update-source-version signal-desktop-apple-emoji "$latestVersion" \
+  --system=x86_64-linux \
+  --file="$SCRIPT_DIR/signal-desktop-apple-emoji.nix"
+
 echo "Updating signal-desktop for aarch64-linux"
 update-source-version signal-desktop-bin "$latestVersionAarch64" "" \
   "https://download.copr.fedorainfracloud.org/results/useidel/signal-desktop/fedora-42-aarch64/$(printf "%08d" $latestBuildAarch64)-signal-desktop/signal-desktop-$latestVersionAarch64.fc42.aarch64.rpm" \
   --system=aarch64-linux \
   --file="$SCRIPT_DIR/signal-desktop-aarch64.nix"
+
+update-source-version signal-desktop "$latestVersionAarch64" "" \
+  "https://download.copr.fedorainfracloud.org/results/useidel/signal-desktop/fedora-42-aarch64/$(printf "%08d" $latestBuildAarch64)-signal-desktop/signal-desktop-$latestVersionAarch64.fc42.aarch64.rpm" \
+  --system=aarch64-linux \
+  --file="$SCRIPT_DIR/signal-desktop-aarch64-apple-emoji.nix"
 
 echo "Updating signal-desktop for darwin"
 update-source-version signal-desktop-bin "$latestVersion" \
