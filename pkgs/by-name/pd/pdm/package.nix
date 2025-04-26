@@ -30,7 +30,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.22.3";
+  version = "2.24.1";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -39,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-+qUvVQJO/xfBZJuMBezu/LdKhKag1BCQ3To2qFXiOzY=";
+    hash = "sha256-YChgPJmHWJ4tftosa24SKB0J7uV/zR6VWX18poEEsLY=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -73,6 +73,7 @@ python.pkgs.buildPythonApplication rec {
       tomlkit
       truststore
       unearth
+      id
       virtualenv
     ]
     ++ httpx.optional-dependencies.socks;
@@ -124,6 +125,9 @@ python.pkgs.buildPythonApplication rec {
     "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
     "test_build_distributions"
     "test_init_project_respect"
+    "test_use_python_write_file_multiple_versions"
+    "test_repository_get_token_from_oidc"
+    "test_repository_get_token_misconfigured_github"
   ];
 
   __darwinAllowLocalNetworking = true;
