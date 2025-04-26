@@ -1982,7 +1982,7 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
-  bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
+  bat-extras = recurseIntoAttrs (lib.makeScope newScope (callPackage ../tools/misc/bat-extras { }));
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -3235,14 +3235,6 @@ with pkgs;
 
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
-  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
-
-  inherit (fdbPackages)
-    foundationdb73
-    ;
-
-  foundationdb = foundationdb73;
-
   fuse-ext2 = callPackage ../tools/filesystems/fuse-ext2 { };
 
   fwknop = callPackage ../tools/security/fwknop {
@@ -4207,7 +4199,7 @@ with pkgs;
 
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
 
-  nlopt = callPackage ../development/libraries/nlopt { octave = null; };
+  nlopt = callPackage ../development/libraries/nlopt { };
 
   notation = callPackage ../by-name/no/notation/package.nix {
     buildGoModule = buildGo123Module;
@@ -9677,8 +9669,6 @@ with pkgs;
   };
 
   mlt = callPackage ../development/libraries/mlt { };
-
-  mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
 
   mpeg2dec = libmpeg2;
 

@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.8.0";
+  version = "8.8.1";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-54UOXEH3DxT1P/CRi09gEoq9si+x/1GHFuWRIyEvz3E=";
+    hash = "sha256-gn2roiwNLUFJsuen2qGPvl4DyE6gPUQibS1Cn7cj2L8=";
   };
 
   patches = [

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-drawio-exporter";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = !isPy3k;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mkdocs_drawio_exporter";
     inherit version;
-    hash = "sha256-7DbJE5UHXRO3kQYM2HuzxQeEhWBKFE06WFSf5GTYGZ8=";
+    hash = "sha256-LbHnV6WLIgab6CrripZnnqc5kkVyF4E+Ls00h1bXjHc=";
   };
 
   build-system = [ poetry-core ];
