@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Library tasked with managing, extracting and handling media art caches";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

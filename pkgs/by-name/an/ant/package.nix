@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = [ ] ++ lib.teams.java.members;
+    teams = [ lib.teams.java ];
     platforms = lib.platforms.all;
   };
 })

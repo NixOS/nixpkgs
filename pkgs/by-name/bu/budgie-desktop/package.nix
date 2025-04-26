@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       cc-by-sa-30
     ];
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "budgie-1.0"

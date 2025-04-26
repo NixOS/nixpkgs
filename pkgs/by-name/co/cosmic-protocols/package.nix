@@ -45,7 +45,7 @@ stdenv.mkDerivation {
       mit
       gpl3Only
     ];
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 }

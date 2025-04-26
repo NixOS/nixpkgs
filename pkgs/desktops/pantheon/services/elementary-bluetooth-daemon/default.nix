@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Send and receive files via bluetooth";
     homepage = "https://github.com/elementary/bluetooth-daemon";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
     mainProgram = "io.elementary.bluetooth";
   };

@@ -363,7 +363,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
 
-    maintainers = teams.xen.members;
+    teams = [ teams.xen ];
     knownVulnerabilities = optional (versionOlder version minSupportedVersion) "The Xen Project Hypervisor version ${version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
 
     mainProgram = "xl";

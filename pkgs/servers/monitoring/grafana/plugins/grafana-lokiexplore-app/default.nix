@@ -7,7 +7,7 @@ grafanaPlugin {
   meta = with lib; {
     description = "The Grafana Logs Drilldown app offers a queryless experience for browsing Loki logs without the need for writing complex queries.";
     license = licenses.agpl3Only;
-    maintainers = lib.teams.fslabs.members;
+    teams = [ lib.teams.fslabs ];
     platforms = platforms.unix;
   };
 }

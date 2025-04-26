@@ -129,6 +129,6 @@ buildPythonPackage rec {
     mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
-    maintainers = teams.golang.members;
+    teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };
