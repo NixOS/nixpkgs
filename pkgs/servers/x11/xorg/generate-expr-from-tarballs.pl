@@ -289,6 +289,7 @@ print OUT <<EOF;
   lib,
   bdftopcf,
   font-alias,
+  font-encodings,
   font-util,
   gccmakedep,
   imake,
@@ -338,6 +339,7 @@ self: with self; {
     xorgproto
     xtrans
     ;
+  encodings = font-encodings;
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
