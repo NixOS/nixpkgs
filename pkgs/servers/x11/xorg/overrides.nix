@@ -476,7 +476,6 @@ self: super:
     };
   });
 
-  mkfontscale = addMainProgram super.mkfontscale { };
   oclock = addMainProgram super.oclock { };
   smproxy = addMainProgram super.smproxy { };
   transset = addMainProgram super.transset { };

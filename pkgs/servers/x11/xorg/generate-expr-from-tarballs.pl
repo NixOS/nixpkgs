@@ -304,6 +304,7 @@ print OUT <<EOF;
   lndir,
   luit,
   makedepend,
+  mkfontscale,
   pixman,
   sessreg,
   util-macros,
@@ -330,6 +331,7 @@ self: with self; {
     lndir
     luit
     makedepend
+    mkfontscale
     pixman
     sessreg
     xbitmaps
