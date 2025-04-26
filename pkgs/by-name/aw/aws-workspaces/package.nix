@@ -1,6 +1,4 @@
 {
-  stdenv,
-  lib,
   callPackage,
   writeShellApplication,
   buildFHSEnv,
@@ -46,19 +44,18 @@ buildFHSEnv {
 
   includeClosures = true;
 
-  targetPkgs =
-    pkgs: with pkgs; [
-      workspacesclient
-      custom_lsb_release
-      webkitgtk_4_1
-      gtk3
-      pango
-      atk
-      cairo
-      gdk-pixbuf
-      protobufc
-      cyrus_sasl
-    ];
+  targetPkgs = pkgs: [
+    workspacesclient
+    custom_lsb_release
+    webkitgtk_4_1
+    gtk3
+    pango
+    atk
+    cairo
+    gdk-pixbuf
+    protobufc
+    cyrus_sasl
+  ];
 
   extraBwrapArgs = [
     # provide certificates where Debian-style OpenSSL can find them
@@ -68,6 +65,8 @@ buildFHSEnv {
   # expected executable doesn't match the name of this package
   extraInstallCommands = ''
     mv $out/bin/${pname} $out/bin/workspacesclient
+
+    ln -s ${workspacesclient}/share $out/
   '';
 
   meta = workspacesclient.meta;
