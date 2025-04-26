@@ -515,7 +515,6 @@ python.pkgs.buildPythonApplication rec {
       pytest-aiohttp
       pytest-freezer
       pytest-mock
-      pytest-rerunfailures
       pytest-socket
       pytest-timeout
       pytest-unordered
@@ -540,9 +539,6 @@ python.pkgs.buildPythonApplication rec {
   pytestFlagsArray = [
     # assign tests grouped by file to workers
     "--dist loadfile"
-    # retry racy tests that end in "RuntimeError: Event loop is closed"
-    "--reruns 3"
-    "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
     # AssertionError: assert 1 == 0
