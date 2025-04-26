@@ -1,7 +1,7 @@
 {
   lib,
-  fetchurl,
   stdenv,
+  fetchurl,
   gettext,
   pkg-config,
   glib,
@@ -10,19 +10,18 @@
   libSM,
   libICE,
   which,
-  IOKit,
   copyDesktopItems,
   makeDesktopItem,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gkrellm";
-  version = "2.3.11";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "http://gkrellm.srcbox.net/releases/gkrellm-${version}.tar.bz2";
-    sha256 = "01lccz4fga40isv09j8rjgr0qy10rff9vj042n6gi6gdv4z69q0y";
+    url = "http://gkrellm.srcbox.net/releases/gkrellm-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-b4NmV2C5Nq1LVfkYKx7HYB+vOKDyXqHkvdyZZQiPAy0=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
     which
     wrapGAppsHook3
   ];
+
   buildInputs = [
     gettext
     glib
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libX11
     libSM
     libICE
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -53,12 +53,11 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "STRIP=-s" ];
-  installFlags = [ "DESTDIR=$(out)" ];
 
-  # This icon is used by the desktop file.
-  postInstall = ''
-    install -Dm444 -T src/icon.xpm $out/share/pixmaps/gkrellm.xpm
-  '';
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX=''"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -75,16 +74,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Themeable process stack of system monitors";
     longDescription = ''
       GKrellM is a single process stack of system monitors which
       supports applying themes to match its appearance to your window
       manager, Gtk, or any other theme.
     '';
-
     homepage = "http://gkrellm.srcbox.net";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})
