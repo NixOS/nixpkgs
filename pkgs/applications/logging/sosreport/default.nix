@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Unified tool for collecting system logs and other debug information";
     homepage = "https://github.com/sosreport/sos";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }
