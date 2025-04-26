@@ -3017,8 +3017,8 @@ let
         mktplcRef = {
           name = "asn1js";
           publisher = "lapo";
-          version = "0.2.1";
-          hash = "sha256-/75tsueW1PQIHN6YOLajREcMbRnzxzBIGnd7LGAxwBs=";
+          version = "0.2.2";
+          hash = "sha256-U1mvxDqyNbTalKgxtCLxLOMT3ZxVGC2KXWW47khtQKA=";
         };
         meta = {
           description = "Decode ASN.1 content inside VSCode";
