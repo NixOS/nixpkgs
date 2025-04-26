@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  go_1_24,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
@@ -13,7 +12,7 @@
   withHsm ? stdenvNoCC.hostPlatform.isLinux,
 }:
 
-buildGoModule.override { go = go_1_24; } (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "openbao";
   version = "2.2.1";
 
