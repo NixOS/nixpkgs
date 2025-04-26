@@ -1,0 +1,52 @@
+From 60b2032b96fc185b37fb0f2152e834efb2edad6e Mon Sep 17 00:00:00 2001
+From: Christos Zoulas <christos@zoulas.com>
+Date: Thu, 5 Dec 2024 19:41:12 +0000
+Subject: [PATCH] PR/571: jschleus: Some zip files are misclassified as data
+
+---
+ magic/Magdir/archive | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/magic/Magdir/archive b/magic/Magdir/archive
+index e6ff4570a..e560523cb 100644
+--- a/magic/Magdir/archive
++++ b/magic/Magdir/archive
+@@ -1795,6 +1795,17 @@
+ !:ext zip/cbz
+ 
+ 
++# Generic zip archives (Greg Roelofs, c/o zip-bugs@wkuvx1.wku.edu)
++#   Next line excludes specialized formats:
++0	name	zipgeneric
++>4	beshort		x			Zip archive data, at least
++!:mime	application/zip
++>4	use		zipversion
++>4	beshort		x			to extract
++>8	beshort		x			\b, compression method=
++>8	use		zipcompression
++>0x161	string		WINZIP		\b, WinZIP self-extracting
++
+ 0	string		PK\003\004
+ !:strength +1
+ # IOS/IPadOS IPA file (Zip archive)
+@@ -2132,17 +2143,11 @@
+ >>>>>>(-6.l)	search/9000	kmp.json	Keyman Compiled Package File
+ !:mime	application/vnd.keyman.kmp+zip
+ !:ext kmp
++>>>>>+4	default		x
++>>>>>>0	use		zipgeneric
+ 
+-# Generic zip archives (Greg Roelofs, c/o zip-bugs@wkuvx1.wku.edu)
+-#   Next line excludes specialized formats:
+ >>>>+4	default		x
+->>>>>4	beshort		x			Zip archive data, at least
+-!:mime	application/zip
+->>>>>4	use		zipversion
+->>>>>4	beshort		x			to extract
+->>>>>8	beshort		x			\b, compression method=
+->>>>>8	use		zipcompression
+->>>>>0x161	string		WINZIP		\b, WinZIP self-extracting
++>>>>>0	use		zipgeneric
+ 
+ # Zip archives (Greg Roelofs, c/o zip-bugs@wkuvx1.wku.edu)
+ 0	string		PK\005\006	Zip archive data (empty)
