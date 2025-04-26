@@ -8,4 +8,4 @@ NODE_ENV=production
 [[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
 
 export RELEASE NODE_ENV
-exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/server.js"
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/web/apps/web/server.js"

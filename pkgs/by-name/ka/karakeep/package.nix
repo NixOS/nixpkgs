@@ -9,6 +9,7 @@
   srcOnly,
   removeReferencesTo,
   pnpm_9,
+  ncc,
 }:
 let
   pnpm = pnpm_9;
@@ -35,15 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    pnpm.configHook
+
     python3
     nodejs
     node-gyp
-    pnpm.configHook
+    ncc
   ];
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version;
-
-    # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-patched-source";
       inherit (finalAttrs) src patches;
@@ -51,31 +53,37 @@ stdenv.mkDerivation (finalAttrs: {
         cp -pr --reflink=auto -- . $out
       '';
     };
-
     hash = "sha256-HZb11CAbnlGSmP/Gxyjncd/RuIWkPv3GvwYs9QZ12Ss=";
   };
+
   buildPhase = ''
-    runHook preBuild
-
-    # Based on matrix-appservice-discord
-    pushd node_modules/better-sqlite3
-    npm run build-release --offline "--nodedir=${srcOnly nodejs}"
-    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs}" {} \;
-    popd
-
     export CI=true
+    export NEXT_TELEMETRY_DISABLED=1
+    export PUPPETEER_SKIP_DOWNLOAD=true
 
-    echo "Compiling apps/web..."
-    pushd apps/web
-    pnpm run build
-    popd
+    (
+      # Based on matrix-appservice-discord
+      cd node_modules/better-sqlite3
+      npm run build-release --offline "--nodedir=${srcOnly nodejs}"
+      find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs}" {} \;
+    )
 
-    echo "Building apps/cli"
-    pushd apps/cli
-    pnpm run build
-    popd
+    ( cd apps/web; pnpm run build )
+    ( cd apps/cli; pnpm run build )
+    ( cd packages/db; ncc build migrate.ts -o ./db_migrations )
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    # Remove dev dependencies
+    pnpm --ignore-scripts --prod prune
+
+    # Remove large dependencies that are not necessary during runtime
+    rm -rf node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist,@hoarder/prettier-config}
+
+    # Remove broken symlinks
+    find . -type l ! -exec test -e {} \; -delete
   '';
 
   installPhase = ''
@@ -84,19 +92,29 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/doc/karakeep
     cp README.md LICENSE $out/share/doc/karakeep
 
-    # Copy necessary files into lib/karakeep while keeping the directory structure
-    LIB_TO_COPY="node_modules apps/web/.next/standalone apps/cli/dist apps/workers packages/db packages/shared packages/trpc"
     KARAKEEP_LIB_PATH="$out/lib/karakeep"
-    for DIR in $LIB_TO_COPY; do
-      mkdir -p "$KARAKEEP_LIB_PATH/$DIR"
-      cp -a $DIR/{.,}* "$KARAKEEP_LIB_PATH/$DIR"
-      chmod -R u+w "$KARAKEEP_LIB_PATH/$DIR"
-    done
+    mkdir -p "$KARAKEEP_LIB_PATH"
 
-    # NextJS requires static files are copied in a specific way
+    # Shared node_modules (needed for Workers)
+    cp -a ./node_modules "$KARAKEEP_LIB_PATH/node_modules"
+    chmod -R u+w "$KARAKEEP_LIB_PATH/node_modules"
+
+    # Workers
+    cp -a ./apps/workers "$KARAKEEP_LIB_PATH/workers"
+    chmod -R u+w "$KARAKEEP_LIB_PATH/workers"
+
+    # Migrations
+    mv ./packages/db/db_migrations "$KARAKEEP_LIB_PATH/db_migrations"
+
+    # Web
     # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output#automatically-copying-traced-files
-    cp -r ./apps/web/public "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/"
-    cp -r ./apps/web/.next/static "$KARAKEEP_LIB_PATH/apps/web/.next/standalone/apps/web/.next/"
+    mv ./apps/web/.next/standalone "$KARAKEEP_LIB_PATH/web"
+    cp -r ./apps/web/public "$KARAKEEP_LIB_PATH/web/apps/web/"
+    cp -r ./apps/web/.next/static "$KARAKEEP_LIB_PATH/web/apps/web/.next/"
+
+    # CLI
+    mkdir -p "$KARAKEEP_LIB_PATH/cli"
+    mv apps/cli/dist/index.mjs "$KARAKEEP_LIB_PATH/cli/index.mjs"
 
     # Copy and patch helper scripts
     for HELPER_SCRIPT in ${./helpers}/*; do
@@ -118,9 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    # Remove large dependencies that are not necessary during runtime
-    rm -rf $out/lib/karakeep/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
-
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
