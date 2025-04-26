@@ -39,6 +39,8 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"xbitmaps"} = "xbitmaps";
+$pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -268,8 +270,13 @@ print OUT <<EOF;
   gccmakedep,
   libpciaccess,
   libpthread-stubs,
+  libxcvt,
   luit,
+  makedepend,
   pixman,
+  util-macros,
+  xbitmaps,
+  xcb-proto,
 }:
 
 self: with self; {
@@ -277,12 +284,17 @@ self: with self; {
   inherit
     gccmakedep
     libpciaccess
+    libxcvt
     luit
+    makedepend
     pixman
+    xbitmaps
     ;
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
+  utilmacros = util-macros;
+  xcbproto = xcb-proto;
 
 EOF
 
