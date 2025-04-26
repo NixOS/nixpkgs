@@ -6223,6 +6223,8 @@ with pkgs;
       lldb_20 = llvmPackages_20.lldb;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
+
+      mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_12
     llvmPackages_13
@@ -6247,6 +6249,7 @@ with pkgs;
     lldb_20
     llvm_20
     bolt_20
+    mkLLVMPackages
     ;
 
   lorri = callPackage ../tools/misc/lorri { };
