@@ -1,55 +1,50 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+  runTest,
   lts ? true,
   ...
 }:
 let
-  incusTest = import ./incus-tests.nix;
+  incusTest =
+    config:
+    runTest {
+      imports = [
+        ./incus-tests-module.nix
+        ./incus-tests.nix
+      ];
+
+      tests.incus = {
+        inherit lts;
+      }
+      // config;
+    };
 in
 {
-  all = incusTest {
-    inherit lts pkgs system;
-    allTests = true;
-  };
-
-  container = incusTest {
-    inherit lts pkgs system;
-    instanceContainer = true;
-  };
-
-  lvm = incusTest {
-    inherit lts pkgs system;
-    storageLvm = true;
-  };
-
-  lxd-to-incus = import ./lxd-to-incus.nix {
-    inherit lts pkgs system;
-  };
-
-  openvswitch = incusTest {
-    inherit lts pkgs system;
-    networkOvs = true;
-  };
-
-  ui = import ./ui.nix {
-    inherit lts pkgs system;
-  };
-
-  virtual-machine = incusTest {
-    inherit lts pkgs system;
-    instanceVm = true;
-  };
-
-  zfs = incusTest {
-    inherit lts pkgs system;
-    storageZfs = true;
-  };
+  all = incusTest { all = true; };
 
   appArmor = incusTest {
-    inherit lts pkgs system;
+    all = true;
     appArmor = true;
-    allTests = true;
   };
+
+  container = incusTest { instance.container = true; };
+
+  lvm = incusTest { storage.lvm = true; };
+
+  lxd-to-incus = runTest {
+    imports = [ ./lxd-to-incus.nix ];
+
+    _module.args = { inherit lts; };
+  };
+
+  openvswitch = incusTest { network.ovs = true; };
+
+  ui = runTest {
+    imports = [ ./ui.nix ];
+
+    _module.args = { inherit lts; };
+  };
+
+  virtual-machine = incusTest { instance.virtual-machine = true; };
+
+  zfs = incusTest { storage.zfs = true; };
 }
