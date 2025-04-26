@@ -318,6 +318,7 @@ print OUT <<EOF;
 {
   lib,
   bdftopcf,
+  font-adobe-75dpi,
   font-alias,
   font-bh-ttf,
   font-bh-type1,
@@ -433,6 +434,7 @@ self: with self; {
     xwud
     ;
   encodings = font-encodings;
+  fontadobe75dpi = font-adobe-75dpi;
   fontalias = font-alias;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;

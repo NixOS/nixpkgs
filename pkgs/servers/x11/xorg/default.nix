@@ -2,6 +2,7 @@
 {
   lib,
   bdftopcf,
+  font-adobe-75dpi,
   font-alias,
   font-bh-ttf,
   font-bh-type1,
@@ -117,6 +118,7 @@ self: with self; {
     xwud
     ;
   encodings = font-encodings;
+  fontadobe75dpi = font-adobe-75dpi;
   fontalias = font-alias;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
@@ -310,47 +312,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/font/font-adobe-100dpi-1.0.4.tar.xz";
         sha256 = "1kwwbaiqnfm3pcysy9gw0g9xhpgmhjcd6clp7zajhqq5br2gyymn";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontadobe75dpi = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-adobe-75dpi";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-adobe-75dpi-1.0.4.tar.xz";
-        sha256 = "04drk4wi176524lxjwfrnkr3dwz1hysabqfajpj6klfypqnsd08j";
       };
       hardeningDisable = [
         "bindnow"
