@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "junction";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
     rev = "v${version}";
-    hash = "sha256-0zY6Dp0aKHtBHSTiGbI5o6876BsARbo8/BbArl0RaMY=";
+    hash = "sha256-gnFig8C46x73gAUl9VVx3Y3hrhEVeP/DvaYHYuv9RTg=";
     fetchSubmodules = true;
   };
 

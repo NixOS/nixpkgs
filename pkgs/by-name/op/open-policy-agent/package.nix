@@ -14,13 +14,13 @@ assert
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    hash = "sha256-9pLySzYfLyRcbhKz+zusBFHNVnhtGyqlsrNr1AzDQx0=";
+    hash = "sha256-wWxWpJSDOaZLJ7ULdAzPFJ9YNXX3FyQRod2roaLsuis=";
   };
 
   vendorHash = null;
@@ -43,9 +43,24 @@ buildGoModule rec {
     ) "opa_wasm"
   );
 
-  checkFlags = lib.optionals (!enableWasmEval) [
-    "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
-  ];
+  checkFlags =
+    let
+      skippedTests =
+        [
+          # Skip tests that require network, not available in the nix sandbox
+          "TestInterQueryCache_ClientError"
+          "TestIntraQueryCache_ClientError"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # Skip tests that require network, not available in the darwin sandbox
+          "TestHTTPSClient"
+          "TestHTTPSNoClientCerts"
+        ]
+        ++ lib.optionals (!enableWasmEval) [
+          "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+        ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck =
     ''
@@ -83,6 +98,9 @@ buildGoModule rec {
 
     runHook postInstallCheck
   '';
+
+  # Required for tests that need networking
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     mainProgram = "opa";
