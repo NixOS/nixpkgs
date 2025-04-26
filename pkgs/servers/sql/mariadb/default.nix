@@ -369,7 +369,6 @@ let
     };
 in
 self: {
-  mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'.";
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
