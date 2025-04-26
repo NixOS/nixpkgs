@@ -188,6 +188,13 @@ Whether the build result should be allowed to contain references to the Go tool 
 
 Defaults to `false`
 
+### `goSum` {#var-go-goSum}
+
+Specifies the contents of the `go.sum` file and triggers rebuilds when it changes. This helps combat inconsistent dependency errors on `go.sum` changes.
+
+Defaults to `null`
+
+
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 
 Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation.
