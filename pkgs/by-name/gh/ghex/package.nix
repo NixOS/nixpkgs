@@ -88,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ghex";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

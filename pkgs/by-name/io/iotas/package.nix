@@ -75,6 +75,7 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "iotas";
-    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ zendo ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

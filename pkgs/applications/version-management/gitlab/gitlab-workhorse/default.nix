@@ -31,7 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = teams.gitlab.members;
+    teams = [ teams.gitlab ];
     license = licenses.mit;
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kimwalisch/primesieve/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
     mainProgram = "primesieve";
-    maintainers = lib.teams.sage.members;
+    teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
 })

@@ -603,7 +603,7 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
     platforms = platforms.linux;
     mainProgram = "hass";
   };

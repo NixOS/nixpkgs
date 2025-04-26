@@ -32,6 +32,6 @@ buildPecl {
     description = "Coroutine-based concurrency library for PHP";
     homepage = "https://www.swoole.com";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

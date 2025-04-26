@@ -33,7 +33,7 @@ let
             homepage
             license
             changelog
-            maintainers
+            teams
             platforms
             ;
           description = "PL/Perl - Perl Procedural Language";

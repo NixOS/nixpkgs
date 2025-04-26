@@ -90,6 +90,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/python-mistralclient/";
     license = licenses.asl20;
     mainProgram = "mistral";
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

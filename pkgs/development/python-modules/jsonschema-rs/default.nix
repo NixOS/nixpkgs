@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Stranger6667/jsonschema/tree/master/crates/jsonschema-py";
     changelog = "https://github.com/Stranger6667/jsonschema/blob/python-v${version}/crates/jsonschema-py/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CAS for polynomial computations";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     # 32 bit x86 fails with some link error: `undefined reference to `__divmoddi4@GCC_7.0.0'`
     # https://www.singular.uni-kl.de:8002/trac/ticket/837
     platforms = subtractLists platforms.i686 platforms.unix;

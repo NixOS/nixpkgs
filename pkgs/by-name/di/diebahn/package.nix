@@ -88,12 +88,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
     mainProgram = "diebahn";
-    maintainers =
-      with lib.maintainers;
-      [
-        dotlambda
-        lilacious
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      lilacious
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

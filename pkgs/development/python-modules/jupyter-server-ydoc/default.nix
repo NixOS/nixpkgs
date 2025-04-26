@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Jupyter-server extension integrating collaborative shared models";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-server-ydoc";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

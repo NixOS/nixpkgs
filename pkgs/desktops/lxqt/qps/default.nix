@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qps";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux; # does not build on darwin
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

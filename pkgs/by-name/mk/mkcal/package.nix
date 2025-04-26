@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/sailfishos/mkcal/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "mkcaltool";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "libmkcal-qt5"

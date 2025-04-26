@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";
     homepage = "https://developer.nvidia.com/dcgm";
     license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
     mainProgram = "dcgmi";
     platforms = platforms.linux;
   };

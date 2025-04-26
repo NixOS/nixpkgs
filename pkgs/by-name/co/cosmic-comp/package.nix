@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.cosmic.members;
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

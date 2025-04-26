@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/hyprland-protocols";
     description = "Wayland protocol extensions for Hyprland";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
     platforms = lib.platforms.linux;
   };
 })

@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Settings Daemon for the COSMIC Desktop Environment";
     mainProgram = "cosmic-settings-daemon";
     license = licenses.gpl3Only;
-    maintainers = teams.cosmic.members;
+    teams = [ teams.cosmic ];
     platforms = platforms.linux;
   };
 })

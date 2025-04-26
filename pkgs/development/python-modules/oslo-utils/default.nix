@@ -101,6 +101,6 @@ buildPythonPackage rec {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -25,6 +25,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = teams.gitlab.members;
+    teams = [ teams.gitlab ];
   };
 }

@@ -631,12 +631,10 @@ stdenv.mkDerivation (
     meta = {
       homepage = "http://haskell.org/ghc";
       description = "Glasgow Haskell Compiler";
-      maintainers =
-        with lib.maintainers;
-        [
-          guibou
-        ]
-        ++ lib.teams.haskell.members;
+      maintainers = with lib.maintainers; [
+        guibou
+      ];
+      teams = [ lib.teams.haskell ];
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;

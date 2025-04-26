@@ -52,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://store.steampowered.com/";
     license = licenses.unfreeRedistributable;
-    maintainers = lib.teams.steam.members ++ [ lib.maintainers.jagajaga ];
+    maintainers = [ lib.maintainers.jagajaga ];
+    teams = [ lib.teams.steam ];
     mainProgram = "steam";
   };
 })

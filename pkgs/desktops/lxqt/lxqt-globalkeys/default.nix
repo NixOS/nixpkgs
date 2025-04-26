@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "LXQt service for global keyboard shortcuts registration";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

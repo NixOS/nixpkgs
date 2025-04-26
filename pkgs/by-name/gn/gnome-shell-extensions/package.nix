@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Modify and extend GNOME Shell functionality and behavior";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

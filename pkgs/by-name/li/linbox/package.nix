@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "C++ library for exact, high-performance linear algebra";
     mainProgram = "linbox-config";
     license = licenses.lgpl21Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
     homepage = "https://linalg.org/";
   };
