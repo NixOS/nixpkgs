@@ -7761,7 +7761,6 @@ with pkgs;
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gradle-packages = import ../development/tools/build-managers/gradle {
     inherit
-      jdk11
       jdk17
       jdk21
       jdk23
@@ -15783,13 +15782,6 @@ with pkgs;
   deliantra-data = callPackage ../games/deliantra/data.nix { };
 
   ddnet-server = ddnet.override { buildClient = false; };
-
-  devilutionx = callPackage ../games/devilutionx {
-    fmt = fmt_9;
-    SDL2_classic = SDL2_classic.override {
-      withStatic = true;
-    };
-  };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
