@@ -386,7 +386,6 @@ rec {
         uclibceabi
         uclibceabihf
       ];
-    isLLVMLibc = [ { abi = abis.llvm; } ];
 
     isEfi = [
       {

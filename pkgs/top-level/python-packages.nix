@@ -632,6 +632,8 @@ self: super: with self; {
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
+  ament-package = callPackage ../development/python-modules/ament-package { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
@@ -1755,6 +1757,8 @@ self: super: with self; {
   };
 
   beniget = callPackage ../development/python-modules/beniget { };
+
+  benqprojector = callPackage ../development/python-modules/benqprojector { };
 
   bentoml = callPackage ../development/python-modules/bentoml { };
 
@@ -2961,6 +2965,8 @@ self: super: with self; {
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csaf-tool = callPackage ../development/python-modules/csaf-tool { };
+
+  csaps = callPackage ../development/python-modules/csaps { };
 
   cson = callPackage ../development/python-modules/cson { };
 
@@ -6808,6 +6814,8 @@ self: super: with self; {
   ipy = callPackage ../development/python-modules/ipy { };
 
   ipycanvas = callPackage ../development/python-modules/ipycanvas { };
+
+  ipydatagrid = callPackage ../development/python-modules/ipydatagrid { };
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
@@ -11489,6 +11497,8 @@ self: super: with self; {
     callPackage ../development/python-modules/proton-vpn-network-manager
       { };
 
+  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
+
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
   protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib {
@@ -11744,6 +11754,8 @@ self: super: with self; {
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
+
+  py2vega = callPackage ../development/python-modules/py2vega { };
 
   py3buddy = callPackage ../development/python-modules/py3buddy { };
 
@@ -12294,7 +12306,6 @@ self: super: with self; {
 
   pygame-ce = callPackage ../development/python-modules/pygame-ce {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
-    SDL2_mixer = pkgs.SDL2_mixer_2_0;
   };
 
   pygame-gui = callPackage ../development/python-modules/pygame-gui { };
@@ -15396,6 +15407,8 @@ self: super: with self; {
   scapy = callPackage ../development/python-modules/scapy {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
+
+  scenedetect = callPackage ../development/python-modules/scenedetect { };
 
   schedule = callPackage ../development/python-modules/schedule { };
 

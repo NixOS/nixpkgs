@@ -85,6 +85,15 @@ let
   };
 
   ovftoolSystem = ovftoolSystems.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
+  # Regrettably, we need to compile this version or else ovftool complains about unknown symbols.
+  ovftool-xercesc = xercesc.overrideAttrs (prev: rec {
+    version = "3.2.5";
+    src = fetchurl {
+      url = lib.replaceStrings [ prev.version ] [ version ] prev.src.url;
+      hash = "sha256-VFz8zmxOdVIHvR8n4xkkHlDjfAwnJQ8RzaEWAY8e8PU=";
+    };
+  });
 in
 stdenv.mkDerivation (final: {
   pname = "ovftool";
@@ -111,7 +120,7 @@ stdenv.mkDerivation (final: {
       icu60
       libiconv
       libxcrypt-legacy
-      xercesc
+      ovftool-xercesc
       zlib
       curl
     ]
@@ -124,10 +133,14 @@ stdenv.mkDerivation (final: {
       libxml2
     ];
 
-  nativeBuildInputs = [
-    unzip
-    makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs =
+    [
+      unzip
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+    ];
 
   postUnpack = ''
     # The linux package wraps ovftool.bin with ovftool. Wrapping
@@ -240,7 +253,7 @@ stdenv.mkDerivation (final: {
       change_args+=(-change @loader_path/lib/libexpat.dylib ${expat}/lib/libexpat.dylib)
       change_args+=(-change @loader_path/lib/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
       change_args+=(-change @loader_path/lib/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
-      change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+      change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${ovftool-xercesc}/lib/libxerces-c.dylib)
 
       # lolwut
       change_args+=(-change @GOBUILD_CAYMAN_CURL_ROOT@/apple_mac64/lib/libcurl.4.dylib ${curl.out}/lib/libcurl.4.dylib)
@@ -255,7 +268,7 @@ stdenv.mkDerivation (final: {
       change_args+=(-change @loader_path/libexpat.dylib ${expat}/lib/libexpat.dylib)
       change_args+=(-change @loader_path/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
       change_args+=(-change @loader_path/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
-      change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+      change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${ovftool-xercesc}/lib/libxerces-c.dylib)
 
       # Add new absolute paths for other libs to all libs
       for lib in $out/lib/*.dylib; do

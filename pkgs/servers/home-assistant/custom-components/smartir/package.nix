@@ -24,8 +24,6 @@ buildHomeAssistantComponent rec {
     distutils
   ];
 
-  dontBuild = true;
-
   postInstall = ''
     cp -r codes $out/custom_components/smartir/
   '';

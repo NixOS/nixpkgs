@@ -2,7 +2,6 @@
   fetchzip,
   lib,
   mecab,
-  nixosTests,
   postgresql,
   postgresqlTestExtension,
   stdenv,

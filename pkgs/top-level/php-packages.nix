@@ -314,6 +314,8 @@ lib.makeScope pkgs.newScope (
 
         ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
 
+        luasandbox = callPackage ../development/php-packages/luasandbox { };
+
         mailparse = callPackage ../development/php-packages/mailparse { };
 
         maxminddb = callPackage ../development/php-packages/maxminddb { };

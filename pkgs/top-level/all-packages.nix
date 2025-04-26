@@ -3742,8 +3742,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  ham = pkgs.perlPackages.ham;
-
   hdf5 = callPackage ../tools/misc/hdf5 {
     fortranSupport = false;
     fortran = gfortran;
@@ -10626,7 +10624,6 @@ with pkgs;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
     enableLto = false;
-    openexr = openexr_2;
   };
 
   opencv4WithoutCuda = opencv4.override {
@@ -13865,8 +13862,6 @@ with pkgs;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
-  dfilemanager = libsForQt5.callPackage ../applications/file-managers/dfilemanager { };
-
   direwolf = callPackage ../applications/radio/direwolf {
     hamlib = hamlib_4;
   };
@@ -14103,6 +14098,7 @@ with pkgs;
     {
       greetd = callPackage ../applications/display-managers/greetd { };
       gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
+      qtgreet = callPackage ../applications/display-managers/greetd/qtgreet.nix { };
       regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };
       tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
       wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
@@ -15481,8 +15477,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-  };
+  openimageio_2 = callPackage ../by-name/op/openimageio/2.nix { };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
@@ -16738,6 +16733,11 @@ with pkgs;
 
   bitcoind = callPackage ../applications/blockchains/bitcoin {
     withGui = false;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
+  bitcoin-knots = libsForQt5.callPackage ../applications/blockchains/bitcoin-knots {
+    withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
@@ -18794,8 +18794,6 @@ with pkgs;
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 
-  qzdl = libsForQt5.callPackage ../games/qzdl { };
-
   rbspy = darwin.apple_sdk_11_0.callPackage ../development/tools/rbspy { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
@@ -18981,6 +18979,7 @@ with pkgs;
   inherit (callPackage ../servers/web-apps/wordpress { })
     wordpress
     wordpress_6_7
+    wordpress_6_8
     ;
 
   wordpressPackages = recurseIntoAttrs (

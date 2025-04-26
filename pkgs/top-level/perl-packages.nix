@@ -15542,8 +15542,6 @@ with self;
     };
   };
 
-  ham = callPackage ../development/perl-modules/ham { };
-
   HashFlatten = buildPerlPackage {
     pname = "Hash-Flatten";
     version = "1.19";
