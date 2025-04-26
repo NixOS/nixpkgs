@@ -16404,6 +16404,13 @@
     githubId = 15896005;
     name = "Vladyslav Burzakovskyy";
   };
+  MrSom3body = {
+    email = "nix@sndh.dev";
+    matrix = "@mrsom3body:matrix.org";
+    github = "MrSom3body";
+    githubId = 129101708;
+    name = "Karun Sandhu";
+  };
   mrtarantoga = {
     email = "goetz-dev@web.de";
     name = "Götz Grimmer";
