@@ -21,6 +21,7 @@ $ nix-shell -p "hy.withPackages (ps: with ps; [ numpy matplotlib ])"
 ```
 
 Or if you want to extend your `configuration.nix`:
+
 ```nix
 {
   # ...
