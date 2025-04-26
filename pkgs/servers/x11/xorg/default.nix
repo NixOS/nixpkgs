@@ -6,6 +6,7 @@
   font-util,
   gccmakedep,
   imake,
+  libfontenc,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -36,6 +37,7 @@ self: with self; {
     bdftopcf
     gccmakedep
     imake
+    libfontenc
     libpciaccess
     libxcb
     libxcvt
@@ -2993,42 +2995,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "dmx" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libfontenc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      zlib,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libfontenc";
-      version = "1.1.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libfontenc-1.1.8.tar.xz";
-        sha256 = "1ihlznj4m49jn1887cr86qqhrrlghvbfj7bbh230svi30pac60kv";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        zlib
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "fontenc" ];
         platforms = lib.platforms.unix;
       };
     })

@@ -36,6 +36,7 @@ $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
+$pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
@@ -291,6 +292,7 @@ print OUT <<EOF;
   font-util,
   gccmakedep,
   imake,
+  libfontenc,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -321,6 +323,7 @@ self: with self; {
     bdftopcf
     gccmakedep
     imake
+    libfontenc
     libpciaccess
     libxcb
     libxcvt
