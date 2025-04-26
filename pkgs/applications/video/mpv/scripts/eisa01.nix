@@ -54,6 +54,14 @@ lib.recurseIntoAttrs (
       };
     };
 
+    simplehistory = {
+      scriptPath = "scripts/SimpleHistory.lua";
+      meta = {
+        description = "Store videos in a history file, continue watching your last played or resume previously played videos, manage and play from your history, and more";
+        maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+      };
+    };
+
     smartskip = {
       scriptPath = "scripts/SmartSkip.lua";
       meta = {
