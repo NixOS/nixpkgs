@@ -16,6 +16,10 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-SncbnK6LxsleKRa/sSCm/8dsgPw/XJGvYfkcIeWYDy4=";
   };
 
+  pythonRelaxDeps = [
+    "termcolor"
+  ];
+
   nativeBuildInputs = with pythonPackages; [
     poetry-core
   ];
