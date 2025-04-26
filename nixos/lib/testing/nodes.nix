@@ -82,7 +82,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to turn on the vsock-based SSH backdoor for all VMs.";
+        description = "Whether to turn on the VSOCK-based access to all VMs. This provides an unauthenticated access intended for debugging.";
       };
     };
 
