@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       cmake
+      extra-cmake-modules
       doxygen
       graphviz
       perl
@@ -53,16 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
       wrapQtAppsHook
     ]);
 
-  buildInputs =
-    [
-      extra-cmake-modules
-    ]
-    ++ (with libsForQt5; [
-      kcalendarcore
-      qtbase
-      qtpim
-      timed
-    ]);
+  buildInputs = with libsForQt5; [
+    kcalendarcore
+    qtbase
+    qtpim
+    timed
+  ];
 
   nativeCheckInputs = [
     tzdata
