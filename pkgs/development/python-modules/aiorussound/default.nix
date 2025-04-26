@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiorussound";
-  version = "4.5.0";
+  version = "4.5.2";
   pyproject = true;
 
   # requires newer f-strings introduced in 3.12
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "noahhusby";
     repo = "aiorussound";
     tag = version;
-    hash = "sha256-G4bJ2K9SBMoCwTCfn1oZSDoU/FHgZXQf13YEZJBKcNo=";
+    hash = "sha256-4/FuYROiyFP+13ZWkAATpRSAvkiDNMLw6MnP/lagI9I=";
   };
 
   build-system = [ poetry-core ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiorussound" ];
 
   meta = with lib; {
-    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${version}";
+    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${src.tag}";
     description = "Async python package for interfacing with Russound RIO hardware";
     homepage = "https://github.com/noahhusby/aiorussound";
     license = licenses.mit;
