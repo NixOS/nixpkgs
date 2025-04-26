@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       dywedir
       getchoo
+      krovuxdev
     ];
     mainProgram = "sk";
   };
