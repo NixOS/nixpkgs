@@ -16133,6 +16133,12 @@
     github = "mlvzk";
     githubId = 44906333;
   };
+  mmad = {
+    name = "M. MAD";
+    email = "m.mad.official@proton.me";
+    githubId = 96647182;
+    github = "M-MAD-Official";
+  };
   mmahut = {
     email = "marek.mahut@gmail.com";
     github = "mmahut";
