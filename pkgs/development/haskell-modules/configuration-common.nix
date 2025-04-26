@@ -20,6 +20,30 @@ with haskellLib;
 
 self: super:
 {
+  # Hackage's accelerate is from 2020 and incomptible with our GHC.
+  # The existing derivation also has missing dependencies
+  # compared to the source from github.
+  # https://github.com/AccelerateHS/accelerate/issues/553
+  accelerate =
+    assert super.accelerate.version == "1.3.0.0";
+    lib.pipe super.accelerate [
+      (addBuildDepends [
+        self.double-conversion
+        self.formatting
+        self.microlens
+      ])
+
+      (overrideCabal (drv: {
+        version = "1.3.0.0-unstable-2025-04-25";
+        src = pkgs.fetchFromGitHub {
+          owner = "AccelerateHS";
+          repo = "accelerate";
+          rev = "3f681a5091eddf5a3b97f4cd0de32adc830e1117";
+          sha256 = "sha256-tCcl7wAls+5cBSrqbxfEAJngbV43OJcLJdaC4qqkBxc=";
+        };
+      }))
+    ];
+
   # https://github.com/ivanperez-keera/dunai/issues/427
   dunai = addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai);
 

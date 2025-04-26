@@ -13,7 +13,6 @@ broken-packages:
   - AbortT-transformers # failure in job https://hydra.nixos.org/build/233210345 at 2023-09-02
   - abt # failure in job https://hydra.nixos.org/build/233201301 at 2023-09-02
   - AC-BuildPlatform # failure in job https://hydra.nixos.org/build/233219130 at 2023-09-02
-  - accelerate # failure in job https://hydra.nixos.org/build/233198907 at 2023-09-02
   - accentuateus # failure in job https://hydra.nixos.org/build/233253627 at 2023-09-02
   - access-time # failure in job https://hydra.nixos.org/build/233246051 at 2023-09-02
   - accuerr # failure in job https://hydra.nixos.org/build/233220965 at 2023-09-02
