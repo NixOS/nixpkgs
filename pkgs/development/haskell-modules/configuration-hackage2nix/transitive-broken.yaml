@@ -839,6 +839,7 @@ dont-distribute-packages:
  - clickhouse-haskell
  - clifford
  - clippings
+ - clod
  - cloud-haskell
  - cloud-seeder
  - cloudyfs
@@ -990,6 +991,7 @@ dont-distribute-packages:
  - curryer-rpc
  - cv-combinators
  - cypher
+ - dahdit-audio
  - dahdit-midi
  - dahdit-test
  - daino
@@ -1489,7 +1491,7 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - grisette_0_11_0_0
+ - grisette_0_12_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1970,6 +1972,7 @@ dont-distribute-packages:
  - imj-base
  - imj-game-hamazed
  - imj-measure-stdout
+ - immutaball-core
  - imparse
  - imperative-edsl
  - imperative-edsl-vhdl
@@ -2164,6 +2167,7 @@ dont-distribute-packages:
  - lame-tester
  - landlock
  - lang
+ - langchain-hs
  - language-Modula2
  - language-ats
  - language-boogie
