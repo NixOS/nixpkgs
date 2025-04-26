@@ -304,6 +304,7 @@ print OUT <<EOF;
   makedepend,
   pixman,
   sessreg,
+  transset,
   util-macros,
   xbitmaps,
   xcb-proto,
@@ -329,6 +330,7 @@ self: with self; {
     makedepend
     pixman
     sessreg
+    transset
     xbitmaps
     xorgproto
     xtrans
