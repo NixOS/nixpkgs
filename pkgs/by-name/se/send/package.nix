@@ -52,7 +52,10 @@ buildNpmPackage rec {
     changelog = "https://github.com/timvisee/send/releases/tag/v${version}";
     homepage = "https://github.com/timvisee/send";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      MrSom3body
+    ];
     mainProgram = "send";
   };
 }
