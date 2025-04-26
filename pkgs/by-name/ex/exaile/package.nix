@@ -16,7 +16,7 @@
   librsvg,
   streamripper,
   udisks,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   iconTheme ? adwaita-icon-theme,
   deviceDetectionSupport ? true,
   documentationSupport ? true,
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional multimediaKeySupport keybinder3
     ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
     ++ lib.optional podcastSupport python3.pkgs.feedparser
-    ++ lib.optional wikipediaSupport webkitgtk_4_0;
+    ++ lib.optional wikipediaSupport webkitgtk_4_1;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest

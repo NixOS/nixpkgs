@@ -1,0 +1,33 @@
+From 7255d6376fad2c88eaadf1278ee8947181230866 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Sun, 16 Apr 2023 19:52:38 +0000
+Subject: [PATCH] Update for gupnp-igd-1.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+New gupnp-igd has been released.
+No significant changed in API so pkgconfig dependency can be simple
+bumped.
+
+Signed-off-by: Tomasz Kłoczko <kloczek@github.com>
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 6a733b73..c42fa138 100644
+--- a/meson.build
++++ b/meson.build
+@@ -285,7 +285,7 @@ gst_dep = dependency('gstreamer-base-1.0', version: gst_req,
+ cdata.set('HAVE_GSTREAMER', gst_dep.found(), description: 'Build GStreamer plugin')
+ 
+ # GUPnP IGD
+-gupnp_igd_dep = dependency('gupnp-igd-1.0', version: gupnp_igd_req, required: get_option('gupnp'))
++gupnp_igd_dep = dependency('gupnp-igd-1.6', version: gupnp_igd_req, required: get_option('gupnp'))
+ cdata.set('HAVE_GUPNP', gupnp_igd_dep.found(), description: 'Use the GUPnP IGD library')
+ 
+ libm = cc.find_library('m', required: false)
+-- 
+GitLab
+
