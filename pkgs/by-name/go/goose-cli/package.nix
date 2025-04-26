@@ -26,17 +26,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "goose-cli";
-  version = "1.0.17";
+  version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${version}";
-    hash = "sha256-l/lcwTNUq2xJHh0MKhnDZjRJ/5cANbdar/Vusf38esQ=";
+    hash = "sha256-lUMqfIVZI+EN/Ys3eNPnPPprB1spanN7RZT6nhuwuHY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1xKWzgptnM1ZP0nQXILBoaKVwL2FyXpldTUIa1ITQO0=";
+  cargoHash = "sha256-5Aed0w7VpzPcaFIR0+iA3VCaln/VAU4VDBqDwVBBhR4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -54,20 +54,17 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  checkFlags =
-    [
-      # need dbus-daemon
-      "--skip=config::base::tests::test_multiple_secrets"
-      "--skip=config::base::tests::test_secret_management"
-      # Observer should be Some with both init project keys set
-      "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
-      "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Lazy instance has previously been poisoned
-      "--skip=jetbrains::tests::test_capabilities"
-      "--skip=jetbrains::tests::test_router_creation"
-    ];
+  checkFlags = [
+    # need dbus-daemon
+    "--skip=config::base::tests::test_multiple_secrets"
+    "--skip=config::base::tests::test_secret_management"
+    # Observer should be Some with both init project keys set
+    "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
+    "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
+    # Lazy instance has previously been poisoned
+    "--skip=jetbrains::tests::test_capabilities"
+    "--skip=jetbrains::tests::test_router_creation"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
