@@ -101,7 +101,7 @@ buildPythonPackage rec {
   meta = {
     description = "IPython: Productive Interactive Computing";
     downloadPage = "https://github.com/ipython/ipython/";
-    homepage = "https://ipython.org/";
+    homepage = "https://ipython.readthedocs.io/en/stable/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bjornfor ];
