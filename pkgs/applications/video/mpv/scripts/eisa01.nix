@@ -61,5 +61,13 @@ lib.recurseIntoAttrs (
         maintainers = with lib.maintainers; [ iynaix ];
       };
     };
+
+    undoredo = {
+      scriptPath = "scripts/UndoRedo.lua";
+      meta = {
+        description = "Undo / redo any accidental time jumps";
+        maintainers = with lib.maintainers; [ iynaix ];
+      };
+    };
   }
 )
