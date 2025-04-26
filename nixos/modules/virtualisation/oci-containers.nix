@@ -416,7 +416,7 @@ let
             # try logging in, if it fails, check if image exists locally
             ${cfg.backend} login \
             ${container.login.registry} \
-            --username ${container.login.username} \
+            --username ${escapeShellArg container.login.username} \
             --password-stdin < ${container.login.passwordFile} \
             || ${cfg.backend} image inspect ${container.image} >/dev/null \
             || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
