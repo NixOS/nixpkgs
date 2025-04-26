@@ -137,6 +137,6 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Boxes/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 }

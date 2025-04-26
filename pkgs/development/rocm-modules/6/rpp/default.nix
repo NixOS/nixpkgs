@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Comprehensive high-performance computer vision library for AMD processors";
     homepage = "https://github.com/ROCm/rpp";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken = useOpenCL;
   };

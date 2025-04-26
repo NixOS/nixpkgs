@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Unified config handling for client libraries and programs";
     homepage = "https://github.com/openstack/os-client-config";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

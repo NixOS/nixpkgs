@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
     license = licenses.gpl2Plus;
-    maintainers = teams.helsinki-systems.members;
+    teams = [ teams.helsinki-systems ];
     mainProgram = "icingacli";
     platforms = platforms.all;
   };

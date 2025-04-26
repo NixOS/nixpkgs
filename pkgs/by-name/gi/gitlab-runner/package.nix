@@ -109,6 +109,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.gitlab.com/runner";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
-    maintainers = with lib.maintainers; [ zimbatm ] ++ lib.teams.gitlab.members;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    teams = [ lib.teams.gitlab ];
   };
 })

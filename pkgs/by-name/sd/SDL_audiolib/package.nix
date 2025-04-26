@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audio decoding, resampling and mixing library for SDL";
     homepage = "https://github.com/realnc/SDL_audiolib";
     license = lib.licenses.lgpl3Plus;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
   };
 })

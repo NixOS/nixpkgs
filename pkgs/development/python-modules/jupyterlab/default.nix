@@ -74,7 +74,7 @@ buildPythonPackage rec {
     description = "Jupyter lab environment notebook server extension";
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";
   };
 }

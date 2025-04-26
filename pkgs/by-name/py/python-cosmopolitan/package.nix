@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     platforms = platforms.x86_64;
     badPlatforms = platforms.darwin;
     license = licenses.isc;
-    maintainers = teams.cosmopolitan.members;
+    teams = [ teams.cosmopolitan ];
     mainProgram = "python.com";
   };
 }

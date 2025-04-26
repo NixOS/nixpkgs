@@ -61,6 +61,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Panel for the Xfce desktop environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

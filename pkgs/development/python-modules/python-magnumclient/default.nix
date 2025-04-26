@@ -94,6 +94,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Magnum API";
     license = lib.licenses.asl20;
     mainProgram = "magnum";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

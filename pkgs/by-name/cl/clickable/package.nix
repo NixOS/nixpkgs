@@ -82,6 +82,7 @@ python3Packages.buildPythonApplication rec {
       lib.strings.replaceStrings [ "." ] [ "-" ] version
     }";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members ++ (with lib.maintainers; [ ilyakooo0 ]);
+    maintainers = with lib.maintainers; [ ilyakooo0 ];
+    teams = [ lib.teams.lomiri ];
   };
 }

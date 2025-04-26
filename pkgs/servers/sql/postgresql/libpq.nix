@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (postgresql.meta)
       homepage
       license
-      maintainers
+      teams
       platforms
       ;
     description = "C application programmer's interface to PostgreSQL";

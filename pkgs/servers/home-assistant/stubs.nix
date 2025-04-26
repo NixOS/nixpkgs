@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/KapJI/homeassistant-stubs";
     changelog = "https://github.com/KapJI/homeassistant-stubs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 }

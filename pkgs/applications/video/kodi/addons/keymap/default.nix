@@ -33,6 +33,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/tamland/xbmc-keymap-editor";
     description = "GUI for configuring mappings for remotes, keyboard and other inputs supported by Kodi";
     license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }
