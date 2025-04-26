@@ -17356,6 +17356,13 @@
     name = "Guilhem Saurel";
     keys = [ { fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28"; } ];
   };
+  ninelore = {
+    name = "Ingo Reitz";
+    email = "9l@9lo.re";
+    matrix = "@9lore:tchncs.de";
+    github = "ninelore";
+    githubId = 21343557;
+  };
   ninjafb = {
     email = "oscar@oronberg.com";
     github = "NinjaFB";
