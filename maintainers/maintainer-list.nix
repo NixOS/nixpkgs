@@ -9484,12 +9484,6 @@
     name = "Martin Hardselius";
     keys = [ { fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619"; } ];
   };
-  harrisonthorne = {
-    email = "harrisonthorne@proton.me";
-    github = "muni-corn";
-    githubId = 33523827;
-    name = "Harrison Thorne";
-  };
   harryposner = {
     email = "nixpkgs@harryposner.com";
     github = "harryposner";
@@ -16597,6 +16591,14 @@
     github = "multun";
     githubId = 5047140;
     name = "Victor Collod";
+  };
+  municorn = {
+    name = "municorn";
+    email = "municorn@musicaloft.com";
+    github = "muni-corn";
+    githubId = 33523827;
+    matrix = "@municorn:matrix.org";
+    keys = [ { fingerprint = "2686 7D83 CD74 CCEF 192F  052E 4B21 310A 52B1 5162"; } ];
   };
   munksgaard = {
     name = "Philip Munksgaard";
