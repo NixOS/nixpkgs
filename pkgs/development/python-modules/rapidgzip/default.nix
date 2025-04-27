@@ -20,6 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-fTXwrxZXtAUakMPAwsDSQz886Dnbkw/b7T1lFt4qXfE=";
   };
 
+  postPatch = ''
+    # <72 is there to fix windows and pypy issues
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"setuptools >= 61.2, < 72",' \
+        '"setuptools",'
+  '';
+
   nativeBuildInputs = [
     cython
     nasm
