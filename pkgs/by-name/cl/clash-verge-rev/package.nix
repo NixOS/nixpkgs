@@ -87,6 +87,9 @@ let
       Guanran928
       bot-wxt1221
     ];
+    knownVulnerabilities = [
+      "https://github.com/clash-verge-rev/clash-verge-rev/issues/3428"
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
