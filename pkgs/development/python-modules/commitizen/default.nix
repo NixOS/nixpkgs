@@ -3,7 +3,6 @@
   commitizen,
   fetchFromGitHub,
   buildPythonPackage,
-  gitMinimal,
   pythonOlder,
   stdenv,
   installShellFiles,
@@ -21,6 +20,8 @@
   questionary,
   termcolor,
   tomlkit,
+  gitMinimal,
+  gitSetupHook,
   py,
   pytest-freezer,
   pytest-mock,
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     argcomplete
     deprecated
     gitMinimal
+    gitSetupHook
     py
     pytest-freezer
     pytest-mock
@@ -84,9 +86,6 @@ buildPythonPackage rec {
   # which requires a valid HOME directory.
   preCheck = ''
     export HOME="$(mktemp -d)"
-
-    git config --global user.name "Nix Builder"
-    git config --global user.email "nix-builder@nixos.org"
     git init .
   '';
 
