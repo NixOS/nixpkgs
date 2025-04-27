@@ -24,14 +24,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.3.6";
+  version = "4.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KQD/2/yp7TfErX/do+t2WC/ZRdRpYq86xkdBri1rL/Q=";
+    hash = "sha256-x1xPMwVvvYTwsx60RiKgDHpfmBuFrf6xmKg3IfBGWAg=";
   };
 
   build-system = [
