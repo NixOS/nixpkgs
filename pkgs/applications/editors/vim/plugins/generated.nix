@@ -8863,6 +8863,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neomodern-nvim = buildVimPlugin {
+    pname = "neomodern.nvim";
+    version = "2025-04-26";
+    src = fetchFromGitHub {
+      owner = "cdmill";
+      repo = "neomodern.nvim";
+      rev = "1ef8dcde62ff7179c94da8cba9879a5ddd1b4e2d";
+      sha256 = "1cn9227i1pdjd2ljk0nawyma5gaav256nhhf970ibwsgffn6n5d0";
+    };
+    meta.homepage = "https://github.com/cdmill/neomodern.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neomru-vim = buildVimPlugin {
     pname = "neomru.vim";
     version = "2020-02-05";
@@ -21295,6 +21308,19 @@ final: prev: {
       sha256 = "0hraiw10ia93ryhfb207kha6hhhnsbmfdid6h44dsg87mkixm3c8";
     };
     meta.homepage = "https://github.com/piersolenski/wtf.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  xmake-nvim = buildVimPlugin {
+    pname = "xmake.nvim";
+    version = "2025-04-01";
+    src = fetchFromGitHub {
+      owner = "Mythos-404";
+      repo = "xmake.nvim";
+      rev = "4f03aa221ebb462f3ce013fc48d4d32b88b6ded8";
+      sha256 = "0ldrz485r092fd35wqvh8nknv2gslag7wj2v4dichmihn81701ry";
+    };
+    meta.homepage = "https://github.com/Mythos-404/xmake.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

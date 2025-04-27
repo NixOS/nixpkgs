@@ -46,7 +46,7 @@ let
       meta = with lib; {
         description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
         homepage = "https://github.com/varnish/varnish-modules";
-        inherit (varnish.meta) license platforms maintainers;
+        inherit (varnish.meta) license platforms teams;
       };
     };
 in

@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       ++ platforms.mips
       ++ platforms.m68k
       ++ platforms.riscv
+      ++ platforms.loongarch64
     );
     maintainers = [ maintainers.bjornfor ];
   };
