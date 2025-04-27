@@ -69,6 +69,7 @@
 
       supportedLocales = lib.mkOption {
         type = lib.types.listOf lib.types.str;
+        visible = false;
         default = lib.unique (
           builtins.map
             (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
@@ -82,21 +83,6 @@
               ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
             )
         );
-        defaultText = lib.literalExpression ''
-          lib.unique (
-            builtins.map
-              (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
-              (
-                [
-                  "C.UTF-8"
-                  "en_US.UTF-8"
-                  config.i18n.defaultLocale
-                ]
-                ++ config.i18n.extraLocales
-                ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
-              )
-          )
-        '';
         example = [
           "en_US.UTF-8/UTF-8"
           "nl_NL.UTF-8/UTF-8"
