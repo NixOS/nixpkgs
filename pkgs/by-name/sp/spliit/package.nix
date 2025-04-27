@@ -39,30 +39,29 @@ buildNpmPackage rec {
     NEXT_TELEMETRY_DISABLED = 1;
   };
 
-  installPhase = ''
-    runHook preInstall
+  postBuild = ''
+    rm -r .next/cache
+  '';
 
-    mkdir -p $out/bin
-    cp -r .next $out/.next
-    cp -r public $out/public
-    cp package*.json $out/
-    cp next.config.mjs $out/
-    cp -r prisma $out/prisma
-    cp -r node_modules $out/
-
-    makeWrapper $out/node_modules/.bin/next $out/bin/spliit \
-      --chdir $out \
+  postInstall = ''
+    cp -r .next $out/lib/node_modules/spliit2/
+    rm -r $out/lib/node_modules/spliit2/{scripts,src}
+    makeWrapper $out/lib/node_modules/spliit2/node_modules/.bin/next $out/bin/spliit \
+      --chdir $out/lib/node_modules/spliit2 \
       --set PRISMA_SCHEMA_ENGINE_BINARY ${lib.getExe' prisma-engines "schema-engine"} \
       --set PRISMA_QUERY_ENGINE_BINARY ${lib.getExe' prisma-engines "query-engine"} \
       --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
-      --run "node_modules/.bin/prisma migrate deploy" \
+      --run "$out/lib/node_modules/spliit2/node_modules/.bin/prisma migrate deploy" \
       --add-flags start \
-
-    runHook postInstall
   '';
 
   # Skip postinstall which runs prisma commands
   npmFlags = [ "--ignore-scripts" ];
+  npmPruneFlags = [
+    "--ignore-scripts"
+    "--omit=optional"
+    "--omit=dev"
+  ];
 
   passthru.tests = {
     spliit = nixosTests.spliit;
