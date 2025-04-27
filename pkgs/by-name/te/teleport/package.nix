@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   rustPlatform,
   fetchFromGitHub,
   fetchpatch,
@@ -15,18 +15,18 @@
   rustc,
   stdenv,
   xdg-utils,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_95,
   wasm-pack,
   nixosTests,
 
   withRdpClient ? true,
 
-  version,
-  hash,
-  vendorHash,
+  version ? "17.4.8",
+  hash ? "sha256-BMiV4xMDy/21B2kl/vkXD14LKQ9t/qj6K8HFnU9Td7w=",
+  vendorHash ? "sha256-/JP0/4fFdCuDFLQ+mh7CQNMJ4n3yDNyvnLfbmRl/TBA=",
   extPatches ? [ ],
-  cargoHash,
-  pnpmHash,
+  cargoHash ? "sha256-qz8gkooQTuBlPWC4lHtvBQpKkd+nEZ0Hl7AVg9JkPqs=",
+  pnpmHash ? "sha256-TZb1nABTbR+SPgykc/KMRkHW7oLawem6KWmdOFAbLbk=",
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -84,7 +84,7 @@ let
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook
-      wasm-bindgen-cli
+      wasm-bindgen-cli_0_2_95
       wasm-pack
     ];
 
@@ -120,7 +120,7 @@ let
     '';
   };
 in
-buildGoModule (finalAttrs: {
+buildGo123Module (finalAttrs: {
   inherit pname src version;
   inherit vendorHash;
   proxyVendor = true;
