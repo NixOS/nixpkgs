@@ -16,6 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-CVXa2HvX7M0cwqnTeZVETg07j324ATQuMNreEgAC2QA=";
   };
 
+  pythonRelaxDeps = [ "rich" ];
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];
