@@ -1,0 +1,11 @@
+{
+  "packageVersion": "137.0.1-1",
+  "source": {
+    "rev": "137.0.1-1",
+    "hash": "sha256-4C9RcdkNOYX215uom94yOi9ZQM0zEVgETNFFTsgkPns="
+  },
+  "firefox": {
+    "version": "137.0.1",
+    "hash": "sha512-zCy+PdZWloScGxl7kIiHwREIP6i1CJqk6ubzPuQE2ynFZmGcSLd/tJWtf53JSi2dkQ5bKq+GRNsdADaAkfnctg=="
+  }
+}

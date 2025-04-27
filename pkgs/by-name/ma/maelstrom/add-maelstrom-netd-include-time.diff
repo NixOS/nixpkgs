@@ -1,0 +1,12 @@
+diff --git a/Maelstrom-netd.c b/Maelstrom-netd.c
+index 3e6e942..41ed9a5 100644
+--- a/Maelstrom-netd.c
++++ b/Maelstrom-netd.c
+@@ -13,6 +13,7 @@
+ #include <arpa/inet.h>
+ #include <netdb.h>
+ #include <unistd.h>
++#include <time.h>
+
+ /* We wait in a loop for players to connect and tell us how many people
+    are playing.  Then, once all players have connected, then we broadcast
