@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Document structures for collaborative editing using Ypy";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

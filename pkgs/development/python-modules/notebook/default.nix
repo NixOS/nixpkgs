@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "Web-based notebook environment for interactive computing";
     homepage = "https://github.com/jupyter/notebook";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-notebook";
   };
 }

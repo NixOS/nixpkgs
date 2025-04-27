@@ -23,9 +23,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  # N.B.: using the Makefile is intentional.
+  # We pass "nixpkgs" for build.Date to avoid `gh --version` reporting a very old date.
   buildPhase = ''
     runHook preBuild
-    make GO_LDFLAGS="-s -w" GH_VERSION=${version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
+    make GO_LDFLAGS="-s -w -X github.com/cli/cli/v${lib.versions.major version}/internal/build.Date=nixpkgs" GH_VERSION=${version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
     runHook postBuild
   '';
 

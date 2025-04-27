@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

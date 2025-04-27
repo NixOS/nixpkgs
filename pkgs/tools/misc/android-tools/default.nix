@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
       unicode-dfs-2015
     ];
     platforms = platforms.unix;
-    maintainers = teams.android.members ++ (with maintainers; [ primeos ]);
+    maintainers = with maintainers; [ primeos ];
+    teams = [ teams.android ];
   };
 }

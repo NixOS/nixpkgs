@@ -55,6 +55,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/AppDaemon/appdaemon";
     changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
     license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

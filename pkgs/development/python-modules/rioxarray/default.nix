@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://corteva.github.io/rioxarray/";
     changelog = "https://github.com/corteva/rioxarray/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

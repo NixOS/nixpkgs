@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/ROCm/rocm-cmake";
     license = licenses.mit;
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.unix;
   };
 })

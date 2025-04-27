@@ -52,6 +52,6 @@ buildNpmPackage rec {
     description = "Deploy on Clever Cloud and control your applications, add-ons, services from command line";
     license = licenses.asl20;
     mainProgram = "clever";
-    maintainers = teams.clevercloud.members;
+    teams = [ teams.clevercloud ];
   };
 }

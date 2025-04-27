@@ -121,7 +121,7 @@ buildPythonPackage rec {
     homepage = "https://jupyterbook.org/";
     changelog = "https://github.com/jupyter-book/jupyter-book/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-book";
   };
 }

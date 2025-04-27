@@ -99,7 +99,7 @@ buildGoModule rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = "https://kubernetes.io";
-    maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
+    teams = [ teams.kubernetes ];
     platforms = platforms.linux;
   };
 

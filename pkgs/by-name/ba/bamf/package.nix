@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ davidak ];
+    teams = [ teams.pantheon ];
   };
 }

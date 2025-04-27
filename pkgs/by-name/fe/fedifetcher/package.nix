@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://blog.thms.uk/fedifetcher";
     changelog = "https://github.com/nanos/FediFetcher/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = teams.c3d2.members;
+    teams = [ teams.c3d2 ];
     mainProgram = "fedifetcher";
   };
 }

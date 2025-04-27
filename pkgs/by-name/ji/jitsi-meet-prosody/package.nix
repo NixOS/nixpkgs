@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jitsi/jitsi-meet/";
     license = licenses.asl20;
-    maintainers = teams.jitsi.members;
+    teams = [ teams.jitsi ];
     platforms = platforms.linux;
   };
 }

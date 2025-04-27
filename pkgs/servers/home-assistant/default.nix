@@ -377,7 +377,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.4.3";
+  hassVersion = "2025.4.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -398,13 +398,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-KyPWEGXSoB9BJolR4+Kq9K9urhXN4YcgV0SQYaAEjiA=";
+    hash = "sha256-MiBsVsgV/M8ge7XQ4e4VpdAKTVZBCDu3Jqql2YHx9rY=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-xo1f2GDeafOaXiJ1+l+NsJkpU0FvbSnflsp2BE/JKC4=";
+    hash = "sha256-qOhOs6I2Jx/7GWVeCBJ6d77w3RCFjsvFxDUbR60Ucf0=";
   };
 
   build-system = with python.pkgs; [
@@ -432,7 +432,8 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
-    sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==78.1.1" setuptools
   '';
 
   dependencies = with python.pkgs; [
@@ -603,7 +604,7 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
     platforms = platforms.linux;
     mainProgram = "hass";
   };

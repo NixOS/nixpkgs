@@ -60,6 +60,6 @@ buildPythonPackage rec {
     mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

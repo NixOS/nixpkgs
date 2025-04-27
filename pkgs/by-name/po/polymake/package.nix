@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.polymake.org/doku.php";
     changelog = "https://github.com/polymake/polymake/blob/V${version}/ChangeLog";
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.linux;
   };
 }

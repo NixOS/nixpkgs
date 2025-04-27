@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/hyprland-qt-support";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
   };
 })

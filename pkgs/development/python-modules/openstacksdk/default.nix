@@ -79,6 +79,6 @@ buildPythonPackage rec {
     mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

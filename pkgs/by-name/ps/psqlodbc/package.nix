@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "ODBC driver for PostgreSQL";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = libpq.meta.maintainers;
+    teams = libpq.meta.teams;
   };
 }

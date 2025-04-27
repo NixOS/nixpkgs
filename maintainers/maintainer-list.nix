@@ -9484,12 +9484,6 @@
     name = "Martin Hardselius";
     keys = [ { fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619"; } ];
   };
-  harrisonthorne = {
-    email = "harrisonthorne@proton.me";
-    github = "muni-corn";
-    githubId = 33523827;
-    name = "Harrison Thorne";
-  };
   harryposner = {
     email = "nixpkgs@harryposner.com";
     github = "harryposner";
@@ -15090,6 +15084,17 @@
     githubId = 3139724;
     name = "Matteo Pacini";
   };
+  mattfield = {
+    email = "matt@mild.systems";
+    github = "mattfield";
+    githubId = 686826;
+    name = "Matt Field";
+    keys = [
+      {
+        fingerprint = "8BEE 1295 D9EC 9560 0273  7E57 45B8 21B5 CB29 C07A";
+      }
+    ];
+  };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
     github = "matthewbauer";
@@ -16586,6 +16591,14 @@
     github = "multun";
     githubId = 5047140;
     name = "Victor Collod";
+  };
+  municorn = {
+    name = "municorn";
+    email = "municorn@musicaloft.com";
+    github = "muni-corn";
+    githubId = 33523827;
+    matrix = "@municorn:matrix.org";
+    keys = [ { fingerprint = "2686 7D83 CD74 CCEF 192F  052E 4B21 310A 52B1 5162"; } ];
   };
   munksgaard = {
     name = "Philip Munksgaard";
@@ -18213,6 +18226,12 @@
     githubId = 111265;
     name = "Ozan Sener";
   };
+  oskardotglobal = {
+    email = "me@oskar.global";
+    github = "oskardotglobal";
+    githubId = 52569953;
+    name = "Oskar Manhart";
+  };
   osnyx = {
     email = "os@flyingcircus.io";
     github = "osnyx";
@@ -18827,6 +18846,11 @@
     github = "petrosagg";
     githubId = 939420;
     name = "Petros Angelatos";
+  };
+  petrzjunior = {
+    github = "petrzjunior";
+    githubId = 7000918;
+    name = "Petr Zahradnik";
   };
   petterstorvik = {
     email = "petterstorvik@gmail.com";

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkcal";
-  version = "0.7.26";
+  version = "0.7.27";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "mkcal";
     tag = finalAttrs.version;
-    hash = "sha256-myOSzxzZmuOU7MShPfUOsHJilw9B6jh3W1S3P5dhcvs=";
+    hash = "sha256-7QgkGULCqlsao91WmqHjVYJDN0b1JFEmPMRs2SvFv3k=";
   };
 
   outputs = [
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/sailfishos/mkcal/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "mkcaltool";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "libmkcal-qt5"

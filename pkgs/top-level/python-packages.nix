@@ -1207,9 +1207,7 @@ self: super: with self; {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
-  awscrt = callPackage ../development/python-modules/awscrt {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  awscrt = callPackage ../development/python-modules/awscrt { };
 
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
 
@@ -5213,8 +5211,8 @@ self: super: with self; {
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
-  foundationdb73 = callPackage ../servers/foundationdb/python.nix {
-    foundationdb = pkgs.foundationdb73;
+  foundationdb = callPackage ../development/python-modules/foundationdb {
+    inherit (pkgs) foundationdb;
   };
 
   fountains = callPackage ../development/python-modules/fountains { };
@@ -5628,6 +5626,8 @@ self: super: with self; {
   glom = callPackage ../development/python-modules/glom { };
 
   glueviz = callPackage ../development/python-modules/glueviz { };
+
+  gluonts = callPackage ../development/python-modules/gluonts { };
 
   glymur = callPackage ../development/python-modules/glymur { };
 
@@ -7941,6 +7941,8 @@ self: super: with self; {
 
   lightify = callPackage ../development/python-modules/lightify { };
 
+  lightning = callPackage ../development/python-modules/lightning { };
+
   lightning-utilities = callPackage ../development/python-modules/lightning-utilities { };
 
   lightparam = callPackage ../development/python-modules/lightparam { };
@@ -9932,6 +9934,8 @@ self: super: with self; {
   nixpkgs-updaters-library = callPackage ../development/python-modules/nixpkgs-updaters-library { };
 
   nkdfu = callPackage ../development/python-modules/nkdfu { };
+
+  nlopt = callPackage ../development/python-modules/nlopt { };
 
   nlpcloud = callPackage ../development/python-modules/nlpcloud { };
 

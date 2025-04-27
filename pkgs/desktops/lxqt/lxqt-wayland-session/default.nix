@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
       mit
     ];
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 }
