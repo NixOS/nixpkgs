@@ -21,10 +21,10 @@
   tornado,
 
   # tests
-  gitMinimal,
   pytest-tornado,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
+  gitSetupHook,
+  gitMinimal,
 }:
 
 buildPythonPackage rec {
@@ -56,10 +56,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    gitMinimal
     pytest-tornado
     pytestCheckHook
-    writableTmpDirAsHomeHook
+    gitSetupHook
+    gitMinimal
   ];
 
   disabledTests =
@@ -80,11 +80,6 @@ buildPythonPackage rec {
       # OSError: Could not find system gitattributes location!
       "test_locate_gitattributes_syste"
     ];
-
-  preCheck = ''
-    git config --global user.email "janedoe@example.com"
-    git config --global user.name "Jane Doe"
-  '';
 
   __darwinAllowLocalNetworking = true;
 
