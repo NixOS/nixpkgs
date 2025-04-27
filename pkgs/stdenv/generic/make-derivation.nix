@@ -150,6 +150,7 @@ let
     "pie"
     "relro"
     "stackprotector"
+    "glibcxxassertions"
     "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
