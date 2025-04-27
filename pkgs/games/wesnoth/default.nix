@@ -143,7 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.wesnoth.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [
+      abbradar
+      niklaskorz
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wesnoth";
   };
