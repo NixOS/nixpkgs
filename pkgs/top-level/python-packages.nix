@@ -5858,6 +5858,8 @@ self: super: with self; {
 
   gophish = callPackage ../development/python-modules/gophish { };
 
+  gotify = callPackage ../development/python-modules/gotify { };
+
   gorilla = callPackage ../development/python-modules/gorilla { };
 
   goslide-api = callPackage ../development/python-modules/goslide-api { };
