@@ -4,7 +4,6 @@
   version,
   src,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
 }@args:
 
 {
@@ -58,7 +57,7 @@ stdenv.mkDerivation {
       else
         "https://git.lix.systems/lix-project/nix-eval-jobs";
     license = lib.licenses.gpl3;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isStatic;
   };

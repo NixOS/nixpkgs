@@ -5,6 +5,7 @@
   buildEnv,
 
   maintainers,
+  teams,
 
   version,
 
@@ -229,6 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = nix-cli.meta.homepage;
     license = nix-cli.meta.license;
     maintainers = maintainers;
+    teams = teams;
     platforms = nix-cli.meta.platforms;
     outputsToInstall = [
       "out"

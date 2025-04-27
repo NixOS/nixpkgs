@@ -228,7 +228,7 @@ stdenv.mkDerivation (
       description = "hipBLASLt is a library that provides general matrix-matrix operations with a flexible API";
       homepage = "https://github.com/ROCm/hipBLASlt";
       license = with licenses; [ mit ];
-      maintainers = teams.rocm.members;
+      teams = [ teams.rocm ];
       platforms = platforms.linux;
     };
   }

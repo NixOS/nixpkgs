@@ -1,19 +1,35 @@
 import os
 import re
 import signal
+import sys
 import tempfile
 import threading
+import traceback
 from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
 from typing import Any
+from unittest import TestCase
 
+from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
 SENTINEL = object()
+
+
+class AssertionTester(TestCase):
+    """
+    Subclass of `unittest.TestCase` which is used in the
+    `testScript` to perform assertions.
+
+    It throws a custom exception whose parent class
+    gets special treatment in the logs.
+    """
+
+    failureException = RequestedAssertionFailed
 
 
 def get_tmp_dir() -> Path:
@@ -115,7 +131,7 @@ class Driver:
             try:
                 yield
             except Exception as e:
-                self.logger.error(f'Test "{name}" failed with error: "{e}"')
+                self.logger.log_test_error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
     def test_symbols(self) -> dict[str, Any]:
@@ -140,6 +156,7 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
+            t=AssertionTester(),
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -163,7 +180,36 @@ class Driver:
         """Run the test script"""
         with self.logger.nested("run the VM test script"):
             symbols = self.test_symbols()  # call eagerly
-            exec(self.tests, symbols, None)
+            try:
+                exec(self.tests, symbols, None)
+            except MachineError:
+                for line in traceback.format_exc().splitlines():
+                    self.logger.log_test_error(line)
+                sys.exit(1)
+            except RequestedAssertionFailed:
+                exc_type, exc, tb = sys.exc_info()
+                # We manually print the stack frames, keeping only the ones from the test script
+                # (note: because the script is not a real file, the frame filename is `<string>`)
+                filtered = [
+                    frame
+                    for frame in traceback.extract_tb(tb)
+                    if frame.filename == "<string>"
+                ]
+
+                self.logger.log_test_error("Traceback (most recent call last):")
+
+                code = self.tests.splitlines()
+                for frame, line in zip(filtered, traceback.format_list(filtered)):
+                    self.logger.log_test_error(line.rstrip())
+                    if lineno := frame.lineno:
+                        self.logger.log_test_error(f"    {code[lineno - 1].strip()}")
+
+                self.logger.log_test_error("")  # blank line for readability
+                exc_prefix = exc_type.__name__ if exc_type is not None else "Error"
+                for line in f"{exc_prefix}: {exc}".splitlines():
+                    self.logger.log_test_error(line)
+
+                sys.exit(1)
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""

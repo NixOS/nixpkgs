@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.golang.members;
+    teams = [ lib.teams.golang ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

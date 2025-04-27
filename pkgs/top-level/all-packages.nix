@@ -1113,15 +1113,6 @@ with pkgs;
 
   fontbakery = with python3Packages; toPythonApplication fontbakery;
 
-  weylus = callPackage ../applications/graphics/weylus {
-    inherit (darwin.apple_sdk.frameworks)
-      ApplicationServices
-      Carbon
-      Cocoa
-      VideoToolbox
-      ;
-  };
-
   genealogos-api = genealogos-cli.override {
     crate = "api";
   };
@@ -2060,7 +2051,7 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
-  bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
+  bat-extras = recurseIntoAttrs (lib.makeScope newScope (callPackage ../tools/misc/bat-extras { }));
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -3451,14 +3442,6 @@ with pkgs;
 
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
-  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
-
-  inherit (fdbPackages)
-    foundationdb73
-    ;
-
-  foundationdb = foundationdb73;
-
   fuse-ext2 = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/fuse-ext2 { };
 
   fwknop = callPackage ../tools/security/fwknop {
@@ -4506,7 +4489,7 @@ with pkgs;
 
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
 
-  nlopt = callPackage ../development/libraries/nlopt { octave = null; };
+  nlopt = callPackage ../development/libraries/nlopt { };
 
   notation = callPackage ../by-name/no/notation/package.nix {
     buildGoModule = buildGo123Module;
@@ -6669,6 +6652,8 @@ with pkgs;
       lldb_20 = llvmPackages_20.lldb;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
+
+      mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_12
     llvmPackages_13
@@ -6693,6 +6678,7 @@ with pkgs;
     lldb_20
     llvm_20
     bolt_20
+    mkLLVMPackages
     ;
 
   lorri = callPackage ../tools/misc/lorri {
@@ -8319,7 +8305,6 @@ with pkgs;
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gradle-packages = import ../development/tools/build-managers/gradle {
     inherit
-      jdk11
       jdk17
       jdk21
       jdk23
@@ -8453,8 +8438,6 @@ with pkgs;
       wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/mold
     '';
   };
-
-  moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
   mopsa = ocamlPackages.mopsa.bin;
 
@@ -10480,8 +10463,6 @@ with pkgs;
   };
 
   mlt = darwin.apple_sdk_11_0.callPackage ../development/libraries/mlt { };
-
-  mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
 
   mpeg2dec = libmpeg2;
 
@@ -17021,13 +17002,6 @@ with pkgs;
   deliantra-data = callPackage ../games/deliantra/data.nix { };
 
   ddnet-server = ddnet.override { buildClient = false; };
-
-  devilutionx = callPackage ../games/devilutionx {
-    fmt = fmt_9;
-    SDL2_classic = SDL2_classic.override {
-      withStatic = true;
-    };
-  };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 

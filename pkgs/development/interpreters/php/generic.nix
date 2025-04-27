@@ -393,7 +393,7 @@ let
             homepage = "https://www.php.net/";
             license = licenses.php301;
             mainProgram = "php";
-            maintainers = teams.php.members;
+            teams = [ teams.php ];
             platforms = platforms.all;
             outputsToInstall = [
               "out"

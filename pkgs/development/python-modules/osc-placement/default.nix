@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/osc-placement";
     description = "OpenStackClient plugin for the Placement service";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

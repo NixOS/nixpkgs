@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttr: {
     homepage = "https://nlnet.nl/project/Re-iSearch/";
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.astro ] ++ lib.teams.ngi.members;
+    maintainers = [ lib.maintainers.astro ];
+    teams = [ lib.teams.ngi ];
   };
 })

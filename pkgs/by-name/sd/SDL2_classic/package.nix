@@ -251,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${finalAttrs.version}";
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = lib.teams.sdl.members;
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl2" ];
   };
 })

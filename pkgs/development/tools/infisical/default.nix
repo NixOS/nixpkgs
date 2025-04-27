@@ -84,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
     license = licenses.mit;
     mainProgram = "infisical";
-    maintainers = teams.infisical.members ++ (with maintainers; [ hausken ]);
+    maintainers = with maintainers; [ hausken ];
+    teams = [ teams.infisical ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

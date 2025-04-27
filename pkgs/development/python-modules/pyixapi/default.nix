@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/peering-manager/pyixapi/";
     changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

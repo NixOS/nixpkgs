@@ -39,6 +39,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Disc burner and project creator for Xfce";
     mainProgram = "xfburn";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

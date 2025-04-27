@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Command line tool for RabbitMQ that uses the HTTP API";
-    maintainers = lib.teams.flyingcircus.members;
+    teams = [ lib.teams.flyingcircus ];
     homepage = "https://www.rabbitmq.com/docs/management-cli";
     license = with lib.licenses; [
       mit

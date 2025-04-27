@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phase1geo/Minder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "com.github.phase1geo.minder";
   };
 }
