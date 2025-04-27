@@ -7,6 +7,7 @@
   oniguruma,
   zlib,
   gitMinimal,
+  gitSetupHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-dive";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sy2qNFn8JLE173HVWfFXBx21jcx4kpFMwi9a0m38lso=";
   };
 
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     gitMinimal
+    gitSetupHook
   ];
 
   # don't use vendored libgit2
@@ -44,12 +46,6 @@ rustPlatform.buildRustPackage rec {
     # requires internet access
     "--skip=screenshot"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    git config --global user.name nixbld
-    git config --global user.email nixbld@example.com
-  '';
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
