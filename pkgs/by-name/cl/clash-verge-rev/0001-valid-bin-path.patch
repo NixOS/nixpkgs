@@ -1,0 +1,56 @@
+diff --git a/src/service/core.rs b/src/service/core.rs
+index 84407a5..51081ed 100644
+--- a/src/service/core.rs
++++ b/src/service/core.rs
+@@ -7,6 +7,7 @@ use once_cell::sync::Lazy;
+ use std::{
+     collections::HashMap,
+     sync::{atomic::Ordering, Arc, Mutex},
++    env,
+ };
+ 
+ impl CoreManager {
+@@ -227,7 +228,7 @@ impl CoreManager {
+             .unwrap()
+             .running_pid
+             .load(Ordering::Relaxed) as u32;
+-        
++
+         match process::find_processes("verge-mihomo") {
+             Ok(pids) => {
+                 // 直接在迭代过程中过滤和终止
+@@ -248,18 +249,32 @@ impl CoreManager {
+                     })
+                     .filter(|&success| success)
+                     .count();
+-                    
++
+                 println!("Successfully stopped {} verge-mihomo processes", kill_count);
+             }
+             Err(e) => {
+                 eprintln!("Error finding verge-mihomo processes: {}", e);
+             }
+         }
+-        
++
+         Ok(())
+     }
+ 
+     pub fn start_clash(&self, body: StartBody) -> Result<(), String> {
++        {
++            let bin_path = std::path::Path::new(body.bin_path.as_str());
++            let current_exe = std::env::current_exe()
++                .map_err(|e| format!("Failed to get current exe path: {}", e))?;
++            let current_dir = current_exe.parent()
++                .ok_or("Failed to get current directory")?;
++
++            if !bin_path.starts_with(current_dir) {
++                return Err(format!(
++                    "Invalid binary path for clash kernel. It must be under: {}",
++                    current_dir.display()
++                ));
++            }
++        }
+         {
+             // Check clash & stop if needed
+             let is_running_clash = self
