@@ -6,12 +6,13 @@
   fetchFromGitHub,
   freezegun,
   funcy,
-  gitMinimal,
   pydantic,
   pytest-cov-stub,
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
+  gitMinimal,
+  gitSetupHook,
   pythonOlder,
   rich,
   ruamel-yaml,
@@ -61,13 +62,11 @@ buildPythonPackage rec {
     pytest-mock
     pytest-test-utils
     pytestCheckHook
+    gitSetupHook
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-
-    git config --global user.email "nobody@example.com"
-    git config --global user.name "Nobody"
 
     # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
