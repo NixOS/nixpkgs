@@ -1,7 +1,6 @@
 {
   vimUtils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 vimUtils.buildVimPlugin rec {
   pname = "bitbake-vim";
@@ -19,11 +18,4 @@ vimUtils.buildVimPlugin rec {
   sourceRoot = "source/contrib/vim";
 
   meta.homepage = "https://github.com/openembedded/bitbake/";
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)$"
-    ];
-  };
 }
