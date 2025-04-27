@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "elmerfem";
-  version = "unstable-2023-09-18";
+  version = "unstable-2025-04-25";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
     repo = "elmerfem";
-    rev = "0fcced06f91c93f44557efd6a5f10b2da5c7066c";
-    hash = "sha256-UuARDYW7D3a4dB6I86s2Ed5ecQxc+Y/es3YIeF2VyTc=";
+    rev = "3d195587c8ac0d495151eadb7c540dcd81418af6";
+    hash = "sha256-xlCgAuij1plg6wK8vzzLqucl2YOqUSPyAYk9o3T7Atk=";
   };
 
   hardeningDisable = [ "format" ];
