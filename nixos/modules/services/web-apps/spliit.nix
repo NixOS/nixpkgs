@@ -42,7 +42,7 @@ in
 
     configureNginx = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = "Configure nginx as a reverse proxy for Spliit.";
     };
 
@@ -155,6 +155,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         LoadCredential = lib.mkIf (cfg.secretFile != null) "env-secrets:${cfg.secretFile}";
+        DynamicUser = true;
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -226,18 +227,6 @@ in
             };
           };
         };
-      };
-    };
-
-    users.groups = {
-      ${cfg.group} = { };
-    };
-
-    users.users = {
-      ${cfg.user} = {
-        group = cfg.group;
-        isSystemUser = true;
-        description = "Spliit daemon user";
       };
     };
 
