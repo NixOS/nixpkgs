@@ -17151,9 +17151,7 @@ with pkgs;
     useProprietaryAssets = false;
   };
 
-  ldmud = callPackage ../games/ldmud { };
-
-  ldmud-full = callPackage ../games/ldmud {
+  ldmud-full = callPackage ../by-name/ld/ldmud/package.nix {
     ipv6Support = true;
     mccpSupport = true;
     mysqlSupport = true;
