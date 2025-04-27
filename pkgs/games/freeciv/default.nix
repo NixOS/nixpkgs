@@ -18,6 +18,7 @@
   SDL2_image,
   SDL2_ttf,
   SDL2_gfx,
+  libX11,
   freetype,
   fluidsynth,
   sdl2Client ? false,
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
       SDL2_image
       SDL2_ttf
       SDL2_gfx
+      libX11 # can be removed when https://github.com/freeciv/freeciv/commit/00a9d69fa38d8618893e1eaad2830abb395ef25b is tagged, likely in 3.2.0
       freetype
       fluidsynth
     ]
