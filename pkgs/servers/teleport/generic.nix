@@ -39,7 +39,7 @@ let
   pname = "teleport";
   inherit version;
 
-  rdpClient = rustPlatform.buildRustPackage rec {
+  rdpClient = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "teleport-rdpclient";
     useFetchCargoVendor = true;
     inherit cargoHash;
@@ -52,15 +52,15 @@ let
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
     # buildRustPackage sets strictDeps = true;
-    nativeCheckInputs = buildInputs;
+    nativeCheckInputs = finalAttrs.buildInputs;
 
     OPENSSL_NO_VENDOR = "1";
 
     postInstall = ''
       mkdir -p $out/include
-      cp ${buildAndTestSubdir}/librdprs.h $out/include/
+      cp ${finalAttrs.buildAndTestSubdir}/librdprs.h $out/include/
     '';
-  };
+  });
 
   webassets = stdenv.mkDerivation {
     pname = "teleport-webassets";
@@ -120,7 +120,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit pname src version;
   inherit vendorHash;
   proxyVendor = true;
@@ -208,4 +208,4 @@ buildGoModule rec {
     # which occupies more than 31 bits of address space.
     broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
   };
-}
+})
