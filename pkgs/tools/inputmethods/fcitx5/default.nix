@@ -29,7 +29,6 @@
   libthai,
   libdatrie,
   xcbutilkeysyms,
-  pcre,
   xcbutil,
   xcbutilwm,
   xcb-imdkit,
@@ -89,7 +88,6 @@ stdenv.mkDerivation rec {
     libsepol
     libXdmcp
     libxkbcommon
-    pcre
     xcbutil
     xcbutilwm
     xcbutilkeysyms
