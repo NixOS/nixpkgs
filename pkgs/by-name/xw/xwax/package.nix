@@ -4,6 +4,7 @@
   fetchurl,
   SDL,
   SDL_ttf,
+  alsa-lib,
   jack2,
   libmpg123,
   ffmpeg,
@@ -37,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     # sdl
     SDL
     SDL_ttf
+
+    alsa-lib
 
     # audio server
     jack2
