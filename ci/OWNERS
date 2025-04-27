@@ -469,3 +469,6 @@ pkgs/development/interpreters/lfe/      @NixOS/beam
 
 # OctoDNS
 pkgs/tools/networking/octodns/ @anthonyroussel
+
+# Teleport
+pkgs/servers/teleport   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
