@@ -57,7 +57,8 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/starship completions zsh)
     '';
 
-  cargoHash = "sha256-Z/dMKExGemssCMqRzQ58xXxXvbFR84WX3KI2pC20omI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-B2CCrSH2aTcGEX96oBxl/27hNMdDpdd2vxdt0/nlN6I=";
 
   nativeCheckInputs = [ git ];
 
