@@ -3209,6 +3209,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  copilot-lsp = buildVimPlugin {
+    pname = "copilot-lsp";
+    version = "2025-04-27";
+    src = fetchFromGitHub {
+      owner = "copilotlsp-nvim";
+      repo = "copilot-lsp";
+      rev = "194acc0a975f20d88e62a382e83bdec71715d3c0";
+      sha256 = "09f1z36h5jxkl8xyfla6l6hsc0fgkin4w1sj45mwsk8a8g26xdlj";
+    };
+    meta.homepage = "https://github.com/copilotlsp-nvim/copilot-lsp/";
+    meta.hydraPlatforms = [ ];
+  };
+
   copilot-lua = buildVimPlugin {
     pname = "copilot.lua";
     version = "2025-04-25";
