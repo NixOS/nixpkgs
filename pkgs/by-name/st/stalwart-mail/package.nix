@@ -38,19 +38,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    sqlite
+    zstd
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
@@ -143,6 +136,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::inbound::antispam::antispam"
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::vrfy::vrfy_expn"
+    # thread 'smtp::management::queue::manage_queue' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    # NOTE: Test unreliable on high load systems
+    "--skip=smtp::management::queue::manage_queue"
   ];
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
