@@ -6,6 +6,7 @@
   pythonOlder,
   setuptools,
   click-default-group,
+  condense-json,
   numpy,
   openai,
   pip,
@@ -16,13 +17,14 @@
   pyyaml,
   sqlite-migrate,
   cogapp,
+  pytest-asyncio,
   pytest-httpx,
   sqlite-utils,
 }:
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.23";
+    version = "0.24.2";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -33,13 +35,14 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-jUWhdLZLHgrIP7trHvLBETQ764+k4ze5Swt2HYMqg4E=";
+      hash = "sha256-G5XKau8sN/AW9icSmJW9ht0wP77QdJkT5xmn7Ej4NeU=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
 
     dependencies = [
       click-default-group
+      condense-json
       numpy
       openai
       pip
@@ -56,6 +59,7 @@ let
     nativeCheckInputs = [
       cogapp
       numpy
+      pytest-asyncio
       pytest-httpx
       pytestCheckHook
     ];

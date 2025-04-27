@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "minetest-mapserver";
-  version = "4.9.2";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "minetest-mapserver";
     repo = "mapserver";
     rev = "v${version}";
-    hash = "sha256-wo3/7axVkEcnqkOG29KE136EeMt/FW63q68UlpIA3z8=";
+    hash = "sha256-6tDhfYG/zcFjGNCR6yir71FM/qFHK5p/3+q+P6V1a4c=";
   };
 
   vendorHash = "sha256-P3+M1ciRmFbOFnjy1+oWPhngPYFe/5o6Cs8pRlYNx2Q=";

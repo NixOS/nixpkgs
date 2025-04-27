@@ -14,6 +14,7 @@
   nixosTests,
   rocksdb,
   callPackage,
+  withFoundationdb ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
@@ -53,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     "elastic"
     "s3"
     "redis"
-  ];
+  ] ++ lib.optionals withFoundationdb [ "foundationdb" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

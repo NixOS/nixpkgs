@@ -16,6 +16,7 @@
   description ? null,
   homepage ? null,
   maintainers ? [ ],
+  teams ? [ ],
   unpack ? false, # whether to use fetchzip rather than fetchurl
 }:
 applyPatches (
@@ -27,7 +28,7 @@ applyPatches (
         {
           license = lib.licenses.${license};
           longDescription = description;
-          inherit homepage maintainers;
+          inherit homepage maintainers teams;
         }
         // lib.optionalAttrs (description != null) {
           longDescription = description;

@@ -1,6 +1,6 @@
 {
   lib,
-  vscode-extensions-update,
+  vscode-extension-update,
 }:
 
 {
@@ -8,6 +8,6 @@
   extraArgs ? [ ],
 }:
 
-[ "${lib.getExe vscode-extensions-update}" ]
+[ "${lib.getExe vscode-extension-update}" ]
 ++ lib.optionals (attrPath != null) [ attrPath ]
 ++ extraArgs
