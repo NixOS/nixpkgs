@@ -34,13 +34,13 @@ let
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.41";
+    version = "8.50";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-      sha256 = "sha256-8xvY8XYZJa/gAVcxR+ffpE8naUTbGyM8AyAdpG6nKtA=";
+      sha256 = "sha256-PR/Xw/u5auGFrrXnRsl2bAkOt8/JZWY3uGNfTHomAj8=";
     };
 
     postPatch =
