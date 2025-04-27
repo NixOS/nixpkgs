@@ -136,25 +136,33 @@ in
         cfg.settings
       ];
 
-      preStart = lib.mkIf (cfg.database.passwordFile != null) ''
-        DATABASE_PASSWORD="$(cat ${cfg.database.passwordFile})"
-
-        POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.name}?host=${cfg.database.hostname}:${toString cfg.database.port}";
-
-        echo -n "POSTGRES_PRISMA_URL=\"$POSTGRES_PRISMA_URL\"" > /run/spliit/.env
-        echo -n "POSTGRES_URL_NON_POOLING=\"$POSTGRES_PRISMA_URL\"" > /run/spliit/.env
-      '';
-
       serviceConfig = {
-        EnvironmentFile = lib.mkIf (cfg.database.passwordFile != null) "/run/spliit/.env";
         Type = "simple";
 
         StateDirectory = "spliit";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart =
+          if (cfg.database.passwordFile != null) then
+            lib.getExe (
+              pkgs.writeShellScriptBin "spliit-passwordFile" ''
+                set -eu
+                DATABASE_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/dbpasswordfile)"
+
+                POSTGRES_PRISMA_URL="postgresql://${cfg.database.user}:$DATABASE_PASSWORD@${cfg.database.hostname}:${toString cfg.database.port}/${cfg.database.name}";
+
+                export POSTGRES_PRISMA_URL="$POSTGRES_PRISMA_URL"
+                export POSTGRES_URL_NON_POOLING="$POSTGRES_PRISMA_URL"
+
+                exec ${lib.getExe cfg.package}
+              ''
+            )
+          else
+            lib.getExe cfg.package;
         Restart = "always";
         User = cfg.user;
         Group = cfg.group;
-        LoadCredential = lib.mkIf (cfg.secretFile != null) "env-secrets:${cfg.secretFile}";
+        LoadCredential =
+          lib.optional (cfg.secretFile != null) "env-secrets:${cfg.secretFile}"
+          ++ (lib.optional (cfg.database.passwordFile != null) "dbpasswordfile:${cfg.database.passwordFile}");
         DynamicUser = true;
 
         # Hardening
