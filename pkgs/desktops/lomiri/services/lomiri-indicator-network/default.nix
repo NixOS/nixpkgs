@@ -125,7 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      vm = nixosTests.ayatana-indicators;
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-network;
     };
     updateScript = gitUpdater { };
   };
