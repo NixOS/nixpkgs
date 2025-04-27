@@ -54,6 +54,14 @@ lib.recurseIntoAttrs (
       };
     };
 
+    simplebookmark = {
+      scriptPath = "scripts/SimpleBookmark.lua";
+      meta = {
+        description = "Simple bookmarks script based on assigning keys";
+        maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+      };
+    };
+
     simplehistory = {
       scriptPath = "scripts/SimpleHistory.lua";
       meta = {
