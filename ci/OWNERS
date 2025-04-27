@@ -472,7 +472,7 @@ pkgs/development/interpreters/lfe/      @NixOS/beam
 pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
-pkgs/servers/teleport   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
 pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @donteatoreo @johnrtitor
