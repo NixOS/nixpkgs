@@ -12,6 +12,8 @@
   logs,
   fpath,
   odoc,
+  writableTmpDirAsHomeHook,
+  gitSetupHook,
   opam-format,
   opam-core,
   opam-state,
@@ -69,6 +71,8 @@ buildDunePackage rec {
   nativeCheckInputs = [
     odoc
     gitMinimal
+    writableTmpDirAsHomeHook
+    gitSetupHook
   ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
@@ -80,10 +84,6 @@ buildDunePackage rec {
   '';
 
   preCheck = ''
-    export HOME=$TMPDIR
-    git config --global user.email "nix-builder@nixos.org"
-    git config --global user.name "Nix Builder"
-
     # it fails when it tries to reference "./make_check_deterministic.exe"
     rm -r tests/bin/check
   '';
