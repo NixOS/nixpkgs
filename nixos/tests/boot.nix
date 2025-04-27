@@ -65,20 +65,22 @@ let
 
   iso =
     (import ../lib/eval-config.nix {
-      inherit system;
       modules = [
         ../modules/installer/cd-dvd/installation-cd-minimal.nix
         ../modules/testing/test-instrumentation.nix
+        { nixpkgs.pkgs = pkgs; }
       ];
     }).config.system.build.isoImage;
 
   sd =
     (import ../lib/eval-config.nix {
-      inherit system;
       modules = [
         ../modules/installer/sd-card/sd-image-x86_64.nix
         ../modules/testing/test-instrumentation.nix
-        { sdImage.compressImage = false; }
+        {
+          sdImage.compressImage = false;
+          nixpkgs.pkgs = pkgs;
+        }
       ];
     }).config.system.build.sdImage;
 
@@ -109,7 +111,6 @@ let
     let
       config =
         (import ../lib/eval-config.nix {
-          inherit system;
           modules = [
             ../modules/installer/netboot/netboot.nix
             ../modules/testing/test-instrumentation.nix
@@ -118,6 +119,8 @@ let
                 "serial"
                 "live.nixos.passwordHash=$6$jnwR50SkbLYEq/Vp$wmggwioAkfmwuYqd5hIfatZWS/bO6hewzNIwIrWcgdh7k/fhUzZT29Vil3ioMo94sdji/nipbzwEpxecLZw0d0" # "password"
               ];
+
+              nixpkgs.pkgs = pkgs;
             }
             {
               key = "serial";

@@ -428,6 +428,7 @@ with pkgs;
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
     cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
     ddns = python3Packages.callPackage ../tools/networking/octodns/providers/ddns { };
+    transip = python3Packages.callPackage ../tools/networking/octodns/providers/transip { };
   };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
@@ -4315,7 +4316,6 @@ with pkgs;
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = pkgsi686Linux.mangohud;
-    inherit (python3Packages) mako;
   };
 
   marimo = with python3Packages; toPythonApplication marimo;
@@ -6659,6 +6659,8 @@ with pkgs;
       lldb_20 = llvmPackages_20.lldb;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
+
+      mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_12
     llvmPackages_13
@@ -6683,6 +6685,7 @@ with pkgs;
     lldb_20
     llvm_20
     bolt_20
+    mkLLVMPackages
     ;
 
   lorri = callPackage ../tools/misc/lorri {
@@ -16410,8 +16413,8 @@ with pkgs;
 
   vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
-  vscode-extensions-update-script =
-    callPackage ../by-name/vs/vscode-extensions-update/vscode-extensions-update-script.nix
+  vscode-extension-update-script =
+    callPackage ../by-name/vs/vscode-extension-update/vscode-extension-update-script.nix
       { };
 
   vscode-js-debug = callPackage ../by-name/vs/vscode-js-debug/package.nix {
@@ -16483,9 +16486,9 @@ with pkgs;
 
   webcamoid = qt6Packages.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_34; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_35; };
 
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_33; };
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_34; };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
@@ -18311,8 +18314,6 @@ with pkgs;
       { };
 
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
-
-  calaos_installer = libsForQt5.callPackage ../misc/calaos/installer { };
 
   clinfo = callPackage ../tools/system/clinfo {
     inherit (darwin.apple_sdk.frameworks) OpenCL;

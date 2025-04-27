@@ -4196,6 +4196,8 @@ self: super: with self; {
 
   dsnap = callPackage ../development/python-modules/dsnap { };
 
+  dtfabric = callPackage ../development/python-modules/dtfabric { };
+
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
@@ -4414,6 +4416,8 @@ self: super: with self; {
   emborg = callPackage ../development/python-modules/emborg { };
 
   embrace = callPackage ../development/python-modules/embrace { };
+
+  embreex = callPackage ../development/python-modules/embreex { };
 
   emcee = callPackage ../development/python-modules/emcee { };
 
@@ -5550,6 +5554,8 @@ self: super: with self; {
   ghidra-bridge = callPackage ../development/python-modules/ghidra-bridge { };
 
   ghome-foyer-api = callPackage ../development/python-modules/ghome-foyer-api { };
+
+  ghostscript = callPackage ../development/python-modules/ghostscript { };
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
@@ -14230,6 +14236,8 @@ self: super: with self; {
   python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
 
   python-toolbox = callPackage ../development/python-modules/python-toolbox { };
+
+  python-transip = callPackage ../development/python-modules/python-transip { };
 
   python-troveclient = callPackage ../development/python-modules/python-troveclient { };
 

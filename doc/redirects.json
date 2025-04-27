@@ -450,6 +450,9 @@
   "var-meta-teams": [
     "index.html#var-meta-teams"
   ],
+  "var-go-goSum": [
+    "index.html#var-go-goSum"
+  ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
   ],

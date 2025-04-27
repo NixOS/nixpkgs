@@ -15,6 +15,7 @@
   nixosTests,
   rocksdb,
   callPackage,
+  withFoundationdb ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage rec {
       sqlite
       zstd
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.Security
@@ -61,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     "elastic"
     "s3"
     "redis"
-  ];
+  ] ++ lib.optionals withFoundationdb [ "foundationdb" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

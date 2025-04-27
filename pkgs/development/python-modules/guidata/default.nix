@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "guidata";
-  version = "3.7.1";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${version}";
-    hash = "sha256-Qao10NyqFLysx/9AvORX+EIrQlnQJQhSYkVHeTwIutQ=";
+    hash = "sha256-ljS2FJmLPPRHQesEwO4dTWr+OZRjviGjkuTYusB9O48=";
   };
 
   build-system = [
@@ -105,7 +105,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library generating graphical user interfaces for easy dataset editing and display";
     homepage = "https://github.com/PlotPyStack/guidata";
-    changelog = "https://github.com/PlotPyStack/guidata/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/guidata/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

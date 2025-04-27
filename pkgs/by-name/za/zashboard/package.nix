@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zashboard";
-  version = "1.80.1";
+  version = "1.81.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/M/nDkyMZt1bPW5Aimg+U1Dg5dJOdUh3NnxXMuQxKhg=";
+    hash = "sha256-pZ0oSH20vdvfAhKfEn8LPRUN1NgBkSDmxdwFZF6ynB4=";
   };
 
   nativeBuildInputs = [
