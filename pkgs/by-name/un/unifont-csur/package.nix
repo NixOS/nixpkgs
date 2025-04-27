@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unifont-csur";
-  version = "16.0.02";
+  version = "16.0.03";
 
   src = fetchurl {
     url = "https://unifoundry.com/pub/unifont/unifont-${finalAttrs.version}/font-builds/unifont_csur-${finalAttrs.version}.otf";
-    hash = "sha256-orLV0a0dQUAnzWnSTD1ALfbAsqWtFscH3rMCDyaXNfo=";
+    hash = "sha256-41MXxHHohZFm42LMePmLSZp3bytsxMJmWh/0psIgWt4=";
   };
 
   dontUnpack = true;
