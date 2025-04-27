@@ -6976,6 +6976,12 @@
     githubId = 30512529;
     name = "Evils";
   };
+  evythedemon = {
+    name = "Evy Garden";
+    github = "EvysGarden";
+    githubId = 92547295;
+    email = "evysgarden@protonmail.com";
+  };
   ewok = {
     email = "ewok@ewok.ru";
     github = "ewok-old";

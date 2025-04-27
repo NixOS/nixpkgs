@@ -68,6 +68,8 @@ jobs:
         with:
           app-id: ${{ vars.OWNER_RO_APP_ID }}
           private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -101,6 +103,9 @@ jobs:
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
           private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
+          permission-pull-requests: write
 
       - name: Build review request package
         run: nix-build ci -A requestReviews

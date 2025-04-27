@@ -11,18 +11,18 @@
   curl,
   goocanvas2,
   gpsd,
-  hamlib,
+  hamlib_4,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpredict";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gpredict";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+hgjImfT3nWMBYwde7+KC/hzd84pwQbpoJvaJSNG4E8=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     goocanvas2
     gpsd
-    hamlib
+    hamlib_4
   ];
 
   meta = {
@@ -69,12 +69,13 @@ stdenv.mkDerivation rec {
       well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
       NORAD Keplerian elements.
     '';
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
     maintainers = with lib.maintainers; [
       markuskowa
       cmcdragonkai
+      pandapip1
     ];
   };
-}
+})

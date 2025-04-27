@@ -67,7 +67,11 @@ let
     hasAttrByPath (splitString "." component) cfg.config
     || useComponentPlatform component
     || useExplicitComponent component
-    || builtins.elem component (cfg.extraComponents ++ cfg.defaultIntegrations);
+    || builtins.elem component (
+      cfg.extraComponents
+      ++ cfg.defaultIntegrations
+      ++ map (builtins.getAttr "domain") cfg.customComponents
+    );
 
   # Final list of components passed into the package to include required dependencies
   extraComponents = filter useComponent availableComponents;
@@ -718,6 +722,7 @@ in
 
             # Custom components, maintained manually.
             "amshan"
+            "benqprojector"
           ];
         in
         {
