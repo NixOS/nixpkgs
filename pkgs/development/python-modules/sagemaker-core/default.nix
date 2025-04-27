@@ -46,6 +46,7 @@ buildPythonPackage rec {
     "boto3"
     "importlib-metadata"
     "mock"
+    "rich"
   ];
 
   dependencies = [
