@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   coreutils,
-  gcc,
   libxml2,
   lto ? true,
   makeWrapper,
