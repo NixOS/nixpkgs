@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-jack"
   ];
 
+  enableParallelBuilding = true;
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-h";
   doInstallCheck = true;
