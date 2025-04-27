@@ -114,12 +114,12 @@ appimageTools.wrapType2 {
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
+    mv $out/bin/irccloud-${version} $out/bin/irccloud
     install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
     substituteInPlace $out/share/applications/irccloud.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=irccloud'
   '';
 }
 ```
@@ -154,7 +154,7 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=irccloud'
     '';
   };
 in
@@ -166,7 +166,7 @@ appimageTools.wrapAppImage {
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
+    mv $out/bin/irccloud-${version} $out/bin/irccloud
     install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
