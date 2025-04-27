@@ -10909,6 +10909,10 @@ with pkgs;
 
   stalwart-mail-webadmin = stalwart-mail.webadmin;
 
+  stalwart-mail-enterprise = stalwart-mail.override {
+    stalwartEnterprise = true;
+  };
+
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
 
   inherit (callPackages ../servers/monitoring/sensu-go { })
