@@ -1,11 +1,13 @@
 {
   lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
   buildNpmPackage,
   electron_34,
   makeWrapper,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 let
   pname = "vrcx";
@@ -48,6 +50,7 @@ buildNpmPackage {
 
   nativeBuildInputs = [
     makeWrapper
+    copyDesktopItems
   ];
 
   buildPhase = ''
@@ -65,17 +68,34 @@ buildNpmPackage {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/vrcx
-    cp -r build/*-unpacked/resources "$out/lib/vrcx/"
-    mkdir -p $out/lib/vrcx/resources/app.asar.unpacked/build
-    cp -r ${backend} "$out/lib/vrcx/resources/app.asar.unpacked/build/Electron"
+    mkdir -p "$out/share/vrcx"
+    cp -r build/*-unpacked/resources "$out/share/vrcx/"
+    mkdir -p $out/share/vrcx/resources/app.asar.unpacked/build
+    cp -r ${backend} "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx" \
-      --add-flags "$out/lib/vrcx/resources/app.asar" \
+      --add-flags "$out/share/vrcx/resources/app.asar" \
       --set NODE_ENV production
+
+    install -Dm644 VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
 
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vrcx";
+      desktopName = "VRCX";
+      comment = "Friendship management tool for VRChat";
+      icon = "vrcx";
+      exec = "vrcx";
+      terminal = false;
+      categories = [
+        "Utility"
+        "Application"
+      ];
+    })
+  ];
 
   passthru = {
     inherit backend;
