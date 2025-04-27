@@ -14,7 +14,7 @@
   xmlto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adcli";
   version = "0.9.2";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
     repo = "adcli";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
   };
 
@@ -66,15 +66,15 @@ stdenv.mkDerivation rec {
     patch_docbook doc/adcli-docs.xml
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/realmd/adcli/adcli.html";
     description = "Helper library and tools for Active Directory client operations";
     mainProgram = "adcli";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       SohamG
       anthonyroussel
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
