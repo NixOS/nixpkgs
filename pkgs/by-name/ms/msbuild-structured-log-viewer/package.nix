@@ -29,9 +29,6 @@ buildDotnetModule (finalAttrs: {
   projectFile = [ "src/StructuredLogViewer.Avalonia/StructuredLogViewer.Avalonia.csproj" ];
   nugetDeps = ./deps.json;
 
-  # HACK: Clear out RuntimeIdentifiers that's set in StructuredLogViewer.Avalonia.csproj, otherwise our --runtime has no effect
-  dotnetFlags = [ "-p:RuntimeIdentifiers=" ];
-
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
     copyDesktopItems
