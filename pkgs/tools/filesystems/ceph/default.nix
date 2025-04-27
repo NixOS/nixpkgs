@@ -352,10 +352,10 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.1";
+  version = "19.2.2";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-QEX3LHxySVgLBg21iQga1DnyQsXFi6593e+WSjgT/h8=";
+    hash = "sha256-7FD9LJs25VzUCRIBm01Cm3ss1YLTN9YLwPZnHSMd8rs=";
   };
 in
 rec {
