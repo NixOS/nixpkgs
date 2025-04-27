@@ -103,6 +103,29 @@
   ###### implementation
 
   config = {
+    warnings =
+      lib.optional
+        (
+          (lib.subtractLists config.i18n.supportedLocales (
+            builtins.map
+              (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
+              (
+                [ config.i18n.defaultLocale ]
+                ++ config.i18n.extraLocales
+                ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+              )
+          )) != [ ]
+        )
+        ''
+          `i18n.supportedLocales` is deprecated in favor of `i18n.extraLocales`,
+          and it seems you are using `i18n.supportedLocales` and forgot to
+          include some locales specified in `i18n.defaultLocale`,
+          `i18n.extraLocales` or `i18n.extraLocaleSettings`.
+
+          If you're trying to install additional locales not specified in
+          `i18n.defaultLocale` or `i18n.extraLocaleSettings`, consider adding
+          only those locales to `i18n.extraLocales`.
+        '';
 
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
