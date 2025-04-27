@@ -75,6 +75,12 @@ stdenv.mkDerivation rec {
     pmix
   ];
 
+  # Setting this manually, required for RiscV cross-compile
+  configureFlags = [
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {
