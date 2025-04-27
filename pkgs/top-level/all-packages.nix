@@ -19176,10 +19176,6 @@ with pkgs;
 
   inherit (callPackage ../applications/misc/zettlr { }) zettlr;
 
-  fac-build = callPackage ../development/tools/build-managers/fac {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
   };
