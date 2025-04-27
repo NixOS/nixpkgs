@@ -38,19 +38,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    sqlite
+    zstd
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
