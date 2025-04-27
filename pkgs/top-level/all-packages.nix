@@ -7759,8 +7759,6 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS
 
-  actiona = callPackage ../applications/misc/actiona { };
-
   inherit (callPackage ../development/tools/alloy { })
     alloy5
     alloy6
