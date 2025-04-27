@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       libiconv
       icu
     ]
-    ++ [
+    ++ lib.optionals sdl2Client [
       SDL2
       SDL2_mixer
       SDL2_image
