@@ -94,6 +94,7 @@ buildNpmPackage {
         "Utility"
         "Application"
       ];
+      mimeTypes = [ "x-scheme-handler/vrcx" ];
     })
   ];
 
