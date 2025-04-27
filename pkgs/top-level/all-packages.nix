@@ -5900,6 +5900,10 @@ with pkgs;
         # JS backend can't use gmp
         else if stdenv.hostPlatform.isGhcjs then
           haskell.packages.native-bignum.ghc98
+        # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
+        # FIXME: remove when fixed
+        else if stdenv.hostPlatform.isi686 then
+          haskell.packages.ghc96
         else
           haskell.packages.ghc98
       )
@@ -5925,6 +5929,10 @@ with pkgs;
       # JS backend can't use GMP
       else if stdenv.targetPlatform.isGhcjs then
         haskell.compiler.native-bignum.ghc98
+      # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
+      # FIXME: remove when fixed
+      else if stdenv.hostPlatform.isi686 then
+        haskell.compiler.ghc96
       else
         haskell.compiler.ghc98
     );
