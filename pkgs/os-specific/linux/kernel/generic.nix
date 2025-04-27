@@ -242,6 +242,28 @@ let
 
         installPhase = "mv $buildRoot/.config $out";
 
+        doCheck = true;
+
+        checkPhase =
+          lib.optionalString stdenv.cc.isClang ''
+            if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
+              echo "Kernel config didn't recognize the clang compiler?"
+              exit 1
+            fi
+          ''
+          + lib.optionalString stdenv.cc.bintools.isLLVM ''
+            if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
+              echo "Kernel config didn't recognize the LLVM linker?"
+              exit 1
+            fi
+          ''
+          + lib.optionalString withRust ''
+            if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
+              echo "Kernel config didn't find Rust toolchain?"
+              exit 1
+            fi
+          '';
+
         enableParallelBuilding = true;
 
         passthru = rec {
