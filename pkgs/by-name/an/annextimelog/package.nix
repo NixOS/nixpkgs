@@ -28,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-+3PkG33qKckagSVvVdqkypulO7uu5AMOv8fQiP8IUbs=";
   };
 
+  pythonRelaxDeps = [ "rich" ];
+
   nativeBuildInputs =
     with python3.pkgs;
     [
