@@ -2,23 +2,27 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  openssl,
   Security,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spr";
-  version = "1.3.4";
+  version = "1.3.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-lsdWInJWcofwU3P4vAWcLQeZuV3Xn1z30B7mhODJ4Vc=";
+    hash = "sha256-PrqDWrbGH80ByxK5S7Q1lpF+BGujqP6ilFM/6TqKSZ0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4fYQM+GQ5yqES8HQ23ft4wfM5mwDdcWuE5Ed2LST9Gw=";
+  cargoHash = "sha256-bzxcqYy0gWLGfm2JokabQvBFRhXv4ywDYdzxmG1nDac=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
