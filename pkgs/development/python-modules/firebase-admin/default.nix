@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "firebase-admin";
-  version = "6.7.0";
+  version = "6.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
     tag = "v${version}";
-    hash = "sha256-MQFGgWQ2YgAii+IVP/78JKU1Q7QgEvMXz5WvXGoyw7g=";
+    hash = "sha256-N8DidHocdIV5qFEPZIqWZPfxvIfJzd/+jXGk/OZBT1s=";
   };
 
   build-system = [ setuptools ];
