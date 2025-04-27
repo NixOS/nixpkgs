@@ -9,15 +9,15 @@
 
 buildGoModule rec {
   pname = "fleectl";
-  version = "4.64.1";
+  version = "4.67.1";
 
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
     tag = "fleet-v${version}";
-    hash = "sha256-cZ0YTFcyPt7NMZUDZCdlVPTuhwRy7mTp7JCdINqiwOM=";
+    hash = "sha256-shaOPK7BbIDARopzGehlIA6aPdRiFRP9hrFRNO3kfGA=";
   };
-  vendorHash = "sha256-gFAotYho18Jn8MaFK6ShoMA1VLXVENcrASvHWZGFOFg=";
+  vendorHash = "sha256-UkdHwjCcxNX7maI4QClLm5WWaLXwGlEu80eZXVoYy60=";
 
   subPackages = [
     "cmd/fleetctl"
