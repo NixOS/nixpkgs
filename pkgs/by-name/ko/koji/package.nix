@@ -9,6 +9,7 @@
   openssl,
   gitMinimal,
   writableTmpDirAsHomeHook,
+  gitSetupHook,
   installShellFiles,
   versionCheckHook,
 }:
@@ -42,12 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
+    gitSetupHook
   ];
-
-  preCheck = ''
-    git config --global user.name 'nix-user'
-    git config --global user.email 'nix-user@example.com'
-  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd koji \
