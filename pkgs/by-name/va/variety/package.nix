@@ -17,6 +17,7 @@
   imagemagick,
   appindicatorSupport ? true,
   libayatana-appindicator,
+  bash,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -78,6 +79,9 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace variety/VarietyWindow.py \
       --replace-fail '[script,' '["${runtimeShell}", script,' \
       --replace-fail 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+    substituteInPlace data/variety-autostart.desktop.template \
+      --replace-fail "/bin/bash" "${lib.getExe bash}" \
+      --replace-fail "{VARIETY_PATH}" "variety"
   '';
 
   meta = {
