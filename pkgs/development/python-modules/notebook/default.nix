@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
   hatch-jupyter-builder,
   hatchling,
   jupyter-server,
@@ -18,15 +20,29 @@ buildPythonPackage rec {
   version = "7.4.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lolJYrIwAT6gwKRm5OZCxarOJbqMhmhhdbaZkO9ij/k=";
+  src = fetchFromGitHub {
+    owner = "jupyter";
+    repo = "notebook";
+    tag = "v${version}";
+    hash = "sha256-Xz9EZgYNJjWsN7tcTmwXLwH9VW7GnI0P/oNT0IFpkoE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "timeout = 300" ""
   '';
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  missingHashes = ./missing-hashes.json;
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-IFLAwEFsI/GL26XAfiLDyW1mG72gcN2TH651x8Nbrtw=";
+  };
 
   build-system = [
     hatch-jupyter-builder
