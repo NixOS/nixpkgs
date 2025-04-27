@@ -8,6 +8,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  stdenv,
 }:
 let
   pname = "vrcx";
@@ -121,5 +122,6 @@ buildNpmPackage {
       ImSapphire
     ];
     platforms = lib.platforms.linux;
+    broken = !stdenv.hostPlatform.isx86_64;
   };
 }
