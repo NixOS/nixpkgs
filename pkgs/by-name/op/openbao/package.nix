@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  go_1_24,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
   nixosTests,
@@ -12,7 +12,7 @@
   withHsm ? stdenvNoCC.hostPlatform.isLinux,
 }:
 
-buildGoModule.override { go = go_1_24; } (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "openbao";
   version = "2.2.1";
 
@@ -43,8 +43,15 @@ buildGoModule.override { go = go_1_24; } (finalAttrs: {
     cp -r --no-preserve=mode ${finalAttrs.passthru.ui} http/web_ui
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     mv $out/bin/openbao $out/bin/bao
+
+    # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
+    installShellCompletion --bash --name bao <(echo complete -C "$out/bin/bao" bao)
   '';
 
   nativeInstallCheckInputs = [
