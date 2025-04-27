@@ -190,11 +190,11 @@ buildGoModule (finalAttrs: {
 
   passthru.tests = nixosTests.teleport;
 
-  meta = with lib; {
+  meta = {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       arianvp
       justinas
       sigma
@@ -203,7 +203,7 @@ buildGoModule (finalAttrs: {
       techknowlogick
       juliusfreudenberger
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
     broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
