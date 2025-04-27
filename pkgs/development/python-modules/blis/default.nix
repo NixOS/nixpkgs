@@ -79,7 +79,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-${version}";
+    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-v${version}";
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
     license = lib.licenses.bsd3;
