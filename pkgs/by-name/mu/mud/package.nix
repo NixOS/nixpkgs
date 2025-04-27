@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mud";
-  version = "1.0.12";
+  version = "1.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jasursadikov";
     repo = "mud";
     tag = "v${version}";
-    hash = "sha256-fFSnkodYhV1dokCJq43PwXxjIeAkObYZA3VxhjGZlhM=";
+    hash = "sha256-DRkr4SYXzYZg7IvPwKGeqcJVDyJr4TdJ4TKuBu7iHEc=";
   };
 
   build-system = with python3Packages; [
