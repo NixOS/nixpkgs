@@ -5,13 +5,13 @@
 }:
 vimUtils.buildVimPlugin rec {
   pname = "bitbake-vim";
-  version = "2.10.4";
+  version = "2.0.26";
 
   src = fetchFromGitHub {
     owner = "openembedded";
     repo = "bitbake";
     tag = version;
-    hash = "sha256-gdxPnRhd4Hj1PWgCU5A/+639ndJXlkdArOBZt6eiZWA=";
+    hash = "sha256-Er6zWDhqIYCWTjAQbfliKpFzoYampcrSZGuXcN9C/rk=";
   };
 
   sourceRoot = "source/contrib/vim";
