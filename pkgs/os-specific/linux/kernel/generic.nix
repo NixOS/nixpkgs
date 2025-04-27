@@ -236,6 +236,24 @@ let
             KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
             PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
             perl -w $generateConfig
+        ''
+        + lib.optionalString stdenv.cc.isClang ''
+          if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
+            echo "Kernel config didn't recognize the clang compiler?"
+            exit 1
+          fi
+        ''
+        + lib.optionalString stdenv.cc.bintools.isLLVM ''
+          if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
+            echo "Kernel config didn't recognize the LLVM linker?"
+            exit 1
+          fi
+        ''
+        + lib.optionalString withRust ''
+          if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
+            echo "Kernel config didn't find Rust toolchain?"
+            exit 1
+          fi
         '';
 
         installPhase = "mv $buildRoot/.config $out";
