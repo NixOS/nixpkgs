@@ -76,6 +76,7 @@ buildNpmPackage {
     cp -r ${backend} "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
+      --add-flags "--ozone-platform-hint=auto"              \
       --add-flags "$out/share/vrcx/resources/app.asar"      \
       --set NODE_ENV production                             \
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
