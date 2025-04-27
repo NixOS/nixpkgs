@@ -28,6 +28,8 @@ buildPythonPackage rec {
     hash = "sha256-XqCP2GfS8hxlFU4Mndeh+7Ll2kXJ3Dei+AGp/oy0PUg=";
   };
 
+  pythonRelaxDeps = [ "cryptography" ];
+
   build-system = [ hatchling ];
 
   dependencies = [
