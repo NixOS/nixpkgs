@@ -36,8 +36,6 @@
   lz4,
   libmpg123,
   makeWrapper,
-  pcre,
-  pcre2,
   pkg-config,
   portaudio,
   rapidjson,
@@ -107,8 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       libxkbcommon
       lz4
       libmpg123
-      pcre
-      pcre2
       portaudio
       rapidjson
       sqlite
