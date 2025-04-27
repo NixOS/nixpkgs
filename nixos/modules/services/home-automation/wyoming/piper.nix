@@ -164,7 +164,7 @@ in
             DeviceAllow = "";
             DevicePolicy = "closed";
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            MemoryDenyWriteExecute = false; # required for onnxruntime
             PrivateDevices = true;
             PrivateUsers = true;
             ProtectHome = true;

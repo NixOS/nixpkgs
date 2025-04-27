@@ -46,9 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
       libgpiod
     ];
 
+  postPatch = ''
+    # Remove these rules from flashprog to avoid conflicts with libftdi
+    sed -i"" '/ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001"/d' "util/50-flashprog.rules"
+    sed -i"" '/ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010"/d' "util/50-flashprog.rules"
+    sed -i"" '/ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6011"/d' "util/50-flashprog.rules"
+    sed -i"" '/ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014"/d' "util/50-flashprog.rules"
+  '';
+
   postInstall = ''
-    cd "$src"
-    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
+    install -Dm644 ../util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
 
   passthru.updateScript = gitUpdater {
