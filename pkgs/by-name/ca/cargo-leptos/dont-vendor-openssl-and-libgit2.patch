@@ -1,0 +1,112 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index c133008..4f50554 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -515,7 +515,6 @@ dependencies = [
+  "liquid-lib",
+  "log",
+  "names",
+- "openssl",
+  "paste",
+  "path-absolutize",
+  "regex",
+@@ -533,7 +532,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "cargo-leptos"
+-version = "0.2.31"
++version = "0.2.32"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -1397,21 +1396,6 @@ version = "0.1.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
+ 
+-[[package]]
+-name = "foreign-types"
+-version = "0.3.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f6f339eb8adc052cd2ca78910fda869aefa38d22d5cb648e6485e4d3fc06f3b1"
+-dependencies = [
+- "foreign-types-shared",
+-]
+-
+-[[package]]
+-name = "foreign-types-shared"
+-version = "0.1.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
+-
+ [[package]]
+ name = "form_urlencoded"
+ version = "1.2.1"
+@@ -2996,47 +2980,12 @@ dependencies = [
+  "portable-atomic",
+ ]
+ 
+-[[package]]
+-name = "openssl"
+-version = "0.10.71"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5e14130c6a98cd258fdcb0fb6d744152343ff729cbfcb28c656a9d12b999fbcd"
+-dependencies = [
+- "bitflags 2.9.0",
+- "cfg-if",
+- "foreign-types",
+- "libc",
+- "once_cell",
+- "openssl-macros",
+- "openssl-sys",
+-]
+-
+-[[package]]
+-name = "openssl-macros"
+-version = "0.1.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
+-dependencies = [
+- "proc-macro2",
+- "quote",
+- "syn 2.0.100",
+-]
+-
+ [[package]]
+ name = "openssl-probe"
+ version = "0.1.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d05e27ee213611ffe7d6348b942e8f942b37114c00cc03cec254295a4a17852e"
+ 
+-[[package]]
+-name = "openssl-src"
+-version = "300.4.2+3.4.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "168ce4e058f975fe43e89d9ccf78ca668601887ae736090aacc23ae353c298e2"
+-dependencies = [
+- "cc",
+-]
+-
+ [[package]]
+ name = "openssl-sys"
+ version = "0.9.106"
+@@ -3045,7 +2994,6 @@ checksum = "8bb61ea9811cc39e3c2069f40b8b8e2e70d8569b361f879786cc7ed48b777cdd"
+ dependencies = [
+  "cc",
+  "libc",
+- "openssl-src",
+  "pkg-config",
+  "vcpkg",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index e8a4792..c588d37 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -56,7 +56,7 @@ base64ct = { version = "1.6.0", features = ["alloc"] }
+ swc = "13.0.1"
+ swc_common = "6.1"
+ shlex = "1.3.0"
+-cargo-generate = { version = "0.22", features = ["vendored-openssl"] }
++cargo-generate = { version = "0.22", default-features = false }
+ wasm-opt = "0.116.1"
+ ignore = "0.4.23"
+ walkdir = "2.5"

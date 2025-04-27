@@ -4,6 +4,9 @@
   lib,
   rustPlatform,
   stdenv,
+  pkg-config,
+  libgit2,
+  openssl,
 }:
 let
   inherit (darwin.apple_sdk.frameworks)
@@ -16,23 +19,36 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.28";
+  version = "0.2.32";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = "cargo-leptos";
     rev = "v${version}";
-    hash = "sha256-SjpfM963Zux+H5QhK8prvDLuI56fP5PqX5gcVbthRx4=";
+    hash = "sha256-sRfIRPs0hhFjMK9KQ4AUDSGTu1U8QIpVxsVhsWjY4fs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Da9ei4yAOfhSQmQgrUDZCmMeJXTfGnYhI1+L0JT/ECs=";
-
-  buildInputs = optionals isDarwin [
-    SystemConfiguration
-    Security
-    CoreServices
+  cargoPatches = [
+    ./dont-vendor-openssl-and-libgit2.patch
   ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xh9fGtSxDsYvJbGV55Rf+8c+eI4dtc5a8QcoNq1SvbQ=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      libgit2
+      openssl
+    ]
+    ++ optionals isDarwin [
+      SystemConfiguration
+      Security
+      CoreServices
+    ];
 
   # https://github.com/leptos-rs/cargo-leptos#dependencies
   buildFeatures = [ "no_downloads" ]; # cargo-leptos will try to install missing dependencies on its own otherwise
