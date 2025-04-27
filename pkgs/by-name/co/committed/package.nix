@@ -5,7 +5,9 @@
   rustPlatform,
   versionCheckHook,
   nix-update-script,
-  git,
+  gitMinimal,
+  writableTmpDirAsHomeHook,
+  gitSetupHook,
   libz,
 }:
 let
@@ -34,16 +36,10 @@ rustPlatform.buildRustPackage {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
+    writableTmpDirAsHomeHook
+    gitSetupHook
   ];
-
-  # Ensure libgit2 can read user.name and user.email for `git_signature_default`.
-  # https://github.com/crate-ci/committed/blob/v1.1.5/crates/committed/tests/cmd.rs#L126
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    git config --global user.name nobody
-    git config --global user.email no@where
-  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
