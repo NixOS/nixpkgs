@@ -8,6 +8,7 @@
   openssl,
   stdenv,
   gitMinimal,
+  gitSetupHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,15 +41,16 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    gitSetupHook
+  ];
 
   # disable vendored libgit2 and openssl
   buildNoDefaultFeatures = true;
 
   preCheck = ''
-    export HOME=$(mktemp -d) USER=nixbld
-    git config --global user.name Nixbld
-    git config --global user.email nixbld@localhost.localnet
+    export USER=nixbld
   '';
 
   # Exclude some tests that don't work in sandbox:
