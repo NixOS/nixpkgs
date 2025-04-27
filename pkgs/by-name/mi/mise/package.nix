@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   nix-update-script,
   rustPlatform,
