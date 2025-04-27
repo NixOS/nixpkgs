@@ -1,0 +1,12 @@
+# This file is used by .github/workflows/labels.yml
+# This version is only run for Pull Requests from protected branches like staging-next, haskell-updates or python-updates.
+
+"6.topic: haskell":
+  - any:
+    - head-branch:
+      - '^haskell-updates$'
+
+"6.topic: python":
+  - any:
+    - head-branch:
+      - '^python-updates$'
