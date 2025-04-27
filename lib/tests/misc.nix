@@ -969,6 +969,28 @@ runTests {
 
   testToSentenceCasePath = testingThrow (strings.toSentenceCase ./.);
 
+  testToCamelCase = {
+    expr = strings.toCamelCase "hello world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromKebab = {
+    expr = strings.toCamelCase "hello-world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromSnake = {
+    expr = strings.toCamelCase "hello_world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromPascal = {
+    expr = strings.toCamelCase "HelloWorld";
+    expected = "helloWorld";
+  };
+
+  testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
+
   testToInt = testAllTrue [
     # Naive
     (123 == toInt "123")
