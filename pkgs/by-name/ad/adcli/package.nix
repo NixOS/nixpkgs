@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
+    libxslt # xsltproc
     pkg-config
     util-linux
     xmlto
@@ -37,11 +38,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cyrus_sasl
     libkrb5
-    libxslt
     openldap
   ];
 
-  configureFlags = [ "--disable-debug" ];
+  strictDeps = true;
+
+  configureFlags = [
+    "--disable-debug"
+    "ac_cv_path_KRB5_CONFIG=${lib.getExe' (lib.getDev libkrb5) "krb5-config"}"
+  ];
 
   postPatch = ''
     substituteInPlace tools/Makefile.am \
