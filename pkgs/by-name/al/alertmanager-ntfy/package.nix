@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -27,7 +28,10 @@ buildGoModule {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+  passthru = {
+    tests = { inherit (nixosTests.prometheus) alertmanager-ntfy; };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+  };
 
   meta = {
     description = "Forwards Prometheus Alertmanager notifications to ntfy.sh";
