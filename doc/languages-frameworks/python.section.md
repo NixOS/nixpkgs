@@ -2196,6 +2196,9 @@ The following rules are desired to be respected:
   and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+* Non-python runtime dependencies should be added via explicit wrapping or
+  patching (using e.g. `substituteInPlace`), rather than through propagation via
+  `dependencies`/`propagatedBuildInputs`, to reduce clutter in `$PATH`.
 
 This list is useful for reviewers as well as for self-checking when submitting packages.
 

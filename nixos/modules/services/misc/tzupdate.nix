@@ -68,7 +68,6 @@ in
 
     systemd.timers.tzupdate = {
       enable = cfg.timer.enable;
-      interval = cfg.timer.interval;
       timerConfig = {
         OnStartupSec = "30s";
         OnCalendar = cfg.timer.interval;
