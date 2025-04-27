@@ -1389,6 +1389,7 @@ in
   tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   typesense = handleTest ./typesense.nix { };
+  tzupdate = runTest ./tzupdate.nix;
   ucarp = handleTest ./ucarp.nix { };
   udisks2 = handleTest ./udisks2.nix { };
   ulogd = handleTest ./ulogd/ulogd.nix { };
