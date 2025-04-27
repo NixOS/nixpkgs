@@ -12,6 +12,7 @@
 let
   pname = "vrcx";
   version = "2025.03.01";
+  dotnet = dotnetCorePackages.dotnet_9;
   electron = electron_34;
 
   src = fetchFromGitHub {
@@ -27,10 +28,11 @@ let
     inherit version src;
     pname = "${pname}-backend";
 
-    nugetDeps = ./deps.json;
-    dotnet-sdk = dotnetCorePackages.dotnet_9.sdk;
-    dotnet-runtime = dotnetCorePackages.dotnet_9.runtime;
+    dotnet-sdk = dotnet.sdk;
+    dotnet-runtime = dotnet.runtime;
     projectFile = "Dotnet/VRCX-Electron.csproj";
+
+    nugetDeps = ./deps.json;
 
     installPhase = ''
       runHook preInstall
@@ -73,9 +75,11 @@ buildNpmPackage {
     mkdir -p $out/share/vrcx/resources/app.asar.unpacked/build
     cp -r ${backend} "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/vrcx" \
-      --add-flags "$out/share/vrcx/resources/app.asar" \
-      --set NODE_ENV production
+    makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
+      --add-flags "$out/share/vrcx/resources/app.asar"      \
+      --set NODE_ENV production                             \
+      --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
+      --prefix PATH : ${lib.makeBinPath [ dotnet.runtime ]}
 
     install -Dm644 VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
 
