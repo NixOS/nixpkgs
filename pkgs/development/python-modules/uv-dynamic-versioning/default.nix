@@ -18,6 +18,8 @@
   gitpython,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
+  gitSetupHook,
+  gitMinimal,
 }:
 
 buildPythonPackage rec {
@@ -52,15 +54,12 @@ buildPythonPackage rec {
     "uv_dynamic_versioning"
   ];
 
-  preCheck = ''
-    git config --global user.email "nobody@example.com"
-    git config --global user.name "Nobody"
-  '';
-
   nativeCheckInputs = [
     gitpython
     pytestCheckHook
     writableTmpDirAsHomeHook
+    gitSetupHook
+    gitMinimal
   ];
 
   meta = {
