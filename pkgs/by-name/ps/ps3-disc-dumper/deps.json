@@ -170,11 +170,6 @@
     "hash": "sha256-kP5XM5GgwHGfNJfe4T2yO5NIZtiF71Ddp0pd1vG5V/4="
   },
   {
-    "pname": "System.CodeDom",
-    "version": "9.0.4",
-    "hash": "sha256-X8IDHw/ssp0vgPSnyM/tmDTb3poH6GLe+gZ4MR9qfho="
-  },
-  {
     "pname": "System.IO.Hashing",
     "version": "9.0.4",
     "hash": "sha256-rbcQzEncB3VuUZIcsE1tq30suf5rvRE4HkE+0lR/skU="
@@ -183,11 +178,6 @@
     "pname": "System.IO.Pipelines",
     "version": "8.0.0",
     "hash": "sha256-LdpB1s4vQzsOODaxiKstLks57X9DTD5D6cPx8DE1wwE="
-  },
-  {
-    "pname": "System.Management",
-    "version": "9.0.4",
-    "hash": "sha256-+sW/NQELaBGjUfzndaNLPHKKQVdI1yOJMaqF4tV2SVY="
   },
   {
     "pname": "System.Memory",
@@ -213,5 +203,10 @@
     "pname": "Tmds.DBus.Protocol",
     "version": "0.20.0",
     "hash": "sha256-CRW/tkgsuBiBJfRwou12ozRQsWhHDooeP88E5wWpWJw="
+  },
+  {
+    "pname": "WmiLight",
+    "version": "6.13.0",
+    "hash": "sha256-dliebNR45yj1Gvyv4WE7dMnWcdHx94PLjBv3AWhdS5I="
   }
 ]
