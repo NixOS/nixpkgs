@@ -2,7 +2,7 @@
   fetchFromGitHub,
   lib,
   stdenv,
-  gtk,
+  gtk3,
   pkg-config,
   libgsf,
   libofx,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk
+    gtk3
     libgsf
     libofx
     adwaita-icon-theme
