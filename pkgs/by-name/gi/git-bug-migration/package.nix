@@ -4,14 +4,14 @@
   fetchFromGitHub,
   gitMinimal,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-bug-migration";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "MichaelMure";
     repo = "git-bug-migration";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IOBgrU3C0ZHD2wx9LRVgKEJzDlUj6z2UXlHGU3tdTdQ=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   nativeCheckInputs = [ gitMinimal ];
 
   ldflags = [
-    "-X main.GitExactTag=${version}"
-    "-X main.GitLastTag=${version}"
+    "-X main.GitExactTag=${finalAttrs.version}"
+    "-X main.GitLastTag=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -30,14 +30,14 @@ buildGoModule rec {
     git config --global user.email 'nobody@localhost'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for upgrading repositories using git-bug to new versions";
     homepage = "https://github.com/MichaelMure/git-bug-migration";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       DeeUnderscore
       sudoforge
     ];
     mainProgram = "git-bug-migration";
   };
-}
+})
