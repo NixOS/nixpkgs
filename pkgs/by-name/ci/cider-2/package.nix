@@ -33,7 +33,8 @@ appimageTools.wrapType2 rec {
       install -m 444 -D ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace-warn 'Exec=Cider' 'Exec=${pname}'
-      cp -r ${contents}/usr/share/icons $out/share
+      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
+                     $out/share/icons/hicolor/256x256/apps/cider.png
     '';
 
   meta = {
