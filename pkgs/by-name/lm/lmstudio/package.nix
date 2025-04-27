@@ -12,8 +12,6 @@ let
   version_x86_64-linux = "0.3.15-11";
   hash_x86_64-linux = "sha256-EfynIN6DGSvzOgI+E7CxycJ2KUlFZx2YRwRihjhE3SM=";
 
-  passthru.updateScript = ./update.sh;
-
   meta = {
     description = "LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)";
     homepage = "https://lmstudio.ai/";
@@ -31,6 +29,7 @@ in
 if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
     inherit pname meta;
+    passthru.updateScript = ./update.sh;
     version = version_aarch64-darwin;
     url =
       args.url
@@ -40,6 +39,7 @@ if stdenv.hostPlatform.isDarwin then
 else
   callPackage ./linux.nix {
     inherit pname meta;
+    passthru.updateScript = ./update.sh;
     version = version_x86_64-linux;
     url =
       args.url
