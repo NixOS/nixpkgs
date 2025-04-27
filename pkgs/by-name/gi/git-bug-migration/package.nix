@@ -3,6 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   gitMinimal,
+  gitSetupHook,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule rec {
   pname = "git-bug-migration";
@@ -17,18 +19,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-Hid9OK91LNjLmDHam0ZlrVQopVOsqbZ+BH2rfQi5lS0=";
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    gitSetupHook
+    gitMinimal
+  ];
 
   ldflags = [
     "-X main.GitExactTag=${version}"
     "-X main.GitLastTag=${version}"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    git config --global user.name 'Nixpkgs Test User'
-    git config --global user.email 'nobody@localhost'
-  '';
 
   meta = with lib; {
     description = "Tool for upgrading repositories using git-bug to new versions";
