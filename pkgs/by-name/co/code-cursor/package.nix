@@ -162,7 +162,7 @@ stdenvNoCC.mkDerivation {
       substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
 
       wrapProgram $out/bin/cursor \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=x11 --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
     ''}
 
     ${lib.optionalString hostPlatform.isDarwin ''
