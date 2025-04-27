@@ -17741,7 +17741,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };
+  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   nest = callPackage ../applications/science/biology/nest { };
 
