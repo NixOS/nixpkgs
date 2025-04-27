@@ -3,7 +3,7 @@
   fetchPypi,
   python3Packages,
   writableTmpDirAsHomeHook,
-  git,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,12 +21,12 @@ python3Packages.buildPythonApplication rec {
     "termcolor"
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
   # required in PATH for tool to work
-  propagatedBuildInputs = [ git ];
+  propagatedBuildInputs = [ gitMinimal ];
 
   dependencies = with python3Packages; [
     colorama
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     python3Packages.pytest7CheckHook
     writableTmpDirAsHomeHook
   ];
