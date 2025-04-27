@@ -12114,9 +12114,6 @@ with pkgs;
     withoutInitTools = true;
   };
 
-  # FIXME: `tcp-wrapper' is actually not OS-specific.
-  trickster = callPackage ../servers/trickster/trickster.nix { };
-
   trinsic-cli = callPackage ../tools/admin/trinsic-cli { };
 
   # Upstream U-Boots:

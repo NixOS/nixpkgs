@@ -2,6 +2,8 @@
   lib,
   fetchurl,
   stdenv,
+  dprint,
+  writableTmpDirAsHomeHook,
 }:
 let
   mkDprintPlugin =
@@ -33,6 +35,21 @@ let
       buildPhase = ''
         mkdir -p $out
         cp $src $out/plugin.wasm
+      '';
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [
+        dprint
+        writableTmpDirAsHomeHook
+      ];
+      # Prevent schema unmatching errors
+      # See https://github.com/NixOS/nixpkgs/pull/369415#issuecomment-2566112144 for detail
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        mkdir empty && cd empty
+        dprint check --allow-no-files --plugins "$out/plugin.wasm"
+
+        runHook postInstallCheck
       '';
       passthru = {
         updateScript = ./update-plugins.py;
