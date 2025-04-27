@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
       # Needed to correctly link curl in pkgsStatic.
       ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
+      # Backport of https://gitlab.kitware.com/cmake/cmake/-/commit/1b0c92a3a1b782ff3e1c4499b6ab8db614d45bcd
+      ./009-cmCurl-Avoid-using-undocumented-type-for-CURLOPT_NETRC-values.diff
     ];
 
   outputs =
