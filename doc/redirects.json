@@ -43,6 +43,9 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nostrictaliasing": [
+    "index.html#nostrictaliasing"
+  ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
     "index.html#pkgs-substituteall",
@@ -449,6 +452,9 @@
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
+  ],
+  "var-go-goSum": [
+    "index.html#var-go-goSum"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"

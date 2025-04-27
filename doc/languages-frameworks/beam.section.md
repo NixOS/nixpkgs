@@ -375,9 +375,7 @@ let
     nodePackages.prettier
   ];
 
-  inputs =
-    basePackages
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
+  inputs = basePackages ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   # define shell startup command
   hooks = ''
