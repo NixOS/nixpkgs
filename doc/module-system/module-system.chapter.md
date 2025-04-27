@@ -10,9 +10,10 @@ Compared to plain Nix, it adds documentation, type checking and composition or e
 This chapter is new and not complete yet.
 
 See also:
+
 - Introduction to the module system, in the context of NixOS, see [Writing NixOS Modules](https://nixos.org/manual/nixos/unstable/index.html#sec-writing-modules) in the NixOS manual.
 - Generic guide to the module system on [nix.dev](https://nix.dev/tutorials/module-system/index.html).
-:::
+  :::
 
 ## `lib.evalModules` {#module-system-lib-evalModules}
 
@@ -23,6 +24,7 @@ Evaluate a set of modules. This function is typically only used once per applica
 #### `modules` {#module-system-lib-evalModules-param-modules}
 
 A list of modules. These are merged together to form the final configuration.
+
 <!-- TODO link to section about merging, TBD -->
 
 #### `specialArgs` {#module-system-lib-evalModules-param-specialArgs}
@@ -48,8 +50,8 @@ The `class` value should be a string in lower [camel case](https://en.wikipedia.
 
 If applicable, the `class` should match the "prefix" of the attributes used in (experimental) [flakes](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#description). Some examples are:
 
- - `nixos` as in `flake.nixosModules`
- - `nixosTest`: modules that constitute a [NixOS VM test](https://nixos.org/manual/nixos/stable/index.html#sec-nixos-tests)
+- `nixos` as in `flake.nixosModules`
+- `nixosTest`: modules that constitute a [NixOS VM test](https://nixos.org/manual/nixos/stable/index.html#sec-nixos-tests)
 <!-- We've only just started with `class`. You're invited to add a few more. -->
 
 #### `prefix` {#module-system-lib-evalModules-param-prefix}
@@ -79,6 +81,7 @@ However, the value returned from the type is just the [`config`](#module-system-
 If you're familiar with prototype inheritance, you can think of this `evalModules` invocation as the prototype, and usages of this type as the instances.
 
 This type is also available to the [`modules`](#module-system-lib-evalModules-param-modules) as the module argument `moduleType`.
+
 <!-- TODO: document the module arguments. Using moduleType is like saying: suppose this configuration was extended. -->
 
 #### `extendModules` {#module-system-lib-evalModules-return-value-extendModules}
@@ -102,16 +105,16 @@ The real work of module evaluation happens while computing the values in `config
 If you do reference multiple `config` (or `options`) from before and after `extendModules`, evaluation performance is the same as with multiple `evalModules` invocations, because the new modules' ability to override existing configuration fundamentally requires constructing a new `config` and `options` fixpoint.
 :::
 
-#### `_module` {#module-system-lib-evalModules-return-value-_module}
+#### `_module` {#module-system-lib-evalModules-return-value--module}
 
 A portion of the configuration tree which is elided from `config`.
 
 <!-- TODO: when markdown migration is complete, make _module docs visible again and reference _module docs. Maybe move those docs into this chapter? -->
 
-#### `_type` {#module-system-lib-evalModules-return-value-_type}
+#### `_type` {#module-system-lib-evalModules-return-value--type}
 
 A nominal type marker, always `"configuration"`.
 
-#### `class` {#module-system-lib-evalModules-return-value-_configurationClass}
+#### `class` {#module-system-lib-evalModules-return-value--configurationClass}
 
 The [`class` argument](#module-system-lib-evalModules-param-class).

@@ -130,7 +130,7 @@ In the above example, the `name`, `src`, and `patches` of the derivation will be
 The argument `oldAttrs` is used to refer to the attribute set of the original derivation.
 
 ::: {.note}
-A package's attributes are evaluated *before* being modified by the `overrideDerivation` function. For example, the `name` attribute reference in `url = "mirror://gnu/hello/${name}.tar.gz";` is filled-in *before* the `overrideDerivation` function modifies the attribute set. This means that overriding the `name` attribute, in this example, *will not* change the value of the `url` attribute. Instead, we need to override both the `name` *and* `url` attributes.
+A package's attributes are evaluated _before_ being modified by the `overrideDerivation` function. For example, the `name` attribute reference in `url = "mirror://gnu/hello/${name}.tar.gz";` is filled-in _before_ the `overrideDerivation` function modifies the attribute set. This means that overriding the `name` attribute, in this example, _will not_ change the value of the `url` attribute. Instead, we need to override both the `name` _and_ `url` attributes.
 :::
 
 ## lib.makeOverridable {#sec-lib-makeOverridable}

@@ -422,7 +422,7 @@ Use the following commands:
 
     BIOS systems
 
-    :   You *must* set the option [](#opt-boot.loader.grub.device) to
+    : You *must* set the option [](#opt-boot.loader.grub.device) to
         specify on which disk the GRUB boot loader is to be installed.
         Without it, NixOS cannot boot.
 
@@ -433,7 +433,7 @@ Use the following commands:
 
     UEFI systems
 
-    :   You must select a boot-loader, either systemd-boot or GRUB. The recommended
+    : You must select a boot-loader, either systemd-boot or GRUB. The recommended
         option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
         to `true`. `nixos-generate-config` should do this automatically
         for new configurations when booted in UEFI mode.

@@ -67,17 +67,15 @@ Here is an example of a web frontend build process using `gulp`. You might use `
 ### Example build script (gulpfile.js) {#ex-bowerGulpFile}
 
 ```javascript
-var gulp = require('gulp');
+var gulp = require("gulp");
 
-gulp.task('default', [], function () {
-  gulp.start('build');
+gulp.task("default", [], function () {
+  gulp.start("build");
 });
 
-gulp.task('build', [], function () {
+gulp.task("build", [], function () {
   console.log("Just a dummy gulp build");
-  gulp
-    .src(["./bower_components/**/*"])
-    .pipe(gulp.dest("./gulpdist/"));
+  gulp.src(["./bower_components/**/*"]).pipe(gulp.dest("./gulpdist/"));
 });
 ```
 

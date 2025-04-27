@@ -48,14 +48,17 @@ BEAM builders are not registered at the top level, because they are not relevant
 To use any of those builders into your environment, refer to them by their attribute path under `beamPackages`, e.g. `beamPackages.rebar3`:
 
 ::: {.example #ex-beam-ephemeral-shell}
+
 # Ephemeral shell
 
 ```ShellSession
 $ nix-shell -p beamPackages.rebar3
 ```
+
 :::
 
 ::: {.example #ex-beam-declarative-shell}
+
 # Declarative shell
 
 ```nix
@@ -69,6 +72,7 @@ pkgs.mkShell {
   packages = [ pkgs.beamPackages.rebar3 ];
 }
 ```
+
 :::
 
 ## Packaging BEAM Applications {#packaging-beam-applications}

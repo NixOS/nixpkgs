@@ -48,9 +48,9 @@ The argument passed to `wrapType2` can also contain an `extraPkgs` attribute, wh
 `extraPkgs` must be a function that returns a list of packages.
 There are a few ways to learn which dependencies an application needs:
 
-  - Looking through the extracted AppImage files, reading its scripts and running `patchelf` and `ldd` on its executables.
-    This can also be done in `appimage-run`, by setting `APPIMAGE_DEBUG_EXEC=bash`.
-  - Running `strace -vfefile` on the wrapped executable, looking for libraries that can't be found.
+- Looking through the extracted AppImage files, reading its scripts and running `patchelf` and `ldd` on its executables.
+  This can also be done in `appimage-run`, by setting `APPIMAGE_DEBUG_EXEC=bash`.
+- Running `strace -vfefile` on the wrapped executable, looking for libraries that can't be found.
 
 :::{.example #ex-wrapping-appimage-with-extrapkgs}
 
