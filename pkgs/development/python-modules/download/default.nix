@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A quick module to help downloading files using python";
-    homepage = "https://pypi.org/project/download/";
+    homepage = "https://github.com/choldgraf/download";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jolars ];
   };
