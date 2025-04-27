@@ -6799,10 +6799,6 @@ with pkgs;
   open-watcom-bin-unwrapped = callPackage ../development/compilers/open-watcom/bin.nix { };
   open-watcom-bin = wrapWatcom open-watcom-bin-unwrapped { };
 
-  ponyc = callPackage ../development/compilers/ponyc { };
-
-  pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
-
   replibyte = callPackage ../development/tools/database/replibyte {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
