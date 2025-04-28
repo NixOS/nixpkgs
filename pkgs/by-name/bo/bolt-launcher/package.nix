@@ -7,81 +7,31 @@
   ninja,
   libarchive,
   libz,
-  libcef,
+  cef-binary,
   luajit,
   xorg,
   libgbm,
   glib,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  expat,
-  libxkbcommon,
-  gtk3,
   jdk17,
   pango,
   cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  systemd,
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
   enableRS3 ? false,
 }:
 let
-  cef = libcef.overrideAttrs (oldAttrs: {
-    installPhase =
-      let
-        gl_rpath = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
-        ];
-        rpath = lib.makeLibraryPath [
-          glib
-          nss
-          nspr
-          atk
-          at-spi2-atk
-          libdrm
-          expat
-          xorg.libxcb
-          libxkbcommon
-          xorg.libX11
-          xorg.libXcomposite
-          xorg.libXdamage
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXrandr
-          libgbm
-          gtk3
-          pango
-          cairo
-          alsa-lib
-          dbus
-          at-spi2-core
-          cups
-          xorg.libxshmfence
-          systemd
-        ];
-      in
-      ''
-        mkdir -p $out/lib/ $out/share/cef/
-        cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
-        cp -r ../Resources/* $out/lib/
-        cp -r ../Release/* $out/lib/
-        patchelf --set-rpath "${rpath}" $out/lib/libcef.so
-        patchelf --set-rpath "${gl_rpath}" $out/lib/libEGL.so
-        patchelf --set-rpath "${gl_rpath}" $out/lib/libGLESv2.so
-        cp ../Release/*.bin $out/share/cef/
-        cp -r ../Resources/* $out/share/cef/
-        cp -r ../include $out
-        cp -r ../libcef_dll $out
-        cp -r ../cmake $out
-      '';
+  cef = cef-binary.overrideAttrs (oldAttrs: {
+    version = "126.2.18";
+    gitRevision = "3647d39";
+    chromiumVersion = "126.0.6478.183";
+
+    srcHash =
+      {
+        aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
+        x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   });
 in
 let
@@ -122,19 +72,8 @@ let
     ];
 
     preConfigure = ''
-      mkdir -p cef/dist/Release cef/dist/Resources cef/dist/include
-
-      ln -s ${cef}/lib/* cef/dist/Release
-
-      ln -s ${cef}/share/cef/*.pak cef/dist/Resources
-      ln -s ${cef}/share/cef/icudtl.dat cef/dist/Resources
-      ln -s ${cef}/share/cef/locales cef/dist/Resources
-
-      ln -s ${cef}/include/* cef/dist/include
-      ln -s ${cef}/libcef_dll cef/dist/libcef_dll
-
-      ln -s ${cef}/cmake cef/dist/cmake
-      ln -s ${cef}/CMakeLists.txt cef/dist
+      mkdir -p cef
+      ln -s ${cef} cef/dist
     '';
 
     postFixup = ''
