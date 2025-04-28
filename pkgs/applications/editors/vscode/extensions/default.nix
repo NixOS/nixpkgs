@@ -410,8 +410,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.18.19";
-          hash = "sha256-JGyyvDZQmlVGwEwQHh+82yK7uSrtt/HBaWHzbiGJ614=";
+          version = "1.18.20";
+          hash = "sha256-g3rRdFjbxrp9y/dVhj/2GUJvDbG92VGq/jPtlLXV2kM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -492,8 +492,8 @@ let
         mktplcRef = {
           publisher = "banacorn";
           name = "agda-mode";
-          version = "0.5.5";
-          hash = "sha256-xz+KO743jGziLzO7pINTcOX9JV68MJ0juDl+rpr9hk8=";
+          version = "0.5.6";
+          hash = "sha256-FKcPJzdhK0QbaG3wBkdGOkiDkZ4qVJh3RBTnD4wLIh8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
@@ -785,8 +785,8 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.14.15";
-          hash = "sha256-BJKPAyXBHX9W0pSxtri67PFL1zA4Vd2OMFfWi5bDnYQ=";
+          version = "0.14.16";
+          hash = "sha256-U2oZSIsLpqEqYBIEjSnIToEOOnTCUi4vR6XwjnNUDN8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bradlc.vscode-tailwindcss/changelog";
@@ -1015,8 +1015,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.7.1";
-          hash = "sha256-egtB8mF9bbGb5YJ2pS9uGMzLmJcHAZ7UTswrn6k2k3A=";
+          version = "1.8.0";
+          hash = "sha256-zAe2IFT69oZ/OLVSaaY5lGSiF/7FGiQngz/EXekwQtM=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1178,8 +1178,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.2.5";
-          hash = "sha256-t6+LLLGuh67cuvGzv9+ic7AFqQU+bxDc6UByJM0OF7s=";
+          version = "8.2.7";
+          hash = "sha256-RH+nqLiT5atyTC9WMFpY5ARTolK8+d1VZJY8oHK1G7E=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -1207,8 +1207,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.10.84";
-          hash = "sha256-s7Zo8zRZ4nsEuoSPwQL3osRs5zlmbcEsCjIJ8janhPs=";
+          version = "3.11.24";
+          hash = "sha256-bQf8kr4wvbUk+IMdoevBqZxTKg81uKlQO9yD6xJd1TM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1259,8 +1259,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.9.2";
-          hash = "sha256-lGVp/pkYQFqCa1fCEydrNke1yRxUmTRaaN+giuLdISQ=";
+          version = "2.9.4";
+          hash = "sha256-6BSwkK6/YbCFci0p8aox8E9KP2M1daj3bu4qBxjybUE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1486,8 +1486,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.22.42";
-          hash = "sha256-jIjRMQ279KK8BxcQWWzcRcwfhkTg8W4aGUwqijje7ZY=";
+          version = "2.22.45";
+          hash = "sha256-5nTNidm/oR1CazYXJfb6pKKXS5CSo3UUuW3xDp6yYGk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1918,8 +1918,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.26.10";
-          hash = "sha256-vhQtdc0553TyPkQnTHwg7Nr+UbDMf9yR+2jj40ANPdQ=";
+          version = "0.26.11";
+          hash = "sha256-tq4Woc4+vBVWox1ldTmJQJG/NGQPDAVEi+rviFEbVt0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2109,8 +2109,8 @@ let
           publisher = "github";
           name = "copilot";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
-          version = "1.303.0";
-          hash = "sha256-xh1jdosoSdIdLbmKQJjIwqwC5aF6Ko7y+GC3Y+gBazI=";
+          version = "1.309.0";
+          hash = "sha256-i1PcbbOBgULd+inwypezE/ZsePrJaqM2z6qrDcNBLVA=";
         };
 
         meta = {
@@ -2127,8 +2127,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.26.2025040204"; # latest compatible with vscode ^1.98
-          hash = "sha256-grG/pn+R4paCqkSx6DGzKjyjQVZ2FINRxdpXynGF35g=";
+          version = "0.26.7"; # latest compatible with vscode ^1.98
+          hash = "sha256-aR6AGU/boDmYef0GWna5sUsyv9KYGCkugWpFIusDMNE=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -2187,8 +2187,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.11.0";
-          hash = "sha256-4fzjJKj4RGzqD+ionUA2Al7UGv5aJNCo8O1JOnS+nqY=";
+          version = "6.12.0";
+          hash = "sha256-0Pka2v2nXMfRD3TCiVAfLaxEhpQml9R/6Lg3/tk03zQ=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2203,8 +2203,8 @@ let
         mktplcRef = {
           name = "gleam";
           publisher = "gleam";
-          version = "2.11.1";
-          hash = "sha256-tySY6vPg71QQKeKivCoJzcAH73nML/NWhtr+TgaSKRg=";
+          version = "2.12.0";
+          hash = "sha256-kAs3+ecfMl2IcL+I4TXhbzq55AbHZ9NiQLhK6Eg+iZI=";
         };
         meta = {
           description = "Support for the Gleam programming language";
@@ -2219,8 +2219,8 @@ let
         mktplcRef = {
           name = "Go";
           publisher = "golang";
-          version = "0.47.1";
-          hash = "sha256-FKbPvXIO7SGt9C2lD7+0Q6yD0QNzrdef1ltsYXPmAi0=";
+          version = "0.47.2";
+          hash = "sha256-d2JXrKd3pMPWshy1pZ0HGmk2ZTVn4W5IrwakkibZTgk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/golang.Go/changelog";
@@ -3017,8 +3017,8 @@ let
         mktplcRef = {
           name = "asn1js";
           publisher = "lapo";
-          version = "0.2.1";
-          hash = "sha256-/75tsueW1PQIHN6YOLajREcMbRnzxzBIGnd7LGAxwBs=";
+          version = "0.2.2";
+          hash = "sha256-U1mvxDqyNbTalKgxtCLxLOMT3ZxVGC2KXWW47khtQKA=";
         };
         meta = {
           description = "Decode ASN.1 content inside VSCode";
@@ -4065,8 +4065,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "25.3.1";
-          hash = "sha256-1w4B5+WHDJzU4Fz5x2pXDAssRWjZPl79ykTNbk2rQXo=";
+          version = "25.4.0";
+          hash = "sha256-E/BogNtax4dkv6hlYcaRinTxr4jnVyV9hVCdkIkul9s=";
         };
         meta = {
           description = "Ansible language support";
@@ -4649,8 +4649,8 @@ let
         mktplcRef = {
           publisher = "streetsidesoftware";
           name = "code-spell-checker";
-          version = "4.0.45";
-          hash = "sha256-2goKjykQMLTRPP9Y0aBXLu3qDlhEKO00x82C18nKlIY=";
+          version = "4.0.47";
+          hash = "sha256-g9r8I909ge44JfBRm1JBHFluXr9H8zl0ERqkwoxtQaI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -4661,6 +4661,10 @@ let
           maintainers = [ lib.maintainers.datafoo ];
         };
       };
+
+      streetsidesoftware.code-spell-checker-french =
+        callPackage ./streetsidesoftware.code-spell-checker-french
+          { };
 
       streetsidesoftware.code-spell-checker-german =
         callPackage ./streetsidesoftware.code-spell-checker-german
@@ -4759,8 +4763,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.259.0";
-          hash = "sha256-BhJskqQr222VA6Sf7okttUIeYpsi99IyXJIOOWZKQ9M=";
+          version = "3.260.0";
+          hash = "sha256-Ve9PGpsqc7q5wCu62X0I5xJsQJ0xAJKN6VNi6HfWNDk=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5086,8 +5090,8 @@ let
         mktplcRef = {
           name = "vscode-mdx";
           publisher = "unifiedjs";
-          version = "1.8.13";
-          hash = "sha256-QTIDs+HVnM+zJ3jqhiBhUTsrI44kaHInYDXLXMC1/9E=";
+          version = "1.8.14";
+          hash = "sha256-kIQPvmLkqZa3jPxIfJ3LDyIvr5yXQTsO7uzzvFa9EJM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/unifiedjs.vscode-mdx/changelog";
@@ -5394,8 +5398,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "2.2.8";
-          hash = "sha256-efEeTq/y4al38Tdut3bHVdluf3tUYqc6CFPX+ch1gLg=";
+          version = "2.2.10";
+          hash = "sha256-cQxDoKDfzifcGTkhS8rC+JUQofbxMfXmkJF1CwiU1nc=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
@@ -5548,8 +5552,8 @@ let
         mktplcRef = {
           name = "php-debug";
           publisher = "xdebug";
-          version = "1.35.0";
-          hash = "sha256-HQYxQPKirPCnje2lrOFprBG3ha7YaV5iytmeI8CTQJU=";
+          version = "1.36.1";
+          hash = "sha256-4r3mf7q6n1b/cVYIGZyRNK5nEAJYzTz4cJrKNH+R01s=";
         };
         meta = {
           description = "PHP Debug Adapter";

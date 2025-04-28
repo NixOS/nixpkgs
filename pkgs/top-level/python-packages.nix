@@ -4187,6 +4187,8 @@ self: super: with self; {
 
   dsnap = callPackage ../development/python-modules/dsnap { };
 
+  dtfabric = callPackage ../development/python-modules/dtfabric { };
+
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
@@ -5844,6 +5846,8 @@ self: super: with self; {
   googletrans = callPackage ../development/python-modules/googletrans { };
 
   gophish = callPackage ../development/python-modules/gophish { };
+
+  gotify = callPackage ../development/python-modules/gotify { };
 
   gorilla = callPackage ../development/python-modules/gorilla { };
 

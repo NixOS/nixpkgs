@@ -468,6 +468,11 @@ stdenv.mkDerivation (
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
         })
+        (fetchpatch2 {
+          name = "texinfo-7.1.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";
+          hash = "sha256-BZsq1WI6OgtkCQE8koQu0CNcb5c8WgTu/LzQzu6ZLuo=";
+        })
       ]
       ++ optionals (lib.versionOlder version "7" && stdenv.hostPlatform.isAarch32) [
         (fetchpatch2 {
