@@ -108,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
       marcin-serwin
     ];
     platforms = lib.platforms.all;
-    pkgConfigModules = [ "sdl2-compat" ];
+    pkgConfigModules = [
+      "sdl2-compat"
+      "sdl2"
+    ];
   };
 })
