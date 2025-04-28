@@ -7,9 +7,6 @@
 
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "programs" "clash-verge" "tunMode" ] ''
-      The tunMode will work with service mode which is enabled by default.
-    '')
   ];
   options.programs.clash-verge = {
     enable = lib.mkEnableOption "Clash Verge";
@@ -23,6 +20,8 @@
       default = pkgs.clash-verge-rev;
       defaultText = lib.literalExpression "pkgs.clash-verge-rev";
     };
+    serviceMode = lib.mkEnableOption "Service Mode";
+    tunMode = lib.mkEnableOption "Setcap for TUN Mode. DNS settings won't work on this way";
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
   };
 
@@ -42,7 +41,14 @@
         ))
       ];
 
-      systemd.services.clash-verge = {
+      security.wrappers.clash-verge = lib.mkIf cfg.tunMode {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_bind_service,cap_net_raw,cap_net_admin=+ep";
+        source = "${lib.getExe cfg.package}";
+      };
+
+      systemd.services.clash-verge = lib.mkIf cfg.serviceMode {
         enable = true;
         description = "Clash Verge Service Mode";
         serviceConfig = {
