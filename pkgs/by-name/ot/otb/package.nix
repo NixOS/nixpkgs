@@ -264,6 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OTB_USE_FFTW" enableFFTW)
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+
   propagatedBuildInputs =
     [
       boost
