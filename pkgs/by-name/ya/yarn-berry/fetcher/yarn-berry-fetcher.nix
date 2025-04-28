@@ -13,18 +13,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yarn-berry-${toString berryVersion}-fetcher";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     domain = "cyberchaos.dev";
     owner = "yuka";
     repo = "yarn-berry-fetcher";
-    tag = "1.2.1";
-    hash = "sha256-gBre1LGyDVhikigWoWWW5qZyDCHp4lDONPqg1CRtaFM=";
+    tag = finalAttrs.version;
+    hash = "sha256-4lPnjLvS9MBtFyIqFKY91w/6MAesziGMJLrE60djEsI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KNVfwv+qaJEu3TqhCKpiTfuRvFIFcHstcpjre/QXDso=";
+  cargoHash = "sha256-i0AJ3z+7oSqBW45Vs6dojcipQPoaIa6bejhqCfkdZNA=";
 
   env.YARN_ZIP_SUPPORTED_CACHE_VERSION = berryCacheVersion;
   env.LIBZIP_SYS_USE_PKG_CONFIG = 1;
