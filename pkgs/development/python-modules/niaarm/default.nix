@@ -23,6 +23,7 @@
 
 buildPythonPackage rec {
   pname = "niaarm";
+  # nixpkgs-update: no auto update
   version = "0.4.1";
   pyproject = true;
 
