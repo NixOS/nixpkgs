@@ -44,6 +44,7 @@ let
     gitpython
     ifcopenshell
     matplotlib
+    opencamlib
     pivy
     ply
     py-slvs
@@ -104,6 +105,7 @@ freecad-utils.makeCustomizable (
         medfile
         mpi
         ode
+        opencamlib
         pivy
         ply # for openSCAD file support
         py-slvs

@@ -24749,6 +24749,12 @@
     githubId = 13155277;
     name = "Tom Houle";
   };
+  tomjnixon = {
+    name = "Tom Nixon";
+    email = "nixpkgs@tomn.co.uk";
+    github = "tomjnixon";
+    githubId = 178226;
+  };
   tomkoid = {
     email = "tomaszierl@outlook.com";
     name = "Tomkoid";

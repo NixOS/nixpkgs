@@ -10277,6 +10277,8 @@ self: super: with self; {
     openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };
 
+  opencamlib = callPackage ../development/python-modules/opencamlib { };
+
   opencensus = callPackage ../development/python-modules/opencensus { };
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
