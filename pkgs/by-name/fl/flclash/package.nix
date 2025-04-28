@@ -31,6 +31,7 @@ let
   metaCommon = {
     description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
     homepage = "https://github.com/chen08209/FlClash";
+    knownVulnerabilities = [ "https://github.com/chen08209/FlClash/issues/1131" ];
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ ];
   };
