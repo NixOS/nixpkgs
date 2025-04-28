@@ -23,13 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B6XRai5UOAtY/7JXNbI3YuBgazi1Xd2ZOs6vvLq9LIs=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-    pandoc
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      graphviz
+      pkg-config
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isRiscV) [
+      # Pandoc fails to cross-compile to RiscV
+      pandoc
+    ];
 
   buildInputs = [ libogg ];
 
