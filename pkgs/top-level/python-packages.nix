@@ -12020,6 +12020,8 @@ self: super: with self; {
 
   pandantic = callPackage ../development/python-modules/pandantic { };
 
+  pandarallel = callPackage ../development/python-modules/pandarallel { };
+
   pandas = callPackage ../development/python-modules/pandas { inherit (pkgs.darwin) adv_cmds; };
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
