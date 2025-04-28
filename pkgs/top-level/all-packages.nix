@@ -421,15 +421,7 @@ with pkgs;
 
   octodns = callPackage ../tools/networking/octodns { };
 
-  octodns-providers = recurseIntoAttrs {
-    bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
-    gandi = python3Packages.callPackage ../tools/networking/octodns/providers/gandi { };
-    hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
-    powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
-    cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
-    ddns = python3Packages.callPackage ../tools/networking/octodns/providers/ddns { };
-    transip = python3Packages.callPackage ../tools/networking/octodns/providers/transip { };
-  };
+  octodns-providers = octodns.providers;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 

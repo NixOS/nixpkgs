@@ -51,6 +51,13 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "octodns" ];
 
   passthru = {
+    providers = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python3Packages) callPackage;
+        directory = ./providers;
+      }
+    );
+
     withProviders =
       ps:
       let
