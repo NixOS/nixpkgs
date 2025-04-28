@@ -3420,9 +3420,7 @@ with pkgs;
 
   fpm = callPackage ../tools/package-management/fpm { };
 
-  ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
-    mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
-  };
+  ferdium = callPackage ../applications/networking/instant-messengers/ferdium { };
 
   franz = callPackage ../applications/networking/instant-messengers/franz {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
