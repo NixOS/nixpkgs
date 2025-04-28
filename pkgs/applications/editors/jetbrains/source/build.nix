@@ -33,11 +33,11 @@
 }:
 
 let
-  kotlin_2_0_21 = kotlin.overrideAttrs (oldAttrs: {
-    version = "2.0.21";
+  kotlin' = kotlin.overrideAttrs (oldAttrs: {
+    version = "2.1.10";
     src = fetchurl {
       url = oldAttrs.src.url;
-      sha256 = "sha256-A1LApFvSL4D2sm5IXNBNqAR7ql3lSGUoH7n4mkp7zyo=";
+      sha256 = "sha256-xuniY2iJgo4ZyIEdWriQhiU4yJ3CoxAZVt/uPCqLprE=";
     };
   });
 
@@ -61,6 +61,9 @@ let
     cp -r ${ideaSrc} $out
     chmod +w -R $out
     cp -r ${androidSrc} $out/android
+
+    # https://github.com/JetBrains/intellij-community/commit/489c017c6f06bb2be8e653fd9ace551dd9d31e49
+    rm -f "$out/.idea/libraries/jet_sign.xml"
   '';
 
   libdbusmenu-jb = libdbusmenu.overrideAttrs (old: {
@@ -175,7 +178,7 @@ let
       jbr
     ];
     patches = [ ../patches/kotlinc-path.patch ];
-    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin_2_0_21}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
+    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
       runHook preInstall
 
@@ -223,7 +226,7 @@ let
       repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "2.0.21-RC";
+      version = "2.1.10";
     in
     fetchurl {
       url =
@@ -239,7 +242,7 @@ let
         + "-"
         + version
         + ".jar";
-      hash = "sha256-jFjxP1LGjrvc1x2XqF5gg/SeKdSFNefxABBlrYl81zA=";
+      hash = "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4=";
     };
 
   targetClass =
@@ -291,7 +294,7 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt \
       --replace-fail 'JPS_PLUGIN_CLASSPATH_HERE' '${kotlin-jps-plugin-classpath}' \
-      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin_2_0_21}'
+      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin'}'
     substituteInPlace \
       platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt \
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
@@ -316,7 +319,7 @@ stdenvNoCC.mkDerivation rec {
     export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
-      -Djps.kotlin.home=${kotlin_2_0_21} \
+      -Djps.kotlin.home=${kotlin'} \
       -Dintellij.build.target.os=linux \
       -Dintellij.build.target.arch=x64 \
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
@@ -332,7 +335,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preBuild
 
     java \
-      -Djps.kotlin.home=${kotlin_2_0_21} \
+      -Djps.kotlin.home=${kotlin'} \
       "@java_argfile"
 
     runHook postBuild
