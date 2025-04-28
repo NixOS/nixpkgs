@@ -6,7 +6,9 @@
   # Python deps
   blockfrost-python,
   cachetools,
-  cbor2,
+  # https://github.com/Python-Cardano/pycardano/blob/v0.13.2/Makefile#L26-L39
+  # If we do not do it then tests fail due to differences in used sized vs unsized arrays
+  cbor2WithoutCExtensions,
   cose,
   docker,
   ecpy,
@@ -25,7 +27,7 @@
 }:
 
 let
-  cose_0_9_dev8 = cose.overridePythonAttrs (old: rec {
+  cose_0_9_dev8 = (cose.override { cbor2 = cbor2WithoutCExtensions; }).overridePythonAttrs (old: rec {
     version = "0.9.dev8";
     src = (
       old.src.override {
@@ -38,14 +40,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.12.3";
+  version = "0.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";
     repo = "pycardano";
     tag = "v${version}";
-    hash = "sha256-jxgskdQ7Us+utndUgFYK7G2IW/e5QbeXytOsxQfFiJI=";
+    hash = "sha256-v3ZnyVDbRkW+rbw2rRGGcdlsXpTB1mE6cEYoS/fqzbc=";
   };
 
   build-system = [
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   dependencies = [
     blockfrost-python
     cachetools
-    cbor2
+    cbor2WithoutCExtensions
     cose_0_9_dev8
     docker
     ecpy
