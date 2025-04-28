@@ -88,6 +88,7 @@ buildGo124Module rec {
     maintainers = with lib.maintainers; [
       knightpp
       soopyc
+      ryand56
     ];
     mainProgram = "anubis";
   };
