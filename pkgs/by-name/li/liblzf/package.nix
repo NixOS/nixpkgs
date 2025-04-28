@@ -1,15 +1,12 @@
 {
   lib,
   stdenv,
-  autoreconfHook,
   fetchDebianPatch,
   fetchpatch,
   fetchurl,
   pkg-config,
   testers,
   validatePkgConfig,
-  writeText,
-
   autoconf,
   automake,
   libtool,
@@ -17,7 +14,6 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblzf";
   version = "3.6";
-  # used for changelog
 
   src = fetchurl {
     url = "http://dist.schmorp.de/liblzf/liblzf-${finalAttrs.version}.tar.gz";
@@ -33,20 +29,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (
       let
-        name = "liblzf-3.6-autoconf-20140314.patch";
+        patchName = "liblzf-3.6-autoconf-20140314.patch";
       in
       fetchpatch {
-        inherit name;
-        url = "https://src.fedoraproject.org/rpms/liblzf/raw/53da654eead51a24ac81a28e1b1c531eb1afab28/f/${name}";
+        inherit patchName;
+        url = "https://src.fedoraproject.org/rpms/liblzf/raw/53da654eead51a24ac81a28e1b1c531eb1afab28/f/${patchName}";
         hash = "sha256-rkhI8w0HV3fGiDfHiXBzrnxqGDE/Yo5ntePrsscMiyg=";
-        # relative = true;
-        # stripLen = 1;
       }
     )
   ];
 
   nativeBuildInputs = [
-    # autoreconfHook
     autoconf
     automake
     libtool
