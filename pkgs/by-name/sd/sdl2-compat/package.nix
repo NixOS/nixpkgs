@@ -16,7 +16,6 @@
   testers,
   libX11,
   libGL,
-  testSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   # skip timing-based tests as those are flaky
   env.SDL_TESTS_QUICK = 1;
 
-  doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = true;
 
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
