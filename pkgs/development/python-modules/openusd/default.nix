@@ -143,10 +143,7 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
   propagatedBuildInputs =
     [
@@ -186,6 +183,7 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
     license = lib.licenses.tost;
     maintainers = with lib.maintainers; [
       shaddydc
