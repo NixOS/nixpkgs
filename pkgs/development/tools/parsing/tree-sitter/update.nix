@@ -392,6 +392,10 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
+    "tree-sitter-purescript" = {
+      orga = "postsolar";
+      repo = "tree-sitter-purescript";
+    };
     "tree-sitter-org-nvim" = {
       orga = "milisims";
       repo = "tree-sitter-org";
