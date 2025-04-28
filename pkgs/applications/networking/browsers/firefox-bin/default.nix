@@ -114,7 +114,7 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/Applications
-        mv Firefox*.app $out/Applications
+        mv Firefox*.app "$out/Applications/${applicationName}.app"
       ''
     else
       ''
