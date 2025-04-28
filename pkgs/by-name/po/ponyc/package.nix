@@ -22,30 +22,30 @@
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.58.6";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    hash = "sha256-cCZo/lOvSvF19SGQ9BU2J3EBKHF9PgRBhuUVBkggF9I=";
+    hash = "sha256-4gDv8UWTk0RWVNC4PU70YKSK9fIMbWBsQbHboVls2BA=";
     fetchSubmodules = true;
   };
 
-  benchmarkRev = "1.7.1";
+  benchmarkRev = "1.9.1";
   benchmark = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${benchmarkRev}";
-    hash = "sha256-gg3g/0Ki29FnGqKv9lDTs5oA9NjH23qQ+hTdVtSU+zo=";
+    hash = "sha256-5xDg1duixLoWIuy59WT0r5ZBAvTR6RPP7YrhBYkMxc8=";
   };
 
-  googletestRev = "1.12.1";
+  googletestRev = "1.15.2";
   googletest = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "release-${googletestRev}";
-    hash = "sha256-W+OxRTVtemt2esw4P7IyGWXOonUN5ZuscjvzqkYvZbM=";
+    rev = "v${googletestRev}";
+    hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (rec {
     # Replace downloads with local copies.
     substituteInPlace lib/CMakeLists.txt \
         --replace-fail "https://github.com/google/benchmark/archive/v$benchmarkRev.tar.gz" "$NIX_BUILD_TOP/deps/benchmark-$benchmarkRev.tar" \
-        --replace-fail "https://github.com/google/googletest/archive/release-$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
+        --replace-fail "https://github.com/google/googletest/archive/refs/tags/v$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
 
   preBuild = ''
