@@ -35,12 +35,13 @@ stdenvNoCC.mkDerivation {
       terminal = false;
       desktopName = "Chatzone";
       genericName = "Ozon corporate messenger";
-      comment = "Mattermost Desktop application for Linux";
+      comment = "Chatzone Desktop application for Linux";
       categories = [
         "Network"
         "InstantMessaging"
         "Chat"
       ];
+      startupWMClass = "Chatzone";
       mimeTypes = [ "x-scheme-handler/mattermost" ];
     })
   ];
