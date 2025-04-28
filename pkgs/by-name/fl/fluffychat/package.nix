@@ -49,6 +49,7 @@ flutter327.buildFlutterApplication (
       maintainers = with maintainers; [
         mkg20001
         gilice
+        tebriel
       ];
       platforms = [
         "x86_64-linux"
