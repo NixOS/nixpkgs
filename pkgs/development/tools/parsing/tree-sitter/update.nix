@@ -480,6 +480,10 @@ let
       orga = "uncenter";
       repo = "tree-sitter-tera";
     };
+    "tree-sitter-netlinx" = {
+      orga = "norgate-av";
+      repo = "tree-sitter-netlinx";
+    };
   };
 
   allGrammars =
