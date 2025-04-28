@@ -11,7 +11,8 @@
   withPerl ?
     stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
   perl,
-  withPython ? lib.meta.availableOn stdenv.hostPlatform python3Packages.python,
+  withPython ?
+    !stdenv.hostPlatform.isStatic && lib.meta.availableOn stdenv.hostPlatform python3Packages.python,
   python3Packages,
   swig,
   ncurses,
