@@ -12,14 +12,11 @@
   makeWrapper,
   removeReferencesTo,
   replaceVars,
-  go_1_23,
   applyPatches,
   nvidia-modprobe,
+  go,
 }:
 let
-  # https://github.com/NVIDIA/libnvidia-container/pull/297
-  go = go_1_23;
-
   modprobeVersion = "550.54.14";
   patchedModprobe = applyPatches {
     src = nvidia-modprobe.src.override {
@@ -35,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.17.2";
+  version = "1.17.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     rev = "v${version}";
-    hash = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
+    hash = "sha256-kveP0Px9Fds7pS39aW+cqg2jtiQCMN2zG4GTGRqRrc0=";
   };
 
   patches = [
