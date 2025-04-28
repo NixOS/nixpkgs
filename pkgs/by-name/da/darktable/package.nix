@@ -47,6 +47,7 @@
   libpng,
   librsvg,
   libsecret,
+  libsoup_2_4,
   libsysprof-capture,
   libthai,
   libtiff,
@@ -133,6 +134,7 @@ stdenv.mkDerivation rec {
       libpng
       librsvg
       libsecret
+      libsoup_2_4
       libsysprof-capture
       libthai
       libtiff
