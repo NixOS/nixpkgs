@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  python,
   setuptools,
   protobuf,
 }:
@@ -34,6 +35,12 @@ buildPythonPackage rec {
     "google.protobuf.util"
     "google._upb._message"
   ];
+
+  # Tries to explicitly create a namespace package with pkg_resources,
+  # which breaks everything with our PYTHONPATH setup.
+  postInstall = ''
+    rm $out/${python.sitePackages}/google/__init__.py
+  '';
 
   meta = {
     description = "Protocol Buffers are Google's data interchange format";
