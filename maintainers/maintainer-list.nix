@@ -338,6 +338,11 @@
     githubId = 7345998;
     name = "A1ca7raz";
   };
+  A1egator = {
+    name = "Alexander Thomas";
+    github = "A1egator";
+    githubId = 140679159;
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -3990,6 +3995,11 @@
     github = "CardboardTurkey";
     githubId = 34030186;
     keys = [ { fingerprint = "8BC7 74E4 A2EC 7507 3B61  A647 0BBB 1C8B 1C36 39EE"; } ];
+  };
+  cardealerT = {
+    name = "Timothy Cardillo";
+    github = "cardealerT";
+    githubId = 196286129;
   };
   carloscraveiro = {
     email = "carlos.craveiro@usp.br";
