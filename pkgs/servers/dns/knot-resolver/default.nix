@@ -27,8 +27,7 @@
   cacert,
   extraFeatures ? false, # catch-all if defaults aren't enough
 }:
-let # un-indented, over the whole file
-
+let
   result = if extraFeatures then wrapped-full else unwrapped;
 
   inherit (lib) optional optionals optionalString;
@@ -67,7 +66,7 @@ let # un-indented, over the whole file
         # Even though they should already be loaded and they're in RPATH, too.
         for f in daemon/lua/{kres,zonefile}.lua; do
           substituteInPlace "$f" \
-            --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+            --replace-fail "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
         done
       ''
       # some tests have issues with network sandboxing, apparently
