@@ -1,10 +1,10 @@
 {
   "aci": {
-    "hash": "sha256-f4hgHFJgRUG+mhRgD7GMtkXoYkzAbkxxMIzvGLS0ums=",
+    "hash": "sha256-NS5q6ElCGEGSceOCIVudKE6m6EzXMV/3HGHHXwYopOA=",
     "homepage": "https://registry.terraform.io/providers/CiscoDevNet/aci",
     "owner": "CiscoDevNet",
     "repo": "terraform-provider-aci",
-    "rev": "v2.15.0",
+    "rev": "v2.16.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -498,13 +498,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-1TN37PZR2skkmKhRbv1Z1Kv45G9b8WQz9yDK14fs1TI=",
+    "hash": "sha256-tZJuXYRD6+E6Bhrn+cjeSCRAePgj/g+E8YTStwjZiSM=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v17.10.0",
+    "rev": "v17.11.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-1KTU8nMYUfC+LJHFeIpK6m4RUPWvSHNSXGVJgcnsVl8="
+    "vendorHash": "sha256-3URc3A1kkcVQ/riB2/THuIEiCq9MrifxgRL73cjsbDA="
   },
   "google": {
     "hash": "sha256-GuwIiAyZwa66Vl6dIKdmzHYhWdNrfISy3YKLJQva92U=",
@@ -922,13 +922,13 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-M2F84q7ZBzrGUpUv5vTWeeb3jG4RcinFxiQxooWkrhs=",
+    "hash": "sha256-1/GKJWRy+epeEwReieN6aVNP4/oPT3FTkHeHtticL8k=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.16.0",
+    "rev": "v4.17.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-fYCisoPEON8F11HauVONyqS56RS/1+bebnLeCCXTrsw="
+    "vendorHash": "sha256-5BkKjne3r3V8T+SkqjfHVEpXXK8sKTYMc23g1EaLoOE="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
@@ -1075,13 +1075,13 @@
     "vendorHash": "sha256-j+3qtGlueKZgf0LuNps4Wc9G3EmpSgl8ZNSLqslyizI="
   },
   "rancher2": {
-    "hash": "sha256-LJgYGgJ7PLRq3WlT2rAnnM8svn4EGghLy3rY7lpmJxI=",
+    "hash": "sha256-H6ZdGvKSYRlDsCKIHlPHdEv1+6aa1rll/73IeJ+PDhc=",
     "homepage": "https://registry.terraform.io/providers/rancher/rancher2",
     "owner": "rancher",
     "repo": "terraform-provider-rancher2",
-    "rev": "v6.1.4",
+    "rev": "v7.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uIyLOqabx8wQurxcG70LHm+jBga+bCNyf5XxGrt5OKA="
+    "vendorHash": "sha256-M2lJKmIR66lQKFkInjizn68ax2Gq4sim5Y3vZKyDhZ8="
   },
   "random": {
     "hash": "sha256-tdTVqSJmQ6Ht3kdoYMxhoRN+XJqvu8BPVB0VQghcDVs=",
