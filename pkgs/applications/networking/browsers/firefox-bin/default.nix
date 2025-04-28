@@ -34,7 +34,8 @@ let
 
   inherit (generated) version sources;
 
-  binaryName = if channel == "release" then "firefox" else "firefox-${channel}";
+  binaryName =
+    if (channel == "release" || stdenv.hostPlatform.isDarwin) then "firefox" else "firefox-${channel}";
 
   mozillaPlatforms = {
     i686-linux = "linux-i686";
@@ -113,7 +114,7 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/Applications
-        mv Firefox.app $out/Applications
+        mv Firefox*.app $out/Applications
       ''
     else
       ''
