@@ -4,6 +4,16 @@
   pkgs,
   ...
 }:
+let
+  aggregatedLocales =
+    builtins.map
+      (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
+      (
+        [ config.i18n.defaultLocale ]
+        ++ config.i18n.extraLocales
+        ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+      );
+in
 {
   ###### interface
 
@@ -71,17 +81,11 @@
         type = lib.types.listOf lib.types.str;
         visible = false;
         default = lib.unique (
-          builtins.map
-            (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
-            (
-              [
-                "C.UTF-8"
-                "en_US.UTF-8"
-                config.i18n.defaultLocale
-              ]
-              ++ config.i18n.extraLocales
-              ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
-            )
+          [
+            "C.UTF-8/UTF-8"
+            "en_US.UTF-8/UTF-8"
+          ]
+          ++ aggregatedLocales
         );
         example = [
           "en_US.UTF-8/UTF-8"
@@ -104,18 +108,7 @@
 
   config = {
     warnings =
-      lib.optional
-        (
-          (lib.subtractLists config.i18n.supportedLocales (
-            builtins.map
-              (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
-              (
-                [ config.i18n.defaultLocale ]
-                ++ config.i18n.extraLocales
-                ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
-              )
-          )) != [ ]
-        )
+      lib.optional ((lib.subtractLists config.i18n.supportedLocales aggregatedLocales) != [ ])
         ''
           `i18n.supportedLocales` is deprecated in favor of `i18n.extraLocales`,
           and it seems you are using `i18n.supportedLocales` and forgot to
