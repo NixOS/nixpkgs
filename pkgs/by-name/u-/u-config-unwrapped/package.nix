@@ -26,12 +26,12 @@ stdenv.mkDerivation (
           else if isLinux && isx86_64 then
             "linux_amd64"
           else if isMinGW then
-            "win32"
+            "windows"
           else
-            lib.warn "unsupported system ${system} for libc‐free version, falling back to generic" "generic"
+            lib.warn "unsupported system ${system} for libc‐free version, falling back to posix" "posix"
         )
       else
-        "generic";
+        "posix";
 
     cppflags = lib.mapAttrsToList (name: value: "-D${name}=\"${value}\"") {
       # set these to empty strings as there are no central directories for
@@ -74,7 +74,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "u-config";
-    version = "0.33.3";
+    version = "0.34.0";
 
     outputs = [
       "out"
@@ -84,7 +84,7 @@ stdenv.mkDerivation (
     # fetch using fetchurl to permit use during bootstrap
     src = fetchurl {
       url = "https://github.com/skeeto/u-config/releases/download/v${finalAttrs.version}/u-config-${finalAttrs.version}.tar.gz";
-      hash = "sha256-wtSGgU99/UJ06Ww5+tmorhBx70It+cvfp2EO8fCH9ew=";
+      hash = "sha256-xt+8G5SI5f3UpJmjxfe5aMfYkTUvm+dUyQq56qgFrj4=";
     };
 
     # provides memset and memcpy for libc‐free versions
@@ -116,7 +116,7 @@ stdenv.mkDerivation (
     buildPhase = ''
       runHook preBuild
 
-      $CC -o ${binary} ${escapeShellArgs cppflags} ${escapeShellArgs cflags} ${platform}_main.c ${escapeShellArgs libs}
+      $CC -o ${binary} ${escapeShellArgs cppflags} ${escapeShellArgs cflags} main_${platform}.c ${escapeShellArgs libs}
 
       runHook postBuild
     '';
@@ -124,7 +124,7 @@ stdenv.mkDerivation (
     checkPhase = ''
       runHook preCheck
 
-      $CC -o tests${exe} ${escapeShellArgs cppflags} test_main.c
+      $CC -o tests${exe} ${escapeShellArgs cppflags} main_test.c
       ./tests${exe}
 
       runHook postCheck
@@ -159,7 +159,7 @@ stdenv.mkDerivation (
         mvs
       ];
 
-      platforms = lib.platforms.all;
+      platforms = with lib.platforms; unix ++ windows;
       mainProgram = "pkg-config";
     };
   }
