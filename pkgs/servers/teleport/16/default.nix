@@ -2,11 +2,11 @@
 import ../generic.nix (
   args
   // {
-    version = "16.5.0";
-    hash = "sha256-d634UB/YGDdAeBEJcRsRE5gqd31oQX3P4HJ+PoMQUmk=";
-    vendorHash = "sha256-0/ZYG8mYv3B0YJ89NJVG7M29/hU2zBtSXmoD32VEqpk=";
-    pnpmHash = "sha256-dqCfwMzSnEPQXz1bsroqSihkvw2Kcvyz+A4fpa52LVk=";
-    cargoHash = "sha256-NASNBk4QVoqe2cz4l94aXo6pUtF8Qxwb61XRI/ErjTs=";
+    version = "16.5.3";
+    hash = "sha256-yaHy75oS+HuO++qHEDaGByz11vwAqfaDT9qb94iKs3Y=";
+    vendorHash = "sha256-pHAiJ080lyWtb7xbwSeD9g8JlyXZyqtZC2IpsUJ7YaY=";
+    pnpmHash = "sha256-JQca2eFxcKJDHIaheJBg93ivZU95UWMRgbcK7QE4R10=";
+    cargoHash = "sha256-04zykCcVTptEPGy35MIWG+tROKFzEepLBmn04mSbt7I=";
 
     # wasm-bindgen-cli version must match the version of wasm-bindgen in Cargo.lock
     wasm-bindgen-cli = wasm-bindgen-cli.override {
