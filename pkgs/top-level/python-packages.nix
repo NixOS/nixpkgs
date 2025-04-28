@@ -634,6 +634,8 @@ self: super: with self; {
 
   amshan = callPackage ../development/python-modules/amshan { };
 
+  amulet-leveldb = callPackage ../development/python-modules/amulet-leveldb { };
+
   amulet-nbt = callPackage ../development/python-modules/amulet-nbt { };
 
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
