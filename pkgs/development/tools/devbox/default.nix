@@ -45,6 +45,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       urandom
       lagoja
+      madeddie
     ];
   };
 }
