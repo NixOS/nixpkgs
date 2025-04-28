@@ -3,11 +3,16 @@
   stdenv,
   autoreconfHook,
   fetchDebianPatch,
+  fetchpatch,
   fetchurl,
   pkg-config,
   testers,
   validatePkgConfig,
   writeText,
+
+  autoconf,
+  automake,
+  libtool,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblzf";
@@ -26,39 +31,38 @@ stdenv.mkDerivation (finalAttrs: {
       patch = "0001-Make-sure-that-the-library-is-linked-with-C-symbols.patch";
       hash = "sha256-Rgfp/TysRcEJaogOo/Xno+G4HZzj9Loa69DL43Bp1Ok=";
     })
-    # we patch configure.ac to enable libtool and add a pkg-config file
-    ./0001-shared_library.patch
+    (
+      let
+        name = "liblzf-3.6-autoconf-20140314.patch";
+      in
+      fetchpatch {
+        inherit name;
+        url = "https://src.fedoraproject.org/rpms/liblzf/raw/53da654eead51a24ac81a28e1b1c531eb1afab28/f/${name}";
+        hash = "sha256-rkhI8w0HV3fGiDfHiXBzrnxqGDE/Yo5ntePrsscMiyg=";
+        # relative = true;
+        # stripLen = 1;
+      }
+    )
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    # autoreconfHook
+    autoconf
+    automake
+    libtool
     pkg-config
     validatePkgConfig
   ];
 
-  postPatch =
-    let
-      pkgConfigIn = writeText "liblzf.pc.in" ''
-        prefix=@prefix@
-        exec_prefix=@exec_prefix@
-        libdir=@libdir@
-        includedir=@includedir@
+  preConfigure = ''
+    sh ./bootstrap.sh
+  '';
 
-        Name: ${finalAttrs.pname}
-        Description: ${finalAttrs.meta.description}
-        URL: ${finalAttrs.meta.homepage}
-        Version: @VERSION@
-        Libs: -L$${libdir} -llzf
-        Cflags: -I$${includedir}
-      '';
-      shlib_version = "1:0:0";
-    in
-    ''
-      echo "${finalAttrs.version}" > VERSION
-      echo "${shlib_version}" > VERSION_INFO
-      cp ${./Makefile.am} ./Makefile.am
-      cp ${pkgConfigIn} ./liblzf.pc.in
-    '';
+  postInstall = ''
+    pushd $out/bin
+    ln -s lzf unlzf
+    popd
+  '';
 
   outputs = [
     "out"
@@ -68,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     pkgConfigTest = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
+      version = "${finalAttrs.version}.0";
       versionCheck = true;
     };
 
