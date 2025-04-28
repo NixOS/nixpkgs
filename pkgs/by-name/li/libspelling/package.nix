@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspelling";
-  version = "0.4.7";
+  version = "0.4.8";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libspelling/${lib.versions.majorMinor finalAttrs.version}/libspelling-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QvEw8pX1rdtuno50zPu3CXlL0t/QISk+KHW5SBu9Tog=";
+    hash = "sha256-J3ZGKFgY2nspXvAHssXr2BXQkws60JdQWzztlpZa9Rc=";
   };
 
   nativeBuildInputs = [
