@@ -27,6 +27,9 @@ stdenvNoCC.mkDerivation {
     license = licenses.mit;
     mainProgram = "bemoji";
     platforms = platforms.all;
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    maintainers = with maintainers; [
+      laurent-f1z1
+      MrSom3body
+    ];
   };
 }
