@@ -306,6 +306,9 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
+    substituteInPlace "$out/lib/pkgconfig/gio-2.0.pc" \
+      --replace '${"$"}{datadir}/glib-2.0/schemas' "$dev/share/glib-2.0/schemas" \
+      --replace '${"$"}{datadir}/glib-2.0/dtds' "$dev/share/glib-2.0/dtds"
   '';
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
