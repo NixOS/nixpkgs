@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   fetchzip,
   makeWrapper,
   premake5,
@@ -15,8 +14,7 @@
   curl,
   envsubst,
   flac,
-  # Use fmt 10+ after release 40.1.4+
-  fmt_9,
+  fmt,
   freetype,
   irrlicht,
   libevent,
@@ -29,7 +27,6 @@
   libX11,
   libxkbcommon,
   libXxf86vm,
-  lua5_3,
   mono,
   nlohmann_json,
   openal,
@@ -119,61 +116,77 @@ let
     };
   };
 
-  ocgcore = stdenv.mkDerivation {
-    pname = "ocgcore-edopro";
-    version = deps.edopro-version;
+  ocgcore =
+    let
+      # Refer to CORENAME EPRO_TEXT in <edopro>/gframe/dllinterface.cpp for this
+      ocgcoreName = lib.strings.concatStrings [
+        (lib.optionalString (!stdenv.hostPlatform.isWindows) "lib")
+        "ocgcore"
+        (
+          if stdenv.hostPlatform.isiOS then
+            "-ios"
+          else if stdenv.hostPlatform.isAndroid then
+            (
+              if stdenv.hostPlatform.isx86_64 then
+                "x64"
+              else if stdenv.hostPlatform.isx86_32 then
+                "x86"
+              else if stdenv.hostPlatform.isAarch64 then
+                "v8"
+              else if stdenv.hostPlatform.isAarch32 then
+                "v7"
+              else
+                throw "Don't know what platform suffix edopro expects for ocgcore on: ${stdenv.hostPlatform.system}"
+            )
+          else
+            lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ".aarch64"
+        )
+        stdenv.hostPlatform.extensions.sharedLibrary
+      ];
+    in
+    stdenv.mkDerivation {
+      pname = "ocgcore-edopro";
+      version = deps.edopro-version;
 
-    src = edopro-src;
-    sourceRoot = "${edopro-src.name}/ocgcore";
+      src = edopro-src;
+      sourceRoot = "${edopro-src.name}/ocgcore";
 
-    patches = [
-      # Fix linking against our Lua (different name mangling, C in Lua vs C++ in ocgcore)
-      ./ocgcore-lua-symbols.patch
-    ];
+      nativeBuildInputs = [
+        premake5
+      ];
 
-    nativeBuildInputs = [
-      premake5
-    ];
+      enableParallelBuilding = true;
 
-    # Drop when edopro version >= 41
-    buildInputs = [ lua5_3 ];
-    preBuild = ''
-      premake5 gmake2 \
-        --lua-path="${lua5_3}"
-    '';
+      buildFlags = [
+        "verbose=true"
+        "config=release"
+        "ocgcoreshared"
+      ];
 
-    enableParallelBuilding = true;
+      makeFlags = [
+        "-C"
+        "build"
+      ];
 
-    buildFlags = [
-      "verbose=true"
-      "config=release"
-      "ocgcoreshared"
-    ];
+      # To make sure linking errors are discovered at build time, not when edopro runs into them during loading
+      env.NIX_LDFLAGS = "--unresolved-symbols=report-all";
 
-    makeFlags = [
-      "-C"
-      "build"
-    ];
+      installPhase = ''
+        runHook preInstall
 
-    # To make sure linking errors are discovered at build time, not when edopro runs into them during loading
-    env.NIX_LDFLAGS = "--unresolved-symbols=report-all";
+        install -Dm644 bin/release/*ocgcore*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/${ocgcoreName}
 
-    installPhase = ''
-      runHook preInstall
+        runHook postInstall
+      '';
 
-      install -Dm644 -t $out/lib bin/release/libocgcore*${stdenv.hostPlatform.extensions.sharedLibrary}
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "YGOPro script engine";
-      homepage = "https://github.com/edo9300/ygopro-core";
-      license = lib.licenses.agpl3Plus;
-      inherit maintainers;
-      platforms = lib.platforms.unix;
+      meta = {
+        description = "YGOPro script engine";
+        homepage = "https://github.com/edo9300/ygopro-core";
+        license = lib.licenses.agpl3Plus;
+        inherit maintainers;
+        platforms = lib.platforms.unix;
+      };
     };
-  };
 
   edopro = stdenv.mkDerivation {
     pname = "edopro";
@@ -190,7 +203,7 @@ let
       bzip2
       curl
       flac
-      fmt_9
+      fmt
       freetype
       irrlicht-edopro
       libevent
@@ -202,14 +215,6 @@ let
       openal
       SDL2
       sqlite
-    ];
-
-    patches = [
-      (fetchpatch {
-        name = "libgit2-version.patch";
-        url = "https://github.com/edo9300/edopro/commit/f8ddbfff51231827a8dd1dcfcb2dda85f50a56d9.patch";
-        hash = "sha256-w9VTmWfw6vEyVvsOH+AK9lAbUOV+MagzGQ3Wa5DCS/U=";
-      })
     ];
 
     # nixpkgs' gcc stack currently appears to not support LTO
