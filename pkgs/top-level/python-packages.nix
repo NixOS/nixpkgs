@@ -13260,6 +13260,8 @@ self: super: with self; {
 
   pyhdfe = callPackage ../development/python-modules/pyhdfe { };
 
+  pyhealth = callPackage ../development/python-modules/pyhealth { };
+
   pyheck = callPackage ../development/python-modules/pyheck { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
