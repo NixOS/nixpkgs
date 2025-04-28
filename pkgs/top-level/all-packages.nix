@@ -419,7 +419,7 @@ with pkgs;
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
-  octodns = python3Packages.callPackage ../tools/networking/octodns { };
+  octodns = callPackage ../tools/networking/octodns { };
 
   octodns-providers = recurseIntoAttrs {
     bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
