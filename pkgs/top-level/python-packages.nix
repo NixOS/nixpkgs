@@ -16485,6 +16485,8 @@ self: super: with self; {
 
   sqlfmt = callPackage ../development/python-modules/sqlfmt { };
 
+  sqlframe = callPackage ../development/python-modules/sqlframe { };
+
   sqlglot = callPackage ../development/python-modules/sqlglot { };
 
   sqlite-anyio = callPackage ../development/python-modules/sqlite-anyio { };
