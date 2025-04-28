@@ -8,7 +8,7 @@
   gettext,
   pkg-config,
   wxGTK32,
-  boost,
+  boost177,
   icu,
   lucenepp,
   asciidoc,
@@ -20,6 +20,9 @@
   nlohmann_json,
   hicolor-icon-theme,
   wrapGAppsHook3,
+  cld2,
+  cpprest,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     libxslt
     xmlto
-    boost
+    boost177
     libtool
     pkg-config
   ];
@@ -54,21 +57,26 @@ stdenv.mkDerivation rec {
     gtk3
     gtkspell3
     hicolor-icon-theme
+    cld2
+    cpprest
+    libsecret
   ];
 
   propagatedBuildInputs = [ gettext ];
 
-  preConfigure = "
+  preConfigure = ''
     patchShebangs bootstrap
     ./bootstrap
-  ";
+
+    configureFlagsArray+=(
+      "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/ -I${cpprest}/include/"
+    )
+  '';
 
   configureFlags = [
-    "--without-cld2"
-    "--without-cpprest"
-    "--with-boost-libdir=${boost.out}/lib"
-    "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
+    "--with-boost-libdir=${boost177.out}/lib"
     "LDFLAGS=-llucene++"
+    "--with-cpprest"
   ];
 
   preFixup = ''
