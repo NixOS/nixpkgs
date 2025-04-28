@@ -149,34 +149,19 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Build system patches
     ./0001-cmake-Add-option-to-enable-Hunter-to-fetch-data.patch
     ./0002-cmake-Fix-build-dependencies.patch
     ./0003-cmake-Skip-some-dependencies.patch
     ./0004-cmake-Enable-build-of-3rdparty-dependencies.patch
-
-    ./0005-magic-enum.patch
-
     ./00.patch
-
     ./11.patch
+    ./0006-cmake-Install-shared-objects.patch
 
-    #    ./0001-CMakeLists.txt-Fix-dependencies.patch
-    #    ./0002-CMakeLists.txt-Add-embedded-dependencies.patch
-    #    ./0003-CMakeLists.txt-Link-crypto-library-due-to-OpenSSL-re.patch
-    #    ./0004-CMakeLists-backward-dependency.patch
-    #    ./0005-CMakeLists-Do-not-install-3rdparty-source-code.patch
-    #    ./0006-cmake-Disable-downloaders-for-container-build.patch
-    #    ./0007-cmake-Sort-out-dependencies-for-depthai.patch
-    #    ./0008-examples-Don-t-download-dependencies.patch
+    # Code fixes patches
+    ./0005-magic-enum.patch
     ./0009-Color.hpp-Explicit-specification-for-float-type.patch
-    #    ./0010-StreamMessageParser.cpp-Add-case-for-DatatypeEnum-Im.patch
     ./0011-BenchmarkOut.cpp-Explicit-cast-to-double.patch
-    #    ./0012-cmake-Handle-catch2-dependencies-for-tests.patch
-    #    ./0013-cmake-Don-t-download-the-test-dependencies.patch
-    #    ./0014-cmake-Install-examples-after-build-WIP.patch
-    #    ./0015-magic-enum.patch
-    #    ./0017-rerun-fetch.patch
-    #    ./016-resources.patch
   ];
 
   nativeBuildInputs = [
@@ -251,6 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEPTHAI_PCL_SUPPORT" true)
     (lib.cmakeBool "DEPTHAI_BUILD_PYTHON" true)
     (lib.cmakeBool "DEPTHAI_PYTHON_ENABLE_TESTS" true)
+    (lib.cmakeBool "DEPTHAI_INSTALL" true)
     # NOTE: Dependency broken
     #    (lib.cmakeBool "DEPTHAI_BASALT_SUPPORT" true)
     # NOTE: Broken atm
@@ -263,128 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEPTHAI_TEST_EXAMPLES" false)
     (lib.cmakeBool "DEPTHAI_BUILD_EXAMPLES" false)
   ];
-
-  # Add rpath to all executables to find the libraries
-  postFixup = ''
-    mkdir -p $out/share/
-    mkdir -p $out/lib/
-    mkdir -p $out/${python3.sitePackages}
-    mkdir -p $out/share/python-examples
-    name=$(basename $TMP)
-
-    # Copy any additional Python files if they're not already in the right place
-    ${
-      if stdenv.isDarwin then
-        ''
-          if [ -d /tmp/$name/source/build/bindings/python ]; then
-             cp -r /tmp/$name/source/build/bindings/python/depthai $out/${python3.sitePackages}/
-        ''
-      else
-        ''
-          if [ -d $buildDir/build/source/build/bindings/python ]; then
-             cp -r $buildDir/build/source/build/bindings/python/depthai $out/${python3.sitePackages}/
-        ''
-    }
-       mkdir -p $out/${python3.sitePackages}/depthai_cli
-       cp $src/bindings/python/utilities/stress_test.py $out/${python3.sitePackages}/depthai_cli
-       cp $src/bindings/python/utilities/cam_test.py $out/${python3.sitePackages}/depthai_cli
-       cp $src/bindings/python/depthai_cli/__init__.py $out/${python3.sitePackages}/depthai_cli
-       cp $src/bindings/python/depthai_cli/depthai_cli.py $out/${python3.sitePackages}/depthai_cli
-    fi
-
-    # Copy Python examples
-    cp -r $src/examples/python/* $out/share/python-examples
-
-    # Find all shared libraries in the build directory and copy them to lib directory
-    ${
-      if stdenv.isDarwin then
-        ''
-          find $buildDir -name "*.dylib*" -type f -not -path "*/\.*" | while read lib_file; do
-        ''
-      else
-        ''
-          find $buildDir -name "*.so*" -type f -not -path "*/\.*" | while read lib_file; do
-        ''
-    }
-      cp -P "$lib_file" $out/lib/
-    done
-
-    # Find all shared libraries in the build directory and copy them to lib directory
-    # Exclude static libraries (.a files) and only copy shared objects (.so files)
-    ${
-      if stdenv.isDarwin then
-        ''
-          find $buildDir -name "*.dylib*" -type f -not -name "*.a" -not -path "*/\.*" | while read lib_file; do
-        ''
-      else
-        ''
-          find $buildDir -name "*.so*" -type f -not -name "*.a" -not -path "*/\.*" | while read lib_file; do
-        ''
-    }
-      lib_basename=$(basename "$lib_file")
-      if [ ! -e "$out/lib/$lib_basename" ]; then
-        cp -P "$lib_file" $out/lib/
-      else
-        echo "Skipping $lib_basename as it already exists in $out/lib/"
-      fi
-    done
-
-    # Find all executables in the build directory and copy them to share
-    find $buildDir -type f -executable -not -path "*/\.*" | while read exec_file; do
-      cp "$exec_file" $out/share/
-    done
-
-    # Patch the executables in the share directory
-    for f in $out/share/*; do
-      if [ -f "$f" ] && [ -x "$f" ]; then
-        echo "Patching $f"
-        ${
-          if stdenv.isDarwin then
-            ''
-              install_name_tool -add_rpath $out/lib $f || true
-            ''
-          else
-            ''
-              patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib" "$f" || true
-            ''
-        }
-      fi
-    done
-
-    # Also patch the binaries in the bin directory
-    for f in $out/bin/*; do
-      if [ -f "$f" ] && [ -x "$f" ]; then
-        echo "Patching $f"
-        ${
-          if stdenv.isDarwin then
-            ''
-              install_name_tool -add_rpath $out/lib $f || true
-            ''
-          else
-            ''
-              patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib" "$f" || true
-            ''
-        }
-      fi
-    done
-
-    # Make Python Great again
-    ${
-      if stdenv.isDarwin then
-        ''
-          mv bindings/python/depthai.cpython-312-darwin.so $out/${python3.sitePackages}/
-          install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/depthai.cpython-312-darwin.so
-
-          mv bindings/python/tests/depthai_pybind11_tests.cpython-312-darwin.so $out/${python3.sitePackages}/
-          install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/depthai_pybind11_tests.cpython-312-darwin.so
-        ''
-      else
-        ''
-          mv $out/lib/depthai.cpython-312-${arch}-linux-gnu.so $out/${python3.sitePackages}/
-          mv $out/lib/depthai_pybind11_tests.cpython-312-${arch}-linux-gnu.so $out/${python3.sitePackages}/
-        ''
-    }
-  '';
 
   postPatch =
     if stdenv.isDarwin then
@@ -412,6 +276,20 @@ stdenv.mkDerivation (finalAttrs: {
         find . -maxdepth 1 -type d -not -name "." -not -name "nanorpc" -exec rm -rf {} \;
         cd ../..
       '';
+
+  # Explicitly fix RPATH in Python modules that autoPatchelfHook might miss
+  preFixup = lib.optionalString (!stdenv.isDarwin) ''
+    # Explicitly patch Python modules to remove /build references
+    echo "Explicitly patching Python modules to remove /build references"
+    
+    # Find Python modules
+    PYTHON_MODULES=$(find $out -name "*.so" -path "*/python*/*")
+    
+    for f in $PYTHON_MODULES; do
+      echo "Patching $f"
+      patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib" "$f" || true
+    done
+  '';
 
   meta = {
     description = "Core C++ library for Luxonis OAK devices";
