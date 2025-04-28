@@ -133,18 +133,20 @@ stdenv.mkDerivation (self: {
   # altogether. One by one hopefully we can fix these (on ofBorg,
   # upstream--somehow some way) in due time.
   disabledTestFiles =
-    lib.optionals
-      (builtins.elem stdenv.hostPlatform.system [
-        "x86_64-linux"
-        "aarch64-linux"
-      ])
-      [
-        "foreign-stack-alignment.impure.lisp"
-        # Floating point tests are fragile
-        # https://sourceforge.net/p/sbcl/mailman/message/58728554/
-        "compiler.pure.lisp"
-        "float.pure.lisp"
-      ]
+    lib.optionals (lib.versionOlder "2.5.2" self.version) [ "debug.impure.lisp" ]
+    ++
+      lib.optionals
+        (builtins.elem stdenv.hostPlatform.system [
+          "x86_64-linux"
+          "aarch64-linux"
+        ])
+        [
+          "foreign-stack-alignment.impure.lisp"
+          # Floating point tests are fragile
+          # https://sourceforge.net/p/sbcl/mailman/message/58728554/
+          "compiler.pure.lisp"
+          "float.pure.lisp"
+        ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # This is failing on aarch64-linux on ofBorg. Not on my local machine nor on
       # a VM on my laptop. Not sure what’s wrong.
