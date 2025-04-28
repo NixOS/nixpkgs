@@ -16439,6 +16439,10 @@ self: super: with self; {
 
   spsdk = callPackage ../development/python-modules/spsdk { };
 
+  spsdk-mcu-link = callPackage ../development/python-modules/spsdk-mcu-link { };
+
+  spsdk-pyocd = callPackage ../development/python-modules/spsdk-pyocd { };
+
   spur = callPackage ../development/python-modules/spur { };
 
   spyder = callPackage ../development/python-modules/spyder { };
@@ -16893,6 +16897,8 @@ self: super: with self; {
   systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
+
+  t61codec = callPackage ../development/python-modules/t61codec { };
 
   tabcmd = callPackage ../development/python-modules/tabcmd { };
 
@@ -19028,6 +19034,8 @@ self: super: with self; {
   x11-hash = callPackage ../development/python-modules/x11-hash { };
 
   x256 = callPackage ../development/python-modules/x256 { };
+
+  x690 = callPackage ../development/python-modules/x690 { };
 
   xapian = callPackage ../development/python-modules/xapian { inherit (pkgs) xapian; };
 
