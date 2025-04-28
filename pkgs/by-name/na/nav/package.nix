@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nav";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchzip {
     url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${platform}.tar.gz";
     sha256 =
       {
-        x86_64-linux = "sha256-ihn5wlagmujHlSfJpgojQNqa4NjLF1wk2pt8wHi60DY=";
+        x86_64-linux = "sha256-ZDta1qbkdR3p9BJ0fy7or8MvE6QCL+wCKWd/KLavrhw=";
         aarch64-linux = "sha256-l3rKu3OU/TUUjmx3p06k9V5eN3ZDNcxbxObLqVQ2B7U=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
