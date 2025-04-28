@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
       elementary-terminal # io.elementary.terminal.settings
       granite7
       switchboard
+      wingpanel-indicator-sound # io.elementary.desktop.wingpanel.sound
     ]);
 
   mesonFlags = [
