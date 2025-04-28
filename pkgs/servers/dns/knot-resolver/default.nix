@@ -36,11 +36,11 @@ let # un-indented, over the whole file
 
   unwrapped = stdenv.mkDerivation rec {
     pname = "knot-resolver";
-    version = "5.7.4";
+    version = "5.7.5";
 
     src = fetchurl {
       url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-      hash = "sha256-a22m7PBoKAQa+tRN+iJ3gfCuNK0YOmZwCFCTVdGL2cg=";
+      sha256 = "80239cf9aa92599d9cbad4642dea5520b2ccfbc9c6f968886ea46179cb3cdf66";
     };
 
     outputs = [
@@ -69,13 +69,6 @@ let # un-indented, over the whole file
           substituteInPlace "$f" \
             --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
         done
-      ''
-      # https://gitlab.nic.cz/knot/knot-resolver/-/issues/925
-      + ''
-        patch modules/http/meson.build <<EOF
-        @@ -22 +21,0 @@
-        -  ['http', files('http.test.lua')],
-        EOF
       ''
       # some tests have issues with network sandboxing, apparently
       + optionalString doInstallCheck ''
