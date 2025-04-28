@@ -51,19 +51,19 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.2.1";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
     rev = "refs/tags/${version}";
-    hash = "sha256-zOWcXpByJRzI9sTjTl+w/vo99suKOEN0TvPn1ZWlNmc=";
+    hash = "sha256-FAVNS7GPvglFuSTDTAUtZ6ZzY4yH+eo34KhUQ4C3b4I=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-My7WUAqIvOrbbVTxSnA6a5NviM6u95+iyykx1xbudpw=";
+    hash = "sha256-1ffF3i/IgE+J+0M+z6bzwZ9H8u0EYcYXTiBD9Jj7HdQ=";
   };
 
   postPatch = ''
