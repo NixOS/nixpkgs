@@ -43,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     phpPackage = php84;
+    tests = nixosTests.firefly-pico;
     updateScript = nix-update-script { };
     frontend = callPackage ./frontend.nix {
       inherit (finalAttrs)
