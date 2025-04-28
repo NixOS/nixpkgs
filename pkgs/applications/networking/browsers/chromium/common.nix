@@ -518,6 +518,21 @@ let
       ]
       ++ lib.optionals (chromiumVersionAtLeast "134" && lib.versionOlder rustcVersion "1.86") [
         ./patches/chromium-134-rust-adler2.patch
+      ]
+      ++ lib.optionals (!isElectron) [
+        # Backport "Only call format_message when needed" to fix print() crashing with is_cfi = true.
+        # We build electron is_cfi = false and as such electron is not affected by this.
+        # https://github.com/NixOS/nixpkgs/issues/401326
+        # https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/issues/13
+        # https://skia-review.googlesource.com/c/skia/+/961356
+        (fetchpatch {
+          name = "only-call-format_message-when-needed.patch";
+          url = "https://skia.googlesource.com/skia/+/71685eda67178fa374d473ec1431fc459c83bb21^!?format=TEXT";
+          decode = "base64 -d";
+          stripLen = 1;
+          extraPrefix = "third_party/skia/";
+          hash = "sha256-aMqDjt/0cowqSm5DqcD3+zX+mtjydk396LD+B5F/3cs=";
+        })
       ];
 
     postPatch =
