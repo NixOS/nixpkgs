@@ -3,10 +3,13 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
 
   # build-system
   hatch-jupyter-builder,
   hatchling,
+  jupyterlab,
 
   # dependencies
   markdown-it-py,
@@ -38,9 +41,33 @@ buildPythonPackage rec {
     hash = "sha256-Rkz2rite0hKcts4+3SmFsDF6tH2kQa4d2DtyZsAx3rA=";
   };
 
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  missingHashes = ./missing-hashes.json;
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    sourceRoot = "${src.name}/jupyterlab";
+    hash = "sha256-UOsQsvnPpwpiKilaS0Rs/j1YReDljpLbEWZaeoRVK9g=";
+  };
+
+  env.HATCH_BUILD_HOOKS_ENABLE = true;
+
+  preConfigure = ''
+    pushd jupyterlab
+  '';
+
+  preBuild = ''
+    popd
+  '';
+
   build-system = [
     hatch-jupyter-builder
     hatchling
+    jupyterlab
   ];
 
   dependencies = [
