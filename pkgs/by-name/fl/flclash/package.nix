@@ -110,5 +110,8 @@ flutter329.buildFlutterApplication {
   meta = metaCommon // {
     mainProgram = "FlClash";
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "https://github.com/chen08209/FlClash/issues/1131"
+    ];
   };
 }
