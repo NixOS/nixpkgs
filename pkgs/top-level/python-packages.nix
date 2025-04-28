@@ -2041,6 +2041,8 @@ self: super: with self; {
 
   brelpy = callPackage ../development/python-modules/brelpy { };
 
+  brevo-python = callPackage ../development/python-modules/brevo-python { };
+
   brian2 = callPackage ../development/python-modules/brian2 { };
 
   bring-api = callPackage ../development/python-modules/bring-api { };
@@ -7173,6 +7175,8 @@ self: super: with self; {
 
   julius = callPackage ../development/python-modules/julius { };
 
+  june-analytics-python = callPackage ../development/python-modules/june-analytics-python { };
+
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junit2html = callPackage ../development/python-modules/junit2html { };
@@ -8012,6 +8016,10 @@ self: super: with self; {
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
+
+  livekit-api = callPackage ../development/python-modules/livekit-api { };
+
+  livekit-protocol = callPackage ../development/python-modules/livekit-protocol { };
 
   livelossplot = callPackage ../development/python-modules/livelossplot { };
 

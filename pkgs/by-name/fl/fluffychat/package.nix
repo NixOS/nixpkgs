@@ -23,19 +23,20 @@ in
 flutter327.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "1.25.1";
+    version = "1.26.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-5hdFc4JPtTmNVUGTKVBiG7unGsc3NQQ3SJ9I63kfUVc=";
+      hash = "sha256-yCbZCNyZqnYKep0sqkkMn8oz/4lRz7D9he/403MyK9U=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
       flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
+      flutter_typeahead = "sha256-ZGXbbEeSddrdZOHcXE47h3Yu3w6oV7q+ZnO6GyW7Zg8=";
     };
 
     inherit targetFlutterPlatform;
@@ -48,6 +49,7 @@ flutter327.buildFlutterApplication (
       maintainers = with maintainers; [
         mkg20001
         gilice
+        tebriel
       ];
       platforms = [
         "x86_64-linux"
