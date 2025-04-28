@@ -6887,7 +6887,6 @@ with pkgs;
         newScope
         lxqt
         lib
-        libsForQt5
         ;
     }
   );
@@ -9126,7 +9125,7 @@ with pkgs;
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
-  libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
+  libarchive-qt = callPackage ../development/libraries/libarchive-qt { };
 
   libasn1c = callPackage ../servers/osmocom/libasn1c/default.nix { };
 
@@ -15885,7 +15884,7 @@ with pkgs;
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
-  gcompris = libsForQt5.callPackage ../games/gcompris { };
+  gcompris = kdePackages.callPackage ../games/gcompris { };
 
   gl-gsync-demo = callPackage ../games/gl-gsync-demo {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
