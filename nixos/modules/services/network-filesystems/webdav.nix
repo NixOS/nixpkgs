@@ -43,9 +43,8 @@ in
           {
               address = "0.0.0.0";
               port = 8080;
-              scope = "/srv/public";
-              modify = true;
-              auth = true;
+              directory = "/srv/public";
+              permissions = "CRUD"; # C (Create), R (Read), U (Update), D (Delete)
               users = [
                 {
                   username = "{env}ENV_USERNAME";
