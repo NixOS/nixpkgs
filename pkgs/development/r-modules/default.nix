@@ -1778,17 +1778,6 @@ let
       ];
     });
 
-    scDDboost = old.scDDboost.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/scDDboost/commit/f704a727c906075a2e271e9e2db93cf31e3822f5
-        substituteInPlace "DESCRIPTION" \
-          --replace-fail "c++11" "c++14"
-        # https://code.bioconductor.org/browse/scDDboost/commit/74d46e266957b38fe77185fa3ce683f891706538
-        substituteInPlace "src/Makevars" \
-          --replace-fail "#CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
-    });
-
     sf = old.sf.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
@@ -1910,14 +1899,6 @@ let
         ]
         ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
-    });
-
-    bandle = old.bandle.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/bandle/commit/e8f7aaa29c1ba772cee5d51e09b1f500bfee44b8
-        substituteInPlace "src/Makevars" \
-          --replace-fail "CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
     });
 
     graper = old.graper.overrideAttrs (attrs: {
@@ -2527,16 +2508,6 @@ let
 
     rgl = old.rgl.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
-    });
-
-    methylKit = old.methylKit.overrideAttrs (attrs: {
-      # resolve missing function from data.table
-      patches = [
-        (pkgs.fetchpatch {
-          url = "https://github.com/al2na/methylKit/commit/5c30347630bc064d7aefc918923f723671f35253.patch";
-          sha256 = "sha256-hwtybBmSYwVInMIEZ7i7zudJWjiRJmrD0/tU7v78pPc=";
-        })
-      ];
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
