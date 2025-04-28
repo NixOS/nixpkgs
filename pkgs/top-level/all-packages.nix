@@ -12092,10 +12092,6 @@ with pkgs;
     modules = [ ];
   };
 
-  opensmtpd = callPackage ../servers/mail/opensmtpd { };
-  opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
-  opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
-
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
