@@ -42,6 +42,7 @@
   cacert,
   systemd,
   libcxx,
+  sane-backends,
   symlinkJoin,
   libpulseaudio,
   pcsclite,
@@ -54,8 +55,6 @@
   libjson,
   libsecret,
   libcanberra-gtk3,
-  sane-backends,
-
   homepage,
   version,
   prefix,
@@ -175,6 +174,7 @@ stdenv.mkDerivation rec {
     openssl'
     pango
     pcsclite
+    sane-backends
     speex
     (lib.getLib systemd)
     stdenv.cc.cc
