@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   electron_35,
   vulkan-loader,
@@ -29,13 +30,22 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-OS5DR+24F98ICgQ6zL4VD231Rd5JB/gJKl+qNfnP3PE=";
 
   patches = [
-    ./electron-builder-config.patch
+    # Make it possible to load the electron-builder config without sideeffects.
+    # PR at https://github.com/sunfish-shogi/shogihome/pull/1184
+    # Should be removed next 1.22.X ShogiHome update or possibly 1.23.X.
+    (fetchpatch {
+      url = "https://github.com/sunfish-shogi/shogihome/commit/a075571a3bf4f536487e1212a2e7a13802dc7ec7.patch";
+      sha256 = "sha256-dJyaoWOC+fEufzpYenmfnblgd2C9Ymv4Cl8Y/hljY6c=";
+    })
   ];
 
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail 'npm run install:esbuild && ' "" \
       --replace-fail 'npm run install:electron && ' ""
+
+    substituteInPlace .electron-builder.config.mjs \
+      --replace-fail 'AppImage' 'dir'
   '';
 
   env = {
@@ -69,7 +79,7 @@ buildNpmPackage (finalAttrs: {
 
       ./node_modules/.bin/electron-builder \
           --dir \
-          --config scripts/build.mjs \
+          --config .electron-builder.config.mjs \
           -c.electronDist=electron-dist \
           -c.electronVersion=${electron.version}
 
