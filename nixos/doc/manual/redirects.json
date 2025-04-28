@@ -1463,6 +1463,12 @@
   "module-services-networking-pihole-ftl-configuration": [
     "index.html#module-services-networking-pihole-ftl-configuration"
   ],
+  "module-services-web-apps-pihole-web": [
+    "index.html#module-services-web-apps-pihole-web"
+  ],
+  "module-services-web-apps-pihole-web-configuration": [
+    "index.html#module-services-web-apps-pihole-web-configuration"
+  ],
   "ch-profiles": [
     "index.html#ch-profiles"
   ],
