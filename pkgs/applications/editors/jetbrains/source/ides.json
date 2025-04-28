@@ -1,21 +1,21 @@
 {
   "idea-community": {
-    "version": "2024.3.1.1",
-    "buildNumber": "243.22562.218",
+    "version": "2025.1.1.1",
+    "buildNumber": "251.25410.129",
     "buildType": "idea",
-    "ideaHash": "sha256-QKFUg6C+ZVgPrgd6jwWSkBVMHAF30ja0Uqezy9syo5k=",
-    "androidHash": "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=",
-    "jpsHash": "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=",
+    "ideaHash": "sha256-9YatnO+9Pcrlx7EXmq4wMVdeR3DzJF2fsQOvRWH11tk=",
+    "androidHash": "sha256-ueMdEkXt/x5WIex163iwTlOm5bvZNluNO7SNxs+bPYs=",
+    "jpsHash": "sha256-aOYCwDSso0X/7f5tWfP+veoQhCvd6tEDk9lq4YX/cb0=",
     "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
     "mvnDeps": "idea_maven_artefacts.json"
   },
   "pycharm-community": {
-    "version": "2024.3.1.1",
-    "buildNumber": "243.22562.220",
+    "version": "2025.1.1",
+    "buildNumber": "251.25410.122",
     "buildType": "pycharm",
-    "ideaHash": "sha256-QKFUg6C+ZVgPrgd6jwWSkBVMHAF30ja0Uqezy9syo5k=",
-    "androidHash": "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=",
-    "jpsHash": "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=",
+    "ideaHash": "sha256-zEncBVjbrOrd0UZPN3yjuioZ61l8UOEjD33TrLS0p9I=",
+    "androidHash": "sha256-ueMdEkXt/x5WIex163iwTlOm5bvZNluNO7SNxs+bPYs=",
+    "jpsHash": "sha256-aOYCwDSso0X/7f5tWfP+veoQhCvd6tEDk9lq4YX/cb0=",
     "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
     "mvnDeps": "pycharm_maven_artefacts.json"
   }
