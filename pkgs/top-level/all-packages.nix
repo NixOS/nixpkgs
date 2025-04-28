@@ -13673,10 +13673,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  bluefish = callPackage ../applications/editors/bluefish {
-    gtk = gtk3;
-  };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   calf = callPackage ../applications/audio/calf {
