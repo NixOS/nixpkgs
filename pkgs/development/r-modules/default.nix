@@ -565,6 +565,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
+    Rigraphlib = [ pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     imbibe = [ pkgs.zlib.dev ];
