@@ -14,13 +14,13 @@ let
 in
 awsStdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.49.1";
+  version = "1.50.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gnYtzXHaS7QLcVmIcQsQDy6wNesQJ2ruE9W32HqiA5A=";
+    hash = "sha256-aYill04Fs/mJFCmzP/tlwUcPRHJz6R9knQWKGEOMwfQ=";
   };
 
   outputs = [

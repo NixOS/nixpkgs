@@ -35,11 +35,6 @@ class VSCodeExtensionUpdater:
             help="allow check pre-release versions",
         )
         self.parser.add_argument(
-            "--platforms",
-            action="store_true",
-            help="set system according to meta.platforms for nix-update",
-        )
-        self.parser.add_argument(
             "--commit", action="store_true", help="commit the updated package"
         )
         self.args = self.parser.parse_args()
@@ -58,18 +53,16 @@ class VSCodeExtensionUpdater:
             f"{self.extension_publisher}.{self.extension_name}"
         )
         self.nix_system = self.get_nix_system()
-        self.nix_systems = self._get_nix_vscode_extension_platforms() or [
+        nix_vscode_extension_platforms = self._get_nix_vscode_extension_platforms()
+        if not nix_vscode_extension_platforms and self._has_platform_source():
+            logger.error("Error: not found meta.platforms.")
+            sys.exit(1)
+        self.nix_vscode_extension_platforms = nix_vscode_extension_platforms or [
             self.nix_system
         ]
-        if not self.args.platforms:
-            self.nix_systems = (
-                [self.nix_system]
-                if self.nix_system in self.nix_systems
-                else self.nix_systems[:1]
-            )
-        if self.nix_system in self.nix_systems:
-            self.nix_systems.remove(self.nix_system)
-            self.nix_systems.insert(0, self.nix_system)
+        if self.nix_system in self.nix_vscode_extension_platforms:
+            self.nix_vscode_extension_platforms.remove(self.nix_system)
+            self.nix_vscode_extension_platforms.insert(0, self.nix_system)
         self.supported_nix_systems = self.get_supported_nix_systems()
         logger.info(f"VSCode version: {self.target_vscode_version}")
         logger.info(f"Extension Marketplace ID: {self.extension_marketplace_id}")
@@ -117,6 +110,10 @@ class VSCodeExtensionUpdater:
             elif key == "extra-platforms":
                 extra_platforms = value.strip("[]").replace('"', "").split()
         return ([system] if system is not None else []) + extra_platforms
+
+    def _has_platform_source(self) -> bool:
+        source_url = self._get_nix_attribute(f"{self.attribute_path}.src.url")
+        return "targetPlatform=" in source_url
 
     def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
         url = self.execute_command(
@@ -411,7 +408,8 @@ class VSCodeExtensionUpdater:
             f"Total versions found for {self.extension_marketplace_id}: {len(available_versions)}"
         )
         self.new_version = self.find_compatible_extension_version(
-            available_versions, self.get_target_platform(self.nix_systems[0])
+            available_versions,
+            self.get_target_platform(self.nix_vscode_extension_platforms[0]),
         )
         try:
             self.execute_command(
@@ -420,7 +418,7 @@ class VSCodeExtensionUpdater:
         except subprocess.CalledProcessError:
             logger.info("Already up to date or new version is older!")
             sys.exit(0)
-        for i, system in enumerate(self.nix_systems):
+        for i, system in enumerate(self.nix_vscode_extension_platforms):
             version = self.new_version if i == 0 else "skip"
             self.run_nix_update(version, system)
         if self.commit:

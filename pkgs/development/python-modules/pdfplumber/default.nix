@@ -1,8 +1,8 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  ghostscript,
   jupyterlab,
   nbexec,
   pandas,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     jupyterlab
     nbexec
     pandas
