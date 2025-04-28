@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.10.3";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     tag = "v${version}";
-    hash = "sha256-D17eNJYihVNzDoD0FNNMLP1rRvG6fTL97RrBqGgJSX0=";
+    hash = "sha256-3RXkz+UQvLixfYYhm5y/5vu9r0ga6s3xKx1azbmKFgg=";
   };
 
   build-system = [
@@ -97,7 +97,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
-    changelog = "https://github.com/ome/ome-zarr-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ome/ome-zarr-py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bcdarwin ];
     mainProgram = "ome_zarr";
