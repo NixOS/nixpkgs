@@ -16435,6 +16435,8 @@ self: super: with self; {
 
   spsdk = callPackage ../development/python-modules/spsdk { };
 
+  spsdk-mcu-link = callPackage ../development/python-modules/spsdk-mcu-link { };
+
   spur = callPackage ../development/python-modules/spur { };
 
   spyder = callPackage ../development/python-modules/spyder { };
