@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (
       let
-        patchName = "liblzf-3.6-autoconf-20140314.patch";
+        name = "liblzf-3.6-autoconf-20140314.patch";
       in
       fetchpatch {
-        inherit patchName;
-        url = "https://src.fedoraproject.org/rpms/liblzf/raw/53da654eead51a24ac81a28e1b1c531eb1afab28/f/${patchName}";
+        inherit name;
+        url = "https://src.fedoraproject.org/rpms/liblzf/raw/53da654eead51a24ac81a28e1b1c531eb1afab28/f/${name}";
         hash = "sha256-rkhI8w0HV3fGiDfHiXBzrnxqGDE/Yo5ntePrsscMiyg=";
       }
     )
