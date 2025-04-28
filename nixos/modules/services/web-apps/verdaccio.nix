@@ -12,9 +12,18 @@ let
   cfg = config.services.verdaccio;
   format = pkgs.formats.yaml { };
 
-  mapToSocketsList = lib.pipe lib.attrsets.mapAttrsToList [
-    (host: ports: map (port: "${host}:${toString port}") ports)
-  ];
+  mapToSocketsList = lib.attrsets.mapAttrsToList (
+    host: ports: map (port: "${host}:${toString port}") ports
+  );
+
+  ports =
+    if cfg.settings.listen != null then
+      lib.pipe cfg.settings.listen [
+        lib.attrsets.attrValues
+        lib.lists.concatLists
+      ]
+    else
+      [ ];
 
   listen = lib.pipe cfg.settings.listen [
     mapToSocketsList
@@ -28,6 +37,14 @@ in
 {
   options.services.verdaccio = {
     enable = mkEnableOption "Verdaccio npm registry";
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Automatically open the ports specified in `settings.listen` in the firewall.
+      '';
+    };
 
     settings = mkOption {
       type = types.submodule {
@@ -105,5 +122,7 @@ in
     };
 
     environment.etc."verdaccio/${configFileName}".source = configFile;
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall ports;
   };
 }
