@@ -3171,8 +3171,6 @@ with pkgs;
 
   deluge-2_x = deluge;
 
-  dnsviz = callPackage ../tools/networking/dnsviz { };
-
   diffoscopeMinimal = diffoscope.override {
     enableBloat = false;
   };
