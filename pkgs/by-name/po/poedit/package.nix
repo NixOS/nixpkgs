@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.5.2";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    hash = "sha256-FYLTHVoqXypW1QhnVmIWMp9u+/8pbdUoV7v9GSWEMIU=";
+    hash = "sha256-R3X1bWcbIJX2a1qf7hNuKNV9rp3TzINmtCaO7bkHze4=";
   };
 
   nativeBuildInputs = [
