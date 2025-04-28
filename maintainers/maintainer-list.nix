@@ -8664,6 +8664,12 @@
     githubId = 4065244;
     name = "Gary Guo";
   };
+  gauravghodinde = {
+    email = "gauravghodinde@gmail.com";
+    github = "gauravghodinde";
+    githubId = 65962770;
+    name = "Gaurav Ghodinde";
+  };
   gavin = {
     email = "gavin.rogers@holo.host";
     github = "gavinrogers";
