@@ -30,16 +30,27 @@
   jpsHash,
   restarterHash,
   mvnDeps,
+  repositories,
+  kotlin-jps-plugin,
+  kotlinc,
 }:
 
 let
-  kotlin' = kotlin.overrideAttrs (oldAttrs: {
-    version = "2.1.10";
+  kotlin' = kotlin.overrideAttrs rec {
+    version = kotlinc.version;
     src = fetchurl {
-      url = oldAttrs.src.url;
-      sha256 = "sha256-xuniY2iJgo4ZyIEdWriQhiU4yJ3CoxAZVt/uPCqLprE=";
+      url = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-dist-for-ide/${version}/kotlin-dist-for-ide-${version}.jar";
+      sha256 = kotlinc.hash;
     };
-  });
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      LANG=en_US.UTF-8 unzip -qq "$src"
+
+      runHook postUnpack
+    '';
+  };
 
   jbr = jetbrains.jdk-no-jcef-17;
 
@@ -200,19 +211,7 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = [
-        "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/${entry.url}"
-        "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ij/intellij-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public/${entry.url}"
-        "https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/kpm/public/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/ki/maven/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/dpgpv/maven/${entry.url}"
-        "https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev/${entry.url}"
-      ];
+      urls = builtins.map (url: "${url}/${entry.url}") repositories;
       sha256 = entry.hash;
     };
   };
@@ -223,7 +222,7 @@ let
       repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "2.1.10";
+      version = kotlin-jps-plugin.version;
     in
     fetchurl {
       url =
@@ -239,7 +238,7 @@ let
         + "-"
         + version
         + ".jar";
-      hash = "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4=";
+      hash = kotlin-jps-plugin.hash;
     };
 
   targetClass =
