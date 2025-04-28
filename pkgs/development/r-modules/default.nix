@@ -1742,6 +1742,11 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    SynExtend = old.SynExtend.overrideAttrs (attrs: {
+      # build might fail due to race condition
+      enableParallelBuilding = false;
+    });
+
     xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
