@@ -8,17 +8,41 @@
 with lib;
 
 let
+  configFileName = "config.yaml";
   cfg = config.services.verdaccio;
   format = pkgs.formats.yaml { };
-  configFileName = "config.yaml";
-  configFile = format.generate configFileName cfg.settings;
+
+  mapToSocketsList = lib.pipe lib.attrsets.mapAttrsToList [
+    (host: ports: map (port: "${host}:${toString port}") ports)
+  ];
+
+  listen = lib.pipe cfg.settings.listen [
+    mapToSocketsList
+    lib.lists.concatLists
+  ];
+
+  configFile = format.generate configFileName (
+    if cfg.settings.listen != null then cfg.settings // { inherit listen; } else cfg.settings
+  );
 in
 {
   options.services.verdaccio = {
     enable = mkEnableOption "Verdaccio npm registry";
 
     settings = mkOption {
-      type = types.attrs;
+      type = types.submodule {
+        freeformType = types.anything;
+        options = {
+          listen = mkOption {
+            type = types.nullOr (types.attrsOf (types.listOf types.port));
+            default = null;
+            description = ''
+              Attribute set in which the key is the host and the value is a list of ports.
+              This will be used to configure the Verdaccio server to listen on multiple interfaces.
+            '';
+          };
+        };
+      };
       default = { };
       description = ''
         Verdaccio configuration options as a Nix attribute set.
