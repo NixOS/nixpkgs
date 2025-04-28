@@ -717,7 +717,10 @@ let
       gmp
       mpfr.dev
     ];
-    Rmpi = [ pkgs.mpi ];
+    Rmpi = with pkgs; [
+      mpi.dev
+      prrte.dev
+    ];
     RMySQL = with pkgs; [
       zlib
       libmysqlclient
