@@ -16,6 +16,7 @@ declare -ar packages=(
     langchain-openai
     langchain-tests
     langchain-text-splitters
+    langchain-xai
 )
 
 tags=$(git ls-remote --tags --refs "https://github.com/langchain-ai/langchain" | cut --delimiter=/ --field=3-)
