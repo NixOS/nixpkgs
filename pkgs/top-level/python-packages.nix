@@ -6861,6 +6861,8 @@ self: super: with self; {
 
   ipyvuetify = callPackage ../development/python-modules/ipyvuetify { };
 
+  ipywebrtc = callPackage ../development/python-modules/ipywebrtc { };
+
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipyxact = callPackage ../development/python-modules/ipyxact { };
