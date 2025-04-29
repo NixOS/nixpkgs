@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
+    # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
+    # so the session 'bash' will receive the proper locale archive, and thus process
+    # UTF-8 properly.
     ./locale_archive.patch
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
