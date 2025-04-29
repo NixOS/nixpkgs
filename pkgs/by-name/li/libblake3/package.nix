@@ -38,6 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
     tbb_2021_11
   ];
 
+  patches = [
+    # build(cmake): Relax Clang frontend variant detection (BLAKE3-team/BLAKE3#477)
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/BLAKE3-team/BLAKE3/pull/477.patch";
+      hash = "sha256-kidCMGd/i9D9HLLTt7l1DbiU71sFTEyr3Vew4XHUHls=";
+      relative = "c";
+    })
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
