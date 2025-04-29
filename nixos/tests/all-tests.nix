@@ -737,6 +737,7 @@ in
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
   litellm = runTest ./litellm.nix;
   litestream = handleTest ./litestream.nix { };
+  lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   lldap = handleTest ./lldap.nix { };
   localsend = handleTest ./localsend.nix { };
   locate = handleTest ./locate.nix { };
