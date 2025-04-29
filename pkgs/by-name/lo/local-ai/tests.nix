@@ -84,7 +84,7 @@ in
           nodes.machine = {
             imports = [ common-config ];
             virtualisation.cores = 2;
-            virtualisation.memorySize = 4096;
+            virtualisation.memorySize = 3 * 4096;
             services.local-ai.models = models;
           };
           passthru = {
