@@ -33,22 +33,18 @@ in
   ];
 
   config = {
-    fileSystems."/" = mkIf (!cfg.zfs.enable) (
-      lib.mkImageMediaOverride {
-        device = "/dev/disk/by-label/nixos";
-        fsType = "ext4";
-        autoResize = true;
-      }
-    );
+    fileSystems."/" = mkIf (!cfg.zfs.enable) {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+      autoResize = true;
+    };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (
-      lib.mkImageMediaOverride {
-        # The ZFS image uses a partition labeled ESP whether or not we're
-        # booting with EFI.
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
-      }
-    );
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+      # The ZFS image uses a partition labeled ESP whether or not we're
+      # booting with EFI.
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
+    };
 
     boot.growPartition = true;
     boot.kernelParams = [ "console=tty1" ];
