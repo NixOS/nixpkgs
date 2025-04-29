@@ -561,6 +561,18 @@ rec {
   ## Other
   ##
 
+  loongarch64-multiplatform = {
+    linux-kernel = {
+      name = "loongarch-multiplatform";
+      target = "vmlinuz.efi";
+      installTarget = "install";
+      autoModules = true;
+      preferBuiltin = true;
+      baseConfig = "defconfig";
+      DTB = true;
+    };
+  };
+
   riscv-multiplatform = {
     linux-kernel = {
       name = "riscv-multiplatform";
@@ -597,6 +609,9 @@ rec {
 
     else if platform.isAarch64 then
       if platform.isDarwin then apple-m1 else aarch64-multiplatform
+
+    else if platform.isLoongArch64 then
+      loongarch64-multiplatform
 
     else if platform.isRiscV then
       riscv-multiplatform
