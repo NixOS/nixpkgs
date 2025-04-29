@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   vte,
-  gtk,
+  gtk3,
   pcre2,
   nixosTests,
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     vte
-    gtk
+    gtk3
     pcre2
   ];
 
