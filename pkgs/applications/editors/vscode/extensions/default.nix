@@ -4725,6 +4725,22 @@ let
         };
       };
 
+      sunshaoce.risc-v = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          hash = "sha256-d6sf7is/vAiP11KdPlwbtqz3FZOvidlxj9yHHJAb5vU=";
+          name = "risc-v";
+          publisher = "sunshaoce";
+          version = "1.158.10";
+        };
+        meta = {
+          description = "Most Comprehensive RISC-V ASM Highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=sunshaoce.RISC-V";
+          homepage = "https://github.com/sunshaoce/RISC-V";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.qf0xb ];
+        };
+      };
+
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "svelte-vscode";
