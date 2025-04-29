@@ -9,6 +9,7 @@
   strace,
   texinfo,
   which,
+  writableTmpDirAsHomeHook,
   writeText,
   zstd,
   version,
@@ -97,6 +98,7 @@ stdenv.mkDerivation (self: {
     ++ lib.optionals self.doCheck (
       [
         which
+        writableTmpDirAsHomeHook
       ]
       ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
         strace
@@ -171,7 +173,8 @@ stdenv.mkDerivation (self: {
         ./dynamic-space-size-envvar-2.5.2-feature.patch
         ./dynamic-space-size-envvar-2.5.2-tests.patch
       ];
-  postPatch =
+
+  sbclPatchPhase =
     lib.optionalString (self.disabledTestFiles != [ ]) ''
       (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})
     ''
@@ -200,11 +203,7 @@ stdenv.mkDerivation (self: {
       fi
     '';
 
-  preBuild = ''
-    export INSTALL_ROOT=$out
-    mkdir -p test-home
-    export HOME=$PWD/test-home
-  '';
+  preConfigurePhases = "sbclPatchPhase";
 
   enableFeatures =
     assert lib.assertMsg (
@@ -241,6 +240,7 @@ stdenv.mkDerivation (self: {
   buildPhase = ''
     runHook preBuild
 
+    export INSTALL_ROOT=$out
     sh make.sh ${lib.concatStringsSep " " self.buildArgs}
     (cd doc/manual ; make info)
 
@@ -266,7 +266,7 @@ stdenv.mkDerivation (self: {
     ''
       runHook preInstall
 
-      INSTALL_ROOT=$out sh install.sh
+      sh install.sh
 
     ''
     + lib.optionalString (!self.purgeNixReferences) ''
