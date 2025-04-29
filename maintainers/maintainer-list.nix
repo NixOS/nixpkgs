@@ -2535,6 +2535,12 @@
     github = "axelkar";
     githubId = 120189068;
   };
+  axler1 = {
+    name = "Alexander Gonzalez";
+    email = "blue.coral070@slmails.com";
+    github = "Axler1";
+    githubId = 69816272;
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "hafiz";
