@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-A5hOBxj8tKlkHd8zDHfDoU6fIu8gDpt3/usbiDk0/G0=";
+    hash = "sha256-bCcgTi9jG2gM9ZCq4Xc7urOIoSsMwwztEDqKwPB65CE=";
   };
 
   nativeBuildInputs =
