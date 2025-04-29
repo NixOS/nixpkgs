@@ -14703,10 +14703,6 @@ with pkgs;
 
   scheherazade-new = callPackage ../data/fonts/scheherazade { };
 
-  starship = callPackage ../tools/misc/starship {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
-  };
-
   inherit (callPackages ../data/fonts/gdouros { })
     aegan
     aegyptus
