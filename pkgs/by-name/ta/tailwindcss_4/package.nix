@@ -5,6 +5,7 @@
   versionCheckHook,
   autoPatchelfHook,
   makeWrapper,
+  watchman,
 }:
 let
   version = "4.1.4";
@@ -53,9 +54,9 @@ stdenv.mkDerivation {
 
   # libstdc++.so.6 for @parcel/watcher
   postFixup = ''
-    wrapProgram $out/bin/tailwindcss --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ stdenv.cc.cc.lib ]
-    }
+    wrapProgram $out/bin/tailwindcss \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} \
+      --prefix PATH : ${watchman}/bin
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
