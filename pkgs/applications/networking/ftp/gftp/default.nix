@@ -5,7 +5,7 @@
   autoconf,
   automake,
   gettext,
-  gtk,
+  gtk2,
   intltool,
   libtool,
   ncurses,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk
+    gtk2
     ncurses
     openssl
     readline
