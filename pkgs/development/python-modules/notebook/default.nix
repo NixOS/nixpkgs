@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   nodejs,
   yarn-berry_3,
+  distutils,
   hatch-jupyter-builder,
   hatchling,
   jupyter-server,
@@ -35,7 +37,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     nodejs
     yarn-berry_3.yarnBerryConfigHook
-  ];
+  ] ++ lib.optional (stdenv.hostPlatform.system == "aarch64-linux") distutils;
 
   missingHashes = ./missing-hashes.json;
 
