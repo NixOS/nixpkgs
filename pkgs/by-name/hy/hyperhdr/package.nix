@@ -90,7 +90,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awawa-dev/HyperHDR";
     changelog = "https://github.com/awawa-dev/HyperHDR/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [
+      hexa
+      eymeric
+    ];
     mainProgram = "hyperhdr";
     platforms = platforms.linux;
   };
