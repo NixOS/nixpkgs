@@ -23,7 +23,7 @@
   clblast,
   ocl-icd,
 
-  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
+  vulkanSupport ? true,
   vulkan-loader,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
