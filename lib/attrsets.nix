@@ -1076,7 +1076,7 @@ rec {
 
     :::
   */
-  mapAttrsToList = f: attrs: map (name: f name attrs.${name}) (attrNames attrs);
+  mapAttrsToList = f: attrs: attrValues (mapAttrs f attrs);
 
   /**
     Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
