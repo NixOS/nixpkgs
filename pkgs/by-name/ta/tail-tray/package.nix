@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tail-tray";
-  version = "0.2.20";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "SneWs";
     repo = "tail-tray";
     tag = "v${version}";
-    sha256 = "sha256-vsxWGXpmkznfqFwtuLdG6yGAS/Lhs6NLRuzQ/g/WLu8=";
+    sha256 = "sha256-zdmU4GdEVOT8wUgOxJAGsLQEb35O/RUjc8HcYpwIkiM=";
   };
 
   nativeBuildInputs = with kdePackages; [
