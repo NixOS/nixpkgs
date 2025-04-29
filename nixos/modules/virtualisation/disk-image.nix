@@ -37,7 +37,7 @@ in
     boot.loader.systemd-boot.enable = lib.mkDefault cfg.efiSupport;
     boot.growPartition = lib.mkDefault true;
 
-    fileSystems = lib.mkImageMediaOverride {
+    fileSystems = {
       "/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;

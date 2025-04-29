@@ -70,14 +70,12 @@ in
           _: value: ((value.mount or null) != null)
         ) config.openstack.zfs.datasets;
       in
-      lib.mkImageMediaOverride (
-        lib.mapAttrs' (
-          dataset: opts:
-          lib.nameValuePair opts.mount {
-            device = dataset;
-            fsType = "zfs";
-          }
-        ) mountable
-      );
+      lib.mapAttrs' (
+        dataset: opts:
+        lib.nameValuePair opts.mount {
+          device = dataset;
+          fsType = "zfs";
+        }
+      ) mountable;
   };
 }

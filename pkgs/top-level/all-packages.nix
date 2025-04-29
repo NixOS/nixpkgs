@@ -2979,8 +2979,6 @@ with pkgs;
 
   deluge-2_x = deluge;
 
-  dnsviz = python3Packages.callPackage ../tools/networking/dnsviz { };
-
   diffoscopeMinimal = diffoscope.override {
     enableBloat = false;
   };
@@ -5287,6 +5285,9 @@ with pkgs;
 
   ### DEVELOPMENT / COMPILERS
 
+  temurin-bin-24 = javaPackages.compiler.temurin-bin.jdk-24;
+  temurin-jre-bin-24 = javaPackages.compiler.temurin-bin.jre-24;
+
   temurin-bin-23 = javaPackages.compiler.temurin-bin.jdk-23;
   temurin-jre-bin-23 = javaPackages.compiler.temurin-bin.jre-23;
 
@@ -5900,6 +5901,10 @@ with pkgs;
         # JS backend can't use gmp
         else if stdenv.hostPlatform.isGhcjs then
           haskell.packages.native-bignum.ghc98
+        # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
+        # FIXME: remove when fixed
+        else if stdenv.hostPlatform.isi686 then
+          haskell.packages.ghc96
         else
           haskell.packages.ghc98
       )
@@ -5925,6 +5930,10 @@ with pkgs;
       # JS backend can't use GMP
       else if stdenv.targetPlatform.isGhcjs then
         haskell.compiler.native-bignum.ghc98
+      # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
+      # FIXME: remove when fixed
+      else if stdenv.hostPlatform.isi686 then
+        haskell.compiler.ghc96
       else
         haskell.compiler.ghc98
     );
@@ -6350,13 +6359,6 @@ with pkgs;
   open-watcom-v2 = wrapWatcom open-watcom-v2-unwrapped { };
   open-watcom-bin-unwrapped = callPackage ../development/compilers/open-watcom/bin.nix { };
   open-watcom-bin = wrapWatcom open-watcom-bin-unwrapped { };
-
-  ponyc = callPackage ../development/compilers/ponyc {
-    # Upstream pony no longer supports GCC
-    stdenv = llvmPackages.stdenv;
-  };
-
-  pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
 
   replibyte = callPackage ../development/tools/database/replibyte { };
 
@@ -6879,7 +6881,6 @@ with pkgs;
         newScope
         lxqt
         lib
-        libsForQt5
         ;
     }
   );
@@ -9118,7 +9119,7 @@ with pkgs;
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
-  libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
+  libarchive-qt = callPackage ../development/libraries/libarchive-qt { };
 
   libasn1c = callPackage ../servers/osmocom/libasn1c/default.nix { };
 
@@ -11072,7 +11073,7 @@ with pkgs;
     nodejs-slim = nodejs-slim_22;
     python3 = python311;
     ruby = ruby_3_3;
-    yarn-berry = yarn-berry.override { nodejs = nodejs-slim_22; };
+    yarn-berry = yarn-berry_4.override { nodejs = nodejs-slim_22; };
   };
 
   micro-full = micro.wrapper.override {
@@ -11201,10 +11202,6 @@ with pkgs;
     withPerl = false;
     modules = [ ];
   };
-
-  opensmtpd = callPackage ../servers/mail/opensmtpd { };
-  opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
-  opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
@@ -12693,10 +12690,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  bluefish = callPackage ../applications/editors/bluefish {
-    gtk = gtk3;
-  };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   calf = callPackage ../applications/audio/calf {
@@ -13348,8 +13341,6 @@ with pkgs;
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
   };
-
-  gkrellm = callPackage ../applications/misc/gkrellm { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
@@ -15877,7 +15868,7 @@ with pkgs;
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
-  gcompris = libsForQt5.callPackage ../games/gcompris { };
+  gcompris = kdePackages.callPackage ../games/gcompris { };
 
   gl-gsync-demo = callPackage ../games/gl-gsync-demo {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
