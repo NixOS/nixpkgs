@@ -4676,6 +4676,8 @@ with pkgs;
   inherit (callPackage ../development/misc/resholve { })
     resholve;
 
+  reunion = with python3Packages; toPythonApplication rendez;
+
   reuse = with python3.pkgs; toPythonApplication reuse;
 
   riemann-tools = callPackage ../tools/misc/riemann-tools { };
