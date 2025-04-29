@@ -113,7 +113,7 @@ in
       '';
     };
 
-    fileSystems = lib.mkImageMediaOverride {
+    fileSystems = {
       "/" = {
         device = "/dev/disk/by-label/${cfg.label}";
         inherit (cfg) label;
