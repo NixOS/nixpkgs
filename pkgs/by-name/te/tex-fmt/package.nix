@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tex-fmt";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "WGUNDERWOOD";
     repo = "tex-fmt";
     tag = "v${version}";
-    hash = "sha256-3kRtBfIT6QcdZ1+h2WwvxsAv/UJLtwSodF5zvCUDbHQ=";
+    hash = "sha256-gBDZeBR1zvVQgpjVh94awTB1TREnGThwIQG2fLm05po=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4kx3co9doFYD9SjJhL17hgf6ll4niKnF57evv/eNeM0=";
+  cargoHash = "sha256-YeAbDH/ePUQYtp3aQP+SmkXhZY6NopPTmEwvTFuBnks=";
 
   nativeBuildInputs = [ installShellFiles ];
 
