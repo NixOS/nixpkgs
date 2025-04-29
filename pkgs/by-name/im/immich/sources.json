@@ -1,26 +1,26 @@
 {
-  "version": "1.132.1",
-  "hash": "sha256-nZ7kG60TTOVB4yGUsRrcHuWwIamsWlJ7zBvJCP9d4zQ=",
+  "version": "1.132.3",
+  "hash": "sha256-QwQSqWSQ82R5LrbyerAZflDRM2DS+rpA8E6uzxQbs48=",
   "components": {
     "cli": {
-      "npmDepsHash": "sha256-PZOYCJ5FQboy5uVZCqJ4CfxDVSHburP4kxhi01HrKns=",
-      "version": "2.2.63"
+      "npmDepsHash": "sha256-7CWJEEr/6+Duc90Qww6rhVLXEtxz3hymLcQIzv3YPg0=",
+      "version": "2.2.65"
     },
     "server": {
-      "npmDepsHash": "sha256-p46OKwRpk9n15201ImLMlDokezJPXD+GXUWtSHduGfU=",
-      "version": "1.132.1"
+      "npmDepsHash": "sha256-CdE8H8+uAlthHhko5Ir+BETqkZoNzpimgHB2gVJbus8=",
+      "version": "1.132.3"
     },
     "web": {
-      "npmDepsHash": "sha256-HEwmwn1DP+9WnqYSOcR2AoOLU7tTjwi2fN17Vq9cZVE=",
-      "version": "1.132.1"
+      "npmDepsHash": "sha256-3UoNfa2P4bVFQSQTSbRacSxh2UbPokDHqveCHt9bnko=",
+      "version": "1.132.3"
     },
     "open-api/typescript-sdk": {
-      "npmDepsHash": "sha256-Mdn7pmYJmdizQlVINCme6wv6ocqyrBO6U4F5x2xJonc=",
-      "version": "1.132.1"
+      "npmDepsHash": "sha256-Rfds2/c8Q6KfWzyztxLcKS40JKOMh04JzMICsDvqMgs=",
+      "version": "1.132.3"
     },
     "geonames": {
-      "timestamp": "20250424184923",
-      "hash": "sha256-f0IMmEEyw0JSm+u3zgcE4dtTfPpAKvhDFhlqA9F8cVg="
+      "timestamp": "20250428153140",
+      "hash": "sha256-RDetKDf/qFRwlB+Jo5ivD6yp1paMWFJeUf1Vft70Kdw="
     }
   }
 }
