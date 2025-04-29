@@ -3816,8 +3816,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  fastlane = callPackage ../tools/admin/fastlane { };
-
   fontforge = lowPrio (
     callPackage ../tools/misc/fontforge {
       inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -5270,8 +5268,6 @@ with pkgs;
   ovito = qt6Packages.callPackage ../applications/graphics/ovito {
     inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
   };
-
-  oxidized = callPackage ../tools/admin/oxidized { };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
@@ -20314,8 +20310,6 @@ with pkgs;
   lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
-
-  itamae = callPackage ../tools/admin/itamae { };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
