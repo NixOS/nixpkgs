@@ -8,13 +8,13 @@
 
 python311Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.6.8";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zn5kBnINLt/qqAbka9wShFLWJoMJ6SXu2OL6V6uQ2IM=";
+    hash = "sha256-c+VAlm32/NXvUr5i0AY/zuTrFIQLtPxNNeSiQTMoJAY=";
   };
 
   postPatch = ''
