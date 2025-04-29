@@ -14,7 +14,7 @@ let
     src = fetchFromGitHub {
       owner = "albar965";
       repo = "marble";
-      rev = "722acf7f8d79023f6c6a761063645a1470bb3935";
+      rev = "722acf7f8d79023f6c6a761063645a1470bb3935"; # branch lnm/1.1
       hash = "sha256-5GSa+xIQS9EgJXxMFUOA5jTtHJ6Dl4C9yAkFPIOrgo8=";
     };
 
@@ -69,13 +69,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname;
-  version = "3.0.16";
+  version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "albar965";
     repo = "littlenavmap";
-    rev = "v${version}";
-    hash = "sha256-QUgQV8WOAVowjGFpNbzl32gksQ2OnWtLfrJmBK2lJ6M=";
+    tag = "v${version}";
+    hash = "sha256-/1YB2uEQzT0K6IylpWDqOaMSENDR9GuyJNty+2C8kXM=";
   };
 
   nativeBuildInputs = [
