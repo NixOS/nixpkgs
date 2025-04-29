@@ -1,0 +1,35 @@
+diff -ur a/configure.ac b/configure.ac
+--- a/configure.ac	2019-09-14 11:30:11.584847746 +0000
++++ b/configure.ac	2019-09-14 11:31:26.692355265 +0000
+@@ -81,6 +81,7 @@
+ AC_PROG_CPP
+ AC_PROG_INSTALL
+ AC_PROG_RANLIB
++AC_CHECK_TOOL(AR, ar)
+ # We need to check for cplusplus here because we may not do the test
+ # for Qt and autoconf does does not allow that.
+ AC_PROG_CXX
+diff -ur a/pinentry/Makefile.in b/pinentry/Makefile.in
+--- a/pinentry/Makefile.in	2017-12-03 17:43:23.000000000 +0000
++++ b/pinentry/Makefile.in	2019-09-14 11:32:02.532000236 +0000
+@@ -113,7 +113,7 @@
+ CONFIG_CLEAN_FILES =
+ CONFIG_CLEAN_VPATH_FILES =
+ LIBRARIES = $(noinst_LIBRARIES)
+-AR = ar
++AR = @AR@
+ ARFLAGS = cru
+ AM_V_AR = $(am__v_AR_@AM_V@)
+ am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
+diff -ur a/secmem/Makefile.in b/secmem/Makefile.in
+--- a/secmem/Makefile.in	2017-12-03 17:43:23.000000000 +0000
++++ b/secmem/Makefile.in	2019-09-14 11:31:58.764934552 +0000
+@@ -113,7 +113,7 @@
+ CONFIG_CLEAN_FILES =
+ CONFIG_CLEAN_VPATH_FILES =
+ LIBRARIES = $(noinst_LIBRARIES)
+-AR = ar
++AR = @AR@
+ ARFLAGS = cru
+ AM_V_AR = $(am__v_AR_@AM_V@)
+ am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
