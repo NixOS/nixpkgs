@@ -14363,6 +14363,8 @@ self: super: with self; {
 
   pythran = callPackage ../development/python-modules/pythran { inherit (pkgs.llvmPackages) openmp; };
 
+  pythreejs = callPackage ../development/python-modules/pythreejs { };
+
   pytibber = callPackage ../development/python-modules/pytibber { };
 
   pytikz-allefeld = callPackage ../development/python-modules/pytikz-allefeld { };
