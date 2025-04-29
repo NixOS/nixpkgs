@@ -12132,7 +12132,6 @@ with pkgs;
   mariadb-connector-c_3_3 = callPackage ../servers/sql/mariadb/connector-c/3_3.nix { };
 
   inherit (import ../servers/sql/mariadb pkgs)
-    mariadb_105
     mariadb_106
     mariadb_1011
     mariadb_114
