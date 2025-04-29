@@ -1,0 +1,45 @@
+diff --git a/source/slang-glslang/slang-glslang.cpp b/source/slang-glslang/slang-glslang.cpp
+index 4abcada6..0f63a64e 100644
+--- a/source/slang-glslang/slang-glslang.cpp
++++ b/source/slang-glslang/slang-glslang.cpp
+@@ -1,8 +1,7 @@
+ // slang-glslang.cpp
+ #include "slang-glslang.h"
+ 
+-#include "SPIRV/GlslangToSpv.h"
+-#include "glslang/MachineIndependent/localintermediate.h"
++#include "glslang/SPIRV/GlslangToSpv.h"
+ #include "glslang/Public/ShaderLang.h"
+ #include "slang.h"
+ #include "spirv-tools/libspirv.h"
+@@ -17,6 +16,7 @@
+ #include <memory>
+ #include <mutex>
+ #include <sstream>
++#include <cassert>
+ 
+ // This is a wrapper to allow us to run the `glslang` compiler
+ // in a controlled fashion.
+@@ -718,6 +718,11 @@ static int glslang_compileGLSLToSPIRV(glslang_CompileRequest_1_2 request)
+             return 1;
+         }
+ 
++        if (debugLevel == SLANG_DEBUG_INFO_LEVEL_MAXIMAL)
++        {
++            shader->addSourceText(sourceText, sourceTextLength);
++        }
++
+         if (request.entryPointName && strlen(request.entryPointName))
+             shader->setEntryPoint(request.entryPointName);
+ 
+@@ -741,10 +746,6 @@ static int glslang_compileGLSLToSPIRV(glslang_CompileRequest_1_2 request)
+         auto stageIntermediate = program->getIntermediate((EShLanguage)stage);
+         if (!stageIntermediate)
+             continue;
+-        if (debugLevel == SLANG_DEBUG_INFO_LEVEL_MAXIMAL)
+-        {
+-            stageIntermediate->addSourceText(sourceText, sourceTextLength);
+-        }
+ 
+         std::vector<unsigned int> spirv;
+         spv::SpvBuildLogger logger;

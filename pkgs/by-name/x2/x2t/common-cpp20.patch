@@ -1,0 +1,13 @@
+diff --git a/Common/base.pri b/Common/base.pri
+index e8dc81b132..a1049b8af1 100644
+--- a/Common/base.pri
++++ b/Common/base.pri
+@@ -414,7 +414,7 @@ core_windows:CONFIG += no_batch
+ message($$CORE_BUILDS_PLATFORM_PREFIX/$$CORE_BUILDS_CONFIGURATION_PREFIX)
+ 
+ # COMPILER
+-CONFIG += c++11
++CONFIG += c++20
+ 
+ !core_windows {
+ 	QMAKE_CXXFLAGS += -Wno-register
