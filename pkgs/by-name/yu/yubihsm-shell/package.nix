@@ -62,10 +62,6 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags libpcsclite) $NIX_CFLAGS_COMPILE"
   '';
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DDISABLE_LTO=ON"
-  ];
-
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
@@ -75,6 +71,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ matthewcroughan ];
     license = licenses.asl20;
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
