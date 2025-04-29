@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-transip";
     changelog = "https://github.com/octodns/octodns-transip/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.provokateurin ];
+    maintainers = lib.teams.octodns.members ++ [ lib.maintainers.provokateurin ];
   };
 }

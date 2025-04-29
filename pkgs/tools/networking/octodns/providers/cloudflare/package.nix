@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-cloudflare/";
     changelog = "https://github.com/octodns/octodns-cloudflare/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ret2pop ];
+    maintainers = lib.teams.octodns.members ++ [ lib.maintainers.ret2pop ];
   };
 }
