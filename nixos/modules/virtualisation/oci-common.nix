@@ -30,17 +30,15 @@ in
 
   boot.growPartition = true;
 
-  fileSystems = lib.mkImageMediaOverride {
-    "/" = {
-      device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
-      autoResize = true;
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+    autoResize = true;
+  };
 
-    "/boot" = lib.mkIf cfg.efi {
-      device = "/dev/disk/by-label/ESP";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = lib.mkIf cfg.efi {
+    device = "/dev/disk/by-label/ESP";
+    fsType = "vfat";
   };
 
   boot.loader.efi.canTouchEfiVariables = false;
