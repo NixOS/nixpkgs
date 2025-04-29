@@ -9213,6 +9213,8 @@ self: super: with self; {
 
   meds = callPackage ../development/python-modules/meds { };
 
+  meds-testing-helpers = callPackage ../development/python-modules/meds-testing-helpers { };
+
   medvol = callPackage ../development/python-modules/medvol { };
 
   meeko = callPackage ../development/python-modules/meeko { };
