@@ -7,10 +7,12 @@
   xsel,
   yarn-berry_4,
   unstableGitUpdater,
+  nodePackages,
 }:
 
 let
   yarn-berry = yarn-berry_4;
+  serve = nodePackages.serve;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath ([
           nodejs
           xsel
+          serve
         ])
       }   \
       --add-flags serve                                      \
