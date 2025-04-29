@@ -50,6 +50,11 @@ stdenv.mkDerivation rec {
     ./unvendor.patch
   ];
 
+  postPatch = ''
+    substituteInPlace sources/sound-capture/linux/SoundCaptureLinux.cpp \
+      --replace-fail "libasound.so.2" "${lib.getLib alsa-lib}/lib/libasound.so.2"
+  '';
+
   cmakeFlags = [
     "-DPLATFORM=linux"
     (cmakeBool "USE_SYSTEM_FLATBUFFERS_LIBS" true)
