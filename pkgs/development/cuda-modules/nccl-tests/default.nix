@@ -25,13 +25,13 @@ in
 backendStdenv.mkDerivation (finalAttrs: {
 
   pname = "nccl-tests";
-  version = "2.14.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PntD5seMq7s0x4hOO/wBDQdElhKCY6mFrTf073mf7zM=";
+    hash = "sha256-OgffbW9Vx/sm1I1tpaPGdAhIpV4jbB4hJa9UcEAWkdE=";
   };
 
   postPatch = ''

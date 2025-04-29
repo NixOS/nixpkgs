@@ -1,16 +1,26 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   nodejs,
   yarn-berry_3,
+  distutils,
+
+  # build-system
   hatch-jupyter-builder,
   hatchling,
-  jupyter-server,
   jupyterlab,
+
+  # dependencies
+  jupyter-server,
   jupyterlab-server,
   notebook-shim,
   tornado,
+
+  # tests
   pytest-jupyter,
   pytestCheckHook,
 }:
@@ -29,13 +39,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "timeout = 300" ""
+      --replace-fail "timeout = 300" ""
   '';
 
-  nativeBuildInputs = [
-    nodejs
-    yarn-berry_3.yarnBerryConfigHook
-  ];
+  nativeBuildInputs =
+    [
+      nodejs
+      yarn-berry_3.yarnBerryConfigHook
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      distutils
+    ];
 
   missingHashes = ./missing-hashes.json;
 
