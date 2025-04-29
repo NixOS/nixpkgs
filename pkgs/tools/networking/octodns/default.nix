@@ -74,6 +74,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/octodns/octodns";
     changelog = "https://github.com/octodns/octodns/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.anthonyroussel ];
+    maintainers = teams.octodns.members;
   };
 }
