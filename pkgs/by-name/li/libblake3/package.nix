@@ -27,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-npCtM8nOFU8Tcu//IykjMs8aLU12d93+mIfKuxHkuaQ=";
       relative = "c";
     })
+    # build(cmake): Relax Clang frontend variant detection (BLAKE3-team/BLAKE3#477)
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/BLAKE3-team/BLAKE3/pull/477.patch";
+      hash = "sha256-kidCMGd/i9D9HLLTt7l1DbiU71sFTEyr3Vew4XHUHls=";
+      relative = "c";
+    })
   ];
 
   sourceRoot = finalAttrs.src.name + "/c";
