@@ -1,5 +1,12 @@
-{ lib, stdenv, callPackage, fetchurl,
-  guile_1_8, xmodmap, which, freetype,
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  guile_1_8,
+  xmodmap,
+  which,
+  freetype,
   libjpeg,
   sqlite,
   texliveSmall ? null,
@@ -13,17 +20,24 @@
   qtbase,
   qtsvg,
   qtmacextras,
+  fetchpatch,
   ghostscriptX ? null,
   extraFonts ? false,
   chineseFonts ? false,
   japaneseFonts ? false,
-  koreanFonts ? false }:
+  koreanFonts ? false,
+}:
 
 let
   pname = "texmacs";
   version = "2.1.4";
   common = callPackage ./common.nix {
-    inherit extraFonts chineseFonts japaneseFonts koreanFonts;
+    inherit
+      extraFonts
+      chineseFonts
+      japaneseFonts
+      koreanFonts
+      ;
     tex = texliveSmall;
   };
 in
@@ -35,10 +49,12 @@ stdenv.mkDerivation {
     hash = "sha256-h6aSLuDdrAtVzOnNVPqMEWX9WLDHtkCjPy9JXWnBgYY=";
   };
 
-  postPatch = common.postPatch + ''
-    substituteInPlace configure \
-      --replace "-mfpmath=sse -msse2" ""
-  '';
+  postPatch =
+    common.postPatch
+    + ''
+      substituteInPlace configure \
+        --replace "-mfpmath=sse -msse2" ""
+    '';
 
   nativeBuildInputs = [
     guile_1_8
@@ -48,18 +64,28 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs = [
-    guile_1_8
-    qtbase
-    qtsvg
-    ghostscriptX
-    freetype
-    libjpeg
-    sqlite
-    git
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    qtmacextras
+  buildInputs =
+    [
+      guile_1_8
+      qtbase
+      qtsvg
+      ghostscriptX
+      freetype
+      libjpeg
+      sqlite
+      git
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      qtmacextras
+    ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-compile-clang-19.5.patch";
+      url = "https://github.com/texmacs/texmacs/commit/e72783b023f22eaa0456d2e4cc76ae509d963672.patch";
+      hash = "sha256-oJCiXWTY89BdxwbgtFvfThid0WM83+TAUThSihfr0oA=";
+    })
   ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -76,7 +102,10 @@ stdenv.mkDerivation {
   '';
 
   qtWrapperArgs = [
-    "--suffix" "PATH" ":" (lib.makeBinPath [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
       xmodmap
       which
       ghostscriptX

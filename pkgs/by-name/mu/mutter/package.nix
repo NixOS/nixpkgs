@@ -17,6 +17,7 @@
   xvfb-run,
   libadwaita,
   libxcvt,
+  libGL,
   libICE,
   libX11,
   libXcomposite,
@@ -35,6 +36,7 @@
   libXau,
   libinput,
   libdrm,
+  libgbm,
   libei,
   libdisplay-info,
   gsettings-desktop-schemas,
@@ -49,7 +51,7 @@
   libwacom,
   libSM,
   xwayland,
-  mesa,
+  mesa-gl-headers,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -68,7 +70,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "47.0";
+  version = "47.5";
 
   outputs = [
     "out"
@@ -79,13 +81,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LQ6pAVCsbNAhnQB42wXW4VFNauIb+fP3QNT7A5EpAWs=";
+    hash = "sha256-ZVGjPOiH5oQVsTlSr21rQw6VMG+Sl63IwRGVPplcUVs=";
   };
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dtests=disabled"
+    # For NVIDIA proprietary driver up to 470.
+    # https://src.fedoraproject.org/rpms/mutter/pull-request/49
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
@@ -98,13 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
+    mesa-gl-headers
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    glib
     libxcvt
-    mesa # needed for gbm
     meson
     ninja
     xvfb-run
@@ -129,8 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libgbm
     libei
     libdisplay-info
+    libGL
     libgudev
     libinput
     libstartup_notification
@@ -173,10 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
-
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
@@ -187,6 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
+  strictDeps = true;
 
   passthru = {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-15";
@@ -212,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     changelog = "https://gitlab.gnome.org/GNOME/mutter/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

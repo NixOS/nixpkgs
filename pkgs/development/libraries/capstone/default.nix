@@ -1,37 +1,47 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
-  version = "5.0.1";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
     rev = version;
-    sha256 = "sha256-kKmL5sae9ruWGu1gas1mel9qM52qQOD+zLj8cRE3isg=";
+    hash = "sha256-ovIvsxVq+/q5UUMzP4WpxzaE0898uayNc1g2Coignnc=";
   };
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "CAPSTONE_BUILD_MACOS_THIN" true) ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   doCheck = true;
 
   meta = {
     description = "Advanced disassembly library";
-    homepage    = "http://www.capstone-engine.org";
-    license     = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ thoughtpolice ris ];
+    homepage = "http://www.capstone-engine.org";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      ris
+    ];
     mainProgram = "cstool";
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

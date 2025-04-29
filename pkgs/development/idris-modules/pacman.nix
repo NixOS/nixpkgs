@@ -1,14 +1,18 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, sdl2
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  sdl2,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "pacman";
   version = "2017-11-10";
 
-  idrisDeps = [ contrib sdl2 ];
+  idrisDeps = [
+    contrib
+    sdl2
+  ];
 
   src = fetchFromGitHub {
     owner = "jdublu10";

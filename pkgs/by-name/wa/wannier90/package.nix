@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, gfortran
-, blas
-, lapack
-, python3
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  gfortran,
+  blas,
+  lapack,
+  python3,
+  fetchFromGitHub,
 }:
 assert (!blas.isILP64);
 assert blas.isILP64 == lapack.isILP64;
@@ -37,7 +38,10 @@ stdenv.mkDerivation rec {
     cp config/make.inc.gfort make.inc
   '';
 
-  buildFlags = [ "all" "dynlib" ];
+  buildFlags = [
+    "all"
+    "dynlib"
+  ];
 
   preInstall = ''
     installFlagsArray+=(

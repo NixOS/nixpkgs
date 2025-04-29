@@ -1,4 +1,11 @@
-{ lib, mkCoqDerivation, coq, QuickChick, async-test, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  QuickChick,
+  async-test,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "http";
@@ -6,16 +13,25 @@ mkCoqDerivation {
   repo = "coq-http";
   inherit version;
 
-  defaultVersion = let inherit (lib.versions) range; in
+  defaultVersion =
+    let
+      inherit (lib.versions) range;
+    in
     lib.switch coq.coq-version [
-      { case = range "8.14" "8.19"; out = "0.2.1"; }
+      {
+        case = range "8.14" "8.19";
+        out = "0.2.1";
+      }
     ] null;
   release = {
-    "0.2.1".sha256  = "sha256-CIcaXEojNdajXNoMBjGlQRc1sOJSKgUlditNxbNSPgk=";
+    "0.2.1".sha256 = "sha256-CIcaXEojNdajXNoMBjGlQRc1sOJSKgUlditNxbNSPgk=";
   };
   releaseRev = v: "v${v}";
 
-  propagatedBuildInputs = [ QuickChick async-test ];
+  propagatedBuildInputs = [
+    QuickChick
+    async-test
+  ];
 
   configurePhase = ''
     sed -e 's/^	install extract.*//' -i Makefile

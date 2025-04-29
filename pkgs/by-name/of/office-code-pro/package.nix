@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "office-code-pro";
@@ -30,6 +34,6 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/nathco/Office-Code-Pro";
     license = licenses.ofl;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

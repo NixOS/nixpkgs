@@ -2,7 +2,7 @@
   lib,
   awscrt,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -19,17 +19,19 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.35.30"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.36.21"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q1NQ6KUOSNNx+i1RfWXCmkDEN4jLmhU4f5PqxaI98P0=";
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = "botocore";
+    tag = version;
+    hash = "sha256-wk3KCRagEju4ywJfoBR8/4dH3xYgzGgaSHavDYCd5XY=";
   };
 
-  pythonRelaxDeps = [ "urllib3" ];
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     jmespath

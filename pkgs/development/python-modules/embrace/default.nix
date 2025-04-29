@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Embrace SQL keeps your SQL queries in SQL files";
     homepage = "https://pypi.org/project/embrace/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }

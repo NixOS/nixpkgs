@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, makeBinaryWrapper
-, itk
-, vtk
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeBinaryWrapper,
+  itk,
+  vtk,
+  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ANTs";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "ANTsX";
     repo = "ANTs";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-DZzuHMC0XymFCnDn+H1pRFx9jUt+s03PaN88R4ZBRwY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3k9EOylOAUwxBNpzi6U/XZGarCZlbh9PdecKyJh81Yk=";
   };
 
   nativeBuildInputs = [
@@ -24,12 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  buildInputs = [
-    itk
-    vtk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      itk
+      vtk
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   cmakeFlags = [
     "-DANTS_SUPERBUILD=FALSE"
@@ -38,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     for file in $out/bin/*; do
-      wrapProgram $file --set PATH "$out/bin"
+      wrapProgram $file --prefix PATH : "$out/bin"
     done
   '';
 

@@ -1,111 +1,79 @@
 {
   lib,
-  vscode-utils,
-  patchelf,
-  icu,
   stdenv,
+  vscode-utils,
+  autoPatchelfHook,
+  icu,
   openssl,
+  libz,
+  glibc,
   coreutils,
 }:
 let
-  inherit (stdenv.hostPlatform) system;
-  inherit (vscode-utils) buildVscodeMarketplaceExtension;
-
-  extInfo =
-    let
-      baseBins = [
-        ".roslyn/Microsoft.CodeAnalysis.LanguageServer"
-        ".razor/rzls"
-      ];
-      linuxBins = baseBins ++ [
-        ".debugger/vsdbg-ui"
-        ".debugger/vsdbg"
-      ];
-      darwinBins = baseBins ++ [
-        ".debugger/x86_64/vsdbg-ui"
-        ".debugger/x86_64/vsdbg"
-      ];
-    in
+  extInfo = (
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-uCayu7WU+qqiCDxxfO4j1aOypP+O49uNZMnfwq+hO4k=";
-        binaries = linuxBins;
+        hash = "sha256-pMcUrsIVpb0lYhonEKB/5pZG+08OhL/Py7wmkmlXWgo=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-b4Q3JWNdZtLlgxMUBpu+5ppJDILxjPHBZeMxsQHiDa0=";
-        binaries = linuxBins;
+        hash = "sha256-dJilgYVLkx5JVHk3e3mZjW7qpWrviuB4OhtzV1DkmrI=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-uVI2PmHfhmuQMTCbwrGuLamC1DyjeLCZf41pjT891GE=";
-        binaries = darwinBins;
+        hash = "sha256-DyueVd+G67P48Oo0+HTC3Sg0/en/bRBV+F8mKuz66RY=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-zNSvznX7nYTBexlkD49t3Ne66/u3paecZJZwMuPmSf4=";
-        binaries = darwinBins ++ [
-          ".debugger/arm64/vsdbg-ui"
-          ".debugger/arm64/vsdbg"
-        ];
+        hash = "sha256-yk6bSeaEivx8kc3fqpSJBTMxUDsJGVwMoRxPPwaHgtc=";
       };
     }
-    .${system} or (throw "Unsupported system: ${system}");
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+  );
 in
-buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "2.39.29";
+    version = "2.72.34";
     inherit (extInfo) hash arch;
   };
 
-  nativeBuildInputs = [ patchelf ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+    (lib.getLib glibc) # libgcc_s.so.1
+    (lib.getLib libz) # libz.so.1
+  ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib openssl) # libopenssl.so.3
+    (lib.getLib icu) # libicui18n.so libicuuc.so
+    (lib.getLib libz) # libz.so.1
+  ];
 
-  postPatch =
-    ''
-      patchelf_add_icu_as_needed() {
-        declare elf="''${1?}"
-        declare icu_major_v="${lib.head (lib.splitVersion (lib.getVersion icu.name))}"
+  postPatch = ''
+    substituteInPlace dist/extension.js \
+      --replace-fail 'uname -m' '${lib.getExe' coreutils "uname"} -m'
+  '';
 
-        for icu_lib in icui18n icuuc icudata; do
-          patchelf --add-needed "lib''${icu_lib}.so.$icu_major_v" "$elf"
-        done
-      }
+  preFixup = ''
+    (
+      shopt -s globstar
+      shopt -s dotglob
+      for file in "$out"/**/*; do
+        if [[ ! -f "$file" || "$file" == *.so || "$file" == *.dylib ]] ||
+            (! isELF "$file" && ! isMachO "$file"); then
+            continue
+        fi
 
-      patchelf_common() {
-        declare elf="''${1?}"
+        echo Making "$file" executable...
+        chmod +x "$file"
+      done
+    )
+  '';
 
-        patchelf_add_icu_as_needed "$elf"
-        patchelf --add-needed "libssl.so" "$elf"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${
-            lib.makeLibraryPath [
-              stdenv.cc.cc
-              openssl
-              icu.out
-            ]
-          }:\$ORIGIN" \
-          "$elf"
-      }
-
-      substituteInPlace dist/extension.js \
-        --replace 'uname -m' '${lib.getExe' coreutils "uname"} -m'
-
-    ''
-    + (lib.concatStringsSep "\n" (
-      map (bin: ''
-        chmod +x "${bin}"
-      '') extInfo.binaries
-    ))
-    + lib.optionalString stdenv.hostPlatform.isLinux (
-      lib.concatStringsSep "\n" (
-        map (bin: ''
-          patchelf_common "${bin}"
-        '') extInfo.binaries
-      )
-    );
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Official C# support for Visual Studio Code";

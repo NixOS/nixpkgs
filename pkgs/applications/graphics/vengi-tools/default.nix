@@ -1,48 +1,56 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, pkg-config
-, ninja
-, python3
-, makeWrapper
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  makeWrapper,
 
-, backward-cpp
-, curl
-, enet
-, freetype
-, glm
-, gtest
-, libbfd
-, libdwarf
-, libjpeg
-, libuuid
-, libuv
-, lua5_4
-, lzfse
-, opencl-headers
-, SDL2
-, SDL2_mixer
-, wayland-protocols
-, Carbon
-, CoreServices
-, OpenCL
+  backward-cpp,
+  curl,
+  enet,
+  freetype,
+  glm,
+  gtest,
+  libbfd,
+  libdwarf,
+  libjpeg,
+  libuuid,
+  libuv,
+  libX11,
+  lua5_4,
+  lzfse,
+  opencl-headers,
+  SDL2,
+  SDL2_mixer,
+  wayland-protocols,
 
-, callPackage
-, nixosTests
+  callPackage,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.33";
+  version = "0.0.36";
 
   src = fetchFromGitHub {
-    owner = "mgerhardy";
+    owner = "vengi-voxel";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ljB36A5b8K1KBBuQVISb1fkWxb/tTTwojE31KPMg1xQ=";
+    hash = "sha256-6MJw8BaHvd9cZNCMIFwAtk8UzxP+RSfnuv9py8sUgnY=";
   };
+
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Disable code signing on macOS
+    substituteInPlace cmake/macros.cmake --replace-fail "codesign" "true"
+    substituteInPlace cmake/system/apple.cmake --replace-fail "if(APPLE)" "if(false)"
+
+    # calls otool -L on /usr/lib/libSystem.B.dylib and fails because it doesn't exist
+    substituteInPlace cmake/applebundle.cmake --replace-fail 'fixup_bundle("''${TARGET_BUNDLE_DIR}" "" "")' ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -52,27 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    libbfd
-    libdwarf
-    backward-cpp
-    curl
-    enet
-    freetype
-    glm
-    libjpeg
-    libuuid
-    libuv
-    lua5_4
-    lzfse
-    SDL2
-    SDL2_mixer
-  ] ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon CoreServices OpenCL ]
+  buildInputs =
+    [
+      libbfd
+      libdwarf
+      backward-cpp
+      curl
+      enet
+      freetype
+      glm
+      libjpeg
+      libuuid
+      libuv
+      lua5_4
+      lzfse
+      SDL2
+      libX11
+      SDL2_mixer
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
-
-  cmakeFlags =
-    lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # error: "The plain signature for target_link_libraries has already been used"
   doCheck = false;
@@ -81,21 +88,31 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  # Set the data directory for each executable. We cannot set it at build time
-  # with the PKGDATADIR cmake variable because each executable needs a specific
-  # one.
-  # This is not needed on darwin, since on that platform data files are saved
-  # in *.app/Contents/Resources/ too, and are picked up automatically.
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" \
-        --set CORE_PATH $out/share/$(basename "$prog")/
-    done
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv $out/*.app $out/Applications/
+
+        mkdir -p $out/bin
+        ln -s $out/Applications/vengi-voxconvert.app/Contents/MacOS/vengi-voxconvert $out/bin/vengi-voxconvert
+      ''
+    else
+      # Set the data directory for each executable. We cannot set it at build time
+      # with the PKGDATADIR cmake variable because each executable needs a specific
+      # one.
+      # This is not needed on darwin, since on that platform data files are saved
+      # in *.app/Contents/Resources/ too, and are picked up automatically.
+      ''
+        for prog in $out/bin/*; do
+          wrapProgram "$prog" \
+            --set CORE_PATH $out/share/$(basename "$prog")/
+        done
+      '';
 
   passthru.tests = {
-    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
-    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
+    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix { };
     run-voxedit = nixosTests.vengi-tools;
   };
 
@@ -108,11 +125,13 @@ stdenv.mkDerivation (finalAttrs: {
       filemanager and a command line tool to convert between several voxel
       formats.
     '';
-    homepage = "https://mgerhardy.github.io/vengi/";
-    downloadPage = "https://github.com/mgerhardy/vengi/releases";
-    license = [ licenses.mit licenses.cc-by-sa-30 ];
+    homepage = "https://vengi-voxel.github.io/vengi/";
+    downloadPage = "https://github.com/vengi-voxel/vengi/releases";
+    license = [
+      licenses.mit
+      licenses.cc-by-sa-30
+    ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

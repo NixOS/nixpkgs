@@ -4,7 +4,6 @@
   eigenrand,
   example-robot-data,
   fetchFromGitHub,
-  fetchpatch,
   fmt,
   fontconfig,
   graphviz,
@@ -19,27 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite-nlp";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "proxsuite-nlp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Dy8+pPTv/B6vVdpGndVOV16WSLiENJfaIrn1+FYwcI0=";
+    hash = "sha256-ae8o0R+79qetAsc/KmvtBSVfH9695Cg4bcDBAEzKr6A=";
   };
 
   outputs = [
     "out"
     "doc"
-  ];
-
-  patches = [
-    # Fix use of system jrl-cmakemodules
-    # This patch was merged upstream and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite-nlp/pull/109/commits/9bf741ce6010052a773071472891f42adc6cbbea.patch";
-      hash = "sha256-sluMVrTw7EXLFa0dqkoZTkpGjKe7zODqIqbJxCdfSwY=";
-    })
   ];
 
   nativeBuildInputs = [

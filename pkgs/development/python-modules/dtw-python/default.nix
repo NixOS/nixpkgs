@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q2TffroAGS6DeU5hUE/M2Luuxa5VfU+wxbGdfhcioSA=";
   };
 
@@ -39,10 +39,12 @@ buildPythonPackage rec {
   ];
 
   # We need to run tests on real built package: https://github.com/NixOS/nixpkgs/issues/255262
-  preCheck = "cd $out";
-  nativeCheckInputs = [ pytestCheckHook ];
   # tests/ are not included to output package, so we have to set path explicitly
-  pytestFlagsArray = [ "$src/tests" ];
+  preCheck = ''
+    appendToVar pytestFlagsArray "$src/tests"
+    cd $out
+  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dtw" ];
 

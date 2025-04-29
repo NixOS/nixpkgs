@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
   budgie-desktop,
@@ -21,6 +21,7 @@
   glib-networking,
   glibc,
   gnome,
+  gst_all_1,
   gnome-bluetooth_1_0,
   gnome-color-manager,
   gnome-desktop,
@@ -80,13 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
       gcm = gnome-color-manager;
       inherit
         cups
-        glibc
         libgnomekbd
         shadow
         ;
@@ -117,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gnome-desktop
+    gst_all_1.gstreamer
     adwaita-icon-theme
     cheese
     gnome-bluetooth_1_0
@@ -183,6 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  # Fix GCC 14 build.
+  # cc-display-panel.c:962:41: error: passing argument 1 of 'gtk_widget_set_sensitive'
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
@@ -193,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-control-center/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;
   };

@@ -2,16 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  stdenv,
 
   # build-system
   hatchling,
 
   # dependencies
   decorator,
-  httptools,
-  python-magic,
+  h11,
+  puremagic,
   urllib3,
 
   # optional-dependencies
@@ -29,7 +27,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   redis,
-  redis-server,
+  redisTestHook,
   requests,
   sure,
 
@@ -37,20 +35,20 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.0";
+  version = "3.13.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GFzIDSE+09L4RC5w4h3fqgq9lkyOVjq5JN++ZNbHWc8=";
+    hash = "sha256-KoZ2V0M4ezW58c65wc9vJHrYMZ2ywKUjCOietKYS94Q=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
-    httptools
-    python-magic
+    h11
+    puremagic
     urllib3
   ];
 
@@ -59,31 +57,21 @@ buildPythonPackage rec {
     speedups = [ xxhash ];
   };
 
-  nativeCheckInputs =
-    [
-      asgiref
-      fastapi
-      gevent
-      httpx
-      psutil
-      pytest-asyncio
-      pytest-cov-stub
-      pytestCheckHook
-      redis
-      requests
-      sure
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ${redis-server}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-    kill $REDIS_PID
-  '';
+  nativeCheckInputs = [
+    aiohttp
+    asgiref
+    fastapi
+    gevent
+    httpx
+    psutil
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    redis
+    redisTestHook
+    requests
+    sure
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
@@ -99,8 +87,6 @@ buildPythonPackage rec {
     # httpx read failure
     "test_no_dangling_fds"
   ];
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/main/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 

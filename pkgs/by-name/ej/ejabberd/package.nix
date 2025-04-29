@@ -5,7 +5,6 @@
   libpng,
   libjpeg,
   libwebp,
-  erlang,
   openssl,
   expat,
   libyaml,
@@ -18,10 +17,9 @@
   gd,
   autoreconfHook,
   gawk,
-  rebar3WithPlugins,
   fetchFromGitHub,
   fetchgit,
-  fetchHex,
+  fetchpatch2,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -41,6 +39,8 @@
 }:
 
 let
+  inherit (beamPackages) buildRebar3 fetchHex rebar3WithPlugins;
+
   ctlpath = lib.makeBinPath [
     bash
     gnused
@@ -51,31 +51,30 @@ let
     procps
   ];
 
-  provider_asn1 = beamPackages.buildRebar3 {
+  provider_asn1 = buildRebar3 {
     name = "provider_asn1";
-    version = "0.3.0";
+    version = "0.4.1";
     src = fetchHex {
       pkg = "provider_asn1";
-      version = "0.3.0";
-      sha256 = "sha256-MuelWYZi01rBut8jM6a5alMZizPGZoBE/LveSRu/+wU=";
+      version = "0.4.1";
+      sha256 = "sha256-HqR6IyJyJinvbPJJlhJE14yEiBbNmTGOmR0hqonrOR0=";
     };
     beamDeps = [ ];
   };
-  rebar3_hex = beamPackages.buildRebar3 {
+  rebar3_hex = buildRebar3 {
     name = "rebar3_hex";
-    version = "7.0.7";
+    version = "7.0.8";
     src = fetchHex {
       pkg = "rebar3_hex";
-      version = "7.0.7";
-      sha256 = "sha256-1S2igSwiInATUgULZ1E6e2dK6YI5gvRffHRfF1Gg5Ok=";
+      version = "7.0.8";
+      sha256 = "sha256-aEY0EEZwRHp6AAuE1pSfm5RjBjU+PaaJuKp7fvXRiBc=";
     };
     beamDeps = [ ];
   };
 
   allBeamDeps = import ./rebar-deps.nix {
-    # TODO(@chuangzhu) add updateScript
     inherit fetchHex fetchgit fetchFromGitHub;
-    builder = lib.makeOverridable beamPackages.buildRebar3;
+    builder = lib.makeOverridable buildRebar3;
 
     overrides = final: prev: {
       jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
@@ -115,7 +114,7 @@ let
         buildInputs = [ sqlite ];
         buildPlugins = [ beamPackages.pc ];
       };
-      p1_mysql = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
+      p1_mysql = prev.p1_mysql.override { buildPlugins = [ beamPackages.pc ]; };
       epam = prev.epam.override {
         buildInputs = [ pam ];
         buildPlugins = [ beamPackages.pc ];
@@ -140,9 +139,9 @@ let
   ];
 
 in
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "24.07";
+  version = "25.04";
 
   nativeBuildInputs = [
     makeWrapper
@@ -156,7 +155,7 @@ stdenv.mkDerivation (finalAttrs:{
   ];
 
   buildInputs =
-    [ erlang ]
+    [ beamPackages.erlang ]
     ++ builtins.attrValues beamDeps
     ++ lib.optional withMysql allBeamDeps.p1_mysql
     ++ lib.optional withPgsql allBeamDeps.p1_pgsql
@@ -170,8 +169,8 @@ stdenv.mkDerivation (finalAttrs:{
   src = fetchFromGitHub {
     owner = "processone";
     repo = "ejabberd";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-4wEQBumWrHqN2uNrDxAJhgv2ok7pgQlAEPpL96ZOsTQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-BIt5kLEtvMUlyntQ98Mgidmo6lJHbt/LJYrbxPaJxPo=";
   };
 
   passthru.tests = {
@@ -210,6 +209,8 @@ stdenv.mkDerivation (finalAttrs:{
       lib.makeBinPath [ imagemagick ]
     }"''}
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open-source XMPP application server written in Erlang";

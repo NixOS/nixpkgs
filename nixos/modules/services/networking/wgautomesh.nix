@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.wgautomesh;
@@ -6,24 +11,25 @@ let
   configFile =
     # Have to remove nulls manually as TOML generator will not just skip key
     # if value is null
-    settingsFormat.generate "wgautomesh-config.toml"
-      (filterAttrs (k: v: v != null)
-        (mapAttrs
-          (k: v:
-            if k == "peers"
-            then map (e: filterAttrs (k: v: v != null) e) v
-            else v)
-          cfg.settings));
+    settingsFormat.generate "wgautomesh-config.toml" (
+      filterAttrs (k: v: v != null) (
+        mapAttrs (k: v: if k == "peers" then map (e: filterAttrs (k: v: v != null) e) v else v) cfg.settings
+      )
+    );
   runtimeConfigFile =
-    if cfg.enableGossipEncryption
-    then "/run/wgautomesh/wgautomesh.toml"
-    else configFile;
+    if cfg.enableGossipEncryption then "/run/wgautomesh/wgautomesh.toml" else configFile;
 in
 {
   options.services.wgautomesh = {
     enable = mkEnableOption "the wgautomesh daemon";
     logLevel = mkOption {
-      type = types.enum [ "trace" "debug" "info" "warn" "error" ];
+      type = types.enum [
+        "trace"
+        "debug"
+        "info"
+        "warn"
+        "error"
+      ];
       default = "info";
       description = "wgautomesh log level.";
     };
@@ -87,31 +93,33 @@ in
             '';
           };
           peers = mkOption {
-            type = types.listOf (types.submodule {
-              options = {
-                pubkey = mkOption {
-                  type = types.str;
-                  description = "Wireguard public key of this peer.";
+            type = types.listOf (
+              types.submodule {
+                options = {
+                  pubkey = mkOption {
+                    type = types.str;
+                    description = "Wireguard public key of this peer.";
+                  };
+                  address = mkOption {
+                    type = types.str;
+                    description = ''
+                      Wireguard address of this peer (a single IP address, multiple
+                      addresses or address ranges are not supported).
+                    '';
+                    example = "10.0.0.42";
+                  };
+                  endpoint = mkOption {
+                    type = types.nullOr types.str;
+                    description = ''
+                      Bootstrap endpoint for connecting to this Wireguard peer if no
+                      other address is known or none are working.
+                    '';
+                    default = null;
+                    example = "wgnode.mydomain.example:51820";
+                  };
                 };
-                address = mkOption {
-                  type = types.str;
-                  description = ''
-                    Wireguard address of this peer (a single IP address, multiple
-                    addresses or address ranges are not supported).
-                  '';
-                  example = "10.0.0.42";
-                };
-                endpoint = mkOption {
-                  type = types.nullOr types.str;
-                  description = ''
-                    Bootstrap endpoint for connecting to this Wireguard peer if no
-                    other address is known or none are working.
-                  '';
-                  default = null;
-                  example = "wgnode.mydomain.example:51820";
-                };
-              };
-            });
+              }
+            );
             default = [ ];
             description = "wgautomesh peer list.";
           };
@@ -131,7 +139,9 @@ in
 
     systemd.services.wgautomesh = {
       path = [ pkgs.wireguard-tools ];
-      environment = { RUST_LOG = "wgautomesh=${cfg.logLevel}"; };
+      environment = {
+        RUST_LOG = "wgautomesh=${cfg.logLevel}";
+      };
       description = "wgautomesh";
       serviceConfig = {
         Type = "simple";
@@ -142,9 +152,10 @@ in
         LoadCredential = mkIf cfg.enableGossipEncryption [ "gossip_secret:${cfg.gossipSecretFile}" ];
 
         ExecStartPre = mkIf cfg.enableGossipEncryption [
-          ''${pkgs.envsubst}/bin/envsubst \
-              -i ${configFile} \
-              -o ${runtimeConfigFile}''
+          ''
+            ${pkgs.envsubst}/bin/envsubst \
+                          -i ${configFile} \
+                          -o ${runtimeConfigFile}''
         ];
 
         DynamicUser = true;
@@ -156,8 +167,6 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
-    networking.firewall.allowedUDPPorts =
-      mkIf cfg.openFirewall [ cfg.settings.gossip_port ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.settings.gossip_port ];
   };
 }
-

@@ -1,18 +1,26 @@
-{ lib, stdenv, octave, buildEnv
-, makeWrapper, texinfo
-, wrapOctave
-, computeRequiredOctavePackages
-, extraLibs ? []
-, extraOutputsToInstall ? []
-, postBuild ? ""
-, ignoreCollisions ? false
+{
+  lib,
+  stdenv,
+  octave,
+  buildEnv,
+  makeWrapper,
+  locale,
+  texinfo,
+  glibcLocalesUtf8,
+  wrapOctave,
+  computeRequiredOctavePackages,
+  extraLibs ? [ ],
+  extraOutputsToInstall ? [ ],
+  postBuild ? "",
+  ignoreCollisions ? false,
 }:
 
 # Create an octave executable that knows about additional packages
 let
   packages = computeRequiredOctavePackages extraLibs;
 
-in buildEnv {
+in
+buildEnv {
   name = "${octave.name}-env";
   paths = extraLibs ++ [ octave ];
 
@@ -20,20 +28,27 @@ in buildEnv {
   extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ texinfo wrapOctave ];
+  buildInputs = [
+    locale
+    texinfo
+    wrapOctave
+  ];
 
   # During "build" we must first unlink the /share symlink to octave's /share
   # Then, we can re-symlink the all of octave/share, except for /share/octave
   # in env/share/octave, re-symlink everything from octave/share/octave and then
   # perform the pkg install.
-  postBuild = ''
+  postBuild =
+    ''
       if [ -L "$out/bin" ]; then
          unlink $out/bin
          mkdir -p "$out/bin"
          cd "${octave}/bin"
          for prg in *; do
              if [ -x $prg ]; then
-                makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc"
+                makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" \
+                            --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc" \
+                            --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
              fi
          done
          cd $out
@@ -70,7 +85,8 @@ in buildEnv {
         ${octave}/share/applications/org.octave.Octave.desktop \
         $out/share/applications/org.octave.Octave.desktop \
         --replace-fail ${octave}/bin/octave $out/bin/octave
-     '' + postBuild;
+    ''
+    + postBuild;
 
   inherit (octave) meta;
 

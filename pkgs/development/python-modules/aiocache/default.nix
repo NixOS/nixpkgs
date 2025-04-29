@@ -5,14 +5,16 @@
   buildPythonPackage,
   fetchFromGitHub,
   marshmallow,
+  memcachedTestHook,
   msgpack,
-  pkgs,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   redis,
+  redisTestHook,
   setuptools,
 }:
 
@@ -26,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiocache";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4QYCRXMWlt9fsiWgUTc2pKzXG7AG/zGmd4HT5ggIZNM=";
   };
 
@@ -41,10 +43,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     marshmallow
+    memcachedTestHook
     pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    redisTestHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
@@ -54,28 +58,20 @@ buildPythonPackage rec {
     "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
   ];
 
-  disabledTests = [
-    # Test calls apache benchmark and fails, no usable output
-    "test_concurrency_error_rates"
-  ];
+  disabledTests =
+    [
+      # Test calls apache benchmark and fails, no usable output
+      "test_concurrency_error_rates"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/aio-libs/aiocache/issues/863
+      "test_cache_write_doesnt_wait_for_future"
+    ];
 
   disabledTestPaths = [
     # Benchmark and performance tests are not relevant for Nixpkgs
     "tests/performance/"
   ];
-
-  preCheck = ''
-    ${lib.getBin pkgs.redis}/bin/redis-server &
-    REDIS_PID=$!
-
-    ${lib.getBin pkgs.memcached}/bin/memcached &
-    MEMCACHED_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-    kill $MEMCACHED_PID
-  '';
 
   __darwinAllowLocalNetworking = true;
 

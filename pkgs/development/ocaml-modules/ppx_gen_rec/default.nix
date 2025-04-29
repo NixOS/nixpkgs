@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, ppxlib }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "ppx_gen_rec";

@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, perl
-, gdb, cctools, xnu, bootstrap_cmds
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  perl,
+  gdb,
+  cctools,
+  xnu,
+  bootstrap_cmds,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.23.0";
+  version = "3.24.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-xcNKM4BFe5t1YG34kBAuffLHArlCDC6++VQPi11WJk0=";
+    hash = "sha256-ca7iAr3vGuc4mMz36cMVE0+n22wkYGOvxQOu9wLsA70=";
   };
 
   patches = [
@@ -27,62 +35,76 @@ stdenv.mkDerivation rec {
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
     # Fix build on armv7l.
-    # https://bugs.kde.org/show_bug.cgi?id=454346
-    #   Applied on 3.22.0. Does not apply on 3.23.0.
-    #(fetchpatch {
-    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
-    #  sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
-    #})
-    #(fetchpatch {
-    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
-    #  sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
-    #})
-    #(fetchpatch {
-    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
-    #  sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
-    #})
+    # see also https://bugs.kde.org/show_bug.cgi?id=454346
+    (fetchpatch {
+      url = "https://git.yoctoproject.org/poky/plain/meta/recipes-devtools/valgrind/valgrind/use-appropriate-march-mcpu-mfpu-for-ARM-test-apps.patch?id=b7a9250590a16f1bdc8c7b563da428df814d4292";
+      sha256 = "sha256-sBZzn98Sf/ETFv8ubivgA6Y6fBNcyR8beB3ICDAyAH0=";
+    })
   ];
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
 
-  hardeningDisable = [ "pie" "stackprotector" ];
+  hardeningDisable = [
+    "pie"
+    "stackprotector"
+  ];
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs =
+    [
+      gdb
+      perl
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      bootstrap_cmds
+      xnu
+    ];
 
   # Perl is also a native build input.
-  nativeBuildInputs = [ autoreconfHook perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+  ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.hostPlatform.isLinux;
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-    substituteInPlace configure --replace '`uname -r`' \
-        ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin (
-    let OSRELEASE = ''
-      $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
-      <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
-    in ''
-      echo "Don't derive our xnu version using uname -r."
-      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      substituteInPlace configure --replace-fail '`uname -r`' ${stdenv.cc.libc.version}-
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin (
+      let
+        OSRELEASE = ''
+          $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
+          <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
+      in
+      ''
+        echo "Don't derive our xnu version using uname -r."
+        substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
 
-      # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
-      echo "getting rid of the \`-arch' GCC option..."
-      find -name Makefile\* -exec \
-        sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
+        # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
+        echo "getting rid of the \`-arch' GCC option..."
+        find -name Makefile\* -exec \
+          sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
 
-      sed -i coregrind/link_tool_exe_darwin.in \
-          -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
+        sed -i coregrind/link_tool_exe_darwin.in \
+            -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
 
-      substituteInPlace coregrind/m_debuginfo/readmacho.c \
-         --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
+        substituteInPlace coregrind/m_debuginfo/readmacho.c \
+           --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
-      echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
-      substituteInPlace coregrind/link_tool_exe_darwin.in \
-        --replace /usr/bin/ld ${cctools}/bin/ld
-    '');
+        echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
+        substituteInPlace coregrind/link_tool_exe_darwin.in \
+          --replace /usr/bin/ld ${cctools}/bin/ld
+      ''
+    );
 
   configureFlags =
     lib.optional stdenv.hostPlatform.isx86_64 "--enable-only64bit"
@@ -129,9 +151,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    platforms = with lib.platforms; lib.intersectLists
-      (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
-      (darwin ++ freebsd ++ illumos ++ linux);
+    platforms =
+      with lib.platforms;
+      lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips) (
+        darwin ++ freebsd ++ illumos ++ linux
+      );
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     broken = stdenv.hostPlatform.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };

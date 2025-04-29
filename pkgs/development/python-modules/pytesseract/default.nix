@@ -5,7 +5,7 @@
   packaging,
   pillow,
   tesseract,
-  substituteAll,
+  replaceVars,
   pytestCheckHook,
   setuptools,
 }:
@@ -18,13 +18,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "madmaze";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gQMeck6ojlIwyiOCBBhzHHrjQfBMelVksVGd+fyxWZk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./tesseract-binary.patch;
+    (replaceVars ./tesseract-binary.patch {
       drv = tesseract;
     })
   ];
@@ -36,6 +35,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     pillow
+  ];
+  disabledTests = [
+    # https://github.com/madmaze/pytesseract/pull/559
+    "incorrect_tessdata_dir"
+    "invalid_tessdata_dir"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

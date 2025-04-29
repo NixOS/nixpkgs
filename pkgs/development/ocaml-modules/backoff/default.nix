@@ -1,12 +1,17 @@
-{ lib, buildDunePackage, fetchurl, alcotest}:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "backoff";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/backoff/releases/download/${version}/backoff-${version}.tbz";
-    hash = "sha256-EaSseCKekNE03gaNiqh5Y11r8TF9XulR9AZboPWMIwA=";
+    hash = "sha256-AL6jEbInsbwKVYedpNzjix/YRHtOTizxk6aVNzesnwM=";
   };
 
   doCheck = true;
@@ -20,5 +25,5 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-  minimalOCamlVersion = "4.13";
+  minimalOCamlVersion = "4.12";
 }

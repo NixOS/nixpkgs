@@ -25,7 +25,8 @@ let
       hash = "sha256-25jZEo1C9XF4m9YzDwtecQy468nHyv2wnRuK5oY2siU=";
     };
 
-    cargoHash = "sha256-F9DNY0jKhH6aQRqlXq6MEMoFa1qtvAdL5lSEsql6gcI=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-cSLsfYYtdMiXGCG3jpq2Cxl8TgSb7iCWoeXNwEuv4FM=";
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -59,7 +60,6 @@ let
       mainProgram = "so";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        AndersonTorres
         unsolvedcypher
       ];
     };

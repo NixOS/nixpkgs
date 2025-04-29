@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.aerospike;
@@ -39,18 +41,18 @@ in
   options = {
 
     services.aerospike = {
-      enable = mkEnableOption "Aerospike server";
+      enable = lib.mkEnableOption "Aerospike server";
 
-      package = mkPackageOption pkgs "aerospike" { };
+      package = lib.mkPackageOption pkgs "aerospike" { };
 
-      workDir = mkOption {
-        type = types.str;
+      workDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/aerospike";
         description = "Location where Aerospike stores its files";
       };
 
-      networkConfig = mkOption {
-        type = types.lines;
+      networkConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           service {
             address any
@@ -78,8 +80,8 @@ in
         description = "network section of configuration file";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           namespace test {
@@ -95,10 +97,9 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.aerospike.enable {
+  config = lib.mkIf config.services.aerospike.enable {
 
     users.users.aerospike = {
       name = "aerospike";
@@ -109,8 +110,8 @@ in
     users.groups.aerospike.gid = config.ids.gids.aerospike;
 
     boot.kernel.sysctl = {
-      "net.core.rmem_max" = mkDefault 15728640;
-      "net.core.wmem_max" = mkDefault 5242880;
+      "net.core.rmem_max" = lib.mkDefault 15728640;
+      "net.core.wmem_max" = lib.mkDefault 5242880;
     };
 
     systemd.services.aerospike = rec {

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-tailscale";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-47n/BjTHkw0rT8xTHGZOMNwZTy0nDuoHsTJrRyr8qjc=";
+    tag = "v${version}";
+    hash = "sha256-azqvMAluhThfteLEZObApnJjtnT3NzO+VVwTzmxuaFY=";
   };
 
   postPatch = ''

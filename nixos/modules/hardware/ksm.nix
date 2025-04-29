@@ -2,7 +2,8 @@
 let
   cfg = config.hardware.ksm;
 
-in {
+in
+{
   imports = [
     (lib.mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
   ];
@@ -26,8 +27,8 @@ in {
       script =
         ''
           echo 1 > /sys/kernel/mm/ksm/run
-        '' + lib.optionalString (cfg.sleep != null)
         ''
+        + lib.optionalString (cfg.sleep != null) ''
           echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
         '';
     };

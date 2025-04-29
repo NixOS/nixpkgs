@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "circus";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GTzoIk4GjO1mckz0gxBvtmdLUaV1g6waDn7Xp+6Mcas=";
+    hash = "sha256-++alApmYrBI5sX6904JRrIsiYn0w5OxvaMsQIzkRsPQ=";
   };
 
   build-system = [ flit-core ];

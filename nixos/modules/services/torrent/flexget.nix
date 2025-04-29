@@ -1,60 +1,63 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.flexget;
   pkg = cfg.package;
   ymlFile = pkgs.writeText "flexget.yml" ''
     ${cfg.config}
 
-    ${optionalString cfg.systemScheduler "schedules: no"}
-'';
+    ${lib.optionalString cfg.systemScheduler "schedules: no"}
+  '';
   configFile = "${toString cfg.homeDir}/flexget.yml";
-in {
+in
+{
   options = {
     services.flexget = {
-      enable = mkEnableOption "FlexGet daemon";
+      enable = lib.mkEnableOption "FlexGet daemon";
 
-      package = mkPackageOption pkgs "flexget" {};
+      package = lib.mkPackageOption pkgs "flexget" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "deluge";
         example = "some_user";
-        type = types.str;
+        type = lib.types.str;
         description = "The user under which to run flexget.";
       };
 
-      homeDir = mkOption {
+      homeDir = lib.mkOption {
         default = "/var/lib/deluge";
         example = "/home/flexget";
-        type = types.path;
+        type = lib.types.path;
         description = "Where files live.";
       };
 
-      interval = mkOption {
+      interval = lib.mkOption {
         default = "10m";
         example = "1h";
-        type = types.str;
+        type = lib.types.str;
         description = "When to perform a {command}`flexget` run. See {command}`man 7 systemd.time` for the format.";
       };
 
-      systemScheduler = mkOption {
+      systemScheduler = lib.mkOption {
         default = true;
         example = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = "The YAML configuration for FlexGet.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkg ];
 
@@ -75,7 +78,7 @@ in {
         wantedBy = [ "multi-user.target" ];
       };
 
-      flexget-runner = mkIf cfg.systemScheduler {
+      flexget-runner = lib.mkIf cfg.systemScheduler {
         description = "FlexGet Runner";
         after = [ "flexget.service" ];
         wants = [ "flexget.service" ];
@@ -88,7 +91,7 @@ in {
       };
     };
 
-    systemd.timers.flexget-runner = mkIf cfg.systemScheduler {
+    systemd.timers.flexget-runner = lib.mkIf cfg.systemScheduler {
       description = "Run FlexGet every ${cfg.interval}";
       wantedBy = [ "timers.target" ];
       timerConfig = {

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, hidapi }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  hidapi,
+}:
 
 stdenv.mkDerivation {
   pname = "footswitch";

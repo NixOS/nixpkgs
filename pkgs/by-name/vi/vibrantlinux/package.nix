@@ -1,55 +1,49 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, makeWrapper
-, libvibrant
-, libX11
-, libXrandr
-, libxcb
-, linuxPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libvibrant,
+  libxcb,
+  libXrandr,
+  pkg-config,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vibrantLinux";
-  version = "2.1.10";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "libvibrant";
     repo = "vibrantLinux";
-    rev = "v${version}";
-    hash = "sha256-rvJiVId6221hTrfEIvVO9HTMhaZ6KY44Bu3a5MinPHI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GsGWQ6Os8GQ1XbRKrlTOpwPvwyfT/6ftjlt+fJ/YiK8=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
-  ] ++ (with qt5; [
-    qmake
-    wrapQtAppsHook
-  ]);
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs = [
-    libX11
-    libXrandr
-    libxcb
     libvibrant
-    linuxPackages.nvidia_x11.settings.libXNVCtrl
-  ] ++ (with qt5; [
-    qtbase
-    qttools
-  ]);
-
-  postPatch = ''
-    substituteInPlace vibrantLinux.pro \
-      --replace '$$(PREFIX)' '$$PREFIX'
-  '';
+    libxcb
+    libXrandr
+    qt6.qtbase
+    qt6.qttools
+  ];
 
   meta = with lib; {
     description = "Tool to automate managing your screen's saturation depending on what programs are running";
     homepage = "https://github.com/libvibrant/vibrantLinux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ unclamped ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      Scrumplex
+      unclamped
+    ];
     platforms = platforms.linux;
     mainProgram = "vibrantLinux";
   };
-}
+})

@@ -1,25 +1,26 @@
-{ lib
-, blueprint-compiler
-, buildGoModule
-, fetchFromGitHub
-, gobject-introspection
-, gtk4
-, libadwaita
-, libfido2
-, libnotify
-, python3
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  buildGoModule,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk4,
+  libadwaita,
+  libfido2,
+  libnotify,
+  python3,
+  wrapGAppsHook4,
 }:
 
 buildGoModule rec {
   pname = "goldwarden";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "quexten";
     repo = "goldwarden";
     rev = "v${version}";
-    hash = "sha256-LAnhCQmyubWeZtTVaW8IoNmfipvMIlAnY4pKwrURPDs=";
+    hash = "sha256-wAQFx0DKLLKztETAz1eM+eBFiAkSCgd8qqRtLV1Kz9g=";
   };
 
   postPatch = ''
@@ -38,9 +39,12 @@ buildGoModule rec {
       --replace-fail "@PATH@" "$out/bin/goldwarden"
   '';
 
-  vendorHash = "sha256-rMs7FP515aClzt9sjgIQHiYo5SYa2tDHrVRhtT+I8aM=";
+  vendorHash = "sha256-zWACjW/WZC0ZLmRV1VwcRROG218PCZ6aCPOreCG/5sE=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -69,10 +73,10 @@ buildGoModule rec {
     mkdir -p $out/share/goldwarden
     cp -r gui/* $out/share/goldwarden/
     ln -s $out/share/goldwarden/goldwarden_ui_main.py $out/bin/goldwarden-gui
-    rm $out/share/goldwarden/{com.quexten.Goldwarden.desktop,com.quexten.Goldwarden.metainfo.xml,goldwarden.svg,python3-requirements.json,requirements.txt}
+    rm $out/share/goldwarden/{com.quexten.Goldwarden.desktop,com.quexten.Goldwarden.metainfo.xml,com.quexten.Goldwarden.svg,python3-requirements.json,requirements.txt}
 
     install -D gui/com.quexten.Goldwarden.desktop -t $out/share/applications
-    install -D gui/goldwarden.svg -t $out/share/icons/hicolor/scalable/apps
+    install -D gui/com.quexten.Goldwarden.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 gui/com.quexten.Goldwarden.metainfo.xml -t $out/share/metainfo
     install -Dm644 cli/resources/com.quexten.goldwarden.policy -t $out/share/polkit-1/actions
 
@@ -92,7 +96,10 @@ buildGoModule rec {
     description = "Feature-packed Bitwarden compatible desktop integration";
     homepage = "https://github.com/quexten/goldwarden";
     license = licenses.mit;
-    maintainers = with maintainers; [ arthsmn justanotherariel ];
+    maintainers = with maintainers; [
+      arthsmn
+      justanotherariel
+    ];
     mainProgram = "goldwarden";
     platforms = platforms.linux; # Support for other platforms is not yet ready, see https://github.com/quexten/goldwarden/issues/4
   };

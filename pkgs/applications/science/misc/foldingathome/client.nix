@@ -1,18 +1,20 @@
-{ lib
-, buildFHSEnv
-, fetchFromGitHub
-, ocl-icd
-, openssl
-, re2
-, libevent
-, git
-, zlib
-, expat
-, scons
-, stdenv
-, extraPkgs ? [ ]
+{
+  lib,
+  buildFHSEnv,
+  fetchFromGitHub,
+  ocl-icd,
+  openssl,
+  re2,
+  libevent,
+  git,
+  zlib,
+  expat,
+  scons,
+  stdenv,
+  extraPkgs ? [ ],
 }:
 let
+  pname = "fah-client";
   version = "8.3.18";
 
   cbangSrc = fetchFromGitHub {
@@ -23,8 +25,7 @@ let
   };
 
   fah-client = stdenv.mkDerivation {
-    pname = "fah-client";
-    inherit version;
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "FoldingAtHome";
@@ -33,7 +34,12 @@ let
       sha256 = "sha256-lqpC1fAMFb8iX02daVre/pE0c7DkwswlFigJS3ZGEjM=";
     };
 
-    nativeBuildInputs = [ scons re2 libevent git ];
+    nativeBuildInputs = [
+      scons
+      re2
+      libevent
+      git
+    ];
 
     buildInputs = [ openssl ];
 
@@ -66,15 +72,19 @@ let
   };
 in
 buildFHSEnv {
-  name = fah-client.name;
+  inherit pname version;
 
-  targetPkgs = _: [ fah-client ocl-icd zlib expat ] ++ extraPkgs;
+  targetPkgs =
+    _:
+    [
+      fah-client
+      ocl-icd
+      zlib
+      expat
+    ]
+    ++ extraPkgs;
 
   runScript = "/bin/fah-client";
-
-  extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/fah-client
-  '';
 
   meta = {
     description = "Folding@home client";

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, glib
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  glib,
+  fetchFromGitHub,
 }:
 stdenv.mkDerivation rec {
   pname = "g3kb-switch";

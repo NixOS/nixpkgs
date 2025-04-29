@@ -1,21 +1,24 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+{ pkgs, lib, ... }:
 
 let
-  secretsConfigFile = pkgs.writeText "secrets.json" (builtins.toJSON {
-    securityKeys = {
-      "S0_Legacy" = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    };
-  });
-in {
+  secretsConfigFile = pkgs.writeText "secrets.json" (
+    builtins.toJSON {
+      securityKeys = {
+        "S0_Legacy" = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+      };
+    }
+  );
+in
+{
   name = "zwave-js";
   meta.maintainers = with lib.maintainers; [ graham33 ];
 
   nodes = {
-    machine = { config, ... }: {
+    machine = {
       services.zwave-js = {
         enable = true;
         serialPort = "/dev/null";
-        extraFlags = ["--mock-driver"];
+        extraFlags = [ "--mock-driver" ];
         inherit secretsConfigFile;
       };
     };
@@ -28,4 +31,4 @@ in {
     machine.wait_for_open_port(3000)
     machine.wait_until_succeeds("journalctl --since -1m --unit zwave-js --grep 'ZwaveJS server listening'")
   '';
-})
+}

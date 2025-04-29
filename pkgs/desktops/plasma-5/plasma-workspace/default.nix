@@ -1,81 +1,91 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wayland-scanner
-, isocodes
-, libdbusmenu
-, libSM
-, libXcursor
-, libXtst
-, libXft
-, pam
-, wayland
-, xmessage
-, xsetroot
-, baloo
-, breeze-qt5
-, kactivities
-, kactivities-stats
-, kcmutils
-, kconfig
-, kcrash
-, kdbusaddons
-, kdeclarative
-, kdelibs4support
-, kdesu
-, kglobalaccel
-, kidletime
-, kinit
-, kjsembed
-, knewstuff
-, knotifyconfig
-, kpackage
-, kpeople
-, krunner
-, kscreenlocker
-, ktexteditor
-, ktextwidgets
-, kwallet
-, kwayland
-, kwin
-, kxmlrpcclient
-, libkscreen
-, libksysguard
-, libqalculate
-, networkmanager-qt
-, phonon
-, plasma-framework
-, prison
-, solid
-, kholidays
-, kquickcharts
-, appstream-qt
-, plasma-wayland-protocols
-, kpipewire
-, libkexiv2
-, kuserfeedback
-, qtgraphicaleffects
-, qtquickcontrols
-, qtquickcontrols2
-, qtscript
-, qttools
-, qtwayland
-, qtx11extras
-, qqc2-desktop-style
-, polkit-qt
-, pipewire
-, libdrm
-, fetchpatch
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wayland-scanner,
+  isocodes,
+  libdbusmenu,
+  libSM,
+  libXcursor,
+  libXtst,
+  libXft,
+  pam,
+  wayland,
+  xmessage,
+  xsetroot,
+  baloo,
+  breeze-qt5,
+  kactivities,
+  kactivities-stats,
+  kcmutils,
+  kconfig,
+  kcrash,
+  kdbusaddons,
+  kdeclarative,
+  kdelibs4support,
+  kdesu,
+  kglobalaccel,
+  kidletime,
+  kinit,
+  kjsembed,
+  knewstuff,
+  knotifyconfig,
+  kpackage,
+  kpeople,
+  krunner,
+  kscreenlocker,
+  ktexteditor,
+  ktextwidgets,
+  kwallet,
+  kwayland,
+  kwin,
+  kxmlrpcclient,
+  libkscreen,
+  libksysguard,
+  libqalculate,
+  networkmanager-qt,
+  phonon,
+  plasma-framework,
+  prison,
+  solid,
+  kholidays,
+  kquickcharts,
+  appstream-qt,
+  plasma-wayland-protocols,
+  kpipewire,
+  libkexiv2,
+  kuserfeedback,
+  qtgraphicaleffects,
+  qtquickcontrols,
+  qtquickcontrols2,
+  qtscript,
+  qttools,
+  qtwayland,
+  qtx11extras,
+  qqc2-desktop-style,
+  polkit-qt,
+  pipewire,
+  libdrm,
+  fetchpatch,
 }:
 
-let inherit (lib) getBin getLib; in
+let
+  inherit (lib) getBin getLib;
+in
 
 mkDerivation {
   pname = "plasma-workspace";
-  passthru.providedSessions = [ "plasma" "plasmawayland" ];
+  passthru.providedSessions = [
+    "plasma"
+    "plasmawayland"
+  ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wayland-scanner
+  ];
   buildInputs = [
     isocodes
     libdbusmenu
@@ -140,7 +150,10 @@ mkDerivation {
     libdrm
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     ''-DNIXPKGS_BREEZE_WALLPAPERS=${getBin breeze-qt5}/share/wallpapers''

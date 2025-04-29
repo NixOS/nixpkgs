@@ -1,23 +1,22 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, thunar
-, exo
-, libxfce4util
-, intltool
-, gettext
+{
+  lib,
+  mkXfceDerivation,
+  gtk3,
+  thunar,
+  exo,
+  libxfce4util,
+  gettext,
 }:
 
 mkXfceDerivation {
   category = "thunar-plugins";
-  pname  = "thunar-archive-plugin";
-  version = "0.5.2";
+  pname = "thunar-archive-plugin";
+  version = "0.5.3";
   odd-unstable = false;
 
-  sha256 = "sha256-vbuFosj2qxDus7vu9WfRiFpLwnTRnmLVGCDa0tNQecU=";
+  sha256 = "sha256-9EjEQml/Xdj/jCtC4ZuGdmpeNnOqUWJOqoVzLuxzG6s=";
 
   nativeBuildInputs = [
-    intltool
     gettext
   ];
 
@@ -34,6 +33,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Thunar plugin providing file context menus for archives";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk3
-, glib
-, granite
-, libgee
-, libhandy
-, libcanberra-gtk3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk3,
+  glib,
+  granite,
+  libgee,
+  libhandy,
+  libcanberra-gtk3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "7.0.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     rev = version;
-    sha256 = "sha256-of7Tw38yJAhHKICU3XxGwIOwqfUhrL7SGKqFd9Dps/I=";
+    sha256 = "sha256-40STrDpMx1WFaTriJNrvkkbzAM0DeBaPdc8o8URItQI=";
   };
 
   nativeBuildInputs = [
@@ -44,12 +45,6 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
-  postPatch = ''
-    # https://github.com/elementary/notifications/issues/222
-    substituteInPlace src/FdoActionGroup.vala \
-      --replace-fail "out VariantType" "out unowned VariantType"
-  '';
-
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -58,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "GTK notification server for Pantheon";
     homepage = "https://github.com/elementary/notifications";
     license = licenses.gpl3Plus;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     mainProgram = "io.elementary.notifications";
   };

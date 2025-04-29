@@ -1,17 +1,18 @@
-{ callPackage
-, fetchFromGitHub
-, nixosTests
+{
+  callPackage,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 callPackage ./generic.nix rec {
   pname = "shattered-pixel-dungeon";
-  version = "2.5.3";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     rev = "v${version}";
-    hash = "sha256-Y23w3Pdq5Lsn4gywHhhfL2o9gVQlw/6mbRrjlHNfJjA=";
+    hash = "sha256-tEgwB/YIhSpwUZrEC4Gw9+6lLllNK8JuTMNKgVzqv7c=";
   };
 
   depsPath = ./deps.json;

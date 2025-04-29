@@ -3,7 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   sphinx,
-  pytest-cov,
+  pytest-cov-stub,
   pytest,
   mako,
   numpy,
@@ -26,15 +26,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     sphinx
-    pytest-cov
+    pytest-cov-stub
     pytest
   ];
 
-  propagatedBuildInputs = [
-    mako
-    numpy
-    funcsigs
-  ] ++ lib.optional withCuda pycuda ++ lib.optional withOpenCL pyopencl;
+  propagatedBuildInputs =
+    [
+      mako
+      numpy
+      funcsigs
+    ]
+    ++ lib.optional withCuda pycuda
+    ++ lib.optional withOpenCL pyopencl;
 
   checkPhase = ''
     py.test

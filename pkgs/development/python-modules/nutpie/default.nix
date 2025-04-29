@@ -9,9 +9,6 @@
   cargo,
   rustc,
 
-  # buildInputs
-  libiconv,
-
   # dependencies
   arviz,
   pandas,
@@ -20,30 +17,34 @@
 
   # tests
   # bridgestan, (not packaged)
+  equinox,
+  flowjax,
   jax,
   jaxlib,
   numba,
+  pytest-timeout,
   pymc,
   pytestCheckHook,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.13.2";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XyUMCnHm5V7oFaf3W+nGpcHfq1ZFppeGMIMCU5OB87s=";
+    tag = "v${version}";
+    hash = "sha256-l2TEGa9VVJmU4mKZwfUdhiloW6Bh41OqIQzTRvYK3eg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-9lM1S42Bmnlb0opstZN2aOKYhBnP87Frq+fQxk0ez+c=";
+    hash = "sha256-hPKT+YM9s7XZhI3sfnLBfokbGQhwDa9y5Fgg1TItO4M=";
   };
 
   build-system = [
@@ -54,8 +55,8 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
+  pythonRelaxDeps = [
+    "xarray"
   ];
 
   dependencies = [
@@ -69,29 +70,32 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # bridgestan
+    equinox
+    flowjax
     numba
     jax
     jaxlib
     pymc
+    pytest-timeout
     pytestCheckHook
     setuptools
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky (assert np.float64(0.0017554642626285276) > 0.01)
+    "test_normalizing_flow"
   ];
 
   disabledTestPaths = [
     # Require unpackaged bridgestan
     "tests/test_stan.py"
-
-    # KeyError: "duplicate registration for <class 'numba.core.types.misc.SliceType'>"
-    "tests/test_pymc.py"
   ];
-
-  # Currently, no test are working...
-  doCheck = false;
 
   meta = {
     description = "Python wrapper for nuts-rs";
     homepage = "https://github.com/pymc-devs/nutpie";
-    changelog = "https://github.com/pymc-devs/nutpie/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pymc-devs/nutpie/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

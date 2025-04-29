@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,7 +17,7 @@ let
     libdir: "${config.services.collectd.package}/lib/collectd"
   '';
 
-  defaultCollectionCgi = config.services.collectd.package.overrideDerivation(old: {
+  defaultCollectionCgi = config.services.collectd.package.overrideDerivation (old: {
     name = "collection.cgi";
     dontConfigure = true;
     buildPhase = "true";
@@ -41,7 +47,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.lighttpd.enableModules = [ "mod_cgi" "mod_alias" "mod_setenv" ];
+    services.lighttpd.enableModules = [
+      "mod_cgi"
+      "mod_alias"
+      "mod_setenv"
+    ];
 
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/collectd" {
@@ -52,7 +62,15 @@ in
           "/collectd" => "${cfg.collectionCgi}"
         )
         setenv.add-environment = (
-          "PERL5LIB" => "${with pkgs.perlPackages; makePerlPath [ CGI HTMLParser URI pkgs.rrdtool ]}",
+          "PERL5LIB" => "${
+            with pkgs.perlPackages;
+            makePerlPath [
+              CGI
+              HTMLParser
+              URI
+              pkgs.rrdtool
+            ]
+          }",
           "COLLECTION_CONF" => "${collectionConf}"
         )
       }

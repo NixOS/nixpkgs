@@ -2,28 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
   numpy,
   poetry-core,
-  pythonOlder,
+  pyyaml,
+  sentencepiece,
   tqdm,
 }:
 buildPythonPackage rec {
   pname = "gguf";
-  version = "0.10.0";
+  version = "0.16.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UqMO8mMotBn/xH2SafxYDCOO3xyKGbXqFDwyPgSgOME=";
+    hash = "sha256-D8lWKJow0PHzr9dewNST9zriYpo/IfOEbdFofYeRx8E=";
   };
 
   dependencies = [
     numpy
     poetry-core
+    pyyaml
+    sentencepiece
     tqdm
   ];
+
+  pythonImportsCheck = [ "gguf" ];
 
   meta = with lib; {
     description = "Module for writing binary files in the GGUF format";

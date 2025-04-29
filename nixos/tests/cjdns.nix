@@ -5,7 +5,8 @@ let
 
   basicConfig =
     { ... }:
-    { services.cjdns.enable = true;
+    {
+      services.cjdns.enable = true;
 
       # Turning off DHCP isn't very realistic but makes
       # the sequence of address assignment less stochastic.
@@ -17,16 +18,20 @@ let
 
 in
 
-import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "cjdns";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ehmry ];
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "cjdns";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ehmry ];
+    };
 
-  nodes = { # Alice finds peers over over ETHInterface.
+    nodes = {
+      # Alice finds peers over over ETHInterface.
       alice =
         { ... }:
-        { imports = [ basicConfig ];
+        {
+          imports = [ basicConfig ];
 
           services.cjdns.ETHInterface.bind = "eth1";
 
@@ -39,28 +44,33 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       bob =
         { ... }:
 
-        { imports = [ basicConfig ];
+        {
+          imports = [ basicConfig ];
 
           networking.interfaces.eth1.ipv4.addresses = [
-            { address = "192.168.0.2"; prefixLength = 24; }
+            {
+              address = "192.168.0.2";
+              prefixLength = 24;
+            }
           ];
 
-          services.cjdns =
-            { UDPInterface =
-                { bind = "0.0.0.0:1024";
-                  connectTo."192.168.0.1:1024" =
-                    { password = carolPassword;
-                      publicKey = carolPubKey;
-                    };
-                };
+          services.cjdns = {
+            UDPInterface = {
+              bind = "0.0.0.0:1024";
+              connectTo."192.168.0.1:1024" = {
+                password = carolPassword;
+                publicKey = carolPubKey;
+              };
             };
+          };
         };
 
       # Carol listens on ETHInterface and UDPInterface,
       # but knows neither Alice or Bob.
       carol =
         { ... }:
-        { imports = [ basicConfig ];
+        {
+          imports = [ basicConfig ];
 
           environment.etc."cjdns.keys".text = ''
             CJDNS_PRIVATE_KEY=${carolKey}
@@ -68,21 +78,23 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           '';
 
           networking.interfaces.eth1.ipv4.addresses = [
-            { address = "192.168.0.1"; prefixLength = 24; }
+            {
+              address = "192.168.0.1";
+              prefixLength = 24;
+            }
           ];
 
-          services.cjdns =
-            { authorizedPasswords = [ carolPassword ];
-              ETHInterface.bind = "eth1";
-              UDPInterface.bind = "192.168.0.1:1024";
-            };
+          services.cjdns = {
+            authorizedPasswords = [ carolPassword ];
+            ETHInterface.bind = "eth1";
+            UDPInterface.bind = "192.168.0.1:1024";
+          };
           networking.firewall.allowedUDPPorts = [ 1024 ];
         };
 
     };
 
-  testScript =
-    ''
+    testScript = ''
       import re
 
       start_all()
@@ -118,4 +130,5 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       bob.succeed("curl --fail -g http://[{}]".format(alice_ip6))
     '';
-})
+  }
+)

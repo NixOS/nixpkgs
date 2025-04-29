@@ -1,12 +1,32 @@
-{ lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkg-config, wayland-scanner
-, glib, udev, polkit, libusb1, libjpeg, libmodule
-, pcre, libXdmcp, util-linux, libpthreadstubs
-, enableDdc ? true, ddcutil
-, enableDpms ? true, libXext
-, enableGamma ? true, libdrm, libXrandr, wayland
-, enableScreen ? true
-, enableYoctolight ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  dbus,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  glib,
+  udev,
+  polkit,
+  libusb1,
+  libjpeg,
+  libmodule,
+  pcre,
+  libXdmcp,
+  util-linux,
+  libpthreadstubs,
+  enableDdc ? true,
+  ddcutil,
+  enableDpms ? true,
+  libXext,
+  enableGamma ? true,
+  libdrm,
+  libXrandr,
+  wayland,
+  enableScreen ? true,
+  enableYoctolight ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "clightd";
@@ -30,15 +50,17 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags =
-    [ "-DSYSTEMD_SERVICE_DIR=${placeholder "out"}/lib/systemd/system"
+    [
+      "-DSYSTEMD_SERVICE_DIR=${placeholder "out"}/lib/systemd/system"
       "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
       # systemd.pc has prefix=${systemd.out}
       "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
-    ] ++ lib.optional enableDdc        "-DENABLE_DDC=1"
-      ++ lib.optional enableDpms       "-DENABLE_DPMS=1"
-      ++ lib.optional enableGamma      "-DENABLE_GAMMA=1"
-      ++ lib.optional enableScreen     "-DENABLE_SCREEN=1"
-      ++ lib.optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
+    ]
+    ++ lib.optional enableDdc "-DENABLE_DDC=1"
+    ++ lib.optional enableDpms "-DENABLE_DPMS=1"
+    ++ lib.optional enableGamma "-DENABLE_GAMMA=1"
+    ++ lib.optional enableScreen "-DENABLE_SCREEN=1"
+    ++ lib.optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
   depsBuildBuild = [
     pkg-config
@@ -50,23 +72,28 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs = [
-    dbus
-    glib
-    udev
-    polkit
-    libusb1
-    libjpeg
-    libmodule
+  buildInputs =
+    [
+      dbus
+      glib
+      udev
+      polkit
+      libusb1
+      libjpeg
+      libmodule
 
-    pcre
-    libXdmcp
-    util-linux
-    libpthreadstubs
-  ] ++ lib.optionals enableDdc [ ddcutil ]
+      pcre
+      libXdmcp
+      util-linux
+      libpthreadstubs
+    ]
+    ++ lib.optionals enableDdc [ ddcutil ]
     ++ lib.optionals enableDpms [ libXext ]
     ++ lib.optionals enableGamma [ libXrandr ]
-    ++ lib.optionals (enableDpms || enableGamma || enableScreen) [ libdrm wayland ];
+    ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
+      libdrm
+      wayland
+    ];
 
   postInstall = ''
     mkdir -p $out/bin

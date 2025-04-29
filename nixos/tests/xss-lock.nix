@@ -1,24 +1,35 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{
   name = "xss-lock";
   meta.maintainers = [ ];
 
   nodes = {
     simple = {
-      imports = [ ./common/x11.nix ./common/user-account.nix ];
+      imports = [
+        ./common/x11.nix
+        ./common/user-account.nix
+      ];
       programs.xss-lock.enable = true;
       test-support.displayManager.auto.user = "alice";
     };
 
-    custom_lockcmd = { pkgs, ... }: {
-      imports = [ ./common/x11.nix ./common/user-account.nix ];
-      test-support.displayManager.auto.user = "alice";
+    custom_lockcmd =
+      { pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
+        test-support.displayManager.auto.user = "alice";
 
-      programs.xss-lock = {
-        enable = true;
-        extraOptions = [ "-n" "${pkgs.libnotify}/bin/notify-send 'About to sleep!'"];
-        lockerCommand = "${pkgs.xlockmore}/bin/xlock -mode ant";
+        programs.xss-lock = {
+          enable = true;
+          extraOptions = [
+            "-n"
+            "${pkgs.libnotify}/bin/notify-send 'About to sleep!'"
+          ];
+          lockerCommand = "${pkgs.xlockmore}/bin/xlock -mode ant";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -37,4 +48,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     with subtest("custom_cmd"):
         perform_xsslock_test(custom_lockcmd, "xlock")
   '';
-})
+}

@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, buildbot
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  buildbot,
+  stdenv,
 
-# patch
-, coreutils
+  # patch
+  coreutils,
 
-# propagates
-, autobahn
-, msgpack
-, twisted
+  # propagates
+  autobahn,
+  msgpack,
+  twisted,
 
-# tests
-, parameterized
-, psutil
-, setuptools-trial
+  # tests
+  parameterized,
+  psutil,
+  setuptools-trial,
 
-# passthru
-, nixosTests
+  # passthru
+  nixosTests,
 }:
 
 buildPythonPackage ({
@@ -53,8 +54,7 @@ buildPythonPackage ({
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2;
-    broken = stdenv.hostPlatform.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
 })

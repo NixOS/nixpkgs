@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, kconfig
-, kio
-, leptonica
-, mauikit
-, opencv
-, qtlocation
-, exiv2
-, kquickimageedit
-, tesseract
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kconfig,
+  kio,
+  leptonica,
+  mauikit,
+  opencv,
+  qtlocation,
+  exiv2,
+  kquickimageedit,
+  tesseract,
 }:
 
 mkDerivation {

@@ -24,7 +24,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     cryptography
     jmespath

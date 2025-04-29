@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, Security
-, testers
-, igrep
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  Security,
+  testers,
+  igrep,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,12 +19,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZZhzBGLpzd9+rok+S/ypKpWXVzXaA1CnviC7LfgP/CU=";
   };
 
-  cargoHash = "sha256-raSz/+u7P04qHmvdfYoWKOKtNtaFlgmT8Nw0ImhCMkU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NZN9pB9McZkTlpGgAbxi8bwn+aRiPMymGmBLYBc6bmw=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.tests = {
-    version = testers.testVersion { package = igrep; command = "ig --version"; };
+    version = testers.testVersion {
+      package = igrep;
+      command = "ig --version";
+    };
   };
 
   meta = with lib; {

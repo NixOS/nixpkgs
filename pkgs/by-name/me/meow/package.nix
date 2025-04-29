@@ -6,19 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meow";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "PixelSergey";
     repo = "meow";
     rev = "v${version}";
-    hash = "sha256-PB871c137uxxPaYbV6NB8kECVUrQWTeVz0ciVLHrph4=";
+    hash = "sha256-iskpT0CU/cGp+8myWaVmdw/uC0VoP8Sv+qbjpDDKS3o=";
   };
 
-  cargoHash = "sha256-4BoKZUgt4jf8jy2HU3J6RuT0GXNqkJnBUR09wNlNm7E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-c+Nz3PH5a5CAG4HaIEz7U+b4rp6sgAuo+/uRL70/Tbs=";
 
   postInstall = ''
-    ln -s $out/bin/meow-cli $out/bin/meow
+    mv $out/bin/meow-cli $out/bin/meow
   '';
 
   meta = {

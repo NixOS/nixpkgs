@@ -1,33 +1,34 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
-  pytestCheckHook,
-  libxslt,
-  libxml2,
-  libtool,
-  pkg-config,
-  xmlsec,
-  pkgconfig,
-  setuptools-scm,
-  lxml,
+  fetchPypi,
   hypothesis,
+  libtool,
+  libxml2,
+  libxslt,
+  lxml,
+  pkg-config,
+  pkgconfig,
+  pytestCheckHook,
+  setuptools-scm,
+  xmlsec,
 }:
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.14";
-  format = "pyproject";
+  version = "1.3.15";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k0+ATy+JW824bx6u4ja2YQE1YO5p7BCNKc3W5fKSotk=";
+    hash = "sha256-uqhWuD0AEuJ45vbL7JasgSjeZnyp+pou6wLHUugW9tg=";
   };
+
+  build-system = [ setuptools-scm ];
 
   nativeBuildInputs = [
     pkg-config
     pkgconfig
-    setuptools-scm
   ];
 
   buildInputs = [
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the XML Security Library";
     homepage = "https://github.com/mehcode/python-xmlsec";
+    changelog = "https://github.com/xmlsec/python-xmlsec/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
   };

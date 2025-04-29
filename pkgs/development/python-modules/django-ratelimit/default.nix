@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, django-redis
-, fetchFromGitHub
-, pymemcache
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-redis,
+  fetchFromGitHub,
+  pymemcache,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsocol";
     repo = "django-ratelimit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZMtZSKOIIRSqH6eyC7bBeua7YLKyWW6NOXN/MDv9fy4=";
   };
 
@@ -44,7 +45,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
 
   meta = with lib; {
     description = "Cache-based rate-limiting for Django";

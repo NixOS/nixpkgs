@@ -1,74 +1,85 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocprim
-, clr
-, gfortran
-, git
-, gtest
-, boost
-, python3Packages
-, buildTests ? false
-, buildBenchmarks ? false # Seems to depend on tests
-, gpuTargets ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocprim,
+  clr,
+  gfortran,
+  git,
+  gtest,
+  boost,
+  python3Packages,
+  buildTests ? false,
+  buildBenchmarks ? false, # Seems to depend on tests
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocsparse";
-  version = "6.0.2";
+  pname = "rocsparse${clr.gpuArchSuffix}";
+  version = "6.3.3";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    "test"
-  ] ++ lib.optionals buildBenchmarks [
-    "benchmark"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-nTYnEHkTtq0jBeMj4HXpqkJu8LQc+Z6mpjhMP7tJAHQ=";
+    hash = "sha256-6Cut5rbyqKFzHaXfJZGApyY9Mj1Zq/+U8MkXgy4X4Pw=";
   };
 
   nativeBuildInputs = [
     cmake
+    # no ninja, it buffers console output and nix times out long periods of no output
     rocm-cmake
     clr
     gfortran
   ];
 
-  buildInputs = [
-    rocprim
-    git
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    gtest
-    boost
-    python3Packages.python
-    python3Packages.pyyaml
-  ];
+  buildInputs =
+    [
+      rocprim
+      git
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      gtest
+      boost
+      python3Packages.python
+      python3Packages.pyyaml
+    ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    "-DBUILD_CLIENTS_TESTS=ON"
-    "-DCMAKE_MATRICES_DIR=/build/source/matrices"
-    "-Dpython=python3"
-  ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_CLIENTS_BENCHMARKS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_BUILD_TYPE=Release"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      "-DBUILD_CLIENTS_TESTS=ON"
+      "-DCMAKE_MATRICES_DIR=/build/source/matrices"
+      "-Dpython=python3"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ];
 
   # We have to manually generate the matrices
   postPatch = lib.optionalString (buildTests || buildBenchmarks) ''
@@ -112,17 +123,19 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postInstall = lib.optionalString buildBenchmarks ''
-    mkdir -p $benchmark/bin
-    cp -a $out/bin/* $benchmark/bin
-    rm $benchmark/bin/rocsparse-test
-  '' + lib.optionalString (buildTests || buildBenchmarks) ''
-    mkdir -p $test/bin
-    mv $out/bin/* $test/bin
-    rm $test/bin/rocsparse-bench || true
-    mv /build/source/matrices $test
-    rmdir $out/bin
-  '';
+  postInstall =
+    lib.optionalString buildBenchmarks ''
+      mkdir -p $benchmark/bin
+      cp -a $out/bin/* $benchmark/bin
+      rm $benchmark/bin/rocsparse-test
+    ''
+    + lib.optionalString (buildTests || buildBenchmarks) ''
+      mkdir -p $test/bin
+      mv $out/bin/* $test/bin
+      rm $test/bin/rocsparse-bench || true
+      mv /build/source/matrices $test
+      rmdir $out/bin
+    '';
 
   passthru = {
     matrices = import ./deps.nix {
@@ -133,8 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
-      owner = finalAttrs.src.owner;
-      repo = finalAttrs.src.repo;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
     };
   };
 
@@ -142,8 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm SPARSE implementation";
     homepage = "https://github.com/ROCm/rocSPARSE";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

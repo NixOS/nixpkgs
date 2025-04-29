@@ -25,16 +25,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eGJWtmw2Ps3jII4T8E6s3djzxfqcSdyPemvejal0cn4=";
   };
 
-  buildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mypy-extensions
     typing-extensions
   ];
@@ -46,6 +46,11 @@ buildPythonPackage rec {
     toolz
     wrapt
     attrs
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   pythonImportsCheck = [ "psygnal" ];

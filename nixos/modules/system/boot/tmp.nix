@@ -20,7 +20,10 @@ in
       };
 
       tmpfsSize = lib.mkOption {
-        type = lib.types.oneOf [ lib.types.str lib.types.ints.positive ];
+        type = lib.types.oneOf [
+          lib.types.str
+          lib.types.ints.positive
+        ];
         default = "50%";
         description = ''
           Size of tmpfs in percentage.
@@ -32,12 +35,12 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-           Whether to mount a tmpfs on {file}`/tmp` during boot.
+          Whether to mount a tmpfs on {file}`/tmp` during boot.
 
-           ::: {.note}
-           Large Nix builds can fail if the mounted tmpfs is not large enough.
-           In such a case either increase the tmpfsSize or disable this option.
-           :::
+          ::: {.note}
+          Large Nix builds can fail if the mounted tmpfs is not large enough.
+          In such a case either increase the tmpfsSize or disable this option.
+          :::
         '';
       };
     };

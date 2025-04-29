@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  gmp,
+  gcc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mkcl";
@@ -61,7 +69,8 @@ stdenv.mkDerivation rec {
     description = "ANSI Common Lisp Implementation";
     homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
+    mainProgram = "mkcl";
+    teams = [ lib.teams.lisp ];
     platforms = platforms.linux;
-    maintainers = lib.teams.lisp.members;
   };
 }

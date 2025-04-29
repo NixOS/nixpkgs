@@ -2,9 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
+  libsForQt5,
   pkg-config,
-  wrapQtAppsHook,
   udisks,
 }:
 
@@ -20,9 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [ udisks ];
@@ -34,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/udisks2-qt5";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

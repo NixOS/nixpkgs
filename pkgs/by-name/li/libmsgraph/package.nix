@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, gi-docgen
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, uhttpmock_1_0
-, libxml2
-, glib
-, gnome-online-accounts
-, json-glib
-, libsoup_3
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  uhttpmock_1_0,
+  libxml2,
+  glib,
+  gnome-online-accounts,
+  json-glib,
+  libsoup_3,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmsgraph";
   version = "0.2.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/msgraph/${lib.versions.majorMinor finalAttrs.version}/msgraph-${finalAttrs.version}.tar.xz";
@@ -63,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/msgraph";
     changelog = "https://gitlab.gnome.org/GNOME/msgraph/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

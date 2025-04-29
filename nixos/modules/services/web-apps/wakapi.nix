@@ -26,6 +26,14 @@ in
   options.services.wakapi = {
     enable = mkEnableOption "Wakapi";
     package = mkPackageOption pkgs "wakapi" { };
+    stateDir = mkOption {
+      type = types.path;
+      default = "/var/lib/wakapi";
+      description = ''
+        The state directory where data is stored. Will also be used as the
+        working directory for the wakapi service.
+      '';
+    };
 
     settings = mkOption {
       inherit (settingsFormat) type;
@@ -142,30 +150,39 @@ in
           (mkIf (cfg.passwordSalt != null) "WAKAPI_PASSWORD_SALT=${cfg.passwordSalt}")
           (mkIf (cfg.smtpPassword != null) "WAKAPI_MAIL_SMTP_PASS=${cfg.smtpPassword}")
         ];
-        EnvironmentFile = [
-          (optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
-          (optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile)
-        ];
+
+        EnvironmentFile =
+          (lib.optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
+          ++ (lib.optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile);
 
         User = config.users.users.wakapi.name;
         Group = config.users.users.wakapi.group;
 
         DynamicUser = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
         ProtectHome = true;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        NoNewPrivileges = true;
         ProtectProc = "invisible";
-        ProtectSystem = "strict";
+        ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
           "AF_UNIX"
         ];
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        WorkingDirectory = cfg.stateDir;
+        RuntimeDirectory = "wakapi";
         StateDirectory = "wakapi";
         StateDirectoryMode = "0700";
         Restart = "always";
@@ -183,11 +200,11 @@ in
       }
       {
         assertion = !(cfg.passwordSalt != null && cfg.passwordSaltFile != null);
-        message = "Both `services.wakapi.passwordSalt` `services.wakapi.passwordSaltFile` should not be set at the same time.";
+        message = "Both `services.wakapi.passwordSalt` and `services.wakapi.passwordSaltFile` should not be set at the same time.";
       }
       {
         assertion = !(cfg.smtpPassword != null && cfg.smtpPasswordFile != null);
-        message = "Both `services.wakapi.smtpPassword` `services.wakapi.smtpPasswordFile` should not be set at the same time.";
+        message = "Both `services.wakapi.smtpPassword` and `services.wakapi.smtpPasswordFile` should not be set at the same time.";
       }
       {
         assertion = cfg.database.createLocally -> cfg.settings.db.dialect != null;
@@ -196,10 +213,10 @@ in
     ];
 
     warnings = [
-      (lib.optionalString (cfg.database.createLocally -> cfg.settings.db.dialect != "postgres") ''
+      (lib.optionalString (cfg.database.createLocally && cfg.settings.db.dialect != "postgres") ''
         You have enabled automatic database configuration, but the database dialect is not set to "posgres".
 
-        The Wakapi module only supports for PostgreSQL. Please set `services.wakapi.database.createLocally`
+        The Wakapi module only supports PostgreSQL. Please set `services.wakapi.database.createLocally`
         to `false`, or switch to "postgres" as your database dialect.
       '')
     ];

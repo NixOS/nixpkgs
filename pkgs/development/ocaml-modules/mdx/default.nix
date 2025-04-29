@@ -1,29 +1,56 @@
-{ lib, fetchurl, buildDunePackage, ocaml, findlib
-, alcotest
-, astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
-, gitUpdater
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  findlib,
+  alcotest,
+  astring,
+  cppo,
+  fmt,
+  logs,
+  ocaml-version,
+  camlp-streams,
+  lwt,
+  re,
+  csexp,
+  gitUpdater,
 }:
 
 buildDunePackage rec {
   pname = "mdx";
-  version = "2.4.1";
+  version = "2.5.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    hash = "sha256-GkDMkcxVPe0KIMmNQ0NUlTvbdZ7Mka02u7mn3QQSrxM=";
+    hash = "sha256-wtpY19UYLxXARvsyC7AsFmAtLufLmfNJ4/SEHCY2UCk=";
   };
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
-    astring fmt logs csexp ocaml-version camlp-streams re findlib
+    astring
+    fmt
+    logs
+    csexp
+    ocaml-version
+    camlp-streams
+    re
+    findlib
   ];
-  checkInputs = [ alcotest lwt ];
+  checkInputs = [
+    alcotest
+    lwt
+  ];
 
   doCheck = true;
 
-  outputs = [ "bin" "lib" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
 
   installPhase = ''
     runHook preInstall

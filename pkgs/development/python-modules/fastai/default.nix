@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "fastai";
-  version = "2.7.17";
+  version = "2.7.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g1UwIkdXO5X9jx5zgjbTYBkA0CEDgCKY9rhz8qXU2Io=";
+    hash = "sha256-CoBABtO2NkrNVUTzQ58vBdRe2rr4ji26iJOzema4Nsg=";
   };
 
   propagatedBuildInputs = [

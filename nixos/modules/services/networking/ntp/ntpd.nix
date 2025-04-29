@@ -126,9 +126,9 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.ntp.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
+  config = mkIf config.services.ntp.enable {
     # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;
@@ -142,6 +142,7 @@ in
       group = "ntp";
       description = "NTP daemon user";
       home = "/var/lib/ntp";
+      createHome = true;
     };
     users.groups.ntp = { };
 
@@ -155,7 +156,6 @@ in
       serviceConfig = {
         ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
         Type = "forking";
-        StateDirectory = "ntp";
 
         # Hardening options
         PrivateDevices = true;

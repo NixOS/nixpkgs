@@ -1,6 +1,13 @@
-{ lib, stdenvNoCC, fetchurl, b43FirmwareCutter }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  b43FirmwareCutter,
+}:
 
-let version = "5.100.138"; in
+let
+  version = "5.100.138";
+in
 
 stdenvNoCC.mkDerivation {
   pname = "b43-firmware";

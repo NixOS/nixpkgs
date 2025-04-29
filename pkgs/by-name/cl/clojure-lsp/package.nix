@@ -10,23 +10,23 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2024.04.22-11.50.26";
+  version = "2025.03.27-20.21.36";
 
   src = fetchFromGitHub {
     owner = "clojure-lsp";
     repo = "clojure-lsp";
     rev = version;
-    hash = "sha256-GyPIFYR+/BZ+vq6+yuer5HoVILXLWNw1sW8XpJ7q4SA=";
+    hash = "sha256-xS/WVTJFCdktYxBvey855PW5Heqlx4EhpDAMHQ5Bj5M=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    hash = "sha256-dB16225A7L3nWplvqlal+5gho+LmqqVGPN9dfasKaPk=";
+    hash = "sha256-g8jX+41gojvoJHV/xMcP+4ROc9LewCUTuDTQcpHQ6+E=";
   };
 
   extraNativeImageBuildArgs = [
     # These build args mirror the build.clj upstream
-    # ref: https://github.com/clojure-lsp/clojure-lsp/blob/2024.04.22-11.50.26/cli/build.clj#L141-L144
+    # ref: https://github.com/clojure-lsp/clojure-lsp/blob/2024.08.05-18.16.00/cli/build.clj#L141-L144
     "--no-fallback"
     "--native-image-info"
     "--features=clj_easy.graal_build_time.InitClojureClasses"

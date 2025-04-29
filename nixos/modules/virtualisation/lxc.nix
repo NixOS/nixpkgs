@@ -1,6 +1,11 @@
 # LXC Configuration
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.lxc;
@@ -12,58 +17,53 @@ in
   };
 
   options.virtualisation.lxc = {
-    enable =
-      lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-            This enables Linux Containers (LXC), which provides tools
-            for creating and managing system or application containers
-            on Linux.
-          '';
-      };
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        This enables Linux Containers (LXC), which provides tools
+        for creating and managing system or application containers
+        on Linux.
+      '';
+    };
 
     unprivilegedContainers = lib.mkEnableOption "support for unprivileged users to launch containers";
 
-    systemConfig =
-      lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-            This is the system-wide LXC config. See
-            {manpage}`lxc.system.conf(5)`.
-          '';
-      };
+    systemConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        This is the system-wide LXC config. See
+        {manpage}`lxc.system.conf(5)`.
+      '';
+    };
     package = lib.mkPackageOption pkgs "lxc" { };
 
-    defaultConfig =
-      lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-            Default config (default.conf) for new containers, i.e. for
-            network config. See {manpage}`lxc.container.conf(5)`.
-          '';
-      };
+    defaultConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        Default config (default.conf) for new containers, i.e. for
+        network config. See {manpage}`lxc.container.conf(5)`.
+      '';
+    };
 
-    usernetConfig =
-      lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-            This is the config file for managing unprivileged user network
-            administration access in LXC. See {manpage}`lxc-usernet(5)`.
-          '';
-      };
+    usernetConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        This is the config file for managing unprivileged user network
+        administration access in LXC. See {manpage}`lxc-usernet(5)`.
+      '';
+    };
 
-      bridgeConfig =
-        lib.mkOption {
-          type = lib.types.lines;
-          default = "";
-          description = ''
-              This is the config file for override lxc-net bridge default settings.
-            '';
-        };
+    bridgeConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        This is the config file for override lxc-net bridge default settings.
+      '';
+    };
   };
 
   ###### implementation
@@ -88,7 +88,7 @@ in
     };
 
     # We don't need the `lxc-user` group, unless the unprivileged containers are enabled.
-    users.groups = lib.mkIf cfg.unprivilegedContainers { lxc-user = {}; };
+    users.groups = lib.mkIf cfg.unprivilegedContainers { lxc-user = { }; };
 
     # `lxc-user-nic` needs suid to attach to bridge for unpriv containers.
     security.wrappers = lib.mkIf cfg.unprivilegedContainers {
@@ -108,7 +108,12 @@ in
       lxc-net = {
         enable = true;
         wantedBy = [ "multi-user.target" ];
-        path = [ pkgs.iproute2 pkgs.iptables pkgs.getent pkgs.dnsmasq ];
+        path = [
+          pkgs.iproute2
+          pkgs.iptables
+          pkgs.getent
+          pkgs.dnsmasq
+        ];
       };
     };
   };

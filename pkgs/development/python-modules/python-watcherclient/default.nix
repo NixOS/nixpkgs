@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-watcherclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lDdiZKaeteKZEyfjpBx8KY+0FLFOYAnQXl0pTbqq0Ss=";
   };
 
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Watcher API";
     license = lib.licenses.asl20;
     mainProgram = "watcher";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

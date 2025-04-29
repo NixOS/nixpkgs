@@ -18,8 +18,6 @@
   jfsutils,
   nilfs-utils,
   ntfs3g,
-  reiser4progs,
-  reiserfsprogs,
   udftools,
   xfsprogs,
   zfs,
@@ -44,8 +42,7 @@ let
     jfsutils
     nilfs-utils
     ntfs3g
-    reiser4progs
-    reiserfsprogs
+    # reiser{4,fs}progs intentionally omitted due to filesystem removal from Linux.
     udftools
     xfsprogs
     zfs

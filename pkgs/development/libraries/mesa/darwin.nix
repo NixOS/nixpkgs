@@ -17,14 +17,19 @@
 }:
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
-in stdenv.mkDerivation {
-  inherit (common) pname version src meta;
+in
+stdenv.mkDerivation {
+  inherit (common)
+    pname
+    version
+    src
+    meta
+    ;
 
-  patches = [
-    ./darwin-build-fix.patch
+  outputs = [
+    "out"
+    "dev"
   ];
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     bison
@@ -39,7 +44,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libxml2  # should be propagated from libllvm
+    libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
     Xplugin
     xorg.libX11
@@ -58,6 +63,11 @@ in stdenv.mkDerivation {
     (lib.mesonEnable "llvm" true)
   ];
 
-  # Don't need this on Darwin.
-  passthru.llvmpipeHook = null;
+  passthru = {
+    # needed to pass evaluation of bad platforms
+    driverLink = throw "driverLink not supported on darwin";
+    # Don't need this on Darwin.
+    llvmpipeHook = null;
+  };
+
 }

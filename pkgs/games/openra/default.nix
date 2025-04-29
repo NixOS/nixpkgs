@@ -1,7 +1,7 @@
 { callPackage }:
 
 let
-  buildOpenRAEngine = callPackage ./build-engine.nix {};
+  buildOpenRAEngine = callPackage ./build-engine.nix { };
   callPackage' = path: callPackage path { inherit buildOpenRAEngine; };
 in
 {

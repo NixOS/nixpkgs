@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, pkg-config
-, texinfo
-, bison
-, flex
-, zlib
-, elfutils
-, gmp
-, ncurses
-, expat
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  pkg-config,
+  texinfo,
+  bison,
+  flex,
+  zlib,
+  elfutils,
+  gmp,
+  ncurses,
+  expat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,8 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "ROCm source-level debugger for Linux, based on GDB";
     homepage = "https://github.com/ROCm/ROCgdb";
-    license = with licenses; [ gpl2 gpl3 bsd3 ];
-    maintainers = teams.rocm.members;
+    license = with licenses; [
+      gpl2
+      gpl3
+      bsd3
+    ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken = versionAtLeast finalAttrs.version "6.0.0";
   };

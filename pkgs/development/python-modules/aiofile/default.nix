@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiofile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiofile" ];
 
   disabledTests = [
-    # Tests (SystemError) fails randomly during nix-review
+    # Tests (SystemError) fails randomly during nixpkgs-review
     "test_async_open_fp"
     "test_async_open_iter_chunked"
     "test_async_open_iter_chunked"

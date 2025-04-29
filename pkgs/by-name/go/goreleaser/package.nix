@@ -10,22 +10,26 @@
 }:
 buildGoModule rec {
   pname = "goreleaser";
-  version = "2.3.2";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
-    repo = pname;
+    repo = "goreleaser";
     rev = "v${version}";
-    hash = "sha256-YKcduPxcXU1Ixexr/DxeVRfLxYdHNFcGNLbBiH6cIUU=";
+    hash = "sha256-F9gUntTqllTYrRTuUj4tWMrHArM8BflCROPBsOdIsFA=";
   };
 
-  vendorHash = "sha256-3gC2wZz3t6ObqAJ2g80kTrW2OEAyBptdqmN7cQKqZ/w=";
+  vendorHash = "sha256-MGBMPiya1mUBCYcLuTtMCwZ9e+LEtT7Xrb/WZf86IXE=";
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
     "-X main.builtBy=nixpkgs"
+  ];
+
+  subPackages = [
+    "."
   ];
 
   # tests expect the source files to be a build repo
@@ -56,10 +60,8 @@ buildGoModule rec {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
     maintainers = with maintainers; [
-      c0deaddict
       sarcasticadmin
       techknowlogick
-      developer-guy
       caarlos0
     ];
     license = licenses.mit;

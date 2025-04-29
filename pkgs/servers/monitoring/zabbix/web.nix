@@ -24,7 +24,7 @@ import ./versions.nix (
 
     installPhase = ''
       mkdir -p $out/share/zabbix/
-      cp -a ${if lib.versionAtLeast version "5.0.0" then "ui/." else "frontends/php/."} $out/share/zabbix/
+      cp -a ui/. $out/share/zabbix/
       cp ${phpConfig} $out/share/zabbix/conf/zabbix.conf.php
     '';
 
@@ -33,7 +33,10 @@ import ./versions.nix (
       homepage = "https://www.zabbix.com/";
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ mmahut ];
+      maintainers = with lib.maintainers; [
+        bstanderline
+        mmahut
+      ];
       platforms = lib.platforms.linux;
     };
   }

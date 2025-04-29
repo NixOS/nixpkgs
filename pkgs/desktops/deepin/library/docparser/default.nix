@@ -3,13 +3,12 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   poppler,
   pugixml,
   libzip,
   libuuid,
+  libxml2,
   tinyxml-2,
 }:
 
@@ -25,10 +24,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -36,6 +35,7 @@ stdenv.mkDerivation rec {
     pugixml
     libzip
     libuuid
+    libxml2
     tinyxml-2
   ];
 
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/docparser";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

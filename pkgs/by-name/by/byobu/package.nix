@@ -1,15 +1,16 @@
-{ lib
-, autoreconfHook
-, bc
-, fetchFromGitHub
-, gettext
-, makeWrapper
-, perl
-, python3
-, screen
-, stdenv
-, vim
-, tmux
+{
+  lib,
+  autoreconfHook,
+  bc,
+  fetchFromGitHub,
+  gettext,
+  makeWrapper,
+  perl,
+  python3,
+  screen,
+  stdenv,
+  vim,
+  tmux,
 }:
 
 let
@@ -17,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
-  version = "6.12";
+  version = "6.13";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
     repo = "byobu";
     rev = finalAttrs.version;
-    hash = "sha256-NzC9Njsnz14mfKnERGDZw8O3vux0wnfCKwjUeTBQswc=";
+    hash = "sha256-h+3BEMfBRozmpqFNRyfKzjKgevaYm8v7DsJMwkhiCQ4=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper "$out/bin/.$bname" "$out/bin/$bname" \
         --argv0 $bname \
         --prefix PATH ":" "$out/bin" \
-        --set BYOBU_PATH ${lib.makeBinPath [ vim bc ]} \
+        --set BYOBU_PATH ${
+          lib.makeBinPath [
+            vim
+            bc
+          ]
+        } \
         --set BYOBU_PYTHON "${pythonEnv}/bin/python"
     done
   '';
@@ -92,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "byobu";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,34 +1,38 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # optional-dependencies
   # cudf,
   dask,
-  dask-expr,
-  duckdb,
-  fetchFromGitHub,
-  hatchling,
-  hypothesis,
   # modin,
   pandas,
   polars,
   pyarrow,
+  pyspark,
+  sqlframe,
+
+  # tests
+  duckdb,
+  hypothesis,
   pytest-env,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.9.1";
+  version = "1.37.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KUtmkDaHPaJ917/hVhJrt+x64JJYm06fyDfCV2nSa3s=";
+    tag = "v${version}";
+    hash = "sha256-AYgpHJwQVP+F2kr5YJtjnLNYedc81RvRcX1Cfh7c0xw=";
   };
 
   build-system = [
@@ -39,12 +43,13 @@ buildPythonPackage rec {
     # cudf = [ cudf ];
     dask = [
       dask
-      dask-expr
-    ];
+    ] ++ dask.optional-dependencies.dataframe;
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];
     pyarrow = [ pyarrow ];
+    pyspark = [ pyspark ];
+    sqlframe = [ sqlframe ];
   };
 
   nativeCheckInputs = [
@@ -64,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/v${version}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

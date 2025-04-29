@@ -1,7 +1,17 @@
-{ stdenv, nodejs, pnpm, fetchFromGitHub }:
+{
+  stdenv,
+  nodejs,
+  pnpm,
+  fetchFromGitHub,
+}:
 
 let
-  inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src pnpmDepsHash;
+  inherit (import ./sources.nix { inherit fetchFromGitHub; })
+    pname
+    version
+    src
+    pnpmDepsHash
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${pname}-web";
@@ -15,7 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src sourceRoot;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      ;
     hash = pnpmDepsHash;
   };
 

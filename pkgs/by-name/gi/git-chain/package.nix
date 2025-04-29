@@ -12,16 +12,17 @@
 
 rustPlatform.buildRustPackage {
   pname = "git-chain";
-  version = "0-unstable-2024-08-09";
+  version = "0-unstable-2025-03-25";
 
   src = fetchFromGitHub {
     owner = "dashed";
     repo = "git-chain";
-    rev = "4fee033ea1ee51bbb6b7f75411f0f4f799aea1e2";
-    hash = "sha256-wQZXixg7mCBUo18z/WCkTWW3R0j2jxs8t1yaQzY3Eu4=";
+    rev = "f6a6d365e6e3cce15e74649a421044a01fb4f68f";
+    hash = "sha256-lOAURUhR2Ts1DF8yW0WnovSWeZFC8UwR6j4cxoreonY=";
   };
 
-  cargoHash = "sha256-pRxOrlDgfSpUBY2WKfoIH9ngLzb2noiLqxA3/6s+mRw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0Ur80eIKQIsM5vyIt+9YpFufHTk97+T+KXoAkJE90Ag=";
 
   nativeBuildInputs = [ pkg-config ];
 

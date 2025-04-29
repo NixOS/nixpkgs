@@ -5,7 +5,7 @@
   cftime,
   curl,
   cython,
-  fetchPypi,
+  fetchFromGitHub,
   hdf5,
   isPyPy,
   libjpeg,
@@ -20,21 +20,24 @@
   zlib,
 }:
 
-buildPythonPackage rec {
+let
+  version = "1.7.2";
+  suffix = lib.optionalString (lib.match ''.*\.post[0-9]+'' version == null) "rel";
+  tag = "v${version}${suffix}";
+in
+buildPythonPackage {
   pname = "netcdf4";
-  version = "1.7.1.post2";
+  inherit version;
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N9VX42ZUiJ1wIBkr+1b51fk4lMsymX64N65YbFOP17Y=";
+  src = fetchFromGitHub {
+    owner = "Unidata";
+    repo = "netcdf4-python";
+    inherit tag;
+    hash = "sha256-orwCHKOSam+2eRY/yAduFYWREOkJlWIJGIZPZwQZ/RI=";
   };
-
-  postPatch = ''
-    sed -i "/numpy>=/d" pyproject.toml
-  '';
 
   build-system = [
     cython
@@ -43,20 +46,27 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     cftime
+    numpy
+  ];
+
+  buildInputs = [
     curl
     hdf5
     libjpeg
     netcdf
-    numpy
     zlib
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     pushd test/
     NO_NET=1 NO_CDL=1 ${python.interpreter} run_all.py
+
+    runHook postCheck
   '';
 
   env = {
@@ -73,7 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interface to netCDF library (versions 3 and 4)";
     homepage = "https://github.com/Unidata/netcdf4-python";
-    changelog = "https://github.com/Unidata/netcdf4-python/raw/v${version}/Changelog";
+    changelog = "https://github.com/Unidata/netcdf4-python/raw/${tag}/Changelog";
     maintainers = [ ];
     license = licenses.mit;
   };

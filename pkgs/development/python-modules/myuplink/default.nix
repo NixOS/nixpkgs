@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "myuplink";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pajzo";
     repo = "myuplink";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QIFTM4RQR3C67q+sBUCPhUyXylzplNAppHjzvU7i2YU=";
+    tag = version;
+    hash = "sha256-r06aap8FiRslRRgKKSH7vNzpoVn6rX8ZR0oQ0D68xDo=";
   };
 
   postPatch = ''

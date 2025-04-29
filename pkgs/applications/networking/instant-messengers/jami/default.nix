@@ -24,7 +24,6 @@
   libnatpmp,
   libpulseaudio,
   libupnp,
-  yaml-cpp,
   msgpack-cxx,
   openssl,
   restinio,
@@ -32,6 +31,7 @@
   speex,
   udev,
   webrtc-audio-processing,
+  yaml-cpp,
   zlib,
 
   # for dhtnet
@@ -68,14 +68,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240823.0";
+  version = "20241031.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-7jGH54sFiS6qrdEiKSS64lJyJXL1FOJVbesxo/FFmyA=";
+    hash = "sha256-LKezdzM+ltUSgW4GmTXICyufx9mI1AVbdEcwSp6tmao=";
     fetchSubmodules = true;
   };
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "cfe512b0632eea046f683b22e42d01eeb943d751";
+      rev = "8cd00200669fa5b7632faa447ba206c3847e2879";
       hash = "sha256-SGidaCi5z7hO0ePJIZIkcWAkb+cKsZTdksVS7ldpjME=";
     };
 
@@ -173,6 +173,8 @@ stdenv.mkDerivation rec {
       "-DBUILD_BENCHMARKS=Off"
       "-DBUILD_TOOLS=Off"
       "-DBUILD_TESTING=Off"
+      "-DBUILD_DEPENDENCIES=Off"
+      "-DBUILD_EXAMPLE=Off"
     ];
 
     meta = with lib; {
@@ -187,6 +189,12 @@ stdenv.mkDerivation rec {
     pname = "jami-daemon";
     inherit src version meta;
     sourceRoot = "${src.name}/daemon";
+
+    # Fix for libgit2 breaking changes
+    postPatch = ''
+      substituteInPlace src/jamidht/conversationrepository.cpp \
+        --replace-fail "git_commit* const" "const git_commit*"
+    '';
 
     nativeBuildInputs = [
       autoreconfHook
@@ -212,7 +220,6 @@ stdenv.mkDerivation rec {
       libnatpmp
       libpulseaudio
       libupnp
-      yaml-cpp
       msgpack-cxx
       opendht-jami
       openssl
@@ -222,6 +229,7 @@ stdenv.mkDerivation rec {
       speex
       udev
       webrtc-audio-processing
+      yaml-cpp
       zlib
     ];
 

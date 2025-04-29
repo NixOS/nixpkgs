@@ -2,12 +2,13 @@
   stdenv,
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchgit,
   sourceData,
   versionData,
   buildFreebsd,
   patchesRoot,
   writeText,
+  buildPackages,
 }:
 
 self:
@@ -18,15 +19,15 @@ lib.packagesFromDirectoryRecursive {
 }
 // {
   inherit sourceData patchesRoot versionData;
-  patches = ./patches + "/${self.versionData.revision}";
 
   # Keep the crawled portion of Nixpkgs finite.
   buildFreebsd = lib.dontRecurseIntoAttrs buildFreebsd // {
     __attrsFailEvaluation = true;
   };
 
-  ports = fetchzip {
-    url = "https://cgit.freebsd.org/ports/snapshot/ports-dde3b2b456c3a4bdd217d0bf3684231cc3724a0a.tar.gz";
+  ports = fetchgit {
+    url = "https://git.FreeBSD.org/ports.git";
+    rev = "dde3b2b456c3a4bdd217d0bf3684231cc3724a0a";
     sha256 = "BpHqJfnGOeTE7tkFJBx0Wk8ryalmf4KNTit/Coh026E=";
   };
 
@@ -65,16 +66,32 @@ lib.packagesFromDirectoryRecursive {
     inherit (self) libmd libnetbsd;
   };
 
-  libc = self.callPackage ./pkgs/libc/package.nix {
+  libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
     inherit (buildFreebsd)
-      makeMinimal
-      install
-      gencat
       rpcgen
-      mkcsmapper
-      mkesdb
+      gencat
       ;
-    inherit (self) csu include;
+    inherit (buildPackages)
+      flex
+      byacc
+      ;
+  };
+
+  libc = self.callPackage ./pkgs/libc/package.nix {
+    inherit (self) libcMinimal librpcsvc libelf;
+  };
+
+  librpcsvc = self.callPackage ./pkgs/librpcsvc.nix {
+    inherit (buildFreebsd) rpcgen;
+  };
+
+  i18n = self.callPackage ./pkgs/i18n.nix { inherit (buildFreebsd) mkcsmapper mkesdb; };
+
+  libelf = self.callPackage ./pkgs/libelf.nix { inherit (buildPackages) m4; };
+
+  rtld-elf = self.callPackage ./pkgs/rtld-elf.nix {
+    inherit (buildFreebsd) rpcgen;
+    inherit (buildPackages) flex byacc;
   };
 
   libnetbsd = self.callPackage ./pkgs/libnetbsd/package.nix { inherit (buildFreebsd) makeMinimal; };

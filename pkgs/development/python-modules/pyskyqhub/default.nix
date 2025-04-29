@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  # Tests require phyiscal hardware
+  # Tests require physical hardware
   doCheck = false;
 
   pythonImportsCheck = [ "pyskyqhub" ];

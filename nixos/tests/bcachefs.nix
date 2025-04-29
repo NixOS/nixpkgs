@@ -1,13 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "bcachefs";
   meta.maintainers = with pkgs.lib.maintainers; [ Madouura ];
 
-  nodes.machine = { pkgs, ... }: {
-    virtualisation.emptyDiskImages = [ 4096 ];
-    networking.hostId = "deadbeef";
-    boot.supportedFilesystems = [ "bcachefs" ];
-    environment.systemPackages = with pkgs; [ parted keyutils ];
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      virtualisation.emptyDiskImages = [ 4096 ];
+      networking.hostId = "deadbeef";
+      boot.supportedFilesystems = [ "bcachefs" ];
+      environment.systemPackages = with pkgs; [
+        parted
+        keyutils
+      ];
+    };
 
   testScript = ''
     machine.succeed("modprobe bcachefs")
@@ -29,4 +35,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "udevadm settle",
     )
   '';
-})
+}

@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, pkg-config
-, zlib
-, qtbase
-, qtsvg
-, qttools
-, qtmultimedia
-, qmake
-, fetchpatch
-, fetchurl
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  pkg-config,
+  zlib,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtmultimedia,
+  qmake,
+  fetchpatch,
+  fetchurl,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

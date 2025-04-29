@@ -32,15 +32,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ONuX5/GlirPF8+7bZtib1Xsv5llcXcSelFfGyeTc5L8=";
   };
 
   sourceRoot = "${src.name}/packages/python/plotly";
 
+  # tracking numpy 2 issue: https://github.com/plotly/plotly.py/pull/4622
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "\"jupyterlab~=3.0;python_version>='3.6'\"," ""
+
+    substituteInPlace plotly/tests/test_optional/test_utils/test_utils.py \
+      --replace-fail "np.NaN" "np.nan" \
+      --replace-fail "np.NAN" "np.nan" \
+      --replace-fail "np.Inf" "np.inf"
+
+    substituteInPlace plotly/tests/test_optional/test_px/test_imshow.py \
+      --replace-fail "- 255 * img.max()" "- np.int64(255) * img.max()"
   '';
 
   env.SKIP_NPM = true;
@@ -91,6 +100,9 @@ buildPythonPackage rec {
     # AssertionError: assert "plotly" not in sys.modules
     "test_dependencies_not_imported"
     "test_lazy_imports"
+    # numpy2 related error, RecursionError
+    # https://github.com/plotly/plotly.py/pull/4622#issuecomment-2452886352
+    "test_masked_constants_example"
   ];
   disabledTestPaths =
     [

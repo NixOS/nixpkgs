@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub, libX11, libglut, glew, libXNVCtrl, libXext, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libglut,
+  glew,
+  libXNVCtrl,
+  libXext,
+  lib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gl-gsync-demo";
   version = "unstable-2020-12-27";
 
@@ -11,7 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "1innsmpsd9n9ih80v16rhj2ijrl28jd7x6a4jmxdirba7mjibm8d";
   };
 
-  buildInputs = [ libX11 libglut glew libXNVCtrl libXext ];
+  buildInputs = [
+    libX11
+    libglut
+    glew
+    libXNVCtrl
+    libXext
+  ];
 
   installPhase = ''
     runHook preInstall

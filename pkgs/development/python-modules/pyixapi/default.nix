@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyixapi";
-  version = "0.2.3";
+  version = "0.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "pyixapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IiLjxOtyxGSaItxgEbsF8AER/j4Qe7SP9ZAEPjTiYI4=";
+    tag = version;
+    hash = "sha256-NS8rVzLpEtpuLal6sApXI3hjASiIeXZuZ4xyj9Zv1k0=";
   };
 
   pythonRelaxDeps = [ "pyjwt" ];
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API client library for IX-API";
     homepage = "https://github.com/peering-manager/pyixapi/";
-    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${version}";
+    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

@@ -239,7 +239,6 @@ in
           --registration='${registrationFile}'
         '';
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
@@ -269,7 +268,7 @@ in
     buildDocsInSandbox = false;
     doc = ./mautrix-signal.md;
     maintainers = with lib.maintainers; [
-      niklaskorz
+      alyaeanyx
       frederictobiasc
     ];
   };

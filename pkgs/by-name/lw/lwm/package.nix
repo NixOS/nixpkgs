@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl
-, imake, libX11, libSM, libXext, libICE }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  libX11,
+  libSM,
+  libXext,
+  libICE,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lwm";
@@ -12,7 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ imake ];
 
-  buildInputs = [ libX11 libSM libXext libICE ];
+  buildInputs = [
+    libX11
+    libSM
+    libXext
+    libICE
+  ];
 
   dontConfigure = true;
 
@@ -39,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.jfc.org.uk/software/lwm.html";
     license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "lwm";
   };

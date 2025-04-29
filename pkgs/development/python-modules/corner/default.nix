@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   matplotlib,
@@ -21,28 +20,26 @@
   pytest,
   scipy,
 
-  # checks
+  # tests
   pytestCheckHook,
   corner,
 }:
 
 buildPythonPackage rec {
   pname = "corner";
-  version = "2.2.2";
+  version = "2.2.3";
   pyproject = true;
-
-  disable = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "corner.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MYos01YCSUwivymSE2hbjV7eKXfaMqG89koD2CWZjcQ=";
+    tag = "v${version}";
+    hash = "sha256-gK2yylteI3VLVJ0p7NB7bR7cirCo2BvFKnYIH3kfyh4=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [ matplotlib ];
@@ -70,6 +67,7 @@ buildPythonPackage rec {
 
   # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
   disabledTests = [
+    "test_1d_fig_argument"
     "test_arviz"
     "test_basic"
     "test_bins"

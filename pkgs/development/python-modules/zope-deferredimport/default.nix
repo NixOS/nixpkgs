@@ -2,14 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   zope-proxy,
-  zope-testrunner,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-deferredimport";
   version = "5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "zope.deferredimport";
@@ -17,19 +18,22 @@ buildPythonPackage rec {
     hash = "sha256-Orvw4YwfF2WRTs0dQbVJ5NBFshso5AZfsMHeCtc2ssM=";
   };
 
-  propagatedBuildInputs = [ zope-proxy ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ zope-testrunner ];
+  dependencies = [ zope-proxy ];
 
-  checkPhase = ''
-    zope-testrunner --test-path=src []
-  '';
+  pythonImportsCheck = [ "zope.deferredimport" ];
 
-  doCheck = false;
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  unittestFlagsArray = [ "src/zope/deferredimport" ];
+
+  pythonNamespaces = [ "zope" ];
+
+  meta = {
     description = "Allows you to perform imports names that will only be resolved when used in the code";
     homepage = "https://github.com/zopefoundation/zope.deferredimport";
-    license = licenses.zpl21;
+    changelog = "https://github.com/zopefoundation/zope.deferredimport/blob/${version}/CHANGES.rst";
+    license = lib.licenses.zpl21;
   };
 }

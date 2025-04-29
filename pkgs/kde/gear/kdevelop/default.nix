@@ -39,7 +39,7 @@ mkKdeDerivation {
   ];
 
   extraCmakeFlags = [
-    "-DCLANG_BUILTIN_DIR=${libclang.lib}/lib/clang/${lib.versions.major libclang.version}/include"
+    "-DCLANG_BUILTIN_DIR=${lib.getLib libclang}/lib/clang/${lib.versions.major libclang.version}/include"
     "-DAPR_CONFIG_PATH=${apr.dev}/bin"
     "-DAPU_CONFIG_PATH=${aprutil.dev}/bin"
   ];

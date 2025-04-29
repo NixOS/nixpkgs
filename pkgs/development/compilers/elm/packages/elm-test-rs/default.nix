@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mpizenberg";
     repo = "elm-test-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l3RV+j3wAQ88QGNXLILp7YiUpdk7bkN25Y723pDZw48=";
   };
 
@@ -28,12 +28,9 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pubgrub-dependency-provider-elm-0.1.0" = "sha256-00J5XZfmuB4/fgB06aaXrRjdmOpOsSwA3dC3Li1m2Cc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-F3/v4zYGZRv1PRVl/Tas+e0pc/dTM6ina+/c63KVuZY=";
+
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
 

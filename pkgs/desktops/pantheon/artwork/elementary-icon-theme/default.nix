@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, hicolor-icon-theme
-, gtk3
-, xcursorgen
-, librsvg
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  hicolor-icon-theme,
+  gtk3,
+  xcursorgen,
+  librsvg,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -54,6 +55,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/elementary/icons";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

@@ -1,16 +1,18 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "containers-tmpfs";
-  meta = {
-    maintainers = with lib.maintainers; [ patryk27 ];
-  };
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "containers-tmpfs";
+    meta = {
+      maintainers = with lib.maintainers; [ patryk27 ];
+    };
 
-  nodes.machine =
-    { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      virtualisation.writableStore = true;
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [ ../modules/installer/cd-dvd/channel.nix ];
+        virtualisation.writableStore = true;
 
-      containers.tmpfs =
-        {
+        containers.tmpfs = {
           autoStart = true;
           tmpfs = [
             # Mount var as a tmpfs
@@ -25,10 +27,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           config = { };
         };
 
-      virtualisation.additionalPaths = [ pkgs.stdenv ];
-    };
+        virtualisation.additionalPaths = [ pkgs.stdenv ];
+      };
 
-  testScript = ''
+    testScript = ''
       machine.wait_for_unit("default.target")
       assert "tmpfs" in machine.succeed("nixos-container list")
 
@@ -87,4 +89,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           )
           machine.fail(tmpfs_cmd("ls -l /var | grep -q test.file"))
     '';
-})
+  }
+)

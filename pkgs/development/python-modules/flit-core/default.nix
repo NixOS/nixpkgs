@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   inherit (flit) src patches;
 
-  sourceRoot = "${src.name}/flit_core";
+  postPatch = "cd flit_core";
 
   # Tests are run in the "flit" package.
   doCheck = false;
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/flit";
     changelog = "https://github.com/pypa/flit/blob/${src.rev}/doc/history.rst";
     license = licenses.bsd3;
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
   };
 }

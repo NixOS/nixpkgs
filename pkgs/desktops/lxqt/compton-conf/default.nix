@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libconfig
-, lxqt-build-tools
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libconfig,
+  lxqt-build-tools,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtx11extras,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,6 @@ stdenv.mkDerivation rec {
     mainProgram = "compton-conf";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

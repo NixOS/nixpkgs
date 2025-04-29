@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchurl
-, fetchgit
-, ffmpeg
-, libGL
-, libX11
-, libcap
-, libdrm
-, libinput
-, libpng
-, libxcb
-, libxkbcommon
-, mesa
-, meson
-, ninja
-, pandoc
-, pixman
-, pkg-config
-, unzip
-, wayland
-, wayland-protocols
-, wayland-scanner
-, xcbutilerrors
-, xcbutilimage
-, xcbutilwm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchurl,
+  fetchgit,
+  ffmpeg,
+  libGL,
+  libX11,
+  libcap,
+  libdrm,
+  libinput,
+  libpng,
+  libxcb,
+  libxkbcommon,
+  libgbm,
+  meson,
+  ninja,
+  pandoc,
+  pixman,
+  pkg-config,
+  unzip,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  xcbutilerrors,
+  xcbutilimage,
+  xcbutilwm,
 }:
 
 let
@@ -72,7 +73,12 @@ stdenv.mkDerivation {
 
   src = allSources.cardboard;
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -93,7 +99,7 @@ stdenv.mkDerivation {
     libpng
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     wayland-protocols
@@ -134,7 +140,7 @@ stdenv.mkDerivation {
     description = "Scrollable, tiling Wayland compositor inspired on PaperWM";
     license = lib.licenses.gpl3Only;
     mainProgram = "cardboard";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 }

@@ -6,6 +6,7 @@
   fetchFromGitHub,
   grapheme,
   pytestCheckHook,
+  python,
   pythonOlder,
   setuptools,
 }:
@@ -20,9 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rsalmei";
     repo = "alive-progress";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yJhl0QrMHET9ISDc/D5AEQ7dTJkmcV2SWqy/xmG18uY=";
   };
+
+  postInstall = ''
+    mkdir -p $out/share/doc/python${python.pythonVersion}-$pname-$version/
+    mv $out/LICENSE $out/share/doc/python${python.pythonVersion}-$pname-$version/
+  '';
 
   nativeBuildInputs = [ setuptools ];
 

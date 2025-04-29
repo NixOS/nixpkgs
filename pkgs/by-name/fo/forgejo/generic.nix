@@ -1,29 +1,31 @@
-{ lts ? false
-, version
-, rev ? "refs/tags/v${version}"
-, hash
-, npmDepsHash
-, vendorHash
-, nixUpdateExtraArgs ? [ ]
+{
+  lts ? false,
+  version,
+  rev ? "refs/tags/v${version}",
+  hash,
+  npmDepsHash,
+  vendorHash,
+  nixUpdateExtraArgs ? [ ],
 }:
 
-{ bash
-, brotli
-, buildGoModule
-, forgejo
-, git
-, gzip
-, lib
-, makeWrapper
-, nix-update-script
-, nixosTests
-, openssh
-, sqliteSupport ? true
-, xorg
-, runCommand
-, stdenv
-, fetchFromGitea
-, buildNpmPackage
+{
+  bash,
+  brotli,
+  buildGoModule,
+  forgejo,
+  git,
+  gzip,
+  lib,
+  makeWrapper,
+  nix-update-script,
+  nixosTests,
+  openssh,
+  sqliteSupport ? true,
+  xorg,
+  runCommand,
+  stdenv,
+  fetchFromGitea,
+  buildNpmPackage,
 }:
 
 let
@@ -38,9 +40,9 @@ let
     pname = "forgejo-frontend";
     inherit src version npmDepsHash;
 
-    patches = [
-      ./package-json-npm-build-frontend.patch
-    ];
+    buildPhase = ''
+      ./node_modules/.bin/webpack
+    '';
 
     # override npmInstallHook
     installPhase = ''
@@ -56,11 +58,17 @@ buildGoModule rec {
     version
     src
     vendorHash
-  ;
+    ;
 
-  subPackages = [ "." "contrib/environment-to-ini" ];
+  subPackages = [
+    "."
+    "contrib/environment-to-ini"
+  ];
 
-  outputs = [ "out" "data" ];
+  outputs = [
+    "out"
+    "data"
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -79,7 +87,10 @@ buildGoModule rec {
     substituteInPlace modules/setting/server.go --subst-var data
   '';
 
-  tags = lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [
+    "sqlite"
+    "sqlite_unlock_notify"
+  ];
 
   ldflags = [
     "-s"
@@ -108,15 +119,18 @@ buildGoModule rec {
   checkFlags =
     let
       skippedTests = [
-        "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
-        "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
+        "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  preInstall = ''
+    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/gitea"
+  '';
 
   postInstall = ''
     mkdir $data
@@ -124,40 +138,68 @@ buildGoModule rec {
     mkdir -p $out
     cp -R ./options/locale $out/locale
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   # $data is not available in goModules.drv
-  overrideModAttrs = (_: {
-    postPatch = null;
-  });
+  overrideModAttrs = (
+    _: {
+      postPatch = null;
+    }
+  );
 
   passthru = {
     # allow nix-update to handle npmDepsHash
     inherit (frontend) npmDeps;
 
-    data-compressed = runCommand "forgejo-data-compressed" {
-      nativeBuildInputs = [ brotli xorg.lndir ];
-    } ''
-      mkdir $out
-      lndir ${forgejo.data}/ $out/
+    data-compressed =
+      runCommand "forgejo-data-compressed"
+        {
+          nativeBuildInputs = [
+            brotli
+            xorg.lndir
+          ];
+        }
+        ''
+          mkdir $out
+          lndir ${forgejo.data}/ $out/
 
-      # Create static gzip and brotli files
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
-        -exec gzip --best --keep --force {} ';' \
-        -exec brotli --best --keep --no-copy-stat {} ';'
-    '';
+          # Create static gzip and brotli files
+          find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
+            -exec gzip --best --keep --force {} ';' \
+            -exec brotli --best --keep --no-copy-stat {} ';'
+        '';
 
     tests = if lts then nixosTests.forgejo-lts else nixosTests.forgejo;
-    updateScript = nix-update-script { extraArgs = nixUpdateExtraArgs; };
+
+    updateScript = nix-update-script {
+      extraArgs = nixUpdateExtraArgs ++ [
+        "--version-regex"
+        "v(${lib.versions.major version}\\.[0-9.]+)"
+      ];
+    };
   };
 
   meta = {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
-    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
-    license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens marie ];
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      emilylange
+      urandom
+      bendlas
+      adamcstephens
+      marie
+      pyrox0
+    ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gitea";
   };

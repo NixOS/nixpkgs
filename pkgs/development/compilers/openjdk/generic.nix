@@ -7,6 +7,7 @@
   fetchurl,
   fetchpatch,
 
+  buildPackages,
   pkg-config,
   autoconf,
   lndir,
@@ -77,11 +78,11 @@
   temurin-bin-23,
   jdk-bootstrap ?
     {
-      "8" = temurin-bin-8;
-      "11" = temurin-bin-11;
-      "17" = temurin-bin-17;
-      "21" = temurin-bin-21;
-      "23" = temurin-bin-23;
+      "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
+      "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
+      "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
+      "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
+      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
     }
     .${featureVersion},
 }:
@@ -99,12 +100,8 @@ let
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
-  # TODO: Merge these `lib.removePrefix` calls once update scripts have
-  # been run.
-  version = lib.removePrefix tagPrefix (lib.removePrefix "refs/tags/" source.src.rev);
-  versionSplit =
-    # TODO: Remove `-ga` logic once update scripts have been run.
-    builtins.match (if atLeast11 then "(.+)[-+](.+)" else "(.+)-b?(.+)") version;
+  version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
+  versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
   versionBuild = lib.elemAt versionSplit 1;
 
   # The JRE 8 libraries are in directories that depend on the CPU.
@@ -221,15 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
       })
     ]
-    ++ lib.optionals (featureVersion == "17") [
-      # Backport fixes for musl 1.2.4 which are already applied in jdk21+
-      # Fetching patch from chimera because they already went through the effort of rebasing it onto jdk17
-      (fetchurl {
-        name = "lfs64.patch";
-        url = "https://raw.githubusercontent.com/chimera-linux/cports/4614075d19e9c9636f3f7e476687247f63330a35/contrib/openjdk17/patches/lfs64.patch";
-        hash = "sha256-t2mRbdEiumBAbIAC0zsJNwCn59WYWHsnRtuOSL6bWB4=";
-      })
-    ]
     ++ lib.optionals (!headless && enableGtk) [
       (
         if atLeast17 then
@@ -241,6 +229,10 @@ stdenv.mkDerivation (finalAttrs: {
       )
     ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs =
     [
       pkg-config
@@ -250,9 +242,15 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!atLeast11) [
       lndir
+      # Certificates generated using perl in `installPhase`
+      perl
     ]
     ++ [
       unzip
+      zip
+      which
+      # Probably for BUILD_CC but not sure, not in closure.
+      zlib
     ]
     ++ lib.optionals atLeast21 [
       ensureNewerSourcesForZipFilesHook
@@ -262,11 +260,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # TODO: Many of these should likely be in `nativeBuildInputs`.
       cpio
+      # `-lmagic` in NIX_LDFLAGS
       file
-      which
-      zip
-      perl
-      zlib
       cups
       freetype
     ]
@@ -305,7 +300,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXcursor
       libXrandr
       fontconfig
-      jdk-bootstrap'
     ]
     ++ lib.optionals (!headless && enableGtk) [
       (if atLeast11 then gtk3 else gtk2)
@@ -330,6 +324,14 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [
       "--with-boot-jdk=${jdk-bootstrap'.home}"
+      # https://github.com/openjdk/jdk/blob/471f112bca715d04304cbe35c6ed63df8c7b7fee/make/autoconf/util_paths.m4#L315
+      # Ignoring value of READELF from the environment. Use command line variables instead.
+      "READELF=${stdenv.cc.targetPrefix}readelf"
+      "AR=${stdenv.cc.targetPrefix}ar"
+      "STRIP=${stdenv.cc.targetPrefix}strip"
+      "NM=${stdenv.cc.targetPrefix}nm"
+      "OBJDUMP=${stdenv.cc.targetPrefix}objdump"
+      "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
     ]
     ++ (
       if atLeast23 then
@@ -440,6 +442,11 @@ stdenv.mkDerivation (finalAttrs: {
               "-fno-delete-null-pointer-checks"
               "-std=gnu++98"
               "-Wno-error"
+            ]
+            ++ [
+              # error by default in GCC 14
+              "-Wno-error=int-conversion"
+              "-Wno-error=incompatible-pointer-types"
             ]
           );
 
@@ -640,6 +647,7 @@ stdenv.mkDerivation (finalAttrs: {
       edwtjo
       infinidoge
     ];
+    teams = [ lib.teams.java ];
     mainProgram = "java";
     platforms =
       [

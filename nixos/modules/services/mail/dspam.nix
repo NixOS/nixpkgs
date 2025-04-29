@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.dspam;
@@ -24,7 +29,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -78,70 +84,71 @@ in {
 
   };
 
-
   ###### implementation
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      users.users = lib.optionalAttrs (cfg.user == "dspam") {
-        dspam = {
-          group = cfg.group;
-          uid = config.ids.uids.dspam;
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        users.users = lib.optionalAttrs (cfg.user == "dspam") {
+          dspam = {
+            group = cfg.group;
+            uid = config.ids.uids.dspam;
+          };
         };
-      };
 
-      users.groups = lib.optionalAttrs (cfg.group == "dspam") {
-        dspam.gid = config.ids.gids.dspam;
-      };
-
-      environment.systemPackages = [ dspam ];
-
-      environment.etc."dspam/dspam.conf".source = cfgfile;
-
-      systemd.services.dspam = {
-        description = "dspam spam filtering daemon";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "postgresql.service" ];
-        restartTriggers = [ cfgfile ];
-
-        serviceConfig = {
-          ExecStart = "${dspam}/bin/dspam --daemon --nofork";
-          User = cfg.user;
-          Group = cfg.group;
-          RuntimeDirectory = lib.optional (cfg.domainSocket == defaultSock) "dspam";
-          RuntimeDirectoryMode = lib.optional (cfg.domainSocket == defaultSock) "0750";
-          StateDirectory = "dspam";
-          StateDirectoryMode = "0750";
-          LogsDirectory = "dspam";
-          LogsDirectoryMode = "0750";
-          # DSPAM segfaults on just about every error
-          Restart = "on-abort";
-          RestartSec = "1s";
+        users.groups = lib.optionalAttrs (cfg.group == "dspam") {
+          dspam.gid = config.ids.gids.dspam;
         };
-      };
-    }
 
-    (lib.mkIf (cfg.maintenanceInterval != null) {
-      systemd.timers.dspam-maintenance = {
-        description = "Timer for dspam maintenance script";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = cfg.maintenanceInterval;
-          Unit = "dspam-maintenance.service";
+        environment.systemPackages = [ dspam ];
+
+        environment.etc."dspam/dspam.conf".source = cfgfile;
+
+        systemd.services.dspam = {
+          description = "dspam spam filtering daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "postgresql.service" ];
+          restartTriggers = [ cfgfile ];
+
+          serviceConfig = {
+            ExecStart = "${dspam}/bin/dspam --daemon --nofork";
+            User = cfg.user;
+            Group = cfg.group;
+            RuntimeDirectory = lib.optional (cfg.domainSocket == defaultSock) "dspam";
+            RuntimeDirectoryMode = lib.optional (cfg.domainSocket == defaultSock) "0750";
+            StateDirectory = "dspam";
+            StateDirectoryMode = "0750";
+            LogsDirectory = "dspam";
+            LogsDirectoryMode = "0750";
+            # DSPAM segfaults on just about every error
+            Restart = "on-abort";
+            RestartSec = "1s";
+          };
         };
-      };
+      }
 
-      systemd.services.dspam-maintenance = {
-        description = "dspam maintenance script";
-        restartTriggers = [ cfgfile ];
-
-        serviceConfig = {
-          ExecStart = "${dspam}/bin/dspam_maintenance --verbose";
-          Type = "oneshot";
-          User = cfg.user;
-          Group = cfg.group;
+      (lib.mkIf (cfg.maintenanceInterval != null) {
+        systemd.timers.dspam-maintenance = {
+          description = "Timer for dspam maintenance script";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = cfg.maintenanceInterval;
+            Unit = "dspam-maintenance.service";
+          };
         };
-      };
-    })
-  ]);
+
+        systemd.services.dspam-maintenance = {
+          description = "dspam maintenance script";
+          restartTriggers = [ cfgfile ];
+
+          serviceConfig = {
+            ExecStart = "${dspam}/bin/dspam_maintenance --verbose";
+            Type = "oneshot";
+            User = cfg.user;
+            Group = cfg.group;
+          };
+        };
+      })
+    ]
+  );
 }

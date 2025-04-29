@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, fontconfig
-, libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, cmake
-, libxkbcommon
-, wayland
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  fontconfig,
+  libGL,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  cmake,
+  libxkbcommon,
+  wayland,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +26,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
   };
 
-  cargoHash = "sha256-po/pEMZEtySZnz7l2FI7Wqbmp2CiWBijchKGkqlIMPU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8uD4zc33CeImvMW0mOTqws4S2xXQ3Ff9nPxocof0Xm4=";
 
   nativeBuildInputs = [
     cmake

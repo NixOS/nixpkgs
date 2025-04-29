@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
         from some other representations to MARST representation.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

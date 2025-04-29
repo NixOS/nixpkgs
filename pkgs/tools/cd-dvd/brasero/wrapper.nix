@@ -1,8 +1,16 @@
-{ lib, symlinkJoin, brasero-unwrapped, cdrtools, libdvdcss, makeWrapper }:
+{
+  lib,
+  symlinkJoin,
+  brasero-unwrapped,
+  cdrtools,
+  libdvdcss,
+  makeWrapper,
+}:
 
 let
   binPath = lib.makeBinPath [ cdrtools ];
-in symlinkJoin {
+in
+symlinkJoin {
   name = "brasero-${brasero-unwrapped.version}";
 
   paths = [ brasero-unwrapped ];

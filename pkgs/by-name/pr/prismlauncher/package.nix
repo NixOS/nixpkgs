@@ -78,7 +78,7 @@ symlinkJoin {
     let
       runtimeLibs =
         [
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
           ## native versions
           glfw3-minecraft
           openal

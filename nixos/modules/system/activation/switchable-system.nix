@@ -40,30 +40,7 @@ in
     };
   };
 
-  options.system.apply.enable = lib.mkOption {
-    type = lib.types.bool;
-    default = config.system.switch.enable;
-    internal = true;
-    description = ''
-      Whether to include the `bin/apply` script.
-
-      Disabling puts `nixos-rebuild` in a legacy mode that won't be maintained
-      and removes cheap and useful functionality. It's also slower over ssh.
-      This should only be used for testing the `nixos-rebuild` command, to
-      pretend that the configuration is an old NixOS.
-    '';
-  };
-
   config = lib.mkMerge [
-    (lib.mkIf config.system.apply.enable {
-      system.activatableSystemBuilderCommands = ''
-        mkdir -p $out/bin
-        substitute ${./apply/apply.sh} $out/bin/apply \
-          --subst-var-by bash ${lib.getExe pkgs.bash} \
-          --subst-var-by toplevel ''${!toplevelVar}
-        chmod +x $out/bin/apply
-      '';
-    })
     (lib.mkIf (config.system.switch.enable && !config.system.switch.enableNg) {
       warnings = [
         ''
@@ -77,13 +54,14 @@ in
       ];
 
       system.activatableSystemBuilderCommands = ''
-        mkdir -p $out/bin
+        mkdir $out/bin
         substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \
           --subst-var out \
           --subst-var-by toplevel ''${!toplevelVar} \
           --subst-var-by coreutils "${pkgs.coreutils}" \
           --subst-var-by distroId ${lib.escapeShellArg config.system.nixos.distroId} \
           --subst-var-by installBootLoader ${lib.escapeShellArg config.system.build.installBootLoader} \
+          --subst-var-by preSwitchCheck ${lib.escapeShellArg config.system.preSwitchChecksScript} \
           --subst-var-by localeArchive "${config.i18n.glibcLocales}/lib/locale/locale-archive" \
           --subst-var-by perl "${perlWrapped}" \
           --subst-var-by shell "${pkgs.bash}/bin/sh" \
@@ -109,13 +87,14 @@ in
         (
           source ${pkgs.buildPackages.makeWrapper}/nix-support/setup-hook
 
-          mkdir -p $out/bin
+          mkdir $out/bin
           ln -sf ${lib.getExe pkgs.switch-to-configuration-ng} $out/bin/switch-to-configuration
           wrapProgram $out/bin/switch-to-configuration \
             --set OUT $out \
             --set TOPLEVEL ''${!toplevelVar} \
             --set DISTRO_ID ${lib.escapeShellArg config.system.nixos.distroId} \
             --set INSTALL_BOOTLOADER ${lib.escapeShellArg config.system.build.installBootLoader} \
+            --set PRE_SWITCH_CHECK ${lib.escapeShellArg config.system.preSwitchChecksScript} \
             --set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive \
             --set SYSTEMD ${config.systemd.package}
         )

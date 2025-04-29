@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "kubefetch";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "jkulzer";
     repo = "kubefetch";
     rev = "${version}";
-    hash = "sha256-ksnqlfm++Np5I7ZUXvVPgm3T2hHM6x9sAWdmK0Whn5k=";
+    hash = "sha256-1NbbQ9f81DbfvpGayhMYdOTOZrDg2hdZi+qUOr2mntY=";
   };
 
   vendorHash = "sha256-qsncOsCxepySJI+rJnzbIGxSWlxMzqShtzcEoJD2UPw=";

@@ -1,54 +1,83 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
   hatch-jupyter-builder,
   hatchling,
   async-lru,
   httpx,
-  packaging,
-  tornado,
+  importlib-metadata,
   ipykernel,
+  jinja2,
   jupyter-core,
   jupyter-lsp,
-  jupyterlab-server,
   jupyter-server,
+  jupyterlab-server,
   notebook-shim,
-  jinja2,
+  packaging,
+  setuptools,
   tomli,
+  tornado,
+  traitlets,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.2.5";
+  version = "4.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rn86G4y4i09VAJznn6fAb5nXDNY2Ae5KqRgV0FT0b3U=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab";
+    tag = "v${version}";
+    hash = "sha256-j1K5aBLLGSWER3S0Vojrwdd+9T9vYbp1+XgxYD2NORY=";
   };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  preConfigure = ''
+    pushd jupyterlab/staging
+  '';
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src;
+    sourceRoot = "${src.name}/jupyterlab/staging";
+    hash = "sha256-rko09rqT7UQUq/Ddi8lo3V02eJQEEnpjH5RaLSgqj/o=";
+  };
+
+  preBuild = ''
+    popd
+  '';
 
   build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  dependencies = [
-    async-lru
-    httpx
-    packaging
-    tornado
-    ipykernel
-    jupyter-core
-    jupyter-lsp
-    jupyterlab-server
-    jupyter-server
-    notebook-shim
-    jinja2
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies =
+    [
+      async-lru
+      httpx
+      ipykernel
+      jinja2
+      jupyter-core
+      jupyter-lsp
+      jupyter-server
+      jupyterlab-server
+      notebook-shim
+      packaging
+      setuptools
+      tornado
+      traitlets
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   makeWrapperArgs = [
     "--set"
@@ -66,7 +95,7 @@ buildPythonPackage rec {
     description = "Jupyter lab environment notebook server extension";
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";
   };
 }

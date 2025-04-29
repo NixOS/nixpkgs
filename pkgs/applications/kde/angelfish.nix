@@ -1,31 +1,29 @@
-{ lib
-, mkDerivation
-, cargo
-, cmake
-, corrosion
-, extra-cmake-modules
-, fetchpatch2
-, futuresql
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kirigami-addons
-, kirigami2
-, knotifications
-, kpurpose
-, kwindowsystem
-, qcoro
-, qtfeedback
-, qtquickcontrols2
-, qqc2-desktop-style
-, qtwebengine
-, rustPlatform
-, rustc
-, srcs
-
-# provided as callPackage input to enable easier overrides through overlays
-, cargoSha256 ? "sha256-PSrTo7nGgH0KxA82RlBEwtOu80WMCBeaCxHj3n7SgEE="
+{
+  lib,
+  mkDerivation,
+  cargo,
+  cmake,
+  corrosion,
+  extra-cmake-modules,
+  fetchpatch2,
+  futuresql,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  knotifications,
+  kpurpose,
+  kwindowsystem,
+  qcoro,
+  qtfeedback,
+  qtquickcontrols2,
+  qqc2-desktop-style,
+  qtwebengine,
+  rustPlatform,
+  rustc,
+  srcs,
 }:
 
 mkDerivation rec {
@@ -39,11 +37,11 @@ mkDerivation rec {
     })
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     # include version in the name so we invalidate the FOD
     name = "${pname}-${srcs.angelfish.version}";
     inherit (srcs.angelfish) src;
-    sha256 = cargoSha256;
+    hash = "sha256-M3CtP7eWqOxMvnak6K3QvB/diu4jAfMmlsa6ySFIHCU=";
   };
 
   nativeBuildInputs = [

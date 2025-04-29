@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.41";
+  version = "0.42";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ms264556";
     repo = "aioruckus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-acu0EWP/k0qyylPtM8IBxhJhhQhXpbG2NheYpD8RTG8=";
+    tag = "v${version}";
+    hash = "sha256-UfyB3qGEDOQ39YA1AueCBXeoJhGH+XDCLZSFA+kpT2k=";
   };
 
   build-system = [ setuptools ];
@@ -50,6 +50,8 @@ buildPythonPackage rec {
     "test_current_active_clients"
     "test_mesh_info"
     "test_system_info"
+    # Network access to Ruckus Cloud API
+    "test_r1_connect_no_webserver_error"
   ];
 
   meta = with lib; {

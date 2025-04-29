@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, rustPlatform
-, fetchurl
-, lib
+{
+  fetchFromGitHub,
+  rustPlatform,
+  fetchurl,
+  lib,
 }:
 
-rustPlatform.buildRustPackage rec{
+rustPlatform.buildRustPackage rec {
   pname = "moproxy";
   version = "0.5.1";
 
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec{
     hash = "sha256-Rqno+cg44IWBJbKWUP6BnxzwCjuNhFo9nBF6u2jlyA4=";
   };
 
-  cargoHash = "sha256-EunlvI7I6d93wb3hxgxsyAXkzxRlDu0fq9qqjnbzzWg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SJHsXck2f9xJZ4GmOkISjdfqxlF4LCAH9WYjqSqFFkE=";
 
   preBuild =
     let
@@ -26,7 +28,9 @@ rustPlatform.buildRustPackage rec{
     in
     ''
       # build script try to download from network
-      sed -i '15s/.*/let zip_path = PathBuf::from("${lib.escape ["/"]  (toString webBundle)}");/' build.rs
+      sed -i '15s/.*/let zip_path = PathBuf::from("${
+        lib.escape [ "/" ] (toString webBundle)
+      }");/' build.rs
     '';
 
   meta = with lib; {

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, substituteAll
-, file-roller
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  replaceVars,
+  file-roller,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./exec-path.patch;
+    (replaceVars ./exec-path.patch {
       file_roller = file-roller;
     })
   ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Contractor extension for File Roller";
     homepage = "https://github.com/elementary/file-roller-contract";
     license = licenses.gpl3Plus;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
   };
 }

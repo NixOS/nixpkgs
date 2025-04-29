@@ -1,10 +1,11 @@
-{ mkDerivation
-, extra-cmake-modules
-, flatpak
-, kcmutils
-, kconfig
-, kdeclarative
-, kitemmodels
+{
+  mkDerivation,
+  extra-cmake-modules,
+  flatpak,
+  kcmutils,
+  kconfig,
+  kdeclarative,
+  kitemmodels,
 }:
 
 mkDerivation {

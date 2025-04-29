@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.services.networkd-dispatcher;
 
-in {
+in
+{
 
   options = {
     services.networkd-dispatcher = {
@@ -18,7 +24,7 @@ in {
       '';
 
       rules = mkOption {
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           { "restart-tor" = {
               onState = ["routable" "off"];
@@ -38,28 +44,48 @@ in {
           [upstream instructions](https://gitlab.com/craftyguy/networkd-dispatcher)
           for an introduction and example scripts.
         '';
-        type = types.attrsOf (types.submodule {
-          options = {
-            onState = mkOption {
-              type = types.listOf (types.enum [
-                "routable" "dormant" "no-carrier" "off" "carrier" "degraded"
-                "configuring" "configured"
-              ]);
-              default = null;
-              description = ''
-                List of names of the systemd-networkd operational states which
-                should trigger the script. See <https://www.freedesktop.org/software/systemd/man/networkctl.html>
-                for a description of the specific state type.
-              '';
+        type = types.attrsOf (
+          types.submodule {
+            options = {
+              onState = mkOption {
+                type = types.listOf (
+                  types.enum [
+                    "routable"
+                    "dormant"
+                    "no-carrier"
+                    "off"
+                    "carrier"
+                    "degraded"
+                    "configuring"
+                    "configured"
+                    "enslaved"
+                  ]
+                );
+                default = null;
+                description = ''
+                  List of names of the systemd-networkd operational states which
+                  should trigger the script. See {manpage}`networkctl(1)`
+                  for a description of the specific state type.
+                '';
+              };
+              script = mkOption {
+                type = types.lines;
+                description = ''
+                  Shell commands executed on specified operational states.
+                '';
+              };
             };
-            script = mkOption {
-              type = types.lines;
-              description = ''
-                Shell commands executed on specified operational states.
-              '';
-            };
-          };
-        });
+          }
+        );
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          Extra arguments to pass to the networkd-dispatcher command.
+        '';
+        apply = escapeShellArgs;
       };
 
     };
@@ -71,28 +97,33 @@ in {
       packages = [ pkgs.networkd-dispatcher ];
       services.networkd-dispatcher = {
         wantedBy = [ "multi-user.target" ];
-        # Override existing ExecStart definition
-        serviceConfig.ExecStart = let
-          scriptDir = pkgs.symlinkJoin {
-            name = "networkd-dispatcher-script-dir";
-            paths = lib.mapAttrsToList (name: cfg:
-              (map(state:
-                pkgs.writeTextFile {
-                  inherit name;
-                  text = cfg.script;
-                  destination = "/${state}.d/${name}";
-                  executable = true;
-                }
-              ) cfg.onState)
-            ) cfg.rules;
-          };
-        in [
-          ""
-          "${pkgs.networkd-dispatcher}/bin/networkd-dispatcher -v --script-dir ${scriptDir} $networkd_dispatcher_args"
-        ];
+        environment.networkd_dispatcher_args = cfg.extraArgs;
       };
     };
 
+    services.networkd-dispatcher.extraArgs =
+      let
+        scriptDir = pkgs.symlinkJoin {
+          name = "networkd-dispatcher-script-dir";
+          paths = lib.mapAttrsToList (
+            name: cfg:
+            (map (
+              state:
+              pkgs.writeTextFile {
+                inherit name;
+                text = cfg.script;
+                destination = "/${state}.d/${name}";
+                executable = true;
+              }
+            ) cfg.onState)
+          ) cfg.rules;
+        };
+      in
+      [
+        "--verbose"
+        "--script-dir"
+        "${scriptDir}"
+      ];
+
   };
 }
-

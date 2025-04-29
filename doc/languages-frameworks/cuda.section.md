@@ -12,11 +12,13 @@ compatible are available as well. For example, there can be a
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
 ```nix
-{ config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, ...
-}: {}
+{
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  ...
+}:
+{ }
 ```
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
@@ -32,11 +34,15 @@ package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
 {
-  mypkg = let
-    cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
-      cudnn = prev.cudnn_8_3;
-    });
-  in callPackage { inherit cudaPackages; };
+  mypkg =
+    let
+      cudaPackages = cudaPackages_11_5.overrideScope (
+        final: prev: {
+          cudnn = prev.cudnn_8_3;
+        }
+      );
+    in
+    callPackage { inherit cudaPackages; };
 }
 ```
 

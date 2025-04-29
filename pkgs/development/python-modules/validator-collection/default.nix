@@ -34,7 +34,7 @@
   pyparsing,
   pytest,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytz,
   readme-renderer,
   requests,
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "insightindustry";
     repo = "validator-collection";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-CDPfIkZZRpl1rAzNpLKJfaBEGWUl71coic2jOHIgi6o=";
   };
 
@@ -106,7 +106,7 @@ buildPythonPackage rec {
     pyparsing
     pytest
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytz
     readme-renderer
     requests

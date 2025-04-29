@@ -4,6 +4,7 @@
   fetchFromGitHub,
   beautifulsoup4,
   extruct,
+  isodate,
   language-tags,
   regex,
   requests,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "15.2.1";
+  version = "15.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,19 +25,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2rwy7tfTKaUmPJv59WMVGAOUP+vGWquJbF/3BbS3kkA=";
+    tag = version;
+    hash = "sha256-s/ocJi7NidebFkd724p/k7njOzELsdh7n9nQXaeVXV8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     extruct
+    isodate
     language-tags
     regex
-    requests
   ];
+
+  optional-dependencies = {
+    online = [ requests ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, exempi
-, lcms2
-, libexif
-, libjpeg
-, librsvg
-, libxml2
-, libpeas
-, shared-mime-info
-, gtk3
-, mate-desktop
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  exempi,
+  lcms2,
+  libexif,
+  libjpeg,
+  librsvg,
+  libxml2,
+  libpeas,
+  shared-mime-info,
+  gtk3,
+  mate-desktop,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

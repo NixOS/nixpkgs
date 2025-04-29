@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, iconnamingutils
-, librsvg
-, gtk3
-, hicolor-icon-theme
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  iconnamingutils,
+  librsvg,
+  gtk3,
+  hicolor-icon-theme,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -1,15 +1,16 @@
-{ lib
-, buildGoModule
-, copyDesktopItems
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libxml2
-, vte-gtk4
+{
+  lib,
+  buildGoModule,
+  copyDesktopItems,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libxml2,
+  vte-gtk4,
 }:
 
 buildGoModule rec {
@@ -40,7 +41,10 @@ buildGoModule rec {
     vte-gtk4
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   enableParallelBuilding = true;
 

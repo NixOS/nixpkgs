@@ -1,8 +1,22 @@
-{ config, pkgs, lib, utils, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.docuum;
-  inherit (lib) mkIf mkEnableOption mkOption getExe types optionals concatMap;
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    getExe
+    types
+    optionals
+    concatMap
+    ;
 in
 {
   options.services.docuum = {
@@ -25,7 +39,7 @@ in
     keep = mkOption {
       description = "Prevents deletion of images for which repository:tag matches the specified regex.";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "^my-image" ];
     };
 
@@ -56,12 +70,22 @@ in
         DynamicUser = true;
         StateDirectory = "docuum";
         SupplementaryGroups = [ "docker" ];
-        ExecStart = utils.escapeSystemdExecArgs ([
-          (getExe pkgs.docuum)
-          "--threshold" cfg.threshold
-          "--deletion-chunk-size" cfg.deletionChunkSize
-        ] ++ (concatMap (keep: [ "--keep" keep ]) cfg.keep)
-          ++ (optionals (cfg.minAge != null) [ "--min-age" cfg.minAge ])
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (getExe pkgs.docuum)
+            "--threshold"
+            cfg.threshold
+            "--deletion-chunk-size"
+            cfg.deletionChunkSize
+          ]
+          ++ (concatMap (keep: [
+            "--keep"
+            keep
+          ]) cfg.keep)
+          ++ (optionals (cfg.minAge != null) [
+            "--min-age"
+            cfg.minAge
+          ])
         );
       };
     };

@@ -5,14 +5,13 @@
   fetchFromGitHub,
   fetchurl,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
-  postgresql,
+  libpq,
   setuptools,
 
   # propagates
-  backports-zoneinfo,
   typing-extensions,
 
   # psycopg-c
@@ -30,24 +29,24 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
+  postgresql,
   postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.2.3";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "psycopg";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
+    repo = "psycopg";
+    tag = version;
+    hash = "sha256-fCiTu6lKFqY7Yl9KfmhRZQIDg5sEkXkQ95kPfIDSGn8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
-      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (replaceVars ./ctypes.patch {
+      libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
@@ -74,14 +73,13 @@ let
 
     nativeBuildInputs = [
       cython
-      # needed to find pg_config with strictDeps
-      postgresql
+      libpq.pg_config
       setuptools
       tomli
     ];
 
     buildInputs = [
-      postgresql
+      libpq
     ];
 
     # tested in psycopg
@@ -122,10 +120,13 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      "doc"
+    ];
 
   sphinxRoot = "../docs";
 
@@ -142,18 +143,23 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
-  nativeBuildInputs = [
-    furo
-    setuptools
-    shapely
-    sphinx-autodoc-typehints
-    sphinxHook
-  ];
+  nativeBuildInputs =
+    [
+      furo
+      setuptools
+      shapely
+    ]
+    # building the docs fails with the following error when cross compiling
+    #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      sphinx-autodoc-typehints
+      sphinxHook
+    ];
 
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   pythonImportsCheck = [
     "psycopg"
@@ -174,7 +180,7 @@ buildPythonPackage rec {
       pytestCheckHook
       postgresql
     ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
+    ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
     ++ optional-dependencies.c
     ++ optional-dependencies.pool;
 
@@ -188,7 +194,7 @@ buildPythonPackage rec {
     ''
       cd ..
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
     '';
 
@@ -211,8 +217,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o"
-    "cache_dir=$TMPDIR"
+    "-o cache_dir=.cache"
     "-m"
     "'not refcount and not timing and not flakey'"
     # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
@@ -221,7 +226,7 @@ buildPythonPackage rec {
   ];
 
   postCheck = ''
-    cd ${pname}
+    cd psycopg
   '';
 
   passthru = {

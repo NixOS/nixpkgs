@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, jre
-, makeWrapper
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://javacc.github.io/javacc";
     license = licenses.bsd2;
     mainProgram = "javacc";
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
   };
 })

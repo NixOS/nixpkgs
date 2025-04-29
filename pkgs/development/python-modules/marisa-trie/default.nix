@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "marisa_trie";
     inherit version;
-    hash = "sha256-/t/GdJf4qidXdWtc9JN1nyRdMh+3iRTOElttddqom18=";
+    hash = "sha256-OifECOKu/APg8dJbL/KvuFqsNWj2+iripTtXouh84p0=";
   };
 
   build-system = [

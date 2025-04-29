@@ -20,6 +20,7 @@ in
   imports = [
     ../../../modules/virtualisation/amazon-image.nix
     ../../../modules/virtualisation/disk-size-option.nix
+    ../../../modules/image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -29,6 +30,17 @@ in
       to = [
         "virtualisation"
         "diskSize"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "amazonImage"
+        "name"
+      ];
+      to = [
+        "image"
+        "baseName"
       ];
     })
   ];
@@ -44,12 +56,6 @@ in
     [ "nvme_core.io_timeout=${timeout}" ];
 
   options.amazonImage = {
-    name = mkOption {
-      type = types.str;
-      description = "The name of the generated derivation";
-      default = "nixos-amazon-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-    };
-
     contents = mkOption {
       example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -80,6 +86,10 @@ in
   config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
+  config.system.nixos.tags = [ "amazon" ];
+  config.system.build.image = config.system.build.amazonImage;
+  config.image.extension = cfg.format;
+
   config.system.build.amazonImage =
     let
       configFile = pkgs.writeText "configuration.nix" ''
@@ -102,7 +112,8 @@ in
           configFile
           pkgs
           ;
-        inherit (cfg) contents format name;
+        inherit (cfg) contents format;
+        name = config.image.baseName;
 
         includeChannel = true;
 
@@ -118,7 +129,7 @@ in
 
         postVM = ''
            extension=''${rootDiskImage##*.}
-           friendlyName=$out/${cfg.name}
+           friendlyName=$out/${config.image.baseName}
            rootDisk="$friendlyName.root.$extension"
            bootDisk="$friendlyName.boot.$extension"
            mv "$rootDiskImage" "$rootDisk"
@@ -156,7 +167,9 @@ in
           pkgs
           ;
 
-        inherit (cfg) contents format name;
+        inherit (cfg) contents format;
+        inherit (config.image) baseName;
+        name = config.image.baseName;
 
         fsType = "ext4";
         partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
@@ -164,11 +177,6 @@ in
         inherit (config.virtualisation) diskSize;
 
         postVM = ''
-           extension=''${diskImage##*.}
-           friendlyName=$out/${cfg.name}.$extension
-           mv "$diskImage" "$friendlyName"
-           diskImage=$friendlyName
-
            mkdir -p $out/nix-support
            echo "file ${cfg.format} $diskImage" >> $out/nix-support/hydra-build-products
 

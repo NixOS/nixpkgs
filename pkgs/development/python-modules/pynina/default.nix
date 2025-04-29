@@ -4,22 +4,26 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pynina";
-  version = "0.3.3";
-  format = "setuptools";
+  version = "0.3.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "PyNINA";
-    inherit version;
-    hash = "sha256-6HJ78tKl6If/ezwOrGl3VEYO4eMh/6cZq2j2AMBr0I8=";
+    inherit pname version;
+    hash = "sha256-M+0gujriblTDj/qDmBnC4DlKjlZbbStsr7tep5HeNlg=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  pythonRelaxDeps = [ "aiohttp" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

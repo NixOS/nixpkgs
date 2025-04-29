@@ -3,17 +3,18 @@
   mkHyprlandPlugin,
   hyprland,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 mkHyprlandPlugin hyprland {
   pluginName = "hyprfocus";
-  version = "0-unstable-2024-05-30";
+  version = "0-unstable-2025-01-04";
 
   src = fetchFromGitHub {
     owner = "pyt0xic";
     repo = "hyprfocus";
-    rev = "aa7262d3a4564062f97b9cfdad47fd914cfb80f2";
-    hash = "sha256-R1ZgNhQkoS6ZHRRKB+j5vYgRANfYO//sHbrD7moUTx0=";
+    rev = "de6eaf5846b970b697bdf0e20e731b9fbe08654d";
+    hash = "sha256-o8uDSynpHAgpQZMjXyDiyQbxi+QgxY62uZeB08PcL/A=";
   };
 
   installPhase = ''
@@ -25,11 +26,13 @@ mkHyprlandPlugin hyprland {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   meta = {
     homepage = "https://github.com/pyt0xic/hyprfocus";
     description = "Focus animation plugin for Hyprland inspired by Flashfocus";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ donovanglover ];
     platforms = lib.platforms.linux;
+    broken = true; # Doesn't work on Hyprland v0.47.0+
   };
 }

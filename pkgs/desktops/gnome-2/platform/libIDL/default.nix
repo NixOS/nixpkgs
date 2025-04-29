@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, flex, bison, pkg-config, glib, gettext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  pkg-config,
+  glib,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libIDL";
@@ -11,9 +20,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [ glib gettext ];
+  buildInputs = [
+    glib
+    gettext
+  ];
 
-  nativeBuildInputs = [ flex bison pkg-config ];
+  nativeBuildInputs = [
+    flex
+    bison
+    pkg-config
+  ];
 
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # before openembedded removed libIDL

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "atproto-goat";
-  version = "0-unstable-2024-10-29";
+  version = "0-unstable-2025-02-01";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "indigo";
-    rev = "983ce4a481a32a3eb2944c4c76e885d0f6006f83";
-    hash = "sha256-Jo3pI4uRyKh3yV03ijOcg+Uyu75Spmy/VS116MVgleU=";
+    rev = "fd270fbccf0ca858ed2eccdeff246a303c0be045";
+    hash = "sha256-1WK3tMz8WbuIGTHYwD0or+9D0KVezhnv3EDdK11KKp8=";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ buildGoModule rec {
       --replace-fail '"github.com/carlmjohnson/versioninfo"' ""
   '';
 
-  vendorHash = "sha256-T+jtxubVKskrLGTUa4RI24o/WTSFCBk60HhyCFujPOI=";
+  vendorHash = "sha256-pGc29fgJFq8LP7n/pY1cv6ExZl88PAeFqIbFEhB3xXs=";
 
   subPackages = [ "cmd/goat" ];
 

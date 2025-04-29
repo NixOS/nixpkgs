@@ -3,22 +3,27 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
-  version = "0.0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
-    rev = "v${version}";
-    hash = "sha256-f93uT6ELW3T2Xd539EfZCf2LSbxcYnEX+smmLzBAxqc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dQef5TiOV33lnNl7XKl7TlCY0E2sEclehWOmy2uvISY=";
     fetchSubmodules = true;
   };
 
   # no lockfile upstream
   cargoLock.lockFile = ./Cargo.lock;
+
+  preBuild = ''
+    export HOME="$TMPDIR";
+  '';
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -28,6 +33,8 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sus_compiler";
 
+  updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+
   meta = {
     description = "A new Hardware Design Language that keeps you in the driver's seat";
     homepage = "https://github.com/pc2/sus-compiler";
@@ -35,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "sus_compiler";
   };
-}
+})

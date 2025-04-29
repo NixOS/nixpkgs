@@ -17,7 +17,7 @@
   python,
   pytestCheckHook,
   stdenv,
-  substituteAll,
+  replaceVars,
   setuptools,
   torchWithRocm,
   zlib,
@@ -43,28 +43,20 @@ buildPythonPackage {
   patches =
     [
       ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
-      (substituteAll {
-        src = ./0001-_build-allow-extra-cc-flags.patch;
+      (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
         ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
       })
-      (substituteAll (
-        {
-          src = ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch;
-        }
-        // lib.optionalAttrs rocmSupport { libhipDir = "${lib.getLib rocmPackages.clr}/lib"; }
-        // lib.optionalAttrs cudaSupport {
-          libcudaStubsDir = "${lib.getLib cudaPackages.cuda_cudart}/lib/stubs";
-          ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
-        }
-      ))
+      (replaceVars ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch {
+        libhipDir = if rocmSupport then "${lib.getLib rocmPackages.clr}/lib" else null;
+        libcudaStubsDir =
+          if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
+      })
     ]
     ++ lib.optionals cudaSupport [
-      (substituteAll {
-        src = ./0003-nvidia-cudart-a-systempath.patch;
+      (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
         cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
       })
-      (substituteAll {
-        src = ./0004-nvidia-allow-static-ptxas-path.patch;
+      (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
         nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
       })
     ];
@@ -82,6 +74,15 @@ buildPythonPackage {
     substituteInPlace unittest/CMakeLists.txt \
       --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
       --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+
+    # Patch the source code to make sure it doesn't specify a non-existent PTXAS version.
+    # CUDA 12.6 (the current default/max) tops out at PTXAS version 8.5.
+    # NOTE: This is fixed in `master`:
+    # https://github.com/triton-lang/triton/commit/f48dbc1b106c93144c198fbf3c4f30b2aab9d242
+    substituteInPlace "$NIX_BUILD_TOP/$sourceRoot/third_party/nvidia/backend/compiler.py" \
+      --replace-fail \
+        'return 80 + minor' \
+        'return 80 + min(minor, 5)'
   '';
 
   build-system = [ setuptools ];

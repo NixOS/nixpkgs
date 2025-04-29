@@ -1,21 +1,23 @@
-{ acl
-, fetchFromGitHub
-, lib
-, rustPlatform
+{
+  acl,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "laurel";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vasu4ffSdiyeXGV8JUZYL3I/04UvZ/mOImdE45la9y8=";
+    tag = "v${version}";
+    hash = "sha256-fToxRAcZOZvuuzaaWSjweqEwdUu3K2EKXY0K2Qixqpo=";
   };
 
-  cargoHash = "sha256-uQs+BUBWdbSoE3UqrSjqImVm5uwYf7XiTFtGG1BcFZI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i5wsS7y65sIvICfgViVIAbQU9f1E0EmspX+YVKDSKOU=";
 
   postPatch = ''
     # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Transform Linux Audit logs for SIEM usage";
     homepage = "https://github.com/threathunters-io/laurel";
-    changelog = "https://github.com/threathunters-io/laurel/releases/tag/v${version}";
+    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ emilylange ];
     platforms = platforms.linux;

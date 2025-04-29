@@ -1,14 +1,14 @@
 {
- BioPerl,
- IOString,
- buildPerlModule,
- fetchFromGitHub,
- fetchurl,
- kent,
- lib,
- libmysqlclient,
- libpng,
- openssl,
+  BioPerl,
+  IOString,
+  buildPerlModule,
+  fetchFromGitHub,
+  fetchurl,
+  kent,
+  lib,
+  libmysqlclient,
+  libpng,
+  openssl,
 }:
 
 buildPerlModule rec {
@@ -42,7 +42,6 @@ buildPerlModule rec {
       ./kent-316e4fd40f53c96850128fd65097a42623d1e736.patch
     ];
   });
-
 
   buildInputs = [
     BioPerl

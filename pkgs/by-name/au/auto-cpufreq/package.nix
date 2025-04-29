@@ -2,22 +2,24 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
   gtk3,
   getent,
+  nixosTests,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "2.4.0";
+  version = "2.5.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Xsh3d7rQY7RKzZ7J0swrgxZEyITb7B3oX5F/tcBGjfk=";
+    tag = "v${version}";
+    hash = "sha256-iDvgL5dQerQnu2ERKAWGvWppG7cQ/0uKEfVY93ItvO4=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +50,7 @@ python3Packages.buildPythonPackage rec {
 
   patches = [
     # hardcodes version output
-    (substituteAll {
-      src = ./fix-version-output.patch;
+    (replaceVars ./fix-version-output.patch {
       inherit version;
     })
 
@@ -57,6 +58,13 @@ python3Packages.buildPythonPackage rec {
     ./prevent-install-and-copy.patch
     # patch to prevent update
     ./prevent-update.patch
+
+    # ps-util python package bounds are too strict for version 2.5.0
+    (fetchpatch {
+      name = "auto-cpufreq-2.5.0-ps-util-relax-constraints.patch";
+      url = "https://github.com/AdnanHodzic/auto-cpufreq/commit/8f026ac6497050c0e07c55b751c4b80401e932ec.patch";
+      sha256 = "sha256-hcEcuy7oW4fZgfOLSap3pnWk7H1Q757tgfl7HIUyWiM=";
+    })
   ];
 
   postPatch = ''
@@ -92,6 +100,10 @@ python3Packages.buildPythonPackage rec {
     mkdir -p $out/share/polkit-1/actions
     cp scripts/org.auto-cpufreq.pkexec.policy $out/share/polkit-1/actions
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) auto-cpufreq;
+  };
 
   meta = {
     mainProgram = "auto-cpufreq";

@@ -1,10 +1,11 @@
-{ lib
-, fetchurl
-, libopcodes
-, libiberty
-, stdenv
-, libbfd
-, zlib
+{
+  lib,
+  fetchurl,
+  libopcodes,
+  libiberty,
+  stdenv,
+  libbfd,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wEXHozoAr/v+sRBm+lAsA5kuR0piupWXeq0G28FMaCk=";
   };
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+  ];
 
   buildInputs = [
     libopcodes
@@ -43,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       it abstracts over the target CPU, as it exposes to the clients a
       standardized RISC instruction set inspired by the MIPS and SPARC chips.
     '';
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     license = with lib.licenses; [ lgpl3Plus ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # failing tests

@@ -3,18 +3,18 @@
   buildGoModule,
   fetchzip,
   pkg-config,
-  alsa-lib
+  alsa-lib,
 }:
-buildGoModule rec {
+buildGoModule {
   name = "termsonic";
-  version = "0-unstable-2024-09-15";
+  version = "0-unstable-2025-01-07";
 
   src = fetchzip {
-    url = "https://git.sixfoisneuf.fr/termsonic/snapshot/termsonic-93328e0ca6c0ed2424550c7a164b4b1212a554b6.zip";
-    hash = "sha256-qn0EB1lCU8nvgwcIuZ0Xt9yGTBz5bSnJelPF8mG6D1k=";
+    url = "https://git.sixfoisneuf.fr/termsonic/snapshot/termsonic-1dd63d453b109c79967726106035cda9744bbe11.zip";
+    hash = "sha256-HPI4G+bGHejTwVsb8YIU6b7KnIrkqzDf8zZQAWmcfks=";
   };
 
-  vendorHash = "sha256-hBYgRKL9ZFzYy/wLCWacw8I6aqtD5O7lLsB9U5RmLjw=";
+  vendorHash = "sha256-+v7i69b4d11IGnraE6ROscFmqCVLHnkyI2pW+NS1v8k=";
 
   nativeBuildInputs = [ pkg-config ];
 

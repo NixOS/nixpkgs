@@ -1,26 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  cmake,
+  ninja,
 }:
 
 let
-  pyEnv = python.withPackages (ps: [ ps.setuptools ps.tomli ps.pip ps.setuptools ]);
+  pyEnv = python.withPackages (ps: [
+    ps.setuptools
+    ps.tomli
+    ps.pip
+    ps.setuptools
+  ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lief";
-  version = "0.15.1";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
-    rev = version;
-    sha256 = "sha256-2W/p6p7YXqSNaVs8yPAnLQhbBVIQWEbUVnhx9edV5gI=";
+    tag = finalAttrs.version;
+    hash = "sha256-3rLnT/zs7YrAYNc8I2EJevl98LHGcXFf7bVlJJfxqRc=";
   };
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,7 +47,7 @@ stdenv.mkDerivation rec {
     scikit-build-core
   ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.hostPlatform.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
   postBuild = ''
     pushd ../api/python
@@ -57,6 +66,9 @@ stdenv.mkDerivation rec {
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ lassulus genericnerdyusername ];
+    maintainers = with maintainers; [
+      lassulus
+      genericnerdyusername
+    ];
   };
-}
+})

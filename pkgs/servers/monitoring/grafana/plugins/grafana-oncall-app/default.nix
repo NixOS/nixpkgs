@@ -7,7 +7,7 @@ grafanaPlugin {
   meta = with lib; {
     description = "Developer-friendly incident response for Grafana";
     license = licenses.agpl3Only;
-    maintainers = lib.teams.fslabs.members;
+    teams = [ lib.teams.fslabs ];
     platforms = platforms.unix;
   };
 }

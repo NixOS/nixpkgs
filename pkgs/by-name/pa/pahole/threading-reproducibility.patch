@@ -1,5 +1,3 @@
-diff --git a/pahole.c b/pahole.c
-index 954498d2ad4f..2b010658330c 100644
 --- a/pahole.c
 +++ b/pahole.c
 @@ -3705,6 +3705,10 @@ int main(int argc, char *argv[])
@@ -10,6 +8,6 @@ index 954498d2ad4f..2b010658330c 100644
 +	if (getenv("SOURCE_DATE_EPOCH"))
 +		conf_load.reproducible_build = true;
 +
- 	if (languages.str && parse_languages())
- 		return rc;
+ 	if (show_running_kernel_vmlinux) {
+ 		const char *vmlinux = vmlinux_path__find_running_kernel();
  

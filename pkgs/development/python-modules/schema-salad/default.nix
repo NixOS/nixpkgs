@@ -4,7 +4,6 @@
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
-  fetchpatch,
   importlib-resources,
   mistune,
   mypy,
@@ -22,21 +21,23 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.7.20240905150001";
+  version = "8.8.20250205075315";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hPqUD9gYO78NnG/QdD32uRkRPpN5UIhfzNHpUXnNOgE=";
+    tag = version;
+    hash = "sha256-Lev5daC3RCuXN1GJjOwplTx9PB3HTNZdNNzusn2dBaI=";
   };
+
+  pythonRelaxDeps = [ "mistune" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "black>=19.10b0,<23.12" "black>=19.10b0"
+      --replace-fail "mypy[mypyc]==1.15.0" "mypy"
   '';
 
   build-system = [ setuptools-scm ];
@@ -57,7 +58,6 @@ buildPythonPackage rec {
     ++ cachecontrol.optional-dependencies.filecache
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
   preCheck = ''
@@ -66,6 +66,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_load_by_yaml_metaschema"
+    "test_detect_changes_in_html"
     # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"

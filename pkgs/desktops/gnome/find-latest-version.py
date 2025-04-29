@@ -37,55 +37,179 @@ class Stability(Enum):
     STABLE = "stable"
     UNSTABLE = "unstable"
 
+    def allows(self, target: "Stability") -> bool:
+        """
+        Whether selected stability `self` allows version
+        with a specified `target` stability.
+        """
+        match self:
+            case Stability.STABLE:
+                return target == Stability.STABLE
+            case Stability.UNSTABLE:
+                return True
+
+    def __repr__(self) -> str:
+        """
+        Useful for tests.
+        """
+        match self:
+            case Stability.STABLE:
+                return "Stability.STABLE"
+            case Stability.UNSTABLE:
+                return "Stability.UNSTABLE"
+
 
 VersionPolicy = Callable[[Version], bool]
-VersionPredicate = Callable[[Version, Stability], bool]
+VersionClassifier = Callable[[Version], Stability]
 
 
-class VersionPredicateHolder(NamedTuple):
-    function: VersionPredicate
+class VersionClassifierHolder(NamedTuple):
+    function: VersionClassifier
 
 
 def version_to_list(version: str) -> List[int]:
     return list(map(int, version.split(".")))
 
 
-def odd_unstable(version: Version, selected: Stability) -> bool:
+def odd_unstable(version: Version) -> Stability:
+    """
+    Traditional GNOME version policy
+
+    >>> odd_unstable(Version("32"))
+    Stability.STABLE
+    >>> odd_unstable(Version("3.2.1"))
+    Stability.STABLE
+    >>> odd_unstable(Version("3.2.1.alpha"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("3.2.1beta"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.2.89"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.2.90"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.88.2"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.90.2"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.3.0"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.3.89"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.2.899"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.2.900"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.898.2"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.900.2"))
+    Stability.UNSTABLE
+    """
     try:
         version_parts = version_to_list(version.value)
     except:
         # Failing to parse as a list of numbers likely means the version contains a string tag like “beta”, therefore it is not a stable release.
-        return selected != Stability.STABLE
+        return Stability.UNSTABLE
 
     if len(version_parts) < 2:
-        return True
+        return Stability.STABLE
 
     even = version_parts[1] % 2 == 0
     prerelease = (version_parts[1] >= 90 and version_parts[1] < 100) or (version_parts[1] >= 900 and version_parts[1] < 1000)
     stable = even and not prerelease
-    if selected == Stability.STABLE:
-        return stable
+    if stable:
+        return Stability.STABLE
     else:
-        return True
+        return Stability.UNSTABLE
 
 
-def tagged(version: Version, selected: Stability) -> bool:
-    if selected == Stability.STABLE:
-        return not ("alpha" in version.value or "beta" in version.value or "rc" in version.value)
+def ninety_micro_unstable(version: Version) -> Stability:
+    """
+    <https://gitlab.gnome.org/GNOME/gcr/-/tree/4.3.90.3#versions>:
+    > To denote unstable versions, the micro version number will correspond to 90 or
+    > higher, e.g. 4.$MINOR.90.
+
+    >>> ninety_micro_unstable(Version("3.2.1"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("3.2.1.alpha"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("3.2.1beta"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("4.2.89"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("4.3.89"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("4.2.90"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("4.2.89.3"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("4.2.90.3"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("4.90.1"))
+    Stability.STABLE
+    """
+    try:
+        version_parts = version_to_list(version.value)
+    except:
+        # Failing to parse as a list of numbers likely means the version contains a string tag like “beta”, therefore it is not a stable release.
+        return Stability.UNSTABLE
+
+    if len(version_parts) < 3:
+        return Stability.STABLE
+
+    prerelease = version_parts[2] >= 90
+    if prerelease:
+        return Stability.UNSTABLE
     else:
-        return True
+        return Stability.STABLE
 
 
-def no_policy(version: Version, selected: Stability) -> bool:
-    return True
+def tagged(version: Version) -> Stability:
+    """
+    Considers only versions with explicit `alpha`, `beta` or `rc` tags unstable.
+
+    >>> tagged(Version("32"))
+    Stability.STABLE
+    >>> tagged(Version("3.2.1"))
+    Stability.STABLE
+    >>> tagged(Version("4.3.0"))
+    Stability.STABLE
+    >>> tagged(Version("3.2.1.alpha"))
+    Stability.UNSTABLE
+    >>> tagged(Version("3.2.1beta"))
+    Stability.UNSTABLE
+    >>> tagged(Version("3.2.1rc.3"))
+    Stability.UNSTABLE
+    """
+    prerelease = "alpha" in version.value or "beta" in version.value or "rc" in version.value
+    if prerelease:
+        return Stability.UNSTABLE
+    else:
+        return Stability.STABLE
+
+
+def no_policy(version: Version) -> Stability:
+    """
+    Considers any version stable.
+
+    >>> no_policy(Version("32"))
+    Stability.STABLE
+    >>> no_policy(Version("3.2.1"))
+    Stability.STABLE
+    >>> no_policy(Version("3.2.1.alpha"))
+    Stability.STABLE
+    >>> no_policy(Version("3.2.1beta"))
+    Stability.STABLE
+    """
+    return Stability.STABLE
 
 
 class VersionPolicyKind(Enum):
     # HACK: Using function as values directly would make Enum
     # think they are methods and skip them.
-    ODD_UNSTABLE = VersionPredicateHolder(odd_unstable)
-    TAGGED = VersionPredicateHolder(tagged)
-    NONE = VersionPredicateHolder(no_policy)
+    ODD_UNSTABLE = VersionClassifierHolder(odd_unstable)
+    NINETY_MICRO_UNSTABLE = VersionClassifierHolder(ninety_micro_unstable)
+    TAGGED = VersionClassifierHolder(tagged)
+    NONE = VersionClassifierHolder(no_policy)
 
 
 def make_version_policy(
@@ -93,16 +217,16 @@ def make_version_policy(
     selected: Stability,
     upper_bound: Optional[Version],
 ) -> VersionPolicy:
-    version_predicate = version_policy_kind.value.function
+    version_classifier = version_policy_kind.value.function
     if not upper_bound:
-        return lambda version: version_predicate(version, selected)
+        return lambda version: selected.allows(version_classifier(version))
     else:
-        return lambda version: version_predicate(version, selected) and version < upper_bound
+        return lambda version: selected.allows(version_classifier(version)) and version < upper_bound
 
 
 def find_versions(package_name: str, version_policy: VersionPolicy) -> List[Version]:
     # The structure of cache.json: https://gitlab.gnome.org/Infrastructure/sysadmin-bin/blob/master/ftpadmin#L762
-    cache = json.loads(requests.get(f"https://ftp.gnome.org/pub/GNOME/sources/{package_name}/cache.json").text)
+    cache = json.loads(requests.get(f"https://download.gnome.org/sources/{package_name}/cache.json").text)
     if type(cache) != list or cache[0] != 4:
         raise Exception("Unknown format of cache.json file.")
 
@@ -117,7 +241,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "package-name",
-    help="Name of the directory in https://ftp.gnome.org/pub/GNOME/sources/ containing the package.",
+    help="Name of the directory in https://download.gnome.org/sources/ containing the package.",
 )
 parser.add_argument(
     "version-policy",

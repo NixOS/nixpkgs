@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, accountsservice
-, caja
-, dbus-glib
-, libxklavier
-, libcanberra-gtk3
-, libgtop
-, libmatekbd
-, librsvg
-, libayatana-appindicator
-, glib
-, desktop-file-utils
-, dconf
-, gtk3
-, polkit
-, marco
-, mate-desktop
-, mate-menus
-, mate-panel
-, mate-settings-daemon
-, udisks2
-, systemd
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  accountsservice,
+  caja,
+  dbus-glib,
+  libxklavier,
+  libcanberra-gtk3,
+  libgtop,
+  libmatekbd,
+  librsvg,
+  libayatana-appindicator,
+  glib,
+  desktop-file-utils,
+  dconf,
+  gtk3,
+  polkit,
+  marco,
+  mate-desktop,
+  mate-menus,
+  mate-panel,
+  mate-settings-daemon,
+  udisks2,
+  systemd,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -96,6 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-control-center";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

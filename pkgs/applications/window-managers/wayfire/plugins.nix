@@ -1,9 +1,11 @@
 { lib, pkgs }:
 
-lib.makeScope pkgs.newScope (self:
+lib.makeScope pkgs.newScope (
+  self:
   let
     inherit (self) callPackage;
-  in {
+  in
+  {
     firedecor = callPackage ./firedecor.nix { };
     focus-request = callPackage ./focus-request.nix { };
     wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };

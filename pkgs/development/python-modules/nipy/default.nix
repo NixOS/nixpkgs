@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   cython,
@@ -24,13 +24,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
+  version = "0.6.1";
   pname = "nipy";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BTn2nV4VMeT8bxTOJTHjRU8I2bxFZCzIZCZVn/QcUrk=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nipy";
+    tag = version;
+    hash = "sha256-KGMGu0/0n1CzN++ri3Ig1AJjeZfkl4KzNgm6jdwXB7o=";
   };
 
   postPatch = ''

@@ -1,31 +1,40 @@
 {
   lib,
-  fetchPypi,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
+
+  # build-system
   pybind11,
   nanobind,
   ninja,
+  scikit-build-core,
   setuptools-scm,
+
+  # buildInputs
   boost,
+
+  # dependencies
   numpy,
+
+  # tests
   pytestCheckHook,
   pytest-benchmark,
-  scikit-build-core,
 }:
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    pname = "boost_histogram";
-    inherit version;
-    hash = "sha256-BiPwEObFLl0Bh2dyOVloYJDbB/ww8NHYR1tdZjxd2yw=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "boost-histogram";
+    tag = "v${version}";
+    hash = "sha256-7E4y3P3RzVmIHb5mEoEYWZSwWnmL3LbGqYjGbnszM98=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -49,10 +58,17 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
-  meta = with lib; {
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Segfaults: boost_histogram/_internal/hist.py", line 799 in sum
+    # Fatal Python error: Segmentation fault
+    "test_numpy_conversion_4"
+  ];
+
+  meta = {
     description = "Python bindings for the C++14 Boost::Histogram library";
     homepage = "https://github.com/scikit-hep/boost-histogram";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/boost-histogram/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

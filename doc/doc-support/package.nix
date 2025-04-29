@@ -5,9 +5,15 @@
   lib,
   stdenvNoCC,
   callPackage,
+  devmode,
+  mkShellNoCC,
   documentation-highlighter,
   nixos-render-docs,
+  nixos-render-docs-redirects,
+  writeShellScriptBin,
   nixpkgs ? { },
+  markdown-code-runner,
+  roboto,
 }:
 
 stdenvNoCC.mkDerivation (
@@ -21,15 +27,22 @@ stdenvNoCC.mkDerivation (
 
     nativeBuildInputs = [ nixos-render-docs ];
 
-    src = lib.fileset.toSource {
-      root = ../.;
-      fileset = lib.fileset.unions [
-        (lib.fileset.fileFilter (file: file.hasExt "md" || file.hasExt "md.in") ../.)
-        ../style.css
-        ../anchor-use.js
-        ../anchor.min.js
-        ../manpage-urls.json
-      ];
+    src = lib.cleanSourceWith {
+      src = ../.;
+      filter =
+        path: type:
+        type == "directory"
+        || lib.hasSuffix ".md" path
+        || lib.hasSuffix ".md.in" path
+        || lib.elem path (
+          map toString [
+            ../style.css
+            ../anchor-use.js
+            ../anchor.min.js
+            ../manpage-urls.json
+            ../redirects.json
+          ]
+        );
     };
 
     postPatch = ''
@@ -37,6 +50,8 @@ stdenvNoCC.mkDerivation (
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       substituteInPlace ./languages-frameworks/python.section.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
@@ -60,6 +75,7 @@ stdenvNoCC.mkDerivation (
 
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
+        --redirects ./redirects.json \
         --revision ${nixpkgs.rev or "master"} \
         --stylesheet style.css \
         --stylesheet highlightjs/mono-blue.css \
@@ -71,19 +87,27 @@ stdenvNoCC.mkDerivation (
         --section-toc-depth 1 \
         manual.md \
         out/index.html
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
       mv "$dest/index.html" "$dest/manual.html"
+
+      cp ${roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dest/Roboto.ttf"
 
       cp ${epub} "$dest/nixpkgs-manual.epub"
 
       mkdir -p $out/nix-support/
       echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
+
+      runHook postInstall
     '';
 
     passthru = {
@@ -95,12 +119,26 @@ stdenvNoCC.mkDerivation (
 
       pythonInterpreterTable = callPackage ./python-interpreter-table.nix { };
 
-      shell = callPackage ../../pkgs/tools/nix/web-devmode.nix {
-        buildArgs = "./.";
-        open = "/share/doc/nixpkgs/manual.html";
-      };
+      shell =
+        let
+          devmode' = devmode.override {
+            buildArgs = toString ../.;
+            open = "/share/doc/nixpkgs/manual.html";
+          };
+          nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
+        in
+        mkShellNoCC {
+          packages = [
+            devmode'
+            nixos-render-docs-redirects'
+            markdown-code-runner
+          ];
+        };
 
-      tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
+      tests = {
+        manpage-urls = callPackage ../tests/manpage-urls.nix { };
+        check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
+      };
     };
   }
 )

@@ -1,32 +1,32 @@
-{ stdenv
-, lib
-, testers
-, wrapGAppsHook3
-, fetchzip
-, sbcl
-, pkg-config
-, libfixposix
-, gobject-introspection
-, gsettings-desktop-schemas
-, glib-networking
-, notify-osd
-, gtk3
-, glib
-, gdk-pixbuf
-, cairo
-, pango
-, webkitgtk_4_0
-, openssl
-, gstreamer
-, gst-libav
-, gst-plugins-base
-, gst-plugins-good
-, gst-plugins-bad
-, gst-plugins-ugly
-, xdg-utils
-, xclip
-, wl-clipboard
-, nix-update-script
+{
+  stdenv,
+  lib,
+  testers,
+  wrapGAppsHook3,
+  fetchzip,
+  sbcl,
+  pkg-config,
+  libfixposix,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  glib-networking,
+  gtk3,
+  glib,
+  gdk-pixbuf,
+  cairo,
+  pango,
+  webkitgtk_4_0,
+  openssl,
+  gstreamer,
+  gst-libav,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-plugins-bad,
+  gst-plugins-ugly,
+  xdg-utils,
+  xclip,
+  wl-clipboard,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,25 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  # for sbcl 2.4.3
-  postPatch = ''
-    substituteInPlace _build/cl-gobject-introspection/src/init.lisp \
-       --replace-warn sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
-    substituteInPlace _build/fset/Code/port.lisp \
-       --replace-warn sb-ext::once-only sb-int:once-only
-  '';
-
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [
     sbcl
     # for groveller
-    pkg-config libfixposix
+    pkg-config
+    libfixposix
     # for gappsWrapper
     gobject-introspection
     gsettings-desktop-schemas
     glib-networking
-    notify-osd
     gtk3
     gstreamer
     gst-libav
@@ -88,11 +80,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # don't refresh from git
-  makeFlags = [ "all" "NYXT_SUBMODULES=false" ];
+  makeFlags = [
+    "all"
+    "NYXT_SUBMODULES=false"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xdg-utils xclip wl-clipboard ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${
+      lib.makeBinPath [
+        xdg-utils
+        xclip
+        wl-clipboard
+      ]
+    }")
   '';
 
   # prevent corrupting core in exe
@@ -108,7 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nyxt";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lewo dariof4 ];
+    maintainers = with maintainers; [
+      lewo
+      dariof4
+    ];
     platforms = platforms.all;
   };
 })

@@ -1,25 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "prettypst";
-  version = "unstable-2023-12-06";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "antonWetzel";
     repo = "prettypst";
-    rev = "bf46317ecac4331f101b2752de5328de5981eeba";
-    hash = "sha256-wPayP/693BKIrHrRkx4uY0UuZRoCGPNW8LB3Z0oSBi4=";
+    rev = "2.0.0";
+    hash = "sha256-fGm3HDMJ12HlVOjLtaS2hcAzVl/jl4nqMYly0aBVRxw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-syntax-0.10.0" = "sha256-qiskc0G/ZdLRZjTicoKIOztRFem59TM4ki23Rl55y9s=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zfx6SDtvn5waKWZB1gVxcvCzP+Rp7+J+txaRHoRfaBM=";
 
   meta = {
     changelog = "https://github.com/antonWetzel/prettypst/blob/${src.rev}/changelog.md";

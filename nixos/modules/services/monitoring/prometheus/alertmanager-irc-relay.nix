@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.prometheus.alertmanagerIrcRelay;
 
@@ -10,19 +12,19 @@ let
 in
 {
   options.services.prometheus.alertmanagerIrcRelay = {
-    enable = mkEnableOption "Alertmanager IRC Relay";
+    enable = lib.mkEnableOption "Alertmanager IRC Relay";
 
-    package = mkPackageOption pkgs "alertmanager-irc-relay" { };
+    package = lib.mkPackageOption pkgs "alertmanager-irc-relay" { };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
-      default = [];
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       description = "Extra command line options to pass to alertmanager-irc-relay.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = configFormat.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           http_host = "localhost";
           http_port = 8000;
@@ -50,7 +52,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.alertmanager-irc-relay = {
       description = "Alertmanager IRC Relay";
 
@@ -61,7 +63,7 @@ in
         ExecStart = ''
           ${cfg.package}/bin/alertmanager-irc-relay \
           -config ${configFile} \
-          ${escapeShellArgs cfg.extraFlags}
+          ${lib.escapeShellArgs cfg.extraFlags}
         '';
 
         DynamicUser = true;
@@ -82,7 +84,10 @@ in
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
 
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 
@@ -98,5 +103,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.oxzi ];
+  meta.maintainers = [ lib.maintainers.oxzi ];
 }

@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -35,6 +41,13 @@ let
     # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
     mkdir -p $out/share/plymouth/themes/spinfinity
     ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
+
+    # Logo for catppuccin (two-step) theme
+    for flavour in mocha macchiato latte frappe
+    do
+      mkdir -p $out/share/plymouth/themes/catppuccin-"$flavour"
+      ln -s $logo $out/share/plymouth/themes/catppuccin-"$flavour"/header-image.png
+    done
   '';
 
   themesEnv = pkgs.buildEnv {
@@ -131,7 +144,8 @@ in
     environment.systemPackages = [ plymouth ];
 
     environment.etc."plymouth/plymouthd.conf".source = configFile;
-    environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
+    environment.etc."plymouth/plymouthd.defaults".source =
+      "${plymouth}/share/plymouth/plymouthd.defaults";
     environment.etc."plymouth/logo.png".source = cfg.logo;
     environment.etc."plymouth/themes".source = "${themesEnv}/share/plymouth/themes";
     # XXX: Needed because we supply a different set of plugins in initrd.
@@ -173,7 +187,7 @@ in
         "/etc/plymouth/logo.png".source = cfg.logo;
         "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
         # Directories
-        "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" {} ''
+        "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" { } ''
           # Check if the actual requested theme is here
           if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
               echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
@@ -189,7 +203,7 @@ in
           # useless in the initrd, and adds several megabytes to the closure
           rm $out/renderers/x11.so
         '';
-        "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
+        "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" { } ''
           # Check if the actual requested theme is here
           if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
               echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
@@ -217,7 +231,7 @@ in
         '';
 
         # Fonts
-        "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" {} ''
+        "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" { } ''
           mkdir -p $out
           cp ${escapeShellArg cfg.font} $out
         '';
@@ -238,8 +252,17 @@ in
         plymouth-quit.wantedBy = [ "multi-user.target" ];
         plymouth-read-write.wantedBy = [ "sysinit.target" ];
         plymouth-reboot.wantedBy = [ "reboot.target" ];
-        plymouth-start.wantedBy = [ "initrd-switch-root.target" "sysinit.target" ];
-        plymouth-switch-root-initramfs.wantedBy = [ "halt.target" "kexec.target" "plymouth-switch-root-initramfs.service" "poweroff.target" "reboot.target" ];
+        plymouth-start.wantedBy = [
+          "initrd-switch-root.target"
+          "sysinit.target"
+        ];
+        plymouth-switch-root-initramfs.wantedBy = [
+          "halt.target"
+          "kexec.target"
+          "plymouth-switch-root-initramfs.service"
+          "poweroff.target"
+          "reboot.target"
+        ];
         plymouth-switch-root.wantedBy = [ "initrd-switch-root.target" ];
       };
       # Link in runtime files before starting
@@ -251,11 +274,13 @@ in
 
     # Insert required udev rules. We take stage 2 systemd because the udev
     # rules are only generated when building with logind.
-    boot.initrd.services.udev.packages = [ (pkgs.runCommand "initrd-plymouth-udev-rules" {} ''
-      mkdir -p $out/etc/udev/rules.d
-      cp ${config.systemd.package.out}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out/etc/udev/rules.d
-      sed -i '/loginctl/d' $out/etc/udev/rules.d/71-seat.rules
-    '') ];
+    boot.initrd.services.udev.packages = [
+      (pkgs.runCommand "initrd-plymouth-udev-rules" { } ''
+        mkdir -p $out/etc/udev/rules.d
+        cp ${config.systemd.package.out}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out/etc/udev/rules.d
+        sed -i '/loginctl/d' $out/etc/udev/rules.d/71-seat.rules
+      '')
+    ];
 
     boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${plymouth}/bin/plymouth
@@ -326,26 +351,41 @@ in
 
     # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
     boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
-      mkdir -p /etc/plymouth
-      mkdir -p /run/plymouth
-      ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
-      ln -s ${configFile} /etc/plymouth/plymouthd.conf
-      ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
-      ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
-      ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
-      ln -s $extraUtils/etc/fonts /etc/fonts
+      plymouth_enabled=1
+      for o in $(cat /proc/cmdline); do
+          case $o in
+              plymouth.enable=0)
+                  plymouth_enabled=0
+                  ;;
+          esac
+      done
 
-      plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
-      plymouth show-splash
+      if [ "$plymouth_enabled" != 0 ]; then
+        mkdir -p /etc/plymouth
+        mkdir -p /run/plymouth
+        ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
+        ln -s ${configFile} /etc/plymouth/plymouthd.conf
+        ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
+        ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
+        ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
+        ln -s $extraUtils/etc/fonts /etc/fonts
+
+        plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
+        plymouth show-splash
+      fi
     '');
 
     boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-      plymouth update-root-fs --new-root-dir="$targetRoot"
+      if [ "$plymouth_enabled" != 0 ]; then
+        plymouth update-root-fs --new-root-dir="$targetRoot"
+      fi
     '';
 
     # `mkBefore` to ensure that any custom prompts would be visible.
     boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
-      plymouth quit --wait
+      if [ "$plymouth_enabled" != 0 ]; then
+        plymouth quit --wait
+      fi
     '');
 
   };

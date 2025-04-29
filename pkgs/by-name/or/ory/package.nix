@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "ory";
@@ -7,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ory";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q7+Fpttgx62GbKxCCiEDlX//e/pNO24e7KhhBeGRDH0=";
   };
 
@@ -17,7 +22,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   tags = [
     "sqlite"
@@ -38,6 +43,9 @@ buildGoModule rec {
     description = "Ory CLI";
     homepage = "https://www.ory.sh/cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ luleyleo nicolas-goudry ];
+    maintainers = with maintainers; [
+      luleyleo
+      nicolas-goudry
+    ];
   };
 }

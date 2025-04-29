@@ -47,6 +47,7 @@ Options:
       --url url       Any url understood by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
+      --name n        Symbolic store path name to use for the result (default: based on URL)
       --branch-name   Branch name to check out into
       --sparse-checkout Only fetch and checkout part of the repository.
       --non-cone-mode Use non-cone mode for sparse checkouts.
@@ -75,6 +76,7 @@ for arg; do
             --url) argfun=set_url;;
             --rev) argfun=set_rev;;
             --hash) argfun=set_hashType;;
+            --name) argfun=set_symbolicName;;
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
             --sparse-checkout) argfun=set_sparseCheckout;;
@@ -424,6 +426,12 @@ if test -z "$branchName"; then
     branchName=fetchgit
 fi
 
+if [ -v symbolicName ]; then
+    storePathName="$symbolicName"
+else
+    storePathName="$(url_to_name "$url" "$rev")"
+fi
+
 tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
 exit_handlers+=(remove_tmpHomePath)
 ln -s "${NETRC:-$HOME/.netrc}" "$tmpHomePath/.netrc"
@@ -443,7 +451,7 @@ else
     # If the hash was given, a file with that hash may already be in the
     # store.
     if test -n "$expHash"; then
-        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" "$(url_to_name "$url" "$rev")")
+        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" "$storePathName")
         if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
             finalPath=
         fi
@@ -453,11 +461,12 @@ else
     # If we don't know the hash or a path with that hash doesn't exist,
     # download the file and add it to the store.
     if test -z "$finalPath"; then
-
-        tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
+        # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+        # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+        tmpPath="$(realpath "$(mktemp -d --tmpdir git-checkout-tmp-XXXXXXXX)")"
         exit_handlers+=(remove_tmpPath)
 
-        tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"
+        tmpFile="$tmpPath/$storePathName"
         mkdir -p "$tmpFile"
 
         # Perform the checkout.

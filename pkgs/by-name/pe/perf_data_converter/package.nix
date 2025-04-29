@@ -18,7 +18,7 @@ let
     hash = "sha256-PhacBegQDwWZqZeoZjoLR4akhVV3QrSPr1KflCuied0=";
   };
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "perf_data_converter";
   version = "0-unstable-2024-10-14";
 
@@ -38,8 +38,8 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-gSRSkLGZhHe8o3byZVFsUxXPM+xzetOPhfzkAVTGAUs=";
-        x86_64-linux = "sha256-ZYjFpdH0oYrJguw16DSJWiXjhfJusG+inShbx/BOrcY=";
+        aarch64-linux = "sha256-Ksae4VC2FbkW79N5EGn/rTdj+GFKQsZCdi4LPfnzV7Y=";
+        x86_64-linux = "sha256-TYeS1bax7sA0hJLXqtE8Q5FLnIylcWPZynVE2LhvZKc=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
@@ -11,13 +17,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
-  cargoHash = "sha256-cOxkWMFPVmi+/BQWIvExzX5LDyC7C8kaTf5dGwfXj+s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LtZTfmVVUqxc9GAM6mLLmlJXBhLqnfrvBZWh0RWrR/0=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
   doCheck = true;
-  checkFlags = [ "--skip" "device" ];
+  checkFlags = [
+    "--skip"
+    "device"
+  ];
 
   meta = with lib; {
     description = "Wireguard network manager";
@@ -28,7 +38,12 @@ rustPlatform.buildRustPackage rec {
       To achieve this, wireguard network manager needs to be running on each node.
     '';
     homepage = "https://github.com/gin66/wg_netmanager";
-    license = with licenses; [ mit asl20 bsd3 mpl20 ];
+    license = with licenses; [
+      mit
+      asl20
+      bsd3
+      mpl20
+    ];
     maintainers = with maintainers; [ gin66 ];
     platforms = platforms.linux;
     mainProgram = "wg_netmanager";

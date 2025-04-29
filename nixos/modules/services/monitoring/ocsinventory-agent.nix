@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.ocsinventory-agent;
@@ -48,7 +53,8 @@ in
 
             ca = lib.mkOption {
               type = lib.types.path;
-              default = "/etc/ssl/certs/ca-certificates.crt";
+              default = config.security.pki.caBundle;
+              defaultText = lib.literalExpression "config.security.pki.caBundle";
               description = ''
                 Path to CA certificates file in PEM format, for server
                 SSL certificate validation.
@@ -67,7 +73,6 @@ in
         };
         default = { };
         example = {
-          ca = "/etc/ssl/certs/ca-certificates.crt";
           debug = true;
           server = "https://ocsinventory.localhost:8080/ocsinventory";
           tag = "01234567890123";
@@ -98,7 +103,8 @@ in
     let
       configFile = settingsFormat.generate "ocsinventory-agent.cfg" cfg.settings;
 
-    in lib.mkIf cfg.enable {
+    in
+    lib.mkIf cfg.enable {
       # Path of the configuration file is hard-coded and cannot be changed
       # https://github.com/OCSInventory-NG/UnixAgent/blob/v2.10.0/lib/Ocsinventory/Agent/Config.pm#L78
       #

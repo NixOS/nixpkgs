@@ -1,25 +1,28 @@
-{ lib, stdenv
-, autoreconfHook
-, bison
-, fetchFromGitHub
-, flex
-, lksctp-tools
-, openssl
-, pkg-config
-, sqlite
-, util-linux
-, nixosTests
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  bison,
+  fetchFromGitHub,
+  flex,
+  lksctp-tools,
+  openssl,
+  pkg-config,
+  sqlite,
+  util-linux,
+  unstableGitUpdater,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "solanum";
-  version = "unstable-2022-07-12";
+  version = "0-unstable-2025-02-25";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
-    repo = pname;
-    rev = "860187d02895fc953de3475da07a7a06b9380254";
-    hash = "sha256-g8hXmxTfcPDmQ/cu4AI/iJfrhPLaQJEAeMdDhNDsVXs=";
+    repo = "solanum";
+    rev = "1669c6406cea5092f5ac25634136341a92c6373b";
+    hash = "sha256-Y/fXtBgqzt9tRxL4Xs0KM9nX7Os9QBHBjoDuiaHOsfY=";
   };
 
   patches = [
@@ -30,17 +33,19 @@ stdenv.mkDerivation rec {
     substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
   '';
 
-  configureFlags = [
-    "--enable-epoll"
-    "--enable-ipv6"
-    "--enable-openssl=${openssl.dev}"
-    "--with-program-prefix=solanum-"
-    "--localstatedir=/var/lib"
-    "--with-rundir=/run"
-    "--with-logdir=/var/log"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--enable-sctp=${lksctp-tools.out}/lib"
-  ];
+  configureFlags =
+    [
+      "--enable-epoll"
+      "--enable-ipv6"
+      "--enable-openssl=${openssl.dev}"
+      "--with-program-prefix=solanum-"
+      "--localstatedir=/var/lib"
+      "--with-rundir=/run"
+      "--with-logdir=/var/log"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--enable-sctp=${lksctp-tools.out}/lib"
+    ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -64,7 +69,10 @@ stdenv.mkDerivation rec {
   #   make[4]: *** [Makefile:634: solanum] Error 1
   enableParallelInstalling = false;
 
-  passthru.tests = { inherit (nixosTests) solanum; };
+  passthru = {
+    tests = { inherit (nixosTests) solanum; };
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib; {
     description = "IRCd for unified networks";

@@ -8,29 +8,27 @@
   nix-update,
   writeScript,
   git,
+  pkg-config,
+  openssl,
   python312,
   swim,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-IAb9Vj5KwyXpARD2SIgYRXhz1ihwcgCTwx3zbgoN6dE=";
+    hash = "sha256-eWeEbwIm+PC0XHmvV3xZqUIcA01arnalbGFtPTUP9tg=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YMUeHr9eUOYIcO7PbaFgZa0Ib10GMF+jT10ZCSG7PNo=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [
@@ -51,7 +49,13 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
   env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
 
   passthru.tests = {

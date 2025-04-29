@@ -5,9 +5,7 @@
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
-  gradle,
+  gradle_8,
   gradle_7,
   perl,
   pkg-config,
@@ -57,7 +55,7 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
-  gradle_openjfx = if atLeast23 then gradle else gradle_7;
+  gradle_openjfx = if atLeast23 then gradle_8 else gradle_7;
 in
 
 assert lib.assertMsg (lib.pathExists sourceFile)
@@ -69,17 +67,8 @@ stdenv.mkDerivation {
 
   inherit (source) src;
 
-  patches =
-    if featureVersion == "23" then
-      [
-        # 8338701: Provide media support for libavcodec version 61
-        # <https://github.com/openjdk/jfx23u/pull/18>
-        (fetchpatch2 {
-          url = "https://github.com/openjdk/jfx23u/commit/aba60fda1c82f00e8e685107592305c403a31287.patch?full_index=1";
-          hash = "sha256-+aRhTwi4VQthAq1SH1jxPl0mTosNMKoTY52jm+jiKso=";
-        })
-      ]
-    else if atLeast21 then
+  patches = lib.optionals (!atLeast23) (
+    if atLeast21 then
       [
         ./21/patches/backport-ffmpeg-7-support-jfx21.patch
       ]
@@ -87,7 +76,8 @@ stdenv.mkDerivation {
       [
         ./17/patches/backport-ffmpeg-6-support-jfx11.patch
         ./17/patches/backport-ffmpeg-7-support-jfx11.patch
-      ];
+      ]
+  );
 
   nativeBuildInputs = [
     gradle_openjfx
@@ -123,6 +113,8 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
+  # GCC 14 makes these errors by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion";
   env.config = writeText "gradle.properties" ''
     CONF = Release
     JDK_HOME = ${jdk-bootstrap.home}
@@ -138,11 +130,6 @@ stdenv.mkDerivation {
       sed -e '1i #include <cstdio>' \
         -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
            modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
-
-    ''
-    + lib.optionalString (!atLeast21) ''
-      substituteInPlace modules/javafx.web/src/main/native/Source/JavaScriptCore/offlineasm/parser.rb \
-        --replace-fail "File.exists?" "File.exist?"
 
     ''
     + ''

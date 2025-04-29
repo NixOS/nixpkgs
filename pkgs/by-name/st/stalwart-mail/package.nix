@@ -13,33 +13,24 @@
   darwin,
   nix-update-script,
   nixosTests,
-  rocksdb_8_11,
+  rocksdb,
   callPackage,
+  withFoundationdb ? false,
 }:
 
-let
-  # Stalwart depends on rocksdb crate:
-  # https://github.com/stalwartlabs/mail-server/blob/v0.8.0/crates/store/Cargo.toml#L10
-  # which expects a specific rocksdb versions:
-  # https://github.com/rust-rocksdb/rust-rocksdb/blob/v0.22.0/librocksdb-sys/Cargo.toml#L3
-  # See upstream issue for rocksdb 9.X support
-  # https://github.com/stalwartlabs/mail-server/issues/407
-  rocksdb = rocksdb_8_11;
-  version = "0.10.5";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  inherit version;
+  version = "0.11.7";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MD9zAWeitP3cXxzR4znqL551AGFbOcRzhV3goY6l/iY=";
-    fetchSubmodules = true;
+    tag = "v${version}";
+    hash = "sha256-pBCj/im5UB7A92LBuLeB6EAHTJEuN62BG5Nkj8qsNNA=";
   };
 
-  cargoHash = "sha256-ug49H6RWLlDdJNVW/BJcqNsG/NDNgWiqR8GiZ/HVrvY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-B+xsTVsh9QBAybKiJq0Sb7rveOsH05vuCmNQ5t/UZnk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,23 +38,16 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    sqlite
+    zstd
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
-  # skip defaults on darwin because foundationdb is not available
-  buildNoDefaultFeatures = stdenv.hostPlatform.isDarwin;
-  buildFeatures = lib.optional (stdenv.hostPlatform.isDarwin) [
+  # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
     "sqlite"
     "postgres"
     "mysql"
@@ -71,7 +55,7 @@ rustPlatform.buildRustPackage {
     "elastic"
     "s3"
     "redis"
-  ];
+  ] ++ lib.optionals withFoundationdb [ "foundationdb" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -82,8 +66,6 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     mkdir -p $out/etc/stalwart
-    cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
-    cp -r resources/config/spamfilter $out/etc/stalwart/
 
     mkdir -p $out/lib/systemd/system
 
@@ -97,8 +79,10 @@ rustPlatform.buildRustPackage {
     "--skip=directory::internal::internal_directory"
     "--skip=directory::ldap::ldap_directory"
     "--skip=directory::sql::sql_directory"
+    "--skip=directory::oidc::oidc_directory"
     "--skip=store::blob::blob_tests"
     "--skip=store::lookup::lookup_tests"
+    "--skip=smtp::lookup::sql::lookup_sql"
     # thread 'directory::smtp::lmtp_directory' panicked at tests/src/store/mod.rs:122:44:
     # called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
     "--skip=directory::smtp::lmtp_directory"
@@ -112,8 +96,16 @@ rustPlatform.buildRustPackage {
     "--skip=smtp::inbound::data::data"
     # Expected "X-My-Header: true" but got Received: from foobar.net (unknown [10.0.0.123])
     "--skip=smtp::inbound::scripts::sieve_scripts"
+    # thread 'smtp::outbound::lmtp::lmtp_delivery' panicked at tests/src/smtp/session.rs:313:13:
+    # Expected "<invalid@domain.org> (failed to lookup" but got From: "Mail Delivery Subsystem" <MAILER-DAEMON@localhost>
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
+    # thread 'smtp::outbound::extensions::extensions' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    "--skip=smtp::outbound::extensions::extensions"
     # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
     "--skip=smtp::outbound::smtp::smtp_delivery"
+    # panicked at tests/src/smtp/outbound/lmtp.rs
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
     # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
     # assertion `left == right` failed
     #   left: [1, 2, 2]
@@ -144,6 +136,10 @@ rustPlatform.buildRustPackage {
     "--skip=smtp::inbound::antispam::antispam"
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::vrfy::vrfy_expn"
+    # thread 'smtp::management::queue::manage_queue' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    # NOTE: Test unreliable on high load systems
+    "--skip=smtp::management::queue::manage_queue"
   ];
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

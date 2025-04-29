@@ -24,7 +24,7 @@ fn validate_setting_name(key: &str) -> bool {
     (first_char.is_alphabetic() || first_char == '*')
         && key[1..]
             .chars()
-            .all(|c| c.is_alphanumeric() || c == '_' || c == '*')
+            .all(|c| c.is_alphanumeric() || c == '_' || c == '*' || c == '-')
 }
 
 const SPECIAL_TYPES: [&str; 5] = ["octal", "hex", "float", "list", "array"];

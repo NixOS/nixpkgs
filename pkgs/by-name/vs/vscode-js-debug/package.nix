@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, buildPackages
-, libsecret
-, xcbuild
-, Security
-, AppKit
-, pkg-config
-, node-gyp
-, runCommand
-, vscode-js-debug
-, nix-update-script
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  buildPackages,
+  libsecret,
+  xcbuild,
+  Security,
+  AppKit,
+  pkg-config,
+  node-gyp,
+  runCommand,
+  vscode-js-debug,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.94.0";
+  version = "1.97.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-Mh4g0YBgZ3u0zLwfzbcc1/24dsgq/7l9fu/KdurhLks=";
+    hash = "sha256-MZY6gthj3q2ptAvV28hVvIYgBsW4dpsznasZmK1wVOU=";
   };
 
-  npmDepsHash = "sha256-s+kulnn4yE2rNPtm2MYJ36kFZStYgjePc7zdX7FwrNk=";
+  npmDepsHash = "sha256-Xvpb5KauM5BvybKPqUOF7vwDlbVBbpxGTuakx4TVyas=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,24 +57,29 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v((?!\d{4}\.\d\.\d{3}).*)" ];
+    extraArgs = [
+      "--version-regex"
+      "v((?!\\d{4}\\.\\d\\.\\d{3}).*)"
+    ];
   };
 
-  passthru.tests.test = runCommand "${pname}-test"
-    {
-      nativeBuildInputs = [ vscode-js-debug ];
-      meta.timeout = 60;
-    } ''
-    output=$(js-debug --help 2>&1)
-    if grep -Fw -- "Usage: dapDebugServer.js [port|socket path=8123] [host=localhost]" - <<< "$output"; then
-      touch $out
-    else
-      echo "Expected help output was not found!" >&2
-      echo "The output was:" >&2
-      echo "$output" >&2
-      exit 1
-    fi
-  '';
+  passthru.tests.test =
+    runCommand "${pname}-test"
+      {
+        nativeBuildInputs = [ vscode-js-debug ];
+        meta.timeout = 60;
+      }
+      ''
+        output=$(js-debug --help 2>&1)
+        if grep -Fw -- "Usage: dapDebugServer.js [port|socket path=8123] [host=localhost]" - <<< "$output"; then
+          touch $out
+        else
+          echo "Expected help output was not found!" >&2
+          echo "The output was:" >&2
+          echo "$output" >&2
+          exit 1
+        fi
+      '';
 
   meta = with lib; {
     description = "A DAP-compatible JavaScript debugger";
@@ -85,8 +91,7 @@ buildNpmPackage rec {
       Studio proper.
     '';
     homepage = "https://github.com/microsoft/vscode-js-debug";
-    changelog =
-      "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
     mainProgram = "js-debug";
     license = licenses.mit;
     maintainers = with maintainers; [ zeorin ];

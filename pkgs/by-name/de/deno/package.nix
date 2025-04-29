@@ -5,53 +5,62 @@
   fetchFromGitHub,
   rustPlatform,
   cmake,
+  yq,
   protobuf,
   installShellFiles,
-  apple-sdk_11,
-  darwinMinVersionHook,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
+  libffi,
+  sqlite,
+  lld,
 }:
 
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.0.2";
+  version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nbwLkkO1ucRmlgGDRCJLHPpu4lk0xLQvz3wWpq7rics=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/5KCwWyPdx/OKjoKgHZ8BAih7dh21VrbC+N1U74B/KI=";
   };
 
-  cargoHash = "sha256-y/hAEu8c/CFS4mfp4f/pvPJRz4cxGoi39uIUbn5J+Pw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3I1yplJjVH7Mf2wjwk8qSdbHTcR20QSJGF9MHtnu+q8=";
 
   postPatch = ''
-    # upstream uses lld on aarch64-darwin for faster builds
-    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace "-fuse-ld=lld " ""
+    # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
+    tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
   '';
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    # for tomlq to adjust Cargo.toml
+    yq
     # required by libz-ng-sys crate
     cmake
     # required by deno_kv crate
     protobuf
     installShellFiles
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
+
+  configureFlags = lib.optionals stdenv.cc.isClang [
+    # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
+    "--disable-multi-os-directory"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-    # V8 supports 10.15+; binary references `aligned_alloc` directly
-    (darwinMinVersionHook "10.15")
+  buildInputs = [
+    libffi
+    # required by libsqlite3-sys
+    sqlite.dev
   ];
-
   buildAndTestSubdir = "cli";
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
@@ -68,7 +77,7 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString (canExecute) ''
+  postInstall = lib.optionalString canExecute ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
@@ -76,10 +85,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString (canExecute) ''
+  installCheckPhase = lib.optionalString canExecute ''
     runHook preInstallCheck
     $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${version}"
+    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -88,7 +97,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://deno.land/";
-    changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
+    changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
@@ -101,7 +110,10 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [
+      jk
+      ofalvai
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -109,4 +121,4 @@ rustPlatform.buildRustPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

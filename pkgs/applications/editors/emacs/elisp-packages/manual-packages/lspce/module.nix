@@ -10,16 +10,17 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "lspce-module";
-  version = "1.1.0-unstable-2024-09-07";
+  version = "1.1.0-unstable-2024-12-15";
 
   src = fetchFromGitHub {
     owner = "zbelial";
     repo = "lspce";
-    rev = "4bf1fa9d3d8b17eb6ae628e93018ee8f020565ba";
-    hash = "sha256-OeDUQXqVBUfKjYt5oSmfl2N/19PFYIbPXfFqloai0LQ=";
+    rev = "45f84ce102bb34e44c39e5f437107ba786973d6f";
+    hash = "sha256-DiqC7z1AQbXsSXc77AGRilWi3HfEg0YoHrXu54O3Clo=";
   };
 
-  cargoHash = "sha256-VMGdB4dF3Ccxl6DifdXFH4+XVT7RoeqI/l/AR/epg4o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ygFXKniCCOyXndPOTKoRbd4W1OR2CSA2jr7yxpwkw28=";
 
   checkFlags = [
     # flaky test
@@ -34,6 +35,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/zbelial/lspce";
     description = "LSP Client for Emacs implemented as a module using Rust";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

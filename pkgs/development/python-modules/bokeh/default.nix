@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchFromGitHub,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   colorama,
   contourpy,
   jinja2,
@@ -27,6 +26,7 @@
   geckodriver,
   isort,
   json5,
+  narwhals,
   nbconvert,
   networkx,
   psutil,
@@ -46,26 +46,18 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.6.0";
+  version = "3.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ADLcHnatCXsHYm5RWEaF/0jGVIH7qq0QVmOxBGFlhno=";
-  };
-
-  src_test = fetchFromGitHub {
-    owner = "bokeh";
-    repo = "bokeh";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MAv+6bwc5f+jZasRDsYTJ/ir0i1pYCuwqPMumsYWvws=";
+    hash = "sha256-gMIYhc7CdkMazU25L4McceuZnqmVRwznd+DFd7DPwdg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-nodejs-npmjs-paths.patch;
+    (replaceVars ./hardcode-nodejs-npmjs-paths.patch {
       node_bin = "${nodejs}/bin/node";
       npm_bin = "${nodejs}/bin/npm";
     })
@@ -120,14 +112,12 @@ buildPythonPackage rec {
     pyyaml
     tornado
     xyzservices
+    narwhals
   ];
 
   doCheck = false; # need more work
-  pytestFlagsArray = "tests/test_defaults.py";
+
   pythonImportsCheck = [ "bokeh" ];
-  preCheck = ''
-    cp -rv ''${src_test}/tests/* ./tests/
-  '';
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";

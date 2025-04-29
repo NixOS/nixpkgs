@@ -16,13 +16,18 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.8.6";
+  version = "6.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f8lZ5I5uxdWvi9Am9p9eJNCLPLirs0IXb1q4AwzAfXo=";
+    hash = "sha256-+gUVaX1MmNvgTZ6JjYFt4UJ+W5rl0OFSFpEJ/SH10pw=";
   };
+
+  patches = [
+    # Make wheel file generation deterministic https://github.com/NixOS/nixpkgs/issues/383885
+    ./sip-builder.patch
+  ];
 
   build-system = [
     setuptools
@@ -48,6 +53,6 @@ buildPythonPackage rec {
     description = "Creates C++ bindings for Python modules";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    maintainers = with maintainers; [ ];
   };
 }

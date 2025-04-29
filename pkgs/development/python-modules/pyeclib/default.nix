@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.6.2";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LZQNJU7QEoHo+RWvHnQkNxBg6t322u/c3PyBhy1eVZc=";
+    tag = version;
+    hash = "sha256-oRitXlQunfqLSKMaSW3E1BnL0otA4UPj/y6bbiN0kPM=";
   };
 
   postPatch = ''
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "This library provides a simple Python interface for implementing erasure codes";
     homepage = "https://github.com/openstack/pyeclib";
     license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

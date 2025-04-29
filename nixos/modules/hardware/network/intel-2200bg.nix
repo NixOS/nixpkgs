@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -17,7 +22,6 @@
     };
 
   };
-
 
   ###### implementation
 

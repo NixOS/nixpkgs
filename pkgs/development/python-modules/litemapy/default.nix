@@ -2,22 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  # build-system
+  setuptools,
+  # dependencies
   nbtlib,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "litemapy";
-  version = "0.7.2b0";
-  format = "setuptools";
+  version = "0.10.0b0";
+  pyproject = true;
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "SmylerMC";
     repo = "litemapy";
     rev = "v${version}";
-    hash = "sha256-VfEo/JLeU17bEkvc8oZYfq19RsHl6QvKv0sGZYQjYhE=";
+    hash = "sha256-mGRnrFfrg0VD9pXs0WOuiP6QnYyu0Jbv/bqCWtkOie0=";
   };
 
-  propagatedBuildInputs = [ nbtlib ];
+  propagatedBuildInputs = [
+    nbtlib
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "litemapy" ];
 

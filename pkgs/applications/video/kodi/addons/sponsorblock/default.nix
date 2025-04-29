@@ -1,4 +1,10 @@
-{ lib, buildKodiAddon, fetchFromGitHub, six, requests }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  six,
+  requests,
+}:
 buildKodiAddon rec {
   pname = "sponsorblock";
   namespace = "script.service.sponsorblock";
@@ -24,6 +30,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/siku2/script.service.sponsorblock";
     description = "Port of SponsorBlock for Invidious and YouTube Plugin";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

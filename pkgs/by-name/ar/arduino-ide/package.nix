@@ -1,15 +1,16 @@
-{ appimageTools
-, fetchurl
-, lib
+{
+  appimageTools,
+  fetchurl,
+  lib,
 }:
 
 let
   pname = "arduino-ide";
-  version = "2.3.3";
+  version = "2.3.6";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-VJGO3X1PUKE0OLr5PKH5uTE3rX0SlyrD6vdYdFdzHxk=";
+    hash = "sha256-3Zx6XRhkvAt1Erv13wF3p3lm3guRDYreh+ATBzoO6pk=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

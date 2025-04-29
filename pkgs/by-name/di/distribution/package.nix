@@ -7,15 +7,15 @@
   distribution,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "distribution";
-  version = "3.0.0-beta.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "distribution";
     repo = "distribution";
-    rev = "v${version}";
-    hash = "sha256-tiTwrcRtOEIs1sCkzHXY1TPYw0TOdDvM2Y8YdgQjEmI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-myezQTEdH7kkpCoAeZMf5OBxT4Bz8Qx6vCnwim230RY=";
   };
 
   vendorHash = null;
@@ -25,11 +25,12 @@ buildGoModule rec {
     # TestInMemoryDriverSuite: timeout after 10 minutes, looks like a deadlock.
     "-skip=^TestHTTPChecker$|^TestInMemoryDriverSuite$"
   ];
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests.version = testers.testVersion {
       package = distribution;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
@@ -45,8 +46,8 @@ buildGoModule rec {
     homepage = "https://distribution.github.io/distribution/";
     changelog = "https://github.com/distribution/distribution/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "registry";
     platforms = platforms.unix;
   };
-}
+})

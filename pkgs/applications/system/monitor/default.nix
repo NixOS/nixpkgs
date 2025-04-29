@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, curl
-, flatpak
-, gettext
-, glib
-, gtk3
-, json-glib
-, libwnck
-, libgee
-, libgtop
-, libhandy
-, sassc
-, udisks2
-, wrapGAppsHook3
-, libX11
-, libXext
-, libXNVCtrl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  curl,
+  flatpak,
+  gettext,
+  glib,
+  gtk3,
+  json-glib,
+  libwnck,
+  libgee,
+  libgtop,
+  libhandy,
+  sassc,
+  udisks2,
+  wrapGAppsHook3,
+  libX11,
+  libXext,
+  libXNVCtrl,
 }:
 
 stdenv.mkDerivation rec {
@@ -100,7 +101,8 @@ stdenv.mkDerivation rec {
       section in the NixOS manual.
     '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ xiorcale ];
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "com.github.stsdc.monitor";

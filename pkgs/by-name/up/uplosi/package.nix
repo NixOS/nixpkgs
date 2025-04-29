@@ -6,23 +6,23 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "uplosi";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "edgelesssys";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MsZ4Bl8sW1dZUB9cYPsaLtc8P8RRx4hafSbNB4vXqi4=";
+    repo = "uplosi";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5I916T70sH4UAq5EGRjR7lnRBbPqMJIxaXwUCJQ4DcM=";
   };
 
-  vendorHash = "sha256-o7PPgW3JL47G6Na5n9h3RasRMfU25FD1U/wCMaydRmc=";
+  vendorHash = "sha256-2lJmPNLpI1ksFb0EtcjPjyTy7eX1DKeX0F80k9FtGno=";
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
   ldflags = [
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -39,7 +39,7 @@ buildGoModule rec {
   meta = {
     description = "Upload OS images to cloud provider";
     homepage = "https://github.com/edgelesssys/uplosi";
-    changelog = "https://github.com/edgelesssys/uplosi/releases/tag/v${version}";
+    changelog = "https://github.com/edgelesssys/uplosi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "uplosi";
     maintainers = with lib.maintainers; [
@@ -48,4 +48,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

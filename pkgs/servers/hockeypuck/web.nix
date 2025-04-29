@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 let
   sources = (import ./sources.nix) { inherit fetchFromGitHub; };

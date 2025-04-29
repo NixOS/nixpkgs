@@ -1,14 +1,16 @@
-{ config
-, lib
-, linuxPackages
-, pkgs
-, generateSplicesForMkScope
-, makeScopeWithSplicing'
+{
+  config,
+  lib,
+  linuxPackages,
+  pkgs,
+  generateSplicesForMkScope,
+  makeScopeWithSplicing',
 }:
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "xfce";
-  f = (self:
+  f = (
+    self:
     let
       inherit (self) callPackage;
     in
@@ -43,6 +45,8 @@ makeScopeWithSplicing' {
 
       thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
+      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
+
       tumbler = callPackage ./core/tumbler { };
 
       xfce4-panel = callPackage ./core/xfce4-panel { };
@@ -61,11 +65,7 @@ makeScopeWithSplicing' {
 
       xfce4-appfinder = callPackage ./core/xfce4-appfinder { };
 
-      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools {
-        mkXfceDerivation = self.mkXfceDerivation.override {
-          xfce4-dev-tools = null;
-        };
-      };
+      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools { };
 
       #### APPLICATIONS
 
@@ -163,7 +163,8 @@ makeScopeWithSplicing' {
 
       xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
 
-    } // lib.optionalAttrs config.allowAliases {
+    }
+    // lib.optionalAttrs config.allowAliases {
       #### ALIASES
 
       automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
@@ -176,5 +177,6 @@ makeScopeWithSplicing' {
 
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
       xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08
-    });
+    }
+  );
 }

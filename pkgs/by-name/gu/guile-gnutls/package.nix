@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPackages
-, gnutls
-, guile
-, libtool
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  gnutls,
+  guile,
+  libtool,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
   pname = "guile-gnutls";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/guile-gnutls-${version}.tar.gz";
-    hash = "sha256-W0y5JgMgduw0a7XAvA0CMflo/g9WWRPMFpNLt5Ovsjk=";
+    hash = "sha256-AfC6O+qDe7RNyxs//M48Lr6IaZ0KO92sHYeeR1qXh+Q=";
   };
 
   strictDeps = true;

@@ -2,21 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-s3transfer";
-  version = "0.10.2";
+  version = "0.11.5";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "types_s3transfer";
     inherit version;
-    hash = "sha256-YBZ6O/tcU27GzbWBj3+aKO3KncPgtf+FrjdFJvxeV24=";
+    hash = "sha256-+pGVAG7qPf3VGvX1Gz3DpPV1aW8yO7AgLQPdPq6gEWY=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;

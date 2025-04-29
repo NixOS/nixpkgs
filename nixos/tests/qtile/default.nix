@@ -1,30 +1,37 @@
-import ../make-test-python.nix ({ lib, ...} : {
+{ lib, ... }:
+{
   name = "qtile";
 
   meta = {
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 
-  nodes.machine = { pkgs, lib, ... }: let
-    # We create a custom Qtile configuration file that adds a widget from
-    # qtile-extras to the bar. This ensure that the qtile-extras package
-    # also works, and that extraPackages behave as expected.
+  nodes.machine =
+    { pkgs, lib, ... }:
+    let
+      # We create a custom Qtile configuration file that adds a widget from
+      # qtile-extras to the bar. This ensure that the qtile-extras package
+      # also works, and that extraPackages behave as expected.
 
-    config-deriv = pkgs.callPackage ./config.nix { };
-  in {
-    imports = [ ../common/x11.nix ../common/user-account.nix ];
-    test-support.displayManager.auto.user = "alice";
+      config-deriv = pkgs.callPackage ./config.nix { };
+    in
+    {
+      imports = [
+        ../common/x11.nix
+        ../common/user-account.nix
+      ];
+      test-support.displayManager.auto.user = "alice";
 
-    services.xserver.windowManager.qtile = {
-      enable = true;
-      configFile = "${config-deriv}/config.py";
-      extraPackages = ps: [ ps.qtile-extras ];
+      services.xserver.windowManager.qtile = {
+        enable = true;
+        configFile = "${config-deriv}/config.py";
+        extraPackages = ps: [ ps.qtile-extras ];
+      };
+
+      services.displayManager.defaultSession = lib.mkForce "qtile";
+
+      environment.systemPackages = [ pkgs.kitty ];
     };
-
-    services.displayManager.defaultSession = lib.mkForce "qtile";
-
-    environment.systemPackages = [ pkgs.kitty ];
-  };
 
   testScript = ''
     with subtest("ensure x starts"):
@@ -42,4 +49,4 @@ import ../make-test-python.nix ({ lib, ...} : {
         machine.sleep(2)
         machine.screenshot("terminal")
   '';
-})
+}

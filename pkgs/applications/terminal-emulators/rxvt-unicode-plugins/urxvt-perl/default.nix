@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, wmctrl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wmctrl,
+}:
 
 stdenv.mkDerivation {
   pname = "urxvt-perl";

@@ -1,36 +1,39 @@
-{ lib
-, fetchFromGitHub
-, libpulseaudio
-, libconfig
-# Needs a gnuradio built with qt gui support
-, gnuradio3_8
-, thrift
-# Not gnuradioPackages'
-, codec2
-, gmp
-, gsm
-, libopus
-, libjpeg
-, libsndfile
-, libftdi
-, limesuite
-, soapysdr-with-plugins
-, protobuf
-, speex
-, speexdsp
-, cppzmq
-, uhd
+{
+  lib,
+  fetchFromGitHub,
+  libpulseaudio,
+  libconfig,
+  # Needs a gnuradio built with qt gui support
+  gnuradio,
+  log4cpp,
+  thrift,
+  # Not gnuradioPackages'
+  codec2,
+  gmp,
+  gsm,
+  libopus,
+  libjpeg,
+  libsndfile,
+  libftdi,
+  limesuite,
+  soapysdr-with-plugins,
+  protobuf,
+  speex,
+  speexdsp,
+  cppzmq,
+  uhd,
 }:
 
-gnuradio3_8.pkgs.mkDerivation rec {
+gnuradio.pkgs.mkDerivation {
   pname = "qradiolink";
-  version = "0.9.0-1";
+  # https://github.com/qradiolink/qradiolink/tree/gr_3.10
+  version = "0.9.0-1-unstable-2024-08-29";
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
-    rev = version;
-    sha256 = "sha256-Js6DzmUG8O9c9VvjE6hc7JGuFmgc1Wq41zVJb8Us/yI=";
+    rev = "f1006a20e0a642d0ac20aab18b19fa97567f2621";
+    sha256 = "sha256-9AYFO+mmwLAH8gEpZn6qcENabc/KBMcg/0wCTKsInNY=";
   };
 
   preBuild = ''
@@ -47,36 +50,43 @@ gnuradio3_8.pkgs.mkDerivation rec {
     install -Dm644 qradiolink.desktop $out/share/applications/qradiolink.desktop
   '';
 
-  buildInputs = [
-    gnuradio3_8.unwrapped.boost
-    codec2
-    gnuradio3_8.unwrapped.logLib
-    gmp
-    libpulseaudio
-    libconfig
-    gsm
-    gnuradio3_8.pkgs.osmosdr
-    libopus
-    libjpeg
-    limesuite
-    soapysdr-with-plugins
-    speex
-    speexdsp
-    gnuradio3_8.qt.qtbase
-    gnuradio3_8.qt.qtmultimedia
-    libftdi
-    libsndfile
-    cppzmq
-    gnuradio3_8.qwt
-    uhd
-  ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
-    thrift
-    gnuradio3_8.unwrapped.python.pkgs.thrift
-  ];
+  buildInputs =
+    [
+      gnuradio.unwrapped.boost
+      codec2
+      gnuradio.unwrapped.logLib
+      # gnuradio uses it's own log library (spdlog), and qradiolink is still
+      # using the old gnuradio log library log4cpp. Perhaps this won't be needed
+      # once the gr_3.10 branch will mature enough to be merged into qradiolink's
+      # master branch.
+      log4cpp
+      gmp
+      libpulseaudio
+      libconfig
+      gsm
+      gnuradio.pkgs.osmosdr
+      libopus
+      libjpeg
+      limesuite
+      soapysdr-with-plugins
+      speex
+      speexdsp
+      gnuradio.qt.qtbase
+      gnuradio.qt.qtmultimedia
+      libftdi
+      libsndfile
+      cppzmq
+      gnuradio.qwt
+      uhd
+    ]
+    ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+      thrift
+      gnuradio.unwrapped.python.pkgs.thrift
+    ];
   nativeBuildInputs = [
     protobuf
-    gnuradio3_8.qt.qmake
-    gnuradio3_8.qt.wrapQtAppsHook
+    gnuradio.qt.qmake
+    gnuradio.qt.wrapQtAppsHook
   ];
 
   meta = with lib; {

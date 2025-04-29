@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, python3
-, libxcb
-, AppKit
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  python3,
+  libxcb,
+  AppKit,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,31 +21,38 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-o8/ENAWzVqs7rokST6xnyu9Q/pKqq/UnKWOFRuIuGes=";
   };
 
-  cargoHash = "sha256-LcnvCWGVdBxhDgQDoGHXRppGeEpfjOv/F0dZMN2bOF8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+TJ/QG+6ZILcSZEIXj6B4qYF0P5pQpo1kw2qEfE0FDw=";
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration AppKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      SystemConfiguration
+      AppKit
+    ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkFlags = [ "--skip=kbs2::config::tests::test_find_config_dir" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--skip=test_ragelib_rewrap_keyfile" ];
+  checkFlags = [
+    "--skip=kbs2::config::tests::test_find_config_dir"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--skip=test_ragelib_rewrap_keyfile" ];
 
-  postInstall = ''
-    mkdir -p $out/share/kbs2
-    cp -r contrib/ $out/share/kbs2
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd kbs2 \
-      --bash <($out/bin/kbs2 --completions bash) \
-      --fish <($out/bin/kbs2 --completions fish) \
-      --zsh <($out/bin/kbs2 --completions zsh)
-  '';
+  postInstall =
+    ''
+      mkdir -p $out/share/kbs2
+      cp -r contrib/ $out/share/kbs2
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd kbs2 \
+        --bash <($out/bin/kbs2 --completions bash) \
+        --fish <($out/bin/kbs2 --completions fish) \
+        --zsh <($out/bin/kbs2 --completions zsh)
+    '';
 
   meta = with lib; {
     description = "Secret manager backed by age";

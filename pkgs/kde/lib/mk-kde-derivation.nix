@@ -3,8 +3,8 @@ self:
   lib,
   stdenv,
   makeSetupHook,
-  fetchurl,
   cmake,
+  ninja,
   qt6,
 }:
 let
@@ -55,6 +55,7 @@ let
       # FIXME: typo lol
       "ICS" = lib.licenses.isc;
       "BSD-3-clause" = lib.licenses.bsd3;
+      "BSD-3-Clauses" = lib.licenses.bsd3;
 
       # These are only relevant to Qt commercial users
       "Qt-Commercial-exception-1.0" = null;
@@ -120,6 +121,7 @@ let
 
     nativeBuildInputs = [
       cmake
+      ninja
       qt6.wrapQtAppsHook
       moveDevHook
     ] ++ extraNativeBuildInputs;
@@ -150,7 +152,7 @@ let
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
-    maintainers = lib.teams.qt-kde.members;
+    teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   } // (args.meta or { });

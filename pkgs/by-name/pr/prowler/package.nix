@@ -4,23 +4,38 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest pydantic
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+        dependencies = [
+          python3.pkgs.pydantic_1
+          python3.pkgs.cryptography
+          python3.pkgs.email-validator
+        ];
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "4.4.1";
+  version = "5.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9pqp9DJKvzOzApWuSXNn7uQ4bxdPmQ9QtOEAlbrT9Eg=";
+    tag = version;
+    hash = "sha256-SljpmFZNfenLB+meJHjnGsnDCRBi+60/IMlJLWtBw7Q=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with py.pkgs; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     alive-progress
     awsipranges
     azure-identity
@@ -37,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     azure-mgmt-rdbms
     azure-mgmt-resource
     azure-mgmt-security
+    azure-mgmt-search
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
@@ -58,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     numpy
     pandas
     py-ocsf-models
-    pydantic
+    pydantic_1
     python-dateutil
     pytz
     schema
@@ -73,7 +89,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${version}";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "prowler";

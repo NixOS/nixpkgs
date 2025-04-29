@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitLab, qmake, qtbase, wrapQtAppsHook, doxygen }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
+  doxygen,
+}:
 
 stdenv.mkDerivation {
   pname = "signond";

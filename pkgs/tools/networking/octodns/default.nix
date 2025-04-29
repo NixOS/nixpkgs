@@ -8,7 +8,7 @@
   natsort,
   pytestCheckHook,
   python-dateutil,
-  python3,
+  python,
   pythonOlder,
   pyyaml,
   runCommand,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L3c4lYt/fgMctJFArc1XlR+hvpz10kcBcYYXajnNQr0=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   passthru.withProviders =
     ps:
     let
-      pyEnv = python3.withPackages ps;
+      pyEnv = python.withPackages ps;
     in
     runCommand "octodns-with-providers" { } ''
       mkdir -p $out/bin

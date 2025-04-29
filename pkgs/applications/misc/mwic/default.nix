@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, pythonPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pythonPackages,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.7.10";
@@ -9,13 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dmIHPehkxpSb78ymVpcPCu4L41coskrHQOg067dprOo=";
   };
 
-  makeFlags=["PREFIX=\${out}"];
+  makeFlags = [ "PREFIX=\${out}" ];
 
   nativeBuildInputs = [
     pythonPackages.wrapPython
   ];
 
-  propagatedBuildInputs = with pythonPackages; [ pyenchant regex ];
+  propagatedBuildInputs = with pythonPackages; [
+    pyenchant
+    regex
+  ];
 
   postFixup = ''
     wrapPythonPrograms
@@ -29,4 +37,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-

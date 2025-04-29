@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "job-security";
   version = "0-unstable-2024-04-07";
 
@@ -15,12 +16,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KPnLVKz10SuVcG0CCFWxWnjhf9gHHPCRZw6AW9/gAmk=";
   };
 
-  cargoHash = "sha256-YwlI+Z3Zry3i3amz3DufvKzSS1Hrp2kPG76aH5tMJ2g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-g+n0C8tkEuixbRo48cMOYPXcYt+Ur1TP6fFTYlI4fVg=";
 
   meta = {
     description = "Job control from anywhere";
     homepage = "https://github.com/yshui/job-security";
-    license = with lib.licenses; [ asl20 mit mpl20 ];
+    license = with lib.licenses; [
+      asl20
+      mit
+      mpl20
+    ];
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "jobs";
     broken = stdenv.hostPlatform.isDarwin;

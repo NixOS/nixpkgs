@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j8KY8OTYG+Hl86OppbMyAFBSA89TO7hc8mcNgTGTlgM=";
   };
 
-  cargoHash = "sha256-Ue7ukYkpNkoD9IRy/EWMsB5kMzwWny8onVNeN+3WWgQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JPY1mge4aqO/QERCXYk+HzONjDJHi5og6lwQ68nUxqE=";
 
   meta = {
     description = "TUI hexeditor in Rust with colored bytes";

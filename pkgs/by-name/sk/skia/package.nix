@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchgit
-, expat
-, fontconfig
-, freetype
-, harfbuzzFull
-, icu
-, gn
-, libGL
-, libjpeg
-, libwebp
-, libX11
-, ninja
-, python3
-, testers
-, vulkan-headers
-, vulkan-memory-allocator
-, xcbuild
+{
+  lib,
+  stdenv,
+  fetchgit,
+  expat,
+  fontconfig,
+  freetype,
+  harfbuzzFull,
+  icu,
+  gn,
+  libGL,
+  libjpeg,
+  libwebp,
+  libX11,
+  ninja,
+  python3,
+  testers,
+  vulkan-headers,
+  vulkan-memory-allocator,
+  xcbuild,
+  cctools,
+  zlib,
+  fixDarwinDylibNames,
 
-, enableVulkan ? !stdenv.hostPlatform.isDarwin
+  enableVulkan ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,55 +46,77 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [
-    gn
-    ninja
-    python3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  nativeBuildInputs =
+    [
+      gn
+      ninja
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+      cctools.libtool
+      zlib
+      fixDarwinDylibNames
+    ];
 
-  buildInputs = [
-    expat
-    fontconfig
-    freetype
-    harfbuzzFull
-    icu
-    libGL
-    libjpeg
-    libwebp
-    libX11
-  ] ++ lib.optionals enableVulkan [
-    vulkan-headers
-    vulkan-memory-allocator
-  ];
+  buildInputs =
+    [
+      expat
+      fontconfig
+      freetype
+      harfbuzzFull
+      icu
+      libGL
+      libjpeg
+      libwebp
+      libX11
+    ]
+    ++ lib.optionals enableVulkan [
+      vulkan-headers
+      vulkan-memory-allocator
+    ];
 
-  gnFlags = let
-    cpu = {
-      "x86_64" = "x64";
-      "i686" = "x86";
-      "arm" = "arm";
-      "aarch64" = "arm64";
-    }.${stdenv.hostPlatform.parsed.cpu.name};
-  in [
-    # Build in release mode
-    "is_official_build=true"
-    "is_component_build=true"
-    # Don't use missing tools
-    "skia_use_dng_sdk=false"
-    "skia_use_wuffs=false"
-    # Use system dependencies
-    "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
-    "cc=\"${stdenv.cc.targetPrefix}cc\""
-    "cxx=\"${stdenv.cc.targetPrefix}c++\""
-    "ar=\"${stdenv.cc.targetPrefix}ar\""
-    "target_cpu=\"${cpu}\""
-  ] ++ map (lib: "skia_use_system_${lib}=true") [
-    "zlib"
-    "harfbuzz"
-    "libpng"
-    "libwebp"
-  ] ++ lib.optionals enableVulkan [
-    "skia_use_vulkan=true"
-  ];
+  gnFlags =
+    let
+      cpu =
+        {
+          "x86_64" = "x64";
+          "i686" = "x86";
+          "arm" = "arm";
+          "aarch64" = "arm64";
+        }
+        .${stdenv.hostPlatform.parsed.cpu.name};
+    in
+    [
+      # Build in release mode
+      "is_official_build=true"
+      "is_component_build=true"
+      # Don't use missing tools
+      "skia_use_dng_sdk=false"
+      "skia_use_wuffs=false"
+      # Use system dependencies
+      "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+      "cc=\"${stdenv.cc.targetPrefix}cc\""
+      "cxx=\"${stdenv.cc.targetPrefix}c++\""
+      "ar=\"${stdenv.cc.targetPrefix}ar\""
+      "target_cpu=\"${cpu}\""
+    ]
+    ++ map (lib: "skia_use_system_${lib}=true") [
+      "zlib"
+      "harfbuzz"
+      "libpng"
+      "libwebp"
+    ]
+    ++ lib.optionals enableVulkan [
+      "skia_use_vulkan=true"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "skia_use_fontconfig=true"
+      "skia_use_freetype=true"
+      "skia_use_metal=true"
+    ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lz";
 
   # Somewhat arbitrary, but similar to what other distros are doing
   installPhase = ''
@@ -98,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Libraries
     mkdir -p $out/lib
-    cp *.so *.a $out/lib
+    cp *.so *.a *.dylib $out/lib
 
     # Includes
     pushd ../../include
@@ -144,7 +170,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
     pkgConfigModules = [ "skia" ];
-    # https://github.com/NixOS/nixpkgs/pull/325871#issuecomment-2220610016
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

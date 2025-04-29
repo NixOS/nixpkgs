@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "5.2.0";
+  version = "5.4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2NsF00jaW2wl99sTxTQ5xJkqNOYh9RaecmBMcWP3TI8=";
+    tag = "v${version}";
+    hash = "sha256-6K6wBLCJCIAHbJQuY7JPnkmuq8OwrxCaSAHWeFDwH10=";
   };
 
   build-system = [ setuptools ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Podman's RESTful API";
     homepage = "https://github.com/containers/podman-py";
-    changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
+    changelog = "https://github.com/containers/podman-py/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

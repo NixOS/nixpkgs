@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage {
   # See #310673 and #310125 for similar fixes
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 
-  cargoHash = "sha256-V8FkkWcXrYcDmhbdJztpbd4gBVbtbPY0NHS4pb/z8HM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-unx2XGi16aWvw5dceAuReMEMLGcO/JwYpx9Ewvrw3KE=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

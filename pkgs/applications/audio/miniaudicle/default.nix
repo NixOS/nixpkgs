@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, wrapQtAppsHook
-, qt6Packages
-, bison
-, flex
-, which
-, alsa-lib
-, libsndfile
-, libpulseaudio
-, libjack2
-, audioBackend ? "pulse" # "pulse", "alsa", or "jack"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  qt6Packages,
+  bison,
+  flex,
+  which,
+  alsa-lib,
+  libsndfile,
+  libpulseaudio,
+  libjack2,
+  audioBackend ? "pulse", # "pulse", "alsa", or "jack"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.5.3.0";
+  version = "1.5.4.2";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
     rev = "chuck-${finalAttrs.version}";
-    hash = "sha256-iLmTliJXaYDM5X+s3HsXLFO2qonh18BaiWiTdDXKWjk=";
+    hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
     fetchSubmodules = true;
   };
 
@@ -42,12 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    libsndfile
-    qt6Packages.qscintilla
-  ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
-    ++ lib.optional (audioBackend == "jack")  libjack2;
+  buildInputs =
+    [
+      alsa-lib
+      libsndfile
+      qt6Packages.qscintilla
+    ]
+    ++ lib.optional (audioBackend == "pulse") libpulseaudio
+    ++ lib.optional (audioBackend == "jack") libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 

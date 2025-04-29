@@ -1,14 +1,15 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, qtquickcontrols2
-, kcalendarcore
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, kirigami2
-, ki18n
-, knotifications
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  qtquickcontrols2,
+  kcalendarcore,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  kirigami2,
+  ki18n,
+  knotifications,
 }:
 
 mkDerivation {

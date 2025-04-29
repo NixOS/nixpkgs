@@ -1,36 +1,38 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
-, common-updater-scripts, git, gnused, nix, nixfmt-classic, majorVersion }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  jre,
+  gnugrep,
+  coreutils,
+  writeScript,
+  common-updater-scripts,
+  git,
+  gnused,
+  nix,
+  majorVersion,
+}:
 
 let
   repo = "git@github.com:scala/scala.git";
 
   versionMap = {
-    "2.10" = {
-      version = "2.10.7";
-      sha256 = "koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
-      pname = "scala_2_10";
-    };
-
-    "2.11" = {
-      version = "2.11.12";
-      sha256 = "sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
-      pname = "scala_2_11";
-    };
-
     "2.12" = {
       version = "2.12.18";
-      sha256 = "naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
+      hash = "sha256-naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
       pname = "scala_2_12";
     };
 
     "2.13" = {
-      version = "2.13.12";
-      sha256 = "r+fm+1njyIRX6Z9wGHMOUvuifI0V49cVT3KWggbKhxk=";
+      version = "2.13.15";
+      hash = "sha256-jXIZ0q2IHIHPdwmp5JU05s4S0Bft4Uc+r9Hpuyh8ObE=";
       pname = "scala_2_13";
     };
   };
 
-in with versionMap.${majorVersion};
+in
+with versionMap.${majorVersion};
 
 stdenv.mkDerivation rec {
   inherit version;
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
   name = "scala-${version}";
 
   src = fetchurl {
-    inherit sha256;
+    inherit hash;
     url = "https://www.scala-lang.org/files/archive/scala-${version}.tgz";
   };
 
@@ -83,17 +85,13 @@ stdenv.mkDerivation rec {
           git
           gnused
           nix
-          nixfmt-classic
         ]
       }
       versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
       oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
       latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
       if [ "$oldVersion" != "$latestTag" ]; then
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/development/compilers/scala/2.x.nix"
         update-source-version ${pname} "$latestTag" --version-key=version --print-changes
-        nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
       fi
@@ -114,6 +112,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     branch = versions.majorMinor version;
-    maintainers = with maintainers; [ nequissimus kashw2 ];
+    maintainers = with maintainers; [
+      nequissimus
+      kashw2
+    ];
   };
 }

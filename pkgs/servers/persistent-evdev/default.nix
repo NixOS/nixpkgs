@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  evdev,
+  pyudev,
+}:
 
 buildPythonPackage rec {
   pname = "persistent-evdev";
@@ -12,8 +18,9 @@ buildPythonPackage rec {
     sha256 = "d0i6DL/qgDELet4ew2lyVqzd9TApivRxL3zA3dcsQXY=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    evdev pyudev
+  propagatedBuildInputs = [
+    evdev
+    pyudev
   ];
 
   postPatch = ''

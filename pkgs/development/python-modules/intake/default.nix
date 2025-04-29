@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-F13jbAQP3G3cKeAegM1w/t32xyC0BgL9/67aIlzA4SE=";
   };
 
@@ -131,14 +131,7 @@ buildPythonPackage rec {
       # Require deprecated distutils
       "test_which"
       "test_load"
-    ]
-    ++
-      lib.optionals
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
-        [
-          # Flaky with older low-res mtime on darwin < 10.13 (#143987)
-          "test_second_load_timestamp"
-        ];
+    ];
 
   pythonImportsCheck = [ "intake" ];
 

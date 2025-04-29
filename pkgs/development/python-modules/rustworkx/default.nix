@@ -4,6 +4,7 @@
   cargo,
   rustPlatform,
   rustc,
+  setuptools,
   setuptools-rust,
   numpy,
   fixtures,
@@ -12,39 +13,49 @@
   libiconv,
   stdenv,
   lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rustworkx";
-  version = "0.14.2";
-  format = "setuptools";
+  version = "0.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "rustworkx";
     rev = version;
-    hash = "sha256-gck5X6J4Yg5it/YCBsk/yZ5qXg/iwCEbyDIKfBTRxHM=";
+    hash = "sha256-hzB99ReL1bTmj1mYne9rJp2rBeMnmIR17VQFVl7rzr0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-FNCa5pshcnsYpjlz6yDITe2k0cHLTybj3rF34qrsRVU=";
+    hash = "sha256-9NMTGq8KzIvnOXrsUpFHrtM9K/E7RMrE/Aa9mtO7pTI=";
   };
 
   nativeBuildInputs = [
-    setuptools-rust
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
 
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
+
   buildInputs = [ numpy ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     networkx
+    pytestCheckHook
     testtools
   ];
+
+  preCheck = ''
+    rm -r rustworkx
+  '';
 
   pythonImportsCheck = [ "rustworkx" ];
 

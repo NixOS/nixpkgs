@@ -1,7 +1,13 @@
-{ stdenv, lib, fetchsvn,
-  version, rev, sha256 }:
+{
+  stdenv,
+  lib,
+  fetchsvn,
+  version,
+  rev,
+  sha256,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossfire-arch";
   version = rev;
 
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "http://crossfire.real-time.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ ToxicFrog ];
   };
 }

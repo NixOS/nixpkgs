@@ -6,13 +6,14 @@
   setuptools,
   pytestCheckHook,
   numpy,
-  opencv4,
+  opencv-python,
+  simsimd,
   stringzilla,
 }:
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.19";
+  version = "0.0.23";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,17 +21,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GwT7Py7pKbpHxx4avj37/hRjSJXdH5uBU11nCITysVw=";
+    tag = version;
+    hash = "sha256-jyNOrtQbQ62bQouu5WLYBWqVS5wUDZFsiqkMMb5p7Ek=";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     numpy
-    opencv4
+    opencv-python
+    simsimd
     stringzilla
   ];
 

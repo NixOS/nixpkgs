@@ -1,49 +1,75 @@
 {
   lib,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
   # build time
-  astropy-extension-helpers,
+  stdenv,
   cython,
+  extension-helpers,
   setuptools,
   setuptools-scm,
 
-  # testing
-  pytestCheckHook,
-  stdenv,
-  pytest-xdist,
-  pytest-astropy,
-
-  # runtime
+  # dependencies
   astropy-iers-data,
   numpy,
   packaging,
   pyerfa,
   pyyaml,
+
+  # optional-dependencies
+  scipy,
+  matplotlib,
+  ipython,
+  ipywidgets,
+  ipykernel,
+  pandas,
+  certifi,
+  dask,
+  h5py,
+  pyarrow,
+  beautifulsoup4,
+  html5lib,
+  sortedcontainers,
+  pytz,
+  jplephem,
+  mpmath,
+  asdf,
+  asdf-astropy,
+  bottleneck,
+  fsspec,
+  s3fs,
+
+  # testing
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-astropy-header,
+  pytest-astropy,
+  threadpoolctl,
+
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.1.4";
+  version = "7.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NhVY4rCTqZvr5p8f1H+shqGSYHpMFu05ugqACyq2DDQ=";
+    hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0"  "numpy"
-  '';
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
 
   build-system = [
-    astropy-extension-helpers
     cython
+    extension-helpers
     setuptools
     setuptools-scm
   ];
@@ -56,37 +82,72 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  optional-dependencies = lib.fix (self: {
+    recommended = [
+      scipy
+      matplotlib
+    ];
+    ipython = [
+      ipython
+    ];
+    jupyter = [
+      ipywidgets
+      ipykernel
+      # ipydatagrid
+      pandas
+    ] ++ self.ipython;
+    all =
+      [
+        certifi
+        dask
+        h5py
+        pyarrow
+        beautifulsoup4
+        html5lib
+        sortedcontainers
+        pytz
+        jplephem
+        mpmath
+        asdf
+        asdf-astropy
+        bottleneck
+        fsspec
+        s3fs
+      ]
+      ++ self.recommended
+      ++ self.ipython
+      ++ self.jupyter
+      ++ dask.optional-dependencies.array
+      ++ fsspec.optional-dependencies.http;
+  });
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    pytest-astropy-header
     pytest-astropy
-  ];
+    threadpoolctl
+  ] ++ optional-dependencies.recommended;
 
-  # Not running it inside the build directory. See:
-  # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
+  pythonImportsCheck = [ "astropy" ];
+
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
-    cd "$out"
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    # See https://github.com/astropy/astropy/issues/17649 and see
+    # --hypothesis-profile=ci pytest flag below.
+    cp conftest.py $out/
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd "$out"
   '';
-  pythonImportsCheck = [ "astropy" ];
-  disabledTests = [
-    # May fail due to parallelism, see:
-    # https://github.com/astropy/astropy/issues/15441
-    "TestUnifiedOutputRegistry"
-
-    # flaky
-    "test_timedelta_conversion"
-    # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
-    "test_sidereal_lon_independent"
-    "test_timedelta_full_precision_arithmetic"
-    "test_datetime_to_timedelta"
-
-    "test_datetime_difference_agrees_with_timedelta_no_hypothesis"
-
-    # SAMPProxyError 1: 'Timeout expired!'
-    "TestStandardProfile.test_main"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
+  pytestFlagsArray = [
+    "--hypothesis-profile=ci"
+  ];
+  postCheck = ''
+    rm conftest.py
+  '';
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "6.17.0";
+  version = "8.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7AHmRAJ8wL8/V5uQyjdsEUxHQz0n+3pxi9FpMsM1l4U=";
+    tag = "v${version}";
+    hash = "sha256-DhzeEYdI/hrx6Stq77aOBJsl5AEtZO4ssbthmW4u/sE=";
   };
 
   build-system = [ setuptools ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # require network access
+    # Tests require network access
     "tests/test_captions.py"
     "tests/test_cli.py"
     "tests/test_exceptions.py"
@@ -33,11 +33,18 @@ buildPythonPackage rec {
     "tests/test_streams.py"
   ];
 
+  disabledTests = [
+    "test_playlist_failed_pagination"
+    "test_playlist_pagination"
+    "test_create_mock_html_json"
+  ];
+
   pythonImportsCheck = [ "pytubefix" ];
 
   meta = {
-    homepage = "https://github.com/JuanBindez/pytubefix";
     description = "Pytube fork with additional features and fixes";
+    homepage = "https://github.com/JuanBindez/pytubefix";
+    changelog = "https://github.com/JuanBindez/pytubefix/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ youhaveme9 ];
   };

@@ -1,13 +1,14 @@
-{ lib
-, fetchzip
-, makeShellWrapper
-, makeDesktopItem
-, stdenv
-, gtk3
-, libXtst
-, glib
-, zlib
-, wrapGAppsHook3
+{
+  lib,
+  fetchzip,
+  makeShellWrapper,
+  makeDesktopItem,
+  stdenv,
+  gtk3,
+  libXtst,
+  glib,
+  zlib,
+  wrapGAppsHook3,
 }:
 
 let
@@ -21,7 +22,6 @@ let
     categories = [ "Development" ];
     startupWMClass = "TLA+ Toolbox";
   };
-
 
 in
 stdenv.mkDerivation rec {
@@ -67,7 +67,14 @@ stdenv.mkDerivation rec {
     makeShellWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
       --chdir "$out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3 libXtst glib zlib ]}"  \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          gtk3
+          libXtst
+          glib
+          zlib
+        ]
+      }"  \
       "''${gappsWrapperArgs[@]}"
 
     echo -e "\nCreating TLA Toolbox icons..."

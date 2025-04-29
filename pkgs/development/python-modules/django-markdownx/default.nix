@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neutronX";
     repo = "django-markdownx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FZPUlogVd3FMGeH1vfKHA3tXVps0ET+UCQJflpiV2lE=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  # tests only executeable in vagrant
+  # tests only executable in vagrant
   doCheck = false;
 
   pythonImportsCheck = [ "markdownx" ];

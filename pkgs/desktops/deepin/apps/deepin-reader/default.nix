@@ -2,16 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
   dde-qt-dbus-factory,
-  qtwebengine,
-  karchive,
   poppler,
   libchardet,
   libspectre,
@@ -42,10 +38,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -53,8 +49,8 @@ stdenv.mkDerivation rec {
     qt5integration
     qt5platform-plugins
     dde-qt-dbus-factory
-    qtwebengine
-    karchive
+    libsForQt5.qtwebengine
+    libsForQt5.karchive
     poppler
     libchardet
     libspectre
@@ -71,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-reader";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

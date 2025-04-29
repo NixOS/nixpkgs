@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   runCommand,
 
   # build-system
@@ -31,28 +30,15 @@ let
 in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.32.2";
+  version = "0.34.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-TOs6wAZDcSD1eP+Hbj78YXoAtKbReC5di5QSpQdwp8E=";
+    repo = "python-dbusmock";
+    tag = version;
+    hash = "sha256-7h5SIcgWcbzInmCkbGz/ulfPJvqPPguWLJY+AXJuo0c=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://github.com/martinpitt/python-dbusmock/commit/1a8d8722068ef7e5f061336047a72d1a0f253b98.patch";
-      hash = "sha256-0j3UXsTMDh1+UolkmoLQXlwHXve81yKiGJ7gDWNZVPY=";
-    })
-    (fetchpatch {
-      name = "os-release.patch";
-      url = "https://github.com/martinpitt/python-dbusmock/commit/4b99cff50e8c741f20aef4527b27ccdb2a4053d2.patch";
-      hash = "sha256-Xcovv44JeuTvPAtXWJvWE+MxlyloClSJGKZz+C3P5bE=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -80,7 +66,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${version}";
+    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;

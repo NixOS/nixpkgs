@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fetchzip
-, johnny-reborn-engine
-, makeWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchzip,
+  johnny-reborn-engine,
+  makeWrapper,
 }:
 
 let
@@ -26,7 +27,10 @@ stdenvNoCC.mkDerivation {
   pname = "johnny-reborn";
   inherit (johnny-reborn-engine) version;
 
-  srcs = [ sounds resources ];
+  srcs = [
+    sounds
+    resources
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 

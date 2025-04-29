@@ -1,38 +1,39 @@
-{ lib
-, config
-, stdenv
-, fetchFromGitHub
-, cmake
-, darwin
-, removeReferencesTo
-, btop
-, testers
-, autoAddDriverRunpath
-, cudaSupport ? config.cudaSupport
-, rocmSupport ? config.rocmSupport
-, rocmPackages
+{
+  lib,
+  config,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  removeReferencesTo,
+  autoAddDriverRunpath,
+  apple-sdk_15,
+  versionCheckHook,
+  rocmPackages,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-A5hOBxj8tKlkHd8zDHfDoU6fIu8gDpt3/usbiDk0/G0=";
+    hash = "sha256-bCcgTi9jG2gM9ZCq4Xc7urOIoSsMwwztEDqKwPB65CE=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals cudaSupport [
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.IOKit
+    apple-sdk_15
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -46,9 +47,9 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath ${lib.getLib rocmPackages.rocm-smi}/lib $out/bin/btop
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = btop;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Monitor of resources";

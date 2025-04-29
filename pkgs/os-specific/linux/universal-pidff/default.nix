@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-pidff";
-  version = "0.0.8";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DptLqyjfRCpkbyFAQI8sylyKu2XyZZGrSITva9vcXGQ=";
+    tag = version;
+    hash = "sha256-AlJIbu8xrlDXfEqzoMGyHsLLfHnBsyYcECdoU3XyE00=";
   };
 
   postPatch = ''
@@ -38,9 +38,12 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/JacKeTUs/universal-pidff";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      danerieber
+      computerdane
       racci
     ];
     platforms = lib.platforms.linux;
+
+    # Broken due to missing linux/minmax.h
+    broken = kernel.kernelOlder "5.10";
   };
 }

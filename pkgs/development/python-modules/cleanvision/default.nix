@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanvision";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QAydDqLJx/jYKXqxRUElTdM5dOFA6nZag8rNAjPZjRg=";
   };
 
@@ -74,6 +74,6 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # Fatal Python error: Aborted
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

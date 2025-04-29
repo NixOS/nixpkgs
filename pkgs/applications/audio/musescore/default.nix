@@ -1,75 +1,58 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, wrapGAppsHook3
-, wrapQtAppsHook
-, pkg-config
-, ninja
-, alsa-lib
-, alsa-plugins
-, freetype
-, libjack2
-, lame
-, libogg
-, libpulseaudio
-, libsndfile
-, libvorbis
-, portaudio
-, portmidi
-, qtbase
-, qtdeclarative
-, flac
-, libopusenc
-, libopus
-, tinyxml-2
-, qt5compat
-, qtwayland
-, qtsvg
-, qtscxml
-, qtnetworkauth
-, qttools
-, nixosTests
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  pkg-config,
+  ninja,
+  alsa-lib,
+  alsa-plugins,
+  freetype,
+  libjack2,
+  lame,
+  libogg,
+  libpulseaudio,
+  libsndfile,
+  libvorbis,
+  portaudio,
+  portmidi,
+  qtbase,
+  qtdeclarative,
+  flac,
+  libopusenc,
+  libopus,
+  tinyxml-2,
+  qt5compat,
+  qtwayland,
+  qtsvg,
+  qtscxml,
+  qtnetworkauth,
+  qttools,
+  nixosTests,
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  # portaudio propagates Darwin frameworks. Rebuild it using the 11.0 stdenv
-  # from Qt and the 11.0 SDK frameworks.
-  portaudio' = if stdenv.hostPlatform.isDarwin then portaudio.override {
-    stdenv = stdenv';
-    inherit (darwin.apple_sdk_11_0.frameworks)
-      AudioUnit
-      AudioToolbox
-      CoreAudio
-      CoreServices
-      Carbon
-    ;
-  } else portaudio;
-in stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.2";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wgujiFvaWejSEXTbq/Re/7Ca1jIqso2uZej3Lb3V4I8=";
+    sha256 = "sha256-9jafh9zyf+tuC+WU6nQIMBVm+Gqqcig8jS2R1h/YnIo=";
   };
+
+  # Backport + additional patch to fix build on Qt 6.9
+  # FIXME: remove when no longer required
   patches = [
-    # https://github.com/musescore/MuseScore/pull/24326
     (fetchpatch {
-      name = "fix-menubar-with-qt6.5+.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
-      hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
+      url = "https://github.com/musescore/MuseScore/commit/05056ed19520060c3912a09a3adfa0927057f956.patch";
+      hash = "sha256-50Hytuu2lQRbAI2JEwlKeMUmJxTUtfqgwru6U760hAY=";
     })
-    (fetchpatch {
-      name = "fix-crash-accessing-uninitialized-properties.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24714.patch";
-      hash = "sha256-ErrCU/U+wyfD7R8kiZTifGIeuCAdKi1q7uxYsoE/OLA=";
-    })
+    ./qt-6.9.patch
   ];
 
   cmakeFlags = [
@@ -92,16 +75,21 @@ in stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs =
+    [
+      # MuseScore JACK backend loads libjack at runtime.
+      "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libjack2 ]
+      }"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default QT_QPA_PLATFORM xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -109,49 +97,48 @@ in stdenv'.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-    cmake
-    qttools
-    pkg-config
-    ninja
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
-    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      wrapQtAppsHook
+      cmake
+      qttools
+      pkg-config
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+      # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+      wrapGAppsHook3
+    ];
 
-  buildInputs = [
-    libjack2
-    freetype
-    lame
-    libogg
-    libpulseaudio
-    libsndfile
-    libvorbis
-    portaudio'
-    portmidi
-    flac
-    libopusenc
-    libopus
-    tinyxml-2
-    qtbase
-    qtdeclarative
-    qt5compat
-    qtsvg
-    qtscxml
-    qtnetworkauth
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    qtwayland
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-  ];
+  buildInputs =
+    [
+      libjack2
+      freetype
+      lame
+      libogg
+      libpulseaudio
+      libsndfile
+      libvorbis
+      portaudio
+      portmidi
+      flac
+      libopusenc
+      libopus
+      tinyxml-2
+      qtbase
+      qtdeclarative
+      qt5compat
+      qtsvg
+      qtscxml
+      qtnetworkauth
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      qtwayland
+    ];
 
-  postInstall = ''
-    # Remove unneeded bundled libraries and headers
-    rm -r $out/{include,lib}
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
@@ -190,7 +177,11 @@ in stdenv'.mkDerivation (finalAttrs: {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever doronbehar orivej ];
+    maintainers = with maintainers; [
+      vandenoever
+      doronbehar
+      orivej
+    ];
     mainProgram = "mscore";
     platforms = platforms.unix;
   };

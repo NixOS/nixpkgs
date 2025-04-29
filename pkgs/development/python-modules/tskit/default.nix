@@ -11,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.5.8";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Wq7ar96w5hdAyKMMvK4zjYln74RmX1l/VhvS++CN+Xk=";
+    hash = "sha256-2ME+czMbliqdPDUsF2jlK6Ymh7YxZwXs7GoEVY1XVYE=";
   };
+
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0" "numpy"
+  '';
 
   build-system = [ setuptools ];
 

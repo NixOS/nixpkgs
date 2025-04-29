@@ -1,15 +1,16 @@
-{ mkDerivation
-, lib
-, kdecoration
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, plasma-workspace
-, qtbase
-, qt5
+{
+  mkDerivation,
+  lib,
+  kdecoration,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  plasma-workspace,
+  qtbase,
+  qt5,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "lightly-boehs";
   version = "0.4.1";
 

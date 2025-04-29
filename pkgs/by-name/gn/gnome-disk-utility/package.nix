@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, udisks2
-, libhandy
-, libsecret
-, libdvdread
-, meson
-, ninja
-, gtk3
-, glib
-, wrapGAppsHook3
-, libnotify
-, itstool
-, gnome
-, gnome-settings-daemon
-, adwaita-icon-theme
-, libxml2
-, gsettings-desktop-schemas
-, libcanberra-gtk3
-, libxslt
-, docbook-xsl-nons
-, desktop-file-utils
-, libpwquality
-, systemd
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  udisks2,
+  libhandy,
+  libsecret,
+  libdvdread,
+  meson,
+  ninja,
+  gtk3,
+  glib,
+  wrapGAppsHook3,
+  libnotify,
+  itstool,
+  gnome,
+  gnome-settings-daemon,
+  adwaita-icon-theme,
+  libxml2,
+  gsettings-desktop-schemas,
+  libcanberra-gtk3,
+  libxslt,
+  docbook-xsl-nons,
+  desktop-file-utils,
+  libpwquality,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://apps.gnome.org/DiskUtility/";
     description = "Udisks graphical front-end";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "gnome-disks";

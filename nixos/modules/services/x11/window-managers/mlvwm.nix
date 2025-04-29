@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.xserver.windowManager.mlvwm;
+let
+  cfg = config.services.xserver.windowManager.mlvwm;
 
 in
 {
@@ -22,15 +28,15 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = [{
-      name = "mlvwm";
-      start = ''
-        ${pkgs.mlvwm}/bin/mlvwm ${optionalString (cfg.configFile != null)
-          "-f /etc/mlvwm/mlvwmrc"
-        } &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.windowManager.session = [
+      {
+        name = "mlvwm";
+        start = ''
+          ${pkgs.mlvwm}/bin/mlvwm ${optionalString (cfg.configFile != null) "-f /etc/mlvwm/mlvwmrc"} &
+          waitPID=$!
+        '';
+      }
+    ];
 
     environment.etc."mlvwm/mlvwmrc" = mkIf (cfg.configFile != null) {
       source = cfg.configFile;

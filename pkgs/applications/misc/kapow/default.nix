@@ -1,4 +1,12 @@
-{ lib, stdenv, qmake, fetchFromGitHub, qtbase, qttools, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  qmake,
+  fetchFromGitHub,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kapow";
@@ -11,7 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "1fz9fb4w21ax8hjs6dwfn2410ig4lqvzdlijq0jcj3jbgxd4i1gw";
   };
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [ qtbase ];
 

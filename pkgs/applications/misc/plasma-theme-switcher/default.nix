@@ -1,5 +1,11 @@
 {
-  stdenv, lib, cmake, extra-cmake-modules, fetchFromGitHub, qtbase, kdeFrameworks
+  stdenv,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  qtbase,
+  kdeFrameworks,
 }:
 
 stdenv.mkDerivation rec {

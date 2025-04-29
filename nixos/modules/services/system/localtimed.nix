@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.localtimed;
-in {
+in
+{
   imports = [ (lib.mkRenamedOptionModule [ "services" "localtime" ] [ "services" "localtimed" ]) ];
 
   options = {
     services.localtimed = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable `localtimed`, a simple daemon for keeping the
@@ -23,12 +26,12 @@ in {
           to make the choice deliberate. An error will be presented otherwise.
         '';
       };
-      package = mkPackageOption pkgs "localtime" { };
-      geoclue2Package = mkPackageOption pkgs "geoclue2-with-demo-agent" { };
+      package = lib.mkPackageOption pkgs "localtime" { };
+      geoclue2Package = lib.mkPackageOption pkgs "Geoclue2" { default = "geoclue2-with-demo-agent"; };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # This will give users an error if they have set an explicit time
     # zone, rather than having the service silently override it.
     time.timeZone = null;

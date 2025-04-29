@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-aodhclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FArXBkDOY0Weu3Fm/M0Qgg0XHTy95MqlUidZ/hUZfB8=";
   };
 
@@ -77,6 +77,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Aodh API";
     license = lib.licenses.asl20;
     mainProgram = "aodh";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

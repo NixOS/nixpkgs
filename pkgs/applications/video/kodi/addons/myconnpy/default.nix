@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "myconnpy";
   namespace = "script.module.myconnpy";
@@ -20,6 +26,6 @@ buildKodiAddon rec {
     homepage = "http://dev.mysql.com/doc/connector-python/en/index.html";
     description = "MySQL Connector/Python";
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

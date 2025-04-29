@@ -1,11 +1,13 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ lib, ... }:
+
+{
   name = "freenet";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ nagy ];
+  meta = {
+    maintainers = with lib.maintainers; [ nagy ];
   };
 
   nodes = {
-    machine = { ... }: {
+    machine = {
       services.freenet.enable = true;
     };
   };
@@ -16,4 +18,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds("curl -sfL http://localhost:8888/ | grep Freenet")
     machine.succeed("systemctl stop freenet")
   '';
-})
+}

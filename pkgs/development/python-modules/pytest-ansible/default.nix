@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "24.9.0";
+  version = "25.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OlRWtKMgcZCDCFcUl3YXzG/ERPfx2KBEaKNf0strgCU=";
+    tag = "v${version}";
+    hash = "sha256-AX/yqxWHlLvS0K3Axhukzimi7IZYY6+IwkB9+tiqHTM=";
   };
 
   postPatch = ''
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
-    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
+    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ tjni ];
   };

@@ -1,11 +1,12 @@
-{ lib
-, pkgs
-, stdenvNoCC
-, fetchFromGitHub
-, php
-, nix-update-script
-, theme ? null
-, plugins ? []
+{
+  lib,
+  pkgs,
+  stdenvNoCC,
+  fetchFromGitHub,
+  php,
+  nix-update-script,
+  theme ? null,
+  plugins ? [ ],
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -47,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/plugins
     cp plugins/plugin.php $out/plugins/plugin.php
 
-    ${lib.optionalString (plugins != []) ''
+    ${lib.optionalString (plugins != [ ]) ''
       cp plugins/*.php $out/plugins/
       cp ${pkgs.writeText "$out/plugins.json" ''
         ${toString (builtins.toJSON plugins)}
@@ -64,7 +65,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Database management in a single PHP file";
     homepage = "https://docs.adminerevo.org";
-    license = with licenses; [ asl20 gpl2Only ];
+    license = with licenses; [
+      asl20
+      gpl2Only
+    ];
     maintainers = with maintainers; [
       shyim
     ];

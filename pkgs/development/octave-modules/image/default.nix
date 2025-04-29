@@ -1,15 +1,16 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "image";
-  version = "2.14.0";
+  version = "2.16.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dRXqIRqMuO9dnTurhaNunfVHXosFqRmgeODVJ0YHcTM=";
+    sha256 = "sha256-m7JsyljrH77fs/hOPS5+HuteFtfr4yNbfBB9lPWNFBc=";
   };
 
   meta = with lib; {
@@ -18,10 +19,10 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Functions for processing images";
     longDescription = ''
-       The Octave-forge Image package provides functions for processing
-       images. The package also provides functions for feature extraction,
-       image statistics, spatial and geometric transformations, morphological
-       operations, linear filtering, and much more.
+      The Octave-forge Image package provides functions for processing
+      images. The package also provides functions for feature extraction,
+      image statistics, spatial and geometric transformations, morphological
+      operations, linear filtering, and much more.
     '';
   };
 }

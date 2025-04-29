@@ -10,19 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-application-manager";
-  version = "1.2.15";
+  version = "1.2.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-9WKKM3SAMgW+UL0DnzDFqA+HHi7euF/yyTyKSbrIgV4=";
+    hash = "sha256-KUwX7oilV562WDxkBhTQhwz2lgcQIYwkmRRglWj0zh8=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6Packages.wrapQtAppsHook
+    qt6Packages.wrapQtAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-application-manager";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

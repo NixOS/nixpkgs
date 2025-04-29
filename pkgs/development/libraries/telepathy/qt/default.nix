@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, qtbase
-, pkg-config
-, python3Packages
-, dbus-glib
-, dbus
-, telepathy-farstream
-, telepathy-glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  qtbase,
+  pkg-config,
+  python3Packages,
+  dbus-glib,
+  dbus,
+  telepathy-farstream,
+  telepathy-glib,
 }:
 
 let
@@ -23,10 +24,21 @@ stdenv.mkDerivation rec {
     sha256 = "bf8e2a09060addb80475a4938105b9b41d9e6837999b7a00e5351783857e18ad";
   };
 
-  nativeBuildInputs = [ cmake pkg-config python ];
-  propagatedBuildInputs = [ qtbase telepathy-farstream telepathy-glib ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python
+  ];
+  propagatedBuildInputs = [
+    qtbase
+    telepathy-farstream
+    telepathy-glib
+  ];
   buildInputs = [ dbus-glib ];
-  nativeCheckInputs = [ dbus dbus-python ];
+  nativeCheckInputs = [
+    dbus
+    dbus-python
+  ];
 
   # No point in building tests if they are not run
   # On 0.9.7, they do not even build with QT4

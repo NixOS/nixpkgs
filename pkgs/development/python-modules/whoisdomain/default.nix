@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "whoisdomain";
-  version = "1.20240129.1";
+  version = "1.20250220.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nRj/WkYjMZuQoYF+QFIHABlek4DxvvEnOTeFYLHYvZc=";
+    tag = version;
+    hash = "sha256-/f5zV0vgjOIIux4e0mXeFSfY8cNpfGkfeCs3djla2zM=";
   };
 
   nativeBuildInputs = [ hatchling ];

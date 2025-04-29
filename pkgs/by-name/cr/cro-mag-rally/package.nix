@@ -1,9 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  libGL,
+  cmake,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation {
@@ -24,6 +26,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     SDL2
+    libGL
   ];
 
   installPhase = ''

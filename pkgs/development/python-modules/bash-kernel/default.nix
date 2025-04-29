@@ -1,43 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  ipykernel,
-  python,
-  pexpect,
+  fetchFromGitHub,
+  replaceVars,
   bashInteractive,
-  substituteAll,
+  flit-core,
+  filetype,
+  ipykernel,
+  pexpect,
+  writableTmpDirAsHomeHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "bash-kernel";
-  version = "0.9.3";
+  version = "0.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "bash_kernel";
-    inherit version;
-    hash = "sha256-n3oDgRyn2csfv/gIIjfPBFC5cYIlL9C4BYeha2XmbVg=";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "bash_kernel";
+    tag = version;
+    hash = "sha256-ugFMcQx1B1nKoO9rhb6PMllRcoZi0O4B9um8dOu5DU4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./bash-path.patch;
+    (replaceVars ./bash-path.patch {
       bash = lib.getExe bashInteractive;
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    filetype
     ipykernel
     pexpect
   ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = ''
     ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out
@@ -58,11 +61,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
     changelog = "https://github.com/takluyver/bash_kernel/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

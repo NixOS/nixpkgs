@@ -2,36 +2,42 @@
   lib,
   stdenv,
   buildPythonPackage,
-  substituteAll,
+  fetchFromGitHub,
+  fetchpatch,
   glibc,
   libtiff,
-  openjpeg,
-  fetchFromGitHub,
   lxml,
   numpy,
+  openjpeg,
   pytestCheckHook,
   pythonOlder,
   scikit-image,
   setuptools,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "glymur";
-  version = "0.13.4";
+  version = "0.13.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "quintusdias";
     repo = "glymur";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RzRZuSNvlUrB+J93a1ob7dDMacZB082JwVHQ9Fce2JA=";
+    tag = "v${version}";
+    hash = "sha256-tIvDhlFPpDxC3CgBDT0RN9MM8ycY+J1hjcLXzx14Zhs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./set-lib-paths.patch;
+    # Numpy 2.x compatibility, https://github.com/quintusdias/glymur/pull/675
+    (fetchpatch {
+      name = "numpy2-compat.patch";
+      url = "https://github.com/quintusdias/glymur/commit/89b159299035ebb05776c3b90278f410ca6dba64.patch";
+      hash = "sha256-C/Q5WZmW5YtN3U8fxKljfqwKHtFLfR2LQ69Tj8SuIWg=";
+    })
+    (replaceVars ./set-lib-paths.patch {
       openjp2_lib = "${lib.getLib openjpeg}/lib/libopenjp2${stdenv.hostPlatform.extensions.sharedLibrary}";
       tiff_lib = "${lib.getLib libtiff}/lib/libtiff${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

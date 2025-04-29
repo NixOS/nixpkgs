@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   SDL2,
   darwin,
   fetchurl,
@@ -24,14 +25,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
+  buildInputs =
+    [
+      SDL2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libobjc
+    ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  outputs = [ "out" "dev" ];
+  # Missing 'sincos()' implementation fails linking projects
+  # like 'freeciv_sdl2'.
+  env.NIX_LDFLAGS = "-lm";
 
   configureFlags = [
     (lib.enableFeature enableMmx "mmx")
@@ -39,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  enableParallelBuilding = true;
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
@@ -67,8 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       written in plain C and can be used in C++ code.
     '';
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "SDL2_gfx" ];
     inherit (SDL2.meta) platforms;
   };

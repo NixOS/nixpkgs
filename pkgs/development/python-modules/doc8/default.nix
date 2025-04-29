@@ -3,7 +3,6 @@
   buildPythonPackage,
   chardet,
   docutils,
-  fetchpatch,
   fetchPypi,
   pbr,
   pygments,
@@ -26,15 +25,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-EiXzAUThzJfjiNuvf+PpltKJdHOlOm2uJo3d4hw1S5g=";
   };
-
-  patches = [
-    # https://github.com/PyCQA/doc8/pull/146
-    (fetchpatch {
-      name = "remove-setuptools-scm-git-archive.patch";
-      url = "https://github.com/PyCQA/doc8/commit/06416e95041db92e4295b13ab596351618f6b32e.patch";
-      hash = "sha256-IIE3cDNOx+6RLjidGrokyazaX7MOVbMKUb7yQIM5sI0=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools-scm

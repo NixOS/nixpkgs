@@ -1,4 +1,12 @@
-{ lib, buildPythonApplication, fetchPypi, python3Packages }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  libevdev,
+  paramiko,
+  pynput,
+  screeninfo,
+}:
 
 buildPythonApplication rec {
   pname = "remarkable-mouse";
@@ -9,7 +17,12 @@ buildPythonApplication rec {
     hash = "sha256-82P9tE3jiUlKBGZCiWDoL+9VJ06Bc+If+aMfcEEU90U=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ screeninfo paramiko pynput libevdev ];
+  propagatedBuildInputs = [
+    screeninfo
+    paramiko
+    pynput
+    libevdev
+  ];
 
   # no tests
   doCheck = false;

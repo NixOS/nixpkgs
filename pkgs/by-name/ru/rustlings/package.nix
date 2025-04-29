@@ -8,11 +8,12 @@
   cargo,
   rustc,
   clippy,
+  gcc,
   makeWrapper,
 }:
 let
   pname = "rustlings";
-  version = "6.3.0";
+  version = "6.4.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,10 +21,11 @@ rustPlatform.buildRustPackage {
     owner = "rust-lang";
     repo = "rustlings";
     rev = "v${version}";
-    hash = "sha256-te7DYgbEtWWSSvO28ajkJucRb3c9L8La1wfGW0WSxW0=";
+    hash = "sha256-VdIIcpyoCuid3MECVc9aKeIOUlxGlxcG7znqbqo9pjc=";
   };
 
-  cargoHash = "sha256-Vq4Os4CKkEz4HggIZhlbIo9Cu+BVJPdybL1CNvz5wEQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QWmK+chAUnMGjqLq2xN5y6NJZJBMDTszImB9bXhO4+w=";
 
   # Disabled test that does not work well in an isolated environment
   checkFlags = [
@@ -46,6 +48,7 @@ rustPlatform.buildRustPackage {
         cargo
         rustc
         clippy
+        gcc
       ]
     }
   '';

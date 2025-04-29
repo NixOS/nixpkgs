@@ -20,8 +20,24 @@
     "batterytime@typeof.pw",
     "batime@martin.zurowietz.de"
   ],
+  "nepali-calendar": [
+    "nepali-date@biplab",
+    "nepali-calendar-gs-extension@subashghimire.info.np"
+  ],
+  "mouse-follows-focus": [
+    "mouse-follows-focus@crisidev.org",
+    "mousefollowsfocus@matthes.biz"
+  ],
   "power-profile-indicator": [
     "power-profile-indicator@laux.wtf",
     "power-profile@fthx"
+  ],
+  "fullscreen-to-empty-workspace": [
+    "fullscreen-to-empty-workspace@aiono.dev",
+    "fullscreen-to-empty-workspace2@corgijan.dev"
+  ],
+  "eur-usd": [
+    "eur-usd-gshell@vezza.github.com",
+    "usd-mxn-gshell@kinduff.github.com"
   ]
 }

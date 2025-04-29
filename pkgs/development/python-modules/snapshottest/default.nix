@@ -6,7 +6,7 @@
   six,
   termcolor,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   django,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     django
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "snapshottest" ];

@@ -1,16 +1,32 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    optionalString
+    types
+    ;
 
-  cfg = config.services.bird2;
-  caps = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_RAW" ];
+  cfg = config.services.bird;
+  caps = [
+    "CAP_NET_ADMIN"
+    "CAP_NET_BIND_SERVICE"
+    "CAP_NET_RAW"
+  ];
 in
 {
   ###### interface
   options = {
-    services.bird2 = {
+    services.bird = {
       enable = mkEnableOption "BIRD Internet Routing Daemon";
+      package = lib.mkPackageOption pkgs "bird3" { };
       config = mkOption {
         type = types.lines;
         description = ''
@@ -22,7 +38,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether bird2 should be automatically reloaded when the configuration changes.
+          Whether bird should be automatically reloaded when the configuration changes.
         '';
       };
       checkConfig = mkOption {
@@ -43,7 +59,7 @@ in
         '';
         description = ''
           Commands to execute before the config file check. The file to be checked will be
-          available as `bird2.conf` in the current directory.
+          available as `bird.conf` in the current directory.
 
           Files created with this option will not be available at service runtime, only during
           build time checking.
@@ -52,38 +68,40 @@ in
     };
   };
 
-
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "bird" ] "Use services.bird2 instead")
-    (lib.mkRemovedOptionModule [ "services" "bird6" ] "Use services.bird2 instead")
+    (lib.mkRemovedOptionModule [ "services" "bird2" ]
+      "Use services.bird instead. bird3 is the new default bird package. You can choose to remain with bird2 by setting the service.bird.package option."
+    )
+    (lib.mkRemovedOptionModule [ "services" "bird6" ] "Use services.bird instead")
   ];
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.bird ];
+    environment.systemPackages = [ cfg.package ];
 
-    environment.etc."bird/bird2.conf".source = pkgs.writeTextFile {
-      name = "bird2";
+    environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
+      name = "bird";
       text = cfg.config;
+      derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
       checkPhase = optionalString cfg.checkConfig ''
-        ln -s $out bird2.conf
+        ln -s $out bird.conf
         ${cfg.preCheckConfig}
-        ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
+        bird -d -p -c bird.conf
       '';
     };
 
-    systemd.services.bird2 = {
+    systemd.services.bird = {
       description = "BIRD Internet Routing Daemon";
       wantedBy = [ "multi-user.target" ];
-      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird2.conf".source;
+      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
-        User = "bird2";
-        Group = "bird2";
-        ExecStart = "${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf";
-        ExecReload = "${pkgs.bird}/bin/birdc configure";
-        ExecStop = "${pkgs.bird}/bin/birdc down";
+        User = "bird";
+        Group = "bird";
+        ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
+        ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
+        ExecStop = "${lib.getExe' cfg.package "birdc"} down";
         RuntimeDirectory = "bird";
         CapabilityBoundingSet = caps;
         AmbientCapabilities = caps;
@@ -98,12 +116,16 @@ in
       };
     };
     users = {
-      users.bird2 = {
+      users.bird = {
         description = "BIRD Internet Routing Daemon user";
-        group = "bird2";
+        group = "bird";
         isSystemUser = true;
       };
-      groups.bird2 = { };
+      groups.bird = { };
     };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [ herbetom ];
   };
 }

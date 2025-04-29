@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
+{
+  stdenv,
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
 }:
 
 mkDerivation rec {
@@ -41,7 +42,7 @@ mkDerivation rec {
     homepage = "https://github.com/martynets/dialogbox/";
     description = "Qt-based scriptable engine providing GUI dialog boxes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     mainProgram = "dialogbox";
   };

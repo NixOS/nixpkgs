@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, avogadrolibs, molequeue, hdf5
-, openbabel, qttools, wrapQtAppsHook, mesa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  avogadrolibs,
+  molequeue,
+  hdf5,
+  openbabel,
+  qttools,
+  wrapQtAppsHook,
+  mesa,
 }:
 
 let
@@ -10,22 +21,26 @@ let
     hash = "sha256-AR/y70zeYR9xBzWDB5JXjJdDM+NLOX6yxCQte2lYN/U=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.99.0";
+  version = "1.100.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    hash = "sha256-m8kX4WzOmPE/BZQRePOoUAdMPdWb6pmcqtPvDdEIIao=";
+    hash = "sha256-NSozi6oElNTIFTdRW32ZcNm8Ae311xk6kN1wtrEqjaU=";
   };
 
   postUnpack = ''
     cp -r ${avogadroI18N} avogadro-i18n
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     avogadrolibs

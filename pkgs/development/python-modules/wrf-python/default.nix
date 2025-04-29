@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
 
@@ -49,6 +49,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wrf" ];
 
   meta = with lib; {
+    # `ModuleNotFoundError: No module named 'distutils.msvccompiler'` on Python 3.11
+    # `ModuleNotFoundError: No module named 'numpy.distutils'` on Python 3.12
+    broken = true;
     description = "WRF postprocessing library for Python";
     homepage = "http://wrf-python.rtfd.org";
     license = licenses.asl20;

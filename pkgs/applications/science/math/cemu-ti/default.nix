@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6
-, libarchive
-, libpng
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6,
+  libarchive,
+  libpng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/gui/qt/";
 
+  patches = [
+    # This is resolved upstream, but I can't apply the patch because the
+    # sourceRoot isn't set to the base of the Git repo.
+    ./resolve-ambiguous-constexpr.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -39,8 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "CEmu";
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ clevor ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+    ];
+    broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
   };
 })

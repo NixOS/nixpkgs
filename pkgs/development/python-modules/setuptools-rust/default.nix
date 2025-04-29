@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.10.1";
+  version = "1.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "setuptools_rust";
     inherit version;
-    hash = "sha256-15A1/FTN+TQunt9LAJSR7KsGw6ZSs3w8E3x7qFVH0+Y=";
+    hash = "sha256-92XWbz3vb9yF4ebYicaoEq6hQwyNrc8ce2d5tF+HT7I=";
   };
 
   build-system = [

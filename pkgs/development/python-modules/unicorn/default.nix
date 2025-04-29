@@ -2,21 +2,24 @@
   lib,
   stdenv,
   buildPythonPackage,
+  capstone,
+  pytestCheckHook,
+  setuptools-scm,
   setuptools,
-  unicorn-emu,
+  unicorn,
 }:
 
 buildPythonPackage rec {
   pname = "unicorn";
-  version = lib.getVersion unicorn-emu;
+  version = lib.getVersion unicorn;
   pyproject = true;
 
-  src = unicorn-emu.src;
+  src = unicorn.src;
 
   sourceRoot = "${src.name}/bindings/python";
 
   prePatch = ''
-    ln -s ${unicorn-emu}/lib/libunicorn.* prebuilt/
+    ln -s ${unicorn}/lib/libunicorn.* prebuilt/
   '';
 
   # Needed on non-x86 linux
@@ -32,17 +35,18 @@ buildPythonPackage rec {
       "macosx_11_0"
     ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    capstone
+    pytestCheckHook
+  ];
 
-    mv unicorn unicorn.hidden
-    patchShebangs sample_*.py shellcode.py
-    sh -e sample_all.sh
-
-    runHook postCheck
-  '';
+  # this test does not appear to be intended as a pytest-style test
+  disabledTests = [ "test_i386" ];
 
   pythonImportsCheck = [ "unicorn" ];
 

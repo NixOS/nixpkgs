@@ -1,51 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, libiconv
-, buildPackages
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.3.0";
+  version = "18.5.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-Q3UI1IUD5Jz2O4xj3mFM7DqY3lTy3WhWYPa8QjJHTKE=";
+    hash = "sha256-VXbnf/TfMWGHHXccKZBX4/RWDT/J1kpSBzhML4973mo=";
   };
 
-  # TODO: unify this to one hash because updater do not support this
-  cargoHash =
-    if stdenv.hostPlatform.isLinux
-    then "sha256-K4Vw/d0ZOROWujWr76I3QvfKefLhXLeFufUrgStAyjQ="
-    else "sha256-8NAfE7cGFT64ntNXK9RT0D/MbDJweN7vvsG/KlrY4K4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MQNveOBItVOHFNarU5xXl8xHoooSAVbA7JnxxuRI9To=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "client" "sync" "server" "clipboard" "daemon"
+    "client"
+    "sync"
+    "server"
+    "clipboard"
+    "daemon"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk_11_0.frameworks.AppKit
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-  ];
-
-  preBuild = ''
-    export PROTOC=${buildPackages.protobuf}/bin/protoc
-    export PROTOC_INCLUDE="${buildPackages.protobuf}/include";
-  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atuin \
@@ -54,8 +42,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) atuin;
+  passthru = {
+    tests = {
+      inherit (nixosTests) atuin;
+    };
+    updateScript = nix-update-script { };
   };
 
   checkFlags = [
@@ -71,11 +62,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=build_aliases"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/atuinsh/atuin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      sciencentistguy
+      _0x4A6F
+    ];
     mainProgram = "atuin";
   };
 }

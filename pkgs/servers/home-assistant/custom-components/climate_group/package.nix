@@ -11,11 +11,9 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "climate_group";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-f/VQUNzRSxmKGNgijaafQ5NbngUUKmcdkafYC3Ol9qM=";
   };
-
-  dontBuild = true;
 
   meta = {
     changelog = "https://github.com/bjrnptrsn/climate_group/blob/${src.rev}/README.md#changelog";

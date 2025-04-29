@@ -6,6 +6,7 @@
   fuse,
   cryfs,
   encfs,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-vault";
@@ -15,6 +16,13 @@ mkKdeDerivation {
     ./0002-cryfs-path.patch
     ./0003-fusermount-path.patch
     ./0004-gocryptfs-path.patch
+
+    # Fix build with Qt 6.9
+    # FIXME: remove in 6.3.5
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-vault/-/commit/a982e58679caa583ceb4cc883d1c1923dab54db9.patch";
+      hash = "sha256-Khws1fvVTFEgwMDGt7P52PHboa+4kq6g792kFaT5ceU=";
+    })
   ];
 
   CXXFLAGS = [

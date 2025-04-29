@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, glib
-, gtest
-, libqtdbustest
-, lomiri-api
-, pkg-config
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gtest,
+  libqtdbustest,
+  lomiri-api,
+  pkg-config,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to test GMenuModel structures";
     homepage = "https://gitlab.com/ubports/development/core/gmenuharness";
     license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.unix;
     pkgConfigModules = [
       "libgmenuharness"

@@ -1,39 +1,70 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ffmpeg
-, fftwFloat
-, chafa
-, freeimage
-, glib
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fftwFloat,
+  chafa,
+  curl,
+  glib,
+  libopus,
+  opusfile,
+  libvorbis,
+  taglib,
+  faad2,
+  libogg,
+  pkg-config,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "1.5.2";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
-    rev = "v${version}";
-    hash = "sha256-Om7v8eTlYxXQYf1MG+L0I5ICQ2LS7onouhPGosuK8NM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-64xdxRx4OanAcLgir9N7p/q71+gQYhffnWnxZzz93h8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
+  buildInputs = [
+    fftwFloat.dev
+    chafa
+    curl.dev
+    glib.dev
+    libopus
+    opusfile
+    libvorbis
+    taglib
+    faad2
+    libogg
+  ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Command-line music player for Linux";
     homepage = "https://github.com/ravachol/kew";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ demine ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      demine
+      matteopacini
+    ];
     mainProgram = "kew";
   };
-}
+})

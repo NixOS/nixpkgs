@@ -1,18 +1,28 @@
-{ lib, stdenv, fetchurl, xorgproto, libXt, libX11
-, gifview ? false
-, static ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorgproto,
+  libXt,
+  libX11,
+  gifview ? false,
+  static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gifsicle";
-  version = "1.95";
+  version = "1.96";
 
   src = fetchurl {
     url = "https://www.lcdf.org/gifsicle/gifsicle-${version}.tar.gz";
-    hash = "sha256-snEWRwCf0qExMPO+FgUy7UZTjnYr/A8CDepQYYp9yVA=";
+    hash = "sha256-/SPSeWgabf48FSZOM/NEBFs7pHPaTRn0nmelCZSwd/s=";
   };
 
-  buildInputs = lib.optionals gifview [ xorgproto libXt libX11 ];
+  buildInputs = lib.optionals gifview [
+    xorgproto
+    libXt
+    libX11
+  ];
 
   configureFlags = lib.optional (!gifview) "--disable-gifview";
 

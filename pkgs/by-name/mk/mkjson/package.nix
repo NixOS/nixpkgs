@@ -1,1 +1,2 @@
-{ haskell, haskellPackages }: haskell.lib.justStaticExecutables (haskellPackages.callPackage ./generated.nix { })
+{ haskell, haskellPackages }:
+haskell.lib.justStaticExecutables (haskellPackages.callPackage ./generated.nix { })

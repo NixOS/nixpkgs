@@ -12,14 +12,15 @@
   pythonOlder,
   withGui ? false,
   wrapQtAppsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "vivisect";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,15 +29,18 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "cxxfilt"
+    "msgpack"
     "pyasn1"
     "pyasn1-modules"
   ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyasn1
     pyasn1-modules
     cxxfilt
@@ -53,7 +57,7 @@ buildPythonPackage rec {
     wrapQtApp $out/bin/vivbin
   '';
 
-  # requires another repo for test files
+  # Tests requires another repo for test files
   doCheck = false;
 
   pythonImportsCheck = [ "vivisect" ];

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, pidgin, intltool, libxml2, gmime, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pidgin,
+  intltool,
+  libxml2,
+  gmime,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-sipe";
@@ -24,7 +34,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ intltool ];
-  buildInputs = [ pidgin gmime libxml2 nss ];
+  buildInputs = [
+    pidgin
+    gmime
+    libxml2
+    nss
+  ];
   configureFlags = [
     "--without-dbus"
     "--enable-quality-check=no"

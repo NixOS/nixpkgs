@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "objax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objax" ];
 
-  # This is necessay to ignore the presence of two protobufs version (tensorflow is bringing an
+  # This is necessary to ignore the presence of two protobufs version (tensorflow is bringing an
   # older version).
   catchConflicts = false;
 

@@ -1,26 +1,70 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
-, pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
-, lua, curl
-, Cocoa, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  pango,
+  gettext,
+  boost,
+  libvorbis,
+  fribidi,
+  dbus,
+  libpng,
+  pcre,
+  openssl,
+  icu,
+  lua,
+  curl,
+  Cocoa,
+  Foundation,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.18.2";
+  version = "1.18.4";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    hash = "sha256-nr+WUFzHeaPxCzwc+8JZRL86X8XEsnsGM1HXnNqOIF0=";
+    hash = "sha256-c3BoTFnSUqtp71QeSCsC2teVuzsQwV8hOJtIcZdP+1E=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu lua curl ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation];
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_net
+      SDL2_ttf
+      pango
+      gettext
+      boost
+      libvorbis
+      fribidi
+      dbus
+      libpng
+      pcre
+      openssl
+      icu
+      lua
+      curl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+      Foundation
+    ];
 
   cmakeFlags = [
     "-DENABLE_SYSTEM_LUA=ON"

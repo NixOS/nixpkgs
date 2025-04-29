@@ -1,7 +1,8 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
 let
   cfg = config.services.matter-server;
@@ -25,14 +26,20 @@ in
     };
 
     logLevel = lib.mkOption {
-      type = lib.types.enum [ "critical" "error" "warning" "info" "debug" ];
+      type = lib.types.enum [
+        "critical"
+        "error"
+        "warning"
+        "info"
+        "debug"
+      ];
       default = "info";
       description = "Verbosity of logs from the matter-server";
     };
 
     extraArgs = lib.mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra arguments to pass to the matter-server executable.
         See https://github.com/home-assistant-libs/python-matter-server?tab=readme-ov-file#running-the-development-server for options.
@@ -49,28 +56,42 @@ in
       description = "Matter Server";
       environment.HOME = storagePath;
       serviceConfig = {
-        ExecStart = (lib.concatStringsSep " " [
-          "${cfg.package}/bin/matter-server"
-          "--port" (toString cfg.port)
-          "--vendorid" vendorId
-          "--storage-path" storagePath
-          "--log-level" "${cfg.logLevel}"
-          "${lib.escapeShellArgs cfg.extraArgs}"
-        ]);
+        ExecStart = (
+          lib.concatStringsSep " " [
+            # `python-matter-server` writes to /data even when a storage-path
+            # is specified. This symlinks /data at the systemd-managed
+            # /var/lib/matter-server, so all files get dropped into the state
+            # directory.
+            "${pkgs.bash}/bin/sh"
+            "-c"
+            "'"
+            "${pkgs.coreutils}/bin/ln -s %S/matter-server/ %t/matter-server/root/data"
+            "&&"
+            "${cfg.package}/bin/matter-server"
+            "--port"
+            (toString cfg.port)
+            "--vendorid"
+            vendorId
+            "--storage-path"
+            storagePath
+            "--log-level"
+            "${cfg.logLevel}"
+            "${lib.escapeShellArgs cfg.extraArgs}"
+            "'"
+          ]
+        );
         # Start with a clean root filesystem, and allowlist what the container
         # is permitted to access.
-        TemporaryFileSystem = "/";
+        # See https://discourse.nixos.org/t/hardening-systemd-services/17147/14.
+        RuntimeDirectory = [ "matter-server/root" ];
+        RootDirectory = "%t/matter-server/root";
+
         # Allowlist /nix/store (to allow the binary to find its dependencies)
         # and dbus.
-        ReadOnlyPaths = "/nix/store /run/dbus";
+        BindReadOnlyPaths = "/nix/store /run/dbus";
         # Let systemd manage `/var/lib/matter-server` for us inside the
         # ephemeral TemporaryFileSystem.
         StateDirectory = storageDir;
-        # `python-matter-server` writes to /data even when a storage-path is
-        # specified. This bind-mount points /data at the systemd-managed
-        # /var/lib/matter-server, so all files get dropped into the state
-        # directory.
-        BindPaths = "${storagePath}:/data";
 
         # Hardening bits
         AmbientCapabilities = "";
@@ -96,6 +117,7 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -119,4 +141,3 @@ in
     };
   };
 }
-

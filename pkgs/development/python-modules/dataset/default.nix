@@ -5,7 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  sqlalchemy,
+  sqlalchemy_1_4,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +21,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    alembic
+    (alembic.override { sqlalchemy = sqlalchemy_1_4; })
     banal
-    sqlalchemy
+    # SQLAlchemy >= 2.0.0 is unsupported
+    # https://github.com/pudo/dataset/issues/411
+    sqlalchemy_1_4
   ];
 
   # checks attempt to import nonexistent module 'test.test' and fail
@@ -36,8 +38,5 @@ buildPythonPackage rec {
     homepage = "https://dataset.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ xfnw ];
-    # SQLAlchemy >= 2.0.0 is unsupported
-    # https://github.com/pudo/dataset/issues/411
-    broken = true;
   };
 }

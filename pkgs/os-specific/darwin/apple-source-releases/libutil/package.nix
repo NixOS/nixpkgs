@@ -21,7 +21,7 @@ mkAppleDerivation {
   ];
 
   buildInputs = [
-    apple-sdk_14
+    (apple-sdk_14.override { enableBootstrap = true; })
     copyfile
   ];
 

@@ -2,81 +2,77 @@
   lib,
   stdenv,
   buildPythonPackage,
-  rustPlatform,
   fetchFromGitHub,
-  darwin,
-  libiconv,
+  rustPlatform,
+
+  # buildInputs
+  openssl,
+
+  # nativeBuildInputs
   pkg-config,
   protobuf,
-  attrs,
-  cachetools,
+
+  # dependencies
   deprecation,
   overrides,
   packaging,
+  pyarrow,
   pydantic,
-  pylance,
-  requests,
-  retry,
   tqdm,
+
+  # tests
   aiohttp,
   pandas,
   polars,
+  pylance,
   pytest-asyncio,
   pytestCheckHook,
+  duckdb,
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.13.0";
+  version = "0.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    rev = "refs/tags/python-v${version}";
-    hash = "sha256-6E20WgyoEALdxmiOfgq89dCkqovvIMzc/wy+kvjDWwU=";
+    tag = "python-v${version}";
+    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
   };
 
   buildAndTestSubdir = "python";
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
+  };
 
   build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      libiconv
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
+
+  pythonRelaxDeps = [
+    # pylance is pinned to a specific release
+    "pylance"
+  ];
 
   dependencies = [
-    attrs
-    cachetools
     deprecation
     overrides
     packaging
+    pyarrow
     pydantic
-    pylance
-    requests
-    retry
     tqdm
   ];
 
@@ -84,8 +80,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp
+    duckdb
     pandas
     polars
+    pylance
     pytest-asyncio
     pytestCheckHook
   ];
@@ -99,24 +97,27 @@ buildPythonPackage rec {
   disabledTests = [
     # require tantivy which is not packaged in nixpkgs
     "test_basic"
+    "test_fts_native"
 
     # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
     # https://github.com/lancedb/lancedb/issues/1539
     "test_polars"
   ];
 
-  disabledTestPaths = [
-    # touch the network
-    "test_s3.py"
-  ];
+  disabledTestPaths =
+    [
+      # touch the network
+      "test_s3.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+      "test_remote_db.py"
+    ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
       "python-v(.*)"
-      "--generate-lockfile"
-      "--lockfile-metadata-path"
-      "python"
     ];
   };
 

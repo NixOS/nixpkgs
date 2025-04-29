@@ -1,7 +1,6 @@
 {
   lib,
-  apple-sdk_11,
-  developer_cmds,
+  apple-sdk,
   fetchurl,
   libpcap,
   libresolv,
@@ -67,7 +66,7 @@ let
     };
   };
 
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "network_cmds-deps-private-headers";
@@ -405,7 +404,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-L5upfoE6uHsdFOzylTTH+UPftA96qdpnvgFcK5dmhgY=";
+  xcodeHash = "sha256-HkcIvKB4ektuk+3J/Sque8Pr5dMeNFZRlENuiu3KdsA=";
 
   patches = [
     # Some private headers depend on corecrypto, which we can’t use.
@@ -444,12 +443,10 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   nativeBuildInputs = [
-    developer_cmds
     pkg-config
   ];
 
   buildInputs = [
-    apple-sdk_11
     libpcap
     libresolv
     openssl

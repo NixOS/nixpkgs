@@ -2,19 +2,23 @@ import ./make-test-python.nix {
   name = "thelounge";
 
   nodes = {
-    private = { config, pkgs, ... }: {
-      services.thelounge = {
-        enable = true;
-        plugins = [ pkgs.theLoungePlugins.themes.solarized ];
+    private =
+      { config, pkgs, ... }:
+      {
+        services.thelounge = {
+          enable = true;
+          plugins = [ pkgs.theLoungePlugins.themes.solarized ];
+        };
       };
-    };
 
-    public = { config, pkgs, ... }: {
-      services.thelounge = {
-        enable = true;
-        public = true;
+    public =
+      { config, pkgs, ... }:
+      {
+        services.thelounge = {
+          enable = true;
+          public = true;
+        };
       };
-    };
   };
 
   testScript = ''

@@ -1,9 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.journald;
-in {
+in
+{
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "journald" "enableHttpGateway" ] [ "services" "journald" "gateway" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "journald" "enableHttpGateway" ]
+      [ "services" "journald" "gateway" "enable" ]
+    )
   ];
 
   options = {
@@ -31,7 +41,12 @@ in {
 
     services.journald.storage = lib.mkOption {
       default = "persistent";
-      type = lib.types.enum [ "persistent" "volatile" "auto" "none" ];
+      type = lib.types.enum [
+        "persistent"
+        "volatile"
+        "auto"
+        "none"
+      ];
       description = ''
         Controls where to store journal data. See
         {manpage}`journald.conf(5)` for further information.
@@ -49,8 +64,7 @@ in {
 
         Note that the effective rate limit is multiplied by a factor derived
         from the available free disk space for the journal as described on
-        [
-        journald.conf(5)](https://www.freedesktop.org/software/systemd/man/journald.conf.html).
+        {manpage}`journald.conf(5)`.
 
         Note that the total amount of logs stored is limited by journald settings
         such as `SystemMaxUse`, which defaults to 10% the file system size
@@ -61,6 +75,23 @@ in {
         able to store logs for when an application logs at full burst rate.
         With default settings for log lines that are 100 Bytes long, this can
         amount to just a few hours.
+      '';
+    };
+
+    services.journald.audit = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.bool;
+      description = ''
+        If enabled systemd-journald will turn on auditing on start-up.
+        If disabled it will turn it off. If unset it will neither enable nor disable it, leaving the previous state unchanged.
+
+        NixOS defaults to leaving this unset as enabling audit without auditd running leads to spamming /dev/kmesg with random messages
+        and if you enable auditd then auditd is responsible for turning auditing on.
+
+        If you want to have audit logs in journald and do not mind audit logs also ending up in /dev/kmesg you can set this option to true.
+
+        If you want to for some ununderstandable reason disable auditing if auditd enabled it then you can set this option to false.
+        It is of NixOS' opinion that setting this to false is definitely the wrong thing to do - but it's an option.
       '';
     };
 
@@ -85,19 +116,27 @@ in {
   };
 
   config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-journald.socket"
-      "systemd-journald@.socket"
-      "systemd-journald-varlink@.socket"
-      "systemd-journald.service"
-      "systemd-journald@.service"
-      "systemd-journal-flush.service"
-      "systemd-journal-catalog-update.service"
-      "systemd-journald-sync@.service"
-      ] ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
-      "systemd-journald-dev-log.socket"
-      "syslog.socket"
+    systemd.additionalUpstreamSystemUnits =
+      [
+        "systemd-journald.socket"
+        "systemd-journald@.socket"
+        "systemd-journald-varlink@.socket"
+        "systemd-journald.service"
+        "systemd-journald@.service"
+        "systemd-journal-flush.service"
+        "systemd-journal-catalog-update.service"
+        "systemd-journald-sync@.service"
+      ]
+      ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket")
+      ++ [
+        "systemd-journald-dev-log.socket"
+        "syslog.socket"
       ];
+
+    systemd.sockets.systemd-journald-audit.wantedBy = [
+      "systemd-journald.service"
+      "sockets.target"
+    ];
 
     environment.etc = {
       "systemd/journald.conf".text = ''
@@ -112,6 +151,7 @@ in {
         ${lib.optionalString (cfg.forwardToSyslog) ''
           ForwardToSyslog=yes
         ''}
+        Audit=${utils.systemdUtils.lib.toOption cfg.audit}
         ${cfg.extraConfig}
       '';
     };
@@ -119,9 +159,13 @@ in {
     users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
 
     systemd.services.systemd-journal-flush.restartIfChanged = false;
-    systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
+    systemd.services.systemd-journald.restartTriggers = [
+      config.environment.etc."systemd/journald.conf".source
+    ];
     systemd.services.systemd-journald.stopIfChanged = false;
-    systemd.services."systemd-journald@".restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
+    systemd.services."systemd-journald@".restartTriggers = [
+      config.environment.etc."systemd/journald.conf".source
+    ];
     systemd.services."systemd-journald@".stopIfChanged = false;
   };
 }

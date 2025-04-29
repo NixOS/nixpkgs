@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "coloursum";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zA2JhSnlFccSY01WMGsgF4AmrF/3BRUCcSMfoEbEPgA=";
   };
 
-  cargoHash = "sha256-dhcTpff4h37MHNbLoYUZiolSclSGcFrMJ3kKLCZAVAw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aZkWzJaEW6/fiCfb+RKNef0eJf/CJW8OU1N2OlHwuJM=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 

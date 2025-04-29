@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libGL
-, libxkbcommon
-, libxml2
-, libevdev
-, libinput
-, mesa
-, meson
-, ninja
-, pixman
-, pkg-config
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGL,
+  libxkbcommon,
+  libxml2,
+  libevdev,
+  libinput,
+  libgbm,
+  meson,
+  ninja,
+  pixman,
+  pkg-config,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libevdev
     libinput
-    mesa # for libEGL
+    libgbm
     pixman
     udev
     wayland
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Openbox clone on Wayland";
     license = lib.licenses.mit;
     mainProgram = "waybox";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 })

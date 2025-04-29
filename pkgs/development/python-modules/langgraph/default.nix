@@ -10,7 +10,9 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-prebuilt,
   langgraph-sdk,
+  xxhash,
 
   # tests
   aiosqlite,
@@ -30,18 +32,20 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
-}:
 
+  # passthru
+  nix-update-script,
+}:
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.39";
+  version = "0.3.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VZRGlE3MSOzur1TWC6swQjf/o5M62LsYncx2g8dtS+o=";
+    tag = "${version}";
+    hash = "sha256-xGznstX6RHo4vO03xnR2by9yW1jc7+E2oSVNWD/9L7c=";
   };
 
   postgresqlTestSetupPost = ''
@@ -56,7 +60,9 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-prebuilt
     langgraph-sdk
+    xxhash
   ];
 
   pythonImportsCheck = [ "langgraph" ];
@@ -66,6 +72,12 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    pytestCheckHook
+    postgresql
+    postgresqlTestHook
+  ];
+
+  checkInputs = [
     aiosqlite
     dataclasses-json
     grandalf
@@ -80,10 +92,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-repeat
     pytest-xdist
-    pytestCheckHook
     syrupy
-    postgresql
-    postgresqlTestHook
   ];
 
   disabledTests = [
@@ -104,16 +113,26 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+
+    # pydantic.errors.PydanticForbiddenQualifier,
+    # see https://github.com/langchain-ai/langgraph/issues/4360
+    "test_state_schema_optional_values"
   ];
 
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
-    "tests/test_pregel_async.py"
+    "tests/test_checkpoint_migration.py"
+    "tests/test_large_cases.py"
+    "tests/test_large_cases_async.py"
     "tests/test_pregel.py"
+    "tests/test_pregel_async.py"
   ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

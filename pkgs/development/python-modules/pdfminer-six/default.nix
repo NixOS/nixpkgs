@@ -8,7 +8,7 @@
   pythonOlder,
   pytestCheckHook,
   setuptools,
-  substituteAll,
+  replaceVars,
   ocrmypdf,
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aY7GQADRxeiclr6/G3RRgrPcl8rGiC85JYEIjIa+vG0=";
   };
 
@@ -34,8 +34,7 @@ buildPythonPackage rec {
       excludes = [ "CHANGELOG.md" ];
       hash = "sha256-fsSXvN92MVtNFpAst0ctvGrbxVvoe4Nyz4wMZqJ1aw8=";
     })
-    (substituteAll {
-      src = ./disable-setuptools-git-versioning.patch;
+    (replaceVars ./disable-setuptools-git-versioning.patch {
       inherit version;
     })
   ];

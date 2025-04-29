@@ -14,7 +14,7 @@
   pmdsky-debug-py,
   range-typed-integers,
   pythonOlder,
-  # optional dependancies for SpriteCollab
+  # optional dependencies for SpriteCollab
   aiohttp,
   lru-dict,
   graphql-core,

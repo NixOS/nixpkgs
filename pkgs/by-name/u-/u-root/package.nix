@@ -10,7 +10,7 @@
   linux_latest,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "u-root";
   version = "0.14.0-unstable-2024-09-26";
 
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
   ldflags = [ "-s" ];
 
@@ -63,10 +63,10 @@ buildGoModule rec {
     '';
     homepage = "https://u-root.org/";
     downloadPage = "https://github.com/u-root/u-root";
-    changelog = "https://github.com/u-root/u-root/blob/${src.rev}/RELEASES";
+    changelog = "https://github.com/u-root/u-root/blob/${finalAttrs.src.rev}/RELEASES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "u-root";
     platforms = lib.platforms.linux;
   };
-}
+})

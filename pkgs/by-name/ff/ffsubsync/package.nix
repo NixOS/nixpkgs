@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZdKZeKfAUe/FXLOur9Btb5RgXewmy3EHunQphqlxpIc=";
   };
 
@@ -34,9 +34,11 @@ python3.pkgs.buildPythonApplication rec {
     ffmpeg-python
     future
     numpy
+    pkgs.ffmpeg
     pysubs2
     chardet
     rich
+    setuptools
     six
     srt
     tqdm

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 # image metadata:
 # hw_firmware_type=uefi
@@ -28,18 +33,22 @@ in
   ];
 
   config = {
-    fileSystems."/" = mkIf (!cfg.zfs.enable) {
-      device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
-      autoResize = true;
-    };
+    fileSystems."/" = mkIf (!cfg.zfs.enable) (
+      lib.mkImageMediaOverride {
+        device = "/dev/disk/by-label/nixos";
+        fsType = "ext4";
+        autoResize = true;
+      }
+    );
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
-      # The ZFS image uses a partition labeled ESP whether or not we're
-      # booting with EFI.
-      device = "/dev/disk/by-label/ESP";
-      fsType = "vfat";
-    };
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (
+      lib.mkImageMediaOverride {
+        # The ZFS image uses a partition labeled ESP whether or not we're
+        # booting with EFI.
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+      }
+    );
 
     boot.growPartition = true;
     boot.kernelParams = [ "console=tty1" ];
@@ -73,7 +82,10 @@ in
       path = [ pkgs.wget ];
       description = "Fetch Metadata on startup";
       wantedBy = [ "multi-user.target" ];
-      before = [ "apply-ec2-data.service" "amazon-init.service" ];
+      before = [
+        "apply-ec2-data.service"
+        "amazon-init.service"
+      ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = metadataFetcher;

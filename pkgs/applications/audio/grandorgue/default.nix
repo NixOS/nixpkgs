@@ -1,58 +1,70 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fftwFloat
-, alsa-lib
-, zlib
-, wavpack
-, wxGTK32
-, udev
-, jackaudioSupport ? false
-, libjack2
-, imagemagick
-, libicns
-, yaml-cpp
-, makeWrapper
-, Cocoa
-, includeDemo ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fftwFloat,
+  alsa-lib,
+  zlib,
+  wavpack,
+  wxGTK32,
+  udev,
+  jackaudioSupport ? false,
+  libjack2,
+  imagemagick,
+  libicns,
+  yaml-cpp,
+  makeWrapper,
+  Cocoa,
+  includeDemo ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.15.1-1";
+  version = "3.15.4-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-5uAA878OBc04PkUgCwoRtc6lIASivq3YcfFffTae6uM=";
+    hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };
 
-  postPatch = ''
-    substituteInPlace resources/CMakeLists.txt \
-      --replace \
-        "iconutil -c icns \''${GENERATED_ICONS_DIR}" \
-        "png2icns \''${GENERATED_ICONS_DIR}/../GrandOrgue.icns \''${GENERATED_ICONS_DIR}/*{16,32,128,256,512,1024}.png" \
-  '';
+  patches = [ ./darwin-fixes.patch ];
 
-  nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    imagemagick
+    libicns
+    makeWrapper
+  ];
 
-  buildInputs = [ fftwFloat zlib wavpack wxGTK32 yaml-cpp ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
+  buildInputs =
+    [
+      fftwFloat
+      zlib
+      wavpack
+      wxGTK32
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      udev
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
-  cmakeFlags = lib.optionals (!jackaudioSupport) [
-    "-DRTAUDIO_USE_JACK=OFF"
-    "-DRTMIDI_USE_JACK=OFF"
-    "-DGO_USE_JACK=OFF"
-    "-DINSTALL_DEPEND=OFF"
-  ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_IPHONE=0";
+  cmakeFlags =
+    lib.optionals (!jackaudioSupport) [
+      "-DRTAUDIO_USE_JACK=OFF"
+      "-DRTMIDI_USE_JACK=OFF"
+      "-DGO_USE_JACK=OFF"
+      "-DINSTALL_DEPEND=OFF"
+    ]
+    ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}

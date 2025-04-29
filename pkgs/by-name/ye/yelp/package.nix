@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, webkitgtk_4_1
-, pkg-config
-, gtk3
-, libhandy
-, glib
-, gnome
-, adwaita-icon-theme
-, sqlite
-, itstool
-, libxml2
-, libxslt
-, gst_all_1
-, wrapGAppsHook3
-, yelp-xsl
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  webkitgtk_4_1,
+  pkg-config,
+  gtk3,
+  libhandy,
+  glib,
+  gnome,
+  adwaita-icon-theme,
+  sqlite,
+  itstool,
+  libxml2,
+  libxslt,
+  gst_all_1,
+  wrapGAppsHook3,
+  yelp-xsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
   ];
 
+  patches = [
+    ./cve-2025-3155.patch
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "yelp";
@@ -57,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://apps.gnome.org/Yelp/";
     description = "Help viewer in Gnome";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

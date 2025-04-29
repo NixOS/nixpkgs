@@ -1,25 +1,27 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.goxlr-utility;
 in
-
-with lib;
 {
 
   options = {
     services.goxlr-utility = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to enable goxlr-utility for controlling your TC-Helicon GoXLR or GoXLR Mini
         '';
       };
-      package = mkPackageOption pkgs "goxlr-utility" { };
-      autoStart.xdg = mkOption {
+      package = lib.mkPackageOption pkgs "goxlr-utility" { };
+      autoStart.xdg = lib.mkOption {
         default = true;
-        type = with types; bool;
+        type = with lib.types; bool;
         description = ''
           Start the daemon automatically using XDG autostart.
           Sets `xdg.autostart.enable = true` if not already enabled.
@@ -44,16 +46,15 @@ with lib;
         '';
       };
     in
-    mkIf config.services.goxlr-utility.enable {
+    lib.mkIf config.services.goxlr-utility.enable {
       services.udev.packages = [ cfg.package ];
 
-      xdg.autostart.enable = mkIf cfg.autoStart.xdg true;
-      environment.systemPackages = mkIf cfg.autoStart.xdg
-        [
-          cfg.package
-          goxlr-autostart
-        ];
+      xdg.autostart.enable = lib.mkIf cfg.autoStart.xdg true;
+      environment.systemPackages = lib.mkIf cfg.autoStart.xdg [
+        cfg.package
+        goxlr-autostart
+      ];
     };
 
-  meta.maintainers = with maintainers; [ errnoh ];
+  meta.maintainers = with lib.maintainers; [ errnoh ];
 }

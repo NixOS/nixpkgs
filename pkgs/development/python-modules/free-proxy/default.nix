@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "free-proxy";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jundymek";
     repo = "free-proxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5eYioshdqUC5QWHqMIU6+GvInihSOJxWvMlJ/xad/3I=";
+    tag = "v${version}";
+    hash = "sha256-8SxKGGifQTU0CUrtUQUtrmeq+Do4GIqNUWAdCt++eUA=";
   };
 
   build-system = [ setuptools ];

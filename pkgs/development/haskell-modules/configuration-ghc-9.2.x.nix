@@ -41,14 +41,18 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
@@ -59,23 +63,27 @@ self: super: {
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
   # Allow dhall 1.42.*
-  weeder_2_4_1 = doJailbreak (super.weeder_2_4_1.override {
-    # weeder < 2.6 only supports algebraic-graphs < 0.7
-    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
-    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-  });
-
+  weeder_2_4_1 = doJailbreak (
+    super.weeder_2_4_1.override {
+      # weeder < 2.6 only supports algebraic-graphs < 0.7
+      # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+      algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+    }
+  );
 
   haskell-language-server = lib.pipe super.haskell-language-server [
     (disableCabalFlag "fourmolu")
     (disableCabalFlag "ormolu")
     (disableCabalFlag "cabal")
     (disableCabalFlag "stylishHaskell")
-    (d: d.override {
-      ormolu = null;
-      fourmolu = null;
-      stan = null;
-    })
+    (
+      d:
+      d.override {
+        ormolu = null;
+        fourmolu = null;
+        stan = null;
+      }
+    )
   ];
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
@@ -115,24 +123,18 @@ self: super: {
 
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
+    (if isDarwin then appendConfigureFlags [ "--ghc-option=-fcompact-unwind" ] else x: x)
+      super.inline-c-cpp;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_5_0;
 
-  # Requires GHC < 9.4
-  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
-
   # Packages which need compat library for GHC < 9.6
-  inherit
-    (lib.mapAttrs
-      (_: addBuildDepends [ self.foldable1-classes-compat ])
-      super)
+  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
     OneTuple
     these
-  ;
+    ;
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple

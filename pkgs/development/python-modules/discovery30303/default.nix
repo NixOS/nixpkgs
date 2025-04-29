@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "discovery30303";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "discovery30303";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-P31P5GjIrMotdIXqqZ6LCbk5MIl2Kq4MzlWDw+aOcrE=";
+    tag = "v${version}";
+    hash = "sha256-QIGLRe+nUV3tUOs+pu6Qk/2Amh9IVcQq89o2JeKiTvM=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to discover devices that respond on port 30303";
     homepage = "https://github.com/bdraco/discovery30303";
-    changelog = "https://github.com/bdraco/discovery30303/releases/tag/v${version}";
+    changelog = "https://github.com/bdraco/discovery30303/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

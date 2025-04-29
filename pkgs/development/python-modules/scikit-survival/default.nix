@@ -2,9 +2,10 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cython,
   ecos,
+  eigen,
   joblib,
   numexpr,
   numpy,
@@ -18,12 +19,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.23.0";
+  version = "0.24.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JFI3SDOK74vQdoUOStYlc4e0VHps97KjV3a1NQSN6E0=";
+  src = fetchFromGitHub {
+    owner = "sebp";
+    repo = "scikit-survival";
+    tag = "v${version}";
+    hash = "sha256-El5q2eE6wJKg/8rcFZPZQl7MVxw1jMsggjiCJHj7il8=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +49,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # treat numpy versions as lower bounds, same as setuptools build
   postPatch = ''
-    sed -i 's/numpy==/numpy>=/' pyproject.toml
+    ln -s ${lib.getInclude eigen}/include/eigen3/Eigen \
+      sksurv/linear_model/src/eigen
   '';
 
   # Hack needed to make pytest + cython work

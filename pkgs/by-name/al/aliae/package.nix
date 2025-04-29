@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "aliae";
-  version = "0.22.2";
+  version = "0.26.5";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "aliae";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IpOfTCMbnNUW8flyb7p98QEwveNb8wClyBuv7fAKm8Y=";
+    tag = "v${version}";
+    hash = "sha256-F5OteK1D0MCNyiZG6iz3vawkx74WJKst2Yr6ca8TYZw=";
   };
 
-  vendorHash = "sha256-aUKF/r0OFN0gZXCKHFYKyQa806NFP5lQAONFZlMP4vE=";
+  vendorHash = "sha256-TsJU1oAc1T+VdUYzrcyflTPYJhG6sPjFNZ7bZKk1KdM=";
 
   sourceRoot = "${src.name}/src";
 

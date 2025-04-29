@@ -1,13 +1,18 @@
-{ stdenv, lib, cmake, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clangbuildanalyzer";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "aras-p";
     repo = "ClangBuildAnalyzer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kmgdk634zM0W0OoRoP/RzepArSipa5bNqdVgdZO9gxo=";
+    hash = "sha256-GIMQZGPFKDrfMqCsA8nR3O8Hzp2jcaZ+yDrPeCxTsIg=";
   };
 
   nativeBuildInputs = [

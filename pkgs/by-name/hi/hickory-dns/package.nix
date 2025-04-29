@@ -1,21 +1,25 @@
-{ lib
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hickory-dns";
-  version = "0.24.1";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
-    rev = "v${version}";
-    hash = "sha256-szq21RuRmkhAfHlzhGQYpwjiIRkavFCPETOt+6TxhP4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H8wJozmuXtJ6d96DMgQ/Uw2sp3sa+UKMXT9vf5azcyc=";
   };
-  cargoHash = "sha256-LcMjHHEuDlhSfDXGIrSMXewraSxEgRw2g2DOoH4i5RU=";
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nuT2WUejpIhfI8WVTupAgdo7iav9YL1ipHu/PR4S2Hg=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -23,12 +27,17 @@ rustPlatform.buildRustPackage rec {
   # tests expect internet connectivity to query real nameservers like 8.8.8.8
   doCheck = false;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Rust based DNS client, server, and resolver";
     homepage = "https://hickory-dns.org/";
-    maintainers = with maintainers; [ colinsane ];
-    platforms = platforms.linux;
-    license = with licenses; [ asl20 mit ];
+    maintainers = with lib.maintainers; [ colinsane ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "hickory-dns";
   };
-}
+})

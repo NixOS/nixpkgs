@@ -12,13 +12,14 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "OFFAT";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LZd9nMeI+TMd95r6CuNAB7eMqrE97ne0ioPjuIbtK7w=";
   };
 
   sourceRoot = "${src.name}/src";
 
   pythonRelaxDeps = [
+    "rich"
     "setuptools"
     "tenacity"
   ];

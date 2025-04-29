@@ -20,6 +20,7 @@
   requests,
   scipy,
   setuptools,
+  setuptools-scm,
   seaborn,
   statsmodels,
   tqdm,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.12.0";
+  version = "4.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,19 +39,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-G1qW6HcJi176nfxOBGBK2tLyY/Nnz9STYpZWluWvhP0=";
+    tag = "v${version}";
+    hash = "sha256-gmMEW1aAwBar/xR22Wm98hbjP20ty3idvxfqCJ1uRGM=";
   };
 
   preBuild = ''
     echo ${version} > VERSION
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "imagehash"
-    "scipy"
+    "matplotlib"
+    "multimethod"
+    "numpy"
   ];
 
   dependencies = [
@@ -69,6 +75,7 @@ buildPythonPackage rec {
     requests
     scipy
     seaborn
+    setuptools
     statsmodels
     tqdm
     typeguard
@@ -101,12 +108,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ydata_profiling" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";
   };
 }

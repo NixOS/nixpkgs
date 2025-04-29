@@ -1,49 +1,56 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  pytest,
-  unicodecsv,
+  cargo,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  rustc,
   rustPlatform,
-  libiconv,
+  unicodecsv,
 }:
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "1.0.4";
+  version = "1.1.2";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.11";
 
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cqq7O+3VE83SBxIkL9URc7WZcsCxRregucbzLxZWKT8=";
+  src = fetchFromGitHub {
+    owner = "jamesturk";
+    repo = "jellyfish";
+    rev = version;
+    hash = "sha256-xInjoTXYgZuHyvyKm+N4PAwHozE5BOkxoYhRzZnPs3Q=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    maturinBuildHook
-    cargoSetupHook
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  build-system = [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}-rust-dependencies";
-    hash = "sha256-HtzgxTO6tbN/tohaiTm9B9jrFYGTt1Szo9qRzpcy8BA=";
-  };
-
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     unicodecsv
   ];
 
+  pythonImportsCheck = [ "jellyfish" ];
+
   meta = {
-    homepage = "https://github.com/sunlightlabs/jellyfish";
-    description = "Approximate and phonetic matching of strings";
+    description = "A python library for doing approximate and phonetic matching of strings";
+    homepage = "https://github.com/jamesturk/jellyfish";
+    changelog = "https://github.com/jamesturk/jellyfish/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
 }

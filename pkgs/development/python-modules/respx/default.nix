@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = "respx";
-    rev = version;
-    hash = "sha256-sBb9HPvX+AKJUMWBME381F2amYdQmBiM8OguGW3lFG0=";
+    tag = version;
+    hash = "sha256-T3DLNXJykSF/HXjlmQdJ2CG4d+U1eTa+XWcgtT3dhl4=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for mocking HTTPX";
     homepage = "https://lundberg.github.io/respx/";
-    changelog = "https://github.com/lundberg/respx/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/lundberg/respx/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

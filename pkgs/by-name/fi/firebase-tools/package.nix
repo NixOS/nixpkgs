@@ -5,22 +5,21 @@
   fetchFromGitHub,
   python3,
   xcbuild,
+  nix-update-script,
 }:
 
-let
-  version = "13.20.2";
+buildNpmPackage rec {
+  pname = "firebase-tools";
+  version = "14.2.1";
+
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FIflfCSTXm7J2WectS175vc0ccztWa4tE2E2kcbhwJg=";
+    tag = "v${version}";
+    hash = "sha256-3eAzLtVNlgjktnuQ1ZJIyE2CsKZISPRuGjUTHZxX/6k=";
   };
-in
-buildNpmPackage {
-  pname = "firebase-tools";
-  inherit version src;
 
-  npmDepsHash = "sha256-qEerq6rFBN6HmzDS4xQJorzmzapBV/WhzCwG3rHU458=";
+  npmDepsHash = "sha256-/mij1GjkRldQWaBv1YEwxMWoP6CG3ydLV2aI+K2R+t4=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -34,16 +33,19 @@ buildNpmPackage {
       xcbuild
     ];
 
-  env = {
-    PUPPETEER_SKIP_DOWNLOAD = true;
-  };
+  env.PUPPETEER_SKIP_DOWNLOAD = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/firebase/firebase-tools/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/firebase/firebase-tools/blob/v${version}/CHANGELOG.md";
     description = "Manage, and deploy your Firebase project from the command line";
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with lib.maintainers; [
+      momeemt
+      sarahec
+    ];
   };
 }

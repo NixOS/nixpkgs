@@ -1,7 +1,6 @@
 {
   lib,
-  apple-sdk_11,
-  darwinMinVersionHook,
+  apple-sdk,
   mkAppleDerivation,
   ncurses,
   pkg-config,
@@ -9,8 +8,8 @@
 }:
 
 let
-  iokitUser = apple-sdk_11.sourceRelease "IOKitUser";
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  iokitUser = apple-sdk.sourceRelease "IOKitUser";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "IOKitTools-deps-private-headers";
@@ -52,9 +51,7 @@ mkAppleDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    apple-sdk_11
-    apple-sdk_11.privateFrameworksHook
-    (darwinMinVersionHook "11.0")
+    apple-sdk.privateFrameworksHook
     ncurses
   ];
 

@@ -27,6 +27,6 @@ buildPecl {
     description = "Extension providing efficient data structures for PHP";
     license = licenses.mit;
     homepage = "https://github.com/php-ds/ext-ds";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

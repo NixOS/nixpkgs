@@ -9,6 +9,7 @@ with lib;
 {
   imports = [
     ./disk-size-option.nix
+    ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -250,8 +251,12 @@ with lib;
           message = "'legacy+gpt' disk partitioning requires 'seabios' bios";
         }
       ];
+      image.baseName = lib.mkDefault "vzdump-qemu-${cfg.filenameSuffix}";
+      image.extension = "vma.zst";
+      system.build.image = config.system.build.VMA;
       system.build.VMA = import ../../lib/make-disk-image.nix {
         name = "proxmox-${cfg.filenameSuffix}";
+        baseName = config.image.baseName;
         inherit (cfg) partitionTableType;
         postVM =
           let
@@ -299,16 +304,22 @@ with lib;
                 });
           in
           ''
-            ${vma}/bin/vma create "vzdump-qemu-${cfg.filenameSuffix}.vma" \
+            ${vma}/bin/vma create "${config.image.baseName}.vma" \
               -c ${
-                cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)
+                cfgFile "qemu-server.conf" (
+                  (builtins.removeAttrs cfg.qemuConf [ "diskSize" ])
+                  // {
+                    inherit (config.virtualisation) diskSize;
+                  }
+                  // cfg.qemuExtraConf
+                )
               }/qemu-server.conf drive-virtio0=$diskImage
             rm $diskImage
-            ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
-            mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
+            ${pkgs.zstd}/bin/zstd "${config.image.baseName}.vma"
+            mv "${config.image.fileName}" $out/
 
             mkdir -p $out/nix-support
-            echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" > $out/nix-support/hydra-build-products
+            echo "file vma $out/${config.image.fileName}" > $out/nix-support/hydra-build-products
           '';
         inherit (cfg.qemuConf) additionalSpace bootSize;
         inherit (config.virtualisation) diskSize;
@@ -341,14 +352,16 @@ with lib;
         ];
       };
 
-      fileSystems."/" = {
-        device = "/dev/disk/by-label/nixos";
-        autoResize = true;
-        fsType = "ext4";
-      };
-      fileSystems."/boot" = lib.mkIf hasBootPartition {
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
+      fileSystems = lib.mkImageMediaOverride {
+        "/" = {
+          device = "/dev/disk/by-label/nixos";
+          autoResize = true;
+          fsType = "ext4";
+        };
+        "/boot" = lib.mkIf hasBootPartition {
+          device = "/dev/disk/by-label/ESP";
+          fsType = "vfat";
+        };
       };
 
       networking = mkIf cfg.cloudInit.enable {
@@ -365,6 +378,7 @@ with lib;
         qemuGuest.enable = true;
       };
 
-      proxmox.qemuExtraConf.${cfg.cloudInit.device} = "${cfg.cloudInit.defaultStorage}:vm-9999-cloudinit,media=cdrom";
+      proxmox.qemuExtraConf.${cfg.cloudInit.device} =
+        "${cfg.cloudInit.defaultStorage}:vm-9999-cloudinit,media=cdrom";
     };
 }

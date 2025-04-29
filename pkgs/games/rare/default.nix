@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, qt5
-, legendary-gl
-, orjson
-, pypresence
-, pyqt5
-, python
-, qtawesome
-, requests
-, setuptools
-, typing-extensions
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  qt5,
+  legendary-gl,
+  orjson,
+  pypresence,
+  pyqt5,
+  python,
+  qtawesome,
+  requests,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonApplication rec {
@@ -21,7 +22,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RareDevs";
     repo = "Rare";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 

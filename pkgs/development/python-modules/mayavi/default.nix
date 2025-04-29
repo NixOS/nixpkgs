@@ -4,13 +4,14 @@
   buildPythonPackage,
   envisage,
   fetchPypi,
-  numpy,
+  numpy_1,
   packaging,
   pyface,
   pygments,
   pyqt5,
   pythonOlder,
   pythonAtLeast,
+  stdenv,
   traitsui,
   vtk,
   wrapQtAppsHook,
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     apptools
     envisage
-    numpy
+    numpy_1
     packaging
     pyface
     pygments
@@ -57,7 +58,10 @@ buildPythonPackage rec {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     mainProgram = "mayavi2";
+    # Fails during stripping with:
+    # The file was not recognized as a valid object file
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

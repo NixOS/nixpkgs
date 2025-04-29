@@ -31,18 +31,21 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ qt5.qtwayland ];
 
-  dependencies = with python3Packages; [
-    distro
-    jsonschema
-    psutil
-    sentry-sdk
-    setuptools
-    sip
-    (pyqt5.override { withWebSockets = true; })
-    truststore
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      distro
+      jsonschema
+      psutil
+      sentry-sdk
+      setuptools
+      sip
+      (pyqt5.override { withWebSockets = true; })
+      truststore
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   dontWrapQtApps = true;
 

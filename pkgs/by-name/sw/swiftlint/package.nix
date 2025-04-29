@@ -4,14 +4,15 @@
   fetchurl,
   unzip,
   nix-update-script,
+  versionCheckHook,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "swiftlint";
-  version = "0.57.0";
+  version = "0.59.0";
 
   src = fetchurl {
     url = "https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip";
-    hash = "sha256-m1+5hPze016ryyoQrs8CCbcLjWY3ONMn4Zgh6sReuBA=";
+    hash = "sha256-rsGt9hy2EklZEA7eQ/Tp9eztVLVlVn9LMPTeZz9fQYA=";
   };
 
   dontPatch = true;
@@ -28,15 +29,21 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "A tool to enforce Swift style and conventions";
     homepage = "https://realm.github.io/SwiftLint/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "swiftlint";
-    maintainers = with maintainers; [ matteopacini ];
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      matteopacini
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

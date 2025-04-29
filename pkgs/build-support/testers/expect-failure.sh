@@ -34,19 +34,28 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 
 # -----------------------------------------
 # Write the build log to the default output
-#
-# # from stdenv setup.sh
-getAllOutputNames() {
-    if [ -n "$__structuredAttrs" ]; then
-        echo "${!outputs[*]}"
-    else
-        echo "$outputs"
-    fi
-}
 
-outs=( $(getAllOutputNames) )
-defOut=${outs[0]}
-defOutPath=${!defOut}
+# Source structured attrs as per nixpkgs/pkgs/stdenv/generic/source-stdenv.sh
+#
+# We need this so that we can read $outputs when `__structuredAttrs` is enabled
+#
+# NOTE: This MUST be done after the original builder has finished!
+#       Otherwise we could pollute its environment.
+if [ -e "${NIX_ATTRS_SH_FILE:-}" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
+
+# Variables injected by replaceVars
+#
+# `$outputs` is unordered when `__structuredAttrs` is enabled,
+# so we use `replaceVars` to pass in an ordered `$outputNames` array
+@vars@
+
+declare -a outputPaths
+for name in "${outputNames[@]}"; do
+    # Either dereference $name, or access $outputs[] associative array
+    outputPath=${!name:-${outputs[$name]}}
+    outputPaths+=( "$outputPath" )
+done
+defOutPath=${outputPaths[0]}
 
 if [[ ! -d $defOutPath ]]; then
   if [[ -e $defOutPath ]]; then
@@ -63,8 +72,7 @@ echo $r >$defOutPath/testBuildFailure.exit
 # ------------------------------------------------------
 # Put empty directories in place for any missing outputs
 
-for outputName in ${outputs:-out}; do
-  outputPath="${!outputName}"
+for outputPath in "${outputPaths[@]}"; do
   if [[ ! -e "${outputPath}" ]]; then
     @coreutils@/bin/mkdir "${outputPath}";
   fi

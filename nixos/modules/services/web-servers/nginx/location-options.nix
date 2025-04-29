@@ -11,7 +11,7 @@ with lib;
   options = {
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           user = "password";
@@ -30,10 +30,7 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: {command}`htpasswd -c <filename> <username>`.
-
-        WARNING: The generate file contains the users' passwords in a
-        non-cryptographically-securely hashed way.
+        Can be created by running {command}`nix-shell --packages apacheHttpd --run 'htpasswd -B -c FILENAME USERNAME'`.
       '';
     };
 
@@ -53,6 +50,16 @@ with lib;
       example = true;
       description = ''
         Whether to support proxying websocket connections with HTTP/1.1.
+      '';
+    };
+
+    uwsgiPass = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "unix:/run/example/example.sock";
+      description = ''
+        Adds uwsgi_pass directive and sets recommended proxy headers if
+        recommendedUwsgiSettings is enabled.
       '';
     };
 
@@ -93,7 +100,12 @@ with lib;
     };
 
     return = mkOption {
-      type = with types; nullOr (oneOf [ str int ]);
+      type =
+        with types;
+        nullOr (oneOf [
+          str
+          int
+        ]);
       default = null;
       example = "301 http://example.com$request_uri";
       description = ''
@@ -103,7 +115,7 @@ with lib;
 
     fastcgiParams = mkOption {
       type = types.attrsOf (types.either types.str types.path);
-      default = {};
+      default = { };
       description = ''
         FastCGI parameters to override.  Unlike in the Nginx
         configuration file, overriding only some default parameters
@@ -135,6 +147,15 @@ with lib;
       defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
       description = ''
         Enable recommended proxy settings.
+      '';
+    };
+
+    recommendedUwsgiSettings = mkOption {
+      type = types.bool;
+      default = config.services.nginx.recommendedUwsgiSettings;
+      defaultText = literalExpression "config.services.nginx.recommendedUwsgiSettings";
+      description = ''
+        Enable recommended uwsgi settings.
       '';
     };
   };

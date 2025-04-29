@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, gettext
-, fetchurl
-, vala
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, gtk4
-, libadwaita
-, glib
-, libxml2
-, wrapGAppsHook4
-, itstool
-, gnome
+{
+  stdenv,
+  lib,
+  gettext,
+  fetchurl,
+  vala,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  gtk4,
+  libadwaita,
+  glib,
+  libxml2,
+  wrapGAppsHook4,
+  itstool,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     mainProgram = "baobab";
     homepage = "https://apps.gnome.org/Baobab/";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

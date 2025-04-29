@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, kmod, which
-, hwdata
-, static ? stdenv.hostPlatform.isStatic
-, IOKit
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+  kmod,
+  which,
+  hwdata,
+  static ? stdenv.hostPlatform.isStatic,
+  IOKit,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +24,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which zlib ]
+  buildInputs =
+    [
+      which
+      zlib
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
@@ -36,7 +47,10 @@ stdenv.mkDerivation rec {
     "DNS=yes"
   ];
 
-  installTargets = [ "install" "install-lib" ];
+  installTargets = [
+    "install"
+    "install-lib"
+  ];
 
   postInstall = ''
     # Remove update-pciids as it won't work on nixos

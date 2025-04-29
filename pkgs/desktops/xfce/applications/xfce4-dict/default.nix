@@ -1,10 +1,11 @@
-{ lib
-, mkXfceDerivation
-, glib
-, gtk3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
+{
+  lib,
+  mkXfceDerivation,
+  glib,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
 }:
 
 mkXfceDerivation {
@@ -25,6 +26,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Dictionary Client for the Xfce desktop environment";
     mainProgram = "xfce4-dict";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

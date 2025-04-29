@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gitignore-parser";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mherrmann";
     repo = "gitignore_parser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-y8A8OLgJccYWvKTJs7um8RwFFM0CswbwRojknBmk3TY=";
+    tag = "v${version}";
+    hash = "sha256-s1t7WTrtxeeL4we+Y8I6XK8vKzmDVftmtXhRS/XeSAM=";
   };
 
   nativeBuildInputs = [ setuptools ];

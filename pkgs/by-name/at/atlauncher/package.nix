@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   jre,
   lib,
   makeWrapper,
@@ -18,16 +18,19 @@
   udev,
   xorg,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.37.3";
+  version = "3.4.38.2";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XdTbrM7FPR0o0d+p4ko48UonMsY+nLfiXj5fP2a3/zI=";
+    hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
   };
 
   postPatch = ''
@@ -96,6 +99,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
   meta = {
+    broken = stdenvNoCC.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/issues/356259
     changelog = "https://github.com/ATLauncher/ATLauncher/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
     downloadPage = "https://atlauncher.com/downloads";

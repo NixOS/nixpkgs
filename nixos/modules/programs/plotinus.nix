@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.plotinus;
@@ -28,7 +33,9 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}" ];
+    environment.sessionVariables.XDG_DATA_DIRS = [
+      "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}"
+    ];
     environment.variables.GTK3_MODULES = [ "${pkgs.plotinus}/lib/libplotinus.so" ];
   };
 }

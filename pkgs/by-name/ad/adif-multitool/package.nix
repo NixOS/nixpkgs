@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "adif-multitool";
-  version = "0.1.15";
+  version = "0.1.20";
 
-  vendorHash = "sha256-oyFL021J/cU+N+mQ6kW3vju39P/uGM6U58uqE9sxIOE=";
+  vendorHash = "sha256-U9BpTDHjUZicMjKeyxyM/eOxJeAY2DMQMHOEMiCeN/U=";
 
   src = fetchFromGitHub {
     owner = "flwyd";
     repo = "adif-multitool";
     rev = "v${version}";
-    hash = "sha256-zfJTEmjTomd2T/TkdNYZgIJBwx0PaByEkN/E2kgKHes=";
+    hash = "sha256-qeAH8UTyEZn8As3wTjluONpjeT/5l9zicN5+8uwnbLo=";
   };
 
   meta = with lib; {

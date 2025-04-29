@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   api_token = "f87f42114e44b63ad1b9e3c3d33d6fbe"; # random md5 hash
@@ -101,4 +101,4 @@ in
     # wait until snmphost gets polled
     librenms.wait_until_succeeds("test $(curl -H 'X-Auth-Token: ${api_token}' http://localhost/api/v0/devices/snmphost | jq -Mr .devices[0].last_polled) != 'null'")
   '';
-})
+}

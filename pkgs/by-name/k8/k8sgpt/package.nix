@@ -6,24 +6,19 @@
 
 buildGoModule rec {
   pname = "k8sgpt";
-  version = "0.3.41";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${version}";
-    hash = "sha256-p53gVpFhxr60OEZSASRU5KX7TkWzYCDAvG9aQj2NFHI=";
+    hash = "sha256-TaJBGU+nLMVOL1uiHPan8p2DfuAWTr57Lt2BtfNq6dA=";
   };
 
-  vendorHash = "sha256-9H6E1JUbxfcx3Baithu9Jr6MpxfuKE+XWz7HrTCdxA8=";
+  vendorHash = "sha256-960gfOCpqY2gCbHR+fYFeV9UjztWMRVQKHIg/n3ELxk=";
 
   # https://nixos.org/manual/nixpkgs/stable/#var-go-CGO_ENABLED
-  CGO_ENABLED = 0;
-
-  # https://nixos.org/manual/nixpkgs/stable/#ssec-skip-go-tests
-  checkFlags = [
-    "-skip=TestActivate/trivy"
-  ];
+  env.CGO_ENABLED = 0;
 
   # https://nixos.org/manual/nixpkgs/stable/#ssec-skip-go-tests
   ldflags = [

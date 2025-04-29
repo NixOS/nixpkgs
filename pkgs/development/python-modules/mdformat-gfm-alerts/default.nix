@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-gfm-alerts";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2EYdNCyS1LxcEnCXkOugAAGx5XLWV4cWTNkXjR8RVQo=";
   };
 
@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/KyleKing/mdformat-gfm-alerts/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
+    broken = true; # broken test due to changes in mdformat; compare https://github.com/KyleKing/mdformat-admon/issues/25
   };
 }

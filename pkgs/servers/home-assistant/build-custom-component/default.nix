@@ -1,13 +1,14 @@
-{ lib
-, home-assistant
-, makeSetupHook
+{
+  home-assistant,
+  makeSetupHook,
 }:
 
-{ owner
-, domain
-, version
-, format ? "other"
-, ...
+{
+  owner,
+  domain,
+  version,
+  format ? "other",
+  ...
 }@args:
 
 let
@@ -19,29 +20,51 @@ in
 home-assistant.python.pkgs.buildPythonPackage (
   {
     pname = "${owner}/${domain}";
-    inherit format;
+    inherit version format;
+
+    buildPhase = ''
+      true
+    '';
 
     installPhase = ''
       runHook preInstall
 
       mkdir $out
-      cp -r ./custom_components/ $out/
+      if [[ -f ./manifest.json ]]; then
+        mkdir $out/custom_components
+        cp -R "$(realpath .)" "$out/custom_components/${domain}"
+      else
+        cp -r ./custom_components/ $out/
+      fi
 
       # optionally copy sentences, if they exist
-      cp -r ./custom_sentences/ $out/ || true
+      if [[ -d ./custom_sentences ]]; then
+        cp -r ./custom_sentences/ $out/
+      fi
 
       runHook postInstall
     '';
 
-    nativeCheckInputs = with home-assistant.python.pkgs; [
-      importlib-metadata
-      manifestRequirementsCheckHook
-      packaging
-    ] ++ (args.nativeCheckInputs or []);
+    nativeCheckInputs =
+      with home-assistant.python.pkgs;
+      [
+        manifestRequirementsCheckHook
+        packaging
+      ]
+      ++ (args.nativeCheckInputs or [ ]);
 
     passthru = {
       isHomeAssistantComponent = true;
     } // args.passthru or { };
 
-  } // builtins.removeAttrs args [ "nativeCheckInputs" "passthru" ]
+    meta = {
+      inherit (home-assistant.meta) platforms;
+    } // args.meta or { };
+
+  }
+  // builtins.removeAttrs args [
+    "meta"
+    "nativeCheckInputs"
+    "passthru"
+  ]
 )

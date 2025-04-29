@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.hardware.amdgpu;
-in {
+in
+{
   options.hardware.amdgpu = {
     legacySupport.enable = lib.mkEnableOption ''
       using `amdgpu` kernel driver instead of `radeon` for Southern Islands

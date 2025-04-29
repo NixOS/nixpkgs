@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, gtk3
-, libxfce4ui, libxfce4util, xfce4-dev-tools, xfce4-panel
-, i3ipc-glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  intltool,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-dev-tools,
+  xfce4-panel,
+  i3ipc-glib,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +35,7 @@ stdenv.mkDerivation rec {
     libxfce4util
     xfce4-panel
     i3ipc-glib
-   ];
+  ];
 
   enableParallelBuilding = true;
 
@@ -35,6 +44,7 @@ stdenv.mkDerivation rec {
     description = "Workspace switcher plugin for xfce4-panel which can be used for the i3 window manager";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ berbiche ] ++ teams.xfce.members;
+    maintainers = with maintainers; [ berbiche ];
+    teams = [ teams.xfce ];
   };
 }

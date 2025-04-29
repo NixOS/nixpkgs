@@ -1,11 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.teeworlds;
   register = cfg.register;
 
   bool = b: if b != null && b then "1" else "0";
   optionalSetting = s: setting: lib.optionalString (s != null) "${setting} ${s}";
-  lookup = attrs: key: default: if attrs ? key then attrs."${key}" else default;
+  lookup =
+    attrs: key: default:
+    if attrs ? key then attrs."${key}" else default;
 
   inactivePenaltyOptions = {
     "spectator" = "1";
@@ -19,7 +26,7 @@ let
   };
   tournamentModeOptions = {
     "disable" = "0";
-    "enable"  = "1";
+    "enable" = "1";
     "restrictSpectators" = "2";
   };
 
@@ -151,11 +158,14 @@ in
 
       extraOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra configuration lines for the {file}`teeworlds.cfg`. See [Teeworlds Documentation](https://www.teeworlds.com/?page=docs&wiki=server_settings).
         '';
-        example = [ "sv_map dm1" "sv_gametype dm" ];
+        example = [
+          "sv_map dm1"
+          "sv_gametype dm"
+        ];
       };
 
       server = {
@@ -184,7 +194,11 @@ in
         };
 
         inactivePenalty = lib.mkOption {
-          type = lib.types.enum [ "spectator" "spectator/kick" "kick" ];
+          type = lib.types.enum [
+            "spectator"
+            "spectator/kick"
+            "kick"
+          ];
           example = "spectator";
           default = "spectator/kick";
           description = ''
@@ -231,7 +245,11 @@ in
         };
 
         skillLevel = lib.mkOption {
-          type = lib.types.enum [ "casual" "normal" "competitive" ];
+          type = lib.types.enum [
+            "casual"
+            "normal"
+            "competitive"
+          ];
           default = "normal";
           description = ''
             The skill level shown in the server browser.
@@ -336,7 +354,11 @@ in
         };
 
         tournamentMode = lib.mkOption {
-          type = lib.types.enum [ "disable" "enable" "restrictSpectators" ];
+          type = lib.types.enum [
+            "disable"
+            "enable"
+            "restrictSpectators"
+          ];
           default = "disable";
           description = ''
             Whether to enable tournament mode. In tournament mode, players join as spectators.
@@ -428,7 +450,10 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
       };

@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix (
+  { pkgs, ... }:
   let
     homeserverDomain = "server";
     homeserverUrl = "http://server:8008";
@@ -13,145 +14,158 @@ import ../make-test-python.nix ({ pkgs, ... }:
     meta.maintainers = pkgs.mautrix-meta.meta.maintainers;
 
     nodes = {
-      server = { config, pkgs, ... }: {
-        services.postgresql = {
-          enable = true;
+      server =
+        { config, pkgs, ... }:
+        {
+          services.postgresql = {
+            enable = true;
 
-          ensureUsers = [
-            {
-              name = "mautrix-meta-instagram";
-              ensureDBOwnership = true;
-            }
-          ];
+            ensureUsers = [
+              {
+                name = "mautrix-meta-instagram";
+                ensureDBOwnership = true;
+              }
+            ];
 
-          ensureDatabases = [
-            "mautrix-meta-instagram"
-          ];
-        };
-
-        systemd.services.mautrix-meta-instagram = {
-          wants = [ "postgres.service" ];
-          after = [ "postgres.service" ];
-        };
-
-        services.matrix-synapse = {
-          enable = true;
-          settings = {
-            database.name = "sqlite3";
-
-            enable_registration = true;
-
-            # don't use this in production, always use some form of verification
-            enable_registration_without_verification = true;
-
-            listeners = [ {
-              # The default but tls=false
-              bind_addresses = [
-                "0.0.0.0"
-              ];
-              port = 8008;
-              resources = [ {
-                "compress" = true;
-                "names" = [ "client" ];
-              } {
-                "compress" = false;
-                "names" = [ "federation" ];
-              } ];
-              tls = false;
-              type = "http";
-            } ];
+            ensureDatabases = [
+              "mautrix-meta-instagram"
+            ];
           };
-        };
 
-        services.mautrix-meta.instances.instagram = {
-          enable = true;
+          systemd.services.mautrix-meta-instagram = {
+            wants = [ "postgres.service" ];
+            after = [ "postgres.service" ];
+          };
 
-          environmentFile = pkgs.writeText ''my-secrets'' ''
-            AS_TOKEN=${asToken}
-            HS_TOKEN=${hsToken}
-          '';
+          services.matrix-synapse = {
+            enable = true;
+            settings = {
+              database.name = "sqlite3";
 
-          settings = {
-            homeserver = {
-              address = homeserverUrl;
-              domain = homeserverDomain;
+              enable_registration = true;
+
+              # don't use this in production, always use some form of verification
+              enable_registration_without_verification = true;
+
+              listeners = [
+                {
+                  # The default but tls=false
+                  bind_addresses = [
+                    "0.0.0.0"
+                  ];
+                  port = 8008;
+                  resources = [
+                    {
+                      "compress" = true;
+                      "names" = [ "client" ];
+                    }
+                    {
+                      "compress" = false;
+                      "names" = [ "federation" ];
+                    }
+                  ];
+                  tls = false;
+                  type = "http";
+                }
+              ];
             };
+          };
 
-            appservice = {
-              port = 8009;
+          services.mautrix-meta.instances.instagram = {
+            enable = true;
 
-              as_token = "$AS_TOKEN";
-              hs_token = "$HS_TOKEN";
+            environmentFile = pkgs.writeText ''my-secrets'' ''
+              AS_TOKEN=${asToken}
+              HS_TOKEN=${hsToken}
+            '';
 
-              database = {
-                type = "postgres";
-                uri = "postgres:///mautrix-meta-instagram?host=/var/run/postgresql";
+            settings = {
+              homeserver = {
+                address = homeserverUrl;
+                domain = homeserverDomain;
               };
 
-              bot.username = botUserName;
-            };
+              appservice = {
+                port = 8009;
 
-            bridge.permissions."@${userName}:server" = "user";
+                as_token = "$AS_TOKEN";
+                hs_token = "$HS_TOKEN";
+
+                database = {
+                  type = "postgres";
+                  uri = "postgres:///mautrix-meta-instagram?host=/var/run/postgresql";
+                };
+
+                bot.username = botUserName;
+              };
+
+              bridge.permissions."@${userName}:server" = "user";
+            };
           };
+
+          networking.firewall.allowedTCPPorts = [
+            8008
+            8009
+          ];
         };
 
-        networking.firewall.allowedTCPPorts = [ 8008 8009 ];
-      };
+      client =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = [
+            (pkgs.writers.writePython3Bin "do_test"
+              {
+                libraries = [ pkgs.python3Packages.matrix-nio ];
+                flakeIgnore = [
+                  # We don't live in the dark ages anymore.
+                  # Languages like Python that are whitespace heavy will overrun
+                  # 79 characters..
+                  "E501"
+                ];
+              }
+              ''
+                import sys
+                import functools
+                import asyncio
 
-      client = { pkgs, ... }: {
-        environment.systemPackages = [
-          (pkgs.writers.writePython3Bin "do_test"
-          {
-            libraries = [ pkgs.python3Packages.matrix-nio ];
-            flakeIgnore = [
-              # We don't live in the dark ages anymore.
-              # Languages like Python that are whitespace heavy will overrun
-              # 79 characters..
-              "E501"
-            ];
-          } ''
-              import sys
-              import functools
-              import asyncio
-
-              from nio import AsyncClient, RoomMessageNotice, RoomCreateResponse, RoomInviteResponse
-
-
-              async def message_callback(matrix: AsyncClient, msg: str, _r, e):
-                  print("Received matrix text message: ", e)
-                  assert msg in e.body
-                  exit(0)  # Success!
+                from nio import AsyncClient, RoomMessageNotice, RoomCreateResponse, RoomInviteResponse
 
 
-              async def run(homeserver: str):
-                  matrix = AsyncClient(homeserver)
-                  response = await matrix.register("${userName}", "foobar")
-                  print("Matrix register response: ", response)
-
-                  # Open a DM with the bridge bot
-                  response = await matrix.room_create()
-                  print("Matrix create room response:", response)
-                  assert isinstance(response, RoomCreateResponse)
-                  room_id = response.room_id
-
-                  response = await matrix.room_invite(room_id, "@${botUserName}:${homeserverDomain}")
-                  assert isinstance(response, RoomInviteResponse)
-
-                  callback = functools.partial(
-                      message_callback, matrix, "Hello, I'm an Instagram bridge bot."
-                  )
-                  matrix.add_event_callback(callback, RoomMessageNotice)
-
-                  print("Waiting for matrix message...")
-                  await matrix.sync_forever(timeout=30000)
+                async def message_callback(matrix: AsyncClient, msg: str, _r, e):
+                    print("Received matrix text message: ", e)
+                    assert msg in e.body
+                    exit(0)  # Success!
 
 
-              if __name__ == "__main__":
-                  asyncio.run(run(sys.argv[1]))
-            ''
-          )
-        ];
-      };
+                async def run(homeserver: str):
+                    matrix = AsyncClient(homeserver)
+                    response = await matrix.register("${userName}", "foobar")
+                    print("Matrix register response: ", response)
+
+                    # Open a DM with the bridge bot
+                    response = await matrix.room_create()
+                    print("Matrix create room response:", response)
+                    assert isinstance(response, RoomCreateResponse)
+                    room_id = response.room_id
+
+                    response = await matrix.room_invite(room_id, "@${botUserName}:${homeserverDomain}")
+                    assert isinstance(response, RoomInviteResponse)
+
+                    callback = functools.partial(
+                        message_callback, matrix, "Hello, I'm an Instagram bridge bot."
+                    )
+                    matrix.add_event_callback(callback, RoomMessageNotice)
+
+                    print("Waiting for matrix message...")
+                    await matrix.sync_forever(timeout=30000)
+
+
+                if __name__ == "__main__":
+                    asyncio.run(run(sys.argv[1]))
+              ''
+            )
+          ];
+        };
     };
 
     testScript = ''
@@ -218,4 +232,5 @@ import ../make-test-python.nix ({ pkgs, ... }:
           assert as_token_registration == expected_as_token, f"as_token in registration should match the one specified (is: {as_token_registration}, expected: {expected_as_token})"
           assert hs_token_registration == expected_hs_token, f"hs_token in registration should match the one specified (is: {hs_token_registration}, expected: {expected_hs_token})"
     '';
-  })
+  }
+)

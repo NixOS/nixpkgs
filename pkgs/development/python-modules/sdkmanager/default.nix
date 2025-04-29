@@ -13,26 +13,29 @@
 
 buildPythonPackage rec {
   pname = "sdkmanager";
-  version = "0.6.8";
+  version = "0.6.11";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitLab {
     owner = "fdroid";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Ev90WS/T+Rb8h/21XHQdy/GePhGiYWwyfP88OUyBojQ=";
+    repo = "sdkmanager";
+    tag = version;
+    hash = "sha256-UBBko5copc5y9kdUr8jqJgijxRLfpRuJmT1QSow/eVg=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    argcomplete
-    requests
-  ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
+  dependencies =
+    [
+      argcomplete
+      requests
+    ]
+    ++ requests.optional-dependencies.socks
+    ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
 
   postInstall = ''
     wrapProgram $out/bin/sdkmanager \
@@ -44,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sdkmanager" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/fdroid/sdkmanager";
     description = "Drop-in replacement for sdkmanager from the Android SDK written in Python";
     mainProgram = "sdkmanager";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ linsui ];
   };
 }

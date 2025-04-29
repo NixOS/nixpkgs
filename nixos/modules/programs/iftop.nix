@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.iftop;
-in {
+in
+{
   options = {
-    programs.iftop.enable = lib.mkEnableOption "iftop + setcap wrapper";
+    programs.iftop.enable = lib.mkEnableOption "iftop and setcap wrapper for it";
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.iftop ];
@@ -12,7 +18,7 @@ in {
       owner = "root";
       group = "root";
       capabilities = "cap_net_raw+p";
-      source = "${pkgs.iftop}/bin/iftop";
+      source = lib.getExe pkgs.iftop;
     };
   };
 }

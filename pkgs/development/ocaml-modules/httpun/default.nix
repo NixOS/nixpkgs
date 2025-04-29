@@ -1,9 +1,10 @@
-{ buildDunePackage
-, httpun-types
-, angstrom
-, bigstringaf
-, faraday
-, alcotest
+{
+  buildDunePackage,
+  httpun-types,
+  angstrom,
+  bigstringaf,
+  faraday,
+  alcotest,
 }:
 
 buildDunePackage {
@@ -11,7 +12,12 @@ buildDunePackage {
 
   inherit (httpun-types) src version;
 
-  propagatedBuildInputs = [ angstrom bigstringaf faraday httpun-types ];
+  propagatedBuildInputs = [
+    angstrom
+    bigstringaf
+    faraday
+    httpun-types
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

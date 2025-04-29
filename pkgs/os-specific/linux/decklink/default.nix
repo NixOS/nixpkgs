@@ -1,7 +1,9 @@
-{ stdenv
-, lib
-, blackmagic-desktop-video
-, kernel
+{
+  stdenv,
+  lib,
+  blackmagic-desktop-video,
+  kernel,
+  fetchpatch,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decklink";
@@ -11,18 +13,29 @@ stdenv.mkDerivation (finalAttrs: {
   # See pkgs/by-name/bl/blackmagic-desktop-video/package.nix for more.
   inherit (blackmagic-desktop-video) src version;
 
+  patches = lib.optionals (lib.versionAtLeast kernel.modDirVersion "6.13") [
+    # needed for version 14.4.x to build for kernel 6.13
+    (fetchpatch {
+      name = "01-update-makefiles";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/01-update-makefiles.patch?h=decklink";
+      hash = "sha256-l3iu0fG/QJMdGI/WSlNn+qjF4nK25JxoiwhPrMGTqE4=";
+    })
+  ];
+
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = placeholder "out";
 
-  nativeBuildInputs =  kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  postUnpack = let
-    arch = stdenv.hostPlatform.uname.processor;
-  in ''
-    tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" finalAttrs.version)}/other/${arch}/desktopvideo-${finalAttrs.version}-${arch}.tar.gz
-    moduleRoot=$NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}-${stdenv.hostPlatform.uname.processor}/usr/src
-    sourceRoot=$moduleRoot
-  '';
+  postUnpack =
+    let
+      arch = stdenv.hostPlatform.uname.processor;
+    in
+    ''
+      tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" finalAttrs.version)}/other/${arch}/desktopvideo-${finalAttrs.version}-${arch}.tar.gz
+      moduleRoot=$NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}-${stdenv.hostPlatform.uname.processor}/usr/src
+      sourceRoot=$moduleRoot
+    '';
 
   buildPhase = ''
     runHook preBuild

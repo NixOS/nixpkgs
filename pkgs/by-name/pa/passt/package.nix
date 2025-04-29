@@ -1,18 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, gitUpdater
-, testers
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  getconf,
+  gitUpdater,
+  testers,
+  unixtools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2024_09_06.6b38f07";
+  version = "2025_04_15.2340bbf";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Qf1neJOkYXR5p9Owk60qtc22A+au4EY45Qt9PfJ+Lrs=";
+    hash = "sha256-eYIgAj8BtCZ9OxG8/IDaUvFCtB+1ROU0UHf6sbaVUEY=";
   };
+
+  separateDebugInfo = true;
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail \
+      'PAGE_SIZE=$(shell getconf PAGE_SIZE)' \
+      "PAGE_SIZE=$(${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe getconf} PAGE_SIZE)"
+  '';
 
   makeFlags = [
     "prefix=${placeholder "out"}"
@@ -22,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
+      command = "${unixtools.script}/bin/script -c 'passt --version'";
     };
 
     updateScript = gitUpdater {
@@ -44,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
       interfaces on the host, hence not requiring any capabilities or
       privileges.
     '';
-    license = [ licenses.bsd3 /* and */ licenses.gpl2Plus ];
+    license = [
+      licenses.bsd3 # and
+      licenses.gpl2Plus
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ _8aed ];
     mainProgram = "passt";

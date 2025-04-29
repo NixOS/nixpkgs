@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,8 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ Heterogeneous-Compute Interface for Portability";
     homepage = "https://github.com/ROCm/HIP";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

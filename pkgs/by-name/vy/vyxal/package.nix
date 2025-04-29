@@ -3,6 +3,7 @@
   stdenvNoCC,
   clangStdenv,
   fetchFromGitHub,
+  fetchurl,
   mill,
   which,
 }:
@@ -10,11 +11,12 @@
 let
   # we need to lock the mill version, because an update will change the
   # fetched internal dependencies, thus breaking the deps FOD
-  lockedMill = mill.overrideAttrs (oldAttrs: {
+  lockedMill = mill.overrideAttrs (oldAttrs: rec {
     # should ideally match the version listed inside the `.mill-version` file of the source
     version = "0.11.12";
-    src = oldAttrs.src.overrideAttrs {
-      outputHash = "sha256-k4/oMHvtq5YXY8hRlX4gWN16ClfjXEAn6mRIoEBHNJo=";
+    src = fetchurl {
+      url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
+      hash = "sha256-k4/oMHvtq5YXY8hRlX4gWN16ClfjXEAn6mRIoEBHNJo=";
     };
   });
 in
@@ -25,7 +27,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Vyxal";
     repo = "Vyxal";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8hA4u9zz8jm+tlSZ88z69/PUFNYk7+i3jtgUntgDgPE=";
   };
 

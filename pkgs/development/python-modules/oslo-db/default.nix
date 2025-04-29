@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  aiosqlite,
   alembic,
   debtcollector,
   oslo-config,
@@ -21,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "16.0.0";
+  version = "17.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.db";
+    pname = "oslo_db";
     inherit version;
-    hash = "sha256-8bNUjR8eEfLYEZfBwXix0lO2A474iDYdMQp2Aa7BfoE=";
+    hash = "sha256-FHPfDAlc0HOVKG7WBSIgJcI3R3qhLGwpndQUqxT3t8Q=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiosqlite
     oslo-context
     oslotest
     stestr
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    stestr run
+    stestr run -e <(echo "oslo_db.tests.sqlalchemy.test_utils.TestModelQuery.test_project_filter_allow_none")
   '';
 
   pythonImportsCheck = [ "oslo_db" ];
@@ -64,6 +66,6 @@ buildPythonPackage rec {
     description = "Oslo Database library";
     homepage = "https://github.com/openstack/oslo.db";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

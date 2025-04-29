@@ -1,4 +1,10 @@
-{ lib, stdenv, autoreconfHook, fetchurl, openfst }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+  openfst,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opengrm-ngram";

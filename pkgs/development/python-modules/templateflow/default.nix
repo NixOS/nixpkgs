@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools-scm,
+  hatchling,
+  hatch-vcs,
   nipreps-versions,
   pybids,
   requests,
@@ -20,12 +22,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "templateflow";
     repo = "python-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools-scm
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     nipreps-versions
     pybids
     requests
@@ -33,7 +40,12 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # most tests try to download data
-  #pythonImportsCheck = [ "templateflow" ];  # touches $HOME/.cache, hence needs https://github.com/NixOS/nixpkgs/pull/120300
+
+  postFixup = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "templateflow" ];
 
   meta = with lib; {
     homepage = "https://templateflow.org/python-client";

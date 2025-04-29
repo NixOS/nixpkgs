@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.heisenbridge;
 
@@ -9,14 +14,16 @@ let
 
   registrationFile = "/var/lib/heisenbridge/registration.yml";
   # JSON is a proper subset of YAML
-  bridgeConfig = builtins.toFile "heisenbridge-registration.yml" (builtins.toJSON {
-    id = "heisenbridge";
-    url = cfg.registrationUrl;
-    # Don't specify as_token and hs_token
-    rate_limited = false;
-    sender_localpart = "heisenbridge";
-    namespaces = cfg.namespaces;
-  });
+  bridgeConfig = builtins.toFile "heisenbridge-registration.yml" (
+    builtins.toJSON {
+      id = "heisenbridge";
+      url = cfg.registrationUrl;
+      # Don't specify as_token and hs_token
+      rate_limited = false;
+      sender_localpart = "heisenbridge";
+      namespaces = cfg.namespaces;
+    }
+  );
 in
 {
   options.services.heisenbridge = {
@@ -188,18 +195,26 @@ in
         RemoveIPC = true;
         UMask = "0077";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ lib.optional (cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)) "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet =
+          [ "CAP_CHOWN" ]
+          ++ lib.optional (
+            cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)
+          ) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
         LockPersonality = true;
         RestrictRealtime = true;
-        SystemCallFilter = ["@system-service" "~@privileged" "@chown"];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "@chown"
+        ];
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_INET AF_INET6";
       };
     };
 
-    users.groups.heisenbridge = {};
+    users.groups.heisenbridge = { };
     users.users.heisenbridge = {
       description = "Service user for the Heisenbridge";
       group = "heisenbridge";

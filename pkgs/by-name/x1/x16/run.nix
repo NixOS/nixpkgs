@@ -1,6 +1,7 @@
-{ runtimeShell
-, symlinkJoin
-, writeTextFile
+{
+  runtimeShell,
+  symlinkJoin,
+  writeTextFile,
 }:
 
 { emulator, rom }:
@@ -22,7 +23,8 @@ let
   };
 in
 symlinkJoin {
-  name = "run-x16-${emulator.version}";
+  pname = "run-x16";
+  inherit (emulator) version;
 
   paths = [
     emulator
@@ -30,9 +32,3 @@ symlinkJoin {
     runScript
   ];
 }
-# TODO [ AndersonTorres ]:
-
-# 1. Parse the command line in order to allow the user to set an optional
-# rom-file
-# 2. generate runScript based on symlinkJoin (maybe a postBuild?)
-# 3. a NixOS module to abstract the runner

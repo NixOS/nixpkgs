@@ -1,4 +1,8 @@
-{ lib, stdenv, kernel }:
+{
+  lib,
+  stdenv,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   pname = "x86_energy_perf_policy";
@@ -22,6 +26,9 @@ stdenv.mkDerivation {
     mainProgram = "x86_energy_perf_policy";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2Only;
-    platforms = [ "i686-linux" "x86_64-linux" ]; # x86-specific
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ]; # x86-specific
   };
 }

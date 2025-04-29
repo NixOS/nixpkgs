@@ -18,6 +18,16 @@ setup hook registering ninja-based build and install phases.
 
 Controls the flags passed to `meson setup` during configure phase.
 
+#### `mesonBuildDir` {#meson-build-dir}
+
+Directory where Meson will put intermediate files.
+
+Setting this can be useful for debugging multiple Meson builds while in the same source directory, for example, when building for different platforms.
+Different values for each build will prevent build artefacts from interefering with each other.
+This setting has no tangible effect when running the build in a sandboxed derivation.
+
+The default value is `build`.
+
 #### `mesonWrapMode` {#meson-wrap-mode}
 
 Which value is passed as

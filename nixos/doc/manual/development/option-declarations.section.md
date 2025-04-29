@@ -99,7 +99,7 @@ mkPackageOption pkgs "name" { default = [ "path" "in" "pkgs" ]; example = "liter
 
 Creates an Option attribute set for an option that specifies the package a module should use for some purpose.
 
-**Note**: You shouldn’t necessarily make package options for all of your modules. You can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+**Note**: You should make package options for your modules, where applicable. While one can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays), they slow down nixpkgs evaluation significantly and are harder to debug when issues arise.
 
 The package is specified in the third argument under `default` as a list of strings
 representing its attribute path in nixpkgs (or another package set).
@@ -158,14 +158,14 @@ lib.mkOption {
 ::: {#ex-options-declarations-util-mkPackageOption-extraDescription .example}
 ### `mkPackageOption` with additional description text
 ```nix
-mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+mkPackageOption pkgs [ "python312Packages" "torch" ] {
   extraDescription = "This is an example and doesn't actually do anything.";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
-  default = pkgs.python39Packages.pytorch;
-  defaultText = lib.literalExpression "pkgs.python39Packages.pytorch";
+  default = pkgs.python312Packages.torch;
+  defaultText = lib.literalExpression "pkgs.python312Packages.torch";
   description = "The pytorch package to use. This is an example and doesn't actually do anything.";
 }
 ```

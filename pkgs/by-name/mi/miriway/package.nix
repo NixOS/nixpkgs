@@ -4,24 +4,35 @@
   fetchFromGitHub,
   gitUpdater,
   nixosTests,
+  bash,
   cmake,
+  inotify-tools,
   pkg-config,
   mir,
   libxkbcommon,
+  swaybg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "24.09";
+  version = "25.02.1";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-/0txc9ynC3rj9tbHwYNlDe2C1DlmjoE2Q2/uoBz2GFg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+HHHF9dhVYMxugJZckAnQduuSBLAw5StbwRJF5Fz+rU=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'DESTINATION /usr/lib/systemd' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}/systemd'
+  '';
+
   strictDeps = true;
+
+  # Source has a path "systemd/usr/{libexec,lib}/...", don't break references to that
+  dontFixCmake = true;
 
   nativeBuildInputs = [
     cmake
@@ -29,9 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bash
     mir
     libxkbcommon
   ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/miriway-background \
+      --replace-fail 'exec swaybg' 'exec ${lib.getExe swaybg}'
+
+    substituteInPlace $out/bin/miriway-run \
+      --replace-fail 'inotifywait -qq' '${lib.getExe' inotify-tools "inotifywait"} -qq'
+  '';
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

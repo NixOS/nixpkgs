@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, snes9x }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  snes9x,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-snes9x";
@@ -26,6 +32,6 @@ buildKodiBinaryAddon rec {
     description = "Snes9X GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

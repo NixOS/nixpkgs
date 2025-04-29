@@ -32,13 +32,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "project_root = Path(__file__).parents[1]" "project_root = Path(__file__).parents[0]"
 
-    # dataclasses is included in Python 3.7
-    substituteInPlace requirements.txt \
-      --replace dataclasses ""
-
     # https://github.com/madman-bob/python-dataclasses-serialization/issues/16
     sed -i '/(\(Dict\|List\)/d' tests/test_json.py tests/test_bson.py
   '';
+
+  # dataclasses is included in Python 3.7
+  pythonRemoveDeps = [ "dataclasses" ];
 
   propagatedBuildInputs = [
     more-properties

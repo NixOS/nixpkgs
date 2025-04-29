@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, libiconv
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  libiconv,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,17 +21,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
   };
 
-  cargoHash = "sha256-C/D9EPfifyajrCyXE8w/qRuzWEoyJJIcj4xii94/9l4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AQiXRKOXV7kXiu9GbtPE0Rddy93t1Y5tuJmww4xFSaU=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+    ];
 
   postInstall = ''
     installManPage man/*.1

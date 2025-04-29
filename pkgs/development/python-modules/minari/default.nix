@@ -19,8 +19,10 @@
   google-cloud-storage,
   tqdm,
   h5py,
+  huggingface-hub,
   mktestdocs,
   pytest,
+  scikit-image,
 
   # tests
   jaxlib,
@@ -29,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "minari";
-  version = "0.5.1";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LriUPl9lrIDz5tzZIOxhj8C2q0LZr6AgJGRw/cWp4Fs=";
+    tag = "v${version}";
+    hash = "sha256-LvJwp2dZdGPazJPWQtrk+v7zaPjOlomBu5j9avVdCcA=";
   };
 
   build-system = [
@@ -59,10 +61,16 @@ buildPythonPackage rec {
       tqdm
     ];
     hdf5 = [ h5py ];
+    hf = [ huggingface-hub ];
+    integrations = [
+      # agilerl
+      # d3rlpy
+    ];
     testing = [
       # gymnasium-robotics
       mktestdocs
       pytest
+      scikit-image
     ];
   };
 

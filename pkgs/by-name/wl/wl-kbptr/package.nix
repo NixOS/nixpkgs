@@ -6,6 +6,8 @@
   libxkbcommon,
   meson,
   ninja,
+  opencv,
+  pixman,
   pkg-config,
   stdenv,
   wayland,
@@ -14,15 +16,15 @@
 }:
 let
   pname = "wl-kbptr";
-  version = "0.2.1";
+  version = "0.3.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "moverest";
     repo = "wl-kbptr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bA4PbWJNM4qWDF5KfNEgeQ5Z/r/Aw3wL8YUMSnzUo0w=";
+    tag = "v${version}";
+    hash = "sha256-T7vxD5FW6Hjqc6io7Hypr6iJRM32KggQVMOGsy2Lg4Q=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -37,9 +39,13 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk3
     libxkbcommon
+    opencv
+    pixman
     wayland
     wayland-protocols
   ];
+
+  mesonFlags = [ "-Dopencv=enabled" ];
 
   strictDeps = true;
 
@@ -53,7 +59,10 @@ stdenv.mkDerivation {
     changelog = "https://github.com/moverest/wl-kbptr/releases/tag/v${version}";
     license = lib.licenses.gpl3;
     mainProgram = "wl-kbptr";
-    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
+    maintainers = [
+      lib.maintainers.luftmensch-luftmensch
+      lib.maintainers.clementpoiret
+    ];
     inherit (wayland.meta) platforms;
   };
 }

@@ -23,6 +23,8 @@ lib.makeScope newScope (self: {
 
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
+  kaiju = self.callPackage ./extensions/kaiju { };
+
   lightkeeper = self.callPackage ./extensions/lightkeeper { };
 
   machinelearning = self.callPackage ./extensions/machinelearning { inherit ghidra; };
@@ -31,4 +33,5 @@ lib.makeScope newScope (self: {
 
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 
+  wasm = self.callPackage ./extensions/wasm { inherit ghidra; };
 })

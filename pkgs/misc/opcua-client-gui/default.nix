@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  wrapQtAppsHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,8 +20,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapQtAppsHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   makeWrapperArgs = [
     "\${qtWrapperArgs[@]}"

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mealie;
   pkg = cfg.package;
@@ -23,7 +28,7 @@ in
 
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
-      default = {};
+      default = { };
       description = ''
         Configuration of the Mealie service.
 
@@ -60,7 +65,7 @@ in
         API_PORT = toString cfg.port;
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
-        CRF_MODEL_PATH = "/var/lib/mealie/model.crfmodel";
+        NLTK_DATA = pkgs.nltk-data.averaged_perceptron_tagger_eng;
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
@@ -70,7 +75,7 @@ in
         ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
-        StandardOutput="journal";
+        StandardOutput = "journal";
       };
     };
   };

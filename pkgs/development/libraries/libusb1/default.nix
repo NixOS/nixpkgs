@@ -1,39 +1,48 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, pkg-config
-, enableUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic
-, udev
-, libobjc
-, IOKit
-, Security
-, withExamples ? false
-, withStatic ? false
-, withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  pkg-config,
+  enableUdev ?
+    stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isAndroid,
+  udev,
+  libobjc,
+  IOKit,
+  Security,
+  withExamples ? false,
+  withStatic ? false,
+  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libusb";
-  version = "1.0.27";
+  version = "1.0.28";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
     rev = "v${version}";
-    sha256 = "sha256-OtzYxWwiba0jRK9X+4deWWDDTeZWlysEt0qMyGUarDo=";
+    sha256 = "sha256-ntfDh/+HYm5cthhO8FkAJHo4RcxvZUKmHf4AOrHLysM=";
   };
 
-  outputs = [ "out" "dev" ] ++ lib.optionals withDocs [ "doc" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals withDocs [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ] ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs =
-    lib.optional enableUdev udev ++
-    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit Security ];
+    lib.optional enableUdev udev
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libobjc
+      IOKit
+      Security
+    ];
 
   dontDisableStatic = withStatic;
 
@@ -68,6 +77,9 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ prusnak realsnick ];
+    maintainers = with maintainers; [
+      prusnak
+      realsnick
+    ];
   };
 }

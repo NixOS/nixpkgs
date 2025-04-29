@@ -10,23 +10,33 @@
   ­~~~
 */
 
-{ lib, stdenv, ghcWithPackages, makeWrapper, diagrams-builder, extraPackages ? (self: []) }:
+{
+  lib,
+  stdenv,
+  ghcWithPackages,
+  makeWrapper,
+  diagrams-builder,
+  extraPackages ? (self: [ ]),
+}:
 
 let
 
   # Used same technique as for the yiCustom package.
-  wrappedGhc = ghcWithPackages
-    (self: [ diagrams-builder ] ++ extraPackages self);
+  wrappedGhc = ghcWithPackages (self: [ diagrams-builder ] ++ extraPackages self);
   ghc = lib.getExe' wrappedGhc "ghc";
 
-  exeWrapper = backend : ''
+  exeWrapper = backend: ''
     makeWrapper \
     "${diagrams-builder}/bin/diagrams-builder-${backend}" "$out/bin/diagrams-builder-${backend}" \
       --set NIX_GHC ${ghc} \
       --set NIX_GHC_LIBDIR "$(${ghc} --print-libdir)"
   '';
 
-  backends = ["svg" "cairo" "ps"];
+  backends = [
+    "svg"
+    "cairo"
+    "ps"
+  ];
 
 in
 

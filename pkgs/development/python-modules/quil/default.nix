@@ -1,44 +1,40 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   rustPlatform,
   numpy,
   pytestCheckHook,
   syrupy,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.12.1";
+  version = "0.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "quil-rs";
-    rev = "quil-py/v${version}";
-    hash = "sha256-OCQp8WKOxyZNMu2waeasSZ4E8VhFqDZcgGbDoMpKeHg=";
+    tag = "quil-py/v${version}";
+    hash = "sha256-sj+JjE6y+toIjHO1J2g+3gzQMcfSa6zzQeOySATU48w=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    hash = "sha256-EmSDjheLEyFr0w6XOvJYdRmGGlv2L/wh3qAN8Nn5lyg=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-0KZikbCJgg4prR9XxfCJcZOTiV2Hcob2zLurxqCkH6I=";
   };
 
   buildAndTestSubdir = "quil-py";
 
-  build-system = [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = [ numpy ];
 
@@ -54,13 +50,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  disabledTests = [
-    # Syrupy snapshot needs to be regenerated
-    "test_filter_instructions"
-  ];
-
   meta = {
-    changelog = "https://github.com/rigetti/quil-rs/blob/${src.rev}/quil-py/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/quil-rs/blob/${src.tag}/quil-py/CHANGELOG.md";
     description = "Python package for building and parsing Quil programs";
     homepage = "https://github.com/rigetti/quil-rs/tree/main/quil-py";
     license = lib.licenses.asl20;

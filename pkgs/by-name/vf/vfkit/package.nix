@@ -1,42 +1,65 @@
 {
   lib,
-  fetchurl,
-  stdenvNoCC,
+  apple-sdk_15,
+  buildGoModule,
+  darwin,
+  fetchFromGitHub,
+  fetchpatch2,
+  nix-update-script,
   testers,
+  vfkit,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildGoModule rec {
   pname = "vfkit";
-  version = "0.5.1";
+  version = "0.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/crc-org/vfkit/releases/download/v${finalAttrs.version}/vfkit";
-    hash = "sha256-at+KsvsKO359d4VUvcSuio2ej5hM6//U4Mj/jqXwhEc=";
+  src = fetchFromGitHub {
+    owner = "crc-org";
+    repo = "vfkit";
+    rev = "v${version}";
+    hash = "sha256-+ds9GIa3q2ck4D3sjUHz7e9w00XgD6/jq4L8QkBpCJg=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-YvrcEPyAvuECUVgQoHKveMoFOeh4M3k5ngsP2w46+vY=";
 
-  installPhase = ''
-    runHook preInstall
+  subPackages = [ "cmd/vfkit" ];
 
-    install -Dm755 $src $out/bin/vfkit
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/crc-org/vfkit/pkg/cmdline.gitVersion=${src.rev}"
+  ];
 
-    runHook postInstall
+  nativeBuildInputs = [
+    darwin.sigtool
+  ];
+
+  buildInputs = [
+    apple-sdk_15
+  ];
+
+  postFixup = ''
+    codesign --entitlements vf.entitlements -f -s - $out/bin/vfkit
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
+    version = testers.testVersion { package = vfkit; };
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple command line tool to start VMs through the macOS Virtualization framework";
     homepage = "https://github.com/crc-org/vfkit";
+    changelog = "https://github.com/crc-org/vfkit/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    maintainers = with lib.maintainers; [
+      sarcasticadmin
+      phaer
+    ];
     platforms = lib.platforms.darwin;
-    # Source build will be possible after darwin SDK 12.0 bump
-    # https://github.com/NixOS/nixpkgs/pull/229210
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "vfkit";
   };
-})
+}

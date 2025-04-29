@@ -1,6 +1,27 @@
-{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsa-lib, speex
-, libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
-, wrapQtAppsHook, rtl-sdr, tcl, doxygen, groff }:
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  makeDesktopItem,
+  alsa-lib,
+  speex,
+  libopus,
+  curl,
+  gsm,
+  libgcrypt,
+  libsigcxx,
+  popt,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  rtl-sdr,
+  tcl,
+  doxygen,
+  groff,
+  jsoncpp,
+}:
 
 let
   desktopItem = makeDesktopItem rec {
@@ -9,18 +30,23 @@ let
     icon = "qtel";
     desktopName = name;
     genericName = "EchoLink Client";
-    categories = [ "HamRadio" "Qt" "Network" ];
+    categories = [
+      "HamRadio"
+      "Qt"
+      "Network"
+    ];
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "svxlink";
-  version = "19.09.2";
+  version = "24.02";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-riyFEuEmJ7+jYT3UoTTsMUwFdO3y5mjo4z0fcC3O8gY=";
+    repo = "svxlink";
+    tag = version;
+    hash = "sha256-QNm3LQ9RY24F/wmRuP+D2G5of1490YpZD9bp6dZErU0=";
   };
 
   cmakeFlags = [
@@ -29,9 +55,16 @@ in stdenv.mkDerivation rec {
     "-DRTLSDR_INCLUDE_DIRS=${rtl-sdr}/include"
     "../src"
   ];
+
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ cmake pkg-config doxygen groff wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    doxygen
+    groff
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -46,25 +79,24 @@ in stdenv.mkDerivation rec {
     rtl-sdr
     speex
     tcl
+    jsoncpp
   ];
 
   postInstall = ''
-    rm -f $out/share/applications/*
-    cp -v ${desktopItem}/share/applications/* $out/share/applications
-    mv $out/share/icons/link.xpm $out/share/icons/qtel.xpm
-
+    rm -rf $out/share/applications
+    ln -s ${desktopItem}/share/applications $out/share/applications
     wrapQtApp $out/bin/qtel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced repeater controller and EchoLink software";
     longDescription = ''
       Advanced repeater controller and EchoLink software for Linux including a
       GUI, Qtel - The Qt EchoLink client
     '';
     homepage = "http://www.svxlink.org/";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ zaninime ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ zaninime ];
+    platforms = lib.platforms.linux;
   };
 }

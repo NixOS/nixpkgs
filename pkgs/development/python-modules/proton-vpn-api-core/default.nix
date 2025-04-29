@@ -12,6 +12,7 @@
   pytest-asyncio,
   requests,
   sentry-sdk,
+  pyxdg,
   distro,
   pytestCheckHook,
   pytest-cov-stub,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.35.5";
+  version = "0.42.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-YdBsA8qKcWpR+L/I9rEFntR448kaxEjYuGDPS1ynsMU=";
+    hash = "sha256-WzyxBeIiOXDxyv0/guPWO16pN41ZVXnxd6iiiZ+bLR4=";
   };
 
   build-system = [
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     pynacl
     proton-core
     sentry-sdk
+    pyxdg
   ];
 
   pythonImportsCheck = [
@@ -59,14 +61,17 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   disabledTests = [
     # Permission denied: '/run'
     "test_ensure_configuration_file_is_created"
+    "test_ovpnconfig_with_certificate"
     "test_ovpnconfig_with_settings"
     "test_wireguard_config_content_generation"
     "test_wireguard_with_non_certificate"
@@ -79,6 +84,10 @@ buildPythonPackage rec {
     description = "Acts as a facade to the other Proton VPN components, exposing a uniform API to the available Proton VPN services";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-api-core";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sebtm ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

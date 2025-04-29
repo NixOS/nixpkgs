@@ -1,4 +1,21 @@
-{ lib, stdenv, apacheHttpd, autoconf, automake, autoreconfHook, curl, fetchFromGitHub, glib, lasso, libtool, libxml2, libxslt, openssl, pkg-config, xmlsec }:
+{
+  lib,
+  stdenv,
+  apacheHttpd,
+  autoconf,
+  automake,
+  autoreconfHook,
+  curl,
+  fetchFromGitHub,
+  glib,
+  lasso,
+  libtool,
+  libxml2,
+  libxslt,
+  openssl,
+  pkg-config,
+  xmlsec,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -12,10 +29,28 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VcR+HZ5S7fLrGqT1SHCQLQw6v516G0x+wf8Wb5Sy4Gk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];
-  buildInputs = [ apacheHttpd curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    autoconf
+    automake
+  ];
+  buildInputs = [
+    apacheHttpd
+    curl
+    glib
+    lasso
+    libtool
+    libxml2
+    libxslt
+    openssl
+    xmlsec
+  ];
 
-  configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
+  configureFlags = [
+    "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
+    "--exec-prefix=$out"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

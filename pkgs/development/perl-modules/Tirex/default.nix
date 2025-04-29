@@ -1,14 +1,16 @@
-{ lib
-, buildPerlPackage
-, fetchFromGitHub
-, fetchpatch
-, GD
-, IPCShareLite
-, JSON
-, LWP
-, mapnik
-, boost
-, nix-update-script
+{
+  lib,
+  buildPerlPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  GD,
+  IPCShareLite,
+  JSON,
+  LWP,
+  mapnik,
+  boost,
+  nix-update-script,
+  pkg-config,
 }:
 
 buildPerlPackage rec {
@@ -18,7 +20,7 @@ buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "tirex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p2P19tifA/AvJatTzboyhtt7W1SwKJQzqpU4oDalfhU=";
   };
 
@@ -29,12 +31,12 @@ buildPerlPackage rec {
       url = "https://github.com/openstreetmap/tirex/commit/5f131231c9c12e88793afba471b150ca8af8d587.patch";
       hash = "sha256-bnL1ZGy8ZNSZuCRbZn59qRVLg3TL0GjFYnhRKroeVO0=";
     })
-    # Support Mapnik >= v4.0.0 (boost:filesystem no longer indirectly linked)
-    # https://github.com/openstreetmap/tirex/pull/59
-    (fetchpatch {
-      url = "https://github.com/openstreetmap/tirex/commit/137903be9b7b35dde4c7010e65faa16bcf6ad476.patch";
-      hash = "sha256-JDqwWVnzExPwLpzv4LbSmGYah956uko+Zdicahua9oQ=";
-    })
+    # Support Mapnik >= v4.0.0 (no more mapnik-config)
+    ./use-pkg-config.patch
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [

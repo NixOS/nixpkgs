@@ -22,24 +22,25 @@
   # tests
   opencv4,
   numpy,
-  pympler,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.18.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+HQvDf5aovUtZ++BoD22B012N32A+7++O/jbpkIVQws=";
+    tag = "v${version}";
+    hash = "sha256-xof6lFb0DhmWVmYuBNslcGZs82NRkcgZgt+SX9gsrBY=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
+    substituteInPlace setup.py \
+      --replace-warn ', "-Werror"' ""
   '';
 
   nativeBuildInputs = [
@@ -60,9 +61,6 @@ buildPythonPackage rec {
   ];
 
   env = {
-    # clang-16: error: argument unused during compilation: '-fno-strict-overflow'
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
-
     RELEASE_FULL_FLAG = 1;
   };
 
@@ -73,14 +71,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     opencv4
     numpy
-    pympler
     pytestCheckHook
   ];
+
+  preCheck = ''
+    # https://github.com/bigcat88/pillow_heif/issues/325
+    rm tests/images/heif_other/L_xmp_latin1.heic
+    rm tests/images/heif/L_xmp.heif
+  '';
 
   disabledTests =
     [
       # Time based
       "test_decode_threads"
+      # Missing EXIF info on WEBP-AVIF variant
+      "test_exif_from_pillow"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/bigcat88/pillow_heif/issues/89
@@ -99,7 +104,7 @@ buildPythonPackage rec {
     ];
 
   meta = {
-    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/v${version}";
+    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/${src.tag}";
     description = "Python library for working with HEIF images and plugin for Pillow";
     homepage = "https://github.com/bigcat88/pillow_heif";
     license = with lib.licenses; [

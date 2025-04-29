@@ -23,17 +23,17 @@
   libpulseaudio,
   at-spi2-core,
   libxkbcommon,
-  mesa,
+  libgbm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exodus";
-  version = "24.19.4";
+  version = "25.9.2";
 
   src = requireFile {
     name = "exodus-linux-x64-${finalAttrs.version}.zip";
     url = "https://downloads.exodus.com/releases/exodus-linux-x64-${finalAttrs.version}.zip";
-    hash = "sha256-+g7DdDrSVmBl1wCSCoJcO2gmbWQBnJUYqjT+GuDlCYw=";
+    hash = "sha256-QEspr/n4TnwpCx9lBY874+dlcMvhXiYKhyqel7ebuzg=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
         systemd
         vivaldi-ffmpeg-codecs
         libxkbcommon
-        mesa
+        libgbm
       ];
     in
     ''

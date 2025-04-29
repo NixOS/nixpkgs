@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "coherent-oss";
     repo = "pytest-flake8";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FsJysBj5S5HHGay+YZKMgb9RdUN637J+FfNl+m9l6ik=";
+    tag = "v${version}";
+    hash = "sha256-uc5DOqqdoLfhzI2ogDOqhbJOHzdu+uqSOojIH+S1LZI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -29,8 +29,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    # https://github.com/coherent-oss/pytest-flake8/issues/3
-    broken = lib.versionAtLeast flake8.version "6";
     changelog = "https://github.com/coherent-oss/pytest-flake8/blob/${src.rev}/NEWS.rst";
     description = "py.test plugin for efficiently checking PEP8 compliance";
     homepage = "https://github.com/coherent-oss/pytest-flake8";

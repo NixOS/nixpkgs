@@ -38,6 +38,6 @@ buildPythonPackage rec {
     mainProgram = "gruut-ipa";
     homepage = "https://github.com/rhasspy/gruut-ipa";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

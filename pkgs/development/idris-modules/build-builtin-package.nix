@@ -1,7 +1,8 @@
 # Build one of the packages that comes with idris
 # pname: The pname of the package
 # deps: The dependencies of the package
-{ idris, build-idris-package }: pname: deps:
+{ idris, build-idris-package }:
+pname: deps:
 let
   inherit (builtins.parseDrvName idris.name) version;
 in

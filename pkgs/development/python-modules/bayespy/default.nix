@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bayespy";
     repo = "bayespy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-X7CwJBrKHlU1jqMkt/7XEzaiwul1Yzkb/V64lXG4Aqo=";
   };
 

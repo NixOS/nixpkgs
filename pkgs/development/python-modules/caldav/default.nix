@@ -7,10 +7,10 @@
   pytestCheckHook,
   pythonOlder,
   python,
-  pytz,
   recurring-ical-events,
   requests,
   setuptools,
+  setuptools-scm,
   toPythonModule,
   tzlocal,
   vobject,
@@ -19,32 +19,32 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.3.9";
-
+  version = "1.4.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R9zXwD0sZE4bg6MTHWWCWWlZ5wH0H6g650zA7AboAo8=";
+    repo = "caldav";
+    tag = "v${version}";
+    hash = "sha256-rixhEIcl37ZIiYFOnJY0Ww75xZy3o/436JcgLmoOGi0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     vobject
     lxml
     requests
     icalendar
     recurring-ical-events
-    pytz
-    tzlocal
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    tzlocal
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
   ];
 

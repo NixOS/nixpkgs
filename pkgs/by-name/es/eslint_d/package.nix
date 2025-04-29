@@ -1,21 +1,30 @@
-{ lib, buildNpmPackage, fetchFromGitHub, eslint_d, testers }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  eslint_d,
+  testers,
+}:
 
 buildNpmPackage rec {
   pname = "eslint_d";
-  version = "14.1.1";
+  version = "14.3.0";
 
   src = fetchFromGitHub {
     owner = "mantoni";
     repo = "eslint_d.js";
     rev = "v${version}";
-    hash = "sha256-r+AQFFzB3PhvER6oVHpqQiFuaHuT+2O8gL2zu8aCTbs=";
+    hash = "sha256-Mu3dSgRIC2L9IImKixJfaUsltlajY0cYdXOSikNQuPo=";
   };
 
-  npmDepsHash = "sha256-XOFRzGPrisXE8GyqVO5xms+o9OwA9w0y+uJkcdyX+z0=";
+  npmDepsHash = "sha256-nZ9q+Xmd8JLs+xYEO1TVbDEmQl2UwR9D9OWqVChNHhw=";
 
   dontNpmBuild = true;
 
-  passthru.tests.version = testers.testVersion { package = eslint_d; version = src.rev; };
+  passthru.tests.version = testers.testVersion {
+    package = eslint_d;
+    version = src.rev;
+  };
 
   meta = with lib; {
     description = "Makes eslint the fastest linter on the planet";

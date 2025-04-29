@@ -24,6 +24,6 @@ buildGoModule rec {
     description = "Gen: Friendly & Safer GORM powered by Code Generation";
     license = licenses.mit;
     mainProgram = "gentool";
-    maintainers = with maintainers; [tembleking];
+    maintainers = with maintainers; [ tembleking ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.streamdeck-ui;
@@ -22,7 +27,12 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.package
-      (lib.mkIf cfg.autoStart (pkgs.makeAutostartItem { name = "streamdeck-ui-noui"; package = cfg.package; }))
+      (lib.mkIf cfg.autoStart (
+        pkgs.makeAutostartItem {
+          name = "streamdeck-ui-noui";
+          package = cfg.package;
+        }
+      ))
     ];
 
     services.udev.packages = [ cfg.package ];

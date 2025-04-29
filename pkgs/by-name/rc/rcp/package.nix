@@ -1,26 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-INLXVruiaK5yv5old0NOWFcg9y13M6Dm7bBMmcPFY1I=";
+    hash = "sha256-mMSO5twpuxiA6pMG/bNMn3WJjs3ZwuoOk62M0WIrRBk=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    IOKit
-  ]);
-
-  cargoHash = "sha256-JXDM97uGuGh3qHK3Gh8Nd/YSZq/Kcj81PpufJJMqQQI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uVBWPxGxNgiahywA78QjN8msNx3gZ6vOyX7AkOdK2EM=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -36,7 +33,8 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     mainProgram = "rcp";
     maintainers = with maintainers; [ wykurz ];
-    # = note: Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    # Building procfs on an for a unsupported platform. Currently only linux and android are supported
+    # (Your current target_os is macos)
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.12.2";
+  version = "4.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-Gn6tVcflWd1N7ohW46iLQSJav+HOjfV7fBORX+Eh/7g=";
+    hash = "sha256-CkrFWlggeJ2H4pdyfSKYZsllD2UhtkIGQTxPutok2Vs=";
   };
 
   nativeBuildInputs = [ flit-core ];

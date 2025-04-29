@@ -1,5 +1,13 @@
-{ lib, fetchurl, buildDunePackage
-, digestif, sexplib0, mirage-crypto, mirage-crypto-pk, astring, base64
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  digestif,
+  sexplib0,
+  mirage-crypto,
+  mirage-crypto-pk,
+  astring,
+  base64,
 }:
 
 buildDunePackage rec {
@@ -13,8 +21,14 @@ buildDunePackage rec {
     hash = "sha256-/CcVqLbdylB+LqpKNETkpvQ8SEAIcEFCO1MZqvdmJWU=";
   };
 
-  propagatedBuildInputs = [ digestif sexplib0 mirage-crypto mirage-crypto-pk
-                            astring base64 ];
+  propagatedBuildInputs = [
+    digestif
+    sexplib0
+    mirage-crypto
+    mirage-crypto-pk
+    astring
+    base64
+  ];
 
   doCheck = true;
 

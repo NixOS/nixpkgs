@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.13.46";
+  version = "9.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lL8Yupclu2ho0pRzsT947wHiWFxctWHsAgC+dnbndFI=";
+    hash = "sha256-9ZDuK3Kb3Zhzyi1SmJRmrdFMmVO0iAXArrQINI1NYiQ=";
   };
 
   build-system = [ setuptools ];

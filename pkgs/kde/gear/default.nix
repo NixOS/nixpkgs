@@ -7,7 +7,6 @@
   akonadi-contacts = callPackage ./akonadi-contacts { };
   akonadi-import-wizard = callPackage ./akonadi-import-wizard { };
   akonadi-mime = callPackage ./akonadi-mime { };
-  akonadi-notes = callPackage ./akonadi-notes { };
   akonadi-search = callPackage ./akonadi-search { };
   akonadiconsole = callPackage ./akonadiconsole { };
   akregator = callPackage ./akregator { };
@@ -26,6 +25,7 @@
   bovo = callPackage ./bovo { };
   calendarsupport = callPackage ./calendarsupport { };
   calindori = callPackage ./calindori { };
+  calligra = callPackage ./calligra { };
   cantor = callPackage ./cantor { };
   cervisia = callPackage ./cervisia { };
   colord-kde = callPackage ./colord-kde { };
@@ -172,7 +172,6 @@
   krecorder = callPackage ./krecorder { };
   kreversi = callPackage ./kreversi { };
   krfb = callPackage ./krfb { };
-  kross-interpreters = callPackage ./kross-interpreters { };
   kruler = callPackage ./kruler { };
   ksanecore = callPackage ./ksanecore { };
   kshisen = callPackage ./kshisen { };
@@ -192,6 +191,7 @@
   ktuberling = callPackage ./ktuberling { };
   kturtle = callPackage ./kturtle { };
   kubrick = callPackage ./kubrick { };
+  kunifiedpush = callPackage ./kunifiedpush { };
   kwalletmanager = callPackage ./kwalletmanager { };
   kwave = callPackage ./kwave { };
   kweather = callPackage ./kweather { };
@@ -236,12 +236,12 @@
   plasmatube = callPackage ./plasmatube { };
   poxml = callPackage ./poxml { };
   qmlkonsole = callPackage ./qmlkonsole { };
+  qrca = callPackage ./qrca { };
   rocs = callPackage ./rocs { };
   signon-kwallet-extension = callPackage ./signon-kwallet-extension { };
   skanlite = callPackage ./skanlite { };
   skanpage = callPackage ./skanpage { };
   skladnik = callPackage ./skladnik { };
-  spectacle = callPackage ./spectacle { };
   step = callPackage ./step { };
   svgpart = callPackage ./svgpart { };
   sweeper = callPackage ./sweeper { };

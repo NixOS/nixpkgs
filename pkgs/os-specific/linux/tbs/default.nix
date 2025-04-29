@@ -1,28 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, patchutils, perlPackages }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  patchutils,
+  perlPackages,
+}:
 let
 
   media = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "d8d1ff33c0c47e34fe3e860b52b4d6c457520866";
-    hash = "sha256-1Z9itZ5GFpfUeRtp5xTnS+I91LUZLDhsEcF2v8ThaCs=";
+    rev = "cf8cf4c06090fe3c2dc2f665764abc580b8a1921";
+    hash = "sha256-YTITVsSktxAoWBsIN6jXZD11pxXaMrMl5N6VZYxfTi0=";
   };
 
   build = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "8cd12a6e90999f3a341018812a5d66d7e6b30913";
-    hash = "sha256-+I0NrML54ni37qgDHbRUQiLmmw/UZgXmoFoiDNDeH5A=";
+    rev = "f362ab16cb88cc1d3599408c22e3abc52aebe1fc";
+    hash = "sha256-xsZdrOgf+dA5B/GVWSnWUw0FInswPd1Kzg/qWE2JmqM=";
   };
 
 in
 stdenv.mkDerivation {
   pname = "tbs";
-  version = "20240506-${kernel.version}";
+  version = "20241213-${kernel.version}";
 
-  srcs = [ media build ];
+  srcs = [
+    media
+    build
+  ];
   sourceRoot = build.name;
 
   # https://github.com/tbsdtv/linux_media/wiki
@@ -53,19 +64,22 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ patchutils kmod perlPackages.ProcProcessTable ]
-    ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    patchutils
+    kmod
+    perlPackages.ProcProcessTable
+  ] ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tbsdtv.com/";
     description = "Linux driver for TBSDTV cards";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ck3d ];
     priority = -1;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.9";
+    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.13";
   };
 }

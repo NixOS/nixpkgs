@@ -15,9 +15,21 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
+
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) basedpyright git go gopls python3;
+    inherit (pkgs)
+      basedpyright
+      git
+      go
+      gopls
+      python3
+      ;
   };
+
+  lua = callPackage ./manual-packages/lua { inherit (pkgs) lua; };
+
+  straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
 
   structured-haskell-mode = self.shm;
 

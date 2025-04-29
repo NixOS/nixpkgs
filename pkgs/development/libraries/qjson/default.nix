@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.0";

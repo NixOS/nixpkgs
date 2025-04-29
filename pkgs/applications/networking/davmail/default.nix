@@ -1,32 +1,33 @@
-{ stdenv
-, fetchurl
-, lib
-, makeWrapper
-, unzip
-, glib
-, gtk2
-, gtk3
-, jre
-, libXtst
-, coreutils
-, gnugrep
-, zulu
-, preferGtk3 ? true
-, preferZulu ? true
+{
+  stdenv,
+  fetchurl,
+  lib,
+  makeWrapper,
+  unzip,
+  glib,
+  gtk2,
+  gtk3,
+  jre,
+  libXtst,
+  coreutils,
+  gnugrep,
+  zulu,
+  preferGtk3 ? true,
+  preferZulu ? true,
 }:
 
 let
-  rev = 3546;
+  rev = 3627;
   jre' = if preferZulu then zulu else jre;
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "6.2.2";
+  version = "6.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    hash = "sha256-45paGy6SfUFXK6vY8L4tHFYiio1/5ah9vTyGImdgwHI=";
+    hash = "sha256-Yh61ZHsEMF6SchLEyBV3rRI7pJ/bvR2K4G8U6jrPa3A=";
   };
 
   postPatch = ''
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -44,8 +48,20 @@ stdenv.mkDerivation rec {
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
-      --prefix PATH : ${lib.makeBinPath [ jre' coreutils gnugrep ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk' libXtst ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jre'
+          coreutils
+          gnugrep
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          glib
+          gtk'
+          libXtst
+        ]
+      }
 
     runHook postInstall
   '';

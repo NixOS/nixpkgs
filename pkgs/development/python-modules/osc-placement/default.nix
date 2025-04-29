@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PUwyYOg1dymlnnTr6TnxS42ISmbS00YfOdkL+5MbYFI=";
   };
 
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/osc-placement";
     description = "OpenStackClient plugin for the Placement service";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

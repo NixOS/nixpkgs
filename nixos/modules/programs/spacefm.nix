@@ -1,8 +1,14 @@
 # Global configuration for spacefm.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.programs.spacefm;
+let
+  cfg = config.programs.spacefm;
 
 in
 {
@@ -47,7 +53,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.spaceFM ];
 
-    environment.etc."spacefm/spacefm.conf".text =
-      lib.concatStrings (lib.mapAttrsToList (n: v: "${n}=${builtins.toString v}\n") cfg.settings);
+    environment.etc."spacefm/spacefm.conf".text = lib.concatStrings (
+      lib.mapAttrsToList (n: v: "${n}=${builtins.toString v}\n") cfg.settings
+    );
   };
 }

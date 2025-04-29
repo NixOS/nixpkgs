@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "voip-utils";
-  version = "0.2.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voip-utils";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/DBBTL+t0VQJL43HgXGdhMHMKr8uBEkJ7Mf7Xp1mwhU=";
+    tag = "v${version}";
+    hash = "sha256-43g7ArhIZVyZ+VnzenldrQfr6kjpAxPNrK/vazYED+w=";
   };
 
   postPatch = ''
@@ -33,9 +33,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "voip_utils" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  # no tests as of v0.1.0
-  doCheck = false;
 
   meta = {
     changelog = "https://github.com/home-assistant-libs/voip-utils/blob/${src.rev}/CHANGELOG.md";

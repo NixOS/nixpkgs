@@ -20,14 +20,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nutils";
     repo = "poly-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dxFv4Az3uz6Du5dk5KZJ+unVbt3aZjxXliAQZhmBWDM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-+fnKvlSwM197rsyusFH7rs1W6livxel45UGbi1sB05k=";
+    hash = "sha256-3UBQJfMPVo37V7mJnN9loF1+vKh3JxFJWgynwsOnAg4=";
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook ];

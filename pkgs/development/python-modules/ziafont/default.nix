@@ -6,26 +6,28 @@
   setuptools,
   pytestCheckHook,
   nbval,
+  writableTmpDirAsHomeHook,
   fetchurl,
 }:
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.9";
+  version = "0.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziafont";
-    rev = "refs/tags/${version}";
-    hash = "sha256-S7IDL3ItP14/GrCUtSTT+JWuqRAY/Po0Kerq8mggDdg=";
+    tag = version;
+    hash = "sha256-tDwl+2EChzBDCFcZW71r4eSKyazlJSv7tRX6soPNSuY=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
     nbval
   ];
 

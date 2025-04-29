@@ -5,7 +5,7 @@
   pythonOlder,
 
   # build-system
-  poetry-core,
+  flit-core,
 
   # propagates
   aiofiles,
@@ -27,27 +27,23 @@
   mock,
   py,
   pytest-asyncio,
-  pytest7CheckHook,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.8";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
-    rev = "refs/tags/${version}";
-    hash = "sha256-A23+25bDzK2GlGNTCul6HbsjNujrnhpzTxdnV3Ig028=";
+    tag = version;
+    hash = "sha256-NApev3nRBS4QDMGq8++rSmK5YgeljkaVAsdezsTbZr4=";
   };
 
-  build-system = [ poetry-core ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail " ""
-  '';
+  build-system = [ flit-core ];
 
   dependencies =
     [
@@ -75,14 +71,15 @@ buildPythonPackage rec {
     mock
     py
     pytest-asyncio
-    pytest7CheckHook
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
   meta = with lib; {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

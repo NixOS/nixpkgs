@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "pyogrio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AyKBktZWzUxD1HKKp89gQ97c4WPB5PkXnkFqN+RHx7c=";
   };
 
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://pyogrio.readthedocs.io/";
     changelog = "https://github.com/geopandas/pyogrio/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

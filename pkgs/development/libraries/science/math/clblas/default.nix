@@ -1,14 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, gfortran
-, blas
-, boost
-, python3
-, ocl-icd
-, opencl-headers
-, Accelerate, CoreGraphics, CoreVideo, OpenCL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  gfortran,
+  blas,
+  boost,
+  python3,
+  ocl-icd,
+  opencl-headers,
+  Accelerate,
+  CoreGraphics,
+  CoreVideo,
+  OpenCL,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,21 +44,28 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-     "-DBUILD_TEST=OFF"
+    "-DBUILD_TEST=OFF"
   ];
 
-  nativeBuildInputs = [ cmake gfortran python3 ];
-  buildInputs = [
-    blas
-    boost
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    ocl-icd
-    opencl-headers
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-    CoreGraphics
-    CoreVideo
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    python3
   ];
+  buildInputs =
+    [
+      blas
+      boost
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      ocl-icd
+      opencl-headers
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Accelerate
+      CoreGraphics
+      CoreVideo
+    ];
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     OpenCL
   ];

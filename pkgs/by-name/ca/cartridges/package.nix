@@ -1,34 +1,42 @@
 {
   lib,
-  fetchFromGitHub,
-  python3Packages,
   appstream,
   blueprint-compiler,
   desktop-file-utils,
-  gobject-introspection,
+  fetchFromGitHub,
+  glib,
   glib-networking,
+  gobject-introspection,
+  gtk4,
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
+  python3Packages,
   wrapGAppsHook4,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
-  version = "2.9.3";
+  version = "2.12.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-37i8p6KaS/G7ybw850XYaPiG83/Lffn/+21xVk5xva0=";
+    tag = "v${version}";
+    hash = "sha256-pGEh9ugDWjaAjVL8mFUVqU+WFwcpRcstc11ikDxhihI=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
     blueprint-compiler
-    desktop-file-utils
+    desktop-file-utils # for `desktop-file-validate`
+    glib # for `glib-compile-schemas`
+    gtk4 # for `gtk-update-icon-cache`
     gobject-introspection
     meson
     ninja
@@ -49,11 +57,22 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ ''''${gappsWrapperArgs[@]}'' ];
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/libexec $out $pythonPath
   '';
+
+  # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase
+  # is skipped by `buildPythonApplication`
+  # https://github.com/NixOS/nixpkgs/blob/9d4343b7b27a3e6f08fc22ead568233ff24bbbde/pkgs/development/interpreters/python/mk-python-derivation.nix#L296
+  postInstallCheck = ''
+    mesonCheckPhase
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "GTK4 + Libadwaita game launcher";
@@ -64,9 +83,9 @@ python3Packages.buildPythonApplication rec {
       You can sort and hide games or download cover art from SteamGridDB.
     '';
     homepage = "https://apps.gnome.org/Cartridges/";
-    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "cartridges";
     platforms = lib.platforms.linux;
   };

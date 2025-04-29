@@ -1,37 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, gettext
-, groff
-, libSM
-, libX11
-, libXext
-, libXft
-, libXinerama
-, libXrandr
-, lua
-, makeWrapper
-, pkg-config
-, readline
-, which
-, xmessage
-, xterm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  gettext,
+  groff,
+  libSM,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  libXrandr,
+  lua,
+  makeWrapper,
+  pkg-config,
+  readline,
+  which,
+  xmessage,
+  xterm,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
-    rev = finalAttrs.version;
-    hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ll4thDS8fHxkm2IuGjePPVPyPPrz7yDzpKVloFuk/yE=";
   };
 
-  # error: 'PATH_MAX' undeclared
   postPatch = ''
+    # Fix build failure due missing headers
+    sed -i '1i#define _POSIX_C_SOURCE 200809L' mod_notionflux/notionflux/notionflux.c
+    sed -i '2i#include <stdio.h>' mod_notionflux/notionflux/notionflux.c
+    sed -i '3i#include <string.h>' mod_notionflux/notionflux/notionflux.c
+
+    # error: 'PATH_MAX' undeclared
     sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
   '';
 
@@ -56,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -72,7 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/notion \
-      --prefix PATH ":" "${lib.makeBinPath [ xmessage xterm ]}" \
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          xmessage
+          xterm
+        ]
+      }" \
   '';
 
   meta = {
@@ -80,7 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://notionwm.net";
     license = lib.licenses.lgpl21;
     mainProgram = "notion";
-    maintainers = with lib.maintainers; [ jfb AndersonTorres raboof ];
+    maintainers = with lib.maintainers; [
+      jfb
+      raboof
+      NotAShelf
+    ];
     platforms = lib.platforms.linux;
   };
 })

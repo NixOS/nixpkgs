@@ -1,25 +1,28 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, makeWrapper
-, gh
-, gnugrep
-, fzf
-, python3
-, withDelta ? false
-, delta
-, withBat ? false
-, bat
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  makeWrapper,
+  gh,
+  gnugrep,
+  fzf,
+  python3,
+  withDelta ? false,
+  delta,
+  withBat ? false,
+  bat,
 }:
 let
-  binPath = lib.makeBinPath ([
-    gh
-    gnugrep
-    fzf
-    python3
-  ]
-  ++ lib.optional withBat bat
-  ++ lib.optional withDelta delta);
+  binPath = lib.makeBinPath (
+    [
+      gh
+      gnugrep
+      fzf
+      python3
+    ]
+    ++ lib.optional withBat bat
+    ++ lib.optional withDelta delta
+  );
 in
 stdenvNoCC.mkDerivation {
   pname = "gh-notify";

@@ -1,19 +1,20 @@
-{ lib
-, resholve
-, fetchFromGitHub
-, bc
-, coreutils
-, file
-, gawk
-, ghostscript
-, gnused
-, imagemagick
-, zip
-, runtimeShell
-, findutils
+{
+  lib,
+  resholve,
+  fetchFromGitHub,
+  bc,
+  coreutils,
+  file,
+  gawk,
+  ghostscript,
+  gnused,
+  imagemagick,
+  zip,
+  runtimeShell,
+  findutils,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation {
   pname = "pdf2odt";
   version = "20220827";
 

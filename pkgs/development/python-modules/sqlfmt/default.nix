@@ -1,34 +1,38 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchFromGitHub,
-  importlib-metadata,
   black,
-  poetry-core,
+  buildPythonPackage,
   click,
+  fetchFromGitHub,
+  gitpython,
+  importlib-metadata,
   jinja2,
   platformdirs,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
   tomli,
   tqdm,
-  gitpython,
 }:
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.23.2";
+  version = "0.26.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g2ycfpsBFMh16pYVzCmde0mhQhhvAhH25i3LJTcG7Ac=";
+    tag = "v${version}";
+    hash = "sha256-q0pkwuQY0iLzK+Lef6k62UxMKJy592RsJnSZnVYdMa8=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "platformdirs" ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     click
@@ -40,25 +44,26 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    jinjafmt = [
-      black
-    ];
-    sqlfmt_primer = [
-      gitpython
-    ];
+    jinjafmt = [ black ];
+    sqlfmt_primer = [ gitpython ];
   };
 
-  pythonRelaxDeps = [
-    "platformdirs"
-  ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "sqlfmt"
-  ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH="$PATH:$out/bin";
+  '';
+
+  pythonImportsCheck = [ "sqlfmt" ];
 
   meta = {
     description = "Sqlfmt formats your dbt SQL files so you don't have to";
     homepage = "https://github.com/tconbeer/sqlfmt";
+    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pcboy ];
     mainProgram = "sqlfmt";

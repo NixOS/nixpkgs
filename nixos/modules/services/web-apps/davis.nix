@@ -468,10 +468,13 @@ in
         "davis-env-setup.service"
         "davis-db-migrate.service"
       ];
-      systemd.services.phpfpm-davis.requires = [
-        "davis-env-setup.service"
-        "davis-db-migrate.service"
-      ] ++ lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.service";
+      systemd.services.phpfpm-davis.requires =
+        [
+          "davis-env-setup.service"
+          "davis-db-migrate.service"
+        ]
+        ++ lib.optional mysqlLocal "mysql.service"
+        ++ lib.optional pgsqlLocal "postgresql.service";
       systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths = [ cfg.dataDir ];
 
       services.nginx = lib.mkIf (cfg.nginx != null) {
@@ -496,7 +499,7 @@ in
                     return 302 https://$host/dav/;
                   '';
                 };
-                "~ ^(.+\.php)(.*)$" = {
+                "~ ^(.+\\.php)(.*)$" = {
                   extraConfig = ''
                     try_files                $fastcgi_script_name =404;
                     include                  ${config.services.nginx.package}/conf/fastcgi_params;

@@ -1,23 +1,27 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, analitza
-, ki18n
-, kinit
-, kirigami2
-, kconfigwidgets
-, kwidgetsaddons
-, kio
-, kxmlgui
-, qtwebengine
-, plasma-framework
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  analitza,
+  ki18n,
+  kinit,
+  kirigami2,
+  kconfigwidgets,
+  kwidgetsaddons,
+  kio,
+  kxmlgui,
+  qtwebengine,
+  plasma-framework,
 }:
 
 mkDerivation {
   pname = "kalgebra";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     extra-cmake-modules

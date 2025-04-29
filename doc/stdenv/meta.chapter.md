@@ -91,6 +91,10 @@ For details, see [Source provenance](#sec-meta-sourceProvenance).
 
 A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice” in the same pull request, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.
 
+### `teams` {#var-meta-teams}
+
+A list of the teams of this Nix expression. Teams are defined in [`nixpkgs/maintainers/team-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/team-list.nix), and can be defined in a package with `meta.teams = with lib.teams; [ team1 team2 ]`.
+
 ### `mainProgram` {#var-meta-mainProgram}
 
 The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
@@ -145,7 +149,7 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
 ```nix
 {
   meta.platforms = lib.platforms.linux;
-  meta.hydraPlatforms = [];
+  meta.hydraPlatforms = [ ];
 }
 ```
 
@@ -169,7 +173,12 @@ This means that `broken` can be used to express constraints, for example:
 
   ```nix
   {
-    meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ]);
+    meta.broken = lib.all (
+      map (p: p.meta.broken) [
+        glibc
+        musl
+      ]
+    );
   }
   ```
 

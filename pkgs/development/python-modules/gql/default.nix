@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "gql";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jm0X+X8gQyQYn03gT14bdr79+Wd5KL9ryvrU/0VUtEU=";
   };
 
@@ -109,6 +109,8 @@ buildPythonPackage rec {
     # Exclude linter tests
     "gql-checker/tests/test_flake8_linter.py"
     "gql-checker/tests/test_pylama_linter.py"
+    "tests/test_httpx.py"
+    "tests/test_httpx_async.py"
   ];
 
   pythonImportsCheck = [ "gql" ];

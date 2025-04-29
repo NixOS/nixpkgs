@@ -1,7 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -38,6 +40,8 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelOlder "5.15";
+    # This module is in mainline now and upstream suggests using that
+    # with recent kernels rather than the out-of-tree module.
+    broken = kernel.kernelOlder "5.15" || kernel.kernelAtLeast "6.9";
   };
 }

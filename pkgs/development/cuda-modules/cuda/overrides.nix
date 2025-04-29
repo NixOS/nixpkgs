@@ -157,6 +157,11 @@ filterAndCreateOverrides {
       cudaAtLeast,
       gmp,
       expat,
+      libxcrypt-legacy,
+      ncurses6,
+      python310,
+      python311,
+      python312,
       stdenv,
       lib,
     }:
@@ -165,12 +170,35 @@ filterAndCreateOverrides {
         prevAttrs.buildInputs
         # x86_64 only needs gmp from 12.0 and on
         ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ]
+        # Additional dependencies for CUDA 12.5 and later, which
+        # support multiple Python versions.
+        ++ lib.lists.optionals (cudaAtLeast "12.5") [
+          libxcrypt-legacy
+          ncurses6
+          python310
+          python311
+          python312
+        ]
         # aarch64,sbsa needs expat
         ++ lib.lists.optionals (stdenv.hostPlatform.isAarch64) [ expat ];
+
+      installPhase =
+        prevAttrs.installPhase
+        # Python 3.8 is not in nixpkgs anymore, delete Python 3.8 cuda-gdb support
+        # to avoid autopatchelf failing to find libpython3.8.so.
+        + lib.optionalString (cudaAtLeast "12.5") ''
+          find $bin -name '*python3.8*' -delete
+          find $bin -name '*python3.9*' -delete
+        '';
     };
 
   cuda_nvcc =
-    { backendStdenv, setupCudaHook }:
+    {
+      lib,
+      backendStdenv,
+      cudaOlder,
+      setupCudaHook,
+    }:
     prevAttrs: {
       # Merge "bin" and "dev" into "out" to avoid circular references
       outputs = builtins.filter (
@@ -195,15 +223,20 @@ filterAndCreateOverrides {
       # backend-stdenv.nix
 
       postPatch =
+        let
+          nvvmReplace = lib.optionalString (cudaOlder "12.5") ''
+            --replace-fail \
+              '$(TOP)/$(_NVVM_BRANCH_)' \
+              "''${!outputBin}/nvvm" \
+          '';
+        in
         (prevAttrs.postPatch or "")
         + ''
           substituteInPlace bin/nvcc.profile \
             --replace-fail \
-              '$(TOP)/$(_NVVM_BRANCH_)' \
-              "''${!outputBin}/nvvm" \
-            --replace-fail \
               '$(TOP)/$(_TARGET_DIR_)/include' \
-              "''${!outputDev}/include"
+              "''${!outputDev}/include" \
+              ${nvvmReplace}
 
           cat << EOF >> bin/nvcc.profile
 
@@ -247,7 +280,7 @@ filterAndCreateOverrides {
       libcurand,
       libGLU,
       libglvnd,
-      mesa,
+      libgbm,
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -256,26 +289,68 @@ filterAndCreateOverrides {
         libcurand
         libGLU
         libglvnd
-        mesa
+        libgbm
       ];
     };
+
+  cuda_sanitizer_api = _: _: { outputs = [ "out" ]; };
+
+  fabricmanager = { zlib }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ zlib ]; };
+
+  imex = { zlib }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ zlib ]; };
 
   nsight_compute =
     {
       lib,
       qt5 ? null,
       qt6 ? null,
+      rdma-core,
+      stdenv,
     }:
     prevAttrs:
     let
       inherit (lib.strings) versionOlder versionAtLeast;
       inherit (prevAttrs) version;
       qt = if versionOlder version "2022.2.0" then qt5 else qt6;
+      qtwayland =
+        if lib.versions.major qt.qtbase.version == "5" then
+          lib.getBin qt.qtwayland
+        else
+          lib.getLib qt.qtwayland;
       inherit (qt) wrapQtAppsHook qtwebview;
+      archDir =
+        {
+          aarch64-linux = "linux-desktop-t210-a64";
+          x86_64-linux = "linux-desktop-glibc_2_11_3-x64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     in
     {
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ wrapQtAppsHook ];
-      buildInputs = prevAttrs.buildInputs ++ [ qtwebview ];
+      buildInputs = prevAttrs.buildInputs ++ [
+        qtwayland
+        qtwebview
+        (qt.qtwebengine or qt.full)
+        rdma-core
+      ];
+      dontWrapQtApps = true;
+      preInstall = ''
+        rm -rf host/${archDir}/Mesa/
+      '';
+      postInstall = ''
+        moveToOutput 'ncu' "''${!outputBin}/bin"
+        moveToOutput 'ncu-ui' "''${!outputBin}/bin"
+        moveToOutput 'host/${archDir}' "''${!outputBin}/bin"
+        moveToOutput 'target/${archDir}' "''${!outputBin}/bin"
+        wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
+      '';
+      preFixup = ''
+        # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+        patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/bin/host/${archDir}/Plugins/imageformats/libqtiff.so"
+      '';
+      autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
+        "libnvidia-ml.so.1"
+      ];
       brokenConditions = prevAttrs.brokenConditions // {
         "Qt 5 missing (<2022.2.0)" = !(versionOlder version "2022.2.0" -> qt5 != null);
         "Qt 6 missing (>=2022.2.0)" = !(versionAtLeast version "2022.2.0" -> qt6 != null);
@@ -284,6 +359,7 @@ filterAndCreateOverrides {
 
   nsight_systems =
     {
+      boost178,
       cuda_cudart,
       cudaOlder,
       gst_all_1,
@@ -294,6 +370,7 @@ filterAndCreateOverrides {
       qt5 ? null,
       qt6 ? null,
       rdma-core,
+      stdenv,
       ucx,
       wayland,
       xorg,
@@ -309,20 +386,31 @@ filterAndCreateOverrides {
         else
           lib.getLib qt.qtwayland;
       qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
+      hostDir =
+        {
+          aarch64-linux = "host-linux-armv8";
+          x86_64-linux = "host-linux-x64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      targetDir =
+        {
+          aarch64-linux = "target-linux-sbsa-armv8";
+          x86_64-linux = "target-linux-x64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      versionString = with lib.versions; "${majorMinor version}.${patch version}";
     in
     {
       # An ad hoc replacement for
       # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
       env.rmPatterns = toString [
-        "nsight-systems/*/*/lib{arrow,jpeg}*"
-        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
-        "nsight-systems/*/*/libboost*"
-        "nsight-systems/*/*/libexec"
-        "nsight-systems/*/*/libQt*"
-        "nsight-systems/*/*/libstdc*"
-        "nsight-systems/*/*/Mesa"
-        "nsight-systems/*/*/Plugins"
-        "nsight-systems/*/*/python/bin/python"
+        "nsight-systems/${versionString}/${hostDir}/lib{arrow,jpeg}*"
+        "nsight-systems/${versionString}/${hostDir}/lib{ssl,ssh,crypto}*"
+        "nsight-systems/${versionString}/${hostDir}/libboost*"
+        "nsight-systems/${versionString}/${hostDir}/libexec"
+        "nsight-systems/${versionString}/${hostDir}/libstdc*"
+        "nsight-systems/${versionString}/${hostDir}/python/bin/python"
+        "nsight-systems/${versionString}/${hostDir}/Mesa"
       ];
       postPatch =
         prevAttrs.postPatch or ""
@@ -330,11 +418,20 @@ filterAndCreateOverrides {
           for path in $rmPatterns; do
             rm -r "$path"
           done
+          patchShebangs nsight-systems
         '';
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
+      dontWrapQtApps = true;
       buildInputs = prevAttrs.buildInputs ++ [
         (qt.qtdeclarative or qt.full)
         (qt.qtsvg or qt.full)
+        (qt.qtimageformats or qt.full)
+        (qt.qtpositioning or qt.full)
+        (qt.qtscxml or qt.full)
+        (qt.qttools or qt.full)
+        (qt.qtwebengine or qt.full)
+        (qt.qtwayland or qt.full)
+        boost178
         cuda_cudart.stubs
         gst_all_1.gst-plugins-base
         gst_all_1.gstreamer
@@ -352,18 +449,41 @@ filterAndCreateOverrides {
         xorg.libXtst
       ];
 
+      postInstall =
+        # 1. Move dependencies of nsys, nsys-ui binaries to bin output
+        # 2. Fix paths in wrapper scripts
+        ''
+          moveToOutput 'nsight-systems/${versionString}/${hostDir}' "''${!outputBin}"
+          moveToOutput 'nsight-systems/${versionString}/${targetDir}' "''${!outputBin}"
+          moveToOutput 'nsight-systems/${versionString}/bin' "''${!outputBin}"
+          substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
+            --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
+          wrapQtApp "$bin/nsight-systems/${versionString}/${hostDir}/nsys-ui.bin"
+        '';
+
+      preFixup = ''
+        # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+        patchelf --replace-needed libtiff.so.5 libtiff.so $bin/nsight-systems/${versionString}/${hostDir}/Plugins/imageformats/libqtiff.so
+      '';
+
+      autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
+        "libnvidia-ml.so.1"
+      ];
+
       brokenConditions = prevAttrs.brokenConditions // {
-        # Older releases require boost 1.70, which is deprecated in Nixpkgs
-        "CUDA too old (<11.8)" = cudaOlder "11.8";
         "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
         "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
+      };
+      badPlatformsConditions = prevAttrs.badPlatformsConditions // {
+        # Older releases require boost 1.70, which is deprecated in Nixpkgs
+        "CUDA too old (<11.8)" = cudaOlder "11.8";
       };
     };
 
   nvidia_driver =
     { }:
     prevAttrs: {
-      brokenConditions = prevAttrs.brokenConditions // {
+      badPlatformsConditions = prevAttrs.badPlatformsConditions // {
         "Package is not supported; use drivers from linuxPackages" = true;
       };
     };

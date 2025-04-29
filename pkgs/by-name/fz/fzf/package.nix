@@ -1,37 +1,43 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runtimeShell
-, installShellFiles
-, bc
-, ncurses
-, testers
-, fzf
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runtimeShell,
+  installShellFiles,
+  bc,
+  ncurses,
+  testers,
+  fzf,
 }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.56.0";
+  version = "0.61.3";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
     rev = "v${version}";
-    hash = "sha256-HG2GQwic1wJ0OiCinBEZ1wfjqXuq37udEpBwLt7LIA0=";
+    hash = "sha256-J/udSravvLZAStYDhMRh8KCD9ae8WH6ELtKXiWlWJ+8=";
   };
 
-  vendorHash = "sha256-dsQyoSJQT5PwhZ/anth5YjNXf6ZubrCza6kXWZJ3DgA=";
+  vendorHash = "sha256-WcrJfvY3GZLDuRr2PZR1ooNPJ6FQ4S3RvUc2+zePw5w=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ ncurses ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -84,7 +90,11 @@ buildGoModule rec {
     description = "Command-line fuzzy finder written in Go";
     homepage = "https://github.com/junegunn/fzf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Br1ght0ne ma27 zowoq ];
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      ma27
+      zowoq
+    ];
     mainProgram = "fzf";
     platforms = lib.platforms.unix;
   };

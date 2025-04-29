@@ -1,32 +1,33 @@
-{ lib
-, fetchFromGitHub
-, gexiv2
-, gobject-introspection
-, gtk3
-, hicolor-icon-theme
-, intltool
-, libnotify
-, librsvg
-, python3
-, runtimeShell
-, wrapGAppsHook3
-, fehSupport ? false
-, feh
-, imagemagickSupport ? true
-, imagemagick
-, appindicatorSupport ? true
-, libayatana-appindicator
+{
+  lib,
+  fetchFromGitHub,
+  gexiv2,
+  gobject-introspection,
+  gtk3,
+  hicolor-icon-theme,
+  intltool,
+  libnotify,
+  librsvg,
+  python3,
+  runtimeShell,
+  wrapGAppsHook3,
+  fehSupport ? false,
+  feh,
+  imagemagickSupport ? true,
+  imagemagick,
+  appindicatorSupport ? true,
+  libayatana-appindicator,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.12";
+  version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    rev = "refs/tags/${version}";
-    hash = "sha256-FjnhV7vzRPVDCgUNK8CHo3arKXuwe+3xH/5AxCVgeIY=";
+    tag = version;
+    hash = "sha256-7CTJ3hWddbOX/UfZ1qX9rPNGTfkxQ4pxu23sq9ulgv4=";
   };
 
   nativeBuildInputs = [
@@ -41,24 +42,25 @@ python3.pkgs.buildPythonApplication rec {
     hicolor-icon-theme
     libnotify
     librsvg
-  ]
-  ++ lib.optional appindicatorSupport libayatana-appindicator;
+  ] ++ lib.optional appindicatorSupport libayatana-appindicator;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    beautifulsoup4
-    configobj
-    dbus-python
-    distutils-extra
-    httplib2
-    lxml
-    pillow
-    pycairo
-    pygobject3
-    requests
-    setuptools
-  ]
-  ++ lib.optional fehSupport feh
-  ++ lib.optional imagemagickSupport imagemagick;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      beautifulsoup4
+      configobj
+      dbus-python
+      distutils-extra
+      httplib2
+      lxml
+      pillow
+      pycairo
+      pygobject3
+      requests
+      setuptools
+    ]
+    ++ lib.optional fehSupport feh
+    ++ lib.optional imagemagickSupport imagemagick;
 
   doCheck = false;
 
@@ -95,6 +97,9 @@ python3.pkgs.buildPythonApplication rec {
       blur, as well as options to layer quotes and a clock onto the background.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
+    maintainers = with maintainers; [
+      p3psi
+      zfnmxt
+    ];
   };
 }

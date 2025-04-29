@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, libnet
-, libpcap
-, libdnet
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libnet,
+  libpcap,
+  libdnet,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-f0sHzcH3faeg7epfpWXbgaHrRWaWBKMEqLdy38+svGo=";
   };
 
-  buildInputs = [ libnet libpcap libdnet ];
+  buildInputs = [
+    libnet
+    libpcap
+    libdnet
+  ];
 
   meta = with lib; {
     description = "Gateway ACL scanner";

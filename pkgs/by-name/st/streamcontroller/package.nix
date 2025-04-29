@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  isKde ? false,
   python3Packages,
   fetchFromGitHub,
   copyDesktopItems,
@@ -12,17 +13,23 @@
   libportal-gtk4,
   xdg-desktop-portal,
   xdg-desktop-portal-gtk,
+  kdotool,
 }:
-stdenv.mkDerivation rec {
+let
+  # We have to hardcode revision because upstream often create multiple releases for the same version number.
+  # This is the commit hash that maps to 1.5.0-beta.8 released on 2025-03-12
+  rev = "de11d84afac7873044568606a8468c78d57aceda";
+in
+stdenv.mkDerivation {
   pname = "streamcontroller";
 
-  version = "1.5.0-beta.7";
+  version = "1.5.0-beta.8";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
-    rev = version;
-    hash = "sha256-UBcsA9pAo7fONhk4vYXQU4EgSVKm1D7/7nvL9BaNIgo=";
+    inherit rev;
+    hash = "sha256-pE92/oX9iZYCIhwDkPkjPq/cDUQLUGs+Ou5rjFEIBpo=";
   };
 
   # The installation method documented upstream
@@ -31,37 +38,48 @@ stdenv.mkDerivation rec {
   # Due to how the code is structured upstream, it's infeasible to use `buildPythonApplication`.
 
   dontBuild = true;
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    # Some plugins needs to load things dynamically and in that case we won't find python3 without this
+    let
+      binPath =
+        [
+          python3Packages.python.interpreter
+        ]
+        # Allows automatic detection of windows to switch pages on KDE
+        ++ lib.optional isKde kdotool;
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/usr/lib/streamcontroller
-    cp -r ./* $out/usr/lib/streamcontroller/
+      mkdir -p $out/usr/lib/streamcontroller
+      cp -r ./* $out/usr/lib/streamcontroller/
 
-    mkdir -p $out/bin/
+      mkdir -p $out/bin/
 
-    # Note that the implementation of main.py assumes
-    # working directory to be at the root of the project's source code
-    makeWrapper \
-      ${python3Packages.python.interpreter} \
-      $out/bin/streamcontroller \
-      --add-flags main.py \
-      --chdir $out/usr/lib/streamcontroller \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+      # Note that the implementation of main.py assumes
+      # working directory to be at the root of the project's source code
+      makeWrapper \
+        ${python3Packages.python.interpreter} \
+        $out/bin/streamcontroller \
+        --add-flags main.py \
+        --chdir $out/usr/lib/streamcontroller \
+        --prefix PYTHONPATH : "$PYTHONPATH" \
+        --prefix PATH : "$PATH:${lib.makeBinPath binPath}"
 
-    mkdir -p "$out/etc/udev/rules.d"
-    cp ./udev.rules $out/etc/udev/rules.d/70-streamcontroller.rules
+      mkdir -p "$out/etc/udev/rules.d"
+      cp ./udev.rules $out/etc/udev/rules.d/70-streamcontroller.rules
 
-    install -D ./flatpak/icon_256.png $out/share/icons/hicolor/256x256/apps/streamcontroller.png
+      install -D ./flatpak/icon_256.png $out/share/icons/hicolor/256x256/apps/com.core447.StreamController.png
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   desktopItems = [
     (makeDesktopItem {
       name = "StreamController";
       desktopName = "StreamController";
       exec = "streamcontroller";
-      icon = "streamcontroller";
+      icon = "com.core447.StreamController";
       comment = "Control your Elgato Stream Decks";
       categories = [ "Utility" ];
     })

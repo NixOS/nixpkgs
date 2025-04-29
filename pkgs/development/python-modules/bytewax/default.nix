@@ -17,6 +17,7 @@
 
   # dependencies
   jsonpickle,
+  prometheus-client,
 
   # optional dependencies
   confluent-kafka,
@@ -24,11 +25,12 @@
   # test
   myst-docutils,
   pytestCheckHook,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
   pname = "bytewax";
-  version = "0.17.2";
+  version = "0.21.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,25 +38,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bytewax";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BecZvBJsaTHIhJhWM9GZldSL6Irrc7fiedulTN9e76I=";
+    tag = "v${version}";
+    hash = "sha256-O5q1Jd3AMUaQwfQM249CUnkjqEkXybxtM9SOISoULZk=";
   };
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
-  # Remove docs tests, myst-docutils in nixpkgs is not compatible with package requirements.
-  # Package uses old version.
-  patches = [ ./remove-docs-test.patch ];
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "columnation-0.1.0" = "sha256-RAyZKR+sRmeWGh7QYPZnJgX9AtWqmca85HcABEFUgX8=";
-      "timely-0.12.0" = "sha256-sZuVLBDCXurIe38m4UAjEuFeh73VQ5Jawy+sr3U/HbI=";
-      "libsqlite3-sys-0.26.0" = "sha256-WpJA+Pm5dWKcdUrP0xS5ps/oE/yAXuQvvsdyDfDet1o=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-TTB1//Xza47rnfvlIs9qMvwHPj/U3w2cGTmWrEokriQ=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +66,10 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  propagatedBuildInputs = [ jsonpickle ];
+  dependencies = [
+    jsonpickle
+    prometheus-client
+  ];
 
   optional-dependencies = {
     kafka = [ confluent-kafka ];
@@ -82,10 +79,16 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     myst-docutils
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    pytest-benchmark
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    "--benchmark-disable"
+    "pytests"
+  ];
 
   disabledTestPaths = [
     # dependens on an old myst-docutils version

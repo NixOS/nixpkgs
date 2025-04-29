@@ -1,6 +1,7 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
 }:
 buildPythonApplication rec {
   version = "0.0.42";

@@ -18,7 +18,7 @@
   python3Packages,
   testers,
   criterion,
-  callPackage
+  callPackage,
 }:
 
 let
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.version =
     let
-      tester = callPackage ./tests/001-version.nix {};
+      tester = callPackage ./tests/001-version.nix { };
     in
     testers.testVersion {
       package = criterion;

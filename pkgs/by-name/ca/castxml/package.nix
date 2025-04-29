@@ -5,7 +5,7 @@
   libffi,
   libxml2,
   llvmPackages,
-  python3,
+  sphinx,
   stdenv,
   testers,
   zlib,
@@ -16,17 +16,16 @@
 
 let
   inherit (llvmPackages) libclang llvm;
-  inherit (python3.pkgs) sphinx;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
-  version = "0.6.8";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J4Z/NjCVOq4QS7ncCi87P5YPgqRwFyDAc14uS5T7s6M=";
+    hash = "sha256-qT7uIZU6DoEQqqhaHEPzPUAFF+KCT4Ybtl8zk495Jko=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (withManual || withHTML) [ sphinx ];

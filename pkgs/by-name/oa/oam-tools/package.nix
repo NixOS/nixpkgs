@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "owasp-amass";
     repo = "oam-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vt4V8em8Iaz3BVKIqlcAv+VIpJtD58xb3QrkIr4tYuU=";
   };
 

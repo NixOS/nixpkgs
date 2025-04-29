@@ -45,7 +45,7 @@ let
     else if isx86_64 then
       "amd64"
     else
-      abort "no Nim CPU support known for ${config}";
+      throw "no Nim CPU support known for ${config}";
 
   parseOs =
     platform:
@@ -72,7 +72,7 @@ let
     else if isiOS then
       "iOS"
     else
-      abort "no Nim OS support known for ${config}";
+      throw "no Nim OS support known for ${config}";
 
   parsePlatform = p: {
     cpu = parseCpu p;
@@ -85,12 +85,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.0";
+  version = "2.2.4";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zphChJyXYOSH7N0c2t98DyhEyvrmBUAcfHKuJXZEiTw=";
+    hash = "sha256-+CtBl1D8zlYfP4l6BIaxgBhoRddvtdmfJIzhZhCBicc=";
   };
 
   buildInputs = [

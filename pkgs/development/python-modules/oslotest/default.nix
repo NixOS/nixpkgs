@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Oslo test framework";
     homepage = "https://github.com/openstack/oslotest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

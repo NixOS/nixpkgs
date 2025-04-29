@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change "libcpucycles.1.dylib" "$out/lib/libcpucycles.1.dylib" "$out/bin/cpucycles-info"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://cpucycles.cr.yp.to/";
     description = "Microlibrary for counting CPU cycles";

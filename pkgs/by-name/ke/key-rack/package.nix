@@ -31,9 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build-aux/{checks.sh,read-manifest.py}
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-wCJTm0W+g3+O1t1fR4maqJoxpPM0NeJG7d54MMAH33c=";
+    hash = "sha256-iV9ILi3/Uqi8lDHh1Uf2caz6Kc129CDThnqTN9VfUHc=";
   };
 
   nativeBuildInputs = [

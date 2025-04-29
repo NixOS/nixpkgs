@@ -37,10 +37,10 @@ let
         hash = "sha256-Iu28LMDNmtL2r7gJV5Vbb8HZj18dlkHe+mw/Y1L8YKE=";
       };
 
-      cargoDeps = rustPlatform.fetchCargoTarball {
+      cargoDeps = rustPlatform.fetchCargoVendor {
         inherit src;
         name = "${pname}-${version}";
-        sha256 = cargoHash;
+        hash = cargoHash;
       };
 
       nativeBuildInputs =
@@ -87,19 +87,19 @@ in
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
-    cargoHash = "sha256-HKbVss6jGFdnCgXV3UYf6RxtmQM3+tq3cHfOSKw5JnY=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
   };
 
   wasmer-compiler-cranelift = common {
     pname = "wasmer-compiler-cranelift";
     buildAndTestSubdir = "packages/compiler-cranelift";
-    cargoHash = "sha256-BTBkoTluK7IVS+TpbQnMjn2Wvwhfxv1ev5PZWS/kW0w=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
   };
 
   wasmer-compiler-llvm = common {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
-    cargoHash = "sha256-AfLp4RLfnJ3R1Wg+RCJRmYr7748LQtl1W+ttTgIMls4=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
     extraNativeBuildInputs = [ llvm_14 ];
     extraBuildInputs = [
       libffi
@@ -112,6 +112,6 @@ in
   wasmer-compiler-singlepass = common {
     pname = "wasmer-compiler-singlepass";
     buildAndTestSubdir = "packages/compiler-singlepass";
-    cargoHash = "sha256-4DoeKRjS/2ijpUva0p/AE3qoIyt8CvCjkPWFPyLH6gs=";
+    cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
   };
 }

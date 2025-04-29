@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pythonOlder,
   setuptools,
   numpy,
@@ -9,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.84";
+  version = "1.85";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "biopython";
-    repo = "biopython";
-    rev = "refs/tags/biopython-${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-zXUB/AkWc/cY9M02WheSvXjT/nwM+lGXfXgCcWfu0G4=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Xa+rdAWd5OePSfa1aE7drm585G8Jz6BZwdEznoseoKY=";
   };
 
   build-system = [ setuptools ];

@@ -10,13 +10,13 @@ in
 {
   lib,
   jq,
-  libtapi,
+  llvm,
 }:
 
 self: super: {
   nativeBuildInputs = super.nativeBuildInputs or [ ] ++ [
     jq
-    libtapi
+    llvm
   ];
 
   buildPhase =
@@ -24,23 +24,18 @@ self: super: {
     + ''
       echo "Removing the following dylibs from the libSystem reexported libraries list: ${lib.escapeShellArg (lib.concatStringsSep ", " removedDylibs)}"
       for libSystem in libSystem.B.tbd libSystem.B_asan.tbd; do
-        test ! -e usr/lib/$libSystem && continue # TODO: remove once the minimum SDK is 10.14 or newer.
-        tapi stubify --filetype=tbd-v5 usr/lib/$libSystem -o usr/lib/$libSystem # tbd-v5 is a JSON-based format.
-        jq --argjson libs ${lib.escapeShellArg (builtins.toJSON removedDylibs)} '
+        # tbd-v5 is a JSON-based format, which can be manipulated by `jq`.
+        llvm-readtapi --filetype=tbd-v5 usr/lib/$libSystem \
+        | jq --argjson libs ${lib.escapeShellArg (builtins.toJSON removedDylibs)} '
           if .libraries then
             .libraries[] |= select(.install_names[] | any([.] | inside($libs)) | not)
           else
             .
           end
           | .main_library.reexported_libraries[].names[] |= select([.] | inside($libs) | not)
-        ' usr/lib/$libSystem > usr/lib/$libSystem~
-        mv usr/lib/$libSystem~ usr/lib/$libSystem
+        ' > usr/lib/$libSystem~
+        # Convert libSystem back to tbd-v4 because not all tooling supports the JSON-based format yet.
+        llvm-readtapi -delete-input --filetype=tbd-v4 usr/lib/$libSystem~ -o usr/lib/$libSystem
       done
-
-      # Rewrite the text-based stubs to v4 using `tapi`. This ensures a consistent format between SDK versions.
-      # tbd-v4 also drops certain elements that are no longer necessary (such as GUID lists).
-      find . -name '*.tbd' -type f \
-        -exec echo "Converting {} to tbd-v4" \; \
-        -exec tapi stubify --filetype=tbd-v4 {} -o {} \;
     '';
 }

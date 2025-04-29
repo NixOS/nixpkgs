@@ -1,18 +1,21 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
   {
     name = "btrbk-no-timer";
     meta.maintainers = with lib.maintainers; [ oxalica ];
 
-    nodes.machine = { ... }: {
-      environment.systemPackages = with pkgs; [ btrfs-progs ];
-      services.btrbk.instances.local = {
-        onCalendar = null;
-        settings.volume."/mnt" = {
-          snapshot_dir = "btrbk/local";
-          subvolume = "to_backup";
+    nodes.machine =
+      { ... }:
+      {
+        environment.systemPackages = with pkgs; [ btrfs-progs ];
+        services.btrbk.instances.local = {
+          onCalendar = null;
+          settings.volume."/mnt" = {
+            snapshot_dir = "btrbk/local";
+            subvolume = "to_backup";
+          };
         };
       };
-    };
 
     testScript = ''
       start_all()
@@ -34,4 +37,5 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       machine.start_job("btrbk-local.service")
       machine.wait_until_succeeds("cat /mnt/btrbk/local/*/bar | grep foo")
     '';
-  })
+  }
+)

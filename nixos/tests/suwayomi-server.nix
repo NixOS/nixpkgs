@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem
-, pkgs
-, lib ? pkgs.lib
+{
+  system ? builtins.currentSystem,
+  pkgs,
+  lib ? pkgs.lib,
 }:
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
@@ -8,12 +9,14 @@ let
 
   baseTestConfig = {
     meta.maintainers = with lib.maintainers; [ ratcornu ];
-    nodes.machine = { pkgs, ... }: {
-      services.suwayomi-server = {
-        enable = true;
-        settings.server.port = 1234;
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.suwayomi-server = {
+          enable = true;
+          settings.server.port = 1234;
+        };
       };
-    };
     testScript = ''
       machine.wait_for_unit("suwayomi-server.service")
       machine.wait_for_open_port(1234)
@@ -23,24 +26,30 @@ let
 in
 
 {
-  without-auth = makeTest (recursiveUpdate baseTestConfig {
-    name = "suwayomi-server-without-auth";
-  });
+  without-auth = makeTest (
+    recursiveUpdate baseTestConfig {
+      name = "suwayomi-server-without-auth";
+    }
+  );
 
-  with-auth = makeTest (recursiveUpdate baseTestConfig {
-    name = "suwayomi-server-with-auth";
+  with-auth = makeTest (
+    recursiveUpdate baseTestConfig {
+      name = "suwayomi-server-with-auth";
 
-    nodes.machine = { pkgs, ... }: {
-      services.suwayomi-server = {
-        enable = true;
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          services.suwayomi-server = {
+            enable = true;
 
-        settings.server = {
-          port = 1234;
-          basicAuthEnabled = true;
-          basicAuthUsername = "alice";
-          basicAuthPasswordFile = pkgs.writeText "snakeoil-pass.txt" "pass";
+            settings.server = {
+              port = 1234;
+              basicAuthEnabled = true;
+              basicAuthUsername = "alice";
+              basicAuthPasswordFile = pkgs.writeText "snakeoil-pass.txt" "pass";
+            };
+          };
         };
-      };
-    };
-  });
+    }
+  );
 }

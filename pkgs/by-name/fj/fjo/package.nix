@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitea, rustPlatform, openssl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  rustPlatform,
+  openssl,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fjo";
@@ -12,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KjH78yqfZoN24TBYyFZuxf7z9poRov0uFYQ8+eq9p/o=";
   };
 
-  cargoHash = "sha256-2G/TdajAqKiSoTL5FnukfS/eHkTNaGOj9EFpKsdb02k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iF2hIeRnyYYyyg45c1E3NIR9m7oonY18JlGvFSXy/Lc=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

@@ -1,31 +1,41 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, glib
-, gtk4
-, pango
-, librsvg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  pango,
+  librsvg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "regreet";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
     rev = version;
-    hash = "sha256-MPLlHYTfDyL2Uy50A4lVke9SblXCErgJ24SP3kFuIPw=";
+    hash = "sha256-f8Xvno5QqmWz4SUiFYDvs8lFU1ZaqQ8gpTaVzWxW4T8=";
   };
 
-  cargoHash = "sha256-dR6veXCGVMr5TbCvP0EqyQKTG2XM65VHF9U2nRWyzfA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-abCQ3RsnZ/a1DbjQFOiA7Xs7bbqSJxwNps8yV6Q4FIw=";
 
   buildFeatures = [ "gtk4_8" ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
-  buildInputs = [ glib gtk4 pango librsvg ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook4
+  ];
+  buildInputs = [
+    glib
+    gtk4
+    pango
+    librsvg
+  ];
 
   meta = with lib; {
     description = "Clean and customizable greeter for greetd";

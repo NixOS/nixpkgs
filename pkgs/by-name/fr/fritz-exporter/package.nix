@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fritz-exporter";
-  version = "2.5.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
-    rev = "fritzexporter-v${version}";
-    hash = "sha256-x5WCVDIKdreQCmVpiWbmVBNo42P5kSxX9dLMBKfZTWc=";
+    tag = "fritzexporter-v${version}";
+    hash = "sha256-xQLTI6b8X22aU6dj7Tmkzxn7vE4y8r/djUetG3Qg9Qw=";
   };
 
   postPatch = ''
@@ -22,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "defusedxml"
+    "attrs"
   ];
 
   nativeBuildInputs = with python3.pkgs; [
@@ -42,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pdreker/fritz_exporter/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pdreker/fritz_exporter/blob/${src.tag}/CHANGELOG.md";
     description = "Prometheus exporter for Fritz!Box home routers";
     homepage = "https://github.com/pdreker/fritz_exporter";
     license = lib.licenses.asl20;

@@ -8,9 +8,6 @@
   pybind11,
   setuptools,
 
-  # nativeBuildInputs
-  protobuf-core,
-
   # buildInputs
   abseil-cpp,
   protobuf,
@@ -38,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
@@ -46,10 +43,6 @@ buildPythonPackage rec {
     cmake
     protobuf
     setuptools
-  ];
-
-  nativeBuildInputs = [
-    protobuf-core # `protoc` required
   ];
 
   buildInputs = [
@@ -123,7 +116,7 @@ buildPythonPackage rec {
   meta = {
     description = "Open Neural Network Exchange";
     homepage = "https://onnx.ai";
-    changelog = "https://github.com/onnx/onnx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/onnx/onnx/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ acairncross ];
   };

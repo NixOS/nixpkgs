@@ -1,4 +1,8 @@
-{ lib, buildKodiAddon, fetchFromGitHub }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+}:
 buildKodiAddon rec {
   pname = "pdfreader";
   namespace = "plugin.image.pdf";
@@ -17,6 +21,6 @@ buildKodiAddon rec {
     homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
     description = "Comic book reader";
     license = licenses.gpl2Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

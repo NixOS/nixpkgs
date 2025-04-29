@@ -1,68 +1,77 @@
 {
   lib,
   stdenv,
-  baycomp,
-  bottleneck,
   buildPythonPackage,
-  chardet,
+  fetchFromGitHub,
+
+  # build-system
+  oldest-supported-numpy,
+  setuptools,
+
+  # nativeBuildInputs
   copyDesktopItems,
   cython,
+  qt5,
+  recommonmark,
+  sphinx,
+
+  # dependencies
+  baycomp,
+  bottleneck,
   catboost,
-  xgboost,
-  fetchFromGitHub,
-  fetchurl,
+  chardet,
   httpx,
   joblib,
   keyring,
   keyrings-alt,
-  makeDesktopItem,
   matplotlib,
-  nix-update-script,
   numpy,
-  oldest-supported-numpy,
   openpyxl,
   opentsne,
   orange-canvas-core,
   orange-widget-base,
   pandas,
-  pytestCheckHook,
-  pytest-qt,
-  pyqtgraph,
-  pyqt5,
-  pyqtwebengine,
-  python,
-  python-louvain,
-  pythonOlder,
-  pyyaml,
   pip,
-  qt5,
+  pyqt5,
+  pyqtgraph,
+  pyqtwebengine,
+  python-louvain,
+  pyyaml,
   qtconsole,
-  recommonmark,
   requests,
   scikit-learn,
   scipy,
   serverfiles,
-  setuptools,
-  sphinx,
-  wheel,
+  xgboost,
   xlrd,
   xlsxwriter,
+
+  makeDesktopItem,
+
+  # passthru
+  gitUpdater,
+  python,
+  pytest-qt,
+  pytestCheckHook,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.37.0";
+    version = "3.38.1";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchFromGitHub {
       owner = "biolab";
       repo = "orange3";
-      rev = "refs/tags/${version}";
-      hash = "sha256-3PybiHXH6oIYJb78/a7LnQA6cYUicDx4Mf65QhIhT4w=";
+      tag = version;
+      hash = "sha256-bzF2rK8/cKAoe9Wzj+rQJatgBQTP3KVtT6xU+IzKYIY=";
     };
+
+    build-system = [
+      oldest-supported-numpy
+      setuptools
+    ];
 
     postPatch = ''
       substituteInPlace pyproject.toml \
@@ -74,50 +83,47 @@ let
 
     nativeBuildInputs = [
       copyDesktopItems
-      oldest-supported-numpy
       cython
       qt5.wrapQtAppsHook
       recommonmark
-      setuptools
       sphinx
-      wheel
     ];
 
     enableParallelBuilding = true;
 
     pythonRelaxDeps = [ "scikit-learn" ];
 
-    propagatedBuildInputs = [
-      numpy
-      scipy
-      chardet
+    dependencies = [
+      baycomp
+      bottleneck
       catboost
-      xgboost
+      chardet
+      httpx
+      joblib
+      keyring
+      keyrings-alt
+      matplotlib
+      numpy
       openpyxl
       opentsne
-      qtconsole
-      setuptools
-      bottleneck
-      matplotlib
-      joblib
-      requests
-      keyring
-      scikit-learn
-      pandas
-      pyqtwebengine
-      serverfiles
       orange-canvas-core
+      orange-widget-base
+      pandas
+      pip
+      pyqt5
+      pyqtgraph
+      pyqtwebengine
       python-louvain
+      pyyaml
+      qtconsole
+      requests
+      scikit-learn
+      scipy
+      serverfiles
+      setuptools
+      xgboost
       xlrd
       xlsxwriter
-      httpx
-      pyqtgraph
-      pyqt5
-      orange-widget-base
-      keyrings-alt
-      pyyaml
-      baycomp
-      pip
     ];
 
     # FIXME: ImportError: cannot import name '_variable' from partially initialized module 'Orange.data' (most likely due to a circular import) (/build/source/Orange/data/__init__.py)
@@ -165,7 +171,7 @@ let
     '';
 
     passthru = {
-      updateScript = nix-update-script { };
+      updateScript = gitUpdater { };
       tests.unittests = stdenv.mkDerivation {
         name = "${self.name}-tests";
         inherit (self) src;
@@ -181,13 +187,13 @@ let
           chmod +w -R .
 
           substituteInPlace Orange/classification/tests/test_xgb_cls.py \
-            --replace test_learners mk_test_learners
+            --replace-fail test_learners mk_test_learners
 
           substituteInPlace Orange/modelling/tests/test_xgb.py \
-            --replace test_learners mk_test_learners
+            --replace-fail test_learners mk_test_learners
 
           substituteInPlace Orange/**/tests/*.py \
-            --replace test_filename filename_test
+            --replace-fail test_filename filename_test
 
           # TODO: debug why orange is crashing on GC, may be a upstream issue
           chmod +x Orange/__init__.py
@@ -196,8 +202,8 @@ let
         '';
 
         nativeBuildInputs = [
-          pytestCheckHook
           pytest-qt
+          pytestCheckHook
         ];
 
         postCheck = ''
@@ -211,12 +217,12 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Data mining and visualization toolbox for novice and expert alike";
       homepage = "https://orangedatamining.com/";
-      changelog = "https://github.com/biolab/orange3/blob/${version}/CHANGELOG.md";
-      license = with licenses; [ gpl3Plus ];
-      maintainers = with maintainers; [ lucasew ];
+      changelog = "https://github.com/biolab/orange3/blob/${src.tag}/CHANGELOG.md";
+      license = [ lib.licenses.gpl3Plus ];
+      maintainers = [ lib.maintainers.lucasew ];
       mainProgram = "orange-canvas";
     };
   };

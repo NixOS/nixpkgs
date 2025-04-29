@@ -4,6 +4,7 @@
   buildPythonPackage,
   CoreFoundation,
   fetchPypi,
+  setuptools,
   IOKit,
   pytestCheckHook,
   python,
@@ -12,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "7.0.0";
+  pyproject = true;
 
   inherit stdenv;
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j6rk8xC22Wn6JsoFRTOLIfc8axXbfEqNk0pUgvqoGPI=";
+    hash = "sha256-e+nD66OL7Mtkleozr9mCpEB0t48oxDSh9RzAf9MVxFY=";
   };
 
   postPatch = ''
@@ -31,6 +32,8 @@ buildPythonPackage rec {
     substituteInPlace psutil/arch/osx/cpu.c \
       --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
+
+  build-system = [ setuptools ];
 
   buildInputs =
     # workaround for https://github.com/NixOS/nixpkgs/issues/146760
@@ -46,10 +49,10 @@ buildPythonPackage rec {
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
-  # - the other disabled tests are likely due to sanboxing (missing specific errors)
+  # - the other disabled tests are likely due to sandboxing (missing specific errors)
   pytestFlagsArray = [
     # Note: $out must be referenced as test import paths are relative
-    "$out/${python.sitePackages}/psutil/tests/test_system.py"
+    "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
   ];
 
   disabledTests = [

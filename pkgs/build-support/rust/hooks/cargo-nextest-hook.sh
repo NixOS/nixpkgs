@@ -10,7 +10,7 @@ cargoNextestHook() {
     fi
 
     local flagsArray=(
-        "--target" "@rustHostPlatformSpec@"
+        "--target" "@rustcTarget@"
         "--offline"
     )
 

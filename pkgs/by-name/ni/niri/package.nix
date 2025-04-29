@@ -1,6 +1,5 @@
 {
   lib,
-  clang,
   dbus,
   eudev,
   fetchFromGitHub,
@@ -8,7 +7,8 @@
   libglvnd,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
+  versionCheckHook,
   nix-update-script,
   pango,
   pipewire,
@@ -23,15 +23,15 @@
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "0.1.9";
+  version = "25.02";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4YDrKMwXGVOBkeaISbxqf24rLuHvO98TnqxWYfgiSeg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mTTHA0RAaQcdYe+9A3Jx77cmmyLFHmRoZdd8RpWa+m8=";
   };
 
   postPatch = ''
@@ -40,18 +40,12 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-0.3.0" = "sha256-/3BO66yVoo63+5rwrZzoxhSTncvLyHdvtSaApFj3fBg=";
-      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xUjBQ65INi5qD7s5SpPw9TISgY6I3bjjUBmpubvM43I=";
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang
     pkg-config
     rustPlatform.bindgenHook
   ];
@@ -62,7 +56,7 @@ rustPlatform.buildRustPackage rec {
       libglvnd # For libEGL
       libinput
       libxkbcommon
-      mesa # For libgbm
+      libgbm
       pango
       seatd
       wayland # For libwayland-client
@@ -86,9 +80,14 @@ rustPlatform.buildRustPackage rec {
     + lib.optionalString withDbus ''
       install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     ''
-    + lib.optionalString withSystemd ''
+    + lib.optionalString (withSystemd || withDinit) ''
       install -Dm0755 resources/niri-session -t $out/bin
+    ''
+    + lib.optionalString withSystemd ''
       install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+    ''
+    + lib.optionalString withDinit ''
+      install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
     '';
 
   env = {
@@ -104,6 +103,10 @@ rustPlatform.buildRustPackage rec {
     );
   };
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     providedSessions = [ "niri" ];
     updateScript = nix-update-script { };
@@ -112,7 +115,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
-    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${version}";
+    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       iogamaster
@@ -123,4 +126,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "niri";
     platforms = lib.platforms.linux;
   };
-}
+})

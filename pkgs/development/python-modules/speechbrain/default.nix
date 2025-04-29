@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "speechbrain";
-  version = "1.0.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "speechbrain";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5ZMS1g74G4w83kNrXyt9IUsXe5uYS1qC+MwleQrjhTY=";
+    tag = "v${version}";
+    hash = "sha256-H45kTOIO6frbrRu+TP+udn1z60ZEcrShNB9iTCLInQs=";
   };
 
   dependencies = [

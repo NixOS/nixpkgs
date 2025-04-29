@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, colors
-, tty
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  colors,
+  tty,
 }:
 
 buildDunePackage rec {
@@ -31,4 +32,3 @@ buildDunePackage rec {
     maintainers = [ ];
   };
 }
-

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.3.0";
+  version = "1.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cYQDoEX33fjxekTA2COHMvcLxCFCD7g9bp3y9sE4uUU=";
+    tag = "v${version}";
+    hash = "sha256-Bs1pxiO5VX/lrd3M6sy+qPSR/K7fxMYNrU+GIXhNY2g=";
   };
 
   postPatch = ''
@@ -65,6 +65,7 @@ buildPythonPackage rec {
       sphinx
       nbsphinx
       openpyxl
+      nbval
     ];
   };
 
@@ -72,7 +73,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-mock
-    nbval
     matplotlib
     pyvisa
     openpyxl
@@ -91,7 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
-    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lugarun ];
   };

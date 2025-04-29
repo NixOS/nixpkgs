@@ -6,22 +6,25 @@
   pythonOlder,
   setuptools,
   click-default-group,
+  condense-json,
   numpy,
   openai,
   pip,
   pluggy,
+  puremagic,
   pydantic,
   python-ulid,
   pyyaml,
   sqlite-migrate,
   cogapp,
+  pytest-asyncio,
   pytest-httpx,
   sqlite-utils,
 }:
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.16";
+    version = "0.24.2";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -31,18 +34,20 @@ let
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      rev = "refs/tags/${version}";
-      hash = "sha256-ew8080Lv1ObjUaGicaGrj8IXXA7rtdgcWhp41O8gfVE=";
+      tag = version;
+      hash = "sha256-G5XKau8sN/AW9icSmJW9ht0wP77QdJkT5xmn7Ej4NeU=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
 
     dependencies = [
       click-default-group
+      condense-json
       numpy
       openai
       pip
       pluggy
+      puremagic
       pydantic
       python-ulid
       pyyaml
@@ -54,6 +59,7 @@ let
     nativeCheckInputs = [
       cogapp
       numpy
+      pytest-asyncio
       pytest-httpx
       pytestCheckHook
     ];
@@ -74,7 +80,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${version}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
       license = licenses.asl20;
       mainProgram = "llm";
       maintainers = with maintainers; [

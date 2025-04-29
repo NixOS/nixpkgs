@@ -1,28 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bluetuith";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "darkhz";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bluetuith";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yXH/koNT4ec/SOZhSU01iPNAfD1MdMjM2+wNmjXWsrk=";
   };
 
   vendorHash = "sha256-tEVzuhE0Di7edGa5eJHLLqOecCuoj02h91TsZiZU1PM=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/darkhz/bluetuith/cmd.Version=${version}@nixpkgs"
+    "-X github.com/darkhz/bluetuith/cmd.Version=${finalAttrs.version}@nixpkgs"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -41,6 +42,9 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "bluetuith";
-    maintainers = with maintainers; [ pyrox0 katexochen ];
+    maintainers = with maintainers; [
+      pyrox0
+      katexochen
+    ];
   };
-}
+})

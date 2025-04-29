@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, boost
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  boost,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-LFDZZbRDa8mQmglgS4DA/OqXp0HJZ2uqg1hbStdgvUw=";
   };
 
-  nativeBuildInputs = [ cmake doxygen ];
-  buildInputs = [ boost zlib ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
+  buildInputs = [
+    boost
+    zlib
+  ];
 
   meta = with lib; {
     description = "Stand-alone binary AndroidManifest.xml decoder";

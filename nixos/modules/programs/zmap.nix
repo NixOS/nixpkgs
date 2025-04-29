@@ -1,8 +1,14 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.zmap;
-in {
+in
+{
   options.programs.zmap = {
     enable = lib.mkEnableOption "ZMap, a network scanner designed for Internet-wide network surveys";
   };

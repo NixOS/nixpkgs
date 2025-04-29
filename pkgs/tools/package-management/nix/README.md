@@ -11,7 +11,7 @@ Alternatively, you can request access to the Nix community builder for all platf
 To build all dependent packages, use:
 
 ```
-nix-review pr <your-pull-request>
+nixpkgs-review pr <your-pull-request>
 ```
 
 And to build all important NixOS tests, run:
@@ -33,3 +33,9 @@ curl https://releases.nixos.org/nix/nix-$version/fallback-paths.nix > nixos/modu
 If you're updating `nixVersions.stable`, follow all the steps mentioned above, but use the **staging** branch for your pull request (or **staging-next** after coordinating with the people in matrix `#staging:nixos.org`)
 This is necessary because, at the end of the staging-next cycle, the NixOS tests are built through the [staging-next-small](https://hydra.nixos.org/jobset/nixos/staging-next-small) jobset.
 Especially nixos installer test are important to look at here.
+
+There is a script to update minor versions:
+
+```
+./pkgs/tools/package-management/nix/update-all.sh
+```

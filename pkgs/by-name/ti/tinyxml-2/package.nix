@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyxml2";
-  version = "10.0.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "leethomason";
     repo = "tinyxml2";
     rev = finalAttrs.version;
-    hash = "sha256-9xrpPFMxkAecg3hMHzzThuy0iDt970Iqhxs57Od+g2g=";
+    hash = "sha256-rYVQSvxA0nxlZFHwGcOWkxcXZWEvTxR9P+d8E7CSm6U=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/leethomason/tinyxml2";
     changelog = "https://github.com/leethomason/tinyxml2/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ zlib ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

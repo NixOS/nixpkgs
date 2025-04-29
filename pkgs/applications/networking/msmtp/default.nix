@@ -1,37 +1,41 @@
-{ resholve
-, stdenv
-, symlinkJoin
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, bash
-, coreutils
-, gnugrep
-, gnutls
-, gsasl
-, libidn2
-, netcat-gnu
-, texinfo
-, which
-, Security
-, withKeyring ? true
-, libsecret
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, withScripts ? true
+{
+  resholve,
+  stdenv,
+  symlinkJoin,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  bash,
+  coreutils,
+  gnugrep,
+  gnutls,
+  gsasl,
+  libidn2,
+  netcat-gnu,
+  texinfo,
+  which,
+  Security,
+  withKeyring ? true,
+  libsecret,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withScripts ? true,
+  gitUpdater,
+  binlore,
+  msmtp,
 }:
 
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.25";
+  version = "1.8.26";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-UZKUpF/ZwYPM2rPDudL1O8e8LguKJh9sTcJRT3vgsf4=";
+    hash = "sha256-MV3fzjjyr7qZw/BbKgsSObX+cxDDivI+0ZlulrPFiWM=";
   };
 
   meta = with lib; {
@@ -47,14 +51,25 @@ let
     pname = "msmtp-binaries";
     inherit version src meta;
 
-    configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
-      ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
+    configureFlags = [
+      "--sysconfdir=/etc"
+      "--with-libgsasl"
+    ] ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
 
-    buildInputs = [ gnutls gsasl libidn2 ]
+    buildInputs =
+      [
+        gnutls
+        gsasl
+        libidn2
+      ]
       ++ optionals stdenv.hostPlatform.isDarwin [ Security ]
       ++ optionals withKeyring [ libsecret ];
 
-    nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+      texinfo
+    ];
 
     enableParallelBuilding = true;
 
@@ -108,15 +123,17 @@ let
           netcat-gnu
           which
         ] ++ optionals withSystemd [ systemd ];
-        execer = [
-          "cannot:${getBin binaries}/bin/msmtp"
-          "cannot:${getBin netcat-gnu}/bin/nc"
-        ] ++ optionals withSystemd [
-          "cannot:${getBin systemd}/bin/systemd-cat"
-        ];
+        execer =
+          [
+            "cannot:${getBin binaries}/bin/msmtp"
+            "cannot:${getBin netcat-gnu}/bin/nc"
+          ]
+          ++ optionals withSystemd [
+            "cannot:${getBin systemd}/bin/systemd-cat"
+          ];
         fix."$MSMTP" = [ "msmtp" ];
-        fake.external = [ "ping" ]
-          ++ optionals (!withSystemd) [ "systemd-cat" ];
+        fake.external = [ "ping" ] ++ optionals (!withSystemd) [ "systemd-cat" ];
+        keep.source = [ "~/.msmtpqrc" ];
       };
 
       msmtp-queue = {
@@ -130,10 +147,23 @@ let
 
 in
 if withScripts then
-  symlinkJoin
-  {
+  symlinkJoin {
     name = "msmtp-${version}";
     inherit version meta;
-    paths = [ binaries scripts ];
-    passthru = { inherit binaries scripts; };
-  } else binaries
+    paths = [
+      binaries
+      scripts
+    ];
+    passthru = {
+      inherit binaries scripts src;
+      # msmtpq forwards most of its arguments to msmtp [1].
+      #
+      # [1]: <https://github.com/marlam/msmtp/blob/msmtp-1.8.26/scripts/msmtpq/msmtpq#L301>
+      binlore.out = binlore.synthesize msmtp ''
+        wrapper bin/msmtpq bin/msmtp
+      '';
+      updateScript = gitUpdater { rev-prefix = "msmtp-"; };
+    };
+  }
+else
+  binaries

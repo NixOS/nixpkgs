@@ -4,7 +4,7 @@
   stdenv,
   systemd,
   meson,
-  substituteAll,
+  replaceVars,
   swaybg,
   ninja,
   pkg-config,
@@ -25,7 +25,7 @@
   scenefx,
   wayland-scanner,
   xcbutilwm,
-  wlroots_0_17,
+  wlroots_0_18,
   testers,
   nixosTests,
   # Used by the NixOS module:
@@ -44,21 +44,20 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-VT+JjQPqCIdtaLeSnRiZ3rES0KgDJR7j5Byxr+d6oRg=";
+    tag = finalAttrs.version;
+    hash = "sha256-gdab7zkjp/S7YVCP1t/OfOdUXZRwNvNSuRFGWEJScF8=";
   };
 
   patches =
     [
       ./load-configuration-from-etc.patch
 
-      (substituteAll {
-        src = ./fix-paths.patch;
+      (replaceVars ./fix-paths.patch {
         inherit swaybg;
       })
     ]
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     scenefx
     wayland
     wayland-protocols
-    (wlroots_0_17.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_18.override { inherit (finalAttrs) enableXWayland; })
   ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
 
   mesonFlags =
@@ -116,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [
       (mesonOption "sd-bus-provider" sd-bus-provider)
-      (mesonEnable "xwayland" finalAttrs.enableXWayland)
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 

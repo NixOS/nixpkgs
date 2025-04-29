@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "causal-conv1d";
-  version = "1.4.0";
+  version = "1.5.0.post8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "causal-conv1d";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p5x5u3zEmEMN3mWd88o3jmcpKUnovTvn7I9jIOj/ie0=";
+    tag = "v${version}";
+    hash = "sha256-CuDAEjRG6NGCoYx5r8pFVnec+3Pqh8ZldzTVx09N6E0=";
   };
 
   build-system = [

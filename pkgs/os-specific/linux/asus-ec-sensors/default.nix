@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   name = "asus-ec-sensors-${version}-${kernel.version}";
-  version = "unstable-2022-07-10";
+  version = "0.1.0-unstable-2025-01-10";
 
   src = fetchFromGitHub {
     owner = "zeule";
     repo = "asus-ec-sensors";
-    rev = "5fbdd1461dc88fc952e02717b8120438ce5558b3";
-    sha256 = "sha256-kBGl8i7HzdItMoM7L91OfX6y+bqDfd22WICRg0n25pI=";
+    rev = "619d505b7055be618e9ba9d5e146fd641dbf3015";
+    sha256 = "sha256-vS8wNS53m495hmsI267R5Kq/j8Mo5491PJkUKRUpqPQ=";
   };
 
   hardeningDisable = [ "pic" ];

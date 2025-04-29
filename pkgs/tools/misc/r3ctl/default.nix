@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, qt5
-, qtbase
-, qttools
-, qtwebsockets
-, qtmultimedia
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  qt5,
+  qtbase,
+  qttools,
+  qtwebsockets,
+  qtmultimedia,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {

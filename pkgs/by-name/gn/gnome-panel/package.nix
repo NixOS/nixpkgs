@@ -45,16 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./modulesdir-env-var.patch
   ];
 
-  # make .desktop Exec absolute
-  postPatch = ''
-    patch -p0 <<END_PATCH
-    +++ gnome-panel/gnome-panel.desktop.in
-    @@ -7 +7 @@
-    -Exec=gnome-panel
-    +Exec=$out/bin/gnome-panel
-    END_PATCH
-  '';
-
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gnome-menus}/share"
@@ -107,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-panel";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-panel/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

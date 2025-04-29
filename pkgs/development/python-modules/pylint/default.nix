@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.3.1";
+  version = "3.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cnMYHHtIRxIySfZV0jTn+OFji+72cOReyNNDiJ9pbAg=";
+    tag = "v${version}";
+    hash = "sha256-c1Nh5g2ykvE+EmnSgpN3J7qMHPz93LZ0/snyIaYmPq4=";
   };
 
   build-system = [ setuptools ];
@@ -69,8 +69,6 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
     "-v"
   ];
-
-  dontUseSetuptoolsCheck = true;
 
   preCheck = ''
     export HOME=$TEMPDIR

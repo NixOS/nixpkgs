@@ -38,7 +38,6 @@ buildPythonPackage rec {
     '';
 
   env = {
-    BUILD_HTTPFS = 1;
     DUCKDB_BUILD_UNITY = 1;
     OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
   };

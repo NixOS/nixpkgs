@@ -3,7 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
-  ghostscript,
+  ghostscript_headless,
   hatch-vcs,
   hatchling,
   hypothesis,
@@ -18,10 +18,9 @@
   pngquant,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   reportlab,
-  substituteAll,
+  replaceVars,
   tesseract,
   unpaper,
   installShellFiles,
@@ -29,10 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.5.0";
-
-  disabled = pythonOlder "3.10";
-
+  version = "16.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,14 +41,13 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-jqe4BRW0U7gqcf+FtDWjDDvRStAqaEPTuU+B+BrFR5Y=";
+    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
   };
 
   patches = [
     ./use-pillow-heif.patch
-    (substituteAll {
-      src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+    (replaceVars ./paths.patch {
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;

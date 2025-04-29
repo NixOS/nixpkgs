@@ -1,7 +1,18 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  inherit (lib) literalMD mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    literalMD
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.services.quake3-server;
 
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
@@ -28,16 +39,17 @@ let
     '';
   };
 
-  home = pkgs.runCommand "quake3-home" {} ''
-      mkdir -p $out/.q3a/baseq3
+  home = pkgs.runCommand "quake3-home" { } ''
+    mkdir -p $out/.q3a/baseq3
 
-      for file in ${cfg.baseq3}/*; do
-        ln -s $file $out/.q3a/baseq3/$(basename $file)
-      done
+    for file in ${cfg.baseq3}/*; do
+      ln -s $file $out/.q3a/baseq3/$(basename $file)
+    done
 
-      ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
+    ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
   '';
-in {
+in
+{
   options = {
     services.quake3-server = {
       enable = mkEnableOption "Quake 3 dedicated server";
@@ -86,31 +98,35 @@ in {
     };
   };
 
-  config = let
-    baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
-  in mkIf cfg.enable {
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
+  config =
+    let
+      baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
+    in
+    mkIf cfg.enable {
+      networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    systemd.services.q3ds = {
-      description = "Quake 3 dedicated server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      systemd.services.q3ds = {
+        description = "Quake 3 dedicated server";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "networking.target" ];
 
-      environment.HOME = if baseq3InStore then home else cfg.baseq3;
+        environment.HOME = if baseq3InStore then home else cfg.baseq3;
 
-      serviceConfig = with lib; {
-        Restart = "always";
-        DynamicUser = true;
-        WorkingDirectory = home;
+        serviceConfig = with lib; {
+          Restart = "always";
+          DynamicUser = true;
+          WorkingDirectory = home;
 
-        # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
-        ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
-        ExecStartPre = optionalString (!baseq3InStore) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
+          # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
+          ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
+          ExecStartPre = optionalString (
+            !baseq3InStore
+          ) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
-        ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
+          ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
+        };
       };
     };
-  };
 
   meta.maintainers = with lib.maintainers; [ f4814n ];
 }

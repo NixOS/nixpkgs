@@ -1,22 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter329,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
   makeDesktopItem,
   copyDesktopItems,
+  autoPatchelfHook,
 }:
+
 let
   pname = "flclash";
-  version = "0.8.66";
+  version = "0.8.82";
+
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
-      rev = "v${version}";
-      hash = "sha256-LkaAALJcP3DGXBMZ3QWLUiyT9Kr4yTxKIRqYhrW1WOw=";
+      tag = "v${version}";
+      hash = "sha256-vZa/JHnoCHuCGWh9ImdK67uBmqosiDm0LZ+/lszPSlY=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -24,26 +27,58 @@ let
         GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
         GIT_CONFIG_VALUE_0 = "git@github.com:";
       });
+
+  metaCommon = {
+    description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
+    homepage = "https://github.com/chen08209/FlClash";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ];
+  };
+
   libclash = buildGoModule {
-    inherit pname version src;
-    modRoot = "./core";
-    vendorHash = "sha256-K+PrLFvDHyaxf1NKzcqf0qmfQwT8rctScv1CN+TxY0M=";
+    inherit version src;
+    pname = "libclash";
+
+    modRoot = "core";
+
+    vendorHash = "sha256-oVgYvRrG7Izr9zlc/76ZKRQgxobzeNzXr9SaIgW1sMY=";
+
+    env.CGO_ENABLED = 0;
+
     buildPhase = ''
       runHook preBuild
-      mkdir -p $out/lib
-      go build -ldflags="-w -s" -tags=with_gvisor -buildmode=c-shared -o $out/lib/libclash.so
+
+      mkdir -p $out/bin
+      go build -ldflags="-w -s" -tags=with_gvisor -o $out/bin/FlClashCore
+
       runHook postBuild
     '';
+
+    meta = metaCommon;
   };
 in
-flutter.buildFlutterApplication {
+flutter329.buildFlutterApplication {
   inherit pname version src;
+
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    keybinder3
+    libayatana-appindicator
+  ];
+
+  flutterBuildFlags = [ "--dart-define=APP_ENV=stable" ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "FlClash";
+      name = "flclash";
       exec = "FlClash %U";
-      icon = "FlClash";
+      icon = "flclash";
       genericName = "FlClash";
       desktopName = "FlClash";
       categories = [
@@ -58,39 +93,22 @@ flutter.buildFlutterApplication {
     })
   ];
 
-  patchPhase = ''
-    runHook prePatch
-    substituteInPlace lib/clash/core.dart --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
-    runHook postPatch
-  '';
-
   preBuild = ''
-    mkdir -p ./libclash/linux/
-    cp ${libclash}/lib/libclash.so ./libclash/linux/libclash.so
+    mkdir -p libclash/linux
+    cp ${libclash}/bin/FlClashCore libclash/linux/FlClashCore
   '';
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps/
-    cp ./assets/images/icon.png $out/share/pixmaps/FlClash.png
+    install -Dm644 assets/images/icon.png $out/share/pixmaps/flclash.png
   '';
 
-  pubspecLock = lib.importJSON ./pubspec.lock.json;
+  passthru = {
+    inherit libclash;
+    updateScript = ./update.sh;
+  };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
-
-  buildInputs = [
-    keybinder3
-    libayatana-appindicator
-  ];
-
-  meta = {
-    description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
-    homepage = "https://github.com/chen08209/FlClash";
+  meta = metaCommon // {
     mainProgram = "FlClash";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
     platforms = lib.platforms.linux;
   };
 }

@@ -18,7 +18,6 @@
   mpi,
   gsl,
   scalapack,
-  openssh,
   makeWrapper,
   libxsmm,
   spglib,
@@ -64,13 +63,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2024.3";
+  version = "2025.1";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-TeVQ0wVUx6d4knwMi9z3LjQZ4ELE6s1TnvwfFz8jbYk=";
+    hash = "sha256-04AFiEuv+EYubZVoYErQDdr9zipKlF7Gqy8DrUaYUMk=";
     fetchSubmodules = true;
   };
 
@@ -83,7 +82,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
     which
-    openssh
     makeWrapper
     pkg-config
   ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
@@ -182,9 +180,9 @@ stdenv.mkDerivation rec {
                      gpuBackend == "cuda"
                    ) "-D__OFFLOAD_CUDA -D__ACC -D__DBCSR_ACC -D__NO_OFFLOAD_PW"
                  } \
-                 ${
-                   lib.strings.optionalString (gpuBackend == "rocm") "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"
-                 }
+                 ${lib.strings.optionalString (
+                   gpuBackend == "rocm"
+                 ) "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"}
     CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
@@ -213,9 +211,9 @@ stdenv.mkDerivation rec {
                      -lcudart -lnvrtc -lcuda -lcublas
                    ''
                  } \
-                 ${
-                   lib.strings.optionalString (gpuBackend == "rocm") "-lamdhip64 -lhipfft -lhipblas -lrocblas"
-                 }
+                 ${lib.strings.optionalString (
+                   gpuBackend == "rocm"
+                 ) "-lamdhip64 -lhipfft -lhipblas -lrocblas"}
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
     include ${plumed}/lib/plumed/src/lib/Plumed.inc
     EOF
@@ -225,7 +223,6 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     mpiCheckPhaseHook
-    openssh
   ];
 
   checkPhase = ''

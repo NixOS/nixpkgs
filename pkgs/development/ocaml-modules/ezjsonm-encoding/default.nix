@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, ezjsonm }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ezjsonm,
+}:
 
 buildDunePackage rec {
   pname = "ezjsonm-encoding";

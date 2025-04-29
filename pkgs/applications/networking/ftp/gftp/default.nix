@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, gettext
-, gtk
-, intltool
-, libtool
-, ncurses
-, openssl
-, pkg-config
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  gettext,
+  gtk,
+  intltool,
+  libtool,
+  ncurses,
+  openssl,
+  pkg-config,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/masneyb/gftp";
     description = "GTK-based multithreaded FTP client for *nix-based machines";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

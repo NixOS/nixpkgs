@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # build-system
+  pdm-backend,
   poetry-core,
 
   # dependencies
@@ -11,7 +12,7 @@
   ollama,
 
   # testing
-  langchain-standard-tests,
+  langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
   syrupy,
@@ -21,19 +22,28 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.6";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
+    tag = "langchain-ollama==${version}";
+    hash = "sha256-nKLz9eCGaonECmr3Uby3j4ul5jQZaqUH3PD20z/JKek=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
 
-  build-system = [ poetry-core ];
+  build-system = [
+    pdm-backend
+    poetry-core
+  ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     langchain-core
@@ -41,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    langchain-standard-tests
+    langchain-tests
     pytestCheckHook
     pytest-asyncio
     syrupy

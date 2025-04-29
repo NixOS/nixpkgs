@@ -14,17 +14,18 @@
   libGLU,
   libzip,
   alsa-lib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dsda-doom";
-  version = "0.28.1";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
     rev = "v${version}";
-    hash = "sha256-X2v9eKiIYX4Zi3C1hbUoW4mceRVa6sxpBsP4Npyo4hM=";
+    hash = "sha256-mcg3GAQ90Qg7d1+/ci/XlTTF2q0tB6j+pp+Fb1Mpcao=";
   };
 
   sourceRoot = "${src.name}/prboom2";
@@ -45,8 +46,11 @@ stdenv.mkDerivation rec {
     SDL2_mixer
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/kraflab/dsda-doom";
+    changelog = "https://github.com/kraflab/dsda-doom/releases/tag/v${version}";
     description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
     license = lib.licenses.gpl2Plus;

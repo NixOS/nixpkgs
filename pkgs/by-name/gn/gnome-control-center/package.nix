@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
   colord,
@@ -74,16 +74,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "47.0.1";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-h+7fdDN7PGHfGaDcjCW1wpYp+1+Rm+w0y9CkscfbNWc=";
+    hash = "sha256-KMfbdNcg/MnyE8EtNy5+rMF2ekm8TKZrK9ILD9ECJmg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
@@ -151,9 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    # vp9alphadecodebin, observed from GST_DEBUG="*:3" warnings.
-    # https://github.com/NixOS/nixpkgs/pull/333911#issuecomment-2409233470
-    gst_all_1.gst-plugins-bad
   ];
 
   nativeCheckInputs = [
@@ -200,9 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
       # WM keyboard shortcuts
       --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
-    for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
-    done
   '';
 
   separateDebugInfo = true;
@@ -217,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities to configure the GNOME desktop";
     mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

@@ -10,21 +10,19 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.126";
+  version = "9.2.152";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "archinfo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LMRZMZeQZVDnIUyqtE90WI9uFHIPSm5d0duWw5ew054=";
+    tag = "v${version}";
+    hash = "sha256-SvtkEiBnqANcH2uHfVkYCNmXrJeOenbpQ+AfuOi7ZQ0=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Classes with architecture-specific information";
     homepage = "https://github.com/angr/archinfo";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }

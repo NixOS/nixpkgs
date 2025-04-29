@@ -20,13 +20,13 @@ finalAttrs: prevAttrs: {
   src = fetchurl { inherit (package) url hash; };
 
   # Useful for inspecting why something went wrong.
-  brokenConditions =
+  badPlatformsConditions =
     let
       cudaTooOld = strings.versionOlder cudaVersion package.minCudaVersion;
       cudaTooNew =
         (package.maxCudaVersion != null) && strings.versionOlder package.maxCudaVersion cudaVersion;
     in
-    prevAttrs.brokenConditions
+    prevAttrs.badPlatformsConditions
     // {
       "CUDA version is too old" = cudaTooOld;
       "CUDA version is too new" = cudaTooNew;
@@ -57,12 +57,13 @@ finalAttrs: prevAttrs: {
   meta = prevAttrs.meta // {
     homepage = "https://developer.nvidia.com/cudnn";
     maintainers =
-      prevAttrs.meta.maintainers
+      prevAttrs.meta.maintainers or [ ]
       ++ (with maintainers; [
         mdaiter
         samuela
         connorbaker
       ]);
+    teams = prevAttrs.meta.teams or [ ];
     license = {
       shortName = "cuDNN EULA";
       fullName = "NVIDIA cuDNN Software License Agreement (EULA)";

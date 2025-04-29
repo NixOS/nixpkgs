@@ -10,39 +10,41 @@
 import ./make-test-python.nix {
   name = "ntfy-sh";
 
-  nodes.machine = {
-    lib,
-    pkgs,
-    ...
-  }: {
-    environment.etc."ntfy-sh-dynamic-user.conf".text = ''
-      [Service]
-      Group=new-ntfy-sh
-      User=new-ntfy-sh
-      DynamicUser=true
-    '';
+  nodes.machine =
+    {
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      environment.etc."ntfy-sh-dynamic-user.conf".text = ''
+        [Service]
+        Group=new-ntfy-sh
+        User=new-ntfy-sh
+        DynamicUser=true
+      '';
 
-    services.ntfy-sh.enable = true;
-    services.ntfy-sh.settings.base-url = "http://localhost:2586";
+      services.ntfy-sh.enable = true;
+      services.ntfy-sh.settings.base-url = "http://localhost:2586";
 
-    systemd.services.ntfy-sh.serviceConfig = {
-      DynamicUser = lib.mkForce false;
-      ExecStartPre = [
-        "${pkgs.coreutils}/bin/id"
-        "${pkgs.coreutils}/bin/ls -lahd /var/lib/ntfy-sh/"
-        "${pkgs.coreutils}/bin/ls -lah /var/lib/ntfy-sh/"
-      ];
-      Group = lib.mkForce "old-ntfy-sh";
-      User = lib.mkForce "old-ntfy-sh";
+      systemd.services.ntfy-sh.serviceConfig = {
+        DynamicUser = lib.mkForce false;
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/id"
+          "${pkgs.coreutils}/bin/ls -lahd /var/lib/ntfy-sh/"
+          "${pkgs.coreutils}/bin/ls -lah /var/lib/ntfy-sh/"
+        ];
+        Group = lib.mkForce "old-ntfy-sh";
+        User = lib.mkForce "old-ntfy-sh";
+      };
+
+      users.users.old-ntfy-sh = {
+        isSystemUser = true;
+        group = "old-ntfy-sh";
+      };
+
+      users.groups.old-ntfy-sh = { };
     };
-
-    users.users.old-ntfy-sh = {
-      isSystemUser = true;
-      group = "old-ntfy-sh";
-    };
-
-    users.groups.old-ntfy-sh = {};
-  };
 
   testScript = ''
     import json
