@@ -121,6 +121,7 @@ let
       "x86_64-linux"
       "aarch64-linux"
     ];
+    position = "pkgs/by-name/wa/warp-terminal/versions.json";
   };
 
 in
