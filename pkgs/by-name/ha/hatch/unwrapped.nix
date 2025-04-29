@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3Packages,
+  buildPythonApplication,
   fetchFromGitHub,
   replaceVars,
   git,
@@ -10,9 +10,31 @@
   writableTmpDirAsHomeHook,
   darwin,
   nix-update-script,
+  uv,
+  hatchling,
+  hatch-vcs,
+  click,
+  httpx,
+  hyperlink,
+  keyring,
+  packaging,
+  pexpect,
+  platformdirs,
+  rich,
+  shellingham,
+  tomli-w,
+  tomlkit,
+  userpath,
+  virtualenv,
+  zstandard,
+  binary,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-xdist,
+  setuptools,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "hatch";
   version = "1.14.1";
   pyproject = true;
@@ -24,16 +46,16 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-101R5x4jAfMYrdE3OWWqGmkPWRI9rSMYr+Lye9NCbA4=";
   };
 
-  patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
+  patches = [ (replaceVars ./paths.patch { uv = lib.getExe uv; }) ];
 
-  build-system = with python3Packages; [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
   pythonRemoveDeps = [ "uv" ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     click
     hatchling
     httpx
@@ -52,7 +74,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs =
-    with python3Packages;
+
     [
       binary
       git
