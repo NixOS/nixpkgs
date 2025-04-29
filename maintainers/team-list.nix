@@ -924,6 +924,12 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  octodns = {
+    members = [ anthonyroussel ];
+    scope = "Maintain the ecosystem around OctoDNS";
+    shortName = "OctoDNS";
+  };
+
   openstack = {
     members = [
       SuperSandro2000
