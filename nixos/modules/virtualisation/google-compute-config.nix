@@ -21,7 +21,7 @@ in
     ../profiles/qemu-guest.nix
   ];
 
-  fileSystems."/" = lib.mkImageMediaOverride {
+  fileSystems."/" = {
     fsType = "ext4";
     device = "/dev/disk/by-label/nixos";
     autoResize = true;

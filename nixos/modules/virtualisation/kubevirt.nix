@@ -12,7 +12,7 @@
   ];
 
   config = {
-    fileSystems."/" = lib.mkImageMediaOverride {
+    fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
