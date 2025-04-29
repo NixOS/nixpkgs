@@ -11339,6 +11339,11 @@
     githubId = 207369;
     keys = [ { fingerprint = "7EB1 C02A B62B B464 6D7C  E4AE D1D0 9DE1 69EA 19A0"; } ];
   };
+  jf-uu = {
+    github = "jf-uu";
+    githubId = 181011550;
+    name = "jf-uu";
+  };
   jfvillablanca = {
     email = "jmfv.dev@gmail.com";
     matrix = "@jfvillablanca:matrix.org";
