@@ -18,18 +18,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-iZRKgRQL/+6RavFMWEugpd8+sWgXgE+itqak5BZe51s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Lf3IjITpfAhPAznUNZyl1WJtWxNUmySPlzvsPHl7t68=";
 
   postUnpack = ''
     mkdir -p source/server/assets_tmp
     cp -r ${atomic-browser}/* source/server/assets_tmp
   '';
+
+  inputsFrom = [ atomic-browser ];
+
+  doCheck = false;
+
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ nasm ];
-
-  doCheck = false; # TODO(jl): broken upstream
 
   meta = {
     description = "Reference implementation for the Atomic Data specification";
@@ -38,8 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.all;
     mainProgram = "atomic-server";
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [
-      oluchitheanalyst
-    ];
+    maintainers = [ lib.maintainers.oluchitheanalyst ];
   };
 })
