@@ -17164,6 +17164,8 @@ self: super: with self; {
 
   test-tube = callPackage ../development/python-modules/test-tube { };
 
+  test2ref = callPackage ../development/python-modules/test2ref { };
+
   testbook = callPackage ../development/python-modules/testbook { };
 
   testcontainers = callPackage ../development/python-modules/testcontainers { };
