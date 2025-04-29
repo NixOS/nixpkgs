@@ -8420,6 +8420,8 @@ self: super: with self; {
 
   manim-slides = callPackage ../development/python-modules/manim-slides { };
 
+  manimgl = callPackage ../development/python-modules/manimgl { };
+
   manimpango = callPackage ../development/python-modules/manimpango {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
