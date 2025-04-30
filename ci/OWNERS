@@ -466,3 +466,6 @@ pkgs/development/beam-modules/          @NixOS/beam
 pkgs/development/interpreters/erlang/   @NixOS/beam
 pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
+
+# OctoDNS
+pkgs/tools/networking/octodns/ @anthonyroussel
