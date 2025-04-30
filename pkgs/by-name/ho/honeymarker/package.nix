@@ -5,14 +5,14 @@
 }:
 buildGoModule rec {
   pname = "honeymarker";
-  version = "0.2.1";
-  vendorHash = "sha256-ZuDobjC/nizZ7G0o/zVTQmDfDjcdBhfPcmkhgwFc7VU=";
+  version = "0.2.12";
+  vendorHash = "sha256-jtDjy8Y2S5/Ujtv+dtoRZ4SP66sSP7yer97fwdNZEpg=";
 
   src = fetchFromGitHub {
     owner = "honeycombio";
     repo = "honeymarker";
     rev = "v${version}";
-    hash = "sha256-tiwX94CRvXnUYpiux94XhOj2abn1Uc+wjcDOmw79ab4=";
+    hash = "sha256-28NCAtx3MHlwm44IUlI0DzUaycH9cPN8ZdEhhQtdciU=";
   };
 
   meta = with lib; {
