@@ -2602,7 +2602,28 @@ self: super:
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
   # https://github.com/well-typed/cborg/issues/340
-  cborg = doJailbreak super.cborg;
+  cborg = lib.pipe super.cborg [
+    doJailbreak
+    # Fix build on 32-bit: https://github.com/well-typed/cborg/pull/322
+    (appendPatches (
+      lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+        (pkgs.fetchpatch {
+          name = "cborg-i686-1.patch";
+          url = "https://github.com/well-typed/cborg/commit/a4757c46219afe6d235652ae642786f2e2977020.patch";
+          sha256 = "01n0x2l605x7in9hriz9asmzsfb5f8d6zkwgypckfj1r18qbs2hj";
+          includes = [ "**/Codec/CBOR/**" ];
+          stripLen = 1;
+        })
+        (pkgs.fetchpatch {
+          name = "cborg-i686-2.patch";
+          url = "https://github.com/well-typed/cborg/commit/94a856e4e544a5bc7f927cfb728de385d6260af4.patch";
+          sha256 = "03iz85gsll38q5bl3m024iv7yb1k5sisly7jvgf66zic8fbvkhcn";
+          includes = [ "**/Codec/CBOR/**" ];
+          stripLen = 1;
+        })
+      ]
+    ))
+  ];
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
   # https://github.com/Bodigrim/data-array-byte/issues/1
