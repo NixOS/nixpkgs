@@ -4,31 +4,31 @@
   rustPlatform,
   pkg-config,
   openssl,
+  perl,
   stdenv,
   darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "code2prompt";
-  version = "1.1.0";
+  commit = "11a517e73105905e130f653a4bb7217f92cf8eb4";
+  version = "2.0.0+git-2025-03-31";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
-    rev = "v${version}";
-    hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
+    rev = "${commit}";
+    hash = "sha256-/wU9Uq3/eeJ2HGJlMMnGgPCA40rx7KOG7F0eFGTbwPA=";
   };
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = src + "/Cargo.lock";
   };
 
-  postPatch = ''
-    # src is missing Cargo.lock
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ];
 
   buildInputs =
     [ openssl ]
