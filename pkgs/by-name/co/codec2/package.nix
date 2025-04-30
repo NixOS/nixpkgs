@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-69Mp4o3MgV98Fqfai4txv5jQw2WpoPuoWcwHsNAFPQM=";
   };
 
+  patches = [
+    # Fix nix-store path dupliucations
+    ./fix-pkg-config.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     buildPackages.stdenv.cc # needs to build a C program to run at build time
