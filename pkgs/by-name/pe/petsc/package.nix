@@ -58,6 +58,7 @@
 
   # Used in passthru.tests
   petsc,
+  mpich,
 }:
 assert withFullDeps -> withCommonDeps;
 
@@ -76,6 +77,7 @@ assert withSuperLuDist -> mpiSupport;
 let
   petscPackages = lib.makeScope newScope (self: {
     inherit
+      mpi
       # global override options
       mpiSupport
       fortranSupport
@@ -86,7 +88,6 @@ let
 
     petscPackages = self;
     # external libraries
-    mpi = self.callPackage mpi.override { };
     blas = self.callPackage blas.override { };
     lapack = self.callPackage lapack.override { };
     hdf5 = self.callPackage hdf5.override {
@@ -286,6 +287,9 @@ stdenv.mkDerivation (finalAttrs: {
         fullDeps = petsc.override {
           withFullDeps = true;
           withParmetis = false;
+        };
+        mpich = petsc.override {
+          mpi = mpich;
         };
       };
   };
