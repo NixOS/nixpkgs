@@ -1,5 +1,6 @@
 {
   lib,
+  testers,
   stdenv,
   buildPackages,
   fetchFromGitHub,
@@ -8,14 +9,14 @@
   lpcnetfreedv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "codec2";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
-    rev = "${version}";
+    rev = finalAttrs.version;
     hash = "sha256-69Mp4o3MgV98Fqfai4txv5jQw2WpoPuoWcwHsNAFPQM=";
   };
 
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
       "-DLPCNET=ON"
     ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
     homepage = "https://www.rowetel.com/codec2.html";
@@ -64,5 +67,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ markuskowa ];
     # generate_codebook only built for host platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    pkgConfigModules = [ "codec2" ];
   };
-}
+})
