@@ -129,10 +129,10 @@ let
       # When extended with extendModules or moduleType, a fresh instance of
       # this module is used, to avoid conflicts and allow chaining of
       # extendModules.
-      internalModule = rec {
+      internalModule = {
         _file = "lib/modules.nix";
 
-        key = _file;
+        key = "lib/modules.nix";
 
         options = {
           _module.args = mkOption {
