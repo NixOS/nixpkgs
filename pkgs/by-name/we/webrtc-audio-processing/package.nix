@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fzdslr ];
     platforms =
       with lib.platforms;
       lib.intersectLists
