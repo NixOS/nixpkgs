@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-pkg-config.patch
   ];
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     cmake
     buildPackages.stdenv.cc # needs to build a C program to run at build time
@@ -46,10 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm0755 src/{c2enc,c2sim,freedv_rx,freedv_tx,cohpsk_*,fdmdv_*,fsk_*,ldpc_*,ofdm_*} -t $out/bin/
   '';
 
-  # Swap keyword order to satisfy SWIG parser
-  postFixup = ''
-    sed -r -i 's/(\<_Complex)(\s+)(float|double)/\3\2\1/' $out/include/$pname/freedv_api.h
-  '';
+  postFixup =
+    # Swap keyword order to satisfy SWIG parser
+    ''
+      sed -r -i 's/(\<_Complex)(\s+)(float|double)/\3\2\1/' $dev/include/$pname/freedv_api.h
+    ''
+    +
+      # generated cmake module is not compatible with multiple outputs
+      ''
+        substituteInPlace $dev/lib/cmake/codec2/codec2-config.cmake --replace-fail \
+          '"''${_IMPORT_PREFIX}/include/codec2' \
+          "\"$dev/include/codec2"
+      '';
 
   cmakeFlags =
     [
