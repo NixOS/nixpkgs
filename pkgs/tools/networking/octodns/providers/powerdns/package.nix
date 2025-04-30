@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-powerdns/";
     changelog = "https://github.com/octodns/octodns-powerdns/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = teams.octodns.members;
   };
 }
