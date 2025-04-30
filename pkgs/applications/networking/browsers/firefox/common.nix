@@ -248,12 +248,21 @@ let
       }
     );
 
-  defaultPrefs = lib.optionalAttrs geolocationSupport {
-    "geo.provider.network.url" = {
-      value = "https://api.beacondb.net/v1/geolocate";
-      reason = "We have no Google API keys and Mozilla Location Services were retired.";
-    };
-  };
+  defaultPrefs =
+    if geolocationSupport then
+      {
+        "geo.provider.network.url" = {
+          value = "https://api.beacondb.net/v1/geolocate";
+          reason = "We have no Google API keys and Mozilla Location Services were retired.";
+        };
+      }
+    else
+      {
+        "geo.provider.use_geoclue" = {
+          value = false;
+          reason = "Geolocation support has been disabled through the `geolocationSupport` package attribute.";
+        };
+      };
 
   defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (
     lib.concatStringsSep "\n" (
