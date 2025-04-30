@@ -2,6 +2,7 @@
   lib,
   pkgs,
   stdenv,
+  fetchpatch,
   fetchurl,
   fetchzip,
   fetchFromGitHub,
@@ -149,19 +150,34 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Build system patches
-    ./0001-cmake-Add-option-to-enable-Hunter-to-fetch-data.patch
+    # Offine build
+    (fetchpatch {
+      url = "https://github.com/luxonis/depthai-core/pull/1303/commits/cc8fd0fe76b460b512a515e8c3a2919fa72358c8.patch";
+      hash = "sha256-0v3KhRzod89gG4ce2m1G+ie3iW4IYnztKZ3cwKb/MG0=";
+    })
+    # CMake system install and fix RPATH
+    (fetchpatch {
+      url = "https://github.com/luxonis/depthai-core/pull/1309/commits/0571499c79658afb5112bd6c3488a649dc045d64.patch";
+      hash = "sha256-4ctLBhnD6Vzy4Si+OFnyUXCQ0wkt7630UDnk7odww0c=";
+    })
+
     ./0002-cmake-Fix-build-dependencies.patch
     ./0003-cmake-Skip-some-dependencies.patch
     ./0004-cmake-Enable-build-of-3rdparty-dependencies.patch
-    ./00.patch
-    ./11.patch
-    ./0006-cmake-Install-shared-objects.patch
-
-    # Code fixes patches
     ./0005-magic-enum.patch
-    ./0009-Color.hpp-Explicit-specification-for-float-type.patch
-    ./0011-BenchmarkOut.cpp-Explicit-cast-to-double.patch
+    ./0006-skip-libnop-xtensor.patch
+    ./0007-we-still-need-thirdparty.patch
+
+    # BechmarkOut.cpp fix cast to double
+    (fetchpatch {
+      url = "https://github.com/luxonis/depthai-core/pull/1302/commits/aa51312342906f321ba34c07f405a413c231e50c.patch";
+      hash = "sha256-YgniRH8qPwUzhIUXSAD0AO7K8Wlce4rZD6BUn/a09bU=";
+    })
+    # Color.hpp fix cast to float
+    (fetchpatch {
+      url = "https://github.com/luxonis/depthai-core/pull/1302/commits/4abe505665bcc606161b4574a25dcbfd643b8fb9.patch";
+      hash = "sha256-y99LZvAWJTO3co8UPj9OFrfwmmawbNwTHSyb+dp1F/I=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -276,20 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
         find . -maxdepth 1 -type d -not -name "." -not -name "nanorpc" -exec rm -rf {} \;
         cd ../..
       '';
-
-  # Explicitly fix RPATH in Python modules that autoPatchelfHook might miss
-  preFixup = lib.optionalString (!stdenv.isDarwin) ''
-    # Explicitly patch Python modules to remove /build references
-    echo "Explicitly patching Python modules to remove /build references"
-    
-    # Find Python modules
-    PYTHON_MODULES=$(find $out -name "*.so" -path "*/python*/*")
-    
-    for f in $PYTHON_MODULES; do
-      echo "Patching $f"
-      patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib" "$f" || true
-    done
-  '';
 
   meta = {
     description = "Core C++ library for Luxonis OAK devices";
