@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "extension_helpers" ];
 
-  pytestFlagsArray = [ "extension_helpers/tests" ];
+  enabledTestPaths = [ "extension_helpers/tests" ];
 
   disabledTests = [
     # Test require network access
