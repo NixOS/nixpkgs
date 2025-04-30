@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   graphviz,
+  gitUpdater,
   jre,
   makeBinaryWrapper,
   testers,
@@ -38,9 +39,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     $out/bin/plantuml -testdot
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "plantuml --version";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "plantuml --version";
+    };
+    updateScript = gitUpdater {
+      url = "https://github.com/plantuml/plantuml.git";
+      allowedVersions = "^1\\.[0-9\\.]+$";
+      rev-prefix = "v";
+    };
   };
 
   meta = {
