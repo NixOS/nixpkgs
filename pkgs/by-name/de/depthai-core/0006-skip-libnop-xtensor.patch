@@ -1,15 +1,3 @@
-diff --git a/cmake/DownloadAndChecksum.cmake b/cmake/DownloadAndChecksum.cmake
-index d271c2524..54fd89105 100644
---- a/cmake/DownloadAndChecksum.cmake
-+++ b/cmake/DownloadAndChecksum.cmake
-@@ -1,6 +1,7 @@
-     # Download files
-     function(DownloadAndChecksum url url_checksum output status_var)
- 
-+           message(STATUS "Look for: ${output}")
-         # Check if file already downloaded (in resources)
-         if(EXISTS "${output}")
-             get_filename_component(_filename "${output}" NAME)
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 162eb12b0..83f2776d4 100644
 --- a/CMakeLists.txt
