@@ -2805,6 +2805,8 @@ self: super: with self; {
 
   consonance = callPackage ../development/python-modules/consonance { };
 
+  constantdict = callPackage ../development/python-modules/constantdict { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   construct = callPackage ../development/python-modules/construct { };
