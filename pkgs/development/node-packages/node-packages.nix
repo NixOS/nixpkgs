@@ -5207,6 +5207,33 @@ let
         sha512 = "ioXoq9gPxkss4MYhD+SFaU9p1IHFUX0ILAWFPyjGaBdjLsYAlZw6j1iLA0N/m12uVHLFDfSYNF7EQccjinIMDA==";
       };
     };
+    "@redocly/ajv-8.11.2" = {
+      name = "_at_redocly_slash_ajv";
+      packageName = "@redocly/ajv";
+      version = "8.11.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@redocly/ajv/-/ajv-8.11.2.tgz";
+        sha512 = "io1JpnwtIcvojV7QKDUSIuMN/ikdOUd1ReEnUnMKGfDVridQZ31J0MmIuqwuRjWDZfmvr+Q0MqCcfHM2gTivOg==";
+      };
+    };
+    "@redocly/config-0.22.2" = {
+      name = "_at_redocly_slash_config";
+      packageName = "@redocly/config";
+      version = "0.22.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@redocly/config/-/config-0.22.2.tgz";
+        sha512 = "roRDai8/zr2S9YfmzUfNhKjOF0NdcOIqF7bhf4MVC5UxpjIysDjyudvlAiVbpPHp3eDRWbdzUgtkK1a7YiDNyQ==";
+      };
+    };
+    "@redocly/openapi-core-1.34.3" = {
+      name = "_at_redocly_slash_openapi-core";
+      packageName = "@redocly/openapi-core";
+      version = "1.34.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@redocly/openapi-core/-/openapi-core-1.34.3.tgz";
+        sha512 = "3arRdUp1fNx55itnjKiUhO6t4Mf91TsrTIYINDNLAZPS0TPd5YpiXRctwjel0qqWoOOhjA34cZ3m4dksLDFUYg==";
+      };
+    };
     "@resvg/resvg-js-2.6.2" = {
       name = "_at_resvg_slash_resvg-js";
       packageName = "@resvg/resvg-js";
@@ -11534,6 +11561,15 @@ let
         sha512 = "T2VJbcDuZQ0Tb2EWwSotMPJjgpy1/tGee1BTpUNsGZ/qgNjV2t7Mvu+d4600U564nbLesN1x2dPL+xii174Ekg==";
       };
     };
+    "change-case-5.4.4" = {
+      name = "change-case";
+      packageName = "change-case";
+      version = "5.4.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/change-case/-/change-case-5.4.4.tgz";
+        sha512 = "HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==";
+      };
+    };
     "character-entities-1.2.4" = {
       name = "character-entities";
       packageName = "character-entities";
@@ -12450,6 +12486,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/color-support/-/color-support-1.1.3.tgz";
         sha512 = "qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==";
+      };
+    };
+    "colorette-1.4.0" = {
+      name = "colorette";
+      packageName = "colorette";
+      version = "1.4.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/colorette/-/colorette-1.4.0.tgz";
+        sha512 = "Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==";
       };
     };
     "colorette-2.0.20" = {
@@ -23152,6 +23197,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz";
         sha512 = "cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==";
+      };
+    };
+    "js-levenshtein-1.1.6" = {
+      name = "js-levenshtein";
+      packageName = "js-levenshtein";
+      version = "1.1.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/js-levenshtein/-/js-levenshtein-1.1.6.tgz";
+        sha512 = "X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==";
       };
     };
     "js-sdsl-4.3.0" = {
@@ -39113,6 +39167,15 @@ let
         sha512 = "7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==";
       };
     };
+    "uri-js-replace-1.0.1" = {
+      name = "uri-js-replace";
+      packageName = "uri-js-replace";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/uri-js-replace/-/uri-js-replace-1.0.1.tgz";
+        sha512 = "W+C9NWNLFOoBI2QWDp4UT9pv65r2w5Cx+3sTYFvtMdDBxkKt1syCqsUdSFAChbEe1uK5TfS04wt/nGwmaeIQ0g==";
+      };
+    };
     "urix-0.1.0" = {
       name = "urix";
       packageName = "urix";
@@ -41550,6 +41613,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/yaml/-/yaml-2.7.1.tgz";
         sha512 = "10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ==";
+      };
+    };
+    "yaml-ast-parser-0.0.43" = {
+      name = "yaml-ast-parser";
+      packageName = "yaml-ast-parser";
+      version = "0.0.43";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/yaml-ast-parser/-/yaml-ast-parser-0.0.43.tgz";
+        sha512 = "2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==";
       };
     };
     "yargs-13.3.2" = {
@@ -57072,6 +57144,58 @@ in
     meta = {
       description = "npm registry manager can help you switch different npm registries easily and quickly";
       homepage = "https://github.com/Pana/nrm";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  openapi-typescript = nodeEnv.buildNodePackage {
+    name = "openapi-typescript";
+    packageName = "openapi-typescript";
+    version = "7.6.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/openapi-typescript/-/openapi-typescript-7.6.1.tgz";
+      sha512 = "F7RXEeo/heF3O9lOXo2bNjCOtfp7u+D6W3a3VNEH2xE6v+fxLtn5nq0uvUcA1F5aT+CMhNeC5Uqtg5tlXFX/ag==";
+    };
+    dependencies = [
+      sources."@babel/code-frame-7.27.1"
+      sources."@babel/helper-validator-identifier-7.27.1"
+      sources."@redocly/ajv-8.11.2"
+      sources."@redocly/config-0.22.2"
+      sources."@redocly/openapi-core-1.34.3"
+      sources."agent-base-7.1.3"
+      sources."ansi-colors-4.1.3"
+      sources."argparse-2.0.1"
+      sources."balanced-match-1.0.2"
+      sources."brace-expansion-2.0.1"
+      sources."change-case-5.4.4"
+      sources."colorette-1.4.0"
+      sources."debug-4.4.0"
+      sources."fast-deep-equal-3.1.3"
+      sources."https-proxy-agent-7.0.6"
+      sources."index-to-position-1.1.0"
+      sources."js-levenshtein-1.1.6"
+      sources."js-tokens-4.0.0"
+      sources."js-yaml-4.1.0"
+      sources."json-schema-traverse-1.0.0"
+      sources."minimatch-5.1.6"
+      sources."ms-2.1.3"
+      sources."parse-json-8.3.0"
+      sources."picocolors-1.1.1"
+      sources."pluralize-8.0.0"
+      sources."require-from-string-2.0.2"
+      sources."supports-color-9.4.0"
+      sources."type-fest-4.40.1"
+      sources."typescript-5.8.3"
+      sources."uri-js-replace-1.0.1"
+      sources."yaml-ast-parser-0.0.43"
+      sources."yargs-parser-21.1.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Convert OpenAPI 3.0 & 3.1 schemas to TypeScript";
+      homepage = "https://openapi-ts.dev";
       license = "MIT";
     };
     production = true;
