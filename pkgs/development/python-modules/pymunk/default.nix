@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "pymunk/tests" ];
+  enabledTestPaths = [ "pymunk/tests" ];
 
   pythonImportsCheck = [ "pymunk" ];
 
