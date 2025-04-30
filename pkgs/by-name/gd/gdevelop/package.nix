@@ -13,7 +13,10 @@ let
     downloadPage = "https://github.com/4ian/GDevelop/releases";
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ tombert ];
+    maintainers = with lib.maintainers; [
+      tombert
+      matteopacini
+    ];
     mainProgram = "gdevelop";
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
