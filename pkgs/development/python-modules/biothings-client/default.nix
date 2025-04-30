@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "biothings_client" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # All other tests make network requests to exercise the API
     "tests/gene.py::TestGeneClient::test_http"
     "tests/test.py::TestBiothingsClient::test_generate_settings_from_url"
