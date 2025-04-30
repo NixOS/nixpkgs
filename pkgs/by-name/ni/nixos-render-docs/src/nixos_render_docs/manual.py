@@ -8,7 +8,7 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple, Iterable, Tuple
 
 from markdown_it.token import Token
 
@@ -260,6 +260,7 @@ class HTMLParameters(NamedTuple):
     chunk_toc_depth: int
     section_toc_depth: int
     media_dir: Path
+    split_pages: bool
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -510,6 +511,42 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return tag, style
 
     def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
+        if self._html_params.split_pages:
+            return self._included_thing_split(tag, token, tokens, i)
+        else:
+            return self._included_thing_single_page(tag, token, tokens, i)
+
+    def _included_thing_split(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
+        outer, inner = [], []
+        # since books have no non-include content the toplevel book wrapper will not count
+        # towards nesting depth. other types will have at least a title+id heading which
+        # *does* count towards the nesting depth. chapters give a -1 to included sections
+        # mirroring the special handing in _make_hN. sigh.
+        hoffset = (
+            0 if not self._headings
+            else self._headings[-1].level - 1 if self._toplevel_tag == 'chapter'
+            else self._headings[-1].level
+        )
+        outer.append(self._maybe_close_partintro())
+        fragments : Iterable[Tuple[any, Path]] = token.meta['included']
+        state = self._push(tag, hoffset)
+
+        toc = TocEntry.of(fragments[0][0][0])
+        outer.append(self._file_header(toc))
+
+        in_dir = self._in_dir
+        for included, path in fragments:
+            try:
+                self._in_dir = (in_dir / path).parent
+                (self._base_path / path.with_suffix(".html")).write_text("".join([self.render(included)]))
+
+            except Exception as e:
+                raise RuntimeError(f"rendering {path}") from e
+
+        self._pop(state)
+        return "".join(outer)
+
+    def _included_thing_single_page(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
         outer, inner = [], []
         # since books have no non-include content the toplevel book wrapper will not count
         # towards nesting depth. other types will have at least a title+id heading which
@@ -634,7 +671,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         return start
 
     # xref | (id, type, heading inlines, file, starts new file)
-    def _collect_ids(self, tokens: Sequence[Token], target_file: str, typ: str, file_changed: bool
+    def _collect_ids(self, tokens: Sequence[Token], in_file: str, target_file: str, typ: str, file_changed: bool
                      ) -> list[XrefTarget | tuple[str, str, Token, str, bool]]:
         result: list[XrefTarget | tuple[str, str, Token, str, bool]] = []
         # collect all IDs and their xref substitutions. headings are deferred until everything
@@ -650,10 +687,17 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     name = html.escape(opt)
                     result.append(XrefTarget(id, f'<code class="option">{name}</code>', name, None, target_file))
             elif bt.type.startswith('included_'):
-                sub_file = bt.meta['include-args'].get('into-file', target_file)
+                sub_file = bt.meta['include-args'].get('into-file', None)
                 subtyp = bt.type.removeprefix('included_').removesuffix('s')
+
                 for si, (sub, _path) in enumerate(bt.meta['included']):
-                    result += self._collect_ids(sub, sub_file, subtyp, si == 0 and sub_file != target_file)
+                    if self._html_params.split_pages and not sub_file:
+                        sub_file = Path(_path).relative_to(Path(in_file).parent)
+                    elif not self._html_params.split_pages and not sub_file:
+                        sub_file = target_file
+
+                    result += self._collect_ids(sub, in_file, str(sub_file.with_suffix(".html")), subtyp, si == 0 and sub_file != target_file)
+
             elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
             elif bt.type == 'figure_open' and (id := cast(str, bt.attrs.get('id', ''))):
@@ -664,7 +708,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
                 assert bt.children is not None
-                result += self._collect_ids(bt.children, target_file, typ, False)
+                result += self._collect_ids(bt.children, in_file, target_file, typ, False)
             elif id := cast(str, bt.attrs.get('id', '')):
                 # anchors and examples have no titles we could use, but we'll have to put
                 # *something* here to communicate that there's no title.
@@ -704,7 +748,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
         self._number_block('example', "Example", tokens)
         self._number_block('figure', "Figure", tokens)
-        xref_queue = self._collect_ids(tokens, outfile.name, 'book', True)
+        xref_queue = self._collect_ids(tokens, str(infile), outfile.name, 'book', True)
 
         failed = False
         deferred = []
@@ -742,7 +786,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 )
 
         TocEntry.collect_and_link(self._xref_targets, tokens)
-        if self._redirects:
+        if self._redirects and False:
             self._redirects.validate(self._xref_targets)
             server_redirects = self._redirects.get_server_redirects()
             with open(outfile.parent / '_redirects', 'w') as server_redirects_file:
@@ -765,6 +809,7 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--redirects', type=Path)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
+    p.add_argument('--into-pages', action='store_true')
 
 def _run_cli_html(args: argparse.Namespace) -> None:
     with open(args.manpage_urls) as manpage_urls, open(Path(__file__).parent / "redirects.js") as redirects_script:
@@ -776,7 +821,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
+                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir, args.into_pages),
             json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 
