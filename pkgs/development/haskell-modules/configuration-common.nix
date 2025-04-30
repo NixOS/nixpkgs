@@ -2302,6 +2302,15 @@ self: super:
   # Overwrite the build cores
   raaz = disableParallelBuilding super.raaz;
 
+  # Test suite uses SHA as a point of comparison which doesn't
+  # succeeds its own test suite on 32bit:
+  # https://github.com/GaloisInc/SHA/issues/16
+  cryptohash-sha256 =
+    if pkgs.stdenv.hostPlatform.is32bit then
+      dontCheck super.cryptohash-sha256
+    else
+      super.cryptohash-sha256;
+
   # https://github.com/andreymulik/sdp/issues/3
   sdp = disableLibraryProfiling super.sdp;
   sdp-binary = disableLibraryProfiling super.sdp-binary;
