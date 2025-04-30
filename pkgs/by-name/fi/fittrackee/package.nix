@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
     time-machine
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "fittrackee"
   ];
 

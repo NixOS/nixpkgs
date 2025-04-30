@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "test_other_socket"
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "pytest_recording" ];
 

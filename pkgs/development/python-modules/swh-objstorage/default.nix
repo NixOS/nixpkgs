@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swh.objstorage" ];
 
-  pytestFlagsArray = [ "swh/objstorage/tests" ];
+  enabledTestPaths = [ "swh/objstorage/tests" ];
 
   nativeCheckInputs = [
     aiohttp

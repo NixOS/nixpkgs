@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yte" ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   preCheck = ''
     # The CLI test need yte on the PATH

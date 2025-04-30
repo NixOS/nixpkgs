@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.

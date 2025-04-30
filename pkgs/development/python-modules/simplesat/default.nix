@@ -52,7 +52,7 @@ buildPythonPackage rec {
       --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
-  pytestFlagsArray = [ "simplesat/tests" ];
+  enabledTestPaths = [ "simplesat/tests" ];
 
   meta = with lib; {
     description = "Prototype for SAT-based dependency handling";

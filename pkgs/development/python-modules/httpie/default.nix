@@ -81,7 +81,7 @@ buildPythonPackage rec {
     installManPage docs/http.1
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "httpie"
     "tests"
   ];

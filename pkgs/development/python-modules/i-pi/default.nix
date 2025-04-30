@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optional (pythonAtLeast "3.12") distutils;
 
-  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
+  enabledTestPaths = [ "ipi_tests/unit_tests" ];
   disabledTests = [
     "test_driver_base"
     "test_driver_forcebuild"

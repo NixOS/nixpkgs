@@ -60,7 +60,7 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'

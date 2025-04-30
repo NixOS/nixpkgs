@@ -43,7 +43,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  pytestFlagsArray = [ "joblib/test" ];
+  enabledTestPaths = [ "joblib/test" ];
 
   disabledTests = [
     "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57

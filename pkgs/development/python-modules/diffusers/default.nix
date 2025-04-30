@@ -134,7 +134,7 @@ buildPythonPackage rec {
       cat ${conftestSkipNetworkErrors} >> tests/conftest.py
     '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     # depends on current working directory

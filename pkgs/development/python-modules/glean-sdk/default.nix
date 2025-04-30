@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "glean-core/python/tests" ];
+  enabledTestPaths = [ "glean-core/python/tests" ];
 
   disabledTests = [
     # RuntimeError: No ping received.

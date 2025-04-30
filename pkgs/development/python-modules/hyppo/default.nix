@@ -51,7 +51,7 @@ buildPythonPackage rec {
     matplotlib
     seaborn
   ];
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "hyppo"
   ];
 

@@ -132,7 +132,7 @@ python3.pkgs.buildPythonApplication rec {
     pycryptodomex
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   postCheck = ''
     $out/bin/electrum help >/dev/null

@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "tensorly.contrib"
   ];
 
-  pytestFlagsArray = [ "tensorly" ];
+  enabledTestPaths = [ "tensorly" ];
 
   disabledTests = [
     # this can fail on hydra and other peoples machines, check with others before re-enabling

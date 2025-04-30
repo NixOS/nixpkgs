@@ -56,7 +56,7 @@ buildPythonPackage rec {
     apollo-fpga
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/"
   ];
 

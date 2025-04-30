@@ -141,7 +141,7 @@ python3Packages.buildPythonApplication rec {
       squashfsTools
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_bin_echo"

@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "plyer/tests" ];
+  enabledTestPaths = [ "plyer/tests" ];
   disabledTests = [
     # assumes dbus is not installed, it fails and is not very robust.
     "test_notification_notifysend"

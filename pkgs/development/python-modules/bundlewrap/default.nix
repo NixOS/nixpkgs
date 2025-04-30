@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # only unit tests as integration tests need a OpenSSH client/server setup
     "tests/unit"
   ];

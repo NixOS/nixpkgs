@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     umockdev
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
   ];
 
