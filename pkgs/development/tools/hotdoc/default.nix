@@ -1,63 +1,47 @@
 {
   lib,
   stdenv,
-  buildPythonApplication,
-  fetchpatch,
   fetchPypi,
-  pytestCheckHook,
   pkg-config,
   cmake,
   flex,
   glib,
   json-glib,
   libxml2,
-  appdirs,
-  dbus-deviation,
-  faust-cchardet,
-  feedgen,
-  lxml,
-  networkx,
-  pkgconfig,
-  pyyaml,
-  schema,
-  setuptools,
-  toposort,
-  wheezy-template,
   llvmPackages,
   gst_all_1,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hotdoc";
-  version = "0.15";
-  format = "setuptools";
+  version = "0.17.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sfQ/iBd1Z+YqnaOg8j32rC2iucdiiK3Tff9NfYFnQyc=";
+    hash = "sha256-xNXf9kfwOqh6HS0GA10oGe3QmbkWNeOy7jkIKTV66fw=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-test-hotdoc.patch";
-      url = "https://github.com/hotdoc/hotdoc/commit/d2415a520e960a7b540742a0695b699be9189540.patch";
-      hash = "sha256-9ORZ91c+/oRqEp2EKXjKkz7u8mLnWCq3uPsc3G4NB9E=";
-    })
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [
     pkg-config
     cmake
     flex
+    llvmPackages.libclang
   ];
+
+  # CMake is used to build CMARK, but the build system is still python
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
     glib
     json-glib
     libxml2.dev
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ stdenv.cc.libc.dev ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     appdirs
     dbus-deviation
     faust-cchardet
@@ -70,14 +54,10 @@ buildPythonApplication rec {
     setuptools # for pkg_resources
     toposort
     wheezy-template
+    backports-entry-points-selectable
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  # CMake is used to build CMARK, but the build system is still python
-  dontUseCmakeConfigure = true;
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   # Ensure C+GI+GST extensions are built and can be imported
   pythonImportsCheck = [
@@ -105,16 +85,20 @@ buildPythonApplication rec {
   # Hardcode libclang paths
   postPatch = ''
     substituteInPlace hotdoc/extensions/c/c_extension.py \
-      --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
+      --replace-fail "shutil.which('llvm-config')" "True" \
+      --replace-fail "['clang'," "['${llvmPackages.libclang}/bin/clang'," \
+      --replace-fail "version = subprocess.check_output(" 'version = "${lib.versions.major llvmPackages.libclang.version}"' \
+      --replace-fail "[LLVM_CONFIG, '--version']).strip().decode()" "" \
+      --replace-fail "prefix = subprocess.check_output(" 'prefix = "${lib.getLib llvmPackages.libclang}"' \
+      --replace-fail "[LLVM_CONFIG, '--prefix']).strip().decode()" "" \
+      --replace-fail "subprocess.check_output([LLVM_CONFIG, '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
   '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
   preCheck = ''
     pushd $TMPDIR
   '';
+
   postCheck = ''
     popd
   '';
@@ -123,10 +107,10 @@ buildPythonApplication rec {
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tastiest API documentation system";
-    homepage = "https://hotdoc.github.io/";
-    license = [ licenses.lgpl21Plus ];
+    homepage = "https://hotdoc.github.io";
+    license = [ lib.licenses.lgpl21Plus ];
     maintainers = [ ];
   };
 }

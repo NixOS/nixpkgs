@@ -3758,7 +3758,7 @@ with pkgs;
 
   host = bind.host;
 
-  hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
+  hotdoc = callPackage ../development/tools/hotdoc { };
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
