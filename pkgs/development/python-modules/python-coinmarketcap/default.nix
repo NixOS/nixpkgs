@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "python-coinmarketcap";
   version = "0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rsz44";
