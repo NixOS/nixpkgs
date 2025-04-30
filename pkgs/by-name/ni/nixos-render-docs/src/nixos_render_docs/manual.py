@@ -771,7 +771,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                         else:
                             sub_file = Path(_path).with_suffix(".html").name
                     else:
-                        sub_file = Path(target_file).name
+                        sub_file = target_file
 
                     result += self._collect_ids(sub, in_file, sub_file, subtyp, si == 0 and sub_file != target_file)
 

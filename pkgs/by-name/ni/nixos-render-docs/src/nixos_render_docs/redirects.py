@@ -99,8 +99,6 @@ class Redirects:
           - Identifiers must not be identical to any historical location's anchor of the same output path
           - The first element of an identifier's redirects list must denote its current location.
         """
-        return
-
         xref_targets = {}
         ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-", "service-opt-", "systemd-service-opt")
         for id, target in initial_xref_targets.items():
