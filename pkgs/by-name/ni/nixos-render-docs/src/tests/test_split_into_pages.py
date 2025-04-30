@@ -18,7 +18,7 @@ def run_test(test_path: Path, md: HTMLConverter):
 def test_chapters(tmp_path: Path):
     """Test adding a new identifier to the source."""
 
-    md = setup_test(Path(__file__).parent / "samples/chapters", tmp_path)
+    md = setup_test(Path(__file__).parent / "samples/test_chapters", tmp_path)
     run_test(tmp_path, md)
 
     for f in tmp_path.iterdir():

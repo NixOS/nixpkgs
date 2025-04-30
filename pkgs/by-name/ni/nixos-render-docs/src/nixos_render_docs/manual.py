@@ -497,7 +497,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         ])
 
     def _make_hN(self, level: int) -> tuple[str, str]:
-        # for some reason chapters didn't increase the hN nesting count in docbook xslts.
+        # for some reason test_chapters didn't increase the hN nesting count in docbook xslts.
         # originally this was duplicated here for consistency with docbook rendering, but
         # it could be reevaluated and changed now that docbook is gone.
         if self._toplevel_tag == 'chapter':
@@ -511,16 +511,72 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return tag, style
 
     def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
-        if self._html_params.split_pages:
-            return self._included_thing_split(tag, token, tokens, i)
+        into = token.meta['include-args'].get('into-file')
+        split_pages = self._html_params.split_pages and not into
+        fragments = token.meta['included']
+
+        hoffset = (
+            0 if not self._headings
+            else self._headings[-1].level - 1 if self._toplevel_tag == 'chapter'
+            else self._headings[-1].level
+        )
+
+        outer = [ self._maybe_close_partintro() ]
+
+        state = self._push(tag, hoffset)
+        if split_pages:
+            toc = TocEntry.of(fragments[0][0][0])
+            in_dir = self._in_dir
+            for included, path in fragments:
+                inner = [
+                    self._file_header(toc),
+                    self.render(included),
+                    self._file_footer(toc)
+                ]
+                self._in_dir = (in_dir / path).parent
+
+                if Path(path).is_relative_to(Path(in_dir)):
+                    sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html").as_posix()
+                else:
+                    # The path is not relative, likely it is absolute:
+                    # We arbitrary take the basename and write it next to the outfile.
+                    sub_file = Path(path).with_suffix(".html").name
+
+                file_path = (self._base_path / sub_file).with_suffix(".html")
+
+                print(f"write file to: {file_path}")
+
+                if not file_path.parent.exists():
+                    file_path.parent.mkdir(exist_ok=True)
+
+                file_path.write_text("".join(inner))
         else:
-            return self._included_thing_single_page(tag, token, tokens, i)
+            inner = []
+            if into:
+                toc = TocEntry.of(fragments[0][0][0])
+                inner.append(self._file_header(toc))
+                # we do not set _hlevel_offset=0 because docbook didn't either.
+            else:
+                inner = outer
+            in_dir = self._in_dir
+            for included, path in fragments:
+                try:
+                    self._in_dir = (in_dir / path).parent
+                    inner.append(self.render(included))
+                except Exception as e:
+                    raise RuntimeError(f"rendering {path}") from e
+            if into:
+                inner.append(self._file_footer(toc))
+                (self._base_path / into).write_text("".join(inner))
+
+        self._pop(state)
+        return "".join(outer)
 
     def _included_thing_split(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
         outer = []
         # since books have no non-include content the toplevel book wrapper will not count
         # towards nesting depth. other types will have at least a title+id heading which
-        # *does* count towards the nesting depth. chapters give a -1 to included sections
+        # *does* count towards the nesting depth. test_chapters give a -1 to included sections
         # mirroring the special handing in _make_hN. sigh.
         hoffset = (
             0 if not self._headings
@@ -529,23 +585,35 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         )
         outer.append(self._maybe_close_partintro())
         fragments : Iterable[Tuple[any, Path]] = token.meta['included']
-        state = self._push(tag, hoffset)
+        into = token.meta['include-args'].get('into-file')
 
+        state = self._push(tag, hoffset)
         toc = TocEntry.of(fragments[0][0][0])
 
         in_dir = self._in_dir
         for included, path in fragments:
-            try:
-                inner = [
-                    self._file_header(toc),
-                    self.render(included),
-                    self._file_footer(toc)
-                ]
-                self._in_dir = (in_dir / path).parent
-                (self._base_path / path.with_suffix(".html")).write_text("".join(inner))
+            inner = [
+                self._file_header(toc),
+                self.render(included),
+                self._file_footer(toc)
+            ]
+            self._in_dir = (in_dir / path).parent
 
-            except Exception as e:
-                raise RuntimeError(f"rendering {path}") from e
+            if Path(path).is_relative_to(Path(in_dir)):
+                sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html").as_posix()
+            else:
+                # The path is not relative, likely it is absolute:
+                # We arbitrary take the basename and write it next to the outfile.
+                sub_file = Path(path).with_suffix(".html").name
+
+            file_path = (self._base_path / sub_file).with_suffix(".html")
+
+            print(f"write file to: {file_path}")
+
+            if not file_path.parent.exists():
+                file_path.parent.mkdir(exist_ok=True)
+
+            file_path.write_text("".join(inner))
 
         self._pop(state)
         return "".join(outer)
@@ -554,7 +622,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         outer, inner = [], []
         # since books have no non-include content the toplevel book wrapper will not count
         # towards nesting depth. other types will have at least a title+id heading which
-        # *does* count towards the nesting depth. chapters give a -1 to included sections
+        # *does* count towards the nesting depth. test_chapters give a -1 to included sections
         # mirroring the special handing in _make_hN. sigh.
         hoffset = (
             0 if not self._headings
@@ -691,16 +759,21 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     name = html.escape(opt)
                     result.append(XrefTarget(id, f'<code class="option">{name}</code>', name, None, target_file))
             elif bt.type.startswith('included_'):
-                sub_file = bt.meta['include-args'].get('into-file', None)
+                into = bt.meta['include-args'].get('into-file', None)
                 subtyp = bt.type.removeprefix('included_').removesuffix('s')
 
                 for si, (sub, _path) in enumerate(bt.meta['included']):
-                    if self._html_params.split_pages and not sub_file:
-                        sub_file = Path(_path).relative_to(Path(in_file).parent)
-                    elif not self._html_params.split_pages and not sub_file:
-                        sub_file = target_file
+                    if into:
+                        sub_file = into
+                    elif self._html_params.split_pages:
+                        if Path(_path).is_relative_to(Path(in_file).parent):
+                            sub_file = Path(_path).relative_to(Path(in_file).parent).with_suffix(".html").as_posix()
+                        else:
+                            sub_file = Path(_path).with_suffix(".html").name
+                    else:
+                        sub_file = Path(target_file).name
 
-                    result += self._collect_ids(sub, in_file, str(sub_file.with_suffix(".html")), subtyp, si == 0 and sub_file != target_file)
+                    result += self._collect_ids(sub, in_file, sub_file, subtyp, si == 0 and sub_file != target_file)
 
             elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
@@ -760,6 +833,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             for item in xref_queue:
                 try:
                     target = item if isinstance(item, XrefTarget) else self._render_xref(*item)
+                    print(target)
                 except UnresolvedXrefError:
                     if failed:
                         raise
@@ -790,6 +864,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 )
 
         TocEntry.collect_and_link(self._xref_targets, tokens)
+
         if self._redirects and False:
             self._redirects.validate(self._xref_targets)
             server_redirects = self._redirects.get_server_redirects()
