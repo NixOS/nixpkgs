@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/testcase.py" ];
+  enabledTestPaths = [ "test/testcase.py" ];
 
   pythonImportsCheck = [ "timeago" ];
 
