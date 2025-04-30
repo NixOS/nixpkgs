@@ -17,7 +17,8 @@ buildPythonPackage rec {
     rev = "de069d55d7cc5eea9cd194b47d4609c4846d59d1";
     hash = "sha256-FQIfDV7O3z5S2HGKi2k8NPsvkAS66rsueggoSAGvbVU=";
   };
-build-system = [ setuptools ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
