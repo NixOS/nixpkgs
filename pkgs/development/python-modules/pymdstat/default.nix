@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "unitest.py" ];
+  enabledTestPaths = [ "unitest.py" ];
 
   meta = with lib; {
     description = "Pythonic library to parse Linux /proc/mdstat file";

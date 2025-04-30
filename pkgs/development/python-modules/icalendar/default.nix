@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "test_docstring_of_python_file"
   ];
 
-  pytestFlagsArray = [ "src/icalendar" ];
+  enabledTestPaths = [ "src/icalendar" ];
 
   meta = with lib; {
     changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";

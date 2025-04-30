@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm ../testing/adios2/python/TestBPWriteTypesHighLevelAPI.py
     '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "../testing/adios2/python/Test*.py"
   ];
 

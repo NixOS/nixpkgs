@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   meta = with lib; {
     description = "Flexible and powerful hierarchical key-value store for your Django models";
