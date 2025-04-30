@@ -279,6 +279,17 @@
           includes = [ "configure.ac" ];
           hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
         })
+      ]
+      # Fixes stack overrun in rts which crashes an process whenever
+      # freeHaskellFunPtr is called with nixpkgs' hardening flags.
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
+      ++ lib.optionals (lib.versionOlder version "9.13" && stdenv.hostPlatform.is32bit) [
+        (fetchpatch {
+          name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
+          sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
+        })
       ];
 
     stdenv = stdenvNoCC;
