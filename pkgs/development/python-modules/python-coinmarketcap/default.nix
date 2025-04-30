@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
