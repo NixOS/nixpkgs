@@ -1,44 +1,56 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
+  pybind11,
   setuptools,
-  torch,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  cmake,
 
   # dependencies
   cloudpickle,
+  importlib-metadata,
   numpy,
   orjson,
   packaging,
+  torch,
 
   # tests
   h5py,
   pytestCheckHook,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.7.2";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-ZDfRvfyBashU4kIoo8JX/EoCv4tpDOyggOlpdVCudT8=";
+    hash = "sha256-2S0xpsJNDdIGoLbALAIcSEVqYD5Nq2YXs3mWFtSUvsA=";
   };
 
   build-system = [
+    pybind11
     setuptools
-    torch
+    setuptools-scm
   ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
+    importlib-metadata
     numpy
     orjson
     packaging
@@ -66,10 +78,15 @@ buildPythonPackage rec {
     "test_map_iter_interrupt_early"
   ];
 
-  disabledTestPaths = [
-    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-    "test/test_compile.py"
-  ];
+  disabledTestPaths =
+    [
+      # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
+      "test/test_compile.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Hangs forever
+      "test/test_distributed.py"
+    ];
 
   meta = {
     description = "Pytorch dedicated tensor container";

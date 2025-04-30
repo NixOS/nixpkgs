@@ -772,6 +772,12 @@
     githubId = 1141462;
     name = "Vladyslav Pekker";
   };
+  agvantibo = {
+    email = "apicalium@gmail.com";
+    github = "agvantibo-again";
+    githubId = 207841739;
+    name = "Savchenko Dmitriy";
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";
@@ -2114,6 +2120,12 @@
     github = "asappia";
     githubId = 891399;
     name = "Alessandro Sappia";
+  };
+  asauzeau = {
+    email = "antoine.sauzeau3@gmail.com";
+    github = "AntoineSauzeau";
+    githubId = 72159603;
+    name = "Antoine Sauzeau";
   };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
@@ -6641,6 +6653,13 @@
     github = "dsymbol";
     githubId = 88138099;
   };
+  dtomvan = {
+    email = "18gatenmaker6@gmail.com";
+    github = "dtomvan";
+    githubId = 51440893;
+    name = "Tom van Dijk";
+    keys = [ { fingerprint = "D044 F07B 8863 B681 26BD  79FE 7A98 4C82 07AD BA51"; } ];
+  };
   dtzWill = {
     email = "w@wdtz.org";
     github = "dtzWill";
@@ -9889,6 +9908,12 @@
     github = "hogcycle";
     githubId = 57007241;
     name = "hogcycle";
+  };
+  hoh = {
+    email = "git@hugoherter.com";
+    github = "hoh";
+    githubId = 404665;
+    name = "Hugo Herter";
   };
   holgerpeters = {
     name = "Holger Peters";
@@ -13373,6 +13398,12 @@
     github = "l0b0";
     githubId = 168301;
     name = "Victor Engmark";
+  };
+  L0L1P0P = {
+    name = "Behrad Badeli";
+    email = "behradbadeli@gmail.com";
+    github = "L0L1P0P1";
+    githubId = 73695812;
   };
   l1npengtul = {
     email = "l1npengtul@l1npengtul.lol";
@@ -24051,6 +24082,13 @@
     github = "teto";
     githubId = 886074;
     name = "Matthieu Coudron";
+  };
+  tetov = {
+    email = "anton@tetov.se";
+    github = "tetov";
+    githubId = 14882117;
+    keys = [ { fingerprint = "2B4D 0035 AFF0 F7DA CE5B  29D7 337D DB57 4A88 34DB"; } ];
+    name = "Anton Tetov";
   };
   teutat3s = {
     email = "teutates@mailbox.org";
