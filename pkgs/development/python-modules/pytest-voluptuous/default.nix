@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_voluptuous" ];
 
-  pytestFlagsArray = [ "tests/test_plugin.py" ];
+  enabledTestPaths = [ "tests/test_plugin.py" ];
 
   meta = with lib; {
     description = "Pytest plugin for asserting data against voluptuous schema";

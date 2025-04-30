@@ -62,7 +62,7 @@ buildPythonPackage rec {
     "lib/openjpeg"
   ];
 
-  pytestFlagsArray = [ "openjpeg/tests" ];
+  enabledTestPaths = [ "openjpeg/tests" ];
 
   pythonImportsCheck = [ "openjpeg" ];
 

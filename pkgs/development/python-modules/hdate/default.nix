@@ -48,7 +48,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "hdate" ];
 

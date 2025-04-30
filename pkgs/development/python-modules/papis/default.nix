@@ -86,7 +86,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "papis"
     "tests"
   ];

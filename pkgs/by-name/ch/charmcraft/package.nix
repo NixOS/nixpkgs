@@ -100,7 +100,7 @@ python.pkgs.buildPythonApplication rec {
       writableTmpDirAsHomeHook
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon the `charm` tool being installed

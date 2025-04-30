@@ -16,7 +16,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "jsonpath" ];
-  pytestFlagsArray = [ "test/test*.py" ];
+  enabledTestPaths = [ "test/test*.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/sean2077/jsonpath-python";

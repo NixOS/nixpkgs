@@ -88,7 +88,7 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/tests.py"
     "tests/test_expand.py"
     "tests/test_io.py"

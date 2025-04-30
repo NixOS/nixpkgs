@@ -97,7 +97,7 @@ buildPythonPackage rec {
     "test_ttp_templates_dir_env_variable"
   ];
 
-  pytestFlagsArray = [ "test/pytest" ];
+  enabledTestPaths = [ "test/pytest" ];
 
   meta = with lib; {
     changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
