@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # From .github/workflows
     "src/"
     "glue/cirq"
