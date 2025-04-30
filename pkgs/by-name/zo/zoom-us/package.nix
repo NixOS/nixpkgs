@@ -3,7 +3,19 @@
   lib,
   fetchurl,
   pulseaudioSupport ? true,
-  xdgDesktopPortalSupport ? true,
+  xdgDesktopPortalPkgs ? (
+    # return empty list here to disable xdg-desktop-portal support
+    pkgs: [
+      pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.lxqt.xdg-desktop-portal-lxqt
+      pkgs.plasma5Packages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-xapp
+    ]
+  ),
   callPackage,
   buildFHSEnv,
 }:
@@ -120,17 +132,8 @@ let
       pkgs.libpulseaudio
       pkgs.pulseaudio
     ]
-    ++ lib.optionals xdgDesktopPortalSupport [
-      pkgs.kdePackages.xdg-desktop-portal-kde
-      pkgs.lxqt.xdg-desktop-portal-lxqt
-      pkgs.plasma5Packages.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal
-      pkgs.xdg-desktop-portal-gnome
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal-wlr
-      pkgs.xdg-desktop-portal-xapp
-    ];
+    ++ lib.optional (xdgDesktopPortalPkgs pkgs != [ ]) pkgs.xdg-desktop-portal
+    ++ xdgDesktopPortalPkgs pkgs;
 
 in
 
