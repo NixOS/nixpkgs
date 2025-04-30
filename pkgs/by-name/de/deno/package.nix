@@ -28,18 +28,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.2.12";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-GE/KyrZ3nyS2PwuhNYo7KIeD2BWdcUYLGJDRkxNW+9o=";
+    hash = "sha256-shmVZhFo8U6QNZwcrzE7n2qW42tieIduEV+jvEx4oh0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3I1yplJjVH7Mf2wjwk8qSdbHTcR20QSJGF9MHtnu+q8=";
+  cargoHash = "sha256-0CnVbEMN6XeaLxvfw9bi0cNRnPQjKkrBgsZkYwurZsE=";
 
   patches = [
     ./tests-replace-hardcoded-paths.patch
@@ -103,10 +103,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Internet access
       "--skip=check::ts_no_recheck_on_redirect"
       "--skip=js_unit_tests::quic_test"
+      "--skip=js_unit_tests::net_test"
       "--skip=node_unit_tests::http_test"
       "--skip=node_unit_tests::http2_test"
       "--skip=node_unit_tests::net_test"
       "--skip=node_unit_tests::tls_test"
+      "--skip=npm::lock_file_lock_write"
 
       # GPU access
       "--skip=js_unit_tests::webgpu_test"
