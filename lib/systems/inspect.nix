@@ -416,6 +416,11 @@ rec {
           family = "x86";
         };
       }
+      {
+        cpu = {
+          family = "loongarch";
+        };
+      }
     ];
 
     isElf = {
