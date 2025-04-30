@@ -14884,6 +14884,8 @@ self: super: with self; {
     callPackage ../development/python-modules/recursive-pth-loader { }
   );
 
+  recursivenodes = callPackage ../development/python-modules/recursivenodes { };
+
   red-black-tree-mod = callPackage ../development/python-modules/red-black-tree-mod { };
 
   redbaron = callPackage ../development/python-modules/redbaron { };
