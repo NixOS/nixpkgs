@@ -13,6 +13,9 @@ let
 
   defaultBackend = options.virtualisation.oci-containers.backend.default;
 
+  volumeName = volume: builtins.head (builtins.split ":" volume);
+  isNamedVolume = volume: !lib.strings.hasPrefix "/" (volumeName volume);
+
   containerOptions =
     { name, ... }:
     {
@@ -211,24 +214,87 @@ let
         };
 
         volumes = mkOption {
-          type = with types; listOf str;
+          type =
+            with types;
+            oneOf [
+              (listOf str)
+              (attrsOf (
+                nullOr (submodule {
+                  options = {
+                    tarballStream = mkOption {
+                      type = types.package;
+                      description = "Package which result is an executable that streams the initialization tarball (.tar) for the volume to stdout.";
+                      example = literalExpression ''
+                        pkgs.stdenv.mkDerivation {
+                          name = "service-backup-stream";
+                          src = fetchurl {
+                            url = "https://example.com/somefile.tar";
+                            sha256 = "0v...";  # Actual hash here
+                          };
+
+                          dontUnpack = true;
+
+                          buildCommand = ${''
+                            cat > $out <<EOF
+                            # Do additional pre-processing here
+                            cat $src
+                            EOF
+                            chmod +x $out
+                          ''};
+                        }
+                      '';
+                    };
+
+                    forceInitialization = mkOption {
+                      type = types.bool;
+                      default = false;
+                      description = "Re-initialize the volume with every service restart if true.";
+                    };
+                  };
+                })
+              ))
+            ];
           default = [ ];
           description = ''
-            List of volumes to attach to this container.
+            Set of volumes to attach to this container.
 
-            Note that this is a list of `"src:dst"` strings to
-            allow for `src` to refer to `/nix/store` paths, which
-            would be difficult with an attribute set.  There are
-            also a variety of mount options available as a third
-            field; please refer to the
-            [docker engine documentation](https://docs.docker.com/engine/storage/volumes/) for details.
+            This can be specified in two ways:
+
+            As a list of strings in the form of "src:dst" (and optionally "src:dst:options").
+            This format allows referencing paths like those in /nix/store,
+            which would be difficult to express using an attribute set.
+            For supported mount options, refer to the [docker engine documentation](https://docs.docker.com/engine/storage/volumes/)
+
+            As an attribute set, where each attribute name is a mount string
+            in the same format as described above ("src:dst:options)").
+            Each attribute value must be either null or an attribute set with the following optional fields.
+            If the target is not a named volume, the associated value must be null.
+
+            `tarballStream (package)`: a package which result is an executable that writes the archive to stdout.
+            This archive will be used to initialize the volume, if the volume is not already present.
+
+            `forceInitialization (bool)`:  If set to true, the volume will be re-initialized using the provided tarball on every service restart.
           '';
-          example = literalExpression ''
-            [
-              "volume_name:/path/inside/container"
-              "/path/on/host:/path/inside/container"
-            ]
-          '';
+          example = [
+            literalExpression
+            ''
+              [
+                "volume_name:/path/inside/container"
+                "/path/on/host:/path/inside/container"
+              ]
+            ''
+            literalExpression
+            ''
+              {
+                # This named volume 'data' is initialized using the provided package, which provides a tar ball.
+                "data:/path/to/data" = my_package;
+                # This named volume 'other_volume' will not be initialized, because the null-value is set.
+                "other_volume":/path/inside/container" = null;
+                # This volume mount cannot be initialized, thus the value must be null.
+                "/path/on/host:/path/inside/container" = null;
+              }
+            ''
+          ];
         };
 
         workdir = mkOption {
@@ -421,6 +487,63 @@ let
             || ${cfg.backend} image inspect ${container.image} >/dev/null \
             || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
           ''}
+          ${
+            let
+              # Docker as of April 2025 does not provide volume (exists|volume import) functionallity
+              # so we need to work around that when docker is used.
+              # We provide diffrent script sections for each backend.
+              podman_commands = {
+                rm_existing_volume = volume_name: ''
+                  ${cfg.backend} volume exists ${escapeShellArg volume_name} \
+                  && { ${cfg.backend} volume rm ${escapeShellArg volume_name} || { echo "volume ${escapeShellArg volume_name} could not be removed" >&2 ; exit 1; }; }
+                '';
+                import_volume = volume_name: tarballStream: ''
+                  ${cfg.backend} volume create ${escapeShellArg volume_name} && \
+                  ${tarballStream} | ${cfg.backend} volume import ${escapeShellArg volume_name} - \
+                  || echo "volume ${escapeShellArg volume_name} was not intialized" >&1
+                '';
+              };
+              docker_commands = {
+                rm_existing_volume = volume_name: ''
+                  ${cfg.backend} volume inspect ${escapeShellArg volume_name} >/dev/null \
+                  && { ${cfg.backend} volume rm ${escapeShellArg volume_name} || { echo "volume ${escapeShellArg volume_name} could not be removed" >&2 ; exit 1; }; }
+                '';
+                import_volume = volume_name: tarballStream: ''
+                  ${cfg.backend} volume create ${escapeShellArg volume_name} && \
+                  ${tarballStream} | ${cfg.backend} run --rm -i -v ${escapeShellArg volume_name}:/bak_unpacked alpine sh -c "tar -xf - -C /bak_unpacked" \
+                  || echo "volume ${escapeShellArg volume_name} was not intialized" >&1
+                '';
+              };
+              commands =
+                if cfg.backend == "docker" then
+                  docker_commands
+                else if cfg.backend == "podman" then
+                  podman_commands
+                else
+                  throw "Unhandled backend: ${cfg.backend}";
+              volumes = lib.attrsets.optionalAttrs (builtins.isAttrs container.volumes) (
+                lib.filterAttrs (n: v: (isNamedVolume n) && v != null) container.volumes
+              );
+            in
+            optionalString (volumes != { }) ''
+              ${builtins.concatStringsSep "\n" (
+                lib.attrsets.mapAttrsToList (volume: config: ''
+                  ${
+                    if config.forceInitialization then
+                      ''
+                        # Clearing ${volumeName volume}, forceInitialization is set.
+                        ${commands.rm_existing_volume (volumeName volume)}
+                      ''
+                    else
+                      ""
+                  }
+
+                  # Intializing ${volumeName volume}, if creations fails (already exists) reinitializing is discarded.
+                  ${commands.import_volume (volumeName volume) config.tarballStream}
+                '') volumes
+              )}
+            ''
+          }
           ${optionalString (container.imageFile != null) ''
             ${cfg.backend} load -i ${container.imageFile}
           ''}
@@ -492,7 +615,9 @@ let
         ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
         ++ map (p: "-p ${escapeShellArg p}") container.ports
         ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-        ++ map (v: "-v ${escapeShellArg v}") container.volumes
+        ++ map (v: "-v ${escapeShellArg v}") (
+          if builtins.isAttrs container.volumes then lib.attrNames container.volumes else container.volumes
+        )
         ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
         ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
         ++ optional (container.privileged) "--privileged"
@@ -604,6 +729,7 @@ in
                 imageFile,
                 imageStream,
                 podman,
+                volumes,
                 ...
               }:
               [
@@ -615,6 +741,16 @@ in
                 {
                   assertion = cfg.backend == "docker" -> podman == null;
                   message = "virtualisation.oci-containers.containers.${name}: Cannot set `podman` option if backend is `docker`.";
+                }
+                {
+                  assertion =
+                    builtins.isAttrs volumes
+                    -> builtins.all (v: v == null) (
+                      lib.attrsets.mapAttrsToList (volume: config: config) (
+                        lib.filterAttrs (volume: config: !(isNamedVolume volume)) volumes
+                      )
+                    );
+                  message = "virtualisation.oci-containers.containers.${name}: Unnamed volumes cannot be initialized.";
                 }
               ];
           in
