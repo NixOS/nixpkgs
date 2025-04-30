@@ -419,17 +419,9 @@ with pkgs;
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
-  octodns = python3Packages.callPackage ../tools/networking/octodns { };
+  octodns = callPackage ../tools/networking/octodns { };
 
-  octodns-providers = recurseIntoAttrs {
-    bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
-    gandi = python3Packages.callPackage ../tools/networking/octodns/providers/gandi { };
-    hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
-    powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
-    cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
-    ddns = python3Packages.callPackage ../tools/networking/octodns/providers/ddns { };
-    transip = python3Packages.callPackage ../tools/networking/octodns/providers/transip { };
-  };
+  octodns-providers = octodns.providers;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 
@@ -11233,7 +11225,6 @@ with pkgs;
   mariadb-connector-c_3_3 = callPackage ../servers/sql/mariadb/connector-c/3_3.nix { };
 
   inherit (import ../servers/sql/mariadb pkgs)
-    mariadb_105
     mariadb_106
     mariadb_1011
     mariadb_114
