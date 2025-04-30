@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.5.0";
+  version = "5.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ENSfmSbRYjcxAQmw5uHi96ITO4TmhLs2U012Y+ZpGbs=";
+    hash = "sha256-TWkw81T50pKVQl16NyYSRcdKMoB8Rddkvtwoav0Ock4=";
   };
 
   build-system = [ setuptools ];
