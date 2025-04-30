@@ -51,6 +51,7 @@
   pytest-mock,
   pytest-timeout,
   requests-mock,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -183,6 +184,12 @@ buildPythonPackage rec {
     thrift
   ] ++ moto.optional-dependencies.server;
 
+  pytestFlagsArray = [
+    "-W"
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
+    "ignore::pytest.PytestUnraisableExceptionWarning"
+  ];
+
   disabledTestPaths = [
     # Several errors:
     # - FileNotFoundError: [Errno 2] No such file or directory: '/nix/store/...-python3.12-pyspark-3.5.3/lib/python3.12/site-packages/pyspark/./bin/spark-submit'
@@ -240,6 +247,11 @@ buildPythonPackage rec {
       # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
       "test_identity_transform_column_projection"
       "test_identity_transform_columns_projection"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # AssertionError:
+      # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
+      "test_read_not_struct_type"
     ];
 
   __darwinAllowLocalNetworking = true;
