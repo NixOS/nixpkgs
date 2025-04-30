@@ -77,7 +77,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-vv" ];
+  pytestFlags = [ "-vv" ];
 
   makeWrapperArgs = lib.optionals (withTmpdir != null) [
     "--set TMPDIR ${withTmpdir}"

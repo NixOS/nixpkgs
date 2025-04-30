@@ -45,9 +45,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # suppress pytest.PytestUnraisableExceptionWarning: Exception ignored in: <socket.socket fd=-1, family=AddressFamily.AF_UNIX, type=SocketKind.SOCK_STREAM, proto=0>
-    "-W ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [

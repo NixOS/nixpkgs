@@ -245,9 +245,8 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "--reruns"
-    "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [

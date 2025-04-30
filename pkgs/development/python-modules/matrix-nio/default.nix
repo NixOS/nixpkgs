@@ -97,7 +97,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTestPaths = lib.optionals (!withOlm) [
     "tests/encryption_test.py"

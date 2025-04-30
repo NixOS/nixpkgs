@@ -44,7 +44,10 @@ python3Packages.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "-r fEs" ];
+  pytestFlags = [
+    # -r fEs
+    "-rfEs"
+  ];
 
   meta = {
     description = "Beets plugin to move non-music files during the import process";

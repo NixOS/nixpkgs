@@ -52,9 +52,7 @@ python3Packages.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
+  pytestFlags = [
     "--snapshot-warn-unused"
   ];
 

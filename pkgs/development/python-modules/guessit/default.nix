@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "guessit" ];
 

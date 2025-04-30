@@ -76,9 +76,8 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.

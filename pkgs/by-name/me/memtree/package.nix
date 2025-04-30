@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-v" ];
+  pytestFlags = [ "-v" ];
   pythonImportsCheck = [ "memtree" ];
 
   passthru.updateScript = nix-update-script {

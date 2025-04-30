@@ -88,7 +88,7 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # cryptography 44 compat issue
     "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];

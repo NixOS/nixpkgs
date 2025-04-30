@@ -69,7 +69,7 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ optional-dependencies.ssh;
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks

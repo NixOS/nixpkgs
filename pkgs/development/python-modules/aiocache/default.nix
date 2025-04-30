@@ -48,9 +48,8 @@ buildPythonPackage rec {
     redisTestHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
     # TypeError: object MagicMock can't be used in 'await' expression
     "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
     # Tests can time out and leave redis/valkey in an unusable state for later tests
