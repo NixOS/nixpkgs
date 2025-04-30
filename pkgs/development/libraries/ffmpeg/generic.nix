@@ -72,7 +72,12 @@
   withNvcodec ?
     withHeadlessDeps
     && (
-      with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform == buildPlatform
+      with stdenv;
+      !isDarwin
+      && !isAarch32
+      && !hostPlatform.isLoongArch64
+      && !hostPlatform.isRiscV
+      && hostPlatform == buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
   withFontconfig ? withHeadlessDeps, # Needed for drawtext filter
