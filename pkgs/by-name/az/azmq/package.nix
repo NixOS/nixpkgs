@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost183,
   cmake,
   ninja,
   zeromq,
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost183
     catch2
     zeromq
   ];
