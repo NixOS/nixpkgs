@@ -8,15 +8,15 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alan";
   version = "3.0beta8";
 
   src = fetchFromGitHub {
     owner = "alan-if";
     repo = "alan";
-    rev = "v${version}";
-    sha256 = "0zfg1frmb4yl39hk8h733bmlwk4rkikzfhvv7j34cxpdpsp7spzl";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9F99rr7tdkaGPHtD92ecmUxO6xrjQDRhGtSTVbMLz30=";
   };
 
   postPatch = ''
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/alan/examples
     # Build the release tarball
     make package
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
     mv $out/share/alan/{alan,arun} $out/bin
     # a2a3 isn't included in the release tarball
     cp bin/a2a3 $out/bin
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
@@ -46,11 +50,11 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alanif.se/";
     description = "Alan interactive fiction language";
-    license = licenses.artistic2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ neilmayhew ];
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ neilmayhew ];
   };
-}
+})
