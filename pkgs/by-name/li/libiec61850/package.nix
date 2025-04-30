@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source library for the IEC 61850 protocols";
     homepage = "https://libiec61850.com/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ stv0g ];
+    maintainers = with lib.maintainers; [ stv0g pjungkamp ];
     platforms = lib.platforms.unix;
   };
 })
