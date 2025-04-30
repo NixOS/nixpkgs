@@ -48,8 +48,5 @@ stdenv.mkDerivation (finalAttrs: {
         (arm ++ aarch64 ++ mips ++ power ++ riscv ++ x86 ++ loongarch64)
         # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
         (linux ++ windows ++ freebsd ++ netbsd ++ openbsd ++ darwin);
-    # BE platforms are unsupported
-    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
-    badPlatforms = lib.platforms.bigEndian;
   };
 })
