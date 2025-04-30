@@ -22,19 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "vaults";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
     repo = "vaults";
     tag = version;
-    hash = "sha256-PczDj6G05H6XbkMQBr4e1qgW5s8GswEA9f3BRxsAWv0=";
+    hash = "sha256-B4CNEghMfP+r0poyhE102zC1Yd2U5ocV1MCMEVEMjEY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-j0A6HlApV0l7LuB7ISHp+k/bSH5Icdv+aNQ9juCCO9I=";
+    hash = "sha256-my4CxFIEN19juo/ya2vlkejQTaZsyoYLtFTR7iCT9s0=";
   };
 
   patches = [ ./not-found-flatpak-info.patch ];
