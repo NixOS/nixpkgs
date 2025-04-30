@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   disabledTests = [
     # Tests are not properly mocking network requests
