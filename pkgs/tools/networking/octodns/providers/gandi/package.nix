@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-gandi";
     changelog = "https://github.com/octodns/octodns-gandi/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    maintainers = teams.octodns.members ++ [ maintainers.onny ];
   };
 }

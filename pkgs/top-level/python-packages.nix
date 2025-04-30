@@ -8404,6 +8404,8 @@ self: super: with self; {
 
   manim-slides = callPackage ../development/python-modules/manim-slides { };
 
+  manimgl = callPackage ../development/python-modules/manimgl { };
+
   manimpango = callPackage ../development/python-modules/manimpango { };
 
   manuel = callPackage ../development/python-modules/manuel { };
