@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "html_sanitizer/tests.py" ];
+  enabledTestPaths = [ "html_sanitizer/tests.py" ];
 
   disabledTests = [
     # Tests are sensitive to output
