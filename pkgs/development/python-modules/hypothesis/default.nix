@@ -71,7 +71,7 @@ buildPythonPackage rec {
     rm tox.ini
   '';
 
-  pytestFlagsArray = [ "tests/cover" ];
+  enabledTestPaths = [ "tests/cover" ];
 
   disabledTests =
     [
