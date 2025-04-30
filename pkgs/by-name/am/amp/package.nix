@@ -10,7 +10,8 @@
   libgit2,
   curl,
   writableTmpDirAsHomeHook,
-  git,
+  gitMinimal,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,12 +32,13 @@ rustPlatform.buildRustPackage rec {
     cmake
     pkg-config
     python3
-    git
+    gitMinimal
   ];
   buildInputs = [
     openssl
     xorg.libxcb
     libgit2
+    zlib
   ];
 
   nativeCheckInputs = [
