@@ -865,7 +865,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
 
         TocEntry.collect_and_link(self._xref_targets, tokens)
 
-        if self._redirects and False:
+        if self._redirects:
             self._redirects.validate(self._xref_targets)
             server_redirects = self._redirects.get_server_redirects()
             with open(outfile.parent / '_redirects', 'w') as server_redirects_file:

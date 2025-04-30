@@ -64,15 +64,15 @@ class HTMLRenderer(Renderer):
     def link_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         href = escape(cast(str, token.attrs['href']), True)
         tag, title, target, text = "link", "", 'target="_top"', ""
-        # if href.startswith('#'):
-        #     if not (xref := self._xref_targets.get(href[1:])):
-        #         raise UnresolvedXrefError(f"bad local reference, id {href} not known")
-        #     if tokens[i + 1].type == 'link_close':
-        #         tag, text = "xref", xref.title_html
-        #     if xref.title:
-        #         # titles are not attribute-safe on their own, so we need to replace quotes.
-        #         title = 'title="{}"'.format(xref.title.replace('"', '&quot;'))
-        #     target, href = "", xref.href()
+        if href.startswith('#'):
+            if not (xref := self._xref_targets.get(href[1:])):
+                raise UnresolvedXrefError(f"bad local reference, id {href} not known")
+            if tokens[i + 1].type == 'link_close':
+                tag, text = "xref", xref.title_html
+            if xref.title:
+                # titles are not attribute-safe on their own, so we need to replace quotes.
+                title = 'title="{}"'.format(xref.title.replace('"', '&quot;'))
+            target, href = "", xref.href()
         return f'<a class="{tag}" href="{href}" {title} {target}>{text}'
     def link_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "</a>"

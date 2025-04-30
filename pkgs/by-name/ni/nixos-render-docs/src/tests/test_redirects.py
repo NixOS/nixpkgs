@@ -20,7 +20,7 @@ class TestRedirects(unittest.TestCase):
                 infile.write(content)
 
         redirects = Redirects({"redirects-test-suite": ["index.html#redirects-test-suite"]} | raw_redirects, '')
-        return HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, redirects)
+        return HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path(""), False), {}, redirects)
 
     def run_test(self, md: HTMLConverter):
         md.convert(Path(__file__).parent / 'index.md', Path(__file__).parent / 'index.html')
