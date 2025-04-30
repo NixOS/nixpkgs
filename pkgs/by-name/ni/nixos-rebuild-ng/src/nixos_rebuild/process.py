@@ -6,6 +6,7 @@ import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
 from getpass import getpass
+from pathlib import Path
 from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
@@ -82,7 +83,7 @@ atexit.register(cleanup_ssh)
 
 
 def run_wrapper(
-    args: Sequence[str | bytes | os.PathLike[str] | os.PathLike[bytes]],
+    args: Sequence[str | bytes | os.PathLike[str]],
     *,
     check: bool = True,
     extra_env: dict[str, str] | None = None,
@@ -127,10 +128,12 @@ def run_wrapper(
         kwargs,
         extra_env,
     )
+    # This makes error messages more readable by not having Path objects in the error message.
+    stringified_args = [str(arg) if isinstance(arg, Path) else arg for arg in args]
 
     try:
         r = subprocess.run(
-            args,
+            stringified_args,
             check=check,
             env=env,
             input=process_input,
