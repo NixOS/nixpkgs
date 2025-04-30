@@ -36,7 +36,7 @@ buildPythonPackage rec {
     undefined
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "pyfakefs/tests"
   ];
 
