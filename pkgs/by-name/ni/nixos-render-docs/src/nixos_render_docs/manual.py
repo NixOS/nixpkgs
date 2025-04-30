@@ -517,7 +517,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             return self._included_thing_single_page(tag, token, tokens, i)
 
     def _included_thing_split(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
-        outer, inner = [], []
+        outer = []
         # since books have no non-include content the toplevel book wrapper will not count
         # towards nesting depth. other types will have at least a title+id heading which
         # *does* count towards the nesting depth. chapters give a -1 to included sections
@@ -532,13 +532,17 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         state = self._push(tag, hoffset)
 
         toc = TocEntry.of(fragments[0][0][0])
-        outer.append(self._file_header(toc))
 
         in_dir = self._in_dir
         for included, path in fragments:
             try:
+                inner = [
+                    self._file_header(toc),
+                    self.render(included),
+                    self._file_footer(toc)
+                ]
                 self._in_dir = (in_dir / path).parent
-                (self._base_path / path.with_suffix(".html")).write_text("".join([self.render(included)]))
+                (self._base_path / path.with_suffix(".html")).write_text("".join(inner))
 
             except Exception as e:
                 raise RuntimeError(f"rendering {path}") from e
