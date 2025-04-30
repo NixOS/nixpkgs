@@ -4921,6 +4921,8 @@ self: super: with self; {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
+  fireworks-ai = callPackage ../development/python-modules/fireworks-ai { };
+
   first = callPackage ../development/python-modules/first { };
 
   fissix = callPackage ../development/python-modules/fissix { };
@@ -18891,6 +18893,11 @@ self: super: with self; {
   whisper = callPackage ../development/python-modules/whisper { };
 
   whispers = callPackage ../development/python-modules/whispers { };
+
+  whisperx = callPackage ../development/python-modules/whisperx {
+    inherit (pkgs) ffmpeg;
+    ctranslate2-cpp = pkgs.ctranslate2;
+  };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
