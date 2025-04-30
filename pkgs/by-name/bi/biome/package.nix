@@ -8,7 +8,7 @@
   zlib,
   gitMinimal,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
   version = "2.0.0";
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [ gitMinimal ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags = cargoBuildFlags ++ [
+  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
     # fails due to cargo insta
     "-- --skip=commands::check::print_json"
     "--skip=commands::check::print_json_pretty"
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    BIOME_VERSION = version;
+    BIOME_VERSION = finalAttrs.version;
     LIBGIT2_NO_VENDOR = 1;
     INSTA_UPDATE = "no";
   };
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Toolchain of the web";
     homepage = "https://biomejs.dev/";
-    changelog = "https://github.com/biomejs/biome/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/biomejs/biome/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "biome";
   };
-}
+})
