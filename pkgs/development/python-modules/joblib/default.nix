@@ -43,7 +43,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  pytestFlagsArray = [ "joblib/test" ];
+  enabledTestPaths = [ "joblib/test" ];
 
   disabledTests =
     [
