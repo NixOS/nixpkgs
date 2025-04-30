@@ -43,9 +43,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_marshmallow" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

@@ -59,7 +59,7 @@ buildPythonPackage rec {
     cd "$(mktemp -d)"
   '';
 
-  pytestFlagsArray = [ "--pyargs skmisc" ];
+  pytestFlags = [ "--pyargs" "skmisc" ];
 
   pythonImportsCheck = [ "skmisc" ];
 
