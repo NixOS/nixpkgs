@@ -167,6 +167,7 @@ let
     package:
     let
       classical-deps = [
+        mathcomp.ssreflect
         mathcomp.algebra
         mathcomp-finmap
       ];
