@@ -18,6 +18,11 @@ buildPythonPackage {
 
     substituteInPlace mitmproxy-linux-ebpf/.cargo/config.toml \
       --replace-fail 'build-std = ["core"]' ""
+
+    cp ${./fix-mitmproxy-linux-redirector-path.diff} tmp.diff
+    substituteInPlace tmp.diff \
+      --replace-fail @mitmproxy-linux-redirector@ $out/bin/mitmproxy-linux-redirector
+    patch -p1 < tmp.diff
   '';
 
   RUSTFLAGS = "-C target-feature=";
