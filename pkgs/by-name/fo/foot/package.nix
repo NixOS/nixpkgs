@@ -103,8 +103,8 @@ stdenv.mkDerivation {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "foot";
-    rev = version;
     hash = "sha256-OCDFfOEyE8CrgisswSfPXH1rNoaM1C1ztm9R77P0MOk=";
+    tag = version;
   };
 
   separateDebugInfo = true;
