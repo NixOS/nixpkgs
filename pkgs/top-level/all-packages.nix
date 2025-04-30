@@ -10284,8 +10284,6 @@ with pkgs;
   };
   libxcrypt-legacy = libxcrypt.override { enableHashes = "all"; };
 
-  libxeddsa = callPackage ../development/libraries/libxeddsa { };
-
   libxkbcommon = libxkbcommon_8;
   libxml2 = callPackage ../development/libraries/libxml2 {
     python = python3;
