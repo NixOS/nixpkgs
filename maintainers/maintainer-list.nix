@@ -2115,6 +2115,12 @@
     githubId = 891399;
     name = "Alessandro Sappia";
   };
+  asauzeau = {
+    email = "antoine.sauzeau3@gmail.com";
+    github = "AntoineSauzeau";
+    githubId = 72159603;
+    name = "Antoine Sauzeau";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
@@ -3603,6 +3609,13 @@
     email = "bmg.avoin@gmail.com";
     github = "brianmcgillion";
     githubId = 1044263;
+  };
+  bricked = {
+    name = "bricked";
+    email = "hello@bricked.dev";
+    github = "brckd";
+    githubId = 92804487;
+    keys = [ { fingerprint = "58A2 81E6 2FBD 6E4E 664C  B603 7B4D 2A02 BB0E C28C"; } ];
   };
   britter = {
     name = "Benedikt Ritter";
@@ -6634,6 +6647,13 @@
     github = "dsymbol";
     githubId = 88138099;
   };
+  dtomvan = {
+    email = "18gatenmaker6@gmail.com";
+    github = "dtomvan";
+    githubId = 51440893;
+    name = "Tom van Dijk";
+    keys = [ { fingerprint = "D044 F07B 8863 B681 26BD  79FE 7A98 4C82 07AD BA51"; } ];
+  };
   dtzWill = {
     email = "w@wdtz.org";
     github = "dtzWill";
@@ -8663,6 +8683,12 @@
     github = "nbdd0121";
     githubId = 4065244;
     name = "Gary Guo";
+  };
+  gauravghodinde = {
+    email = "gauravghodinde@gmail.com";
+    github = "gauravghodinde";
+    githubId = 65962770;
+    name = "Gaurav Ghodinde";
   };
   gavin = {
     email = "gavin.rogers@holo.host";
@@ -24039,6 +24065,13 @@
     githubId = 886074;
     name = "Matthieu Coudron";
   };
+  tetov = {
+    email = "anton@tetov.se";
+    github = "tetov";
+    githubId = 14882117;
+    keys = [ { fingerprint = "2B4D 0035 AFF0 F7DA CE5B  29D7 337D DB57 4A88 34DB"; } ];
+    name = "Anton Tetov";
+  };
   teutat3s = {
     email = "teutates@mailbox.org";
     matrix = "@teutat3s:pub.solar";
@@ -24735,6 +24768,12 @@
     github = "tomhoule";
     githubId = 13155277;
     name = "Tom Houle";
+  };
+  tomjnixon = {
+    name = "Tom Nixon";
+    email = "nixpkgs@tomn.co.uk";
+    github = "tomjnixon";
+    githubId = 178226;
   };
   tomkoid = {
     email = "tomaszierl@outlook.com";

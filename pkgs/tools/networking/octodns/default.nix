@@ -1,26 +1,28 @@
 {
   lib,
-  buildPythonPackage,
-  dnspython,
   fetchFromGitHub,
-  fqdn,
-  idna,
-  natsort,
-  pytestCheckHook,
-  python-dateutil,
   python3,
-  pythonOlder,
-  pyyaml,
   runCommand,
-  setuptools,
-}:
 
-buildPythonPackage rec {
+  # passthru
+  octodns,
+}:
+let
+  # Export `python` with `octodns` as a module for `octodns-providers`.
+  python = python3.override {
+    self = python;
+    packageOverrides = final: prev: {
+      octodns = final.toPythonModule octodns;
+    };
+  };
+  python3Packages = python.pkgs;
+in
+python3Packages.buildPythonApplication rec {
   pname = "octodns";
   version = "1.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "octodns";
@@ -29,11 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-L3c4lYt/fgMctJFArc1XlR+hvpz10kcBcYYXajnNQr0=";
   };
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     dnspython
     fqdn
     idna
@@ -42,21 +44,30 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "octodns" ];
 
-  passthru.withProviders =
-    ps:
-    let
-      pyEnv = python3.withPackages ps;
-    in
-    runCommand "octodns-with-providers" { } ''
-      mkdir -p $out/bin
-      ln -st $out/bin ${pyEnv}/bin/octodns-*
-    '';
+  passthru = {
+    providers = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python3Packages) callPackage;
+        directory = ./providers;
+      }
+    );
+
+    withProviders =
+      ps:
+      let
+        pyEnv = python.withPackages ps;
+      in
+      runCommand "octodns-with-providers" { } ''
+        mkdir -p $out/bin
+        ln -st $out/bin ${pyEnv}/bin/octodns-*
+      '';
+  };
 
   meta = with lib; {
     description = "Tools for managing DNS across multiple providers";
