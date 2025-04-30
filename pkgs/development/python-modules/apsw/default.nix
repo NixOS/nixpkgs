@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "apsw/tests.py" ];
+  enabledTestPaths = [ "apsw/tests.py" ];
 
   disabledTests = [
     # we don't build the test extension
