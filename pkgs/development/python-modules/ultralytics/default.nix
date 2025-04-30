@@ -75,7 +75,7 @@ buildPythonPackage rec {
     onnxruntime
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # rest of the tests require internet access
     "tests/test_python.py"
   ];
