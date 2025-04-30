@@ -5,6 +5,7 @@
   nodejs_22, # Node ≥22 is required by codex-cli
   pnpm_10,
   makeBinaryWrapper,
+  installShellFiles,
   versionCheckHook,
 }:
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs_22
     pnpm_10.configHook
     makeBinaryWrapper
+    installShellFiles
   ];
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -53,6 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     makeBinaryWrapper ${nodejs_22}/bin/node $out/bin/codex --add-flags "$dest/bin/codex.js"
+
+    # Install shell completions
+    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      $out/bin/codex completion bash > codex.bash
+      $out/bin/codex completion zsh > codex.zsh
+      $out/bin/codex completion fish > codex.fish
+      installShellCompletion codex.{bash,zsh,fish}
+    ''}
 
     runHook postInstall
   '';
