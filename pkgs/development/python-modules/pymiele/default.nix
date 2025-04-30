@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pymiele";
-  version = "0.2.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/iUpbvD77MURTltnStm47PEqXnfVuHf4m3+h9V2cn68=";
+    hash = "sha256-96doAJ8NcT5cbooj00+pU6PmZYefTrH/rw4exXXja8A=";
   };
 
   build-system = [ setuptools ];
