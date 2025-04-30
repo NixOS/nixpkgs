@@ -36,7 +36,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf,
+  protobuf_29,
   python3,
   rapidjson,
   re2,
@@ -57,6 +57,9 @@
 }:
 
 let
+  # https://github.com/apache/arrow/issues/45807
+  protobuf = protobuf_29;
+
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
