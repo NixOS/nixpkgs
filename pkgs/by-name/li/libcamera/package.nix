@@ -17,6 +17,7 @@
   python3,
   python3Packages,
   systemd, # for libudev
+  libpisp,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
   withQcam ? false,
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
 
       gtest
     ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
     ++ lib.optionals withTracing [ lttng-ust ]
     ++ lib.optionals withQcam [
       libtiff
