@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "xgi";
   version = "0.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -29,13 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-0QchgZ1Egcx5/8vSJPGLlN13A0KC+Q3dbAhWVB77Hdk=";
   };
 
-  nativeBuildInputs = [
-    hatchling
+  build-system = [
     setuptools
+    hatchling
+  ];
+
+  nativeBuildInputs = [
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     networkx
     numpy
@@ -56,12 +59,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xgi" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/xgi-org/xgi/blob/main/CHANGELOG.md#${
       builtins.replaceStrings [ "." ] [ "" ] version
     }";
     description = "Software for higher-order networks";
     homepage = "https://xgi.readthedocs.io/";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }
