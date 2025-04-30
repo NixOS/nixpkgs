@@ -8728,6 +8728,8 @@ self: super: with self; {
     callPackage ../development/python-modules/magic-wormhole-transit-relay
       { };
 
+  magicattr = callPackage ../development/python-modules/magicattr { };
+
   magicgui = callPackage ../development/python-modules/magicgui { };
 
   magika = callPackage ../development/python-modules/magika { };
