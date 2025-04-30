@@ -200,6 +200,9 @@ stdenv.mkDerivation {
     "themes"
   ];
 
+  passthru = { inherit stimulusGenerator; };
+  passthru.updateScript = ./update.sh;
+
   passthru.tests = {
     clang-default-compilation = foot.override {
       inherit (llvmPackages) stdenv;
