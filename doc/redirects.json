@@ -1101,6 +1101,9 @@
   "var-meta-broken": [
     "index.html#var-meta-broken"
   ],
+  "var-meta-knownVulnerabilities": [
+    "index.html#var-meta-knownVulnerabilities"
+  ],
   "sec-meta-license": [
     "index.html#sec-meta-license"
   ],
