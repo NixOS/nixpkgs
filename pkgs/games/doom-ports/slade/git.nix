@@ -54,6 +54,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
+    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxGTK) "wx-config"))
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
