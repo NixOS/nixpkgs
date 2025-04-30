@@ -13,6 +13,8 @@
   pandas,
   polars,
   pyarrow,
+  pyspark,
+  sqlframe,
 
   # tests
   duckdb,
@@ -23,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.30.0";
+  version = "1.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-jqrrQRviWllzZQEnlOTZ6oJM3WYQ3YlDvareTTBcNl4=";
+    hash = "sha256-AYgpHJwQVP+F2kr5YJtjnLNYedc81RvRcX1Cfh7c0xw=";
   };
 
   build-system = [
@@ -46,6 +48,8 @@ buildPythonPackage rec {
     pandas = [ pandas ];
     polars = [ polars ];
     pyarrow = [ pyarrow ];
+    pyspark = [ pyspark ];
+    sqlframe = [ sqlframe ];
   };
 
   nativeCheckInputs = [

@@ -2,6 +2,8 @@
   lib,
   newScope,
   yarn-berry,
+  yarn,
+  replaceVars,
   libzip,
   zlib,
   zlib-ng,
@@ -12,7 +14,11 @@ let
     "3" = final: {
       berryCacheVersion = "8";
 
-      berryOfflinePatches = [ ./berry-3-offline.patch ];
+      berryOfflinePatches = [
+        (replaceVars ./berry-3-offline.patch {
+          yarnv1 = lib.getExe yarn;
+        })
+      ];
 
       # Known good version: 1.11.3
       libzip =
@@ -29,7 +35,11 @@ let
     "4" = final: {
       berryCacheVersion = "10";
 
-      berryOfflinePatches = [ ./berry-4-offline.patch ];
+      berryOfflinePatches = [
+        (replaceVars ./berry-4-offline.patch {
+          yarnv1 = lib.getExe yarn;
+        })
+      ];
 
       # Known good version: 1.11.3
       libzip =

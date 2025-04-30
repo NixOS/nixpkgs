@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripunzip";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
     rev = "v${version}";
-    hash = "sha256-Y4p3CFE8MyEQJ/af0g2/EL4kto/VZABvD5OS0rRuo8g=";
+    hash = "sha256-IPa7LvwB6RqebJXWKz4DZE5o/ob0sV7mVp6a/F0qsbU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lhStxg8H2T29eFYDFAZhFjOyH4hfRwEmcewm7Ec/oTw=";
+  cargoHash = "sha256-3bzIScXVxT8HFmFc0svincvTyuT2F2nfFs/3ApnCBUs=";
 
   buildInputs =
     [ openssl ]

@@ -75,7 +75,7 @@ yarnBerryConfigHook() {
     export npm_config_nodedir="@nodeSrc@"
     export npm_config_node_gyp="@nodeGyp@"
 
-    YARN_IGNORE_PATH=1 @yarn_offline@ install --mode=skip-build
+    YARN_IGNORE_PATH=1 @yarn_offline@ install --mode=skip-build --inline-builds
     if [[ -z "${dontYarnBerryPatchShebangs-}" ]]; then
       echo "Running patchShebangs in between the Link and the Build step..."
       patchShebangs node_modules
