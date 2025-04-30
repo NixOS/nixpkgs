@@ -57,7 +57,7 @@ in
       description = "Alertmanager IRC Relay";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         ExecStart = ''
