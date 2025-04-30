@@ -13,6 +13,7 @@ let
     inherit (pkgs)
       stdenv
       lib
+      python2
       runCommand
       writeTextFile
       writeShellScript
