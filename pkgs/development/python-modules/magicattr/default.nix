@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A getattr and setattr that works on nested objects, lists, dicts, and any combination thereof without resorting to eval";
+    description = "Getattr and setattr that works on nested objects, lists, dicts, and any combination thereof without resorting to eval";
     homepage = "https://github.com/frmdstryr/magicattr";
     changelog = "https://github.com/frmdstryr/magicattr/releases/tag/v${version}";
     license = lib.licenses.mit;
