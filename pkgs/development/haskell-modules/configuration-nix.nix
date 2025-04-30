@@ -1770,4 +1770,11 @@ builtins.intersectAttrs super {
 
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
   cpython = doJailbreak super.cpython;
+
+
+  # inline-python specifies python3-embed in its pkgconfig-depends.
+  # This is a valid pkg-config configuration, but it's not a nix package attribute.
+  inline-python = overrideCabal (drv: {
+    libraryHaskellDepends = [ pkgs.python3 ];
+  }) super.inline-python;
 }
