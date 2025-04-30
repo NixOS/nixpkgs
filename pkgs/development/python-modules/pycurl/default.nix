@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # don't pick up the tests directory below examples/
     "tests"
   ];
