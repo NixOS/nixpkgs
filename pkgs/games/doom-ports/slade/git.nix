@@ -8,27 +8,27 @@
   zip,
   wxGTK,
   gtk3,
-  sfml,
+  sfml_2,
   fluidsynth,
   curl,
-  freeimage,
   ftgl,
   glew,
   lua,
   mpg123,
   wrapGAppsHook3,
   unstableGitUpdater,
+  libwebp,
 }:
 
 stdenv.mkDerivation {
   pname = "slade";
-  version = "3.2.6-unstable-2024-11-26";
+  version = "3.2.7-unstable-2025-04-22";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "f8ca52edf98e649c6455f6cc32f7aa361e41babe";
-    hash = "sha256-h43kYVLDxr1Z3vKJ+IZaDmvkerUdGJFLzJrPj0b2VUI=";
+    rev = "f8584231353845148c7623990dd90291fcb70f33";
+    hash = "sha256-tP84FfSjfOxFh8S7GuyHB0M13Svx6SLbloo8xt9oORU=";
   };
 
   nativeBuildInputs = [
@@ -42,14 +42,14 @@ stdenv.mkDerivation {
   buildInputs = [
     wxGTK
     gtk3
-    sfml
+    sfml_2
     fluidsynth
     curl
-    freeimage
     ftgl
     glew
     lua
     mpg123
+    libwebp
   ];
 
   cmakeFlags = [
