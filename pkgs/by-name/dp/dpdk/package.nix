@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpdk";
-  version = "24.07";
+  version = "25.03";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "sha256-mUT35fJo56ybQZPizVTvbZj24dfd3JZ8d65PZhbW+70=";
+    sha256 = "sha256-akCnMTKChuvXloWxj/pZkua3cME4Q9Zf0NEVfPzP9j0=";
   };
 
   nativeBuildInputs = [
@@ -67,14 +67,6 @@ stdenv.mkDerivation rec {
     rdma-core
     # Requested by pkg-config.
     libbsd
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-11614.patch";
-      url = "https://git.dpdk.org/dpdk-stable/patch/?id=fdf13ea6fede07538fbe5e2a46fa6d4b2368fa81";
-      hash = "sha256-lD2mhPm5r1tWZb4IpzHa2SeK1DyQ3rwjzArRTpAgZAY=";
-    })
   ];
 
   postPatch = ''

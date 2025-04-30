@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     pygments-markdown-lexer
     pyopenssl
     requests
+    setuptools
     slixmpp
     python-telegram-bot
     webtest
