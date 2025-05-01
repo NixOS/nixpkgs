@@ -21567,6 +21567,12 @@
     github = "samemrecebi";
     githubId = 64419750;
   };
+  samestep = {
+    name = "Sam Estep";
+    email = "sam@samestep.com";
+    github = "samestep";
+    githubId = 8246041;
+  };
   samfundev = {
     name = "samfundev";
     github = "samfundev";
