@@ -3084,7 +3084,15 @@ self: super:
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible =
     assert super.crucible.version == "0.7.2";
-    doJailbreak super.crucible;
+    doJailbreak (
+      super.crucible.override {
+        what4 = self.what4_1_7;
+      }
+    );
+
+  crucible-llvm = super.crucible-llvm.override {
+    what4 = self.what4_1_7;
+  };
 
   # Test suite invokes cabal-install in a way incompatible with our generic builder
   # (i.e. tries to re-use the ghc package db / environment from dist-newstyle).
