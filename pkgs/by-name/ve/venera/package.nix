@@ -14,13 +14,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-kjSjXIeQh+XT9J3qmmwNw75462VGfdykUZ4XeWphVH8=";
+    hash = "sha256-YiiR4CvOOzsFiSZ2VDVwibhimVwUJDkEu+TXWmf3/S0=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
