@@ -17725,7 +17725,7 @@ with pkgs;
   thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
-  thunderbird-bin = thunderbird-latest-bin;
+  thunderbird-bin = thunderbird-esr-bin;
   thunderbird-latest-bin = wrapThunderbird thunderbird-latest-bin-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
