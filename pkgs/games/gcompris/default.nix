@@ -15,6 +15,7 @@
   qtmultimedia,
   qtsensors,
   qttools,
+  extra-cmake-modules,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     gettext
     ninja
     qttools
