@@ -6061,6 +6061,11 @@ with pkgs;
   jdk23 = openjdk23;
   jdk23_headless = openjdk23_headless;
 
+  openjdk24 = javaPackages.compiler.openjdk24;
+  openjdk24_headless = javaPackages.compiler.openjdk24.headless;
+  jdk24 = openjdk24;
+  jdk24_headless = openjdk24_headless;
+
   # default JDK
   jdk = jdk21;
   jdk_headless = jdk21_headless;
