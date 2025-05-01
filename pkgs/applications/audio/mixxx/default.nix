@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
-    rev = version;
-    hash = "sha256-1ZE2hVwacZve0+IOQs+htK/kl7zFsOWkh/KcrnI6u/M=";
+    rev = "9e3f9bfbac5c6fde7c4ee5fed2b550aa62060a95";
+    hash = "sha256-9z4UqmXR/n1CCr1/YzTNl5SdRgbZgN/i1JNfA4TLaXU=";
   };
 
   nativeBuildInputs = [
@@ -130,6 +130,8 @@ stdenv.mkDerivation rec {
   # see https://github.com/mixxxdj/mixxx/blob/2.3.5/CMakeLists.txt#L1381-L1392
   cmakeFlags = [
     "-DINSTALL_USER_UDEV_RULES=OFF"
+    # "BUILD_TESTING=OFF" must imply "BUILD_BENCH=OFF"
+    "-DBUILD_BENCH=OFF"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
