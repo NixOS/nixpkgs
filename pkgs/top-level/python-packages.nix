@@ -4860,6 +4860,8 @@ self: super: with self; {
 
   fenics = callPackage ../development/python-modules/fenics { hdf5 = pkgs.hdf5_1_10; };
 
+  fenics-ufl = callPackage ../development/python-modules/fenics-ufl { };
+
   ffcv = callPackage ../development/python-modules/ffcv { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
