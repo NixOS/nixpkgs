@@ -595,6 +595,11 @@ let
       position = pos.file + ":" + toString pos.line;
     }
     // {
+      maintainers =
+        attrs.meta.maintainers or [ ]
+        ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+    }
+    // {
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;
