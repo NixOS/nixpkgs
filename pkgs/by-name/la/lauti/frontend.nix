@@ -13,8 +13,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lauti";
   inherit version src;
 
-  sourceRoot = "${finalAttrs.src.name}/";
-
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-uIDBE4ewdzrtJqOjFQTAei1TpAjQMRqls7CtG1h8KnA=";
