@@ -17,6 +17,7 @@
   libpulseaudio,
   libselinux,
   libsepol,
+  libsysprof-capture,
   libxcb,
   makeBinaryWrapper,
   moltenvk,
@@ -103,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
           dbus
           dconf
           glib
+          libsysprof-capture
         ]
         ++ lib.optionals audioSupport [
           libpulseaudio
