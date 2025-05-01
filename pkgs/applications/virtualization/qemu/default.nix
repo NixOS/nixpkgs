@@ -16,6 +16,8 @@
   lzo,
   snappy,
   libaio,
+  libGL,
+  libX11,
   libtasn1,
   gnutls,
   curl,
@@ -234,7 +236,11 @@ stdenv.mkDerivation (finalAttrs: {
       attr
       libaio
     ]
-    ++ lib.optionals xenSupport [ xen ]
+    ++ lib.optionals xenSupport [
+      xen
+      libGL
+      libX11
+    ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [
       glusterfs
