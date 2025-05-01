@@ -3149,7 +3149,7 @@ with pkgs;
 
   fcitx5-table-other = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-other.nix { };
 
-  featherpad = qt5.callPackage ../applications/editors/featherpad { };
+  featherpad = callPackage ../applications/editors/featherpad { };
 
   ffsend = callPackage ../tools/misc/ffsend { };
 
@@ -14056,8 +14056,6 @@ with pkgs;
     mopidy-ytmusic
     ;
 
-  edgetx = libsForQt5.callPackage ../applications/misc/edgetx { };
-
   mpg123 = callPackage ../applications/audio/mpg123 {
     jack = libjack2;
   };
@@ -15721,13 +15719,6 @@ with pkgs;
   };
 
   crawl = callPackage ../games/crawl { };
-
-  inherit (import ../games/crossfire pkgs)
-    crossfire-server
-    crossfire-arch
-    crossfire-maps
-    crossfire-client
-    ;
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
@@ -17779,10 +17770,6 @@ with pkgs;
 
   kodelife = callPackage ../applications/graphics/kodelife {
     inherit (gst_all_1) gstreamer gst-plugins-base;
-  };
-
-  weasis = callPackage ../by-name/we/weasis/package.nix {
-    jre = jdk23;
   };
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
