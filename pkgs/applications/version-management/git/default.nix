@@ -37,7 +37,8 @@
   nlsSupport ? true,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
-  withManual ? true,
+  # Disable the manual since libxslt doesn't seem to parse the files correctly.
+  withManual ? !stdenv.hostPlatform.useLLVM,
   pythonSupport ? true,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
