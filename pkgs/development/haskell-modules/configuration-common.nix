@@ -2987,19 +2987,28 @@ self: super:
     assert super.bzlib.version == "0.5.2.0";
     doJailbreak super.bzlib;
 
-  what4 = lib.pipe super.what4 [
-    (addTestToolDepends (
-      with pkgs;
-      [
-        cvc4
-        cvc5
-        z3
+  inherit
+    (lib.mapAttrs (
+      _: pkg:
+      lib.pipe pkg [
+        (addTestToolDepends (
+          with pkgs;
+          [
+            cvc4
+            cvc5
+            z3
+          ]
+        ))
+        # 2025-04-09: FIXME: template_tests still failing with:
+        #   fd:9: hPutBuf: resource vanished (Broken pipe)
+        dontCheck
+
+        doDistribute
       ]
-    ))
-    # 2025-04-09: template_tests still failing with:
-    #   fd:9: hPutBuf: resource vanished (Broken pipe)
-    dontCheck
-  ];
+    ) super)
+    what4
+    what4_1_7
+    ;
 
   copilot-theorem = lib.pipe super.copilot-theorem [
     (addTestToolDepends (with pkgs; [ z3 ]))
