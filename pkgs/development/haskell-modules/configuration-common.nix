@@ -2578,9 +2578,7 @@ self: super:
 
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
-  # https://github.com/well-typed/cborg/issues/340
   cborg = lib.pipe super.cborg [
-    doJailbreak
     # Fix build on 32-bit: https://github.com/well-typed/cborg/pull/322
     (appendPatches (
       lib.optionals pkgs.stdenv.hostPlatform.is32bit [
