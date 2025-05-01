@@ -5,6 +5,7 @@
   SDL,
   SDL_ttf,
   jack2,
+  alsa-lib,
   libmpg123,
   ffmpeg,
   cdparanoia,
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # audio server
     jack2
+    alsa-lib
 
     # audio decoder
     libmpg123
