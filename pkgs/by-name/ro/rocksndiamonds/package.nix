@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    SDL2 # sdl2-config
+  ];
   buildInputs = [
     SDL2
     SDL2_image
@@ -39,6 +44,10 @@ stdenv.mkDerivation rec {
     SDL2_net
     zlib
   ];
+
+  preConfigure = ''
+    makeFlagsArray+=("CC=$CC" "AR=$AR" "RANLIB=$RANLIB")
+  '';
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
@@ -59,7 +68,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
+  # flaky with parallel building
+  # ranlib: game_bd.a: error reading bd_caveengine.o: file truncated
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "Scrolling tile-based arcade style puzzle game";
