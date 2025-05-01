@@ -390,6 +390,8 @@ let
             (isDerivation x && x ? meta.timeout);
       };
       timeout = int;
+      knownVulnerabilities = listOf str;
+      badPlatforms = platforms;
 
       # Needed for Hydra to expose channel tarballs:
       # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
@@ -397,7 +399,6 @@ let
 
       # Weirder stuff that doesn't appear in the documentation?
       maxSilent = int;
-      knownVulnerabilities = listOf str;
       name = str;
       version = str;
       tag = str;
@@ -410,7 +411,6 @@ let
       isFcitxEngine = bool;
       isIbusEngine = bool;
       isGutenprint = bool;
-      badPlatforms = platforms;
     };
 
   checkMetaAttr =

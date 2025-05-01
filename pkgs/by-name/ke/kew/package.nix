@@ -1,34 +1,50 @@
 {
+  config,
   lib,
   stdenv,
-  fetchFromGitHub,
-  fftwFloat,
+  alsa-lib,
+  autoPatchelfHook,
   chafa,
   curl,
-  glib,
-  libopus,
-  opusfile,
-  libvorbis,
-  taglib,
   faad2,
+  fetchFromGitHub,
+  fftwFloat,
+  glib,
   libogg,
-  pkg-config,
-  versionCheckHook,
+  libopus,
+  libjack2,
+  libpulseaudio,
+  libvorbis,
   nix-update-script,
+  opusfile,
+  pkg-config,
+  taglib,
+  versionCheckHook,
+
+  withALSA ? stdenv.hostPlatform.isLinux,
+  withJACK ? false,
+  withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-64xdxRx4OanAcLgir9N7p/q71+gQYhffnWnxZzz93h8=";
+    hash = "sha256-nntbxDy1gfd4F/FvlilLeOAepqtxhnYE2XRjJSlFvgI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+    ];
+
   buildInputs = [
     fftwFloat.dev
     chafa
@@ -41,6 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
     faad2
     libogg
   ];
+
+  runtimeDependencies =
+    lib.optionals withPulseaudio [
+      libpulseaudio
+    ]
+    ++ lib.optionals (withALSA || withJACK) [
+      alsa-lib
+    ]
+    ++ lib.optionals withJACK [
+      libjack2
+    ];
+
+  enableParallelBuilding = true;
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
