@@ -480,6 +480,10 @@ let
       orga = "uncenter";
       repo = "tree-sitter-tera";
     };
+    "tree-sitter-crystal" = {
+      orga = "crystal-lang-tools";
+      repo = "tree-sitter-crystal";
+    };
   };
 
   allGrammars =
