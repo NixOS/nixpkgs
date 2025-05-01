@@ -381,6 +381,8 @@ self: super: with self; {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiontfy = callPackage ../development/python-modules/aiontfy { };
+
   aionut = callPackage ../development/python-modules/aionut { };
 
   aiooncue = callPackage ../development/python-modules/aiooncue { };
