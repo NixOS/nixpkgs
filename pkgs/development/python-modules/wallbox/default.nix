@@ -2,22 +2,21 @@
   lib,
   aenum,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "wallbox";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S1JP7/D3U853fQU3a2pyL+dt/hVLDP3TB82tcGlcXVQ=";
+  src = fetchFromGitHub {
+    owner = "cliviu74";
+    repo = "wallbox";
+    tag = version;
+    hash = "sha256-1/hm0x71YTW3cA11Nw/e4xUol5T9lElgm1bKi1wRi3o=";
   };
 
   build-system = [
@@ -34,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wallbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Wallbox EV charger API";
     homepage = "https://github.com/cliviu74/wallbox";
-    changelog = "https://github.com/cliviu74/wallbox/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/cliviu74/wallbox/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
