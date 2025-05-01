@@ -6,8 +6,6 @@
   aiohttp,
   jinja2,
   markupsafe,
-  pytest-aiohttp,
-  pytestCheckHook,
   pythonOlder,
   pyyaml,
 }:
@@ -37,18 +35,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-aiohttp
-  ];
-
   pythonRelaxDeps = [
     "markupsafe"
     "jinja2"
-  ];
-
-  disabledTestPaths = [
-    "tests/conftest.py"
   ];
 
   pythonImportsCheck = [ "aiohttp_swagger" ];
