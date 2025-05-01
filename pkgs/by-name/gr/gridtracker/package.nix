@@ -1,41 +1,16 @@
 {
   lib,
-  stdenv,
-  fetchFromGitLab,
-  nix-update-script,
-  nwjs,
-  wrapGAppsHook3,
+  appimageTools,
+  fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+appimageTools.wrapType2 rec {
   pname = "gridtracker";
-  version = "1.24.0922";
-
-  src = fetchFromGitLab {
-    owner = "gridtracker.org";
-    repo = "gridtracker";
-    rev = "v${version}";
-    hash = "sha256-6WgP13JVOzYnYtCDH3qCQXT70X9j4yqlUb18FFf1aSY=";
+  version = "2.250421.1";
+  src = fetchurl {
+    url = "https://download2.gridtracker.org/GridTracker2-${version}-x86_64.AppImage";
+    sha256 = "sha256-nb/V50Ds+UojTEHTWeYLg2iI8quU15lcsgtEKdkiTpw=";
   };
-
-  nativeBuildInputs = [ wrapGAppsHook3 ];
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace '$(DESTDIR)/usr' '$(DESTDIR)/'
-    substituteInPlace gridtracker.sh \
-      --replace "exec nw" "exec ${nwjs}/bin/nw" \
-      --replace "/usr/share/gridtracker" "$out/share/gridtracker"
-    substituteInPlace gridtracker.desktop \
-      --replace "/usr/share/gridtracker/gridview.png" "$out/share/gridtracker/gridview.png"
-  '';
-
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "NO_DIST_INSTALL=1"
-  ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Amateur radio companion to WSJT-X or JTDX";
@@ -49,6 +24,9 @@ stdenv.mkDerivation rec {
     homepage = "https://gridtracker.org";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [
+      melling
+      sciencemarc
+    ];
   };
 }
