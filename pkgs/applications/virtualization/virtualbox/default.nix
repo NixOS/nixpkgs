@@ -249,8 +249,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableKvm (
       let
         patchVboxVersion =
-          # There is no updated patch for 7.0.22 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.0.22" then "7.0.20" else finalAttrs.virtualboxVersion;
+          # There is no updated patch for 7.1.8 yet, but the older one still applies.
+          if finalAttrs.virtualboxVersion == "7.1.8" then "7.1.6" else finalAttrs.virtualboxVersion;
       in
       fetchpatch {
         name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
