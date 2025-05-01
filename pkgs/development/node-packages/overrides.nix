@@ -55,6 +55,13 @@ final: prev: {
     '';
   };
 
+  nbb = prev.nbb.override {
+    buildInputs = with pkgs; [
+      # Required for bin/nbbun.
+      bun
+    ];
+  };
+
   joplin = prev.joplin.override (oldAttrs: {
     nativeBuildInputs =
       [

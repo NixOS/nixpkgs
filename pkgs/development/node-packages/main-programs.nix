@@ -5,6 +5,7 @@
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
+  nbb = "nbb";
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";

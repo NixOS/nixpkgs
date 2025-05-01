@@ -118,6 +118,7 @@
 , "meat"
 , "mocha"
 , "multi-file-swagger"
+, "nbb"
 , "nijs"
 , "node-gyp-build"
 , "node2nix"
