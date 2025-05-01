@@ -15152,8 +15152,6 @@ with pkgs;
     mopidy-ytmusic
     ;
 
-  edgetx = libsForQt5.callPackage ../applications/misc/edgetx { };
-
   mpg123 = callPackage ../applications/audio/mpg123 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit AudioToolbox;
     jack = libjack2;
