@@ -237,6 +237,8 @@ stdenv.mkDerivation (finalAttrs: {
     ) finalAttrs.buildInputs
   );
 
+  __darwinAllowLocalNetworking = true;
+
   # This is needed as the checks need to compile and link the test cases with
   # -lpetsc, which is not available in the checkPhase, which is executed before
   # the installPhase. The installCheckPhase comes after the installPhase, so
