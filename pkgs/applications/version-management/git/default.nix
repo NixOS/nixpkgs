@@ -456,6 +456,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstallCheck =
     ''
+      # Some tests break with high concurrency
+      # https://github.com/NixOS/nixpkgs/pull/403237
+      if ((NIX_BUILD_CORES > 32)); then
+        NIX_BUILD_CORES=32
+      fi
+
       installCheckFlagsArray+=(
         GIT_PROVE_OPTS="--jobs $NIX_BUILD_CORES --failures --state=failed,save"
         GIT_TEST_INSTALLED=$out/bin
