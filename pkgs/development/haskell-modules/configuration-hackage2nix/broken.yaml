@@ -2538,7 +2538,6 @@ broken-packages:
   - hdaemonize-buildfix # failure in job https://hydra.nixos.org/build/233225678 at 2023-09-02
   - hdbc-aeson # failure in job https://hydra.nixos.org/build/233240596 at 2023-09-02
   - HDBC-mysql # failure in job https://hydra.nixos.org/build/233205323 at 2023-09-02
-  - HDBC-postgresql # failure in job https://hydra.nixos.org/build/295090953 at 2025-04-22
   - hdbc-postgresql-hstore # failure in job https://hydra.nixos.org/build/233201143 at 2023-09-02
   - HDBC-postgresql-hstore # failure in job https://hydra.nixos.org/build/233243932 at 2023-09-02
   - hdevtools # failure in job https://hydra.nixos.org/build/233229115 at 2023-09-02
@@ -4767,7 +4766,6 @@ broken-packages:
   - postgresql-config # failure in job https://hydra.nixos.org/build/233197788 at 2023-09-02
   - postgresql-cube # failure in job https://hydra.nixos.org/build/233195283 at 2023-09-02
   - PostgreSQL # failure in job https://hydra.nixos.org/build/233258066 at 2023-09-02
-  - postgresql-libpq-configure # failure in job https://hydra.nixos.org/build/295096222 at 2025-04-22
   - postgresql-lo-stream # failure in job https://hydra.nixos.org/build/233194012 at 2023-09-02
   - postgresql-ltree # failure in job https://hydra.nixos.org/build/233199998 at 2023-09-02
   - postgresql-named # failure in job https://hydra.nixos.org/build/233241920 at 2023-09-02

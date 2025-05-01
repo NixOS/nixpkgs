@@ -2969,7 +2969,6 @@ dont-distribute-packages:
  - regular-xmlpickler
  - reheat
  - rel8
- - relational-query-postgresql-pure
  - relative-date
  - remote-json
  - remote-json-client
@@ -3574,7 +3573,6 @@ dont-distribute-packages:
  - type-structure
  - type-sub-th
  - typecheck-plugin-nat-simple_0_1_0_11
- - typed-admin
  - typed-encoding-encoding
  - typed-gui
  - typed-streams
