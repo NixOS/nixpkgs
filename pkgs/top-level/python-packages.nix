@@ -10322,6 +10322,8 @@ self: super: with self; {
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
 
+  openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
+
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
 
   openidc-client = callPackage ../development/python-modules/openidc-client { };
