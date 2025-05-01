@@ -2538,7 +2538,6 @@ broken-packages:
   - hdaemonize-buildfix # failure in job https://hydra.nixos.org/build/233225678 at 2023-09-02
   - hdbc-aeson # failure in job https://hydra.nixos.org/build/233240596 at 2023-09-02
   - HDBC-mysql # failure in job https://hydra.nixos.org/build/233205323 at 2023-09-02
-  - HDBC-postgresql # failure in job https://hydra.nixos.org/build/295090953 at 2025-04-22
   - hdbc-postgresql-hstore # failure in job https://hydra.nixos.org/build/233201143 at 2023-09-02
   - HDBC-postgresql-hstore # failure in job https://hydra.nixos.org/build/233243932 at 2023-09-02
   - hdevtools # failure in job https://hydra.nixos.org/build/233229115 at 2023-09-02
