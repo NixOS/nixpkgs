@@ -1082,7 +1082,6 @@ broken-packages:
   - crockford # failure in job https://hydra.nixos.org/build/233210759 at 2023-09-02
   - crocodile # failure in job https://hydra.nixos.org/build/233222277 at 2023-09-02
   - cronus # failure in job https://hydra.nixos.org/build/233225303 at 2023-09-02
-  - crucibile-llvm # what4 >=1.7 https://hydra.nixos.org/build/295428376
   - cruncher-types # failure in job https://hydra.nixos.org/build/233229024 at 2023-09-02
   - crunghc # failure in job https://hydra.nixos.org/build/233193295 at 2023-09-02
   - crux # simple-get-opt <0.5 https://hydra.nixos.org/build/295428379
