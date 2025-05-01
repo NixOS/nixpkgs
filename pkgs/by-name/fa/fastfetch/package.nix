@@ -73,57 +73,89 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [
-      glib
-      pcre
-      pcre2
-      yyjson
-    ]
-    ++ lib.optionals imageSupport [
-      chafa
-      imagemagick
-    ]
-    ++ lib.optionals sqliteSupport [
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      hwdata
-      libselinux
-      libsepol
-      util-linux
-      zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && gnomeSupport) [
-      dbus
-      dconf
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && audioSupport) [
-      libpulseaudio
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && openclSupport) [
-      ocl-icd
-      opencl-headers
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && vulkanSupport) [
-      libdrm
-      ddcutil
-    ]
-    ++ lib.optionals rpmSupport [ rpm ]
-    ++ lib.optionals vulkanSupport [ vulkan-loader ]
-    ++ lib.optionals waylandSupport [ wayland ]
-    ++ lib.optionals x11Support [
-      libXrandr
-      libglvnd
-      libxcb
-      xorg.libXau
-      xorg.libXdmcp
-      xorg.libXext
-    ]
-    ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      moltenvk
-    ];
+    let
+      commonDeps = [
+        pcre
+        pcre2
+        yyjson
+      ];
+
+      # Cross-platform optional dependencies
+      imageDeps = lib.optionals imageSupport [
+        chafa
+        imagemagick
+      ];
+
+      sqliteDeps = lib.optionals sqliteSupport [
+        sqlite
+      ];
+
+      linuxCoreDeps = lib.optionals stdenv.hostPlatform.isLinux [
+        hwdata
+        libselinux
+        libsepol
+        util-linux
+        zlib
+      ];
+
+      linuxFeatureDeps = lib.optionals stdenv.hostPlatform.isLinux (
+        lib.optionals gnomeSupport [
+          dbus
+          dconf
+          glib
+        ]
+        ++ lib.optionals audioSupport [
+          libpulseaudio
+        ]
+        ++ lib.optionals openclSupport [
+          ocl-icd
+          opencl-headers
+        ]
+        ++ lib.optionals vulkanSupport [
+          libdrm
+          ddcutil
+        ]
+        ++ lib.optionals rpmSupport [
+          rpm
+        ]
+      );
+
+      waylandDeps = lib.optionals waylandSupport [
+        wayland
+      ];
+
+      vulkanDeps = lib.optionals vulkanSupport [
+        vulkan-loader
+      ];
+
+      x11Deps = lib.optionals x11Support [
+        libXrandr
+        libglvnd
+        libxcb
+        xorg.libXau
+        xorg.libXdmcp
+        xorg.libXext
+      ];
+
+      x11XfceDeps = lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [
+        xfce.xfconf
+      ];
+
+      macosDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+        apple-sdk_15
+        moltenvk
+      ];
+    in
+    commonDeps
+    ++ imageDeps
+    ++ sqliteDeps
+    ++ linuxCoreDeps
+    ++ linuxFeatureDeps
+    ++ waylandDeps
+    ++ vulkanDeps
+    ++ x11Deps
+    ++ x11XfceDeps
+    ++ macosDeps;
 
   cmakeFlags =
     [
