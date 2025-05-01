@@ -35,6 +35,7 @@
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   commandLineArgs ? "",
   pkgsBuildBuild,
+  pkgsBuildHost,
   pkgs,
 }:
 
@@ -108,6 +109,12 @@ let
         };
         pkgsBuildBuild = pkgsBuildBuild // {
           rustc = pkgsBuildBuild.rustPackages_1_83.rustc;
+        };
+      }
+      // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "136") {
+        nodejs = pkgs.nodejs_22;
+        pkgsBuildHost = pkgsBuildHost // {
+          nodejs = pkgsBuildHost.nodejs_22;
         };
       }
     );
