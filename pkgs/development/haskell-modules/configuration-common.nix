@@ -1232,15 +1232,6 @@ self: super:
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
-  sensei = overrideCabal (drv: {
-    # sensei passes `-package hspec-meta` to GHC in the tests, but doesn't
-    # depend on it itself.
-    testHaskellDepends = drv.testHaskellDepends or [ ] ++ [ self.hspec-meta ];
-    # requires git at test-time *and* runtime, but we'll just rely on users to
-    # bring their own git at runtime.
-    testToolDepends = drv.testToolDepends or [ ] ++ [ pkgs.git ];
-  }) super.sensei;
-
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
 
