@@ -114,6 +114,14 @@ in
         '';
       };
 
+      useKexecForReboot = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Use kexec to reboot into the new kernel instead of a regular reboot.
+        '';
+      };
+
       randomizedDelaySec = lib.mkOption {
         default = "0";
         type = lib.types.str;
@@ -244,7 +252,6 @@ in
           nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
           date = "${pkgs.coreutils}/bin/date";
           readlink = "${pkgs.coreutils}/bin/readlink";
-          shutdown = "${config.systemd.package}/bin/shutdown";
           upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) "--upgrade";
         in
         if cfg.allowReboot then
@@ -285,7 +292,19 @@ in
                 echo "Outside of configured reboot window, skipping."
             ''}
             else
-              ${shutdown} -r +1
+              ${
+                if cfg.useKexecForReboot then
+                  ''
+                    initrd="${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}"
+                    cmdline="init=$initrd ${toString config.boot.kernelParams}"
+                    ${lib.getExe pkgs.kexec-tools} -l "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" --initrd="$initrd" --command-line="$cmdline"
+                    ${lib.getExe' config.systemd.package "systemctl"} kexec
+                  ''
+                else
+                  ''
+                    ${config.systemd.package}/bin/shutdown -r +1
+                  ''
+              }
             fi
           ''
         else
