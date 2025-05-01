@@ -3098,6 +3098,10 @@ self: super:
   # (i.e. tries to re-use the ghc package db / environment from dist-newstyle).
   sensei = dontCheck super.sensei;
 
+  crux = super.crux.override {
+    simple-get-opt = self.simple-get-opt_0_4;
+  };
+
   # 2025-04-23: jailbreak to allow megaparsec >= 9.7
   # 2025-04-23: test data missing from tarball
   crucible-syntax = doJailbreak (dontCheck super.crucible-syntax);

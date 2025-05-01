@@ -1084,7 +1084,6 @@ broken-packages:
   - cronus # failure in job https://hydra.nixos.org/build/233225303 at 2023-09-02
   - cruncher-types # failure in job https://hydra.nixos.org/build/233229024 at 2023-09-02
   - crunghc # failure in job https://hydra.nixos.org/build/233193295 at 2023-09-02
-  - crux # simple-get-opt <0.5 https://hydra.nixos.org/build/295428379
   - crypto-cipher-benchmarks # failure in job https://hydra.nixos.org/build/233195297 at 2023-09-02
   - cryptocompare # failure in job https://hydra.nixos.org/build/233192898 at 2023-09-02
   - cryptoconditions # failure in job https://hydra.nixos.org/build/233211816 at 2023-09-02
