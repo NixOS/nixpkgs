@@ -66,8 +66,7 @@
     privacySupport = true;
     webrtcSupport = true;
     enableOfficialBranding = false;
-    googleAPISupport = true;
-    mlsAPISupport = true;
+    geolocationSupport = true;
   }
 ).overrideAttrs
   (prev: {
