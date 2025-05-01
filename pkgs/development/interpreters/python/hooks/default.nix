@@ -438,6 +438,19 @@ in
     } ./setuptools-rust-hook.sh
   ) { };
 
+  stestrCheckHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "stestr-check-hook";
+      propagatedBuildInputs = [
+        stestr
+      ];
+      substitutions = {
+        inherit pythonCheckInterpreter;
+      };
+    } ./stestr-check-hook.sh
+  ) { };
+
   unittestCheckHook = callPackage (
     { makePythonHook }:
     makePythonHook {

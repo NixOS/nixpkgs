@@ -568,6 +568,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
+- `stestrCheckHook` to run tests with `stestr`.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
