@@ -76,15 +76,6 @@ buildPythonPackage rec {
     pytz
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pluggy.PluggyTeardownRaisedWarning"
-    "-W"
-    "ignore::pytest.PytestDeprecationWarning"
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   pythonImportsCheck = [ "aiogram" ];
 
   passthru.updateScript = gitUpdater {
