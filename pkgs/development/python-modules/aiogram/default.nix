@@ -1,37 +1,44 @@
 {
   lib,
-  aiodns,
-  aiofiles,
-  aiohttp-socks,
-  aiohttp,
-  aresponses,
-  babel,
   buildPythonPackage,
-  certifi,
   fetchFromGitHub,
-  gitUpdater,
+
+  # build-system
   hatchling,
+
+  # dependencies
+  aiofiles,
+  aiohttp,
+  certifi,
   magic-filter,
-  motor,
-  pycryptodomex,
   pydantic,
+
+  # optional dependencies
+  aiodns,
+  aiohttp-socks,
+  babel,
+  motor,
   pymongo,
+  redis,
+  uvloop,
+
+  # test dependencies
+  aresponses,
+  pycryptodomex,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   pytz,
-  redis,
-  uvloop,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
   version = "3.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aiogram";
@@ -42,7 +49,10 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "aiohttp" ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "pydantic"
+  ];
 
   dependencies = [
     aiofiles
