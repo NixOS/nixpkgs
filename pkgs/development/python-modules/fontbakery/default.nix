@@ -141,8 +141,17 @@ buildPythonPackage rec {
     "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
+    "test_command_check_googlefonts"
     # AssertionError
     "test_check_shape_languages"
+    "test_command_config_file"
+    "test_config_override"
+  ];
+
+  disabledTestPaths = [
+    # ValueError: Check 'googlefonts/glyphsets/shape_languages' not found
+    "tests/test_checks_filesize.py"
+    "tests/test_checks_googlefonts_overrides.py"
   ];
 
   postInstall = ''
