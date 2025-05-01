@@ -12176,6 +12176,8 @@ with pkgs;
 
   rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
 
+  rustHelloWorld = callPackage ../tools/misc/rust-hello-world { };
+
   OVMF = callPackage ../applications/virtualization/OVMF {
     inherit (python3Packages) pexpect;
   };
