@@ -3086,6 +3086,10 @@ self: super:
     assert super.crucible.version == "0.7.2";
     doJailbreak super.crucible;
 
+  # Test suite invokes cabal-install in a way incompatible with our generic builder
+  # (i.e. tries to re-use the ghc package db / environment from dist-newstyle).
+  sensei = dontCheck super.sensei;
+
   # 2025-04-23: jailbreak to allow megaparsec >= 9.7
   # 2025-04-23: test data missing from tarball
   crucible-syntax = doJailbreak (dontCheck super.crucible-syntax);
