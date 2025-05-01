@@ -173,7 +173,14 @@ let
         hash = "sha256-6wg/eVu9J83yvIO428U1FX3otz58tAy6pCvp7fqOBKU=";
       })
     ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      (fetchpatch {
+        name = "qtscript-loongarch64.patch";
+        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/2fa4f3b28affc29835fcca5c75431f19ff3754a3/community/qt5-qtscript/qtscript-loongarch64.patch";
+        hash = "sha256-DUTXX20ClqGRYat8zk3/Facc1IyAw58qCXrbUaDLyiM=";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qtsystems = [
       # Fix crash if no X11 display available
