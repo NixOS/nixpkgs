@@ -579,6 +579,12 @@ in
           else
             null;
 
+        tcp-brutal =
+          if lib.versionAtLeast kernel.version "4.9" then
+            callPackage ../os-specific/linux/tcp-brutal { }
+          else
+            null;
+
         tuxedo-drivers =
           if lib.versionAtLeast kernel.version "4.14" then
             callPackage ../os-specific/linux/tuxedo-drivers { }
