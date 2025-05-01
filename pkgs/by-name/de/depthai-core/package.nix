@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     xlinkCompat
     cpr
     fp16
-    curl
+    curl.dev
     mp4v2
     pcl
     eigen
@@ -253,16 +253,23 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEPTHAI_BUILD_PYTHON" true)
     (lib.cmakeBool "DEPTHAI_PYTHON_ENABLE_TESTS" true)
     (lib.cmakeBool "DEPTHAI_INSTALL" true)
-    # NOTE: Dependency broken
-    #    (lib.cmakeBool "DEPTHAI_BASALT_SUPPORT" true)
-    # NOTE: Broken atm
-    #(lib.cmakeBool "DEPTHAI_RTABMAP_SUPPORT" true)
 
-    # NOTE: Find the package
+    # NOTE: Not yet packaged
+    (lib.cmakeBool "DEPTHAI_BASALT_SUPPORT" false)
+
+    # NOTE: MR to fix the broken package
+    (lib.cmakeBool "DEPTHAI_RTABMAP_SUPPORT" false)
+
+    # NOTE: Does not have CMake file under /lib
     (lib.cmakeBool "DEPTHAI_ENABLE_CURL" false)
-    (lib.cmakeBool "DEPTHAI_ENABLE_BACKWARD" false)
-    (lib.cmakeBool "DEPTHAI_BUILD_TESTS" false)
-    (lib.cmakeBool "DEPTHAI_TEST_EXAMPLES" false)
+
+    (lib.cmakeBool "DEPTHAI_ENABLE_BACKWARD" true)
+
+    # Note: as they run in parallel they require lot of RAM
+    (lib.cmakeBool "DEPTHAI_BUILD_TESTS" true)
+    (lib.cmakeBool "DEPTHAI_TEST_EXAMPLES" true)
+
+    # Fixme: requires 'rerun.hpp' which is part of rerun_cpp_sdk.zip
     (lib.cmakeBool "DEPTHAI_BUILD_EXAMPLES" false)
   ];
 
