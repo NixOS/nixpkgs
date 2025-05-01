@@ -199,6 +199,14 @@ let
         znver3 = versionAtLeast ccVersion "11.0";
         znver4 = versionAtLeast ccVersion "13.0";
         znver5 = versionAtLeast ccVersion "14.0";
+
+        # LoongArch64
+        # https://gcc.gnu.org/gcc-12/changes.html#loongarch
+        # la464 was added together with loongarch64 support
+        # https://gcc.gnu.org/gcc-14/changes.html#loongarch
+        "la64v1.0" = versionAtLeast ccVersion "14.0";
+        "la64v1.1" = versionAtLeast ccVersion "14.0";
+        la664 = versionAtLeast ccVersion "14.0";
       }
       .${arch} or true
     else if isClang then
@@ -223,6 +231,14 @@ let
         znver3 = versionAtLeast ccVersion "12.0";
         znver4 = versionAtLeast ccVersion "16.0";
         znver5 = versionAtLeast ccVersion "19.1";
+
+        # LoongArch64
+        # https://releases.llvm.org/16.0.0/tools/clang/docs/ReleaseNotes.html#loongarch-support
+        # la464 was added together with loongarch64 support
+        # https://releases.llvm.org/19.1.0/tools/clang/docs/ReleaseNotes.html#loongarch-support
+        "la64v1.0" = versionAtLeast ccVersion "19.1";
+        "la64v1.1" = versionAtLeast ccVersion "19.1";
+        la664 = versionAtLeast ccVersion "19.1";
       }
       .${arch} or true
     else
