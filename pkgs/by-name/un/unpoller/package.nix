@@ -21,10 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/prometheus/common/version.Branch=master"
-    "-X github.com/prometheus/common/version.BuildDate=unknown"
-    "-X github.com/prometheus/common/version.Revision=${src.rev}"
-    "-X github.com/prometheus/common/version.Version=${version}-0"
+    "-X golift.io/version.Version=${version}"
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) unpoller; };
