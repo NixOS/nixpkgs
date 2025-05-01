@@ -23,6 +23,7 @@ lib.extendMkDerivation {
       patchFlags ? [ ],
       nativeBuildInputs ? [ ],
       buildInputs ? [ ],
+      packageJSON ? null,
       # The output hash of the dependencies for this project.
       # Can be calculated in advance with prefetch-npm-deps.
       npmDepsHash ? "",
@@ -64,7 +65,13 @@ lib.extendMkDerivation {
           postPatch
           patchFlags
           ;
-        name = "${name}-npm-deps";
+        name =
+          let
+            suffix =
+              lib.optionalString (finalAttrs.packageJSON != null)
+                "-${(lib.removeSuffix "-package.json" (lib.removePrefix "${builtins.storeDir}/" finalAttrs.packageJSON))}";
+          in
+          "${name}-npm-deps${suffix}";
         hash = npmDepsHash;
       },
       # Custom npmConfigHook
@@ -83,7 +90,7 @@ lib.extendMkDerivation {
       };
     in
     {
-      inherit npmDeps npmBuildScript;
+      inherit npmDeps npmBuildScript packageJSON;
 
       nativeBuildInputs =
         nativeBuildInputs
