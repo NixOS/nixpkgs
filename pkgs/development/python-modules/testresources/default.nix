@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "testresources";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee9d1982154a1e212d4e4bac6b610800bfb558e4fb853572a827bc14a96e4417";
+    sha256 = "sha256-LL89fgCrLp/iS3VKECZE9vM0JEmARkw4IzsYEn8d6uw=";
   };
 
   postPatch = ''
