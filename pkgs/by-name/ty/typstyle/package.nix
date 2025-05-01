@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
-  version = "0.13.3";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
