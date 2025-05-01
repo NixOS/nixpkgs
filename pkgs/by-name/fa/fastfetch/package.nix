@@ -37,11 +37,17 @@
   xorg,
   yyjson,
   zlib,
+  # Feature flags
+  audioSupport ? true,
+  flashfetchSupport ? false,
+  gnomeSupport ? true,
+  imageSupport ? true,
+  openclSupport ? true,
   rpmSupport ? false,
+  sqliteSupport ? true,
   vulkanSupport ? true,
   waylandSupport ? true,
   x11Support ? true,
-  flashfetchSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
@@ -68,27 +74,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      chafa
-      imagemagick
+      glib
       pcre
       pcre2
-      sqlite
       yyjson
     ]
+    ++ lib.optionals imageSupport [
+      chafa
+      imagemagick
+    ]
+    ++ lib.optionals sqliteSupport [
+      sqlite
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      dconf
-      ddcutil
-      glib
       hwdata
-      libdrm
-      libpulseaudio
       libselinux
       libsepol
-      ocl-icd
-      opencl-headers
       util-linux
       zlib
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && gnomeSupport) [
+      dbus
+      dconf
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && audioSupport) [
+      libpulseaudio
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && openclSupport) [
+      ocl-icd
+      opencl-headers
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && vulkanSupport) [
+      libdrm
+      ddcutil
     ]
     ++ lib.optionals rpmSupport [ rpm ]
     ++ lib.optionals vulkanSupport [ vulkan-loader ]
@@ -111,19 +129,42 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
       (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
-      (lib.cmakeBool "ENABLE_DRM" false)
-      (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
       (lib.cmakeBool "ENABLE_OSMESA" false)
       (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
-      (lib.cmakeBool "ENABLE_GLX" x11Support)
-      (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+
+      # Feature flags
+      (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
+      (lib.cmakeBool "ENABLE_IMAGEMAGICK7" imageSupport)
+      (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
+      (lib.cmakeBool "ENABLE_ZLIB" imageSupport)
+
+      (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
+
+      (lib.cmakeBool "ENABLE_PULSE" audioSupport)
+
+      (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
+      (lib.cmakeBool "ENABLE_DCONF" gnomeSupport)
+      (lib.cmakeBool "ENABLE_DBUS" gnomeSupport)
+
+      (lib.cmakeBool "ENABLE_OPENCL" openclSupport)
+
+      (lib.cmakeBool "ENABLE_DRM" vulkanSupport)
+      (lib.cmakeBool "ENABLE_DRM_AMDGPU" vulkanSupport)
       (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
+      (lib.cmakeBool "ENABLE_DDCUTIL" vulkanSupport)
+      (lib.cmakeBool "ENABLE_EGL" vulkanSupport)
+
       (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+
+      (lib.cmakeBool "ENABLE_GLX" x11Support)
       (lib.cmakeBool "ENABLE_X11" x11Support)
       (lib.cmakeBool "ENABLE_XCB" x11Support)
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
       (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.hostPlatform.isDarwin)))
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+
+      (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+
       (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -162,5 +203,20 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
+    longDescription = ''
+      Fast and highly customizable system info script.
+
+      Feature flags (all default to 'true' except rpmSupport and flashfetchSupport):
+      * rpmSupport: RPM package detection (default: false)
+      * vulkanSupport: Vulkan GPU information and DRM features
+      * waylandSupport: Wayland display detection
+      * x11Support: X11 display information
+      * flashfetchSupport: Build the flashfetch utility (default: false)
+      * imageSupport: Image rendering (chafa and imagemagick)
+      * sqliteSupport: Package counting via SQLite
+      * audioSupport: PulseAudio functionality
+      * gnomeSupport: GNOME integration (dconf, dbus, gio)
+      * openclSupport: OpenCL features
+    '';
   };
 })
