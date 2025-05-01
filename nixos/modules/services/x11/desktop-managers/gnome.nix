@@ -84,12 +84,19 @@ in
     maintainers = lib.teams.gnome.members;
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "gnome" "core-utilities" "enable" ]
+      [ "services" "gnome" "core-apps" "enable" ]
+    )
+  ];
+
   options = {
 
     services.gnome = {
       core-os-services.enable = mkEnableOption "essential services for GNOME3";
       core-shell.enable = mkEnableOption "GNOME Shell services";
-      core-utilities.enable = mkEnableOption "GNOME core utilities";
+      core-apps.enable = mkEnableOption "GNOME core apps";
       core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
       games.enable = mkEnableOption "GNOME games";
     };
@@ -213,7 +220,7 @@ in
 
       services.gnome.core-os-services.enable = true;
       services.gnome.core-shell.enable = true;
-      services.gnome.core-utilities.enable = mkDefault true;
+      services.gnome.core-apps.enable = mkDefault true;
 
       services.displayManager.sessionPackages = [ pkgs.gnome-session.sessions ];
 
@@ -405,7 +412,7 @@ in
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
-    (lib.mkIf serviceCfg.core-utilities.enable {
+    (lib.mkIf serviceCfg.core-apps.enable {
       environment.systemPackages = utils.removePackagesByName (
         [
           pkgs.baobab
