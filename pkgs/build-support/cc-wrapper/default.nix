@@ -332,7 +332,17 @@ let
     ++ optional (targetPlatform ? gcc.fpu) "-mfpu=${targetPlatform.gcc.fpu}"
     ++ optional (targetPlatform ? gcc.mode) "-mmode=${targetPlatform.gcc.mode}"
     ++ optional (targetPlatform ? gcc.thumb) "-m${thumb}"
-    ++ optional (tune != null) "-mtune=${tune}";
+    ++ optional (tune != null) "-mtune=${tune}"
+    ++
+      optional (targetPlatform ? gcc.strict-align)
+        "-m${optionalString (!targetPlatform.gcc.strict-align) "no-"}strict-align"
+    ++ optional (
+      targetPlatform ? gcc.cmodel
+      &&
+        # TODO: clang on powerpcspe also needs a condition: https://github.com/llvm/llvm-project/issues/71356
+        # https://releases.llvm.org/18.1.6/tools/clang/docs/ReleaseNotes.html#loongarch-support
+        ((targetPlatform.isLoongArch64 && isClang) -> versionAtLeast ccVersion "18.1")
+    ) "-mcmodel=${targetPlatform.gcc.cmodel}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 
