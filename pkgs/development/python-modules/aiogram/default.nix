@@ -87,7 +87,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiogram" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "4.1";
+  };
 
   __darwinAllowLocalNetworking = true;
 
