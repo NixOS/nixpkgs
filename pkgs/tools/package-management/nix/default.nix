@@ -184,13 +184,9 @@ lib.makeExtensible (
       };
 
       nix_2_28 = commonMeson {
-        version = "2.28.2";
-        hash = "sha256-yl+hlZ/VFHIZwPIDEs4ysOYgprW4VEORfSyvScF7Cwg=";
+        version = "2.28.3";
+        hash = "sha256-TjZp5ITSUvNRAzNznmkZRQxNRzMLiSAplz4bV2T8cbs=";
         self_attribute_name = "nix_2_28";
-        patches = [
-          # fixes user/system registries regression: https://github.com/NixOS/nix/issues/13050
-          ./patches/0001-Revert-Actually-ignore-system-user-registries-during.patch
-        ];
       };
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {

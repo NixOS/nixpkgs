@@ -123,8 +123,14 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optional (lib.versionOlder release_version "14") ./llvm-config-link-static.patch
+      lib.optional (lib.versionOlder release_version "14")
+        # When cross-compiling we configure llvm-config-native with an approximation
+        # of the flags used for the normal LLVM build. To avoid the need for building
+        # a native libLLVM.so (which would fail) we force llvm-config to be linked
+        # statically against the necessary LLVM components always.
+        ./llvm-config-link-static.patch
       ++ lib.optionals (lib.versions.major release_version == "12") [
+        # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
         (getVersionFile "llvm/fix-llvm-issue-49955.patch")
 
         # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
@@ -135,6 +141,9 @@ stdenv.mkDerivation (
           stripLen = 1;
         })
       ]
+      # Support custom installation dirs
+      # Originally based off https://reviews.llvm.org/D99484
+      # Latest state: https://github.com/llvm/llvm-project/pull/125376
       ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         # Running the tests involves invoking binaries (like `opt`) that depend on
@@ -241,7 +250,8 @@ stdenv.mkDerivation (
           ]
       ++
         lib.optional (lib.versions.major release_version == "17")
-          # resolves https://github.com/llvm/llvm-project/issues/75168
+          # Fixes a crash with -fzero-call-used-regs=used-gpr
+          # See also https://github.com/llvm/llvm-project/issues/75168
           (
             fetchpatch {
               name = "fix-fzero-call-used-regs.patch";
@@ -278,6 +288,7 @@ stdenv.mkDerivation (
             })
           ]
       ++ lib.optionals enablePolly [
+        # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
       ]
       ++

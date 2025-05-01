@@ -974,15 +974,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "http";
-      version = "0.3-0";
+      version = "0.4-0";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/http-0.3-0.rockspec";
-          sha256 = "0fn3irkf5nnmfc83alc40b316hs8l7zdq2xlaiaa65sjd8acfvia";
+          url = "mirror://luarocks/http-0.4-0.rockspec";
+          sha256 = "0kbf7ybjyj6408sdrmh1jb0ig5klfc8mqcwz6gv6rd6ywn47qifq";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/daurnimator/lua-http/archive/v0.3.zip";
-        sha256 = "1pqxxxifl2j1cik3kgayx43v6py5jp6r22myhvxfffysb3b84a2l";
+        url = "https://github.com/daurnimator/lua-http/archive/v0.4.zip";
+        sha256 = "0252mc3mns1ni98hhcgnb3pmb53lk6nzr0jgqin0ggcavyxycqb2";
       };
 
       disabled = luaOlder "5.1";

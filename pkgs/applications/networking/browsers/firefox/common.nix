@@ -155,8 +155,6 @@ in
     !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl,
   curl,
   geolocationSupport ? !privacySupport,
-  googleAPISupport ? geolocationSupport,
-  mlsAPISupport ? geolocationSupport,
   webrtcSupport ? !privacySupport,
 
   # digital rights managemewnt
@@ -250,12 +248,21 @@ let
       }
     );
 
-  defaultPrefs = {
-    "geo.provider.network.url" = {
-      value = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
-      reason = "Use MLS by default for geolocation, since our Google API Keys are not working";
-    };
-  };
+  defaultPrefs =
+    if geolocationSupport then
+      {
+        "geo.provider.network.url" = {
+          value = "https://api.beacondb.net/v1/geolocate";
+          reason = "We have no Google API keys and Mozilla Location Services were retired.";
+        };
+      }
+    else
+      {
+        "geo.provider.use_geoclue" = {
+          value = false;
+          reason = "Geolocation support has been disabled through the `geolocationSupport` package attribute.";
+        };
+      };
 
   defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (
     lib.concatStringsSep "\n" (
@@ -472,22 +479,6 @@ buildStdenv.mkDerivation {
           ''
         }
       fi
-    ''
-    + lib.optionalString googleAPISupport ''
-      # Google API key used by Chromium and Firefox.
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
-      echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/google-api-key
-      # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
-      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
-      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
-    ''
-    + lib.optionalString mlsAPISupport ''
-      # Mozilla Location services API key
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys at https://location.services.mozilla.com/api.
-      echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
-      configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
     ''
     + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
       export MOZILLA_OFFICIAL=1

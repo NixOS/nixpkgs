@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttr: {
   postPatch = ''
     # Fix gcc-13 build due to missing <cstdint> include.
     sed -e '1i #include <cstdint>' -i src/mmap.cxx
+
+    # g++: error: unrecognized command-line option '-msse2'
+    # gcc: error: unrecognized command-line option '-m64'
+    substituteInPlace build/Makefile.ubuntu \
+      --replace-fail "-msse2" "" \
+      --replace-fail "-m64" ""
   '';
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
@@ -69,7 +75,7 @@ stdenv.mkDerivation (finalAttr: {
     description = "Novel multimodal search and retrieval engine";
     homepage = "https://nlnet.nl/project/Re-iSearch/";
     license = lib.licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.astro ];
     teams = [ lib.teams.ngi ];
   };

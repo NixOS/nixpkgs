@@ -185,6 +185,22 @@ This means that `broken` can be used to express constraints, for example:
 This makes `broken` strictly more powerful than `meta.badPlatforms`.
 However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
 
+## `knownVulnerabilities` {#var-meta-knownVulnerabilities}
+
+A list of known vulnerabilities affecting the package, usually identified by CVE identifiers.
+
+This metadata allows users and tools to be aware of unresolved security issues before using the package, for example:
+
+```nix
+{
+  meta.knownVulnerabilities = [
+    "CVE-2024-3094: Malicious backdoor allowing unauthorized remote code execution"
+  ];
+}
+```
+
+If this list is not empty, the package is marked as "insecure", meaning that it cannot be built or installed unless the environment variable [`NIXPKGS_ALLOW_INSECURE`](#sec-allow-insecure) is set.
+
 ## Licenses {#sec-meta-license}
 
 The `meta.license` attribute should preferably contain a value from `lib.licenses` defined in [`nixpkgs/lib/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix), or in-place license description of the same format if the license is unlikely to be useful in another expression.

@@ -4,7 +4,6 @@
   callPackage,
   lib,
   fetchFromGitHub,
-  fetchPypi,
   python3,
   replaceVars,
   nix-update-script,
@@ -17,59 +16,6 @@ let
   py = python3.override {
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
-      (
-        # Due to flask > 2.3 the login will not work
-        self: super: {
-          werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
-            version = "2.2.3";
-            format = "setuptools";
-            pyproject = null;
-            src = fetchPypi {
-              pname = "Werkzeug";
-              inherit version;
-              hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
-            };
-            doCheck = false;
-          });
-          flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-            version = "2.2.5";
-            format = "setuptools";
-            pyproject = null;
-            src = fetchPypi {
-              pname = "Flask";
-              inherit version;
-              hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
-            };
-            doCheck = false;
-          });
-          flask-login = super.flask-login.overridePythonAttrs (oldAttrs: rec {
-            version = "0.6.3";
-            src = fetchPypi {
-              pname = "Flask-Login";
-              inherit version;
-              hash = "sha256-XiPRSmB+8SgGxplZC4nQ8ODWe67sWZ11lHv5wUczAzM=";
-            };
-            build-system = [ self.setuptools ];
-            doCheck = false; # DeprecationWarnings
-          });
-          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: {
-            doCheck = false; # fails in current overlay
-          });
-          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: {
-            doCheck = false; # fails in current overlay
-          });
-
-          netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
-            version = "0.9.0";
-
-            src = fetchPypi {
-              pname = "netaddr";
-              inherit version;
-              hash = "sha256-e0b6mxotcf1d6eSjeE7zOXAKU6CMgEDwi69fEZTaASg=";
-            };
-          });
-        })
-
       # Built-in dependency
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {
@@ -105,14 +51,14 @@ let
       (self: super: {
         octoprint-pisupport = self.buildPythonPackage rec {
           pname = "OctoPrint-PiSupport";
-          version = "2023.5.24";
+          version = "2023.10.10";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-PiSupport";
             rev = version;
-            hash = "sha256-KfkZXJ2f02G2ee+J1w+YQRKz+LSWwxVIIwmdevDGhew=";
+            hash = "sha256-VSzDoFq4Yn6KOn+RNi1uVJHzH44973kd/VoMjqzyBRA=";
           };
 
           # requires octoprint itself during tests
@@ -127,13 +73,13 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.10.3";
+          version = "1.11.0";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-BToW1/AcQ01OK7RWZrkstX2M4+uKuL/wFB6HGkVUflk=";
+            hash = "sha256-HvIMssPpRhzG//eyf0SfM5ddTUMr82F4ZS7c9tp88qw=";
           };
 
           propagatedBuildInputs =
@@ -153,7 +99,6 @@ let
               flask-login
               flask-limiter
               frozendict
-              future
               itsdangerous
               immutabledict
               jinja2
