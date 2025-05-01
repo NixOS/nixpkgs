@@ -61,6 +61,7 @@
   ffmpeg,
   ipython,
   pytest-asyncio,
+  mcp,
   respx,
   scikit-image,
   torch,
@@ -72,19 +73,19 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.22.0";
+  version = "5.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-pHmeS9wnhS8lAQ2lnzGXLVGKZwzHkKA0tAF2t/nDmt8=";
+    hash = "sha256-hgK1zA7jEH7DVAgXJuT/lsnE/J3B/cmPnj4BJ4rlxms=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-HjJxd2dzBGEE9dxWIi9dI28J7rOA6iidJmoAGDYM/Zw=";
+    hash = "sha256-h3ulPik0Uf8X687Se3J7h3+8jYzwXtbO6obsO27zyfA=";
   };
 
   pythonRelaxDeps = [
@@ -156,6 +157,7 @@ buildPythonPackage rec {
       ffmpeg
       ipython
       pytest-asyncio
+      mcp
       respx
       scikit-image
       # shap is needed as well, but breaks too often
@@ -308,6 +310,8 @@ buildPythonPackage rec {
     "client/python/test/test_client.py"
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
+    # requires docker
+    "test/test_docker/"
 
     # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
