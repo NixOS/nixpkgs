@@ -13,7 +13,7 @@ scx.cscheds.overrideAttrs (oldAttrs: {
       cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
     '';
 
-  passthru.tests = nixosTests.scx;
+  passthru.tests.basic = nixosTests.scx;
 
   passthru.updateScript.command = ./update.sh;
 
