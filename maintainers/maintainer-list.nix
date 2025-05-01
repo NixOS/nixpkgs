@@ -14574,6 +14574,12 @@
     github = "m00wl";
     githubId = 46034439;
   };
+  m0tholith = {
+    name = "m0tholith";
+    email = "main.m0tholith@gmail.com";
+    github = "m0tholith";
+    githubId = 48518572;
+  };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
     github = "m1cr0man";
