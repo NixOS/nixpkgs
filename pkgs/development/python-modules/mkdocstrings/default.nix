@@ -12,21 +12,19 @@
   pymdown-extensions,
   pytestCheckHook,
   pythonOlder,
-  typing-extensions,
+  dirty-equals,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.27.0";
+  version = "0.29.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = version;
-    hash = "sha256-L86aFq1S7Hfp+1MHwliCSz0mfgAFD/5AHbeqL1aZ5XM=";
+    hash = "sha256-i3rGPKptsFD/IE4vGpWC0HTKoqAtjQ6gkVhZbfYn2bo=";
   };
 
   postPatch = ''
@@ -47,10 +45,12 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonOlder "3.10") [
       importlib-metadata
-      typing-extensions
     ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    dirty-equals
+  ];
 
   pythonImportsCheck = [ "mkdocstrings" ];
 
@@ -66,11 +66,11 @@ buildPythonPackage rec {
     "test_extended_templates"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
     changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
