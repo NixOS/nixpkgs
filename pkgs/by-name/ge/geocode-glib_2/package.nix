@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "geocode-glib_2";
       packageName = "geocode-glib";
     };
     tests = {
