@@ -24,14 +24,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.9.2";
+  version = "0.10.2";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Xb/i25l0jLn87OeouD0+CRv11d8aOn7Sr69z3TkS6I4=";
+    hash = "sha256-L75nmxjymPfuu6CM5QRE1jInElNrD2OuAXMR8+c2tGQ=";
     fetchSubmodules = true;
-    fetchLFS = true;
   };
 
   enableParallelBuilding = false;
