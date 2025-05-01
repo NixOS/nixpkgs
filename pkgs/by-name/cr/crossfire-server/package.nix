@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  fetchsvn,
+  pkgs,
+  fetchgit,
   autoconf,
   automake,
   libtool,
@@ -10,26 +11,20 @@
   check,
   pkg-config,
   python3,
-  version,
-  rev,
-  sha256,
-  maps,
-  arch,
+  # Included here so that hosts using custom maps/archetypes can easily override.
+  maps ? pkgs.crossfire-maps,
+  arch ? pkgs.crossfire-arch,
 }:
 
 stdenv.mkDerivation {
   pname = "crossfire-server";
-  version = rev;
+  version = "2025-04";
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/server/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/crossfire/crossfire-server";
+    rev = "5f742b9f9f785e4a59a3a463bee1f31c9bc67098";
+    hash = "sha256-e7e3xN7B1cv9+WkZGzOJgrFer50Cs0L/2dYB9RmGCiE=";
   };
-
-  patches = [
-    ./add-cstdint-include-to-crossfire-server.patch
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -56,7 +51,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    broken = true; # cfpython.c:63:10: fatal error: node.h: No such file or directory
     description = "Server for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
     license = licenses.gpl2Plus;
