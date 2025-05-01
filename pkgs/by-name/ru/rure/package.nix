@@ -4,6 +4,7 @@
   rustPlatform,
   fetchCrate,
   fixDarwinDylibNames,
+  haskellPackages,
 }:
 
 let
@@ -36,7 +37,10 @@ rustPlatform.buildRustPackage {
     fixDarwinDylibNames
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.haskell-bindings = haskellPackages.regex-rure;
+  };
 
   meta = {
     description = "C API for Rust's regular expression library";

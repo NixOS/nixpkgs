@@ -381,6 +381,8 @@ self: super: with self; {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aiontfy = callPackage ../development/python-modules/aiontfy { };
+
   aionut = callPackage ../development/python-modules/aionut { };
 
   aiooncue = callPackage ../development/python-modules/aiooncue { };
@@ -3042,6 +3044,8 @@ self: super: with self; {
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
+  cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
@@ -4929,6 +4933,8 @@ self: super: with self; {
   fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
 
   firetv = callPackage ../development/python-modules/firetv { };
+
+  fireworks-ai = callPackage ../development/python-modules/fireworks-ai { };
 
   first = callPackage ../development/python-modules/first { };
 
@@ -8420,6 +8426,8 @@ self: super: with self; {
 
   manim-slides = callPackage ../development/python-modules/manim-slides { };
 
+  manimgl = callPackage ../development/python-modules/manimgl { };
+
   manimpango = callPackage ../development/python-modules/manimpango {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
@@ -10315,6 +10323,8 @@ self: super: with self; {
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
+
+  openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
 
@@ -17663,6 +17673,8 @@ self: super: with self; {
 
   tritonclient = callPackage ../development/python-modules/tritonclient { };
 
+  trl = callPackage ../development/python-modules/trl { };
+
   trlib = toPythonModule (
     pkgs.trlib.override {
       pythonSupport = true;
@@ -18271,6 +18283,8 @@ self: super: with self; {
 
   typst = callPackage ../development/python-modules/typst { };
 
+  tyro = callPackage ../development/python-modules/tyro { };
+
   tzdata = callPackage ../development/python-modules/tzdata { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
@@ -18424,6 +18438,10 @@ self: super: with self; {
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
+
+  unsloth = callPackage ../development/python-modules/unsloth { };
+
+  unsloth-zoo = callPackage ../development/python-modules/unsloth-zoo { };
 
   unstructured = callPackage ../development/python-modules/unstructured { };
 
@@ -18932,6 +18950,11 @@ self: super: with self; {
   whisper = callPackage ../development/python-modules/whisper { };
 
   whispers = callPackage ../development/python-modules/whispers { };
+
+  whisperx = callPackage ../development/python-modules/whisperx {
+    inherit (pkgs) ffmpeg;
+    ctranslate2-cpp = pkgs.ctranslate2;
+  };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 

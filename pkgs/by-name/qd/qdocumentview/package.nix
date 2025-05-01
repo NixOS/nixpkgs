@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdocumentview";
-  version = "0.3.0";
+  version = "0.3.0.1";
 
   src = fetchFromGitLab {
     owner = "extraqt";
     repo = "qdocumentview";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fGm19Bl3lSvMhau2jByZTTThwfWnsrm/Xx82J6ZJcVo=";
+    hash = "sha256-z5Z43fo6oemGBn5Gfmx5ndeOva+qSH6mwkUWClylChA=";
   };
 
   nativeBuildInputs = [

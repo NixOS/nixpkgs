@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "mkdocs-plugins";
     tag = "v${version}";
-    hash = "sha256-EbhkhcH8sGxiwimg9dfmSSOJR7DYw7nfS3m1HUSH0vg=";
+    hash = "sha256-+bH4pkY+BE31t3b750ZAbbesKLFjgx6KF9b2tXFTmhI=";
   };
 
   buildInputs = [ hatchling ];

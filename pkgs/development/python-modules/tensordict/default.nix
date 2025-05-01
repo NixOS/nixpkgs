@@ -27,15 +27,23 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-2S0xpsJNDdIGoLbALAIcSEVqYD5Nq2YXs3mWFtSUvsA=";
+    hash = "sha256-ZYuu1vKhC5Yi9m3EsPUhA9OXHjmHafUJRCDnQIu5kFk=";
   };
+
+  # TODO: remove at next release
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'version = "0.8.0"' \
+        'version = "0.8.1"'
+  '';
 
   build-system = [
     pybind11

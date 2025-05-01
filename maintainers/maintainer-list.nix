@@ -772,6 +772,12 @@
     githubId = 1141462;
     name = "Vladyslav Pekker";
   };
+  agvantibo = {
+    email = "apicalium@gmail.com";
+    github = "agvantibo-again";
+    githubId = 207841739;
+    name = "Savchenko Dmitriy";
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";
@@ -9903,6 +9909,12 @@
     githubId = 57007241;
     name = "hogcycle";
   };
+  hoh = {
+    email = "git@hugoherter.com";
+    github = "hoh";
+    githubId = 404665;
+    name = "Hugo Herter";
+  };
   holgerpeters = {
     name = "Holger Peters";
     email = "holger.peters@posteo.de";
@@ -13386,6 +13398,12 @@
     github = "l0b0";
     githubId = 168301;
     name = "Victor Engmark";
+  };
+  L0L1P0P = {
+    name = "Behrad Badeli";
+    email = "behradbadeli@gmail.com";
+    github = "L0L1P0P1";
+    githubId = 73695812;
   };
   l1npengtul = {
     email = "l1npengtul@l1npengtul.lol";
@@ -17278,6 +17296,12 @@
     github = "NickHu";
     githubId = 450276;
     name = "Nick Hu";
+  };
+  nicklewis = {
+    email = "nick@nlew.net";
+    github = "nicklewis";
+    githubId = 115494;
+    name = "Nick Lewis";
   };
   nicknovitski = {
     email = "nixpkgs@nicknovitski.com";

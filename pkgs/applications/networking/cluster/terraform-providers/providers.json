@@ -417,13 +417,13 @@
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw="
   },
   "equinix": {
-    "hash": "sha256-L/1cNCPmDDxbdJYOtzIl1dCDZBu6DlH96ZN1SisywgQ=",
+    "hash": "sha256-ae9mtP5at9b3EB8aaBcjomL3ahr6ta+wm8jv9reQW20=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v3.6.0",
+    "rev": "v3.7.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-K3tQQytOQ81duLMyCZu9PczsS1NUYF0AmPMQo5UcUXo="
+    "vendorHash": "sha256-sjEgBLwk/dYUmq+kL0PtamEukXgC9rzeyTT87HK0Y8E="
   },
   "exoscale": {
     "hash": "sha256-RUO4Ge2z4e4N2FWiLtSNv/w2ivgOJVNYQCJvT8hN/8g=",
@@ -1228,11 +1228,11 @@
     "vendorHash": "sha256-oEamCseBGmETqeBLiBHfh81oQNUHWfTrsegkFijvb20="
   },
   "spotinst": {
-    "hash": "sha256-8BP8ltL2fWbTxRCdiypPzKvWpbUfLG6mRTAx3onujHY=",
+    "hash": "sha256-dQeOucXwHW0GeZ2irKbdx+GvnjuA1PKnW+RFjvjwNc0=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.216.1",
+    "rev": "v1.216.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-STIPYBMj6r630/J71fAeLTkrvop/8u7gToGcijopqCo="
   },
@@ -1264,20 +1264,20 @@
     "vendorHash": "sha256-9M1DsE/FPQK8TG7xCJWbU3HAJCK3p/7lxdzjO1oAfWs="
   },
   "sumologic": {
-    "hash": "sha256-15ZM0Uk0VEEPTC/paxUq4dTG/myV1yyJX8wJW/BuH/0=",
+    "hash": "sha256-HdK4YOrOoaivdYOHBTcOjjx4kI7kAITWY39aZ6WFpgU=",
     "homepage": "https://registry.terraform.io/providers/SumoLogic/sumologic",
     "owner": "SumoLogic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v3.0.8",
+    "rev": "v3.0.9",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-S3SBp17+qqA64tWydD5DYc9KahycJ+qDrdXvFwu6Lbc="
   },
   "sysdig": {
-    "hash": "sha256-FMXo2GJrrZZNrragGle1Sy6hwERoUoDTEKv3N2hJl00=",
+    "hash": "sha256-bvYbLU1MgBcgu/koj/cl30rI1WlTVKJybP+vC7H54v0=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v1.53.0",
+    "rev": "v1.54.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-L+XwC7c4ph4lM0+BhHB9oi1R/Av8jlDcqHewOmtPU1s="
   },

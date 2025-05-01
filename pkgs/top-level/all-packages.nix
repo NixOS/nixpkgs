@@ -2443,10 +2443,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  grype = callPackage ../by-name/gr/grype/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
@@ -5717,10 +5713,6 @@ with pkgs;
     jdk = jdk8;
   };
 
-  alan = callPackage ../development/compilers/alan { };
-
-  alan_2 = callPackage ../development/compilers/alan/2.nix { };
-
   armips = callPackage ../development/compilers/armips {
     stdenv = gcc10Stdenv;
   };
@@ -7810,25 +7802,18 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_32-bin
     electron_33-bin
     electron_34-bin
     electron_35-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
-    electron-chromedriver_32
     electron-chromedriver_33
     electron-chromedriver_34
     electron-chromedriver_35
     ;
 
-  electron_32 = electron_32-bin;
-  electron_33 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then
-      electron-source.electron_33
-    else
-      electron_33-bin;
+  electron_33 = electron_33-bin;
   electron_34 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then
       electron-source.electron_34
@@ -16085,11 +16070,21 @@ with pkgs;
   thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
-  thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
+  thunderbird-bin = thunderbird-latest-bin;
+  thunderbird-latest-bin = wrapThunderbird thunderbird-latest-bin-unwrapped {
     pname = "thunderbird-bin";
   };
-  thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
+  thunderbird-latest-bin-unwrapped =
+    callPackage ../applications/networking/mailreaders/thunderbird-bin
+      {
+        generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
+      };
+  thunderbird-esr-bin = wrapThunderbird thunderbird-esr-bin-unwrapped {
+    pname = "thunderbird-esr-bin";
+  };
+  thunderbird-esr-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    generated = import ../applications/networking/mailreaders/thunderbird-bin/release_esr_sources.nix;
+    versionSuffix = "esr";
   };
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
