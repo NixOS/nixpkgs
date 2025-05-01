@@ -3346,7 +3346,7 @@ with pkgs;
 
   fcitx5-table-other = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-other.nix { };
 
-  featherpad = qt5.callPackage ../applications/editors/featherpad { };
+  featherpad = callPackage ../applications/editors/featherpad { };
 
   ffsend = callPackage ../tools/misc/ffsend {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
