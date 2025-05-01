@@ -1699,6 +1699,7 @@ builtins.intersectAttrs super {
 
   postgresql-libpq-configure = overrideCabal (drv: {
     librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.libpq ];
+    libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.libpq.pg_config ];
   }) super.postgresql-libpq-configure;
 
   postgresql-libpq-pkgconfig = addPkgconfigDepend pkgs.libpq super.postgresql-libpq-pkgconfig;
