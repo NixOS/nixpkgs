@@ -7819,7 +7819,11 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
-  electron_36 = electron_36-bin;
+  electron_36 =
+    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_36 then
+      electron-source.electron_36
+    else
+      electron_36-bin;
   electron = electron_35;
   electron-bin = electron_35-bin;
   electron-chromedriver = electron-chromedriver_35;
