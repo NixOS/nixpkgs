@@ -25950,6 +25950,13 @@
     githubId = 52650;
     name = "Marc Busqué";
   };
+  wakimizu = {
+    name = "Wakimizu";
+    email = "wakimizu@disroot.org";
+    github = "wkmz";
+    githubId = 201233278;
+    keys = [ { fingerprint = "DC26 6E53 B39C 1C49 3AA8  4721 6029 1109 6C62 5EC7"; } ];
+  };
   wakira = {
     name = "Sheng Wang";
     email = "sheng@a64.work";
