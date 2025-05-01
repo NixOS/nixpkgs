@@ -411,9 +411,6 @@ self: super:
   # As well as deepseq < 1.5 (so it forbids GHC 9.8)
   hw-fingertree = doJailbreak super.hw-fingertree;
 
-  # hedgehog < 1.5
-  hw-prim = doJailbreak super.hw-prim;
-
   # Test suite is slow and sometimes comes up with counter examples.
   # Upstream is aware (https://github.com/isovector/nspace/issues/1),
   # if it's a bug, at least doesn't seem to be nixpkgs-specific.
@@ -908,10 +905,6 @@ self: super:
   # Package exists only to be example of documentation, yet it has restrictive
   # "base" dependency.
   haddock-cheatsheet = doJailbreak super.haddock-cheatsheet;
-
-  # Too strict bounds on bytestring < 0.12
-  # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/issues/18
-  pipes-http = doJailbreak super.pipes-http;
 
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
@@ -2149,9 +2142,6 @@ self: super:
     sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
   }) super.basic-cpuid;
 
-  # 2025-02-11: Too strict bounds on bytestring
-  streamly-bytestring = doJailbreak super.streamly-bytestring;
-
   # Allow building with language-docker >= 13 (!); waiting for 2.13 release.
   hadolint = doJailbreak (
     appendPatches [
@@ -2499,9 +2489,6 @@ self: super:
       hash = "sha256-k3UdmTq8c+iNF8inKM+oWf/NgJqRgUSFS3YwRKVg8Mw=";
     };
   } super.hoogle;
-
-  # Too strict upper bound on HTTP
-  oeis = doJailbreak super.oeis;
 
   inherit
     (
