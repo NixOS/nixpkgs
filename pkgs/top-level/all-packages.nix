@@ -7798,6 +7798,7 @@ with pkgs;
     electron_33-bin
     electron_34-bin
     electron_35-bin
+    electron_36-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -7817,6 +7818,7 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
+  electron_36 = electron_36-bin;
   electron = electron_35;
   electron-bin = electron_35-bin;
   electron-chromedriver = electron-chromedriver_35;

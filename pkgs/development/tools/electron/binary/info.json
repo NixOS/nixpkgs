@@ -31,5 +31,16 @@
             "x86_64-linux": "d346f416d061f38bc53f3d57e0f01c03d0febb00199e362f7ef2e1209f93817e"
         },
         "version": "35.2.1"
+    },
+    "36": {
+        "hashes": {
+            "aarch64-darwin": "5f38c1939c76a6299ac68a9b5b56deea8d81f4ac02f5855a59a7aad4c3c86eef",
+            "aarch64-linux": "e09c83143897a2156e070689df80591e62404ed5289e6f6674fe46ccdff6f2f3",
+            "armv7l-linux": "69210a543ab81214c635868cf3325b58656892cf831cc91eee232cc6112b684d",
+            "headers": "0wz92myljv28smg20jgs59l2n9kdha99n7ch0ng1bzhavwp619jg",
+            "x86_64-darwin": "86eb97a6b4f800efc82910cf366e1e1c93fbc003dcb55aad5f78a0af4f0b826e",
+            "x86_64-linux": "088b95582140e2c9175f01df5c82a80048085acfb416bb27783bf4d0babc7eb4"
+        },
+        "version": "36.1.0"
     }
 }
