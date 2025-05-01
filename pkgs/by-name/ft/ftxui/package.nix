@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ftxui";
-  version = "6.0.2";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
     repo = "ftxui";
     tag = "v${version}";
-    hash = "sha256-VvP1ctFlkTDdrAGRERBxMRpFuM4mVpswR/HO9dzUSUo=";
+    hash = "sha256-45m/+nvDDNtaaH+CkocyKzIQrtJ5g/vIpvDHnkBuzII=";
   };
 
   strictDeps = true;
