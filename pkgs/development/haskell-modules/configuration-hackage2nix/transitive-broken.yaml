@@ -3364,7 +3364,6 @@ dont-distribute-packages:
  - relational-postgresql8
  - relational-query
  - relational-query-HDBC
- - relational-query-postgresql-pure
  - relational-record
  - relational-record-examples
  - relational-schemas
@@ -4001,7 +4000,6 @@ dont-distribute-packages:
  - type-structure
  - type-sub-th
  - typecheck-plugin-nat-simple_0_1_0_11
- - typed-admin
  - typed-encoding-encoding
  - typed-gui
  - typed-streams

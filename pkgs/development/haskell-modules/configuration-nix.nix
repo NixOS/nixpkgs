@@ -1704,6 +1704,10 @@ builtins.intersectAttrs super {
     librarySystemDepends = [ ];
   }) super.postgresql-libpq;
 
+  HDBC-postgresql = overrideCabal (drv: {
+    libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.libpq.pg_config ];
+  }) super.HDBC-postgresql;
+
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
   pvar = dontCheck super.pvar;
