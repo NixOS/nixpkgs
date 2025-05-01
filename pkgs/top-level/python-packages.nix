@@ -9975,6 +9975,8 @@ self: super: with self; {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
+  nncf = callPackage ../development/python-modules/nncf { };
+
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
 
   nocasedict = callPackage ../development/python-modules/nocasedict { };
