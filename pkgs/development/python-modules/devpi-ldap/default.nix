@@ -1,12 +1,18 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
   devpi-server,
-  pyyaml,
+  fetchFromGitHub,
   ldap3,
+  mock,
+  pytest-cov,
+  pytest-flake8,
+  pytestCheckHook,
+  python3,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  webtest,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +34,19 @@ buildPythonPackage rec {
     devpi-server
     pyyaml
     ldap3
+  ];
+
+  nativeCheckInputs = [
+    devpi-server
+    mock
+    pytest-cov
+    pytest-flake8
+    pytestCheckHook
+    webtest
+  ];
+
+  disabledTests = [
+    "test_plugin_call" # requires gen_path fixture
   ];
 
   pythonImportsCheck = [ "devpi_ldap" ];
