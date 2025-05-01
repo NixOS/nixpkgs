@@ -17,6 +17,7 @@
     ]
   ),
   callPackage,
+  nixosTests,
   buildFHSEnv,
 }:
 
@@ -58,6 +59,7 @@ let
 
     passthru.updateScript = ./update.sh;
     passthru.tests.startwindow = callPackage ./test.nix { };
+    passthru.tests.nixos-module = nixosTests.zoom-us;
 
     meta = {
       homepage = "https://zoom.us/";
