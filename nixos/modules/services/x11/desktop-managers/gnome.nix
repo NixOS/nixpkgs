@@ -325,17 +325,9 @@ in
     })
 
     (lib.mkIf serviceCfg.core-shell.enable {
-      services.xserver.desktopManager.gnome.sessionPath =
-        let
-          mandatoryPackages = [
-            pkgs.gnome-shell
-          ];
-          optionalPackages = [
-            pkgs.gnome-shell-extensions
-          ];
-        in
-        mandatoryPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+      services.xserver.desktopManager.gnome.sessionPath = [
+        pkgs.gnome-shell
+      ];
 
       services.colord.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
@@ -386,7 +378,7 @@ in
         source-sans
       ];
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
         let
           mandatoryPackages = [
@@ -399,7 +391,6 @@ in
             pkgs.gnome-bluetooth
             pkgs.gnome-color-manager
             pkgs.gnome-control-center
-            pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
             pkgs.glib # for gsettings program
@@ -413,11 +404,12 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = utils.removePackagesByName (
         [
           pkgs.baobab
+          pkgs.decibels
           pkgs.epiphany
           pkgs.gnome-text-editor
           pkgs.gnome-calculator
@@ -499,17 +491,19 @@ in
       ] config.environment.gnome.excludePackages;
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
       environment.systemPackages = utils.removePackagesByName [
         pkgs.dconf-editor
         pkgs.devhelp
+        pkgs.d-spy
         pkgs.gnome-builder
         # boxes would make sense in this option, however
         # it doesn't function well enough to be included
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
         # pkgs.gnome-boxes
+        pkgs.sysprof
       ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
