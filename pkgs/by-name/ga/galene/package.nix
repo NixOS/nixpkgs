@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -32,6 +33,10 @@ buildGoModule rec {
     mkdir $static
     cp -r ./static $static
   '';
+
+  passthru = {
+    tests.vm = nixosTests.galene.basic;
+  };
 
   meta = with lib; {
     description = "Videoconferencing server that is easy to deploy, written in Go";
