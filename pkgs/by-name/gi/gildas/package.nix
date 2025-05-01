@@ -6,7 +6,6 @@
   pkg-config,
   python3,
   gfortran,
-  lesstif,
   cfitsio,
   getopt,
   perl,
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       gtk2-x11
-      lesstif
       cfitsio
       python3Env
       ncurses
