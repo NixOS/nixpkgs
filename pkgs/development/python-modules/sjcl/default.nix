@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodome,
-  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pycryptodome ];
-
-  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "sjcl" ];
 
