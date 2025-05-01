@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.11.1";
+  version = "3.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${version}";
-    hash = "sha256-X39XOv8HJdSjMjMMnmB7Gxjseg5k/LuKICTxapcHVsU=";
+    hash = "sha256-CfzDO4u6JL4cLHvs7f1oQqQPc+j1lKng4J9wIBswIpA=";
   };
 
   patches = [ ./unwrap-subprocess.patch ];
@@ -44,6 +44,8 @@ python3Packages.buildPythonApplication rec {
     mock
     pytestCheckHook
     versionCheckHook
+    zstandard
+    lz4
   ];
 
   disabledTests =
@@ -57,13 +59,13 @@ python3Packages.buildPythonApplication rec {
       "test_get_file_mode"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
     changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
     mainProgram = "barman";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = lib.platforms.unix;
   };
 }
