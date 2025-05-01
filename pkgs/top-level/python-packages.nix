@@ -11824,6 +11824,8 @@ self: super: with self; {
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
+  pyadjoint-ad = callPackage ../development/python-modules/pyadjoint-ad { };
+
   pyads = callPackage ../development/python-modules/pyads { };
 
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
