@@ -17,12 +17,19 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-bhL+u+BoKgW2cwOXEzaq0h07dKFz9u9WB2jW8nAF0vI=";
   };
 
+  sourceRoot = "source";
+
+  unpackPhase = ''
+    runHook preUnpack
+    unzip $src -d "$sourceRoot"
+    runHook postUnpack
+  '';
+
   patches = [
     # set GEOSERVER_DATA_DIR to current working directory if not provided
     ./data-dir.patch
   ];
 
-  sourceRoot = ".";
   nativeBuildInputs = [
     unzip
     makeWrapper
