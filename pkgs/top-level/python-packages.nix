@@ -10498,6 +10498,8 @@ self: super: with self; {
     openvino-native = pkgs.openvino.override { python3Packages = self; };
   };
 
+  openvino-telemetry = callPackage ../development/python-modules/openvino-telemetry { };
+
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
   openwrt-luci-rpc = callPackage ../development/python-modules/openwrt-luci-rpc { };
