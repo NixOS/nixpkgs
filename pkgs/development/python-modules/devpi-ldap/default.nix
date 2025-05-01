@@ -56,6 +56,7 @@ buildPythonPackage rec {
     description = "LDAP authentication for devpi-server";
     changelog = "https://github.com/devpi/devpi-ldap/blob/main/CHANGELOG.rst";
     license = lib.licenses.mit; # according to its setup.py
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ confus ];
   };
 }
