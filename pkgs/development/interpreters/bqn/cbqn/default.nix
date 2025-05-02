@@ -63,6 +63,7 @@ stdenv.mkDerivation {
 
   dontConfigure = true;
 
+  doCheck = true;
   doInstallCheck = true;
 
   strictDeps = true;
@@ -130,6 +131,13 @@ stdenv.mkDerivation {
     $out/bin/BQN test/random.bqn
 
     runHook postInstallCheck
+  '';
+
+  # Only uses in tree BQN executable, so doesn't make sense in installCheckPhase
+  checkPhase = ''
+    runHook preCheck
+    make -C test/ffi
+    runHook postCheck
   '';
 
   meta = {
