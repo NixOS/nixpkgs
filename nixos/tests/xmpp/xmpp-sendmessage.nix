@@ -15,7 +15,14 @@ let
   '';
 in
 writeScriptBin "send-message" ''
-  #!${(python3.withPackages (ps: [ ps.slixmpp ])).interpreter}
+  #!${
+    (python3.withPackages (
+      ps:
+      [
+        ps.slixmpp
+      ]
+    )).interpreter
+  }
   import logging
   import sys
   import signal
