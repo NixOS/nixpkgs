@@ -51,6 +51,10 @@ let
             hash = "sha256-89wnr2rIbyw490hHwckB9g1GKCXm6BERnplfwEUlNOg=";
           })
         ];
+
+        postInstall = ''
+          cp $out/bin/wine $out/bin/wine64
+        '';
       });
 in
 buildGoModule (finalAttrs: {
