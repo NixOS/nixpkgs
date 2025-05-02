@@ -35,12 +35,19 @@ stdenv.mkDerivation rec {
   pname = "ombi";
   version = "4.47.1";
 
-  sourceRoot = ".";
-
   src = fetchurl {
     url = "https://github.com/Ombi-app/Ombi/releases/download/v${version}/${os}-${arch}.tar.gz";
     sha256 = hash;
   };
+
+  sourceRoot = "source";
+
+  unpackPhase = ''
+    runHook preUnpack
+    mkdir -p "$sourceRoot"
+    tar xf $src --directory="$sourceRoot"
+    runHook postUnpack
+  '';
 
   nativeBuildInputs =
     [ makeWrapper ]

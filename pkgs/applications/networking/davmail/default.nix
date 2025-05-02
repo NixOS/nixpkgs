@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchurl,
+  fetchzip,
   lib,
   makeWrapper,
   unzip,
@@ -25,16 +25,15 @@ stdenv.mkDerivation rec {
   pname = "davmail";
   version = "6.3.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    hash = "sha256-Yh61ZHsEMF6SchLEyBV3rRI7pJ/bvR2K4G8U6jrPa3A=";
+    hash = "sha256-zJMwCFX/uJnLeThj6/t2usBRM+LIuamZt0EFLG3N+8k=";
+    stripRoot = false;
   };
 
   postPatch = ''
     sed -i -e '/^JAVA_OPTS/d' davmail
   '';
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [
     makeWrapper

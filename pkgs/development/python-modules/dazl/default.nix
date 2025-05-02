@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
 
   poetry-core,
 
@@ -27,22 +26,16 @@
 buildPythonPackage rec {
   pname = "dazl";
   version = "8.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2EXbfXNl/vNhOIKfBv18TKMPizab72LlNV7QhEf4aVs=";
   };
 
-  patches = [
-    # Merged, remove this next release
-    (fetchpatch {
-      name = "428.patch"; # https://github.com/digital-asset/dazl-client/pull/428
-      url = "https://github.com/digital-asset/dazl-client/commit/a68bad0471d22210f0abf31447a7732477de39d4.patch";
-      sha256 = "sha256-Gx9W1XkvMPg8FAOAXijDF5QnMbntk5mR0q5+o5i2KAE=";
-    })
+  pythonRelaxDeps = [
+    "grpcio"
   ];
-
-  format = "pyproject";
 
   nativeBuildInputs = [ poetry-core ];
 
