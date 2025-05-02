@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  patches = [
+    # fix using strncpy and strlen without including string.h
+    ./missing-string-header.patch
+  ];
+
   postPatch = ''
     sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
   '';
