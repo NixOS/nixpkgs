@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   pkg-config,
+  buildPackages,
   cmake,
   extra-cmake-modules,
   wayland-scanner,
@@ -93,6 +94,10 @@ stdenv.mkDerivation rec {
     xcb-imdkit
     xkeyboard_config
     libxkbfile
+  ];
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
   ];
 
   strictDeps = true;
