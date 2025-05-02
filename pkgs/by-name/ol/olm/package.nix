@@ -1,11 +1,16 @@
 {
   lib,
   stdenv,
+  llvmPackages_18,
   fetchFromGitLab,
   cmake,
 }:
-
-stdenv.mkDerivation rec {
+let
+  # Specifically Clang 19.1.0 or later doesn't like `include/olm/list.hh`.
+  broken = stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "19.1.0";
+  chosenStdenv = if broken then llvmPackages_18.stdenv else stdenv;
+in
+chosenStdenv.mkDerivation rec {
   pname = "olm";
   version = "3.2.16";
 
