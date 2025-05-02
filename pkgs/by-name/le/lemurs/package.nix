@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
       lemurs-wayland
       lemurs-wayland-script
       lemurs-xorg
+      lemurs-xorg-script
       ;
   };
 
