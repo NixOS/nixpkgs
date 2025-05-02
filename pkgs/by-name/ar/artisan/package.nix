@@ -6,11 +6,11 @@
 }:
 let
   pname = "artisan";
-  version = "3.1.2";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/${pname}-linux-${version}.AppImage";
-    hash = "sha256-HwzTxuE7aRuXrI7BbySFgYGu74uw3JyBs91iPNGT2Jg=";
+    hash = "sha256-GU9DCAIMioPRUC1IDu8SbhD802pWEH7MlALnQH+Y4oU=";
   };
 
   appimageContents = appimageTools.extract {
