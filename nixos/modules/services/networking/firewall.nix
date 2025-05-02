@@ -293,7 +293,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.networking.enable && cfg.enable) {
 
     assertions = [
       {

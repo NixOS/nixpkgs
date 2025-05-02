@@ -548,6 +548,10 @@ in
   ###### interface
 
   options = {
+    networking.enable = lib.mkEnableOption "networking" // {
+      default = true;
+      example = false;
+    };
 
     networking.hostName = mkOption {
       default = config.system.nixos.distroId;
@@ -1535,7 +1539,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkIf cfg.enable {
 
     warnings =
       (concatMap (i: i.warnings) interfaces)
