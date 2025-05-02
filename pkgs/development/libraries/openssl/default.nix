@@ -367,9 +367,9 @@ in
     };
   };
 
-  openssl_3_4 = common {
-    version = "3.4.1";
-    hash = "sha256-ACotazC1i/S+pGxDvdljZar42qbEKHgqpP7uBtoZffM=";
+  openssl_3_5 = common {
+    version = "3.5.0";
+    hash = "sha256-NE0KefGpsIApsHROLMQBpD+ckKzRBE0JpTC0iFqOn8A=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
