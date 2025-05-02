@@ -384,6 +384,7 @@ let
       maintainers = with lib.maintainers; [
         shiryel
         corngood
+        superherointj
       ];
       mainProgram = "godot4${suffix}";
     };
