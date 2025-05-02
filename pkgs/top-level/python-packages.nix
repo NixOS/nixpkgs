@@ -19057,6 +19057,8 @@ self: super: with self; {
 
   xdxf2html = callPackage ../development/python-modules/xdxf2html { };
 
+  xeddsa = toPythonModule (callPackage ../development/python-modules/xeddsa { });
+
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
   xformers = callPackage ../development/python-modules/xformers { };
