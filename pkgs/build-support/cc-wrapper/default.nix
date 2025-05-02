@@ -46,7 +46,9 @@
     # ("cross-built-native") compiler; currently nixpkgs has a special build
     # path for these (`crossStageStatic`).  Hopefully at some point that build
     # path will be merged with this one and this conditional will be removed.
-    else if (with stdenvNoCC; buildPlatform != hostPlatform || hostPlatform != targetPlatform) then
+    else if
+      (with stdenvNoCC; buildPlatform.notEquals hostPlatform || hostPlatform.notEquals targetPlatform)
+    then
       false
 
     # Never add these flags when wrapping the bootstrapFiles' compiler; it has a
@@ -116,7 +118,7 @@ let
   # Prefix for binaries. Customarily ends with a dash separator.
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by default.
-  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
+  targetPrefix = optionalString (targetPlatform.notEquals hostPlatform) (targetPlatform.config + "-");
 
   ccVersion = getVersion cc;
   ccName = removePrefix targetPrefix (getName cc);
@@ -124,7 +126,8 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
-  cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_solib =
+    getLib cc + optionalString (targetPlatform.notEquals hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -147,7 +150,8 @@ let
     && !(targetPlatform.isiOS or false)
     && gccForLibs != null;
   gccForLibs_solib =
-    getLib gccForLibs + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+    getLib gccForLibs
+    + optionalString (targetPlatform.notEquals hostPlatform) "/${targetPlatform.config}";
 
   # Analogously to cc_solib and gccForLibs_solib
   libcxx_solib = "${getLib libcxx}/lib";
@@ -608,9 +612,7 @@ stdenvNoCC.mkDerivation {
             # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
             # 'cc.lib'. But it's a gcc package bug.
             # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
-            echo "-L${gccForLibs}/${
-              optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"
-            }/lib" >> $out/nix-support/cc-ldflags
+            echo "-L${gccForLibs}/${optionalString (targetPlatform.notEquals hostPlatform) "/${targetPlatform.config}"}/lib" >> $out/nix-support/cc-ldflags
           ''
           # this ensures that when clang passes -lgcc_s to lld (as it does
           # when building e.g. firefox), lld is able to find libgcc_s.so

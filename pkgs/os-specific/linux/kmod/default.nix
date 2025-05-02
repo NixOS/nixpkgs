@@ -15,7 +15,7 @@
   xz,
   zstd,
   elf-header,
-  withDevdoc ? stdenv.hostPlatform == stdenv.buildPlatform,
+  withDevdoc ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   withStatic ? stdenv.hostPlatform.isStatic,
   gitUpdater,
 }:

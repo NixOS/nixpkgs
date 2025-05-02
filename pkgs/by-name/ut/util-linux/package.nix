@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
       (lib.enableFeature translateManpages "poman")
       "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
     ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "scanf_cv_type_modifier=ms"
+    ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "scanf_cv_type_modifier=ms"
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
       # These features are all disabled in the freebsd-ports distribution
       "--disable-nls"

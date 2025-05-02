@@ -291,7 +291,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
+    broken = stdenv.buildPlatform.notEquals stdenv.hostPlatform || withEbpf;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";

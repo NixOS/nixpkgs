@@ -692,7 +692,8 @@ let
 
       ''
       +
-        lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
+        lib.optionalString
+          (stdenv.hostPlatform.equals stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
           ''
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
@@ -739,7 +740,7 @@ let
         # We only build those specific toolchains when we cross-compile, as native non-cross-compilations would otherwise
         # end up building much more things than they need to (roughly double the build steps and time/compute):
       }
-      // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+      // lib.optionalAttrs (stdenv.buildPlatform.notEquals stdenv.hostPlatform) {
         host_toolchain = "//build/toolchain/linux/unbundle:host";
         v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
       }

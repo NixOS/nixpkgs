@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       "-DBUILD_CONTRIBS_LIB=ON"
       "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
       "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
       "-D_CL_HAVE_NAMESPACES_EXITCODE__TRYRUN_OUTPUT="

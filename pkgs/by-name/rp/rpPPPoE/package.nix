@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
     export PPPD=${ppp}/sbin/pppd
   '';
 
-  configureFlags = [
-    "--enable-plugin=${ppp}/include"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "rpppoe_cv_pack_bitfields=rev" ];
+  configureFlags =
+    [
+      "--enable-plugin=${ppp}/include"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
+      "rpppoe_cv_pack_bitfields=rev"
+    ];
 
   postConfigure = ''
     sed -i Makefile -e 's@DESTDIR)/etc/ppp@out)/etc/ppp@'

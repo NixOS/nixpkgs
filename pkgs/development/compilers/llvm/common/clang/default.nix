@@ -262,7 +262,7 @@ stdenv.mkDerivation (
     env =
       lib.optionalAttrs
         (
-          stdenv.buildPlatform != stdenv.hostPlatform
+          stdenv.buildPlatform.notEquals stdenv.hostPlatform
           && !stdenv.hostPlatform.useLLVM
           && lib.versionAtLeast release_version "15"
         )

@@ -41,7 +41,7 @@ mkMesonLibrary (finalAttrs: {
     # There have been issues building these dependencies
     ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.sandbox
     ++ lib.optional (
-      stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
+      stdenv.hostPlatform.equals stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
     ) aws-sdk-cpp;
 
   propagatedBuildInputs = [

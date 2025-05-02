@@ -15,7 +15,7 @@
 }:
 
 # Prebuilt only does native
-assert stdenv.targetPlatform == stdenv.hostPlatform;
+assert stdenv.targetPlatform.equals stdenv.hostPlatform;
 
 let
   useLLVM =

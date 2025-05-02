@@ -8,7 +8,7 @@ let
     optionals
     ;
 
-  cmakeFlags' = optionals (stdenv.hostPlatform != stdenv.buildPlatform) (
+  cmakeFlags' = optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) (
     [
       "-DCMAKE_SYSTEM_NAME=${
         findFirst isString "Generic" (

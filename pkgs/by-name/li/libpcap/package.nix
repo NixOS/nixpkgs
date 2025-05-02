@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withRemote [
       "--enable-remote"
     ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
+    ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
 
   postInstall = ''
     if [ "$dontDisableStatic" -ne "1" ]; then

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "--with-build-cc=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
     ]
     ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       updateAutotoolsGnuConfigScriptsHook
       pkg-config
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.
       ncurses
     ];

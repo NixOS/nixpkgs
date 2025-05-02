@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-hotplug-dir=$(out)/lib/firmware" ];
 
   depsBuildBuild = lib.optional (
-    stdenv.buildPlatform != stdenv.hostPlatform
+    stdenv.buildPlatform.notEquals stdenv.hostPlatform
     || stdenv.hostPlatform.isAarch64
     || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV64

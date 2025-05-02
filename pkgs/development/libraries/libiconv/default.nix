@@ -8,7 +8,7 @@
   enableDarwinABICompat ? false,
 }:
 
-# assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
+# assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform.notEquals stdenv.buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   pname = "libiconv";
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   postPatch =
     lib.optionalString
       (
-        (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc
+        (stdenv.hostPlatform.notEquals stdenv.buildPlatform && stdenv.hostPlatform.isMinGW)
+        || stdenv.cc.nativeLibc
       )
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h

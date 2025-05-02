@@ -342,7 +342,7 @@ lib.extendMkDerivation {
                 buildGoDir install "$pkg"
               done
             ''
-          + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+          + lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
             # normalize cross-compiled builds w.r.t. native builds
             (
               dir=$GOPATH/bin/''${GOOS}_''${GOARCH}

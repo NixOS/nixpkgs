@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "permission denied"
 
-  preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preBuild = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     pushd src
     make CC=${buildPackages.stdenv.cc}/bin/cc predicates_init
     mv predicates_init predicates_init_build

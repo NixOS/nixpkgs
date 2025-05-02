@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # For cross builds, provide answers to the configure time tests.
       # These answers are valid on x86_64-linux and aarch64-linux.
       # TODO: provide all valid answers for BSD.

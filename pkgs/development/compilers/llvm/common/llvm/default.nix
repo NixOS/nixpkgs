@@ -324,7 +324,7 @@ stdenv.mkDerivation (
 
     propagatedBuildInputs =
       (lib.optional (
-        lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform
+        lib.versionAtLeast release_version "14" || stdenv.buildPlatform.equals stdenv.hostPlatform
       ) ncurses)
       ++ [ zlib ];
 
@@ -649,7 +649,7 @@ stdenv.mkDerivation (
       ++
         optionals
           (
-            (stdenv.hostPlatform != stdenv.buildPlatform)
+            (stdenv.hostPlatform.notEquals stdenv.buildPlatform)
             && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
           )
           [
@@ -713,7 +713,7 @@ stdenv.mkDerivation (
           if lib.versionOlder release_version "18" then "$shortVersion" else release_version
         }.dylib
       ''
-      + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
+      + optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) (
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           ''
             ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
@@ -733,7 +733,7 @@ stdenv.mkDerivation (
       )
       && (!stdenv.hostPlatform.isMusl)
       && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-      && (stdenv.hostPlatform == stdenv.buildPlatform);
+      && (stdenv.hostPlatform.equals stdenv.buildPlatform);
 
     checkTarget = "check-all";
 

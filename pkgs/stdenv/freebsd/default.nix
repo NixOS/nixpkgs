@@ -19,7 +19,7 @@
     files,
 }:
 
-assert crossSystem == localSystem;
+assert crossSystem.equals localSystem;
 let
   inherit (localSystem) system;
   mkExtraBuildCommands0 = cc: ''

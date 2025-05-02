@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     # std::basic_string<..., Json::SecureAllocator<char>> vs.
     # std::basic_string<..., [default allocator]>
     ++ lib.optional (
-      (stdenv.buildPlatform != stdenv.hostPlatform) || secureMemory
+      (stdenv.buildPlatform.notEquals stdenv.hostPlatform) || secureMemory
     ) "-DJSONCPP_WITH_TESTS=OFF";
 
   meta = with lib; {

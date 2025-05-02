@@ -111,11 +111,11 @@ stdenv.mkDerivation rec {
       "--with-awk=${lib.getBin gawk}/bin/gawk"
       "--with-appresdir=${placeholder "out"}/lib/X11/app-defaults"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "gl_cv_func_signbit=yes"
     ];
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
     "GROFF_BIN_PATH=${buildPackages.groff}/bin"

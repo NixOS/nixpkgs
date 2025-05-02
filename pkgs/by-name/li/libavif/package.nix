@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
 
     ''
     # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.hostPlatform.equals stdenv.buildPlatform) ''
       mkdir -p "$out/bin"
       makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
         --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}

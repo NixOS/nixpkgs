@@ -48,7 +48,7 @@ let
       ++ lib.optionals (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) [
         (lib.enableFeature true "rpath")
       ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
         (lib.withFeatureAs true "cross-build" nativeBuildRoot)
       ]
       ++ lib.optionals withStatic [ (lib.enableFeature true "static") ];

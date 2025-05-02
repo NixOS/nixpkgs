@@ -49,7 +49,7 @@
   gmp,
 
   # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform,
+  enableRelocatedStaticLibs ? stdenv.targetPlatform.notEquals stdenv.hostPlatform,
 
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
@@ -64,13 +64,13 @@
     !(
       stdenv.targetPlatform.isWindows
       # terminfo can't be built for cross
-      || (stdenv.buildPlatform != stdenv.hostPlatform)
-      || (stdenv.hostPlatform != stdenv.targetPlatform)
+      || (stdenv.buildPlatform.notEquals stdenv.hostPlatform)
+      || (stdenv.hostPlatform.notEquals stdenv.targetPlatform)
     ),
 
   # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
+  ghcFlavour ? lib.optionalString (stdenv.targetPlatform.notEquals stdenv.hostPlatform) (
     if useLLVM then "perf-cross" else "perf-cross-ncg"
   ),
 
@@ -83,7 +83,9 @@
 
   enableHaddockProgram ?
     # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform),
+    (
+      stdenv.buildPlatform.equals stdenv.hostPlatform && stdenv.targetPlatform.equals stdenv.hostPlatform
+    ),
 
   # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -103,17 +105,21 @@ assert !enableNativeBignum -> gmp != null;
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
 assert
-  (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform)
+  (
+    stdenv.buildPlatform.notEquals stdenv.hostPlatform
+    || stdenv.targetPlatform.notEquals stdenv.hostPlatform
+  )
   -> !enableHaddockProgram;
 
 # GHC does not support building when all 3 platforms are different.
-assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
+assert
+  stdenv.buildPlatform.equals stdenv.hostPlatform || stdenv.hostPlatform.equals stdenv.targetPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (targetPlatform.notEquals hostPlatform) "${targetPlatform.config}-";
 
   buildMK =
     ''
@@ -145,7 +151,7 @@ let
         DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
         BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
       ''
-    + lib.optionalString (targetPlatform != hostPlatform) ''
+    + lib.optionalString (targetPlatform.notEquals hostPlatform) ''
       Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
       CrossCompilePrefix = ${targetPrefix}
     ''
@@ -257,7 +263,7 @@ let
   #    used to build stage 2 GHC itself, i.e. the core libs are both host and
   #    target.
   targetLibs = {
-    inherit (if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget)
+    inherit (if hostPlatform.notEquals targetPlatform then targetPackages else pkgsHostTarget)
       gmp
       libffi
       ncurses
@@ -459,9 +465,13 @@ stdenv.mkDerivation (
     # GHC's usage of build, host, and target is non-standard.
     # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/cross-compiling
     # TODO(@Ericson2314): Always pass "--target" and always prefix.
-    configurePlatforms = [
-      "build"
-    ] ++ lib.optional (buildPlatform != hostPlatform || targetPlatform != hostPlatform) "target";
+    configurePlatforms =
+      [
+        "build"
+      ]
+      ++ lib.optional (
+        buildPlatform.notEquals hostPlatform || targetPlatform.notEquals hostPlatform
+      ) "target";
 
     # `--with` flags for libraries needed for RTS linker
     configureFlags =
@@ -477,18 +487,18 @@ stdenv.mkDerivation (
         "--with-ffi-includes=${targetLibs.libffi.dev}/include"
         "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
       ]
-      ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
+      ++ lib.optionals (targetPlatform.equals hostPlatform && !enableNativeBignum) [
         "--with-gmp-includes=${targetLibs.gmp.dev}/include"
         "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
       ]
       ++
         lib.optionals
-          (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows)
+          (targetPlatform.equals hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows)
           [
             "--with-iconv-includes=${libiconv}/include"
             "--with-iconv-libraries=${libiconv}/lib"
           ]
-      ++ lib.optionals (targetPlatform != hostPlatform) [
+      ++ lib.optionals (targetPlatform.notEquals hostPlatform) [
         "--enable-bootstrap-with-devel-snapshot"
       ]
       ++ lib.optionals useLdGold [

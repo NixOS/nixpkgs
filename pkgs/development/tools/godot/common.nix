@@ -145,7 +145,7 @@ let
 
     strictDeps = true;
 
-    depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    depsBuildBuild = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       buildPackages.stdenv.cc
       pkg-config
     ];

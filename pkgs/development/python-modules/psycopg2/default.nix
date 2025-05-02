@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psycopg2" ];
 
-  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  disallowedReferences = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     buildPackages.libpq
   ];
 

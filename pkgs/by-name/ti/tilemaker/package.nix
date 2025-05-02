@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (
+  cmakeFlags = lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) (
     lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc"
   );
 

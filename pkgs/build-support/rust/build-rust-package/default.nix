@@ -142,7 +142,7 @@ lib.extendMkDerivation {
 
       patches = cargoPatches ++ patches;
 
-      PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+      PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform.notEquals stdenv.hostPlatform then 1 else 0;
 
       postUnpack =
         ''

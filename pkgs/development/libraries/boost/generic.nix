@@ -31,7 +31,7 @@
   enableStatic ? !enableShared,
   enablePython ? false,
   enableNumpy ? false,
-  enableIcu ? stdenv.hostPlatform == stdenv.buildPlatform,
+  enableIcu ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   taggedLayout ? (
     (enableRelease && enableDebug)
     || (enableSingleThreaded && enableMultiThreaded)
@@ -74,7 +74,7 @@ let
   layout = if taggedLayout then "tagged" else "system";
 
   needUserConfig =
-    stdenv.hostPlatform != stdenv.buildPlatform
+    stdenv.hostPlatform.notEquals stdenv.buildPlatform
     || useMpi
     || (stdenv.hostPlatform.isDarwin && enableShared);
 
@@ -106,7 +106,7 @@ let
     ++
       lib.optionals
         (
-          stdenv.hostPlatform != stdenv.buildPlatform
+          stdenv.hostPlatform.notEquals stdenv.buildPlatform
           ||
             # required on mips; see 61d9f201baeef4c4bb91ad8a8f5f89b747e0dfe4
             (stdenv.hostPlatform.isMips && lib.versionAtLeast version "1.79")
@@ -280,7 +280,7 @@ stdenv.mkDerivation {
     # uniform way for clang and gcc (which works thanks to our cc-wrapper).
     # We pass toolset later which will make b2 invoke everything in the right
     # way -- the other toolset in user-config.jam will be ignored.
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
       cat << EOF >> user-config.jam
       using gcc : cross : ${stdenv.cc.targetPrefix}c++
         : <archiver>$AR

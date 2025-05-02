@@ -44,9 +44,7 @@ stdenv.mkDerivation {
     [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
     ++ lib.optional stdenv.hostPlatform.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
     # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
-    ++ lib.optional (
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
+    ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
 
   nativeBuildInputs = [
     cmake

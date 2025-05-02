@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       "man"
     ]
     ++ lib.optional withIntrospection "devdoc"
-    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
+    ++ lib.optional (stdenv.buildPlatform.equals stdenv.hostPlatform) "installedTests";
 
   src =
     let

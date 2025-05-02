@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags =
-    lib.optionals (with stdenv; buildPlatform != hostPlatform && hostPlatform.isFreeBSD)
+    lib.optionals (with stdenv; buildPlatform.notEquals hostPlatform && hostPlatform.isFreeBSD)
       [
         "ik_cv_have_note_extend_in=yes"
         "ik_cv_have_note_extend_out=yes"

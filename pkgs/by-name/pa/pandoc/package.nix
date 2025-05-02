@@ -48,7 +48,7 @@ in
         -t ${pandoc-cli.scope.typst} \
         $out/bin/pandoc
     ''
-    + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.equals stdenv.hostPlatform) ''
       mkdir -p $out/share/bash-completion/completions
       $out/bin/pandoc --bash-completion > $out/share/bash-completion/completions/pandoc
     ''

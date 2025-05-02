@@ -14,9 +14,7 @@
 
 let
   # The targetPrefix is prepended to binary names to allow multiple binuntils on the PATH to both be usable.
-  targetPrefix = lib.optionalString (
-    stdenv.targetPlatform != stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (stdenv.targetPlatform.notEquals stdenv.hostPlatform) "${stdenv.targetPlatform.config}-";
 
   # First version with all the required files
   xnu = fetchFromGitHub {

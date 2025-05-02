@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
 
   postFixup =
     let
-      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+      isCross = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
       nss = if isCross then buildPackages.nss.tools else "$out";
     in
     (lib.optionalString enableFIPS (

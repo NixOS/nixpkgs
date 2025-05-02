@@ -122,16 +122,16 @@ let
             ${lib.concatMapStringsSep "\n" (
               binary:
               # Can't actually run the binary when cross-compiling
-              (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "type ") + binary
+              (lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "type ") + binary
             ) binaries}
             ${lib.optionalString isLib ''
               test -e ${crate}/lib/*.rlib || exit 1
-              ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "test -x "} \
+              ${lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "test -x "} \
                 ${libTestBinary}/bin/run-test-${crateName}
             ''}
             touch $out
           ''
-        else if stdenv.hostPlatform == stdenv.buildPlatform then
+        else if stdenv.hostPlatform.equals stdenv.buildPlatform then
           ''
             for file in ${crate}/tests/*; do
               $file 2>&1 >> $out
@@ -847,7 +847,7 @@ rec {
             nativeBuildInputs = [ pkg ];
           }
           (
-            if stdenv.hostPlatform == stdenv.buildPlatform then
+            if stdenv.hostPlatform.equals stdenv.buildPlatform then
               ''
                 ${pkg}/bin/brotli -c ${pkg}/bin/brotli > /dev/null && touch $out
               ''
@@ -888,7 +888,7 @@ rec {
             nativeBuildInputs = [ pkg ];
           }
           (
-            if stdenv.hostPlatform == stdenv.buildPlatform then
+            if stdenv.hostPlatform.equals stdenv.buildPlatform then
               ''
                 ${pkg}/bin/rcgen && touch $out
               ''

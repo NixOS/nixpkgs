@@ -69,7 +69,7 @@ let
   # targetInfo.triple is what Google thinks the toolchain should be, this is a little
   # different from what we use. We make it four parts to conform with the existing
   # standard more properly.
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
+  targetPrefix = lib.optionalString (stdenv.targetPlatform.notEquals stdenv.hostPlatform) (
     stdenv.targetPlatform.config + "-"
   );
 in

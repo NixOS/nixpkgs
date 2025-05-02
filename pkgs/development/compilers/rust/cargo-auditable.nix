@@ -39,7 +39,7 @@ let
         asl20
       ];
       maintainers = with maintainers; [ figsoda ];
-      broken = stdenv.hostPlatform != stdenv.buildPlatform;
+      broken = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
     };
   };
 

@@ -33,17 +33,19 @@ buildNodejs {
           })
         ]
     )
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
-      # This patch is concerning.
-      # https://github.com/nodejs/node/issues/54576
-      # It is only supposed to affect clang >= 17, but I'm seeing it on clang 19.
-      # I'm keeping the predicate for this patch pretty strict out of caution,
-      # so if you see the error it's supposed to prevent, feel free to loosen it.
-      (fetchpatch2 {
-        url = "https://raw.githubusercontent.com/rubyjs/libv8-node/62476a398d4c9c1a670240a3b070d69544be3761/patch/v8-no-assert-trivially-copyable.patch";
-        hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
-      })
-    ]
+    ++
+      lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD)
+        [
+          # This patch is concerning.
+          # https://github.com/nodejs/node/issues/54576
+          # It is only supposed to affect clang >= 17, but I'm seeing it on clang 19.
+          # I'm keeping the predicate for this patch pretty strict out of caution,
+          # so if you see the error it's supposed to prevent, feel free to loosen it.
+          (fetchpatch2 {
+            url = "https://raw.githubusercontent.com/rubyjs/libv8-node/62476a398d4c9c1a670240a3b070d69544be3761/patch/v8-no-assert-trivially-copyable.patch";
+            hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
+          })
+        ]
     ++ [
       ./configure-armv6-vfpv2.patch
       ./disable-darwin-v8-system-instrumentation-node19.patch

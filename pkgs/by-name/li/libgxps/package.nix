@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     [
       "-Denable-test=false"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "-Ddisable-introspection=true"
     ];
 

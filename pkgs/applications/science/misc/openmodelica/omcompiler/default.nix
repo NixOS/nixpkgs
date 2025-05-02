@@ -18,7 +18,7 @@
   mkOpenModelicaDerivation,
 }:
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   nativeOMCompiler = buildPackages.openmodelica.omcompiler;
 in
 mkOpenModelicaDerivation (

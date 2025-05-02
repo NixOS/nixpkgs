@@ -343,7 +343,7 @@ effectiveStdenv.mkDerivation {
     ++ optionals enablePython [
       pythonPackages.python
     ]
-    ++ optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
+    ++ optionals (effectiveStdenv.buildPlatform.equals effectiveStdenv.hostPlatform) [
       hdf5
     ]
     ++ optionals enableGtk2 [
@@ -454,7 +454,7 @@ effectiveStdenv.mkDerivation {
         pythonPackages.wheel
         pythonPackages.setuptools
       ]
-      ++ optionals (effectiveStdenv.hostPlatform == effectiveStdenv.buildPlatform) [
+      ++ optionals (effectiveStdenv.hostPlatform.equals effectiveStdenv.buildPlatform) [
         pythonPackages.pythonImportsCheckHook
       ]
     )
@@ -628,7 +628,8 @@ effectiveStdenv.mkDerivation {
         withIpp = opencv4.override { enableIpp = true; };
       }
       // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-      // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
+      # FIXME: should this be `!buildPlatform.isDarwin` ?
+      // optionalAttrs (effectiveStdenv.buildPlatform.system != "x86_64-darwin") {
         opencv4-tests = callPackage ./tests.nix {
           inherit
             enableGStreamer

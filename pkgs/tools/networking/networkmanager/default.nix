@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Miscellaneous
     # almost cross-compiles, however fails with
     # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
-    "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Ddocs=${lib.boolToString (stdenv.buildPlatform.equals stdenv.hostPlatform)}"
     # We don't use firewalld in NixOS
     "-Dfirewalld_zone=false"
     "-Dtests=no"
@@ -216,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
-  postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postFixup = lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
     cp -r ${buildPackages.networkmanager.devdoc} $devdoc
     cp -r ${buildPackages.networkmanager.man} $man
   '';

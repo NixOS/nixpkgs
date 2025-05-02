@@ -8,7 +8,7 @@
   ...
 }:
 
-assert crossSystem == localSystem;
+assert crossSystem.equals localSystem;
 
 bootStages
 ++ [
