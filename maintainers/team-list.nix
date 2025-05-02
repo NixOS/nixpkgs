@@ -287,6 +287,7 @@ with lib.maintainers;
       raphaelr
       jamiemagee
       anpin
+      superherointj
     ];
     scope = "Maintainers of the .NET build tools and packages";
     shortName = "dotnet";
@@ -643,6 +644,7 @@ with lib.maintainers;
       marcusramberg
       mic92
       rorosen
+      superherointj
       wrmilling
       yajo
     ];
