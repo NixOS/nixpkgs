@@ -132,6 +132,7 @@ python3Packages.buildPythonApplication rec {
       psydvl
       shamilton
       Gliczy
+      XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
