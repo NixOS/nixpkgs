@@ -5,15 +5,9 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
-  libGLU,
   ffmpeg,
   ncurses,
+  glfw,
   Cocoa,
 }:
 stdenv.mkDerivation rec {
@@ -32,22 +26,30 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
-    libGLU
     ncurses
     ffmpeg
+    glfw
   ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+
+  # This CMakeLists builds a version of glfw that does not work in wayland
+  patchPhase = ''
+    echo "" > ./deps/vera/deps/CMakeLists.txt
+  '';
+
+  # These scripts are a bit hacky and depend on X11 tools
+  postInstall = ''
+    rm $out/bin/glslScreenSaver
+    rm $out/bin/glslThumbnailer
+  '';
 
   meta = with lib; {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.hodapp ];
+    maintainers = [
+      maintainers.hodapp
+      maintainers.leiserfg
+    ];
     platforms = platforms.unix;
     mainProgram = "glslViewer";
     # never built on aarch64-darwin since first introduction in nixpkgs
