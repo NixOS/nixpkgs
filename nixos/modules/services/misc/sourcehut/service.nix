@@ -52,10 +52,10 @@ let
       {
         after =
           [ "network.target" ]
-          ++ optional cfg.postgresql.enable "postgresql.service"
+          ++ optional cfg.postgresql.enable "postgresql.target"
           ++ optional cfg.redis.enable "redis-sourcehut-${srvsrht}.service";
         requires =
-          optional cfg.postgresql.enable "postgresql.service"
+          optional cfg.postgresql.enable "postgresql.target"
           ++ optional cfg.redis.enable "redis-sourcehut-${srvsrht}.service";
         path = [ pkgs.gawk ];
         environment.HOME = runDir;
@@ -482,11 +482,9 @@ in
             && lib.strings.versionAtLeast config.services.postgresql.package.version "15.0"
           )
           {
-            postgresql.postStart = (
-              lib.mkAfter ''
-                $PSQL -tAc 'ALTER DATABASE "${srvCfg.postgresql.database}" OWNER TO "${srvCfg.user}";'
-              ''
-            );
+            postgresql-setup.postStart = ''
+              psql -tAc 'ALTER DATABASE "${srvCfg.postgresql.database}" OWNER TO "${srvCfg.user}";'
+            '';
           }
         )
       ];
