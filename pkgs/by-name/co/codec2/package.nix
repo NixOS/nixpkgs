@@ -1,5 +1,6 @@
 {
   lib,
+  testers,
   stdenv,
   buildPackages,
   fetchFromGitHub,
@@ -8,16 +9,27 @@
   lpcnetfreedv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "codec2";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
-    rev = "${version}";
+    rev = finalAttrs.version;
     hash = "sha256-69Mp4o3MgV98Fqfai4txv5jQw2WpoPuoWcwHsNAFPQM=";
   };
+
+  patches = [
+    # Fix nix-store path dupliucations
+    ./fix-pkg-config.patch
+  ];
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -40,10 +52,18 @@ stdenv.mkDerivation rec {
     install -Dm0755 src/{c2enc,c2sim,freedv_rx,freedv_tx,cohpsk_*,fdmdv_*,fsk_*,ldpc_*,ofdm_*} -t $out/bin/
   '';
 
-  # Swap keyword order to satisfy SWIG parser
-  postFixup = ''
-    sed -r -i 's/(\<_Complex)(\s+)(float|double)/\3\2\1/' $out/include/$pname/freedv_api.h
-  '';
+  postFixup =
+    # Swap keyword order to satisfy SWIG parser
+    ''
+      sed -r -i 's/(\<_Complex)(\s+)(float|double)/\3\2\1/' $dev/include/$pname/freedv_api.h
+    ''
+    +
+      # generated cmake module is not compatible with multiple outputs
+      ''
+        substituteInPlace $dev/lib/cmake/codec2/codec2-config.cmake --replace-fail \
+          '"''${_IMPORT_PREFIX}/include/codec2' \
+          "\"$dev/include/codec2"
+      '';
 
   cmakeFlags =
     [
@@ -56,6 +76,8 @@ stdenv.mkDerivation rec {
       "-DLPCNET=ON"
     ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
     homepage = "https://www.rowetel.com/codec2.html";
@@ -64,5 +86,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ markuskowa ];
     # generate_codebook only built for host platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    pkgConfigModules = [ "codec2" ];
   };
-}
+})

@@ -638,7 +638,7 @@ let
       clevisTest ? false,
       clevisFallbackTest ? false,
       disableFileSystems ? false,
-      selectNixPackage ? pkgs: pkgs.nixStable,
+      selectNixPackage ? pkgs: pkgs.nixVersions.stable,
     }:
     let
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
