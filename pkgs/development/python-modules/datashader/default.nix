@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "holoviz";
     repo = "datashader";
     tag = "v${version}";
-    hash = "sha256-ZmVuDqmFTjq2cgnG+Eve07pynMkEyqFkLtNiCXSandA=";
+    hash = "sha256-HduEO2XDH20tovtlpg5DbF96G5Lpbo+XVmQKnWvfyL8=";
   };
 
   build-system = [

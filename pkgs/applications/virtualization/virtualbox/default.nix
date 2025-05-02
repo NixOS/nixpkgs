@@ -74,9 +74,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.6";
-  virtualboxSubVersion = "a";
-  virtualboxSha256 = "5a7b13066ec71990af0cc00a5eea9c7ec3c71ca5ed99bb549c85494ce2ea395d";
+  virtualboxVersion = "7.1.8";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "3f7132c55ac6c5f50585bfaa115d29e30b47ccf535cb0a12ff50214ddae2f63d";
 
   kvmPatchVersion = "20250207";
   kvmPatchHash = "sha256-GzRLIXhzWL1NLvaGKcWVBCdvay1IxgJUE4koLX1ze7Y=";
@@ -249,8 +249,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableKvm (
       let
         patchVboxVersion =
-          # There is no updated patch for 7.0.22 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.0.22" then "7.0.20" else finalAttrs.virtualboxVersion;
+          # There is no updated patch for 7.1.8 yet, but the older one still applies.
+          if finalAttrs.virtualboxVersion == "7.1.8" then "7.1.6" else finalAttrs.virtualboxVersion;
       in
       fetchpatch {
         name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
