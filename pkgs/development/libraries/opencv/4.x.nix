@@ -449,19 +449,20 @@ effectiveStdenv.mkDerivation {
       pkg-config
       unzip
     ]
-    ++ optionals enablePython (
-      [
-        pythonPackages.pip
-        pythonPackages.wheel
-        pythonPackages.setuptools
-      ]
-      ++ optionals (effectiveStdenv.buildPlatform.canExec effectiveStdenv.hostPlatform) [
-        pythonPackages.pythonImportsCheckHook
-      ]
-    )
+    ++ optionals enablePython [
+      pythonPackages.pip
+      pythonPackages.wheel
+      pythonPackages.setuptools
+    ]
     ++ optionals enableCuda [
       cudaPackages.cuda_nvcc
     ];
+
+  nativeCheckInputs =
+    optionals (enablePython && effectiveStdenv.buildPlatform.canExec effectiveStdenv.hostPlatform)
+      [
+        pythonPackages.pythonImportsCheckHook
+      ];
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
