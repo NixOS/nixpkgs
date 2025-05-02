@@ -12,7 +12,6 @@
   numpy,
   packaging,
   pyyaml,
-  tensorboardx,
   torch,
   torchmetrics,
   tqdm,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     numpy
     packaging
     pyyaml
-    tensorboardx
     torch
     torchmetrics
     tqdm
