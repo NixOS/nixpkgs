@@ -135,6 +135,14 @@ let
           Packages containing out-of-tree vhost-user drivers.
         '';
       };
+
+      autostartDefaultNetworks = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Automatically start the default libvirtd qemu networks.
+        '';
+      };
     };
   };
 
@@ -448,7 +456,7 @@ in
         # Copy default libvirt network config .xml files to /var/lib
         # Files modified by the user will not be overwritten
         for i in $(cd ${cfg.package}/var/lib && echo \
-            libvirt/qemu/networks/*.xml \
+            libvirt/qemu/networks/*.xml ${optionalString cfg.qemu.autostartDefaultNetworks "libvirt/qemu/networks/autostart/*.xml"} \
             libvirt/nwfilter/*.xml );
         do
             # Intended behavior
