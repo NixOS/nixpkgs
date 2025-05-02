@@ -1,11 +1,12 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   fontconfig,
   llvmPackages,
+  nix-update-script,
   python3Packages,
   pythonSupport ? false,
+  stdenv,
 
   # nativeBuildInputs
   doxygen,
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oy2qcJbIGr5pe+XYWKntfsc6Ie7oEU1qqrPXjuqULmY=";
+    hash = "sha256-i+NQzhYdHQ+KcNxSLELgnMk98mdfN/vbXfRlU3k/dUU=";
   };
 
   outputs = [
@@ -106,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   pythonImportsCheck = [ "aligator" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Versatile and efficient framework for constrained trajectory optimization";
