@@ -591,6 +591,8 @@ in
 
         mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
+        module-signing = callPackage ../os-specific/linux/kernel/module-signing { };
+
         mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
 
         mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
