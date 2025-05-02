@@ -100,7 +100,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "networking.target"
-      ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
+      ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.target");
       path = with pkgs; [ replace-secret ];
       restartTriggers = restartTriggers;
       serviceConfig =

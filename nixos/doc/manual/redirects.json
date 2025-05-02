@@ -1316,22 +1316,14 @@
   "module-services-postgres-initializing-extra-permissions": [
     "index.html#module-services-postgres-initializing-extra-permissions"
   ],
-  "module-services-postgres-initializing-extra-permissions-superuser": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser"
-  ],
   "module-services-postgres-initializing-extra-permissions-superuser-post-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start",
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user"
   ],
-  "module-services-postgres-initializing-extra-permissions-service-user-pre-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user-oneshot": [
+  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
   ],
   "module-services-postgres-authentication": [
