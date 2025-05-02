@@ -721,6 +721,7 @@ in
   libinput = runTest ./libinput.nix;
   lemurs = runTest ./lemurs.nix;
   lemurs-wayland = runTest ./lemurs-wayland.nix;
+  lemurs-wayland-script = runTest ./lemurs-wayland-script.nix;
   librenms = runTest ./librenms.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
