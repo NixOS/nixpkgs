@@ -995,7 +995,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
           homepage = "https://github.com/ChristianKohler/PathIntellisense";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.imgabe ];
+          maintainers = [
+            lib.maintainers.imgabe
+            lib.maintainers.superherointj
+          ];
         };
       };
 
@@ -1541,7 +1544,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory";
           homepage = "https://github.com/DonJayamanne/gitHistoryVSCode/";
           license = lib.licenses.mit;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.superherointj ];
         };
       };
 
@@ -1572,6 +1575,7 @@ let
           description = "XML Tools";
           homepage = "https://github.com/DotJoshJohnson/vscode-xml";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.superherointj ];
         };
       };
 
@@ -1613,7 +1617,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens";
           homepage = "https://gitlens.amod.io/";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ratsclub ];
+          maintainers = [
+            lib.maintainers.ratsclub
+            lib.maintainers.superherointj
+          ];
         };
       };
 
@@ -1664,7 +1671,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig";
           homepage = "https://github.com/editorconfig/editorconfig-vscode";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.dbirks ];
+          maintainers = [
+            lib.maintainers.dbirks
+            lib.maintainers.superherointj
+          ];
         };
       };
 
@@ -1854,7 +1864,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=file-icons.file-icons";
           homepage = "https://github.com/file-icons/vscode";
           license = lib.licenses.mit;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.superherointj ];
         };
         mktplcRef = {
           name = "file-icons";
@@ -2050,7 +2060,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools";
           homepage = "https://github.com/godotengine/godot-vscode-plugin";
           license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ thtrf ];
+          maintainers = with lib.maintainers; [
+            superherointj
+            thtrf
+          ];
         };
       };
 
@@ -2719,7 +2732,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-nix-syntax";
           homepage = "https://github.com/jeff-hykin/better-nix-syntax";
           license = lib.licenses.mit;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.superherointj ];
         };
       };
 
@@ -2783,7 +2796,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/nix-community/vscode-nix-ide";
           license = lib.licenses.mit;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.superherointj ];
         };
       };
 
@@ -3773,7 +3786,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight";
           homepage = "https://github.com/enyancc/vscode-ext-color-highlight";
           license = lib.licenses.gpl3Only;
-          maintainers = [ lib.maintainers.datafoo ];
+          maintainers = [
+            lib.maintainers.datafoo
+            lib.maintainers.superherointj
+          ];
         };
       };
 
@@ -4118,7 +4134,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml";
           homepage = "https://github.com/redhat-developer/vscode-yaml";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.raroh73 ];
+          maintainers = [
+            lib.maintainers.raroh73
+            lib.maintainers.superherointj
+          ];
         };
       };
 
@@ -4475,7 +4494,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
           license = lib.licenses.mit;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.superherointj ];
         };
       };
 
@@ -4825,6 +4844,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.superherointj ];
         };
       };
 
@@ -5115,7 +5135,10 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
           homepage = "https://github.com/usernamehw/vscode-error-lens";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.imgabe ];
+          maintainers = [
+            lib.maintainers.imgabe
+            lib.maintainers.superherointj
+          ];
         };
       };
 
@@ -5518,6 +5541,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=woberg.godot-dotnet-tools";
           homepage = "https://github.com/williamoberg/godot-dotnet-tools";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.superherointj ];
           # For instructions on configuring this extension see:
           # https://wiki.nixos.org/wiki/Godot-Mono
         };
