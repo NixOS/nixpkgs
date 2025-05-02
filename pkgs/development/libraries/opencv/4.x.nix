@@ -103,6 +103,7 @@ let
     optionalString
     ;
   inherit (lib.trivial) flip;
+  sysEquals = lib.systems.equals;
 
   version = "4.11.0";
 
@@ -343,7 +344,8 @@ effectiveStdenv.mkDerivation {
     ++ optionals enablePython [
       pythonPackages.python
     ]
-    ++ optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
+    # FIXME: Do we actually want `equals`, or should we use `canExec`?
+    ++ optionals (sysEquals effectiveStdenv.buildPlatform effectiveStdenv.hostPlatform) [
       hdf5
     ]
     ++ optionals enableGtk2 [
@@ -454,7 +456,8 @@ effectiveStdenv.mkDerivation {
         pythonPackages.wheel
         pythonPackages.setuptools
       ]
-      ++ optionals (effectiveStdenv.hostPlatform == effectiveStdenv.buildPlatform) [
+      # FIXME: Do we actually want `equals`, or should we use `canExec`?
+      ++ optionals (sysEquals effectiveStdenv.hostPlatform effectiveStdenv.buildPlatform) [
         pythonPackages.pythonImportsCheckHook
       ]
     )
