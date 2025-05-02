@@ -2,6 +2,7 @@
   lib,
   appimageTools,
   fetchurl,
+  nix-update-script,
 }:
 let
   pname = "artisan";
@@ -23,6 +24,10 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/org.artisan_scope.artisan.desktop $out/share/applications/org.artisan_scope.artisan.desktop
     install -m 444 -D ${appimageContents}/artisan.png $out/share/applications/artisan.png
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=v([\\d.]+)" ];
+  };
 
   meta = {
     description = "visual scope for coffee roasters";
