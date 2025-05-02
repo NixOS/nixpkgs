@@ -98,7 +98,7 @@ writeScriptBin "send-message" ''
       # MUC
       ct.register_plugin('xep_0045')
       ct.connect(("${connectTo}", 5222))
-      ct.process(forever=False)
+      ct.loop.run_until_complete(ct.disconnected)
 
       if not ct.test_succeeded:
           sys.exit(1)
