@@ -81,8 +81,8 @@ in
       ];
     };
     systemd.services.homebox = {
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
-      after = lib.optional cfg.database.createLocally "postgresql.service";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = lib.optional cfg.database.createLocally "postgresql.target";
       environment = cfg.settings;
       serviceConfig = {
         User = "homebox";

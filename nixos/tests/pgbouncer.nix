@@ -11,7 +11,7 @@ import ./make-test-python.nix (
       one =
         { pkgs, ... }:
         {
-          systemd.services.postgresql = {
+          systemd.services.postgresql-setup = {
             postStart = ''
               ${pkgs.postgresql}/bin/psql -U postgres -c "ALTER ROLE testuser WITH LOGIN PASSWORD 'testpass'";
               ${pkgs.postgresql}/bin/psql -U postgres -c "ALTER DATABASE testdb OWNER TO testuser;";

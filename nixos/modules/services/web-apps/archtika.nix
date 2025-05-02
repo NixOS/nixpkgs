@@ -150,7 +150,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
 
         path = [ config.services.postgresql.package ];
