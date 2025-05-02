@@ -723,6 +723,7 @@ in
   lemurs-wayland = runTest ./lemurs-wayland.nix;
   lemurs-wayland-script = runTest ./lemurs-wayland-script.nix;
   lemurs-xorg = runTest ./lemurs-xorg.nix;
+  lemurs-xorg-script = runTest ./lemurs-xorg-script.nix;
   librenms = runTest ./librenms.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
