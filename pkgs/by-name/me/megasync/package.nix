@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mega.nz/";
     downloadPage = "https://github.com/meganz/MEGAsync";
     changelog = "https://github.com/meganz/MEGAsync/releases/tag/v${finalAttrs.version}_Linux";
-    license = lib.licenses.unfree;
+    license = lib.licenses.unfreeRedistributable;
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -18778,6 +18778,10 @@ self: super: with self; {
 
   wandb = callPackage ../development/python-modules/wandb { };
 
+  wapiti-arsenic = callPackage ../development/python-modules/wapiti-arsenic { };
+
+  wapiti-swagger = callPackage ../development/python-modules/wapiti-swagger { };
+
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 
   warble = callPackage ../development/python-modules/warble { };

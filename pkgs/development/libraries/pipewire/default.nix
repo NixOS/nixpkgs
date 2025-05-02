@@ -40,6 +40,7 @@
   gst_all_1,
   ffmpeg,
   fftwFloat,
+  bluezSupport ? stdenv.hostPlatform.isLinux,
   bluez,
   sbc,
   libfreeaptx,
@@ -74,7 +75,6 @@ let
     webrtc-audio-processing
   ];
 
-  bluezSupport = stdenv.hostPlatform.isLinux;
   modemmanagerSupport = lib.meta.availableOn stdenv.hostPlatform modemmanager;
   libcameraSupport = lib.meta.availableOn stdenv.hostPlatform libcamera;
   ldacbtSupport = lib.meta.availableOn stdenv.hostPlatform ldacbt;
