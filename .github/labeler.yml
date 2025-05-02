@@ -1,6 +1,12 @@
 # This file is used by .github/workflows/labels.yml
 # This version uses `sync-labels: true`, meaning that a non-match will remove the label
 
+"4.workflow: backport":
+  - any:
+    - base-branch:
+      - '^release-'
+      - '^staging-'
+
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:
