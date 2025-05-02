@@ -511,7 +511,7 @@ lib.makeOverridable (
           chmod u-w Makefile arch/"$arch"/Makefile*
 
           # Keep whole scripts dir
-          chmod u-w -R scripts
+          find -L scripts -type f -print0 | xargs -0 -r chmod u-w
 
           # Delete everything not kept
           find . -type f -perm -u=w -print0 | xargs -0 -r rm
