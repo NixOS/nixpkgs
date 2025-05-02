@@ -89,7 +89,7 @@ in
         primary.succeed("sudo -u postgres pgbackrest --stanza=default restore --delta")
 
         primary.systemctl("start postgresql")
-        primary.wait_for_unit("postgresql.service")
+        primary.wait_for_unit("postgresql.target")
         assert "hello world" in primary.succeed("sudo -u postgres psql -c 'TABLE t;'")
     '';
 }

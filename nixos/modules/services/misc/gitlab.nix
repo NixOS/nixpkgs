@@ -1295,8 +1295,8 @@ in
         pgsql = config.services.postgresql;
       in
       mkIf databaseActuallyCreateLocally {
-        after = [ "postgresql.service" ];
-        bindsTo = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
+        bindsTo = [ "postgresql.target" ];
         wantedBy = [ "gitlab.target" ];
         partOf = [ "gitlab.target" ];
         path = [
@@ -1561,12 +1561,12 @@ in
     systemd.services.gitlab-db-config = {
       after = [
         "gitlab-config.service"
-        "gitlab-postgresql.service"
-        "postgresql.service"
+        "gitlab-postgresql.target"
+        "postgresql.target"
       ];
       wants =
-        optional (cfg.databaseHost == "") "postgresql.service"
-        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+        optional (cfg.databaseHost == "") "postgresql.target"
+        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.target";
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
@@ -1596,7 +1596,7 @@ in
       after = [
         "network.target"
         "redis-gitlab.service"
-        "postgresql.service"
+        "postgresql.target"
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
@@ -1604,7 +1604,7 @@ in
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
-      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.target";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment =
@@ -1847,7 +1847,7 @@ in
         "gitlab-config.service"
         "gitlab-db-config.service"
       ];
-      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.target";
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;

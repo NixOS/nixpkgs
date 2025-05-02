@@ -65,14 +65,14 @@ runTest (
           };
 
           systemd.services.nextcloud-setup = {
-            requires = [ "postgresql.service" ];
-            after = [ "postgresql.service" ];
+            requires = [ "postgresql.target" ];
+            after = [ "postgresql.target" ];
           };
 
           services.postgresql = {
             enable = true;
           };
-          systemd.services.postgresql.postStart = lib.mkAfter ''
+          systemd.services.postgresql-setup.postStart = ''
             password=$(cat ${config.services.nextcloud.config.dbpassFile})
             ${config.services.postgresql.package}/bin/psql <<EOF
               CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
