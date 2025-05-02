@@ -894,8 +894,5 @@ in
   };
 
   meta.doc = ./postgresql.md;
-  meta.maintainers = with lib.maintainers; [
-    thoughtpolice
-    danbst
-  ];
+  meta.maintainers = pkgs.postgresql.meta.maintainers;
 }
