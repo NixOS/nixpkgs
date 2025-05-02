@@ -6548,6 +6548,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  kanagawa-paper-nvim = buildVimPlugin {
+    pname = "kanagawa-paper.nvim";
+    version = "2025-04-27";
+    src = fetchFromGitHub {
+      owner = "thesimonho";
+      repo = "kanagawa-paper.nvim";
+      rev = "4f41353f6a2bf9f25b2466a0f1eb6883d8fd09c1";
+      sha256 = "0gan0jqn4azkqln5xsnffpyjqmzqv1wwv02xv2d0yykmlqk9yqc8";
+    };
+    meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kdl-vim = buildVimPlugin {
     pname = "kdl.vim";
     version = "2023-02-20";
