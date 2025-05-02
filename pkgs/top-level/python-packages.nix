@@ -18369,8 +18369,6 @@ self: super: with self; {
 
   unasync = callPackage ../development/python-modules/unasync { };
 
-  unblob-native = callPackage ../development/python-modules/unblob-native { };
-
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
