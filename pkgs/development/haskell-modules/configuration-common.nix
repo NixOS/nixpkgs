@@ -2998,19 +2998,28 @@ self: super:
     assert super.bzlib.version == "0.5.2.0";
     doJailbreak super.bzlib;
 
-  what4 = lib.pipe super.what4 [
-    (addTestToolDepends (
-      with pkgs;
-      [
-        cvc4
-        cvc5
-        z3
+  inherit
+    (lib.mapAttrs (
+      _: pkg:
+      lib.pipe pkg [
+        (addTestToolDepends (
+          with pkgs;
+          [
+            cvc4
+            cvc5
+            z3
+          ]
+        ))
+        # 2025-04-09: FIXME: template_tests still failing with:
+        #   fd:9: hPutBuf: resource vanished (Broken pipe)
+        dontCheck
+
+        doDistribute
       ]
-    ))
-    # 2025-04-09: template_tests still failing with:
-    #   fd:9: hPutBuf: resource vanished (Broken pipe)
-    dontCheck
-  ];
+    ) super)
+    what4
+    what4_1_7
+    ;
 
   copilot-theorem = lib.pipe super.copilot-theorem [
     (addTestToolDepends (with pkgs; [ z3 ]))
@@ -3086,11 +3095,23 @@ self: super:
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible =
     assert super.crucible.version == "0.7.2";
-    doJailbreak super.crucible;
+    doJailbreak (
+      super.crucible.override {
+        what4 = self.what4_1_7;
+      }
+    );
+
+  crucible-llvm = super.crucible-llvm.override {
+    what4 = self.what4_1_7;
+  };
 
   # Test suite invokes cabal-install in a way incompatible with our generic builder
   # (i.e. tries to re-use the ghc package db / environment from dist-newstyle).
   sensei = dontCheck super.sensei;
+
+  crux = super.crux.override {
+    simple-get-opt = self.simple-get-opt_0_4;
+  };
 
   # 2025-04-23: jailbreak to allow megaparsec >= 9.7
   # 2025-04-23: test data missing from tarball

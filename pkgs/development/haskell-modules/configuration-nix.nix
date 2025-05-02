@@ -825,6 +825,11 @@ builtins.intersectAttrs super {
     ];
   }) super.crucible-symio;
 
+  # Test suite requires z3 to be in PATH
+  crucible-llvm = addTestToolDepends [
+    pkgs.z3
+  ] super.crucible-llvm;
+
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark =
     overrideCabal
