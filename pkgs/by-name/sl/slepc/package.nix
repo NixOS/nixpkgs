@@ -16,13 +16,13 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.0";
+  version = "3.23.1";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z9CVZQ/Ezb1S2EkTb9amAPxaN4tiUnKrbvQIc3BnVuU=";
+    hash = "sha256-K38/QH4AG8/SksrRLc+jIs1WO8FKFFTNkuHFbBER/tg=";
   };
 
   postPatch = ''
