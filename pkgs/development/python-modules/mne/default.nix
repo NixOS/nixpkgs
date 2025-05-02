@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mne-python";
+  pname = "mne";
   version = "1.9.0";
   pyproject = true;
 
