@@ -57,6 +57,13 @@ stdenv.mkDerivation rec {
       stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
     ) "-DCMAKE_OSX_ARCHITECTURES=arm64";
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # yaml-cpp uses std::auto_ptr and std::binary_function which has
+    # been disabled in clang with libcxx. These flags re-enables these
+    # features
+    NIX_CXXSTDLIB_COMPILE = "-D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR=1 -D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION=1";
+  };
+
   postInstall = ''
     moveToOutput bin "$bin"
     moveToOutput cmake "$dev"
