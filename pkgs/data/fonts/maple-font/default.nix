@@ -17,7 +17,7 @@ let
     }:
     stdenv.mkDerivation rec {
       inherit pname;
-      version = "7.1";
+      version = "7.2";
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
         inherit hash;

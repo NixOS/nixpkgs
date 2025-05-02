@@ -1,10 +1,14 @@
 {
   lib,
+  libiconv,
   python3,
   fetchFromGitHub,
   gitUpdater,
   makeWrapper,
+  rustPlatform,
+  stdenvNoCC,
   e2fsprogs,
+  erofs-utils,
   jefferson,
   lz4,
   lziprecover,
@@ -23,6 +27,7 @@ let
   # These dependencies are only added to PATH
   runtimeDeps = [
     e2fsprogs
+    erofs-utils
     jefferson
     lziprecover
     lzop
@@ -38,7 +43,7 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "25.1.8";
+  version = "25.4.14";
   pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.9";
 
@@ -46,14 +51,21 @@ python3.pkgs.buildPythonApplication rec {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-PGpJPAo9q52gQ3EGusYtDA2e0MG5kFClqCYPB2DvuMs=";
+    hash = "sha256-kWZGQX8uSKdFW+uauunHcruXhJ5XpBfyDY7gPyWGK90=";
     forceFetchGit = true;
     fetchLFS = true;
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-lGsDax7+CUACeYChDqdPsVbKE/hH94CPek6UBVz1eqs=";
   };
 
   strictDeps = true;
 
   build-system = with python3.pkgs; [ poetry-core ];
+
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = with python3.pkgs; [
     arpy
@@ -69,15 +81,17 @@ python3.pkgs.buildPythonApplication rec {
     pyfatfs
     pyperscan
     python-magic
+    pyzstd
     rarfile
     rich
     structlog
     treelib
-    unblob-native
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with rustPlatform; [
     makeWrapper
+    maturinBuildHook
+    cargoSetupHook
   ];
 
   # These are runtime-only CLI dependencies, which are used through
@@ -87,7 +101,7 @@ python3.pkgs.buildPythonApplication rec {
     "ubi-reader"
   ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [ "lz4" ];
 
   pythonImportsCheck = [ "unblob" ];
 
@@ -112,13 +126,6 @@ python3.pkgs.buildPythonApplication rec {
       disabled = [
         # https://github.com/tytso/e2fsprogs/issues/152
         "test_all_handlers[filesystem.extfs]"
-
-        # Should be dropped after upgrading to next version
-        # Needs https://github.com/onekey-sec/unblob/pull/1128/commits/c6af67f0c6f32fa01d7abbf495eb0293e9184438
-        # Unfortunately patches touching LFS stored assets cannot be applied
-        "test_all_handlers[filesystem.ubi.ubi]"
-        "test_all_handlers[archive.dlink.encrpted_img]"
-        "test_all_handlers[archive.dlink.shrs]"
       ];
     in
     [
