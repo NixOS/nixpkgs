@@ -157,7 +157,7 @@ let
       else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
         { ${name "mac_intel64"} = ""; }
       else
-        throw "ICV is not available for this platform (or not yet supported by this package)";
+        throw "ICV is not available for ${effectiveStdenv.hostPlatform.system} (or not yet supported by this package)";
     dst = ".cache/ippicv";
   };
 
