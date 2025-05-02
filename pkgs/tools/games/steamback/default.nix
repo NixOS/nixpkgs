@@ -45,6 +45,7 @@ buildPythonApplication rec {
     "async-tkinter-loop"
     "platformdirs"
     "Pillow"
+    "psutil"
   ];
 
   checkPhase = ''
