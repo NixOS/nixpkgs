@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
       url = "https://git.yoctoproject.org/poky/plain/meta/recipes-devtools/valgrind/valgrind/use-appropriate-march-mcpu-mfpu-for-ARM-test-apps.patch?id=b7a9250590a16f1bdc8c7b563da428df814d4292";
       sha256 = "sha256-sBZzn98Sf/ETFv8ubivgA6Y6fBNcyR8beB3ICDAyAH0=";
     })
+
+    # Support NIX_DEBUG_INFO_DIRS environment variable.
+    ./Support-NIX_DEBUG_INFO_DIRS.patch
   ];
 
   outputs = [

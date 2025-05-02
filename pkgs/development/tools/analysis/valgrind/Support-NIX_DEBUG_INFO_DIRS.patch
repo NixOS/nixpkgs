@@ -1,0 +1,45 @@
+diff --git a/coregrind/m_debuginfo/readelf.c b/coregrind/m_debuginfo/readelf.c
+index ce7b7998d..a8f9273df 100644
+--- a/coregrind/m_debuginfo/readelf.c
++++ b/coregrind/m_debuginfo/readelf.c
+@@ -1514,17 +1514,30 @@ DiImage* find_debug_file( struct _DebugInfo* di,
+    DiImage* dimg      = NULL; /* the img that we found */
+    HChar*   debugpath = NULL; /* where we found it */
+ 
+-   if (buildid != NULL) {
+-      debugpath = ML_(dinfo_zalloc)("di.fdf.1",
+-                                    VG_(strlen)(buildid) + 33);
+-
+-      VG_(sprintf)(debugpath, "/usr/lib/debug/.build-id/%c%c/%s.debug",
+-                   buildid[0], buildid[1], buildid + 2);
++   HChar* debug_dirs_env = VG_(getenv)("NIX_DEBUG_INFO_DIRS");
++   const HChar* debug_dirs_path = debug_dirs_env == NULL ? "/usr/lib/debug" : debug_dirs_env;
++   HChar debug_dirs_path_mut[VG_(strlen)(debug_dirs_path) + 1]; /* copy for strtok_r */
++   VG_(strcpy) (debug_dirs_path_mut, debug_dirs_path);
++   HChar *ssaveptr;
++   HChar *debug_dir;
+ 
+-      dimg = open_debug_file(debugpath, buildid, 0, rel_ok, NULL);
+-      if (!dimg) {
+-         ML_(dinfo_free)(debugpath);
+-         debugpath = NULL;
++   if (buildid != NULL) {
++      for (debug_dir = VG_(strtok_r) (debug_dirs_path_mut, " ", &ssaveptr);
++           debug_dir != NULL;
++           debug_dir = VG_(strtok_r) (NULL, " ", &ssaveptr)) {
++         debugpath = ML_(dinfo_zalloc)("di.fdf.1",
++                                       VG_(strlen)(debug_dir) + VG_(strlen)(buildid) + 19);
++
++         VG_(sprintf)(debugpath, "%s/.build-id/%c%c/%s.debug",
++                      debug_dir, buildid[0], buildid[1], buildid + 2);
++
++         dimg = open_debug_file(debugpath, buildid, 0, rel_ok, NULL);
++         if (!dimg) {
++            ML_(dinfo_free)(debugpath);
++            debugpath = NULL;
++         } else {
++            break;
++         }
+       }
+    }
+ 
