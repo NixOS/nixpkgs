@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoconf,
+  automake116x,
   zlib,
   shadow,
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
@@ -41,11 +43,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-ge6Ts8/f6318QJDO3rode7zpFB/QtQG2hrP+R13cpMY=";
   };
 
-  patches = [
-    ./rtcwake-search-PATH-for-shutdown.patch
-    # https://github.com/util-linux/util-linux/pull/3013
-    ./fix-darwin-build.patch
-  ];
+  patches =
+    [
+      ./rtcwake-search-PATH-for-shutdown.patch
+      # https://github.com/util-linux/util-linux/pull/3013
+      ./fix-darwin-build.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      (fetchurl {
+        name = "bits-only-build-when-cpu_set_t-is-available.patch";
+        url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
+        hash = "sha256-G7Cdv8636wJEjgt9am7PaDI8bpSF8sO9bFWEIiAL25A=";
+      })
+    ];
 
   # We separate some of the utilities into their own outputs. This
   # allows putting together smaller systems depending on only part of
@@ -137,6 +147,10 @@ stdenv.mkDerivation rec {
     [
       pkg-config
       installShellFiles
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      autoconf
+      automake116x
     ]
     ++ lib.optionals translateManpages [ po4a ]
     ++ lib.optionals (cryptsetupSupport == "dlopen") [ cryptsetup ];
