@@ -17,6 +17,7 @@
   libpulseaudio,
   libselinux,
   libsepol,
+  libsysprof-capture,
   libxcb,
   makeBinaryWrapper,
   moltenvk,
@@ -37,11 +38,17 @@
   xorg,
   yyjson,
   zlib,
+  # Feature flags
+  audioSupport ? true,
+  flashfetchSupport ? false,
+  gnomeSupport ? true,
+  imageSupport ? true,
+  openclSupport ? true,
   rpmSupport ? false,
+  sqliteSupport ? true,
   vulkanSupport ? true,
   waylandSupport ? true,
   x11Support ? true,
-  flashfetchSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
@@ -67,63 +74,131 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [
-      chafa
-      imagemagick
-      pcre
-      pcre2
-      sqlite
-      yyjson
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      dconf
-      ddcutil
-      glib
-      hwdata
-      libdrm
-      libpulseaudio
-      libselinux
-      libsepol
-      ocl-icd
-      opencl-headers
-      util-linux
-      zlib
-    ]
-    ++ lib.optionals rpmSupport [ rpm ]
-    ++ lib.optionals vulkanSupport [ vulkan-loader ]
-    ++ lib.optionals waylandSupport [ wayland ]
-    ++ lib.optionals x11Support [
-      libXrandr
-      libglvnd
-      libxcb
-      xorg.libXau
-      xorg.libXdmcp
-      xorg.libXext
-    ]
-    ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      moltenvk
-    ];
+    let
+      commonDeps = [
+        pcre
+        pcre2
+        yyjson
+      ];
+
+      # Cross-platform optional dependencies
+      imageDeps = lib.optionals imageSupport [
+        chafa
+        imagemagick
+      ];
+
+      sqliteDeps = lib.optionals sqliteSupport [
+        sqlite
+      ];
+
+      linuxCoreDeps = lib.optionals stdenv.hostPlatform.isLinux [
+        hwdata
+        libselinux
+        libsepol
+        util-linux
+        zlib
+      ];
+
+      linuxFeatureDeps = lib.optionals stdenv.hostPlatform.isLinux (
+        lib.optionals gnomeSupport [
+          dbus
+          dconf
+          glib
+          libsysprof-capture
+        ]
+        ++ lib.optionals audioSupport [
+          libpulseaudio
+        ]
+        ++ lib.optionals openclSupport [
+          ocl-icd
+          opencl-headers
+        ]
+        ++ lib.optionals vulkanSupport [
+          libdrm
+          ddcutil
+        ]
+        ++ lib.optionals rpmSupport [
+          rpm
+        ]
+      );
+
+      waylandDeps = lib.optionals waylandSupport [
+        wayland
+      ];
+
+      vulkanDeps = lib.optionals vulkanSupport [
+        vulkan-loader
+      ];
+
+      x11Deps = lib.optionals x11Support [
+        libXrandr
+        libglvnd
+        libxcb
+        xorg.libXau
+        xorg.libXdmcp
+        xorg.libXext
+      ];
+
+      x11XfceDeps = lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [
+        xfce.xfconf
+      ];
+
+      macosDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+        apple-sdk_15
+        moltenvk
+      ];
+    in
+    commonDeps
+    ++ imageDeps
+    ++ sqliteDeps
+    ++ linuxCoreDeps
+    ++ linuxFeatureDeps
+    ++ waylandDeps
+    ++ vulkanDeps
+    ++ x11Deps
+    ++ x11XfceDeps
+    ++ macosDeps;
 
   cmakeFlags =
     [
       (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
       (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
-      (lib.cmakeBool "ENABLE_DRM" false)
-      (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
       (lib.cmakeBool "ENABLE_OSMESA" false)
       (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
-      (lib.cmakeBool "ENABLE_GLX" x11Support)
-      (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+
+      # Feature flags
+      (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
+      (lib.cmakeBool "ENABLE_IMAGEMAGICK7" imageSupport)
+      (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
+      (lib.cmakeBool "ENABLE_ZLIB" imageSupport)
+
+      (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
+
+      (lib.cmakeBool "ENABLE_PULSE" audioSupport)
+
+      (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
+      (lib.cmakeBool "ENABLE_DCONF" gnomeSupport)
+      (lib.cmakeBool "ENABLE_DBUS" gnomeSupport)
+
+      (lib.cmakeBool "ENABLE_OPENCL" openclSupport)
+
+      (lib.cmakeBool "ENABLE_DRM" vulkanSupport)
+      (lib.cmakeBool "ENABLE_DRM_AMDGPU" vulkanSupport)
       (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
+      (lib.cmakeBool "ENABLE_DDCUTIL" vulkanSupport)
+      (lib.cmakeBool "ENABLE_EGL" vulkanSupport)
+
       (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+
+      (lib.cmakeBool "ENABLE_GLX" x11Support)
       (lib.cmakeBool "ENABLE_X11" x11Support)
       (lib.cmakeBool "ENABLE_XCB" x11Support)
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
       (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.hostPlatform.isDarwin)))
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+
+      (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+
       (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -162,5 +237,20 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
+    longDescription = ''
+      Fast and highly customizable system info script.
+
+      Feature flags (all default to 'true' except rpmSupport and flashfetchSupport):
+      * rpmSupport: RPM package detection (default: false)
+      * vulkanSupport: Vulkan GPU information and DRM features
+      * waylandSupport: Wayland display detection
+      * x11Support: X11 display information
+      * flashfetchSupport: Build the flashfetch utility (default: false)
+      * imageSupport: Image rendering (chafa and imagemagick)
+      * sqliteSupport: Package counting via SQLite
+      * audioSupport: PulseAudio functionality
+      * gnomeSupport: GNOME integration (dconf, dbus, gio)
+      * openclSupport: OpenCL features
+    '';
   };
 })
