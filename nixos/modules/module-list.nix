@@ -1,4 +1,5 @@
 [
+  # keep-sorted start case=no numeric=yes
   ./config/appstream.nix
   ./config/console.nix
   ./config/debug-info.nix
@@ -1878,6 +1879,7 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
+  # keep-sorted end
   {
     documentation.nixos.extraModules = [
       ./virtualisation/qemu-vm.nix
