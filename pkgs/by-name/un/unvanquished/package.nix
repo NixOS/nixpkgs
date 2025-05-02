@@ -20,6 +20,7 @@
   libpng,
   libvorbis,
   libwebp,
+  libX11,
   lua5,
   makeDesktopItem,
   ncurses,
@@ -171,6 +172,7 @@ stdenv.mkDerivation rec {
     libvorbis
     libjpeg
     libwebp
+    libX11
     libpng
   ];
 
