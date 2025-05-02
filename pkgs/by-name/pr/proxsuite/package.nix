@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
-  version = "0.6.7";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "simple-robotics";
     repo = "proxsuite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iKc55WDHArmmIM//Wir6FHrNV84HnEDcBUlwnsbtMME=";
+    hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
   };
 
   outputs = [
