@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchCrate,
   rustPlatform,
 }:
@@ -19,6 +20,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Kubectl version managing shim that invokes the correct kubectl version";
     homepage = "https://gitlab.com/cromulentbanana/korrect";
     license = lib.licenses.mit;
+    # kubectl downloads don't work on x86_64-darwin yet, still investigating with upstream
+    # https://gitlab.com/cromulentbanana/korrect/-/issues/14
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     maintainers = [ lib.maintainers.dwt ];
   };
 })
