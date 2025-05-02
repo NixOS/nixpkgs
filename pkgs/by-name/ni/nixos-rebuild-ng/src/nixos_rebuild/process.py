@@ -179,27 +179,40 @@ def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
     # its arguments as regex)
     quoted_args = re.escape(shlex.join(str(a) for a in args))
     logger.debug("killing remote process using pkill with args=%r", quoted_args)
-    r = subprocess.run(
-        [
-            "ssh",
-            *remote.opts,
-            *SSH_DEFAULT_OPTS,
-            remote.host,
-            "--",
-            "pkill",
-            "--signal",
-            "SIGINT",
-            "--full",
-            "--",
-            quoted_args,
-        ],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    logger.debug(
-        "remote pkill captured output with stdout=%r, stderr=%r, returncode=%s",
-        r.stdout,
-        r.stderr,
-        r.returncode,
-    )
+    cleanup_interrupted = False
+
+    try:
+        r = subprocess.run(
+            [
+                "ssh",
+                *remote.opts,
+                *SSH_DEFAULT_OPTS,
+                remote.host,
+                "--",
+                "pkill",
+                "--signal",
+                "SIGINT",
+                "--full",
+                "--",
+                quoted_args,
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        logger.debug(
+            "remote pkill captured output with stdout=%r, stderr=%r, returncode=%s",
+            r.stdout,
+            r.stderr,
+            r.returncode,
+        )
+    except KeyboardInterrupt:
+        cleanup_interrupted = True
+        raise
+    finally:
+        if cleanup_interrupted or r.returncode:
+            logger.warning(
+                "could not clean-up remote process, the command %s may still be running in host '%s'",
+                args,
+                remote.host,
+            )
