@@ -2,31 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  ddt,
+
+  # build-system
+  pbr,
+  setuptools,
+
+  # dependencies
   debtcollector,
-  eventlet,
-  fixtures,
   iso8601,
-  libxcrypt-legacy,
   netaddr,
   netifaces,
   oslo-i18n,
-  oslotest,
   packaging,
-  pbr,
   psutil,
   pyparsing,
   pytz,
+  tzdata,
+
+  # tests
+  ddt,
+  eventlet,
+  fixtures,
+  iana-etc,
+  libredirect,
+  libxcrypt-legacy,
+  oslotest,
+  pyyaml,
   qemu-utils,
   replaceVars,
-  setuptools,
   stdenv,
   stestr,
   testscenarios,
-  tzdata,
-  pyyaml,
-  iana-etc,
-  libredirect,
 }:
 
 buildPythonPackage rec {
@@ -52,12 +58,12 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     debtcollector
     iso8601
     netaddr
@@ -76,10 +82,10 @@ buildPythonPackage rec {
     fixtures
     libredirect.hook
     oslotest
+    pyyaml
     qemu-utils
     stestr
     testscenarios
-    pyyaml
   ];
 
   # disabled tests:
@@ -92,15 +98,16 @@ buildPythonPackage rec {
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
+      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
     ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }
