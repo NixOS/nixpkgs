@@ -2,18 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cereal_1_3_2,
-  cmake,
-  doxygen,
-  eigen,
   fontconfig,
-  graphviz,
-  jrl-cmakemodules,
-  simde,
-  matio,
+  nix-update-script,
   pythonSupport ? false,
   python3Packages,
+
+  # nativeBuildInputs
+  cmake,
+  doxygen,
+  graphviz,
+
+  # propagatedBuildInputs
+  cereal_1_3_2,
+  eigen,
+  jrl-cmakemodules,
+  simde,
+
+  # checkInputs
+  matio,
+
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
@@ -25,15 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-iKc55WDHArmmIM//Wir6FHrNV84HnEDcBUlwnsbtMME=";
   };
-
-  patches = [
-    # Fix use of system cereal
-    # This was merged upstream and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite/pull/352/commits/8305864f13ca7dff7210f89004a56652b71f8891.patch";
-      hash = "sha256-XMS/zHFVrEp1P6aDlGrLbrcmuKq42+GdZRH9ObewNCY=";
-    })
-  ];
 
   outputs = [
     "doc"
@@ -57,12 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
   ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+
   propagatedBuildInputs = [
     cereal_1_3_2
     eigen
     jrl-cmakemodules
     simde
   ] ++ lib.optionals pythonSupport [ python3Packages.pybind11 ];
+
   checkInputs =
     [ matio ]
     ++ lib.optionals pythonSupport [
@@ -85,11 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   pythonImportsCheck = [ "proxsuite" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "The Advanced Proximal Optimization Toolbox";
     homepage = "https://github.com/Simple-Robotics/proxsuite";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })
