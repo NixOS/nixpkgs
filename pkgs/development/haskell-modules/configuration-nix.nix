@@ -1519,6 +1519,9 @@ builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  # Needs network access
+  pinecone = dontCheck super.pinecone;
+
   # Smoke test can't be executed in sandbox
   # https://github.com/georgefst/evdev/issues/25
   evdev = overrideCabal (drv: {
