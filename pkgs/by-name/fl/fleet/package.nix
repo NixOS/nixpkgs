@@ -1,23 +1,21 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "fleet";
-  version = "4.67.1";
+  version = "4.67.2";
 
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
     tag = "fleet-v${finalAttrs.version}";
-    hash = "sha256-cZ0YTFcyPt7NMZUDZCdlVPTuhwRy7mTp7JCdINqiwOM=";
+    hash = "sha256-iMLD9M4EzXHRxvc5px9UcXEdjRIO1jm+hYwhaYaFON8=";
   };
-  vendorHash = "sha256-gFAotYho18Jn8MaFK6ShoMA1VLXVENcrASvHWZGFOFg=";
+  vendorHash = "sha256-UkdHwjCcxNX7maI4QClLm5WWaLXwGlEu80eZXVoYy60=";
 
   subPackages = [
     "cmd/fleet"
@@ -26,11 +24,6 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-X github.com/fleetdm/fleet/v4/server/version.appName=fleet"
     "-X github.com/fleetdm/fleet/v4/server/version.version=${finalAttrs.version}"
-  ];
-
-  doCheck = true;
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
   ];
 
   doInstallCheck = true;
@@ -46,6 +39,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       asauzeau
+      lesuisse
     ];
     mainProgram = "fleet";
   };

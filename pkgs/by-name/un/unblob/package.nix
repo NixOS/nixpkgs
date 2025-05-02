@@ -106,12 +106,25 @@ python3.pkgs.buildPythonApplication rec {
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
-    "--no-cov"
-    # `disabledTests` swallows the parameters between square brackets
-    # https://github.com/tytso/e2fsprogs/issues/152
-    "-k 'not test_all_handlers[filesystem.extfs]'"
-  ];
+  pytestFlagsArray =
+    let
+      # `disabledTests` swallows the parameters between square brackets
+      disabled = [
+        # https://github.com/tytso/e2fsprogs/issues/152
+        "test_all_handlers[filesystem.extfs]"
+
+        # Should be dropped after upgrading to next version
+        # Needs https://github.com/onekey-sec/unblob/pull/1128/commits/c6af67f0c6f32fa01d7abbf495eb0293e9184438
+        # Unfortunately patches touching LFS stored assets cannot be applied
+        "test_all_handlers[filesystem.ubi.ubi]"
+        "test_all_handlers[archive.dlink.encrpted_img]"
+        "test_all_handlers[archive.dlink.shrs]"
+      ];
+    in
+    [
+      "--no-cov"
+      "-k 'not ${lib.concatStringsSep " and not " disabled}'"
+    ];
 
   passthru = {
     updateScript = gitUpdater { };
