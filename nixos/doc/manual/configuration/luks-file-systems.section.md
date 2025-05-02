@@ -117,7 +117,7 @@ added to the LUKS volume.
 ```
 
 Existing key slots are left intact, unless `--wipe-slot=` is specified. It is
-recommened to add a recovery key that should be stored in a secure physical
+recommended to add a recovery key that should be stored in a secure physical
 location and can be entered wherever a password would be entered.
 
 ```ShellSession
