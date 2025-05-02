@@ -506,6 +506,10 @@ let
         List of AirBnB's Nerve service discovery configurations.
       '';
 
+      nomad_sd_configs = mkOpt (types.listOf promTypes.nomad_sd_config) ''
+        List of Nomad service discovery configurations.
+      '';
+
       openstack_sd_configs = mkOpt (types.listOf promTypes.openstack_sd_config) ''
         List of OpenStack service discovery configurations.
       '';
@@ -1195,6 +1199,48 @@ let
         Timeout value.
       '';
     };
+  };
+
+  promTypes.nomad_sd_config = mkSdConfigModule {
+    allow_stale = mkDefOpt types.bool "true" ''
+      Allows any nomad server to service API requests regardless of whether it
+      is the cluster leader. The trade-off is fast reads but potentially stale
+      values.
+    '';
+
+    enable_http2 = mkDefOpt types.bool "true" ''
+      Whether to enable HTTP2.
+    '';
+
+    namespace = mkDefOpt types.string "default" ''
+      Nomad has support for namespaces, which allow jobs and their associated
+      objects to be segmented from each other and other users of the cluster.
+      When using a non-default namespace, this option must be set to indicate
+      the namespace that should be scraped.
+    '';
+
+    refresh_interval = mkDefOpt types.str "60s" ''
+      Refresh interval to re-read the service list.
+    '';
+
+    region = mkDefOpt types.str "global" ''
+      By default, any request to the nomad API will default to the region on
+      which the machine is servicing the request. This option can be used to
+      explicitly indicate which region to scrape. Requests will be
+      transparently forwarded and serviced by a server in the requested
+      region.
+    '';
+
+    server = mkOption {
+      type = types.str;
+      description = lib.mdDoc ''
+        The URL of the nomad cluster to scrape.
+      '';
+    };
+
+    tag_separator = mkDefOpt types.str "," ''
+      The string by which Nomad service tags are joined into the tag label.
+    '';
   };
 
   promTypes.openstack_sd_config = types.submodule {
