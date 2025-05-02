@@ -1789,6 +1789,12 @@
     githubId = 19378309;
     name = "Simon Struck";
   };
+  aoli-al = {
+    email = "aoli.al@hotmail.com";
+    github = "aoli-al";
+    githubId = 5557706;
+    name = "Ao Li";
+  };
   aorith = {
     email = "aomanu+nixpkgs@gmail.com";
     github = "aorith";
@@ -16755,6 +16761,13 @@
     github = "Myaats";
     githubId = 6295090;
     name = "Mats";
+  };
+  mymindstorm = {
+    name = "Brendan Early";
+    email = "mymindstorm@evermiss.net";
+    github = "mymindstorm";
+    githubId = 27789806;
+    keys = [ { fingerprint = "52B9 A09F 788F 4D1F 0C94  9EBE EE39 A9F3 0C9D 72B5"; } ];
   };
   mynacol = {
     github = "Mynacol";

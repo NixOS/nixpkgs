@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
   fetchpatch,
@@ -148,10 +149,15 @@ python3Packages.buildPythonApplication rec {
     "test_attack_unifi"
   ];
 
-  disabledTestPaths = [
-    # Requires sslyze which is obsolete and was removed
-    "tests/attack/test_mod_ssl.py"
-  ];
+  disabledTestPaths =
+    [
+      # Requires sslyze which is obsolete and was removed
+      "tests/attack/test_mod_ssl.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 13] Permission denied: '/tmp/crawl.db'
+      "tests/web/test_persister.py"
+    ];
 
   pythonImportsCheck = [ "wapitiCore" ];
 
