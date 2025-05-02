@@ -11,7 +11,7 @@ from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
 
-logger = logging.getLogger(__name__)
+logger: Final = logging.getLogger(__name__)
 
 SSH_DEFAULT_OPTS: Final = [
     "-o",
