@@ -47,7 +47,15 @@ python3.pkgs.buildPythonApplication rec {
   # no test
   doCheck = false;
 
-  pythonImportsCheck = [ "nb_cli" ];
+  pythonImportsCheck = [
+    "nb_cli"
+    "nb_cli.cli"
+    "nb_cli.compat"
+    "nb_cli.config"
+    "nb_cli.handlers"
+    "nb_cli.i18n"
+    "nb_cli.log"
+  ];
 
   passthru.tests = {
     version = testers.testVersion { package = nb-cli; };
