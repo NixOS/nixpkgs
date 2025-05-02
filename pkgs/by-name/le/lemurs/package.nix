@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests)
       lemurs
       lemurs-wayland
+      lemurs-wayland-script
       ;
   };
 
