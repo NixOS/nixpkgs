@@ -1609,6 +1609,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  bloat-nvim = buildVimPlugin {
+    pname = "bloat.nvim";
+    version = "2025-04-30";
+    src = fetchFromGitHub {
+      owner = "dundalek";
+      repo = "bloat.nvim";
+      rev = "f90bef655ac40fecbaae53e10db1cf7894d090b1";
+      sha256 = "0ah5c84172wkc75zx5ll2dp9y3r867lik29aw5mm7i3lj530p0ri";
+    };
+    meta.homepage = "https://github.com/dundalek/bloat.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
     version = "2023-10-10";
