@@ -12850,6 +12850,20 @@ with pkgs;
       inherit modules;
     };
 
+  signModules =
+    {
+      modules,
+      pubKeyPath,
+      privKeyPathOrUri,
+      hashAlgorithm,
+    }@args:
+    callPackage ../os-specific/linux/kmod/signer.nix {
+      inherit (buildPackages) kmod;
+      inherit (buildPackages.linuxPackages) module-signing;
+      inherit (args) modules pubKeyPath privKeyPathOrUri hashAlgorithm;
+    }
+  ;
+
   nushell = darwin.apple_sdk_11_0.callPackage ../shells/nushell {
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
