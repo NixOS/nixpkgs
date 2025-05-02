@@ -416,6 +416,8 @@ dont-distribute-packages:
  - a50
  - abcBridge
  - ac-machine-conduit
+ - accelerate-arithmetic
+ - accelerate-fourier
  - accelerate-llvm
  - accelerate-llvm-native
  - accelerate-typelits
@@ -926,7 +928,6 @@ dont-distribute-packages:
  - coordinate
  - copilot-cbmc
  - copilot-sbv
- - copilot-verifier
  - coroutine-enumerator
  - coroutine-iteratee
  - couch-simple
@@ -952,7 +953,6 @@ dont-distribute-packages:
  - crf-chain2-tiers
  - criu-rpc
  - cron-compat
- - crux-llvm
  - crypto-classical
  - crypto-conduit
  - crypto-pubkey
@@ -1406,7 +1406,9 @@ dont-distribute-packages:
  - global
  - global-config
  - glome-hs
+ - gloss-accelerate
  - gloss-devil
+ - gloss-raster-accelerate
  - gloss-sodium
  - gltf-loader
  - gmap
@@ -1494,6 +1496,7 @@ dont-distribute-packages:
  - gtkimageview
  - gtkrsync
  - guarded-rewriting
+ - h3spec
  - hOff-display
  - hPDB
  - hPDB-examples
@@ -1873,6 +1876,7 @@ dont-distribute-packages:
  - http2-client-grpc
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
+ - http3
  - https-everywhere-rules
  - https-everywhere-rules-raw
  - httpspec
@@ -3699,6 +3703,7 @@ dont-distribute-packages:
  - wai-thrift
  - waldo
  - warp-grpc
+ - warp-quic
  - warped
  - wavesurfer
  - wavy
