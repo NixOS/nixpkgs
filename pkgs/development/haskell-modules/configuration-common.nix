@@ -1232,6 +1232,17 @@ self: super:
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
+  # Missing test files
+  # https://github.com/pbrisbin/jsonpatch/issues/10
+  jsonpatch = overrideCabal (drv: {
+    testTargets =
+      lib.warnIf (lib.versionAtLeast drv.version "0.3.0.2")
+        "haskellPackages.jsonpatch: override can be dropped"
+        [
+          "readme" # disabled: "spec"
+        ];
+  }) super.jsonpatch;
+
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
 
