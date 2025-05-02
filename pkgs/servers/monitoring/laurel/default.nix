@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "laurel";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
     tag = "v${version}";
-    hash = "sha256-fToxRAcZOZvuuzaaWSjweqEwdUu3K2EKXY0K2Qixqpo=";
+    hash = "sha256-SXCQxIzprBt0qnUpniHp3AOu9yxgQTtf+1b/p9X+7xc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-i5wsS7y65sIvICfgViVIAbQU9f1E0EmspX+YVKDSKOU=";
+  cargoHash = "sha256-qXsbq6lgQMNQAbrU2ntw0yGeNcR1h/g8jKg2ZoU0XfA=";
 
   postPatch = ''
     # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
@@ -28,6 +28,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
   buildInputs = [ acl ];
+
+  checkFlags = [
+    # Nix' build sandbox does not allow setting ACLs:
+    # https://github.com/NixOS/nix/blob/2.28.3/src/libstore/unix/build/local-derivation-goal.cc#L1760-L1769
+    # Skip the tests that are failing with "Operation not supported (os error 95)" because of this:
+    "--skip=rotate::test::existing"
+    "--skip=rotate::test::fresh_file"
+  ];
 
   meta = with lib; {
     description = "Transform Linux Audit logs for SIEM usage";
