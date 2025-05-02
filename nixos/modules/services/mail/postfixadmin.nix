@@ -148,8 +148,8 @@ in
     # objects owners and extensions; for now we tack on what's needed
     # here.
     systemd.services.postfixadmin-postgres = lib.mkIf localDB {
-      after = [ "postgresql.service" ];
-      bindsTo = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
+      bindsTo = [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [
         pgsql.package

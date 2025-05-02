@@ -235,12 +235,12 @@ in
         after = [
           "network.target"
           "onlyoffice-docservice.service"
-          "postgresql.service"
+          "postgresql.target"
         ];
         requires = [
           "network.target"
           "onlyoffice-docservice.service"
-          "postgresql.service"
+          "postgresql.target"
         ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -314,9 +314,9 @@ in
           description = "onlyoffice documentserver";
           after = [
             "network.target"
-            "postgresql.service"
+            "postgresql.target"
           ];
-          requires = [ "postgresql.service" ];
+          requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";

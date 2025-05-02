@@ -92,8 +92,8 @@ in
 
     systemd.services.atuin = {
       description = "atuin server";
-      requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      requires = lib.optionals cfg.database.createLocally [ "postgresql.target" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

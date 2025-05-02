@@ -275,13 +275,13 @@ in
           "systemd-tmpfiles-setup.service"
         ]
         ++ lib.optionals (cfg.database.createLocally) [
-          "postgresql.service"
+          "postgresql.target"
         ]
         ++ lib.optionals cfg.redis.createLocally [
           "redis-${cfg.redis.name}.service"
         ];
       requires = lib.optionals (cfg.database.createLocally) [
-        "postgresql.service"
+        "postgresql.target"
       ];
       description = "Zammad web";
       wantedBy = [ "multi-user.target" ];
