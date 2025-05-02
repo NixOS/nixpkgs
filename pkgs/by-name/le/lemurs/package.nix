@@ -32,7 +32,10 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.tests = {
-    inherit (nixosTests) lemurs;
+    inherit (nixosTests)
+      lemurs
+      lemurs-wayland
+      ;
   };
 
   meta = {
