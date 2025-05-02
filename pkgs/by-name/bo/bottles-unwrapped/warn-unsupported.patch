@@ -1,7 +1,7 @@
-diff --git a/bottles/frontend/windows/main_window.py b/bottles/frontend/windows/main_window.py
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
 index 79bf0d72..e3a15cb5 100644
---- a/bottles/frontend/windows/main_window.py
-+++ b/bottles/frontend/windows/main_window.py
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
 @@ -104,29 +104,29 @@ class MainWindow(Adw.ApplicationWindow):
  
              def response(dialog, response, *args):
