@@ -17,6 +17,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-HZey1RVpx/fHNxdEue1LczYbwYUxEb3i3fHpkKHhn+8=";
   };
 
+  pythonRelaxDeps = [
+    "watchfiles"
+  ];
+
   build-system = [
     python3.pkgs.babel
     python3.pkgs.pdm-backend
