@@ -1,6 +1,8 @@
 # This file is used by .github/workflows/labels.yml
 # This version uses `sync-labels: true`, meaning that a non-match will remove the label
 
+# keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
+
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:
@@ -589,3 +591,5 @@
     - changed-files:
       - any-glob-to-any-file:
         - maintainers/maintainer-list.nix
+
+# keep-sorted end
