@@ -3,9 +3,9 @@
   vscode-utils,
   jq,
   moreutils,
-  python311Packages,
   R,
   rPackages,
+  radian,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -20,7 +20,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     moreutils
   ];
   buildInputs = [
-    python311Packages.radian
+    radian
     R
     rPackages.languageserver
   ];
@@ -28,8 +28,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     cd "$out/$installPrefix"
     jq '.contributes.configuration.properties."r.rpath.mac".default = "${lib.getExe' R "R"}"' package.json | sponge package.json
     jq '.contributes.configuration.properties."r.rpath.linux".default = "${lib.getExe' R "R"}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rterm.mac".default = "${lib.getExe python311Packages.radian}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rterm.linux".default = "${lib.getExe python311Packages.radian}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."r.rterm.mac".default = "${lib.getExe radian}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."r.rterm.linux".default = "${lib.getExe radian}"' package.json | sponge package.json
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";

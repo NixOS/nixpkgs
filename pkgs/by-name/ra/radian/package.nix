@@ -1,30 +1,16 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  pytestCheckHook,
-  pyte,
-  pexpect,
-  ptyprocess,
-  pythonOlder,
-  jedi,
   git,
-  lineedit,
-  prompt-toolkit,
-  pygments,
-  rchitect,
   R,
   rPackages,
-  setuptools,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "radian";
   version = "0.6.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "randy3k";
@@ -38,7 +24,7 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
@@ -48,25 +34,26 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs =
-    [
+    (with python3Packages; [
       lineedit
       prompt-toolkit
       pygments
       rchitect
-    ]
+    ])
     ++ (with rPackages; [
       reticulate
       askpass
     ]);
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pyte
-    pexpect
-    ptyprocess
-    jedi
-    git
-  ];
+  nativeCheckInputs =
+    (with python3Packages; [
+      pytestCheckHook
+      pyte
+      pexpect
+      ptyprocess
+      jedi
+    ])
+    ++ [ git ];
 
   makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
 
