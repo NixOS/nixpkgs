@@ -397,7 +397,7 @@ in
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            ${pkgs.python3Packages.django}/bin/django-admin.py migrate --noinput
+            ${pkgs.python3Packages.django}/bin/django-admin migrate --noinput
 
             chown -R graphite:graphite ${dataDir}
 
@@ -407,7 +407,7 @@ in
           # Only collect static files when graphite_web changes.
           if ! [ "${dataDir}/current_graphite_web" -ef "${pkgs.python3Packages.graphite-web}" ]; then
             mkdir -p ${staticDir}
-            ${pkgs.python3Packages.django}/bin/django-admin.py collectstatic  --noinput --clear
+            ${pkgs.python3Packages.django}/bin/django-admin collectstatic  --noinput --clear
             chown -R graphite:graphite ${staticDir}
             ln -sfT "${pkgs.python3Packages.graphite-web}" "${dataDir}/current_graphite_web"
           fi
