@@ -1616,6 +1616,8 @@ let
 
         ohex = callPackage ../development/ocaml-modules/ohex { };
 
+        oidc = callPackage ../development/ocaml-modules/oidc { };
+
         ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
         omd = callPackage ../development/ocaml-modules/omd { };
