@@ -427,10 +427,6 @@ dont-distribute-packages:
  - adhoc-network
  - adict
  - adp-multi-monadiccp
- - aern2-fun
- - aern2-mfun
- - aern2-mp
- - aern2-real
  - aeson-native
  - aeson_1_5_6_0
  - affine
@@ -1024,7 +1020,6 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
- - dde
  - debug
  - decimal-arithmetic
  - dedukti
@@ -2589,7 +2584,6 @@ dont-distribute-packages:
  - ois-input-manager
  - olwrapper
  - om-kubernetes
- - om-legion
  - one-time-password
  - online-csv
  - oops-examples
