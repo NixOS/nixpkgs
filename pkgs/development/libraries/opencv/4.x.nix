@@ -631,7 +631,8 @@ effectiveStdenv.mkDerivation {
         withIpp = opencv4.override { enableIpp = true; };
       }
       // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-      // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
+      # FIXME: is !(isx86_64 && isDarwin) correct, or should it be more general, like !isDarwin ?
+      // optionalAttrs (with effectiveStdenv.buildPlatform; !(isx86_64 && isDarwin)) {
         opencv4-tests = callPackage ./tests.nix {
           inherit
             enableGStreamer
