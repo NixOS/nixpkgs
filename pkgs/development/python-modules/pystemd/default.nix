@@ -8,6 +8,7 @@
   pytest,
   mock,
   pkg-config,
+  cython,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,17 @@ buildPythonPackage rec {
     hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
   };
 
+  postPatch = ''
+    # remove cythonized sources, build them anew to support more python version
+    rm pystemd/*.c
+  '';
+
   buildInputs = [ systemd ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    cython
+  ];
 
   propagatedBuildInputs = [
     lxml
