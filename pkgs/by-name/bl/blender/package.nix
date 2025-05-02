@@ -53,6 +53,7 @@
   llvmPackages,
   makeWrapper,
   mesa,
+  nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openal,
   opencollada-blender,
@@ -114,7 +115,7 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "4.4.1";
 
-  srcs = fetchzip {
+  src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
     hash = "sha256-5MsJ7UFpwwtaq905CiTkas/qPYOaeiacSSl3qu9h5w0=";
@@ -413,6 +414,12 @@ stdenv'.mkDerivation (finalAttrs: {
           ]
         }], check=True)  # noqa: E501
       '';
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://projects.blender.org/blender/blender"
+      ];
     };
   };
 
