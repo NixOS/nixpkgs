@@ -718,6 +718,7 @@ in
   lemurs = handleTest ./lemurs.nix { };
   lemurs-wayland = handleTest ./lemurs-wayland.nix { };
   lemurs-wayland-script = handleTest ./lemurs-wayland-script.nix { };
+  lemurs-xorg = handleTest ./lemurs-xorg.nix { };
   librenms = runTest ./librenms.nix;
   libresprite = handleTest ./libresprite.nix { };
   libreswan = runTest ./libreswan.nix;
