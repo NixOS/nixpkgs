@@ -1,21 +1,29 @@
 {
-  cmake,
-  crocoddyl,
-  doxygen,
-  fetchFromGitHub,
-  fmt,
-  fontconfig,
-  gbenchmark,
-  graphviz,
   lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
   llvmPackages,
-  pinocchio,
-  pkg-config,
-  proxsuite-nlp,
   python3Packages,
   pythonSupport ? false,
-  stdenv,
+
+  # nativeBuildInputs
+  doxygen,
+  cmake,
+  graphviz,
+  pkg-config,
+
+  # buildInputs
+  fmt,
+
+  # propagatedBuildInputs
   suitesparse,
+  crocoddyl,
+  pinocchio,
+  proxsuite-nlp,
+
+  # checkInputs
+  gbenchmark,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
     ]
     ++ lib.optionals pythonSupport [
+      python3Packages.python
       python3Packages.pythonImportsCheckHook
     ];
   buildInputs =
