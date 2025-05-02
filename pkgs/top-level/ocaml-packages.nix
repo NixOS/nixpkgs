@@ -1018,6 +1018,8 @@ let
 
         jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
+        jose = callPackage ../development/ocaml-modules/jose { };
+
         js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
         js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix { };
