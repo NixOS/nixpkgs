@@ -1,25 +1,26 @@
 {
   stdenv,
   lib,
-  fetchsvn,
-  version,
-  rev,
-  sha256,
+  fetchgit,
 }:
 
 stdenv.mkDerivation {
   pname = "crossfire-arch";
-  version = rev;
+  version = "2025-04";
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/arch/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/crossfire/crossfire-arch";
+    rev = "876eb50b9199e9aa06175b7a7d85832662be3f78";
+    hash = "sha256-jDiAKcjWYvjGiD68LuKlZS4sOR9jW3THp99kAEdE+y0=";
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"
     cp -a . "$out/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
