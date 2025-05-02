@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "2.0.1-7";
   pname = "libsoundio";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "libsoundio";
     rev = version;
-    sha256 = "12l4rvaypv87vigdrmjz48d4d6sq4gfxf5asvnc4adyabxb73i4x";
+    sha256 = "sha256-JQ6TH6zf1wNb4al0v5MgcR12KQL6CKSVXbf1KKJevwA=";
   };
 
   nativeBuildInputs = [ cmake ];
