@@ -24874,6 +24874,12 @@
     githubId = 70387628;
     name = "Basil Keeler";
   };
+  totaltax = {
+    email = "shieldscoen@gmail.com";
+    github = "TotalTaxAmount";
+    githubId = 64336456;
+    name = "Coen Shields";
+  };
   totoroot = {
     name = "Matthias Thym";
     email = "git@thym.at";
