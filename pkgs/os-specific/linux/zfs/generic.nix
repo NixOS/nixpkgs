@@ -50,6 +50,7 @@ let
       rev ? "zfs-${version}",
       kernelMinSupportedMajorMinor,
       kernelMaxSupportedMajorMinor,
+      enableUnsupportedExperimentalKernel ? false, # allows building against unsupported Kernel versions
       maintainers ? (with lib.maintainers; [ amarshall ]),
       tests,
     }@innerArgs:
@@ -201,6 +202,7 @@ let
         "--with-tirpc=1"
         (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ]
+      ++ optional enableUnsupportedExperimentalKernel "--enable-linux-experimental"
       ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -355,7 +357,7 @@ let
 
         inherit maintainers;
         mainProgram = "zfs";
-        broken = buildKernel && !(kernelIsCompatible kernel);
+        broken = buildKernel && !((kernelIsCompatible kernel) || enableUnsupportedExperimentalKernel);
       };
     };
 in
