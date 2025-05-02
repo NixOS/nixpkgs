@@ -1,0 +1,38 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 44ca43e7..8b6960dd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,7 +14,6 @@ find_program(CARGO cargo)
+ 
+ add_custom_command(
+ 	OUTPUT
+-	"target/release/libdeltachat.a"
+ 	"target/release/libdeltachat.${DYNAMIC_EXT}"
+ 	"target/release/pkgconfig/deltachat.pc"
+         COMMAND
+@@ -39,12 +38,10 @@ add_custom_target(
+ 	lib_deltachat
+ 	ALL
+ 	DEPENDS
+-	"target/release/libdeltachat.a"
+ 	"target/release/libdeltachat.${DYNAMIC_EXT}"
+ 	"target/release/pkgconfig/deltachat.pc"
+ )
+ 
+ install(FILES "deltachat-ffi/deltachat.h" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+-install(FILES "target/release/libdeltachat.a" DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ install(FILES "target/release/libdeltachat.${DYNAMIC_EXT}" DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ install(FILES "target/release/pkgconfig/deltachat.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+diff --git a/deltachat-ffi/Cargo.toml b/deltachat-ffi/Cargo.toml
+index de0fbafe..120efec9 100644
+--- a/deltachat-ffi/Cargo.toml
++++ b/deltachat-ffi/Cargo.toml
+@@ -12,7 +12,7 @@ categories = ["cryptography", "std", "email"]
+ 
+ [lib]
+ name = "deltachat"
+-crate-type = ["cdylib", "staticlib"]
++crate-type = ["cdylib"]
+ 
+ [dependencies]
+ deltachat = { path = "../", default-features = false }

@@ -1,0 +1,22 @@
+diff --git i/include/xsimd/arch/xsimd_scalar.hpp w/include/xsimd/arch/xsimd_scalar.hpp
+index 9066da6..7aa3b6b 100644
+--- i/include/xsimd/arch/xsimd_scalar.hpp
++++ w/include/xsimd/arch/xsimd_scalar.hpp
+@@ -502,16 +502,7 @@ namespace xsimd
+         return !(x0 == x1);
+     }
+ 
+-#if defined(__APPLE__)
+-    inline float exp10(const float& x) noexcept
+-    {
+-        return __exp10f(x);
+-    }
+-    inline double exp10(const double& x) noexcept
+-    {
+-        return __exp10(x);
+-    }
+-#elif defined(__GLIBC__)
++#if defined(__GLIBC__)
+     inline float exp10(const float& x) noexcept
+     {
+         return ::exp10f(x);

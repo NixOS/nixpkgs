@@ -1,0 +1,15 @@
+diff -ur a/unix/configure b/unix/configure
+--- a/unix/configure	2008-06-19 21:32:20.000000000 -0600
++++ b/unix/configure	2023-07-11 10:02:57.809867694 -0600
+@@ -519,7 +519,10 @@
+ 
+ 
+ echo Check for memset
+-echo "int main(){ char k; memset(&k,0,0); return 0; }" > conftest.c
++cat > conftest.c << _EOF_
++#include <string.h>
++int main(){ char k; memset(&k,0,0); return 0; }
++_EOF_
+ $CC -o conftest conftest.c >/dev/null 2>/dev/null
+ [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DZMEM"
+ 

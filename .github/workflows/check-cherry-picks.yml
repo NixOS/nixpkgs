@@ -1,0 +1,24 @@
+name: "Check cherry-picks"
+on:
+  pull_request_target:
+    branches:
+     - 'release-**'
+     - 'staging-**'
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
+    steps:
+    - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      with:
+        fetch-depth: 0
+        filter: blob:none
+    - name: Check cherry-picks
+      env:
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      run: |
+        ./maintainers/scripts/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA"
