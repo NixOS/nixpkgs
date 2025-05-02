@@ -48,7 +48,6 @@ flutter327.buildFlutterApplication (
       mainProgram = "fluffychat";
       maintainers = with maintainers; [
         mkg20001
-        gilice
         tebriel
       ];
       platforms = [
