@@ -25,6 +25,7 @@ lib.makeScope newScope (
       nushell_plugin_dbus = self.dbus;
     };
     skim = callPackage ./skim.nix { inherit IOKit CoreFoundation; };
+    strutils = callPackage ./strutils.nix { inherit IOKit CoreFoundation; };
   }
   // lib.optionalAttrs config.allowAliases {
     regex = throw "`nu_plugin_regex` is no longer compatible with the current Nushell release.";
