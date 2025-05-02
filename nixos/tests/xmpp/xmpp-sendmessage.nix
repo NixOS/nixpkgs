@@ -18,9 +18,11 @@ writeScriptBin "send-message" ''
   #!${
     (python3.withPackages (
       ps:
+      with ps;
       [
-        ps.slixmpp
+        slixmpp
       ]
+      ++ slixmpp.optional-dependencies.xep-0363
     )).interpreter
   }
   import logging
