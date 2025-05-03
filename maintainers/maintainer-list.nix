@@ -547,6 +547,13 @@
     githubId = 124545;
     name = "Anthony Cowley";
   };
+  acpuchades = {
+    name = "Alejandro Caravaca Puchades";
+    email = "acaravacapuchades@gmail.com";
+    github = "acpuchades";
+    githubId = 59510094;
+    keys = [ { fingerprint = "D23C FEF0 C257 D999 C80B  1EB6 A158 D219 BD68 B562"; } ];
+  };
   acuteaangle = {
     name = "Summer Tea";
     email = "zestypurple@protonmail.com";
