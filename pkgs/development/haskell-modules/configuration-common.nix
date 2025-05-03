@@ -2241,6 +2241,10 @@ self: super:
   feed = dontCheck super.feed;
 
   spacecookie = overrideCabal (old: {
+    # Security relevant patch update
+    version = "1.0.0.3";
+    sha256 = "1kzzbq22dk277jcx04w154y4vwa92zmnf40jcbgiihkz5rvisix0";
+
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
     # let testsuite discover the resulting binary
     preCheck =
