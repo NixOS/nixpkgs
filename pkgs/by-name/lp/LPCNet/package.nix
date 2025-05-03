@@ -7,6 +7,7 @@
   codec2,
   # for tests
   octave,
+  sox,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,13 +48,30 @@ stdenv.mkDerivation (finalAttrs: {
     codec2
   ];
 
+  cmakeFlags = lib.optionals (stdenv.cc.isClang && stdenv.hostPlatform.isAarch64) [
+    # unsupported option '-mfpu=' for target 'x86_64-apple-darwin'
+    "-DNEON=OFF"
+  ];
+
   nativeCheckInputs = [
     octave
+    sox
+  ];
+
+  disabledTests = lib.optionals (stdenv.cc.isClang && stdenv.hostPlatform.isAarch64) [
+    # disable tests that require NEON
+    "SIMD_functions"
   ];
 
   doCheck = true;
-  preCheck = ''
+  checkPhase = ''
+    runHook preCheck
+
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}/build/source/build/src"
+
+    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
+
+    runHook postCheck
   '';
 
   meta = {
