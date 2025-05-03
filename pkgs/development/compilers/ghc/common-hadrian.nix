@@ -201,6 +201,7 @@
             lib.versionOlder version "9.11"
             && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
             && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
           )
           [
             # Determine size of time related types using hsc2hs instead of assuming CLong.
