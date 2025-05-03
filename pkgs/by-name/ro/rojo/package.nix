@@ -37,15 +37,15 @@ rustPlatform.buildRustPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
+    changelog = "https://github.com/rojo-rbx/rojo/blob/v${version}/CHANGELOG.md";
     description = "Project management tool for Roblox";
-    mainProgram = "rojo";
-    longDescription = ''
-      Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
-    '';
-    homepage = "https://rojo.space";
     downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${version}";
-    changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
+    homepage = "https://rojo.space";
     license = lib.licenses.mpl20;
+    longDescription = ''
+      Tool designed to enable Roblox developers to use professional-grade software engineering tools.
+    '';
+    mainProgram = "rojo";
     maintainers = with lib.maintainers; [ wackbyte ];
   };
 }
