@@ -1,27 +1,36 @@
 {
   lib,
   stdenv,
+
+  # sources
   fetchurl,
   fetchFromGitHub,
   fetchDebianPatch,
+
+  # nativeBuildInputs
   cmake,
   pkg-config,
-  SDL2,
-  libvorbis,
-  libogg,
-  libjpeg,
-  libpng,
-  freetype,
-  glew,
-  tinyxml,
-  openal,
-  libepoxy,
+
+  gcc-unwrapped,
+
+  # buildInputs
   curl,
   freealut,
-  readline,
+  freetype,
+  glew,
   libb2,
-  gcc-unwrapped,
-  enableSoundtrack ? false, # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+  libepoxy,
+  libjpeg,
+  libogg,
+  libpng,
+  libvorbis,
+  openal,
+  readline,
+  SDL2,
+  tinyxml,
+
+  # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+  enableSoundtrack ? false,
 }:
 
 let
@@ -53,11 +62,9 @@ stdenv.mkDerivation {
 
   enableParallelInstalling = false;
 
-  postInstall =
-    ''''
-    + lib.optionalString enableSoundtrack ''
-      ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
-    '';
+  postInstall = lib.optionalString enableSoundtrack ''
+    ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -65,20 +72,20 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    SDL2
-    libvorbis
-    libogg
-    libjpeg
-    libpng
+    curl
+    freealut
     freetype
     glew
-    tinyxml
-    openal
-    freealut
-    libepoxy
-    curl
-    readline
     libb2
+    libepoxy
+    libjpeg
+    libogg
+    libpng
+    libvorbis
+    openal
+    readline
+    SDL2
+    tinyxml
   ];
 
   cmakeFlags = [
