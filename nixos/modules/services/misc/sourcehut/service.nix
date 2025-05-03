@@ -1,7 +1,8 @@
 srv:
 {
   configIniOfService,
-  srvsrht ? "${srv}srht", # Because "buildsrht" does not follow that pattern (missing an "s").
+  pkgname ? "${srv}srht", # Because "buildsrht" does not follow that pattern (missing an "s").
+  srvsrht ? "${srv}.sr.ht",
   iniKey ? "${srv}.sr.ht",
   webhooks ? false,
   extraTimers ? { },
@@ -28,7 +29,7 @@ let
     mkIf
     mkMerge
     ;
-  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib.options) mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatStringsSep hasSuffix optionalString;
   inherit (config.services) postgresql;
   redis = config.services.redis.servers."sourcehut-${srvsrht}";
@@ -162,6 +163,8 @@ in
     {
       enable = mkEnableOption "${srv} service";
 
+      package = mkPackageOption pkgs [ "sourcehut" pkgname ] { };
+
       user = mkOption {
         type = types.str;
         default = srvsrht;
@@ -276,7 +279,7 @@ in
             forceSSL = mkDefault true;
             locations."/".proxyPass = "http://${cfg.listenAddress}:${toString srvCfg.port}";
             locations."/static" = {
-              root = "${pkgs.sourcehut.${srvsrht}}/${pkgs.sourcehut.python.sitePackages}/${srvsrht}";
+              root = "${srvCfg.package}/${pkgs.sourcehut.python.sitePackages}/${srvsrht}";
               extraConfig = mkDefault ''
                 expires 30d;
               '';
@@ -367,12 +370,12 @@ in
                 StateDirectory = [ "sourcehut/${srvsrht}" ];
                 StateDirectoryMode = "2750";
                 ExecStart =
-                  "${cfg.python}/bin/gunicorn ${srvsrht}.app:app --name ${srvsrht} --bind ${cfg.listenAddress}:${toString srvCfg.port} "
+                  "${cfg.python}/bin/gunicorn ${pkgname}.app:app --name ${srvsrht} --bind ${cfg.listenAddress}:${toString srvCfg.port} "
                   + concatStringsSep " " srvCfg.gunicorn.extraArgs;
               };
               preStart =
                 let
-                  package = pkgs.sourcehut.${srvsrht};
+                  package = srvCfg.package;
                   version = package.version;
                   stateDir = "/var/lib/sourcehut/${srvsrht}";
                 in
@@ -385,7 +388,7 @@ in
                   if test ! -e ${stateDir}/db; then
                     # Setup the initial database.
                     # Note that it stamps the alembic head afterward
-                    ${package}/bin/${srvsrht}-initdb
+                    ${postgresql.package}/bin/psql -d ${srvsrht} -f ${package}/share/sourcehut/${srvsrht}-schema.sql
                     echo ${version} >${stateDir}/db
                   fi
 
@@ -401,7 +404,7 @@ in
                   # See https://lists.sr.ht/~sircmpwn/sr.ht-admins/<20190302181207.GA13778%40cirno.my.domain>
                   if test ! -e ${stateDir}/webhook; then
                     # Update ${iniKey}'s users' profile copy to the latest
-                    ${cfg.python}/bin/srht-update-profiles ${iniKey}
+                    ${cfg.python}/bin/sr.ht-update-profiles ${iniKey}
                     touch ${stateDir}/webhook
                   fi
                 '';
@@ -424,7 +427,7 @@ in
               Type = "simple";
               Restart = "always";
               ExecStart =
-                "${cfg.python}/bin/celery --app ${srvsrht}.webhooks worker --hostname ${srvsrht}-webhooks@%%h "
+                "${cfg.python}/bin/celery --app ${pkgname}.webhooks worker --hostname ${srvsrht}-webhooks@%%h "
                 + concatStringsSep " " srvCfg.webhooks.extraArgs;
               # Avoid crashing: os.getloadavg()
               ProcSubset = mkForce "all";
@@ -443,7 +446,7 @@ in
               ];
               serviceConfig = {
                 Type = "oneshot";
-                ExecStart = "${pkgs.sourcehut.${srvsrht}}/bin/${timerName}";
+                ExecStart = "${srvCfg.package}/bin/${timerName}";
               };
             }
             (timer.service or { })
