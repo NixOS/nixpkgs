@@ -61,12 +61,14 @@ body:
           You can still open a build failure report, but please say '**No, Hydra cannot reproduce this build failure.**' below.
         - If there's a <img src="https://raw.githubusercontent.com/NixOS/hydra/refs/heads/master/src/root/static/images/emojione-question-2754.svg" width="20px" align="top" alt="Gray Question Mark"> icon near the package entry, say '**Hydra is currently rebuilding this package.**'
         - If there's a <img src="https://raw.githubusercontent.com/NixOS/hydra/refs/heads/master/src/root/static/images/emojione-stopsign-1f6d1.svg" width="20px" align="top" alt="Red Stop Sign"> icon near the package entry, then the build job was stopped manually. If this occurs, please coordinate with the [Infrastructure Team](https://matrix.to/#/#infra:nixos.org), and say '**The last build job was manually cancelled.**'
+        - If Hydra isn't supposed to build the package at all, say '**Hydra doesn’t try to build the package.**'
       options:
         - "Please select the Hydra Status."
         - "Yes, Hydra can reproduce this build failure."
         - "No, Hydra cannot reproduce this build failure."
         - "Hydra is currently rebuilding this package."
         - "The last build job was manually cancelled."
+        - "Hydra doesn’t try to build the package."
       default: 0
     validations:
       required: true
