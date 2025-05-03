@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "garble";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = "garble";
     tag = "v${version}";
-    hash = "sha256-zS/K2kOpWhJmr0NuWSjEjNXV8ILt81yLIQWSPDuMwt8=";
+    hash = "sha256-NpVhfLSsBMJbAZNVE/dct4+GwlXoA1DGovvzn3tNPc4=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -32,12 +32,17 @@ buildGoModule rec {
     })
   ];
 
-  checkFlags = [
-    "-skip"
-    "TestScript/gogarble"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestScript/gogarble"
+        # Need another version of go
+        "TestScript/gotoolchain"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-xxG1aQrALVuJ7oVn+Z+sH655eFQ7rcYFmymGCUZD1uU=";
+  vendorHash = "sha256-jo7HRqGplrIAimkPb+3psw37kyqnuWOewELyQqCIWSU=";
 
   # Used for some of the tests.
   nativeCheckInputs = [
