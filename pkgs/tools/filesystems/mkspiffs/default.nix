@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkgsBuildHost,
+  versionCheckHook,
 }:
 
 # Changing the variables CPPFLAGS and BUILD_CONFIG_NAME can be done by
@@ -44,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     install -Dm755 -t $out/bin mkspiffs
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to build and unpack SPIFFS images";
