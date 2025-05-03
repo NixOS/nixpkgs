@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   coreutils,
   curl,
@@ -90,6 +91,10 @@ stdenv.mkDerivation rec {
     # binary. Without changes, the `aesm_service` will be different after every
     # build because the embedded zip file contents have different modified times.
     ./cppmicroservices-no-mtime.patch
+
+    # Fix build with GCC 14.
+    # https://github.com/intel/linux-sgx/pull/1063
+    ./gcc14-fix.patch
   ];
 
   postPatch =

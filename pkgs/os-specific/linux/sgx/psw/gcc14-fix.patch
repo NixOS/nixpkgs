@@ -1,0 +1,53 @@
+From 72186018e974398dfadc1b0825ac22e45920ddf3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
+Date: Mon, 24 Jun 2024 17:36:13 +0100
+Subject: [PATCH] enclave_common: add missing <algorithm> header for GCC 14
+ compat
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When building with GCC 14, various c++ stdlib functions are undefined:
+
+sgx_enclave_common.cpp: In function ‘void* get_enclave_base_address_from_address(void*)’:
+sgx_enclave_common.cpp:164:23: error: ‘upper_bound’ is not a member of ‘std’; did you mean ‘lower_bound’?
+  164 |     auto upper = std::upper_bound(s_enclave_base_address.begin(), s_enclave_base_address.end(), (uint64_t)target_address);
+      |                       ^~~~~~~~~~~
+      |                       lower_bound
+sgx_enclave_common.cpp: In function ‘void* enclave_create_ex(void*, size_t, size_t, uint32_t, const void*, size_t, uint32_t, const void**, uint32_t*)’:
+sgx_enclave_common.cpp:790:14: error: ‘sort’ is not a member of ‘std’; did you mean ‘qsort’?
+  790 |         std::sort(s_enclave_base_address.begin(), s_enclave_base_address.end());
+      |              ^~~~
+      |              qsort
+sgx_enclave_common.cpp: In function ‘bool enclave_delete(void*, uint32_t*)’:
+sgx_enclave_common.cpp:1255:43: error: ‘remove’ is not a member of ‘std’; did you mean ‘move’?
+ 1255 |         s_enclave_base_address.erase(std::remove(s_enclave_base_address.begin(), s_enclave_base_address.end(), (uint64_t)base_address),
+      |                                           ^~~~~~
+      |                                           move
+
+These stdlib functions are provided by bits/stl_algo.h, and prior
+to GCC 14, the <functional> header would pull in stl_algo.h.
+
+With GCC 14, the <functional> header was changed to only pull in
+stl_algobase.h.
+
+We must now use <algorithm> to get these definitions, which should
+work on all versions of GCC.
+
+Signed-off-by: Daniel P. Berrangé <berrange@redhat.com>
+---
+ psw/enclave_common/sgx_enclave_common.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/psw/enclave_common/sgx_enclave_common.cpp b/psw/enclave_common/sgx_enclave_common.cpp
+index 9867ecc86..46fcf8733 100644
+--- a/psw/enclave_common/sgx_enclave_common.cpp
++++ b/psw/enclave_common/sgx_enclave_common.cpp
+@@ -35,6 +35,7 @@
+ #include <dlfcn.h>
+ #include <map>
+ #include <functional>
++#include <algorithm>
+ #include "sgx_enclave_common.h"
+ #include "sgx_urts.h"
+ #include "arch.h"
