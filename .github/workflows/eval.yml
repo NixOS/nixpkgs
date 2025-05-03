@@ -43,7 +43,7 @@ jobs:
           echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -71,7 +71,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -111,7 +111,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -152,7 +152,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -260,7 +260,7 @@ jobs:
           path: comparison
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
 
       # Important: This workflow job runs with extra permissions,
       # so we need to make sure to not run untrusted code from PRs
