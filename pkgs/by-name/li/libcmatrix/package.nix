@@ -6,6 +6,7 @@
   libgcrypt,
   libsecret,
   libsoup_3,
+  cmake,
   meson,
   ninja,
   olm,
@@ -30,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+
+    cmake # used by meson to find olm
   ];
 
   buildInputs = [
@@ -41,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     olm
     sqlite
   ];
+
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # 0u is not a valid version number on darwin
+    substituteInPlace src/meson.build --replace-fail "soversion: '0u'," "soversion: '0',"
+  '';
 
   meta = {
     changelog = "https://source.puri.sm/Librem5/libcmatrix/-/blob/${finalAttrs.src.tag}/NEWS";

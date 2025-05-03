@@ -709,6 +709,7 @@ mapAliases {
   gg = go-graft; # Added 2025-03-07
   ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
   git-codeowners = throw "'git-codeowners' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  gmni = throw "gmni has been removed as it is no longer maintained upstream"; # Added 2025-05-02
   gmp5 = throw "'gmp5' has been removed as it is unmaintained. Consider using 'gmp' instead"; # Added 2024-10-28
   gmpc = throw "'gmpc' has been removed due to lack of maintenance upstream. Consider using 'plattenalbum' instead"; # Added 2024-09-14
   gmtk = throw "'gmtk' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
@@ -951,6 +952,7 @@ mapAliases {
   libbitcoin-explorer = throw "libbitcoin-explorer has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
   libbitcoin-network = throw "libbitcoin-network has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
   libbitcoin-protocol = throw "libbitcoin-protocol has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
+  libchop = throw "libchop has been removed due to failing to build and being unmaintained upstream"; # Added 2025-05-02
   libdwg = throw "libdwg has been removed as upstream is unmaintained, the code doesn't build without significant patches, and the package had no reverse dependencies"; # Added 2024-12-28
   libgcrypt_1_8 = throw "'libgcrypt_1_8' is end-of-life. Consider using 'libgcrypt' instead"; # Added 2025-01-05
   libgda = lib.warnOnInstantiate "‘libgda’ has been renamed to ‘libgda5’" libgda5; # Added 2025-01-21
@@ -1349,6 +1351,7 @@ mapAliases {
   openjdk22_headless = throw "OpenJDK 22 was removed as it has reached its end of life"; # Added 2024-09-24
   jdk22 = throw "OpenJDK 22 was removed as it has reached its end of life"; # Added 2024-09-24
   jdk22_headless = throw "OpenJDK 22 was removed as it has reached its end of life"; # Added 2024-09-24
+  oobicpl = throw "oobicpl was removed as it is unmaintained upstream"; # Added 2025-04-26
   openjfx11 = throw "OpenJFX 11 was removed as it has reached its end of life"; # Added 2024-10-07
   openjfx19 = throw "OpenJFX 19 was removed as it has reached its end of life"; # Added 2024-08-01
   openjfx20 = throw "OpenJFX 20 was removed as it has reached its end of life"; # Added 2024-08-01
@@ -1396,6 +1399,7 @@ mapAliases {
   passky-desktop = throw "passky-desktop has been removed, as it was unmaintained and blocking the Electron 29 removal."; # Added 2025-02-24
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
+  paco = throw "'paco' has been removed as it has been abandoned"; # Added 2025-04-30
   inherit (perlPackages) pacup;
   panopticon = throw "'panopticon' has been removed because it is unmaintained upstream"; # Added 2025-01-25
   paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14

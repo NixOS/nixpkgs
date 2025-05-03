@@ -2759,8 +2759,6 @@ with pkgs;
 
   persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
 
-  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui { };
-
   inherit (import ../development/libraries/libsbsms pkgs)
     libsbsms
     libsbsms_2_0_2
