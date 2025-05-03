@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace spectre-meltdown-checker.sh \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
