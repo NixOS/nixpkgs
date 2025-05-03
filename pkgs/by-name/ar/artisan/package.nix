@@ -2,14 +2,15 @@
   lib,
   appimageTools,
   fetchurl,
+  nix-update-script,
 }:
 let
   pname = "artisan";
-  version = "3.1.2";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/${pname}-linux-${version}.AppImage";
-    hash = "sha256-HwzTxuE7aRuXrI7BbySFgYGu74uw3JyBs91iPNGT2Jg=";
+    hash = "sha256-GU9DCAIMioPRUC1IDu8SbhD802pWEH7MlALnQH+Y4oU=";
   };
 
   appimageContents = appimageTools.extract {
@@ -23,6 +24,10 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/org.artisan_scope.artisan.desktop $out/share/applications/org.artisan_scope.artisan.desktop
     install -m 444 -D ${appimageContents}/artisan.png $out/share/applications/artisan.png
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=v([\\d.]+)" ];
+  };
 
   meta = {
     description = "visual scope for coffee roasters";

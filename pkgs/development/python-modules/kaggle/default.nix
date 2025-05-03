@@ -16,6 +16,7 @@
   tqdm,
   urllib3,
   webencodings,
+  protobuf,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     tqdm
     urllib3
     webencodings
+    protobuf
   ];
 
   # Tests try to access the network.

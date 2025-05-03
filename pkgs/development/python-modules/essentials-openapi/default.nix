@@ -14,6 +14,7 @@
   pyyaml,
   rich,
   setuptools,
+  stdenv,
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";
@@ -58,6 +59,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "openapidocs" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests start a server using a hardcoded port, and since
+    # multiple Python versions are always built simultaneously, this
+    # failure is quite likely to occur.
+    "tests/test_cli.py"
+  ];
 
   meta = {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
