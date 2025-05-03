@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
-  OPENSSL_NO_VENDOR = "1";
+  env.OPENSSL_NO_VENDOR = true;
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.hostPlatform.isDarwin;
