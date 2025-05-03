@@ -6,14 +6,14 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rojo";
   version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aCwQ07z7MhBS4C03npwjQOmfJXwD7trYo/upT3GAkHU=";
     fetchSubmodules = true;
   };
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
-    changelog = "https://github.com/rojo-rbx/rojo/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rojo-rbx/rojo/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Project management tool for Roblox";
-    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${version}";
+    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${finalAttrs.version}";
     homepage = "https://rojo.space";
     license = lib.licenses.mpl20;
     longDescription = ''
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rojo";
     maintainers = with lib.maintainers; [ wackbyte ];
   };
-}
+})
