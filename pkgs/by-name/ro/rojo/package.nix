@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/rojo";
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
