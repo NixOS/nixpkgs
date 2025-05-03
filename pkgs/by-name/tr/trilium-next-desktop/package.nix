@@ -5,7 +5,7 @@
   fetchurl,
   makeBinaryWrapper,
   # use specific electron since it has to load a compiled module
-  electron_34,
+  electron_35,
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
@@ -15,7 +15,7 @@
 
 let
   pname = "trilium-next-desktop";
-  version = "0.92.6";
+  version = "0.93.0";
 
   triliumSource = os: arch: sha256: {
     url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${os}-${arch}.zip";
@@ -26,10 +26,10 @@ let
   darwinSource = triliumSource "macos";
 
   # exposed like this for update.sh
-  x86_64-linux.sha256 = "1ky5w6iwqcsc66ywgamkfs9yd6bp51c3y69251pi4b365dwbglf5";
-  aarch64-linux.sha256 = "1zm6g2rkg31ahnn8y5h42vb632pqjg6d8kb4xkkrb4pp9h71sgjm";
-  x86_64-darwin.sha256 = "011y5vh0bfn73l8n4my5pdpgrvvicy1lvnjrb1qyaglg7gw2sy0r";
-  aarch64-darwin.sha256 = "05v6pk1h5y5kqwjkixji3a44dcr219320z0i6yvwv4d8mc943qhs";
+  x86_64-linux.sha256 = "02cz98bgv8l5c96irmxla93h9vpxpfh2l25q5h4r1wcyg00k0gqc";
+  aarch64-linux.sha256 = "0ahkskdaggff34zn6ml8s3v3ig8fq3isrcrckpvy9acyhk2nm924";
+  x86_64-darwin.sha256 = "0p1db3bij5pipwjjh0vyscvd6anq1qriny7y7yxx2sviksgyl0i8";
+  aarch64-darwin.sha256 = "0fkqlxssrdz2g63yhs1l74h037xac04y3dng7kqnrzhn740p2wjc";
 
   sources = {
     x86_64-linux = linuxSource "x64" x86_64-linux.sha256;
@@ -115,7 +115,7 @@ let
       asar pack $tmp/ $out/share/trilium/resources/app.asar
       rm -rf $tmp
 
-      makeWrapper ${lib.getExe electron_34} $out/bin/trilium \
+      makeWrapper ${lib.getExe electron_35} $out/bin/trilium \
         "''${gappsWrapperArgs[@]}" \
         --set-default ELECTRON_IS_DEV 0 \
         --add-flags $out/share/trilium/resources/app.asar

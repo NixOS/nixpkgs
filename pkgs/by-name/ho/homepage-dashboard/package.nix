@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gYFJ/coLQ/iBuMIF3+MaGfhA8J4S8TOi5sbd3ZaYeXU=";
+    hash = "sha256-B6hgQWAILfZNRFN4APX/3T2LcVj2FQPS/CAUdUA+drU=";
   };
 
   # This patch ensures that the cache implementation respects the env
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-qLRtkQjwHH0JK+u+fJnYfJDhZDEasAzprSY+cogNrNg=";
+    hash = "sha256-1WsiSG+dZVpd28bBjf3EYn95sxMCXsQPd27/otWW0nI=";
   };
 
   nativeBuildInputs = [

@@ -152,7 +152,7 @@ let
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
-    maintainers = lib.teams.qt-kde.members;
+    teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   } // (args.meta or { });

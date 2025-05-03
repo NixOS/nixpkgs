@@ -72,12 +72,7 @@ let
     else
       targetPlatform.parsed.kernel.name;
 
-  # Apple Silicon uses a different CPU name in the target triple.
-  swiftArch =
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-      "arm64"
-    else
-      targetPlatform.parsed.cpu.name;
+  swiftArch = stdenv.hostPlatform.darwinArch;
 
   # On Darwin, a `.swiftmodule` is a subdirectory in `lib/swift/<OS>`,
   # containing binaries for supported archs. On other platforms, binaries are
@@ -765,7 +760,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Swift Programming Language";
     homepage = "https://github.com/apple/swift";
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux ++ darwin;
     # Swift doesn't support 32-bit Linux, unknown on other platforms.

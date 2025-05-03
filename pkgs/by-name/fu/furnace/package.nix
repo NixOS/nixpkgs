@@ -12,6 +12,7 @@
   freetype,
   libsndfile,
   libX11,
+  libGL,
   rtmidi,
   SDL2,
   zlib,
@@ -29,14 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furnace";
-  version = "0.6.8";
+  version = "0.6.8.1";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-pdl46Xrq1NS0Wtri/xMfd4SxKnFQykB0TpOG/GJT89Y=";
+    hash = "sha256-R4yQqTPVNx5i9AeY06T0QdNN22ImLvD0bH96r5ojPLo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -66,12 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       portaudio
     ]
+    ++ lib.optionals withGL [
+      libGL
+    ]
     ++ lib.optionals withJACK [
       libjack2
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
       alsa-lib
+      libX11
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;

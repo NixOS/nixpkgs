@@ -5,7 +5,7 @@
 }:
 let
   pname = "saucectl";
-  version = "0.194.1";
+  version = "0.194.3";
 in
 buildGoModule {
   inherit pname version;
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "saucelabs";
     repo = "saucectl";
     tag = "v${version}";
-    hash = "sha256-WsaM1FgbUVcd+6p+OdmIHNs2BVG8lEGgDqY2z9Du7Rg=";
+    hash = "sha256-ECOJ+8gAx/LoCV3l9Nl585E9b8MwptpmweJrwzFx2Vc=";
   };
 
   ldflags = [

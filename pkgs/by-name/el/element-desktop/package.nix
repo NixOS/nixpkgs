@@ -8,7 +8,7 @@
   nodejs,
   fetchYarnDeps,
   jq,
-  electron_34,
+  electron_35,
   element-web,
   sqlcipher,
   callPackage,
@@ -22,7 +22,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_34;
+  electron = electron_35;
   keytar = callPackage ./keytar {
     inherit electron;
   };
@@ -151,7 +151,7 @@ stdenv.mkDerivation (
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
       license = licenses.asl20;
-      maintainers = teams.matrix.members;
+      teams = [ teams.matrix ];
       inherit (electron.meta) platforms;
       mainProgram = "element-desktop";
     };

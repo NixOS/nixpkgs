@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   zope-interface,
   webob,
@@ -10,18 +10,19 @@
 
 buildPythonPackage rec {
   pname = "repoze-who";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "repoze.who";
-    inherit version;
-    hash = "sha256-6VWt8AwfCwxxXoKJeaI37Ev37nCCe9l/Xhe/gnYNyzA=";
+  src = fetchFromGitHub {
+    owner = "repoze";
+    repo = "repoze.who";
+    tag = version;
+    hash = "sha256-vc4McZ0Mve2F/KjT/63NZwy5wl11WG2G/w5sUI71NWg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     zope-interface
     webob
   ];

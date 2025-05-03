@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openstack/python-zaqarclient";
     description = "Client library for OpenStack Zaqar API";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

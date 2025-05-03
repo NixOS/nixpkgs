@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
+    teams = [ teams.android ];
   };
 }

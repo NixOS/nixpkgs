@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       be restarted.
     '';
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 })

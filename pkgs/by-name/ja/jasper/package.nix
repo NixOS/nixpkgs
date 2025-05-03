@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.4";
+  version = "4.2.5";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
+    hash = "sha256-PjgglP4mKW1eOJ7QgUmc4KNsp/d9ubJBWr4CLcQAyRA=";
   };
 
   outputs = [

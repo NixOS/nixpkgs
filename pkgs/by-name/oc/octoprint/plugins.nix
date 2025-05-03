@@ -16,7 +16,7 @@ let
       // {
         pname = "octoprint-plugin-${args.pname}";
         inherit (args) version;
-        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
+        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
         # none of the following have tests
         doCheck = false;
       }
@@ -345,13 +345,13 @@ in
 
   octopod = buildPlugin rec {
     pname = "octopod";
-    version = "0.3.16";
+    version = "0.3.18";
 
     src = fetchFromGitHub {
       owner = "gdombiak";
       repo = "OctoPrint-OctoPod";
       rev = version;
-      sha256 = "sha256-9QKC1MsYO3XihOTAijJUv5i20iMSQHOHPfLiYPV5y8s=";
+      sha256 = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
@@ -366,13 +366,13 @@ in
 
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
-    version = "2.3.3";
+    version = "2.4.0";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-hqm8RShCNpsVbrVXquat5VXqcVc7q5tn5+7Ipqmaw4U=";
+      sha256 = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
     };
 
     propagatedBuildInputs = with super; [

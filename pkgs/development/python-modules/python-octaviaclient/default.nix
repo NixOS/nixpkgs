@@ -30,12 +30,13 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cXReOIfgC5Fx5gT0vF/pV7QwEuC2YfnW4OE+m7nqr20=";
+    pname = "python_octaviaclient";
+    inherit version;
+    hash = "sha256-2yZnuPdhGyfEjS5bLXbRjhl/v+mQyyzYlv3gbztNYig=";
   };
 
   # somehow python-neutronclient cannot be found despite it being supplied
@@ -97,6 +98,6 @@ buildPythonPackage rec {
     description = "OpenStack Octavia Command-line Client";
     homepage = "https://github.com/openstack/python-octaviaclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

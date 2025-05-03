@@ -9,6 +9,7 @@
   # tests
   pillow,
   pytestCheckHook,
+  syrupy,
 
   setuptools,
 }:
@@ -34,11 +35,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "textual_image" ];
 
-  doCheck = false; # tests require [syrupy](https://github.com/syrupy-project/syrupy)
+  doCheck = true;
 
   meta = {
     description = "Render images in the terminal with Textual and rich";

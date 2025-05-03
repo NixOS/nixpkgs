@@ -33,7 +33,7 @@
   zip,
   git,
   makeWrapper,
-  electron_33,
+  electron_34,
   server ? false, # build server version
   pam,
   nixosTests,
@@ -42,7 +42,7 @@
 let
   # Note: we shouldn't use the latest electron here, since the node-abi dependency might
   # need to be updated every time the latest electron gets a new abi version number
-  electron = electron_33;
+  electron = electron_34;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";

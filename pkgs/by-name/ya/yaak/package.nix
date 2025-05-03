@@ -11,7 +11,6 @@
   webkitgtk_4_1,
   glib,
   gtk3,
-  libsoup_2_4,
   openssl,
   pango,
   cairo,
@@ -59,7 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     gtk3
     openssl
-    libsoup_2_4
     webkitgtk_4_1
     pango
     cairo

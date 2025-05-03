@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Undo/Recover trashed files/folders.";
+    description = "Undo/Recover trashed files/folders";
     homepage = "https://github.com/boydaihungst/restore.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

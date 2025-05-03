@@ -277,8 +277,10 @@ self: super:
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      xorg.utilmacros
+    ];
     meta = attrs.meta // {
       platforms = lib.platforms.darwin;
     };

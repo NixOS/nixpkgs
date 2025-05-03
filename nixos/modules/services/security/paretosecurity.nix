@@ -4,17 +4,24 @@
   pkgs,
   ...
 }:
+let
+  cfg = config.services.paretosecurity;
+in
 {
 
   options.services.paretosecurity = {
     enable = lib.mkEnableOption "[ParetoSecurity](https://paretosecurity.com) [agent](https://github.com/ParetoSecurity/agent) and its root helper";
     package = lib.mkPackageOption pkgs "paretosecurity" { };
-    trayIcon = lib.mkEnableOption "tray icon for ParetoSecurity";
+    trayIcon = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Set to false to disable the tray icon and run as a CLI tool only.";
+    };
   };
 
-  config = lib.mkIf config.services.paretosecurity.enable {
-    environment.systemPackages = [ config.services.paretosecurity.package ];
-    systemd.packages = [ config.services.paretosecurity.package ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     # In traditional Linux distributions, systemd would read the [Install] section from
     # unit files and automatically create the appropriate symlinks to enable services.
@@ -36,19 +43,17 @@
     ];
 
     # Enable the tray icon and timer services if the trayIcon option is enabled
-    systemd.user = lib.mkIf config.services.paretosecurity.trayIcon {
-      services.paretosecurity-trayicon = {
-        wantedBy = [ "graphical-session.target" ];
+    systemd.user = lib.mkIf cfg.trayIcon {
+      services = {
+        paretosecurity-trayicon.wantedBy = [ "graphical-session.target" ];
+        paretosecurity-user = {
+          wantedBy = [ "graphical-session.target" ];
+          serviceConfig.Environment = [
+            "PATH=${config.system.path}/bin:${config.system.path}/sbin"
+          ];
+        };
       };
-      services.paretosecurity-user = {
-        wantedBy = [ "graphical-session.target" ];
-        serviceConfig.Environment = [
-          "PATH=${config.system.path}/bin:${config.system.path}/sbin"
-        ];
-      };
-      timers.paretosecurity-user = {
-        wantedBy = [ "timers.target" ];
-      };
+      timers.paretosecurity-user.wantedBy = [ "timers.target" ];
     };
   };
 }

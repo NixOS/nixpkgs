@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Characters/";
     description = "Simple utility application to find and insert unusual characters";
     mainProgram = "gnome-characters";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

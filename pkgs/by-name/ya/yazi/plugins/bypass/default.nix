@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "bypass.yazi";
-  version = "0-unstable-2025-02-16";
+  version = "0-unstable-2025-04-09";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "bypass.yazi";
-    rev = "ecb1f7f6fd305ff4ffff548fa955595af6b26e60";
-    hash = "sha256-XXp4XflrVrs8FrUCRUbSxWZTSGPrIGrpqvB1pARerKQ=";
+    rev = "2ab6d84e8165985dd4d63ef0098e3a30feb3a41a";
+    hash = "sha256-6LiBUvHmN8q/ao1+QhCg75ypuf1i6MyRQiU16Lb8pEs=";
   };
 
   meta = {

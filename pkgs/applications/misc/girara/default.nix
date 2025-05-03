@@ -9,7 +9,7 @@
   dbus,
   xvfb-run,
   glib,
-  gtk,
+  gtk3,
   gettext,
   libiconv,
   json-glib,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glib
-    gtk
+    gtk3
   ];
 
   nativeCheckInputs = [

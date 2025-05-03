@@ -63,6 +63,11 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     # Very time-consuming and some tests fails (performance-related?)
     "tests/integration/test_main.py"
+
+    # AssertionError since textual was updated to 3.1.0
+    # https://github.com/bloomberg/memray/issues/750
+    "tests/unit/test_tree_reporter.py"
+    "tests/unit/test_tui_reporter.py"
   ];
 
   meta = with lib; {

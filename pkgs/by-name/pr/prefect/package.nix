@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.3.3";
+  version = "3.3.5";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4cJoOD7wdmwL+56VMh01JqzyC6817FnLrbIf0Ydaz/g=";
+    hash = "sha256-L5L1ldEpOHJPE9K8UPvpUZlF/85mm5llN912LIlvs9k=";
   };
 
   pythonRelaxDeps = [
@@ -169,7 +169,7 @@ python3Packages.buildPythonApplication rec {
       extraArgs = [
         # avoid pre‐releases
         "--version-regex"
-        ''^\d+\.\d+\.\d+$''
+        "^(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
   };

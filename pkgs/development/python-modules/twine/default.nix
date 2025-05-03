@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  id,
   importlib-metadata,
   keyring,
   packaging,
@@ -23,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "6.0.1";
+  version = "6.1.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NhWLCd9UBuHJwfuO2yT8K+OHcJRD5zdmibk4UxWC7ic=";
+    hash = "sha256-vjJPYnLv+R0H7pPyUe3yMvxkeTXdWFrAA1ObQkBKjb0=";
   };
 
   build-system = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   dependencies =
     [
+      id
       keyring
       packaging
       pkginfo

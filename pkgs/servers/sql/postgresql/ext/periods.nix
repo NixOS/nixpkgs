@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "periods";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "xocolatl";
     repo = "periods";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-97v6+WNDcYb/KivlE/JBlRIZ3gYHj68AlK0fylp1cPo=";
   };
 
@@ -24,4 +24,4 @@ postgresqlBuildExtension rec {
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };
-}
+})

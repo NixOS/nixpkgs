@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGo124Module,
   fetchFromGitHub,
@@ -19,7 +20,6 @@ buildGo124Module rec {
 
   nativeBuildInputs = [
     installShellFiles
-    versionCheckHook
   ];
 
   vendorHash = null;
@@ -32,27 +32,25 @@ buildGo124Module rec {
     "-X=github.com/cilium/cilium/hubble/pkg.Version=${version}"
   ];
 
-  # Test fails at Test_getFlowsRequestWithInvalidRawFilters in github.com/cilium/hubble/cmd/observe
-  # https://github.com/NixOS/nixpkgs/issues/178976
-  # https://github.com/cilium/hubble/pull/656
-  # https://github.com/cilium/hubble/pull/655
-  doCheck = false;
+  doCheck = true;
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hubble \
       --bash <($out/bin/hubble completion bash) \
       --fish <($out/bin/hubble completion fish) \
       --zsh <($out/bin/hubble completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
     homepage = "https://github.com/cilium/hubble/";
-    changelog = "https://github.com/cilium/hubble/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/cilium/hubble/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       humancalico
       bryanasdev000
       FKouhai

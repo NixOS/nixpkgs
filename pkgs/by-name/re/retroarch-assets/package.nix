@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
     description = "Assets needed for RetroArch";
     homepage = "https://libretro.com";
     license = licenses.mit;
-    maintainers = with maintainers; teams.libretro.members ++ [ ];
+    teams = [ teams.libretro ];
     platforms = platforms.all;
   };
 }

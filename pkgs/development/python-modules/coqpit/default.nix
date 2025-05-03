@@ -47,6 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/idiap/coqui-ai-coqpit";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

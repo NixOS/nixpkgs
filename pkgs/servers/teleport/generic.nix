@@ -97,11 +97,7 @@ let
     ];
 
     patches = [
-      (fetchpatch {
-        name = "disable-wasm-opt-for-ironrdp.patch";
-        url = "https://github.com/gravitational/teleport/commit/994890fb05360b166afd981312345a4cf01bc422.patch?full_index=1";
-        hash = "sha256-Y5SVIUQsfi5qI28x5ccoRkBjpdpeYn0mQk8sLO644xo=";
-      })
+      ./disable-wasm-opt-for-ironrdp.patch
     ];
 
     configurePhase = ''
@@ -115,10 +111,14 @@ let
     buildPhase = ''
       PATH=$PATH:$PWD/node_modules/.bin
 
-      pushd web/packages/teleport
+      pushd web/packages
+      pushd shared
       # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
-      RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
+      RUST_MIN_STACK=16777216 wasm-pack build ./libs/ironrdp --target web --mode no-install
+      popd
+      pushd teleport
       vite build
+      popd
       popd
     '';
 

@@ -31,7 +31,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "importlib-metadata" ];
+  pythonRelaxDeps = [
+    "importlib-metadata"
+    "numpy"
+  ];
 
   dependencies = [
     importlib-metadata

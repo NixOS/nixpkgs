@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
     changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

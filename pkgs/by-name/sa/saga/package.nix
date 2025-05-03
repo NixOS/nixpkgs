@@ -96,13 +96,11 @@ stdenv.mkDerivation rec {
     homepage = "https://saga-gis.sourceforge.io";
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
     license = licenses.gpl2Plus;
-    maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
-        michelk
-        mpickering
-      ];
+    maintainers = with maintainers; [
+      michelk
+      mpickering
+    ];
+    teams = [ teams.geospatial ];
     platforms = with platforms; unix;
   };
 }

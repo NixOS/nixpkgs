@@ -4,8 +4,10 @@
   expiringdict,
   fetchPypi,
   google-api-python-client,
+  google-auth,
   google-auth-httplib2,
   google-auth-oauthlib,
+  oauth2client,
   pythonOlder,
   setuptools,
   versioneer,
@@ -36,8 +38,10 @@ buildPythonPackage rec {
   dependencies = [
     expiringdict
     google-api-python-client
+    google-auth
     google-auth-httplib2
     google-auth-oauthlib
+    oauth2client
   ];
 
   # Tests depend on a google auth token

@@ -9,13 +9,13 @@
 
 buildOctavePackage rec {
   pname = "video";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "Andy1978";
     repo = "octave-video";
-    rev = version;
-    hash = "sha256-JFySAu/3lCnfuFMNGYPzX2MqhsRi1+IyJQBcKB9vCo0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fn9LNfuS9dSStBfzBjRRkvP50JJ5K+Em02J9+cHqt6w=";
   };
 
   nativeBuildInputs = [

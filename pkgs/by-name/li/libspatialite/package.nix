@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "spatialite" ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
   };
 })

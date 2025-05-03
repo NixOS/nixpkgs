@@ -28,13 +28,13 @@
 
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KTRgq+0rMBz31AAjrDvQprPHbVobCwIo9+gkcUujglw=";
+    hash = "sha256-9i7uciOr3+hjvesMBlrVq5TgR6fSXYP5RziCnMgfi/E=";
   };
 
   nativeBuildInputs = [
@@ -78,11 +78,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
     license = lib.licenses.bsd3;
-    maintainers =
-      lib.teams.hyprland.members
-      ++ (with lib.maintainers; [
-        iynaix
-      ]);
+    maintainers = with lib.maintainers; [
+      iynaix
+    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprlock";
     platforms = lib.platforms.linux;
   };

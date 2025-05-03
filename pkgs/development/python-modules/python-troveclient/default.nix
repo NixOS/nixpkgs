@@ -84,6 +84,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Trove API";
     license = lib.licenses.asl20;
     mainProgram = "trove";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

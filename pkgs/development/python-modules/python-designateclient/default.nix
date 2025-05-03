@@ -78,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/python-designateclient";
     description = "Client library for OpenStack Designate API";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

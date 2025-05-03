@@ -87,7 +87,6 @@ buildNpmPackage rec {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--commit"
         "--version=stable"
         "--version-regex=^cli-v(.*)$"
       ];

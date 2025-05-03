@@ -1,33 +1,29 @@
 {
+  lib,
   stdenv,
   cmake,
   fetchurl,
   gettext,
   gst_all_1,
-  lib,
   ninja,
   wrapQtAppsHook,
   qmlbox2d,
   qtbase,
   qtcharts,
   qtdeclarative,
-  qtgraphicaleffects,
   qtimageformats,
   qtmultimedia,
-  qtquickcontrols2,
   qtsensors,
   qttools,
-  qtxmlpatterns,
-  extra-cmake-modules,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "4.3";
+  version = "25.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-x+oTh0Nu7MnCnKGR2vkALDclG59576u/+HPdftsDtcc=";
+    hash = "sha256-E3l+5l4rsauidl6Ik5gSWf+SGpVaAVi5X51etl1D05w=";
   };
 
   cmakeFlags = [
@@ -37,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     gettext
     ninja
     qttools
@@ -50,12 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
       qtbase
       qtcharts
       qtdeclarative
-      qtgraphicaleffects
       qtimageformats
       qtmultimedia
-      qtquickcontrols2
       qtsensors
-      qtxmlpatterns
     ]
     ++ (with gst_all_1; [
       gstreamer
@@ -73,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
   # we need a graphical environment for the tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High quality educational software suite, including a large number of activities for children aged 2 to 10";
     homepage = "https://gcompris.net/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "gcompris-qt";
-    maintainers = with maintainers; [ guibou ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ guibou ];
+    platforms = lib.platforms.linux;
   };
 })

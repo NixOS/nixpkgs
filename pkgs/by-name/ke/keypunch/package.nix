@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       tomasajt
       getchoo
     ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

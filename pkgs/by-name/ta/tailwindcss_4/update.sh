@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused gawk nix-prefetch common-updater-scripts jq
+#!nix-shell -i bash -p curl gnused gawk nix-prefetch common-updater-scripts jq ripgrep
 
 set -euo pipefail
 

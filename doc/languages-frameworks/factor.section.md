@@ -125,7 +125,7 @@ factorPackages.buildFactorApplication (finalAttrs: {
   version = "1.0";
 
   src = fetchurl {
-    url = "https://some-forge.org/foo-${finalAttrs.version}.tar.gz"
+    url = "https://some-forge.org/foo-${finalAttrs.version}.tar.gz";
   };
 })
 ```

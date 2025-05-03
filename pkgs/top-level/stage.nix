@@ -54,10 +54,15 @@ in
 
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
-  stdenvNoCC ? stdenv.override {
-    cc = null;
-    hasCC = false;
-  },
+  stdenvNoCC ? (
+    stdenv.override {
+      cc = null;
+      hasCC = false;
+    }
+    # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
+    # size down from ~1 GiB to ~83 MiB, which is a considerable reduction.
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin { extraBuildInputs = [ ]; }
+  ),
 
   # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
@@ -107,15 +112,6 @@ let
             muslabi64 = lib.systems.parse.abis.muslabi64;
           }
           .${parsed.abi.name} or lib.systems.parse.abis.musl;
-      }
-    );
-
-  makeLLVMParsedPlatform =
-    parsed:
-    (
-      parsed
-      // {
-        abi = lib.systems.parse.abis.llvm;
       }
     );
 
@@ -238,21 +234,6 @@ let
       crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
         linker = "lld";
-      };
-    };
-
-    pkgsLLVMLibc = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVMLibc = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using LLVM libc.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
-        libc = "llvm";
       };
     };
 
@@ -393,6 +374,15 @@ let
         gcc =
           lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; }
           // stdenv.hostPlatform.gcc or { };
+      };
+    });
+
+    # Full package set with rocm on cuda off
+    # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
+    pkgsRocm = nixpkgsFun ({
+      config = super.config // {
+        cudaSupport = false;
+        rocmSupport = true;
       };
     });
 

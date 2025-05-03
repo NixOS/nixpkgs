@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-YKlw/YIRogu0AbkRA3kZ4j4tbbVYbgVcLVYifYarmjE=";
+    hash = "sha256-5rENMcYCfHUdb4QsyOnnGe/qCbdYLoXI15e7OqJXit4=";
   };
 
   postPatch = ''
@@ -82,11 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://osm2pgsql.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers =
-      lib.teams.geospatial.members
-      ++ (with lib.maintainers; [
-        jglukasik
-        das-g
-      ]);
+    maintainers = with lib.maintainers; [
+      jglukasik
+      das-g
+    ];
+    teams = [ lib.teams.geospatial ];
   };
 })

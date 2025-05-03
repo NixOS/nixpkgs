@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/";
     description = "Polynomial arithmetic over Z/nZ";
     license = with licenses; [ gpl3 ];
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

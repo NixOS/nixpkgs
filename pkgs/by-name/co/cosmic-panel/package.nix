@@ -11,17 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-panel";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-panel";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-6lt9Rig1pM37B7+nRrR+eYke8umSfYlg8aLB45Q1X+4=";
+    hash = "sha256-QcrkfU6HNZ2tWfKsMdcv58HC/PE7b4T14AIep85TWOY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EIp9s42deMaB7BDe7RAqj2+CnTXjHCtZjS5Iq8l46A4=";
+  cargoHash = "sha256-qufOJeWPRjj4GgWNJmQfYaGKeYOQbkTeFzrUSi9QNnQ=";
 
   nativeBuildInputs = [
     just
@@ -64,11 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Panel for the COSMIC Desktop Environment";
     mainProgram = "cosmic-panel";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      qyliss
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

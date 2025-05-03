@@ -143,7 +143,7 @@ buildDotnetModule rec {
     maintainers = with maintainers; [
       jk
       artemist
-      kekschen
+      willow
     ];
     platforms = [
       "x86_64-linux"

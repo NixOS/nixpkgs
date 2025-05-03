@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OgIgHW9NMW/xSSti3naIR8AQWUtNSv5bYdOcObStBlM=";
   };
 
+  patches = [
+    # https://github.com/fillods/grig/issues/22
+    ./0001-Fix-grig-for-hamlib-4.6.x.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

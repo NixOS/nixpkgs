@@ -264,7 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Machine intelligence library for ROCm";
     homepage = "https://github.com/ROCm/MIOpen";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

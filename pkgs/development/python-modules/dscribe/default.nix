@@ -67,10 +67,14 @@ buildPythonPackage rec {
       # AttributeError: module 'numpy' has no attribute 'product'
       "test_extended_system"
     ]
+    ++
+      lib.optionals
+        ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
+        [
+          # AssertionError on a numerical test
+          "test_cell_list"
+        ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AssertionError on a numerical test
-      "test_cell_list"
-
       # Fatal Python error: Aborted
       # matplotlib/backend_bases.py", line 2654 in create_with_canvas
       "test_examples"

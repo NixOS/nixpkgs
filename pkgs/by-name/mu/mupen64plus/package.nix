@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
   };
 
+  patches = [
+    # Remove unused SDL2 header that erroneously adds libX11 dependency
+    ./remove-unused-header.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     nasm

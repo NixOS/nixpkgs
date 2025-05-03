@@ -28,6 +28,7 @@ let
       "armv6l" = "arm";
       "armv7l" = "arm";
       "i686" = "386";
+      "loongarch64" = "loong64";
       "mips" = "mips";
       "mips64el" = "mips64le";
       "mipsel" = "mipsle";
@@ -186,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
-    maintainers = teams.golang.members;
+    teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };

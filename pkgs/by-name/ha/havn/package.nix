@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "havn";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "mrjackwills";
     repo = "havn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SXsCJzKfm77/IH3H7L5STylusmlN9DN4xd12Vt6L3TM=";
   };
 
@@ -29,10 +29,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/mrjackwills/havn";
     description = "Fast configurable port scanner with reasonable defaults";
-    changelog = "https://github.com/mrjackwills/havn/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mrjackwills/havn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "havn";
     platforms = lib.platforms.linux;
   };
-}
+})

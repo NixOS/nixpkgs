@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
+  libGL,
   IOKit,
   Foundation,
   OpenGL,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       SDL2
+      libGL
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit

@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Debugger support for control of execution and inspection state";
     homepage = "https://github.com/ROCm/ROCdbgapi";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

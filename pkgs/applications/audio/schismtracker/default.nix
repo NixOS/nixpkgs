@@ -7,6 +7,7 @@
   perl,
   pkg-config,
   SDL2,
+  libX11,
   libXext,
   Cocoa,
   utf8proc,
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       SDL2
+      libX11
       utf8proc
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

@@ -154,6 +154,11 @@ let
         };
       });
 
+      # ModuleNotFoundError: No module named 'azure.mgmt.compute.v2024_07_01'
+      azure-mgmt-compute =
+        overrideAzureMgmtPackage super.azure-mgmt-compute "33.0.0" "tar.gz"
+          "sha256-o8wP5PCcjh01I8G/uSYg3+JjoKiTsKwToz1wV+nd3dI=";
+
       # ImportError: cannot import name 'ResourceSku' from 'azure.mgmt.eventgrid.models'
       azure-mgmt-eventgrid =
         overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"

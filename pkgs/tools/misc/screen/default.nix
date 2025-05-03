@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isGNU) "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
+  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
 
   patches = [
     # GNU Screen 5.0 uses strncpy incorrectly in SendCmdMessage
@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
 
   # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # With pkgsLLVM: tests/test-winmsgcond.c:53: assertion 'wmc_end(&wmc, pos + 1, &chg) == pos' failed
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.useLLVM;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";

@@ -30,6 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./find_lcms2_path.patch
   ];
 
+  # make calls to QString::arg compatible with Qt 6.9
+  # see https://doc-snapshots.qt.io/qt6-6.9/whatsnew69.html#new-features-in-qt-6-9
+  postPatch = ''
+    substituteInPlace Pdf4QtLibCore/sources/pdf{documentsanitizer,optimizer}.cpp \
+      --replace-fail \
+        '.arg(counter)' \
+        '.arg<PDFInteger>(counter)'
+    substituteInPlace Pdf4QtLibCore/sources/pdfoptimizer.cpp \
+      --replace-fail \
+        '.arg(bytesSaved)' \
+        '.arg<PDFInteger>(bytesSaved)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

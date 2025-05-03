@@ -15,6 +15,7 @@
   libucontext ? null,
   libxcrypt ? null,
   darwin ? null,
+  isSnapshot ? false,
   isl ? null,
   zlib ? null,
   gnat-bootstrap ? null,
@@ -44,7 +45,7 @@ in
       gettext
     ]
     ++ optionals (perl != null) [ perl ]
-    ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox && flex != null) [ flex ]
+    ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox || isSnapshot && flex != null) [ flex ]
     ++ optionals langAda [ gnat-bootstrap ]
     ++ optionals langRust [ cargo ]
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with

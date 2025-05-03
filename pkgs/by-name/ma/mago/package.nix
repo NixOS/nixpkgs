@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mago";
-  version = "0.22.2";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "carthage-software";
     repo = "mago";
     tag = version;
-    hash = "sha256-78lnNbUKjQYS2BSRGiGmFfnu85Mz+xAwaDG5pVCBqkQ=";
+    hash = "sha256-Kdktcq3czn6YdGKoTB7AjCtfDkNTHhee/kVhMzxsuD8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lwL+5HuT6xiiittGlRDaFWfS9qum4xHginHT/TUMcco=";
+  cargoHash = "sha256-V7x0n+JcXiSGg8sJBKnsB5/KnfJSadYH0i/dNouhoHc=";
 
   env = {
     # Get openssl-sys to use pkg-config

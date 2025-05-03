@@ -131,6 +131,8 @@ buildPythonPackage {
   disabledTests =
     [
       "test_cumulative_simpson_against_simpson_with_default_dx"
+      # https://github.com/scipy/scipy/issues/22789
+      "test_funcs"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # The following tests are broken on aarch64-darwin with newer compilers and library versions.

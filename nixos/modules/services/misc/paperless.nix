@@ -21,7 +21,8 @@ let
       PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
       PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
       PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
-      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+      GRANIAN_HOST = cfg.address;
+      GRANIAN_PORT = toString cfg.port;
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -196,7 +197,7 @@ in
 
     address = lib.mkOption {
       type = lib.types.str;
-      default = "localhost";
+      default = "127.0.0.1";
       description = "Web interface address.";
     };
 
@@ -539,16 +540,15 @@ in
                 echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
                 exit 1
               fi
-              exec ${cfg.package.python.pkgs.gunicorn}/bin/gunicorn \
-                -c ${cfg.package}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
+              exec ${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws "paperless.asgi:application"
             '';
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             Restart = "on-failure";
 
             LimitNOFILE = 65536;
-            # gunicorn needs setuid, liblapack needs mbind
-            SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
+            # liblapack needs mbind
+            SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
             # Needs to serve web page
             PrivateNetwork = false;
           };

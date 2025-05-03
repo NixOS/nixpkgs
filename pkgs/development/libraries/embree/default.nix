@@ -7,7 +7,7 @@
   ispc,
   tbb,
   glfw,
-  openimageio,
+  openimageio_2,
   libjpeg,
   libpng,
   libpthreadstubs,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     tbb
     glfw
-    openimageio
+    openimageio_2
     libjpeg
     libpng
     libX11

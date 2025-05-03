@@ -369,11 +369,10 @@ in
           ;
         inherit fileSystems definitionsDirectory mkfsEnv;
       };
-
-    meta.maintainers = with lib.maintainers; [
-      nikstur
-      willibutz
-    ];
-
   };
+
+  meta.maintainers = with lib.maintainers; [
+    nikstur
+    willibutz
+  ];
 }

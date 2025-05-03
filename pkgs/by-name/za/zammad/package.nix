@@ -20,7 +20,7 @@
 
 let
   pname = "zammad";
-  version = "6.4.1";
+  version = "6.5.0";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
-    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
+    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
   };
 
   buildPhase = ''

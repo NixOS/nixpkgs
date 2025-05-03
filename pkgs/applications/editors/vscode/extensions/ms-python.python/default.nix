@@ -8,7 +8,7 @@
   # Defaults to `false` as we expect it to be project specific most of the time.
   pythonUseFixed ? false,
   # For updateScript
-  vscode-extensions-update-script,
+  vscode-extension-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension rec {
@@ -45,7 +45,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
         --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
     '';
 
-  passthru.updateScript = vscode-extensions-update-script { };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Visual Studio Code extension with rich support for the Python language";

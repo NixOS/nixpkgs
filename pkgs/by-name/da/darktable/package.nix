@@ -47,11 +47,11 @@
   libpng,
   librsvg,
   libsecret,
-  libsoup_2_4,
   libsysprof-capture,
   libthai,
   libtiff,
   libwebp,
+  libxml2,
   libxslt,
   lua,
   util-linux,
@@ -133,11 +133,11 @@ stdenv.mkDerivation rec {
       libpng
       librsvg
       libsecret
-      libsoup_2_4
       libsysprof-capture
       libthai
       libtiff
       libwebp
+      libxml2
       libxslt
       lua
       openexr

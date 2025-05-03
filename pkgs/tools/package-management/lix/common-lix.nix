@@ -9,7 +9,6 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
 }@args:
 
 assert lib.assertMsg (
@@ -369,7 +368,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";

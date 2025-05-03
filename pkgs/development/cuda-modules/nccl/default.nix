@@ -22,16 +22,24 @@ let
     cudaOlder
     cudatoolkit
     ;
+  # versions 2.26+ with CUDA 11.x error with
+  # fatal error: cuda/atomic: No such file or directory
+  version = if cudaAtLeast "12.0" then "2.26.2-1" else "2.25.1-1";
+  hash =
+    if cudaAtLeast "12.0" then
+      "sha256-iLEuru3gaNLcAdH4V8VIv3gjdTGjgb2/Mr5UKOh69N4="
+    else
+      "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
-  version = "2.21.5-1";
+  version = version;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IF2tILwW8XnzSmfn7N1CO7jXL95gUp02guIW5n1eaig=";
+    hash = hash;
   };
 
   __structuredAttrs = true;
@@ -111,12 +119,10 @@ backendStdenv.mkDerivation (finalAttrs: {
     # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
     badPlatforms = lib.optionals cudaFlags.isJetsonBuild [ "aarch64-linux" ];
-    maintainers =
-      with maintainers;
-      [
-        mdaiter
-        orivej
-      ]
-      ++ teams.cuda.members;
+    maintainers = with maintainers; [
+      mdaiter
+      orivej
+    ];
+    teams = [ teams.cuda ];
   };
 })

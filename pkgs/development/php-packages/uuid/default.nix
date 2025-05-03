@@ -30,7 +30,7 @@ buildPecl {
     description = "A wrapper around Universally Unique IDentifier library (libuuid).";
     license = lib.licenses.php301;
     homepage = "https://github.com/php/pecl-networking-uuid";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
     platforms = lib.platforms.linux;
   };
 }

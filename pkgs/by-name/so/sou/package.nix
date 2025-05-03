@@ -3,7 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  versionCheckHook,
+  testers,
+  sou,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,13 +26,16 @@ buildGoModule (finalAttrs: {
     "-X=main.version=${finalAttrs.version}"
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheck = [ versionCheckHook ];
-
   # Some of the tests use localhost networking
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      command = "HOME=$TMPDIR sou --version";
+      package = sou;
+    };
+  };
 
   meta = {
     description = "Tool for exploring files in container image layers";

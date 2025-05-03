@@ -82,7 +82,6 @@ rec {
         # Platforms with host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
         "x86_64-darwin"
-        "i686-darwin"
         "aarch64-darwin"
         "i686-freebsd"
         "x86_64-freebsd"
@@ -110,7 +109,6 @@ rec {
       targetPlatforms = tier1TargetPlatforms ++ [
         # Platforms without host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-        "armv7a-darwin"
         "armv5tel-linux"
         "armv7a-linux"
         "m68k-linux"

@@ -24,6 +24,7 @@
   armTrustedFirmwareAllwinnerH616,
   armTrustedFirmwareRK3328,
   armTrustedFirmwareRK3399,
+  armTrustedFirmwareRK3568,
   armTrustedFirmwareRK3588,
   armTrustedFirmwareS905,
   buildPackages,
@@ -604,6 +605,20 @@ in
       "x86_64-linux"
     ];
     filesToInstall = [ "u-boot.rom" ];
+  };
+
+  ubootQuartz64B = buildUBoot {
+    defconfig = "quartz64-b-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3566;
+    filesToInstall = [
+      "idbloader.img"
+      "idbloader-spi.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
   };
 
   ubootRaspberryPi = buildUBoot {

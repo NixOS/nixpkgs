@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Call `sudo` in yazi.";
+    description = "Call `sudo` in yazi";
     homepage = "https://github.com/TD-Sky/sudo.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

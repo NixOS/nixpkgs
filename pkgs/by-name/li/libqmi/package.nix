@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/libqmi/";
     description = "Modem protocol helper library";
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
     license = with licenses; [
       # Library

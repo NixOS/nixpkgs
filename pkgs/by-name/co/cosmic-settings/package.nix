@@ -27,17 +27,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-UKg3TIpyaqtynk6wLFFPpv69F74hmqfMVPra2+iFbvE=";
+    hash = "sha256-rrPgCXl4uD4Gvstgj9Sdv6rB/0d8wa56CdBjAkTLQG8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mf/Cw3/RLrCYgsk7JKCU2+oPn1VPbD+4JzkUmbd47m8=";
+  cargoHash = "sha256-7Aoy/okgFSwDU6jMYzTGtwPbK82yMgL5bnKBfBUD3vA=";
 
   nativeBuildInputs = [
     cmake
@@ -102,10 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pop-os/cosmic-settings";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-settings";
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

@@ -74,7 +74,7 @@ let
   );
 in
 
-rec {
+lib.recurseIntoAttrs rec {
   # Misc tools
   binaries = stdenv.mkDerivation {
     pname = "${targetPrefix}ndk-toolchain";
@@ -138,6 +138,11 @@ rec {
 
       patchShebangs $out/bin
     '';
+    meta = {
+      description = "The Android NDK toolchain, tuned for other platforms";
+      license = with lib.licenses; [ unfree ];
+      teams = [ lib.teams.android ];
+    };
   };
 
   binutils = wrapBintoolsWith {

@@ -10,7 +10,6 @@
   numpy,
   numpy_1,
   llvmlite,
-  libcxx,
   replaceVars,
   writers,
   numba,
@@ -48,14 +47,10 @@ buildPythonPackage rec {
     #
     # - https://git-scm.com/docs/gitattributes#_export_subst and
     # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
-    #
-    # Hence this hash may change if GitHub / Git will change it's behavior.
-    # Hopefully this will not happen until the next release. We are fairly sure
-    # that upstream relies on those strings to be valid, that's why we don't
-    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
-    # changes too often, we can always use forceFetchGit, and inject the
-    # relevant strings ourselves, using `substituteInPlace`, in postFetch.
-    hash = "sha256-4CaTJPaQduJqD0NQOPp1qsDr/BeCjbfZhulVW/x2ZAU=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
+    '';
+    hash = "sha256-d09armWFI55fqyYCzZNVOq6f5b8BTk0s8fjU0OGrNgo=";
   };
 
   postPatch = ''
@@ -74,7 +69,7 @@ buildPythonPackage rec {
         'numpy_version >= (3, 0)'
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   build-system = [
     setuptools

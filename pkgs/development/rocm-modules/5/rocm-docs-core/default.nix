@@ -64,7 +64,7 @@ buildPythonPackage rec {
       mit
       cc-by-40
     ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 }

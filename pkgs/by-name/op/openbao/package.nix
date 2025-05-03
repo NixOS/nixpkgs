@@ -2,56 +2,57 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  go_1_24,
-  testers,
-  openbao,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
+  callPackage,
+  stdenvNoCC,
+  withUi ? true,
+  withHsm ? stdenvNoCC.hostPlatform.isLinux,
 }:
 
-buildGoModule.override { go = go_1_24; } rec {
+buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
-    tag = "v${version}";
-    hash = "sha256-dDMOeAceMaSrF7P4JZ2MKy6zDa10LxCQKkKwu/Q3kOU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qbLaa7EUQywPRTIgUclTomDDBxzdQnyVAqCGD+iOlpg=";
   };
 
-  vendorHash = "sha256-zcMc63B/jTUykPfRKvea27xRxjOV+zytaxKOEQAUz1Q=";
+  vendorHash = "sha256-Upvv3dxS6HIFxR6T+2/dqnFsUtemjOGUaiICgPlepJ8=";
 
   proxyVendor = true;
 
   subPackages = [ "." ];
 
-  tags = [
-    "openbao"
-    "bao"
-  ];
+  tags = lib.optional withHsm "hsm" ++ lib.optional withUi "ui";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/openbao/openbao/version.GitCommit=${src.rev}"
-    "-X github.com/openbao/openbao/version.fullVersion=${version}"
+    "-X github.com/openbao/openbao/version.GitCommit=${finalAttrs.src.rev}"
+    "-X github.com/openbao/openbao/version.fullVersion=${finalAttrs.version}"
+    "-X github.com/openbao/openbao/version.buildDate=1970-01-01T00:00:00Z"
+  ];
+
+  postConfigure = lib.optionalString withUi ''
+    cp -r --no-preserve=mode ${finalAttrs.passthru.ui} http/web_ui
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   postInstall = ''
     mv $out/bin/openbao $out/bin/bao
+
+    # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
+    installShellCompletion --bash --name bao <(echo complete -C "$out/bin/bao" bao)
   '';
-
-  # TODO: Enable the NixOS tests after adding OpenBao as a NixOS service in an upcoming PR and
-  # adding NixOS tests
-  #
-  # passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev vault-agent; };
-
-  passthru.tests.version = testers.testVersion {
-    package = openbao;
-    command = "HOME=$(mktemp -d) bao --version";
-    version = "v${version}";
-  };
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -61,15 +62,22 @@ buildGoModule.override { go = go_1_24; } rec {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    ui = callPackage ./ui.nix { };
+    tests = { inherit (nixosTests) openbao; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "ui"
+      ];
+    };
   };
 
   meta = {
     homepage = "https://www.openbao.org/";
     description = "Open source, community-driven fork of Vault managed by the Linux Foundation";
-    changelog = "https://github.com/openbao/openbao/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/openbao/openbao/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "bao";
     maintainers = with lib.maintainers; [ brianmay ];
   };
-}
+})

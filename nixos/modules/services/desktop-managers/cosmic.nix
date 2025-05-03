@@ -14,12 +14,7 @@ let
   cfg = config.services.desktopManager.cosmic;
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    thefossguy
-    HeitorAugustoLN
-    nyabinary
-    ahoneybun
-  ];
+  meta.maintainers = lib.teams.cosmic.members;
 
   options = {
     services.desktopManager.cosmic = {

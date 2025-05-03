@@ -6,17 +6,21 @@ The Emacs package comes with some extra helpers to make it easier to configure. 
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; {
-    myEmacs = emacs.pkgs.withPackages (epkgs: (with epkgs.melpaStablePackages; [
-      company
-      counsel
-      flycheck
-      ivy
-      magit
-      projectile
-      use-package
-    ]));
-  };
+  packageOverrides =
+    pkgs: with pkgs; {
+      myEmacs = emacs.pkgs.withPackages (
+        epkgs:
+        (with epkgs.melpaStablePackages; [
+          company
+          counsel
+          flycheck
+          ivy
+          magit
+          projectile
+          use-package
+        ])
+      );
+    };
 }
 ```
 
@@ -24,8 +28,8 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; rec {
-    myEmacsConfig = writeText "default.el" ''
+  packageOverrides = pkgs: {
+    myEmacsConfig = pkgs.writeText "default.el" ''
       (eval-when-compile
         (require 'use-package))
 
@@ -80,19 +84,22 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
         (projectile-global-mode))
     '';
 
-    myEmacs = emacs.pkgs.withPackages (epkgs: (with epkgs.melpaStablePackages; [
-      (runCommand "default.el" {} ''
-         mkdir -p $out/share/emacs/site-lisp
-         cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
-       '')
-      company
-      counsel
-      flycheck
-      ivy
-      magit
-      projectile
-      use-package
-    ]));
+    myEmacs = emacs.pkgs.withPackages (
+      epkgs:
+      (with epkgs.melpaStablePackages; [
+        (runCommand "default.el" { } ''
+          mkdir -p $out/share/emacs/site-lisp
+          cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
+        '')
+        company
+        counsel
+        flycheck
+        ivy
+        magit
+        projectile
+        use-package
+      ])
+    );
   };
 }
 ```
@@ -108,11 +115,12 @@ let
     # ...
   };
 in
-((emacsPackagesFor emacs).overrideScope overrides).withPackages
-  (p: with p; [
+((emacsPackagesFor emacs).overrideScope overrides).withPackages (
+  p: with p; [
     # here both these package will use haskell-mode of our own choice
     ghc-mod
     dante
-  ])
+  ]
+)
 ```
 }

@@ -82,7 +82,7 @@ stdenv.mkDerivation (
           homepage
           license
           sourceProvenance
-          maintainers
+          teams
           platforms
           ;
         description = "High-Performance Polyglot VM (Product: ${product})";

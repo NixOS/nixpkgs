@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "textualeffects";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s6LrsCJu/ubDIXQqxQlY2HVbzDc9+FtUE9oBSulUsm8=";
+    hash = "sha256-hnCTIdSc16v0ftUTeCEwF05vXYXqFplqfDhwnDZGxGM=";
   };
 
   build-system = [ hatchling ];

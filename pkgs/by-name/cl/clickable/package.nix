@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "8.3.0";
+  version = "8.3.1";
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    hash = "sha256-5fymmsZUYwB+wc1X7Y1HwwJbGRjQPwkk9JLTxnfH8fo=";
+    hash = "sha256-Vn2PyALaRrE+jJRdZzW+jjCm3f2GfpgrQcFGB7kr4EM=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -82,6 +82,7 @@ python3Packages.buildPythonApplication rec {
       lib.strings.replaceStrings [ "." ] [ "-" ] version
     }";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members ++ (with lib.maintainers; [ ilyakooo0 ]);
+    maintainers = with lib.maintainers; [ ilyakooo0 ];
+    teams = [ lib.teams.lomiri ];
   };
 }

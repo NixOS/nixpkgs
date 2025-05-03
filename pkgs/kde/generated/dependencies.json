@@ -1147,7 +1147,9 @@
       "kirigami",
       "kirigami-addons",
       "kquickimageeditor",
-      "prison"
+      "kwindowsystem",
+      "prison",
+      "qxmpp"
     ],
     "kajongg": [
       "extra-cmake-modules",
@@ -2769,7 +2771,6 @@
       "kitemmodels",
       "kmailtransport",
       "kmime",
-      "kstatusnotifieritem",
       "kwidgetsaddons",
       "kwindowsystem",
       "kxmlgui",
@@ -3929,6 +3930,7 @@
       "kcoreaddons",
       "ki18n",
       "kio",
+      "ktextwidgets",
       "qtkeychain",
       "sonnet",
       "syntax-highlighting"
@@ -6332,5 +6334,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "7e4e118f"
+  "version": "f0a9ee94"
 }

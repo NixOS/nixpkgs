@@ -12,9 +12,7 @@
 
   meta = {
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      thefossguy
-    ];
+    maintainers = lib.teams.cosmic.members;
   };
 
   nodes.machine = {
@@ -77,14 +75,14 @@
       if (enableAutologin) then
         ''
           with subtest("cosmic-greeter initialisation"):
-              machine.wait_for_unit("graphical.target")
+              machine.wait_for_unit("graphical.target", timeout=120)
         ''
       else
         ''
           from time import sleep
 
-          machine.wait_for_unit("graphical.target")
-          machine.wait_until_succeeds("pgrep --uid ${toString cfg.users.users.cosmic-greeter.name} --full cosmic-greeter")
+          machine.wait_for_unit("graphical.target", timeout=120)
+          machine.wait_until_succeeds("pgrep --uid ${toString cfg.users.users.cosmic-greeter.name} --full cosmic-greeter", timeout=30)
           # Sleep for 10 seconds for ensuring that `greetd` loads the
           # password prompt for the login screen properly.
           sleep(10)
@@ -98,7 +96,7 @@
           # `cosmic-session` target is the Workspaces applet. So, wait
           # for it to start. The process existing means that COSMIC
           # now handles any opened windows from now on.
-          machine.wait_until_succeeds("pgrep --uid ${toString user.uid} --full 'cosmic-panel-button com.system76.CosmicWorkspaces'")
+          machine.wait_until_succeeds("pgrep --uid ${toString user.uid} --full 'cosmic-panel-button com.system76.CosmicWorkspaces'", timeout=30)
 
       # The best way to test for Wayland and XWayland is to launch
       # the GUI applications and see the results yourself.
@@ -123,7 +121,7 @@
               machine.wait_until_succeeds(f''''su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} lswt --json | jq ".toplevels" | grep "^    \\"app-id\\": \\"{app_id}\\"$"' '''', timeout=30)
               machine.succeed(f"pkill {gui_app}", timeout=5)
 
-      machine.succeed("echo 'test completed succeessfully' > /${testName}")
+      machine.succeed("echo 'test completed succeessfully' > /${testName}", timeout=5)
       machine.copy_from_vm('/${testName}')
 
       machine.shutdown()

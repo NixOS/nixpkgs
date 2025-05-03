@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.29.2";
+  version = "9.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${version}";
-    hash = "sha256-69NsbfHF29l92gwO8If9vp8Cdjac3BnO+hbY3b2bZ8E=";
+    hash = "sha256-XmKwK52njnREOogI/kSIaMoZSbYmMGXiL0tPmJvVutA=";
   };
 
   postPatch = ''
@@ -25,13 +25,13 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace tests/common.py \
       --replace-fail 'os.environ["PYTHONPATH"] = os.getcwd()' "pass" \
       --replace-fail 'del os.environ["PYTHONPATH"]' "pass"
-    substituteInPlace snakemake/unit_tests/__init__.py \
+    substituteInPlace src/snakemake/unit_tests/__init__.py \
       --replace-fail '"unit_tests/templates"' '"'"$PWD"'/snakemake/unit_tests/templates"'
-    substituteInPlace snakemake/assets/__init__.py \
+    substituteInPlace src/snakemake/assets/__init__.py \
       --replace-fail "raise err" "return bytes('err','ascii')"
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
   dependencies = with python3Packages; [
     appdirs
@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
     smart-open
     snakemake-interface-executor-plugins
     snakemake-interface-common
+    snakemake-interface-logger-plugins
     snakemake-interface-storage-plugins
     snakemake-interface-report-plugins
     stopit
@@ -126,6 +127,20 @@ python3Packages.buildPythonApplication rec {
       "test_deploy_sources"
       "test_output_file_cache_storage"
       "test_storage"
+
+      # Tries to access internet
+      "test_report_after_run"
+
+      # Needs stress-ng
+      "test_benchmark"
+      "test_benchmark_jsonl"
+
+      # Needs unshare
+      "test_nodelocal"
+
+      # Requires snakemake-storage-plugin-http
+      "test_keep_local"
+      "test_retrieve"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Unclear failure:
@@ -144,6 +159,14 @@ python3Packages.buildPythonApplication rec {
       "test_queue_input_forceall"
       "test_resources_submitted_to_cluster"
       "test_scopes_submitted_to_cluster"
+
+      # Issue with /dev/stderr in sandbox
+      "test_protected_symlink_output"
+
+      # Unclear issue:
+      #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
+      # but pulp solver is not default
+      "test_access_patterns"
     ];
 
   pythonImportsCheck = [ "snakemake" ];

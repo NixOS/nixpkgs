@@ -4,7 +4,6 @@
   src,
   libayatana-appindicator,
   vendor-hash,
-  fetchpatch,
   glib,
   webui,
   pkg-config,
@@ -16,6 +15,7 @@
   meta,
   webkitgtk_4_1,
   openssl,
+  jq,
 }:
 
 rustPlatform.buildRustPackage {
@@ -30,20 +30,7 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-service-mode-mihomo-check.patch";
-      url = "https://github.com/clash-verge-rev/clash-verge-rev/commit/16d4f9fe7ee95b7312a10bf216c818c3e144dea7.patch";
-      hash = "sha256-FQHm1jjo0W1IokMDJGWVMVV9DWItG1prX+TIysL12DA=";
-    })
-  ];
-
-  prePatch = ''
-    cd ..
-  '';
-
   postPatch = ''
-    cd src-tauri
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
@@ -54,11 +41,10 @@ rustPlatform.buildRustPackage {
       --replace-fail '"kwriteconfig5"' '"${libsForQt5.kconfig}/bin/kwriteconfig5"' \
       --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
 
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${webui}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
-    sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
-    sed -i -e '/sidecar/d' -e '/resources/d' tauri.linux.conf.json
+    cat tauri.conf.json | jq 'del(.bundle.resources) | del(.bundle.externalBin) | .build.frontendDist = "${webui}" | .build.beforeBuildCommand = ""' > tauri.conf.json.2
+    mv tauri.conf.json.2 tauri.conf.json
+    cat tauri.linux.conf.json | jq 'del(.bundle.externalBin)' > tauri.linux.conf.json.2
+    mv tauri.linux.conf.json.2 tauri.linux.conf.json
     chmod 777 ../.cargo
     rm ../.cargo/config.toml
   '';
@@ -66,6 +52,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.cargoSetupHook
+    jq
   ];
 
   buildInputs = [

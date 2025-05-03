@@ -80,6 +80,7 @@ let
         hash = "sha256-ME/mkaHhFeHajTbc7zhg9vtf/8XgkgSRu9I/mlQXnds=";
       };
       postPatch = "";
+      patches = [ ];
     }
   );
 

@@ -142,7 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "adwaita-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
     pkgConfigModules = [ "libadwaita-1" ];
   };

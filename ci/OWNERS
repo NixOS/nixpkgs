@@ -172,13 +172,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn
-/maintainers/scripts/haskell                  @sternenseemann @maralorn
-/pkgs/development/compilers/ghc               @sternenseemann @maralorn
-/pkgs/development/haskell-modules             @sternenseemann @maralorn
-/pkgs/test/haskell                            @sternenseemann @maralorn
-/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn
-/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
+/maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn @wolfgangwalther
+/pkgs/development/haskell-modules             @sternenseemann @maralorn @wolfgangwalther
+/pkgs/test/haskell                            @sternenseemann @maralorn @wolfgangwalther
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @wolfgangwalther
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @wolfgangwalther
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
@@ -329,6 +329,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Kakoune
 /pkgs/applications/editors/kakoune     @philiptaron
 
+# LuaPackages
+/pkgs/development/lua-modules         @NixOS/lua
+
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim
 
@@ -463,3 +466,9 @@ pkgs/development/beam-modules/          @NixOS/beam
 pkgs/development/interpreters/erlang/   @NixOS/beam
 pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
+
+# OctoDNS
+pkgs/tools/networking/octodns/ @anthonyroussel
+
+# Teleport
+pkgs/servers/teleport   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger

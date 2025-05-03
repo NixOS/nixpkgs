@@ -4,7 +4,7 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeWrapper,
-  ffmpeg,
+  ffmpeg-headless,
   yt-dlp,
   makeDesktopItem,
   electron,
@@ -28,7 +28,7 @@ buildNpmPackage rec {
     makeWrapper
   ];
   buildInputs = [
-    ffmpeg
+    ffmpeg-headless
     yt-dlp
   ];
 
@@ -56,7 +56,7 @@ buildNpmPackage rec {
   # Also stop it from downloading ytdlp
   postPatch = ''
     substituteInPlace src/renderer.js \
-      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg}' \
+      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg-headless}' \
       --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
       --replace-fail '!!localStorage.getItem("fullYtdlpBinPresent")' 'true'
     # Disable auto-updates
@@ -66,7 +66,8 @@ buildNpmPackage rec {
 
   postInstall = ''
     makeWrapper ${electron}/bin/electron $out/bin/ytdownloader \
-        --add-flags $out/lib/node_modules/ytdownloader/main.js
+        --add-flags $out/lib/node_modules/ytdownloader/main.js \
+        --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
 
     install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
   '';

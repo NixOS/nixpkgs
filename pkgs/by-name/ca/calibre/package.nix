@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.1.1";
+  version = "8.2.100";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lz+QlrajIjA2uvo6Iomejk9Y+djDjUNPAd5BZT3Dz5Y=";
+    hash = "sha256-lUHnaorIUwoac1YgYimxF8KTJOPSUiJg5BKC+hFy0lc=";
   };
 
   patches = [
@@ -219,6 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
       $ETN 'test_websocket_basic'  # flakey
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )
 

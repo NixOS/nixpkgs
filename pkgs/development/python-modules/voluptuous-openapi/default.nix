@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "voluptuous-openapi";
-  version = "0.0.6";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voluptuous-openapi";
     tag = "v${version}";
-    hash = "sha256-D8TafOOGiZO2IpSE7aGB1CVey2zpZgGzZpUvagT9B6Q=";
+    hash = "sha256-shgLUO4dFuvVG8K3yuK8FUsohIb4zgh7h6nvNiaYws0=";
   };
 
   build-system = [ setuptools ];

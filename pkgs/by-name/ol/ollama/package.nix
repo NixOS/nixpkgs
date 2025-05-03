@@ -19,7 +19,6 @@
   cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
   darwin,
   autoAddDriverRunpath,
-  versionCheckHook,
 
   # passthru
   nixosTests,
@@ -41,20 +40,6 @@ assert builtins.elem acceleration [
 ];
 
 let
-  pname = "ollama";
-  # don't forget to invalidate all hashes each update
-  version = "0.6.4";
-
-  src = fetchFromGitHub {
-    owner = "ollama";
-    repo = "ollama";
-    tag = "v${version}";
-    hash = "sha256-d8TPVa/kujFDrHbjwv++bUe2txMlkOxAn34t7wXg4qE=";
-    fetchSubmodules = true;
-  };
-
-  vendorHash = "sha256-4wYgtdCHvz+ENNMiHptu6ulPJAznkWetQcdba3IEB6s=";
-
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
     "but they are mutually exclusive; falling back to cpu"
@@ -70,6 +55,7 @@ let
 
   rocmLibs = [
     rocmPackages.clr
+    rocmPackages.hipblas-common
     rocmPackages.hipblas
     rocmPackages.rocblas
     rocmPackages.rocsolver
@@ -77,10 +63,9 @@ let
     rocmPackages.rocm-device-libs
     rocmPackages.rocm-smi
   ];
-  rocmClang = linkFarm "rocm-clang" { llvm = rocmPackages.llvm.clang; };
   rocmPath = buildEnv {
     name = "rocm-path";
-    paths = rocmLibs ++ [ rocmClang ];
+    paths = rocmLibs;
   };
 
   cudaLibs = [
@@ -131,23 +116,40 @@ let
   goBuild =
     if enableCuda then
       buildGoModule.override { stdenv = cudaPackages.backendStdenv; }
+    else if enableRocm then
+      buildGoModule.override { stdenv = rocmPackages.stdenv; }
     else
       buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
-goBuild {
-  inherit
-    pname
-    version
-    src
-    vendorHash
-    ;
+goBuild (finalAttrs: {
+  pname = "ollama";
+  # don't forget to invalidate all hashes each update
+  version = "0.6.7";
+
+  src = fetchFromGitHub {
+    owner = "ollama";
+    repo = "ollama";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GRqvaD/tAPI9cVlVu+HmRTv5zr7oCHdSlKoFfSLJ4r4=";
+    fetchSubmodules = true;
+  };
+
+  vendorHash = "sha256-t7+GLNC6mRcXq9ErxN6gGki5WWWoEcMfzRVjta4fddA=";
 
   env =
     lib.optionalAttrs enableRocm {
       ROCM_PATH = rocmPath;
       CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
       HIP_PATH = rocmPath;
+      CFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+      CXXFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+    }
+    // lib.optionalAttrs (enableRocm && (rocmPackages.clr.localGpuTargets or false)) {
+
+      # If rocm CLR is set to build for an exact set of targets reuse that target list,
+      # otherwise let ollama use its builtin defaults
+      HIP_ARCHS = lib.concatStringsSep ";" rocmPackages.clr.localGpuTargets;
     }
     // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
@@ -175,7 +177,7 @@ goBuild {
   # replace inaccurate version number with actual release version
   postPatch = ''
     substituteInPlace version/version.go \
-      --replace-fail 0.0.0 '${version}'
+      --replace-fail 0.0.0 '${finalAttrs.version}'
   '';
 
   overrideModAttrs = (
@@ -231,22 +233,24 @@ goBuild {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/ollama/ollama/version.Version=${version}"
+    "-X=github.com/ollama/ollama/version.Version=${finalAttrs.version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheck = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  # required for github.com/ollama/ollama/detect's tests
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (subpath "/System/Library/Extensions"))
+    (allow iokit-open (iokit-user-client-class "AGXDeviceUserClient"))
+  '';
 
   passthru = {
     tests =
       {
         inherit ollama;
         version = testers.testVersion {
-          inherit version;
+          inherit (finalAttrs) version;
           package = ollama;
         };
       }
@@ -264,7 +268,7 @@ goBuild {
       + lib.optionalString rocmRequested ", using ROCm for AMD GPU acceleration"
       + lib.optionalString cudaRequested ", using CUDA for NVIDIA GPU acceleration";
     homepage = "https://github.com/ollama/ollama";
-    changelog = "https://github.com/ollama/ollama/releases/tag/v${version}";
+    changelog = "https://github.com/ollama/ollama/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     platforms = if (rocmRequested || cudaRequested) then platforms.linux else platforms.unix;
     mainProgram = "ollama";
@@ -273,7 +277,6 @@ goBuild {
       dit7ya
       elohmeier
       prusnak
-      roydubnium
     ];
   };
-}
+})

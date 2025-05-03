@@ -10,16 +10,16 @@
   pivKeySupport ? true,
   pkcs11Support ? true,
   testers,
-  cosign,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "cosign";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cosign";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QvU+JpIcE9EX+ehRWvs2bS2VGgGVekNX8f5+mITIwU0=";
   };
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -69,14 +69,14 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = cosign;
+    package = finalAttrs.finalPackage;
     command = "cosign version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";
-    changelog = "https://github.com/sigstore/cosign/releases/tag/v${version}";
+    changelog = "https://github.com/sigstore/cosign/releases/tag/v${finalAttrs.version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     mainProgram = "cosign";
     license = licenses.asl20;
@@ -86,4 +86,4 @@ buildGoModule rec {
       developer-guy
     ];
   };
-}
+})

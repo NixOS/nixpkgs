@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       bsd3
     ];
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.unix;
   };
 })

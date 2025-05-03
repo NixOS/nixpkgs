@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
   libarchive,
   xz,
@@ -9,16 +9,17 @@
   meson,
   pkg-config,
   ninja,
+  qt6,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive-qt";
   version = "2.0.8";
 
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libarchive-qt";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-31a6DsxObSJWyLfT6mVtyjloT26IwFHpH53iuyC2mco=";
   };
 
@@ -26,6 +27,7 @@ mkDerivation rec {
     meson
     ninja
     pkg-config
+    qt6.wrapQtAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -33,14 +35,17 @@ mkDerivation rec {
     bzip2
     zlib
     xz
+    qt6.qtbase
   ];
 
-  meta = with lib; {
+  mesonFlags = [ "-Duse_qt_version=qt6" ];
+
+  meta = {
     description = "Qt based archiving solution with libarchive backend";
     mainProgram = "archiver";
     homepage = "https://gitlab.com/marcusbritanicus/libarchive-qt";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

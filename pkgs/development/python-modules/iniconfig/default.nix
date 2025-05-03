@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "iniconfig";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LZHhNb9y0xpBCxfBbaYQqCy1X2sEd9GpAhNLJKRVuLM=";
+    hash = "sha256-OrvS4ws2cz/uePnH9zCPLQBQ6I8Ah/0lwmRfY8dz4cc=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   patches = [
     # Cannot use hatch-vcs, due to an infinite recursion

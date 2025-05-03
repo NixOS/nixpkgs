@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "eheimdigital";
-  version = "1.0.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "autinerd";
     repo = "eheimdigital";
     tag = version;
-    hash = "sha256-ocDw7ZwuKSGQT8fPcZEbkKyRH0sCOJusopV0kM11rCw=";
+    hash = "sha256-dqQeRaPy9NtvRhmGUVBVzmORJNYxzM2X/ricJUBlCK0=";
   };
 
   build-system = [ hatchling ];

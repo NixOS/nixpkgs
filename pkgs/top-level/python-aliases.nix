@@ -38,14 +38,12 @@ mapAliases ({
   python2Packages = throw "do not use python2Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python27Packages = throw "do not use python27Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python3Packages = throw "do not use python3Packages when building Python packages, specify each used package as a separate argument"; # do not remove
-  python39Packages = throw "do not use python39Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python310Packages = throw "do not use python310Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python311Packages = throw "do not use python311Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python312Packages = throw "do not use python312Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python313Packages = throw "do not use python313Packages when building Python packages, specify each used package as a separate argument"; # do not remove
   python2 = throw "do not use python2 when building Python packages, use the generic python parameter instead"; # do not remove
   python3 = throw "do not use python3 when building Python packages, use the generic python parameter instead"; # do not remove
-  python39 = throw "do not use python39 when building Python packages, use the generic python parameter instead"; # do not remove
   python310 = throw "do not use python310 when building Python packages, use the generic python parameter instead"; # do not remove
   python311 = throw "do not use python311 when building Python packages, use the generic python parameter instead"; # do not remove
   python312 = throw "do not use python312 when building Python packages, use the generic python parameter instead"; # do not remove
@@ -273,8 +271,7 @@ mapAliases ({
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
   flufl_lock = flufl-lock; # added 2023-11-03
-  fn = throw "fn was removed as it is no longer used by any package in nixpkgs, it is not compatible with python 3.11 or newer and it was last updated in 2014."; # added 2025-02-08
-  forbiddenfruit = throw "forbiddenfruit has been removed, because it was unmaintained and relied on the nose test framework"; # added 2024-07-08
+  fn = throw "fn was removed as it is no longer used by any package in nixpkgs, it is not compatible with python 3.11 or newer and it was last updated in 2014."; # added 2025-02-08 # added 2024-07-08
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
@@ -686,7 +683,7 @@ mapAliases ({
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
-  inherit (super.pkgs) ruff-lsp; # added 2023-06-23
+  ruff-lsp = throw "ruff-lsp has been deprecated, use `ruff server` instead"; # added 2025-04-21
   runway-python = throw "SDK has been deprecated and was archived by upstream"; # added 2023-05-03
   safe = throw "safe has been removed, it was unmaintained sinced October 2019"; # added 2024-07-28
   sampledata = throw "sampledata has been removed, it was unmaintained since 2017"; # added 2024-07-27
@@ -697,6 +694,7 @@ mapAliases ({
   scikits-samplerate = throw "scikits-samplerate has been removed, it was unsed and unmaintained since 2015"; # added 2024-05-23
   selectors2 = throw "selectors2 has been removed: archived by upstream."; # added 2024-07-27
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
+  sentry-sdk_2 = sentry-sdk; # added 2025-04-20
   sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
   setuptools_dso = setuptools-dso; # added 2024-03-03
   setuptools_scm = setuptools-scm; # added 2021-06-03
@@ -774,6 +772,7 @@ mapAliases ({
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
+  unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   update_checker = update-checker; # added 2024-01-07
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13

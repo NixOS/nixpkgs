@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     mainProgram = "screengrab";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

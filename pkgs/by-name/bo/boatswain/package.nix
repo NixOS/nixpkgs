@@ -70,7 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/boatswain";
     changelog = "https://gitlab.gnome.org/World/boatswain/-/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ _0xMRTT ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "boatswain";
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

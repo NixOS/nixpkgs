@@ -7,6 +7,7 @@
   buildNpmPackage,
   buildGoModule,
   runCommand,
+  bash,
   chromedriver,
   openapi-generator-cli,
   nodejs,
@@ -277,7 +278,7 @@ let
             pyyaml
             requests-oauthlib
             scim2-filter-parser
-            sentry-sdk_2
+            sentry-sdk
             service-identity
             setproctitle
             structlog
@@ -342,6 +343,8 @@ in
 stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     rm Makefile

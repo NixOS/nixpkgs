@@ -5,7 +5,7 @@
   intltool,
   pkg-config,
   glib,
-  gtk,
+  gtk3,
   lua,
   libwnck,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    gtk
+    gtk3
     lua
     libwnck
   ];

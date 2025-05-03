@@ -151,6 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "papers";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

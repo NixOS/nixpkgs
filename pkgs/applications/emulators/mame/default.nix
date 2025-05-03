@@ -127,10 +127,27 @@ stdenv.mkDerivation rec {
 
   # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
   # it is not possible to use substituteAll
-  postPatch = ''
-    substituteInPlace src/emu/emuopts.cpp \
-      --subst-var-by mamePath "$out/opt/mame"
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/emu/emuopts.cpp \
+        --subst-var-by mamePath "$out/opt/mame"
+    ''
+    # MAME's build system uses `sw_vers` to test whether it needs to link with
+    # the Metal framework or not. However:
+    # a) that would return the build system's version, not the target's, and
+    # b) it can't actually find `sw_vers` in $PATH, so it thinks it's on macOS
+    #    version 0, and doesn't link with Metal - causing missing symbol errors
+    #    when it gets to the link step, because other parts of the build system
+    #    _do_ use the correct target version number.
+    # This replaces the `sw_vers` call with the macOS version actually being
+    # targeted, so everything gets linked correctly.
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for file in scripts/src/osd/{mac,sdl}.lua; do
+        substituteInPlace "$file" --replace-fail \
+          'backtick("sw_vers -productVersion")' \
+          "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
+        done
+    '';
 
   desktopItems = [
     (makeDesktopItem {

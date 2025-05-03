@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
@@ -12,14 +12,14 @@
 
 let
   pname = "flclash";
-  version = "0.8.80";
+  version = "0.8.83";
 
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-8zimk2G6vCzh2vhYqUBt0aWMk7xpWMwyzpzB89I7CoA=";
+      hash = "sha256-vkek2pHeXiIQ8pv5t8mRJDvqojhYW5cTUeKWN/mhGu8=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -41,7 +41,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-muMZvmGNfb4VO11kp60VF3sGrh9ajQ51tlX+BF0AsBE=";
+    vendorHash = "sha256-YrJtvkDpSQnx5AE+3zjCim8lrTjARzJvz6nCkKVOCew=";
 
     env.CGO_ENABLED = 0;
 
@@ -57,7 +57,7 @@ let
     meta = metaCommon;
   };
 in
-flutter327.buildFlutterApplication {
+flutter329.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -71,6 +71,8 @@ flutter327.buildFlutterApplication {
     keybinder3
     libayatana-appindicator
   ];
+
+  flutterBuildFlags = [ "--dart-define=APP_ENV=stable" ];
 
   desktopItems = [
     (makeDesktopItem {

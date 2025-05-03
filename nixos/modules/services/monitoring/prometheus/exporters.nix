@@ -65,6 +65,7 @@ let
         "dnssec"
         "domain"
         "dovecot"
+        "ebpf"
         "fastly"
         "flow"
         "fritz"

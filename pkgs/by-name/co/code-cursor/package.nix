@@ -48,26 +48,26 @@
 }:
 let
   pname = "cursor";
-  version = "0.48.7";
+  version = "0.49.6";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/linux/x64/Cursor-0.48.7-x86_64.AppImage";
-      hash = "sha256-LxAUhmEM02qCaeUUsHgjv0upAF7eerX+/QiGeKzRY4M=";
+      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/x64/Cursor-0.49.6-x86_64.AppImage";
+      hash = "sha256-WH4/Zw0VJmRGyRzMlkThkhZ4fGysMKBUSIPCTsyGS4w=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/linux/arm64/Cursor-0.48.7-aarch64.AppImage";
-      hash = "sha256-l1T0jLX7oWjq4KzxO4QniUAjzVbBu4SWA1r5aXGpDS4=";
+      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/arm64/Cursor-0.49.6-aarch64.AppImage";
+      hash = "sha256-cpNoff6mDRkT2RicaDlxzqVP9BNe6UEGgJVHr1xMiv0=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-h9zcmZRpOcfBRK5Xw/AdY/rwlINEHYiUgpCoGXg6hSY=";
+      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-fAaLY9YTIuNThFl5OsIMHavy2xwDgYooL4xTSp4Cwzw=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/1d623c4cc1d3bb6e0fe4f1d5434b47b958b05876/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-FsXabTXN1Bkn1g4ZkQVqa+sOx4JkSG9c09tp8lAcPKM=";
+      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-DNN2+gfs9u0tZmh75J258d2TL6ErIYludMgPJZcgfb8=";
     };
   };
 
@@ -112,7 +112,6 @@ stdenvNoCC.mkDerivation {
     gtk3
     libdrm
     libgbm
-    libGL
     libGL
     libva-minimal
     libxkbcommon
@@ -162,7 +161,8 @@ stdenvNoCC.mkDerivation {
       substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
 
       wrapProgram $out/bin/cursor \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
+        --add-flags "--update=false" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=x11 --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
     ''}
 
     ${lib.optionalString hostPlatform.isDarwin ''

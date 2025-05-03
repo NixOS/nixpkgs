@@ -24,9 +24,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # requires network connections
-    "-m 'not request'"
+    "request"
   ];
 
   pythonImportsCheck = [ "xyzservices.providers" ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Source of XYZ tiles providers";
     homepage = "https://github.com/geopandas/xyzservices";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

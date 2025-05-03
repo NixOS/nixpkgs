@@ -28,7 +28,7 @@
   pydantic,
   pyyaml,
   requests,
-  sentry-sdk_2,
+  sentry-sdk,
   setproctitle,
   setuptools,
   pythonOlder,
@@ -188,7 +188,7 @@ buildPythonPackage rec {
       pydantic
       pyyaml
       requests
-      sentry-sdk_2
+      sentry-sdk
       setproctitle
       # setuptools is necessary since pkg_resources is required at runtime.
       setuptools
@@ -250,6 +250,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Require docker access
     "tests/system_tests"
+
+    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
+    "tests/unit_tests/test_analytics/test_sentry.py"
   ];
 
   disabledTests =

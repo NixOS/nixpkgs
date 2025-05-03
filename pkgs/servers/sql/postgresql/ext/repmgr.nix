@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "repmgr";
   version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "repmgr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8G2CzzkWTKEglpUt1Gr7d/DuHJvCIEjsbYDMl3Zt3cs=";
   };
 
@@ -34,4 +34,4 @@ postgresqlBuildExtension rec {
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

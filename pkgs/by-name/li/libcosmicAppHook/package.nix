@@ -76,10 +76,6 @@ makeSetupHook {
 
   meta = {
     description = "Setup hook for configuring and wrapping applications based on libcosmic";
-    maintainers = with lib.maintainers; [
-      HeitorAugustoLN
-      nyabinary
-      thefossguy
-    ];
+    teams = [ lib.teams.cosmic ];
   };
 } ./libcosmic-app-hook.sh

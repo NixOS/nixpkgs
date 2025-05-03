@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "banks";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "masci";
     repo = "banks";
     tag = "v${version}";
-    hash = "sha256-bDOPWq941UGcRXlUO8CVewjmEDFHJH7OZaRTo1Iqbjw=";
+    hash = "sha256-lOlNYIBMa3G06t5KfRWNd/d8aXjxnWp11n8Kw7Ydy+Y=";
   };
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";

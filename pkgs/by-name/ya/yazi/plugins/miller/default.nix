@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Miller, now in yazi.";
+    description = "Miller, now in yazi";
     homepage = "https://github.com/Reledia/miller.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

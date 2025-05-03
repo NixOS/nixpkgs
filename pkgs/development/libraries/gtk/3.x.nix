@@ -65,7 +65,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.48";
+  version = "3.24.49";
 
   outputs = [
     "out"
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-      hash = "sha256-0Qzp6p30TBAW2NFyHznlXT1gf8+4UzSuwNI2zcmnBVY=";
+      hash = "sha256-XqUsaijw5ezy6aPC+suzDQQLc4cfzV8zzRMX6QGKFG4=";
     };
 
   patches =
@@ -284,7 +284,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     pkgConfigModules =
       [
         "gdk-3.0"

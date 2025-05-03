@@ -87,6 +87,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Zun API";
     license = lib.licenses.asl20;
     mainProgram = "zun";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

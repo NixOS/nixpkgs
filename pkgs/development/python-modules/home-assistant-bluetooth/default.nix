@@ -51,6 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/home-assistant-libs/home-assistant-bluetooth";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 }

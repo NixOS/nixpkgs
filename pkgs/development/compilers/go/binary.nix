@@ -18,6 +18,7 @@ let
       "armv7l" = "armv6l";
       "powerpc64le" = "ppc64le";
       "riscv64" = "riscv64";
+      "loongarch64" = "loong64";
     }
     .${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.golang.members;
+    teams = [ lib.teams.golang ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

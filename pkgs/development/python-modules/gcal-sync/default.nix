@@ -3,6 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   freezegun,
   ical,
   pydantic,
@@ -26,6 +27,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-8VUXW6tIX43TV7UIxeforZIxAUqGY9uqpz6WGyH4d8E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "ical-v9-compat.patch";
+      url = "https://github.com/allenporter/gcal_sync/commit/7ce4b4214568764c234bff179cf05f7e03e21c1b.patch";
+      hash = "sha256-OKFOl1uSCFECbZJe5/J+9oD3fpX/sRM1zPgJ+fmBqPg=";
+      excludes = [ "requirements_dev.txt" ];
+    })
+  ];
 
   build-system = [ setuptools ];
 

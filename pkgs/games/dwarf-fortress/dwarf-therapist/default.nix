@@ -6,8 +6,12 @@
   qtdeclarative,
   cmake,
   ninja,
-  version ? "42.1.6",
-  hash ? "sha256-VjCXT4sl3HsFILrqTc3JJSeRedZaOXUbf4KvSzTo0uc=",
+  dfVersions,
+
+  # see: https://github.com/Dwarf-Therapist/Dwarf-Therapist/releases
+  version ? dfVersions.therapist.version,
+  maxDfVersion ? dfVersions.therapist.maxDfVersion,
+  hash ? dfVersions.therapist.git.outputHash,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit hash;
   };
 
@@ -45,6 +49,10 @@ stdenv.mkDerivation rec {
       null;
 
   dontWrapQtApps = true;
+
+  passthru = {
+    inherit maxDfVersion;
+  };
 
   meta = with lib; {
     mainProgram = "dwarftherapist";

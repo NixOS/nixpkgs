@@ -80,6 +80,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-foundation";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

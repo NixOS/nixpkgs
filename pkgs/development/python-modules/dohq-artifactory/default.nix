@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "dohq-artifactory";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "devopshq";
     repo = "artifactory";
     tag = version;
-    hash = "sha256-g6FozwSieurnXS76+yu/lBeL4yIWXdoyl9cUyUpMJx0=";
+    hash = "sha256-oGv7sZWi/e9WWa5W82pJ6d8S2d2e9gaoGZ3P/97IWoI=";
   };
 
   # https://github.com/devopshq/artifactory/issues/470

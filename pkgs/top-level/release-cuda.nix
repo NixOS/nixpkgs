@@ -105,6 +105,7 @@ let
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
+      mistral-rs = linux;
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;

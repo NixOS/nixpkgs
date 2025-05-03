@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  fetchurl,
   makeWrapper,
   nodejs,
   stdenvNoCC,
@@ -11,35 +10,37 @@
   nix-update-script,
 }:
 
-let
-  version = "0.45.0";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "pocket-id";
+  version = "0.51.0";
+
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
-    tag = "v${version}";
-    hash = "sha256-x5Y3ArkIPxiE6avk9DNyFdfkc/pY6h3JH3PZCS8U/GM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tNPbowMytALmvJ1H8IWCmXIQFlXKEHA5+T9FWdpaLi0=";
   };
 
   backend = buildGoModule {
     pname = "pocket-id-backend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/backend";
+    sourceRoot = "${finalAttrs.src.name}/backend";
 
-    vendorHash = "sha256-mqpBP+A2X5ome1Ppg/Kki0C+A77jFtWzUjI/RN+ZCzg=";
+    vendorHash = "sha256-0LAlltXd7YNQu7ymdjUSy75hMBz6MpvmUtgct43BU7M=";
 
     preFixup = ''
       mv $out/bin/cmd $out/bin/pocket-id-backend
     '';
   };
 
-  frontend = buildNpmPackage (finalAttrs: {
+  frontend = buildNpmPackage {
     pname = "pocket-id-frontend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/frontend";
+    sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-cpmZzlz+wusfRLN4iIGdk+I4SWrX/gk2fbhg+Gg3paw=";
+    npmDepsHash = "sha256-CKxa0uL7pBQJiA2LPDA/HQvRk8sjphZ9nur8jb7BnU8=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     nativeBuildInputs = [
@@ -53,7 +54,7 @@ let
       # it still needs a few packages from node_modules, try to strip that
       npm prune --omit=dev --omit=optional $npmFlags
       # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,bits-ui,jiti,@swc,.bin}
+      rm -r node_modules/{lucide-svelte,jiti,@swc,.bin}
       # unused file types
       for pattern in '*.map' '*.map.js' '*.ts'; do
         find . -type f -name "$pattern" -exec rm {} +
@@ -67,17 +68,7 @@ let
 
       runHook postInstall
     '';
-  });
-
-in
-stdenvNoCC.mkDerivation rec {
-  pname = "pocket-id";
-  inherit
-    version
-    src
-    backend
-    frontend
-    ;
+  };
 
   dontUnpack = true;
 
@@ -85,8 +76,8 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    ln -s ${backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-    ln -s ${frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
+    ln -s ${finalAttrs.backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
+    ln -s ${finalAttrs.frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
 
     runHook postInstall
   '';
@@ -108,12 +99,13 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "OIDC provider with passkeys support";
     homepage = "https://pocket-id.org";
-    changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${version}";
+    changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       gepbird
+      marcusramberg
       ymstnt
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

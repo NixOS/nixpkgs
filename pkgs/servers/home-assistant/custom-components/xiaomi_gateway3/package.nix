@@ -20,8 +20,6 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ zigpy ];
 
-  dontBuild = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

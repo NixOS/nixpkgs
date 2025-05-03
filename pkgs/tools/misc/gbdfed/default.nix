@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   freetype,
-  gtk,
+  gtk2-x11,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     freetype
-    gtk
+    gtk2-x11
   ];
 
   patches = [ ./Makefile.patch ];

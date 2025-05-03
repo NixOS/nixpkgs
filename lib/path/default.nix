@@ -165,7 +165,7 @@ let
     # This is a workaround for https://github.com/NixOS/nix/issues/12361 which
     # was needed during the experimental phase of ca-derivations and should be
     # removed once the issue has been resolved.
-    || match "[0-9a-z]{52}" (head components) != null;
+    || components != [ ] && match "[0-9a-z]{52}" (head components) != null;
 
 in
 # No rec! Add dependencies on this file at the top.
