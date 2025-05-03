@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost186,
   glibc,
 }:
 let
-  boost' = boost.override {
+  boost' = boost186.override {
     enableShared = false;
   };
 in
