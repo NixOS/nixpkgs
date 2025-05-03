@@ -78,6 +78,7 @@ let
     ghc983
     ghc984
     ghc9101
+    ghc9102
     # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
@@ -590,6 +591,7 @@ let
       hlint = lib.subtractLists [
         compilerNames.ghc902
         compilerNames.ghc9101
+        compilerNames.ghc9102
         compilerNames.ghc9122
       ] released;
       hpack = released;
@@ -623,6 +625,7 @@ let
       ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
+        compilerNames.ghc9102
         compilerNames.ghc9122
       ] released;
     })
