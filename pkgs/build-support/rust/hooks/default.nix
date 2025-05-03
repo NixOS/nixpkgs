@@ -27,8 +27,6 @@
       name = "cargo-build-hook.sh";
       substitutions = {
         inherit (stdenv.targetPlatform.rust) rustcTarget;
-        inherit (rust.envVars) setEnv;
-
       };
       passthru.tests =
         {
@@ -46,7 +44,6 @@
       name = "cargo-check-hook.sh";
       substitutions = {
         inherit (stdenv.targetPlatform.rust) rustcTarget;
-        inherit (rust.envVars) setEnv;
       };
       passthru.tests =
         {
@@ -105,12 +102,14 @@
         # inputs do not cause us to find the wrong `diff`.
         diff = "${lib.getBin diffutils}/bin/diff";
 
+        inherit (stdenv.targetPlatform.rust) cargoEnvVarTarget;
+
+        cargoTargetLinker = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc";
+
         cargoConfig =
-          lib.optionalString (stdenv.hostPlatform.config != stdenv.targetPlatform.config) ''
-            [target."${stdenv.targetPlatform.rust.rustcTarget}"]
-            "linker" = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
+          # TODO: set host linker via environment variable instead (like the target linker above),
+          #       because .cargo/config.toml is overridden by some projects
           ''
-          + ''
             [target."${stdenv.hostPlatform.rust.rustcTarget}"]
             "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
             "rustflags" = [ "-C", "target-feature=${
@@ -121,6 +120,7 @@
       passthru.tests =
         {
           test = tests.rust-hooks.cargoSetupHook;
+          invalid-config = tests.rust-hooks.cargoSetupHook-invalid-config;
         }
         // lib.optionalAttrs (stdenv.isLinux) {
           testCross = pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
@@ -139,8 +139,6 @@
       ];
       substitutions = {
         inherit (stdenv.targetPlatform.rust) rustcTarget;
-        inherit (rust.envVars) setEnv;
-
       };
     } ./maturin-build-hook.sh
   ) { };

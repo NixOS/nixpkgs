@@ -36,6 +36,8 @@ cargoSetupPostUnpackHook() {
     @cargoConfig@
 EOF
 
+    export CARGO_TARGET_@cargoEnvVarTarget@_LINKER=@cargoTargetLinker@
+
     echo "Finished cargoSetupPostUnpackHook"
 }
 

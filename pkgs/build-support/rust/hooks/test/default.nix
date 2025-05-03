@@ -1,9 +1,12 @@
 {
+  cargo,
+  lib,
+  runCommand,
   rustPlatform,
   stdenv,
-  cargo,
+  writeText,
 }:
-{
+rec {
   /*
     test each hook individually, to make sure that:
       - each hook works properly outside of buildRustPackage
@@ -25,6 +28,24 @@
       mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
     '';
   };
+
+  cargoSetupHook-invalid-config =
+    let
+      sys = lib.systems.elaborate stdenv.system;
+      invalidCargoConfig = writeText "invalid-cargo-config.toml" ''
+        [target.${sys.linuxArch}-unknown-linux-gnu]
+        linker = "${sys.linuxArch}-linux-gnu-gcc"
+      '';
+      invalidSrc = runCommand "invalid-src" { } ''
+        cp -r ${./example-rust-project} $out
+        chmod -R +w $out
+        mkdir -p $out/.cargo
+        cp ${invalidCargoConfig} $out/.cargo/config.toml
+      '';
+    in
+    cargoSetupHook.overrideAttrs (old: {
+      src = invalidSrc;
+    });
 
   cargoBuildHook = stdenv.mkDerivation {
     name = "test-cargoBuildHook";
