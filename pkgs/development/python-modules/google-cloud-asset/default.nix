@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.29.2";
+  version = "3.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_asset";
     inherit version;
-    hash = "sha256-fFmpPUeKgniruevGhXnJLhzwM4ymO4ERjD8BQ0/HBbs=";
+    hash = "sha256-wveVKsxf7PpFWZD8JTFSi4NNFyoTdcJP6TLZ/jBT3zo=";
   };
 
   build-system = [ setuptools ];
