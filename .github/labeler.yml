@@ -40,6 +40,16 @@
         - pkgs/development/coq-modules/**/*
         - pkgs/top-level/coq-packages.nix
 
+"6.topic: COSMIC":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/services/desktop-managers/cosmic.nix
+        - nixos/modules/services/display-managers/cosmic-greeter.nix
+        - nixos/tests/cosmic.nix
+        - pkgs/by-name/co/cosmic-*/**/*
+        - pkgs/by-name/xd/xdg-desktop-portal-cosmic/*
+
 "6.topic: crystal":
   - any:
     - changed-files:
