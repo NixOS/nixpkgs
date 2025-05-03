@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pkgsBuildHost,
 }:
 
 # Changing the variables CPPFLAGS and BUILD_CONFIG_NAME can be done by
@@ -19,10 +20,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oa6Lmo2yb66IjtEKkZyJBgM/p7rdvmrKfgNd2rAM/Lk=";
   };
 
+  # 1) Fix build for Darwin
+  # 2) Fix cross
+  # 3) Do not run test as part of the buildPhase - the checkPhase will run it as `make test`
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "-arch i386 -arch x86_64" ""
+      --replace-fail "-arch i386 -arch x86_64" "" \
+      --replace-fail "strip" "${pkgsBuildHost.binutils.targetPrefix}strip" \
+      --replace-fail "dist: test" ""
   '';
+
+  strictDeps = true;
 
   buildFlags = [ "dist" ];
 
@@ -30,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=${finalAttrs.version}"
     "SPIFFS_VERSION=unknown"
   ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installPhase = ''
     install -Dm755 -t $out/bin mkspiffs
