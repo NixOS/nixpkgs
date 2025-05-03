@@ -64,9 +64,9 @@ mkCoqDerivation {
       null;
 
   propagatedBuildInputs = [
-    mathcomp.algebra
-    mathcomp.ssreflect
+    mathcomp.boot
     mathcomp.fingroup
+    mathcomp.algebra
   ];
 
   meta = with lib; {
