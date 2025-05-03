@@ -16,14 +16,15 @@
   quarto,
   extraPythonPackages ? ps: [ ],
   sysctl,
+  which,
 }:
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.6.43";
+  version = "1.7.29";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-9cwGPduP0BN0fNtMb8lklK5FftJMuuPaqCFRN8vL+cI=";
+    hash = "sha256-UFXNyovsvRmLTAHQ3P/XYZwL4su9xwmrTQCFy3VXkak=";
   };
 
   patches = [
@@ -32,6 +33,7 @@ stdenv.mkDerivation (final: {
 
   nativeBuildInputs = [
     makeWrapper
+    which
   ];
 
   dontStrip = true;
@@ -81,7 +83,7 @@ stdenv.mkDerivation (final: {
     quarto-check =
       runCommand "quarto-check"
         {
-          nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
+          nativeBuildInputs = [ which ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
         }
         ''
           export HOME="$(mktemp -d)"
