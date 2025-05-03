@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.0.0-rc.2";
-  sha256 = "729fca42bb7266031dd020f3935423ea8d4b4e2d119b34b608f1d079e5c1621a";
+  version = "24.0.0-rc.3";
+  sha256 = "9bbca08fba05f075a20f734ea80b195a4a39218476b60b32db79e1d393fda20b";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -51,11 +51,6 @@ buildNodejs {
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
-      # fix test failure on macos 15.4
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/33f6e1ea296cd20366ab94e666b03899a081af94.patch?full_index=1";
-        hash = "sha256-aVBMcQlhQeviUQpMIfC988jjDB2BgYzlMYsq+w16mzU=";
-      })
     ]
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts
