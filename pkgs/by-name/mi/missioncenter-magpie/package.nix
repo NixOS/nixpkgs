@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  mission-center,
   fetchFromGitLab,
   rustPlatform,
 
@@ -35,7 +36,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "missioncenter-magpie";
-  version = "1.0.0";
+  inherit (mission-center) version;
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
