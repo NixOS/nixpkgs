@@ -98,7 +98,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
     homepage = "https://www.openclonk.org";
-    license = with lib.licenses; if enableSoundtrack then unfreeRedistributable else isc;
+    license = with lib.licenses; [ isc ] ++ lib.optional enableSoundtrack unfreeRedistributable;
     mainProgram = "openclonk";
     maintainers = [ ];
     platforms = lib.platforms.linux;
