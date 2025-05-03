@@ -4,7 +4,7 @@
   coq,
   version ? null,
   equations,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-analysis,
   mathcomp-experimental-reals,
   extructures,
@@ -19,7 +19,7 @@
   defaultVersion =
     with lib.versions;
     lib.switch
-      [ coq.coq-version mathcomp-ssreflect.version ]
+      [ coq.coq-version mathcomp-boot.version ]
       [
         {
           cases = [
@@ -62,7 +62,7 @@
 
   propagatedBuildInputs = [
     equations
-    mathcomp-ssreflect
+    mathcomp-boot
     mathcomp-analysis
     mathcomp-experimental-reals
     extructures
