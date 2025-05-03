@@ -41,9 +41,27 @@
   IMGUI_FREETYPE ? false,
   IMGUI_FREETYPE_LUNASVG ? false,
   IMGUI_USE_WCHAR32 ? false,
-}@args:
+  # Enable docking and multi-viewports features[^2]
+  # [^2]: https://github.com/ocornut/imgui/wiki/Docking
+  dockingSupport ? false,
+}:
 
 let
+  version = "1.91.9b";
+  srcs = {
+    master = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      tag = "v${version}";
+      hash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
+    };
+    docking = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      tag = "v${version}-docking";
+      hash = "sha256-mQOJ6jCN+7VopgZ61yzaCnt4R1QLrW7+47xxMhFRHLQ=";
+    };
+  };
   vcpkgSource = applyPatches {
     inherit (vcpkg) src;
     patches = [
@@ -56,9 +74,9 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgui";
-  version = "1.91.4";
+  inherit version;
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -66,12 +84,7 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  src = fetchFromGitHub {
-    owner = "ocornut";
-    repo = "imgui";
-    tag = "v${version}";
-    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
-  };
+  src = if dockingSupport then srcs.docking else srcs.master;
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
   postPatch = ''
@@ -142,7 +155,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit; # vcpkg licensed as MIT too
     maintainers = with lib.maintainers; [
       SomeoneSerge
+      ivyfanchiang
     ];
     platforms = lib.platforms.all;
   };
-}
+})

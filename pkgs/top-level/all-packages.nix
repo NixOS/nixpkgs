@@ -9669,6 +9669,7 @@ with pkgs;
   imgui = callPackage ../development/libraries/imgui {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
+  imgui-docking = imgui.override { dockingSupport = true; };
 
   imlib2Full = imlib2.override {
     # Compilation error on Darwin with librsvg. For more information see:
