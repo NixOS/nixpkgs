@@ -5593,6 +5593,8 @@ let
         };
       };
 
+      yy0931.vscode-sqlite3-editor = callPackage ./yy0931.vscode-sqlite3-editor { };
+
       yzane.markdown-pdf = callPackage ./yzane.markdown-pdf { };
 
       yzhang.dictionary-completion = buildVscodeMarketplaceExtension {
