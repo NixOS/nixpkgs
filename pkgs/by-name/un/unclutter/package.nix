@@ -15,7 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS=-std=c89"
+  ];
 
   installPhase = ''
     mkdir -pv "$out/bin"
