@@ -29,7 +29,7 @@ let
     ];
   };
 
-  version = "0.0.21";
+  version = "0.0.22";
   tag = "v${version}";
 in
 buildPythonPackage {
@@ -37,13 +37,13 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-Q5f4WihaT88R+x4jMUuRNBvWglkGdS5oi+o9jOk+tSE=";
+    hash = "sha256-xfm/dGZUF1UlQz/OXYYsHzSE+j5G/updfLzW0a4+vSM=";
   };
 
   pythonRelaxDeps = [
