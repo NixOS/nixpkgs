@@ -7,6 +7,7 @@
   SDL,
   addDriverRunpath,
   alembic,
+  apple-sdk_15,
   blender,
   boost,
   brotli,
@@ -287,6 +288,9 @@ stdenv'.mkDerivation (finalAttrs: {
           OpenAL
           OpenGL
           SDL
+          # blender chooses Metal features based on runtime system version
+          # lets use the latest SDK and let Blender handle falling back on older systems.
+          apple-sdk_15
           brotli
           llvmPackages.openmp
           sse2neon
@@ -432,7 +436,6 @@ stdenv'.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    broken = stdenv.hostPlatform.isDarwin; # fails due to too-old SDK, using newer SDK fails to compile
     maintainers = with lib.maintainers; [
       amarshall
       veprbl
