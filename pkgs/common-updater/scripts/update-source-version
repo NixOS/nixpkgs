@@ -283,8 +283,53 @@ if cmp -s "$nixFile" "$nixFile.cmp"; then
     die "Failed to replace temporary source hash of '$attr' to the final source hash!"
 fi
 
+cargoHashExists=$(nix-instantiate $systemArg --eval --strict -E "let pkgs = $importTree; in builtins.hasAttr \"cargoHash\" pkgs.$attr")
+
+if [[ "$cargoHashExists" = "true" ]]; then
+    # Get old cargo hash though $attr.cargoHash
+    oldCargoHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.cargoHash" | tr -d '"')
+    if [[ -z "$oldCargoHash" ]]; then
+        die "Couldn't evaluate old cargo hash from '$attr.cargoHash'!"
+    fi
+    if [[ $(grep --count "$oldCargoHash" "$nixFile") != 1 ]]; then
+        die "Couldn't locate old cargo hash '$oldCargoHash' (or it appeared more than once) in '$nixFile'!"
+    fi
+
+    # Replace cargo hash with temporary hash
+    oldCargoHashEscaped=$(echo "$oldCargoHash" | sed -re 's|[+]|\\&|g')
+    tempCargoHash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    tempCargoHashEscaped=$(echo "$tempCargoHash" | sed -re 's|[+]|\\&|g')
+    sed -i.cargohash.cmp "$nixFile" -re "s|\"$oldCargoHashEscaped\"|\"$tempCargoHash\"|"
+    if cmp -s "$nixFile" "$nixFile.cargohash.cmp"; then
+        die "Failed to replace cargo hash of '$attr' to a temporary hash!"
+    fi
+
+    # Compute new cargo hash
+    nix-build $systemArg --no-out-link -A "$attr.cargoDeps" 2>"$attr.cargohash.fetchlog" >/dev/null || true
+    # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
+    newCargoHash=$(
+        sed '1,/hash mismatch in fixed-output derivation/d' "$attr.cargohash.fetchlog" \
+        | grep --perl-regexp --only-matching 'got: +[: ]\K.+'
+    )
+    if [[ -z "$newCargoHash" ]]; then
+        cat "$attr.cargohash.fetchlog" >&2
+        die "Couldn't figure out new cargo hash of '$attr'!"
+    fi
+
+    # Replace temporary cargo hash with the new one
+    sed -i.cargohash.cmp "$nixFile" -re "s|\"$tempCargoHashEscaped\"|\"$newCargoHash\"|"
+    if cmp -s "$nixFile" "$nixFile.cargohash.cmp"; then
+        die "Failed to replace temporary cargo hash of '$attr' to the final cargo hash!"
+    fi
+fi
+
 rm -f "$nixFile.cmp"
 rm -f "$attr.fetchlog"
+
+if [[ "$cargoHashExists" = "true" ]]; then
+    rm -f "$nixFile.cargohash.cmp"
+    rm -f "$attr.cargohash.fetchlog"
+fi
 
 if [ -n "$printChanges" ]; then
     printf '[{"attrPath":"%s","oldVersion":"%s","newVersion":"%s","files":["%s"]}]\n' "$attr" "$oldVersion" "$newVersion" "$nixFile"
