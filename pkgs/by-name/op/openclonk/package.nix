@@ -42,14 +42,14 @@ let
   };
 in
 stdenv.mkDerivation {
-  version = "unstable-2023-10-30";
+  version = "9.0-unstable-2025-01-11";
   pname = "openclonk";
 
   src = fetchFromGitHub {
     owner = "openclonk";
     repo = "openclonk";
-    rev = "5275334a11ef7c23ce809f35d6b443abd91b415f";
-    sha256 = "14x5b2rh739156l4072rbsnv9n862jz1zafi6ng158ja5fwl16l2";
+    rev = "db975b4a887883f4413d1ce3181f303d83ee0ab5";
+    hash = "sha256-Vt7umsfe2TVZAeKJOXCi2ZCbSv6wAotuMflS7ii7Y/E=";
   };
 
   patches = [
@@ -62,9 +62,14 @@ stdenv.mkDerivation {
     })
   ];
 
-  postInstall = lib.optionalString enableSoundtrack ''
-    ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
-  '';
+  postInstall =
+    ''
+      mv $out/games/openclonk $out/bin
+      rm -r $out/games
+    ''
+    + lib.optionalString enableSoundtrack ''
+      ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
+    '';
 
   nativeBuildInputs = [
     cmake
