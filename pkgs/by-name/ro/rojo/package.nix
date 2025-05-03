@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Tool designed to enable Roblox developers to use professional-grade software engineering tools.
     '';
     mainProgram = "rojo";
-    maintainers = with lib.maintainers; [ wackbyte ];
+    maintainers = with lib.maintainers; [
+      wackbyte
+      HeitorAugustoLN
+    ];
   };
 })
