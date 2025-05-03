@@ -6,6 +6,7 @@
   openssl,
   stdenv,
   darwin,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,6 +46,13 @@ rustPlatform.buildRustPackage rec {
     export CI=true
     export HOME=$(mktemp -d)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/oro";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Package manager for tools that use node_modules";
