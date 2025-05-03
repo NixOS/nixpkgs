@@ -20,6 +20,7 @@
   # lib.optional features with extra dependencies
 
   docsSupport ? true,
+  buildPackages,
   pandoc,
   python3,
 
@@ -106,25 +107,34 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
+  postPatch = ''
+    substituteInPlace cmake/ConkyPlatformChecks.cmake \
+      --replace-fail "pkg_get_variable(Wayland_SCANNER wayland-scanner wayland_scanner)" "set(Wayland_SCANNER ${lib.getExe buildPackages.wayland-scanner})"
+  '';
+
   env = {
     # For some reason -Werror is on by default, causing the project to fail compilation.
     NIX_CFLAGS_COMPILE = "-Wno-error";
     NIX_LDFLAGS = "-lgcc_s";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs =
     [
       cmake
       pkg-config
+      gperf
     ]
     ++ lib.optional docsSupport pandoc
     ++ lib.optional (docsSupport || extrasSupport) (
-      python3.withPackages (ps: [
+      # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
+      buildPackages.python3.withPackages (ps: [
         ps.jinja2
         ps.pyyaml
       ])
     )
-    ++ lib.optional waylandSupport wayland-scanner
     ++ lib.optional luaImlib2Support toluapp
     ++ lib.optional luaCairoSupport toluapp;
 
@@ -132,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       glib
       libXinerama
-      gperf
     ]
     ++ lib.optional ncursesSupport ncurses
     ++ lib.optionals x11Support [
@@ -185,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
