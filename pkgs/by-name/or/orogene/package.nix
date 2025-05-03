@@ -20,8 +20,14 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  cargoPatches = [
+    # Workaround to avoid "error[E0282]"
+    # ref: https://github.com/orogene/orogene/pull/315
+    ./update-outdated-lockfile.patch
+  ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ju3nRevwJZfnoSqEIERkfMyg6Dy8ky53qf1ZXuAOjsw=";
+  cargoHash = "sha256-I08mqyogEuadp+V10svMmCm0i0zOZWiocOpM9E3lgag=";
 
   nativeBuildInputs = [
     pkg-config
