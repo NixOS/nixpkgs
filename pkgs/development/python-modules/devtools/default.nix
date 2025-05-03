@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
 
+  patches = [
+    # https://github.com/samuelcolvin/python-devtools/pull/166
+    ./fix-test-ast-expr.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0' \
