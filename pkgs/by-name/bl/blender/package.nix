@@ -1,9 +1,4 @@
 {
-  Cocoa,
-  CoreGraphics,
-  ForceFeedback,
-  OpenAL,
-  OpenGL,
   SDL,
   addDriverRunpath,
   alembic,
@@ -282,11 +277,6 @@ stdenv'.mkDerivation (finalAttrs: {
         ]
       else
         [
-          Cocoa
-          CoreGraphics
-          ForceFeedback
-          OpenAL
-          OpenGL
           SDL
           # blender chooses Metal features based on runtime system version
           # lets use the latest SDK and let Blender handle falling back on older systems.

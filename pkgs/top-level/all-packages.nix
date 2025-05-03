@@ -13633,13 +13633,6 @@ with pkgs;
 
   blender = callPackage ../by-name/bl/blender/package.nix {
     python3Packages = python311Packages;
-    inherit (darwin.apple_sdk.frameworks)
-      Cocoa
-      CoreGraphics
-      ForceFeedback
-      OpenAL
-      OpenGL
-      ;
   };
 
   blender-hip = blender.override { hipSupport = true; };
