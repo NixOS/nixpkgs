@@ -12,8 +12,6 @@
   ninja,
   pkg-config,
 
-  gcc-unwrapped,
-
   # buildInputs
   curl,
   freealut,
@@ -93,11 +91,6 @@ stdenv.mkDerivation {
     readline
     SDL2
     tinyxml
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
   ];
 
   cmakeBuildType = "RelWithDebInfo";
