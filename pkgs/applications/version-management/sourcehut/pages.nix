@@ -8,13 +8,13 @@
 buildGoModule (
   rec {
     pname = "pagessrht";
-    version = "0.15.7";
+    version = "0.16.0";
 
     src = fetchFromSourcehut {
       owner = "~sircmpwn";
       repo = "pages.sr.ht";
       rev = version;
-      hash = "sha256-Lobuf12ybSO7Y4ztOLMFW0dmPFaBSEPCy4Nmh89tylI=";
+      hash = "sha256-XnKNXYzg9wuL4U2twkAspaQJZy2HWLQQQl9AITtipVU=";
     };
 
     postPatch = ''
@@ -48,6 +48,6 @@ buildGoModule (
   }
   // import ./fix-gqlgen-trimpath.nix {
     inherit unzip;
-    gqlgenVersion = "0.17.42";
+    gqlgenVersion = "0.17.64";
   }
 )
