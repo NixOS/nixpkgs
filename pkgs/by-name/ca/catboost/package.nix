@@ -8,7 +8,7 @@
   llvmPackages,
   ninja,
   openssl,
-  python3Packages,
+  python3,
   ragel,
   yasm,
   zlib,
@@ -24,18 +24,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.7";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I3geFdVQ1Pm61eRXi+ueaxel3QRb8EJV9f4zV2Q7kk4=";
+    hash = "sha256-TsBob9vxFqE4HxuvEpjIbyc3deOpU+gDl4ysn6I+DNY=";
   };
-
-  patches = [
-    ./remove-conan.patch
-  ];
 
   postPatch = ''
     substituteInPlace cmake/common.cmake \
@@ -62,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       llvmPackages.bintools
       ninja
-      (python3Packages.python.withPackages (ps: with ps; [ six ]))
+      python3
       ragel
       yasm
     ]
@@ -71,6 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
+    ]
+    ++ lib.optionals pythonSupport [
+      (python3.withPackages (
+        ps: with ps; [
+          cython
+          numpy
+        ]
+      ))
     ];
 
   buildInputs =
@@ -123,7 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru = {
+    tests = {
+      python = python3.pkgs.catboost;
+    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     description = "High-performance library for gradient boosting on decision trees";
@@ -132,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       library, used for ranking, classification, regression and other machine
       learning tasks for Python, R, Java, C++. Supports computation on CPU and GPU.
     '';
-    changelog = "https://github.com/catboost/catboost/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/catboost/catboost/blob/${finalAttrs.src.tag}/RELEASE.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     homepage = "https://catboost.ai";

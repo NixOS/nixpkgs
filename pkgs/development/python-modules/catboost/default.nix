@@ -22,6 +22,7 @@ buildPythonPackage rec {
     pname
     version
     src
+    meta
     ;
   pyproject = true;
 
@@ -54,9 +55,4 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "catboost" ];
-
-  meta = catboost.meta // {
-    # https://github.com/catboost/catboost/issues/2671
-    broken = lib.versionAtLeast numpy.version "2";
-  };
 }
