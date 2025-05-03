@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "3.3.10";
+  version = "3.3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "scmrepo";
     tag = version;
-    hash = "sha256-BiLxILHbq5Q8iIE2yMBNlnqqFMoRe9z+Bn/FMaA7gtI=";
+    hash = "sha256-0vgpfUeqhol3AZuUotSbGYVyknVSxRLBwVMkcKx3m48=";
   };
 
   build-system = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
-    changelog = "https://github.com/iterative/scmrepo/releases/tag/${version}";
+    changelog = "https://github.com/iterative/scmrepo/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
