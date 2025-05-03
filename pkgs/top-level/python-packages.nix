@@ -15378,8 +15378,6 @@ self: super: with self; {
 
   sabctools = callPackage ../development/python-modules/sabctools { };
 
-  sabyenc = callPackage ../development/python-modules/sabyenc { };
-
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
   sacn = callPackage ../development/python-modules/sacn { };
