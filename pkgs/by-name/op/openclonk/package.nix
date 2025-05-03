@@ -9,6 +9,7 @@
 
   # nativeBuildInputs
   cmake,
+  ninja,
   pkg-config,
 
   gcc-unwrapped,
@@ -24,6 +25,7 @@
   libogg,
   libpng,
   libvorbis,
+  libXrandr,
   openal,
   readline,
   SDL2,
@@ -60,14 +62,13 @@ stdenv.mkDerivation {
     })
   ];
 
-  enableParallelInstalling = false;
-
   postInstall = lib.optionalString enableSoundtrack ''
     ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
   '';
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
   ];
 
@@ -82,6 +83,7 @@ stdenv.mkDerivation {
     libogg
     libpng
     libvorbis
+    libXrandr
     openal
     readline
     SDL2
@@ -101,9 +103,6 @@ stdenv.mkDerivation {
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     mainProgram = "openclonk";
     maintainers = [ ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    platforms = lib.platforms.linux;
   };
 }
