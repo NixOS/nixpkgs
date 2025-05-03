@@ -100,7 +100,7 @@ stdenv.mkDerivation {
     homepage = "https://www.openclonk.org";
     license = with lib.licenses; [ isc ] ++ lib.optional enableSoundtrack unfreeRedistributable;
     mainProgram = "openclonk";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ wolfgangwalther ];
     platforms = lib.platforms.linux;
   };
 }
