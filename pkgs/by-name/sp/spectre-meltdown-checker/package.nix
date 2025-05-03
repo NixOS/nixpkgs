@@ -1,10 +1,11 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  coreutils,
   binutils-unwrapped,
+  coreutils,
+  fetchFromGitHub,
+  lib,
+  makeBinaryWrapper,
+  stdenv,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "34c6095912d115551f69435a55d6e0445932fdf9";
     hash = "sha256-m0f0+AFPrB2fPNd1SkSj6y9PElTdefOdI51Jgfi816w=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   prePatch = ''
     substituteInPlace spectre-meltdown-checker.sh \
