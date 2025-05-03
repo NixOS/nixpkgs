@@ -19,14 +19,10 @@ buildGoModule (
 
     postPatch = ''
       substituteInPlace Makefile \
-        --replace "all: server" ""
-
-      # fix build failure due to unused import
-      substituteInPlace server.go \
-        --replace-warn '	"fmt"' ""
+        --replace-fail "all: server daily" ""
     '';
 
-    vendorHash = "sha256-9hpOkP6AYSZe7MW1mrwFEKq7TvVt6OcF6eHWY4jARuU=";
+    vendorHash = "sha256-koPa4po/eWReoyCKH8XKMLpGQhJ8tzh+CbHg3z6gzYs=";
 
     postInstall = ''
       mkdir -p $out/share/sql/
