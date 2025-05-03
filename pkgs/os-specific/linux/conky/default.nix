@@ -113,11 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "pkg_get_variable(Wayland_SCANNER wayland-scanner wayland_scanner)" "set(Wayland_SCANNER ${lib.getExe buildPackages.wayland-scanner})"
   '';
 
-  env = {
-    # For some reason -Werror is on by default, causing the project to fail compilation.
-    NIX_CFLAGS_COMPILE = "-Wno-error";
-    NIX_LDFLAGS = "-lgcc_s";
-  };
+  env.NIX_LDFLAGS = "-lgcc_s";
 
   strictDeps = true;
 
