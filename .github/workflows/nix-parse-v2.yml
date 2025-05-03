@@ -32,7 +32,7 @@ jobs:
           ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
         if: ${{ env.CHANGED_FILES && env.CHANGED_FILES != '' }}
 
-      - uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+      - uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=channel:nixpkgs-unstable
