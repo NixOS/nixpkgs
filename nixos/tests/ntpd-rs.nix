@@ -69,6 +69,9 @@ import ./make-test-python.nix (
 
         client.succeed("ntp-ctl status | grep server:123")
         server.succeed("ntp-ctl status | grep '\[::\]:123'")
+
+        client.succeed("grep '^mode = \"server\"' $(systemctl status ntpd-rs | grep -oE '/nix/store[^ ]*ntpd-rs.toml')")
+        server.succeed("grep '^mode = \"pool\"' $(systemctl status ntpd-rs | grep -oE '/nix/store[^ ]*ntpd-rs.toml')")
       '';
   }
 )
