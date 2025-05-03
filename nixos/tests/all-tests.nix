@@ -384,6 +384,7 @@ in
   deluge = handleTest ./deluge.nix { };
   dendrite = handleTest ./matrix/dendrite.nix { };
   dependency-track = handleTest ./dependency-track.nix { };
+  device-tree = handleTestOn [ "aarch64-linux" ] ./device-tree.nix { };
   devpi-server = handleTest ./devpi-server.nix { };
   dex-oidc = handleTest ./dex-oidc.nix { };
   dhparams = handleTest ./dhparams.nix { };
