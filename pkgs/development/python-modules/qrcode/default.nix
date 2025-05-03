@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "8.1";
+  version = "8.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6N9zyvcsO6zj6T2foK9ap4Jn1PP1vHqxsgjycWBaXkg=";
+    hash = "sha256-NcPypBcrMxNqufaz7xwAJg3S9m+FjyTYhBigFfRGUGw=";
   };
 
   build-system = [ poetry-core ];
