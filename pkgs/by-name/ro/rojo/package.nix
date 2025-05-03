@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
   pkg-config,
   openssl,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
   version = "7.5.0";
@@ -22,13 +21,8 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-naItqyJaIxFZuswbrE8RZqMffGy1MaIa0RX9RLOWmyw=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
   OPENSSL_NO_VENDOR = "1";
