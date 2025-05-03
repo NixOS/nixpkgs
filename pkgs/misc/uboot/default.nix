@@ -611,7 +611,7 @@ in
     defconfig = "quartz64-b-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
-    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    ROCKCHIP_TPL = rkbin.TPL_RK3566;
     filesToInstall = [
       "idbloader.img"
       "idbloader-spi.img"

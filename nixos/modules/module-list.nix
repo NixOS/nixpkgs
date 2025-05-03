@@ -1515,6 +1515,7 @@
   ./services/web-apps/collabora-online.nix
   ./services/web-apps/commafeed.nix
   ./services/web-apps/convos.nix
+  ./services/web-apps/cook-cli.nix
   ./services/web-apps/crabfit.nix
   ./services/web-apps/davis.nix
   ./services/web-apps/cryptpad.nix
