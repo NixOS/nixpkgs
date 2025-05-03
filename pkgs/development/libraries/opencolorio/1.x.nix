@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  git,
+  gitMinimal,
   pkg-config,
   lcms2,
   tinyxml,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAtts: {
   # TODO: Investigate whether git can be dropped: It's only used to apply patches
   nativeBuildInputs = [
     cmake
-    git
+    gitMinimal
     pkg-config
   ];
 
