@@ -1093,6 +1093,7 @@ mapAliases {
   loc = throw "'loc' has been removed due to lack of upstream maintenance. Consider 'tokei' as an alternative."; # Added 2025-01-25
   loco-cli = loco; # Added 2025-02-24
   loop = throw "'loop' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  LPCNet = throw "'LPCNet' has been abandoned upstream"; # Added 2025-05-03
   luna-icons = throw "luna-icons has been removed as it was removed upstream"; # Added 2024-10-29
   lucene = throw "lucene has been removed since it was both wildly out of date and was not even built properly for 4 years"; # Added 2025-04-10
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
