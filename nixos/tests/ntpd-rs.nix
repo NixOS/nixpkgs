@@ -50,6 +50,9 @@ import ./make-test-python.nix (
           machine.succeed('systemctl is-active ntpd-rs.service')
           machine.succeed('systemctl is-active ntpd-rs-metrics.service')
           machine.succeed('curl http://localhost:9975/metrics | grep ntp_uptime_seconds')
+
+        client.succeed("ntp-ctl status | grep server:123")
+        server.succeed("ntp-ctl status | grep '\[::\]:123'")
       '';
   }
 )
