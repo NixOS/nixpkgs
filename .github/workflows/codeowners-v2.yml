@@ -90,7 +90,7 @@ jobs:
   request:
     name: Request
     runs-on: ubuntu-24.04
-    if: github.repository_owner == 'NixOS'
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.state == 'open'
     steps:
       - uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
 
