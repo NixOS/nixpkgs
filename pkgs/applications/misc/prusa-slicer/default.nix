@@ -28,7 +28,6 @@
   nlopt,
   opencascade-occt_7_6_1,
   openvdb,
-  pcre,
   qhull,
   tbb_2021_11,
   wxGTK32,
@@ -130,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
       nlopt
       opencascade-override'
       openvdb_tbb_2021_8
-      pcre
       qhull
       tbb_2021_11
       wxGTK-override'
