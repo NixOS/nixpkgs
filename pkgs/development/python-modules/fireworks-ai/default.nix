@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "fireworks-ai";
-  version = "0.15.12";
+  version = "0.15.13";
   pyproject = true;
 
   # no source available
   src = fetchPypi {
     pname = "fireworks_ai";
     inherit version;
-    hash = "sha256-I4ClPZIkTGCP05j42XuXOA2Jnz/3EAkfS1CRe3URnsI=";
+    hash = "sha256-ZZSF4R1HOYpNmKnL2OPWoUwdSJJ2j2e3+hzW0QH55io=";
   };
 
   build-system = [

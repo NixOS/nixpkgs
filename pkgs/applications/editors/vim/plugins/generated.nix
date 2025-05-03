@@ -1609,6 +1609,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  bloat-nvim = buildVimPlugin {
+    pname = "bloat.nvim";
+    version = "2025-04-30";
+    src = fetchFromGitHub {
+      owner = "dundalek";
+      repo = "bloat.nvim";
+      rev = "f90bef655ac40fecbaae53e10db1cf7894d090b1";
+      sha256 = "0ah5c84172wkc75zx5ll2dp9y3r867lik29aw5mm7i3lj530p0ri";
+    };
+    meta.homepage = "https://github.com/dundalek/bloat.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
     version = "2023-10-10";
@@ -6535,6 +6548,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  kanagawa-paper-nvim = buildVimPlugin {
+    pname = "kanagawa-paper.nvim";
+    version = "2025-04-27";
+    src = fetchFromGitHub {
+      owner = "thesimonho";
+      repo = "kanagawa-paper.nvim";
+      rev = "4f41353f6a2bf9f25b2466a0f1eb6883d8fd09c1";
+      sha256 = "0gan0jqn4azkqln5xsnffpyjqmzqv1wwv02xv2d0yykmlqk9yqc8";
+    };
+    meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kdl-vim = buildVimPlugin {
     pname = "kdl.vim";
     version = "2023-02-20";
@@ -11437,6 +11463,19 @@ final: prev: {
       sha256 = "16xh0fyv2yzanqwvs1k4159yf6241p6y18h1fbhl6gnzim0i7yw5";
     };
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  oil-git-status-nvim = buildVimPlugin {
+    pname = "oil-git-status.nvim";
+    version = "2025-04-03";
+    src = fetchFromGitHub {
+      owner = "refractalize";
+      repo = "oil-git-status.nvim";
+      rev = "4b5cf53842c17a09420919e655a6a559da3112d7";
+      sha256 = "1jzw6lkvi9xxzqy8xz056xlb45byr1arklh87zmyf0nj9plm2nsp";
+    };
+    meta.homepage = "https://github.com/refractalize/oil-git-status.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

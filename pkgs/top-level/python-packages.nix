@@ -5914,6 +5914,8 @@ self: super: with self; {
 
   gptcache = callPackage ../development/python-modules/gptcache { };
 
+  gpu-rir = callPackage ../development/python-modules/gpu-rir { };
+
   gpuctypes = callPackage ../development/python-modules/gpuctypes { };
 
   gpustat = callPackage ../development/python-modules/gpustat { };
@@ -10597,6 +10599,8 @@ self: super: with self; {
   oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
 
   oslo-log = callPackage ../development/python-modules/oslo-log { };
+
+  oslo-metrics = callPackage ../development/python-modules/oslo-metrics { };
 
   oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
 
@@ -18367,8 +18371,6 @@ self: super: with self; {
 
   unasync = callPackage ../development/python-modules/unasync { };
 
-  unblob-native = callPackage ../development/python-modules/unblob-native { };
-
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
@@ -19109,6 +19111,8 @@ self: super: with self; {
   xdot = callPackage ../development/python-modules/xdot { inherit (pkgs) graphviz; };
 
   xdxf2html = callPackage ../development/python-modules/xdxf2html { };
+
+  xeddsa = toPythonModule (callPackage ../development/python-modules/xeddsa { });
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
