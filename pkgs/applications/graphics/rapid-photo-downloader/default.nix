@@ -17,18 +17,54 @@
   gdk-pixbuf,
   libmediainfo,
   vmtouch,
+  gitUpdater,
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.34";
+  version = "0.9.36";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "rapid-photo-downloader";
     rev = "v${version}";
-    hash = "sha256-4VC1fwQh9L3c5tgLUaC36p9QHL4dR2vkWc2XlNl0Xzw=";
+    hash = "sha256-fFmIbqymYkg2Z1/x0mNsCNlDCOyqVg65CM4a67t+kPQ=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      ifuse
+      libimobiledevice
+      # Python dependencies
+      pyqt5
+      pygobject3
+      gphoto2
+      pyzmq
+      tornado
+      psutil
+      pyxdg
+      arrow
+      python-dateutil
+      easygui
+      babel
+      colour
+      pillow
+      pymediainfo
+      sortedcontainers
+      requests
+      colorlog
+      pyprind
+      setuptools
+      show-in-file-manager
+      tenacity
+    ]
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   postPatch = ''
     # Drop broken version specifier
@@ -72,36 +108,6 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   #       "Namespace [Notify / GExiv2 / GUdev] not available"
   strictDeps = false;
 
-  propagatedBuildInputs =
-    with python3Packages;
-    [
-      ifuse
-      libimobiledevice
-      pyqt5
-      pygobject3
-      gphoto2
-      pyzmq
-      tornado
-      psutil
-      pyxdg
-      arrow
-      python-dateutil
-      easygui
-      babel
-      colour
-      pillow
-      pyheif
-      pymediainfo
-      sortedcontainers
-      requests
-      colorlog
-      pyprind
-      setuptools
-      show-in-file-manager
-      tenacity
-    ]
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
-
   preFixup = ''
     makeWrapperArgs+=(
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
@@ -118,12 +124,17 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "a.*";
+  };
+
+  meta = {
     description = "Photo and video importer for cameras, phones, and memory cards";
     mainProgram = "rapid-photo-downloader";
     homepage = "https://www.damonlynch.net/rapid/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ philipdb ];
   };
 }

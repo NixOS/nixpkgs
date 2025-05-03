@@ -5914,6 +5914,8 @@ self: super: with self; {
 
   gptcache = callPackage ../development/python-modules/gptcache { };
 
+  gpu-rir = callPackage ../development/python-modules/gpu-rir { };
+
   gpuctypes = callPackage ../development/python-modules/gpuctypes { };
 
   gpustat = callPackage ../development/python-modules/gpustat { };
@@ -7537,6 +7539,8 @@ self: super: with self; {
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
+
+  langchain-mistralai = callPackage ../development/python-modules/langchain-mistralai { };
 
   langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
 
@@ -10597,6 +10601,8 @@ self: super: with self; {
   oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
 
   oslo-log = callPackage ../development/python-modules/oslo-log { };
+
+  oslo-metrics = callPackage ../development/python-modules/oslo-metrics { };
 
   oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
 
@@ -17037,6 +17043,8 @@ self: super: with self; {
 
   tempora = callPackage ../development/python-modules/tempora { };
 
+  temporalio = callPackage ../development/python-modules/temporalio { };
+
   tenacity = callPackage ../development/python-modules/tenacity { };
 
   tenant-schemas-celery = callPackage ../development/python-modules/tenant-schemas-celery { };
@@ -18367,8 +18375,6 @@ self: super: with self; {
 
   unasync = callPackage ../development/python-modules/unasync { };
 
-  unblob-native = callPackage ../development/python-modules/unblob-native { };
-
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
@@ -18778,6 +18784,10 @@ self: super: with self; {
 
   wandb = callPackage ../development/python-modules/wandb { };
 
+  wapiti-arsenic = callPackage ../development/python-modules/wapiti-arsenic { };
+
+  wapiti-swagger = callPackage ../development/python-modules/wapiti-swagger { };
+
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 
   warble = callPackage ../development/python-modules/warble { };
@@ -19105,6 +19115,8 @@ self: super: with self; {
   xdot = callPackage ../development/python-modules/xdot { inherit (pkgs) graphviz; };
 
   xdxf2html = callPackage ../development/python-modules/xdxf2html { };
+
+  xeddsa = toPythonModule (callPackage ../development/python-modules/xeddsa { });
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 

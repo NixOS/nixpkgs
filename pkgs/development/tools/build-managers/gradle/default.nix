@@ -229,8 +229,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.13";
-    hash = "sha256-IPGxF2I3JUpvwgTYQ0GW+hGkz7OHVnUZxhVW6HEK7Xg=";
+    version = "8.14";
+    hash = "sha256-Ya0xDTx9Pl2hMbdrvyK1pMB4bp2JLa6MFljUtITePKo=";
     defaultJava = jdk21;
   };
 
@@ -286,7 +286,8 @@ rec {
             tests = {
               toolchains =
                 let
-                  javaVersion = lib.versions.major (lib.getVersion jdk23);
+                  javaVersion = lib.getVersion jdk23;
+                  javaMajorVersion = lib.versions.major javaVersion;
                 in
                 runCommand "detects-toolchains-from-nix-env"
                   {
@@ -302,10 +303,14 @@ rec {
                   }
                   ''
                     cp -a $src/* .
-                    substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaVersion}'
+                    substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
                     env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
                     gradle run --no-daemon --quiet --console plain > $out
-                    test "$(<$out)" = "${javaVersion}"
+                    actual="$(<$out)"
+                    if [[ "${javaVersion}" != "$actual"* ]]; then
+                      echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
+                      exit 1
+                    fi
                   '';
             } // gradle.tests;
           }

@@ -37,16 +37,16 @@ let
 
   hash =
     {
-      aarch64-darwin = "sha256-glN+QlawtpG9aZ2ROCRkDjNCLTLh8IUWs695XShDhzI=";
-      aarch64-linux = "sha256-oyeZrUC2l5O62fknNBdfwEH3p2tFXX8fFrEaA7vWoRg=";
-      x86_64-darwin = "sha256-58io1d+mKcXvcoMQzGBIOQg2b6ehLQS2G6r0RnR+blw=";
-      x86_64-linux = "sha256-8owcCOPSKfZrAxeuGT8dZnmnbAtQiyv12K9Yr0KJhQE=";
+      aarch64-darwin = "sha256-V9i3n/q8GrPQ9qt0AzKJPedAZeeiUm9A5IQ/8FD62b4=";
+      aarch64-linux = "sha256-Qhx/zh9E+5oBjf7vMvvAVQF05rJI0aB0KcBMXZaYlDA=";
+      x86_64-darwin = "sha256-eVu3RCFTHz/uVyt3aBnXBlpCtH5Jdnil0PTEREnxZvs=";
+      x86_64-linux = "sha256-1tZq12F676RhbMvl4ubDirpNjU1a9yOLxd0DAK2xNqY=";
     }
     .${stdenv.hostPlatform.system} or unsupported;
 in
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.33.3.5008";
+  version = "1.34.1.5021";
 
   src = fetchurl {
     url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";

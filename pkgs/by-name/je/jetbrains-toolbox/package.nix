@@ -6,6 +6,7 @@
   fetchurl,
   makeWrapper,
   icu,
+  libappindicator-gtk3,
   undmg,
 }:
 
@@ -65,6 +66,7 @@ let
       install -Dm644 ${src}/jetbrains-toolbox.desktop $out/share/applications/jetbrains-toolbox.desktop
       install -Dm644 ${src}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
       wrapProgram $out/bin/jetbrains-toolbox \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libappindicator-gtk3 ]} \
         --append-flags "--update-failed"
     '';
 

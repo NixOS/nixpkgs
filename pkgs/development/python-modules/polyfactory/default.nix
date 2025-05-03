@@ -48,6 +48,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  disabledTests = [
+    # Unsupported type: LiteralAlias
+    "test_type_alias"
+  ];
+
   pythonImporeCheck = [ "polyfactory" ];
 
   meta = {

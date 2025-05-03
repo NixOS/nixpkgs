@@ -234,9 +234,6 @@ package-maintainers:
     - xmonad-contrib
   erictapen:
     - hakyll
-  evenbrenden:
-    - unleash-client-haskell
-    - unleash-client-haskell-core
   Gabriella439:
     - annah
     - bench

@@ -382,6 +382,15 @@ pkgs.mkShell {
 ```
 will create a development shell where a `node_modules` directory is created & packages symlinked to the Nix store when activated.
 
+:::{.note}
+Commands like `npm install` & `npm add` that writes packages & executables needs to be used with `--package-lock-only`.
+
+This means `npm` installs dependencies by writing into `package-lock.json` without modifying the `node_modules` folder. Installation happens through reloading the devShell.
+This might be best practice since it gives the `nix shell` virtually exclusive ownership over your `node_modules` folder.
+
+It's recommended to set `package-lock-only = true` in your project-local [`.npmrc`](https://docs.npmjs.com/cli/v11/configuring-npm/npmrc).
+:::
+
 ### corepack {#javascript-corepack}
 
 This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.

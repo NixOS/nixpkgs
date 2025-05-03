@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-waQcxdVXZZ09wuLWUNL4nRUHF1rIDI8lAfYc/1bxMl0=";
 
-  buildFeatures = [ "mpris" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 
   nativeBuildInputs = [
     pkg-config

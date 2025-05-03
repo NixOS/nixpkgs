@@ -59,7 +59,7 @@ buildNpmPackage rec {
       $out/share/applications \
       $out/share/icons/hicolor/512x512/apps
 
-    readonly dist=release/linux-unpacked
+    readonly dist=release/*-unpacked
 
     cp -a $dist/resources $out/share/${pname}
 

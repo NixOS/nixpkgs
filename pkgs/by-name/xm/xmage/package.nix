@@ -17,8 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   preferLocalBuild = true;
 
+  nativeBuildInputs = [ unzrip ];
+
+  sourceRoot = "source";
+
   unpackPhase = ''
-    ${unzrip}/bin/unzrip $src
+    runHook preUnpack
+    unzrip $src -d "$sourceRoot"
+    runHook postUnpack
   '';
 
   installPhase =

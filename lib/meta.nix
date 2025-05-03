@@ -289,7 +289,8 @@ rec {
   */
   availableOn =
     platform: pkg:
-    ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
+    pkg != null
+    && ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
     && all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
 
   /**

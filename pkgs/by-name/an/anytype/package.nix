@@ -13,27 +13,27 @@
 
 let
   pname = "anytype";
-  version = "0.45.3";
+  version = "0.46.4";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-fwfxmNca75xAAHKeT2nddz+XZexDomzHbw188LXxZqA=";
+    hash = "sha256-JA8DHOPRLPoc8/GXkHfktVy3sZ5BpSFmgn71Xt15iLE=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "687106c4e37297f86fab79f77ef83599b61ab65c";
-    hash = "sha256-Y0irD0jzqYobnjtD2M1+hTDRUUYnuygUx9+tE1gUoTw=";
+    rev = "07eed415b0eec409dcdfedf848936d41f190c7ec";
+    hash = "sha256-PgDZkL/tg7/uZhLLenRjkb5NB1hQjUJflaAce2TlDRE=";
   };
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-9BI+rXzTYonlMhcH8uiWyyF18JGv8GL1U9hZ9Z6X3As=";
+  npmDepsHash = "sha256-4pMYKmQ7+f8BKztLF4Jfe89tuh+DiQNnS3ulL0i6Gw0=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -48,6 +48,10 @@ buildNpmPackage {
   npmFlags = [
     # keytar needs to be built against electron's ABI
     "--nodedir=${electron.headers}"
+  ];
+
+  patches = [
+    ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
   ];
 
   buildPhase = ''

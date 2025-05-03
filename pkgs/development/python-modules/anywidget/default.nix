@@ -3,12 +3,15 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   pythonOlder,
   hatch-jupyter-builder,
   hatchling,
   importlib-metadata,
+  ipykernel,
   ipywidgets,
   psygnal,
+  pydantic,
   typing-extensions,
   watchfiles,
 }:
@@ -46,7 +49,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    ipykernel
+    pydantic
     watchfiles
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [

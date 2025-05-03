@@ -19,17 +19,21 @@
   dbus,
   python3,
   wrapGAppsHook3,
+  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
   version = "0.5.6";
 
-  outputs = [
-    "out"
-    "dev"
-    "devdoc"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withDocs [
+      "devdoc"
+    ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
@@ -37,14 +41,18 @@ stdenv.mkDerivation rec {
     sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
+    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [ lxml ])) # Tests
     autoreconfHook
     dbus
     docbook_xsl
     gnome-common
     gobject-introspection
-    gtk-doc
+    gtk-doc # required for autoreconfHook, even when `withDocs = false`
     pkg-config
     vala
     which
@@ -66,10 +74,13 @@ stdenv.mkDerivation rec {
       --replace '/usr/lib/systemd/user' '@prefix@/lib/systemd/user'
   '';
 
-  configureFlags = [
-    "--enable-gtk-doc"
-    "--enable-headless-tests"
-  ];
+  configureFlags =
+    [
+      "--enable-headless-tests"
+    ]
+    ++ lib.optionals withDocs [
+      "--enable-gtk-doc"
+    ];
 
   # Fix paths
   makeFlags = [
@@ -79,6 +90,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Requires /etc/machine-id
   doCheck = false;
+  strictDeps = true;
 
   # Ignore deprecation errors
   env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";

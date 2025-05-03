@@ -30,14 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.8.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i0gVKk2nFQQGxvUI2zqPWL82SFJdNglAuZ5gNdNhg2M=";
+    hash = "sha256-zeyg/VdzcWbMXuCE1RELiyGg9mytfpNfIa911BwqqIA=";
   };
 
   postPatch =
@@ -45,17 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       patchShebangs genversion.sh
       substituteInPlace cmake/XRootDConfig.cmake.in \
         --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
-    ''
-    # Upstream started using an absolute path in an install's DESTINATION directive.
-    # This causes our build to fail in `fixupPhase` with:
-    #   Moving /nix/store/jbh4667k5zm74h9wv8y1j11x89cv6pnd-xrootd-5.8.0/include to /nix/store/6vnmipw8p1hc6cmkrsq9v1ay7j6iycq2-xrootd-5.8.0-dev/include
-    #   mv: cannot overwrite '/nix/store/6vnmipw8p1hc6cmkrsq9v1ay7j6iycq2-xrootd-5.8.0-dev/include/xrootd': Directory not empty
-    # Patch submitted upstream: https://github.com/xrootd/xrootd/pull/2478
-    + ''
-      substituteInPlace src/XrdPfc.cmake \
-        --replace-fail \
-        'DESTINATION ''${CMAKE_INSTALL_PREFIX}/include/xrootd/XrdPfc' \
-        'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}/xrootd/XrdPfc'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'

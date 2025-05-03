@@ -68,10 +68,13 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  postFixup = ''
+    patchShebangs --update --host $out/share/dialect/search_provider
+  '';
+
   doCheck = false;
 
-  # handle setup hooks better
-  strictDeps = false;
+  strictDeps = true;
 
   passthru.updateScript = nix-update-script { };
 

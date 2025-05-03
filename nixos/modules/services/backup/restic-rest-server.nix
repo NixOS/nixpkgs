@@ -39,7 +39,7 @@ in
     htpasswd-file = lib.mkOption {
       default = null;
       type = lib.types.nullOr lib.types.path;
-      description = "The path to the servers .htpasswd file. Defaults to {dataDir}/htpasswd.";
+      description = "The path to the servers .htpasswd file. Defaults to `\${dataDir}/.htpasswd`.";
     };
 
     privateRepos = lib.mkOption {

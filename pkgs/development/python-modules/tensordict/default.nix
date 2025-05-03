@@ -34,16 +34,8 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-ZYuu1vKhC5Yi9m3EsPUhA9OXHjmHafUJRCDnQIu5kFk=";
+    hash = "sha256-yEwuCsIKNHQf8iCSB38R8mJXvdOi0+MeNk9M9+jWfxU=";
   };
-
-  # TODO: remove at next release
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail \
-        'version = "0.8.0"' \
-        'version = "0.8.1"'
-  '';
 
   build-system = [
     pybind11

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cfitsio,
   cmake,
   curl,
@@ -22,12 +23,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.5";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-L9hyVfdgFlFfM6MyjR4bUa86FHPbVg7xBWPY8YSHUXw=";
+    hash = "sha256-6hwWMmAGKJmldL8eTLQzzBsumk5thFoqGvm2dWk0Jpo=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/education/kstars/-/commit/92eb37bdb3e24bd06e6da9977f3bf76218c95339.diff";
+      hash = "sha256-f2m15op48FiPYsKJ7WudlejVwoiGYWGnX2QiCnBINU8=";
+    })
+  ];
 
   nativeBuildInputs = with kdePackages; [
     extra-cmake-modules

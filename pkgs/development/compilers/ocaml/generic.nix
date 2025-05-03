@@ -49,7 +49,7 @@ let
 in
 
 let
-  useNativeCompilers = !stdenv.hostPlatform.isMips;
+  useNativeCompilers = !stdenv.hostPlatform.isMips && !stdenv.hostPlatform.isLoongArch64;
   inherit (lib)
     optional
     optionals

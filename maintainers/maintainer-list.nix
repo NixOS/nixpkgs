@@ -1789,6 +1789,12 @@
     githubId = 19378309;
     name = "Simon Struck";
   };
+  aoli-al = {
+    email = "aoli.al@hotmail.com";
+    github = "aoli-al";
+    githubId = 5557706;
+    name = "Ao Li";
+  };
   aorith = {
     email = "aomanu+nixpkgs@gmail.com";
     github = "aorith";
@@ -3354,6 +3360,12 @@
     github = "bmilanov";
     githubId = 30090366;
   };
+  bmrips = {
+    name = "Benedikt M. Rips";
+    email = "benedikt.rips@gmail.com";
+    github = "bmrips";
+    githubId = 20407973;
+  };
   bmwalters = {
     name = "Bradley Walters";
     email = "oss@walters.app";
@@ -4200,6 +4212,12 @@
     github = "Ch1keen";
     githubId = 40013212;
     name = "Han Jeongjun";
+  };
+  ch4og = {
+    email = "mitanick@ya.ru";
+    github = "ch4og";
+    githubId = 32384814;
+    name = "Nikita Mitasov";
   };
   chaduffy = {
     email = "charles@dyfis.net";
@@ -10309,6 +10327,12 @@
     github = "ikervagyok";
     githubId = 7481521;
     name = "Balázs Lengyel";
+  };
+  ik-nz = {
+    email = "me@igk.nz";
+    github = "ik-nz";
+    githubId = 207392575;
+    name = "Isaac Kabel";
   };
   ilarvne = {
     email = "ilarvne@proton.me";
@@ -16762,6 +16786,13 @@
     githubId = 6295090;
     name = "Mats";
   };
+  mymindstorm = {
+    name = "Brendan Early";
+    email = "mymindstorm@evermiss.net";
+    github = "mymindstorm";
+    githubId = 27789806;
+    keys = [ { fingerprint = "52B9 A09F 788F 4D1F 0C94  9EBE EE39 A9F3 0C9D 72B5"; } ];
+  };
   mynacol = {
     github = "Mynacol";
     githubId = 26695166;
@@ -16854,6 +16885,12 @@
     githubId = 692274;
     name = "Daniel Nagy";
     keys = [ { fingerprint = "F6AE 2C60 9196 A1BC ECD8  7108 1B8E 8DCB 576F B671"; } ];
+  };
+  nagymathev = {
+    name = "Viktor Nagymathe";
+    email = "nagymathev@gmail.com";
+    github = "nagymathev";
+    githubId = 49335802;
   };
   naho = {
     github = "trueNAHO";
@@ -19014,6 +19051,13 @@
     github = "phile314";
     githubId = 1640697;
     name = "Philipp Hausmann";
+  };
+  philipdb = {
+    email = "philipdb.art110@passmail.com";
+    name = "Philip de Bruin";
+    github = "PhiliPdB";
+    githubId = 7051056;
+    keys = [ { fingerprint = "01AE 5EC2 39D9 CE4B DDB0  166A 4EC5 5FB7 07DC 24C4"; } ];
   };
   Philipp-M = {
     email = "philipp@mildenberger.me";
