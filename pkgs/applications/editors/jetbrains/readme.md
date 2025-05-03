@@ -3,11 +3,11 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 
 ## Tests:
 - To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.empty`.
-- To test the build process with all plugins* supported by all IDEs, build `jetbrains.plugins.tests.all`. 
-- To test only plugins for a specific IDE*, build `jetbrains.ide-name.tests.plugins.all`.
+- To test the build process with all plugins\* supported by all IDEs, build `jetbrains.plugins.tests.all`.
+- To test only plugins for a specific IDE\*, build `jetbrains.ide-name.tests.plugins.all`.
 - To test that plugins are correctly stored in the plugins directory run the NixOS test `nixosTests.jetbrains.plugins-available`.
 
-*: Plugins marked as broken in nixpkgs are skipped: When updating/fixing plugins, please check the `brokenPlugins` in `plugins/tests.nix` and update it if needed.
+\*: Plugins marked as broken in nixpkgs are skipped: When updating/fixing plugins, please check the `brokenPlugins` in `plugins/tests.nix` and update it if needed.
 
 ## How to use plugins:
  - Get the ide you want and call `jetbrains.plugins.addPlugins` with a list of plugins you want to add.
