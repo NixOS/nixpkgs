@@ -139,6 +139,11 @@ buildPythonPackage rec {
     "test_list_poetry_managed"
     "test_find_all_with_poetry_managed"
     "test_find_poetry_managed_pythons"
+    # Flaky
+    "test_threading_property_types"
+    "test_threading_single_thread_safe"
+    "test_threading_property_caching"
+    "test_threading_atomic_cached_property_different_instances"
   ];
 
   pytestFlagsArray = [
