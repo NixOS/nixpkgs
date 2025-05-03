@@ -672,6 +672,7 @@ in
   jellyfin = handleTest ./jellyfin.nix { };
   jenkins = handleTest ./jenkins.nix { };
   jenkins-cli = handleTest ./jenkins-cli.nix { };
+  jetbrains = import ./jetbrains/default.nix { inherit runTest; };
   jibri = handleTest ./jibri.nix { };
   jirafeau = handleTest ./jirafeau.nix { };
   jitsi-meet = handleTest ./jitsi-meet.nix { };
