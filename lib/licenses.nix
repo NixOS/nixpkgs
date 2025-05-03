@@ -1164,6 +1164,13 @@ lib.mapAttrs mkLicense (
       fullName = "Sendmail License";
     };
 
+    sel = {
+      fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
+      url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+      free = false;
+      redistributable = false;
+    };
+
     sfl = {
       fullName = "Source First License 1.1";
       url = "https://gitlab.futo.org/videostreaming/grayjay/-/blob/master/LICENSE.md";
