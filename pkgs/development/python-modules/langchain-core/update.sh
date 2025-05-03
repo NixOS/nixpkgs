@@ -11,6 +11,7 @@ declare -ar packages=(
     langchain-core
     langchain-groq
     langchain-huggingface
+    langchain-mistralai
     langchain-mongodb
     langchain-ollama
     langchain-openai
