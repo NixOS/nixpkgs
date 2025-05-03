@@ -1,11 +1,9 @@
 {
   system,
   pkgs,
-
   # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
   callTest,
-
 }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leaves.
@@ -14,9 +12,7 @@
 # where said tests are unsupported.
 # Example callTest that just extracts the derivation from the test:
 #   callTest = t: t.test;
-
 with pkgs.lib;
-
 let
   discoverTests =
     val:
@@ -140,10 +136,8 @@ let
       _class = "nixosTest";
       node.pkgs = pkgs.pkgsLinux;
     };
-
 in
 {
-
   # Testing the test driver
   nixos-test-driver = {
     extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix { };
@@ -413,6 +407,7 @@ in
   druid = handleTestOn [ "x86_64-linux" ] ./druid { };
   drbd-driver = handleTest ./drbd-driver.nix { };
   dublin-traceroute = handleTest ./dublin-traceroute.nix { };
+  dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
   earlyoom = handleTestOn [ "x86_64-linux" ] ./earlyoom.nix { };
   early-mount-options = handleTest ./early-mount-options.nix { };
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
