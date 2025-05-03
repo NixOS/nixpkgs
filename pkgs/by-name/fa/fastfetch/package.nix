@@ -188,7 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
       (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
-      (lib.cmakeBool "ENABLE_OSMESA" false)
       (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
 
       # Feature flags
@@ -228,8 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
 
-      (lib.cmakeBool "ENABLE_X11" x11Support)
-      (lib.cmakeBool "ENABLE_XCB" x11Support)
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
 
