@@ -36,7 +36,7 @@
 let
   soundtrack_src = fetchurl {
     url = "http://www.openclonk.org/download/Music.ocg";
-    sha256 = "1ckj0dlpp5zsnkbb5qxxfxpkiq76jj2fgj91fyf3ll7n0gbwcgw5";
+    hash = "sha256-Mye6pl1eSgEQ/vOLfDsdHDjp2ljb3euGKBr7s36+2W4=";
   };
 in
 stdenv.mkDerivation {
@@ -95,10 +95,10 @@ stdenv.mkDerivation {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  meta = with lib; {
+  meta = {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
     homepage = "https://www.openclonk.org";
-    license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
+    license = with lib.licenses; if enableSoundtrack then unfreeRedistributable else isc;
     mainProgram = "openclonk";
     maintainers = [ ];
     platforms = lib.platforms.linux;
