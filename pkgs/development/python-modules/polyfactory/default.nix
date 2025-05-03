@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "polyfactory";
-  version = "2.19.0";
+  version = "2.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "polyfactory";
     tag = "v${version}";
-    hash = "sha256-0VsH2J+vEk3cF7AYvirnXPupSLE2EGrp9FF+/EOWAbw=";
+    hash = "sha256-CoD0DIo3s7pzD9kobDPxLaxK8LZhqkXCIpzyR4fVJrg=";
   };
 
   build-system = [ hatchling ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     homepage = "https://polyfactory.litestar.dev/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/litestar-org/polyfactory/releases/tag/v${version}";
+    changelog = "https://github.com/litestar-org/polyfactory/releases/tag/${src.tag}";
     description = "Simple and powerful factories for mock data generation";
     license = lib.licenses.mit;
   };
