@@ -2,36 +2,39 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  extra-cmake-modules,
   qtbase,
   qtdeclarative,
+  kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kquickimageeditor";
-  version = "0.3.0";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+BByt07HMb4u6j9bVZqkUPvyRaElKvJ2MjKlPakL87E=";
+    repo = "kquickimageeditor";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8TJBg42E9lNbLpihjtc5Z/drmmSGQmic8yO45yxSNQ4=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ kdePackages.extra-cmake-modules ];
+
   buildInputs = [
     qtbase
     qtdeclarative
   ];
+
   cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
+
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of QtQuick components providing basic image editing capabilities";
     homepage = "https://invent.kde.org/libraries/kquickimageeditor";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})
