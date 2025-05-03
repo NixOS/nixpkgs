@@ -10626,7 +10626,6 @@ with pkgs;
   zunclient = with python312Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
-  openvdb_11 = callPackage ../development/libraries/openvdb/11.nix { };
 
   openvr = callPackage ../by-name/op/openvr/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
