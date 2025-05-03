@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    install -Dm444 doc/newsraft.desktop -t $out/share/applications
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
