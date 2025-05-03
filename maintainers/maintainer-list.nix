@@ -10328,6 +10328,12 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  ik-nz = {
+    email = "me@igk.nz";
+    github = "ik-nz";
+    githubId = 207392575;
+    name = "Isaac Kabel";
+  };
   ilarvne = {
     email = "ilarvne@proton.me";
     github = "ilarvne";
