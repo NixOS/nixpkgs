@@ -113,6 +113,8 @@ qtModule {
 
     # Fix build with Pipewire 1.4
     ./pipewire-1.4.patch
+    # Reproducibility QTBUG-136068
+    ./gn-object-sorted.patch
   ];
 
   postPatch =
