@@ -2756,9 +2756,15 @@ in
     ];
   };
 
-  peek-nvim = super.peek-nvim.overrideAttrs {
-    runtimeDeps = [ deno ];
-  };
+  peek-nvim = super.peek-nvim.overrideAttrs (old: {
+    patches = [
+      # Patch peek-nvim to run using nixpkgs deno
+      # This means end-users have to build peek-nvim the first time they use it...
+      (replaceVars ./patches/peek-nvim/cmd.patch {
+        deno = lib.getExe deno;
+      })
+    ];
+  });
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
