@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  wrapGAppsHook3,
   cmake,
   pkg-config,
   fftwFloat,
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     imagemagick
     libicns
     makeWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs =
