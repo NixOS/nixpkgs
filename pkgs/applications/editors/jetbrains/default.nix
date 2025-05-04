@@ -10,7 +10,6 @@ in
   stdenv,
   callPackage,
   fetchurl,
-  nixosTests,
 
   jdk,
   zlib,
@@ -78,7 +77,7 @@ let
       extraWrapperArgs ? [ ],
       extraLdPath ? [ ],
       extraBuildInputs ? [ ],
-      extraTests ? [ ],
+      extraTests ? { },
     }:
     mkJetBrainsProductCore {
       inherit
@@ -278,9 +277,6 @@ rec {
     pname = "idea-community";
     extraBuildInputs = [ stdenv.cc.cc ];
     fromSource = true;
-    extraTests = {
-      nixos-plugins-available = nixosTests.jetbrains.plugins-available;
-    };
   };
 
   idea-community =
