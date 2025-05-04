@@ -1724,6 +1724,8 @@ self: super: with self; {
 
   beanhub-import = callPackage ../development/python-modules/beanhub-import { };
 
+  beanie = callPackage ../development/python-modules/beanie { };
+
   beanquery = callPackage ../development/python-modules/beanquery { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
