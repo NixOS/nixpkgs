@@ -2590,10 +2590,6 @@ with pkgs;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
-  noti = callPackage ../tools/misc/noti {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   nsz = with python3.pkgs; toPythonApplication nsz;
 
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
