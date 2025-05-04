@@ -18,34 +18,6 @@
   cmake,
 }:
 
-let
-  kissatPkgConfig = stdenv.mkDerivation {
-    name = "kissat-pkgconfig";
-    inherit (kissat) version;
-
-    dontUnpack = true;
-    dontConfigure = true;
-    dontBuild = true;
-
-    outputs = [ "out" ];
-
-    installPhase = ''
-      mkdir -p $out/lib/pkgconfig
-      cat > $out/lib/pkgconfig/kissat.pc <<EOF
-      prefix=${kissat.dev}
-      exec_prefix=\''${prefix}
-      libdir=${kissat.lib}/lib
-      includedir=\''${prefix}/include
-
-      Name: kissat
-      Description: 'keep it simple and clean bare metal SAT solver' written in C
-      Version: ${kissat.version}
-      Libs: -L\''${libdir} -lkissat
-      Cflags: -I\''${includedir}
-      EOF
-    '';
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
   version = "0.7.0";
@@ -65,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     git
     ninja
     cmake
-    kissatPkgConfig
+    kissat
   ];
   buildInputs = [
     cadical
