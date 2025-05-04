@@ -60,7 +60,7 @@ postgresqlBuildExtension (finalAttrs: {
      "-DCMAKE_BUILD_TYPE=Release"
      "-DNETCAT=${netcat}/bin/nc"
      "-DOPENSSL_CONFIGURED=1"
-     "-DPG_CONFIG=${postgresql}/bin/pg_config"
+     "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
      "-DPG_CTL=${postgresql}/bin/pg_ctl"
      "-DPSQL=${postgresql}/bin/psql"
      "-DCREATEDB=${postgresql}/bin/createdb"
