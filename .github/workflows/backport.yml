@@ -41,5 +41,26 @@ jobs:
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 
-            * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
-              * Even as a non-commiter, if you find that it is not acceptable, leave a comment.
+            Before merging, ensure that this backport is [acceptable for the stable release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases), and tick all boxes that apply.
+            As a non-committer unable to tick the checkboxes: if you find that this backport is not acceptable, do leave a comment and consider closing this PR.
+
+            Backwards-compatible changes that are generally okay to backport:
+
+            * [ ] The PR adds new packages, modules and functions
+            * [ ] The PR adds security fixes
+            * [ ] The PR contains patch version updates
+            * [ ] The PR contains minor version updates, which have been verified to include no breaking changes
+
+            Breaking changes that are _not_ okay to backport:
+
+            * [ ] The PR contains major version updates
+            * [ ] The PR changes or removes existing functionality
+            * [ ] The PR contains backward-incompatible changes to the `.override*` interface of a derivation
+            * [ ] The PR deserves an addition to the release notes
+            * [ ] The PR will cause a state migration which risks the loss of user data
+
+            Reasons why a breaking change still needs to be backported:
+
+            * [ ] The PR updates security critical applications, such as `firefox` and `chromium`
+            * [ ] The PR is required to continue interoperating with external services, such as `spotify`, `steam`, and `discord`
+            * [ ] Other, detailed in a comment below
