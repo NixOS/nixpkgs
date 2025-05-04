@@ -6,15 +6,20 @@
   doxygen,
   graphviz,
   pkg-config,
+  nix-update-script,
 }:
+let
+  version = "4.1.1";
+  versionPrefix = "gz-cmake${lib.versions.major version}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-cmake";
-  version = "4.1.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-cmake";
-    tag = "gz-cmake${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
+    tag = "${versionPrefix}_${finalAttrs.version}";
     hash = "sha256-BWgRm+3UW65Cu7TqXtFFG05JlYF52dbpAsIE8aDnJM0=";
   };
 
@@ -24,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     pkg-config
   ];
+
+  # Extract the version by matching the tag's prefix.
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=${versionPrefix}_([\\d\\.]+)" ];
+  };
 
   meta = {
     description = "CMake modules to build Gazebo projects";
