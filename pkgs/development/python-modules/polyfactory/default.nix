@@ -14,7 +14,7 @@
   pydantic,
   pytestCheckHook,
   email-validator,
-  pytest-lazy-fixtures,
+  beanie,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +41,7 @@ buildPythonPackage rec {
     pymongo
     aiosqlite
     email-validator
+    beanie
   ];
 
   nativeCheckInputs = [

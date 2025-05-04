@@ -7633,6 +7633,8 @@ self: super: with self; {
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
+  lazy-model = callPackage ../development/python-modules/lazy-model { };
+
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
   lc7001 = callPackage ../development/python-modules/lc7001 { };
