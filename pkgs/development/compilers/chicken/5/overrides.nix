@@ -71,6 +71,12 @@ in
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
+    // {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-incompatible-pointer-types"
+        "-Wno-int-conversion"
+      ];
+    }
     // lib.optionalAttrs stdenv.cc.isClang {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=incompatible-function-pointer-types"
@@ -97,7 +103,37 @@ in
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
-  gl-utils = addPkgConfig;
+  gl-utils =
+    old:
+    (addPkgConfig old)
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      srfi-1
+      z3
+      matchable
+      miscmacros
+      srfi-42
+      srfi-99
+      epoxy
+      gl-math
+    ]) old);
+  gl-math =
+    old:
+    {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-incompatible-pointer-types"
+        "-Wno-int-conversion"
+      ];
+    }
+    // lib.optionalAttrs stdenv.cc.isClang {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=incompatible-function-pointer-types"
+        "-Wno-error=int-conversion"
+      ];
+    }
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      srfi-1
+      matchable
+    ]) old);
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
@@ -289,7 +325,21 @@ in
   chicken-doc-admin = broken;
   coops-utils = broken;
   crypt = broken;
-  hypergiant = broken;
+  hypergiant =
+    old:
+    (addToBuildInputsWithPkgConfig [
+      pkgs.libepoxy
+    ] old)
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      bitstring
+      gl-type
+      glfw3
+      glls
+      hyperscene
+      noise
+      soil
+      srfi-18
+    ]) old);
   iup = broken;
   kiwi = broken;
   lmdb-ht = broken;
