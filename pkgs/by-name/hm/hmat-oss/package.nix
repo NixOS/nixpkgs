@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   blas,
   lapack,
 }:
@@ -22,7 +23,14 @@ stdenv.mkDerivation rec {
     "-DHMAT_GIT_VERSION=OFF"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pkg-config # used to find the LAPACK
+    ];
+
   buildInputs = [
     blas
     lapack
