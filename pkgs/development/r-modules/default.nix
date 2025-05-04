@@ -1792,6 +1792,41 @@ let
       '';
     });
 
+    cn_farms = old.cn_farms.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/sparse_farms.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    PICS = old.PICS.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/segment.c" \
+        --replace-fail "Calloc" "R_Calloc"
+      '';
+    });
+
+    genoCN = old.genoCN.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/xCNV.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    trigger = old.trigger.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/trigger.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
     lwgeom = old.lwgeom.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
@@ -1908,6 +1943,14 @@ let
     zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
       nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
+    });
+
+    AneuFinder = old.AneuFinder.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace src/utility.cpp src/densities.cpp src/loghmm.cpp src/scalehmm.cpp \
+          --replace-fail "Calloc(" "R_Calloc(" \
+          --replace-fail "Free(" "R_Free("
+      '';
     });
 
     b64 = old.b64.overrideAttrs (attrs: {
