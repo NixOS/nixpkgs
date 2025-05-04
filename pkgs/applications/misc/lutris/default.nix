@@ -144,18 +144,6 @@ buildPythonApplication rec {
       --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
-  configurePhase = ''
-    meson setup build --prefix=$out
-  '';
-
-  buildPhase = ''
-    ninja -C build
-  '';
-
-  installPhase = ''
-    ninja -C build install
-  '';
-
   # avoid double wrapping
   dontWrapGApps = true;
   makeWrapperArgs = [
