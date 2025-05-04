@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   jinja2,
   setuptools-scm,
   shtab,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "0.0.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Freed-Wu";
     repo = "help2man";
@@ -25,14 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-BIDn+LQzBtDHUtFvIRL3NMXNouO3cMLibuYBoFtCUxI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     jinja2
     setuptools-scm
     shtab
     tomli
   ];
 
-  propagatedBuildInputs = [ jinja2 ];
+  dependencies = [ jinja2 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
