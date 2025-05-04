@@ -3,6 +3,12 @@
 
 # keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
 
+"4.workflow: backport":
+  - any:
+    - base-branch:
+      - '^release-'
+      - '^staging-'
+
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:

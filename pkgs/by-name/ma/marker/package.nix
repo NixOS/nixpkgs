@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
 
+  patches = [
+    # https://github.com/fabiocolacio/Marker/pull/427
+    ./fix_incompatible_pointer_in_marker_window_init.patch
+  ];
+
   nativeBuildInputs = [
     itstool
     meson

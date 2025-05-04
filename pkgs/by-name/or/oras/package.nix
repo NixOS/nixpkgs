@@ -5,16 +5,17 @@
   installShellFiles,
   testers,
   oras,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oras";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IXIw2prApg5iL3BPbOY4x09KjyhFvKofgfz2L6UXKR8=";
   };
 
@@ -27,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X oras.land/oras/internal/version.Version=${version}"
+    "-X oras.land/oras/internal/version.Version=${finalAttrs.version}"
     "-X oras.land/oras/internal/version.BuildMetadata="
     "-X oras.land/oras/internal/version.GitTreeState=clean"
   ];
@@ -40,29 +41,18 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
-    $out/bin/oras --help
-    $out/bin/oras version | grep "${version}"
-
-    runHook postInstallCheck
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    package = oras;
-    command = "oras version";
-  };
-
-  meta = with lib; {
+  meta = {
     homepage = "https://oras.land/";
-    changelog = "https://github.com/oras-project/oras/releases/tag/v${version}";
+    changelog = "https://github.com/oras-project/oras/releases/tag/v${finalAttrs.version}";
     description = "ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
     mainProgram = "oras";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       developer-guy
     ];
   };
-}
+})

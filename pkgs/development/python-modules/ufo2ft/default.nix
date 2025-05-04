@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.4.2";
+  version = "3.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KRLkYmNSAL0s6G18ATxUa451mXinVYvDxe6zbYh3kU4=";
+    hash = "sha256-jGMH1VZQAUszd8uxH+3mRAfudTiOEoBXSnGOUcqPXao=";
   };
 
   build-system = [

@@ -166,6 +166,10 @@ in
         done
       )
     ''
+    + lib.optionalString (lib.versionAtLeast info.version "36") ''
+      echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+      echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+    ''
     + base.postPatch;
 
   preConfigure =

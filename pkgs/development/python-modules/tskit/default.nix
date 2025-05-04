@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2ME+czMbliqdPDUsF2jlK6Ymh7YxZwXs7GoEVY1XVYE=";
+    hash = "sha256-bbo89pMhTDEF2M3c1pauDjECNmk34CmmqmXNmOcbVfI=";
   };
 
   postPatch = ''

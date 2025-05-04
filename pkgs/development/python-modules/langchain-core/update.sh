@@ -5,18 +5,22 @@ set -euo pipefail
 
 declare -ar packages=(
     langchain
+    langchain-anthropic
     langchain-azure-dynamic-sessions
     langchain-chroma
     langchain-community
     langchain-core
+    langchain-fireworks
     langchain-groq
     langchain-huggingface
     langchain-mistralai
     langchain-mongodb
     langchain-ollama
     langchain-openai
+    langchain-perplexity
     langchain-tests
     langchain-text-splitters
+    langchain-xai
 )
 
 tags=$(git ls-remote --tags --refs "https://github.com/langchain-ai/langchain" | cut --delimiter=/ --field=3-)

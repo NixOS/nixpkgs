@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "2025.04.01";
+  version = "2025.05.01";
   pyproject = true;
 
   src = fetchFromGitHub {
