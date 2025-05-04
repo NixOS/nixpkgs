@@ -112,7 +112,7 @@ in
         IFS=' ' read -ra ideArray <<< "$idePaths"
         for ide in "''${ideArray[@]}"; do
           echo "processing $ide"
-          
+
           echo "> ensure normal plugin is available"
           (
             set -x
