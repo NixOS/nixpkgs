@@ -7554,6 +7554,8 @@ self: super: with self; {
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
 
+  langchain-xai = callPackage ../development/python-modules/langchain-xai { };
+
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
