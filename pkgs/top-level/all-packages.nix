@@ -16876,6 +16876,8 @@ with pkgs;
   anki = callPackage ../games/anki {
     inherit (darwin.apple_sdk.frameworks) AVKit CoreAudio;
   };
+  anki-utils = callPackage ../games/anki/addons/anki-utils.nix { };
+  anki-addons = recurseIntoAttrs (callPackage ../games/anki/addons { });
   anki-bin = callPackage ../games/anki/bin.nix { };
   anki-sync-server = callPackage ../games/anki/sync-server.nix { };
 
