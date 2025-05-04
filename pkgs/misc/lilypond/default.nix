@@ -3,7 +3,6 @@
   lib,
   fetchzip,
   ghostscript,
-  gyre-fonts,
   texinfo,
   imagemagick,
   texi2html,
@@ -69,16 +68,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [
-    # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
-    "--with-urwotf-dir=${ghostscript.fonts}/share/fonts"
-    "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
-  ];
-
   preConfigure = ''
     substituteInPlace scripts/build/mf2pt1.pl \
       --replace-fail "mem=mf2pt1" "mem=$PWD/mf/mf2pt1"
-    export HOME=$TMPDIR/home
   '';
 
   strictDeps = true;
