@@ -133,7 +133,7 @@ let
     import ../build-support/trivial-builders {
       inherit lib;
       inherit (self) config;
-      inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self) runtimeShell stdenv stdenvNoCC execline;
       inherit (self.pkgsBuildHost) jq shellcheck-minimal;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
