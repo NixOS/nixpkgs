@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/norgate-av/tree-sitter-netlinx",
+  "rev": "6d3c01e54d150c6d3dcf99cad95a1f5fa0293018",
+  "date": "2025-04-20T17:23:44+01:00",
+  "path": "/nix/store/mnl4bx3006gy841ky2vgyyfx9fnibm2m-tree-sitter-netlinx",
+  "sha256": "13kyl1a0d9x6k6ivcyzbplkcsdjy3kd4raym1zz8c5gs9xwg6vb4",
+  "hash": "sha256-ZG3zeE/6FYb+D9WrTNocXjbNJr3re7ajmaanBlSgfo4=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
