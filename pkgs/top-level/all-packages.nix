@@ -1360,10 +1360,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-up = callPackage ../applications/version-management/git-up {
-    pythonPackages = python3Packages;
-  };
-
   gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
 
   lucky-commit = callPackage ../applications/version-management/lucky-commit {
