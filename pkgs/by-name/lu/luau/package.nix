@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  gitUpdater,
   llvmPackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, small, safe, gradually typed embeddable scripting language derived from Lua";
