@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evil-helix";
-  version = "20250104";
+  version = "20250413";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
     rev = "release-${version}";
-    hash = "sha256-Otp68+SbW51/MqVejPrbYzeRu4wAiYsNkDQQTZScW1Q=";
+    hash = "sha256-0dXDAhnkkr5rh4UK0zkT3xYthk01VbNnRrYe5rD3oh4=";
   };
 
   useFetchCargoVendor = true;
