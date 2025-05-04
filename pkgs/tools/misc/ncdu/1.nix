@@ -2,17 +2,20 @@
   lib,
   stdenv,
   fetchurl,
+  pkg-config,
   ncurses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
-  version = "1.18.1";
+  version = "1.22";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fA+h6ynYWq7UuhdBZL27jwEbXDkNAXxX1mj8cjEzJAU=";
+    sha256 = "sha256-CtbAltwE1RIFgRBHYMAbj06X1BkdbJ73llT6PGkaF2s=";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ncurses ];
 
