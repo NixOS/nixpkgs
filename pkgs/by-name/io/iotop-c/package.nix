@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ ncurses ];
+
   makeFlags = [
-    "DESTDIR=$(out)"
-    "TARGET=iotop-c"
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
   ];
 
   postInstall = ''
-    mv $out/usr/share/man/man8/{iotop,iotop-c}.8
-    ln -s $out/usr/sbin $out/bin
-    ln -s $out/usr/share $out/share
+    mv $out/share/man/man8/{iotop,iotop-c}.8
   '';
 
   meta = with lib; {
