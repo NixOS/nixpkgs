@@ -1,9 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   setuptools-scm,
   setuptools,
@@ -12,12 +12,13 @@
   numpy,
   wheel,
   pytest-mpl,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "mpl-scatter-density";
   version = "0.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -27,15 +28,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     sha256 = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
   };
-
-  patches = [
-    # https://github.com/astrofrog/mpl-scatter-density/pull/37
-    (fetchpatch {
-      name = "distutils-removal.patch";
-      url = "https://github.com/ifurther/mpl-scatter-density/commit/6feedabe1e82da67d8eec46a80eb370d9f334251.patch";
-      sha256 = "sha256-JqWlSm8mIwqjRPa+kMEaKipJyzGEO+gJK+Q045N1MXA=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -52,7 +44,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
+    writableTmpDirAsHomeHook
   ];
+
+  # Need to set MPLBACKEND=agg for headless `matplotlib` on darwin.
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "agg";
 
   disabledTests = [
     # AssertionError: (240, 240) != (216, 216)
