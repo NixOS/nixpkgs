@@ -8,7 +8,7 @@ let
 
   cfg = config.networking.firewall;
 
-  ifaceSet = lib.concatStringsSep ", " (map (x: ''"${x}"'') cfg.trustedInterfaces);
+  incomingTrustedInterfaces = lib.concatStringsSep ", " (map (x: ''"${x}"'') cfg.trustedInterfaces);
 
   portsToNftSet =
     ports: portRanges:
@@ -114,8 +114,8 @@ in
         type filter hook input priority filter; policy drop;
 
         ${lib.optionalString (
-          ifaceSet != ""
-        ) ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
+          incomingTrustedInterfaces != ""
+        ) ''iifname { ${incomingTrustedInterfaces} } accept comment "trusted interfaces"''}
 
         # Some ICMPv6 types like NDP is untracked
         ct state vmap {
