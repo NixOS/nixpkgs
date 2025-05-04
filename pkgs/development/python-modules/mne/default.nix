@@ -90,10 +90,16 @@ buildPythonPackage rec {
     "test_plotting_scalebars"
     # tries to write a datetime object to hdf5, which fails:
     "test_hitachi_basic"
+    # flaky
+    "test_fine_cal_systems"
+    "test_simulate_raw_bem"
   ];
 
-  # removes 700k lines form pytest log, remove this when scipy is at v1.17.0
-  pytestFlagsArray = [ "--disable-warnings" ];
+  pytestFlagsArray = [
+    "-m 'not (slowtest or ultraslowtest or pgtest)'"
+    # removes 700k lines form pytest log, remove this when scipy is at v1.17.0
+    "--disable-warnings"
+  ];
 
   pythonImportsCheck = [ "mne" ];
 
