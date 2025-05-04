@@ -9,13 +9,13 @@
 stdenv.mkDerivation rec {
   pname = "unicorn-angr";
   # Version must follow what angr requires
-  version = "2.0.1.post1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = "unicorn";
     tag = version;
-    hash = "sha256-Jz5C35rwnDz0CXcfcvWjkwScGNQO1uijF7JrtZhM7mI=";
+    hash = "sha256-vBggblml+lQFhyNrfIp5GKVQ09fd+ccblKHEzWteMbI=";
   };
 
   nativeBuildInputs = [
