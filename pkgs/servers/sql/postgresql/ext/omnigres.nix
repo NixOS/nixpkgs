@@ -24,6 +24,7 @@
   postgresqlTestExtension,
   postgresqlPackages,
   python3,
+  python3Packages,
   readline,
   stdenv,
   zlib,
@@ -39,16 +40,20 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "74ab3167d32e47fec790bb54a979780f7f9f1a28";
+  version = "c9e6df4146b6ce0a5fea6a9d11cd0d694af1f1cf";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
     rev = finalAttrs.version;
-    hash = "sha256-PuxfD4XJv6ZxD1LnF3OopY+m057eBT1ZvEfRSbbIyzQ=";
+    hash = "sha256-g/BxjQEuKsulrgk/pbChooOlg3c+pdjw4O1P9rLdnes=";
   };
 
-  nativeBuildInputs = [ cmake flex libtool pkg-config ];
+  nativeBuildInputs = [ cmake flex libtool pkg-config perl ];
+  propagatedBuildInputs = [
+    python3
+    python3Packages.build
+  ];
   buildInputs =
     postgresql.buildInputs ++ [
       bison
@@ -66,33 +71,31 @@ postgresqlBuildExtension (finalAttrs: {
       openssl
       perl
       python3
+      python3Packages.build
       readline
       zlib
       # TODO: just some hacky tests, remove this later
       extensions
     ];
 
-  preConfigure = ''
-    substituteInPlace cmake/PostgreSQLExtension.cmake \
-      --replace "\''${_ext_dir}" "$out"
-  '';
+  # Future version will handle this, disabling for now
+  hardeningDisable = [ "format" ];
 
   cmakeFlags = [
      "-DCMAKE_BUILD_TYPE=Release"
      "-DNETCAT=${netcat}/bin/nc"
      "-DOPENSSL_CONFIGURED=1"
      "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
-     "-DPostgreSQL_LIBRARY_DIRS=${postgresql}/lib"
+     # Can remove this later after hack is deprecated
      "-DPostgreSQL_EXTENSION_DIR=${extensions}/share/postgresql/extension"
-     "-DPostgreSQL_SERVER_INCLUDE_DIRS=${lib.getDev postgresql}/include"
      "-DPython3_EXECUTABLE=${python3}/bin/python3"
      "-DPython_EXECUTABLE=${python3}/bin/python3"
      "-DDOXYGEN_EXECUTABLE=${doxygen}/bin/doxygen"
   ];
 
-  buildPhase = ''
-    cmake -S . -B build
-    make all
+  enableParallelBuilding = true;
+
+  installPhase = ''
   '';
 
   passthru.tests.extension = postgresqlTestExtension {
