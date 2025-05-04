@@ -79,14 +79,9 @@ postgresqlBuildExtension (finalAttrs: {
 
   cmakeFlags = [
      "-DCMAKE_BUILD_TYPE=Release"
-     "-DPGVER=${postgresql.version}"
      "-DNETCAT=${netcat}/bin/nc"
      "-DOPENSSL_CONFIGURED=1"
      "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
-     "-DPG_CTL=${postgresql}/bin/pg_ctl"
-     "-DPSQL=${postgresql}/bin/psql"
-     "-DCREATEDB=${postgresql}/bin/createdb"
-     "-DINITDB=${postgresql}/bin/initdb"
      "-DPostgreSQL_LIBRARY_DIRS=${postgresql}/lib"
      "-DPostgreSQL_EXTENSION_DIR=${extensions}/share/postgresql/extension"
      "-DPostgreSQL_SERVER_INCLUDE_DIRS=${lib.getDev postgresql}/include"
