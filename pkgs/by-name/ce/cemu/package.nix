@@ -7,7 +7,6 @@
   cubeb,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   fmt_9,
   gamemode,
   glm,
@@ -45,20 +44,20 @@ let
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-J4gz4rnydu8JlzqNC/OIoVoRcgeFd6B1Qboxu5drOKY=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-JBd5ntU1fFDvQpNbfP63AQANzuQTdfd4dfB29/BN5LM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YO3rMhlBZ5fGu0ceAFB0R3owFuSobx39faWL9EUFwAM=";
   };
 
   patches = [
@@ -66,12 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     # > The following imported targets are referenced, but are missing:
     # > SPIRV-Tools-opt
     ./0000-spirv-tools-opt-cmakelists.patch
-    ./0001-glslang-cmake-target.patch
-    (fetchpatch {
-      name = "fix-building-against-boost-187.patch";
-      url = "https://github.com/cemu-project/Cemu/commit/2b0cbf7f6b6c34c748585d255ee7756ff592a502.patch";
-      hash = "sha256-jHB/9MWZ/oNfUgZtxtgkSN/OnRARSuGVfXFFB9ldDpI=";
-    })
     ./0002-cemu-imgui.patch
   ];
 
