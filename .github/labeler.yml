@@ -1,6 +1,8 @@
 # This file is used by .github/workflows/labels.yml
 # This version uses `sync-labels: true`, meaning that a non-match will remove the label
 
+# keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
+
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:
@@ -320,6 +322,16 @@
       - any-glob-to-any-file:
         - pkgs/os-specific/linux/musl/**/*
 
+"6.topic: nim":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/nim.section.md
+        - pkgs/build-support/build-nim-package.nix
+        - pkgs/build-support/build-nim-sbom.nix
+        - pkgs/by-name/ni/nim*
+        - pkgs/top-level/nim-overrides.nix
+
 "6.topic: nixos":
   - any:
     - changed-files:
@@ -335,16 +347,6 @@
       - any-glob-to-any-file:
         - nixos/modules/virtualisation/nixos-containers.nix
         - pkgs/tools/virtualization/nixos-container/**/*
-
-"6.topic: nim":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - doc/languages-frameworks/nim.section.md
-        - pkgs/build-support/build-nim-package.nix
-        - pkgs/build-support/build-nim-sbom.nix
-        - pkgs/by-name/ni/nim*
-        - pkgs/top-level/nim-overrides.nix
 
 "6.topic: nodejs":
   - any:
@@ -492,14 +494,6 @@
       - any-glob-to-any-file:
           - maintainers/team-list.nix
 
-"6.topic: TeX":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - doc/languages-frameworks/texlive.section.md
-        - pkgs/test/texlive/**
-        - pkgs/tools/typesetting/tex/**/*
-
 "6.topic: testing":
   - any:
     - changed-files:
@@ -515,6 +509,14 @@
         - nixos/lib/testing-python.nix      # legacy
         - nixos/tests/make-test-python.nix  # legacy
         # lib/debug.nix has a test framework (runTests) but it's not the main focus
+
+"6.topic: TeX":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/texlive.section.md
+        - pkgs/test/texlive/**
+        - pkgs/tools/typesetting/tex/**/*
 
 "6.topic: updaters":
   - any:
@@ -579,13 +581,16 @@
       - any-glob-to-any-file:
         - nixos/doc/manual/release-notes/**/*
 
-"8.has: module (update)":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - nixos/modules/**/*
 "8.has: maintainer-list (update)":
   - any:
     - changed-files:
       - any-glob-to-any-file:
         - maintainers/maintainer-list.nix
+
+"8.has: module (update)":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/**/*
+
+# keep-sorted end

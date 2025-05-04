@@ -27,10 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FqualaTkirB+gBcgkThQpSBHhM4iaXkiGujwBUnUX0E=";
   };
 
+  patches = [
+    ./wasm-bindgen.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     name = "share-preview-${finalAttrs.version}";
-    hash = "sha256-XY48fQ5HLvZ1nxLk6rbuxSBAHAPUcnwu/5AwgTWhfbg=";
+    hash = "sha256-lDSRXe+AjJzWT0hda/aev6kNJAvHblGmmAYXdYhrnQs=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Preview and debug websites metadata tags for social media share";
     homepage = "https://apps.gnome.org/SharePreview";
+    downloadPage = "https://github.com/rafaelmardojai/share-preview";
+    changelog = "https://github.com/rafaelmardojai/share-preview/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "share-preview";
     teams = [ lib.teams.gnome-circle ];

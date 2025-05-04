@@ -7540,6 +7540,8 @@ self: super: with self; {
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
 
+  langchain-mistralai = callPackage ../development/python-modules/langchain-mistralai { };
+
   langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
 
   langchain-ollama = callPackage ../development/python-modules/langchain-ollama { };
@@ -17040,6 +17042,8 @@ self: super: with self; {
   tempman = callPackage ../development/python-modules/tempman { };
 
   tempora = callPackage ../development/python-modules/tempora { };
+
+  temporalio = callPackage ../development/python-modules/temporalio { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
