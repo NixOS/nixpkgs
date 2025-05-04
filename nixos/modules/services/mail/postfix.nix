@@ -13,7 +13,7 @@ let
 
   haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != "" || cfg.extraAliases != "";
   haveCanonical = cfg.canonical != "";
-  haveTransport = cfg.transport != "";
+  haveTransport = cfg.transport != "" || (cfg.enableSlowDomains && cfg.slowDomains != [ ]);
   haveVirtual = cfg.virtual != "";
   haveLocalRecipients = cfg.localRecipients != null;
 
@@ -319,13 +319,20 @@ let
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   canonicalFile = pkgs.writeText "postfix-canonical" cfg.canonical;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
+  transportFile = pkgs.writeText "postfix-transport" (
+    lib.optionalString (cfg.enableSlowDomains && cfg.slowDomains != [ ]) (
+      lib.concatMapStrings (domain: ''
+        ${domain} slow:
+      '') cfg.slowDomains
+    )
+    + cfg.transport
+  );
   localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (
     lib.concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients
   );
   checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCfContent;
-  transportFile = pkgs.writeText "postfix-transport" cfg.transport;
   headerChecksFile = pkgs.writeText "postfix-header-checks" headerChecks;
 
 in
@@ -548,6 +555,32 @@ in
         description = ''
           Additional entries to put verbatim into aliases file, cf. man-page {manpage}`aliases(8)`.
         '';
+      };
+
+      enableSlowDomains = lib.mkEnableOption "slow domains feature for rate limiting specific domains";
+
+      slowDomains = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        example = [
+          "orange.fr"
+          "gmail.com"
+        ];
+        description = "List of domains to be rate-limited using the slow transport.";
+      };
+
+      slowDomainsConfig = {
+        defaultDestinationRateDelay = lib.mkOption {
+          type = lib.types.str;
+          default = "5s";
+          description = "Default rate delay for destinations.";
+        };
+
+        defaultDestinationConcurrencyLimit = lib.mkOption {
+          type = lib.types.int;
+          default = 3;
+          description = "Concurrency limit for slow destinations.";
+        };
       };
 
       aliasMapType = lib.mkOption {
@@ -985,7 +1018,10 @@ in
             smtpd_tls_key_file = cfg.sslKey;
 
             smtpd_tls_security_level = lib.mkDefault "may";
-
+          }
+          // lib.optionalAttrs cfg.enableSlowDomains {
+            default_destination_rate_delay = cfg.slowDomainsConfig.defaultDestinationRateDelay;
+            default_destination_concurrency_limit = cfg.slowDomainsConfig.defaultDestinationConcurrencyLimit;
           };
 
         services.postfix.masterConfig =
@@ -1077,6 +1113,14 @@ in
                 lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
             };
           }
+          // lib.optionalAttrs cfg.enableSlowDomains {
+            slow = {
+              command = "smtp";
+              type = "unix";
+              private = true;
+              maxproc = 2;
+            };
+          }
           // lib.optionalAttrs cfg.enableSmtp {
             smtp_inet = {
               name = "smtp";
@@ -1128,7 +1172,7 @@ in
       (lib.mkIf haveCanonical {
         services.postfix.mapFiles.canonical = canonicalFile;
       })
-      (lib.mkIf haveTransport {
+      (lib.mkIf (haveTransport || (cfg.enableSlowDomains && cfg.slowDomains != [ ])) {
         services.postfix.mapFiles.transport = transportFile;
       })
       (lib.mkIf haveVirtual {
