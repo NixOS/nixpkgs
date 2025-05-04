@@ -7,14 +7,14 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luau";
   version = "0.672";
 
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-FMFW7AikBnoT6FZhmCOHKqRVCi2qcO8kXxYCaAfCfNY=";
   };
 
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, small, safe, gradually typed embeddable scripting language derived from Lua";
     homepage = "https://luau-lang.org/";
-    changelog = "https://github.com/luau-lang/luau/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ prince213 ];
+    changelog = "https://github.com/luau-lang/luau/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ prince213 ];
     mainProgram = "luau";
   };
-}
+})
