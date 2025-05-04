@@ -16,6 +16,8 @@
   withRodio ? true,
   withAvahi ? false,
   avahi-compat,
+  withMdns ? true,
+  mdns,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withAvahi avahi-compat
+    ++ lib.optional withMdns mdns
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -53,6 +56,7 @@ rustPlatform.buildRustPackage rec {
     lib.optional withRodio "rodio-backend"
     ++ lib.optional withALSA "alsa-backend"
     ++ lib.optional withAvahi "with-avahi"
+    ++ lib.optional withMdns "with-libmdns"
     ++ lib.optional withPortAudio "portaudio-backend"
     ++ lib.optional withPulseAudio "pulseaudio-backend";
 
