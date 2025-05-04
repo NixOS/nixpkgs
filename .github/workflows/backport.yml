@@ -46,7 +46,7 @@ jobs:
               * Even as a non-commiter, if you find that it is not acceptable, leave a comment.
 
       - name: "Add 'has: port to stable' label"
-        if: steps.backport.outputs.was_successful
+        if: steps.backport.outputs.created_pull_numbers != ''
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
