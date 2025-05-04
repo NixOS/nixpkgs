@@ -11523,8 +11523,8 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl_2_5_3 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.3"; };
+  sbcl_2_5_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.2"; };
     faslExt = "fasl";
     flags = [
       "--dynamic-space-size"
