@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Oslo Context library";
     homepage = "https://github.com/openstack/oslo.context";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -6,7 +6,7 @@
   pkg-config,
   wrapGAppsHook3,
   libxml2,
-  gtk,
+  gtk2,
   libSM,
   shared-mime-info,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libxml2
-    gtk
+    gtk2
     shared-mime-info
     libSM
   ];

@@ -20,34 +20,30 @@
   typing-extensions,
   filelock,
   psutil,
+  httpx,
+  tenacity,
+  tomlkit,
   git,
   pytestCheckHook,
   tomli,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
     tag = version;
-    hash = "sha256-u+ysRpWLHDQdNRBSlYXz80e/MCT4smmv/YX8sfIrn24=";
+    hash = "sha256-CyEBgB3YgTQDzqJloL0XaRF0h6soNOWmtWTjP423MmY=";
   };
 
-  postPatch = ''
-    substituteInPlace safety/safety.py \
-      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
-    substituteInPlace safety/util.py \
-      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
-    substituteInPlace safety/cli.py \
-      --replace-fail "disable-optional-telemetry', default=False" \
-                     "disable-optional-telemetry', default=True"
-    substituteInPlace safety/scan/finder/handlers.py \
-      --replace-fail "telemetry=True" "telemetry=False"
-  '';
+  patches = [
+    ./disable-telemetry.patch
+  ];
 
   build-system = [ hatchling ];
 
@@ -74,12 +70,16 @@ buildPythonPackage rec {
     typing-extensions
     filelock
     psutil
+    httpx
+    tenacity
+    tomlkit
   ];
 
   nativeCheckInputs = [
     git
     pytestCheckHook
     tomli
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -94,10 +94,6 @@ buildPythonPackage rec {
 
   # ImportError: cannot import name 'get_command_for' from partially initialized module 'safety.cli_util' (most likely due to a circular import)
   disabledTestPaths = [ "tests/alerts/test_utils.py" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     description = "Checks installed dependencies for known vulnerabilities";

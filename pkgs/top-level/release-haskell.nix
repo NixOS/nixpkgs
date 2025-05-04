@@ -616,7 +616,7 @@ let
             Critical haskell packages that should work at all times,
             serves as minimum requirement for an update merge
           '';
-          maintainers = lib.teams.haskell.members;
+          teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations [
           # haskell specific tests
@@ -652,7 +652,7 @@ let
         name = "maintained-haskell-packages";
         meta = {
           description = "Aggregate jobset of all haskell packages with a maintainer";
-          maintainers = lib.teams.haskell.members;
+          teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations (
           builtins.map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)

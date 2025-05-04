@@ -14,6 +14,7 @@ runCommand name
     nativeBuildInputs = [ makeBinaryWrapper ];
     treefmtExe = lib.getExe treefmt;
     binPath = lib.makeBinPath runtimeInputs;
+    passthru = { inherit runtimeInputs; };
     configFile = treefmt.buildConfig {
       # Wrap user's modules with a default file location
       _file = "<treefmt.withConfig settings arg>";

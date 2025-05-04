@@ -52,6 +52,6 @@ stdenvNoCC.mkDerivation {
     description = "Mint-L icon theme";
     license = licenses.gpl3Plus; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

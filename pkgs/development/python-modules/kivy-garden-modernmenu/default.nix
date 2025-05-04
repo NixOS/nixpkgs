@@ -40,6 +40,6 @@ buildPythonPackage {
     description = "Stylized menu system for Kivy";
     homepage = "https://github.com/kivy-garden/modernmenu";
     license = lib.licenses.mit;
-    maintainers = lib.teams.ngi.members;
+    teams = [ lib.teams.ngi ];
   };
 }

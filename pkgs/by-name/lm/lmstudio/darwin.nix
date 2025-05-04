@@ -7,6 +7,7 @@
   version,
   url,
   hash,
+  passthru,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;
@@ -47,4 +48,6 @@ stdenv.mkDerivation {
     echo 'Copying extracted content into "sourceRoot"'
     cp -a $mnt/LM\ Studio.app $PWD/
   '';
+
+  inherit passthru;
 }

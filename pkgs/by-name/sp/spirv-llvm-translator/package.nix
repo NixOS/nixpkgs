@@ -43,9 +43,9 @@ let
       }
     else if llvmMajor == "15" then
       rec {
-        version = "15.0.0";
+        version = "15.0.11";
         rev = "v${version}";
-        hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
+        hash = "sha256-q4WhUaBDw0cnv1eqC6wSvrApHKvyg5/4QetybDLQkEw=";
       }
     else if llvmMajor == "14" then
       {
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
         hash = "sha256-71sJuGqVjTcB549eIiCO0LoqAgxkdEHCoxh8Pd/Qzz8=";
       })
     ]
-    ++ lib.optionals (lib.versionAtLeast llvmMajor "15" && lib.versionOlder llvmMajor "18") [
+    ++ lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "18") [
       # Fixes build after spirv-headers breaking change
       (fetchpatch {
         url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";

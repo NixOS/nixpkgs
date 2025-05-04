@@ -247,6 +247,7 @@ rec {
 
         libsecret # For bitwarden
         libmpg123 # Slippi launcher
+        brotli # TwitchDropsMiner
       ];
   };
 }

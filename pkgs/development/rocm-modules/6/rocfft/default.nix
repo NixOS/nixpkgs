@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FFT implementation for ROCm";
     homepage = "https://github.com/ROCm/rocFFT";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Construct and use map tile grids in different projection";
     homepage = "https://developmentseed.org/morecantile/";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
     mainProgram = "morecantile";
   };
 }

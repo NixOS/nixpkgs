@@ -100,10 +100,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "01lbdaizhkxmrw4y8j3wpvsryvnvzmg0pfs56c52laq2jgdfmq1l";
+      sha256 = "1hfcz73wszgqprg2pr83qjbyfb0k93frbdvyhgmw0ryyl9cgc44s";
       type = "gem";
     };
-    version = "2.10.2";
+    version = "2.11.3";
   };
   logger = {
     groups = [ "default" ];
@@ -149,6 +149,16 @@
       type = "gem";
     };
     version = "0.3.8";
+  };
+  net-http-digest_auth = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1nq859b0gh2vjhvl1qh1zrk09pc7p54r9i6nnn6sb06iv07db2jb";
+      type = "gem";
+    };
+    version = "1.4.1";
   };
   net-protocol = {
     dependencies = [ "timeout" ];
@@ -202,15 +212,27 @@
     };
     version = "2.7.4";
   };
+  ostruct = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "05xqijcf80sza5pnlp1c8whdaay8x5dc13214ngh790zrizgp8q9";
+      type = "gem";
+    };
+    version = "0.6.1";
+  };
   oxidized = {
     dependencies = [
       "asetus"
       "bcrypt_pbkdf"
       "ed25519"
       "net-ftp"
+      "net-http-digest_auth"
       "net-scp"
       "net-ssh"
       "net-telnet"
+      "ostruct"
       "psych"
       "rugged"
       "slop"
@@ -219,10 +241,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ry9rwksjb80wxd42zv5m5444n5hwhkbr4spa895jk2c1k5q1y0c";
+      sha256 = "02vprgsqaafrnkz9fhj27mv8ngir4h1g07zc6s6f7gja5awfwqzm";
       type = "gem";
     };
-    version = "0.30.1";
+    version = "0.33.0";
   };
   oxidized-script = {
     dependencies = [
@@ -232,13 +254,11 @@
     groups = [ "default" ];
     platforms = [ ];
     source = {
-      fetchSubmodules = false;
-      rev = "988cded5d89f52e274afb545bd3e011e19d5d22d";
-      sha256 = "13vglj6w37xd6dqfn98xdan3kqbs460akj1rdr4bm7lsrpa281gf";
-      type = "git";
-      url = "https://github.com/ytti/oxidized-script.git";
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0734py1wb97zgjlsdd9rfw60pm0pnp02a53z0va5w5ng7sjn2zli";
+      type = "gem";
     };
-    version = "0.6.0";
+    version = "0.7.0";
   };
   oxidized-web = {
     dependencies = [
@@ -247,6 +267,7 @@
       "haml"
       "htmlentities"
       "json"
+      "ostruct"
       "oxidized"
       "puma"
       "sinatra"
@@ -256,20 +277,24 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0mf1kxjg49fxf988sqd9cni8j5r8xsp3218370ppinsy39l50782";
+      sha256 = "1w16ha8rdnqb9j7v9mjdgfh4p0fdmwfxfprs167267ag1mah4268";
       type = "gem";
     };
-    version = "0.14.0";
+    version = "0.16.0";
   };
   psych = {
+    dependencies = [
+      "date"
+      "stringio"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "186i2hc6sfvg4skhqf82kxaf4mb60g65fsif8w8vg1hc9mbyiaph";
+      sha256 = "1vjrx3yd596zzi42dcaq5xw7hil1921r769dlbz08iniaawlp9c4";
       type = "gem";
     };
-    version = "3.3.4";
+    version = "5.2.3";
   };
   puma = {
     dependencies = [ "nio4r" ];
@@ -277,20 +302,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0gml1rixrfb0naciq3mrnqkpcvm9ahgps1c04hzxh4b801f69914";
+      sha256 = "11xd3207k5rl6bz0qxhcb3zcr941rhx7ig2f19gxxmdk7s3hcp7j";
       type = "gem";
     };
-    version = "6.4.3";
+    version = "6.6.0";
   };
   rack = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0h65a1f9gsqx2ryisdy4lrd9a9l8gdv65dcscw9ynwwjr1ak1n00";
+      sha256 = "14jpch41i6iclbgc8rykvkyn7ii8s9dwvn98k96qi0hqcbdpj30p";
       type = "gem";
     };
-    version = "3.1.12";
+    version = "3.1.13";
   };
   rack-protection = {
     dependencies = [
@@ -385,6 +410,16 @@
       type = "gem";
     };
     version = "4.10.1";
+  };
+  stringio = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1yh78pg6lm28c3k0pfd2ipskii1fsraq46m6zjs5yc9a4k5vfy2v";
+      type = "gem";
+    };
+    version = "3.1.7";
   };
   temple = {
     groups = [ "default" ];

@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
       (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
     ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) (
+      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
+    )
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
       lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
     );

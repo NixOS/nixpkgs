@@ -59,6 +59,7 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/pierky/arouteserver";
     changelog = "https://github.com/pierky/arouteserver/blob/v${version}/CHANGES.rst";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = lib.teams.wdz.members ++ (with lib.maintainers; [ marcel ]);
+    maintainers = with lib.maintainers; [ marcel ];
+    teams = [ lib.teams.wdz ];
   };
 }

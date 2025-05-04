@@ -2,7 +2,6 @@
   lib,
   buildNimPackage,
   fetchFromGitHub,
-  pcre,
   versionCheckHook,
 }:
 
@@ -21,7 +20,6 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  buildInputs = [ pcre ];
   nativeBuildInputs = [ versionCheckHook ];
 
   nimFlags = [ ''--passC:"-Wno-incompatible-pointer-types"'' ];

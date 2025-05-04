@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       fullName = "Custom, BSD-like. See COPYING file.";
       free = true;
     };
-    maintainers = lib.teams.sage.members;
+    teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
 }

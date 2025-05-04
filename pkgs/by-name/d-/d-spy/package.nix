@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       lgpl3Plus # library
       gpl3Plus # app
     ];
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

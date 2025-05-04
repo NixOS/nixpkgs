@@ -1,6 +1,6 @@
 {
   buildDunePackage,
-  qcheck-core,
+  fetchFromGitHub,
   qcheck,
   ppxlib,
   ppx_deriving,
@@ -8,10 +8,14 @@
 
 buildDunePackage {
   pname = "ppx_deriving_qcheck";
+  version = "0.6";
 
-  inherit (qcheck-core) version src patches;
-
-  duneVersion = "3";
+  src = fetchFromGitHub {
+    owner = "c-cube";
+    repo = "qcheck";
+    tag = "v0.24";
+    hash = "sha256-iuFlmSeUhumeWhqHlaNqDjReRf8c4e76hhT27DK3+/g=";
+  };
 
   propagatedBuildInputs = [
     qcheck
@@ -19,7 +23,7 @@ buildDunePackage {
     ppx_deriving
   ];
 
-  meta = qcheck-core.meta // {
+  meta = qcheck.meta // {
     description = "PPX Deriver for QCheck";
   };
 }

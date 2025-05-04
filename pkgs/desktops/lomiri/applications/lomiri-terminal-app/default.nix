@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-terminal-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

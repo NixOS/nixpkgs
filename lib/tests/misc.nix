@@ -631,6 +631,101 @@ runTests {
     ];
   };
 
+  testSplitStringBySimpleDelimiter = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      builtins.elem curr [
+        "."
+        "-"
+      ]
+    ) false "foo.bar-baz";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByLeadingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false ".foo.bar.baz";
+    expected = [
+      ""
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByTrailingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo.bar.baz.";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+      ""
+    ];
+  };
+
+  testSplitStringByMultipleConsecutiveDelimiters = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo...bar";
+    expected = [
+      "foo"
+      ""
+      ""
+      "bar"
+    ];
+  };
+
+  testSplitStringByKeepingSplitChar = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) true "foo.bar.baz";
+    expected = [
+      "foo"
+      ".bar"
+      ".baz"
+    ];
+  };
+
+  testSplitStringByCaseTransition = {
+    expr = strings.splitStringBy (
+      prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null
+    ) true "fooBarBaz";
+    expected = [
+      "foo"
+      "Bar"
+      "Baz"
+    ];
+  };
+
+  testSplitStringByEmptyString = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "";
+    expected = [ "" ];
+  };
+
+  testSplitStringByComplexPredicate = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      prev != ""
+      && curr != ""
+      && builtins.match "[0-9]" prev != null
+      && builtins.match "[a-z]" curr != null
+    ) true "123abc456def";
+    expected = [
+      "123"
+      "abc456"
+      "def"
+    ];
+  };
+
+  testSplitStringByUpperCaseStart = {
+    expr = strings.splitStringBy (prev: curr: builtins.match "[A-Z]" curr != null) true "FooBarBaz";
+    expected = [
+      ""
+      "Foo"
+      "Bar"
+      "Baz"
+    ];
+  };
+
   testEscapeShellArg = {
     expr = strings.escapeShellArg "esc'ape\nme";
     expected = "'esc'\\''ape\nme'";
@@ -851,8 +946,8 @@ runTests {
   };
 
   testEscapeC = {
-    expr = strings.escapeC [ " " ] "Hello World";
-    expected = "Hello\\x20World";
+    expr = strings.escapeC [ "\n" " " ] "Hello World\n";
+    expected = "Hello\\x20World\\x0a";
   };
 
   testEscapeURL = testAllTrue [
@@ -1261,6 +1356,69 @@ runTests {
       ])
     )
   ];
+
+  testTakeEnd =
+    let
+      inherit (lib) takeEnd;
+    in
+    testAllTrue [
+      (
+        takeEnd 0 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        takeEnd 1 [
+          1
+          2
+          3
+        ] == [ 3 ]
+      )
+      (
+        takeEnd 2 [
+          1
+          2
+          3
+        ] == [
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 3 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 4 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (takeEnd 0 [ ] == [ ])
+      (takeEnd 1 [ ] == [ ])
+      (
+        takeEnd (-1) [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (takeEnd (-1) [ ] == [ ])
+    ];
 
   testDrop =
     let

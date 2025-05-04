@@ -2,26 +2,41 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
   systemd,
   lxml,
   psutil,
   pytest,
   mock,
   pkg-config,
+  cython,
 }:
 
 buildPythonPackage rec {
   pname = "pystemd";
   version = "0.13.2";
-  format = "setuptools";
+  pyproject = true;
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
   };
 
+  postPatch = ''
+    # remove cythonized sources, build them anew to support more python version
+    rm pystemd/*.c
+  '';
+
   buildInputs = [ systemd ];
 
-  nativeBuildInputs = [ pkg-config ];
+  build-system = [
+    setuptools
+    cython
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   propagatedBuildInputs = [
     lxml
@@ -33,15 +48,22 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkPhase = "pytest tests";
+  checkPhase = ''
+    runHook preCheck
+    # pytestCheckHook doesn't work
+    pytest tests
+    runHook postCheck
+  '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pystemd" ];
+
+  meta = {
     description = ''
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way
     '';
     homepage = "https://github.com/facebookincubator/pystemd/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

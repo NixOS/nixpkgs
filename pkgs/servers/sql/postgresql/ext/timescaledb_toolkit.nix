@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  nixosTests,
   postgresql,
 }:
 
@@ -12,22 +11,22 @@
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     tag = finalAttrs.version;
-    hash = "sha256-7yUbtWbYL4AnuUX8OXG4OVqYCY2Lf0pISSTlcFdPqog=";
+    hash = "sha256-gGGSNvvJprqLkVwPr7cfmGY1qEUTXMdqdvwPYIzXaTA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-g5pIIifsJAs0C02o/+y+ILLnTXFqwG9tZcvY6NqfnDA=";
+  cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
+    tests = postgresql.pkgs.timescaledb.tests;
   };
 
   # tests take really long
@@ -39,5 +38,6 @@
     maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.tsl;
+    broken = lib.versionOlder postgresql.version "15";
   };
 })

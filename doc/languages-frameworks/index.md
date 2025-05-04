@@ -98,6 +98,7 @@ scheme.section.md
 swift.section.md
 tcl.section.md
 texlive.section.md
+typst.section.md
 vim.section.md
 neovim.section.md
 ```

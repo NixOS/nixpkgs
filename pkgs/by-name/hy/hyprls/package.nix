@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = {
     description = "LSP server for Hyprland's configuration language";
-    homepage = "https://en.ewen.works/hyprls";
+    homepage = "https://gwen.works/hyprls";
     changelog = "https://github.com/hyprland-community/hyprls/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arthsmn ];

@@ -7,7 +7,7 @@ This hook starts a Redis server during `checkPhase`. Example:
 {
   stdenv,
   redis,
-  redisTestHook
+  redisTestHook,
 }:
 stdenv.mkDerivation {
 
@@ -21,13 +21,15 @@ stdenv.mkDerivation {
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
 ```nix
-  checkPhase ''
+{
+  checkPhase = ''
     runHook preCheck
 
     # ... your tests
 
     runHook postCheck
-  ''
+  '';
+}
 ```
 
 ## Variables {#sec-redisTestHook-variables}
@@ -45,7 +47,11 @@ Bash-only variables:
 Example usage:
 
 ```nix
-{ stdenv, redis, redisTestHook }:
+{
+  stdenv,
+  redis,
+  redisTestHook,
+}:
 stdenv.mkDerivation {
 
   # ...
@@ -55,6 +61,7 @@ stdenv.mkDerivation {
   ];
 
   preCheck = ''
-    redisTestPort=6390
-  ''
+    redisTestPort=6390;
+  '';
 }
+```

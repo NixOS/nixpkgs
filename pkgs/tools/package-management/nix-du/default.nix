@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     tag = "v${version}";
-    hash = "sha256-RkGPXjog2XR3ISlWMQZ1rzy3SwE5IPAKP09FIZ6LwkM=";
+    hash = "sha256-/Afp0InA/0xXdombAzylYJF9wcv5WwYizVsP+fHTDrM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rrBFgE3Tz68gBQbz006RSdsqacSZqON78NM4FNi+wrk=";
+  cargoHash = "sha256-Q/woxGh1I6FpgJ5D0x7KovSwuRXfZzqjzwljaoKj0/Y=";
 
   doCheck = true;
   nativeCheckInputs = [

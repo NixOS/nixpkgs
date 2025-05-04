@@ -227,6 +227,7 @@ with lib.maintainers;
       pandapip1
       qyliss
       thefossguy
+      michaelBelsanti
     ];
     githubTeams = [ "cosmic" ];
     shortName = "cosmic";
@@ -526,6 +527,7 @@ with lib.maintainers;
       cdepillabout
       maralorn
       sternenseemann
+      wolfgangwalther
     ];
     githubTeams = [ "haskell" ];
     scope = "Maintain Haskell packages and infrastructure.";
@@ -920,6 +922,12 @@ with lib.maintainers;
     scope = "Maintain the OCaml compiler and package set.";
     shortName = "OCaml";
     enableFeatureFreezePing = true;
+  };
+
+  octodns = {
+    members = [ anthonyroussel ];
+    scope = "Maintain the ecosystem around OctoDNS";
+    shortName = "OctoDNS";
   };
 
   openstack = {

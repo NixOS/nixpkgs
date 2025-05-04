@@ -163,6 +163,7 @@ lib.makeExtensible (
           ];
           self_attribute_name = "nix_2_3";
           maintainers = with lib.maintainers; [ flokli ];
+          teams = [ ];
         }).overrideAttrs
           {
             # https://github.com/NixOS/nix/issues/10222
@@ -183,14 +184,14 @@ lib.makeExtensible (
       };
 
       nix_2_28 = commonMeson {
-        version = "2.28.1";
-        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
+        version = "2.28.3";
+        hash = "sha256-TjZp5ITSUvNRAzNznmkZRQxNRzMLiSAplz4bV2T8cbs=";
         self_attribute_name = "nix_2_28";
       };
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.29pre20250409_${lib.substring 0 8 src.rev}";
-        inherit (self.nix_2_24.meta) maintainers;
+        inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";

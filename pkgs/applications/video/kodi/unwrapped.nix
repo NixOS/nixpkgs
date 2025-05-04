@@ -473,7 +473,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kodi.tv/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
     mainProgram = "kodi";
   };
 })

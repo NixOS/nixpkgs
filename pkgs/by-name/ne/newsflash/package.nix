@@ -12,7 +12,7 @@
   rustc,
   wrapGAppsHook4,
   gdk-pixbuf,
-  clapper,
+  clapper-unwrapped,
   gtk4,
   libadwaita,
   libxml2,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      clapper
+      clapper-unwrapped
       gtk4
       libadwaita
       libxml2
@@ -94,13 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = lib.licenses.gpl3Plus;
-    maintainers =
-      with lib.maintainers;
-      [
-        kira-bruneau
-        stunkymonkey
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      kira-bruneau
+      stunkymonkey
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
     mainProgram = "io.gitlab.news_flash.NewsFlash";
   };

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       mpl10
     ];
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

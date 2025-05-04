@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
 }:
 
@@ -17,17 +18,20 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  doBuild = false;
+  dontBuild = true;
 
-  postPatch = ''
-    awk -i inplace 'BEGIN {opened = 0}; /# --*[^$]*/ { print (opened ? "]===]" : "#[===["); opened = !opened }; {print $0}' linux/CMakeLists.txt
-  '';
+  postPatch =
+    lib.optionalString (lib.versionAtLeast version "1.2.1") ''
+      sed -i '/if(MIMALLOC_USE_STATIC_LIBS)/,/unset(MIMALLOC_USE_STATIC_LIBS CACHE)/d' linux/CMakeLists.txt
+    ''
+    + lib.optionalString (lib.versionOlder version "1.2.1") ''
+      awk -i inplace 'BEGIN {opened = 0}; /# --*[^$]*/ { print (opened ? "]===]" : "#[===["); opened = !opened }; {print $0}' linux/CMakeLists.txt
+    '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"
-    cp -r ./* "$out"
+    cp -r . $out
 
     runHook postInstall
   '';

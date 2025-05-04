@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
     repo = "nvitop";
     tag = "v${version}";
-    hash = "sha256-2l/VfqgV2UmMVad3UYASjYFu/Mzp2K2XNQFUDq1XM9k=";
+    hash = "sha256-1WL1S6jUbCLtuAe223AAmCcOcLZ0rStE04uCd0L9gVw=";
   };
 
   pythonRelaxDeps = [ "nvidia-ml-py" ];

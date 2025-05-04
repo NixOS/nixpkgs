@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://common-lisp.net/project/armedbear/";
     license = lib.licenses.gpl2Classpath;
     mainProgram = "abcl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 })

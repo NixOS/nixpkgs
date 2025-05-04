@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.2.0";
+  version = "2025.3.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-+RMeo+Kyum1WNm7citUe9Uk5yOtfhMPPlQRtnYL3Pj8=";
+    hash = "sha256-nwm9ENTB1V+koUA3M8XR8DegmPHwYoszYlWbcxA6aXY=";
   };
 
   patches = [
@@ -76,7 +76,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-fYZJA6qV3mqxO2g+yxD0MWWQc9QYmdWJ7O7Vf88Qpbs=";
+  npmDepsHash = "sha256-PjlTGR+e8uDe9KKEvW7cq/wYHRBO16Cf3oHh37YcNFc=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -86,7 +86,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-OldVFMI+rcGAbpDg7pHu/Lqbw5I6/+oXULteQ9mXiFc=";
+    hash = "sha256-zIzgVvtTUIPKeOG/v9/7ugIIAVhoMjQ8QJ0Cbj9uZsQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -222,7 +222,6 @@ buildNpmPackage' rec {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
-        "--commit"
         "--version=stable"
         "--version-regex=^desktop-v(.*)$"
       ];

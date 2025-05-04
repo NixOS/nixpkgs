@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation {
   pname = "pilot-link";
-  version = "0.12.3-unstable-2022-09-26";
+  version = "0.13.0-unstable-2022-09-26";
 
   src = fetchFromGitHub {
     owner = "desrod";
@@ -33,7 +33,10 @@ stdenv.mkDerivation {
   # https://github.com/desrod/pilot-link/issues/16
   # https://aur.archlinux.org/packages/pilot-link-git
   patches =
-    [ ./configure-checks.patch ]
+    [
+      ./configure-checks.patch
+      ./incompatible-pointer-type.patch
+    ]
     ++ lib.optionals enableConduits [ ./format-string-literals.patch ]
     ++ lib.optionals enableLibpng [ ./pilot-link-png14.patch ];
 
@@ -55,6 +58,8 @@ stdenv.mkDerivation {
     ++ lib.optionals enableConduits [ "--enable-conduits" ]
     ++ lib.optionals enableLibpng [ "--enable-libpng" ]
     ++ lib.optionals enableLibusb [ "--enable-libusb" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Suite of tools for connecting to PalmOS handheld devices";

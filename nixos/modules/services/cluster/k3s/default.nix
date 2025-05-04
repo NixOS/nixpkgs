@@ -190,6 +190,7 @@ let
         hash = lib.mkOption {
           type = lib.types.str;
           example = "sha256-ej+vpPNdiOoXsaj1jyRpWLisJgWo8EqX+Z5VbpSjsPA=";
+          default = "";
           description = ''
             The hash of the packaged Helm chart. Only has an effect if `package` is not set.
             The Helm chart is fetched during build time and placed as a `.tgz` archive on the

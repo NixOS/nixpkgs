@@ -6,7 +6,8 @@
   pkg-config,
   glib,
   gtk-doc,
-  gtk,
+  gtk ? gtk3,
+  gtk3,
   gobject-introspection,
 }:
 

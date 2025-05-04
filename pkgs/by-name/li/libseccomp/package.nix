@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"
-      "loongarch64-linux"
       "m68k-linux"
       "microblaze-linux"
       "microblazeel-linux"

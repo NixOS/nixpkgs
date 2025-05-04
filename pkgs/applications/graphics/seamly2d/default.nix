@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "seamly2d";
-  version = "2025.3.25.1924";
+  version = "2025.4.14.211";
 
   src = fetchFromGitHub {
     owner = "FashionFreedom";
     repo = "Seamly2D";
     tag = "v${version}";
-    hash = "sha256-hBXdf/r3hXSjy6Vp5SjfOcefxj/aP0La4LTiyOESzmQ=";
+    hash = "sha256-Zs1zinWWbodF340fo18HbRD//JIm/fhEgapAcR0JnzA=";
   };
 
   buildInputs = [

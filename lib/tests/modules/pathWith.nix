@@ -58,6 +58,9 @@ in
   pathInStore.ok1 = "${storeDir}/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv";
   pathInStore.ok2 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15";
   pathInStore.ok3 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash";
+  pathInStore.ok4 = "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab"; # CA derivation
+  pathInStore.ok5 = "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab/bin/bash"; # CA derivation
+  pathInStore.ok6 = /1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab; # CA derivation, path type
   pathInStore.bad1 = "";
   pathInStore.bad2 = "${storeDir}";
   pathInStore.bad3 = "${storeDir}/";

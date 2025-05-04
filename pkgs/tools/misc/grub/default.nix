@@ -43,6 +43,7 @@ let
     x86_64-linux.target = "x86_64";
     armv7l-linux.target = "arm";
     aarch64-linux.target = "aarch64";
+    loongarch64-linux.target = "loongarch64";
     riscv32-linux.target = "riscv32";
     riscv64-linux.target = "riscv64";
   };
@@ -54,6 +55,7 @@ let
     x86_64-linux.target = "x86_64";
     armv7l-linux.target = "arm";
     aarch64-linux.target = "arm64";
+    loongarch64-linux.target = "loongarch64";
     riscv32-linux.target = "riscv32";
     riscv64-linux.target = "riscv64";
   };

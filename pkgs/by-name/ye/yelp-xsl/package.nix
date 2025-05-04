@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = [
+    ./cve-2025-3155.patch
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "yelp-xsl";
@@ -38,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/yelp-xsl";
     description = "Yelp's universal stylesheets for Mallard and DocBook";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = with licenses; [
       # See https://gitlab.gnome.org/GNOME/yelp-xsl/blob/master/COPYING
       # Stylesheets

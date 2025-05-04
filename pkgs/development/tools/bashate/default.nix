@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
     license = with licenses; [ asl20 ];
-    maintainers = teams.openstack.members ++ (with maintainers; [ fab ]);
+    maintainers = with maintainers; [ fab ];
+    teams = [ teams.openstack ];
   };
 }

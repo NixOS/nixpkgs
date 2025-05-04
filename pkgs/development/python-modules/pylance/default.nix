@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.25.2";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-Xds+qSVB7X4CrtrOrfIdOSfgn22CnUyCfKZh2e0hzRo=";
+    hash = "sha256-peTfrSDByfqg3jiSK8FZr7m+/Mu/mCqeZhR/902Qp4s=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-c+uQQmB6KScB5sS+HW1TMAwNsze7Ssog2bf0kQWQUWA=";
+    hash = "sha256-UZ2a7bhK+rJ2jMw9hqyfHjfGRrmG/eB7thjkfguU11o=";
   };
 
   nativeBuildInputs = [
@@ -105,18 +105,6 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
       "test_merge_insert_large"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
-      "test_blob_api"
-      "test_convert_int_tensors"
-      "test_filtered_sampling_odd_batch_size"
-      "test_ground_truth"
-      "test_index_cast_centroids"
-      "test_index_with_no_centroid_movement"
-      "test_iter_filter"
-      "test_iter_over_dataset_fixed_shape_tensor"
-      "test_iter_over_dataset_fixed_size_lists"
     ];
 
   meta = {

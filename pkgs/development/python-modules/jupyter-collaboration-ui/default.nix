@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "JupyterLab/Jupyter Notebook 7+ extension providing user interface integration for real time collaboration";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-collaboration-ui";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

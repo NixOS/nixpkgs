@@ -12,7 +12,6 @@ with import common/ec2.nix { inherit makeTest pkgs; };
 let
   image =
     (import ../lib/eval-config.nix {
-      inherit system;
       modules = [
         ../maintainers/scripts/openstack/openstack-image.nix
         ../modules/testing/test-instrumentation.nix
@@ -22,6 +21,8 @@ let
           system.extraDependencies = with pkgs; [
             stdenv
           ];
+
+          nixpkgs.pkgs = pkgs;
         }
       ];
     }).config.system.build.openstackImage

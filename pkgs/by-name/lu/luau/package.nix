@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luau";
-  version = "0.667";
+  version = "0.671";
 
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
     rev = version;
-    hash = "sha256-AEPUdqQ+uIWxSTOwwbZ8tWSz3VKKHa1D08o6oeEREkg=";
+    hash = "sha256-iiIQKXByHuGCH5ypr7uSAcABaQagLw008Z0HRCsREIM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/luau-lang/luau/releases/tag/${version}";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ prince213 ];
     mainProgram = "luau";
   };
 }

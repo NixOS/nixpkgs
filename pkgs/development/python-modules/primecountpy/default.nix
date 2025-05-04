@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cython interface for C++ primecount library";
     homepage = "https://github.com/dimpase/primecountpy/";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     license = licenses.gpl3Only;
   };
 }

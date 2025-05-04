@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     mainProgram = "obfuscate";
-    maintainers = with maintainers; [ fgaz ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ fgaz ];
+    teams = [ teams.gnome-circle ];
   };
 })

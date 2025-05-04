@@ -5,6 +5,7 @@
   cython,
   setuptools,
   mpi,
+  toPythonModule,
   pytestCheckHook,
   mpiCheckPhaseHook,
 }:
@@ -31,7 +32,9 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    mpi
+    # Use toPythonModule so that also the mpi executables will be propagated to
+    # generated Python environment.
+    (toPythonModule mpi)
   ];
 
   pythonImportsCheck = [ "mpi4py" ];
@@ -48,6 +51,8 @@ buildPythonPackage rec {
     "test/test_util_pool.py"
     "demo/futures/test_futures.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     inherit mpi;

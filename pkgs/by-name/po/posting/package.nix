@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "posting";
-  version = "2.5.4";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
     tag = version;
-    hash = "sha256-6nFQSGCdmR4qZuleiY0xh76WgBIjs9OZtfpc16b4iws=";
+    hash = "sha256-CEfApa1TfBovmGMSxqtHZC9aSSEGYTyVXGpRGxLI7Vo=";
   };
 
   pythonRelaxDeps = true;
@@ -23,7 +23,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # Required for x resources themes
-  buildInputs = [ xorg.xrdb ];
+  buildInputs = [
+    xorg.xrdb
+  ];
 
   dependencies =
     with python3Packages;
@@ -41,6 +43,8 @@ python3Packages.buildPythonApplication rec {
       textual-autocomplete
       textual
       openapi-pydantic
+      tree-sitter-json
+      tree-sitter-html
     ]
     ++ httpx.optional-dependencies.brotli
     ++ textual.optional-dependencies.syntax;

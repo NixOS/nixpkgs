@@ -5,6 +5,7 @@
   beautifulsoup4,
   buildPythonPackage,
   dateparser,
+  dnspython,
   fetchFromGitHub,
   playwright-stealth,
   playwright,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.28.6";
+  version = "1.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     tag = "v${version}";
-    hash = "sha256-f1XCNDc2oNJ/EM8S12nCSYtQh7nUi4UROEzTuOH41Ds=";
+    hash = "sha256-n2lVP+oThZ2hRVOadudaaNFU2KI14rrkG7ipJ0vrj20=";
   };
 
   pythonRelaxDeps = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     aiohttp-socks
     beautifulsoup4
     dateparser
+    dnspython
     playwright
     playwright-stealth
     puremagic

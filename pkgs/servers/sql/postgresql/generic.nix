@@ -521,7 +521,7 @@ let
         description = "Powerful, open source object-relational database system";
         license = licenses.postgresql;
         changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-        maintainers = with maintainers; teams.postgres.members;
+        teams = [ teams.postgres ];
         pkgConfigModules = [
           "libecpg"
           "libecpg_compat"

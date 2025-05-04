@@ -16,19 +16,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gel";
-  version = "7.0.3";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
     tag = "v${version}";
-    hash = "sha256-QP4LtLgF2OWCsPCFzpLR8k/RetfEevSd8Uv/PciHCwk=";
+    hash = "sha256-HqMfReKt1Gl2c7ectgcW514ARCgfNi8PaykvKJUZirY=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-s8UKYZs4GorM0qvAvE+HL+Qma2x05IDtuqYebMDrZHk=";
+    hash = "sha256-rxlJQSh3CN4lBFOWFMZmdH91xgRnBbywXA/gakSKsck=";
   };
 
   nativeBuildInputs = [
@@ -59,11 +59,6 @@ rustPlatform.buildRustPackage rec {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
-
-  # cli warns when edgedb found but gel doesn't
-  postInstall = ''
-    mv $out/bin/edgedb $out/bin/gel
-  '';
 
   doCheck = false;
 

@@ -245,7 +245,7 @@ stdenv.mkDerivation (
           '';
 
           platforms = platforms.unix;
-          maintainers = teams.beam.members;
+          teams = [ teams.beam ];
           license = licenses.asl20;
         }
         // meta

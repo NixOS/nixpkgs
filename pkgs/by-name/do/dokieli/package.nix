@@ -65,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linkeddata/dokieli";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ shogo ] ++ lib.teams.ngi.members;
+    maintainers = with lib.maintainers; [ shogo ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "dokieli";
   };
 })

@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/AudioSharing";
     description = "Automatically share the current audio playback in the form of an RTSP stream";
     mainProgram = "audio-sharing";
-    maintainers = with maintainers; [ benediktbroich ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ benediktbroich ];
+    teams = [ teams.gnome-circle ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

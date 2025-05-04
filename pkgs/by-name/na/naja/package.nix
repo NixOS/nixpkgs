@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     description = "Structural Netlist API (and more) for EDA post synthesis flow development";
     homepage = "https://github.com/najaeda/naja";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.ngi.members;
+    teams = [ lib.teams.ngi ];
     mainProgram = "naja_edit";
     platforms = lib.platforms.all;
   };

@@ -6,23 +6,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dotbot";
-  version = "1.20.4";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
     tag = "v${version}";
-    hash = "sha256-GnzN8z7LP9rVD0DnKkPxJ0BxiO1YDY7MyMWBt1CAh6g=";
+    hash = "sha256-f+ykGXcQ1hLptGElQ5ZTt8z0SXnlTbdcf922AVF78bU=";
   };
 
   preCheck = ''
     patchShebangs bin/dotbot
   '';
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ hatchling ];
 
-  propagatedBuildInputs = with python3Packages; [ pyyaml ];
+  dependencies = with python3Packages; [ pyyaml ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 

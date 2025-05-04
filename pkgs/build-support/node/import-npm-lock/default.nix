@@ -27,7 +27,7 @@ let
       fetcherOpts,
     }:
     (
-      if module ? "resolved" then
+      if module ? "resolved" && module.resolved != null then
         (
           let
             # Parse scheme from URL

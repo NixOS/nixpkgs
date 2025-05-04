@@ -35,6 +35,6 @@ php.buildComposerProject2 (finalAttrs: {
       maintainability.
     ";
     mainProgram = "pdepend";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

@@ -116,8 +116,7 @@ let
     };
 
     loongarch64-linux = {
-      BINARY = 64;
-      TARGET = setTarget "LOONGSONGENERIC";
+      TARGET = setTarget "LA64_GENERIC";
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };

@@ -20,10 +20,10 @@
   rdma-core,
   libbpf,
   xdp-tools,
+  writeText,
   enableDpdk ? true,
   enableRdma ? true,
-  # FIXME: broken: af_xdp plugins - no working libbpf found - af_xdp plugin disabled
-  enableAfXdp ? false,
+  enableAfXdp ? true,
 }:
 
 let
@@ -42,23 +42,27 @@ let
     postInstall = "";
     dontDisableStatic = true;
   });
+
+  # in 25.02 only ID seems to be of interest, so keep it simple
+  os-release-fake = writeText "os-release-fake" ''
+    ID=nixos
+  '';
 in
 stdenv.mkDerivation rec {
   pname = "vpp";
-  version = "24.10";
+  version = "25.02";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
     rev = "v${version}";
-    hash = "sha256-GcmblIAu/BDbqZRycmnBsHkvzJe07qB2lSfDnO7ZYtg=";
+    hash = "sha256-UDO1mlOEQNCmtR18CCTF+ng5Ms9gfTsnohSygLlPopY=";
   };
 
   postPatch = ''
     patchShebangs scripts/
-    substituteInPlace CMakeLists.txt \
-      --replace "plugins tools/vppapigen tools/g2 tools/perftool cmake pkg" \
-      "plugins tools/vppapigen tools/g2 tools/perftool cmake"
+    substituteInPlace pkg/CMakeLists.txt \
+      --replace-fail "/etc/os-release" "${os-release-fake}"
   '';
 
   preConfigure = ''

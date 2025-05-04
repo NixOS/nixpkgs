@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/wobcom/fernglas/releases/tag/fernglas-${version}";
     license = licenses.eupl12;
     platforms = platforms.linux;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
     mainProgram = "fernglas";
   };
 }

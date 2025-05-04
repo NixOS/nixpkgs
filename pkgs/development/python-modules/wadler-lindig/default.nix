@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "wadler-lindig";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "wadler_lindig";
     tag = "v${version}";
-    hash = "sha256-ykRyJ5kCxYb3jBb8/8ogGjpgXMcb/mvvvHaSy9fecxA=";
+    hash = "sha256-owqtKooc7b7RRJglDC5K5M88pxAepHRr+lZCsOOzw7E=";
   };
 
   build-system = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Wadler--Lindig pretty printer for Python";
+    description = "Wadler--Lindig pretty printer for Python";
     homepage = "https://github.com/patrick-kidger/wadler_lindig";
     changelog = "https://github.com/patrick-kidger/wadler_lindig/releases/tag/v${version}";
     license = lib.licenses.asl20;

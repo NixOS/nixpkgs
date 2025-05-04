@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tracer callback/activity library";
     homepage = "https://github.com/ROCm/roctracer";
     license = with licenses; [ mit ]; # mitx11
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor clr.version

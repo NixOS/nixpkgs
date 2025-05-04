@@ -20,12 +20,12 @@ Converts Nix values to strings in the way the [`derivation` built-in function](h
 
 ```nix
 devShellTools.valueToString (builtins.toFile "foo" "bar")
-=> "/nix/store/...-foo"
+# => "/nix/store/...-foo"
 ```
 
 ```nix
 devShellTools.valueToString false
-=> ""
+# => ""
 ```
 
 :::
@@ -42,16 +42,22 @@ This function does not support `__structuredAttrs`, but does support `passAsFile
 devShellTools.unstructuredDerivationInputEnv {
   drvAttrs = {
     name = "foo";
-    buildInputs = [ hello figlet ];
+    buildInputs = [
+      hello
+      figlet
+    ];
     builder = bash;
-    args = [ "-c" "${./builder.sh}" ];
+    args = [
+      "-c"
+      "${./builder.sh}"
+    ];
   };
 }
-=> {
-  name = "foo";
-  buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
-  builder = "/nix/store/...-bash";
-}
+# => {
+#  name = "foo";
+#  buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
+#  builder = "/nix/store/...-bash";
+#}
 ```
 
 Note that `args` is not included, because Nix does not added it to the builder process environment.
@@ -69,7 +75,10 @@ Takes the relevant parts of a derivation and returns a set of environment variab
 let
   pkg = hello;
 in
-devShellTools.derivationOutputEnv { outputList = pkg.outputs; outputMap = pkg; }
+devShellTools.derivationOutputEnv {
+  outputList = pkg.outputs;
+  outputMap = pkg;
+}
 ```
 
 :::

@@ -386,7 +386,6 @@ rec {
         uclibceabi
         uclibceabihf
       ];
-    isLLVMLibc = [ { abi = abis.llvm; } ];
 
     isEfi = [
       {
@@ -415,6 +414,11 @@ rec {
       {
         cpu = {
           family = "x86";
+        };
+      }
+      {
+        cpu = {
+          family = "loongarch";
         };
       }
     ];

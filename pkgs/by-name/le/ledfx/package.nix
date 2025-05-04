@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ledfx";
   version = "2.0.108";
   pyproject = true;
@@ -69,7 +69,7 @@ python3.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
     license = licenses.gpl3Only;
-    maintainers = teams.c3d2.members;
+    teams = [ teams.c3d2 ];
     mainProgram = "ledfx";
   };
 }

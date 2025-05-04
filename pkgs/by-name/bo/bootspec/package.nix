@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";
     homepage = "https://github.com/DeterminateSystems/bootspec";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    teams = [ teams.determinatesystems ];
     platforms = platforms.unix;
   };
 }

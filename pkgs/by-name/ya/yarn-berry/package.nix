@@ -5,13 +5,14 @@
   stdenv,
   testers,
   yarn,
+  callPackage,
   berryVersion ? 4,
 }:
 
 let
-  version_4 = "4.8.1";
+  version_4 = "4.9.1";
   version_3 = "3.8.7";
-  hash_4 = "sha256-JRQVUO5KsaGMmoC99cloW+hbFjgaFLNT3tqA29TVu34=";
+  hash_4 = "sha256-znxB827TFLAEfCeHrwBsmRlkZz1LVWsBFhjZANiIW/4=";
   hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
 in
 
@@ -31,8 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    nodejs
     yarn
   ];
+
+  strictDeps = true;
 
   dontConfigure = true;
 
@@ -48,13 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
     };
-  };
+  } // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";

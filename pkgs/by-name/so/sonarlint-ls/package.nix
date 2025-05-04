@@ -16,17 +16,17 @@
 
 maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
-  version = "3.20.0.76057";
+  version = "3.20.1.76068";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
     rev = version;
-    hash = "sha256-O02KxAIOKhHBkxjLSsc2Pw7VkR0IsyA/kpCu4f1urTE=";
+    hash = "sha256-sM0/L6li314/j//hTDpSKr+XimWY5EZiC1d0CVKoWmw=";
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-yFzT0v7u23b/r8Pe+wuSXlwc4rN5DJ9ezmtlcWVMj7k=";
+  mvnHash = "sha256-aF2lQhed7EN6l3Nwu90x3b4mzwfXyZNCYE8fLMU1Ln0=";
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [

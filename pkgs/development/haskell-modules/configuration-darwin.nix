@@ -20,6 +20,10 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
+    spacecookie = super.spacecookie.overrideAttrs (_: {
+      __darwinAllowLocalNetworking = true;
+    });
+
     streaming-commons = super.streaming-commons.overrideAttrs (_: {
       __darwinAllowLocalNetworking = true;
     });

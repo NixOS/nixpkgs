@@ -408,13 +408,12 @@ let
                 return
             fi
 
-            if [ ! -z "$k_user" ]; then
-                new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+            if [ -n "$k_user" ]; then
+                echo -n $k_user
             else
-                new_k_luks="$(echo | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
-            fi
+                echo
+            fi | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response > /crypt-ramfs/new_key
 
-            echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
             echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
 
             if [ $? == 0 ]; then

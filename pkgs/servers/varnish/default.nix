@@ -83,7 +83,7 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = lib.teams.flyingcircus.members;
+        teams = [ lib.teams.flyingcircus ];
         platforms = platforms.unix;
       };
     };
@@ -94,14 +94,14 @@ in
     version = "6.0.13";
     hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
   };
-  # EOL 2025-03-15
-  varnish75 = common {
-    version = "7.5.0";
-    hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
-  };
   # EOL 2025-09-15
   varnish76 = common {
     version = "7.6.2";
     hash = "sha256-OFxhDsxj3P61PXb0fMRl6J6+J9osCSJvmGHE+o6dLJo=";
+  };
+  # EOL 2026-03-15
+  varnish77 = common {
+    version = "7.7.0";
+    hash = "sha256-aZSPIVEfgc548JqXFdmodQ6BEWGb1gVaPIYTFaIQtOQ=";
   };
 }

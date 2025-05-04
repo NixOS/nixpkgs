@@ -449,7 +449,7 @@ pipe
             description
             longDescription
             platforms
-            maintainers
+            teams
             ;
         }
         // optionalAttrs (!atLeast11) {

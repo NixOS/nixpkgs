@@ -139,7 +139,8 @@ let
         meta = prevAttrs.meta // {
           description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
           homepage = "https://developer.nvidia.com/cutensor";
-          maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.obsidian-systems-maintenance ];
+          maintainers = prevAttrs.meta.maintainers or [ ] ++ [ lib.maintainers.obsidian-systems-maintenance ];
+          teams = prevAttrs.meta.teams;
           license = lib.licenses.unfreeRedistributable // {
             shortName = "cuTENSOR EULA";
             fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";

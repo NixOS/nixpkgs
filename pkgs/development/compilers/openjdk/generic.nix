@@ -643,13 +643,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source Java Development Kit";
     homepage = "https://openjdk.java.net/";
     license = lib.licenses.gpl2Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        edwtjo
-        infinidoge
-      ]
-      ++ lib.teams.java.members;
+    maintainers = with lib.maintainers; [
+      edwtjo
+      infinidoge
+    ];
+    teams = [ lib.teams.java ];
     mainProgram = "java";
     platforms =
       [

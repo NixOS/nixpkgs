@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         [
           libglvnd
           libxkbcommon
+          xorg.libX11
           xorg.libXcursor
           xorg.libXext
           xorg.libXrandr

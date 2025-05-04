@@ -65,7 +65,7 @@ buildPecl rec {
       asl20
       bsd3
     ];
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
     broken = lib.versionAtLeast php.version "8.4";
   };
 }

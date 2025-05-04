@@ -9,10 +9,10 @@
   ninja,
   pybind11,
   setuptools,
-  wheel,
 
   # buildInputs
   SDL2,
+  opencv,
   zlib,
 
   # dependencies
@@ -22,19 +22,25 @@
 
   # tests
   gymnasium,
+  opencv-python,
   pytestCheckHook,
+
+  # Whether to enable recently added vector environments:
+  # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.11.0/docs/vector-environment.md
+  # FIXME: Disabled by default as it mysteriously causes stable-baselines3's tests to hang indefinitely.
+  withVectorEnv ? false,
 }:
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.10.2";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     tag = "v${version}";
-    hash = "sha256-CGUlQFQoQZqs+Jd3IU/o50VwX+tEHrs3KHrcVWahEpo=";
+    hash = "sha256-RgFVpbjJp54FncQzFtdZM7p/1GBMsQ2HvLgIoaokiQc=";
   };
 
   build-system = [
@@ -42,15 +48,19 @@ buildPythonPackage rec {
     ninja
     pybind11
     setuptools
-    wheel
   ];
 
-  buildInputs = [
-    SDL2
-    zlib
-  ];
+  buildInputs =
+    [
+      SDL2
+      zlib
+    ]
+    ++ lib.optionals withVectorEnv [
+      opencv
+    ];
 
   dependencies = [
+    gymnasium
     importlib-resources
     numpy
     typing-extensions
@@ -60,23 +70,43 @@ buildPythonPackage rec {
     # Relax the pybind11 version
     ''
       substituteInPlace src/ale/python/CMakeLists.txt \
-        --replace-fail 'find_package(pybind11 ''${PYBIND11_VER} QUIET)' 'find_package(pybind11 QUIET)'
+        --replace-fail \
+          'find_package(pybind11 ''${PYBIND11_VER} QUIET)' \
+          'find_package(pybind11 QUIET)'
+    ''
+    + lib.optionalString (!withVectorEnv) ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "-DBUILD_VECTOR_LIB=ON" \
+          "-DBUILD_VECTOR_LIB=OFF"
     '';
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "ale_py" ];
 
-  nativeCheckInputs = [
-    gymnasium
-    pytestCheckHook
-  ];
+  doCheck = false;
+
+  nativeCheckInputs =
+    [
+      gymnasium
+      pytestCheckHook
+    ]
+    + lib.optionals withVectorEnv [
+      opencv-python
+    ];
 
   disabledTests = [
+    # Fatal Python error: Aborted
+    # line 414 in test_display_screen
+    "test_display_screen"
+
     # test_atari_env.py tests fail on the majority of the environments because the ROM are missing.
     # The user is expected to manually download the roms:
     # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else
     "test_check_env"
+    "test_reset_step_shapes"
+    "test_rollout_consistency"
     "test_sound_obs"
   ];
 
@@ -88,7 +118,8 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
     badPlatforms = [
-      # fails to link with missing library
+      # FAILED: src/ale/libale.a
+      # /bin/sh: CMAKE_CXX_COMPILER_AR-NOTFOUND: command not found
       lib.systems.inspect.patterns.isDarwin
     ];
   };

@@ -45,6 +45,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
   dependencies = [
     duckduckgo-search
     huggingface-hub

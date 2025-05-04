@@ -71,11 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
     ];
     platforms = lib.platforms.linux;
-    maintainers =
-      with lib.maintainers;
-      [
-        zendo
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      zendo
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 })

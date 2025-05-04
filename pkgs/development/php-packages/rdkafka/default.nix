@@ -25,6 +25,6 @@ buildPecl {
     description = "Kafka client based on librdkafka";
     license = licenses.mit;
     homepage = "https://github.com/arnaud-lb/php-rdkafka";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

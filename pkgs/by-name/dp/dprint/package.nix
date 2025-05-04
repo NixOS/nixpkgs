@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       khushraj
       kachick
+      phanirithvij
     ];
     mainProgram = "dprint";
   };

@@ -123,5 +123,6 @@ python3Packages.buildPythonApplication rec {
       felixsinger
     ];
     mainProgram = "CodeChecker";
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }

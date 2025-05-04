@@ -197,7 +197,7 @@ let
       homepage = "https://www.azul.com/products/zulu/";
       license = lib.licenses.gpl2Only;
       mainProgram = "java";
-      maintainers = [ ] ++ lib.teams.java.members;
+      teams = [ lib.teams.java ];
       platforms = builtins.attrNames dists;
       sourceProvenance = with lib.sourceTypes; [
         binaryBytecode

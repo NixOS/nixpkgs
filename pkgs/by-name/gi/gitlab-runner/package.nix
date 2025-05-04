@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "17.10.1";
+  version = "17.11.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pLmDWZHxd9dNhmbcHJRBxPuY0IpcJoXz/fOJeP1lVlA=";
+    hash = "sha256-Jppy8IG0Oq95RDDkvN1FpXjJuSc3DkfhGgnfpaUSKa4=";
   };
 
-  vendorHash = "sha256-1NteDxcGjsC0kT/9u7BT065EN/rBhaNznegdPHZUKxo=";
+  vendorHash = "sha256-wxFVDkqiqs7jaZEPGyawWfs6h6UgAhCWSckM90G44lA=";
 
   # For patchShebangs
   nativeBuildInputs = [ bash ];
@@ -34,8 +34,9 @@ buildGoModule (finalAttrs: {
       # Remove some tests that can't work during a nix build
 
       # Needs the build directory to be a git repo
-      sed -i "s/func TestCacheArchiverAddingUntrackedFiles/func OFF_TestCacheArchiverAddingUntrackedFiles/" commands/helpers/file_archiver_test.go
-      sed -i "s/func TestCacheArchiverAddingUntrackedUnicodeFiles/func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles/" commands/helpers/file_archiver_test.go
+      substituteInPlace commands/helpers/file_archiver_test.go \
+        --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
+        --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
       rm shells/abstract_test.go
 
       # No writable developer environment
@@ -56,11 +57,14 @@ buildGoModule (finalAttrs: {
     ''
     + lib.optionalString stdenv.buildPlatform.isDarwin ''
       # Invalid bind arguments break Unix socket tests
-      sed -i "s/func TestRunnerWrapperCommand_createListener/func OFF_TestRunnerWrapperCommand_createListener/" commands/wrapper_test.go
+      substituteInPlace commands/wrapper_test.go \
+        --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
 
       # No keychain access during build breaks X.509 certificate tests
-      sed -i "s/func TestCertificate/func OFF_TestCertificate/" helpers/certificate/x509_test.go
-      sed -i "s/func TestClientInvalidSSL/func OFF_TestClientInvalidSSL/" network/client_test.go
+      substituteInPlace helpers/certificate/x509_test.go \
+        --replace-fail "func TestCertificate" "func OFF_TestCertificate"
+      substituteInPlace network/client_test.go \
+        --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
     '';
 
   excludedPackages = [
@@ -79,7 +83,7 @@ buildGoModule (finalAttrs: {
     [
       "-X ${ldflagsPackageVariablePrefix}.NAME=gitlab-runner"
       "-X ${ldflagsPackageVariablePrefix}.VERSION=${finalAttrs.version}"
-      "-X ${ldflagsPackageVariablePrefix}.REVISION=${finalAttrs.src.tag}"
+      "-X ${ldflagsPackageVariablePrefix}.REVISION=v${finalAttrs.version}"
     ];
 
   preCheck = ''
@@ -109,6 +113,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.gitlab.com/runner";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
-    maintainers = with lib.maintainers; [ zimbatm ] ++ lib.teams.gitlab.members;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    teams = [ lib.teams.gitlab ];
   };
 })

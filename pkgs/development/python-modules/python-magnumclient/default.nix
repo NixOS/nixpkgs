@@ -24,6 +24,7 @@
   setuptools,
   sphinxHook,
   stestr,
+  stevedore,
   testtools,
 }:
 
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     oslo-utils
     prettytable
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [
@@ -92,6 +94,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Magnum API";
     license = lib.licenses.asl20;
     mainProgram = "magnum";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

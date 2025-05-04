@@ -125,6 +125,7 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ] ++ teams.jupyter.members;
+    maintainers = with maintainers; [ bjornfor ];
+    teams = [ teams.jupyter ];
   };
 }

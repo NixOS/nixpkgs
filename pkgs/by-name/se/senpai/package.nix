@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~delthas";
     repo = "senpai";
     rev = "v${version}";
-    sha256 = "sha256-3DVy+7mMVFmPpGxwJqtt2+QwNEMrgZazynawE/Wf+UM=";
+    sha256 = "sha256-lwfhRnaHGOIp6NyugPEu6P+3WXkVgQEWaz7DUfHiJrQ=";
   };
 
   vendorHash = "sha256-6glslBPjJr0TmrAkDGbOQ4sDzvODlavVeTugs6RXsCU=";

@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
+    teams = [ teams.jupyter ];
   };
 }

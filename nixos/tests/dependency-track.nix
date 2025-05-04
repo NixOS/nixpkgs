@@ -45,22 +45,27 @@ import ./make-test-python.nix (
         };
     };
 
-    testScript = ''
-      import json
+    testScript =
+      # python
+      ''
+        import json
 
-      start_all()
+        start_all()
 
-      server.wait_for_unit("dependency-track.service")
-      server.wait_until_succeeds(
-        "journalctl -o cat -u dependency-track.service | grep 'Dependency-Track is ready'"
-      )
-      server.wait_for_open_port(${toString dependencyTrackPort})
-
-      with subtest("version api returns correct version"):
-        version = json.loads(
-          server.succeed("curl http://localhost/api/version")
+        server.wait_for_unit("dependency-track.service")
+        server.wait_until_succeeds(
+          "journalctl -o cat -u dependency-track.service | grep 'Dependency-Track is ready'"
         )
-        assert version["version"] == "${pkgs.dependency-track.version}"
-    '';
+        server.wait_for_open_port(${toString dependencyTrackPort})
+
+        with subtest("version api returns correct version"):
+          version = json.loads(
+            server.succeed("curl http://localhost/api/version")
+          )
+          assert version["version"] == "${pkgs.dependency-track.version}"
+
+        with subtest("nginx serves frontend"):
+          server.succeed("curl http://localhost/ | grep \"<title>Dependency-Track</title>\"")
+      '';
   }
 )

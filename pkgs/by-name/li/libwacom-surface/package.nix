@@ -41,5 +41,6 @@ libwacom.overrideAttrs (prevAttrs: {
   meta = prevAttrs.meta // {
     homepage = "https://github.com/linux-surface/libwacom-surface";
     maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ ];
   };
 })

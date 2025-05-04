@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-archiver";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
+    maintainers = with maintainers; [ jchw ];
+    teams = [ teams.lxqt ];
   };
 }

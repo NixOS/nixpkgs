@@ -8,7 +8,7 @@
   gcr,
   glib-networking,
   gsettings-desktop-schemas,
-  gtk,
+  gtk2,
   libsoup_2_4,
   webkitgtk_4_0,
   xorg,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       gcr
       glib-networking
       gsettings-desktop-schemas
-      gtk
+      gtk2
       libsoup_2_4
       webkitgtk_4_0
     ]

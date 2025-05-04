@@ -9,17 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yqBKZOUDdvBcW8OzO832P75miNKUluR+fR1FSOcDoSM=";
+    hash = "sha256-Ay9nJ4b+lRBbZU/LmpG8agLcjp3jyDFyJdESeNoGsLQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-W3SbJE0tt391k6MscgaijCStSyzfTN2MR66a6K+Ui4s=";
+  cargoHash = "sha256-O74clwtMQ1roSy9Jg0l4vzBKuG3DXHDx4yRH/pbT8E0=";
 
   nativeBuildInputs = [
     pkg-config

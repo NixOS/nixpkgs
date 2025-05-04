@@ -5,6 +5,7 @@
   fetchFromGitHub,
   rustPlatform,
   cmake,
+  yq,
   protobuf,
   installShellFiles,
   librusty_v8 ? callPackage ./librusty_v8.nix {
@@ -18,39 +19,37 @@
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.2.8";
+  version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
-    tag = "v${version}";
-    hash = "sha256-pGhqfQR+42XUY0v99fvSyLQPlvzCWntq4qS9vyuJEpY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/5KCwWyPdx/OKjoKgHZ8BAih7dh21VrbC+N1U74B/KI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-FJ3wPkL1Pgw6S66n5hyQfUZWTVXs4oZ0bJJaN22OxoY=";
+  cargoHash = "sha256-3I1yplJjVH7Mf2wjwk8qSdbHTcR20QSJGF9MHtnu+q8=";
 
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-    substituteInPlace Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
+    tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
   '';
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
-  nativeBuildInputs =
-    [
-      rustPlatform.bindgenHook
-      # required by libz-ng-sys crate
-      cmake
-      # required by deno_kv crate
-      protobuf
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      lld
-    ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    # for tomlq to adjust Cargo.toml
+    yq
+    # required by libz-ng-sys crate
+    cmake
+    # required by deno_kv crate
+    protobuf
+    installShellFiles
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
@@ -89,7 +88,7 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = lib.optionalString canExecute ''
     runHook preInstallCheck
     $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${version}"
+    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -98,7 +97,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://deno.land/";
-    changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
+    changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
@@ -122,4 +121,4 @@ rustPlatform.buildRustPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

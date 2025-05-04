@@ -1,0 +1,26 @@
+diff --git a/src/io.github.flattool.Ignition.in b/src/io.github.flattool.Ignition.in
+index 5c71c3c..0b2ec00 100644
+--- a/src/io.github.flattool.Ignition.in
++++ b/src/io.github.flattool.Ignition.in
+@@ -1,7 +1,8 @@
+-#!@GJS@ -m
++#!/usr/bin/env gjs -m
+ 
+ import { exit, programArgs, programInvocationName } from "system";
+ 
++imports.package._findEffectiveEntryPointName = () => 'io.github.flattool.Ignition';
+ imports.package.init({
+   name: "@PACKAGE_NAME@",
+   version: "@PACKAGE_VERSION@",
+diff --git a/src/meson.build b/src/meson.build
+index 488fa06..751f8ed 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -23,7 +23,6 @@ data_res = gnome.compile_resources('io.github.flattool.Ignition.data',
+ )
+ 
+ bin_conf = configuration_data()
+-bin_conf.set('GJS', find_program('gjs').full_path())
+ bin_conf.set('PACKAGE_VERSION', meson.project_version())
+ bin_conf.set('PACKAGE_NAME', meson.project_name())
+ bin_conf.set('prefix', get_option('prefix'))

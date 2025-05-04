@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/libspelling";
     license = licenses.lgpl21Plus;
     changelog = "https://gitlab.gnome.org/GNOME/libspelling/-/raw/${version}/NEWS";
-    maintainers = with maintainers; [ chuangzhu ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ chuangzhu ];
+    teams = [ teams.gnome ];
   };
 })

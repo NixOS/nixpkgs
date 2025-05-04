@@ -74,7 +74,7 @@ def main():
                 f.write(f"    hash = \"{hash}\";\n");
                 f.write(f"  }};\n");
 
-        f.write("\n\n  prePatch = ''\n");
+        f.write("\n  prePatch = ''\n");
         f.write("    mkdir -p");
         for pkg in pkgs:
             if isinstance(pkg, fetch_sources.GitRepo):

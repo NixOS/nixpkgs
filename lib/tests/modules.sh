@@ -315,14 +315,26 @@ checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-overrid
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello"$' config.namedPackage.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.namedPackage.defaultText._type ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.namedPackage.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.namedPackageSingletonDefault.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Hello.*"$' options.namedPackageSingletonDefault.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.namedPackageSingletonDefault.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.packageWithExample.example._type ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.packageWithPathExample.example._type ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.packageWithPathExample.example.text ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. was accessed but has no value defined. Try setting the option.' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
-checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"null or package"$' options.nullablePackage.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.nullablePackageWithDefault.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
 
 # submoduleWith
 

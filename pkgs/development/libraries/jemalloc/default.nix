@@ -50,9 +50,7 @@ stdenv.mkDerivation rec {
     automake
   ];
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export LDFLAGS="$LDFLAGS -Wl,-no_uuid -Wl,-install_name,@rpath/libjemalloc.2.dylib";
-  '';
+  preConfigure = "";
 
   # TODO: switch to autoreconfHook when updating beyond 5.3.0
   # https://github.com/jemalloc/jemalloc/issues/2346
@@ -76,7 +74,14 @@ stdenv.mkDerivation rec {
     # The upstream default is dependent on the builders' page size
     # https://github.com/jemalloc/jemalloc/issues/467
     # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
-    ++ [ (if stdenv.hostPlatform.isAarch64 then "--with-lg-page=16" else "--with-lg-page=12") ]
+    ++ [
+      (
+        if (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64) then
+          "--with-lg-page=16"
+        else
+          "--with-lg-page=12"
+      )
+    ]
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
     ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--with-lg-vaddr=48";

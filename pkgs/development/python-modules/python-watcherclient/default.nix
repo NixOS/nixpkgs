@@ -70,6 +70,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Watcher API";
     license = lib.licenses.asl20;
     mainProgram = "watcher";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

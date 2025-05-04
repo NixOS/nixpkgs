@@ -4,7 +4,6 @@
   fetchurl,
   ocaml,
   findlib,
-  darwin,
   ocaml-lsp,
   dune-release,
 }:
@@ -15,20 +14,16 @@ else
 
   stdenv.mkDerivation rec {
     pname = "dune";
-    version = "3.18.0";
+    version = "3.18.2";
 
     src = fetchurl {
       url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-      hash = "sha256-t0UNrq3DeG9tIp8bi+mKPeHY1wF0RtjEOjlAqjfbL/s=";
+      hash = "sha256-Vr5Qn/w8W6ZSET2ea0PtsEppHx4fbLuhe50kOxI5p68=";
     };
 
     nativeBuildInputs = [
       ocaml
       findlib
-    ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
     ];
 
     strictDeps = true;

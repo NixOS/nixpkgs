@@ -80,7 +80,7 @@ let
       '';
 
       platforms = lib.platforms.unix;
-      maintainers = lib.teams.beam.members;
+      teams = [ lib.teams.beam ];
       license = lib.licenses.asl20;
     };
 

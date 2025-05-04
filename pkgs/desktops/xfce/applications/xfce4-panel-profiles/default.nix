@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://docs.xfce.org/apps/xfce4-panel-profiles/start";
     description = "Simple application to manage Xfce panel layouts";
     mainProgram = "xfce4-panel-profiles";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
     platforms = platforms.linux;
   };
 })

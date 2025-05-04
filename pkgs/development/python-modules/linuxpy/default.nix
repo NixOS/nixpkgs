@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Human friendly interface to Linux subsystems using Python";
     homepage = "https://github.com/tiagocoutinho/linuxpy";
     license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ kekschen ];
+    maintainers = with lib.maintainers; [ willow ];
     platforms = lib.platforms.linux;
   };
 }

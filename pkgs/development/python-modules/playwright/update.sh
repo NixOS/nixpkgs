@@ -32,7 +32,7 @@ replace_sha() {
 prefetch_browser() {
   # nix-prefetch is used to obtain sha with `stripRoot = false`
   # doesn't work on macOS https://github.com/msteen/nix-prefetch/issues/53
-  nix-prefetch -q "{ stdenv, fetchzip }: stdenv.mkDerivation { name=\"browser\"; src = fetchzip { url = \"$1\"; stripRoot = $2; }; }"
+  nix-prefetch --option extra-experimental-features flakes -q "{ stdenv, fetchzip }: stdenv.mkDerivation { name=\"browser\"; src = fetchzip { url = \"$1\"; stripRoot = $2; }; }"
 }
 
 update_browser() {

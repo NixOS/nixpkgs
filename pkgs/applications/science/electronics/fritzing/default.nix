@@ -50,6 +50,11 @@ stdenv.mkDerivation {
     hash = "sha256-a/bWAUeDPj3g8BECOlXuqyCi4JgGLLs1605m380Drt0=";
   };
 
+  patches = [
+    # Fix build with Qt >= 6.9
+    ./fix-stricter-types.patch
+  ];
+
   nativeBuildInputs = [
     qmake
     pkg-config

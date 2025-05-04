@@ -108,12 +108,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;
-    maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
-        lsix
-        dotlambda
-      ];
+    maintainers = with maintainers; [
+      lsix
+      dotlambda
+    ];
+    teams = [ teams.geospatial ];
   };
 }

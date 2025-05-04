@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatch-nodejs-version,
@@ -18,13 +18,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "3.0.3";
+  version = "3.0.4";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "jupyter_ydoc";
-    inherit version;
-    hash = "sha256-ZvPTepoCqXEbUIpVdLCsSJqkDyFgMK8p/dgshiouteo=";
+  src = fetchFromGitHub {
+    owner = "jupyter-server";
+    repo = "jupyter_ydoc";
+    tag = "v${version}";
+    hash = "sha256-dD4ZLT5yKGdvWnsPd3nAKmi6Ca+MK5f/ufyNfbGMmoM=";
   };
 
   build-system = [
@@ -50,6 +51,6 @@ buildPythonPackage rec {
     description = "Document structures for collaborative editing using Ypy";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

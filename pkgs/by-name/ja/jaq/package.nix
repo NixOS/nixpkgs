@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     tag = "v${version}";
-    hash = "sha256-8RP895GXoQOgMAfkfHIxCm0R2lmG+W3/H+xjcqSc3JM=";
+    hash = "sha256-mVC2aggfcEpCtriuz/s4JL8mYkrlyAQLnaN5vyfcW3s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-movx0ahUD20OvLPZiLfXwN5tEkytUk9Q3cOTV1SJcvw=";
+  cargoHash = "sha256-ZZLp3Vwq013MPxKy9gTZ1yMi2O0QcDPgFw5YnrYt90I=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

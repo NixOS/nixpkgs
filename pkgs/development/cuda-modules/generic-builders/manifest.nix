@@ -322,6 +322,6 @@ backendStdenv.mkDerivation (finalAttrs: {
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
     license = licenses.unfree;
-    maintainers = teams.cuda.members;
+    teams = [ teams.cuda ];
   };
 })

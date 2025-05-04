@@ -123,6 +123,7 @@ jdk.overrideAttrs (
       license = lib.licenses.gpl2Only;
       description = "Amazon's distribution of OpenJDK";
       maintainers = with lib.maintainers; [ rollf ];
+      teams = [ ];
     };
   }
 )

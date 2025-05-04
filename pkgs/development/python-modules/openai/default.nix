@@ -46,7 +46,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.69.0";
+  version = "1.76.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-uU6TvA172qETuiP++v8XEunjlB8VrBSBVpWu9iEBvj4=";
+    hash = "sha256-MywcdSFOFKfq6MPRAfsbJzu82IKCOLSU3JbnwHvkHsA=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -71,10 +71,8 @@ buildPythonPackage rec {
       distro
       httpx
       jiter
-      numpy
       pydantic
       sniffio
-      sounddevice
       tqdm
       typing-extensions
     ]

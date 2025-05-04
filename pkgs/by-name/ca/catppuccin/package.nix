@@ -1,5 +1,6 @@
 let
   validThemes = [
+    "alacritty"
     "bat"
     "bottom"
     "btop"
@@ -55,6 +56,14 @@ let
 
   selectedSources = map (themeName: builtins.getAttr themeName sources) themeList;
   sources = {
+    alacritty = fetchFromGitHub {
+      name = "alacritty";
+      owner = "catppuccin";
+      repo = "alacritty";
+      rev = "f6cb5a5c2b404cdaceaff193b9c52317f62c62f7";
+      hash = "sha256-H8bouVCS46h0DgQ+oYY8JitahQDj0V9p2cOoD4cQX+Q=";
+    };
+
     bat = fetchFromGitHub {
       name = "bat";
       owner = "catppuccin";
@@ -221,6 +230,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
 
         local capitalizedVariant=$(sed 's/^\(.\)/\U\1/' <<< "${variant}")
         local capitalizedAccent=$(sed 's/^\(.\)/\U\1/' <<< "${accent}")
+
+      ''
+      + lib.optionalString (lib.elem "alacritty" themeList) ''
+        mkdir -p "$out/alacritty"
+        cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
 
       ''
       + lib.optionalString (lib.elem "bat" themeList) ''

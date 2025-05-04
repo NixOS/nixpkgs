@@ -14,9 +14,11 @@
   libva,
   fetchpatch,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dim";
   version = "0-unstable-2023-12-29";
+
   src = fetchFromGitHub {
     owner = "Dusk-Labs";
     repo = "dim";
@@ -26,8 +28,8 @@ rustPlatform.buildRustPackage rec {
 
   frontend = buildNpmPackage {
     pname = "dim-ui";
-    inherit version;
-    src = "${src}/ui";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/ui";
 
     postPatch = ''
       ln -s ${./package-lock.json} package-lock.json
@@ -37,7 +39,9 @@ rustPlatform.buildRustPackage rec {
 
     installPhase = ''
       runHook preInstall
+
       cp -r build $out
+
       runHook postInstall
     '';
   };
@@ -62,6 +66,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace dim-core/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+    substituteInPlace dim-events/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+    substituteInPlace dim-database/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
@@ -120,4 +130,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.unix;
   };
-}
+})

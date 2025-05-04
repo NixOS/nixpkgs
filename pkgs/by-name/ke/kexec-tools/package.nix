@@ -4,6 +4,7 @@
   buildPackages,
   fetchurl,
   fetchpatch,
+  nixosTests,
   zlib,
 }:
 
@@ -45,6 +46,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.kexec = nixosTests.kexec;
 
   meta = with lib; {
     homepage = "http://horms.net/projects/kexec/kexec-tools";

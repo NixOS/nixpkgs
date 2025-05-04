@@ -26,7 +26,7 @@
   qt6,
   tbb_2021_11,
   tracy,
-  substituteAll,
+  replaceVars,
   python3,
 }:
 let
@@ -94,9 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # These are for Nix compatibility {{{
     ./patches/use-find-package.patch # Replace some vendored dependencies with Nix provided versions
-    (substituteAll {
+    (replaceVars ./patches/skip-git-versioning.patch {
       # Skip tagging build with git version, and substitute it with the src revision (still uses current year timestamp)
-      src = ./patches/skip-git-versioning.patch;
       rev = finalAttrs.src.rev;
     })
     # Prevents using some Qt scripts that seemed to break the install step. Fixes missing link to some targets.

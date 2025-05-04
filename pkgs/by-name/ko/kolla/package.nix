@@ -73,6 +73,7 @@ pythonPackages.buildPythonApplication rec {
     mainProgram = "kolla-build";
     homepage = "https://opendev.org/openstack/kolla";
     license = licenses.asl20;
-    maintainers = teams.openstack.members ++ [ maintainers.astro ];
+    maintainers = [ maintainers.astro ];
+    teams = [ teams.openstack ];
   };
 }

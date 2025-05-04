@@ -76,8 +76,8 @@ in
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
 
-          Add OpenSMTPD-extras here if you want to use the filters, etc. from
-          that package.
+          Add packages here if you want to use them as as such, for example
+          from the opensmtpd-table-* packages.
         '';
       };
     };
@@ -132,14 +132,14 @@ in
         procEnv = pkgs.buildEnv {
           name = "opensmtpd-procs";
           paths = [ cfg.package ] ++ cfg.procPackages;
-          pathsToLink = [ "/libexec/opensmtpd" ];
+          pathsToLink = [ "/libexec/smtpd" ];
         };
       in
       {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
-        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
+        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/smtpd";
       };
   };
 }

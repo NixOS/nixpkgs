@@ -1,25 +1,25 @@
 {
-  "version": "0.146.1",
+  "version": "0.147.0",
   "binaries": {
     "aarch64-darwin": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.146.1/darwin/arm64/yc",
-      "hash": "sha256-CB8TjVYK7BvfMxGa/i4/Nx/6CDVEO942yC+FvSGPVdQ="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.147.0/darwin/arm64/yc",
+      "hash": "sha256-1HJPKu7R0+xwxQQHd/vcxASAhtkQYNJypvKKeehVub8="
     },
     "aarch64-linux": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.146.1/linux/arm64/yc",
-      "hash": "sha256-Lftf19hdhw/vulo3jwMxfoIWkGrKZIFh8GmslLXzUng="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.147.0/linux/arm64/yc",
+      "hash": "sha256-guw6dKsXWDH8VYTCBkxC5BxkrCCt/WEG6BBwTU0K1SY="
     },
     "i686-linux": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.146.1/linux/386/yc",
-      "hash": "sha256-2RQHVU7uglR7FQDJQQ5KnFkNtVsMeO9RAH1g0OX28vQ="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.147.0/linux/386/yc",
+      "hash": "sha256-nACjbD1/iZ4HVUNGXC7TgAnof5Xf48wvz+tKhCP/AXc="
     },
     "x86_64-darwin": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.146.1/darwin/amd64/yc",
-      "hash": "sha256-Qvp3HiHlg6ddReTFRSpc2MDQgnwcQohF1ugFhzWR0os="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.147.0/darwin/amd64/yc",
+      "hash": "sha256-SAVTTdI1EXAK6AqnycVVxtsOAnRC2rKvito+j9Wmzk4="
     },
     "x86_64-linux": {
-      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.146.1/linux/amd64/yc",
-      "hash": "sha256-yHl67bzX4HKcaaAH2dRNI6+bWfvM90Zkh/qkXC3Cw14="
+      "url": "https://storage.yandexcloud.net/yandexcloud-yc/release/0.147.0/linux/amd64/yc",
+      "hash": "sha256-k3Mn3sxPzPu6XfLEP07kkSYZP4LWx8NJe8OIS3yfcgQ="
     }
   }
 }

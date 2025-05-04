@@ -2,37 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   setuptools,
 
   nltk,
-  python-crfsuite,
+  numpy,
   pint,
-  floret,
+  python-crfsuite,
 
   pytestCheckHook,
   nltk-data,
 }:
 buildPythonPackage rec {
   pname = "ingredient-parser-nlp";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strangetom";
     repo = "ingredient-parser";
     tag = version;
-    hash = "sha256-i14RKBcvU56pDNGxNVBvvpQ65FCbitMIfvN5eLLJCWU=";
+    hash = "sha256-VGHN1zgT6gaIrUN6JMgdCSHu652H0D6LCWI6deX12bs=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     nltk
-    python-crfsuite
+    numpy
     pint
-    floret
+    python-crfsuite
   ];
 
   nativeCheckInputs = [
@@ -52,7 +51,7 @@ buildPythonPackage rec {
     description = "Parse structured information from recipe ingredient sentences";
     license = lib.licenses.mit;
     homepage = "https://github.com/strangetom/ingredient-parser/";
-    changelog = "https://github.com/strangetom/ingredient-parser/releases/tag/${version}";
+    changelog = "https://github.com/strangetom/ingredient-parser/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ antonmosich ];
   };
 }

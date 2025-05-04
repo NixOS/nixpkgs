@@ -77,6 +77,21 @@
   "sec-mattermost-plugins-build": [
     "index.html#sec-mattermost-plugins-build"
   ],
+  "sec-nixos-test-wifi": [
+    "index.html#sec-nixos-test-wifi"
+  ],
+  "sec-nixos-test-wifi-ap": [
+    "index.html#sec-nixos-test-wifi-ap"
+  ],
+  "sec-nixos-test-wifi-monitor": [
+    "index.html#sec-nixos-test-wifi-monitor"
+  ],
+  "sec-nixos-test-wifi-station": [
+    "index.html#sec-nixos-test-wifi-station"
+  ],
+  "sec-nixos-test-wifi-vwifi-server": [
+    "index.html#sec-nixos-test-wifi-vwifi-server"
+  ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
   ],
@@ -146,6 +161,9 @@
   "ex-config": [
     "index.html#ex-config"
   ],
+  "ex-nixos-rebuild-build-image-customize": [
+    "index.html#ex-nixos-rebuild-build-image-customize"
+  ],
   "sec-installation-additional-notes": [
     "index.html#sec-installation-additional-notes"
   ],
@@ -199,6 +217,9 @@
   ],
   "sec-image-nixos-rebuild-build-image": [
     "index.html#sec-image-nixos-rebuild-build-image"
+  ],
+  "sec-image-nixos-rebuild-build-image-customize": [
+    "index.html#sec-image-nixos-rebuild-build-image-customize"
   ],
   "sec-image-repart": [
     "index.html#sec-image-repart"
@@ -1894,6 +1915,9 @@
   ],
   "sec-linking-nixos-tests-to-packages": [
     "index.html#sec-linking-nixos-tests-to-packages"
+  ],
+  "sec-nixos-test-testing-hardware-features": [
+    "index.html#sec-nixos-test-testing-hardware-features"
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"

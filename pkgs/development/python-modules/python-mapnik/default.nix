@@ -132,6 +132,6 @@ buildPythonPackage rec {
     description = "Python bindings for Mapnik";
     homepage = "https://mapnik.org";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

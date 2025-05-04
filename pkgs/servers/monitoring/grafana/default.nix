@@ -6,7 +6,7 @@
   removeReferencesTo,
   tzdata,
   wire,
-  yarn,
+  yarn-berry_4,
   nodejs,
   python3,
   cacert,
@@ -44,7 +44,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.6.0";
+  version = "11.6.0+security-01";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -56,69 +56,41 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-oXotHi79XBhxD/qYC7QDQwn7jiX0wKWe/RXZS5DwN9o=";
+    hash = "sha256-JG4Dr0CGDYHH6hBAAtdHPO8Vy9U/bg4GPzX6biZk028=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
+
+    # The build OOMs on memory constrained aarch64 without this
+    NODE_OPTIONS = "--max_old_space_size=4096";
   };
 
-  offlineCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-yarn-offline-cache";
-    inherit src env;
-    nativeBuildInputs = [
-      yarn
-      nodejs
-      cacert
-      jq
-      moreutils
-      # required to run old node-gyp
-      (python3.withPackages (ps: [ ps.distutils ]))
-      git
-      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
-    buildPhase = ''
-      runHook preBuild
-      export HOME="$(mktemp -d)"
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn
-      runHook postBuild
-    '';
-    dontConfigure = true;
-    dontInstall = true;
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash =
-      rec {
-        x86_64-linux = "sha256-52Sq7YJHhs0UICMOtEDta+bY7b/1SdNfzUOigQhH3E4=";
-        aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-9AJbuA1WDGiln2ea0nqD9lDMhKWdYyVkgFyFLB6/Etc=";
-        x86_64-darwin = aarch64-darwin;
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-tpQjEa4xeD4fmrucynt8WVVXZ3uN5WxjSF8YcjE6HLU=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-cYE43OAagPHFhWsUJLMcJVfsJj6d0vUqzjbAviYSuSc=";
+  vendorHash = "sha256-Ziohfy9fMVmYnk9c0iRNi4wJZd2E8vCP+ozsTM0eLTA=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [
     wire
-    yarn
     jq
     moreutils
     removeReferencesTo
     # required to run old node-gyp
     (python3.withPackages (ps: [ ps.distutils ]))
     faketty
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
@@ -129,22 +101,7 @@ buildGoModule rec {
 
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    # Setup node_modules
-    export HOME="$(mktemp -d)"
 
-    # Help node-gyp find Node.js headers
-    # (see https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls)
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder $offlineCache
-    yarn install --immutable-cache
-
-    # The build OOMs on memory constrained aarch64 without this
-    export NODE_OPTIONS=--max_old_space_size=4096
   '';
 
   postBuild = ''

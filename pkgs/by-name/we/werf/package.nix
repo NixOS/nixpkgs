@@ -10,17 +10,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.34.1";
+  version = "2.35.4";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hWkU3tyh0kQ9GNl5gQIs4wTRBQV0B3/0oOAhKLo1hOo=";
+    hash = "sha256-bp0KtTsKSBfCLwKfHseLKnGh9ub09+FC841y0I+KNtw=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-x9ehxBfyk5sMg71yJcyjcrBAi5bzEnENAaqLXFoGQck=";
+  vendorHash = "sha256-vWjFdwcVbw8lxJl2mR54O8DpiwbGzyCy50Heu7NFLA8=";
 
   subPackages = [ "cmd/werf" ];
 
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     [
       "-s"
       "-w"
-      "-X github.com/werf/werf/v2/pkg/werf.Version=${finalAttrs.src.rev}"
+      "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
     ]
     ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
       "-extldflags=-static"
@@ -103,7 +103,7 @@ buildGoModule (finalAttrs: {
       Buildah.
     '';
     homepage = "https://werf.io";
-    changelog = "https://github.com/werf/werf/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/werf/werf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "werf";

@@ -2696,7 +2696,7 @@ with self;
     meta = {
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -4983,7 +4983,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -5993,7 +5993,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -12667,16 +12667,23 @@ with self;
       hash = "sha256-u+rO2ZXX2NEM/FGjpaZtpBzrK8BP7cq1DhDmMA6AHG4=";
     };
     nativeBuildInputs = [ buildPackages.pkg-config ];
-    propagatedBuildInputs = [ pkgs.pkg-config ];
+    propagatedNativeBuildInputs = [ pkgs.pkg-config ];
     postPatch = ''
       # no pkg-config binary when cross-compiling so the check fails
       substituteInPlace Makefile.PL \
         --replace "pkg-config" "$PKG_CONFIG"
+      # use correctly prefixed pkg-config binary
+      substituteInPlace lib/ExtUtils/PkgConfig.pm \
+        --replace-fail '`pkg-config' '`${stdenv.cc.targetPrefix}pkg-config' \
+        --replace-fail '"pkg-config' '"${stdenv.cc.targetPrefix}pkg-config' \
+        --replace-fail '/pkg-config' '/${stdenv.cc.targetPrefix}pkg-config'
     '';
     doCheck = false; # expects test_glib-2.0.pc in PKG_CONFIG_PATH
     meta = {
       description = "Simplistic interface to pkg-config";
+      homepage = "https://gitlab.gnome.org/GNOME/perl-extutils-pkgconfig";
       license = with lib.licenses; [ lgpl21Plus ];
+      maintainers = [ lib.maintainers.fliegendewurst ];
     };
   };
 
@@ -13390,7 +13397,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13421,7 +13428,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13737,7 +13744,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13979,7 +13986,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13997,7 +14004,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -14701,7 +14708,7 @@ with self;
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -15234,7 +15241,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -15534,8 +15541,6 @@ with self;
       ];
     };
   };
-
-  ham = callPackage ../development/perl-modules/ham { };
 
   HashFlatten = buildPerlPackage {
     pname = "Hash-Flatten";
@@ -18897,7 +18902,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -20372,7 +20377,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -26712,7 +26717,8 @@ with self;
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
-      maintainers = teams.deshaw.members ++ [ maintainers.ztzg ];
+      maintainers = [ maintainers.ztzg ];
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27047,7 +27053,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27235,7 +27241,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27922,7 +27928,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27995,7 +28001,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
     };
   };
@@ -28415,7 +28421,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -28433,7 +28439,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
     };
   };

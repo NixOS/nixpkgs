@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "desktop-notifier";
     tag = "v${version}";
-    hash = "sha256-cSeEekjX9NeoEoe9mDokCanK5zrawyvdHK1c4RJ9kSk=";
+    hash = "sha256-COPJHMURwb76p5a5w1/i1xL7B8f2GWGfXXeWW/GUxeY=";
   };
 
   build-system = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for cross-platform desktop notifications";
     homepage = "https://github.com/samschott/desktop-notifier";
-    changelog = "https://github.com/samschott/desktop-notifier/releases/tag/v${version}";
+    changelog = "https://github.com/samschott/desktop-notifier/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
   };

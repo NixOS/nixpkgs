@@ -41,7 +41,7 @@ let
             homepage
             license
             changelog
-            maintainers
+            teams
             platforms
             ;
           description = "PL/Tcl - Tcl Procedural Language";

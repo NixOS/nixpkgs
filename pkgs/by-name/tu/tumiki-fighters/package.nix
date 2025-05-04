@@ -5,6 +5,7 @@
   fetchurl,
   unzip,
   gdc,
+  libGL,
   SDL,
   SDL_mixer,
   bulletml,
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libGL
     SDL
     SDL_mixer
     bulletml

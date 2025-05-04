@@ -1,7 +1,6 @@
 {
   aria2,
   cmake,
-  # https://github.com/mhogomchungu/media-downloader?tab=readme-ov-file#extensions
   extraPackages ? [
     aria2
     ffmpeg
@@ -10,8 +9,8 @@
   fetchFromGitHub,
   ffmpeg,
   lib,
-  libsForQt5,
   python3,
+  qt6,
   stdenv,
 }:
 
@@ -28,10 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [ libsForQt5.qtbase ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPackages}" ];
 

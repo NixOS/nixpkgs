@@ -491,7 +491,11 @@ It might be useful to manipulate the content downloaded by `fetchurl` directly i
 In this example, we'll adapt [](#ex-fetchers-fetchurl-nixpkgs-version) to append the result of running the `hello` package to the contents we download, purely to illustrate how to manipulate the content.
 
 ```nix
-{ fetchurl, hello, lib }:
+{
+  fetchurl,
+  hello,
+  lib,
+}:
 fetchurl {
   url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
 
@@ -714,9 +718,10 @@ A wrapper around `fetchpatch`, which takes:
 Here is an example of `fetchDebianPatch` in action:
 
 ```nix
-{ lib
-, fetchDebianPatch
-, buildPythonPackage
+{
+  lib,
+  fetchDebianPatch,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -914,7 +919,9 @@ It produces packages that cannot be built automatically.
 { fetchtorrent }:
 
 fetchtorrent {
-  config = { peer-limit-global = 100; };
+  config = {
+    peer-limit-global = 100;
+  };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
   hash = "";
 }

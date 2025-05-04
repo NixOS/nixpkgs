@@ -6,7 +6,6 @@
   pkg-config,
   python3,
   gfortran,
-  lesstif,
   cfitsio,
   getopt,
   perl,
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    sha256 = "sha256-5XKImlE5A6JjA6LLqmGc4IzaMMPoHDo8cUPmgRtnEp0=";
+    hash = "sha256-5XKImlE5A6JjA6LLqmGc4IzaMMPoHDo8cUPmgRtnEp0=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       gtk2-x11
-      lesstif
       cfitsio
       python3Env
       ncurses
@@ -96,6 +94,8 @@ stdenv.mkDerivation rec {
       chmod 755 $out/bin/$i
     done
   '';
+
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Radioastronomy data analysis software";

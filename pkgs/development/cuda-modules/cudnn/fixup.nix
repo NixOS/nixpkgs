@@ -57,12 +57,13 @@ finalAttrs: prevAttrs: {
   meta = prevAttrs.meta // {
     homepage = "https://developer.nvidia.com/cudnn";
     maintainers =
-      prevAttrs.meta.maintainers
+      prevAttrs.meta.maintainers or [ ]
       ++ (with maintainers; [
         mdaiter
         samuela
         connorbaker
       ]);
+    teams = prevAttrs.meta.teams or [ ];
     license = {
       shortName = "cuDNN EULA";
       fullName = "NVIDIA cuDNN Software License Agreement (EULA)";

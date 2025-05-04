@@ -13,7 +13,7 @@
   glib,
   glog,
   gflags,
-  protobuf_29,
+  protobuf_21,
   config,
   ocl-icd,
   qimgv,
@@ -29,7 +29,6 @@
   libwebp,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
-  ilmbase,
   enableJPEG2000 ? true,
   openjpeg,
   enableEigen ? true,
@@ -338,7 +337,7 @@ effectiveStdenv.mkDerivation {
       glib
       glog
       pcre2
-      protobuf_29
+      protobuf_21
       zlib
     ]
     ++ optionals enablePython [
@@ -370,7 +369,6 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals enableEXR [
       openexr
-      ilmbase
     ]
     ++ optionals enableJPEG2000 [
       openjpeg
@@ -464,8 +462,6 @@ effectiveStdenv.mkDerivation {
       cudaPackages.cuda_nvcc
     ];
 
-  env.NIX_CFLAGS_COMPILE = optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
-
   # Configure can't find the library without this.
   OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
   OpenBLAS = optionalString withOpenblas openblas_;
@@ -475,6 +471,7 @@ effectiveStdenv.mkDerivation {
       (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
       (cmakeBool "WITH_OPENMP" true)
       (cmakeBool "BUILD_PROTOBUF" false)
+      (cmakeBool "WITH_PROTOBUF" true)
       (cmakeBool "PROTOBUF_UPDATE_FILES" true)
       (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)
       (cmakeBool "BUILD_TESTS" runAccuracyTests)

@@ -8,6 +8,7 @@ from test_driver.logger import AbstractLogger
 from typing import Callable, Iterator, ContextManager, Optional, List, Dict, Any, Union
 from typing_extensions import Protocol
 from pathlib import Path
+from unittest import TestCase
 
 
 class RetryProtocol(Protocol):
@@ -51,3 +52,4 @@ join_all: Callable[[], None]
 serial_stdout_off: Callable[[], None]
 serial_stdout_on: Callable[[], None]
 polling_condition: PollingConditionProtocol
+t: TestCase

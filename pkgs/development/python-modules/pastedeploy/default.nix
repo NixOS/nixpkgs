@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Pylons/pastedeploy";
     changelog = "https://github.com/Pylons/pastedeploy/blob/${version}/docs/news.rst";
     license = licenses.mit;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

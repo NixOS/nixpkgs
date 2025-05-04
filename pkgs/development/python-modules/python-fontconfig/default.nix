@@ -1,13 +1,20 @@
 {
+  lib,
   buildPythonPackage,
-  cython,
   fetchPypi,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # dependencies
   fontconfig,
   freefont_ttf,
-  lib,
   makeFontsConf,
+
+  # testing
+  dejavu_fonts,
   python,
-  setuptools,
 }:
 
 let
@@ -35,6 +42,8 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext -i
   '';
 
+  nativeCheckInputs = [ dejavu_fonts ];
+
   preCheck = ''
     export FONTCONFIG_FILE=${fontsConf};
     export HOME=$TMPDIR
@@ -50,6 +59,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Vayn/python-fontconfig";
     description = "Python binding for Fontconfig";
     license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

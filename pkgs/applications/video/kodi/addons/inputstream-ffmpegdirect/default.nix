@@ -31,6 +31,6 @@ buildKodiBinaryAddon rec {
     description = "InputStream Client for streams that can be opened by either FFmpeg's libavformat or Kodi's cURL";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.vala-lint";
   };
 }

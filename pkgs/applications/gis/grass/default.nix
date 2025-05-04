@@ -165,7 +165,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
+    maintainers = with maintainers; [ mpickering ];
+    teams = [ teams.geospatial ];
     platforms = platforms.all;
     mainProgram = "grass";
   };

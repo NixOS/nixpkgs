@@ -43,17 +43,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.21.2";
+  version = "0.21.4";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d5dHHiiCXhzn8qJlCqJVw0qC86PvKyDZstPivX9bpCI=";
+    hash = "sha256-Xd8b+JXL46r9Jv5Uv5wdtvSKwnHafEo52v1aERmyxrI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0vhUeqCStM7P8+sDs3ZI+JlEzPAreoP+1X8x5zKOJUo=";
+    hash = "sha256-1BTSvHaSPE55v6awnvRry1Exms+zeGug3PNldZ2v2HY=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-pJiMCyBJSuTaxix3kKnSCrURL2+t26zB4Y59gGdxalo=";
+    outputHash = "sha256-w9Lz8wFq34VXInoE5pUeg1B7N92D+TnBWbL2qJ/q8ik=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [

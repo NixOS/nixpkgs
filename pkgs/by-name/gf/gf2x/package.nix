@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Routines for fast arithmetic in GF(2)[x]";
     homepage = "https://gitlab.inria.fr/gf2x/gf2x/";
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

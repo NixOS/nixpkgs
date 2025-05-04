@@ -22,6 +22,7 @@ php.buildComposerProject2 (finalAttrs: {
     description = "PHP coding standard tool";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/PHPCSStandards/PHP_CodeSniffer/";
-    maintainers = with lib.maintainers; [ javaguirre ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [ javaguirre ];
+    teams = [ lib.teams.php ];
   };
 })

@@ -7,7 +7,7 @@
   wayland,
   cairo,
   pango,
-  gtk,
+  gtk3,
   pkg-config,
   scdoc,
   libnotify,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     pango
-    gtk
+    gtk3
     libnotify
     wayland
     glib

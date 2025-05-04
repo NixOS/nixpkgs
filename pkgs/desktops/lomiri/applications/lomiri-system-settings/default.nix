@@ -210,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     mainProgram = "lomiri-system-settings";
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.linux;
     pkgConfigModules = [ "LomiriSystemSettings" ];
   };

@@ -70,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+
+    # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
 
   env = {
@@ -89,12 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/test_fuse.py
   '';
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-
-  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
-  installFlags = [
-    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
-    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
-  ];
 
   postInstall =
     ''

@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amazon-q-cli";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli";
     tag = "v${version}";
-    hash = "sha256-Hi0klNNxtWlZvcqobb8Y2hLsw/Pck1YQZB4AYBmcNKI=";
+    hash = "sha256-fOz9oz+xNwX2Bzl6szgQ9oai6lqP+EzbaCNzHPUT2cA=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-XK6B2OTCnWMow3KHWU6OK1HsyQW7apcLoYRP7viTte0=";
+  cargoHash = "sha256-H9bCke3vQDuS6RDEg8dzeFiBWCex64A8KSRhfgyp8e8=";
 
   cargoBuildFlags = [
     "-p"

@@ -102,6 +102,7 @@ lib.makeOverridable (
       optionalString
       optionalAttrs
       maintainers
+      teams
       platforms
       ;
 
@@ -514,9 +515,8 @@ lib.makeOverridable (
             );
           license = lib.licenses.gpl2Only;
           homepage = "https://www.kernel.org/";
-          maintainers = lib.teams.linux-kernel.members ++ [
-            maintainers.thoughtpolice
-          ];
+          maintainers = [ maintainers.thoughtpolice ];
+          teams = [ teams.linux-kernel ];
           platforms = platforms.linux;
           badPlatforms =
             lib.optionals (lib.versionOlder version "4.15") [

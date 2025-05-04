@@ -21,6 +21,7 @@
   pythonOlder,
   redshift-connector,
   requests-aws4auth,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,10 @@ buildPythonPackage rec {
     hash = "sha256-dIdNrfhBrfrzXmspw25yd/y6MbXRrLfDveCQk+AERV0=";
   };
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "pyarrow"
+  ];
 
   build-system = [ poetry-core ];
 
@@ -54,6 +58,7 @@ buildPythonPackage rec {
     pymysql
     redshift-connector
     requests-aws4auth
+    setuptools
   ];
 
   optional-dependencies = {

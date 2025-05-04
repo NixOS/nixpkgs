@@ -30,7 +30,7 @@ if isPyPy then
       description = "Foreign Function Interface for Python calling C code (bundled with PyPy, placeholder package)";
       homepage = "https://cffi.readthedocs.org/";
       license = lib.licenses.mit;
-      maintainers = lib.teams.python.members;
+      teams = [ lib.teams.python ];
     };
   }
 else
@@ -70,6 +70,6 @@ else
       downloadPage = "https://github.com/python-cffi/cffi";
       homepage = "https://cffi.readthedocs.org/";
       license = licenses.mit;
-      maintainers = teams.python.members;
+      teams = [ teams.python ];
     };
   }

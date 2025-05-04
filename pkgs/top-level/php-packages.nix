@@ -206,7 +206,7 @@ lib.makeScope pkgs.newScope (
           meta = {
             description = "PHP upstream extension: ${name}";
             inherit (php.meta)
-              maintainers
+              teams
               homepage
               license
               platforms
@@ -297,6 +297,8 @@ lib.makeScope pkgs.newScope (
 
         event = callPackage ../development/php-packages/event { };
 
+        excimer = callPackage ../development/php-packages/excimer { };
+
         gnupg = callPackage ../development/php-packages/gnupg { };
 
         grpc = callPackage ../development/php-packages/grpc { };
@@ -311,6 +313,8 @@ lib.makeScope pkgs.newScope (
         inotify = callPackage ../development/php-packages/inotify { };
 
         ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
+
+        luasandbox = callPackage ../development/php-packages/luasandbox { };
 
         mailparse = callPackage ../development/php-packages/mailparse { };
 
@@ -360,7 +364,7 @@ lib.makeScope pkgs.newScope (
                 sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
               '';
 
-              meta.maintainers = lib.teams.php.members;
+              meta.teams = [ lib.teams.php ];
             };
 
         pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
@@ -403,6 +407,8 @@ lib.makeScope pkgs.newScope (
 
         vld = callPackage ../development/php-packages/vld { };
 
+        wikidiff2 = callPackage ../development/php-packages/wikidiff2 { };
+
         xdebug = callPackage ../development/php-packages/xdebug { };
 
         yaml = callPackage ../development/php-packages/yaml { };
@@ -430,10 +436,12 @@ lib.makeScope pkgs.newScope (
               { name = "calendar"; }
               {
                 name = "ctype";
-                postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                  # Broken test on aarch64-darwin
-                  rm ext/ctype/tests/lc_ctype_inheritance.phpt
-                '';
+                postPatch =
+                  lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast php.version "8.2")
+                    # Broken test on aarch64-darwin
+                    ''
+                      rm ext/ctype/tests/lc_ctype_inheritance.phpt
+                    '';
               }
               {
                 name = "curl";

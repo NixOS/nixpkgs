@@ -36,13 +36,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
-  configureFlags = [ "--ioctl=termios" ];
+  configureFlags = [
+    "--ioctl=termios"
+    "--libs=-lncurses"
+  ];
 
   strictDeps = false;
 
   postPatch = ''
     substituteInPlace configure \
-      --replace-fail '-lcurses' '-lncurses'
+      --replace-fail '-lcurses' '-lncurses' \
+      --replace-fail 'if [ -f /usr/include/sys/wait.h ]' 'if true'
+  '';
+
+  postConfigure = ''
+    echo >>config.h '#undef NEED_MEMMOVE'
+    echo >>config.h '#define NEED_IOCTL_H'
   '';
 
   installPhase = ''

@@ -143,7 +143,8 @@ buildNpmPackage rec {
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
     license = licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = teams.jitsi.members ++ [ maintainers.tomasajt ];
+    maintainers = [ maintainers.tomasajt ];
+    teams = [ teams.jitsi ];
     inherit (electron.meta) platforms;
   };
 }

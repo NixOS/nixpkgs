@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-runner";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -108,7 +108,10 @@ let
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
-  hasNoMaintainers = attrs: attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
+  hasNoMaintainers =
+    attrs:
+    (attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0)
+    && (attrs ? meta.teams && (length attrs.meta.teams) == 0);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -368,6 +371,7 @@ let
         ];
       sourceProvenance = listOf attrs;
       maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
@@ -386,6 +390,8 @@ let
             (isDerivation x && x ? meta.timeout);
       };
       timeout = int;
+      knownVulnerabilities = listOf str;
+      badPlatforms = platforms;
 
       # Needed for Hydra to expose channel tarballs:
       # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
@@ -393,7 +399,6 @@ let
 
       # Weirder stuff that doesn't appear in the documentation?
       maxSilent = int;
-      knownVulnerabilities = listOf str;
       name = str;
       version = str;
       tag = str;
@@ -406,7 +411,6 @@ let
       isFcitxEngine = bool;
       isIbusEngine = bool;
       isGutenprint = bool;
-      badPlatforms = platforms;
     };
 
   checkMetaAttr =
@@ -534,7 +538,7 @@ let
       {
         valid = "warn";
         reason = "maintainerless";
-        errormsg = "has no maintainers";
+        errormsg = "has no maintainers or teams";
       }
     # -----
     else

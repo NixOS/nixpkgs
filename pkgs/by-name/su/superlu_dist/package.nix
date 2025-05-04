@@ -5,6 +5,7 @@
   fetchurl,
   llvmPackages,
   cmake,
+  pkg-config,
   gfortran,
   blas,
   lapack,
@@ -13,7 +14,7 @@
   metis,
   parmetis,
   withExamples ? false,
-  fortranSupport ? stdenv.hostPlatform.isLinux,
+  fortranSupport ? true,
   enableOpenMP ? true,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       cmake
+      pkg-config
     ]
     ++ lib.optionals fortranSupport [
       gfortran
@@ -69,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withParmetis [
       metis
       parmetis
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      gfortran.cc.lib
     ];
 
   propagatedBuildInputs = [ blas ];
@@ -80,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
       (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
       (lib.cmakeBool "XSDK_ENABLE_Fortran" fortranSupport)
+      (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
       (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
       (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
       (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)

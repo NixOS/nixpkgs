@@ -9,13 +9,13 @@
 stdenv.mkDerivation {
   pname = "hid-tmff2";
   # https://github.com/Kimplul/hid-tmff2/blob/ca168637fbfb085ebc9ade0c47fa0653dac5d25b/dkms/dkms-install.sh#L12
-  version = "0.82-unstable-2025-02-03";
+  version = "0-unstable-2025-04-12";
 
   src = fetchFromGitHub {
     owner = "Kimplul";
     repo = "hid-tmff2";
-    rev = "a9312ead5720922e1c06b541ea48b6db3f289d36";
-    hash = "sha256-38G0PrYmHg4OLpZvEes5Y2/sQSfUJBCIvqSQderjwAM=";
+    rev = "2661098c3ddaa327b0db8029689f7dfb6e85d1e9";
+    hash = "sha256-dkPniXEHC0xcLQhDmnqgyFnICaooBOGlHVx0jqK0mGc=";
     # For hid-tminit. Source: https://github.com/scarburato/hid-tminit
     fetchSubmodules = true;
   };

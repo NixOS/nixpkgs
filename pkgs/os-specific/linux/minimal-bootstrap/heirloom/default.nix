@@ -108,7 +108,7 @@ bash.runCommand "${pname}-${version}"
         lpl-102
         info-zip
       ];
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

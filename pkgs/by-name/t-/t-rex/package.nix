@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://t-rex.tileserver.ch/";
     changelog = "https://github.com/t-rex-tileserver/t-rex/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     mainProgram = "t_rex";
     platforms = platforms.unix;
     broken = true; # see https://github.com/t-rex-tileserver/t-rex/issues/320

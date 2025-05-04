@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-0vbQDHuLrgrsWiOb2hb6lYylJm5o/wOzoDIw85H8Eh0=";
+    hash = "sha256-Yulm0XkVaN+yBKj8LDsn8pBYXEqTOSGLqbpIKDN0G2U=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KdHYyuH1RMLRueqYbfADUktBx9aL8yTagB0KxEGQsCs=";
+  cargoHash = "sha256-MtpJTLKhlVF5AE3huL0JRWXtNCtc0Z5b/S28ekzirPA=";
 
   passthru = {
     tests.basic-functionality = nixosTests.stargazer;

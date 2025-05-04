@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   fetchzip,
   makeWrapper,
   premake5,
-  writeShellScriptBin,
+  writeShellApplication,
   runCommandLocal,
   symlinkJoin,
+  writeText,
   imagemagick,
   bzip2,
   curl,
+  envsubst,
   flac,
-  # Use fmt 10+ after release 40.1.4+
-  fmt_9,
+  fmt,
   freetype,
   irrlicht,
   libevent,
@@ -34,6 +34,7 @@
   sqlite,
   wayland,
   egl-wayland,
+  zenity,
   covers_url ? "https://pics.projectignis.org:2096/pics/cover/{}.jpg",
   fields_url ? "https://pics.projectignis.org:2096/pics/field/{}.png",
   # While ygoprodeck has higher quality images, "spamming" of their api results in a ban.
@@ -57,6 +58,14 @@ let
   ];
 
   deps = import ./deps.nix;
+
+  edopro-src = fetchFromGitHub {
+    owner = "edo9300";
+    repo = "edopro";
+    rev = deps.edopro-rev;
+    fetchSubmodules = true;
+    hash = deps.edopro-hash;
+  };
 in
 let
   assets = fetchzip {
@@ -107,16 +116,83 @@ let
     };
   };
 
+  ocgcore =
+    let
+      # Refer to CORENAME EPRO_TEXT in <edopro>/gframe/dllinterface.cpp for this
+      ocgcoreName = lib.strings.concatStrings [
+        (lib.optionalString (!stdenv.hostPlatform.isWindows) "lib")
+        "ocgcore"
+        (
+          if stdenv.hostPlatform.isiOS then
+            "-ios"
+          else if stdenv.hostPlatform.isAndroid then
+            (
+              if stdenv.hostPlatform.isx86_64 then
+                "x64"
+              else if stdenv.hostPlatform.isx86_32 then
+                "x86"
+              else if stdenv.hostPlatform.isAarch64 then
+                "v8"
+              else if stdenv.hostPlatform.isAarch32 then
+                "v7"
+              else
+                throw "Don't know what platform suffix edopro expects for ocgcore on: ${stdenv.hostPlatform.system}"
+            )
+          else
+            lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ".aarch64"
+        )
+        stdenv.hostPlatform.extensions.sharedLibrary
+      ];
+    in
+    stdenv.mkDerivation {
+      pname = "ocgcore-edopro";
+      version = deps.edopro-version;
+
+      src = edopro-src;
+      sourceRoot = "${edopro-src.name}/ocgcore";
+
+      nativeBuildInputs = [
+        premake5
+      ];
+
+      enableParallelBuilding = true;
+
+      buildFlags = [
+        "verbose=true"
+        "config=release"
+        "ocgcoreshared"
+      ];
+
+      makeFlags = [
+        "-C"
+        "build"
+      ];
+
+      # To make sure linking errors are discovered at build time, not when edopro runs into them during loading
+      env.NIX_LDFLAGS = "--unresolved-symbols=report-all";
+
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm644 bin/release/*ocgcore*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/${ocgcoreName}
+
+        runHook postInstall
+      '';
+
+      meta = {
+        description = "YGOPro script engine";
+        homepage = "https://github.com/edo9300/ygopro-core";
+        license = lib.licenses.agpl3Plus;
+        inherit maintainers;
+        platforms = lib.platforms.unix;
+      };
+    };
+
   edopro = stdenv.mkDerivation {
     pname = "edopro";
     version = deps.edopro-version;
 
-    src = fetchFromGitHub {
-      owner = "edo9300";
-      repo = "edopro";
-      rev = deps.edopro-rev;
-      hash = deps.edopro-hash;
-    };
+    src = edopro-src;
 
     nativeBuildInputs = [
       makeWrapper
@@ -127,7 +203,7 @@ let
       bzip2
       curl
       flac
-      fmt_9
+      fmt
       freetype
       irrlicht-edopro
       libevent
@@ -141,18 +217,15 @@ let
       sqlite
     ];
 
-    patches = [
-      (fetchpatch {
-        name = "libgit2-version.patch";
-        url = "https://github.com/edo9300/edopro/commit/f8ddbfff51231827a8dd1dcfcb2dda85f50a56d9.patch";
-        hash = "sha256-w9VTmWfw6vEyVvsOH+AK9lAbUOV+MagzGQ3Wa5DCS/U=";
-      })
-    ];
-
     # nixpkgs' gcc stack currently appears to not support LTO
+    # Override where bundled ocgcore get looked up in, so we can supply ours
+    # (can't use --prebuilt-core or let it build a core on its own without making core updates impossible)
     postPatch = ''
       substituteInPlace premake5.lua \
         --replace-fail 'flags "LinkTimeOptimization"' 'removeflags "LinkTimeOptimization"'
+
+      substituteInPlace gframe/game.cpp \
+        --replace-fail 'ocgcore = LoadOCGcore(Utils::GetWorkingDirectory())' 'ocgcore = LoadOCGcore("${lib.getLib ocgcore}/lib/")'
 
       touch ocgcore/premake5.lua
     '';
@@ -244,21 +317,62 @@ let
         "textures"
         "WindBot"
       ];
+      wrapperZenityMessageTemplate = writeText "edopro-wrapper-multiple-versions-message.txt.in" ''
+        Nixpkgs' EDOPro wrapper has found more than 1 directory in: ''${EDOPRO_BASE_DIR}
+
+        We expected the only directory to be: ''${EDOPRO_DIR}
+
+        There may have been an update, requiring you to migrate any files you care about from an older version.
+
+        Examples include:
+
+        - decks/*
+        - config/system.conf - which has your client's settings
+        - any custom things you may have installed into: fonts, skins, script, sound, ...
+        - anything you wish to preserve from: replay, screenshots
+
+        Once you have copied over everything important to ''${EDOPRO_DIR}, delete the old version's path.
+      '';
     in
-    writeShellScriptBin "edopro" ''
-      set -eu
-      EDOPRO_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/edopro"
+    writeShellApplication {
+      name = "edopro";
+      runtimeInputs = [
+        envsubst
+        zenity
+      ];
+      text = ''
+        export EDOPRO_VERSION="${deps.edopro-version}"
+        export EDOPRO_BASE_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/edopro"
+        export EDOPRO_DIR="''${EDOPRO_BASE_DIR}/''${EDOPRO_VERSION}"
 
-      if [ ! -d $EDOPRO_DIR ]; then
-          mkdir -p $EDOPRO_DIR
-          cp -r --no-preserve=all ${assets}/{${assetsToCopy}} $EDOPRO_DIR
-          chmod -R go-rwx $EDOPRO_DIR
+        # If versioned directory doesn't exist yet, make it & copy over assets
+        if [ ! -d "$EDOPRO_DIR" ]; then
+            mkdir -p "$EDOPRO_DIR"
+            cp -r --no-preserve=all ${assets}/{${assetsToCopy}} "$EDOPRO_DIR"
+            chmod -R go-rwx "$EDOPRO_DIR"
 
-          rm $EDOPRO_DIR/config/io.github.edo9300.EDOPro.desktop.in
-      fi
+            rm "$EDOPRO_DIR"/config/io.github.edo9300.EDOPro.desktop.in
+        fi
 
-      exec ${lib.getExe edopro} -C $EDOPRO_DIR $@
-    '';
+        # Different versions provide different assets. Some are necessary for the game to run properly (configs for
+        # where to get incremental updates from, online servers, card scripting, certificates for communication etc),
+        # and some are optional nice-haves (example decks). It's also possible to override assets with custom skins.
+        #
+        # Don't try to manage all of this across versions, just inform the user that they may need to migrate their
+        # files if it looks like there are multiple versions.
+
+        edoproTopDirs="$(find "$EDOPRO_BASE_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l)"
+        if [ "$edoproTopDirs" -ne 1 ]; then
+          zenity \
+            --info \
+            --title='[NIX] Multiple asset copies found' \
+            --text="$(envsubst < ${wrapperZenityMessageTemplate})" \
+            --ok-label='Continue to EDOPro'
+        fi
+
+        exec ${lib.getExe edopro} -C "$EDOPRO_DIR" "$@"
+      '';
+    };
 
   edopro-desktop = runCommandLocal "io.github.edo9300.EDOPro.desktop" { } ''
     mkdir -p $out/share/applications

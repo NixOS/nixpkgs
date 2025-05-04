@@ -99,7 +99,7 @@ let
     description = "Lightweight Kubernetes distribution";
     license = lib.licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = lib.teams.k3s.members;
+    teams = [ lib.teams.k3s ];
     platforms = lib.platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr

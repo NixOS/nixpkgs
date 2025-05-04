@@ -4,11 +4,11 @@
   fetchFromGitHub,
   gitMinimal,
   cacert,
-  yarn,
   makeBinaryWrapper,
   nodejs,
   python3,
   nixosTests,
+  yarn-berry_4,
   writableTmpDirAsHomeHook,
 }:
 
@@ -21,58 +21,32 @@ let
     tag = version;
     hash = "sha256-hXcPcGj+efvRVt3cHQc9KttE0/DOD9Bul6f3cY4ofgs=";
   };
-
-  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
-  offlineCache = stdenv.mkDerivation {
-    name = "hedgedoc-${version}-offline-cache";
-    inherit src;
-
-    nativeBuildInputs = [
-      cacert # needed for git
-      gitMinimal # needed to download git dependencies
-      nodejs # needed for npm to download git dependencies
-      yarn
-      writableTmpDirAsHomeHook
-    ];
-
-    buildPhase = ''
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-KTUj1O2AA1qTQOqTbGBPLHAgiG5sG832Na8qLvEccmc=";
-  };
+  missingHashes = ./missing-hashes.json;
 
 in
 stdenv.mkDerivation {
   pname = "hedgedoc";
-  inherit version src;
+  inherit version src missingHashes;
+
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-V7ptquAohv0t5oA+3iTvlQOZoEtY5xWyhSoJP8jwYI8=";
+  };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     (python3.withPackages (ps: with ps; [ setuptools ])) # required to build sqlite3 bindings
-    yarn
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
   ];
 
   buildInputs = [
     nodejs # for shebangs
   ];
 
-  dontConfigure = true;
-
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$(mktemp -d)
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder ${offlineCache}
-    export npm_config_nodedir=${nodejs} # prevent node-gyp from downloading headers
-
-    yarn --immutable-cache
     yarn run build
 
     # Delete scripts that are not useful for NixOS
@@ -102,7 +76,6 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit offlineCache;
     tests = { inherit (nixosTests) hedgedoc; };
   };
 

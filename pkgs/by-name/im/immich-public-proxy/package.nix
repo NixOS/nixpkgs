@@ -8,12 +8,12 @@
 }:
 buildNpmPackage rec {
   pname = "immich-public-proxy";
-  version = "1.9.1";
+  version = "1.10.0";
   src = fetchFromGitHub {
     owner = "alangrainger";
     repo = "immich-public-proxy";
     tag = "v${version}";
-    hash = "sha256-3BXuT2tpK/kU7JkOJUuPjgHl1n+7jE12CEzuwB2wSvA=";
+    hash = "sha256-KTA2nOifVksKfHNwayHBqsTypWw3PB7nDEN6j7UjCCI=";
   };
 
   sourceRoot = "${src.name}/app";

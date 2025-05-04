@@ -2,26 +2,41 @@
   lib,
   stdenv,
   maven,
-  jdk8,
+  jdk17,
+  jre17_minimal,
   fetchFromGitHub,
   makeWrapper,
   mvnDepsHash ? null,
+  enableGui ? true,
   enableOcr ? true,
+  runCommand,
   tesseract,
   nixosTests,
 }:
 
 let
   mvnDepsHashes = {
-    "x86_64-linux" = "sha256-a2EIxok7Ov2QQntu3fpagzvMAQcBjKwcd1whDNdCm2E=";
-    "aarch64-linux" = "sha256-TUJmlnFJeYY4Pzrmd+9uKb07Tq7HYd4EnAXkbgGCFDk=";
-    "x86_64-darwin" = "sha256-OTctUd4lsH6Z6H7rDYbyAcrBmzpSzFELjPBRN8zUyhY=";
-    "aarch64-darwin" = "sha256-0tNFHEaxAEqrZTTrGCIX53K9MczkqIuDABD/bB6R1KU=";
+    "x86_64-linux" = "sha256-OTd51n6SSlFziqvvHmfyMAyQRwIzsHxFGuJ62zlX1Ec=";
+    "aarch64-linux" = "sha256-tPaGLqm0jgEoz0BD/C6AG9xupovQvib/v0kB/jjqwB8=";
+    "x86_64-darwin" = "sha256-Rs7nTiGazUW8oJJr6fbJKelzFqd2n278sJYoMy2/0N4=";
+    "aarch64-darwin" = "sha256-gnP+G33LPRMQ6HRzeZ8cEV9oSohrlPcMwlBB4rvH7+E=";
   };
 
   knownMvnDepsHash =
     mvnDepsHashes.${stdenv.system}
       or (lib.warn "This platform doesn't have a default mvnDepsHash value, you'll need to specify it manually" lib.fakeHash);
+
+  jdk = jre17_minimal.override {
+    modules = [
+      "java.base"
+      "java.desktop"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.sql"
+    ];
+    jdk = jdk17;
+  };
 in
 maven.buildMavenPackage rec {
   pname = "tika";
@@ -43,30 +58,53 @@ maven.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
-  mvnJdk = jdk8;
+  mvnJdk = jdk17;
   mvnHash = if mvnDepsHash != null then mvnDepsHash else knownMvnDepsHash;
 
-  mvnParameters = toString [
-    "-DskipTests=true" # skip tests (out of memory exceptions)
-    "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
-  ];
+  mvnParameters = toString (
+    [
+      "-DskipTests=true" # skip tests (out of memory exceptions)
+      "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
+    ]
+    ++ lib.optionals (!enableGui) [
+      "-am -pl :tika-server-standard"
+    ]
+  );
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     let
-      binPath = lib.makeBinPath ([ jdk8.jre ] ++ lib.optionals enableOcr [ tesseract ]);
+      flags = "--add-opens java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED";
+
+      binPath = lib.makeBinPath (
+        [
+          (runCommand "jdk-tika"
+            {
+              nativeBuildInputs = [ makeWrapper ];
+            }
+            ''
+              makeWrapper ${jdk}/bin/java $out/bin/java \
+                --add-flags "${flags}"
+            ''
+          )
+        ]
+        ++ lib.optionals enableOcr [ tesseract ]
+      );
     in
     ''
       runHook preInstall
 
       # Note: using * instead of version would match multiple files
+    ''
+    + lib.optionalString enableGui ''
       install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
+      makeWrapper ${jdk}/bin/java $out/bin/tika-app \
+          --add-flags "${flags} -jar $out/share/tika/tika-app.jar"
+    ''
+    + ''
       install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
-
-      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-app \
-          --add-flags "-jar $out/share/tika/tika-app.jar"
-      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-server \
+      makeWrapper ${jdk}/bin/java $out/bin/tika-server \
           --prefix PATH : ${binPath} \
           --add-flags "-jar $out/share/tika/tika-server.jar"
 

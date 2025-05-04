@@ -101,6 +101,8 @@ stdenv.mkDerivation rec {
     "-DNDEBUG"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   checkFlags = [ "V=1" ]; # verbose output in case some test fails
   doInstallCheck = true;
