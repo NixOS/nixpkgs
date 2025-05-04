@@ -18,16 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-      # System install
-      (fetchpatch {
-        url = "https://github.com/luxonis/libnop/pull/6/commits/ae29a8772f38fdb1efc24af9ec2e3f6814eb2158.patch";
-        hash = "sha256-xhWNno5M7euGdYZuHtESkCs3Zc4NvgLGD0OtB/FbMZM=";
-      })
-      # Fix template warning
-      (fetchpatch {
-        url = "https://github.com/luxonis/libnop/pull/6/commits/199978a0fb0dc31de43b80f7504b53958fd202ee.patch";
-        hash = "sha256-5FXhO7oRYA+kRRvK9s+90CBX+JEgL7q18d4PFbsXLgQ=";
-      })
+    # System install
+    (fetchpatch {
+      url = "https://github.com/luxonis/libnop/pull/6/commits/ae29a8772f38fdb1efc24af9ec2e3f6814eb2158.patch";
+      hash = "sha256-xhWNno5M7euGdYZuHtESkCs3Zc4NvgLGD0OtB/FbMZM=";
+    })
+    # Fix template warning
+    (fetchpatch {
+      url = "https://github.com/luxonis/libnop/pull/6/commits/199978a0fb0dc31de43b80f7504b53958fd202ee.patch";
+      hash = "sha256-5FXhO7oRYA+kRRvK9s+90CBX+JEgL7q18d4PFbsXLgQ=";
+    })
   ];
 
   nativeBuildInputs = [ gtest ];
