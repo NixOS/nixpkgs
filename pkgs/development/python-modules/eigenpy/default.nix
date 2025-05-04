@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  fontconfig,
+
   # nativeBuildInputs
   cmake,
   doxygen,
@@ -44,6 +46,12 @@ buildPythonPackage rec {
   ];
 
   strictDeps = true;
+
+  # Fontconfig error: No writable cache directories
+  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   nativeBuildInputs = [
     cmake
