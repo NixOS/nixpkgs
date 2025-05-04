@@ -10,6 +10,7 @@ declare -ar packages=(
     langchain-chroma
     langchain-community
     langchain-core
+    langchain-fireworks
     langchain-groq
     langchain-huggingface
     langchain-mistralai
