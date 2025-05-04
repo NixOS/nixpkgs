@@ -33,6 +33,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Create backport PRs
+        id: backport
         uses: korthout/backport-action@436145e922f9561fc5ea157ff406f21af2d6b363 # v3.2.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
@@ -43,3 +44,15 @@ jobs:
 
             * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
               * Even as a non-commiter, if you find that it is not acceptable, leave a comment.
+
+      - name: "Add 'has: port to stable' label"
+        if: steps.backport.outputs.was_successful
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+        run: |
+          gh api \
+            --method POST \
+            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+            -f "labels[]=8.has: port to stable"
