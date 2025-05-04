@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     age
     coreutils
     findutils
+    getopt
     git
     gnugrep
     gnused
