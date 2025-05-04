@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 let
-  version = "4.1.1";
+  version = "4.2.0";
   versionPrefix = "gz-cmake${lib.versions.major version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gazebosim";
     repo = "gz-cmake";
     tag = "${versionPrefix}_${finalAttrs.version}";
-    hash = "sha256-BWgRm+3UW65Cu7TqXtFFG05JlYF52dbpAsIE8aDnJM0=";
+    hash = "sha256-+bMOcGWfcwPhxR9CBp4iH02CZC4oplCjsTDpPDsDnSs=";
   };
 
   nativeBuildInputs = [
