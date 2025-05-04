@@ -68,9 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CLANG" "${clangWrapped}/bin/clang")
       (lib.cmakeFeature "CLANGXX" "${clangWrapped}/bin/clang++")
     ]
-    # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      (lib.cmakeFeature "KERNELLIB_HOST_CPU_VARIANTS" "distro")
+      (lib.cmakeFeature "LLC_HOST_CPU" "x86-64")
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
       (lib.cmakeFeature "LLC_HOST_CPU" "generic")
