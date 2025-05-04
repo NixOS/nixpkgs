@@ -5,7 +5,7 @@ let
   idea = (
     pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-community-src [
       # This is a "normal plugin", it's output must be linked into /idea-community/plugins.
-      "ideavim"
+      "nixidea"
       # This is a plugin where the output contains a single JAR file. This JAR file needs to be linked directly in /idea-community/plugins.
       "wakatime"
     ]
