@@ -50,18 +50,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      graphviz
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
 
   propagatedBuildInputs = [
     cereal_1_3_2
     eigen
     jrl-cmakemodules
     simde
-  ] ++ lib.optionals pythonSupport [ python3Packages.pybind11 ];
+  ] ++ lib.optionals pythonSupport [ python3Packages.nanobind ];
 
   checkInputs =
     [ matio ]
