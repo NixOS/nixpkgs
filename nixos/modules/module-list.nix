@@ -651,6 +651,7 @@
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/openrgb.nix
   ./services/hardware/pcscd.nix
+  ./services/hardware/pid-fan-controller.nix
   ./services/hardware/pommed.nix
   ./services/hardware/power-profiles-daemon.nix
   ./services/hardware/powerstation.nix

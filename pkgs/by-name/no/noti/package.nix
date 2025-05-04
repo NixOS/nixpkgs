@@ -5,25 +5,27 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: rec {
   pname = "noti";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
-    rev = version;
-    hash = "sha256-8CHSbKOiWNYqKBU1kqQm5t02DJq0JfoIaPsU6Ylc46E=";
+    tag = finalAttrs.version;
+    hash = "sha256-FwOS4ifMiODIzKVQufLhkDYOcmXz9dAfWw+hM3rXT/Y=";
   };
 
   vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
+  subPackages = [ "cmd/noti" ];
+
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/variadico/noti/internal/command.Version=${version}"
+    "-X github.com/variadico/noti/internal/command.Version=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -34,7 +36,7 @@ buildGoModule rec {
     installManPage docs/man/dist/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monitor a process and trigger a notification";
     longDescription = ''
       Monitor a process and trigger a notification.
@@ -43,8 +45,8 @@ buildGoModule rec {
       you when it's done. You can receive messages on your computer or phone.
     '';
     homepage = "https://github.com/variadico/noti";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stites ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.stites ];
     mainProgram = "noti";
   };
-}
+})
