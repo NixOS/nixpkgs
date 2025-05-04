@@ -24,6 +24,7 @@
   xvfb-run,
   gitUpdater,
   md4c,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,19 +38,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rbnGSdzPuFdSqWPaKtF3n4oLZ9l+4jX7KtnmcrTvwbs=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'CPMAddPackage(NAME md4c' \
-                  'CPMFindPackage(NAME md4c'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
-                  'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
-    '';
+  patches = [
+    # Patch from upstream to fix compilation with Qt 6.9
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/bbcd60ae52b6f1395ef2390a2d2ba9d0f98db548.patch";
+      hash = "sha256-9VaqLASxn1udUApDZRI5SCqCXNGOHUcdbM+pKhW8ZAg=";
+    })
+
+    # Upstream patch to support building with a locally provided md4c package
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/972c6ba72f575964fbf2049a22d51b4d1fd3983c.patch";
+      hash = "sha256-ef1Jw5NeT0KLVKQt7VcvQh83n2ujMFK+Nv0165ZQ2r8=";
+    })
+  ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
+  '';
 
   nativeBuildInputs = [
     cmake
