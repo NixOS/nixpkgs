@@ -98,7 +98,7 @@ let
       poolReady() {
         pool="$1"
         state="$("${zpoolCmd}" import -d "${devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
-        if [[ "$state" = "ONLINE" ]]; then
+        if [[ "$state" = "ONLINE" || "$state" = "DEGRADED" ]]; then
           return 0
         else
           echo "Pool $pool in state $state, waiting"
