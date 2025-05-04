@@ -3,6 +3,7 @@
   fetchFromGitHub,
   helix,
   installShellFiles,
+  nix-update-script,
   rustPlatform,
 }:
 
@@ -39,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     cp contrib/Helix.desktop $out/share/applications
     cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Post-modern modal text editor, with vim keybindings";
