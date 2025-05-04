@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rsz44";
     repo = "python-coinmarketcap";
-    rev = "de069d55d7cc5eea9cd194b47d4609c4846d59d1";
+    rev = "de069d55d7cc5eea9cd194b47d4609c4846d59d1"; # No tags
     hash = "sha256-FQIfDV7O3z5S2HGKi2k8NPsvkAS66rsueggoSAGvbVU=";
   };
 
