@@ -18,6 +18,7 @@ in
 
 with haskellLib;
 
+# To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 self: super:
 {
   # Hackage's accelerate is from 2020 and incomptible with our GHC.
