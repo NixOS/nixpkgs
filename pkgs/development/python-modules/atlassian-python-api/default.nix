@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
-    repo = pname;
+    repo = "atlassian-python-api";
     tag = version;
     hash = "sha256-m8B6t9tTlef8cdsh/wnsc0iyNLsB0RYjUhq/bA9MeII=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     deprecated
     jmespath
