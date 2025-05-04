@@ -1370,6 +1370,12 @@
     githubId = 8316672;
     name = "Alex Chapman";
   };
+  alexeyabel = {
+    email = "da-nixpkgs-9@abelonline.de";
+    github = "alexeyabel";
+    githubId = 17473656;
+    name = "Alexey Abel";
+  };
   alexfmpe = {
     email = "alexfmpe@proton.me";
     github = "alexfmpe";
