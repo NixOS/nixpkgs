@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell --show-trace ./updater-emacs.nix -i bash
 
-SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[@]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[@]}" || echo .)")"; pwd)
 
-exec emacs --fg-daemon=updater --quick -l $SCRIPT_DIR/update-melpa.el -f run-updater "$@"
+exec emacs --fg-daemon=updater --quick -l $SCRIPT_DIRECTORY/update-melpa.el -f run-updater "$@"
