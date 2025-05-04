@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-nKLz9eCGaonECmr3Uby3j4ul5jQZaqUH3PD20z/JKek=";
+    hash = "sha256-GRaWwUR26yZqjtO5f5p8abj/4KSrQE2uGAECGjeDxPY=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "langchain-ollama==(.*)"
+      "langchain-ollama==([0-9.]+)"
     ];
   };
 
