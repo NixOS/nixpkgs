@@ -3,7 +3,9 @@
 
 set -eu -o pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # The released tagged as "latest" is always stable.
 LATEST_STABLE_VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --fail -sSL https://api.github.com/repos/coder/coder/releases/latest | jq -r '.tag_name | sub("^v"; "")')

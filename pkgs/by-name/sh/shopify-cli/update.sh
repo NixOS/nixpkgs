@@ -3,12 +3,13 @@
 
 set -eu -o pipefail
 
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
 # Make a temporary directory and make sure it's removed when the script exits
 tmp=$(mktemp -d)
 trap "rm -rf $tmp" EXIT
 
-package_dir="$(dirname "${BASH_SOURCE[0]}")"
-pushd "$package_dir"
+pushd "$SCRIPT_DIRECTORY"
 
 curl -sfL ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/Shopify/cli/releases/latest > $tmp/latest.json
 version=$(cat $tmp/latest.json | jq -r '.tag_name')

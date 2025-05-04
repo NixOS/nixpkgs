@@ -6,8 +6,8 @@ set -euo pipefail
 LATEST_VERSION=$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)
 SUPPORTED_OPERATING_SYSTEMS=("linux" "darwin")
 SUPPORTED_ARCHITECTURES=("x86_64" "aarch64")
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-VERSIONS_FILE="${SCRIPT_DIR}/sysdig-cli-scanner.versions.nix"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+VERSIONS_FILE="${SCRIPT_DIRECTORY}/sysdig-cli-scanner.versions.nix"
 
 main() {
   echo "{" > "$VERSIONS_FILE"

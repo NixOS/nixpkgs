@@ -4,7 +4,7 @@
 set -eux
 
 NIXPKGS_DIR="$PWD"
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
 
 # Get latest release
 YAZI_RELEASE=$(
