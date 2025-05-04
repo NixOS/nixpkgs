@@ -12713,6 +12713,12 @@
     githubId = 8211181;
     name = "Kevin Kandlbinder";
   };
+  keysmashes = {
+    email = "x-89cjg9@keysmash.solutions";
+    github = "keysmashes";
+    githubId = 9433472;
+    name = "ash";
+  };
   kfollesdal = {
     email = "kfollesdal@gmail.com";
     github = "kfollesdal";
@@ -22174,12 +22180,6 @@
     github = "SergioRibera";
     githubId = 56278796;
     name = "Sergio Ribera";
-  };
-  sersorrel = {
-    email = "ash@sorrel.sh";
-    github = "sersorrel";
-    githubId = 9433472;
-    name = "ash";
   };
   servalcatty = {
     email = "servalcat@pm.me";
