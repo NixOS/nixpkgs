@@ -90,8 +90,8 @@ rec {
       "sha256-ol6Gj+NsSOK3hInNvwLTDfWIpfD6tuSVyH52c6UhSNI=";
 
   mypy-boto3-appconfig =
-    buildMypyBoto3Package "appconfig" "1.38.0"
-      "sha256-oyrJXkXHRvSRKGxS5MtSvhKqXWGJ+2gGJMDkIyObL+I=";
+    buildMypyBoto3Package "appconfig" "1.38.7"
+      "sha256-V3UPvnKMl945aK+3gH9UrOs/DGx8Aiy/nuHtwu9N4z4=";
 
   mypy-boto3-appconfigdata =
     buildMypyBoto3Package "appconfigdata" "1.38.0"
@@ -338,8 +338,8 @@ rec {
       "sha256-GaC5ClnSfg8/8jCv2ropPoUS7YOIhKkyicDhsYUUPwk=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.38.0"
-      "sha256-S4dSNK7akvROloXwhPQJosJv/Ouizmkj/75Z/k8jlQ8=";
+    buildMypyBoto3Package "connect" "1.38.7"
+      "sha256-Aq0JiXGaBHSN31Z72a0LL8jG25f+0dBIlIWZuCergV4=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.38.0"
@@ -430,8 +430,8 @@ rec {
       "sha256-MZJRRdZ2nTX+EceiW5gEroB+FcGNBwHug16IRWk6lhY=";
 
   mypy-boto3-ds =
-    buildMypyBoto3Package "ds" "1.38.0"
-      "sha256-GZGTzkx/DzyV2IxrAF/8VM+O0Pl4U+hXiXpbWCT+oho=";
+    buildMypyBoto3Package "ds" "1.38.8"
+      "sha256-xDe+kWl/+j9ruKrlNLT20jv2WbJvChMkIrrkH3JIXOY=";
 
   mypy-boto3-dynamodb =
     buildMypyBoto3Package "dynamodb" "1.38.4"
@@ -730,8 +730,8 @@ rec {
       "sha256-/p6IadhTa59EpFXgN3GexAL+qLJzkedRFHfMOteVIeY=";
 
   mypy-boto3-kinesis =
-    buildMypyBoto3Package "kinesis" "1.38.5"
-      "sha256-p/QG+ZQsZOnDCCi1+CwdNqMB6GyvxI5LbP8JIaD1vII=";
+    buildMypyBoto3Package "kinesis" "1.38.8"
+      "sha256-OTLHfz/Iw3VFTz36ceHi8YVF2VyFTatX3Jw7prVh2Sg=";
 
   mypy-boto3-kinesis-video-archived-media =
     buildMypyBoto3Package "kinesis-video-archived-media" "1.38.0"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-lBWZesgIKYnjSjUOPBhF4GNsNSk09YDSEyX0qweT3iM=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.38.5"
-      "sha256-9UO8R+1+tC02VxRRafeKJAKq3rjPksegkTiteJVI5Sw=";
+    buildMypyBoto3Package "sagemaker" "1.38.7"
+      "sha256-tqb5dUkkvQ+R/aPVdKvGwCEqoVsBYkoCz9ZEG8TisnY=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.38.0"
@@ -1378,8 +1378,8 @@ rec {
       "sha256-ve7HllAv+PG6jHRZNp9Q32jpIEkCapOB4xZdpPYtZJQ=";
 
   mypy-boto3-verifiedpermissions =
-    buildMypyBoto3Package "verifiedpermissions" "1.38.0"
-      "sha256-PQHue+VV4SDyfPJinrKR0gB9FaTjsIjCGGCrrX/QAu4=";
+    buildMypyBoto3Package "verifiedpermissions" "1.38.7"
+      "sha256-fItaBlx3eeWHkKdYTSTeyUpTTeFc3cZdFaHBGVx7cLE=";
 
   mypy-boto3-voice-id =
     buildMypyBoto3Package "voice-id" "1.38.0"
