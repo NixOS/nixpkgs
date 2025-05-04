@@ -67,7 +67,7 @@ postgresqlBuildExtension (finalAttrs: {
      "-DINITDB=${postgresql}/bin/initdb"
      "-DPostgreSQL_LIBRARY_DIRS=${postgresql}/lib"
      "-DPostgreSQL_EXTENSION_DIR=${postgresql}/share/postgresql/extension"
-     "-DPostgreSQL_SERVER_INCLUDE_DIRS=${postgresql}/bin"
+     "-DPostgreSQL_SERVER_INCLUDE_DIRS=${lib.getDev postgresql}/include"
      "-DPython3_EXECUTABLE=${python3}/bin/python3"
      "-DPython_EXECUTABLE=${python3}/bin/python3"
   ];
