@@ -87,6 +87,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ];
-    knownVulnerabilities = [ "https://github.com/mihomo-party-org/mihomo-party/issues/706" ];
   };
 }

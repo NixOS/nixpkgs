@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     maintainers = [ maintainers.GabrielDougherty ];
+    # build tool make_bin is built for host
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }
