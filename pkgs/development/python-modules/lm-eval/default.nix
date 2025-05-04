@@ -104,6 +104,7 @@ buildPythonPackage rec {
     math = [
       sympy
       antlr4-python3-runtime
+      # math_verify[antlr4_11_0]
     ];
     optimum = [ optimum ] ++ optimum.optional-dependencies.openvino;
     sentencepiece = [ sentencepiece ];
@@ -115,7 +116,7 @@ buildPythonPackage rec {
     ];
     # Still missing dependencies for the following:
     # deepsparse, gptq, ibm_watsonx_ai, multilingual, promptsource, sparseml,
-    # zeno, gptqmodel, japanese_leaderboard; all = [...];
+    # zeno, gptqmodel, japanese_leaderboard, sae_lens, sparsify; all = [...];
   };
 
   pythonImportsCheck = [ "lm_eval" ];
