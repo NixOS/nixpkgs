@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index f63bdec..2de3778 100644
+--- a/meson.build
++++ b/meson.build
+@@ -52,7 +52,7 @@ add_project_arguments(
+ LIB_INSTALL_DIR = join_paths(libdir, 'budgie-desktop', 'plugins', meson.project_name())
+ 
+ install_data('schema/com.prateekmedia.systemmonitor.gschema.xml',
+-    install_dir: '/usr/share/glib-2.0/schemas'
++    install_dir: join_paths(datadir, 'glib-2.0/schemas')
+ )
+ 
+ subdir('icons')
