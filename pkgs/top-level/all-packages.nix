@@ -11890,9 +11890,12 @@ with pkgs;
 
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
+  inherit (callPackages ../servers/http/jetty { })
+    jetty_11
+    jetty_12
+    ;
+
   jetty = jetty_12;
-  jetty_12 = callPackage ../servers/http/jetty/12.x.nix { };
-  jetty_11 = callPackage ../servers/http/jetty/11.x.nix { };
 
   kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { kanidm = kanidm_1_4; };
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
