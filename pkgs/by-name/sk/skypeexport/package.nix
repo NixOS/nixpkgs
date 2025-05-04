@@ -26,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # fix build against Boost >= 1.85
+  # https://github.com/Temptin/SkypeExport/pull/24
+  postPatch = ''
+    substituteInPlace src/SkypeExport/main.cpp \
+      --replace-fail \
+        '.leaf()' \
+        '.filename()'
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 
