@@ -56,5 +56,5 @@ jobs:
           )
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configuration-path: .github/labeler-protected-branches.yml
+          configuration-path: .github/labeler-development-branches.yml
           sync-labels: true
