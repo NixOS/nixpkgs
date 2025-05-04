@@ -2,13 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
   doxygen,
+  graphviz,
+  scipy,
+
+  # buildInputs
   boost,
+
+  # propagatedBuildInputs
   eigen,
   jrl-cmakemodules,
   numpy,
-  scipy,
+
 }:
 
 buildPythonPackage rec {
@@ -40,6 +48,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     doxygen
+    graphviz
     scipy
   ];
 
