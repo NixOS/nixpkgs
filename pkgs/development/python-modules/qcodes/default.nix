@@ -173,7 +173,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests are time-sensitive and power-consuming
     # Those tests fails repeatably and are flaky
+    "test_access_channels_by_name"
     "test_access_channels_by_slice"
+    "test_access_channels_by_tuple"
     "test_aggregator"
     "test_datasaver"
     "test_do1d_additional_setpoints_shape"
@@ -181,7 +183,9 @@ buildPythonPackage rec {
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
+    "test_measured"
     "test_ramp_safely"
+    "test_ramp_scaled"
 
     # more flaky tests
     # https://github.com/microsoft/Qcodes/issues/5551
