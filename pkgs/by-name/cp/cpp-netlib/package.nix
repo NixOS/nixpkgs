@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
+  boost181,
   openssl,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    boost181
     openssl
   ];
 
