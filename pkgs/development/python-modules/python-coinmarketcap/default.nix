@@ -29,6 +29,8 @@ buildPythonPackage rec {
     "coinmarketcapapi"
   ];
 
+  doCheck = false; # Tests use the CoinMarketCap API
+
   meta = {
     description = "Python package to wrap the CoinMarketCap API";
     homepage = "https://github.com/rsz44/python-coinmarketcap";
