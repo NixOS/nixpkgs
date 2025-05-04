@@ -65,6 +65,9 @@ let
     { useEFIBoot, useDefaultFilesystems }:
     if useDefaultFilesystems then if useEFIBoot then "efi" else "legacy" else "none";
 
+  mkKeyValue = generators.mkKeyValueDefault { } "=";
+  mkOpts = opts: concatStringsSep "," (mapAttrsToList mkKeyValue opts);
+
   driveCmdline =
     idx:
     {
@@ -75,8 +78,6 @@ let
     }:
     let
       drvId = "drive${toString idx}";
-      mkKeyValue = generators.mkKeyValueDefault { } "=";
-      mkOpts = opts: concatStringsSep "," (mapAttrsToList mkKeyValue opts);
       driveOpts = mkOpts (
         driveExtraOpts
         // {
@@ -828,6 +829,81 @@ in
         '';
       };
 
+      display = {
+        type = mkOption {
+          type = types.enum [
+            "default"
+            "spice-app"
+            "dbus"
+            "sdl"
+            "gtk"
+            "curses"
+            "cocoa"
+            "egl-headless"
+            "none"
+          ];
+          default = "default";
+          example = "gtk";
+          description = ''
+            The backend QEMU will use to display the VM's video output.
+          '';
+        };
+        options = lib.mkOption {
+          type = types.attrsOf types.str;
+          default = { };
+          example = {
+            show-menubar = "on";
+            grab-on-hover = "off";
+          };
+          description = ''
+            Additional options to pass to the QEMU display backend.
+          '';
+        };
+      };
+
+      virtioGpu = {
+        enable = mkOption {
+          type = types.bool;
+          default = pkgs.stdenv.hostPlatform.isAarch;
+          description = "Enable the virtio-gpu graphics device.";
+        };
+        virgl = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Enable hardware graphics acceleration in the VM using VirGL.
+            '';
+          };
+          enableVulkan = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Enable the Venus protocol for hardware acceleration of Vulkan applications.
+            '';
+          };
+        };
+        hostMemory = mkOption {
+          type = types.ints.unsigned;
+          default = 0;
+          example = 1024;
+          description = ''
+            Host memory window size for the virtual GPU device, in megabytes.
+
+            Specifying this option is required for enabling Vulkan support as well as for OpenGL versions above 4.3.
+          '';
+        };
+        options = mkOption {
+          type = lib.types.attrsOf lib.types.str;
+          default = { };
+          example = {
+            xres = 1920;
+            yres = 1080;
+          };
+          description = "Options for the virtio-gpu device.";
+        };
+      };
+
       virtioKeyboard = mkOption {
         type = types.bool;
         default = true;
@@ -1121,6 +1197,12 @@ in
             Please enable it in your configuration.
           '';
         }
+        {
+          assertion = cfg.qemu.virtioGpu.virgl.enableVulkan -> cfg.qemu.virtioGpu.hostMemory > 0;
+          message = ''
+            `virtualisation.qemu.virtioGpu.hostMemory` must be set to a non-zero value to use virtio-gpu Vulkan support.
+          '';
+        }
       ];
 
     warnings = optional (cfg.directBoot.enable && cfg.useBootLoader) ''
@@ -1206,7 +1288,41 @@ in
         "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
 
+    virtualisation.qemu.virtioGpu.options = mkMerge [
+      (mkIf cfg.qemu.virtioGpu.enable {
+        hostmem = mkIf (cfg.qemu.virtioGpu.hostMemory > 0) "${toString cfg.qemu.virtioGpu.hostMemory}M";
+      })
+      (mkIf cfg.qemu.virtioGpu.virgl.enable {
+        blob = mkIf (cfg.qemu.virtioGpu.hostMemory > 0) "on";
+        venus = mkIf cfg.qemu.virtioGpu.virgl.enableVulkan "on";
+      })
+    ];
+
+    virtualisation.qemu.display = mkIf cfg.qemu.virtioGpu.virgl.enable {
+      options.gl = mkDefault "on";
+    };
+
     virtualisation.qemu.options = mkMerge [
+      (mkIf (!(cfg.qemu.display.type == "default" && cfg.qemu.display.options == { })) [
+        "-display ${cfg.qemu.display.type},${mkOpts cfg.qemu.display.options}"
+      ])
+      (
+        let
+          device =
+            if pkgs.stdenv.hostPlatform.isx86 then
+              "virtio-vga"
+            else if pkgs.stdenv.hostPlatform.isAarch then
+              "virtio-gpu-pci"
+            else
+              "virtio-gpu";
+          gl = lib.optionalString cfg.qemu.virtioGpu.virgl.enable "-gl";
+          options = mkOpts cfg.qemu.virtioGpu.options;
+        in
+        mkIf cfg.qemu.virtioGpu.enable [
+          "-vga none"
+          "-device ${device}${gl},${options}"
+        ]
+      )
       (mkIf cfg.qemu.virtioKeyboard [
         "-device virtio-keyboard"
       ])
@@ -1215,7 +1331,6 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
