@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ovito";
-  version = "3.11.1";
+  version = "3.12.2";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     rev = "v${version}";
-    hash = "sha256-ulzcsFAiZDg8nABQXNB2/MS7lZdK3czGHLKgKDWS15E=";
+    hash = "sha256-qpKQAO2f1TfspqjbCLA/3ERWdMeknKe0a54yd9PZbsA=";
     fetchSubmodules = true;
   };
   patches = [ ./zstd.patch ];
