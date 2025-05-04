@@ -5,7 +5,7 @@
   fetchPypi,
   setuptools-scm,
   pyelftools,
-  importlib-metadata,
+  packaging,
   pretend,
   pytestCheckHook,
   # non-python dependencies
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "6.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,7 +29,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ pyelftools ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  dependencies = [
+    packaging
+    pyelftools
+  ];
 
   nativeCheckInputs = [
     pretend
