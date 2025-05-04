@@ -8331,8 +8331,6 @@ with pkgs;
 
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
 
-  kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
-
   kubie = callPackage ../development/tools/kubie {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
