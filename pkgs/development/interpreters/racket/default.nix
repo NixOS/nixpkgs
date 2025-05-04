@@ -20,7 +20,7 @@
 
   disableDocs ? false,
 
-  callPackage,
+  newScope,
 }:
 
 let
@@ -99,9 +99,10 @@ minimal.overrideAttrs (
         stopPred =
           _: lhs: rhs:
           notUpdated lhs || notUpdated rhs;
+        callWithRacket = newScope { racket = finalAttrs.finalPackage; };
       in
       lib.recursiveUpdateUntil stopPred prevAttrs.passthru {
-        tests = builtins.mapAttrs (name: path: callPackage path { racket = finalAttrs.finalPackage; }) {
+        tests = builtins.mapAttrs (_: p: callWithRacket p { }) {
           ## `main-distribution` ##
           draw-crossing = ./tests/draw-crossing.nix;
         };
