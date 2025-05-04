@@ -280,7 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.isDarwin then
       ''
         name=$(basename $TMP)
-        #substituteInPlace CMakeLists.txt --replace-fail "@NIX_PATH@" "/tmp/$name/source/build/resources/"
 
         mkdir -p /tmp/$name/source/build/resources
          # NOTE: Replace with symlink?
@@ -291,8 +290,6 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     else
       ''
-        #substituteInPlace CMakeLists.txt --replace-fail "@NIX_PATH@" "/build/source/build/resources/"
-
         mkdir -p /build/source/build/resources
         # NOTE: Replace with symlink?
         cp ${depthai-data}/share/resources/* /build/source/build/resources
