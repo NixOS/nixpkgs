@@ -70,6 +70,8 @@ in
       documentation = [ "https://music-assistant.io" ];
 
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       environment = {
         HOME = "/var/lib/music-assistant";
