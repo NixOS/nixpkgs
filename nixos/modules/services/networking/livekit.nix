@@ -12,7 +12,7 @@ in
 {
   meta.maintainers = with lib.maintainers; [ quadradical ];
   options.services.livekit = {
-    enable = lib.mkEnableOption "Enable the livekit server";
+    enable = lib.mkEnableOption "the livekit server";
     package = lib.mkPackageOption pkgs "livekit" { };
 
     keyFile = lib.mkOption {
@@ -20,10 +20,9 @@ in
       description = ''
         LiveKit key file holding one or multiple application secrets. Use `livekit-server generate-keys` to generate a random key name and secret.
 
-        The file should have the format `<keyname>: <secret>`. Example:
-        ```
-          lk-jwt-service: f6lQGaHtM5HfgZjIcec3cOCRfiDqIine4CpZZnqdT5cE
-        ```
+        The file should have the format `<keyname>: <secret>`.
+        Example:
+        `lk-jwt-service: f6lQGaHtM5HfgZjIcec3cOCRfiDqIine4CpZZnqdT5cE`
 
         Individual key/secret pairs need to be passed to clients to connect to this instance.
       '';
