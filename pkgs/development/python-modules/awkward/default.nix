@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.8.1";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-37yUZSD9c92ydjjt5Z7KnUzfSMAQM37Ah4WGp9HWiDs=";
+    hash = "sha256-OpEzctuCah/ueqw/D7ZadDLJLD3HqSdgAjFcEHhR47A=";
   };
 
   build-system = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
