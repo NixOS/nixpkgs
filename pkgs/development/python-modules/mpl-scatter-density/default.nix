@@ -4,7 +4,6 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   fast-histogram,
@@ -20,22 +19,20 @@ buildPythonPackage rec {
   version = "0.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
+    hash = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     fast-histogram
