@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "scooby";
   version = "0.10.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-ldDmw2TDvXgfu0fMj6dSr2zh9WfYGNpBGZb3MixKq+k=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [
     beautifulsoup4
