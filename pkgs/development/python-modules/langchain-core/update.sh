@@ -16,6 +16,7 @@ declare -ar packages=(
     langchain-mongodb
     langchain-ollama
     langchain-openai
+    langchain-perplexity
     langchain-tests
     langchain-text-splitters
     langchain-xai
