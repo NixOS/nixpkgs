@@ -51,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/luau-lang/luau/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ prince213 ];
+    maintainers = with lib.maintainers; [
+      prince213
+      HeitorAugustoLN
+    ];
     mainProgram = "luau";
   };
 })
