@@ -7,6 +7,7 @@
   appimageTools,
 
   # linux dependencies
+
   alsa-lib,
   at-spi2-atk,
   autoPatchelfHook,
@@ -15,9 +16,9 @@
   curlWithGnuTls,
   egl-wayland,
   expat,
+  ffmpeg,
   fontconfig,
   freetype,
-  ffmpeg,
   glib,
   glibc,
   glibcLocales,
@@ -26,6 +27,7 @@
   libdrm,
   libgbm,
   libGL,
+  libglvnd,
   libnotify,
   libva-minimal,
   libxkbcommon,
@@ -39,7 +41,6 @@
   vivaldi-ffmpeg-codecs,
   vulkan-loader,
   wayland,
-
   # linux installation
   rsync,
 
@@ -113,6 +114,7 @@ stdenvNoCC.mkDerivation {
     libdrm
     libgbm
     libGL
+    libglvnd
     libva-minimal
     libxkbcommon
     libxkbfile
@@ -162,7 +164,7 @@ stdenvNoCC.mkDerivation {
 
       wrapProgram $out/bin/cursor \
         --add-flags "--update=false" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=x11 --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
     ''}
 
     ${lib.optionalString hostPlatform.isDarwin ''
