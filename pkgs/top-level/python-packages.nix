@@ -2400,6 +2400,8 @@ self: super: with self; {
 
   checkdmarc = callPackage ../development/python-modules/checkdmarc { };
 
+  checkpoint-schedules = callPackage ../development/python-modules/checkpoint-schedules { };
+
   checksumdir = callPackage ../development/python-modules/checksumdir { };
 
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
@@ -7510,6 +7512,8 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+  langchain-anthropic = callPackage ../development/python-modules/langchain-anthropic { };
+
   langchain-aws = callPackage ../development/python-modules/langchain-aws { };
 
   langchain-azure-dynamic-sessions =
@@ -7521,6 +7525,8 @@ self: super: with self; {
   langchain-community = callPackage ../development/python-modules/langchain-community { };
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
+
+  langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
 
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
 
@@ -7534,9 +7540,13 @@ self: super: with self; {
 
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
+  langchain-perplexity = callPackage ../development/python-modules/langchain-perplexity { };
+
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
+
+  langchain-xai = callPackage ../development/python-modules/langchain-xai { };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
 
@@ -11812,6 +11822,8 @@ self: super: with self; {
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
+  pyadjoint-ad = callPackage ../development/python-modules/pyadjoint-ad { };
+
   pyads = callPackage ../development/python-modules/pyads { };
 
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
@@ -14859,6 +14871,8 @@ self: super: with self; {
   recursive-pth-loader = toPythonModule (
     callPackage ../development/python-modules/recursive-pth-loader { }
   );
+
+  recursivenodes = callPackage ../development/python-modules/recursivenodes { };
 
   red-black-tree-mod = callPackage ../development/python-modules/red-black-tree-mod { };
 
