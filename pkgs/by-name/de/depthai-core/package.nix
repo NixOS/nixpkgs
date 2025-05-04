@@ -46,6 +46,7 @@
   apriltag,
   xlink,
   magic-enum,
+  rtabmap,
   fp16,
   curl,
   cpr,
@@ -180,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  dontWrapQtApps = true;
+
   nativeBuildInputs = [
     cmake
     clang-tools
@@ -221,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     jsoncpp
     fmt
+    rtabmap
     mcap
     libarchive
     bzip2
@@ -242,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "DEPTHAI_HUNTER_ENABLE" false)
+    (lib.cmakeBool "DEPTHAI_FETCH_ARTIFACTS" false)
     (lib.cmakeBool "DEPTHAI_3RDPARTY_ENABLE" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RERUN_SDK" "${rerun_sdk}")
     (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "include/3rdparty")
@@ -257,8 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     # NOTE: Not yet packaged
     (lib.cmakeBool "DEPTHAI_BASALT_SUPPORT" false)
 
-    # NOTE: MR to fix the broken package
-    (lib.cmakeBool "DEPTHAI_RTABMAP_SUPPORT" false)
+    (lib.cmakeBool "DEPTHAI_RTABMAP_SUPPORT" true)
 
     # NOTE: Does not have CMake file under /lib
     (lib.cmakeBool "DEPTHAI_ENABLE_CURL" false)
