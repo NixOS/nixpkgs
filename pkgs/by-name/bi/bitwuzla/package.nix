@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     git
     ninja
     cmake
-    kissat
   ];
+
   buildInputs = [
     cadical
     cryptominisat
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     symfpu
     gmp
     zlib
-    kissat.lib
+    kissat
   ];
 
   mesonFlags = [
