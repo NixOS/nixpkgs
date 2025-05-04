@@ -49,8 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     kissat.lib
   ];
 
-  preConfigure = "export PKG_CONFIG_PATH=${kissatPkgConfig}/lib/pkgconfig:$PKG_CONFIG_PATH";
-
   mesonFlags = [
     # note: the default value for default_library fails to link dynamic dependencies
     # but setting it to shared works even in pkgsStatic
