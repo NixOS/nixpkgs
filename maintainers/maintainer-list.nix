@@ -25826,6 +25826,12 @@
     name = "Vinicius Bernardino";
     keys = [ { fingerprint = "F0D3 920C 722A 541F 0CCD  66E3 A7BA BA05 3D78 E7CA"; } ];
   };
+  vnpower = {
+    email = "vnpower@loang.net";
+    github = "vntsuyo";
+    githubId = 209139160;
+    name = "VnPower";
+  };
   vog = {
     email = "v@njh.eu";
     github = "vog";
