@@ -152,6 +152,25 @@ let
   # Analogously to cc_solib and gccForLibs_solib
   libcxx_solib = "${getLib libcxx}/lib";
 
+  # The path suffix used to construct the -B <bintools>/bin/<suffix>
+  # option, which forces the compiler to use the supplied bintools
+  # (unless overriden at runtime) for assembly, stripping, linking...
+  bintools_targetPrefix =
+    if isGNU then
+      # gcc has a bug that causes -B options with suffixes to be ignored
+      # for tool invocations done by collect2 rather than gcc directly.
+      # thankfully, it also has the quirk of searching each entry twice,
+      # as-is and appending the compiler's target prefix. so, as long as
+      # bintool's suffix matches the compiler's target, we can supply a
+      # suffix-less -B option:
+      assert lib.elem bintools.targetPrefix [
+        ""
+        "${targetPlatform.config}-"
+      ];
+      ""
+    else
+      bintools.targetPrefix;
+
   # The following two functions, `isGccArchSupported` and
   # `isGccTuneSupported`, only handle those situations where a flag
   # (`-march` or `-mtune`) is accepted by one compiler but rejected
@@ -879,8 +898,8 @@ stdenvNoCC.mkDerivation {
       # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
       cc = optionalString (!nativeTools) cc;
       wrapperName = "CC_WRAPPER";
-      inherit suffixSalt coreutils_bin bintools;
-      bintools_targetPrefix = bintools.targetPrefix;
+      inherit suffixSalt coreutils_bin;
+      inherit bintools bintools_targetPrefix;
       inherit libc_bin libc_dev libc_lib;
       inherit darwinPlatformForCC;
       default_hardening_flags_str = builtins.toString defaultHardeningFlags;
