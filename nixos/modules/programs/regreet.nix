@@ -155,27 +155,47 @@ in
 
     environment.etc = {
       "greetd/regreet.css" =
-        if lib.isPath cfg.extraCss then { source = cfg.extraCss; } else { text = cfg.extraCss; };
+        if lib.isPath cfg.extraCss then
+          {
+            source = cfg.extraCss;
+          }
+        else
+          {
+            text = cfg.extraCss;
+          };
 
       "greetd/regreet.toml".source = settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
     systemd.tmpfiles.settings."10-regreet" =
       let
+        defaultSessionUserName = config.services.greetd.settings.default_session.user;
+        isDefaultSessionUser =
+          key:
+          defaultSessionUserName == key
+          || defaultSessionUserName == (builtins.getAttr key config.users.users).name;
+        userAttrNameToGroup =
+          key: if isDefaultSessionUser key then (builtins.getAttr key config.users.users).group else null;
+        defaultSessionUserGroup = builtins.head (
+          builtins.filter (x: x != null) (
+            builtins.map userAttrNameToGroup (builtins.attrNames config.users.users)
+          )
+        );
         defaultConfig = {
           user = "greeter";
-          group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
+          group = defaultSessionUserGroup;
           mode = "0755";
         };
         dataDir =
           if lib.versionAtLeast (cfg.package.version) "0.2.0" then
-            { "/var/lib/regreet".d = defaultConfig; }
+            {
+              "/var/lib/regreet".d = defaultConfig;
+            }
           else
-            { "/var/cache/regreet".d = defaultConfig; };
+            {
+              "/var/cache/regreet".d = defaultConfig;
+            };
       in
-      {
-        "/var/log/regreet".d = defaultConfig;
-      }
-      // dataDir;
+      { "/var/log/regreet".d = defaultConfig; } // dataDir;
   };
 }
