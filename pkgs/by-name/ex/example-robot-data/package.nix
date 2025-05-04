@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i5YU5lcbB3gm8/YrRRiE2NDcLEq7+eF7GtIrJ1DF1cU=";
   };
 
