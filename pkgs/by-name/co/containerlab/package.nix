@@ -23,9 +23,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/srl-labs/containerlab/cmd.version=${version}"
-    "-X github.com/srl-labs/containerlab/cmd.commit=${src.rev}"
-    "-X github.com/srl-labs/containerlab/cmd.date=1970-01-01T00:00:00Z"
+    "-X github.com/srl-labs/containerlab/cmd/version.Version=${version}"
+    "-X github.com/srl-labs/containerlab/cmd/version.commit=${src.rev}"
+    "-X github.com/srl-labs/containerlab/cmd/version.date=1970-01-01T00:00:00Z"
   ];
 
   preCheck = ''
