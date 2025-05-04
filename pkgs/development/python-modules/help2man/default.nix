@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
   jinja2,
   setuptools-scm,
@@ -34,6 +35,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ jinja2 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # Checks the output of `help2man --help`.
+    # Broken since 3.13 due to changes in `argparse`.
+    # Upstream issue: https://github.com/Freed-Wu/help2man/issues/6
+    "test_help"
+  ];
 
   pythonImportsCheck = [ "help2man" ];
 
