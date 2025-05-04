@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "model-checker";
-  version = "0.9.18";
+  version = "0.9.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "model_checker";
     inherit version;
-    hash = "sha256-soOwym5oZZMLOOWTF14ZLcFX0RQcGnvC1Eg+k8qUMbo=";
+    hash = "sha256-OzK2TqEXujCdpOyS2qo5L8PAv8cfLLbiItD+OkzlyyI=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
