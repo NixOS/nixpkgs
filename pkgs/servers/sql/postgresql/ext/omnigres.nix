@@ -109,7 +109,7 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   meta = {
-    description = "Postgres as a Business Operating System.";
+    description = "Postgres as a Business Operating System";
     homepage = "https://docs.omnigres.org/";
     maintainers = with lib.maintainers; [ mtrsk ];
     platforms = postgresql.meta.platforms;
