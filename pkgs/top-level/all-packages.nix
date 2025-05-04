@@ -1326,8 +1326,6 @@ with pkgs;
 
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
-  git-fame = callPackage ../applications/version-management/git-fame { };
-
   git-gone = callPackage ../applications/version-management/git-gone { };
 
   git-imerge = python3Packages.callPackage ../applications/version-management/git-imerge { };
@@ -2472,8 +2470,6 @@ with pkgs;
   nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
-
-  noti = callPackage ../tools/misc/noti { };
 
   nsz = with python3.pkgs; toPythonApplication nsz;
 
@@ -7277,12 +7273,14 @@ with pkgs;
     electron_33-bin
     electron_34-bin
     electron_35-bin
+    electron_36-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_33
     electron-chromedriver_34
     electron-chromedriver_35
+    electron-chromedriver_36
     ;
 
   electron_33 = electron_33-bin;
@@ -7296,6 +7294,11 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
+  electron_36 =
+    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_36 then
+      electron-source.electron_36
+    else
+      electron_36-bin;
   electron = electron_35;
   electron-bin = electron_35-bin;
   electron-chromedriver = electron-chromedriver_35;

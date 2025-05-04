@@ -8,6 +8,7 @@
   SDL2_image,
   libX11,
   openssl,
+  zlib,
   which,
   libsForQt5,
   makeWrapper,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.30.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-U1C0vwHcUfjBPGLcmmWFqaKmIMPlV/FumIbFJ6JDBFc=";
+    hash = "sha256-uGzgkXOXmpByXewDuo0NieXHYT6fzaHqyfP60V5fMOY=";
     fetchSubmodules = true;
   };
 
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
     libX11
     openssl
+    zlib
   ];
 
   buildFlags = [
