@@ -27,6 +27,8 @@
   writeText,
   # Processing, video codecs, containers
   ffmpeg_7-full,
+  amf,
+  amf-headers,
   nv-codec-headers,
   libogg,
   x264,
@@ -81,6 +83,8 @@
   udev,
   libgudev,
   hicolor-icon-theme,
+  # Use AMD's advanced media framework.  This is a proprietary framework so disabled by default.
+  useAmf ? false,
   # FDK
   useFdk ? false,
   fdk_aac,
@@ -295,6 +299,10 @@ let
         udev
       ]
       ++ optional useFdk fdk_aac
+      ++ optional useAmf [
+        amf
+        amf-headers
+      ]
       ++ optionals stdenv.hostPlatform.isDarwin [
         AudioToolbox
         Foundation
@@ -310,6 +318,7 @@ let
         "--disable-df-fetch"
         "--disable-df-verify"
       ]
+      ++ optional useAmf "--enable-vce"
       ++ optional (!useGtk) "--disable-gtk"
       ++ optional useFdk "--enable-fdk-aac"
       ++ optional stdenv.hostPlatform.isDarwin "--disable-xcode"
@@ -325,6 +334,11 @@ let
     dontUseNinjaInstall = true;
 
     makeFlags = [ "--directory=build" ];
+
+    postFixup = optional useAmf ''
+      patchelf $out/bin/.HandBrakeCLI-wrapped --add-rpath ${lib.getLib amf}/lib/
+      patchelf $out/bin/.ghb-wrapped --add-rpath ${lib.getLib amf}/lib/
+    '';
 
     passthru = {
       # for convenience
@@ -364,7 +378,7 @@ let
         CLI - `HandbrakeCLI`
         GTK GUI - `ghb`
       '';
-      license = lib.licenses.gpl2Only;
+      license = [ lib.licenses.gpl2Only ] ++ optional useAmf lib.licenses.unfree;
       maintainers = with lib.maintainers; [
         Anton-Latukha
         wmertens
