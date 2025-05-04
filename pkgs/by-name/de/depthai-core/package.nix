@@ -47,6 +47,7 @@
   xlink,
   magic-enum,
   rtabmap,
+  nanorpc,
   fp16,
   curl,
   cpr,
@@ -168,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0005-magic-enum.patch
     ./0006-skip-libnop-xtensor.patch
     ./0007-we-still-need-thirdparty.patch
+    ./0008-include-local-header.patch
 
     # BechmarkOut.cpp fix cast to double
     (fetchpatch {
@@ -225,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
     jsoncpp
     fmt
     rtabmap
+    nanorpc
     mcap
     libarchive
     bzip2
@@ -294,10 +297,8 @@ stdenv.mkDerivation (finalAttrs: {
         # NOTE: Replace with symlink?
         cp ${depthai-data}/share/resources/* /build/source/build/resources
 
-        # Remove all but nanorpc in 3rdparty directory
-        cd include/3rdparty
-        find . -maxdepth 1 -type d -not -name "." -not -name "nanorpc" -exec rm -rf {} \;
-        cd ../..
+        # Remove all 3rdparty directory
+        rm -rf include/3rdparty
       '';
 
   meta = {

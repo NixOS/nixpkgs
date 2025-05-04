@@ -1,0 +1,34 @@
+From 9987b6a001c3306a6485bb14ef9bf02ab602419a Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Sun, 4 May 2025 14:13:46 +0200
+Subject: [PATCH] include local header
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cd10c91cb..7588cb014 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -210,7 +210,7 @@ option(DEPTHAI_INSTALL   "Enable install target for depthai-core targets" ON)
+ set(DEPTHAI_XLINK_LOCAL "" CACHE STRING "Path to local XLink source to use instead of Hunter")
+ set(DEPTHAI_BOOTLOADER_SHARED_LOCAL "" CACHE STRING "Path to local depthai-bootloader-shared source to use instead of submodule")
+ 
+-
++include_directories(${CMAKE_SOURCE_DIR}/src)
+ 
+ # Force Colored output when using Ninja
+ # Global option - affects all targets
+diff --git a/tests/src/onhost_tests/naming_test.cpp b/tests/src/onhost_tests/naming_test.cpp
+index d4ab66f33..3b9ac2d03 100644
+--- a/tests/src/onhost_tests/naming_test.cpp
++++ b/tests/src/onhost_tests/naming_test.cpp
+@@ -1,6 +1,6 @@
+ #include <catch2/catch_all.hpp>
+ 
+-#include "../../src/utility/EepromDataParser.hpp"
++#include <utility/EepromDataParser.hpp>
+ 
+ struct ProductDevice {
+     std::string oldProductName, productName, deviceName;
+-- 
+2.49.0
+
