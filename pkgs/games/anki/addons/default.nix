@@ -6,6 +6,8 @@
 
   anki-connect = callPackage ./anki-connect { };
 
+  local-audio-yomichan = callPackage ./local-audio-yomichan { };
+
   passfail2 = callPackage ./passfail2 { };
 
   reviewer-refocus-card = callPackage ./reviewer-refocus-card { };
