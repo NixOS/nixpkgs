@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
     "CFLAGS=-std=c89"
   ];
 
-  installPhase = ''
-    mkdir -pv "$out/bin"
-    mkdir -pv "$out/share/man/man1"
-    make DESTDIR="$out" BINDIR="$out/bin" PREFIX="" install
-    make DESTDIR="$out" MANPATH="$out/share/man" PREFIX="" install.man
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
+    "MANPATH=${placeholder "out"}/share/man"
+  ];
+
+  installTargets = [
+    "install"
+    "install.man"
+  ];
+
+  preInstall = ''
+    mkdir -pv "$out"/{bin,share/man/man1}
   '';
 
   meta = with lib; {
