@@ -5,6 +5,7 @@ set -euo pipefail
 
 declare -ar packages=(
     langchain
+    langchain-anthropic
     langchain-azure-dynamic-sessions
     langchain-chroma
     langchain-community
