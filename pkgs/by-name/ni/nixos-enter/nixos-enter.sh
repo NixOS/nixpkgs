@@ -108,6 +108,8 @@ chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" 
     chroot "$mountPoint" "$system/sw/bin/systemd-tmpfiles" --create --remove -E 2> /dev/null || true
 )
 
-unset TMPDIR
+# HOSTNAME is unset to not accidentally build a nixos configuration named like the ISO.
+# NIX_REMOTE is unset to not use the ISOs nix daemon by accident.
+unset HOSTNAME NIX_REMOTE TMPDIR
 
 exec chroot "$mountPoint" "${command[@]}"
