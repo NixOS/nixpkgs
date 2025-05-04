@@ -15528,6 +15528,10 @@ self: super: with self; {
 
   scspell = callPackage ../development/python-modules/scspell { };
 
+  sdbus = callPackage ../development/python-modules/sdbus { };
+
+  sdbus-networkmanager = callPackage ../development/python-modules/sdbus-networkmanager { };
+
   sdds = callPackage ../development/python-modules/sdds { };
 
   sdjson = callPackage ../development/python-modules/sdjson { };
