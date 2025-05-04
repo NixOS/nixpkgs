@@ -19106,6 +19106,8 @@ self: super: with self; {
 
   x256 = callPackage ../development/python-modules/x256 { };
 
+  x3dh = callPackage ../development/python-modules/x3dh { };
+
   x690 = callPackage ../development/python-modules/x690 { };
 
   xapian = callPackage ../development/python-modules/xapian { inherit (pkgs) xapian; };
