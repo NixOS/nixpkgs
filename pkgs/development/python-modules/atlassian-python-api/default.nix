@@ -11,13 +11,14 @@
   requests-kerberos,
   requests-oauthlib,
   six,
+  typing-extensions,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "3.41.21";
+  version = "4.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "atlassian-api";
     repo = "atlassian-python-api";
     tag = version;
-    hash = "sha256-m8B6t9tTlef8cdsh/wnsc0iyNLsB0RYjUhq/bA9MeII=";
+    hash = "sha256-iF4gjF/5QbdjJKCWMdElc+gdIy2+D7TV6gpoPZsTv14=";
   };
 
   dependencies = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     requests-kerberos
     requests-oauthlib
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
