@@ -14478,6 +14478,8 @@ with pkgs;
 
   pixinsight = qt6Packages.callPackage ../applications/graphics/pixinsight { };
 
+  rpicam-apps = callPackage ../applications/misc/rpicam-apps/default.nix { };
+
   inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
     apptainer
     singularity
