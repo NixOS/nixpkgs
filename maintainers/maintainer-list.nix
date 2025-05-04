@@ -10477,6 +10477,13 @@
     githubId = 36996706;
     name = "Philip Rying";
   };
+  ImSapphire = {
+    email = "imsapphire0@gmail.com";
+    github = "ImSapphire";
+    githubId = 48931512;
+    name = "Sapphire";
+    keys = [ { fingerprint = "D303 4473 1843 D27B 5D4E  2273 6429 11AA 4025 C8CC"; } ];
+  };
   imsick = {
     email = "lent-lather-excuse@duck.com";
     github = "dvishal485";
