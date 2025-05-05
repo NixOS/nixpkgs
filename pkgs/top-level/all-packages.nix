@@ -3172,8 +3172,6 @@ with pkgs;
 
   gemstash = callPackage ../development/tools/gemstash { };
 
-  hmetis = pkgsi686Linux.callPackage ../applications/science/math/hmetis { };
-
   libbtbb = callPackage ../development/libraries/libbtbb { };
 
   lpd8editor = libsForQt5.callPackage ../applications/audio/lpd8editor { };
@@ -12127,6 +12125,7 @@ with pkgs;
     ubootQemuArm
     ubootQemuRiscv64Smode
     ubootQemuX86
+    ubootQemuX86_64
     ubootQuartz64B
     ubootRaspberryPi
     ubootRaspberryPi2
@@ -12710,8 +12709,6 @@ with pkgs;
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin) DarwinTools;
   };
-
-  cligh = python3Packages.callPackage ../development/tools/github/cligh { };
 
   clight = callPackage ../applications/misc/clight { };
 
