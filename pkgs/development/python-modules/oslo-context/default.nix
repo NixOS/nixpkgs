@@ -10,13 +10,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "oslo.context";
-  version = "5.7.0";
+  pname = "oslo-context";
+  version = "5.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OYxGC5z3yzl+3nliIj5LiAePsvvFNmWkejThsoiQ9M4=";
+    inherit version;
+    pname = "oslo_context";
+    hash = "sha256-DFEf4VNzKv8MGztEq9L1EAioPHB7uSm+4B4SVayWSIk=";
   };
 
   postPatch = ''
