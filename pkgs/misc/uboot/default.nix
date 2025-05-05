@@ -608,6 +608,18 @@ in
     filesToInstall = [ "u-boot.rom" ];
   };
 
+  ubootQemuX86_64 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = [ "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+  };
+
   ubootQuartz64B = buildUBoot {
     defconfig = "quartz64-b-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
