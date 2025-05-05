@@ -8,14 +8,14 @@
   qtwayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libremines";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Bollos00";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libremines";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TQwjEgtqAvKnrpia6VloRgFwtq5TNDmxU+ZWjtEK/n8=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.unix;
   };
-}
+})

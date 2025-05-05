@@ -35,14 +35,14 @@
   xxHash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";
   version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dAb4RGRCC6pCpfLxUJO7pFnqNm1icaU3v1n+HhJILe0=";
     fetchSubmodules = true;
   };
@@ -126,4 +126,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "chiaki";
   };
-}
+})

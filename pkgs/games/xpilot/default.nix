@@ -14,11 +14,11 @@
   zlib,
   libXxf86misc,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xpilot-ng";
   version = "4.7.3";
   src = fetchurl {
-    url = "mirror://sourceforge/xpilot/xpilot_ng/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/xpilot/xpilot_ng/${finalAttrs.pname}-${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "02a7pnp88kh88fzda5q8mzlckk6y9r5fw47j00h26wbsfly0k1zj";
   };
   buildInputs = [
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };
-}
+})

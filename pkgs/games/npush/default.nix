@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "npush";
   version = "0.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/npush/${pname}/${version}/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/project/npush/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tgz";
     hash = "sha256-8hbSsyeehzd4T3fUhDyebyI/oTHOHr3a8ArYAquivNk=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
-}
+})

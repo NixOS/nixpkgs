@@ -32,14 +32,14 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arx-libertatis";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "arx";
     repo = "ArxLibertatis";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
   };
 
@@ -96,5 +96,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.linux;
   };
-
-}
+})

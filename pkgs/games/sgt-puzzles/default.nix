@@ -16,12 +16,12 @@
   isMobile ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgt-puzzles";
   version = "20250303.7da4641";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
+    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
     hash = "sha256-fwphR47zUV+H+Avjco0Dlb94TeH+s6v81MU/H+mbEAk=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
         --set-key Type --set-value Application \
         --set-key Exec --set-value $i \
         --set-key Name --set-value $i \
-        --set-key Comment --set-value "${meta.description}" \
+        --set-key Comment --set-value "${finalAttrs.meta.description}" \
         --set-key Categories --set-value "Game;LogicGame;X-sgt-puzzles;" \
         --set-key Icon --set-value $out/share/icons/hicolor/96x96/apps/$i-96d24.png \
         $i.desktop
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       --set-key Icon --set-value $out/share/icons/hicolor/48x48/apps/sgt-puzzles_map \
       sgt-puzzles.directory
 
-    install -Dm644 ${sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
+    install -Dm644 ${finalAttrs.sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
   '';
 
   passthru = {
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };
-}
+})

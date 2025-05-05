@@ -15,13 +15,13 @@
   },
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2016-1_196";
   dfVersion = "0.44.12";
   inherit soundPack;
   pname = "soundsense";
   src = fetchzip {
-    url = "https://df.zweistein.cz/soundsense/soundSense_${version}.zip";
+    url = "https://df.zweistein.cz/soundsense/soundSense_${finalAttrs.version}.zip";
     hash = "sha256-c+LOUxmJaZ3VqVOBYSQypiZxWyNAXOlRQVD3QZPReb4=";
   };
   nativeBuildInputs = [ dos2unix ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ln -s $out/soundsense/dfhack $out/hack
     ln -s $soundPack $out/soundsense/packs
   '';
-  passthru = { inherit version dfVersion; };
+  passthru = { inherit (finalAttrs) version dfVersion; };
   meta = {
     description = "Plays sound based on Dwarf Fortress game logs";
     maintainers = with lib.maintainers; [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     homepage = "https://df.zweistein.cz/soundsense";
   };
-}
+})

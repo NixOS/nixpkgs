@@ -23,14 +23,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
   version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4/h1bzauYWNvG7skn6afF79t0KEdgYLZoeqeqRudH7I=";
   };
 
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.peterhoeg ];
     platforms = platforms.unix;
   };
-}
+})

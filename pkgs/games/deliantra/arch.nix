@@ -5,12 +5,12 @@
   deliantra-server,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deliantra-arch";
   version = "3.1";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/deliantra/${pname}-${version}.tar.xz";
+    url = "http://dist.schmorp.de/deliantra/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "1xzhv48g90hwkzgx9nfjm81ivg6hchkik9ldimi8ijb4j393kvsz";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ToxicFrog ];
   };
-}
+})

@@ -18,7 +18,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linthesia";
   version = "unstable-2023-05-23";
 
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Game of playing music using a MIDI keyboard following a MIDI file";
     mainProgram = "linthesia";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ ];
   };
-}
+})

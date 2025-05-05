@@ -64,14 +64,14 @@ let
   });
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openmw";
   version = "0.48.0";
 
   src = fetchFromGitLab {
     owner = "OpenMW";
     repo = "openmw";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-zkjVt3GfQZsFXl2Ht3lCuQtDMYQWxhdFO4aGSb3rsyo=";
   };
 
@@ -130,4 +130,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})
