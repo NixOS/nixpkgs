@@ -61,7 +61,6 @@ sub allocId {
             $used->{$id} = 1;
             return $id;
         }
-        $used->{$id} = 1;
         if ($up) { $id++; } else { $id--; }
     }
     die "$0: out of free UIDs or GIDs\n";
