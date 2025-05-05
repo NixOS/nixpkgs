@@ -48,14 +48,9 @@
   withStatic ? stdenv.hostPlatform.isMinGW,
   # passthru.tests
   testers,
-  guile-sdl2,
-  jazz2,
-  SDL2_ttf,
-  SDL2_net,
-  SDL2_gfx,
-  SDL2_sound,
-  SDL2_mixer,
-  SDL2_image,
+  SDL2_classic_ttf,
+  SDL2_classic_mixer,
+  SDL2_classic_image,
   python3Packages,
 }:
 
@@ -215,18 +210,13 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     tests = {
-      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       inherit
-        guile-sdl2
-        jazz2
-        SDL2_ttf
-        SDL2_net
-        SDL2_gfx
-        SDL2_sound
-        SDL2_mixer
-        SDL2_image
+        SDL2_classic_ttf
+        SDL2_classic_mixer
+        SDL2_classic_image
         ;
-      inherit (python3Packages) pygame pygame-ce pygame-sdl2;
+      inherit (python3Packages) pygame pygame-ce;
     };
   };
 
