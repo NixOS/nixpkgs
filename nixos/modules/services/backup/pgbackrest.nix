@@ -100,6 +100,7 @@ in
                 if name == "localhost" then
                   null
                 # "posix" is the default repo type, which uses the -host option.
+                # Other types use prefixed options, for example -sftp-host.
                 else if config.type or "posix" != type then
                   null
                 else
@@ -113,6 +114,26 @@ in
                 default = setHostForType "posix";
                 defaultText = lib.literalExpression "name";
                 description = "Repository host when operating remotely";
+              };
+
+              options.sftp-host = lib.mkOption {
+                type = nullOr str;
+                default = setHostForType "sftp";
+                defaultText = lib.literalExpression "name";
+                description = "SFTP repository host";
+              };
+
+              options.sftp-private-key-file = lib.mkOption {
+                type = nullOr (pathWith {
+                  inStore = false;
+                  absolute = true;
+                });
+                default = null;
+                description = ''
+                  SFTP private key file.
+
+                  The file must be accessible by both the pgbackrest and the postgres users.
+                '';
               };
             }
           )
