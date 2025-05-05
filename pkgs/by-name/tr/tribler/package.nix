@@ -1,117 +1,130 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchPypi,
-  python311,
+  python312,
   makeWrapper,
-  libtorrent-rasterbar-1_2_x,
-  qt5,
   nix-update-script,
-  boost186,
+  fetchFromGitHub,
+  rustPlatform,
+  buildNpmPackage,
+  nodejs_20,
 }:
-
 let
-  # libtorrent-rasterbar-1_2_x requires python311 and boost 1.86
-  python3 = python311.override {
-    packageOverrides = final: prev: {
-      boost = boost186;
+  version = "8.1.0";
+  python3 = python312;
+  nodejs = nodejs_20;
+
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "tribler";
+    repo = "tribler";
+    hash = "sha256-hQ9O/ZqE7ZTduaFfdvS3szaJGwrv0Ch/HlcwMW23PPM=";
+  };
+
+  ipv8-rust-tunnels = python3.pkgs.buildPythonPackage rec {
+    pname = "ipv8-rust-tunnels";
+    version = "0.1.29";
+
+    src = fetchFromGitHub {
+      owner = "tribler";
+      repo = "ipv8-rust-tunnels";
+      rev = version;
+      hash = "sha256-xscMTcdYID15/8zRv7X9AFqUfFT3PtC1V8+KTs9dXrE=";
     };
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit pname version src;
+      hash = "sha256-niVOOBsSomMNg2XubfVJbORO+lOWE2VQp3if11ve6yY=";
+      postPatch = ''
+        ln -s ${./ipv8-rust-tunnels/Cargo.lock} Cargo.lock
+      '';
+    };
+
+    postPatch = ''
+      ln -s ${./ipv8-rust-tunnels/Cargo.lock} Cargo.lock
+    '';
+
+    format = "pyproject";
+
+    nativeBuildInputs = with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ];
   };
-  libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
+
+  tribler-webui = buildNpmPackage {
+    inherit nodejs version;
+    pname = "tribler-webui";
+    src = "${src}/src/tribler/ui";
+    npmDepsHash = "sha256-QnVJ9oBaQN3XQOiQU7lIWKL5bXSSKnCe0orvuG/qPYs=";
+
+    # The prepack script runs the build script, which we'd rather do in the build phase.
+    npmPackFlags = [ "--ignore-scripts" ];
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
+
+    dontNpmBuild = true;
+    dontNpmInstall = true;
+
+    installPhase = ''
+      mkdir -pv $out
+      cp -prvd ./* $out/
+      cd $out
+      npm install
+      npm run build
+    '';
+  };
 in
-stdenv.mkDerivation (finalAttrs: {
+python3.pkgs.buildPythonApplication {
+  inherit version src;
   pname = "tribler";
-  version = "7.14.0";
+  pyproject = true;
 
-  src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${finalAttrs.version}/Tribler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
-  };
-
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-    makeWrapper
-    # we had a "copy" of this in tribler's makeWrapper
-    # but it went out of date and broke, so please just use it directly
-    qt5.wrapQtAppsHook
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
   ];
 
-  buildInputs = [ python3.pkgs.python ];
+  dependencies = with python3.pkgs; [
+    # requirements.txt
+    bitarray
+    configobj
+    lz4
+    libtorrent-rasterbar
+    pillow
+    pony
+    pystray
+    pyipv8
+    ipv8-rust-tunnels
+  ];
 
-  pythonPath =
-    [ libtorrent ]
-    ++ (with python3.pkgs; [
-      # requirements-core.txt
-      aiohttp
-      aiohttp-apispec
-      anyio
-      chardet
-      configobj
-      cryptography
-      decorator
-      faker
-      libnacl
-      lz4
-      marshmallow
-      netifaces
-      networkx
-      pony
-      psutil
-      pyasn1
-      pydantic_1
-      pyopenssl
-      pyyaml
-      sentry-sdk
-      service-identity
-      yappi
-      yarl
-      bitarray
-      filelock
-      (pyipv8.overrideAttrs (p: rec {
-        version = "2.10.0";
-        src = fetchPypi {
-          inherit (p) pname;
-          inherit version;
-          hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
-        };
-      }))
-      file-read-backwards
-      brotli
-      human-readable
-      # requirements.txt
-      pillow
-      pyqt5
-      pyqt5-sip
-      pyqtgraph
-      pyqtwebengine
-    ]);
+  configurePhase = ''
+    ln -s ${./pyproject.toml} pyproject.toml
+    ln -s ${./__main__.py} src/tribler/__main__.py
 
-  installPhase = ''
-    mkdir -pv $out
-    # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
-    wrapPythonPrograms
-    cp -prvd ./* $out/
-    makeWrapper ${python3.pkgs.python}/bin/python $out/bin/tribler \
-        --set _TRIBLERPATH "$out/src" \
-        --set PYTHONPATH $out/src/tribler-core:$out/src/tribler-common:$out/src/tribler-gui:$program_PYTHONPATH \
-        --set NO_AT_BRIDGE 1 \
-        --chdir "$out/src" \
-        --add-flags "-O $out/src/run_tribler.py"
-
-    mkdir -p $out/share/applications $out/share/icons
-    cp $out/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop $out/share/applications/
-    cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
-    mkdir -p $out/share/copyright/tribler
-    mv $out/LICENSE $out/share/copyright/tribler
+    rm -r src/tribler/ui
+    ln -s ${tribler-webui} src/tribler/ui
   '';
 
-  shellHook = ''
-    wrapPythonPrograms || true
-    export QT_QPA_PLATFORM_PLUGIN_PATH=$(echo ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms)
-    export PYTHONPATH=./tribler-core:./tribler-common:./tribler-gui:$program_PYTHONPATH
-    export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
-  '';
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    sphinxHook
+    astroid
+    sphinx-autoapi
+    sphinx-rtd-theme
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_establish_connection"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -119,13 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
     mainProgram = "tribler";
     homepage = "https://www.tribler.org/";
-    changelog = "https://github.com/Tribler/tribler/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.lgpl21Plus;
+    changelog = "https://github.com/Tribler/tribler/releases/tag/v${version}";
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      xvapx
-
       mkg20001
+      mlaradji
+      xvapx
     ];
     platforms = lib.platforms.linux;
   };
-})
+}
