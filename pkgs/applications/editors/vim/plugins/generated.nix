@@ -10140,6 +10140,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-early-retirement = buildVimPlugin {
+    pname = "nvim-early-retirement";
+    version = "2025-05-03";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-early-retirement";
+      rev = "0a320915970f8b505918f446b538af50c513e97e";
+      sha256 = "0044168k95wv1vy3y35462fm0ckpwwb33yyjfrsz1y5fvlzncsy5";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-early-retirement/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-expand-expr = buildVimPlugin {
     pname = "nvim-expand-expr";
     version = "2021-08-14";
