@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  nixosTests,
 }:
 let
   python = python3.override {
@@ -101,6 +102,10 @@ python.pkgs.buildPythonApplication rec {
       makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
     '';
+
+  passthru.tests = {
+    login-and-create-doc = nixosTests.lasuite-docs;
+  };
 
   meta = {
     description = "A collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
