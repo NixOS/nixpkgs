@@ -13,6 +13,7 @@
   dsdcc,
   faad2,
   fetchFromGitHub,
+  fetchpatch,
   fftwFloat,
   flac,
   glew,
@@ -116,6 +117,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals withSDRplay [ sdrplay ];
+
+  patches = [
+    # https://github.com/f4exb/sdrangel/pull/2439
+    (fetchpatch {
+      url = "https://github.com/f4exb/sdrangel/commit/60869b74f96b26e8a173f3f215c2badeaef9a136.patch";
+      hash = "sha256-Lq9pyissNmLYavLCISga0EWbRwisGnKiz6UYhzxJatc=";
+    })
+  ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"

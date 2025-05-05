@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-headless-client";
+    platforms = lib.platforms.linux;
   };
 }
