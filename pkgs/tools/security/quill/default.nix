@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   openssl,
-  Security,
   libiconv,
   udev,
   pkg-config,
@@ -58,7 +57,6 @@ rustPlatform.buildRustPackage rec {
       udev
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ];
 

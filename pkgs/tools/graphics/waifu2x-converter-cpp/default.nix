@@ -7,7 +7,6 @@
   stdenv,
   ocl-icd,
   opencl-headers,
-  OpenCL,
   config,
   cudaSupport ? config.cudaSupport,
   cudatoolkit ? null,
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
       opencv4
     ]
     ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optional stdenv.hostPlatform.isDarwin OpenCL
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       ocl-icd
       opencl-headers

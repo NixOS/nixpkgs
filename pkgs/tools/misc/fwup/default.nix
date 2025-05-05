@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   autoreconfHook,
-  DiskArbitration,
   pkg-config,
   bzip2,
   libarchive,
@@ -36,18 +35,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      libarchive
-      libconfuse
-      libsodium
-      xz
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DiskArbitration
-    ];
+  buildInputs = [
+    bzip2
+    libarchive
+    libconfuse
+    libsodium
+    xz
+    zlib
+  ];
 
   propagatedBuildInputs =
     [

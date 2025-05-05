@@ -8,7 +8,6 @@
   lrzsz,
   ncurses,
   libiconv,
-  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
     [ ncurses ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      IOKit
     ];
 
   nativeBuildInputs = [

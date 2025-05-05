@@ -8,7 +8,6 @@
   libpulseaudio,
   pkg-config,
   patchelf,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
     xorg.libXScrnSaver
     libpulseaudio
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
   nativeBuildInputs = [
     pkg-config
     patchelf

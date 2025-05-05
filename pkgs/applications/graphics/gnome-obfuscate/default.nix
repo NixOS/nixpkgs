@@ -17,7 +17,6 @@
   gtk4,
   gdk-pixbuf,
   libadwaita,
-  Foundation,
   nix-update-script,
 }:
 
@@ -60,16 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      gdk-pixbuf
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    gdk-pixbuf
+    libadwaita
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

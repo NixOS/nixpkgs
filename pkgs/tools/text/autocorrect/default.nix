@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,11 +22,6 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
   '';
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
 
   cargoBuildFlags = [
     "-p"

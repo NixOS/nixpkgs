@@ -9,8 +9,6 @@
   gcc,
   cmake,
   libiconv,
-  CoreServices,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,8 +34,6 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    CoreServices
-    Security
   ];
 
   checkFlags = [

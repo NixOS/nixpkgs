@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   testers,
   gitMinimal,
   serie,
@@ -22,14 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Bdk553tECJiMxJlXj147Sv2LzH+nM+/Cm5BpBr78I4o=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreGraphics
-      AppKit
-    ]
-  );
 
   nativeCheckInputs = [ gitMinimal ];
 

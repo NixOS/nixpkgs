@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitHub,
   xcbuildHook,
-  Foundation,
-  AddressBook,
 }:
 
 stdenv.mkDerivation {
@@ -24,10 +22,6 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [
-    Foundation
-    AddressBook
-  ];
 
   installPhase = ''
     mkdir -p $out/bin

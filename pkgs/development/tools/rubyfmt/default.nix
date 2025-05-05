@@ -10,13 +10,10 @@
   zlib,
   readline,
   libiconv,
-  libobjc,
   libunwind,
   libxcrypt,
   libyaml,
   rust-jemalloc-sys-unprefixed,
-  Foundation,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,10 +45,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       readline
       libiconv
-      libobjc
       libunwind
-      Foundation
-      Security
     ];
 
   preConfigure = ''

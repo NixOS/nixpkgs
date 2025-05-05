@@ -5,7 +5,6 @@
   cmake,
   pkg-config,
   gtk3,
-  Cocoa,
 }:
 
 let
@@ -26,9 +25,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  propagatedBuildInputs =
-    lib.optional stdenv.hostPlatform.isLinux gtk3
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux gtk3;
 
   postPatch = ''
     substituteInPlace darwin/text.m unix/text.c \

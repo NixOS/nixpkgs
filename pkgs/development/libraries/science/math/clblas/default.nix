@@ -10,10 +10,6 @@
   python3,
   ocl-icd,
   opencl-headers,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
-  OpenCL,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,15 +56,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       ocl-icd
       opencl-headers
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreGraphics
-      CoreVideo
     ];
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    OpenCL
-  ];
 
   strictDeps = true;
 

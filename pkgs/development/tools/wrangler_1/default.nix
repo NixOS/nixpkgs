@@ -6,9 +6,6 @@
   pkg-config,
   openssl,
   curl,
-  Security,
-  CoreServices,
-  CoreFoundation,
   libiconv,
 }:
 
@@ -32,9 +29,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      CoreFoundation
-      CoreServices
-      Security
       libiconv
     ];
 

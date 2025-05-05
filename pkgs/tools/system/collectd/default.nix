@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  darwin,
   callPackage,
   autoreconfHook,
   pkg-config,
@@ -41,14 +40,9 @@ stdenv.mkDerivation rec {
     pkg-config
     autoreconfHook
   ];
-  buildInputs =
-    [
-      libtool
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.ApplicationServices
-    ]
-    ++ plugins.buildInputs;
+  buildInputs = [
+    libtool
+  ] ++ plugins.buildInputs;
 
   configureFlags =
     [

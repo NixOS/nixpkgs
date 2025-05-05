@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,8 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-vtNxRW/b8kvy21YQezCUiZNtLnlMSkdTRr/OkGy6UAw=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Rust library for generating cryptocurrency wallets";

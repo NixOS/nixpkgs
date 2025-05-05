@@ -1,12 +1,9 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,12 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   checkFlags = [
     "--skip function_source_schemas"

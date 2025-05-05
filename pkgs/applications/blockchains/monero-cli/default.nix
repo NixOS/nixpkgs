@@ -16,10 +16,6 @@
   unbound,
   zeromq,
 
-  # darwin
-  CoreData,
-  IOKit,
-
   trezorSupport ? true,
   hidapi,
   libusb1,
@@ -87,10 +83,6 @@ stdenv.mkDerivation rec {
       readline
       unbound
       zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      CoreData
     ]
     ++ lib.optionals trezorSupport [
       python3

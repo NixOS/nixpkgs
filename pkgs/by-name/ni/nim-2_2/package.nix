@@ -28,7 +28,6 @@ let
 
       # Needed for any nim package that uses the standard library's
       # 'std/sysrand' module.
-      depsTargetTargetPropagated = lib.optional stdenv.hostPlatform.isDarwin Security;
 
       inherit patches;
 

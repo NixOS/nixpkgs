@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   itk,
-  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ itk ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [ itk ];
 
   doCheck = !stdenv.hostPlatform.isDarwin; # usual dynamic linker issues
 

@@ -12,7 +12,6 @@
   # buildInputs
   openssl,
   stdenv,
-  darwin,
   libiconv,
 }:
 
@@ -47,8 +46,6 @@ buildPythonPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 

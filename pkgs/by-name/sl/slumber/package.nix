@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
 }:
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-acWEinwYCCtoapFkL6XyASvFX4bqYS/HrKjlaAZabi4=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   meta = with lib; {
     description = "Terminal-based HTTP/REST client";

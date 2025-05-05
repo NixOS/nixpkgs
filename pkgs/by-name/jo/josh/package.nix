@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   libgit2,
@@ -8,7 +7,6 @@
   pkg-config,
   makeWrapper,
   git,
-  darwin,
 }:
 
 let
@@ -40,14 +38,10 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Security
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   cargoBuildFlags = cargoFlags;
   cargoTestFlags = cargoFlags;

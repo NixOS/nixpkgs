@@ -10,9 +10,6 @@
   openssl,
   readline,
   gettext,
-  CoreFoundation,
-  IOKit,
-  Kerberos,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +38,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       gettext # bacula requires CoreFoundation, but its `configure` script will only link it when it detects libintl.
-      CoreFoundation
-      IOKit
-      Kerberos
     ]
     # acl relies on attr, which I can't get to build on darwin
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;

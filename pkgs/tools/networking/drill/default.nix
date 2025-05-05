@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,13 +28,9 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_DIR = "${lib.getDev openssl}";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   meta = with lib; {
     description = "HTTP load testing application inspired by Ansible syntax";

@@ -13,9 +13,6 @@
   pipewire,
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
   libpulseaudio,
-  CoreServices,
-  AudioUnit,
-  AudioToolbox,
   nix-update-script,
 }:
 
@@ -42,12 +39,7 @@ stdenv.mkDerivation rec {
     lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
     ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      AudioUnit
-      AudioToolbox
-    ];
+    ++ lib.optional pulseSupport libpulseaudio;
 
   cmakeFlags =
     [

@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,10 +20,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-JM7m/VdaXpUlPOi+N7gue6mlQuxvRFU6++SaSq45Ntg=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   postInstall = ''
     installManPage artifacts/sagoin.1

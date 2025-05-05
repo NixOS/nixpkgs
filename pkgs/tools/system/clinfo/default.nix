@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ocl-icd,
   opencl-headers,
-  OpenCL,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,14 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
   };
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      ocl-icd
-      opencl-headers
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenCL
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ocl-icd
+    opencl-headers
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

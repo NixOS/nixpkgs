@@ -12,10 +12,6 @@
   # Only required on Linux
   glew,
   libglut,
-  # Only required on Darwin
-  Carbon,
-  GLUT,
-  Cocoa,
   # Python bindings
   pythonBindings ? true, # Python bindings
   python3Packages,
@@ -62,11 +58,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glew
       libglut
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      GLUT
-      Cocoa
     ]
     ++ lib.optionals pythonBindings [
       python3Packages.python

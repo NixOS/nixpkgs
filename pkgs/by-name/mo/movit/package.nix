@@ -6,7 +6,6 @@
   SDL2,
   fftw,
   gtest,
-  darwin,
   eigen,
   libepoxy,
   libGL,
@@ -33,18 +32,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      fftw
-      gtest
-      libGL
-      libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.libobjc
-    ];
+  buildInputs = [
+    SDL2
+    fftw
+    gtest
+    libGL
+    libX11
+  ];
 
   propagatedBuildInputs = [
     eigen

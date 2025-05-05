@@ -13,7 +13,6 @@
   gtk3,
   openssl,
   libGL,
-  libobjc,
   libxkbcommon,
   wrapGAppsHook3,
   wayland,
@@ -77,9 +76,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
     ];
 
   postInstall =

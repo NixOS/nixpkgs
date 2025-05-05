@@ -72,6 +72,14 @@ buildPythonPackage rec {
         url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
         hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
       })
+
+      # backport fix for https://code.djangoproject.com/ticket/36056
+      # FIXME: remove if ever backported upstream
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/ec0e784f91b551c654f0962431cc31091926792d.patch";
+        includes = [ "django/*" ]; # tests don't apply
+        hash = "sha256-8YwdOBNJq6+GNoxzdLyN9HEEIWRXGQk9YbyfPwYVkwU=";
+      })
     ]
     ++ lib.optionals withGdal [
       (replaceVars ./django_4_set_geos_gdal_lib.patch {
