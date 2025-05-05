@@ -11,6 +11,7 @@
   SDL2,
   SDL2_image,
   SDL2_ttf,
+  SDL2_mixer,
   libmpeg2,
   libvorbis,
   libzip,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypseus-singe";
-  version = "2.11.3";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "DirtBagXon";
     repo = "hypseus-singe";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-hLl+/tJrBXo6m/cJxmn2bSLXcNLM8B6SKrM702Z8K8E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-04WC0fO/eNUz4muwDAbjDy5AA53QPpX5dq5Xgt8qeBI=";
   };
 
   patches = [ ./use-shared-mpeg2.patch ];
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDL2
       SDL2_image
       SDL2_ttf
+      SDL2_mixer
       libmpeg2
       libvorbis
       libzip
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev SDL2_image}/include/SDL2"
     "-I${lib.getDev SDL2_ttf}/include/SDL2"
+    "-I${lib.getDev SDL2_mixer}/include/SDL2"
   ];
 
   preConfigure = ''

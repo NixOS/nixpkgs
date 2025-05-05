@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xan";
-  version = "0.49.0";
+  version = "0.49.3";
 
   src = fetchFromGitHub {
     owner = "medialab";
     repo = "xan";
     tag = version;
-    hash = "sha256-tzbHIXmTyP7MQeIMVLV4soGg9oRL7bM73+kFqD5zIi0=";
+    hash = "sha256-2BEwMpI9vmhyZFZiEj8sHnVqCYGBULFORGxZgxdmr7M=";
   };
 
-  cargoHash = "sha256-kqgmfdRfuNhi8X5/oljrBTf4cg+tXuO5Uh7MtBsTtqg=";
+  cargoHash = "sha256-spKgZ8T94zhLIDhym5wQrhnW74KPgCMy5Y+3m/pX9/o=";
   useFetchCargoVendor = true;
 
   # FIXME: tests fail and I do not have the time to investigate. Temporarily disable

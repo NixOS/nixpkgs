@@ -48,6 +48,7 @@ stdenv.mkDerivation (
     patches =
       [
         (getVersionFile "clang/purity.patch")
+        # Remove extraneous ".a" suffix from baremetal clang_rt.builtins when compiling for baremetal.
         # https://reviews.llvm.org/D51899
         (getVersionFile "clang/gnu-install-dirs.patch")
       ]
@@ -76,6 +77,7 @@ stdenv.mkDerivation (
         else
           ./ignore-nostd-link-13.diff
       )
+      # Pass the correct path to libllvm
       ++ [
         (replaceVars
           (
@@ -112,6 +114,8 @@ stdenv.mkDerivation (
             stripLen = 1;
             hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
           })
+      # Fixes a bunch of lambda-related crashes
+      # https://github.com/llvm/llvm-project/pull/93206
       ++ lib.optional (lib.versions.major release_version == "18") (fetchpatch {
         name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
         url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";

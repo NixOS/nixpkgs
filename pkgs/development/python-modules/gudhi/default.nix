@@ -21,15 +21,15 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
-  version = "3.10.1";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
-    rev = "tags/gudhi-release-${version}";
+    tag = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-zHjSGm3hk3FZQmyQ03y14vJp5xeoofvij1hczKidvVA=";
+    hash = "sha256-EebPvmioTYBv3VR6SNEfiqi2GC4sZn8WEj0fu42B8yM=";
   };
 
   nativeBuildInputs = [

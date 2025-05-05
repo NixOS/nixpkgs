@@ -25,16 +25,6 @@ let
         };
       });
 
-      geoip2 = super.geoip2.overridePythonAttrs rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "geoip2";
-          inherit version;
-          hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
-        };
-      };
-
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -46,19 +36,17 @@ let
       };
 
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
-
-      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2025.3.0";
+  version = "2025.4.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D/j1RzKhRvdqMxcHg/NPZSoroN3etzh6/V38XV9W1cs=";
+    hash = "sha256-K/llv85CWp+V70BiYAR7lT+urGdLbXBhWpCptxUqDrc=";
   };
 
   npmDeps = buildNpmPackage {
@@ -66,7 +54,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-6qjG0p7pLtTd9CBVVzoeUPv6Vdr5se1wuI5qcKJH2Os=";
+    npmDepsHash = "sha256-FqwgHmIUfcipVbeXmN4uYPHdmnuaSgOQ9LHgKRf16ys=";
 
     dontBuild = true;
 

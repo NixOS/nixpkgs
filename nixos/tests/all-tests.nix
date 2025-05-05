@@ -281,8 +281,6 @@ in
   calibre-server = import ./calibre-server.nix { inherit pkgs runTest; };
   canaille = handleTest ./canaille.nix { };
   castopod = handleTest ./castopod.nix { };
-  cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
-  cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
   cassandra_4 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_4; };
   centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix { };
@@ -595,9 +593,8 @@ in
     inherit handleTestOn;
     package = pkgs.hadoop2;
   };
-  haka = handleTest ./haka.nix { };
   haste-server = handleTest ./haste-server.nix { };
-  haproxy = handleTest ./haproxy.nix { };
+  haproxy = runTest ./haproxy.nix;
   hardened = handleTest ./hardened.nix { };
   harmonia = runTest ./harmonia.nix;
   headscale = handleTest ./headscale.nix { };
@@ -702,6 +699,7 @@ in
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
   kimai = runTest ./kimai.nix;
+  kismet = runTest ./kismet.nix;
   kmonad = runTest ./kmonad.nix;
   knot = runTest ./knot.nix;
   komga = handleTest ./komga.nix { };
@@ -731,11 +729,13 @@ in
   lidarr = handleTest ./lidarr.nix { };
   lightdm = handleTest ./lightdm.nix { };
   lighttpd = runTest ./lighttpd.nix;
+  livekit = runTest ./networking/livekit.nix;
   limesurvey = handleTest ./limesurvey.nix { };
   limine = import ./limine { inherit runTest; };
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
   litellm = runTest ./litellm.nix;
   litestream = handleTest ./litestream.nix { };
+  lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   lldap = handleTest ./lldap.nix { };
   localsend = handleTest ./localsend.nix { };
   locate = handleTest ./locate.nix { };
@@ -914,7 +914,7 @@ in
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix { };
   nix-config = handleTest ./nix-config.nix { };
-  nix-ld = handleTest ./nix-ld.nix { };
+  nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-upgrade = handleTest ./nix/upgrade.nix { inherit (pkgs) nixVersions; };
   nix-required-mounts = runTest ./nix-required-mounts;
@@ -950,7 +950,7 @@ in
   nomad = runTest ./nomad.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
   non-switchable-system = runTest ./non-switchable-system.nix;
-  noto-fonts = handleTest ./noto-fonts.nix { };
+  noto-fonts = runTest ./noto-fonts.nix;
   noto-fonts-cjk-qt-default-weight = handleTest ./noto-fonts-cjk-qt-default-weight.nix { };
   novacomd = handleTestOn [ "x86_64-linux" ] ./novacomd.nix { };
   npmrc = handleTest ./npmrc.nix { };
@@ -968,11 +968,13 @@ in
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
   obs-studio = runTest ./obs-studio.nix;
   oh-my-zsh = handleTest ./oh-my-zsh.nix { };
+  olivetin = runTest ./olivetin.nix;
   ollama = runTest ./ollama.nix;
   ollama-cuda = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-cuda.nix;
   ollama-rocm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-rocm.nix;
   ombi = handleTest ./ombi.nix { };
   openarena = handleTest ./openarena.nix { };
+  openbao = runTest ./openbao.nix;
   openldap = handleTest ./openldap.nix { };
   opensearch = discoverTests (import ./opensearch.nix);
   openresty-lua = handleTest ./openresty-lua.nix { };
@@ -1115,7 +1117,7 @@ in
   private-gpt = handleTest ./private-gpt.nix { };
   privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix { };
-  prometheus = handleTest ./prometheus { };
+  prometheus = import ./prometheus { inherit runTest; };
   prometheus-exporters = handleTest ./prometheus-exporters.nix { };
   prosody = handleTest ./xmpp/prosody.nix { };
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
@@ -1190,6 +1192,7 @@ in
   schleuder = handleTest ./schleuder.nix { };
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
   scrutiny = runTest ./scrutiny.nix;
+  scx = runTest ./scx/default.nix;
   sddm = handleTest ./sddm.nix { };
   sdl3 = handleTest ./sdl3.nix { };
   seafile = handleTest ./seafile.nix { };
@@ -1389,12 +1392,13 @@ in
   tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   typesense = handleTest ./typesense.nix { };
+  tzupdate = runTest ./tzupdate.nix;
   ucarp = handleTest ./ucarp.nix { };
   udisks2 = handleTest ./udisks2.nix { };
   ulogd = handleTest ./ulogd/ulogd.nix { };
   umurmur = handleTest ./umurmur.nix { };
   unbound = handleTest ./unbound.nix { };
-  unifi = handleTest ./unifi.nix { };
+  unifi = runTest ./unifi.nix;
   unit-php = runTest ./web-servers/unit-php.nix;
   unit-perl = handleTest ./web-servers/unit-perl.nix { };
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
@@ -1419,13 +1423,13 @@ in
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish60;
   };
-  varnish75 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish75;
-  };
   varnish76 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish76;
+  };
+  varnish77 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish77;
   };
   vault = handleTest ./vault.nix { };
   vault-agent = handleTest ./vault-agent.nix { };
@@ -1480,6 +1484,7 @@ in
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
   yabar = runTest ./yabar.nix;
+  yarr = runTest ./yarr.nix;
   ydotool = handleTest ./ydotool.nix { };
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;

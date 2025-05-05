@@ -64,6 +64,6 @@ buildKodiBinaryAddon rec {
     description = "Kodi inputstream addon for several manifest types";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

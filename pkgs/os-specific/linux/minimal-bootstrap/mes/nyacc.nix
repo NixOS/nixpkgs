@@ -30,7 +30,7 @@ kaem.runCommand "${pname}-${version}"
       '';
       homepage = "https://savannah.nongnu.org/projects/nyacc";
       license = licenses.lgpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.all;
     };
   }

@@ -25,7 +25,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-bicep";
     homepage = "https://github.com/Azure/bicep/tree/main/src/vscode-bicep";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ] ++ lib.teams.stridtech.members;
+    teams = [ lib.teams.stridtech ];
   };
 }
 

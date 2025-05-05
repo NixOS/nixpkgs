@@ -12,7 +12,6 @@
   wrapGAppsHook3,
 
   openssl,
-  libsoup_2_4,
   webkitgtk_4_1,
   glib-networking,
   libappindicator,
@@ -62,7 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-    libsoup_2_4
     webkitgtk_4_1
     glib-networking
     libappindicator

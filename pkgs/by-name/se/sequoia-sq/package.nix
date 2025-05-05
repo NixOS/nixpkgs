@@ -1,8 +1,6 @@
 {
-  stdenv,
   fetchFromGitLab,
   lib,
-  darwin,
   nettle,
   nix-update-script,
   rustPlatform,
@@ -35,19 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      nettle
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+    sqlite
+    nettle
+  ];
 
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
   # Needed for avoiding "OpenSSL error" since 1.2.0

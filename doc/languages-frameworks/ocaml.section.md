@@ -83,8 +83,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
-    repo = pname;
-    rev = version;
+    repo = "angstrom";
+    tag = version;
     hash = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
@@ -124,7 +124,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${version}/wtf8-v${version}.tbz";
     hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 

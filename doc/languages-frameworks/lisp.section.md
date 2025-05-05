@@ -135,7 +135,6 @@ During Quicklisp import:
 - names starting with a number have a `_` prepended (`3d-vectors`->`_3d-vectors`)
 - `_` in names is converted to `__` for reversibility
 
-
 ## Defining packages manually inside Nixpkgs {#lisp-defining-packages-inside}
 
 Packages that for some reason are not in Quicklisp, and so cannot be
@@ -185,7 +184,7 @@ let
       domain = "gitlab.common-lisp.net";
       owner = "alexandria";
       repo = "alexandria";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
@@ -212,7 +211,7 @@ sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
     domain = "gitlab.common-lisp.net";
     owner = "alexandria";
     repo = "alexandria";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
   };
 })

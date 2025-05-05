@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-hcl2";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amplify-education";
     repo = "python-hcl2";
     tag = "v${version}";
-    hash = "sha256-F3R7wAJ3DfEriwJC7u+WLYfkThIuqmkAlvLWA8sTW/4=";
+    hash = "sha256-PXdk1Edoqqxi3Rsx7Xn0S+kcabc3mo6GqjQ9ZgXZq10=";
   };
 
   disabled = pythonOlder "3.7";

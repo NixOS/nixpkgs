@@ -84,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests.vm = nixosTests.ayatana-indicators;
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-session;
+    };
     updateScript = gitUpdater { };
   };
 

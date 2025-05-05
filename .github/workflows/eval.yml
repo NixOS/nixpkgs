@@ -43,7 +43,7 @@ jobs:
           echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -71,7 +71,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -111,7 +111,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -152,7 +152,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -244,11 +244,14 @@ jobs:
     steps:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
           private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
+          permission-pull-requests: write
 
       - name: Download process result
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
@@ -257,7 +260,7 @@ jobs:
           path: comparison
 
       - name: Install Nix
-        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
+        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
 
       # Important: This workflow job runs with extra permissions,
       # so we need to make sure to not run untrusted code from PRs

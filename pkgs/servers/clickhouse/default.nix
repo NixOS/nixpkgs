@@ -1,6 +1,7 @@
 {
   lib,
   llvmPackages,
+  llvmPackages_16,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -16,7 +17,6 @@
 
   rustSupport ? true,
 
-  corrosion,
   rustc,
   cargo,
   rustPlatform,
@@ -25,12 +25,7 @@
 let
   inherit (llvmPackages) stdenv;
   mkDerivation =
-    (
-      if stdenv.hostPlatform.isDarwin then
-        darwin.apple_sdk_11_0.llvmPackages_16.stdenv
-      else
-        llvmPackages.stdenv
-    ).mkDerivation;
+    (if stdenv.hostPlatform.isDarwin then llvmPackages_16.stdenv else llvmPackages.stdenv).mkDerivation;
 in
 mkDerivation rec {
   pname = "clickhouse";

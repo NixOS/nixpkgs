@@ -3,7 +3,6 @@
   stdenv,
   meson,
   ninja,
-  fetchFromGitHub,
   fetchFromGitLab,
   re2c,
   gperf,
@@ -28,39 +27,15 @@
   emilua, # this package
 }:
 
-let
-  trial-protocol-wrap = fetchFromGitHub {
-    owner = "breese";
-    repo = "trial.protocol";
-    rev = "79149f604a49b8dfec57857ca28aaf508069b669";
-    sparseCheckout = [
-      "include"
-    ];
-    hash = "sha256-QpQ70KDcJyR67PtOowAF6w48GitMJ700B8HiEwDA5sU=";
-    postFetch = ''
-      rm $out/*.*
-      mkdir -p $out/lib/pkgconfig
-      cat > $out/lib/pkgconfig/trial-protocol.pc << EOF
-        Name: trial.protocol
-        Version: 0-unstable-2023-02-10
-        Description:  C++ header-only library with parsers and generators for network wire protocols
-        Requires:
-        Libs:
-        Cflags:
-      EOF
-    '';
-  };
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "emilua";
-  version = "0.11.4";
+  version = "0.11.6";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CVEBFySsGT0f16Dim1Pw1GdDM0fWUKieRZyxHaDH3O4=";
+    hash = "sha256-r/WfRAr8AgnZGHxzcZVLg5MHDwcOTMWqOv/Qu/75Y1c=";
   };
 
   propagatedBuildInputs = [
@@ -74,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     liburing
     openssl
     cereal
-    trial-protocol-wrap
   ];
 
   nativeBuildInputs = [

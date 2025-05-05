@@ -28,6 +28,6 @@ buildPecl {
     description = "Provides functions for function traces and profiling";
     homepage = "https://xdebug.org/";
     license = lib.licenses.php301;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

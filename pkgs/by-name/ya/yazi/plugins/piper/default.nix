@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "piper.yazi";
-  version = "25.4.8-unstable-2025-04-13";
+  version = "25.4.8-unstable-2025-04-21";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "b12a9ab085a8c2fe2b921e1547ee667b714185f9";
-    hash = "sha256-LWN0riaUazQl3llTNNUMktG+7GLAHaG/IxNj1gFhDRE=";
+    rev = "71f925e4b7d6d2fa3e1e7822422d755ea709eb69";
+    hash = "sha256-4XhVQ72JIfkT9A2hcE+3ch/xLEBe+HeFmjupy266OJo=";
   };
 
   meta = {

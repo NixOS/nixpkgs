@@ -122,7 +122,8 @@ let
           description = "cuSPARSELt: A High-Performance CUDA Library for Sparse Matrix-Matrix Multiplication";
           homepage = "https://developer.nvidia.com/cusparselt-downloads";
 
-          maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.sepiabrown ];
+          maintainers = prevAttrs.meta.maintainers or [ ] ++ [ lib.maintainers.sepiabrown ];
+          teams = prevAttrs.meta.teams or [ ];
           license = lib.licenses.unfreeRedistributable // {
             shortName = "cuSPARSELt EULA";
             fullName = "cuSPARSELt SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";

@@ -6,7 +6,6 @@
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  darwin,
   libsecret,
   nodejs,
   perl,
@@ -42,12 +41,7 @@ buildNpmPackage (finalAttrs: {
     ];
 
   # for keytar
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
   postPatch = ''
     # The version string is substituted during publishing:

@@ -36,6 +36,6 @@ buildGoModule rec {
     '';
     homepage = "https://tile38.com/";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

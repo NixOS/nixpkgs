@@ -1,13 +1,11 @@
 {
   rustPlatform,
-  stdenv,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
   perl,
   openssl,
   lib,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "r0vm";
@@ -26,13 +24,9 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs =
-    [
-      openssl.dev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl.dev
+  ];
 
   doCheck = false;
 

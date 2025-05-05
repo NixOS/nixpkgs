@@ -66,7 +66,11 @@
   zlib,
 
   # Boolean flags
-  withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+
+  # FIXME: Native compilation breaks build and runtime on macOS 15.4;
+  # see <https://github.com/NixOS/nixpkgs/issues/395169>.
+  withNativeCompilation ?
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin,
   noGui ? false,
   srcRepo ? true,
   withAcl ? false,
@@ -113,21 +117,6 @@
     else
       "lucid"
   ),
-
-  # macOS dependencies for NS and macPort
-  Accelerate,
-  AppKit,
-  Carbon,
-  Cocoa,
-  GSS,
-  IOKit,
-  ImageCaptureCore,
-  ImageIO,
-  OSAKit,
-  Quartz,
-  QuartzCore,
-  UniformTypeIdentifiers,
-  WebKit,
 
   # test
   callPackage,
@@ -372,27 +361,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withNS [
       librsvg
-      AppKit
-      GSS
-      ImageIO
-    ]
-    ++ lib.optionals (variant == "macport") [
-      Accelerate
-      AppKit
-      Carbon
-      Cocoa
-      IOKit
-      OSAKit
-      Quartz
-      QuartzCore
-      WebKit
-      # TODO are these optional?
-      GSS
-      ImageCaptureCore
-      ImageIO
-    ]
-    ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
-      UniformTypeIdentifiers
     ];
 
   # Emacs needs to find movemail at run time, see info (emacs) Movemail

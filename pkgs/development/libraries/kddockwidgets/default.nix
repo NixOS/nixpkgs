@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "KDDockWidgets";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VDLHED/QKxccZ18WEPV7GPdr3v7VaizDa5sZq7ei5+g=";
+    sha256 = "sha256-B5Fy0ax5ytNB9w8a0HxsVdkQrFubLs/D26LAijrQk3E=";
   };
 
   nativeBuildInputs = [ cmake ];

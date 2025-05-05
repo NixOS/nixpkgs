@@ -1,8 +1,8 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 6a85063..73dbd39 100644
+index 780b802..2f0b489 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -50,13 +50,12 @@ include(GetGitRevisionDescription)
+@@ -53,14 +53,13 @@ include(GetGitRevisionDescription)
  include(InstallRequiredSystemLibraries)
  include(FindPkgConfig)
  include(ExternalProject)
@@ -12,12 +12,13 @@ index 6a85063..73dbd39 100644
  
  PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
  PKG_SEARCH_MODULE(SDL2_TTF REQUIRED SDL2_ttf)
+ PKG_SEARCH_MODULE(SDL2_MIXER REQUIRED SDL2_mixer)
 -build_libmpeg2( )
 +PKG_SEARCH_MODULE(MPEG2 REQUIRED libmpeg2)
  
  message(STATUS "Target: ${CMAKE_SYSTEM_NAME} ${CMAKE_TARGET_ARCHITECTURES}")
  
-@@ -110,7 +109,6 @@ add_subdirectory(timer)
+@@ -114,7 +113,6 @@ add_subdirectory(timer)
  add_subdirectory(video)
  add_subdirectory(vldp)
  

@@ -22,9 +22,6 @@ body:
         > For instance, if you were filing a request against the out of date `hello` package, where the current version in Nixpkgs is 1.0.0, but the latest version upstream is 1.0.1, your title would be as follows:
         > `Update Request: hello 1.0.0 → 1.0.1`
 
-        > [!NOTE]
-        > If you are filing an update request to change a package's source to a fork, please file a new package request instead. Even if the original upstream is outdated, the fork should be considered a new package.
-
         ---
   - type: "dropdown"
     id: "version"
@@ -72,6 +69,13 @@ body:
     attributes:
       label: "Changelog"
       description: "If applicable, please link the upstream changelog for the latest version."
+    validations:
+      required: false
+  - type: "textarea"
+    id: "additional-context"
+    attributes:
+      label: "Additional context"
+      description: "Add any other context about the update here."
     validations:
       required: false
   - type: "textarea"

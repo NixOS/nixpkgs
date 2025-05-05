@@ -1,4 +1,7 @@
 {
+  stdenv,
+  lib,
+  pkgs,
   buildPythonPackage,
   cffi,
   cssselect2,
@@ -6,10 +9,8 @@
   flit-core,
   fontconfig,
   fonttools,
-  ghostscript,
   glib,
   harfbuzz,
-  lib,
   pango,
   pillow,
   pydyf,
@@ -18,14 +19,13 @@
   pytestCheckHook,
   pythonOlder,
   replaceVars,
-  stdenv,
   tinycss2,
   tinyhtml5,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "65.0";
+  version = "65.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-PGed6Wp8hxrgDwjNHncgDzPipJ014gnHIRWTJ1eN+Yg=";
+    hash = "sha256-EgKBvb1C/6p9flztvjGCos7zbqWtl/6fNX5DvmoeWOo=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   ] ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     pytest-cov-stub
     pytestCheckHook
   ];
@@ -106,6 +106,6 @@ buildPythonPackage rec {
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

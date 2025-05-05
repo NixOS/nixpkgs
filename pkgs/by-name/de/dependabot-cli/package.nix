@@ -11,7 +11,7 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.62.1";
+  version = "1.62.2";
 
   # vv Also update this vv
   tag = "nixpkgs-dependabot-cli-${version}";
@@ -45,7 +45,7 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-BD95YCPKoU/crlBPWYejI6kydpXhmYNAgtMEGi+iRsY=";
+    hash = "sha256-LtmCh3RmfKP+9x5pJX7hWLR3EWaWWQ2Vn7Th9fUHsWY=";
   };
 
   vendorHash = "sha256-0Q2+UK8giWL4cYJwfZ8gAAAEIYSqjadnUWJghVeIPjQ=";

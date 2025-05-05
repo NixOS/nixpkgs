@@ -446,8 +446,11 @@ let
         ./patches/cross-compile.patch
         # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
         ./patches/no-build-timestamps.patch
+      ]
+      ++ lib.optionals (!chromiumVersionAtLeast "136") [
         # Fix build with Pipewire 1.4
         # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+        # Got merged, started shipping with M136+.
         ./patches/webrtc-pipewire-1.4.patch
       ]
       ++ lib.optionals (packageName == "chromium") [
@@ -487,7 +490,12 @@ let
         # allowing us to use our rustc and our clang.
         ./patches/chromium-129-rust.patch
       ]
-      ++ lib.optionals (!ungoogled) [
+      ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
+        # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
+        # no longer need this patch. We opt to arbitrarily limit it to versions prior to M136 just
+        # because that's when this revert stopped applying cleanly and defer fully dropping it for
+        # the next cleanup to bundle rebuilding all of chromium and electron.
+        #
         # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
         # and std::hardware_constructive_interference_size.
         # So let's revert the change for now and hope that our rustc.llvmPackages and
@@ -534,11 +542,48 @@ let
           decode = "base64 -d";
           hash = "sha256-xMqGdu5Q8BGF/OIRdmMzPrrrMGDOSY2xElFfhRsJlDU=";
         })
+      ]
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "136") [
+        # Backport "Only call format_message when needed" to fix print() crashing with is_cfi = true.
+        # We build electron is_cfi = false and as such electron is not affected by this.
+        # Started shipping with M136+.
+        # https://github.com/NixOS/nixpkgs/issues/401326
+        # https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/issues/13
+        # https://skia-review.googlesource.com/c/skia/+/961356
+        (fetchpatch {
+          name = "only-call-format_message-when-needed.patch";
+          url = "https://skia.googlesource.com/skia/+/71685eda67178fa374d473ec1431fc459c83bb21^!?format=TEXT";
+          decode = "base64 -d";
+          stripLen = 1;
+          extraPrefix = "third_party/skia/";
+          hash = "sha256-aMqDjt/0cowqSm5DqcD3+zX+mtjydk396LD+B5F/3cs=";
+        })
+      ]
+      ++ lib.optionals (chromiumVersionAtLeast "136") [
+        # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
+        # to look for the minimal version, not the exact version (major.minor.patch). The linked CL makes a case for
+        # preventing compilations of chromium with versions below their intended version, not about running the very
+        # exact version or even running a newer version.
+        ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
       ];
 
     postPatch =
-      lib.optionalString (!isElectron) ''
-        ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+      lib.optionalString (!isElectron)
+        # TODO: reuse mkGnFlags for this
+        (
+          if (chromiumVersionAtLeast "136") then
+            ''
+              cp ${./files/gclient_args.gni} build/config/gclient_args.gni
+              chmod u+w build/config/gclient_args.gni
+              echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+              echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+            ''
+          else
+            ''
+              ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+            ''
+        )
+      + lib.optionalString (!isElectron) ''
 
         echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE
         echo "$SOURCE_DATE_EPOCH" > build/util/LASTCHANGE.committime
@@ -751,6 +796,10 @@ let
             use_qt = false;
           }
       )
+      // lib.optionalAttrs (chromiumVersionAtLeast "136") {
+        # LLVM < v21 does not support --warning-suppression-mappings yet:
+        clang_warning_suppression_file = "";
+      }
       // {
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):

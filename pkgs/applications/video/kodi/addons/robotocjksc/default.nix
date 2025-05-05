@@ -20,6 +20,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/jurialmunkey/resource.font.robotocjksc";
     description = "Roboto CJKSC fonts";
     license = licenses.asl20;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

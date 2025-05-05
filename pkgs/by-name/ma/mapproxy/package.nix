@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     description = "Open source proxy for geospatial data";
     homepage = "https://mapproxy.org/";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
+    maintainers = with lib.maintainers; [ rakesh4g ];
+    teams = [ lib.teams.geospatial ];
   };
 }

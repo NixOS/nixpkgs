@@ -45,7 +45,7 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -60,6 +60,9 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
   # Allow dhall 1.42.*
@@ -71,20 +74,7 @@ self: super: {
     }
   );
 
-  haskell-language-server = lib.pipe super.haskell-language-server [
-    (disableCabalFlag "fourmolu")
-    (disableCabalFlag "ormolu")
-    (disableCabalFlag "cabal")
-    (disableCabalFlag "stylishHaskell")
-    (
-      d:
-      d.override {
-        ormolu = null;
-        fourmolu = null;
-        stan = null;
-      }
-    )
-  ];
+  haskell-language-server = throw "haskell-language-server has dropped support for ghc 9.2 in version 2.10.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
@@ -92,6 +82,9 @@ self: super: {
   primitive-unlifted = super.primitive-unlifted_0_1_3_1;
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
@@ -101,17 +94,30 @@ self: super: {
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  # Needs to match ghc version
-  ghc-tags = doDistribute self.ghc-tags_1_5;
+  # Needs to match ghc-lib version
+  ghc-tags = doDistribute (doJailbreak self.ghc-tags_1_7);
 
-  # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-  hlint = enableCabalFlag "ghc-lib" super.hlint;
+  # Needs to match ghc-lib
+  hlint = doDistribute self.hlint_3_6_1;
+
+  # ghc-lib >= 9.8 and friends no longer build with GHC 9.2 since they require semaphore-compat
+  ghc-lib-parser = doDistribute (
+    self.ghc-lib-parser_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
+  ghc-lib = doDistribute (
+    self.ghc-lib_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
 
   # 0.2.2.3 requires Cabal >= 3.8
   shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
 
-  # https://github.com/sjakobi/bsb-http-chunked/issues/38
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
 
   # https://github.com/NixOS/cabal2nix/issues/554
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
@@ -128,6 +134,9 @@ self: super: {
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_5_0;
+
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)

@@ -69,6 +69,10 @@ buildPythonPackage rec {
     "test_load_azure_tenant_id_happy_path"
     "test_load_azure_tenant_id_no_location_header"
     "test_load_azure_tenant_id_unparsable_location_header"
+    # Take an exceptionally long time when sandboxing is enabled due to retries
+    "test_multipart_upload"
+    "test_rewind_seekable_stream"
+    "test_resumable_upload"
   ];
 
   __darwinAllowLocalNetworking = true;

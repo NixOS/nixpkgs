@@ -25,6 +25,7 @@
   tenacity,
 
   # tests
+  blockbuster,
   freezegun,
   httpx,
   lark,
@@ -41,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.21";
+  version = "0.3.24";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -53,11 +54,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/langchain";
 
-  patches = [
-    # blockbuster isn't supported in nixpkgs
-    ./rm-blockbuster.patch
-  ];
-
   build-system = [ pdm-backend ];
 
   buildInputs = [ bash ];
@@ -68,10 +64,6 @@ buildPythonPackage rec {
     "langchain-core"
     "numpy"
     "tenacity"
-  ];
-
-  pythonRemoveDeps = [
-    "blockbuster"
   ];
 
   dependencies = [
@@ -92,6 +84,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
     httpx
     lark
@@ -151,7 +144,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^langchain==([0-9.]+)$"
+      "langchain==([0-9.]+)"
     ];
   };
 

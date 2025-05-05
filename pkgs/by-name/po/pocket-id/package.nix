@@ -10,20 +10,22 @@
   nix-update-script,
 }:
 
-let
-  version = "0.48.0";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "pocket-id";
+  version = "0.51.1";
+
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
-    tag = "v${version}";
-    hash = "sha256-ax5E3e3GUrQLVsQREUhjmORjXQgKrEBVa9ySJr5ZLUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L+Mmgyeiv/AoboGN1ux4BDhEyVQ8w7IMR8Z34eM8tSU=";
   };
 
   backend = buildGoModule {
     pname = "pocket-id-backend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/backend";
+    sourceRoot = "${finalAttrs.src.name}/backend";
 
     vendorHash = "sha256-0LAlltXd7YNQu7ymdjUSy75hMBz6MpvmUtgct43BU7M=";
 
@@ -32,13 +34,13 @@ let
     '';
   };
 
-  frontend = buildNpmPackage (finalAttrs: {
+  frontend = buildNpmPackage {
     pname = "pocket-id-frontend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    sourceRoot = "${src.name}/frontend";
+    sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-CKxa0uL7pBQJiA2LPDA/HQvRk8sjphZ9nur8jb7BnU8=";
+    npmDepsHash = "sha256-UjYAndueuJU07unbNFoTQHqRFkdyaBKHyT4k3Ex4pg0=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     nativeBuildInputs = [
@@ -66,17 +68,7 @@ let
 
       runHook postInstall
     '';
-  });
-
-in
-stdenvNoCC.mkDerivation {
-  pname = "pocket-id";
-  inherit
-    version
-    src
-    backend
-    frontend
-    ;
+  };
 
   dontUnpack = true;
 
@@ -84,8 +76,8 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
-    ln -s ${backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-    ln -s ${frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
+    ln -s ${finalAttrs.backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
+    ln -s ${finalAttrs.frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
 
     runHook postInstall
   '';
@@ -107,7 +99,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "OIDC provider with passkeys support";
     homepage = "https://pocket-id.org";
-    changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${version}";
+    changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       gepbird
@@ -116,4 +108,4 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

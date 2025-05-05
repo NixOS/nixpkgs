@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nezha-theme-nazhua";
-  version = "0.6.4";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "hi2shark";
     repo = "nazhua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9mBM8M9pPZMMyFcf4JOyY5rnhpiNEy8ZDDnEoopjcbg=";
+    hash = "sha256-Flx0yHhYGDM9qPIsE1ZfjdmuWXbDTodnaiVK7Hee3Z4=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

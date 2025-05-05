@@ -82,15 +82,15 @@ let
   generated = swiftpm2nix.helpers ./nix;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "myproject";
   version = "0.0.0";
 
   src = fetchFromGitHub {
     owner = "nixos";
-    repo = pname;
-    rev = version;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    repo = "myproject";
+    tag = finalAttrs.version;
+    hash = "";
   };
 
   # Including SwiftPM as a nativeBuildInput provides a buildPhase for you.
@@ -106,14 +106,18 @@ stdenv.mkDerivation rec {
   configurePhase = generated.configure;
 
   installPhase = ''
+    runHook preInstall
+
     # This is a special function that invokes swiftpm to find the location
     # of the binaries it produced.
     binPath="$(swiftpmBinPath)"
     # Now perform any installation steps.
     mkdir -p $out/bin
     cp $binPath/myproject $out/bin/
+
+    runHook postInstall
   '';
-}
+})
 ```
 
 ### Custom build flags {#ssec-swiftpm-custom-build-flags}

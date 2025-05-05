@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     description = "LXQt system administration tool";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

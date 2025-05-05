@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-a5++mUhW/pQq3GpIgbe+3tIIA03FxT3Wg3UfYy5Hoaw=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'hatchling==1.26.3' 'hatchling>=1.26.3'
+  '';
+
   build-system = [
     hatchling
     hatch-fancy-pypi-readme

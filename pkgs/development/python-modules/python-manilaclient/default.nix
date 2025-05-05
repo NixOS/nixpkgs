@@ -68,6 +68,6 @@ buildPythonPackage rec {
     mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Contrastive Language-Image Pretraining";
     homepage = "https://github.com/rom1504/CLIP";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

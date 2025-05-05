@@ -4,35 +4,28 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  cmake,
   writableTmpDirAsHomeHook,
-  git,
+  gitMinimal,
   nixosTests,
   buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.22.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YoLi4wxBK9TFTtZRm+2N8HO5ZiC3V2GMqKFKKLHq++s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5Euhbuu1uiJ5HJNlPs9sUoGcc5QWqXqNmEH0jpfGLlc=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    cmake
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    writableTmpDirAsHomeHook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ writableTmpDirAsHomeHook ];
-
-  # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    export HOME=$TMPDIR
-  '';
 
   postInstall =
     ''
@@ -53,13 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-B2CCrSH2aTcGEX96oBxl/27hNMdDpdd2vxdt0/nlN6I=";
+  cargoHash = "sha256-cxDWaPlNK7POJ3GhA21NlJ6q62bqHdA/4sru5pLkvOA=";
 
-  nativeCheckInputs = [ git ];
-
-  preCheck = ''
-    HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   passthru.tests = {
     inherit (nixosTests) starship;
@@ -76,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Br1ght0ne
       Frostman
       awwpotato
+      sigmasquadron
     ];
     mainProgram = "starship";
   };

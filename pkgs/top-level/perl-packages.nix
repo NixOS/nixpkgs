@@ -13,7 +13,6 @@
   lib,
   buildPackages,
   pkgs,
-  darwin,
   fetchurl,
   fetchpatch,
   fetchpatch2,
@@ -2696,7 +2695,7 @@ with self;
     meta = {
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -4983,7 +4982,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -5993,7 +5992,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13397,7 +13396,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13428,7 +13427,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13744,7 +13743,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13986,7 +13985,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -14004,7 +14003,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -14708,7 +14707,7 @@ with self;
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -15241,7 +15240,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -15541,8 +15540,6 @@ with self;
       ];
     };
   };
-
-  ham = callPackage ../development/perl-modules/ham { };
 
   HashFlatten = buildPerlPackage {
     pname = "Hash-Flatten";
@@ -18904,7 +18901,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -20058,7 +20055,6 @@ with self;
       url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.103.tar.gz";
       hash = "sha256-L16N0tsNZEVVhITKbULYOcWpfuiqGyUOaU1n1bf2Y0w=";
     };
-    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
     meta = {
       description = "Manipulate Mac OS X pasteboards";
       license = with lib.licenses; [
@@ -20379,7 +20375,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -26611,6 +26607,7 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from EPEL
+      badPlatforms = lib.platforms.darwin;
     };
   };
 
@@ -26719,7 +26716,8 @@ with self;
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
-      maintainers = teams.deshaw.members ++ [ maintainers.ztzg ];
+      maintainers = [ maintainers.ztzg ];
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27054,7 +27052,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27242,7 +27240,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27929,7 +27927,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -28002,7 +28000,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
     };
   };
@@ -28422,7 +28420,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -28440,7 +28438,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
     };
   };
@@ -32235,7 +32233,6 @@ with self;
         hash = "sha256-nCypGyi6bZDEXqdb7wlGGzk9cFzmYkWGP1slBpXDfHw=";
       })
     ];
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
     doCheck = !stdenv.hostPlatform.isAarch64;
     meta = {
       description = "Perl extension for getting CPU information. Currently only number of CPU's supported";
@@ -32539,16 +32536,12 @@ with self;
       url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.27.tar.gz";
       hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
     };
-    propagatedBuildInputs =
-      [
-        pkgs.tclPackages.bwidget
-        pkgs.tcl
-        pkgs.tclPackages.tix
-        pkgs.tk
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreServices
-      ];
+    propagatedBuildInputs = [
+      pkgs.tclPackages.bwidget
+      pkgs.tcl
+      pkgs.tclPackages.tix
+      pkgs.tk
+    ];
     makeMakerFlags = lib.optionals stdenv.hostPlatform.isLinux [
       "--tclsh=${pkgs.tcl}/bin/tclsh"
       "--nousestubs"

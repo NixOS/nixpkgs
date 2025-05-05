@@ -42,6 +42,10 @@ in
 
         environment.systemPackages = with pkgs; [ git ];
 
+        networking.hosts."127.0.0.1" = [
+          "registry.localhost"
+          "pages.localhost"
+        ];
         virtualisation.memorySize = 6144;
         virtualisation.cores = 4;
         virtualisation.useNixStoreImage = true;
@@ -58,6 +62,12 @@ in
           virtualHosts = {
             localhost = {
               locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+            };
+            "pages.localhost" = {
+              locations."/".proxyPass = "http://localhost:8090";
+            };
+            "registry.localhost" = {
+              locations."/".proxyPass = "http://localhost:4567";
             };
           };
         };
@@ -78,7 +88,7 @@ in
           smtp.enable = true;
           pages = {
             enable = true;
-            settings.pages-domain = "localhost";
+            settings.pages-domain = "pages.localhost";
           };
           extraConfig = {
             incoming_email = {
@@ -96,6 +106,14 @@ in
             otpFile = pkgs.writeText "otpsecret" "Riew9mue";
             dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
             jwsFile = pkgs.runCommand "oidcKeyBase" { } "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
+          };
+
+          registry = {
+            enable = true;
+            certFile = "/var/lib/gitlab/registry_auth_cert";
+            keyFile = "/var/lib/gitlab/registry_auth_key";
+            externalAddress = "registry.localhost";
+            externalPort = 443;
           };
 
           # reduce memory usage
@@ -210,6 +228,7 @@ in
         gitlab.wait_for_unit("gitlab-sidekiq.service")
         gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/tmp/sockets/gitlab.socket")
         gitlab.wait_until_succeeds("curl -sSf http://gitlab/users/sign_in")
+        gitlab.wait_for_unit("docker-registry.service")
       '';
 
       # The actual test of GitLab. Only push data to GitLab if
@@ -447,6 +466,10 @@ in
                   """
               )
               gitlab.succeed("test -s /tmp/archive.tar.bz2")
+        ''
+        + ''
+          with subtest("Test docker registry http is available"):
+              gitlab.succeed("curl -sSf http://registry.localhost")
         '';
 
     in

@@ -31,6 +31,6 @@
       homepage = "https://github.com/phingofficial/phing";
       license = lib.licenses.lgpl3;
       mainProgram = "phing";
-      maintainers = lib.teams.php.members;
+      teams = [ lib.teams.php ];
     };
   })

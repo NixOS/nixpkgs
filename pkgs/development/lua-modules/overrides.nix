@@ -101,7 +101,7 @@ in
     '';
   });
 
-  cqueues = prev.cqueues.overrideAttrs (oa: rec {
+  cqueues = prev.cqueues.overrideAttrs (oa: {
     # Parse out a version number without the Lua version inserted
     version =
       let
@@ -112,7 +112,7 @@ in
       in
       "${date}-${rev}";
 
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       gnum4
@@ -133,13 +133,13 @@ in
     # version, which doesn't work well for us, so modify it
     postConfigure =
       let
-        inherit (prev.cqueues) pname;
+        inherit (final.cqueues) pname version;
       in
       ''
         # 'all' target auto-detects correct Lua version, which is fine for us as
         # we only have the right one available :)
         sed -Ei ''${rockspecFilename} \
-          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.4|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
@@ -237,13 +237,6 @@ in
   });
 
   http = prev.http.overrideAttrs (oa: {
-    patches = [
-      (fetchpatch {
-        name = "invalid-state-progression.patch";
-        url = "https://github.com/daurnimator/lua-http/commit/cb7b59474a.diff";
-        sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
-      })
-    ];
     /*
       TODO: separate docs derivation? (pandoc is heavy)
       nativeBuildInputs = [ pandoc ];

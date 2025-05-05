@@ -27,7 +27,6 @@ let
       libaio,
       liburing,
       systemd,
-      CoreServices,
       cctools,
       perl,
       jemalloc,
@@ -110,7 +109,6 @@ let
             ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ])
           )
           ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            CoreServices
             cctools
             perl
             libedit
@@ -120,10 +118,16 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
+        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+        };
 
         patches =
           [
             ./patch/cmake-includedir.patch
+            # patch for musl compatibility
+            ./patch/include-cstdint-full.patch
           ]
           # Fixes a build issue as documented on
           # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
@@ -215,7 +219,8 @@ let
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
           license = licenses.gpl2Plus;
-          maintainers = with maintainers; [ thoughtpolice ] ++ teams.helsinki-systems.members;
+          maintainers = with maintainers; [ thoughtpolice ];
+          teams = [ teams.helsinki-systems ];
           platforms = platforms.all;
         };
       };
@@ -363,28 +368,19 @@ let
 in
 self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
-  mariadb_105 = self.callPackage generic {
-    # Supported until 2025-06-24
-    version = "10.5.28";
-    hash = "sha256-C1BwII2gEWZA8gvQhfETZSf5mMwjJocVvL81Lnt/PME=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-  };
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
     version = "10.6.21";
     hash = "sha256-jX+XFps7ogRIWJZbjPwlQ2RADfQ+kFBC+S4kuPp7DZY=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
     version = "10.11.11";
     hash = "sha256-bynU1+QPxJr0oP5giYRQnvLRU9882K/kNZ3OPKDieJA=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
     version = "11.4.5";
     hash = "sha256-/2WV+MSC+ZIeObl/oRIjd6afDcvZJVPGuQMsvw6bU1Q=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
 }

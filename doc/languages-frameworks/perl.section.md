@@ -39,7 +39,7 @@ Perl packages from CPAN are defined in [pkgs/top-level/perl-packages.nix](https:
     pname = "Class-C3";
     version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/F/FL/FLORA/Class-C3-${version}.tar.gz";
       hash = "sha256-/5GE5xHT0uYGOQxroqj6LMU7CtKn2s6vMVoSXxL4iK4=";
     };
   };
@@ -88,7 +88,7 @@ buildPerlPackage rec {
   version = "0.36";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/P/PM/PMQS/${pname}-${version}.tar.gz";
+    url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-${version}.tar.gz";
     hash = "sha256-4Y+HGgGQqcOfdiKcFIyMrWBEccVNVAMDBWZlFTMorh8=";
   };
 
@@ -107,7 +107,7 @@ Dependencies on other Perl packages can be specified in the `buildInputs` and `p
     pname = "Class-C3-Componentised";
     version = "1.0004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AS/ASH/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/A/AS/ASH/Class-C3-Componentised-${version}.tar.gz";
       hash = "sha256-ASO9rV/FzJYZ0BH572Fxm2ZrFLMZLFATJng1NuU4FHc=";
     };
     propagatedBuildInputs = [
@@ -137,7 +137,7 @@ On Darwin, if a script has too many `-Idir` flags in its first line (its “sheb
     version = "12.50";
 
     src = fetchurl {
-      url = "https://exiftool.org/${pname}-${version}.tar.gz";
+      url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
       hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
     };
 

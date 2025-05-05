@@ -16,12 +16,13 @@
   curl,
   libcpr,
   rapidjson,
+  libX11,
+  libGL,
   writeShellScriptBin,
   makeDesktopItem,
   lib,
   copyDesktopItems,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "unnamed-sdvx-clone";
   version = "0.6.0";
@@ -54,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libcpr
     rapidjson
+    libX11
+    libGL
   ];
 
   cmakeFlags = [

@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   python3,
+  gitMinimal,
   versionCheckHook,
   pkg-config,
   nixVersions,
@@ -13,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-CnEGC4SnLRfAPl3WTv83xertH2ulG5onseZpq3vxfwc=";
+    hash = "sha256-I7cLVrkJhB3aJeE/A3tpFEUj0AkvcONSXD8NtnE5eQ0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-CyO+W4332fJmeF2CL+9CCdPuion8MrxzkPotLA7my3U=";
+  cargoHash = "sha256-DzSfwBVeRT/GAXWyZKZjlDvj95bQzrkqIgZZ2EZw7eQ=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs =
     [
       python3
+      gitMinimal
     ]
     ++ lib.optionals enableNixImport [
       pkg-config
@@ -66,13 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # aren't packaging py-nickel anyway
     "--workspace"
     "--exclude=py-nickel"
-  ];
-
-  checkFlags = [
-    # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
-    # fails because src is not a git repo
-    # `cmd.current_dir(repo.path()).output()` errors with `NotFound`
-    "--skip=fetch_targets"
   ];
 
   postInstall = ''

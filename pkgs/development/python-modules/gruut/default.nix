@@ -109,6 +109,6 @@ buildPythonPackage rec {
     mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

@@ -6,24 +6,24 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
+  libX11,
   SDL2,
 }:
 
 buildDotnetModule rec {
   pname = "mesen";
-  version = "2.0.0-unstable-2024-12-25";
+  version = "2.0.0-unstable-2025-04-01";
 
   src = fetchFromGitHub {
     owner = "SourMesen";
     repo = "Mesen2";
-    rev = "6820db37933002089a04d356d8469481e915a359";
-    hash = "sha256-TzGMZr351XvVj/wARWJxRisRb5JlkyzdjCVYbwydBVE=";
+    rev = "0dfdbbdd9b5bc4c5d501ea691116019266651aff";
+    hash = "sha256-+Jzw1tfdiX2EmQIoPuMtLmJrv9nx/XqfyLEBW+AXj1I=";
   };
 
   patches = [
-    # the nightly avalonia repository url is still queried, which errors out
-    # even if we don't actually need any nightly versions
-    ./dont-use-alternative-restore-sources.patch
+    # patch out the usage of nightly avalonia builds, since we can't use alternative restore sources
+    ./dont-use-nightly-avalonia.patch
     # upstream has a weird library loading mechanism, which we override with a more sane alternative
     ./dont-zip-libraries.patch
   ];
@@ -60,7 +60,7 @@ buildDotnetModule rec {
 
     nativeBuildInputs = [ SDL2 ];
 
-    buildInputs = [ SDL2 ];
+    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libX11 ];
 
     makeFlags = [ "core" ];
 

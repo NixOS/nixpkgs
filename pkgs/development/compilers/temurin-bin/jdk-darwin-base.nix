@@ -81,7 +81,8 @@ let
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
+      maintainers = with maintainers; [ taku0 ];
+      teams = [ teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

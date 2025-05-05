@@ -23,6 +23,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://deployer.org/";
     license = lib.licenses.mit;
     mainProgram = "dep";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

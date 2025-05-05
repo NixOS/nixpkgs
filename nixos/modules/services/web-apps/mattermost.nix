@@ -41,9 +41,15 @@ let
   # The directory to store mutable data within dataDir.
   mutableDataDir = "${cfg.dataDir}/data";
 
-  # The plugin directory. Note that this is the *post-unpack* plugin directory,
-  # since Mattermost unpacks plugins to put them there. (Hence, mutable data.)
-  pluginDir = "${mutableDataDir}/plugins";
+  # The plugin directory. Note that this is the *pre-unpack* plugin directory,
+  # since Mattermost looks in mutableDataDir for a directory called "plugins".
+  # If Mattermost is installed with plugins defined in a Nix configuration, the plugins
+  # are symlinked here. Otherwise, this is a real directory and the tarballs are uploaded here.
+  pluginTarballDir = "${mutableDataDir}/plugins";
+
+  # We need a different unpack directory for Mattermost to sync things to at launch,
+  # since the above may be a symlink to the store.
+  pluginUnpackDir = "${mutableDataDir}/.plugins";
 
   # Mattermost uses this as a staging directory to unpack plugins, among possibly other things.
   # Ensure that it's inside mutableDataDir since it can get rather large.
@@ -232,9 +238,12 @@ let
           services.mattermost.environmentFile = "<your environment file>";
           services.mattermost.database.fromEnvironment = true;
         '' database;
-    FileSettings.Directory = cfg.dataDir;
-    PluginSettings.Directory = "${pluginDir}/server";
-    PluginSettings.ClientDirectory = "${pluginDir}/client";
+
+    # Note that the plugin tarball directory is not configurable, and is expected to be in FileSettings.Directory/plugins.
+    FileSettings.Directory = mutableDataDir;
+    PluginSettings.Directory = "${pluginUnpackDir}/server";
+    PluginSettings.ClientDirectory = "${pluginUnpackDir}/client";
+
     LogSettings = {
       FileLocation = cfg.logDir;
 
@@ -800,9 +809,9 @@ in
           "R- ${tempDir} - - - - -"
           "d= ${tempDir} 0750 ${cfg.user} ${cfg.group} - -"
 
-          # Ensure that pluginDir is a directory, as it could be a symlink on prior versions.
+          # Ensure that pluginUnpackDir is a directory.
           # Don't remove or clean it out since it should be persistent, as this is where plugins are unpacked.
-          "d= ${pluginDir} 0750 ${cfg.user} ${cfg.group} - -"
+          "d= ${pluginUnpackDir} 0750 ${cfg.user} ${cfg.group} - -"
 
           # Ensure that the plugin directories exist.
           "d= ${mattermostConf.PluginSettings.Directory} 0750 ${cfg.user} ${cfg.group} - -"
@@ -819,11 +828,11 @@ in
           if cfg.pluginsBundle == null then
             # Create the plugin tarball directory to allow plugin uploads.
             [
-              "d= ${cfg.dataDir}/plugins 0750 ${cfg.user} ${cfg.group} - -"
+              "d= ${pluginTarballDir} 0750 ${cfg.user} ${cfg.group} - -"
             ]
           else
             # Symlink the plugin tarball directory, removing anything existing, since it's managed by Nix.
-            [ "L+ ${cfg.dataDir}/plugins - - - - ${cfg.pluginsBundle}" ]
+            [ "L+ ${pluginTarballDir} - - - - ${cfg.pluginsBundle}" ]
         );
 
       systemd.services.mattermost = rec {
@@ -867,12 +876,13 @@ in
             # Logs too.
             oldLogs="$dataDir/logs"
             newLogs="$logDir"
-            if [ "$oldLogs" != "$newLogs" ] && [ -d "$oldLogs" ]; then
+            if [ "$oldLogs" != "$newLogs" ] && [ -d "$oldLogs" ] && [ ! -f "$newLogs/.initial-created" ]; then
               # Migrate the legacy log location to the new log location.
               # Allow this to fail if there aren't any logs to move.
               echo "Moving legacy logs at $oldLogs to $newLogs" >&2
               mkdir -p "$newLogs"
               mv "$oldLogs"/* "$newLogs" || true
+              touch "$newLogs/.initial-created"
             fi
           ''
           + optionalString (!cfg.mutableConfig) ''

@@ -49,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rocm-smi";
     homepage = "https://github.com/ROCm/rocm_smi_lib";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = [ "x86_64-linux" ];
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

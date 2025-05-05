@@ -28,7 +28,6 @@
   freetype,
   gst_all_1,
   harfbuzz,
-  libcxx,
   libGL,
   libunwind,
   libxkbcommon,
@@ -62,13 +61,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-04-18";
+  version = "0-unstable-2025-04-27";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "2ee8427665099987f715296d4d55b6388a480c08";
-    hash = "sha256-fAUTBfoFGZqdZylXvY7h+0Ol0xd1CDNyJxx3rlhI7ss=";
+    rev = "e22ce3988b5962c254857419afbf36cced9648aa";
+    hash = "sha256-shhvxwnhQXMVtXufd4IE8aeUeDm84MLpVktMkodFmeg=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -79,7 +78,7 @@ rustPlatform.buildRustPackage {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-hGLSGbT4089R7BP4pkIQL/YNQlVfIDqW9sUJv+yCUv8=";
+  cargoHash = "sha256-TUhxQFuRINNHEfnnIKejMP6/j3K7t0y9bovcT/l6SZU=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -131,10 +130,9 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
-      libcxx
     ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries

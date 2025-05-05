@@ -8,13 +8,13 @@
 
 buildGoModule {
   pname = "zoekt";
-  version = "3.7.2-2-unstable-2025-04-15";
+  version = "3.7.2-2-unstable-2025-04-22";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "zoekt";
-    rev = "0978c13fb6683be9908ee1a578360734e61cc8b5";
-    hash = "sha256-1Ris2GsZnHHrxvXxOCRSPvvk35YEhqDxNHkd7cjv0YY=";
+    rev = "45c1f08d3942c955f2ef0934518aafca5238df28";
+    hash = "sha256-Iy+5Of6Y4phATJrb3Hd8m9N9iDPkOA8Hgkyrir5x+Hg=";
   };
 
   vendorHash = "sha256-B45Q9G+p/idqqz45lLQQuDGLwAzhKuo9Ev+cISGbKUo=";

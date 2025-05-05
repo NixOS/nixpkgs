@@ -17,9 +17,7 @@
   bison,
   autoconf,
   libiconv,
-  libobjc,
   libunwind,
-  Foundation,
   buildEnv,
   bundler,
   bundix,
@@ -121,9 +119,7 @@ let
           bundler,
           bundix,
           libiconv,
-          libobjc,
           libunwind,
-          Foundation,
           makeBinaryWrapper,
           buildRubyGem,
           defaultGemConfig,
@@ -185,9 +181,7 @@ let
             ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
             ++ ops stdenv.hostPlatform.isDarwin [
               libiconv
-              libobjc
               libunwind
-              Foundation
             ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
@@ -435,8 +429,8 @@ in
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "7" "";
-    hash = "sha256-nDfDsSKIx67CDKEhznaEW+W7XXdmKiSRllGq8dEshig=";
+    version = rubyVersion "3" "3" "8" "";
+    hash = "sha256-WuKKh6WaPkrWa8KTHSMturlT0KqPa687xPj4CXfInKs=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 

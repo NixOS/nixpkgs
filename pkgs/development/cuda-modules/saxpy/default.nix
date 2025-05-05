@@ -62,7 +62,7 @@ backendStdenv.mkDerivation {
   meta = rec {
     description = "Simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
     license = lib.licenses.mit;
-    maintainers = lib.teams.cuda.members;
+    teams = [ lib.teams.cuda ];
     mainProgram = "saxpy";
     platforms = lib.platforms.unix;
     badPlatforms = lib.optionals (flags.isJetsonBuild && cudaOlder "11.4") platforms;

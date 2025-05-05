@@ -683,9 +683,10 @@ mapAliases ({
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
-  inherit (super.pkgs) ruff-lsp; # added 2023-06-23
+  ruff-lsp = throw "ruff-lsp has been deprecated, use `ruff server` instead"; # added 2025-04-21
   runway-python = throw "SDK has been deprecated and was archived by upstream"; # added 2023-05-03
   safe = throw "safe has been removed, it was unmaintained sinced October 2019"; # added 2024-07-28
+  sabyenc = throw "sabyenc has been removed, due to no updates since June 2019 and being superseded by sabyenc3"; # added 2025-05-03
   sampledata = throw "sampledata has been removed, it was unmaintained since 2017"; # added 2024-07-27
   sapi-python-client = kbcstorage; # added 2022-04-20
   scikitimage = scikit-image; # added 2023-05-14
@@ -694,6 +695,7 @@ mapAliases ({
   scikits-samplerate = throw "scikits-samplerate has been removed, it was unsed and unmaintained since 2015"; # added 2024-05-23
   selectors2 = throw "selectors2 has been removed: archived by upstream."; # added 2024-07-27
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
+  sentry-sdk_2 = sentry-sdk; # added 2025-04-20
   sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
   setuptools_dso = setuptools-dso; # added 2024-03-03
   setuptools_scm = setuptools-scm; # added 2021-06-03
@@ -771,6 +773,7 @@ mapAliases ({
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
+  unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   update_checker = update-checker; # added 2024-01-07
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13

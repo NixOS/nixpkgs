@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 })

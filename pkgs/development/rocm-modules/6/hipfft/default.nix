@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FFT marshalling library";
     homepage = "https://github.com/ROCm/hipFFT";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

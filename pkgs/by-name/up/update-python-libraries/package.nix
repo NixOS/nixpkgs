@@ -1,4 +1,5 @@
 {
+  lib,
   python3,
   runCommand,
   git,
@@ -9,8 +10,6 @@
 runCommand "update-python-libraries"
   {
     buildInputs = [
-      nix
-      nix-prefetch-git
       (python3.withPackages (
         ps: with ps; [
           packaging
@@ -18,11 +17,14 @@ runCommand "update-python-libraries"
           toolz
         ]
       ))
-      git
     ];
   }
   ''
     cp ${./update-python-libraries.py} $out
     patchShebangs $out
-    substituteInPlace $out --replace 'GIT = "git"' 'GIT = "${git}/bin/git"'
+    substituteInPlace $out \
+      --replace-fail 'NIX = "nix"' 'NIX = "${lib.getExe nix}"' \
+      --replace-fail 'NIX_PREFETCH_URL = "nix-prefetch-url"' 'NIX_PREFETCH_URL = "${lib.getExe' nix "nix-prefetch-url"}"' \
+      --replace-fail 'NIX_PREFETCH_GIT = "nix-prefetch-git"' 'NIX_PREFETCH_GIT = "${lib.getExe nix-prefetch-git}"' \
+      --replace-fail 'GIT = "git"' 'GIT = "${lib.getExe git}"'
   ''

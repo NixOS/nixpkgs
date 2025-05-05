@@ -15,7 +15,6 @@
   fetchurl,
   file,
   python3,
-  darwin,
   cargo,
   cmake,
   rustc,
@@ -51,7 +50,6 @@ let
     optionalString
     concatStringsSep
     ;
-  inherit (darwin.apple_sdk.frameworks) Security;
   useLLVM = stdenv.targetPlatform.useLLVM or false;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -349,7 +347,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ openssl ]
     ++ optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
       zlib
     ]
     ++ optional (!withBundledLLVM) llvmShared.lib
@@ -412,7 +409,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
+    maintainers = with maintainers; [ havvy ];
+    teams = [ teams.rust ];
     license = [
       licenses.mit
       licenses.asl20

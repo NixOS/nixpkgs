@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
   xorg,
 }:
 
@@ -21,13 +20,9 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-/AnzUaya+dgckcilxj9ZZbDNqmfj1uTWkzhVphpZIsM=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libxcb
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libxcb
+  ];
 
   checkFlags = [
     # skip flaky test

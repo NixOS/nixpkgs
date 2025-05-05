@@ -1,0 +1,57 @@
+diff --git a/safety/cli.py b/safety/cli.py
+index 4d1f0c5..db4d930 100644
+--- a/safety/cli.py
++++ b/safety/cli.py
+@@ -228,7 +228,7 @@ def configure_logger(ctx, param, debug):
+ @proxy_options
+ @click.option(
+     "--disable-optional-telemetry",
+-    default=False,
++    default=True,
+     is_flag=True,
+     show_default=True,
+     help=CLI_DISABLE_OPTIONAL_TELEMETRY_DATA_HELP,
+diff --git a/safety/safety.py b/safety/safety.py
+index e41f5ae..7d29a50 100644
+--- a/safety/safety.py
++++ b/safety/safety.py
+@@ -143,7 +143,7 @@ def fetch_database_url(
+     mirror: str,
+     db_name: str,
+     cached: int,
+-    telemetry: bool = True,
++    telemetry: bool = False,
+     ecosystem: Ecosystem = Ecosystem.PYTHON,
+     from_cache: bool = True
+ ) -> Dict[str, Any]:
+diff --git a/safety/scan/finder/handlers.py b/safety/scan/finder/handlers.py
+index 80a3db6..61a10cc 100644
+--- a/safety/scan/finder/handlers.py
++++ b/safety/scan/finder/handlers.py
+@@ -91,11 +91,11 @@ class PythonFileHandler(FileHandler):
+ 
+         # Fetch both the full and partial Safety databases
+         fetch_database(session=session, full=False, db=db, cached=True,
+-                       telemetry=True, ecosystem=Ecosystem.PYTHON,
++                       telemetry=False, ecosystem=Ecosystem.PYTHON,
+                        from_cache=False)
+ 
+         fetch_database(session=session, full=True, db=db, cached=True,
+-                                telemetry=True, ecosystem=Ecosystem.PYTHON,
++                                telemetry=False, ecosystem=Ecosystem.PYTHON,
+                                 from_cache=False)
+ 
+ 
+diff --git a/safety/util.py b/safety/util.py
+index 2a02236..5feef8d 100644
+--- a/safety/util.py
++++ b/safety/util.py
+@@ -351,7 +351,7 @@ def filter_announcements(
+ 
+ 
+ def build_telemetry_data(
+-    telemetry: bool = True,
++    telemetry: bool = False,
+     command: Optional[str] = None,
+     subcommand: Optional[str] = None,
+ ) -> TelemetryModel:

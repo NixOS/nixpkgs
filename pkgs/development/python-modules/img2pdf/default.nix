@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitea,
   fetchpatch,
@@ -10,7 +11,6 @@
   pillow,
   stdenv,
   exiftool,
-  ghostscript,
   imagemagick,
   mupdf-headless,
   netpbm,
@@ -67,7 +67,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     exiftool
-    ghostscript
+    pkgs.ghostscript
     imagemagick
     mupdf-headless
     netpbm

@@ -9,30 +9,41 @@
 }:
 let
   pname = "beeper";
-  version = "4.0.623";
+  version = "4.0.661";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}.AppImage";
-    hash = "sha256-K043RQ5BoS1ysnmY+LpRixBmMx2XCbRzhWnWsxg26dg=";
+    hash = "sha256-cKeHttoaV+UN5LXUArUxEcMjj3a4kjcj0EuiDriTtyE=";
   };
   appimageContents = appimageTools.extract {
-    inherit version pname src;
+    inherit pname version src;
+
+    postExtract = ''
+      # disable creating a desktop file and icon in the home folder during runtime
+      linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
+      echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
+
+      # disable auto update
+      sed -i 's/[^=]*\.auto_update_disabled/true/' $out/resources/app/build/main/main-entry-*.mjs
+
+      # prevent updates
+      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
+
+      # hide version status element on about page otherwise a error message is shown
+      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/PrefsPanes-*.css
+    '';
   };
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
+appimageTools.wrapAppImage {
+  inherit pname version;
+
+  src = appimageContents;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
-
-  postExtract = ''
-    # disable creating a desktop file and icon in the home folder during runtime
-    linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
-    echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
-    substituteInPlace $out/beepertexts.desktop --replace-fail "AppRun" "beeper"
-  '';
 
   extraInstallCommands = ''
     install -Dm 644 ${appimageContents}/beepertexts.png $out/share/icons/hicolor/512x512/apps/beepertexts.png
     install -Dm 644 ${appimageContents}/beepertexts.desktop -t $out/share/applications/
+    substituteInPlace $out/share/applications/beepertexts.desktop --replace-fail "AppRun" "beeper"
 
     . ${makeWrapper}/nix-support/setup-hook
     wrapProgram $out/bin/beeper \
@@ -50,10 +61,13 @@ appimageTools.wrapType2 {
       text = ''
         set -o errexit
         latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
-        version="$(echo "$latestLinux" |  grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
+        version="$(echo "$latestLinux" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
         update-source-version beeper "$version"
       '';
     });
+
+    # needed for nix-update
+    inherit src;
   };
 
   meta = with lib; {

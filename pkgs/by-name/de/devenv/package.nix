@@ -19,14 +19,14 @@ let
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "f3f44b2baaf6c4c6e179de8cbb1cc6db031083cd";
-      hash = "sha256-E3j+3MoY8Y96mG1dUIiLFm2tZmNbRvSiyN7CrSKuAVg=";
+      rev = "b455edf3505f1bf0172b39a735caef94687d0d9c";
+      hash = "sha256-bYyjarS3qSNqxfgc89IoVz8cAFDkF9yPE63EJr+h50s=";
     };
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.5.2";
+  version = "1.6";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-rXtUUxfQ34ukTy2OyHwuypnSgK95FRPGwJf69QnWMrc=";
+    hash = "sha256-ui6UwatBHN2WFvStGUHVOdBu72MsG/7b0GeyRdTCyEw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oiOh8m7MypViLbzy/13NpSiOwkfRwybUpDs91f+HbGA=";
+  cargoHash = "sha256-XS6F/Sp5peJdzAormYPjAA4SJfusMH6PRYIM3Tw5AUw=";
 
   buildAndTestSubdir = "devenv";
 

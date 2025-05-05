@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ckProfiler";
     homepage = "https://github.com/ROCm/composable_kernel";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

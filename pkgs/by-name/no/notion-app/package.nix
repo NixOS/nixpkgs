@@ -5,9 +5,7 @@
   unzip,
 }:
 let
-  info =
-    (builtins.fromJSON (builtins.readFile ./info.json))."${stdenvNoCC.targetPlatform.system}"
-      or (throw "notion-app: unsupported system ${stdenvNoCC.targetPlatform.system}");
+  info = (lib.importJSON ./info.json)."${stdenvNoCC.hostPlatform.parsed.cpu.name}-darwin";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "notion-app";

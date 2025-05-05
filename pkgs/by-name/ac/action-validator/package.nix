@@ -2,22 +2,28 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "action-validator";
-  version = "0.6.0";
+  version = "0.6.0-unstable-2025-02-16";
 
   src = fetchFromGitHub {
     owner = "mpalmer";
     repo = "action-validator";
-    rev = "v${version}";
-    hash = "sha256-lJHGx/GFddIwVVXRj75Z/l5CH/yuw/uIhr02Qkjruww=";
+    rev = "2f8be1d2066eb3687496a156d00b4f1b3ea7b028";
+    hash = "sha256-QDnikgAfkrvn7/vnmgTQ5J8Ro2HZ6SVkp9cPUYgejqM=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-dy66ZkU9lIYGe9T3oR8m5cGcBQO5MF1KsLjfaHTtvlY=";
+  cargoHash = "sha256-FuJ5NzeZhfN312wK5Q1DgIXUAN6hqxu/1BhGqasbdS8=";
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    branch = "main";
+  };
 
   meta = with lib; {
     description = "Tool to validate GitHub Action and Workflow YAML files";

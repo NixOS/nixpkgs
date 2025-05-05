@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   sourceRoot = "${src.name}/src";
 
   pythonRelaxDeps = [
+    "rich"
     "setuptools"
     "tenacity"
   ];

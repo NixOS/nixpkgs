@@ -6,16 +6,15 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.14";
+  version = "1.3.16";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FmQS8DqjgOyfEth8tpUlJoduo6rAv28PwLGv90J3rcM=";
+    hash = "sha256-aLx/HDrnGTgcRZFs5kiiz173yi/RnARERDKIq+p4OJw=";
   };
 
   nativeBuildInputs = [
@@ -28,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     buildInputs = [ nodejs_22 ];
 
-    hash = "sha256-I+zRCUqJabpGJRFBGW0NrM9xzyzeCjioF54zlCpynBU=";
+    hash = "sha256-Z/OypVPARLrSfvp9U2sPdgv194nj/f2VBxcxwtvaU5Q=";
   };
 
   env = {
     NODE_ENV = "production";
     MOONLIGHT_BRANCH = "stable";
-    MOONLIGHT_VERSION = "v${finalAttrs.version}";
+    MOONLIGHT_VERSION = "v${finalAttrs.version} (nixpkgs)";
   };
 
   patches = [

@@ -2102,6 +2102,14 @@ Note this method is preferred over adding parameters to builders, as that can
 result in packages depending on different variants and thereby causing
 collisions.
 
+::: {.note}
+The `optional-dependencies` attribute should only be used for dependency groups
+as defined in package metadata. If a package gracefully handles missing
+dependencies in runtime but doesn't advertise it through package metadata, then
+these dependencies should not be listed at all. (One may still have to list
+them in `nativeCheckInputs` to pass test suite.)
+:::
+
 ### How to contribute a Python package to nixpkgs? {#tools}
 
 Packages inside nixpkgs must use the [`buildPythonPackage`](#buildpythonpackage-function) or [`buildPythonApplication`](#buildpythonapplication-function) function directly,
@@ -2135,8 +2143,9 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 #### Common issues {#common-issues}
 
-* Tests that attempt to access `$HOME` can be fixed by using the following
-  work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+* Tests that attempt to access `$HOME` can be fixed by using `writableTmpDirAsHomeHook` in
+  `nativeCheckInputs`, which sets up a writable temporary directory as the home directory. Alternatively,
+  you can achieve the same effect manually (e.g. in `preCheck`) with: `export HOME=$(mktemp -d)`.
 * Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
   This can be fixed with two changes in the derivation: 1) replacing `pytest` with
   `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run
@@ -2187,6 +2196,9 @@ The following rules are desired to be respected:
   and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+* Non-python runtime dependencies should be added via explicit wrapping or
+  patching (using e.g. `substituteInPlace`), rather than through propagation via
+  `dependencies`/`propagatedBuildInputs`, to reduce clutter in `$PATH`.
 
 This list is useful for reviewers as well as for self-checking when submitting packages.
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "prometheus-api-client";
-  version = "0.5.7";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "4n4nd";
     repo = "prometheus-api-client-python";
     tag = "v${version}";
-    hash = "sha256-XmsBEGerEA7kEigkVpDYpe1UfEKvEzV/0uY3sffRC7s=";
+    hash = "sha256-Xi3n1Ha6bpfp4KfCh/Zky7bBrXOojuR6BVzPNQ3a18Y=";
   };
 
   build-system = [ setuptools ];

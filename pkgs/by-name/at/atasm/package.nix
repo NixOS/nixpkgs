@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "atasm";
-  version = "1.26";
+  version = "1.28";
 
   src = fetchFromGitHub {
     owner = "CycoPH";
     repo = "atasm";
     rev = "V${version}";
-    hash = "sha256-W9I1Wf2IVBy2l+jyrAOmlpO59uZM1SkBLuNcu2fXI1M=";
+    hash = "sha256-9hDY+DQ2qA6zgVMCfvXW7QErH+eL1TKya4PpQ3vHQLQ=";
   };
 
   makefile = "Makefile";

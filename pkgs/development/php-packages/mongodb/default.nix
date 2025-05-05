@@ -11,7 +11,6 @@
   openssl,
   snappy,
   zlib,
-  darwin,
 }:
 
 buildPecl rec {
@@ -37,8 +36,6 @@ buildPecl rec {
       pcre2
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.Libsystem
       libiconv
     ];
 
@@ -46,6 +43,6 @@ buildPecl rec {
     description = "Official MongoDB PHP driver";
     homepage = "https://github.com/mongodb/mongo-php-driver";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

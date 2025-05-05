@@ -9,7 +9,7 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.15-beta";
+  version = "0.9.16-beta";
 in
 flutter.buildFlutterApplication {
   inherit version;
@@ -18,7 +18,7 @@ flutter.buildFlutterApplication {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-ekCdHU9z8nxcIFz3oN0txlIKWAwhMV8Q5/t5QYvbzCc=";
+    hash = "sha256-AmxQyDV0AiS2qzAsrgBm0SqH0CaLi3W1A3gcsk65dj0=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -30,7 +30,7 @@ flutter.buildFlutterApplication {
 
   gitHashes = {
     balanced_text = "sha256-lSDR5dDjZ4garRbBPI+wSxC5iScg8wVSD5kymmLbYbk=";
-    isar_generator = "sha256-lWnHmZmYx7qDG6mzyDqYt+Xude2xVOH1VW+BoDCas60=";
+    isar_generator = "sha256-EthUFM+YI3bnM0U0sECoNOCRXpo4qjP71VXYBuO/u+I=";
     media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
     palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
     split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
@@ -43,12 +43,13 @@ flutter.buildFlutterApplication {
   '';
 
   postInstall = ''
-    install -Dm644 $src/assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
+    install -Dm444 assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
+    install -Dm444 assets/com.unicornsonlsd.finamp.metainfo.xml -t $out/share/metainfo
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Finamp";
+      name = "com.unicornsonlsd.finamp";
       desktopName = "Finamp";
       genericName = "Music Player";
       exec = "finamp";

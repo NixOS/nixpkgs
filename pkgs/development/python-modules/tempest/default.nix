@@ -98,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openstack/tempest";
     license = licenses.asl20;
     mainProgram = "tempest";
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

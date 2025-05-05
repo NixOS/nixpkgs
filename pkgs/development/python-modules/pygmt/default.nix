@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = lib.licenses.bsd3;
     changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${src.tag}";
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

@@ -8,7 +8,7 @@
   libX11,
   libXt,
   libGL,
-  openimageio,
+  openimageio_2,
   imath,
   python,
   apple-sdk_14,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [
-      openimageio
+      openimageio_2
       imath
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

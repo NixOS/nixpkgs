@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm source-level debugger for Linux, based on GDB";
     homepage = "https://github.com/ROCm/ROCgdb";
     license = licenses.gpl3Plus;
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

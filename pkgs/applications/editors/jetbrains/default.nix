@@ -55,7 +55,8 @@ let
       + lib.optionalString meta.isOpenSource (
         if fromSource then " (built from source)" else " (patched binaries from jetbrains)"
       );
-    maintainers = lib.teams.jetbrains.members ++ map (x: lib.maintainers."${x}") meta.maintainers;
+    maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
+    teams = [ lib.teams.jetbrains ];
     license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
     sourceProvenance =
       if fromSource then

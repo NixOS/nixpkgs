@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm SPARSE implementation";
     homepage = "https://github.com/ROCm/rocSPARSE";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

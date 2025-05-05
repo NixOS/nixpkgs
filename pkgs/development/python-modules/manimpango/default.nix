@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pkg-config,
   setuptools,
   pango,
   cython,
-  AppKit,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -29,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = [ pango ];
 
   build-system = [
     setuptools

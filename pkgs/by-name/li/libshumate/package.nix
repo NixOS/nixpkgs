@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "shumate-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libshumate";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 })

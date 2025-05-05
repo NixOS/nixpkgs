@@ -79,6 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
     changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

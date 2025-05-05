@@ -498,7 +498,8 @@ with self;
 
   core_unix = janePackage {
     pname = "core_unix";
-    hash = "sha256-eqBMiEJ5xUrgFJTMZoEDxqkhedQxxbbf0DedZKHprww=";
+    version = "0.17.1";
+    hash = "sha256-xJoBW6TBBnzR5n38E5LHBFYO2CRIsME7OTdEZKn8EqU=";
     meta.description = "Unix-specific portions of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [
@@ -514,12 +515,6 @@ with self;
     '';
     doCheck = false; # command_validate_parsing.exe is not specified in test build deps
 
-    # Compatibility with OCaml 5.3
-    patches = lib.optional (lib.versionAtLeast ocaml.version "5.3") (fetchpatch {
-      url = "https://github.com/janestreet/core_unix/commit/ebce389ac68e098f542e34400e114ac992f415af.patch";
-      includes = [ "bigstring_unix/src/bigstring_unix_stubs.c" ];
-      hash = "sha256-FGg2zlyp3aZFu1VeFdm7pgSPiW0HAkLYgMGTj+tqju8=";
-    });
   };
 
   csvfields = janePackage {

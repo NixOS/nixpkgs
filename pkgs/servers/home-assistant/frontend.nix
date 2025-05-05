@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Frontend for Home Assistant";
     homepage = "https://github.com/home-assistant/frontend";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

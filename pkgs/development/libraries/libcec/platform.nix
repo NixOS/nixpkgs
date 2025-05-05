@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Pulse-Eight/platform";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -32,18 +32,18 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "q2pro";
-  version = "0-unstable-2025-04-03";
+  version = "0-unstable-2025-04-27";
 
   src = fetchFromGitHub {
     owner = "skullernet";
     repo = "q2pro";
-    rev = "0e00beedaa892fd5f6e50d33231978846ab2d5de";
-    hash = "sha256-xw09M7EtXJ7i6myj/Em0Rtg5CmZtpbyRWmkPhCApu7I=";
+    rev = "9d3b9d1628a0fcd17eb1cf8bb65cff6d917c9a25";
+    hash = "sha256-MyEAoBEASfB4MQdVTu6O8YcZCUWtuIijN34dpwsELPs=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "3749"; # git rev-list --count ${src.rev}
-  SOURCE_DATE_EPOCH = "1743706497"; # git show -s --format=%ct ${src.rev}
+  revCount = "3812"; # git rev-list --count ${src.rev}
+  SOURCE_DATE_EPOCH = "1745703870"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs =
     [
