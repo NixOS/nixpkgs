@@ -131,7 +131,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ./tests.nix { };
+  passthru.tests = callPackage ../tests { };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
