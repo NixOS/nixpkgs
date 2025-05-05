@@ -54,7 +54,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.4.1";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-N8tFD1tl1Vnn0nrQEWdE/vuJHbuSguRYg+oH7QH1m48=";
+    hash = "sha256-DdHS4VynQzabKGcQZdgpTqiiT8HREwq5cEVoiQS4GzM=";
   };
 
   build-system = [
@@ -117,6 +117,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "black"
+    "rich"
     "psutil"
   ];
 
