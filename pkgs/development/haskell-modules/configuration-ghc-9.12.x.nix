@@ -90,7 +90,7 @@ with haskellLib;
   ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
   ghc-lib = doDistribute self.ghc-lib_9_12_2_20250320;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250320;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250421;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
   hlint = doDistribute self.hlint_3_10;
   fourmolu = doDistribute self.fourmolu_0_18_0_0;
