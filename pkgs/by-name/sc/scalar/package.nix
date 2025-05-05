@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "https://scalar.com";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    mainProgram = pname;
+    mainProgram = "scalar";
     maintainers = with lib.maintainers; [ redyf ];
   };
 }
