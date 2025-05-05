@@ -6274,6 +6274,13 @@ self: super: with self; {
 
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
+  highctidh = toPythonModule (
+    pkgs.highctidh.override {
+      python3Packages = self;
+      package = "python-module";
+    }
+  );
+
   highdicom = callPackage ../development/python-modules/highdicom { };
 
   highspy = callPackage ../development/python-modules/highspy { };
@@ -12763,6 +12770,8 @@ self: super: with self; {
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
 
+  pymonocypher = callPackage ../development/python-modules/pymonocypher { };
+
   pymoo = callPackage ../development/python-modules/pymoo { };
 
   pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
@@ -14933,6 +14942,8 @@ self: super: with self; {
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
+
+  rendez = callPackage ../development/python-modules/rendez { };
 
   reno = callPackage ../development/python-modules/reno { };
 
