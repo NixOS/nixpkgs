@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keychain";
-  version = "2.8.5";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "funtoo";
     repo = "keychain";
     rev = version;
-    sha256 = "1bkjlg0a2bbdjhwp37ci1rwikvrl4s3xlbf2jq2z4azc96dr83mj";
+    sha256 = "sha256-NbZMVhkI5h/BeY58OdllH4faKR36cRWN+yeqUaatlaE=";
   };
 
   nativeBuildInputs = [
