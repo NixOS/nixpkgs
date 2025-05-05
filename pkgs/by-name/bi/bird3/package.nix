@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bird";
-  version = "3.1.0";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "https://bird.network.cz/download/bird-${version}.tar.gz";
-    hash = "sha256-xxY49Xb0MWcEN++dkL6lZZK8VjcB3nhpg/RCJk7Hdiw=";
+    hash = "sha256-eKqL5820LfFLnilpu2Q7IoxoBMZXj5CTsXPOiiQ3zDA=";
   };
 
   nativeBuildInputs = [

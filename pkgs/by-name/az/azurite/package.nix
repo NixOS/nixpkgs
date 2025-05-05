@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "azurite";
-  version = "3.33.0";
+  version = "3.34.0";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "Azurite";
     rev = "v${version}";
-    hash = "sha256-aH9FAT49y4k87lzerQdgLqi+ZlucORQX4w1NBFtEfMw=";
+    hash = "sha256-6NECduq2ewed8bR4rlF5MW8mGcsgu8bqgA/DBt8ywtM=";
   };
 
-  npmDepsHash = "sha256-jfa04iWz0aOiFD1YkXn5YEXqQcrY+rIDbVmmUaA5sYc=";
+  npmDepsHash = "sha256-WRaD99CsIuH3BrO01eVuoEZo40VjuScnVzmlFcKpj8g=";
 
   nativeBuildInputs = [
     pkg-config
