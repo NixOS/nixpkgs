@@ -19,6 +19,7 @@
   cookiecutter,
   dataclasses-json,
   deprecated,
+  fastapi-github-oidc,
   freetype-py,
   gitpython,
   kicadcliwrapper,
@@ -26,7 +27,6 @@
   more-itertools,
   natsort,
   numpy,
-  pandas,
   pathvalidate,
   pint,
   posthog,
@@ -34,6 +34,7 @@
   pydantic-settings,
   pygls,
   questionary,
+  requests,
   rich,
   ruamel-yaml,
   ruff,
@@ -53,7 +54,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.3.24";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -62,7 +63,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-erHgjzg+nODEU4WzD3aP3UAv+K59SVEjpDs8VX/RFE0=";
+    hash = "sha256-N8tFD1tl1Vnn0nrQEWdE/vuJHbuSguRYg+oH7QH1m48=";
   };
 
   build-system = [
@@ -88,6 +89,7 @@ buildPythonPackage rec {
     cookiecutter
     dataclasses-json
     deprecated
+    fastapi-github-oidc
     freetype-py
     gitpython
     kicadcliwrapper
@@ -95,7 +97,6 @@ buildPythonPackage rec {
     more-itertools
     natsort
     numpy
-    pandas
     pathvalidate
     pint
     posthog
@@ -103,6 +104,7 @@ buildPythonPackage rec {
     pydantic-settings
     pygls
     questionary
+    requests
     rich
     ruamel-yaml
     ruff
@@ -113,15 +115,9 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  preBuild = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "scikit-build-core==0.9.2" "scikit-build-core>=0.9.2"
-  '';
-
   pythonRelaxDeps = [
     "black"
     "psutil"
-    "posthog"
   ];
 
   pythonImportsCheck = [ "atopile" ];
