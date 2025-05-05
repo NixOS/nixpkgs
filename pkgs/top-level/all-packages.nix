@@ -7851,10 +7851,6 @@ with pkgs;
 
   mkdocs = with python3Packages; toPythonApplication mkdocs;
 
-  mold = callPackage ../by-name/mo/mold/package.nix {
-    tbb = tbb_2021_11;
-  };
-
   mold-wrapped = wrapBintoolsWith {
     bintools = mold;
     extraBuildCommands = ''
