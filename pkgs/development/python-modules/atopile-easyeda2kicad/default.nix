@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "atopile-easyeda2kicad";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "easyeda2kicad.py";
     tag = "v${version}";
-    hash = "sha256-pdP91tWeyQWh9ow02EXA2XIUsaexitX1R/OeyFQJ9vI=";
+    hash = "sha256-TLGLNe/Lk2WpYMzmX2iK3S27/QRqTOdHqO8XIMZSda4=";
   };
 
   build-system = [
