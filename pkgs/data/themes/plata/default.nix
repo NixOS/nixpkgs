@@ -31,14 +31,14 @@
   destructionColor ? null, # Tertiary color for 'destructive' buttons (Default: #F44336 = Red500)
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plata-theme";
   version = "0.9.9";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "1iwvlv9qcrjyfbzab00vjqafmp3vdybz1hi02r6lwbgvwyfyrifk";
   };
 
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.tadfisher ];
   };
-}
+})

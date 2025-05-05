@@ -15,11 +15,11 @@ let
       hash,
       desc,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       inherit pname;
       version = "7.2";
       src = fetchurl {
-        url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
+        url = "https://github.com/subframe7536/Maple-font/releases/download/v${finalAttrs.version}/${pname}.zip";
         inherit hash;
       };
 
@@ -42,7 +42,7 @@ let
         platforms = platforms.all;
         maintainers = with maintainers; [ oluceps ];
       };
-    };
+    });
 
   typeVariants = {
     truetype = {

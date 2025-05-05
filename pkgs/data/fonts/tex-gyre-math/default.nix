@@ -43,7 +43,7 @@ let
     let
       dotless_version = builtins.replaceStrings [ "." ] [ "" ] version;
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       name = "tex-gyre-${variant}-math-${version}";
       inherit version;
 
@@ -54,7 +54,7 @@ let
 
       installPhase = ''
         install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
-        install -m444 -Dt $out/share/doc/${name}    doc/*.txt
+        install -m444 -Dt $out/share/doc/${finalAttrs.name}    doc/*.txt
       '';
 
       outputHashAlgo = "sha256";
@@ -75,6 +75,6 @@ let
         maintainers = with maintainers; [ siddharthist ];
         platforms = platforms.all;
       };
-    };
+    });
 in
 lib.mapAttrs mkVariant variants
