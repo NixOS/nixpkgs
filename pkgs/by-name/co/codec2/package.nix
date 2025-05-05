@@ -6,7 +6,7 @@
   fetchFromGitHub,
   cmake,
   freedvSupport ? false,
-  lpcnetfreedv,
+  LPCNet,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals freedvSupport [
-    lpcnetfreedv
+    LPCNet
   ];
 
   # we need to unset these variables from stdenv here and then set their equivalents in the cmake flags

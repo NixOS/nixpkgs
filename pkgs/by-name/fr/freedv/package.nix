@@ -11,7 +11,7 @@
   libpulseaudio,
   libsamplerate,
   libsndfile,
-  lpcnetfreedv,
+  LPCNet,
   portaudio,
   speexdsp,
   hamlib_4,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     codec2
     libsamplerate
     libsndfile
-    lpcnetfreedv
+    LPCNet
     speexdsp
     hamlib_4
     wxGTK32
