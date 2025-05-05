@@ -60,17 +60,17 @@ module Mergeable
     self.members.each do |member|
       if @@expensive && @@expensive.include?(member)
         # Already computed
-        hash[member] = self[member]
-      elsif self[member] && self[member].is_a?(Mergeable)
+        hash[member] = other[member] || self.send(member)
+      elsif self.send(member) && self.send(member).is_a?(Mergeable)
         # Merge it
-        hash[member] = self[member].merge(other[member])
-      elsif self[member] && self[member].is_a?(Hash)
-        hash[member] = Hash[other[member].map {
-          [_1, self[member][_1] && self[member][_1].is_a?(Mergeable) ? self[member][_1].merge(_2) : _2]
+        hash[member] = self.send(member).merge(other.send(member))
+      elsif self.send(member) && self.send(member).is_a?(Hash)
+        hash[member] = Hash[other.send(member).map {
+          [_1, self.send(member)[_1] && self.send(member)[_1].is_a?(Mergeable) ? self.send(member)[_1].merge(_2) : _2]
         }]
       else
         # Compute it
-        hash[member] = other[member]
+        hash[member] = other.send(member)
       end
     end
     self.class.new(**hash)
@@ -80,6 +80,18 @@ module Mergeable
   def expensive *attrs
     @@expensive ||= Set.new
     attrs.each {@@expensive << _1}
+    self
+  end
+
+  # Materializes this object.
+  def materialize!
+    self.members.each do |name|
+      member = self.send(name)
+      if member.respond_to?(:materialize!)
+        member.materialize!
+      end
+      self[name] = member
+    end
     self
   end
 end
@@ -417,6 +429,9 @@ class DFWithHackVersions < Struct.new(:latest, :versions, keyword_init: true)
         self.versions[df_version.version] = DFWithHackVersion.new(df: df_version, hack: latest_dfhack_version)
       end
     end
+
+    self.materialize!
+    self
   end
 
   # Converts a hash to a DFWithHackVersions.
@@ -488,7 +503,8 @@ class Therapist < Struct.new(:version, :max_df_version, :git, keyword_init: true
     latest = self.class.latest
     self.version = latest.version
     self.max_df_version = latest.max_df_version
-    self.git = nil
+    self.git = latest.git
+    self.materialize!
     self
   end
 
