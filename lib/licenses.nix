@@ -232,6 +232,17 @@ lib.mapAttrs mkLicense (
       fullName = "Lawrence Berkeley National Labs BSD variant license";
     };
 
+    bsd3TheodoreTso = {
+      fullName = "BSD 3 Clause Theodore Tso Variant";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace all references with bsd3
+      # https://tools.spdx.org/app/license_requests/442/
+      # https://github.com/spdx/license-list-XML/issues/2702
+    };
+
     bsdAxisNoDisclaimerUnmodified = {
       fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
       url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
