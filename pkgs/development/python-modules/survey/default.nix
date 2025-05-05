@@ -24,7 +24,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  doCheck = false;
   pythonImportsCheck = [ "survey" ];
 
   meta = with lib; {
