@@ -32,11 +32,13 @@
 
 let
   # TODO: I'll remove this as well, just testing stuff
-  extensions =
-    buildEnv {
-      name = "postgresql-custom";
-      paths = [ postgresql postgresqlPackages.plpython3 ];
-    };
+  extensions = buildEnv {
+    name = "postgresql-custom";
+    paths = [
+      postgresql
+      postgresqlPackages.plpython3
+    ];
+  };
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
@@ -49,46 +51,51 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
   };
 
-  nativeBuildInputs = [ cmake flex libtool pkg-config perl ];
+  nativeBuildInputs = [
+    cmake
+    flex
+    libtool
+    pkg-config
+    perl
+  ];
   propagatedBuildInputs = [
     python3
     python3Packages.build
   ];
-  buildInputs =
-    postgresql.buildInputs ++ [
-      bison
-      boost
-      brotli
-      bzip2
-      doxygen
-      flex
-      git
-      libcap
-      libuv
-      libxml2
-      lld
-      netcat
-      openssl
-      perl
-      python3
-      python3Packages.build
-      readline
-      zlib
-      # TODO: just some hacky tests, remove this later
-      extensions
-    ];
+  buildInputs = postgresql.buildInputs ++ [
+    bison
+    boost
+    brotli
+    bzip2
+    doxygen
+    flex
+    git
+    libcap
+    libuv
+    libxml2
+    lld
+    netcat
+    openssl
+    perl
+    python3
+    python3Packages.build
+    readline
+    zlib
+    # TODO: just some hacky tests, remove this later
+    extensions
+  ];
 
   cmakeFlags = [
-     "-DCMAKE_BUILD_TYPE=Release"
-     "-DNETCAT=${netcat}/bin/nc"
-     "-DOPENSSL_CONFIGURED=1"
-     "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
-     # Can remove this later after hack is deprecated
-     "-DPostgreSQL_EXTENSION_DIR=${extensions}/share/postgresql/extension"
-     "-DPostgreSQL_PACKAGE_LIBRARY_DIR=$out/share/postgresql/extension"
-     "-DPython3_EXECUTABLE=${python3}/bin/python3"
-     "-DPython_EXECUTABLE=${python3}/bin/python3"
-     "-DDOXYGEN_EXECUTABLE=${doxygen}/bin/doxygen"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DNETCAT=${netcat}/bin/nc"
+    "-DOPENSSL_CONFIGURED=1"
+    "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
+    # Can remove this later after hack is deprecated
+    "-DPostgreSQL_EXTENSION_DIR=${extensions}/share/postgresql/extension"
+    "-DPostgreSQL_PACKAGE_LIBRARY_DIR=$out/share/postgresql/extension"
+    "-DPython3_EXECUTABLE=${python3}/bin/python3"
+    "-DPython_EXECUTABLE=${python3}/bin/python3"
+    "-DDOXYGEN_EXECUTABLE=${doxygen}/bin/doxygen"
   ];
 
   enableParallelBuilding = true;
@@ -96,8 +103,8 @@ postgresqlBuildExtension (finalAttrs: {
   # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
   installPhase = ''
     mkdir -p $out/share/postgresql/extension
-    cmake --build . --parallel --target package_extensions
-    cmake --build . --parallel --target install_extensions
+    #cmake --build . --parallel --target package_extensions
+    cmake --build . --target install_extensions
   '';
 
   #passthru.tests.extension = postgresqlTestExtension {
