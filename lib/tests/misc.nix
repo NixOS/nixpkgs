@@ -2958,6 +2958,41 @@ runTests {
     expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
+  testToCommandLine = {
+    expr = cli.toCommandLine cli.gnuOptionFormat {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
+    };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
+  };
+
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
     name = "..foo";
     expected = "foo";
