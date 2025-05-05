@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tHZLKXmuM86A6OpfS3CRRjhFbqj1Q/w1w56msdgLHb0=";
   };
 
+  patches = [
+    # extracted from https://github.com/drowe67/LPCNet/pull/59
+    ./darwin.patch
+  ];
+
   passthru = {
     # Prebuilt neural network model that is needed during the build - can be overwritten
     nnmodel = fetchurl {
