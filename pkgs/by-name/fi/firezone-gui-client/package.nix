@@ -162,5 +162,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-gui-client";
+    platforms = lib.platforms.linux;
   };
 }

@@ -19,28 +19,6 @@ let
 
   skopeoTest = skopeo.override { buildGoModule = buildGo123Module; };
 
-  goarch =
-    platform:
-    {
-      "aarch64" = "arm64";
-      "arm" = "arm";
-      "armv5tel" = "arm";
-      "armv6l" = "arm";
-      "armv7l" = "arm";
-      "i686" = "386";
-      "loongarch64" = "loong64";
-      "mips" = "mips";
-      "mips64el" = "mips64le";
-      "mipsel" = "mipsle";
-      "powerpc64" = "ppc64";
-      "powerpc64le" = "ppc64le";
-      "riscv64" = "riscv64";
-      "s390x" = "s390x";
-      "x86_64" = "amd64";
-      "wasm32" = "wasm";
-    }
-    .${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
-
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
@@ -88,22 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.23.patch
   ];
 
-  GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
+  inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
   # Go will nevertheless build a for host system that we will copy over in
   # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
+  GOHOSTOS = stdenv.buildPlatform.go.GOOS;
+  GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
   CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
 
-  GOARM = toString (
-    lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]
-  );
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
   CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
