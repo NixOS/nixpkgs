@@ -1,0 +1,30 @@
+diff --git a/src/services/log.js b/src/services/log.js
+index 2840c185a..7fb16dd08 100644
+--- a/src/services/log.js
++++ b/src/services/log.js
+@@ -3,9 +3,6 @@ import fs from "fs";
+ import dataDir from "./data_dir.js";
+ import cls from "./cls.js";
+ import { isWindows } from "./utils.js";
+-if (!fs.existsSync(dataDir.LOG_DIR)) {
+-    fs.mkdirSync(dataDir.LOG_DIR, 0o700);
+-}
+ let logFile;
+ const SECOND = 1000;
+ const MINUTE = 60 * SECOND;
+@@ -24,7 +21,6 @@ function initLogFile() {
+     if (logFile) {
+         logFile.end();
+     }
+-    logFile = fs.createWriteStream(path, { flags: "a" });
+ }
+ function checkDate(millisSinceMidnight) {
+     if (millisSinceMidnight >= DAY) {
+@@ -40,7 +36,6 @@ function log(str) {
+     }
+     let millisSinceMidnight = Date.now() - todaysMidnight.getTime();
+     millisSinceMidnight = checkDate(millisSinceMidnight);
+-    logFile.write(`${formatTime(millisSinceMidnight)} ${str}${NEW_LINE}`);
+     console.log(str);
+ }
+ function info(message) {

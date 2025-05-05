@@ -1,0 +1,40 @@
+From 8e96b1e312d473429fbd08bc867376e9932ad42a Mon Sep 17 00:00:00 2001
+From: Carl Smedstad <carl.smedstad@protonmail.com>
+Date: Mon, 30 Dec 2024 19:08:26 +0100
+Subject: [PATCH] Mock socket.shutdown for compatibility with urllib3 >= 2.3
+
+Version 2.3.0 of urllib3 gets the attribute socket.shutdown which
+HTTPretty does no mock. See the following call stack:
+
+    /usr/lib/python3.13/site-packages/requests/sessions.py:602: in get
+        return self.request("GET", url, **kwargs)
+    /usr/lib/python3.13/site-packages/requests/sessions.py:589: in request
+        resp = self.send(prep, **send_kwargs)
+    /usr/lib/python3.13/site-packages/requests/sessions.py:703: in send
+        r = adapter.send(request, **kwargs)
+    /usr/lib/python3.13/site-packages/requests/adapters.py:667: in send
+        resp = conn.urlopen(
+    /usr/lib/python3.13/site-packages/urllib3/connectionpool.py:787: in urlopen
+        response = self._make_request(
+    /usr/lib/python3.13/site-packages/urllib3/connectionpool.py:534: in _make_request
+        response = conn.getresponse()
+    /usr/lib/python3.13/site-packages/urllib3/connection.py:513: in getresponse
+        _shutdown = getattr(self.sock, "shutdown", None)
+---
+ httpretty/core.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/httpretty/core.py b/httpretty/core.py
+index 69686458..de7e091a 100644
+--- a/httpretty/core.py
++++ b/httpretty/core.py
+@@ -861,6 +861,9 @@ def recv_into(self, *args, **kwargs):
+         def recvfrom(self, *args, **kwargs):
+             return self.forward_and_trace('recvfrom', *args, **kwargs)
+ 
++        def shutdown(self, *args, **kwargs):
++            return self.forward_and_trace('shutdown', *args, **kwargs)
++
+         def recv(self, buffersize=0, *args, **kwargs):
+             if not self._read_buf:
+                 self._read_buf = io.BytesIO()

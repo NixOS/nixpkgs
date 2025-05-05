@@ -1,0 +1,13 @@
+See https://postgr.es/m/eb249761-56e2-4e42-a2c5-b9ae18c1ca1f%40technowledgy.de
+---
+--- a/src/makefiles/Makefile.darwin
++++ b/src/makefiles/Makefile.darwin
+@@ -5,6 +5,8 @@ DLSUFFIX = .so
+ # env var name to use in place of LD_LIBRARY_PATH
+ ld_library_path_var = DYLD_LIBRARY_PATH
+ 
++export_dynamic = -Wl,-export_dynamic
++
+ ifdef PGXS
+   BE_DLLLIBS = -bundle_loader $(bindir)/postgres
+ else

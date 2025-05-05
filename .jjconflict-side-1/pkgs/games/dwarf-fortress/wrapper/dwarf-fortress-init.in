@@ -1,0 +1,192 @@
+#!@stdenv_shell@ -e
+set -euo pipefail
+shopt -s extglob
+
+export NIXPKGS_DF_ENV="@env@"
+
+### BEGIN: Default DF options
+declare -A _NIXPKGS_DF_OPTS
+_NIXPKGS_DF_OPTS[fmod]=0    # Don't use fmod by default.
+_NIXPKGS_DF_OPTS[debug]=0   # No debugging output by default.
+### END: Default DF options
+
+# Read NIXPKGS_DF_OPTS.
+if [[ ! -v NIXPKGS_DF_OPTS ]]; then
+  NIXPKGS_DF_OPTS=''
+fi
+IFS=',' read -ra options <<< "$NIXPKGS_DF_OPTS"
+for option in ${options[@]+"${options[@]}"}; do
+  key="${option%=*}"
+  value="${option##*=}"
+  if [ -n "$key" ]; then
+    if [ -z "$value" ] || [ "$key" == "$value" ]; then
+      value=1
+    fi
+    _NIXPKGS_DF_OPTS["$key"]="$value"
+  fi
+done
+
+# Rebuild the canonical option string from the read options.
+NIXPKGS_DF_OPTS=''
+for key in "${!_NIXPKGS_DF_OPTS[@]}"; do
+  value="${_NIXPKGS_DF_OPTS["${key}"]}"
+  NIXPKGS_DF_OPTS="$NIXPKGS_DF_OPTS$key=$value,"
+done
+NIXPKGS_DF_OPTS="${NIXPKGS_DF_OPTS%,}"
+
+# Echoes a log.
+# $@: log messages
+log() {
+  for msg in "$@"; do
+    echo "[nixpkgs] $msg" >&2
+  done
+}
+
+# Echoes a log if NIXPKGS_DF_OPTS includes debug.
+# $@: log messages
+debug() {
+  if [ "${_NIXPKGS_DF_OPTS[debug]}" -ne 0 ]; then
+    log "$@"
+  fi
+}
+
+# Updates a path in $NIXPKGS_DF_HOME from $NIXPKGS_DF_ENV.
+# $1: The environment path.
+update_path() {
+  local path="$1"
+  local orig="$NIXPKGS_DF_ENV/$path"
+  local final="$NIXPKGS_DF_HOME/$path"
+
+  # If user has replaced these data directories, let them stay.
+  @mkdir@ -p "$(dirname -- "$final")"
+  if [ ! -e "$final" ] || [ -L "$final" ]; then
+    debug "Linking: $final -> $orig"
+    @rm@ -f "$final"
+    @ln@ -s "$orig" "$final"
+  else
+    debug "Not updating: $final"
+  fi
+}
+
+# Cleans up a path in $NIXPKGS_DF_HOME that may or may not be in $NIXPKGS_DF_ENV.
+# $1: The environment path.
+cleanup_path() {
+  local path="$1"
+  local final="$NIXPKGS_DF_HOME/$path"
+
+  # Let them stay if not a link.
+  if [ ! -e "$final" ] || [ -L "$final" ]; then
+    debug "Cleaning up: $final"
+    @rm@ -f "$final"
+  else
+    debug "Not cleaning: $final"
+  fi
+}
+
+# Force copies a path in $NIXPKGS_DF_HOME that may or may not be in $NIXPKGS_DF_ENV.
+# $1: The environment path.
+forcecopy_path() {
+  local path="$1"
+
+  if [ -z "$NIXPKGS_DF_ENV" ] || [ -z "$path" ]; then
+    # Avoid producing "/" for any `rm -rf`
+    return
+  fi
+
+  local orig="$NIXPKGS_DF_ENV/$path"
+  local final="$NIXPKGS_DF_HOME/$path"
+
+  if [ -e "$orig" ]; then
+    debug "Force copying: $orig -> $final"
+    @mkdir@ -p "$(dirname -- "$final")"
+    @rm@ -rf "$final"
+    @cp@ -rL --no-preserve=all "$orig" "$final"
+  else
+    debug "Removing: $final"
+    @rm@ -rf "$final"
+  fi
+}
+
+# Runs the final executable. Expects NIXPKGS_DF_HOME and NIXPKGS_DF_EXE to be set.
+go() {
+  cd "$NIXPKGS_DF_HOME"
+  debug "Executing: $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE"
+
+  # Only mess with the library paths if we're starting Dwarf Fortress (not Soundsense).
+  if [ "$NIXPKGS_DF_GAME" -eq 1 ]; then
+    # Handle library paths on Darwin.
+    if [ "$NIXPKGS_DF_PLATFORM" == df_osx ]; then
+      if [ "${NIXPKGS_DF_PLATFORM_REV%%.*}" -ge 11 ]; then
+        export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+        export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+      else
+        export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+        export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+      fi
+    fi
+
+    if [ "$NIXPKGS_DF_PLATFORM" == df_linux ]; then
+      # We have to preload the audio plugin for audio to work. See Nix Pill #12 for this pattern:
+      # https://nixos.org/guides/nix-pills/12-inputs-design-pattern.html
+      if [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ] && [ -f "$NIXPKGS_DF_HOME/libfmod.so.13" ]; then
+        export LD_PRELOAD="$NIXPKGS_DF_HOME/libfmod.so.13${LD_PRELOAD:+:}${LD_PRELOAD:-}"
+      else
+        export LD_PRELOAD="@SDL2_mixer@${LD_PRELOAD:+:}${LD_PRELOAD:-}"
+      fi
+    fi
+  fi
+
+  # If we make it past here, we want to log.
+  # shellcheck disable=SC2093
+  exec -a "$NIXPKGS_DF_EXE" "$NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE" "$@"
+  log "Execution of $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE failed!"
+  exit 1
+}
+
+# Figure out the Dwarf Fortress directory (df_linux or df_osx).
+os_name="$(@uname@)"
+if [ "$os_name" == Linux ]; then
+  export NIXPKGS_DF_PLATFORM="df_linux"
+elif [ "$os_name" == Darwin ]; then
+  export NIXPKGS_DF_PLATFORM="df_osx"
+else
+  log "Unknown platform: $os_name"
+  exit 1
+fi
+export NIXPKGS_DF_PLATFORM_REV="$(@uname@ -r)"
+
+if [[ -v DF_DIR ]] && [ -n "$DF_DIR" ] && { [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; }; then
+  # Compatibility for users that were using DF_DIR, since the dfhack script clobbers this variable.
+  export NIXPKGS_DF_HOME="$DF_DIR"
+fi
+
+if [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; then
+  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/$NIXPKGS_DF_PLATFORM"
+fi
+
+# Compatibility.
+export DF_DIR="$NIXPKGS_DF_HOME"
+
+@mkdir@ -p "$NIXPKGS_DF_HOME"
+
+@cat@ <<EOF >&2
+/------------------------------------------------------------------------------\\
+| Hello from the nixpkgs Dwarf Fortress wrapper!                               |
+|                                                                              |
+| Using the following Dwarf Fortress overlay directory as NIXPKGS_DF_HOME:     |
+| $(@printf@ '% -76s' "$NIXPKGS_DF_HOME") |
+|                                                                              |
+| If you make any changes in it, don't forget to clean it when updating the    |
+| game version! We detect changes if data directories are symbolic links.      |
+|                                                                              |
+| Even though we do our best on our own, this script may miss some. Submit a   |
+| pull request if there are any that become a problem.                         |
+|                                                                              |
+| We started with the following nixpkgs launch options as NIXPKGS_DF_OPTS:     |
+| $(@printf@ '% -76s' "$NIXPKGS_DF_OPTS") |
+|                                                                              |
+| If you want to try fmod over SDL_mixer, set NIXPKGS_DF_OPTS=fmod.            |
+\\------------------------------------------------------------------------------/
+EOF
+
+cd "$NIXPKGS_DF_ENV"

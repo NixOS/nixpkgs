@@ -1,0 +1,13 @@
+diff --git a/src/libponyc/codegen/genexe.c b/src/libponyc/codegen/genexe.c
+index 3f0348eaa1..76b03030bf 100644
+--- a/src/libponyc/codegen/genexe.c
++++ b/src/libponyc/codegen/genexe.c
+@@ -308,7 +308,7 @@
+   snprintf(ld_cmd, ld_len,
+     "%s -execute -arch %.*s "
+     "-o %s %s %s %s "
+-    "-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib -lSystem %s -platform_version macos '" STR(PONY_OSX_PLATFORM) "' '0.0.0'",
++    "-L\"${SDKROOT:-${DEVELOPER_DIR:-@apple-sdk@}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk}/usr/lib\" -lSystem %s -platform_version macos '" STR(PONY_OSX_PLATFORM) "' '0.0.0'",
+            linker, (int)arch_len, c->opt->triple, file_exe, file_o,
+            lib_args, ponyrt, sanitizer_arg
+     );

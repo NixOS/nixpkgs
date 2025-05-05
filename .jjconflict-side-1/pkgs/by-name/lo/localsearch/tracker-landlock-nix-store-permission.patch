@@ -1,0 +1,15 @@
+diff --git a/src/libtracker-miners-common/tracker-landlock.c b/src/libtracker-miners-common/tracker-landlock.c
+index 6d4510be1..1de5d5a90 100644
+--- a/src/libtracker-miners-common/tracker-landlock.c
++++ b/src/libtracker-miners-common/tracker-landlock.c
+@@ -184,6 +184,10 @@ gboolean
+ tracker_landlock_init (const gchar * const *indexed_folders)
+ {
+ 	TrackerLandlockRule stock_rules[] = {
++		{ "/nix/store",
++		 (LANDLOCK_ACCESS_FS_EXECUTE |
++		  LANDLOCK_ACCESS_FS_READ_FILE |
++		  LANDLOCK_ACCESS_FS_READ_DIR) },
+ 		/* Allow access to the executable itself */
+ 		{ LIBEXECDIR "/tracker-extract-3",
+ 		 LANDLOCK_ACCESS_FS_READ_FILE |

@@ -1,0 +1,31 @@
+diff -ur compiler-rt-10.0.0.src/cmake/builtin-config-ix.cmake compiler-rt-10.0.0.src-patched/cmake/builtin-config-ix.cmake
+--- compiler-rt-10.0.0.src/cmake/builtin-config-ix.cmake	2020-03-24 00:01:02.000000000 +0900
++++ compiler-rt-10.0.0.src-patched/cmake/builtin-config-ix.cmake	2020-05-10 03:42:00.883450706 +0900
+@@ -37,6 +37,6 @@
+ 
+ set(ARM64 aarch64)
+-set(ARM32 arm armhf armv6m armv7m armv7em armv7 armv7s armv7k armv8m.main armv8.1m.main)
++set(ARM32 arm armhf armv6m armv7m armv7em armv7 armv7s armv7k armv7l armv8m.main armv8.1m.main)
+ set(HEXAGON hexagon)
+ set(X86 i386)
+ set(X86_64 x86_64)
+diff -ur compiler-rt-10.0.0.src/lib/builtins/CMakeLists.txt compiler-rt-10.0.0.src-patched/lib/builtins/CMakeLists.txt
+--- compiler-rt-10.0.0.src/lib/builtins/CMakeLists.txt	2020-03-24 00:01:02.000000000 +0900
++++ compiler-rt-10.0.0.src-patched/lib/builtins/CMakeLists.txt	2020-05-10 03:44:49.468579650 +0900
+@@ -555,6 +555,7 @@
+ set(armv7_SOURCES ${arm_SOURCES})
+ set(armv7s_SOURCES ${arm_SOURCES})
+ set(armv7k_SOURCES ${arm_SOURCES})
++set(armv7l_SOURCES ${arm_SOURCES})
+ set(arm64_SOURCES ${aarch64_SOURCES})
+ 
+ # macho_embedded archs
+@@ -705,7 +705,7 @@
+   foreach (arch ${BUILTIN_SUPPORTED_ARCH})
+     if (CAN_TARGET_${arch})
+       # For ARM archs, exclude any VFP builtins if VFP is not supported
+-      if (${arch} MATCHES "^(arm|armhf|armv7|armv7s|armv7k|armv7m|armv7em|armv8m.main|armv8.1m.main)$")
++      if (${arch} MATCHES "^(arm|armhf|armv7|armv7s|armv7k|armv7l|armv7m|armv7em|armv8m.main|armv8.1m.main)$")
+         string(REPLACE ";" " " _TARGET_${arch}_CFLAGS "${TARGET_${arch}_CFLAGS}")
+         check_compile_definition(__VFP_FP__ "${CMAKE_C_FLAGS} ${_TARGET_${arch}_CFLAGS}" COMPILER_RT_HAS_${arch}_VFP)
+         if(NOT COMPILER_RT_HAS_${arch}_VFP)

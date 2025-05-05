@@ -1,0 +1,36 @@
+diff --git a/pkg/geoip/geoip.go b/pkg/geoip/geoip.go
+index 6d913b9..13be7f5 100644
+--- a/pkg/geoip/geoip.go
++++ b/pkg/geoip/geoip.go
+@@ -19,10 +19,12 @@ var (
+ )
+ 
+ type IPInfo struct {
+-	Country       string `maxminddb:"country"`
+-	CountryName   string `maxminddb:"country_name"`
+-	Continent     string `maxminddb:"continent"`
+-	ContinentName string `maxminddb:"continent_name"`
++	Country struct {
++		IsoCode string `maxminddb:"iso_code"`
++	} `maxminddb:"country"`
++	Continent struct {
++		Code string `maxminddb:"code"`
++	} `maxminddb:"continent"`
+ }
+ 
+ func init() {
+@@ -44,10 +46,10 @@ func Lookup(ip net.IP, record *IPInfo) (string, error) {
+ 		return "", err
+ 	}
+ 
+-	if record.Country != "" {
+-		return strings.ToLower(record.Country), nil
+-	} else if record.Continent != "" {
+-		return strings.ToLower(record.Continent), nil
++	if record.Country.IsoCode != "" {
++		return strings.ToLower(record.Country.IsoCode), nil
++	} else if record.Continent.Code != "" {
++		return strings.ToLower(record.Continent.Code), nil
+ 	}
+ 
+ 	return "", fmt.Errorf("IP not found")
