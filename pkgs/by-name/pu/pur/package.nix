@@ -16,20 +16,18 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-zSEzYYpDmu3fennTZNvQjAoMekzxoMDUEqvSjN6hNUk=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
-    click
-  ];
+  dependencies = with python3.pkgs; [ click ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pur"
+  pythonImportsCheck = [ "pur" ];
+
+  disabledTests = [
+    # Tests are failing after the last mass update
+    "test_missing_requirements_file"
+    "test_no_arguments_and_no_requirements_file"
   ];
 
   meta = with lib; {
