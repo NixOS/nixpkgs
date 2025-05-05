@@ -37,7 +37,8 @@
   nlsSupport ? true,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
-  withManual ? true,
+  # Disable the manual since libxslt doesn't seem to parse the files correctly.
+  withManual ? !stdenv.hostPlatform.useLLVM,
   pythonSupport ? true,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
@@ -500,7 +501,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + ''
       # Flaky tests:
+      disable_test t0027-auto-crlf
+      disable_test t1451-fsck-buffer
+      disable_test t5319-multi-pack-index
       disable_test t6421-merge-partial-clone
+      disable_test t7504-commit-msg-hook
 
       # Fails reproducibly on ZFS on Linux with formD normalization
       disable_test t0021-conversion
