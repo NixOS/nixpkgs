@@ -70,4 +70,7 @@ in
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
   eval = pkgs.callPackage ./eval { };
+
+  # CI jobs
+  lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
 }
