@@ -4,6 +4,7 @@
   fetchurl,
   perl,
   gettext,
+  versionCheckHook,
   buildPackages,
 }:
 
@@ -19,20 +20,26 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    perl
+  ];
+
+  buildInputs = [
     gettext
     perl
   ];
-  buildInputs = [ perl ];
 
   postPatch = ''
-    patchShebangs separated_to_hash.pl
+    patchShebangs --build separated_to_hash.pl
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    for f in $out/bin/*; do
-      substituteInPlace $f --replace "${buildPackages.perl}" "${perl}"
-    done
+  postInstall = ''
+    patchShebangs --host --update $out/bin/*
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = with lib; {
     description = "Perl script which converts Texinfo source files to HTML output";
