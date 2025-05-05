@@ -46,6 +46,8 @@
       "rb-fsevent"
       "rb-inotify"
     ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
       sha256 = "0xw3q46cmahkgyldid5hwyiwacp590zj2vmswlll68ryvmvcp7df";
