@@ -28,8 +28,6 @@
       - any-glob-to-any-file:
         - .github/workflows/*
         - ci/**/*.*
-
-"backport release-24.11":
   - all:
     - head-branch:
       # r-ryantm's branches have this prefix.
