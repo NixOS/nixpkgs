@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,10 +15,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-YviRACndc4r4ul72ZF3I/R/nEsIoML2Ek2xqUUE3FDQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   env = {
     RUNE_VERSION = version;

@@ -3,14 +3,13 @@
   buildEnv,
   callPackage,
   makeWrapper,
-  Cocoa,
 }:
 
 buildEnv {
   name = "flare-1.14";
 
   paths = [
-    (callPackage ./engine.nix { inherit Cocoa; })
+    (callPackage ./engine.nix { })
     (callPackage ./game.nix { })
   ];
 

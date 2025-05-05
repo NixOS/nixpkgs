@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security ? null,
   versionCheckHook,
 }:
 
@@ -20,8 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-6sRpsXydzKB0ZaV1HeagINgb6ol9dj3XT0+pd53QOCw=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

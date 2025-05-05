@@ -18,7 +18,6 @@
   qtbase,
   qtsvg,
   qttools,
-  VideoDecodeAcceleration,
   wrapQtAppsHook,
   copyDesktopItems,
   # needed to run natively on wayland
@@ -44,26 +43,22 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      boost
-      bzip2
-      ffmpeg
-      fftwSinglePrec
-      hdf5
-      muparser
-      netcdf
-      openssl
-      python3
-      qscintilla
-      qtbase
-      qtsvg
-      qttools
-      qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      VideoDecodeAcceleration
-    ];
+  buildInputs = [
+    boost
+    bzip2
+    ffmpeg
+    fftwSinglePrec
+    hdf5
+    muparser
+    netcdf
+    openssl
+    python3
+    qscintilla
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+  ];
 
   # manually create a desktop file
   desktopItems = [

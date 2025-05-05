@@ -13,7 +13,6 @@
   dbusSupport ? stdenv.hostPlatform.isLinux,
   dbus,
   pcsclite,
-  PCSC,
   wget,
   coreutils,
   perlPackages,
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       perlPackages.perl
       pcsclite
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
     ++ lib.optional systemdSupport systemd;
 
   nativeBuildInputs =

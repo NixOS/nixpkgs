@@ -12,8 +12,6 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   zlib,
-  Security,
-  CoreServices,
   libiconv,
   xz,
   buildPackages,
@@ -53,8 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
       libiconv
       xz
     ];

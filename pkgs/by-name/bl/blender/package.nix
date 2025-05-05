@@ -1,9 +1,4 @@
 {
-  Cocoa,
-  CoreGraphics,
-  ForceFeedback,
-  OpenAL,
-  OpenGL,
   SDL,
   addDriverRunpath,
   alembic,
@@ -283,11 +278,6 @@ stdenv'.mkDerivation (finalAttrs: {
         ]
       else
         [
-          Cocoa
-          CoreGraphics
-          ForceFeedback
-          OpenAL
-          OpenGL
           SDL
           brotli
           llvmPackages.openmp

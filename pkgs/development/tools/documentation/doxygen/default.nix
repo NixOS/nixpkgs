@@ -7,7 +7,6 @@
   flex,
   bison,
   qt5,
-  CoreServices,
   libiconv,
   spdlog,
   sqlite,
@@ -51,8 +50,7 @@ stdenv.mkDerivation rec {
         qtbase
         wrapQtAppsHook
       ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+    );
 
   cmakeFlags = [
     "-DICONV_INCLUDE_DIR=${libiconv}/include"

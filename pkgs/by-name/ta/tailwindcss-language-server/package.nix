@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nodejs_23,
+  nodejs_latest,
   pnpm_9,
   cacert,
 }:
@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs_23
+    nodejs_latest
     pnpm_9.configHook
   ];
 
   buildInputs = [
-    nodejs_23
+    nodejs_latest
   ];
 
   pnpmWorkspaces = [ "@tailwindcss/language-server..." ];

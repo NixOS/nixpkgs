@@ -8,7 +8,6 @@
   withSixel ? false,
   libsixel,
   xorg,
-  AppKit,
   withSki ? true,
 }:
 
@@ -36,8 +35,7 @@ rustPlatform.buildRustPackage rec {
         libX11
         libXrandr
       ]
-    )
-    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
+    );
 
   buildNoDefaultFeatures = !withSki;
   buildFeatures = lib.optional withSixel "sixel";

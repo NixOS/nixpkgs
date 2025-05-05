@@ -7,8 +7,6 @@
   openssl,
   zlib,
   aws-crt-cpp,
-  CoreAudio,
-  AudioToolbox,
   nix,
   arrow-cpp,
   aws-sdk-cpp,
@@ -85,20 +83,11 @@ stdenv.mkDerivation rec {
     curl
   ];
 
-  buildInputs =
-    [
-      curl
-      openssl
-      zlib
-    ]
-    ++ lib.optionals
-      (
-        stdenv.hostPlatform.isDarwin && ((builtins.elem "text-to-speech" apis) || (builtins.elem "*" apis))
-      )
-      [
-        CoreAudio
-        AudioToolbox
-      ];
+  buildInputs = [
+    curl
+    openssl
+    zlib
+  ];
 
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-crt-cpp ];

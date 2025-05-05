@@ -6,7 +6,6 @@
   SDL2,
   libpng,
   libiconv,
-  libobjc,
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -30,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   buildInputs = [
     libiconv
     libpng
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ];
+  ];
 
   nativeCheckInputs = [ SDL2 ];
 

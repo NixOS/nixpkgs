@@ -1,14 +1,11 @@
 {
   lib,
-  stdenv,
   pkgs,
   rustPackages,
   fetchFromGitHub,
   rustPlatform,
   writers,
   nixosTests,
-  CoreServices,
-  Security,
 }:
 
 let
@@ -45,10 +42,6 @@ in
   RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
   nativeBuildInputs = [ rustPackages.rustfmt ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    Security
-  ];
 
   # copy the docs to the $man and $doc outputs
   postInstall = ''

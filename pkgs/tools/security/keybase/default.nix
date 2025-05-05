@@ -1,17 +1,8 @@
 {
-  stdenv,
   replaceVars,
   lib,
   buildGoModule,
   fetchFromGitHub,
-  AppKit,
-  AVFoundation,
-  AudioToolbox,
-  ImageIO,
-  CoreMedia,
-  Foundation,
-  CoreGraphics,
-  MediaToolbox,
   gnupg,
 }:
 
@@ -40,17 +31,6 @@ buildGoModule rec {
       gpg = "${gnupg}/bin/gpg";
       gpg2 = "${gnupg}/bin/gpg2";
     })
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    AVFoundation
-    AudioToolbox
-    ImageIO
-    CoreMedia
-    Foundation
-    CoreGraphics
-    MediaToolbox
   ];
   tags = [ "production" ];
   ldflags = [

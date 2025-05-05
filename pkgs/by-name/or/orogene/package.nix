@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
   versionCheckHook,
 }:
 
@@ -34,13 +32,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   preCheck = ''
     export CI=true

@@ -7,9 +7,6 @@
   libsamplerate,
   swig,
   alsa-lib,
-  AppKit,
-  CoreFoundation,
-  Security,
   python3,
   pythonSupport ? true,
   runCommand,
@@ -45,17 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.wheel
   ];
 
-  buildInputs =
-    [
-      openssl
-      libsamplerate
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      CoreFoundation
-      Security
-    ];
+  buildInputs = [
+    openssl
+    libsamplerate
+  ] ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   env =
     lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++11"; }

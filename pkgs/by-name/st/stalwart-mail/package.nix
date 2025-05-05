@@ -10,7 +10,6 @@
   foundationdb,
   zstd,
   stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
   rocksdb,

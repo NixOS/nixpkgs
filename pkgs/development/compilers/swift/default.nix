@@ -16,14 +16,6 @@ let
 
     callPackage = newScope self;
 
-    # Current versions of Swift on Darwin require macOS SDK 10.15 at least.
-    # The Swift compiler propagates the 13.3 SDK and a 10.15 deployment target.
-    # Packages that need a newer version can add it to their build inputs
-    # to use it (as normal).
-
-    # This SDK is included for compatibility with existing packages.
-    apple_sdk = pkgs.darwin.apple_sdk_11_0;
-
     # Swift builds its own Clang for internal use. We wrap that clang with a
     # cc-wrapper derived from the clang configured below. Because cc-wrapper
     # applies a specific resource-root, the two versions are best matched, or
@@ -88,13 +80,9 @@ let
       swift = swift-unwrapped;
     };
 
-    sourcekit-lsp = callPackage ./sourcekit-lsp {
-      inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
-    };
+    sourcekit-lsp = callPackage ./sourcekit-lsp { };
 
-    swift-docc = callPackage ./swift-docc {
-      inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
-    };
+    swift-docc = callPackage ./swift-docc { };
 
     swift-format = callPackage ./swift-format { };
 

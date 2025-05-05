@@ -8,9 +8,6 @@
   enableUdev ?
     stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isAndroid,
   udev,
-  libobjc,
-  IOKit,
-  Security,
   withExamples ? false,
   withStatic ? false,
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -36,13 +33,7 @@ stdenv.mkDerivation rec {
     pkg-config
     autoreconfHook
   ] ++ lib.optionals withDocs [ doxygen ];
-  propagatedBuildInputs =
-    lib.optional enableUdev udev
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-      IOKit
-      Security
-    ];
+  propagatedBuildInputs = lib.optional enableUdev udev;
 
   dontDisableStatic = withStatic;
 

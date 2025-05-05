@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
   nix-update-script,
 }:
 
@@ -20,8 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Df+twOjzfq+Vxzuv+APiy94XmhBajgk+6+1BRFf+xm0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };

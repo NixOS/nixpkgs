@@ -4,7 +4,6 @@
   fetchFromGitHub,
   libXext,
   libX11,
-  IOKit,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";
@@ -20,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libX11
     libXext
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
+  ];
 
   configureFlags = [ "--disable-debug" ];
 

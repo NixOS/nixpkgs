@@ -5,10 +5,6 @@
   pkg-config,
   openssl,
   zlib,
-  stdenv,
-  CoreServices,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,16 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   # requires internet access
   doCheck = false;

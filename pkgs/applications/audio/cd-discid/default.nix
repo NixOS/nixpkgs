@@ -2,7 +2,6 @@
   fetchurl,
   lib,
   stdenv,
-  IOKit ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +17,6 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "INSTALL=install"
   ];
-
-  buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   meta = with lib; {
     homepage = "http://linukz.org/cd-discid.shtml";

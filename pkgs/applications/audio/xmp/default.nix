@@ -6,8 +6,6 @@
   pkg-config,
   alsa-lib,
   libxmp,
-  AudioUnit,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +23,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
-  buildInputs =
-    [ libxmp ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      CoreAudio
-    ];
+  buildInputs = [ libxmp ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   meta = with lib; {
     description = "Extended module player";

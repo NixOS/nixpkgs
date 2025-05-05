@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  AppKit,
 }:
 
 buildGoModule rec {
@@ -21,7 +20,6 @@ buildGoModule rec {
   vendorHash = "sha256-oCYtEMx3+wK1TyS18iYgRwH3NopWY63xsguvanNDSEo=";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   subPackages = [
     "."

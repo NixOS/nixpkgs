@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Libsystem,
-  SystemConfiguration,
   installShellFiles,
   libiconv,
   rustPlatform,
@@ -32,8 +30,6 @@ rustPlatform.buildRustPackage rec {
     ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Libsystem
-    SystemConfiguration
     libiconv
   ];
 

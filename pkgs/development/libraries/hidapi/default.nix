@@ -6,8 +6,6 @@
   pkg-config,
   libusb1,
   udev,
-  Cocoa,
-  IOKit,
   testers,
 }:
 
@@ -33,11 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    IOKit
-  ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

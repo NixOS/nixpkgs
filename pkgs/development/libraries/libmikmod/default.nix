@@ -5,7 +5,6 @@
   texinfo,
   alsa-lib,
   libpulseaudio,
-  CoreAudio,
 }:
 
 let
@@ -21,10 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-re9iFIY1FqSltE6/LHHvhOzf6zRElz2suscJEcm8Z+k=";
   };
 
-  buildInputs =
-    [ texinfo ]
-    ++ optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ optional stdenv.hostPlatform.isDarwin CoreAudio;
+  buildInputs = [ texinfo ] ++ optional stdenv.hostPlatform.isLinux alsa-lib;
   propagatedBuildInputs = optional stdenv.hostPlatform.isLinux libpulseaudio;
 
   outputs = [

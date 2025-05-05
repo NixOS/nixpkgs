@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchCrate,
   pkg-config,
   openssl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   meta = with lib; {
     description = "GraphQL tool for Rust projects";

@@ -3,8 +3,6 @@
   stdenvNoCC,
   rustPlatform,
   fetchFromGitHub,
-  Foundation,
-  DiskArbitration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,11 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-0ON1h8+ruLOvBR7Q/hOIW6j+BjfPAAuYA2wrUYj59Ow=";
-
-  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-    Foundation
-    DiskArbitration
-  ];
 
   meta = with lib; {
     description = "Alternative to *fetch, uwuifies all stats";

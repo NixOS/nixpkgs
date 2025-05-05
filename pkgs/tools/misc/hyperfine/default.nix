@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +20,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-eZpGqkowp/R//RqLRk3AIbTpW3i9e+lOWpfdli7S4uE=";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     installManPage doc/hyperfine.1
