@@ -8,6 +8,8 @@
   perl,
   atomicparsley,
   ffmpeg,
+  testers,
+  get_iplayer,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -55,6 +57,12 @@ perlPackages.buildPerlPackage rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/.get_iplayer-wrapped
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = get_iplayer;
+    command = "HOME=$(mktemp -d) get_iplayer --help";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
