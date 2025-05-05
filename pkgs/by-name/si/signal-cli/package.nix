@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
-  version = "0.13.9";
+  version = "0.13.14";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}.tar.gz";
-    hash = "sha256-axvMUbF9TE1WLbunZni/KyjFUCdHSimP4AB8nSKf9zI=";
+    hash = "sha256-TKAUSVIBF9FVbwZYc5R3ZsVecF/RsII1nl7GuITxAoc=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -64,13 +64,14 @@ stdenv.mkDerivation rec {
     signal-cli --version
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AsamK/signal-cli";
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
     mainProgram = "signal-cli";
     changelog = "https://github.com/AsamK/signal-cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ivan ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ivan ];
+    platforms = lib.platforms.all;
   };
 }

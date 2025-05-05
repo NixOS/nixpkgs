@@ -93,7 +93,7 @@ writeScript "update-${pname}" ''
   }
   EOF
 
-  mv $tmpfile ${channel}_sources.nix
+  mv $tmpfile ${channel}${if versionSuffix == "" then "" else "_${versionSuffix}"}_sources.nix
 
   popd
 ''
