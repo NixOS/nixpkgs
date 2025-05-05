@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Scalar - An open-source API platform: Modern Rest API Client, Beautiful API References, and 1st-Class OpenAPI/Swagger Support";
+    description = "Modern Rest API Client, Beautiful API References, and 1st-Class OpenAPI/Swagger Support";
     homepage = "https://scalar.com";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
