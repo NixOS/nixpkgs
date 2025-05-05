@@ -3172,8 +3172,6 @@ with pkgs;
 
   gemstash = callPackage ../development/tools/gemstash { };
 
-  hmetis = pkgsi686Linux.callPackage ../applications/science/math/hmetis { };
-
   libbtbb = callPackage ../development/libraries/libbtbb { };
 
   lpd8editor = libsForQt5.callPackage ../applications/audio/lpd8editor { };
