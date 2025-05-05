@@ -74,4 +74,6 @@ in
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
+  manual-nixpkgs = (import ../pkgs/top-level/release.nix { }).manual;
+  manual-nixpkgs-tests = (import ../pkgs/top-level/release.nix { }).manual.tests;
 }
