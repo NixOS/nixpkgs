@@ -7,21 +7,6 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkOption
-    types
-    mkMerge
-    mkIf
-    optionals
-    mkDefault
-    nameValuePair
-    listToAttrs
-    filterAttrs
-    mapAttrsToList
-    foldl'
-    ;
-
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
 
@@ -37,10 +22,10 @@ in
     # One could also do regular btrfs balances, but that shouldn't be necessary
     # during normal usage and as long as the filesystems aren't filled near capacity
     services.btrfs.autoScrub = {
-      enable = mkEnableOption "regular btrfs scrub";
+      enable = lib.mkEnableOption "regular btrfs scrub";
 
-      fileSystems = mkOption {
-        type = types.listOf types.path;
+      fileSystems = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         example = [ "/" ];
         description = ''
           List of paths to btrfs filesystems to regularly call {command}`btrfs scrub` on.
@@ -51,9 +36,9 @@ in
         '';
       };
 
-      interval = mkOption {
+      interval = lib.mkOption {
         default = "monthly";
-        type = types.str;
+        type = lib.types.str;
         example = "weekly";
         description = ''
           Systemd calendar expression for when to scrub btrfs filesystems.
@@ -68,40 +53,40 @@ in
     };
   };
 
-  config = mkMerge [
-    (mkIf enableBtrfs {
+  config = lib.mkMerge [
+    (lib.mkIf enableBtrfs {
       system.fsPackages = [ pkgs.btrfs-progs ];
     })
 
-    (mkIf inInitrd {
+    (lib.mkIf inInitrd {
       boot.initrd.kernelModules = [ "btrfs" ];
       boot.initrd.availableKernelModules =
         [ "crc32c" ]
-        ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
+        ++ lib.optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
           # Needed for mounting filesystems with new checksums
           "xxhash_generic"
           "blake2b_generic"
           "sha256_generic" # Should be baked into our kernel, just to be sure
         ];
 
-      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         btrfs device scan
       '';
 
       boot.initrd.systemd.initrdBin = [ pkgs.btrfs-progs ];
     })
 
-    (mkIf enableAutoScrub {
+    (lib.mkIf enableAutoScrub {
       assertions = [
         {
           assertion = cfgScrub.enable -> (cfgScrub.fileSystems != [ ]);
@@ -120,15 +105,17 @@ in
         let
           isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
 
-          uniqueDeviceList = foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
+          uniqueDeviceList = lib.foldl' (
+            acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]
+          ) [ ];
         in
-        mkDefault (
+        lib.mkDefault (
           map (e: e.mountPoint) (
             uniqueDeviceList (
-              mapAttrsToList (name: fs: {
+              lib.mapAttrsToList (name: fs: {
                 mountPoint = fs.mountPoint;
                 device = fs.device;
-              }) (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
+              }) (lib.filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
             )
           )
         );
@@ -144,7 +131,7 @@ in
             let
               fs' = utils.escapeSystemdPath fs;
             in
-            nameValuePair "btrfs-scrub-${fs'}" {
+            lib.nameValuePair "btrfs-scrub-${fs'}" {
               description = "regular btrfs scrub timer on ${fs}";
 
               wantedBy = [ "timers.target" ];
@@ -155,7 +142,7 @@ in
               };
             };
         in
-        listToAttrs (map scrubTimer cfgScrub.fileSystems);
+        lib.listToAttrs (map scrubTimer cfgScrub.fileSystems);
 
       systemd.services =
         let
@@ -164,7 +151,7 @@ in
             let
               fs' = utils.escapeSystemdPath fs;
             in
-            nameValuePair "btrfs-scrub-${fs'}" {
+            lib.nameValuePair "btrfs-scrub-${fs'}" {
               description = "btrfs scrub on ${fs}";
               documentation = [ "man:btrfs-scrub(8)" ];
               # scrub prevents suspend2ram or proper shutdown
@@ -190,7 +177,7 @@ in
               };
             };
         in
-        listToAttrs (map scrubService cfgScrub.fileSystems);
+        lib.listToAttrs (map scrubService cfgScrub.fileSystems);
     })
   ];
 }
