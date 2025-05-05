@@ -366,7 +366,7 @@ in
         after = [ "cloudflared-tunnel-${name}.service" ];
         unitConfig.StopWhenUnneeded = true;
       }
-    ) config.services.cloudflared.tunnels;
+    ) cfg.tunnels;
 
     systemd.services = lib.mapAttrs' (
       name: tunnel:
@@ -446,7 +446,7 @@ in
           TUNNEL_TRANSPORT_PROTOCOL = tunnel.protocol;
         };
       }
-    ) config.services.cloudflared.tunnels;
+    ) cfg.tunnels;
   };
 
   meta.maintainers = with lib.maintainers; [
