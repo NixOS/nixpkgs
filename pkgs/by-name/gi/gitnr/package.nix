@@ -6,7 +6,6 @@
   libxkbcommon,
   openssl,
   stdenv,
-  darwin,
   wayland,
 }:
 
@@ -31,9 +30,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon

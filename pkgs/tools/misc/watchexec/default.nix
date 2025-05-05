@@ -3,8 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Cocoa,
-  AppKit,
   installShellFiles,
 }:
 
@@ -23,11 +21,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-O2Y0LT16p8tV02OFFgKwPIPn7+qeACJPtT0VWLSyCVE=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    AppKit
-  ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
 

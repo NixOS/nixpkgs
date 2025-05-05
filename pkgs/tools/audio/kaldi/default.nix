@@ -9,7 +9,6 @@
   pkg-config,
   fetchFromGitHub,
   python3,
-  Accelerate,
   _experimental-update-script-combinators,
   common-updater-scripts,
   ripgrep,
@@ -37,14 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFETCHCONTENT_SOURCE_DIR_OPENFST:PATH=${finalAttrs.passthru.sources.openfst}"
   ];
 
-  buildInputs =
-    [
-      openblas
-      icu
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-    ];
+  buildInputs = [
+    openblas
+    icu
+  ];
 
   nativeBuildInputs = [
     cmake

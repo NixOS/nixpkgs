@@ -5,7 +5,6 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
-  darwin,
   openssl,
   pkg-config,
 }:
@@ -39,16 +38,7 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        CoreFoundation
-        SystemConfiguration
-      ]
-    );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE

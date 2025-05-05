@@ -33,9 +33,6 @@
   libdecor,
   alsa-lib,
   asciidoctor,
-  Foundation,
-  AudioUnit,
-  AudioToolbox,
 }:
 
 stdenv.mkDerivation rec {
@@ -98,11 +95,6 @@ stdenv.mkDerivation rec {
       libXxf86vm
       libdecor
       wildmidi # until packaged on Darwin
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      AudioUnit
-      AudioToolbox
     ];
 
   cmakeFlags = [

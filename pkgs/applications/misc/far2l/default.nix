@@ -17,12 +17,6 @@
   gnutar,
   p7zip,
   xz,
-  IOKit,
-  Carbon,
-  Cocoa,
-  AudioToolbox,
-  OpenGL,
-  System,
   withTTYX ? true,
   libX11,
   withGUI ? true,
@@ -94,15 +88,7 @@ stdenv.mkDerivation rec {
         debugpy
         pcpp
       ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Carbon
-      Cocoa
-      AudioToolbox
-      OpenGL
-      System
-    ];
+    );
 
   postPatch = ''
     patchShebangs python/src/prebuild.sh

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
@@ -8,7 +7,6 @@
   makeBinaryWrapper,
   pkg-config,
   xz,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     xz
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
   nativeBuildInputs = [
     pkg-config
     makeBinaryWrapper

@@ -5,7 +5,6 @@
   autoreconfHook,
   ncurses,
   libxcrypt,
-  utmp,
   pam ? null,
 }:
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     ncurses
     libxcrypt
     pam
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
+  ];
 
   # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
   # With pkgsLLVM: tests/test-winmsgcond.c:53: assertion 'wmc_end(&wmc, pos + 1, &chg) == pos' failed

@@ -515,6 +515,14 @@ let
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 
+  # On old ghcjs, the jsexe directories are the output but on the js backend they seem to be treated as intermediates
+  jsexe = rec {
+    shouldUseNode = isGhcjs;
+    shouldAdd = stdenv.hostPlatform.isGhcjs && isExecutable;
+    shouldCopy = shouldAdd && !doInstallIntermediates;
+    shouldSymlink = shouldAdd && doInstallIntermediates;
+  };
+
   # This is a script suitable for --test-wrapper of Setup.hs' test command
   # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
   # We use it to set some environment variables that the test suite may need,
@@ -821,7 +829,8 @@ lib.fix (
               find $packageConfDir -maxdepth 0 -empty -delete;
             ''
         }
-        ${optionalString isGhcjs ''
+
+        ${optionalString jsexe.shouldUseNode ''
           for exeDir in "${binDir}/"*.jsexe; do
             exe="''${exeDir%.jsexe}"
             printWords '#!${nodejs}/bin/node' > "$exe"
@@ -831,6 +840,14 @@ lib.fix (
           done
         ''}
         ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
+
+        ${optionalString jsexe.shouldCopy ''
+          for jsexeDir in dist/build/*/*.jsexe; do
+            bn=$(basename $jsexeDir)
+            exe="''${bn%.jsexe}"
+            cp -r dist/build/$exe/$exe.jsexe ${binDir}
+          done
+        ''}
 
         ${optionalString enableSeparateDocOutput ''
           for x in ${docdir "$doc"}"/html/src/"*.html; do
@@ -850,6 +867,14 @@ lib.fix (
         mkdir -p "$installIntermediatesDir"
         cp -r dist/build "$installIntermediatesDir"
         runHook postInstallIntermediates
+
+        ${optionalString jsexe.shouldSymlink ''
+          for jsexeDir in $installIntermediatesDir/build/*/*.jsexe; do
+            bn=$(basename $jsexeDir)
+            exe="''${bn%.jsexe}"
+            (cd ${binDir} && ln -s $installIntermediatesDir/build/$exe/$exe.jsexe)
+          done
+        ''}
       '';
 
       passthru = passthru // rec {

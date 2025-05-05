@@ -3,8 +3,6 @@
   fetchFromGitHub,
   rustPlatform,
   notmuch,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     notmuch
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   meta = with lib; {
     description = "JMAP integration for notmuch mail";

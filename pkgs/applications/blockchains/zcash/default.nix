@@ -16,7 +16,6 @@
   rustc,
   rustPlatform,
   pkg-config,
-  Security,
   stdenv,
   testers,
   tl-expected,
@@ -60,19 +59,15 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      boost
-      db62
-      libevent
-      libsodium
-      tl-expected
-      utf8cpp
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    boost
+    db62
+    libevent
+    libsodium
+    tl-expected
+    utf8cpp
+    zeromq
+  ];
 
   CXXFLAGS = [
     "-I${lib.getDev utf8cpp}/include/utf8cpp"

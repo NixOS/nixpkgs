@@ -4,8 +4,6 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
-  stdenv,
-  Security,
   versionCheckHook,
 }:
 
@@ -31,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

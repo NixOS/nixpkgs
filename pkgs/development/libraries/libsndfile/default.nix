@@ -13,8 +13,6 @@
   libopus,
   libvorbis,
   alsa-lib,
-  Carbon,
-  AudioToolbox,
 
   # for passthru.tests
   audacity,
@@ -43,20 +41,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
   ];
-  buildInputs =
-    [
-      flac
-      lame
-      libmpg123
-      libogg
-      libopus
-      libvorbis
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      AudioToolbox
-    ];
+  buildInputs = [
+    flac
+    lame
+    libmpg123
+    libogg
+    libopus
+    libvorbis
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   enableParallelBuilding = true;
 

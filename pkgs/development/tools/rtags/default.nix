@@ -6,7 +6,6 @@
   cmake,
   llvmPackages,
   openssl,
-  apple_sdk,
   emacs,
   pkg-config,
 }:
@@ -19,18 +18,12 @@ stdenv.mkDerivation rec {
     pkg-config
     llvmPackages.llvm.dev
   ];
-  buildInputs =
-    [
-      llvmPackages.llvm
-      llvmPackages.libclang
-      openssl
-      emacs
-    ]
-    ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple_sdk.libs.xpc
-      apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    llvmPackages.llvm
+    llvmPackages.libclang
+    openssl
+    emacs
+  ] ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ];
 
   src = fetchFromGitHub {
     owner = "andersbakken";

@@ -4,9 +4,6 @@
   rustPlatform,
   pkg-config,
   openssl,
-  stdenv,
-  CoreServices,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,14 +22,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = with lib; {
     description = "Knowledge management meta-framework for geeks";

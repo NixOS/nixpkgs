@@ -7,7 +7,6 @@
   pkg-config,
   which,
   libvirt,
-  vmnet,
   withQemu ? false,
   qemu,
   makeWrapper,
@@ -49,13 +48,7 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [ vmnet ]
-    else if stdenv.hostPlatform.isLinux then
-      [ libvirt ]
-    else
-      null;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libvirt ];
 
   buildPhase = ''
     make COMMIT=${src.rev}

@@ -7,7 +7,6 @@
   gsasl,
   libidn,
   pkg-config,
-  Security,
   nlsSupport ? true,
   idnSupport ? true,
   gsaslSupport ? true,
@@ -33,8 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional stdenv.hostPlatform.isDarwin Security
-    ++ lib.optional gsaslSupport gsasl
+    lib.optional gsaslSupport gsasl
     ++ lib.optional idnSupport libidn
     ++ lib.optional (sslLibrary == "gnutls") gnutls
     ++ lib.optional (sslLibrary == "openssl") openssl;

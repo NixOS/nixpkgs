@@ -1,0 +1,14 @@
+diff --git a/scripts/entitlement.sh b/scripts/entitlement.sh
+index 0f412949ec..23f56d083a 100755
+--- a/scripts/entitlement.sh
++++ b/scripts/entitlement.sh
+@@ -25,9 +25,5 @@
+   codesign --entitlements "$ENTITLEMENT" --force -s - "$SRC"
+ fi
+ 
+-# Add the QEMU icon to the binary on Mac OS
+-Rez -append "$ICON" -o "$SRC"
+-SetFile -a C "$SRC"
+-
+ mv -f "$SRC" "$DST"
+ trap '' exit

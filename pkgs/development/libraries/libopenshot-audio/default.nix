@@ -13,10 +13,6 @@
   libXrandr,
   pkg-config,
   zlib,
-  Accelerate,
-  AGL,
-  Cocoa,
-  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,10 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ (
       if stdenv.hostPlatform.isDarwin then
         [
-          Accelerate
-          AGL
-          Cocoa
-          Foundation
           zlib
         ]
       else

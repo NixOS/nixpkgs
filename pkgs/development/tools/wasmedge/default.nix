@@ -8,7 +8,6 @@
   spdlog,
   libxml2,
   libffi,
-  Foundation,
   testers,
 }:
 
@@ -39,17 +38,13 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     llvmPackages.lld
   ];
 
-  buildInputs =
-    [
-      boost
-      spdlog
-      llvmPackages.llvm
-      libxml2
-      libffi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    boost
+    spdlog
+    llvmPackages.llvm
+    libxml2
+    libffi
+  ];
 
   cmakeFlags =
     [

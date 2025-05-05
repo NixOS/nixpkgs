@@ -35,7 +35,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.5.1";
+  version = "2.6.0";
 in
 buildPythonPackage {
   inherit version;
@@ -45,7 +45,7 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -66,6 +66,7 @@ buildPythonPackage {
       cuda_cupti
       cuda_nvrtc
       cudnn
+      cusparselt
       libcublas
       libcufft
       libcurand

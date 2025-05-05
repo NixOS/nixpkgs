@@ -7,7 +7,6 @@
   pkg-config,
   libiconv,
   openssl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
     ];
 
   postInstall = ''

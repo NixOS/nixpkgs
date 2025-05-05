@@ -35,38 +35,6 @@ import ./make-test-python.nix (
           ];
         };
 
-      server-x11 =
-        { ... }:
-
-        {
-          environment.systemPackages = [ pkgs.xorg.xauth ];
-          services.openssh = {
-            enable = true;
-            settings.X11Forwarding = true;
-          };
-          users.users.root.openssh.authorizedKeys.keys = [
-            snakeOilPublicKey
-          ];
-        };
-
-      server-x11-disable =
-        { ... }:
-
-        {
-          environment.systemPackages = [ pkgs.xorg.xauth ];
-          services.openssh = {
-            enable = true;
-            settings = {
-              X11Forwarding = true;
-              # CVE-2025-32728: the following line is ineffectual
-              DisableForwarding = true;
-            };
-          };
-          users.users.root.openssh.authorizedKeys.keys = [
-            snakeOilPublicKey
-          ];
-        };
-
       server-allowed-users =
         { ... }:
 
@@ -272,8 +240,6 @@ import ./make-test-python.nix (
       start_all()
 
       server.wait_for_unit("sshd", timeout=30)
-      server_x11.wait_for_unit("sshd", timeout=30)
-      server_x11_disable.wait_for_unit("sshd", timeout=30)
       server_allowed_users.wait_for_unit("sshd", timeout=30)
       server_localhost_only.wait_for_unit("sshd", timeout=30)
       server_match_rule.wait_for_unit("sshd", timeout=30)
@@ -338,16 +304,6 @@ import ./make-test-python.nix (
           )
           client.succeed(
               "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
-              timeout=30
-          )
-
-      with subtest("x11-forwarding"):
-          client.succeed(
-              "[ \"$(ssh -Y -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-x11 'xauth list' | tee /dev/stderr | wc -l)\" -eq 1 ]",
-              timeout=30
-          )
-          client.succeed(
-              "[ \"$(ssh -Y -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-x11-disable 'xauth list' | tee /dev/stderr | wc -l)\" -eq 0 ]",
               timeout=30
           )
 

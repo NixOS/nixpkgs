@@ -6,7 +6,6 @@
   fetchpatch,
   trezor-udev-rules,
   nixosTests,
-  AppKit,
 }:
 
 buildGoModule rec {
@@ -37,9 +36,7 @@ buildGoModule rec {
     })
   ];
 
-  propagatedBuildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
 
   ldflags = [
     "-s"

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Foundation,
 }:
 
 rustPlatform.buildRustPackage {
@@ -19,7 +18,6 @@ rustPlatform.buildRustPackage {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-oXOf9G0BMSbFFAsmRaAZzaquFva1i1gJ4ISqJkqSx4k=";
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   meta = with lib; {
     description = "Simple CLI pomodoro timer using desktop notifications written in Rust";

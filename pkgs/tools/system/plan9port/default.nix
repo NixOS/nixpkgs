@@ -11,11 +11,6 @@
   perl, # For building web manuals
   which,
   ed,
-  Carbon,
-  Cocoa,
-  IOKit,
-  Metal,
-  QuartzCore,
   DarwinTools, # For building on Darwin
 }:
 
@@ -66,11 +61,6 @@ stdenv.mkDerivation rec {
         ]
       else
         [
-          Carbon
-          Cocoa
-          IOKit
-          Metal
-          QuartzCore
           DarwinTools
         ]
     );

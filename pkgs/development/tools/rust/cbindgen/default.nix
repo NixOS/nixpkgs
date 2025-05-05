@@ -5,7 +5,6 @@
   rustPlatform,
   cmake,
   python3Packages,
-  Security,
 
   # tests
   firefox-unwrapped,
@@ -26,8 +25,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-k8n3adoqKp/RXkHybCKV2KlVnaoEhM6vF57BqeCDAP4=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     cmake

@@ -13,8 +13,6 @@
   libpng,
   libtiff,
   eigen,
-  Carbon,
-  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,21 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
   ];
 
-  buildInputs =
-    [
-      libGL
-      glew
-      xorg.libX11
-      ffmpeg
-      libjpeg
-      libpng
-      libtiff.out
-      eigen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-    ];
+  buildInputs = [
+    libGL
+    glew
+    xorg.libX11
+    ffmpeg
+    libjpeg
+    libpng
+    libtiff.out
+    eigen
+  ];
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).

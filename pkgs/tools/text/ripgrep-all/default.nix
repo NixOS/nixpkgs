@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -8,7 +7,6 @@
   pandoc,
   poppler-utils,
   ripgrep,
-  Security,
   zip,
   fzf,
 }:
@@ -44,7 +42,6 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     poppler-utils
   ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = path;
 

@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,10 +22,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/main.rs \
       --replace-fail "e.message().unwrap()" "e.payload()"
   '';
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
-  ];
 
   # requires nightly features
   RUSTC_BOOTSTRAP = true;

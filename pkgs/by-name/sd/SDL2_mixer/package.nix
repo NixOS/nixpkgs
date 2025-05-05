@@ -19,6 +19,7 @@
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_mixer";
   version = "2.8.1";
