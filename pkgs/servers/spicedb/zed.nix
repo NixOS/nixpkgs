@@ -19,6 +19,10 @@ buildGoModule rec {
 
   ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'" ];
 
+  preCheck = ''
+    export NO_COLOR=true
+  '';
+
   meta = with lib; {
     description = "Command line for managing SpiceDB";
     mainProgram = "zed";
