@@ -42,13 +42,16 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "413feff21f9f7310023d8cfd92b83f2a251b1aa4";
+  #version = "413feff21f9f7310023d8cfd92b83f2a251b1aa4";
+  version = "416c38f0215361238e21af268db22862ed449795";
 
   src = fetchFromGitHub {
-    owner = "omnigres";
+    #owner = "omnigres";
+    owner = "yrashk";
     repo = "omnigres";
     rev = finalAttrs.version;
-    hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
+    #hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
+    hash = "sha256-9cHFMrtIK00/mWDO56Q2FBc3g9LrOBop1WdhYltHvGE=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +89,6 @@ postgresqlBuildExtension (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DNETCAT=${netcat}/bin/nc"
     "-DOPENSSL_CONFIGURED=1"
     "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
@@ -99,12 +101,20 @@ postgresqlBuildExtension (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+  doCheck = false;
 
   # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
   installPhase = ''
+    runHook preInstall
+
+    for f in script_omni_*; do
+      patchShebangs $f
+    done
+
     mkdir -p $out/share/postgresql/extension
-    #cmake --build . --parallel --target package_extensions
     cmake --build . --target install_extensions
+
+    runHook postInstall
   '';
 
   #passthru.tests.extension = postgresqlTestExtension {
