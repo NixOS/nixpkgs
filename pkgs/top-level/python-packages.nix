@@ -12280,6 +12280,8 @@ self: super: with self; {
 
   pyfcm = callPackage ../development/python-modules/pyfcm { };
 
+  pyfdt = callPackage ../development/python-modules/pyfdt { };
+
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
   pyfido = callPackage ../development/python-modules/pyfido { };

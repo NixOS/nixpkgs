@@ -3383,6 +3383,13 @@ with pkgs;
 
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
+  inherit
+    ({
+      graylog-6_1 = callPackage ../tools/misc/graylog/6.1.nix { };
+    })
+    graylog-6_1
+    ;
+
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { graylogPackage = graylog-6_0; }
   );
@@ -10998,9 +11005,12 @@ with pkgs;
 
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
+  inherit (callPackages ../servers/http/jetty { })
+    jetty_11
+    jetty_12
+    ;
+
   jetty = jetty_12;
-  jetty_12 = callPackage ../servers/http/jetty/12.x.nix { };
-  jetty_11 = callPackage ../servers/http/jetty/11.x.nix { };
 
   kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { kanidm = kanidm_1_4; };
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
@@ -15322,18 +15332,18 @@ with pkgs;
 
   kodi = callPackage ../applications/video/kodi {
     ffmpeg = ffmpeg_6;
-    jre_headless = jdk11_headless;
+    jre_headless = buildPackages.jdk11_headless;
   };
 
   kodi-wayland = callPackage ../applications/video/kodi {
     ffmpeg = ffmpeg_6;
-    jre_headless = jdk11_headless;
+    jre_headless = buildPackages.jdk11_headless;
     waylandSupport = true;
   };
 
   kodi-gbm = callPackage ../applications/video/kodi {
     ffmpeg = ffmpeg_6;
-    jre_headless = jdk11_headless;
+    jre_headless = buildPackages.jdk11_headless;
     gbmSupport = true;
   };
 
