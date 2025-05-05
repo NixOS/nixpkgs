@@ -17429,11 +17429,11 @@ self: super: with self; {
 
   toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
 
-  torch = callPackage ../development/python-modules/torch { };
+  torch = callPackage ../development/python-modules/torch/source { };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
 
-  torch-bin = callPackage ../development/python-modules/torch/bin.nix { triton = self.triton-bin; };
+  torch-bin = callPackage ../development/python-modules/torch/bin { triton = self.triton-bin; };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 
