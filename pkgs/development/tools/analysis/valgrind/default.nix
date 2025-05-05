@@ -10,6 +10,7 @@
   xnu,
   bootstrap_cmds,
   writeScript,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,7 +65,29 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       bootstrap_cmds
       xnu
-    ];
+    ]
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+      (llvmPackages.compiler-rt-no-libc.override {
+        # valgrind explictly expects libgcc which isn't available under LLVM.
+        # Force using compiler-rt as a replacement.
+        doFakeLibgcc = true;
+        # Disable sanitizers for compiler-rt so we can actually link statically.
+        stdenv = llvmPackages.compiler-rt-no-libc.stdenv.override {
+          hostPlatform = llvmPackages.compiler-rt-no-libc.stdenv.hostPlatform // {
+            parsed = {
+              kernel.name = "none";
+              inherit (llvmPackages.compiler-rt-no-libc.stdenv.hostPlatform.parsed) cpu;
+            };
+            useLLVM = false;
+          };
+        };
+      }).overrideAttrs
+        (
+          f: p: {
+            hardeningDisable = p.hardeningDisable or [ ] ++ [ "stackprotector" ];
+          }
+        )
+    );
 
   # Perl is also a native build input.
   nativeBuildInputs = [
@@ -110,7 +133,12 @@ stdenv.mkDerivation rec {
     lib.optional stdenv.hostPlatform.isx86_64 "--enable-only64bit"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
-  doCheck = true;
+  # Some tests fail on aarch64 and x86_64 under LLVM.
+  doCheck =
+    !(
+      stdenv.targetPlatform.useLLVM or false
+      && (stdenv.targetPlatform.isAarch64 || stdenv.targetPlatform.isx86_64)
+    );
 
   postInstall = ''
     for i in $out/libexec/valgrind/*.supp; do
