@@ -42,9 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}/build/source/build/src"
-  '';
 
   meta = {
     description = "Experimental Neural Net speech coding for FreeDV";
