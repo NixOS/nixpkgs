@@ -211,6 +211,20 @@ in
                 '';
               };
 
+              token = lib.mkOption {
+                type = with lib.types; nullOr str;
+                default = null;
+                description = ''
+                  Cloudflare tunnel token to use instead of a configuration file.
+                  If set, the tunnel will be run using `cloudflared tunnel run --token <token>`.
+                  This option is mutually exclusive with the config file-based approach
+                  (which requires `credentialsFile`).
+                  Note: Using a token bypasses locally defined ingress rules and uses
+                  rules configured via the Cloudflare dashboard.
+                '';
+                example = "eyJhIj...zUzZg==";
+              };
+
               warp-routing = {
                 enabled = lib.mkOption {
                   type = with lib.types; nullOr bool;
@@ -298,6 +312,11 @@ in
           };
           default = "http_status:404";
         };
+        # Example for token-based
+        "my-token-tunnel" = {
+          token = "eyJhIj...zUzZg==";
+          # No credentialsFile, default, or ingress needed here
+        };
       };
     };
   };
@@ -316,6 +335,8 @@ in
     systemd.services = lib.mapAttrs' (
       name: tunnel:
       let
+        isTokenBased = tunnel.token != null;
+
         filterConfig = lib.attrsets.filterAttrsRecursive (
           _: v:
           !builtins.elem v [
@@ -331,7 +352,7 @@ in
         ingressesSet = filterIngressSet tunnel.ingress;
         ingressesStr = filterIngressStr tunnel.ingress;
 
-        fullConfig = filterConfig {
+        fullConfig = lib.mkIf (!isTokenBased) (filterConfig {
           tunnel = name;
           credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
           warp-routing = filterConfig tunnel.warp-routing;
@@ -349,7 +370,7 @@ in
               service = lib.getAttr key ingressesStr;
             }) (lib.attrNames ingressesStr))
             ++ [ { service = tunnel.default; } ];
-        };
+        });
 
         mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
         certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
@@ -367,11 +388,18 @@ in
         serviceConfig = {
           RuntimeDirectory = "cloudflared-tunnel-${name}";
           RuntimeDirectoryMode = "0400";
-          LoadCredential = [
-            "credentials.json:${tunnel.credentialsFile}"
-          ] ++ (lib.optional (certFile != null) "cert.pem:certFile");
+          LoadCredential = lib.mkIf (!isTokenBased) (
+            [
+              "credentials.json:${tunnel.credentialsFile}"
+            ]
+            ++ (lib.optional (certFile != null) "cert.pem:certFile")
+          );
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          ExecStart =
+            if isTokenBased then
+              "${cfg.package}/bin/cloudflared tunnel run --token ${lib.escapeShellArg tunnel.token}"
+            else
+              "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
@@ -383,6 +411,7 @@ in
 
   meta.maintainers = with lib.maintainers; [
     bbigras
+    bn
     anpin
   ];
 }
