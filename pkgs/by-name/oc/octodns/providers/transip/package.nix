@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "octodns-transip";
-  version = "0.0.4";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-transip";
     tag = "v${version}";
-    hash = "sha256-Mq5UwhU7hPK3RgD3TWz6l8Qjtv7VN5TP+3b4ESN2jGs=";
+    hash = "sha256-mqrMzPnUSavSTiyjbLKQuwuwuE2Ghk94EXccpOpWLlM=";
   };
 
   build-system = [
@@ -43,6 +43,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-transip";
     changelog = "https://github.com/octodns/octodns-transip/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.octodns.members ++ [ lib.maintainers.provokateurin ];
+    maintainers = [ lib.maintainers.provokateurin ];
+    teams = [ lib.teams.octodns ];
   };
 }
