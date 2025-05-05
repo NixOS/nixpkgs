@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "LPCNet";
-  version = "0.5";
+  version = "0.5-unstable-2025-01-19";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "LPCNet";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-tHZLKXmuM86A6OpfS3CRRjhFbqj1Q/w1w56msdgLHb0=";
+    rev = "c8e51ac5e2fe674849cb53e7da44689b572cc246";
+    sha256 = "sha256-0Knoym+deTuFAyJrrD55MijVh6DlhJp3lss66BJUHiA=";
   };
 
   patches = [
