@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "scalar";
-  version = "unstable-2025-05-04";
+  version = "0-unstable-2025-05-04";
 
   src = fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
