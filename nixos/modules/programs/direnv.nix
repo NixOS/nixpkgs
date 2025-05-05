@@ -143,14 +143,15 @@ in
         (pkgs.symlinkJoin {
           inherit (cfg.package) name;
           paths = [ cfg.package ];
-          nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
           postBuild = ''
-            wrapProgram "$out/bin/direnv" \
-              --set-default 'DIRENV_CONFIG' '/etc/direnv'
             rm -rf "$out/share/fish"
           '';
         })
       ];
+
+      variables = {
+        DIRENV_CONFIG = "/etc/direnv";
+      };
 
       etc = {
         "direnv/direnv.toml" = lib.mkIf (cfg.settings != { }) {
