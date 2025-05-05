@@ -33,10 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
       build/${finalAttrs.finalPackage.passthru.nnmodel.name}
   '';
 
-  prePatch = ''
-    patchShebangs *.sh unittest/*.sh
-  '';
-
   nativeBuildInputs = [
     cmake
   ];
