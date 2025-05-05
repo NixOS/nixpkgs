@@ -10477,6 +10477,13 @@
     githubId = 36996706;
     name = "Philip Rying";
   };
+  ImSapphire = {
+    email = "imsapphire0@gmail.com";
+    github = "ImSapphire";
+    githubId = 48931512;
+    name = "Sapphire";
+    keys = [ { fingerprint = "D303 4473 1843 D27B 5D4E  2273 6429 11AA 4025 C8CC"; } ];
+  };
   imsick = {
     email = "lent-lather-excuse@duck.com";
     github = "dvishal485";
@@ -12712,6 +12719,12 @@
     github = "Unkn0wnCat";
     githubId = 8211181;
     name = "Kevin Kandlbinder";
+  };
+  keysmashes = {
+    email = "x-89cjg9@keysmash.solutions";
+    github = "keysmashes";
+    githubId = 9433472;
+    name = "ash";
   };
   kfollesdal = {
     email = "kfollesdal@gmail.com";
@@ -22174,12 +22187,6 @@
     github = "SergioRibera";
     githubId = 56278796;
     name = "Sergio Ribera";
-  };
-  sersorrel = {
-    email = "ash@sorrel.sh";
-    github = "sersorrel";
-    githubId = 9433472;
-    name = "ash";
   };
   servalcatty = {
     email = "servalcat@pm.me";
