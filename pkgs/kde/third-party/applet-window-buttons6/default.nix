@@ -10,14 +10,14 @@
   libplasma,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "applet-window-buttons6";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "moodyhunter";
     repo = "applet-window-buttons6";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HnlgBQKT99vVkl6DWqMkN8Vz+QzzZBGj5tqOJ22VkJ8=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ A1ca7raz ];
   };
-}
+})

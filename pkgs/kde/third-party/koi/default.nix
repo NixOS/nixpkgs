@@ -8,19 +8,19 @@
   kwidgetsaddons,
   wrapQtAppsHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "koi";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "baduhai";
     repo = "Koi";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-ip7e/Sz/l5UiTFUTLJPorPO7NltE2Isij2MCmvHZV40=";
   };
 
   # See https://github.com/baduhai/Koi/blob/master/development/Nix%20OS/dev.nix
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baduhai/Koi";
     maintainers = with lib.maintainers; [ fnune ];
   };
-}
+})
