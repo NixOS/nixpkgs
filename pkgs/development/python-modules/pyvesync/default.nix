@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "2.1.18";
+  version = "2.18";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "webdjoe";
     repo = "pyvesync";
     tag = version;
-    hash = "sha256-p46QVjJ8MzvsAu9JAQo4XN+z96arWLoJakdT81ITasU=";
+    hash = "sha256-bcjFa/6GgWk9UZLaB+oUOWVb6b7o0kKB2jzHr9I48eI=";
   };
 
   build-system = [ setuptools ];
