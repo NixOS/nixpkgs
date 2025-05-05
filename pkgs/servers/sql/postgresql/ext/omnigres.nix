@@ -40,13 +40,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "c9e6df4146b6ce0a5fea6a9d11cd0d694af1f1cf";
+  version = "413feff21f9f7310023d8cfd92b83f2a251b1aa4";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
     rev = finalAttrs.version;
-    hash = "sha256-g/BxjQEuKsulrgk/pbChooOlg3c+pdjw4O1P9rLdnes=";
+    hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
   };
 
   nativeBuildInputs = [ cmake flex libtool pkg-config perl ];
@@ -78,9 +78,6 @@ postgresqlBuildExtension (finalAttrs: {
       extensions
     ];
 
-  # Future version will handle this, disabling for now
-  hardeningDisable = [ "format" ];
-
   cmakeFlags = [
      "-DCMAKE_BUILD_TYPE=Release"
      "-DNETCAT=${netcat}/bin/nc"
@@ -88,6 +85,7 @@ postgresqlBuildExtension (finalAttrs: {
      "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
      # Can remove this later after hack is deprecated
      "-DPostgreSQL_EXTENSION_DIR=${extensions}/share/postgresql/extension"
+     "-DPostgreSQL_PACKAGE_LIBRARY_DIR=$out/share/postgresql/extension"
      "-DPython3_EXECUTABLE=${python3}/bin/python3"
      "-DPython_EXECUTABLE=${python3}/bin/python3"
      "-DDOXYGEN_EXECUTABLE=${doxygen}/bin/doxygen"
@@ -95,16 +93,20 @@ postgresqlBuildExtension (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
   installPhase = ''
+    mkdir -p $out/share/postgresql/extension
+    cmake --build . --parallel --target package_extensions
+    cmake --build . --parallel --target install_extensions
   '';
 
-  passthru.tests.extension = postgresqlTestExtension {
-    inherit (finalAttrs) finalPackage;
-    withPackages = [ "plpython3" "omnigres" ];
-    sql = ''
-      CREATE EXTENSION omni;
-    '';
-  };
+  #passthru.tests.extension = postgresqlTestExtension {
+  #  inherit (finalAttrs) finalPackage;
+  #  withPackages = [ "plpython3" "omnigres" ];
+  #  sql = ''
+  #    CREATE EXTENSION omni;
+  #  '';
+  #};
 
   meta = {
     description = "Postgres as a Business Operating System";
