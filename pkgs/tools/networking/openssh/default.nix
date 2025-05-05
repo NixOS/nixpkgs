@@ -97,7 +97,7 @@ in
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-1/debian/patches/gssapi.patch";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.0p1-1/debian/patches/gssapi.patch";
         hash = "sha256-7Q27tvtCY3b9evC3lbqEz4u7v5DcerjWZfhh8azIAQo=";
       })
     ];
