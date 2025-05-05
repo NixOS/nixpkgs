@@ -1,9 +1,9 @@
 {
   lib,
-  flutter,
+  flutter329,
   fetchFromGitHub,
 }:
-flutter.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "expidus-calculator";
   version = "0.1.1-alpha";
 

@@ -5438,7 +5438,8 @@ with pkgs;
     callPackage ../development/compilers/flutter { useNixpkgsEngine = true; }
   );
   flutterPackages = flutterPackages-bin;
-  flutter = flutterPackages.stable;
+  # This is moved to aliases.nix to avoid unpinned use in-tree
+  # flutter = flutterPackages.stable;
   flutter329 = flutterPackages.v3_29;
   flutter327 = flutterPackages.v3_27;
   flutter326 = flutterPackages.v3_26;
