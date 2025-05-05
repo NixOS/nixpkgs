@@ -160,7 +160,7 @@ The Gradle setup hook accepts the following environment variables:
   the package if `doCheck` is set to `true`. Defaults to `test`.
 - `gradleUpdateTask` - the Gradle task (or tasks) to be used for
   fetching all of the package's dependencies in
-  `mitmCache.updateScript`. Defaults to `nixDownloadDeps`.
+  `mitmCache.updateScript`. Defaults to `help --write-verification-metadata sha256`.
 - `gradleUpdateScript` - the code to run for fetching all of the
   package's dependencies in `mitmCache.updateScript`. Defaults to
   running the `preBuild` and `preGradleUpdate` hooks, running the

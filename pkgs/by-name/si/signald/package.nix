@@ -89,10 +89,10 @@ stdenv.mkDerivation {
   gradleUpdateScript = ''
     runHook preBuild
 
-    SIGNALD_TARGET=x86_64-unknown-linux-gnu gradle nixDownloadDeps
-    SIGNALD_TARGET=aarch64-unknown-linux-gnu gradle nixDownloadDeps
-    SIGNALD_TARGET=x86_64-apple-darwin gradle nixDownloadDeps
-    SIGNALD_TARGET=aarch64-apple-darwin gradle nixDownloadDeps
+    SIGNALD_TARGET=x86_64-unknown-linux-gnu gradle --write-verification-metadata sha256
+    SIGNALD_TARGET=aarch64-unknown-linux-gnu gradle --write-verification-metadata sha256
+    SIGNALD_TARGET=x86_64-apple-darwin gradle --write-verification-metadata sha256
+    SIGNALD_TARGET=aarch64-apple-darwin gradle --write-verification-metadata sha256
   '';
 
   meta = with lib; {

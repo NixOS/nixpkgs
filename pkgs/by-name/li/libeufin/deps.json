@@ -985,9 +985,6 @@
    "jar": "sha256-ZzHCVkuXOXGDWCVJAUC3rZ63Jtk4/gzvTr7y7Fkt6wM=",
    "pom": "sha256-rVSg2nLxASl08e7sdp2EopMnzzfMrVUxt4cT/GD0tnY="
   },
-  "org/jetbrains/kotlin#kotlin-native-prebuilt/2.0.20": {
-   "pom": "sha256-xYoRfPul4AVC+QrYLytqsh4Z46Ifzvy0mLq5k69FDwY="
-  },
   "org/jetbrains/kotlin#kotlin-native-utils/2.0.20": {
    "jar": "sha256-wWbyBR6R0ZnpYP/HsnZEhcFRDNF2dN17jOPC/NBqhys=",
    "pom": "sha256-mISZMftwkWhS6qfCDm2Pr1IsUNd627r9k2T1JrfN7EI="
@@ -1113,9 +1110,6 @@
   },
   "org/jetbrains/kotlin/jvm#org.jetbrains.kotlin.jvm.gradle.plugin/2.0.20": {
    "pom": "sha256-JyOoqUP6SkTTcD8VTEW31UcMcZ1OYKvz4ixzt3s4i5M="
-  },
-  "org/jetbrains/kotlin/kotlin-native-prebuilt/2.0.20/kotlin-native-prebuilt-2.0.20-linux-x86_64": {
-   "tar.gz": "sha256-soKRi19RWLL41bU94ICTpyIG/CO5E4Lh3dJjDHIChCc="
   },
   "org/jetbrains/kotlin/plugin/serialization#org.jetbrains.kotlin.plugin.serialization.gradle.plugin/2.0.20": {
    "pom": "sha256-0s2V9THwNRgW+fg0bsbWB2xxyt9jLz6PZX3dft+RukE="

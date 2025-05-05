@@ -914,9 +914,6 @@
    "jar": "sha256-ZzHCVkuXOXGDWCVJAUC3rZ63Jtk4/gzvTr7y7Fkt6wM=",
    "pom": "sha256-rVSg2nLxASl08e7sdp2EopMnzzfMrVUxt4cT/GD0tnY="
   },
-  "org/jetbrains/kotlin#kotlin-native-prebuilt/2.0.20": {
-   "pom": "sha256-xYoRfPul4AVC+QrYLytqsh4Z46Ifzvy0mLq5k69FDwY="
-  },
   "org/jetbrains/kotlin#kotlin-reflect/1.6.10": {
    "jar": "sha256-MnesECrheq0QpVq+x1/1aWyNEJeQOWQ0tJbnUIeFQgM=",
    "pom": "sha256-V5BVJCdKAK4CiqzMJyg/a8WSWpNKBGwcxdBsjuTW1ak="
@@ -984,9 +981,6 @@
   },
   "org/jetbrains/kotlin#kotlin-test/2.0.20/all": {
    "jar": "sha256-2iho+pWj+4814rTjMcouKTIUhnAZZex2a66CD5jgJ3w="
-  },
-  "org/jetbrains/kotlin/kotlin-native-prebuilt/2.0.20/kotlin-native-prebuilt-2.0.20-linux-x86_64": {
-   "tar.gz": "sha256-soKRi19RWLL41bU94ICTpyIG/CO5E4Lh3dJjDHIChCc="
   },
   "org/jetbrains/kotlinx#atomicfu/0.23.1": {
    "jar": "sha256-fbhmDr5LkbtHjts2FsTjpQulnAfcpRfR4ShMA/6GrFc=",
