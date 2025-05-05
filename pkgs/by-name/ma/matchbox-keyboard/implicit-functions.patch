@@ -1,0 +1,47 @@
+--- a/src/matchbox-keyboard-ui-xft-backend.h
++++ b/src/matchbox-keyboard-ui-xft-backend.h
+@@ -27,6 +27,9 @@
+ MBKeyboardUIBackend*
+ mb_kbd_ui_xft_init(MBKeyboardUI *ui);
+ 
++void
++mb_kbd_ui_xft_destroy (MBKeyboardUI *ui);
++
+ #define MB_KBD_UI_BACKEND_INIT_FUNC(ui)  mb_kbd_ui_xft_init((ui))
+ #define MB_KBD_UI_BACKEND_DESTROY_FUNC(ui)  mb_kbd_ui_xft_destroy((ui))
+ 
+--- a/src/matchbox-keyboard.h
++++ b/src/matchbox-keyboard.h
+@@ -332,6 +332,12 @@
+ void
+ mb_kbd_ui_handle_widget_xevent (MBKeyboardUI *ui, XEvent *xev);
+ 
++void
++mb_kbd_ui_handle_configure(MBKeyboardUI *ui, int width, int height);
++
++void
++mb_kbd_ui_update_display_size(MBKeyboardUI *ui);
++
+ #ifdef WANT_CAIRO
+ #define mb_kbd_image_width(x) cairo_image_surface_get_width (x)
+ #define mb_kbd_image_height(x) cairo_image_surface_get_height (x)
+@@ -379,6 +385,9 @@
+             int x, int y, int w, int h);
+ #endif
+ 
++void
++mb_kbd_destroy (MBKeyboard *kb);
++
+ int
+ mb_kbd_row_spacing(MBKeyboard *kb);
+ 
+@@ -647,6 +656,9 @@
+ void
+ mb_kbd_key_dump_key(MBKeyboardKey *key);
+ 
++MBKeyboardKeyActionType
++mb_kbd_key_get_action_type(MBKeyboardKey *key, MBKeyboardKeyStateType state);
++
+ #define mb_kdb_key_foreach_state(k,s)                     \
+        for((s)=0; (s) < N_MBKeyboardKeyStateTypes; (s)++) \
+             if (mb_kdb_key_has_state((k), (s)))
