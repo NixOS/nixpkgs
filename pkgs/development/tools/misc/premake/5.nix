@@ -4,7 +4,6 @@
   fetchFromGitHub,
   libuuid,
   cacert,
-  Foundation,
   readline,
 }:
 
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libuuid ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
       readline
     ];
 

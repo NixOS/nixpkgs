@@ -5,12 +5,8 @@
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
   version = "7.5.0";
@@ -30,14 +26,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
   OPENSSL_NO_VENDOR = "1";

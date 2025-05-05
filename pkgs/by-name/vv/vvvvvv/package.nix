@@ -11,8 +11,6 @@
   physfs,
   SDL2,
   tinyxml-2,
-  Foundation,
-  IOKit,
   makeAndPlay ? false,
 }:
 
@@ -41,17 +39,12 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      faudio
-      physfs
-      SDL2
-      tinyxml-2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      IOKit
-    ];
+  buildInputs = [
+    faudio
+    physfs
+    SDL2
+    tinyxml-2
+  ];
 
   cmakeDir = "../desktop_version";
 

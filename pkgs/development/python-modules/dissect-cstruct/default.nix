@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -21,6 +22,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-Y6maLjugnso3cc9zyiZ/6AdrftYAAImYNBDXPJdTuWc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test_types_enum.patch";
+      url = "https://github.com/fox-it/dissect.cstruct/commit/b6c73136828fc2ae59b51d1f68529002d7c37131.diff";
+      hash = "sha256-hicMolFu/qAw9QkOyug4PNm2Do2PxuXNXPB+/JHOaFg=";
+    })
+  ];
 
   build-system = [
     setuptools

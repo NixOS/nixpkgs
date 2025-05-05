@@ -3,7 +3,7 @@
   mkCoqDerivation,
   coq,
   version ? null,
-  ssreflect,
+  mathcomp-boot,
   deriving,
 }:
 
@@ -15,7 +15,7 @@
   defaultVersion =
     with lib.versions;
     lib.switch
-      [ coq.coq-version ssreflect.version ]
+      [ coq.coq-version mathcomp-boot.version ]
       [
         {
           cases = [
@@ -63,7 +63,7 @@
   release."0.3.0".sha256 = "sha256:14rm0726f1732ldds495qavg26gsn30w6dfdn36xb12g5kzavp38";
   release."0.2.2".sha256 = "sha256:1clzza73gccy6p6l95n6gs0adkqd3h4wgl4qg5l0qm4q140grvm7";
 
-  propagatedBuildInputs = [ ssreflect ];
+  propagatedBuildInputs = [ mathcomp-boot ];
 
   meta = with lib; {
     description = "Finite data structures with extensional reasoning";

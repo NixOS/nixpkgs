@@ -251,11 +251,7 @@ let
             jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
           */
         ]
-        # FIXME: the aarch64-darwin stdenvBootstrapTools are broken
-        #  due to some locale impurity changing in macOS 15.4
-        ++ release-lib.lib.filter (j: j.system != "aarch64-darwin") (
-          collect isDerivation jobs.stdenvBootstrapTools
-        )
+        ++ collect isDerivation jobs.stdenvBootstrapTools
         ++ optionals supportDarwin.x86_64 [
           jobs.stdenv.x86_64-darwin
           jobs.cargo.x86_64-darwin
@@ -369,6 +365,7 @@ let
               "ghc96"
               "ghc98"
               "ghc910"
+              "ghc912"
             ]
             (compilerName: {
               inherit (packagePlatforms pkgs.haskell.packages.${compilerName})

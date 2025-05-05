@@ -19,7 +19,6 @@
   withVoikko ? true,
   withAppleSpell ? stdenv.hostPlatform.isDarwin,
 
-  Cocoa,
 }:
 
 assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
@@ -57,9 +56,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withVoikko [
       libvoikko
-    ]
-    ++ lib.optionals withAppleSpell [
-      Cocoa
     ];
 
   checkInputs = [

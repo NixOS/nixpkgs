@@ -18,6 +18,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,12 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
       hotdoc
     ];
 
-  buildInputs = [
-    bash-completion
-    libxml2
-    gst-devtools
-    python3
-  ];
+  buildInputs =
+    [
+      bash-completion
+      libxml2
+      gst-devtools
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ];
 
   propagatedBuildInputs = [
     gst-plugins-base

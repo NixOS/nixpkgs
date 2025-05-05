@@ -1,12 +1,10 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
   pkg-config,
   openssl,
-  darwin,
   rdkafka,
 }:
 
@@ -36,14 +34,10 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      rdkafka
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    rdkafka
+  ];
 
   passthru.updateScript = nix-update-script { };
 

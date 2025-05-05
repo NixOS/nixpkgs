@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -9,7 +8,6 @@
   vulkan-loader,
   freetype,
   fontconfig,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,19 +30,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      freetype
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        QuartzCore
-        AppKit
-      ]
-    );
+  buildInputs = [
+    freetype
+    fontconfig
+  ];
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;

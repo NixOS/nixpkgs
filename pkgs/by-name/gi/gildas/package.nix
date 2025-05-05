@@ -11,7 +11,6 @@
   perl,
   groff,
   which,
-  darwin,
   ncurses,
 }:
 
@@ -48,32 +47,24 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      gtk2-x11
-      cfitsio
-      python3Env
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks; [ CoreFoundation ]
-    );
+  buildInputs = [
+    gtk2-x11
+    cfitsio
+    python3Env
+    ncurses
+  ];
 
   patches =
     [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./clang.patch
       ./cpp-darwin.patch
-    ]);
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
-
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks"
-  );
 
   configurePhase = ''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out

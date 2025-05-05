@@ -10,7 +10,6 @@
   gperf,
   dejavu_fonts,
   autoreconfHook,
-  CoreFoundation,
   testers,
 }:
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
+  ];
 
   propagatedBuildInputs = [
     freetype

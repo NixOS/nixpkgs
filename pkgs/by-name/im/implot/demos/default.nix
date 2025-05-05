@@ -5,7 +5,6 @@
   fetchpatch,
   cmake,
   pkg-config,
-  darwin,
   fmt,
   gtk3,
   iir1,
@@ -54,18 +53,15 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      fmt
-      iir1
-      imgui
-      imnodes
-      implot
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = [
+    curl
+    fmt
+    iir1
+    imgui
+    imnodes
+    implot
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
 
   meta = {
     description = "Standalone ImPlot Demos";

@@ -35,7 +35,8 @@
   gperf,
   withGrpc ? true,
   grpc,
-  protobuf,
+  # see https://github.com/syslog-ng/syslog-ng/pull/5263
+  protobuf_29,
 }:
 let
   python-deps =
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       rdkafka
     ]
     ++ (lib.optionals withGrpc [
-      protobuf
+      protobuf_29
       grpc
     ]);
 

@@ -1,13 +1,8 @@
 # Compatibility stubs for packages that used the old SDK frameworks.
-# TODO(@reckenrode) Make these stubs warn after framework usage has been cleaned up in nixpkgs.
 {
   lib,
   callPackage,
-  newScope,
-  overrideSDK,
   pkgs,
-  stdenv,
-  stdenvNoCC,
 }:
 
 let

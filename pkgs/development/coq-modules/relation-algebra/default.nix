@@ -3,7 +3,7 @@
   mkCoqDerivation,
   coq,
   aac-tactics,
-  mathcomp,
+  mathcomp-boot,
   version ? null,
 }:
 
@@ -79,7 +79,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [
     aac-tactics
-    mathcomp.ssreflect
+    mathcomp-boot
   ];
 
   meta = with lib; {

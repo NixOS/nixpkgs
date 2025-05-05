@@ -4,7 +4,6 @@
   buildPackages,
   fetchurl,
   flex,
-  cracklib,
   db4,
   gettext,
   audit,
@@ -51,7 +50,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [
-    cracklib
     db4
     libxcrypt
   ] ++ lib.optional stdenv.buildPlatform.isLinux audit;

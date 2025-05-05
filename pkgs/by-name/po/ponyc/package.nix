@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  apple-sdk_13,
   cmake,
   coreutils,
+  darwinMinVersionHook,
   libxml2,
   lto ? true,
   makeWrapper,
@@ -17,7 +19,6 @@
   which,
   z3,
   cctools,
-  darwin,
 }:
 
 stdenv.mkDerivation (rec {
@@ -48,13 +49,20 @@ stdenv.mkDerivation (rec {
     hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    which
-    python3
-    git
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools ];
+  nativeBuildInputs =
+    [
+      cmake
+      makeWrapper
+      which
+      python3
+      git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Keep in sync with `PONY_OSX_PLATFORM`.
+      apple-sdk_13
+      (darwinMinVersionHook "13.0")
+      cctools.libtool
+    ];
 
   buildInputs = [
     libxml2
@@ -68,7 +76,7 @@ stdenv.mkDerivation (rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (replaceVars ./fix-darwin-build.patch {
-        libSystem = darwin.Libsystem;
+        apple-sdk = apple-sdk_13;
       })
     ];
 

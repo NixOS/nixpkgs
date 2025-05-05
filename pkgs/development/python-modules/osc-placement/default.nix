@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "osc-placement";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "osc-placement";
     tag = version;
-    hash = "sha256-PUwyYOg1dymlnnTr6TnxS42ISmbS00YfOdkL+5MbYFI=";
+    hash = "sha256-8D/8WRUZnVTCXL/I+KmIGKtnfyjM7evux808+XY3ciw=";
   };
 
   env.PBR_VERSION = version;

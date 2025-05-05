@@ -30,7 +30,6 @@
   libwebp,
   luajit,
   openexr,
-  OpenCL,
   suitesparse,
   withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
   gimp,
@@ -81,9 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
       gexiv2
       openexr
       suitesparse
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenCL
     ]
     ++ lib.optionals stdenv.cc.isClang [
       llvmPackages.openmp

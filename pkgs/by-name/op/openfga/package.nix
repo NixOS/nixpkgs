@@ -7,7 +7,7 @@
 
 let
   pname = "openfga";
-  version = "1.8.10";
+  version = "1.8.11";
 in
 
 buildGoModule {
@@ -17,7 +17,7 @@ buildGoModule {
     owner = "openfga";
     repo = "openfga";
     rev = "v${version}";
-    hash = "sha256-G2H9YM1cPt1qLIBBlRuUX/uyAwQxlsCMIXqsuI1ryrA=";
+    hash = "sha256-Qv82KeRcK6Io+JB/5NvJ4pdUNFmf8H1OUzRyoH7P4BQ=";
   };
 
   vendorHash = "sha256-Bzgtb4kYUB/+JhFqYoiLKFe09EpNrBk2gwOndLXDm/8=";

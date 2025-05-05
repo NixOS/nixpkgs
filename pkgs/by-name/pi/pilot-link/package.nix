@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  darwin,
   popt,
   bluezSupport ? stdenv.hostPlatform.isLinux,
   bluez,
@@ -50,8 +49,7 @@ stdenv.mkDerivation {
     ++ lib.optionals bluezSupport [ bluez ]
     ++ lib.optionals enableLibpng [ libpng ]
     ++ lib.optionals enableLibusb [ libusb-compat-0_1 ]
-    ++ lib.optionals readlineSupport [ readline ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit ]);
+    ++ lib.optionals readlineSupport [ readline ];
 
   configureFlags =
     [ "--with-libiconv" ]

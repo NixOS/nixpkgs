@@ -47,6 +47,12 @@ rustPlatform.buildRustPackage {
     mv tauri.linux.conf.json.2 tauri.linux.conf.json
     chmod 777 ../.cargo
     rm ../.cargo/config.toml
+
+    # As a side effect of patching the service to fix the arbitrary file overwrite issue,
+    # we also need to update the timestamp format in the filename to the second level.
+    # This ensures that the Clash kernel can still be restarted within one minute without problems.
+    substituteInPlace src/utils/dirs.rs \
+      --replace-fail '%Y-%m-%d-%H%M' '%Y-%m-%d-%H%M%S'
   '';
 
   nativeBuildInputs = [

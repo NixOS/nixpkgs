@@ -3,9 +3,6 @@
   stdenv,
   fetchFromGitHub,
   perl,
-  AppKit,
-  Cocoa,
-  ScriptingBridge,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +18,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     perl
-    Cocoa
-    AppKit
-    ScriptingBridge
   ];
 
   patches = [ ./trash.diff ];

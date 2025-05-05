@@ -1,12 +1,9 @@
 {
   fetchFromGitHub,
   lib,
-  libiconv,
   llvmPackages,
-  MacOSX-SDK,
   makeBinaryWrapper,
   nix-update-script,
-  Security,
   which,
 }:
 
@@ -24,16 +21,9 @@ stdenv.mkDerivation {
     hash = "sha256-GXea4+OIFyAhTqmDh2q+ewTUqI92ikOsa2s83UH2r58=";
   };
 
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/linker.cpp \
-          --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
-    ''
-    + ''
-      substituteInPlace build_odin.sh \
-          --replace-fail '-framework System' '-lSystem'
-      patchShebangs build_odin.sh
-    '';
+  patches = [
+    ./darwin-remove-impure-links.patch
+  ];
 
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
@@ -44,11 +34,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     which
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Security
   ];
 
   installPhase = ''

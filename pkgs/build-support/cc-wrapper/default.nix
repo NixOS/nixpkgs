@@ -880,6 +880,7 @@ stdenvNoCC.mkDerivation {
       cc = optionalString (!nativeTools) cc;
       wrapperName = "CC_WRAPPER";
       inherit suffixSalt coreutils_bin bintools;
+      bintools_targetPrefix = bintools.targetPrefix;
       inherit libc_bin libc_dev libc_lib;
       inherit darwinPlatformForCC;
       default_hardening_flags_str = builtins.toString defaultHardeningFlags;

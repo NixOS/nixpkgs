@@ -26,9 +26,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
 
   passthru.tests.version = testers.testVersion {
     package = lazysql;

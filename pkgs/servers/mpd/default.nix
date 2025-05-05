@@ -9,9 +9,6 @@
   systemd,
   fmt,
   buildPackages,
-  # Darwin inputs
-  AudioToolbox,
-  AudioUnit,
   # Inputs
   curl,
   libcdio,
@@ -209,21 +206,15 @@ let
         sha256 = "sha256-6wEFgiMsEoWvmfH609d+UZY7jzqDoNmXalpHBipqTN0=";
       };
 
-      buildInputs =
-        [
-          glib
-          fmt
-          # According to the configurePhase of meson, gtest is considered a
-          # runtime dependency. Quoting:
-          #
-          #    Run-time dependency GTest found: YES 1.10.0
-          gtest
-        ]
-        ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          AudioToolbox
-          AudioUnit
-        ];
+      buildInputs = [
+        glib
+        fmt
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        gtest
+      ] ++ concatAttrVals features_ featureDependencies;
 
       nativeBuildInputs = [
         meson

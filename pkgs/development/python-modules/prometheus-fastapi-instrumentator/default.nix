@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -44,6 +45,9 @@ buildPythonPackage rec {
     requests
   ];
 
+  # numerous test failures on Darwin
+  doCheck = stdenv.isLinux;
+
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 
   meta = {
@@ -55,6 +59,6 @@ buildPythonPackage rec {
       bsd3
     ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.linux; # numerous test failures on Darwin
+    platforms = lib.platforms.unix;
   };
 }

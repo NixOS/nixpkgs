@@ -468,7 +468,7 @@ pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
 
 # OctoDNS
-pkgs/tools/networking/octodns/ @anthonyroussel
+pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
 pkgs/servers/teleport   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger

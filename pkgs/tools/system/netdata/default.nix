@@ -5,7 +5,6 @@
   cmake,
   cups,
   curl,
-  darwin,
   dlib,
   fetchFromGitHub,
   fetchurl,
@@ -33,7 +32,6 @@
   ninja,
   nixosTests,
   openssl,
-  overrideSDK,
   pkg-config,
   protobuf,
   replaceVars,
@@ -58,10 +56,7 @@
   withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   withML ? true,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.4.0";
   pname = "netdata";
 
@@ -98,14 +93,10 @@ stdenv'.mkDerivation (finalAttrs: {
       protobuf
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        IOKit
-        libossp_uuid
-      ]
-    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libossp_uuid
+    ]
+
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       libcap
       libuuid

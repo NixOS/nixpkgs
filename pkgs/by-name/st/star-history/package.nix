@@ -1,11 +1,9 @@
 {
   lib,
   rustPlatform,
-  darwin,
   fetchCrate,
   pkg-config,
   openssl,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "Command line program to generate a graph showing number of GitHub stars of a user, org or repo over time";

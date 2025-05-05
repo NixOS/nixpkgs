@@ -1,7 +1,6 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchurl,
   pkg-config,
   stdenv,
@@ -25,13 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
-    ];
+  buildInputs = [
+    SDL2
+  ];
 
   outputs = [
     "out"

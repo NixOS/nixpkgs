@@ -36,5 +36,6 @@ jobs:
         run: "nix-env -f '<nixpkgs>' -iAP keep-sorted jq"
 
       - name: Check that Nix files are sorted
+        shell: bash
         run: |
           git ls-files | xargs keep-sorted --mode lint | jq --raw-output '.[] | "Please make sure any new entries in \(.path) are sorted alphabetically."'

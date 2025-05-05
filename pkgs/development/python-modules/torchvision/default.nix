@@ -22,23 +22,25 @@
 
   # tests
   pytest,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv;
 
   pname = "torchvision";
-  version = "0.20.1";
+  version = "0.21.0";
 in
 buildPythonPackage {
   inherit pname version;
+
+  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     tag = "v${version}";
-    hash = "sha256-BXvi4LoO2LZtNSE8lvFzcN4H2nN2fRg5/s7KRci7rMM=";
+    hash = "sha256-eDWw1Lt/sUc2Xt6cqOM5xaOfmsm+NEL5lZO+cIJKMtU=";
   };
 
   nativeBuildInputs = [
@@ -74,24 +76,24 @@ buildPythonPackage {
       export TORCHVISION_INCLUDE="${libjpeg_turbo.dev}/include/"
       export TORCHVISION_LIBRARY="${libjpeg_turbo}/lib/"
     ''
-    # NOTE: We essentially override the compilers provided by stdenv because we don't have a hook
-    #   for cudaPackages to swap in compilers supported by NVCC.
     + lib.optionalString cudaSupport ''
-      export CC=${backendStdenv.cc}/bin/cc
-      export CXX=${backendStdenv.cc}/bin/c++
       export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
       export FORCE_CUDA=1
     '';
 
-  # tries to download many datasets for tests
+  # tests download big datasets, models, require internet connection, etc.
   doCheck = false;
 
   pythonImportsCheck = [ "torchvision" ];
-  checkPhase = ''
-    HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
-  '';
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+    writableTmpDirAsHomeHook
+  ];
+
+  checkPhase = ''
+    py.test test --ignore=test/test_datasets_download.py
+  '';
 
   meta = {
     description = "PyTorch vision library";

@@ -44,9 +44,69 @@ let
   mapAliases = lib.mapAttrs (
     n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
   );
+
+  # Old Darwin pattern stubs; remove these by 25.11.
+
+  mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
+
+  warnStub =
+    prefix:
+    lib.warn "${prefix} these stubs do nothing and will be removed in Nixpkgs 25.11; see <https://nixos.org/manual/nixpkgs/stable/#sec-darwin> for documentation and migration instructions";
+
+  apple_sdk_11_0 = warnStub "darwin.apple_sdk_11_0.*:" (
+    pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { }
+  );
+
+  apple_sdk_12_3 =
+    warnStub
+      "darwin.apple_sdk_12_3.*: add `apple-sdk_12` to build inputs instead to use the macOS 12 SDK."
+      (pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { });
+
+  apple_sdk = apple_sdk_11_0;
+
+  stubs =
+    {
+      inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
+    }
+    // lib.genAttrs [
+      "CF"
+      "CarbonHeaders"
+      "CommonCrypto"
+      "CoreSymbolication"
+      "IOKit"
+      "Libc"
+      "Libinfo"
+      "Libm"
+      "Libnotify"
+      "Librpcsvc"
+      "Libsystem"
+      "LibsystemCross"
+      "Security"
+      "architecture"
+      "cf-private"
+      "configd"
+      "configdHeaders"
+      "darwin-stubs"
+      "dtrace"
+      "eap8021x"
+      "hfs"
+      "hfsHeaders"
+      "launchd"
+      "libclosure"
+      "libdispatch"
+      "libmalloc"
+      "libobjc"
+      "libplatform"
+      "libpthread"
+      "mDNSResponder"
+      "objc4"
+      "ppp"
+      "xnu"
+    ] (name: warnStub "darwin.${name}:" (mkStub "11.0" name));
 in
 
-mapAliases ({
+stubs
+// mapAliases ({
   ### A ###
 
   apple_sdk_10_12 = throw "darwin.apple_sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
@@ -63,8 +123,6 @@ mapAliases ({
   cctools-llvm = pkgs.cctools; # added 2024-07-01
   cctools-port = pkgs.cctools; # added 2024-07-17
 
-  cf-private = throw "'cf-private' has been renamed to 'apple_sdk.frameworks.CoreFoundation'.";
-
   ### D ###
 
   discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27
@@ -78,7 +136,13 @@ mapAliases ({
   ### L ###
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
+  libresolvHeaders = lib.warn "darwin.libresolvHeaders: use `lib.getInclude darwin.libresolv`; this will be removed in 25.11" (
+    lib.getDev self.libresolv
+  ); # added 2025-04-20
   libtapi = pkgs.libtapi; # 2024-08-16
+  libutilHeaders = lib.warn "darwin.libutilHeaders: use `lib.getInclude darwin.libutil`; this will be removed in 25.11" (
+    lib.getDev self.libutil
+  ); # added 2025-04-20
 
   ### M ###
 
@@ -90,4 +154,21 @@ mapAliases ({
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23
+  print-reexports = throw "'darwin.print-reexports' has been removed as it was unused"; # added 2025-04-20
+
+  ### R ###
+
+  rewrite-tbd = throw "'darwin.rewrite-tbd' has been removed, as it was unused and replaced by `llvm-readtapi(1)`"; # added 2025-04-20
+
+  ### S ###
+
+  stdenvNoCF =
+    lib.warn "darwin.stdenvNoCF: use `stdenv` or `stdenvNoCC`; this will be removed in 25.11"
+      (
+        pkgs.stdenv.override {
+          extraBuildInputs = [ ];
+        }
+      ); # added 2025-04-20
+  stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # added 2025-04-20
+  swift-corelibs-foundation = throw "'darwin.swift-corelibs-foundation' has been removed, as it was broken and is no longer used"; # added 2025-04-20
 })

@@ -25,11 +25,11 @@ assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
 stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
-  version = "5.3.1";
+  version = "5.3.2";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
-    hash = "sha256-aU23ZIEqYjZCPU/0DOt7bExEEwG3KtUCu1wn4AzVb3g=";
+    hash = "sha256-+MNIZQnecFGSE4sA7ywAu73Q6Eww1cB9I/xzqdxMycw=";
   };
 
   # PIE is incompatible with the "persistent malloc" ("pma") feature.
@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: figure out a better way to unbreak _NSGetExecutablePath invocations
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"

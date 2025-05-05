@@ -6,7 +6,6 @@
   tailwindcss,
   oniguruma,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,14 +27,9 @@ rustPlatform.buildRustPackage rec {
     tailwindcss
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    oniguruma
+  ];
 
   # requires internet access
   checkFlags = [

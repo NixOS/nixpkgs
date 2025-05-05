@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "python-magnumclient";
-  version = "4.7.0";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-magnumclient";
     tag = version;
-    hash = "sha256-2JHI3CB/DSZZ4LXzL3PCUSmubTciUXtZkc5jpeEc4kk=";
+    hash = "sha256-rXLJnvGc5VHkHghCoBLRhARwl3hhS/oI2VOsGWfESkM=";
   };
 
   env.PBR_VERSION = version;

@@ -14,11 +14,6 @@
   opusfile,
   libogg,
   libxmp,
-  Cocoa,
-  CoreAudio,
-  CoreFoundation,
-  IOKit,
-  OpenGL,
   copyDesktopItems,
   makeDesktopItem,
   pkg-config,
@@ -51,29 +46,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gzip
-      libGL
-      libGLU
-      libvorbis
-      libmad
-      flac
-      libopus
-      opusfile
-      libogg
-      libxmp
-      (if useSDL2 then SDL2 else SDL)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreAudio
-      IOKit
-      OpenGL
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && useSDL2) [
-      CoreFoundation
-    ];
+  buildInputs = [
+    gzip
+    libGL
+    libGLU
+    libvorbis
+    libmad
+    flac
+    libopus
+    opusfile
+    libogg
+    libxmp
+    (if useSDL2 then SDL2 else SDL)
+  ];
 
   buildFlags =
     [

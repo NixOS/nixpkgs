@@ -8,7 +8,6 @@
   sqlite,
   testers,
   moonfire-nvr,
-  darwin,
   nodejs,
   pnpm_9,
 }:
@@ -59,17 +58,10 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      ncurses
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-      ]
-    );
+  buildInputs = [
+    ncurses
+    sqlite
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/ui

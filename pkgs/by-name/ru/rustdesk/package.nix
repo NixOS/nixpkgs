@@ -29,7 +29,6 @@
   zlib,
   zstd,
   stdenv,
-  darwin,
   alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
@@ -144,19 +143,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreAudio
-        CoreFoundation
-        CoreGraphics
-        Foundation
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    )
+
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       xdotool

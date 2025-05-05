@@ -188,7 +188,6 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      sarahec
       aspauldingcode
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

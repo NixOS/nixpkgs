@@ -5,7 +5,6 @@
   openssl,
   nushell,
   pkg-config,
-  Security,
   nix-update-script,
 }:
 
@@ -15,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
   cargoBuildFlags = [ "--package nu_plugin_gstat" ];
 
   checkPhase = ''

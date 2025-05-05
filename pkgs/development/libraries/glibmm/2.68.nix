@@ -7,7 +7,6 @@
   glib,
   libsigcxx30,
   gnome,
-  Cocoa,
   meson,
   ninja,
 }:
@@ -32,10 +31,6 @@ stdenv.mkDerivation rec {
     ninja
     gnum4
     glib # for glib-compile-schemas
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ];
 
   propagatedBuildInputs = [

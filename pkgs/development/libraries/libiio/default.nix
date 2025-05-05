@@ -14,8 +14,6 @@
   runtimeShell,
   lib,
   pkg-config,
-  CFNetwork,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,11 +57,7 @@ stdenv.mkDerivation rec {
       libusb1
     ]
     ++ lib.optional avahiSupport avahi
-    ++ lib.optional stdenv.hostPlatform.isLinux libaio
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CFNetwork
-      CoreServices
-    ];
+    ++ lib.optional stdenv.hostPlatform.isLinux libaio;
 
   cmakeFlags =
     [

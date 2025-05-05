@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
-      darwin.apple_sdk.frameworks.CoreServices
       darwin.developer_cmds
       darwin.DarwinTools
     ];

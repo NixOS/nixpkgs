@@ -11,19 +11,6 @@
 }:
 
 let
-  # Prefix for binaries. Customarily ends with a dash separator.
-  #
-  # TODO(@Ericson2314) Make unconditional, or optional but always true by
-  # default.
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
-    stdenv.targetPlatform.config + "-"
-  );
-
-  # Bootstrap `fetchurl` needed to build SDK packages without causing an infinite recursion.
-  fetchurlBoot = import ../build-support/fetchurl/boot.nix {
-    inherit (stdenv) system;
-  };
-
   aliases =
     self: super:
     lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
@@ -39,13 +26,10 @@ let
           pkg
       ) (old.extraBuildInputs or [ ]);
     });
-
-  mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
 in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
-  extra = spliced: spliced.apple_sdk.frameworks;
   f = lib.extends aliases (
     self:
     let
@@ -57,72 +41,13 @@ makeScopeWithSplicing' {
         directory = ../os-specific/darwin/apple-source-releases;
       };
 
-      # Compatibility packages that aren’t necessary anymore
-      apple-source-headers = {
-        libresolvHeaders = lib.getDev self.libresolv;
-        libutilHeaders = lib.getDev self.libutil;
-      };
-
       # Must use pkgs.callPackage to avoid infinite recursion.
       impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
-
-      # macOS 11.0 SDK
-      apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
-
-      # macOS 12.3 SDK
-      apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
-
-      apple_sdk = apple_sdk_11_0;
-
-      stubs =
-        {
-          inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
-          libobjc = self.objc4;
-        }
-        // lib.genAttrs [
-          "CF"
-          "CarbonHeaders"
-          "CommonCrypto"
-          "CoreSymbolication"
-          "IOKit"
-          "Libc"
-          "Libinfo"
-          "Libm"
-          "Libnotify"
-          "Librpcsvc"
-          "Libsystem"
-          "LibsystemCross"
-          "Security"
-          "architecture"
-          "configd"
-          "configdHeaders"
-          "darwin-stubs"
-          "dtrace"
-          "eap8021x"
-          "hfs"
-          "hfsHeaders"
-          "launchd"
-          "libclosure"
-          "libdispatch"
-          "libmalloc"
-          "libplatform"
-          "libpthread"
-          "mDNSResponder"
-          "objc4"
-          "ppp"
-          "xnu"
-        ] (mkStub apple_sdk.version);
     in
 
     impure-cmds
     // apple-source-packages
-    // apple-source-headers
-    // stubs
     // {
-
-      stdenvNoCF = stdenv.override {
-        extraBuildInputs = [ ];
-      };
 
       inherit (self.adv_cmds) ps;
 
@@ -174,15 +99,6 @@ makeScopeWithSplicing' {
 
       DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
-      print-reexports = callPackage ../os-specific/darwin/print-reexports { };
-
-      rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
-
-      checkReexportsHook = pkgs.makeSetupHook {
-        name = "darwin-check-reexports-hook";
-        propagatedBuildInputs = [ pkgs.darwin.print-reexports ];
-      } ../os-specific/darwin/print-reexports/setup-hook.sh;
-
       libunwind = callPackage ../os-specific/darwin/libunwind { };
 
       sigtool = callPackage ../os-specific/darwin/sigtool { };
@@ -203,8 +119,6 @@ makeScopeWithSplicing' {
       lsusb = callPackage ../os-specific/darwin/lsusb { };
 
       openwith = callPackage ../os-specific/darwin/openwith { };
-
-      stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
 
       trash = callPackage ../os-specific/darwin/trash { };
 
@@ -265,12 +179,6 @@ makeScopeWithSplicing' {
         name = "xcode-project-check-hook";
         propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
       } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
-
-      # Formerly the CF attribute. Use this is you need the open source release.
-      swift-corelibs-foundation = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
-
-      # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
-      # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
       # See doc/packages/darwin-builder.section.md
       linux-builder = lib.makeOverridable (

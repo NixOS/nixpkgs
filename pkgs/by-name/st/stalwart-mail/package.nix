@@ -10,7 +10,6 @@
   foundationdb,
   zstd,
   stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
   rocksdb,
@@ -20,17 +19,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  version = "0.11.7";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
     tag = "v${version}";
-    hash = "sha256-pBCj/im5UB7A92LBuLeB6EAHTJEuN62BG5Nkj8qsNNA=";
+    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-B+xsTVsh9QBAybKiJq0Sb7rveOsH05vuCmNQ5t/UZnk=";
+  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
 
   nativeBuildInputs = [
     pkg-config

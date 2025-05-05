@@ -84,6 +84,18 @@ license = [
 ]
 homepage = "https://github.com/JL-ghcoder/Typst-Pre-Template"
 
+[academicv."1.1.0"]
+url = "https://packages.typst.org/preview/academicv-1.1.0.tar.gz"
+hash = "sha256-OzuK3FlqGPgFEoBz3J8zTJXfxG5qbO0oZFGVPofXqA0="
+typstDeps = [
+    "academicv_1_0_0",
+]
+description = "A clean, flexible curriculum vitae (CV) template using Typst and YAML"
+license = [
+    "Apache-2.0",
+]
+homepage = "https://github.com/roaldarbol/academicv"
+
 [academicv."1.0.0"]
 url = "https://packages.typst.org/preview/academicv-1.0.0.tar.gz"
 hash = "sha256-GHXDKGpD9JZIZbCmziNORHx4n6VjwY4R4nh8bUyGYQ4="
@@ -444,6 +456,16 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/Robotechnic/alchemist"
+
+[alexandria."0.2.0"]
+url = "https://packages.typst.org/preview/alexandria-0.2.0.tar.gz"
+hash = "sha256-N8O9v1tD6CemqbJjX8yTMK2ZGFFASLchZSEie1v2Y3w="
+typstDeps = []
+description = "Use multiple bibliographies in a single Typst document "
+license = [
+    "MIT",
+]
+homepage = "https://github.com/SillyFreak/typst-alexandria"
 
 [alexandria."0.1.3"]
 url = "https://packages.typst.org/preview/alexandria-0.1.3.tar.gz"
@@ -910,6 +932,18 @@ license = [
 ]
 homepage = "https://github.com/typst/templates"
 
+[arborly."0.3.0"]
+url = "https://packages.typst.org/preview/arborly-0.3.0.tar.gz"
+hash = "sha256-/5uZL6VbHbNkof5ffFuqnzl1EALCaZ4wdxrYn+IjdSU="
+typstDeps = [
+    "mantys_1_0_1",
+]
+description = "A library for producing beautiful syntax tree graphs"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/pearcebasmanm/arborly"
+
 [arborly."0.2.0"]
 url = "https://packages.typst.org/preview/arborly-0.2.0.tar.gz"
 hash = "sha256-PotA4XfhbE8qPcPUgq4dtbwrGPnP1dT7i4bRqgj4SY4="
@@ -1203,6 +1237,33 @@ license = [
 ]
 homepage = "https://github.com/avonmoll/bamdone-rebuttal"
 
+[barcala."0.1.1"]
+url = "https://packages.typst.org/preview/barcala-0.1.1.tar.gz"
+hash = "sha256-CrtqR7G1X0Uert3ZILtxBn50feB6VtgyR3DoJFvDkok="
+typstDeps = [
+    "fancy-units_0_1_1",
+    "lilaq_0_2_0",
+    "physica_0_9_5",
+    "valkyrie_0_2_2",
+]
+description = "A report template for UNLP students, specially for engineering"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/JuanM04/barcala"
+
+[barcala."0.1.0"]
+url = "https://packages.typst.org/preview/barcala-0.1.0.tar.gz"
+hash = "sha256-DcG8bHqYciFELaKKXqS4/wOT9EwlWh/sihySjwBKV8I="
+typstDeps = [
+    "valkyrie_0_2_2",
+]
+description = "A report template for UNLP students, specially for engineering"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/JuanM04/barcala"
+
 [basalt-backlinks."0.1.1"]
 url = "https://packages.typst.org/preview/basalt-backlinks-0.1.1.tar.gz"
 hash = "sha256-ynoLsV664bY6MyJF5BXM3/tBXO28g3ZxW567MKg1SgY="
@@ -1275,6 +1336,18 @@ license = [
 ]
 homepage = "https://github.com/polylux-typ/basic"
 
+[basic-report."0.2.0"]
+url = "https://packages.typst.org/preview/basic-report-0.2.0.tar.gz"
+hash = "sha256-WXemvfXuIw/fBgJ9adUjcbovK797F1lPXvcKLELrs00="
+typstDeps = [
+    "hydra_0_6_0",
+]
+description = "A simple template for reports"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/roland-KA/basic-report-typst-template"
+
 [basic-report."0.1.2"]
 url = "https://packages.typst.org/preview/basic-report-0.1.2.tar.gz"
 hash = "sha256-1gyKqdnYu/T7bJahuonb/f8N3tc+w8k3eVLAWo4SmFs="
@@ -1310,6 +1383,18 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/roland-KA/basic-report-typst-template"
+
+[basic-resume."0.2.7"]
+url = "https://packages.typst.org/preview/basic-resume-0.2.7.tar.gz"
+hash = "sha256-qKv8c853nKkPEzW04MEoa4wK0/6dm0lDG6rKU+f6OpI="
+typstDeps = [
+    "scienceicons_0_1_0",
+]
+description = "A simple, standard resume, designed to work well with ATS"
+license = [
+    "Unlicense",
+]
+homepage = "https://github.com/stuxf/basic-typst-resume-template"
 
 [basic-resume."0.2.4"]
 url = "https://packages.typst.org/preview/basic-resume-0.2.4.tar.gz"
@@ -1683,6 +1768,16 @@ license = [
 ]
 homepage = "https://github.com/Lypsilonx/boxr"
 
+[brain-transplant."0.1.0"]
+url = "https://packages.typst.org/preview/brain-transplant-0.1.0.tar.gz"
+hash = "sha256-8kPaIV5h/xOrwMuLSyO0uFEw8mk89+GZDB8zMMZKgJg="
+typstDeps = []
+description = "Transpile Brainfuck code to Typst"
+license = [
+    "MIT-0",
+]
+homepage = "https://app.radicle.xyz/nodes/seed.radicle.garden/rad:z3bYXx6FurPtAURke7sUV8ktrtFNt"
+
 [brilliant-cv."2.0.5"]
 url = "https://packages.typst.org/preview/brilliant-cv-2.0.5.tar.gz"
 hash = "sha256-55ldsGnrsDowYYz1mxIlcLXIna8gRteDikv6K56aXDo="
@@ -1925,6 +2020,20 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/cu1ch3n/caidan"
+
+[callisto."0.2.2"]
+url = "https://packages.typst.org/preview/callisto-0.2.2.tar.gz"
+hash = "sha256-uX1REI/dk8FlXAE7mGGOI6IuJQh73gWNd5ZOhjrd/gw="
+typstDeps = [
+    "based_0_2_0",
+    "cmarker_0_1_3",
+    "mitex_0_2_5",
+]
+description = "Import Jupyter notebooks"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/knuesel/callisto"
 
 [callisto."0.1.0"]
 url = "https://packages.typst.org/preview/callisto-0.1.0.tar.gz"
@@ -2769,6 +2878,18 @@ license = [
 ]
 homepage = "https://github.com/alexanderkoller/typst-citegeist"
 
+[cjk-unbreak."0.1.0"]
+url = "https://packages.typst.org/preview/cjk-unbreak-0.1.0.tar.gz"
+hash = "sha256-i4Rql1otEyJZW1ib987ZACP9u8fx7S8wvMlrZFvLLrI="
+typstDeps = [
+    "touying_0_6_1",
+]
+description = "Remove spaces caused by line breaks around CJK"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/KZNS/cjk-unbreak"
+
 [classic-aau-report."0.3.0"]
 url = "https://packages.typst.org/preview/classic-aau-report-0.3.0.tar.gz"
 hash = "sha256-SqWI3LPyvv5nGWeLfrMD3rLOMXer2UT2djt/iA9NlSE="
@@ -2903,6 +3024,26 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/Gowee/typst-clatter"
+
+[clean-acmart."0.0.1"]
+url = "https://packages.typst.org/preview/clean-acmart-0.0.1.tar.gz"
+hash = "sha256-2xb7rRpMwA0FEIgZwzTUia1DoOQDU3Otc48Qc9YZe3U="
+typstDeps = []
+description = "Simple and clean Typst paper template for ACM conferences following the original acmart style"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/vtta/clean-acmart"
+
+[clean-agh-thesis."0.1.0"]
+url = "https://packages.typst.org/preview/clean-agh-thesis-0.1.0.tar.gz"
+hash = "sha256-dFhLL2pFSYtizKGoKpegQppBdFsai9TQUPJWVdFOmtQ="
+typstDeps = []
+description = "AGH-compliant thesis template"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/matisiekpl/agh-typst"
 
 [clean-dhbw."0.2.1"]
 url = "https://packages.typst.org/preview/clean-dhbw-0.2.1.tar.gz"
@@ -3060,6 +3201,16 @@ license = [
 ]
 homepage = "https://github.com/sebaseb98/clean-math-thesis"
 
+[clear-iclr."0.7.0"]
+url = "https://packages.typst.org/preview/clear-iclr-0.7.0.tar.gz"
+hash = "sha256-d5Jv1xtNJllFK6nC56jU6xmfMZa2tp2GvNwspDLxW6c="
+typstDeps = []
+description = "Paper template for submission to International Conference on Learning\nRepresentations (ICLR"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/daskol/typst-templates"
+
 [clear-iclr."0.4.0"]
 url = "https://packages.typst.org/preview/clear-iclr-0.4.0.tar.gz"
 hash = "sha256-hpHIcxCB5ZE8ZJITOzUYuiFEuV/Fs2UiSVhrX86r6MQ="
@@ -3069,6 +3220,26 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/daskol/typst-templates"
+
+[cmarker."0.1.5"]
+url = "https://packages.typst.org/preview/cmarker-0.1.5.tar.gz"
+hash = "sha256-5Y9ucv5QfjvrHG8ZxypW88XjjjB8XWqxm5Y2pwFgQDA="
+typstDeps = []
+description = "Transpile CommonMark Markdown to Typst, from within Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/SabrinaJewson/cmarker.typ"
+
+[cmarker."0.1.4"]
+url = "https://packages.typst.org/preview/cmarker-0.1.4.tar.gz"
+hash = "sha256-TVbvfBOivVXn9sFMswRptRhNXasTKLy3GtDFGDOhE1A="
+typstDeps = []
+description = "Transpile CommonMark Markdown to Typst, from within Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/SabrinaJewson/cmarker.typ"
 
 [cmarker."0.1.3"]
 url = "https://packages.typst.org/preview/cmarker-0.1.3.tar.gz"
@@ -3826,6 +3997,16 @@ license = [
 ]
 homepage = "https://github.com/philkleer/create-lattes-cv"
 
+[curryst."0.5.1"]
+url = "https://packages.typst.org/preview/curryst-0.5.1.tar.gz"
+hash = "sha256-aDSFHAGqdWYTQzUuwgVtDaprCsFsT+7zt28abBm4QDo="
+typstDeps = []
+description = "Typeset trees of inference rules"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/pauladam94/curryst"
+
 [curryst."0.5.0"]
 url = "https://packages.typst.org/preview/curryst-0.5.0.tar.gz"
 hash = "sha256-WBGZ8nmCrB8iihmkjzdrA7l2U3ff3TKpvQh/XAmTE8Y="
@@ -3940,6 +4121,18 @@ license = [
 ]
 homepage = "https://github.com/csimide/cuti"
 
+[cvssc."0.1.1"]
+url = "https://packages.typst.org/preview/cvssc-0.1.1.tar.gz"
+hash = "sha256-COZzBQ2MqLGKlUlXweYpkERIzC3OE4OUeKNKntQhPpg="
+typstDeps = [
+    "codly_0_1_0",
+    "tidy_0_3_0",
+]
+description = "Common Vulnerability Scoring System Calculator"
+license = [
+    "MIT",
+]
+
 [cvssc."0.1.0"]
 url = "https://packages.typst.org/preview/cvssc-0.1.0.tar.gz"
 hash = "sha256-pCeczpz4B70NefSn79TL/zFjwZG5A+W2QsYedUjvg5o="
@@ -3951,6 +4144,19 @@ description = "Common Vulnerability Scoring System Calculator"
 license = [
     "MIT",
 ]
+
+[cyberschool-errorteaplate."0.1.4"]
+url = "https://packages.typst.org/preview/cyberschool-errorteaplate-0.1.4.tar.gz"
+hash = "sha256-BHJNjdvj53BHDhvqjkSRk0bLBUzlbYazd+ZXzgj0FSo="
+typstDeps = [
+    "codly_1_3_0",
+    "codly-languages_0_1_8",
+]
+description = "This is a template originaly made for the Cyberschool of Rennes, a Cybersecurity school"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ErrorTeaPot/Cyberschool_template"
 
 [cyberschool-errorteaplate."0.1.3"]
 url = "https://packages.typst.org/preview/cyberschool-errorteaplate-0.1.3.tar.gz"
@@ -4086,6 +4292,18 @@ license = [
     "Unlicense",
 ]
 homepage = "https://github.com/profetia/defined"
+
+[definitely-not-isec-thesis."2.0.1"]
+url = "https://packages.typst.org/preview/definitely-not-isec-thesis-2.0.1.tar.gz"
+hash = "sha256-5mxFjH8gF1biPwEclEdRpMgth8FHBcrJWauc3PCYmIo="
+typstDeps = [
+    "definitely-not-isec-thesis_2_0_0",
+]
+description = "An unofficial ISEC TUGraz Master's Thesis template"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ecomaikgolf/typst-isec-master-thesis-template/"
 
 [definitely-not-isec-thesis."2.0.0"]
 url = "https://packages.typst.org/preview/definitely-not-isec-thesis-2.0.0.tar.gz"
@@ -5759,6 +5977,16 @@ license = [
 ]
 homepage = "https://github.com/duskmoon314/typst-fontawesome"
 
+[formalettre."0.1.3"]
+url = "https://packages.typst.org/preview/formalettre-0.1.3.tar.gz"
+hash = "sha256-51SXjB7Icsb0NUPvhPhmaZxa2AJF8D0DLhm5zFzH7YI="
+typstDeps = []
+description = "French formal letter template"
+license = [
+    "BSD-3-Clause",
+]
+homepage = "https://github.com/Brndan/lettre"
+
 [formalettre."0.1.2"]
 url = "https://packages.typst.org/preview/formalettre-0.1.2.tar.gz"
 hash = "sha256-pAfyUg/DQ0a8EoRPRc9rIV+URWHP8ea32R8gevkcjJQ="
@@ -5818,6 +6046,30 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/ejbasas/fractus"
+
+[fractusist."0.3.2"]
+url = "https://packages.typst.org/preview/fractusist-0.3.2.tar.gz"
+hash = "sha256-MZLCEJq/4006XsJyf91k2WlF/zgQo2Nx0Ng1FsV4ojI="
+typstDeps = [
+    "suiji_0_3_0",
+]
+description = "Create a variety of wonderful fractals and curves in Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/liuguangxi/fractusist"
+
+[fractusist."0.3.1"]
+url = "https://packages.typst.org/preview/fractusist-0.3.1.tar.gz"
+hash = "sha256-r2W2PTjgLYmBW2J8AMP6KMZC8QtJ0NfesIcEZHVNxSs="
+typstDeps = [
+    "suiji_0_3_0",
+]
+description = "Create a variety of wonderful fractals and curves in Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/liuguangxi/fractusist"
 
 [fractusist."0.3.0"]
 url = "https://packages.typst.org/preview/fractusist-0.3.0.tar.gz"
@@ -6166,6 +6418,18 @@ license = [
     "AGPL-3.0-only",
 ]
 homepage = "https://github.com/connortwiegand/game-theoryst"
+
+[gantty."0.2.0"]
+url = "https://packages.typst.org/preview/gantty-0.2.0.tar.gz"
+hash = "sha256-AFrlAvMhIeQ8yP9Oa8ID4eO9eA4jGzEGxI6BnBjHlik="
+typstDeps = [
+    "cetz_0_3_1",
+]
+description = "Create gantt charts using datetimes"
+license = [
+    "LGPL-3.0-only",
+]
+homepage = "https://gitlab.com/john_t/typst-gantty"
 
 [gantty."0.1.0"]
 url = "https://packages.typst.org/preview/gantty-0.1.0.tar.gz"
@@ -7068,6 +7332,36 @@ license = [
 ]
 homepage = "https://codeberg.org/Sekoia/gviz-typst"
 
+[hagakiii."0.1.0"]
+url = "https://packages.typst.org/preview/hagakiii-0.1.0.tar.gz"
+hash = "sha256-cIJ562PgOM0flVEhS+7tyuMX+SH/2rxlifpqI5PBr+E="
+typstDeps = []
+description = "Print address labels on Japanese postcards"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/34j/typst-hagakiii"
+
+[hamnosys-includer."0.1.0"]
+url = "https://packages.typst.org/preview/hamnosys-includer-0.1.0.tar.gz"
+hash = "sha256-kLu2ci0HW9sRpop9HZ1Hd8UcBrozLcn4LDuubXrFjKM="
+typstDeps = []
+description = "For using HamNoSys in Typst"
+license = [
+    "LPPL-1.3c",
+]
+homepage = "https://github.com/TestTimothy/Typst-HamNoSys"
+
+[hand-in."1.0.0"]
+url = "https://packages.typst.org/preview/hand-in-1.0.0.tar.gz"
+hash = "sha256-c7xX5I3AImc7cWhxtLhsHa3EOx5zNAq4Tlqtn/DV5EM="
+typstDeps = []
+description = "Clean and minimalist assignment"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/mkorje/typst-hand-in"
+
 [handy-dora."0.1.0"]
 url = "https://packages.typst.org/preview/handy-dora-0.1.0.tar.gz"
 hash = "sha256-3cDtmhJjp2GgBMQGUyUrd8hq6SQ9ggKD7vsR9e1OUvQ="
@@ -7537,6 +7831,18 @@ license = [
 ]
 homepage = "https://github.com/hei-templates/hei-synd-thesis"
 
+[herodot."0.1.0"]
+url = "https://packages.typst.org/preview/herodot-0.1.0.tar.gz"
+hash = "sha256-hZItUzNJe3TNxMjk2JiN7+wuI5AhGwUdx8p8HOUMnUI="
+typstDeps = [
+    "cetz_0_3_4",
+]
+description = "A package for making linear timelines, inspired by chronology"
+license = [
+    "GPL-3.0-only",
+]
+homepage = "https://github.com/gnist-dev/herodot"
+
 [hhn-unitylab-thesis-template."0.0.1"]
 url = "https://packages.typst.org/preview/hhn-unitylab-thesis-template-0.0.1.tar.gz"
 hash = "sha256-nUUMm1vlguTyfcHyMZ3MwzFCwCRxtFo3VLiDYyUegYE="
@@ -7607,6 +7913,26 @@ license = [
     "CC-BY-SA-4.0",
 ]
 homepage = "https://github.com/HTL3R-Typst/htl3r-da"
+
+[htlwienwest-da."0.3.3"]
+url = "https://packages.typst.org/preview/htlwienwest-da-0.3.3.tar.gz"
+hash = "sha256-MFvkmwBGhKRC1308oznAnKWAT1fKuo0l00hmHw/Vljk="
+typstDeps = []
+description = "The diploma thesis template for students of the HTL Wien West"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/htlwienwest/da-vorlage-typst"
+
+[htlwienwest-da."0.3.2"]
+url = "https://packages.typst.org/preview/htlwienwest-da-0.3.2.tar.gz"
+hash = "sha256-OAVoHBYuLe9zT3wWOgNBYTX2id/Y1ap7lKDweLgkyV4="
+typstDeps = []
+description = "The diploma thesis template for students of the HTL Wien West"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/htlwienwest/da-vorlage-typst"
 
 [htlwienwest-da."0.2.1"]
 url = "https://packages.typst.org/preview/htlwienwest-da-0.2.1.tar.gz"
@@ -7981,6 +8307,34 @@ license = [
 ]
 homepage = "https://github.com/Fricsion/typst-template_ieee-style-single-column"
 
+[ijimai."0.0.4"]
+url = "https://packages.typst.org/preview/ijimai-0.0.4.tar.gz"
+hash = "sha256-TMGEcCP27e0mLbDZdsOBT0kpYdL+5rnbvr38Z2cjJIg="
+typstDeps = [
+    "datify_0_1_3",
+    "droplet_0_3_1",
+    "wrap-it_0_1_1",
+]
+description = "Template for writing articles for the International Journal of Interactive Multimedia and Artificial Intelligence (IJIMAI"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/pammacdotnet/IJIMAI"
+
+[ijimai."0.0.3"]
+url = "https://packages.typst.org/preview/ijimai-0.0.3.tar.gz"
+hash = "sha256-xZmU8c/CXwHwCv2QuU83YhOiZ6nuADn5smSMhigjQPo="
+typstDeps = [
+    "datify_0_1_3",
+    "droplet_0_3_1",
+    "wrap-it_0_1_1",
+]
+description = "Template for writing articles for the International Journal of Interactive Multimedia and Artificial Intelligence (IJIMAI"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/pammacdotnet/IJIMAI"
+
 [ijimai."0.0.2"]
 url = "https://packages.typst.org/preview/ijimai-0.0.2.tar.gz"
 hash = "sha256-Uf+PQdL6RsBiKdkbWg+msGLwpkbwiBvBUnzk0MQow3M="
@@ -8008,6 +8362,19 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/pammacdotnet/IJIMAI"
+
+[illc-mol-thesis."0.2.0"]
+url = "https://packages.typst.org/preview/illc-mol-thesis-0.2.0.tar.gz"
+hash = "sha256-aQisDHYRzCywWs1ayT5nRFO64F2bBPUJJgANhEGZSsk="
+typstDeps = [
+    "great-theorems_0_1_2",
+    "rich-counters_0_2_2",
+]
+description = "Official Typst thesis template for Master of Logic students at the ILLC"
+license = [
+    "AGPL-3.0-or-later",
+]
+homepage = "https://codeberg.org/foxy/illc-mol-thesis"
 
 [illc-mol-thesis."0.1.2"]
 url = "https://packages.typst.org/preview/illc-mol-thesis-0.1.2.tar.gz"
@@ -8482,6 +8849,16 @@ license = [
 ]
 homepage = "https://github.com/ISC-HEI/ISC-report"
 
+[its-scripted."0.1.0"]
+url = "https://packages.typst.org/preview/its-scripted-0.1.0.tar.gz"
+hash = "sha256-Q7zPoW9hjAoirl2xb5sG2/tY3ornofX1hq6B6OIQBHo="
+typstDeps = []
+description = "A template for writing movie/tv/theater-scripts in screenplay format"
+license = [
+    "LGPL-3.0-only",
+]
+homepage = "https://github.com/danielFHcode/typst-screenplay"
+
 [jaconf-mscs."0.1.0"]
 url = "https://packages.typst.org/preview/jaconf-mscs-0.1.0.tar.gz"
 hash = "sha256-Vvp2RFqMP2/Uho0VrA4ZE3DXJuj3cy5cPRaxv280x1o="
@@ -8624,6 +9001,24 @@ url = "https://packages.typst.org/preview/jurz-0.1.0.tar.gz"
 hash = "sha256-m/Mj05WArGW5YDoKNdyt1F0YQTS1Dz5Jw9er8w2vyas="
 typstDeps = []
 description = "Randziffern in Typst"
+license = [
+    "MIT",
+]
+
+[juti."0.0.2"]
+url = "https://packages.typst.org/preview/juti-0.0.2.tar.gz"
+hash = "sha256-BcluOxlfOmvwCMGY1tnoLMOGpGw2FK+K4O9VbmAXDIc="
+typstDeps = []
+description = "Template for writing articles for JUTI: Jurnal Ilmiah Teknologi Informasi"
+license = [
+    "MIT",
+]
+
+[juti."0.0.1"]
+url = "https://packages.typst.org/preview/juti-0.0.1.tar.gz"
+hash = "sha256-vUaHThW8boRmGh6g8xnTJpyAJD6oDMI9HEq9vtSbzcY="
+typstDeps = []
+description = "Template for writing articles for JUTI: Jurnal Ilmiah Teknologi Informasi"
 license = [
     "MIT",
 ]
@@ -9116,6 +9511,26 @@ license = [
 ]
 homepage = "https://github.com/Marmare314/lemmify"
 
+[leonux."1.1.0"]
+url = "https://packages.typst.org/preview/leonux-1.1.0.tar.gz"
+hash = "sha256-+kzhNhI9CeQ297PYDQ3L+BQLxZnwc/oJafNyapBY/yU="
+typstDeps = []
+description = "Minimalistic Typst slides (similar to LaTeX beamer"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/LordBlacky/leonux"
+
+[leonux."1.0.0"]
+url = "https://packages.typst.org/preview/leonux-1.0.0.tar.gz"
+hash = "sha256-r9W+jllahfpEiHMTMHQ5zMMU7LPtfdnwVnYvMWqtpaY="
+typstDeps = []
+description = "Minimalistic Typst slides (similar to LaTeX beamer"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/LordBlacky/leonux"
+
 [letter-pro."3.0.0"]
 url = "https://packages.typst.org/preview/letter-pro-3.0.0.tar.gz"
 hash = "sha256-Ow22loLjb/wiiB3iSmdZirbtfDR2XIveWgFcnWctBtI="
@@ -9393,6 +9808,44 @@ license = [
 ]
 homepage = "https://github.com/Enter-tainer/m-jaxon"
 
+[machiatto."0.1.0"]
+url = "https://packages.typst.org/preview/machiatto-0.1.0.tar.gz"
+hash = "sha256-s0fYYTMIuHrHnTqBwa132FiMi5ge0ZGezEOa6t67LCI="
+typstDeps = [
+    "minitoc_0_1_0",
+]
+description = "A package to help develop publications under MoKa Reads Specification"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Moka-Reads/machiatto"
+
+[magnifying-glass."0.1.0"]
+url = "https://packages.typst.org/preview/magnifying-glass-0.1.0.tar.gz"
+hash = "sha256-K4NjY2JJKSijf8UVL7ujT0F2DghmV4Xu7jE9/Bzhb1s="
+typstDeps = []
+description = "Magnify part of image or content"
+license = [
+    "AGPL-3.0-only",
+]
+homepage = "https://codeberg.org/Andrew15-5/magnifying-glass"
+
+[mannot."0.3.0"]
+url = "https://packages.typst.org/preview/mannot-0.3.0.tar.gz"
+hash = "sha256-akdMPerbH8WpVQ1OACR9HOceZunKGTkj6jfh7s6ChFA="
+typstDeps = [
+    "cetz_0_3_4",
+    "codly_1_2_0",
+    "tidy_0_4_0",
+    "tidy_0_4_2",
+    "tiptoe_0_3_0",
+]
+description = "A package for marking and annotating in math blocks"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ryuryu-ymj/mannot"
+
 [mannot."0.2.3"]
 url = "https://packages.typst.org/preview/mannot-0.2.3.tar.gz"
 hash = "sha256-FByqhbapg8hXEr2F+LsIz9chdNXLHoiOaotB6JxT+jE="
@@ -9571,6 +10024,16 @@ license = [
 ]
 homepage = "https://github.com/EpicEricEE/typst-marge"
 
+[marginalia."0.1.4"]
+url = "https://packages.typst.org/preview/marginalia-0.1.4.tar.gz"
+hash = "sha256-Z58a+K5+mGxBaRTbI6Z+e034nfJSjW4FV2tXjHqc1gk="
+typstDeps = []
+description = "Configurable margin-notes and matching wide blocks"
+license = [
+    "Unlicense",
+]
+homepage = "https://github.com/nleanba/typst-marginalia"
+
 [marginalia."0.1.3"]
 url = "https://packages.typst.org/preview/marginalia-0.1.3.tar.gz"
 hash = "sha256-c93UkMnYriR+vakF2O2r+yy1NtH6yAQAk1x/1KQER1g="
@@ -9669,6 +10132,18 @@ license = [
 ]
 homepage = "https://github.com/sxdl/MCM-Typst-template"
 
+[mechanical-system-cetz-34j."0.1.0"]
+url = "https://packages.typst.org/preview/mechanical-system-cetz-34j-0.1.0.tar.gz"
+hash = "sha256-PPoQ0Gy6Xh19JPPnL2uyGhVomZbOHOOUCFJDp/U/cTc="
+typstDeps = [
+    "cetz_0_3_0",
+]
+description = "CeTZ library for drawing mechanical systems"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/34j/typst-cetz-mechanical-system"
+
 [mephistypsteles."0.3.0"]
 url = "https://packages.typst.org/preview/mephistypsteles-0.3.0.tar.gz"
 hash = "sha256-/XWM4SMGT+ZUAEb0QCNxNp8JkHqGInjwY3/zXWrQkls="
@@ -9730,6 +10205,39 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/CL4R3T/meppp"
+
+[messeji."0.3.0"]
+url = "https://packages.typst.org/preview/messeji-0.3.0.tar.gz"
+hash = "sha256-vqIQjUdm4KvrDNTr5SnWqzVwSkG/dRVvQy/0W6o0P/g="
+typstDeps = [
+    "codly_1_3_0",
+    "tidy_0_4_2",
+]
+description = "Typeset multi-page chat histories, including from external JSON files"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Tanikai/messeji"
+
+[messeji."0.2.0"]
+url = "https://packages.typst.org/preview/messeji-0.2.0.tar.gz"
+hash = "sha256-ObsJGFyE7RTc6QBr/Vrvf4bwxfs2qGEcAceAxOpHlaM="
+typstDeps = []
+description = "Typeset multi-page chat histories, including from external JSON files"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Tanikai/messeji"
+
+[messeji."0.1.0"]
+url = "https://packages.typst.org/preview/messeji-0.1.0.tar.gz"
+hash = "sha256-Aq217WNVh5jq7qrrP6xpcu5hXrPm4zQrHhL4Xugy01o="
+typstDeps = []
+description = "Typeset multi-page chat histories, with JSON support"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Tanikai/messeji"
 
 [metalogo."1.2.0"]
 url = "https://packages.typst.org/preview/metalogo-1.2.0.tar.gz"
@@ -10318,6 +10826,22 @@ license = [
 ]
 homepage = "https://github.com/EuanTop/modern-bnu-course-paper"
 
+[modern-bnu-thesis."0.0.2"]
+url = "https://packages.typst.org/preview/modern-bnu-thesis-0.0.2.tar.gz"
+hash = "sha256-pMg00ozQH/SRCyd/BR94OMd7lmg701RG5BGUTMXbvNY="
+typstDeps = [
+    "algo_0_3_6",
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "pinit_0_2_2",
+    "tablex_0_0_9",
+]
+description = "北京师范大学学位论文模板。Modern Beijing Normal University Thesis"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/mosrat/modern-bnu-thesis"
+
 [modern-bnu-thesis."0.0.1"]
 url = "https://packages.typst.org/preview/modern-bnu-thesis-0.0.1.tar.gz"
 hash = "sha256-Zw7INRq6oBSgl7ip/e6SlUgqrAvgwzTmbW0ODOQBFOU="
@@ -10671,6 +11195,42 @@ license = [
 ]
 homepage = "https://github.com/typst-g7-32/modern-g7-32"
 
+[modern-hsh-thesis."1.1.1"]
+url = "https://packages.typst.org/preview/modern-hsh-thesis-1.1.1.tar.gz"
+hash = "sha256-X7gt1MdV8F+vArCrPDwMfLlA3ZndNgo0tOXJo7OV/8M="
+typstDeps = [
+    "big-todo_0_2_0",
+    "codly_1_3_0",
+    "gentle-clues_1_2_0",
+    "gloss-awe_0_0_5",
+    "hydra_0_6_0",
+    "treet_0_1_1",
+    "wrap-it_0_1_1",
+]
+description = "Template for writing a bachelors or masters thesis at the Hochschule Hannover, Faculty 4"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/MrToWy/hsh-thesis"
+
+[modern-hsh-thesis."1.1.0"]
+url = "https://packages.typst.org/preview/modern-hsh-thesis-1.1.0.tar.gz"
+hash = "sha256-A+DECSPBeSUhEXlDGCL7xBWrQ83NGD5Xy0rAaa7TNJk="
+typstDeps = [
+    "big-todo_0_2_0",
+    "codly_1_3_0",
+    "gentle-clues_1_2_0",
+    "gloss-awe_0_0_5",
+    "hydra_0_6_0",
+    "treet_0_1_1",
+    "wrap-it_0_1_1",
+]
+description = "Template for writing a bachelors or masters thesis at the Hochschule Hannover, Faculty 4"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/MrToWy/hsh-thesis"
+
 [modern-hsh-thesis."1.0.2"]
 url = "https://packages.typst.org/preview/modern-hsh-thesis-1.0.2.tar.gz"
 hash = "sha256-RXQYwYaz/mAXMuDX7DS+Wpr8Op6x6nF2G0KB88HCauM="
@@ -10908,6 +11468,36 @@ license = [
 ]
 homepage = "https://github.com/SergeyGorchakov/russian-phd-thesis-template-typst"
 
+[modern-shu-thesis."0.3.3"]
+url = "https://packages.typst.org/preview/modern-shu-thesis-0.3.3.tar.gz"
+hash = "sha256-DgolzfJo0xU5W9dofKZt2wjOJJgke8CsIsa0/74Iv/s="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "lovelace_0_2_0",
+    "numbly_0_1_0",
+]
+description = "上海大学本科毕业论文模板"
+license = [
+    "Apache-2.0",
+]
+homepage = "https://github.com/XY-cpp/typst-shu-thesis"
+
+[modern-shu-thesis."0.3.2"]
+url = "https://packages.typst.org/preview/modern-shu-thesis-0.3.2.tar.gz"
+hash = "sha256-BSo6yklzgBm5DuJtrhaSbnVKRKO8lVUviSA1oB6rAs8="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "lovelace_0_2_0",
+    "numbly_0_1_0",
+]
+description = "上海大学本科毕业论文模板"
+license = [
+    "Apache-2.0",
+]
+homepage = "https://github.com/XY-cpp/typst-shu-thesis"
+
 [modern-shu-thesis."0.3.1"]
 url = "https://packages.typst.org/preview/modern-shu-thesis-0.3.1.tar.gz"
 hash = "sha256-25P4yWiDyB1aKjaYjfSeZzJZr7RUuDacp87HQ0zQU/Y="
@@ -10980,6 +11570,21 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/XY-cpp/typst-shu-thesis"
+
+[modern-sjtu-thesis."0.2.2"]
+url = "https://packages.typst.org/preview/modern-sjtu-thesis-0.2.2.tar.gz"
+hash = "sha256-B3FDybHWM5G2cKeBQefMExVcYf4b2yc/gff5GfcWc6M="
+typstDeps = [
+    "a2c-nums_0_0_1",
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "numbly_0_1_0",
+]
+description = "上海交通大学学位论文 Typst 模板。Shanghai Jiao Tong University Thesis Typst Template"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/tzhTaylor/modern-sjtu-thesis"
 
 [modern-sjtu-thesis."0.2.1"]
 url = "https://packages.typst.org/preview/modern-sjtu-thesis-0.2.1.tar.gz"
@@ -11866,6 +12471,19 @@ license = [
 ]
 homepage = "https://github.com/jonaspleyer/nordic-typst"
 
+[not-jku-thesis."0.2.0"]
+url = "https://packages.typst.org/preview/not-jku-thesis-0.2.0.tar.gz"
+hash = "sha256-73PcYUmXirUoOD2ya89J0GqI/lZtt9Z3FXcRqAqnwDk="
+typstDeps = [
+    "cheq_0_1_0",
+    "glossarium_0_5_4",
+    "wrap-it_0_1_1",
+]
+description = "Customizable not official template for a thesis at the JKU, derived from a template created by Fabian Scherer <https://www.linkedin.com/in/fabian-scherer-de/> with Leon Weber in an advisory role"
+license = [
+    "MIT-0",
+]
+
 [not-jku-thesis."0.1.0"]
 url = "https://packages.typst.org/preview/not-jku-thesis-0.1.0.tar.gz"
 hash = "sha256-CdIyVXvRx0S7kNPPf/3cWpRICwnHOHB8QhtcSuLDPDQ="
@@ -12153,6 +12771,32 @@ license = [
     "MIT",
 ]
 
+[nup."0.1.1"]
+url = "https://packages.typst.org/preview/nup-0.1.1.tar.gz"
+hash = "sha256-UEG7L4KtOcMsILjhcNDZPrzrjFMDqYLTMWQQnjLmNWM="
+typstDeps = [
+    "muchpdf_0_1_0",
+    "shadowed_0_2_0",
+]
+description = "Preview multipage documents with a defined grid layout"
+license = [
+    "MPL-2.0",
+]
+homepage = "https://github.com/baptiste/nup"
+
+[nup."0.1.0"]
+url = "https://packages.typst.org/preview/nup-0.1.0.tar.gz"
+hash = "sha256-vTeP+zoShfjDuXpXZ5HYyYouQrX+8XvUMgXz+a1bgik="
+typstDeps = [
+    "muchpdf_0_1_0",
+    "shadowed_0_2_0",
+]
+description = "Preview multipage documents with a defined grid layout"
+license = [
+    "MPL-2.0",
+]
+homepage = "https://github.com/baptiste/nup"
+
 [oasis-align."0.2.0"]
 url = "https://packages.typst.org/preview/oasis-align-0.2.0.tar.gz"
 hash = "sha256-XB8YyrcSP3+jHSik+aE8JybL8Pncju/2MKW3MC85TTA="
@@ -12268,6 +12912,16 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/v411e/optimal-ovgu-thesis"
+
+[orange-book."0.6.1"]
+url = "https://packages.typst.org/preview/orange-book-0.6.1.tar.gz"
+hash = "sha256-D2WQwAS6ftls8vN2YGDvbqbXh7NC+SUqfGHzvACt4To="
+typstDeps = []
+description = "A book template inspired by The Legrand Orange Book of Mathias Legrand and Vel"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/flavio20002/typst-orange-template"
 
 [orange-book."0.6.0"]
 url = "https://packages.typst.org/preview/orange-book-0.6.0.tar.gz"
@@ -12531,6 +13185,19 @@ license = [
 ]
 homepage = "https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst.git"
 
+[parcio-thesis."0.2.2"]
+url = "https://packages.typst.org/preview/parcio-thesis-0.2.2.tar.gz"
+hash = "sha256-xcHPtq+d6hpGlMfP74XK5mokzp+lFtFDgEC2FPBu1FI="
+typstDeps = [
+    "drafting_0_2_2",
+    "subpar_0_2_2",
+]
+description = "A simple thesis template based on the ParCIO working group at OvGU Magdeburg"
+license = [
+    "0BSD",
+]
+homepage = "https://github.com/xkevio/parcio-typst/"
+
 [parcio-thesis."0.2.1"]
 url = "https://packages.typst.org/preview/parcio-thesis-0.2.1.tar.gz"
 hash = "sha256-XDh2M16Hlg6EOl9ATbxnEEqrSX1G2RzymYB+gQPB5TU="
@@ -12601,6 +13268,16 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/QuadnucYard/pavemat"
+
+[peace-of-posters."0.5.5"]
+url = "https://packages.typst.org/preview/peace-of-posters-0.5.5.tar.gz"
+hash = "sha256-oLMQpulSwmXj7cqW+7t1ABFR2+dUGLg8PaIj+/9DIlc="
+typstDeps = []
+description = "Create scientific posters in Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/jonaspleyer/peace-of-posters"
 
 [peace-of-posters."0.5.4"]
 url = "https://packages.typst.org/preview/peace-of-posters-0.5.4.tar.gz"
@@ -12822,6 +13499,26 @@ license = [
 ]
 homepage = "https://github.com/Leedehai/typst-physics"
 
+[pigmentpedia."0.3.3"]
+url = "https://packages.typst.org/preview/pigmentpedia-0.3.3.tar.gz"
+hash = "sha256-xPFb9o+dHTfWvV0Hs1wuhcTniZH6SnsC0zPSwDcPayo="
+typstDeps = []
+description = "An extensive color library for Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/neuralpain/pigmentpedia"
+
+[pigmentpedia."0.3.2"]
+url = "https://packages.typst.org/preview/pigmentpedia-0.3.2.tar.gz"
+hash = "sha256-j8XCfUwUF+r72tMZmEAy+hNS9yMdIWD3NlNRQ/GIFLs="
+typstDeps = []
+description = "An extensive color library for Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/neuralpain/pigmentpedia"
+
 [pigmentpedia."0.3.1"]
 url = "https://packages.typst.org/preview/pigmentpedia-0.3.1.tar.gz"
 hash = "sha256-/U6/zsw3Vb/JGgsc9lgKeZ1UYnnSv8cZWUtC4wFciyc="
@@ -12851,6 +13548,18 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/neuralpain/pigmentpedia"
+
+[pillar."0.3.2"]
+url = "https://packages.typst.org/preview/pillar-0.3.2.tar.gz"
+hash = "sha256-2Wriav61AfMHQhvwAauKKsR13aR+9x45FK/JTSGIFOg="
+typstDeps = [
+    "zero_0_3_3",
+]
+description = "Faster column specifications for tables"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Mc-Zen/pillar"
 
 [pillar."0.3.1"]
 url = "https://packages.typst.org/preview/pillar-0.3.1.tar.gz"
@@ -13241,6 +13950,18 @@ license = [
     "MIT",
 ]
 
+[project-isi-zac."0.1.0"]
+url = "https://packages.typst.org/preview/project-isi-zac-0.1.0.tar.gz"
+hash = "sha256-aBndG/X2kGLDR3A48g4B3RGvSAvYbBzpx0XBwxdEZ28="
+typstDeps = [
+    "hydra_0_6_1",
+]
+description = "A template for writing reports and thesis"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/Jac-Zac/project-isi-zac.git"
+
 [prooftrees."0.1.0"]
 url = "https://packages.typst.org/preview/prooftrees-0.1.0.tar.gz"
 hash = "sha256-zhnOWUavOqMh3/s8CPIyw5uoX8QslITQJ81zL6WuTaI="
@@ -13264,6 +13985,18 @@ license = [
     "MIT-0",
 ]
 homepage = "https://github.com/sdiebolt/psl-thesis"
+
+[pubmatter."0.2.1"]
+url = "https://packages.typst.org/preview/pubmatter-0.2.1.tar.gz"
+hash = "sha256-PuuXzQfKFtL+MYsftUaDnaQBK5LOo6EtcMzpkae0XgE="
+typstDeps = [
+    "scienceicons_0_0_6",
+]
+description = "Parse, normalize and show publication frontmatter, including authors and affiliations"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/continuous-foundation/pubmatter"
 
 [pubmatter."0.2.0"]
 url = "https://packages.typst.org/preview/pubmatter-0.2.0.tar.gz"
@@ -13318,6 +14051,87 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/ludwig-austermann/qcm"
+
+[qec-thrust."0.1.0"]
+url = "https://packages.typst.org/preview/qec-thrust-0.1.0.tar.gz"
+hash = "sha256-0Qofs0kXArco7PDC3iRU1Nnjm1hngYcA4tqxj/a1spo="
+typstDeps = [
+    "cetz_0_3_4",
+]
+description = "A package for drawing quantum error correction codes with Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/nzy1997/qec-thrust"
+
+[qooklet."0.2.0"]
+url = "https://packages.typst.org/preview/qooklet-0.2.0.tar.gz"
+hash = "sha256-Xm7VotkOaceLlLhnXad2CpK1mXFw1pohkGz/KE2cu/I="
+typstDeps = [
+    "codly_1_3_0",
+    "codly-languages_0_1_8",
+    "ctheorems_1_1_3",
+    "fletcher_0_5_7",
+    "gentle-clues_1_2_0",
+    "hydra_0_6_1",
+    "linguify_0_4_2",
+    "physica_0_9_5",
+    "pinit_0_2_2",
+    "rexllent_0_3_0",
+    "subpar_0_2_2",
+    "wrap-it_0_1_1",
+]
+description = "A quick start template for scientific booklets"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ivaquero/qooklet.git"
+
+[qooklet."0.1.1"]
+url = "https://packages.typst.org/preview/qooklet-0.1.1.tar.gz"
+hash = "sha256-tPewnWaTQW53UZMIWiKYrOYi31CPneUMM8VnNExhuqE="
+typstDeps = [
+    "codly_1_3_0",
+    "codly-languages_0_1_8",
+    "ctheorems_1_1_3",
+    "fletcher_0_5_7",
+    "gentle-clues_1_2_0",
+    "hydra_0_6_1",
+    "linguify_0_4_2",
+    "physica_0_9_5",
+    "pinit_0_2_2",
+    "rexllent_0_3_0",
+    "subpar_0_2_2",
+    "wrap-it_0_1_1",
+]
+description = "A quick start utility for scientific booklets"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ivaquero/qooklet.git"
+
+[qooklet."0.1.0"]
+url = "https://packages.typst.org/preview/qooklet-0.1.0.tar.gz"
+hash = "sha256-QFOc21AbDMtoYvAwgNKQCoO9PkBhTHdELyHlm9jSddg="
+typstDeps = [
+    "codly_1_3_0",
+    "codly-languages_0_1_8",
+    "ctheorems_1_1_3",
+    "fletcher_0_5_7",
+    "gentle-clues_1_2_0",
+    "hydra_0_6_1",
+    "linguify_0_4_2",
+    "physica_0_9_5",
+    "pinit_0_2_2",
+    "rexllent_0_3_0",
+    "subpar_0_2_2",
+    "wrap-it_0_1_1",
+]
+description = "A quick start utility for scientific booklets"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ivaquero/qooklet.git"
 
 [quetta."0.2.0"]
 url = "https://packages.typst.org/preview/quetta-0.2.0.tar.gz"
@@ -13665,6 +14479,16 @@ license = [
 ]
 homepage = "https://github.com/fky2015/resume-ng-typst"
 
+[rexllent."0.3.1"]
+url = "https://packages.typst.org/preview/rexllent-0.3.1.tar.gz"
+hash = "sha256-wV8Y6ZGp9jNuHBI0S4nB0KoYlD8G6oMcTmQMjDRqx08="
+typstDeps = []
+description = "Parsing xlsx file into a typst table, powered by wasm"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/hongjr03/typst-rexllent"
+
 [rexllent."0.3.0"]
 url = "https://packages.typst.org/preview/rexllent-0.3.0.tar.gz"
 hash = "sha256-xG91tiCiPZ9lItlzyyg4pXB5uqtV2tioO+RLtHb5K+w="
@@ -13865,6 +14689,32 @@ license = [
 ]
 homepage = "https://github.com/rose-pine/typst"
 
+[rubber-article."0.4.0"]
+url = "https://packages.typst.org/preview/rubber-article-0.4.0.tar.gz"
+hash = "sha256-W46qCE7HDZP24FlojvjiHu6Epxz5JEdJn43kbeVIjVE="
+typstDeps = [
+    "hydra_0_6_1",
+    "pillar_0_3_1",
+]
+description = "A simple template recreating the look of the classic LaTeX article"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/npikall/rubber-article.git"
+
+[rubber-article."0.3.2"]
+url = "https://packages.typst.org/preview/rubber-article-0.3.2.tar.gz"
+hash = "sha256-31Vnkz0ii8KxgCvdnzUjMqFHp0RLF8M6dfI4T5UHlGQ="
+typstDeps = [
+    "hydra_0_6_1",
+    "pillar_0_3_1",
+]
+description = "A simple template recreating the look of the classic LaTeX article"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/npikall/rubber-article.git"
+
 [rubber-article."0.3.1"]
 url = "https://packages.typst.org/preview/rubber-article-0.3.1.tar.gz"
 hash = "sha256-B+/lqmX27ndp/8IBGa74Y3Mnj3q9Gy6D4ywOYHvBByo="
@@ -14016,6 +14866,16 @@ license = [
 ]
 homepage = "https://github.com/sudanchapagain/sano-presentation-template"
 
+[scaffolder."0.2.1"]
+url = "https://packages.typst.org/preview/scaffolder-0.2.1.tar.gz"
+hash = "sha256-C1/wct+NAtulHWopZsztNcAUpX/0+opIknzehNLSKRs="
+typstDeps = []
+description = "Show borders around the main text area, header and footer in Typst documents"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/wisp3rwind/typst-scaffolder"
+
 [scaffolder."0.2.0"]
 url = "https://packages.typst.org/preview/scaffolder-0.2.0.tar.gz"
 hash = "sha256-iMOIGDtLE/7GDV29+efx9EX6emZ9R2y9AumEajMb7jk="
@@ -14075,6 +14935,16 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/augustebaum/epfl-thesis-typst"
+
+[scholarly-tauthesis."0.11.2"]
+url = "https://packages.typst.org/preview/scholarly-tauthesis-0.11.2.tar.gz"
+hash = "sha256-bpRIcwvCbyemi5NSl5lHUh6yddUzFW0WozSBvTYdleA="
+typstDeps = []
+description = "A template for writing Tampere University theses"
+license = [
+    "MIT",
+]
+homepage = "https://gitlab.com/tuni-official/thesis-templates/tau-typst-thesis-template"
 
 [scholarly-tauthesis."0.11.0"]
 url = "https://packages.typst.org/preview/scholarly-tauthesis-0.11.0.tar.gz"
@@ -14176,6 +15046,16 @@ license = [
 ]
 homepage = "https://gitlab.com/tuni-official/thesis-templates/tau-typst-thesis-template"
 
+[scienceicons."0.1.0"]
+url = "https://packages.typst.org/preview/scienceicons-0.1.0.tar.gz"
+hash = "sha256-xbqURYis+fBX0Wozcv8Ld0CAZv0zH05pYqylJhSmYjQ="
+typstDeps = []
+description = "SVG icons for open-science articles"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/continuous-foundation/scienceicons"
+
 [scienceicons."0.0.6"]
 url = "https://packages.typst.org/preview/scienceicons-0.0.6.tar.gz"
 hash = "sha256-n3GMd9uPpqK2G5aD4+g8D5Egm/OwgGQ2yrZVgeD+lNM="
@@ -14261,6 +15141,41 @@ license = [
     "GPL-3.0-only",
 ]
 homepage = "https://github.com/Dregen-Yor/sdu-exp-report"
+
+[sdu-touying-simpl."0.3.0"]
+url = "https://packages.typst.org/preview/sdu-touying-simpl-0.3.0.tar.gz"
+hash = "sha256-m3FzWgM6/45k9dapyJMUVAii3f7a93SDfRcjLxNppy0="
+typstDeps = [
+    "codly_1_3_0",
+    "codly-languages_0_1_8",
+    "fletcher_0_5_7",
+    "showybox_2_0_4",
+    "timeliney_0_2_1",
+    "touying_0_6_1",
+]
+description = "An templete based on touying, "
+license = [
+    "GPL-3.0-only",
+]
+homepage = "https://github.com/Dregen-Yor/sdu-touying-simpl"
+
+[sdu-touying-simpl."0.2.2"]
+url = "https://packages.typst.org/preview/sdu-touying-simpl-0.2.2.tar.gz"
+hash = "sha256-Fa6IS+3xj8Sz8dxV+AP5hUxEUn0kfQhFwCbw0OKKxFg="
+typstDeps = [
+    "codly_1_3_0",
+    "ctheorems_1_1_3",
+    "fletcher_0_5_7",
+    "gentle-clues_1_2_0",
+    "showybox_2_0_4",
+    "timeliney_0_2_0",
+    "touying_0_6_1",
+]
+description = "An templete based on touying, "
+license = [
+    "GPL-3.0-only",
+]
+homepage = "https://github.com/Dregen-Yor/sdu-touying-simpl"
 
 [sdu-touying-simpl."0.2.1"]
 url = "https://packages.typst.org/preview/sdu-touying-simpl-0.2.1.tar.gz"
@@ -14411,6 +15326,16 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/shaneworld/HHU-Thesis-Template"
+
+[shiroa."0.2.3"]
+url = "https://packages.typst.org/preview/shiroa-0.2.3.tar.gz"
+hash = "sha256-Yb2tdrqI1j/hZDV0gBctZssJaj3b7qqVVfCQ6BhG5uY="
+typstDeps = []
+description = "A simple tool for creating modern online books in pure typst"
+license = [
+    "Apache-2.0",
+]
+homepage = "https://github.com/Myriad-Dreamin/shiroa"
 
 [shiroa."0.2.2"]
 url = "https://packages.typst.org/preview/shiroa-0.2.2.tar.gz"
@@ -14613,6 +15538,46 @@ license = [
     "MIT",
 ]
 
+[shuosc-shu-bachelor-thesis."0.1.2"]
+url = "https://packages.typst.org/preview/shuosc-shu-bachelor-thesis-0.1.2.tar.gz"
+hash = "sha256-JxZ8ID9XQX9knDDIBVSrHre3PGXVZGJ1qSdkuM9ID9k="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "lovelace_0_2_0",
+    "numbly_0_1_0",
+]
+description = "上海大学本科生毕业论文 Typst 模板 - 上海大学开源社区版 (SHUOSC"
+license = [
+    "Apache-2.0",
+]
+homepage = "https://github.com/shuosc/SHU-Bachelor-Thesis-Typst"
+
+[shuosc-shu-bachelor-thesis."0.1.1"]
+url = "https://packages.typst.org/preview/shuosc-shu-bachelor-thesis-0.1.1.tar.gz"
+hash = "sha256-yLT54a9Bxh0llQvzWrz7ZIDuJZB7PUGvHo201ANoGTc="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "lovelace_0_2_0",
+    "numbly_0_1_0",
+]
+description = "上海大学本科生毕业论文 Typst 模板 - 上海大学开源社区版 (SHUOSC"
+license = [
+    "Apache-2.0",
+]
+homepage = "https://github.com/shuosc/SHU-Bachelor-Thesis-Typst"
+
+[shuxuejuan."0.1.2"]
+url = "https://packages.typst.org/preview/shuxuejuan-0.1.2.tar.gz"
+hash = "sha256-oLT87kWugcdSIUGHlM89j+j15BcXA0PK+Yl3VJWrs3s="
+typstDeps = []
+description = "A simple Typst template for math exam in Chinese"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/VWWVVW/shuxuejuan"
+
 [shuxuejuan."0.1.1"]
 url = "https://packages.typst.org/preview/shuxuejuan-0.1.1.tar.gz"
 hash = "sha256-srMnXvFwGS/BvnQc+7ts0GGJMzKW42BnZkc8CWvvf8E="
@@ -14688,6 +15653,16 @@ url = "https://packages.typst.org/preview/silky-letter-insa-0.1.0.tar.gz"
 hash = "sha256-0PyOWEZ1jfN/PntiRLy68914845kzJbj8qH72NESd9g="
 typstDeps = []
 description = "A template made for letters and short documents of INSA, a French engineering school"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/SkytAsul/INSA-Typst-Template"
+
+[silky-report-insa."0.5.0"]
+url = "https://packages.typst.org/preview/silky-report-insa-0.5.0.tar.gz"
+hash = "sha256-MCwrH+qsAML2U/KwWsnw7nFGlJbGgIq3nprlOnAGTDo="
+typstDeps = []
+description = "A template made for reports and other documents of INSA, a French engineering school"
 license = [
     "MIT",
 ]
@@ -14804,6 +15779,16 @@ license = [
     "MIT",
 ]
 
+[simple-bupt-report."0.1.0"]
+url = "https://packages.typst.org/preview/simple-bupt-report-0.1.0.tar.gz"
+hash = "sha256-GeL1I2NCqZItRhfDPHI1u0aXJtTGnaYmFzouZ0fIIvk="
+typstDeps = []
+description = "一份简单的北邮实验报告模板 Simple BUPT Report"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/zhao-leo/BUPT-Report-Typst"
+
 [simple-preavis."0.1.0"]
 url = "https://packages.typst.org/preview/simple-preavis-0.1.0.tar.gz"
 hash = "sha256-x5dtbcF3MGGGkGjAYSLHphn7XcrCnmRsf1g27aAq3vI="
@@ -14823,6 +15808,26 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/steadyfall/simple-technical-resume-template"
+
+[simple-tubs-letter."0.1.1"]
+url = "https://packages.typst.org/preview/simple-tubs-letter-0.1.1.tar.gz"
+hash = "sha256-rmfej0OOGXNDntzUN3N/WsJ4h6A/TISccg0KI9P/JpI="
+typstDeps = []
+description = "A letter template resembling the TUBS coorperate design"
+license = [
+    "GPL-3.0-only",
+]
+homepage = "https://github.com/Cangarw/simple-tubs-letter"
+
+[simple-tubs-letter."0.1.0"]
+url = "https://packages.typst.org/preview/simple-tubs-letter-0.1.0.tar.gz"
+hash = "sha256-Jq9eSrmAFuYwwXAv5BMElIMngdy8WkoqZgbbw8SFHEA="
+typstDeps = []
+description = "A letter template resembling the TUBS coorperate design"
+license = [
+    "GPL-3.0-only",
+]
+homepage = "https://github.com/Cangarw/simple-tubs-letter"
 
 [simplebnf."0.1.1"]
 url = "https://packages.typst.org/preview/simplebnf-0.1.1.tar.gz"
@@ -14969,6 +15974,30 @@ license = [
 ]
 homepage = "https://github.com/daskol/typst-templates"
 
+[sns-polylux-template."0.1.0"]
+url = "https://packages.typst.org/preview/sns-polylux-template-0.1.0.tar.gz"
+hash = "sha256-TZ1xokDMAoajLEj2xgG8z74I+iyi9QAKdul62SUnpUo="
+typstDeps = [
+    "polylux_0_4_0",
+]
+description = "Unofficial template for slides in Polylux with SNS and UniPi colors"
+license = [
+    "MIT-0",
+]
+homepage = "https://gitlab.com/martino.barbieri/polylux-sns-template"
+
+[socialhub-fa."1.0.1"]
+url = "https://packages.typst.org/preview/socialhub-fa-1.0.1.tar.gz"
+hash = "sha256-PKN4zsbdZ1/YRFUrEiadzvlT1zUmUZZGdu+t3XNb3fM="
+typstDeps = [
+    "fontawesome_0_1_0",
+]
+description = "A Typst library for Social Media references with icons based on Font Awesome"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Bi0T1N/typst-socialhub-fa"
+
 [socialhub-fa."1.0.0"]
 url = "https://packages.typst.org/preview/socialhub-fa-1.0.0.tar.gz"
 hash = "sha256-peWWI/ULorfjvD7I8+rh9jm9MIrI/p+8y/kaH9MKM3k="
@@ -15069,6 +16098,16 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/YouXam/soviet-matrix"
+
+[splash."0.5.0"]
+url = "https://packages.typst.org/preview/splash-0.5.0.tar.gz"
+hash = "sha256-gqujm+2U5ufCNeSzBzLtdzCNcg/fMx7Si2jOdavc4y4="
+typstDeps = []
+description = "A library of color palettes for Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/kaarmu/typst-palettes"
 
 [splash."0.4.0"]
 url = "https://packages.typst.org/preview/splash-0.4.0.tar.gz"
@@ -15209,6 +16248,26 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/SillyFreak/typst-stack-pointer"
+
+[starter-journal-article."0.4.0"]
+url = "https://packages.typst.org/preview/starter-journal-article-0.4.0.tar.gz"
+hash = "sha256-e4Be7W7KlECKwqXtSt7iLeBzmzbTuoQJZvz/v4r6rwQ="
+typstDeps = []
+description = "A starter template for journal articles"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/HPDell/typst-starter-journal-article"
+
+[starter-journal-article."0.3.3"]
+url = "https://packages.typst.org/preview/starter-journal-article-0.3.3.tar.gz"
+hash = "sha256-7f8Lqvra9Hnfa7xyZGZbF7pFEQOA41bKg/FA3DxJ1v4="
+typstDeps = []
+description = "A starter template for journal articles"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/HPDell/typst-starter-journal-article"
 
 [starter-journal-article."0.3.2"]
 url = "https://packages.typst.org/preview/starter-journal-article-0.3.2.tar.gz"
@@ -15464,6 +16523,18 @@ license = [
 ]
 homepage = "https://github.com/tingerrr/subpar"
 
+[suiji."0.4.0"]
+url = "https://packages.typst.org/preview/suiji-0.4.0.tar.gz"
+hash = "sha256-NG34Nbcxyq2OoK3wKBv88in0GNV6JK8mmCj9WBAY4bQ="
+typstDeps = [
+    "cetz_0_3_4",
+]
+description = "A high efficient random number generator in Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/liuguangxi/suiji"
+
 [suiji."0.3.0"]
 url = "https://packages.typst.org/preview/suiji-0.3.0.tar.gz"
 hash = "sha256-Fu5fl35phzkx7cWezobq1pB17YyQVGdZ31XDJDdI5EY="
@@ -15583,6 +16654,16 @@ description = "Unicode super- and subscripts in equations"
 license = [
     "MIT",
 ]
+
+[superb-pci."0.2.0"]
+url = "https://packages.typst.org/preview/superb-pci-0.2.0.tar.gz"
+hash = "sha256-0xp+Cl2+yW9V6599VhP2NGWBKZhgMblFmcKqcNR41oc="
+typstDeps = []
+description = "A Peer Community In (PCI) and Peer Community Journal (PCJ) template"
+license = [
+    "MIT-0",
+]
+homepage = "https://codeberg.org/alxsim/superb-pci"
 
 [superb-pci."0.1.0"]
 url = "https://packages.typst.org/preview/superb-pci-0.1.0.tar.gz"
@@ -16189,6 +17270,58 @@ license = [
 ]
 homepage = "https://github.com/7ijme/tally"
 
+[tapestry."0.0.4"]
+url = "https://packages.typst.org/preview/tapestry-0.0.4.tar.gz"
+hash = "sha256-T84c9SHNZMHAmqZuVw2VB3S5JCbfOiv3cD0UUOZGBBI="
+typstDeps = [
+    "cetz_0_3_4",
+    "cetz-plot_0_1_1",
+    "equate_0_3_1",
+    "physica_0_9_5",
+]
+description = "A template for creating LaTeX-like class notes"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/BrandenXia/tapestry"
+
+[tapestry."0.0.3"]
+url = "https://packages.typst.org/preview/tapestry-0.0.3.tar.gz"
+hash = "sha256-j+I5k5O/4bUTEH8kI8+uaC9qXlaaipCAyY1kdQMop7k="
+typstDeps = [
+    "cetz_0_3_4",
+    "cetz-plot_0_1_1",
+    "equate_0_3_1",
+    "physica_0_9_5",
+]
+description = "A template for creating LaTeX-like class notes"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/BrandenXia/tapestry"
+
+[tapestry."0.0.2"]
+url = "https://packages.typst.org/preview/tapestry-0.0.2.tar.gz"
+hash = "sha256-50m7fT1xli8ER/CiCkWVN1EPEO7EJIPsw/r6rKMEcKU="
+typstDeps = [
+    "equate_0_3_1",
+    "physica_0_9_5",
+]
+description = "A template for creating LaTeX-like class notes"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/BrandenXia/tapestry"
+
+[tapestry."0.0.1"]
+url = "https://packages.typst.org/preview/tapestry-0.0.1.tar.gz"
+hash = "sha256-/UafNzzyhCV0EzwgLSxE3IWEEHgmD/MOF6Ye703m80Y="
+typstDeps = []
+description = "A template for creating LaTeX-like class notes"
+license = [
+    "MIT-0",
+]
+
 [tasteful-pairings."0.1.0"]
 url = "https://packages.typst.org/preview/tasteful-pairings-0.1.0.tar.gz"
 hash = "sha256-j68y3BmvDWBFKt5XdOHJxu3lAR5XX5PD0Tw6JXIdXSk="
@@ -16311,6 +17444,29 @@ license = [
 ]
 homepage = "https://github.com/chillcicada/typst-dotenv"
 
+[text-dirr."1.0.0"]
+url = "https://packages.typst.org/preview/text-dirr-1.0.0.tar.gz"
+hash = "sha256-qn4cfK9i1f8ClTsrA0CM5+KLsEPVCUqgDEVUIQm4iqk="
+typstDeps = []
+description = "Get resolved value for text.dir"
+license = [
+    "AGPL-3.0-only",
+]
+homepage = "https://codeberg.org/Andrew15-5/text-dirr"
+
+[tfguf."0.0.2"]
+url = "https://packages.typst.org/preview/tfguf-0.0.2.tar.gz"
+hash = "sha256-RSOTvYAxsRXzBH9vfW/9jIIk8KAMjBsmZNJe4mQQXMA="
+typstDeps = [
+    "physica_0_9_5",
+    "unify_0_7_1",
+]
+description = "Plantilla para hacer TFGs en el Grado en Física de UNIR"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/pammacdotnet/TFGUF"
+
 [tfguf."0.0.1"]
 url = "https://packages.typst.org/preview/tfguf-0.0.1.tar.gz"
 hash = "sha256-57aMGzmncJSV0LSiEcv9alhSZ95j7BDaF99Sek71lNk="
@@ -16336,6 +17492,20 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/TGM-HIT/typst-protocol"
+
+[tgm-hit-thesis."0.3.1"]
+url = "https://packages.typst.org/preview/tgm-hit-thesis-0.3.1.tar.gz"
+hash = "sha256-9lHo3QhUG7AnjwhRBf+NLBJb9PmHvzsh9XOCgCo49TM="
+typstDeps = [
+    "alexandria_0_1_3",
+    "glossarium_0_5_2",
+    "linguify_0_4_2",
+]
+description = "Diploma thesis template for students of the HIT department at TGM Wien"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/TGM-HIT/typst-diploma-thesis"
 
 [tgm-hit-thesis."0.3.0"]
 url = "https://packages.typst.org/preview/tgm-hit-thesis-0.3.0.tar.gz"
@@ -16626,6 +17796,16 @@ license = [
 ]
 homepage = "https://github.com/Enter-tainer/zint-wasi"
 
+[tidy."0.4.3"]
+url = "https://packages.typst.org/preview/tidy-0.4.3.tar.gz"
+hash = "sha256-3F4nBSvietpAevp+EgZIFoLfv4GRMLjSyGD+7RCYjjg="
+typstDeps = []
+description = "Documentation generator for Typst code in Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Mc-Zen/tidy"
+
 [tidy."0.4.2"]
 url = "https://packages.typst.org/preview/tidy-0.4.2.tar.gz"
 hash = "sha256-ZeHCBZWwe7G+tAfoyEzlCGQJFECMhUbiJzKRRKusF4E="
@@ -16684,6 +17864,28 @@ license = [
     "MIT",
 ]
 
+[tiefletter."0.1.1"]
+url = "https://packages.typst.org/preview/tiefletter-0.1.1.tar.gz"
+hash = "sha256-536tEljAru3xi7OaK53ehX3WeK5cdHyQkuwfQEeD580="
+typstDeps = [
+    "tiaoma_0_3_0",
+]
+description = "Invoice and offer template for Austrian freelancers"
+license = [
+    "MIT",
+]
+
+[tiefletter."0.1.0"]
+url = "https://packages.typst.org/preview/tiefletter-0.1.0.tar.gz"
+hash = "sha256-g+hC7DtT5CNf3PSTldttvSK2s2ocRnZboWhVYVmgAY4="
+typstDeps = [
+    "tiaoma_0_3_0",
+]
+description = "Invoice and offer template for Austrian freelancers"
+license = [
+    "MIT",
+]
+
 [tierpist."0.1.0"]
 url = "https://packages.typst.org/preview/tierpist-0.1.0.tar.gz"
 hash = "sha256-p9EUIa5z1f22OlPbJtdUojsnE3Kb2BDAwivkh3himQg="
@@ -16695,6 +17897,19 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/bastienvoirin/tierpist"
+
+[timeliney."0.2.1"]
+url = "https://packages.typst.org/preview/timeliney-0.2.1.tar.gz"
+hash = "sha256-c4aWt4hEhtFN5s9zhh7kg3bBRA+6KBkO8doadd0lOi4="
+typstDeps = [
+    "cetz_0_3_2",
+    "mantys_0_1_4",
+]
+description = "Create Gantt charts in Typst"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/pta2002/typst-timeliney"
 
 [timeliney."0.2.0"]
 url = "https://packages.typst.org/preview/timeliney-0.2.0.tar.gz"
@@ -16802,6 +18017,20 @@ description = "Template para escribir una tesis para la facultad de ciencias"
 license = [
     "MIT",
 ]
+
+[tntt."0.1.0"]
+url = "https://packages.typst.org/preview/tntt-0.1.0.tar.gz"
+hash = "sha256-f4NgrD5/fI4EQmBiYDgxFn1DqZPyvVgSgaTm3jgmmmU="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "tablex_0_0_9",
+]
+description = "Tntt is Not a Tex Thesis Template for Tsinghua university"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/chillcicada/tntt"
 
 [touying."0.6.1"]
 url = "https://packages.typst.org/preview/touying-0.6.1.tar.gz"
@@ -17272,9 +18501,26 @@ license = [
 ]
 homepage = "https://github.com/RaVincentHuang/touying-dids"
 
+[touying-flow."1.2.0"]
+url = "https://packages.typst.org/preview/touying-flow-1.2.0.tar.gz"
+hash = "sha256-rSMg6h0ouBSgHfyy6/3j8+1MNLkjYXNE3NKcWntYGjM="
+typstDeps = [
+    "codly_1_3_0",
+    "cuti_0_3_0",
+    "lovelace_0_3_0",
+    "mitex_0_2_5",
+    "numbly_0_1_0",
+    "touying_0_6_1",
+]
+description = "Enhancing the audience's immersion and foster a deeper state of flow"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Quaternijkon/touying-flow"
+
 [touying-flow."1.1.0"]
 url = "https://packages.typst.org/preview/touying-flow-1.1.0.tar.gz"
-hash = "sha256-KuAAoTh9fbfg+IZagElq10yPce387wsja78SXr0ZqKA="
+hash = "sha256-Hf4pRkP66FVXhTGh9eIxXW/1RqRL/X6/STVXvQeIanE="
 typstDeps = [
     "codly_1_0_0",
     "cuti_0_2_1",
@@ -17373,6 +18619,59 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/kazuyanagimoto/quarto-clean-typst"
+
+[touying-quick."0.1.0"]
+url = "https://packages.typst.org/preview/touying-quick-0.1.0.tar.gz"
+hash = "sha256-BRYPSevmKHiy9rX6VG+yRlvbPuwoc7oy0owQdW3P3gk="
+typstDeps = [
+    "codly_1_3_0",
+    "codly-languages_0_1_8",
+    "ctheorems_1_1_3",
+    "fletcher_0_5_7",
+    "gentle-clues_1_2_0",
+    "linguify_0_4_2",
+    "physica_0_9_5",
+    "pinit_0_2_2",
+    "rexllent_0_3_0",
+    "subpar_0_2_2",
+    "touying_0_6_0",
+]
+description = "A quick-start template based on touying for academic reports"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ivaquero/touying-quick.git"
+
+[touying-simpl-cau."0.2.0"]
+url = "https://packages.typst.org/preview/touying-simpl-cau-0.2.0.tar.gz"
+hash = "sha256-ZNqxrRPAa27RzF5Ib6u9PRAizftPqH2o8ar+NZ6yWAQ="
+typstDeps = [
+    "cetz_0_3_4",
+    "fletcher_0_5_7",
+    "numbly_0_1_0",
+    "touying_0_6_1",
+]
+description = "Touying Slide Theme for China Agricultural University"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/maxchang3/touying-simpl-cau"
+
+[touying-simpl-cau."0.1.0"]
+url = "https://packages.typst.org/preview/touying-simpl-cau-0.1.0.tar.gz"
+hash = "sha256-PzAfpKvVPs8pweoP8QwrVI58wWB+QNZ1efkDASKJqDM="
+typstDeps = [
+    "cetz_0_3_2",
+    "fletcher_0_5_5",
+    "numbly_0_1_0",
+    "touying_0_6_0",
+    "touying_0_6_1",
+]
+description = "Touying Slide Theme for China Agricultural University"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/maxchang3/touying-simpl-cau"
 
 [touying-simpl-hkustgz."0.1.1"]
 url = "https://packages.typst.org/preview/touying-simpl-hkustgz-0.1.1.tar.gz"
@@ -18465,6 +19764,18 @@ license = [
 ]
 homepage = "https://github.com/chosertech/HIT-Thesis-Typst"
 
+[unofficial-cityuhk-thesis."0.1.0"]
+url = "https://packages.typst.org/preview/unofficial-cityuhk-thesis-0.1.0.tar.gz"
+hash = "sha256-wC73F94RMGrq2iKnCTMJfhZkKctHQOiJf1KAT5DjUR4="
+typstDeps = [
+    "hydra_0_6_1",
+]
+description = "The unofficial thesis template for City University of Hong Kong"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/bowentan/unofficial-cityuhk-thesis"
+
 [unofficial-fhict-document-template."1.1.3"]
 url = "https://packages.typst.org/preview/unofficial-fhict-document-template-1.1.3.tar.gz"
 hash = "sha256-QMVNRywcGXL/YcD47I0HSPZiRcW6XT5SwGDvgHwR9es="
@@ -18644,6 +19955,37 @@ license = [
 ]
 homepage = "https://github.com/AnsgarLichter/unofficial-hka-thesis"
 
+[unofficial-sdu-thesis."0.2.2"]
+url = "https://packages.typst.org/preview/unofficial-sdu-thesis-0.2.2.tar.gz"
+hash = "sha256-PZBMLtJmY51CEKARfPcOdasT/4DnRjsBoFeabFWlopM="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "lovelace_0_2_0",
+    "numbly_0_1_0",
+    "unofficial-sdu-thesis_0_2_1",
+]
+description = "山东大学本科毕业论文（设计）模板"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/GrooveWJH/unofficial-sdu-thesis"
+
+[unofficial-sdu-thesis."0.2.1"]
+url = "https://packages.typst.org/preview/unofficial-sdu-thesis-0.2.1.tar.gz"
+hash = "sha256-dRMEQ4PtyFkOhpWyhy+X9XHdhFdH/3s67r/2khFsAc8="
+typstDeps = [
+    "cuti_0_3_0",
+    "i-figured_0_2_4",
+    "lovelace_0_2_0",
+    "numbly_0_1_0",
+]
+description = "山东大学本科毕业论文（设计）模板"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/GrooveWJH/unofficial-sdu-thesis"
+
 [unofficial-sdu-thesis."0.2.0"]
 url = "https://packages.typst.org/preview/unofficial-sdu-thesis-0.2.0.tar.gz"
 hash = "sha256-O/l47Jrk+ChI0JC7VVGLxTL250OTs4L24OlYtZeCei4="
@@ -18740,6 +20082,18 @@ license = [
     "GPL-3.0-only",
 ]
 homepage = "https://github.com/dl-li/uo-Tsinghua-Thesis-Typst-Template"
+
+[upb-cn-templates."0.1.0"]
+url = "https://packages.typst.org/preview/upb-cn-templates-0.1.0.tar.gz"
+hash = "sha256-aY7EfOJN2CHoEURr65IuJwkReXF+bHJnfD9ei9bdLJE="
+typstDeps = [
+    "timeliney_0_2_0",
+]
+description = "Templates for seminar reports and thesis proposals at the Computer Networks Group of Paderborn University"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/upb-cn/student-templates-typst"
 
 [upb-corporate-design-slides."0.1.2"]
 url = "https://packages.typst.org/preview/upb-corporate-design-slides-0.1.2.tar.gz"
@@ -18897,6 +20251,42 @@ license = [
 ]
 homepage = "https://github.com/zyf722/typst-tabler-icons"
 
+[utype-neuies-reports."1.2.0"]
+url = "https://packages.typst.org/preview/utype-neuies-reports-1.2.0.tar.gz"
+hash = "sha256-zvz+mkwc2vgai0+LWbLD+j9/RNGW2iGph0qgZTrVV0M="
+typstDeps = [
+    "linguify_0_4_2",
+]
+description = "NEÜ Eğitim Bilimleri Enstitüsü için RESMÎ OLMAYAN tez önerisi, tez ve dönem projesi şablonudur. [UNOFFICIAL thesis proposal, thesis and term project template for NEU Institute of Educational Sciences"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ertugruluyar-github/utype-neuies-reports"
+
+[utype-neuies-reports."1.1.0"]
+url = "https://packages.typst.org/preview/utype-neuies-reports-1.1.0.tar.gz"
+hash = "sha256-YPlUrEwSdm/xqtN0q4SXIZ+whrl7EmyTIzulowYJOIo="
+typstDeps = [
+    "linguify_0_4_2",
+]
+description = "NEÜ Eğitim Bilimleri Enstitüsü için RESMÎ OLMAYAN tez önerisi, tez ve dönem projesi şablonudur. [UNOFFICIAL thesis proposal, thesis and term project template for NEU Institute of Educational Sciences"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ertugruluyar-github/utype-neuies-reports"
+
+[utype-neuies-reports."1.0.0"]
+url = "https://packages.typst.org/preview/utype-neuies-reports-1.0.0.tar.gz"
+hash = "sha256-NkL09w2FJq7orkefTPZ+74Ud/twqIrOBq9FtZdlsN48="
+typstDeps = [
+    "linguify_0_4_2",
+]
+description = "NEÜ Eğitim Bilimleri Enstitüsü için RESMÎ OLMAYAN tez önerisi, tez ve dönem projesi şablonudur. [UNOFFICIAL thesis proposal, thesis and term project template for NEU Institute of Educational Sciences"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/ertugruluyar-github/utype-neuies-reports"
+
 [valkyrie."0.2.2"]
 url = "https://packages.typst.org/preview/valkyrie-0.2.2.tar.gz"
 hash = "sha256-9FTVR2mbrCMIrsraUrx8m8U1OwMKzIlvK9ule3cQHLk="
@@ -18959,6 +20349,18 @@ license = [
 ]
 homepage = "https://github.com/sardorml/vantage-typst"
 
+[vartable."0.2.0"]
+url = "https://packages.typst.org/preview/vartable-0.2.0.tar.gz"
+hash = "sha256-nPJw1lKOeCWb03tm4l5MBn8Se7nW8PGt4ELD/9wB+iE="
+typstDeps = [
+    "cetz_0_3_4",
+]
+description = "A simple package to make variation table"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Le-foucheur/Typst-VarTable"
+
 [vartable."0.1.2"]
 url = "https://packages.typst.org/preview/vartable-0.1.2.tar.gz"
 hash = "sha256-qdxhy9af6K4ez9UUd9sYrHR38DbCHG/D1besutjxOHE="
@@ -18995,6 +20397,16 @@ license = [
 ]
 homepage = "https://github.com/Le-foucheur/Typst-VarTable"
 
+[vercanard."1.0.3"]
+url = "https://packages.typst.org/preview/vercanard-1.0.3.tar.gz"
+hash = "sha256-yuElpbHPgUVznja91n020BA6dNoZh5Jj7vKqxx1kLFg="
+typstDeps = []
+description = "A colorful CV template"
+license = [
+    "GPL-3.0-only",
+]
+homepage = "https://github.com/elegaanz/vercanard"
+
 [vercanard."1.0.2"]
 url = "https://packages.typst.org/preview/vercanard-1.0.2.tar.gz"
 hash = "sha256-OlUnjAHq46bqpMcrfpoZs2dFMwoxydonb5nUSrMWkIA="
@@ -19026,6 +20438,16 @@ license = [
     "GPL-3.0-only",
 ]
 homepage = "https://github.com/elegaanz/vercanard"
+
+[versatile-apa."7.1.2"]
+url = "https://packages.typst.org/preview/versatile-apa-7.1.2.tar.gz"
+hash = "sha256-g0w9jFsBSyeCjVWGp4/Tu++4VQ5KqRWZt6v8zpDh5k8="
+typstDeps = []
+description = "Comprehensive APA 7th Edition Style Template for Typst, suitable for both student and professional papers"
+license = [
+    "MIT-0",
+]
+homepage = "https://github.com/jassielof/typst-templates"
 
 [versatile-apa."7.1.1"]
 url = "https://packages.typst.org/preview/versatile-apa-7.1.1.tar.gz"
@@ -19142,6 +20564,18 @@ license = [
     "AGPL-3.0-only",
 ]
 homepage = "https://github.com/vonsim/typst-package"
+
+[wavy."0.1.3"]
+url = "https://packages.typst.org/preview/wavy-0.1.3.tar.gz"
+hash = "sha256-iLh9y+2tL8G2RKQ7thYYfa9wyKWZR543JoIMbzqo2tA="
+typstDeps = [
+    "jogs_0_2_4",
+]
+description = "Draw digital timing diagram in Typst using Wavedrom"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/Enter-tainer/wavy"
 
 [wavy."0.1.1"]
 url = "https://packages.typst.org/preview/wavy-0.1.1.tar.gz"
@@ -19484,6 +20918,50 @@ license = [
     "MIT",
 ]
 homepage = "https://github.com/visika/yuan-resume"
+
+[zebraw."0.5.4"]
+url = "https://packages.typst.org/preview/zebraw-0.5.4.tar.gz"
+hash = "sha256-mekAjJe/VoNJ9aHbOpogkEi6QKXV9W7ya+vzkiJFado="
+typstDeps = []
+description = "A lightweight and fast package for displaying code blocks with line numbers or highlighting"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/hongjr03/typst-zebraw"
+
+[zebraw."0.5.3"]
+url = "https://packages.typst.org/preview/zebraw-0.5.3.tar.gz"
+hash = "sha256-ZQAp9iWU/YDdmp9yahnA3Thy9Hv39M5+AYZ7N0l0F4w="
+typstDeps = [
+    "zebraw_0_5_2",
+]
+description = "A lightweight and fast package for displaying code blocks with line numbers or highlighting"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/hongjr03/typst-zebraw"
+
+[zebraw."0.5.2"]
+url = "https://packages.typst.org/preview/zebraw-0.5.2.tar.gz"
+hash = "sha256-4gGEiicfY4Eby8sxHdOwxs7Bh9YUtnZwqlkSTYyvCA4="
+typstDeps = []
+description = "A lightweight and fast package for displaying code blocks with line numbers or highlighting"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/hongjr03/typst-zebraw"
+
+[zebraw."0.5.1"]
+url = "https://packages.typst.org/preview/zebraw-0.5.1.tar.gz"
+hash = "sha256-yDdpAR4F+TbuCSn5bBVTDNX3BDKGH5F55eSaMNJcQz8="
+typstDeps = [
+    "tidy_0_4_2",
+]
+description = "A lightweight and fast package for displaying code blocks with line numbers or highlighting"
+license = [
+    "MIT",
+]
+homepage = "https://github.com/hongjr03/typst-zebraw"
 
 [zebraw."0.5.0"]
 url = "https://packages.typst.org/preview/zebraw-0.5.0.tar.gz"

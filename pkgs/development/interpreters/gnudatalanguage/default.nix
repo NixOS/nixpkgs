@@ -60,7 +60,6 @@
   # and Darwin.
   enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   wxGTK32,
-  Cocoa,
   # X11: OFF by default for platform consistency. Use X where WX is not available
   enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin),
 }:
@@ -152,7 +151,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableGRIB eccodes
     ++ lib.optional enableGLPK glpk
     ++ lib.optional enableWX wxGTK32
-    ++ lib.optional (enableWX && stdenv.hostPlatform.isDarwin) Cocoa
     ++ lib.optional enableMPI mpi
     ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
     ++ lib.optional enableSzip szip;

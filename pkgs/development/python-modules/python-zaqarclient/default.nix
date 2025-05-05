@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "python-zaqarclient";
-  version = "2.8.0";
+  version = "3.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";
     tag = version;
-    hash = "sha256-vfu1GYd9eoVpmBtlnRTiqpiqlgxqPnwpFC9YC1UuvLM=";
+    hash = "sha256-SYHFzl7av/D4/2Ovnv95Ed4vaTxv/ke6FKVg+MWlGBI=";
   };
 
   env.PBR_VERSION = version;

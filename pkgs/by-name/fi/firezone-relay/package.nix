@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-relay";
+    platforms = lib.platforms.linux;
   };
 }

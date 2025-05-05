@@ -5,7 +5,6 @@
   rustPlatform,
   protobuf,
   nix-update-script,
-  darwin,
   withQuic ? false, # with QUIC protocol support
 }:
 
@@ -27,10 +26,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;

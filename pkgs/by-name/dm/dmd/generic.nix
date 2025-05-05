@@ -15,7 +15,6 @@
   curl,
   tzdata,
   gdb,
-  Foundation,
   callPackage,
   targetPackages,
   fetchpatch,
@@ -138,14 +137,10 @@ stdenv.mkDerivation (finalAttrs: {
       git
     ];
 
-  buildInputs =
-    [
-      curl
-      tzdata
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    curl
+    tzdata
+  ];
 
   nativeCheckInputs =
     [

@@ -63,6 +63,23 @@ stdenv.mkDerivation (finalAttrs: {
       gputils
     ];
 
+  # sdcc 4.5.0 massively rewrote sim/ucsim/Makefile.in, and lost the `.PHONY`
+  # rule in the process. As a result, on macOS (which uses a case-insensitive
+  # filesystem), the INSTALL file keeps the `install` target in the ucsim
+  # directory from running. Nothing else creates the `man` output, causing the
+  # entire build to fail.
+  #
+  # TODO: remove this when updating to the next release - it's been fixed in
+  # upstream sdcc r15384 <https://sourceforge.net/p/sdcc/code/15384/>.
+
+  postPatch = ''
+    if grep -q '\.PHONY:.*install' sim/ucsim/Makefile.in; then
+      echo 'Upstream has added `.PHONY: install` rule; must remove `postPatch` from the Nix file.' >&2
+      exit 1
+    fi
+    echo '.PHONY: install' >> sim/ucsim/Makefile.in
+  '';
+
   configureFlags =
     let
       excludedPorts =

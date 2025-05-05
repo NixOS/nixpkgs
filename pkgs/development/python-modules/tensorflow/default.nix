@@ -79,9 +79,6 @@
   sse42Support ? stdenv.hostPlatform.sse4_2Support,
   avx2Support ? stdenv.hostPlatform.avx2Support,
   fmaSupport ? stdenv.hostPlatform.fmaSupport,
-  # Darwin deps
-  Foundation,
-  Security,
   cctools,
   llvmPackages,
 }:
@@ -339,10 +336,6 @@ let
         cudnnMerged
       ]
       ++ lib.optionals mklSupport [ mkl ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Foundation
-        Security
-      ]
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ nsync ];
 
     # arbitrarily set to the current latest bazel version, overly careful

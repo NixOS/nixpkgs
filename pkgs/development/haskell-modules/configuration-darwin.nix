@@ -28,30 +28,13 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
-    halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
-
     # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
     hakyll = overrideCabal {
       testToolDepends = [ ];
       doCheck = false;
     } super.hakyll;
 
-    barbly = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.barbly;
-
     double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
-
-    streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
-
-    apecs-physics = addPkgconfigDepends [
-      darwin.apple_sdk.frameworks.ApplicationServices
-    ] super.apecs-physics;
-
-    # Framework deps are hidden behind a flag
-    hmidi = addExtraLibraries [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreAudio
-      darwin.apple_sdk.frameworks.CoreMIDI
-    ] super.hmidi;
 
     # "erf table" test fails on Darwin
     # https://github.com/bos/math-functions/issues/63
@@ -76,16 +59,6 @@ self: super:
     # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
     gtk3 = appendConfigureFlag "-f have-quartz-gtk" super.gtk3;
     gtk = appendConfigureFlag "-f have-quartz-gtk" super.gtk;
-
-    OpenAL = addExtraLibrary darwin.apple_sdk.frameworks.OpenAL super.OpenAL;
-
-    al = overrideCabal (drv: {
-      libraryFrameworkDepends = [
-        darwin.apple_sdk.frameworks.OpenAL
-      ] ++ (drv.libraryFrameworkDepends or [ ]);
-    }) super.al;
-
-    proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
     # issues finding libcharset.h without libiconv in buildInputs on darwin.
     with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
@@ -161,34 +134,18 @@ self: super:
 
     sym = markBroken super.sym;
 
-    yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
-
     yesod-core = super.yesod-core.overrideAttrs (drv: {
       # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
       # run tests that access localhost.
       __darwinAllowLocalNetworking = true;
     });
 
-    hidapi = addExtraLibraries [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.CoreFoundation
-    ] (super.hidapi.override { systemd = null; });
-
-    hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
-
-    blas-hs = overrideCabal (drv: {
-      libraryFrameworkDepends = [
-        darwin.apple_sdk.frameworks.Accelerate
-      ] ++ (drv.libraryFrameworkDepends or [ ]);
-    }) super.blas-hs;
+    hidapi = super.hidapi.override { systemd = null; };
 
     # Ensure the necessary frameworks are propagatedBuildInputs on darwin
     OpenGLRaw = overrideCabal (drv: {
       librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.OpenGL
-      ];
+      libraryHaskellDepends = drv.libraryHaskellDepends;
       preConfigure =
         ''
           frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
@@ -197,30 +154,9 @@ self: super:
         ''
         + (drv.preConfigure or "");
     }) super.OpenGLRaw;
-    GLURaw = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.OpenGL
-      ];
-    }) super.GLURaw;
     bindings-GLFW = overrideCabal (drv: {
       librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.AGL
-        darwin.apple_sdk.frameworks.Cocoa
-        darwin.apple_sdk.frameworks.OpenGL
-        darwin.apple_sdk.frameworks.IOKit
-        darwin.apple_sdk.frameworks.Kernel
-        darwin.apple_sdk.frameworks.CoreVideo
-        darwin.CF
-      ];
     }) super.bindings-GLFW;
-    OpenCL = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.OpenCL
-      ];
-    }) super.OpenCL;
 
     # cabal2nix likes to generate dependencies on hinotify when hfsevents is
     # really required on darwin: https://github.com/NixOS/cabal2nix/issues/146.
@@ -228,22 +164,7 @@ self: super:
 
     # FSEvents API is very buggy and tests are unreliable. See
     # http://openradar.appspot.com/10207999 and similar issues.
-    fsnotify = addBuildDepend darwin.apple_sdk.frameworks.Cocoa (dontCheck super.fsnotify);
-
-    FractalArt = overrideCabal (drv: {
-      librarySystemDepends = [
-        darwin.libobjc
-        darwin.apple_sdk.frameworks.AppKit
-      ] ++ (drv.librarySystemDepends or [ ]);
-    }) super.FractalArt;
-
-    arbtt = overrideCabal (drv: {
-      librarySystemDepends = [
-        darwin.apple_sdk.frameworks.Foundation
-        darwin.apple_sdk.frameworks.Carbon
-        darwin.apple_sdk.frameworks.IOKit
-      ] ++ (drv.librarySystemDepends or [ ]);
-    }) super.arbtt;
+    fsnotify = dontCheck super.fsnotify;
 
     HTF = overrideCabal (drv: {
       # GNU find is not prefixed in stdenv
@@ -317,39 +238,11 @@ self: super:
     # Otherwise impure gcc is used, which is Apple's weird wrapper
     c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
-    http-client-tls = overrideCabal (drv: {
-      postPatch =
-        ''
-          # This comment has been inserted, so the derivation hash changes, forcing
-          # a rebuild of this derivation which has succeeded to build on Hydra before,
-          # but apparently been corrupted, causing reverse dependencies to fail.
-          #
-          # This workaround can be removed upon the next darwin stdenv rebuild,
-          # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-          # full haskellPackages rebuild.
-        ''
-        + drv.postPatch or "";
-    }) super.http-client-tls;
-
     http2 = super.http2.overrideAttrs (drv: {
       # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
       # that access localhost.
       __darwinAllowLocalNetworking = true;
     });
-
-    foldl = overrideCabal (drv: {
-      postPatch =
-        ''
-          # This comment has been inserted, so the derivation hash changes, forcing
-          # a rebuild of this derivation which has succeeded to build on Hydra before,
-          # but apparently been corrupted, causing reverse dependencies to fail.
-          #
-          # This workaround can be removed upon the next darwin stdenv rebuild,
-          # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-          # full haskellPackages rebuild.
-        ''
-        + drv.postPatch or "";
-    }) super.foldl;
 
     # https://hydra.nixos.org/build/230964714/nixlog/1
     inline-c-cpp = appendPatch (pkgs.fetchpatch {
@@ -410,10 +303,6 @@ self: super:
     }) super.jsaddle-hello;
 
     jsaddle-wkwebview = overrideCabal (drv: {
-      libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-        Cocoa
-        WebKit
-      ];
       libraryHaskellDepends = with self; [
         aeson
         data-default
@@ -439,6 +328,8 @@ self: super:
     # Require /usr/bin/security which breaks sandbox
     http-reverse-proxy = dontCheck super.http-reverse-proxy;
     servant-auth-server = dontCheck super.servant-auth-server;
+
+    sysinfo = dontCheck super.sysinfo;
 
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {

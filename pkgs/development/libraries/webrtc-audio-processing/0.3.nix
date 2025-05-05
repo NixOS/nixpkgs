@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  darwin,
   autoreconfHook,
   pkg-config,
 }:
@@ -52,10 +51,6 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ ApplicationServices ]
-  );
 
   patchPhase = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1

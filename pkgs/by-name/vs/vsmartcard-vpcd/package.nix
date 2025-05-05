@@ -9,7 +9,6 @@
   qrencode,
   python3,
   help2man,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,23 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
   ];
 
-  buildInputs =
-    [
-      pcsclite
-      qrencode
-      (python3.withPackages (
-        pp: with pp; [
-          pyscard
-          pycrypto
-          pbkdf2
-          pillow
-          gnureadline
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.PCSC
-    ];
+  buildInputs = [
+    pcsclite
+    qrencode
+    (python3.withPackages (
+      pp: with pp; [
+        pyscard
+        pycrypto
+        pbkdf2
+        pillow
+        gnureadline
+      ]
+    ))
+  ];
 
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--enable-infoplist";
 

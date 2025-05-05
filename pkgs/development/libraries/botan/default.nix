@@ -7,7 +7,6 @@
   bzip2,
   zlib,
   jitterentropy,
-  darwin,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
 }:
 
@@ -51,13 +50,7 @@ let
           bzip2
           zlib
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin (
-          with darwin.apple_sdk.frameworks;
-          [
-            CoreServices
-            Security
-          ]
-        )
+
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           jitterentropy
         ];

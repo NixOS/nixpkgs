@@ -24,7 +24,6 @@
   fetchgit,
   makeWrapper,
   gitMinimal,
-  libobjc,
   ruby,
   bundler,
 }@defs:
@@ -125,12 +124,9 @@ lib.makeOverridable (
         ++ lib.optionals (type != "gem") [ bundler ]
         ++ nativeBuildInputs;
 
-      buildInputs =
-        [
-          ruby
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ]
-        ++ buildInputs;
+      buildInputs = [
+        ruby
+      ] ++ buildInputs;
 
       #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
       name = attrs.name or "${namePrefix}${gemName}-${suffix}";

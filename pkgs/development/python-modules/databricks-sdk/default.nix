@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_multipart_upload"
     "test_rewind_seekable_stream"
     "test_resumable_upload"
+    # flaky -- ConnectionBroken under heavy load indicates a timing issue
+    "test_github_oidc_flow_works_with_azure"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -4,8 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   protobuf,
-  stdenv,
-  darwin,
   pkg-config,
   openssl,
 }:
@@ -34,7 +32,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   doCheck = false;
 

@@ -17,7 +17,6 @@
   boost,
   llvmPackages,
   fixDarwinDylibNames,
-  Cocoa,
 }:
 
 stdenv.mkDerivation {
@@ -51,8 +50,7 @@ stdenv.mkDerivation {
       jedi
       jedi-language-server
       pybind11
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+    ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"

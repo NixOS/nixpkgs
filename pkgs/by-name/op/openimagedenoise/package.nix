@@ -3,7 +3,6 @@
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
-  darwin,
   fetchzip,
   ispc,
   lib,
@@ -42,14 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [ tbb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Accelerate
-        MetalKit
-        MetalPerformanceShadersGraph
-      ]
-    )
+
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
       cudaPackages.cuda_cccl

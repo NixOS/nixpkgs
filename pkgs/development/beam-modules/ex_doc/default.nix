@@ -30,6 +30,8 @@ mixRelease {
     elixir
     ;
 
+  escriptBinName = "ex_doc";
+
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
@@ -37,25 +39,6 @@ mixRelease {
     inherit src version elixir;
     hash = "sha256-s4b6wuBJPdN0FPn76zbLCHzqJNEZ6E4nOyB1whUM2VY=";
   };
-
-  configurePhase = ''
-    runHook preConfigure
-    mix deps.compile --no-deps-check
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    mix do escript.build
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp -v ex_doc $out/bin
-    runHook postInstall
-  '';
 
   passthru = {
     tests = {

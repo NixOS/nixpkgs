@@ -11,7 +11,6 @@
   cereal,
   cgal,
   curl,
-  darwin,
   dbus,
   eigen,
   expat,
@@ -140,9 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withSystemd [
       systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreWLAN
     ];
 
   strictDeps = true;

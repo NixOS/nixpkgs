@@ -2,8 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  darwin,
-  stdenv,
 }:
 buildGoModule rec {
   pname = "gptscript";
@@ -17,8 +15,6 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-ajglXWGJhSJtcrbSBmxmriXFTT+Vb4xYq0Ec9SYRlQk=";
-
-  propagatedBuildInputs = with darwin; lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   ldflags = [
     "-s"

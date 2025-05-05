@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   cmake,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,10 +27,6 @@ rustPlatform.buildRustPackage rec {
 
   # Needed by wabt-sys
   nativeBuildInputs = [ cmake ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   # Requires a running substrate node
   doCheck = false;

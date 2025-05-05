@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
 
-  ApplicationServices,
   asciidoctor,
   bcg729,
   bison,
@@ -43,7 +42,6 @@
   snappy,
   spandsp3,
   speexdsp,
-  SystemConfiguration,
   wrapGAppsHook3,
   zlib-ng,
   zstd,
@@ -148,9 +146,7 @@ stdenv.mkDerivation rec {
       sbc
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
       gmp
-      SystemConfiguration
     ];
 
   strictDeps = true;

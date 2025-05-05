@@ -7,11 +7,8 @@
   setuptools,
   cython,
   certifi,
-  CFNetwork,
   cmake,
-  CoreFoundation,
   openssl,
-  Security,
   pytestCheckHook,
   pytest-asyncio,
 }:
@@ -61,13 +58,7 @@ buildPythonPackage rec {
     cmake
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      CFNetwork
-      Security
-    ];
+  buildInputs = [ openssl ];
 
   dependencies = [ certifi ];
 

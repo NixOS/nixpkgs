@@ -9,8 +9,10 @@
   httpx,
   json-repair,
   openai,
+  polyfactory,
   pydantic,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   tenacity,
@@ -51,7 +53,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    polyfactory
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
@@ -65,10 +69,13 @@ buildPythonPackage rec {
     "test_default_operations"
     "test_estimate_request_tokens"
     "test_replace_value"
-  ];
-
-  disabledTestPaths = [
-    "tests/unit/caching/test_blob.py"
+    "test_text_service_encode_decode"
+    "test_count_tokens"
+    "trim_to_max_tokens"
+    "test_split"
+    "test_clear"
+    "test_handles_common_errors"
+    "test_children"
   ];
 
   meta = {

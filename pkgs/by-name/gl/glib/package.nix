@@ -31,7 +31,6 @@
   tzdata,
   desktop-file-utils,
   shared-mime-info,
-  darwin,
   makeHardcodeGsettingsPatch,
   testers,
   gobject-introspection,
@@ -178,18 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux
       util-linuxMinimal # for libmount
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        Carbon
-        Cocoa
-        CoreFoundation
-        CoreServices
-        Foundation
-      ]
-    );
+    ];
 
   depsBuildBuild = [
     pkg-config # required to find native gi-docgen

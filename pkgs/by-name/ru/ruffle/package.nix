@@ -7,7 +7,6 @@
   jre_minimal,
   pkg-config,
   wrapGAppsHook3,
-  darwin,
   alsa-lib,
   gtk3,
   openssl,
@@ -56,16 +55,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ]
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      openssl
-      wayland
-      vulkan-loader
-      udev
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    openssl
+    wayland
+    vulkan-loader
+    udev
+  ];
 
   postInstall =
     ''

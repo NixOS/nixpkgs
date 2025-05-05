@@ -11,8 +11,6 @@
   curl,
   openalSupport ? true,
   openal,
-  Cocoa,
-  OpenAL,
 }:
 
 let
@@ -53,17 +51,11 @@ let
           --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
       '';
 
-    buildInputs =
-      [
-        SDL2
-        libGL
-        curl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Cocoa
-        OpenAL
-      ]
-      ++ lib.optional openalSupport openal;
+    buildInputs = [
+      SDL2
+      libGL
+      curl
+    ] ++ lib.optional openalSupport openal;
 
     makeFlags = [
       "WITH_OPENAL=${mkFlag openalSupport}"

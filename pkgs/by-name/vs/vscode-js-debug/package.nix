@@ -6,8 +6,6 @@
   buildPackages,
   libsecret,
   xcbuild,
-  Security,
-  AppKit,
   pkg-config,
   node-gyp,
   runCommand,
@@ -33,12 +31,7 @@ buildNpmPackage rec {
     node-gyp
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      AppKit
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
   postPatch = ''
     ${lib.getExe buildPackages.jq} '

@@ -6,7 +6,6 @@
   libGL,
   libheif,
   libjpeg,
-  darwin,
   pkg-config,
   stdenv,
   enableHEIFCodec ? true,
@@ -50,9 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enableOpenGL [
       libglut
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
     ];
 
   # Since "build" already exists and is populated, cmake tries to use it,

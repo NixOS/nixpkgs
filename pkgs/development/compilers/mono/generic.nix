@@ -13,8 +13,6 @@
   zlib,
   bash,
   cacert,
-  Foundation,
-  libobjc,
   python3,
   version,
   sha256,
@@ -52,20 +50,15 @@ stdenv.mkDerivation rec {
     which
     gnumake42
   ];
-  buildInputs =
-    [
-      glib
-      gettext
-      libgdiplus
-      libX11
-      ncurses
-      zlib
-      bash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      libobjc
-    ];
+  buildInputs = [
+    glib
+    gettext
+    libgdiplus
+    libX11
+    ncurses
+    zlib
+    bash
+  ];
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"

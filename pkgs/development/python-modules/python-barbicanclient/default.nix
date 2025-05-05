@@ -20,17 +20,17 @@
 
 buildPythonPackage rec {
   pname = "python-barbicanclient";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitea {
     domain = "opendev.org";
     owner = "openstack";
     repo = "python-barbicanclient";
     rev = version;
-    hash = "sha256-odoYyBulOQkjUpymFyZgvI+DYmdHJY3PaG8hh2ms+/0=";
+    hash = "sha256-VEK3MDuvciF4hpyNKTKWX2v3pSCcVi+YGgSKCLaWAuI=";
   };
 
   env.PBR_VERSION = version;

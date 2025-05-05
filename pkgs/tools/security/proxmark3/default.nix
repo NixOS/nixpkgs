@@ -12,8 +12,6 @@
   whereami,
   lua,
   lz4,
-  Foundation,
-  AppKit,
   withGui ? true,
   wrapQtAppsHook,
   qtbase,
@@ -73,11 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional withGui qtbase
     ++ lib.optional withPython python3
-    ++ lib.optional withBlueshark bluez5
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      AppKit
-    ];
+    ++ lib.optional withBlueshark bluez5;
 
   makeFlags =
     [

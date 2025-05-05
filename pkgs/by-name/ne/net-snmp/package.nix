@@ -9,7 +9,6 @@
   nettools,
   autoreconfHook,
   withPerlTools ? false,
-  darwin,
 }:
 let
 
@@ -84,15 +83,7 @@ stdenv.mkDerivation rec {
     file
     autoreconfHook
   ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional withPerlTools perlWithPkgs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.ApplicationServices
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.DiskArbitration
-    ];
+  buildInputs = [ openssl ] ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
   # Missing dependencies during relinking:

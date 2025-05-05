@@ -27,7 +27,6 @@
 
   # platform-specific dependencies
   bashNonInteractive,
-  darwin,
   windows,
 
   # optional dependencies
@@ -231,9 +230,6 @@ let
     ++ optionals bluezSupport [
       bluez
     ]
-    ++ optionals enableFramework [
-      darwin.apple_sdk.frameworks.Cocoa
-    ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
       windows.mingw_w64_pthreads
@@ -322,10 +318,6 @@ stdenv.mkDerivation (finalAttrs: {
       # libuuid, slowing down program startup a lot).
       noldconfigPatch
     ]
-    ++ optionals (pythonOlder "3.12") [
-      # https://www.cve.org/CVERecord?id=CVE-2025-0938
-      ./CVE-2025-0938.patch
-    ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # Cross compilation only supports a limited number of "known good"
       # configurations. If you're reading this and it's been a long time
@@ -377,15 +369,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./loongarch-support.patch
       # fix failing tests with openssl >= 3.4
       # https://github.com/python/cpython/pull/127361
-    ]
-    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
-      ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
-    ]
-    ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
-        sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
-      })
     ]
     ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
       # backport fix for https://github.com/python/cpython/issues/95855

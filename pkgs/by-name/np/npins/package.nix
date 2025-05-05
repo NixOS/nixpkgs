@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
-  stdenv,
-  darwin,
 
   # runtime dependencies
   nix, # for nix-prefetch-url
@@ -33,13 +31,6 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-HnX7dkWLxa3DARXG8y9OVBRwvwgxwRIs4mWK3VNblG0=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Security
-      SystemConfiguration
-    ]
-  );
   nativeBuildInputs = [ makeWrapper ];
 
   # (Almost) all tests require internet

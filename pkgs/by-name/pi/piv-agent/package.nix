@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildGoModule,
-  darwin,
   fetchFromGitHub,
   pcsclite,
   pkg-config,
@@ -32,8 +31,7 @@ buildGoModule rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pcsclite ];
 
   meta = with lib; {
     description = "SSH and GPG agent which you can use with your PIV hardware security device (e.g. a Yubikey)";

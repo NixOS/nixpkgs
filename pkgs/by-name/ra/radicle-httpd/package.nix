@@ -1,6 +1,5 @@
 {
   asciidoctor,
-  darwin,
   fetchgit,
   git,
   installShellFiles,
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
   nativeCheckInputs = [ git ];
-  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 

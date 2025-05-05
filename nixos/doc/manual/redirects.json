@@ -59,6 +59,12 @@
   "module-services-strfry-reverse-proxy": [
     "index.html#module-services-strfry-reverse-proxy"
   ],
+  "module-services-dump1090-fa": [
+    "index.html#module-services-dump1090-fa"
+  ],
+  "module-services-dump1090-fa-configuration": [
+    "index.html#module-services-dump1090-fa-configuration"
+  ],
   "preface": [
     "index.html#preface"
   ],
