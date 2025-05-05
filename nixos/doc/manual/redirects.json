@@ -59,6 +59,9 @@
   "module-services-strfry-reverse-proxy": [
     "index.html#module-services-strfry-reverse-proxy"
   ],
+  "module-services-netbird-server-proxy": [
+    "index.html#module-services-netbird-server-proxy"
+  ],
   "preface": [
     "index.html#preface"
   ],
