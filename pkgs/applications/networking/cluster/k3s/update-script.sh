@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq nurl yq-go
+#!nix-shell -i bash -p curl git gnugrep gnused go jq nurl yq-go
 
 set -x -eu -o pipefail
 
