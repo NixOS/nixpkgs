@@ -9,7 +9,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "istatmenus";
+  pname = "istat-menus";
   version = "7.02.10";
 
   src = fetchurl {
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     text = ''
       redirect_url="$(curl -s -L -f "https://download.bjango.com/istatmenus${lib.versions.major finalAttrs.version}/" -o /dev/null -w '%{url_effective}')"
       version="''${redirect_url##*/}"; version="''${version#iStatMenus}"; version="''${version%.zip}"
-      update-source-version istatmenus "$version" --file=./pkgs/by-name/is/istatmenus/package.nix
+      update-source-version istat-menus "$version"
     '';
   });
 
