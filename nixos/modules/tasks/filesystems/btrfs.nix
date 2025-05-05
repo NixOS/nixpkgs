@@ -12,8 +12,7 @@ let
 
   cfgScrub = config.services.btrfs.autoScrub;
 
-  enableAutoScrub = cfgScrub.enable;
-  enableBtrfs = inInitrd || inSystem || enableAutoScrub;
+  enableBtrfs = inInitrd || inSystem || cfgScrub.enable;
 
 in
 
@@ -86,7 +85,7 @@ in
       boot.initrd.systemd.initrdBin = [ pkgs.btrfs-progs ];
     })
 
-    (lib.mkIf enableAutoScrub {
+    (lib.mkIf cfgScrub.enable {
       assertions = [
         {
           assertion = cfgScrub.enable -> (cfgScrub.fileSystems != [ ]);
