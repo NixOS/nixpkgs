@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   openssl,
   libiconv,
@@ -32,6 +33,15 @@ python3.pkgs.buildPythonApplication rec {
     name = "${pname}-${version}";
     hash = "sha256-PdAyEGLYmMLgcPQjzjuwvQo55olKgr079gsgQnUoKTM=";
   };
+
+  patches = [
+    # fix compatibility with authlib 1.5.2
+    # https://github.com/element-hq/synapse/pull/18390
+    (fetchpatch {
+      url = "https://github.com/element-hq/synapse/commit/c9adbc6a1ce6039b1c04ae3298e463a3e3b25c38.patch";
+      hash = "sha256-0EZL0esZ6IEjmBV1whSpfZoFsMJ2yZQPi1GjW7NQ484=";
+    })
+  ];
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
