@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
   };
 
+  # There's a bug with the NVIDIA EGL driver. This patch works around it.
+  patches = (lib.optional enableCuda [
+    ./nvidia_egl_fence_wait.patch
+  ]);
+
   nativeBuildInputs = [
     cmake
     doxygen
