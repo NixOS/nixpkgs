@@ -867,6 +867,7 @@ mapAliases {
   isl_0_11 = throw "isl_0_11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   isl_0_14 = throw "isl_0_14 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   isl_0_17 = throw "isl_0_17 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
+  istatmenus = throw "istatmenus has beend renamed to istat-menus"; # Added 2025-05-05
   iso-flags-png-320x420 = lib.warnOnInstantiate "iso-flags-png-320x420 has been renamed to iso-flags-png-320x240" iso-flags-png-320x240; # Added 2024-07-17
   itktcl = tclPackages.itktcl; # Added 2024-10-02
   iv = throw "iv has been removed as it was no longer required for neuron and broken"; # Added 2025-04-18
