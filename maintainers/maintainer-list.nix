@@ -14675,6 +14675,12 @@
     githubId = 60079945;
     keys = [ { fingerprint = "7590 C9DD E19D 4497 9EE9  0B14 CE96 9670 FB4B 4A56"; } ];
   };
+  madeddie = {
+    email = "edwin@madtech.cx";
+    github = "madeddie";
+    githubId = 140660;
+    name = "Edwin Hermans";
+  };
   madjar = {
     email = "georges.dubus@compiletoi.net";
     github = "madjar";
