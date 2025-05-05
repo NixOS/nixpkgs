@@ -12125,6 +12125,7 @@ with pkgs;
     ubootQemuArm
     ubootQemuRiscv64Smode
     ubootQemuX86
+    ubootQemuX86_64
     ubootQuartz64B
     ubootRaspberryPi
     ubootRaspberryPi2
