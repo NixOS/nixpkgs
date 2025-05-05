@@ -2,29 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
+  hatch-vcs,
   typing-extensions,
+  pytestCheckHook,
+  kicad,
 }:
 
 buildPythonPackage rec {
   pname = "kicadcliwrapper";
-  version = "1.0.4";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "kicadcliwrapper";
     tag = "v${version}";
-    hash = "sha256-S1Sd3TgLUIT1TcG8WbEgHgUqIcXvzVdvfwrPnpaK7/g=";
+    hash = "sha256-D9uvNwNLi9zz/TW+uAOXve/JFjeol1IbZSeunFWCEZA=";
   };
 
-  # this script is used the generated the bindings
-  # and is intended for development.
-  preCheck = ''
-    rm src/kicadcliwrapper/main.py
-  '';
-
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [ typing-extensions ];
 
@@ -35,7 +35,16 @@ buildPythonPackage rec {
     "kicadcliwrapper.lib"
   ];
 
-  doCheck = false; # no tests
+  # this script is used to generate the bindings
+  # and is intended for development.
+  preCheck = ''
+    rm src/kicadcliwrapper/main.py
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    kicad
+  ];
 
   meta = {
     description = "Strongly typed, auto-generated bindings for KiCAD's CLI";
