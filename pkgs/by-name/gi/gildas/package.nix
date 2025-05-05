@@ -12,6 +12,7 @@
   groff,
   which,
   ncurses,
+  makeWrapper,
 }:
 
 let
@@ -23,7 +24,7 @@ let
   );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   srcVersion = "jun25a";
   version = "20250601_a";
   pname = "gildas";
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
     # For each new release, the upstream developers of Gildas move the
     # source code of the previous release to a different directory
     urls = [
-      "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
-      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/gildas-src-${finalAttrs.srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${finalAttrs.srcVersion}.tar.xz"
     ];
     hash = "sha256-DhUGaG96bsZ1NGfDQEujtiM0AUwZBMD42uRpRWI5DX0=";
   };
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     getopt
     gfortran
     which
+    makeWrapper
   ];
 
   buildInputs = [
@@ -54,22 +56,20 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  patches =
-    [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./clang.patch
-      ./cpp-darwin.patch
-    ];
+  patches = [
+    # Use Clang as the default compiler on Darwin.
+    ./clang.patch
+    # Replace hardcoded cpp with GAG_CPP (see below).
+    ./cpp-darwin.patch
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
-  env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
+  env.GAG_CPP = if stdenv.hostPlatform.isDarwin then "${gfortran.outPath}/bin/cpp" else "cpp";
 
   configurePhase = ''
-    substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
-    substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
-    substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
+    substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${lib.getExe perl}
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
@@ -77,12 +77,17 @@ stdenv.mkDerivation rec {
   userExec = "astro class greg mapping sic";
 
   postInstall = ''
-    mkdir -p $out/bin
-    cp -a ../gildas-exe-${srcVersion}/* $out
+    cp -a ../gildas-exe-${finalAttrs.srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
-    for i in ${userExec} ; do
-      cp admin/wrapper.sh $out/bin/$i
-      chmod 755 $out/bin/$i
+    for i in ${finalAttrs.userExec} ; do
+       makeWrapper $out/libexec/bin/$i $out/bin/$i \
+          --set GAG_ROOT_DIR $out \
+          --set GAG_PATH $out/etc \
+          --set GAG_EXEC_SYSTEM libexec \
+          --set GAG_GAG \$HOME/.gag \
+          --set PYTHONHOME ${python3Env} \
+          --prefix PYTHONPATH : $out/libexec/python \
+          --set LD_LIBRARY_PATH $out/libexec/lib/
     done
   '';
 
@@ -106,7 +111,7 @@ stdenv.mkDerivation rec {
       lib.maintainers.bzizou
       lib.maintainers.smaret
     ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
-}
+})
