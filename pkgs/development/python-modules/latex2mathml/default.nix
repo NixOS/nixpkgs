@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "latex2mathml";
-  version = "3.77.0";
+  version = "3.78.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
-    repo = pname;
-    rev = version;
-    hash = "sha256-DLdSFMsNA0gD6Iw0kn+0IrbvyI0VEGOpz0ZYD48nRkY=";
+    repo = "latex2mathml";
+    tag = version;
+    hash = "sha256-FB1VM2z9y17q+6/wv4oTrhe/rD2QzdAc0VMbFmcrIAw=";
   };
 
   build-system = [ poetry-core ];
