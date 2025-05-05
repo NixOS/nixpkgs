@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pocket-id";
-  version = "0.51.0";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tNPbowMytALmvJ1H8IWCmXIQFlXKEHA5+T9FWdpaLi0=";
+    hash = "sha256-L+Mmgyeiv/AoboGN1ux4BDhEyVQ8w7IMR8Z34eM8tSU=";
   };
 
   backend = buildGoModule {
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-CKxa0uL7pBQJiA2LPDA/HQvRk8sjphZ9nur8jb7BnU8=";
+    npmDepsHash = "sha256-UjYAndueuJU07unbNFoTQHqRFkdyaBKHyT4k3Ex4pg0=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     nativeBuildInputs = [

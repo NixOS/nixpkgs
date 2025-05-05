@@ -174,7 +174,7 @@
 
       hash =
         {
-          aarch64-linux = "sha256-DUzvpmBoUk4qyyxPn1EQSqcnIc0YvPRi7HyLo5Ekqa4=";
+          aarch64-linux = "sha256-qN9c4WUPR1aTP4eAhwyRoKQOfJhw10YpvyQTkry1wuM=";
           x86_64-linux = "sha256-nzSX+HszctF+RHNp4AFqS+yZprTSpZq6d0olv+Q1NHQ=";
           aarch64-darwin = "sha256-gCJIc5sqzIwb5tlH8Zsy/A44wI4xKzXAXMf7IvEHCeQ=";
           x86_64-darwin = "sha256-gtRgQhRmyBraSh2Z3y3xuLNTQbOXyF///lGkwwItCDM=";

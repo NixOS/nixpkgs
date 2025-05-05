@@ -991,6 +991,8 @@ let
 
         jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
+        jose = callPackage ../development/ocaml-modules/jose { };
+
         js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
         js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix { };
@@ -1582,6 +1584,8 @@ let
         ogg = callPackage ../development/ocaml-modules/ogg { };
 
         ohex = callPackage ../development/ocaml-modules/ohex { };
+
+        oidc = callPackage ../development/ocaml-modules/oidc { };
 
         ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
