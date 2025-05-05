@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   installShellFiles,
   rustPlatform,
   pkg-config,
   openssl,
   scdoc,
-  Security,
   which,
 }:
 
@@ -36,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     scdoc
     which
   ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   postInstall = ''
     make manual

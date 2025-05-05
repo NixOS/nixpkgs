@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,13 +24,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 

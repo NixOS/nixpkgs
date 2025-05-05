@@ -30,7 +30,6 @@ assert (hash == null) -> (src != null);
   callPackage,
   cmake,
   curl,
-  darwin,
   doxygen,
   editline,
   flex,
@@ -59,7 +58,6 @@ assert (hash == null) -> (src != null);
   pkg-config,
   rapidcheck,
   rsync,
-  Security,
   sqlite,
   util-linuxMinimal,
   xz,
@@ -152,9 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (lib.versionAtLeast version "2.26") [
       libblake3
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       libcpuid
     ]
@@ -163,9 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withAWS [
       aws-sdk-cpp
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.libs.sandbox
     ];
 
   propagatedBuildInputs = [
@@ -246,7 +238,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl-bindings = perl.pkgs.toPerlModule (
       callPackage ./nix-perl.nix {
         nix = finalAttrs.finalPackage;
-        inherit Security;
       }
     );
 

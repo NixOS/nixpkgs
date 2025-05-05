@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
   fetchurl,
-  darwin,
   abseil-cpp,
   meson,
   ninja,
@@ -45,14 +44,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     abseil-cpp
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      ApplicationServices
-      Foundation
-    ]
-  );
 
   env = lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5

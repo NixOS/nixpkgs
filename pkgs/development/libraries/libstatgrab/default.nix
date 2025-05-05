@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   withSaidar ? true,
-  IOKit,
   ncurses,
 }:
 
@@ -16,8 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VoiqSmhVR9cXSoo3PqnY7pJ+dm48wwK97jRSPCxdbBE=";
   };
 
-  buildInputs =
-    (lib.optional stdenv.hostPlatform.isDarwin IOKit) ++ (lib.optional withSaidar ncurses);
+  buildInputs = lib.optional withSaidar ncurses;
 
   meta = with lib; {
     homepage = "https://www.i-scream.org/libstatgrab/";

@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   config,
   stdenv,
   fetchFromGitHub,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-bCcgTi9jG2gM9ZCq4Xc7urOIoSsMwwztEDqKwPB65CE=";
+    hash = "sha256-qXdIk5Mp4Cxy0//e3SwevreK8VcJwz2vUGSX7nrFvxI=";
   };
 
   nativeBuildInputs =
@@ -37,6 +38,14 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  patches = [
+    # https://github.com/aristocratos/btop/issues/1138
+    (fetchpatch {
+      url = "https://github.com/aristocratos/btop/commit/c3b225f536a263eb6d35708b1057dd4a6f1524a5.patch";
+      sha256 = "sha256-I05stm1mkiBpdNIUzL7cwG3kwcKJSHB7FEtnXxKyazQ=";
+    })
+  ];
 
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)

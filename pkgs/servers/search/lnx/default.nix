@@ -1,10 +1,7 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  DiskArbitration,
-  Foundation,
 }:
 
 # unstable was chosen because of an added Cargo.lock
@@ -24,11 +21,6 @@ rustPlatform.buildRustPackage {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-9fro1Dx7P+P9NTsg0gtMfr0s4TEpkZA31EFAnObiNFo=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    DiskArbitration
-    Foundation
-  ];
   meta = with lib; {
     description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants.";
     mainProgram = "lnx";

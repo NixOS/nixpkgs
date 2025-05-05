@@ -1,15 +1,10 @@
 {
   lib,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
 }:
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "railway";
   version = "4.0.1";
@@ -26,13 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = 1;
 

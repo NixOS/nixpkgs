@@ -10,7 +10,6 @@
   fftwFloat,
   volk,
   zstd,
-  AppKit,
   # Sources
   airspy_source ? true,
   airspy,
@@ -107,7 +106,6 @@ stdenv.mkDerivation rec {
       volk
       zstd
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit
     ++ lib.optional stdenv.hostPlatform.isLinux libX11
     ++ lib.optional airspy_source airspy
     ++ lib.optional airspyhf_source airspyhf

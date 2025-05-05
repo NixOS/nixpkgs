@@ -6,7 +6,6 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  darwin,
   glfw,
   libGL,
   SDL2,
@@ -80,12 +79,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.ApplicationServices
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.GameController
-  ];
-
   propagatedBuildInputs =
     lib.optionals IMGUI_LINK_GLVND [ libGL ]
     ++ lib.optionals IMGUI_BUILD_GLFW_BINDING [ glfw ]
@@ -93,8 +86,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals IMGUI_BUILD_VULKAN_BINDING [
       vulkan-headers
       vulkan-loader
-    ]
-    ++ lib.optionals IMGUI_BUILD_METAL_BINDING [ darwin.apple_sdk.frameworks.Metal ];
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "IMGUI_BUILD_GLFW_BINDING" IMGUI_BUILD_GLFW_BINDING)

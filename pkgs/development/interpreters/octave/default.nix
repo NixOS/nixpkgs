@@ -56,7 +56,6 @@
   enableQt ? false,
   libsForQt5,
   libiconv,
-  darwin,
 }:
 
 let
@@ -155,8 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Accelerate
-      darwin.apple_sdk.frameworks.Cocoa
     ];
   nativeBuildInputs =
     [

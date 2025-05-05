@@ -9,9 +9,6 @@
   pkg-config,
   python3,
   xorg,
-  Libsystem,
-  AppKit,
-  Security,
   nghttp2,
   libgit2,
   withDefaultFeatures ? true,
@@ -52,12 +49,9 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       zlib
-      Libsystem
-      Security
     ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      AppKit
       nghttp2
       libgit2
     ];

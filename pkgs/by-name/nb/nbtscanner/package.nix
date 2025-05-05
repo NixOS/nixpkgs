@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -30,8 +28,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/main.rs \
       --replace-fail '.version("0.1")' '.version("${version}")'
   '';
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

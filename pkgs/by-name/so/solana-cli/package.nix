@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
-  darwin,
   udev,
   protobuf,
   rocksdb_8_3,
@@ -41,14 +40,6 @@ let
   version = "1.18.26";
   hash = "sha256-sJ0Zn5GMi64/S8zqomL/dYRVW8SOQWsP+bpcdatJC0A=";
   rocksdb = rocksdb_8_3;
-
-  inherit (darwin.apple_sdk_11_0) Libsystem;
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    System
-    IOKit
-    AppKit
-    Security
-    ;
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
@@ -91,19 +82,10 @@ rustPlatform.buildRustPackage rec {
     protobuf
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Security
-      AppKit
-      System
-      Libsystem
-    ];
+  buildInputs = [
+    openssl
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   doInstallCheck = true;
 

@@ -4,8 +4,6 @@
   fetchFromGitHub,
   nix,
   rustPlatform,
-  darwin,
-  CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
   installShellFiles,
 }:
 let
@@ -26,8 +24,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ZpfzAzqVL7/GaI4C7X0UqZAPFT/Y/OCQ53wDcmgM2zI=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd mdbook \

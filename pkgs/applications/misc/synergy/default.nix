@@ -27,13 +27,6 @@
   xinput,
   avahi-compat,
 
-  # MacOS / darwin
-  ApplicationServices,
-  Carbon,
-  Cocoa,
-  CoreServices,
-  ScreenSaver,
-  UserNotifications,
 }:
 
 stdenv.mkDerivation rec {
@@ -73,14 +66,6 @@ stdenv.mkDerivation rec {
       qttools # Used for translations even when not building the GUI
       openssl
       pcre
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Carbon
-      Cocoa
-      CoreServices
-      ScreenSaver
-      UserNotifications
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       util-linux

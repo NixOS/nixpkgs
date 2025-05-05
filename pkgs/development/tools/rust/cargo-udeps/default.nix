@@ -5,10 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  CoreServices,
-  Security,
   libiconv,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,10 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
       libiconv
-      SystemConfiguration
     ];
 
   # Requires network access

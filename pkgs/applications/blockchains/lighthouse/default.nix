@@ -1,6 +1,5 @@
 {
   cmake,
-  CoreFoundation,
   fetchFromGitHub,
   fetchurl,
   lib,
@@ -11,10 +10,8 @@
   protobuf,
   rustPlatform,
   rust-jemalloc-sys,
-  Security,
   sqlite,
   stdenv,
-  SystemConfiguration,
   testers,
 }:
 
@@ -59,11 +56,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Security
-      SystemConfiguration
     ];
 
   depositContractSpec = fetchurl {

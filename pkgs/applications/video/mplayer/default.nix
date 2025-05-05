@@ -65,7 +65,6 @@
   libjpegSupport ? true,
   libjpeg,
   useUnfreeCodecs ? false,
-  darwin,
   buildPackages,
 }:
 
@@ -176,11 +175,7 @@ stdenv.mkDerivation {
     ++ lib.optional libpngSupport libpng
     ++ lib.optional libjpegSupport libjpeg
     ++ lib.optional bs2bSupport libbs2b
-    ++ lib.optional v4lSupport libv4l
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
+    ++ lib.optional v4lSupport libv4l;
 
   configurePlatforms = [ ];
   configureFlags =

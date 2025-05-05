@@ -2,7 +2,6 @@
   __splicedPackages,
   callPackage,
   config,
-  darwin,
   db,
   lib,
   libffiBoot,
@@ -22,10 +21,10 @@
         sourceVersion = {
           major = "3";
           minor = "12";
-          patch = "9";
+          patch = "10";
           suffix = "";
         };
-        hash = "sha256-ciCDXZ+Qs3wAbphCqN/0WAqspDGGdPlHMCuNKPP4ERI=";
+        hash = "sha256-B6tpdHRZXgbwZkdBfTx/qX3tB6/Bp+RFTFY5kZtG6uo=";
       };
     };
 
@@ -49,10 +48,10 @@
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "16";
+        patch = "17";
         suffix = "";
       };
-      hash = "sha256-v7JJYJmQIgSRobkoUKBxNe0IMeQXOM9oHWPPAbKo+9E=";
+      hash = "sha256-TGgFDwSdG0rFqt0N9fJ5QcA1DSqeerCQfuXrUiXZ1rA=";
       inherit passthruFun;
     };
 
@@ -61,10 +60,10 @@
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "11";
+        patch = "12";
         suffix = "";
       };
-      hash = "sha256-Kpkgx6DNI23jNkTtmAoTy7whBYv9xSj+u2CBV17XO+M=";
+      hash = "sha256-hJ2oevTfE3cQwXluJ2qVX3qFyflxCBBnyPVl0Vw1Kgk=";
       inherit passthruFun;
     };
 
@@ -81,10 +80,10 @@
       sourceVersion = {
         major = "3";
         minor = "13";
-        patch = "2";
+        patch = "3";
         suffix = "";
       };
-      hash = "sha256-2YS8xXzWfKqyb33vQuUjscAVu8XcB4Ns9PC2P6FZ61Y=";
+      hash = "sha256-QPhovL3rgUmjFJWAu5v9QHszIc1I8L5jGvlVrJLA4EE=";
       inherit passthruFun;
     };
 
@@ -94,9 +93,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "a6";
+        suffix = "a7";
       };
-      hash = "sha256-jWGB5TMdmizWykBa4SMOiFiaBD9HaOu0Q9OInUXBw1w=";
+      hash = "sha256-ca287DrJ7fkzCOVc+0GE8utLFv2iuwpaOCkp7SnIOG0=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
@@ -175,7 +174,7 @@
 
       hash =
         {
-          aarch64-linux = "sha256-DUzvpmBoUk4qyyxPn1EQSqcnIc0YvPRi7HyLo5Ekqa4=";
+          aarch64-linux = "sha256-qN9c4WUPR1aTP4eAhwyRoKQOfJhw10YpvyQTkry1wuM=";
           x86_64-linux = "sha256-nzSX+HszctF+RHNp4AFqS+yZprTSpZq6d0olv+Q1NHQ=";
           aarch64-darwin = "sha256-gCJIc5sqzIwb5tlH8Zsy/A44wI4xKzXAXMf7IvEHCeQ=";
           x86_64-darwin = "sha256-gtRgQhRmyBraSh2Z3y3xuLNTQbOXyF///lGkwwItCDM=";

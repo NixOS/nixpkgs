@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
   testers,
   git-stack,
 }:
@@ -21,10 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-338iRd6zoy2O55sZ0h+s6i8kg4yXFBowRQLge9R9Bqs=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
 
   # Many tests try to access the file system.
   doCheck = false;

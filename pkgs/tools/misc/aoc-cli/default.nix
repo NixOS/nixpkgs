@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [ openssl ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-cm8yt7PRjar21EVFIjXYgDkO7+VpHGIB3tJ8hkK+Phw=";

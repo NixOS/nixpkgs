@@ -3,10 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  stdenv,
-  AudioToolbox,
-  AudioUnit,
-  CoreServices,
   pkg-config,
   libmpg123,
   lame,
@@ -31,22 +27,16 @@ buildPythonPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libmpg123 # MP2/MP3 decoding
-      lame # MP3 encoding
-      twolame # MP2 encoding
-      opusfile # opus decoding
-      libopus # opus encoding
-      libvorbis # ogg encoding/decoding
-      libcdio # CD reading
-      libcdio-paranoia # CD reading
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioToolbox
-      AudioUnit
-      CoreServices
-    ];
+  buildInputs = [
+    libmpg123 # MP2/MP3 decoding
+    lame # MP3 encoding
+    twolame # MP2 encoding
+    opusfile # opus decoding
+    libopus # opus encoding
+    libvorbis # ogg encoding/decoding
+    libcdio # CD reading
+    libcdio-paranoia # CD reading
+  ];
 
   preConfigure = ''
     # need to change probe to yes because mp3lame is not reported in pkg-config

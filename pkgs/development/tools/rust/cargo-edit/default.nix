@@ -5,8 +5,6 @@
   pkg-config,
   openssl,
   zlib,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,14 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   doCheck = false; # integration tests depend on changing cargo config
 

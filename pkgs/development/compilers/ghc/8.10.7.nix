@@ -299,6 +299,20 @@ stdenv.mkDerivation (
           sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
         })
 
+        # Determine size of time related types using hsc2hs instead of assuming CLong.
+        # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+        # https://github.com/haskell/ghcup-hs/issues/1107
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+        # Note that in normal situations this shouldn't be the case since nixpkgs
+        # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+        (fetchpatch {
+          name = "unix-fix-ctimeval-size-32-bit.patch";
+          url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+          sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+          stripLen = 1;
+          extraPrefix = "libraries/unix/";
+        })
+
         # See upstream patch at
         # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
         # from source distributions, the auto-generated configure script needs to be

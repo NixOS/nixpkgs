@@ -39,7 +39,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [
     mathcomp.character
-    mathcomp.ssreflect
+    mathcomp.boot
     mathcomp.fingroup
     mathcomp.algebra
     mathcomp.solvable

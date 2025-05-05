@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,8 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-RPCT2mmzuvDYSTTDM7S1yRcmCe8RlkA1i80dW7OPVO4=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];
 
   buildNoDefaultFeatures = true;

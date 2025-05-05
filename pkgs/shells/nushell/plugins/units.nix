@@ -5,8 +5,6 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
-  IOKit,
-  Foundation,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,10 +21,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-3v9jP8nL0JqtC76igsCytkQAVTgWqzHH0KQX3o6bi0c=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    IOKit
-    Foundation
-  ];
   cargoBuildFlags = [ "--package nu_plugin_units" ];
 
   passthru.updateScript = nix-update-script { };

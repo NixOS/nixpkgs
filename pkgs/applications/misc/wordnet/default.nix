@@ -4,7 +4,6 @@
   fetchurl,
   tcl,
   tk,
-  Cocoa,
   makeWrapper,
 }:
 
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     tcl
     tk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   hardeningDisable = [ "format" ];
 

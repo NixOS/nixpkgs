@@ -20,7 +20,6 @@
   libwebp,
   libxcb,
   openjpeg,
-  tkinter,
   zlib-ng,
 
   # optional dependencies
@@ -70,7 +69,6 @@ buildPythonPackage rec {
     libwebp
     libxcb
     openjpeg
-    tkinter
     zlib-ng
   ];
 

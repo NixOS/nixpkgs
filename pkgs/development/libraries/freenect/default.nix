@@ -10,8 +10,6 @@
   libGL,
   libXi,
   libXmu,
-  GLUT,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,19 +23,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PpJGFWrlQ5sK7TJxQNoPujw1MxWRjphvblwOqnF+mSg=";
   };
 
-  buildInputs =
-    [
-      libusb1
-      libglut
-      libGLU
-      libGL
-      libXi
-      libXmu
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      GLUT
-      Cocoa
-    ];
+  buildInputs = [
+    libusb1
+    libglut
+    libGLU
+    libGL
+    libXi
+    libXmu
+  ];
 
   nativeBuildInputs = [
     cmake
