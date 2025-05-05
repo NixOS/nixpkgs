@@ -4,6 +4,9 @@
  "https://download.eclipse.org": {
   "eclipse/updates/4.30/R-4.30-202312010110/plugins/org.eclipse.swt.gtk.linux.x86_64_3.124.200.v20231113-1355": {
    "jar": "sha256-Q048o4oWnZ9Y33AxXiSxbxEeayfbWOf1HoxtoLS4SIs="
+  },
+  "eclipse/updates/4.30/R-4.30-202312010110/plugins/org.eclipse.swt.gtk.linux.aarch64_3.124.200.v20231113-1355": {
+   "jar": "sha256-j98ySq5bTxFHbDJKzWMZP+kfUqekWU1jYUJNDyNg9js="
   }
  },
  "https://github.com": {
