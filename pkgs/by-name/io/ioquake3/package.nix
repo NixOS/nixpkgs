@@ -18,17 +18,18 @@
   makeDesktopItem,
   freetype,
   mumble,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "ioquake3";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2025-04-25";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "ee950eb7b0e41437cc23a9943254c958da8a61ab";
-    sha256 = "sha256-NfhInwrtw85i2mnv7EtBrrpNaslaQaVhLNlK0I9aYto=";
+    rev = "10afd421f23876e03535bb1958eae8b76371565d";
+    hash = "sha256-5ByaIjmyndiliU5qnt62mj2CFByVv4M4+d3KBAgysck=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +83,8 @@ stdenv.mkDerivation {
       ];
     })
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://ioquake3.org/";
