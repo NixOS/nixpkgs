@@ -12,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "octodns-cloudflare";
-  version = "0.0.9";
+  version = "1.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-cloudflare";
     tag = "v${version}";
-    hash = "sha256-VHmi/ClCZCruz0wSSZC81nhN7i31vK29TsYzyrRJNTY=";
+    hash = "sha256-8ORqUGmbmKQ1QbGLi3TFF9DCgF/raSpSEFZ62NfNAOQ=";
   };
 
   build-system = [
@@ -41,8 +43,9 @@ buildPythonPackage rec {
   meta = {
     description = "Cloudflare API provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-cloudflare/";
-    changelog = "https://github.com/octodns/octodns-cloudflare/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/octodns/octodns-cloudflare/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.octodns.members ++ [ lib.maintainers.ret2pop ];
+    maintainers = [ lib.maintainers.ret2pop ];
+    teams = [ lib.teams.octodns ];
   };
 }
