@@ -211,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "release-(.*)"
+        "release-(2\\..*)"
       ];
     };
     tests = {
