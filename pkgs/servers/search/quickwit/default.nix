@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -7,63 +6,21 @@
   nix-update-script,
   protobuf,
   rust-jemalloc-sys,
-  Security,
   nodejs,
-  yarn,
   fetchYarnDeps,
-  fixup-yarn-lock,
+  yarnConfigHook,
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "quickwit";
-  version = "0.8.2";
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/quickwit/quickwit-ui/yarn.lock";
-    hash = "sha256-HppK9ycUxCOIagvzCmE+VfcmfMQfPIC8WeWM6WbA6fQ=";
-  };
+  version = "0.8.2-unstable-2025-04-14";
 
   src = fetchFromGitHub {
     owner = "quickwit-oss";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-OrCO0mCFmhYBdpr4Gps56KJJ37uuJpV6ZJHWspOScyw=";
+    repo = "quickwit";
+    rev = "1366486d369be0caa5112bc8eb500857cc1b220c";
+    hash = "sha256-GuiY+83NeHbYzt+Qu8b67r9YBdAzGgc0v0xYN9daSzI=";
   };
-
-  quickwit-ui = stdenv.mkDerivation {
-    name = "quickwit-ui";
-    src = "${src}/quickwit/quickwit-ui";
-
-    nativeBuildInputs = [
-      nodejs
-      yarn
-      fixup-yarn-lock
-    ];
-
-    configurePhase = ''
-      export HOME=$(mktemp -d)
-    '';
-
-    buildPhase = ''
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-      fixup-yarn-lock yarn.lock
-
-      yarn install --offline \
-        --frozen-lockfile --no-progress \
-        --ignore-engines --ignore-scripts
-      patchShebangs .
-
-      yarn build
-    '';
-
-    installPhase = ''
-      mkdir $out
-      mv build/* $out
-    '';
-  };
-in
-rustPlatform.buildRustPackage rec {
-  inherit pname version src;
 
   postPatch = ''
     substituteInPlace ./quickwit-ingest/build.rs \
@@ -72,38 +29,45 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
     substituteInPlace ./quickwit-proto/build.rs \
       --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
-    cp /build/cargo-vendor-dir/Cargo.lock /build/source/quickwit/Cargo.lock
   '';
 
   sourceRoot = "${src.name}/quickwit";
 
-  preBuild = ''
-    mkdir -p quickwit-ui/build
-    cp -r ${quickwit-ui}/* quickwit-ui/build
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1Wy/aJOyVpULdPC5LAPR/SNRhuP/td2kXKHfSSC15Oo=";
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/quickwit/quickwit-ui/yarn.lock";
+    hash = "sha256-sTqZ1oODGCoWfitG38eovrWI7NduNUOhe/R+QrX4bAQ=";
+  };
+
+  # we will call yarnConfigHook manually
+  dontYarnInstallDeps = true;
+
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+
+    # needed for internal protobuf c wrapper library
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarnConfigHook
+  ];
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "chitchat-0.8.0" = "sha256-6K2noPoFaDnOxQIEV1WbmVPfRGwlI/WS1OWSBH2qb1Q=";
-      "mrecordlog-0.4.0" = "sha256-9LIVs+BqK9FLSfHL3vm9LL+/FXIXJ6v617QLv4luQik=";
-      "ownedbytes-0.6.0" = "sha256-in18/NYYIgUiZ9sm8NgJlebWidRp34DR7AhOD1Nh0aw=";
-      "pulsar-5.0.2" = "sha256-j7wpsAro6x4fk3pvSL4fxLkddJFq8duZ7jDj0Edf3YQ=";
-      "sasl2-sys-0.1.20+2.1.28" = "sha256-u4BsfmTDFxuY3i1amLCsr7MDv356YPThMHclura0Sxs=";
-      "whichlang-0.1.0" = "sha256-7AvLGjtWHjG0TnZdg9p5D+O0H19uo2sqPxJMn6mOU0k=";
-    };
-  };
-
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
-
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  preBuild = ''
+    pushd quickwit-ui
+    yarnConfigHook
+    yarn --offline build
+    popd
+  '';
 
   passthru = {
     tests = {

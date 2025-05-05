@@ -4908,9 +4908,7 @@ with pkgs;
 
   quictls = callPackage ../development/libraries/quictls { };
 
-  quickwit = callPackage ../servers/search/quickwit {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  quickwit = callPackage ../servers/search/quickwit { };
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
