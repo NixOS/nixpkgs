@@ -3942,6 +3942,12 @@
     github = "bmwalters";
     githubId = 4380777;
   };
+  bn = {
+    github = "bn-c";
+    githubId = 149229524;
+    name = "Bach Nguyen";
+    email = "root.bachnc@gmail.com";
+  };
   bnjmnt4n = {
     name = "Benjamin Tan";
     github = "bnjmnt4n";
