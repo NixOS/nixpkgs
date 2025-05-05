@@ -5,8 +5,6 @@
   fetchurl,
   cmake,
   codec2,
-  # for tests
-  octave,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,10 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     codec2
-  ];
-
-  nativeCheckInputs = [
-    octave
   ];
 
   doCheck = true;
