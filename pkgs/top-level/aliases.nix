@@ -490,6 +490,7 @@ mapAliases {
   clang-tools_18 = llvmPackages_18.clang-tools; # Added 2024-04-22
   clang-tools_19 = llvmPackages_19.clang-tools; # Added 2024-08-21
 
+  cligh = throw "'cligh' has been removed since it was unmaintained and its upstream deleted"; # Added 2025-05-05
   cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
 
   ### D ###
