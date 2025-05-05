@@ -1,0 +1,41 @@
+From 8bb60e65e41b305761a086da83bd4684da86a016 Mon Sep 17 00:00:00 2001
+From: uku <hi@uku.moe>
+Date: Mon, 5 May 2025 10:40:09 +0200
+Subject: [PATCH] fix compatibility with glog 0.7.x
+
+---
+ cmake/Dependencies.cmake  | 2 +-
+ cmake/External/glog.cmake | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/Dependencies.cmake b/cmake/Dependencies.cmake
+index ca2e3ad9..7be9d901 100644
+--- a/cmake/Dependencies.cmake
++++ b/cmake/Dependencies.cmake
+@@ -32,7 +32,7 @@ endif()
+ # ---[ Google-glog
+ include("cmake/External/glog.cmake")
+ list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${GLOG_INCLUDE_DIRS})
+-list(APPEND Caffe_LINKER_LIBS PUBLIC ${GLOG_LIBRARIES})
++list(APPEND Caffe_LINKER_LIBS PUBLIC glog::glog)
+ 
+ # ---[ Google-gflags
+ include("cmake/External/gflags.cmake")
+diff --git a/cmake/External/glog.cmake b/cmake/External/glog.cmake
+index f9d0549c..43414544 100644
+--- a/cmake/External/glog.cmake
++++ b/cmake/External/glog.cmake
+@@ -5,8 +5,8 @@ if (NOT __GLOG_INCLUDED)
+   set(__GLOG_INCLUDED TRUE)
+ 
+   # try the system-wide glog first
+-  find_package(Glog)
+-  if (GLOG_FOUND)
++  find_package(glog REQUIRED)
++  if (glog_FOUND)
+       set(GLOG_EXTERNAL FALSE)
+   else()
+     # fetch and build glog from github
+-- 
+2.49.0
+

@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./darwin.patch
+      ./glog-cmake.patch
       (fetchpatch {
         name = "support-opencv4";
         url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
