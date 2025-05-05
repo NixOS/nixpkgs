@@ -17,12 +17,6 @@
   libGLU,
   alsa-lib,
   fontconfig,
-  AVFoundation,
-  Carbon,
-  Cocoa,
-  CoreAudio,
-  Kernel,
-  OpenGL,
 }:
 
 stdenv.mkDerivation rec {
@@ -75,14 +69,6 @@ stdenv.mkDerivation rec {
       alsa-lib
       fontconfig
       libGLU
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AVFoundation
-      Carbon
-      Cocoa
-      CoreAudio
-      Kernel
-      OpenGL
     ];
 
   env.NIX_CFLAGS_COMPILE = toString [

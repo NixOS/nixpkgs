@@ -22,7 +22,6 @@
   rubberband,
   sox,
   vid-stab,
-  darwin,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
   enableJackrack ? stdenv.hostPlatform.isLinux,
@@ -90,9 +89,6 @@ stdenv.mkDerivation rec {
       rubberband
       sox
       vid-stab
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Accelerate
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart

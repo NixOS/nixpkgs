@@ -6,7 +6,6 @@
   aws-c-common,
   nix,
   openssl,
-  Security,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     aws-c-common
     openssl
   ];
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

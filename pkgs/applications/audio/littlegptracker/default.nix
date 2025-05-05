@@ -5,7 +5,6 @@
   SDL2,
   python3,
   jack2,
-  Foundation,
   alsa-lib,
   pkg-config,
 }:
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ SDL2 ]
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform alsa-lib) alsa-lib
-    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation
     ++ lib.optional stdenv.hostPlatform.isLinux jack2;
 
   preBuild = ''

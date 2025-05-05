@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   nixVersions,
   nlohmann_json,
   boost,
   graphviz,
-  Security,
   pkg-config,
 }:
 
@@ -35,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     boost
     nixVersions.nix_2_24
     nlohmann_json
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -3,8 +3,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  Cocoa,
-  Foundation,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,11 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-4AVZ747d6lOjxHN+co0A7APVB5Xj6g5p/Al5fLbgPnc=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-    Cocoa
-  ];
 
   NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-framework"

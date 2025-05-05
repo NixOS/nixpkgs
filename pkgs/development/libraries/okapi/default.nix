@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchurl,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,8 +15,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoVendorDir = "vendor";
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     cp -r include $out

@@ -11,7 +11,6 @@
   xz,
   bzip2,
   acl,
-  libobjc,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +37,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       acl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
     ];
 
   meta = with lib; {

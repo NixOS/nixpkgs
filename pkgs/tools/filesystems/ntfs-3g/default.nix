@@ -9,7 +9,6 @@
   libuuid,
   kmod,
   macfuse-stubs,
-  DiskArbitration,
   crypto ? false,
   libgcrypt,
   gnutls,
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       macfuse-stubs
-      DiskArbitration
     ];
 
   # Note: libgcrypt is listed here non-optionally because its m4 macros are

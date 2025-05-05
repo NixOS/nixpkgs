@@ -12,7 +12,6 @@
   gtk2,
   glib,
   libXtst,
-  Cocoa,
 }:
 
 let
@@ -62,13 +61,11 @@ stdenv.mkDerivation rec {
     makeWrapper
     stripJavaArchivesHook
   ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      gtk2
-      glib
-      libXtst
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    gtk2
+    glib
+    libXtst
+  ];
 
   dontWrapGApps = true;
 

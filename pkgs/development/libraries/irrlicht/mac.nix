@@ -4,9 +4,6 @@
   fetchzip,
   fetchFromGitHub,
   cmake,
-  Cocoa,
-  OpenGL,
-  IOKit,
 }:
 
 let
@@ -41,11 +38,6 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    OpenGL
-    Cocoa
-    IOKit
-  ];
 
   meta = {
     homepage = "https://irrlicht.sourceforge.net/";

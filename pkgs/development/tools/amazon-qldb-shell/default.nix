@@ -1,11 +1,9 @@
 {
-  stdenv,
   lib,
   cmake,
   fetchFromGitHub,
   rustPlatform,
   testers,
-  Security,
 }:
 
 let
@@ -25,7 +23,6 @@ let
       cmake
       rustPlatform.bindgenHook
     ];
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
     cargoLock = {
       lockFile = ./Cargo.lock;

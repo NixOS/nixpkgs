@@ -1,12 +1,9 @@
 {
   lib,
-  stdenv,
   fetchCrate,
   rustPlatform,
   openssl,
   pkg-config,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,14 +26,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = with lib; {
     description = "Command-line tool for downloading APK files from various sources";

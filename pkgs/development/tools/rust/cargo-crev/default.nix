@@ -5,9 +5,6 @@
   rustPlatform,
   perl,
   pkg-config,
-  SystemConfiguration,
-  Security,
-  CoreFoundation,
   curl,
   libiconv,
   openssl,
@@ -42,9 +39,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      SystemConfiguration
-      Security
-      CoreFoundation
       libiconv
       curl
     ];

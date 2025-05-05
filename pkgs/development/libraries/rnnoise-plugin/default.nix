@@ -9,10 +9,6 @@
   pkg-config,
   webkitgtk_4_0,
   xorg,
-  WebKit,
-  MetalKit,
-  CoreAudioKit,
-  simd,
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
@@ -45,12 +41,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       webkitgtk_4_0
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      WebKit
-      MetalKit
-      CoreAudioKit
-      simd
     ];
 
   meta = with lib; {

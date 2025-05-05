@@ -43,6 +43,9 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nostrictaliasing": [
+    "index.html#nostrictaliasing"
+  ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
     "index.html#pkgs-substituteall",

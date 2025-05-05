@@ -24,7 +24,6 @@
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
-  Cocoa,
   fontconfig ? null,
   gnused ? null,
   coreutils ? null,
@@ -76,8 +75,7 @@ in
       qtbase
       qtsvg
     ]
-    ++ lib.optional withWxGTK wxGTK32
-    ++ lib.optional (withWxGTK && stdenv.hostPlatform.isDarwin) Cocoa;
+    ++ lib.optional withWxGTK wxGTK32;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.

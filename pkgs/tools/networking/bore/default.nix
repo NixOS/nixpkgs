@@ -3,8 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromBitbucket,
-  Libsystem,
-  SystemConfiguration,
   installShellFiles,
 }:
 
@@ -39,11 +37,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
   ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Libsystem
-    SystemConfiguration
-  ];
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1
