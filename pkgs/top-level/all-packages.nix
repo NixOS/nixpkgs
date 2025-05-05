@@ -12710,8 +12710,6 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  cligh = python3Packages.callPackage ../development/tools/github/cligh { };
-
   clight = callPackage ../applications/misc/clight { };
 
   clight-gui = libsForQt5.callPackage ../applications/misc/clight/clight-gui.nix { };
