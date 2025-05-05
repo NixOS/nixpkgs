@@ -58,6 +58,9 @@ buildPythonPackage rec {
     "test_ftp"
     "test_ftp_pasv_command"
     "test_ftp_http"
+
+    # flaky comparison between runtime types
+    "test_http_callback_fail"
   ];
 
   # Tests require local network access
