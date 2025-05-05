@@ -17725,13 +17725,25 @@ with pkgs;
   thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
-  thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
+  thunderbird-bin = thunderbird-esr-bin;
+  thunderbird-latest-bin = wrapThunderbird thunderbird-latest-bin-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
     desktopName = "Thunderbird";
   };
-  thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
+  thunderbird-latest-bin-unwrapped =
+    callPackage ../applications/networking/mailreaders/thunderbird-bin
+      {
+        generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
+      };
+  thunderbird-esr-bin = wrapThunderbird thunderbird-esr-bin-unwrapped {
+    applicationName = "thunderbird";
+    pname = "thunderbird-esr-bin";
+    desktopName = "Thunderbird";
+  };
+  thunderbird-esr-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    generated = import ../applications/networking/mailreaders/thunderbird-bin/release_esr_sources.nix;
+    versionSuffix = "esr";
   };
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
