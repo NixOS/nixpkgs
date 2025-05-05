@@ -315,7 +315,7 @@ in
       '';
       example = literalExpression ''
         {
-          inherit (pkgs.nextcloud25Packages.apps) mail calendar contact;
+          inherit (pkgs.nextcloud25Packages.apps) mail calendar contacts;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
