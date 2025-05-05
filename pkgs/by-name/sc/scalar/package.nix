@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  installPhase = ''
+  installPhase = ''    
+    runHook preInstall
+
     mkdir -p $out/lib/${pname} $out/bin
 
     cp -r opt/Scalar/* $out/lib/${pname}/
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     # Install all icons in their specific resolutions
     mkdir -p $out/share/icons/hicolor
     cp -r usr/share/icons/hicolor/* $out/share/icons/hicolor/
+
+    runHook postInstall
   '';
 
   desktopItems = [
