@@ -14,14 +14,14 @@
   stdenv,
   zig,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "freref";
     repo = "fancy-cat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ziHtPfK9GOxKF800kk+kh12Fwh91xbjDYx9wv2pLZWI=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fancy-cat";
     inherit (zig.meta) platforms;
   };
-}
+})
