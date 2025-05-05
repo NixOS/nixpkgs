@@ -28,4 +28,6 @@ rec {
     feature = "rocm";
     libraries = ps: [ ps.torchWithRocm ];
   };
+
+  mnist-example = callPackage ./mnist-example { };
 }
