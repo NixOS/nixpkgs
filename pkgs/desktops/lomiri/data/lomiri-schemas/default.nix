@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-schemas";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-schemas";
     tag = finalAttrs.version;
-    hash = "sha256-AI/tpTzhnzKygG/zgszQAmvbaM8VdU+Chs9bjd9Jx9A=";
+    hash = "sha256-Xm21KM+IxKQwOlBsmGTgFq2bUJy/WTBBcf/2Cqkdlos=";
   };
 
   strictDeps = true;
