@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amazon-q-cli";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli";
     tag = "v${version}";
-    hash = "sha256-fOz9oz+xNwX2Bzl6szgQ9oai6lqP+EzbaCNzHPUT2cA=";
+    hash = "sha256-BiVCiMBL5LLm8RYw58u6P7yqQq9XnN8b6fTbxNE2QsA=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-H9bCke3vQDuS6RDEg8dzeFiBWCex64A8KSRhfgyp8e8=";
+  cargoHash = "sha256-7zUgWLGTZx3Ex7RYxb3eZimWdy6AxkNwpCDUwiAr2JE=";
 
   cargoBuildFlags = [
     "-p"
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    mv $out/bin/q_cli $out/bin/amazon-q
+    install -m 0755 $out/bin/q_cli $out/bin/amazon-q
   '';
 
   meta = {
@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
+    mainProgram = "amazon-q";
     maintainers = [ lib.maintainers.jamesward ];
     platforms = lib.platforms.linux;
   };
