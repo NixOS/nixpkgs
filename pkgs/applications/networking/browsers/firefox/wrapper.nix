@@ -2,7 +2,7 @@
   stdenv,
   lib,
   makeDesktopItem,
-  makeWrapper,
+  makeShellWrapper, # don't switch to makeBinaryWrapper until it supports all flags used, e.g. --run
   lndir,
   config,
   buildPackages,
@@ -285,7 +285,7 @@ let
       );
 
       nativeBuildInputs = [
-        makeWrapper
+        makeShellWrapper
         lndir
         jq
       ];
