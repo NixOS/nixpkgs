@@ -152,5 +152,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor ];
+    # tries to execute output binary as part of build process
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }
