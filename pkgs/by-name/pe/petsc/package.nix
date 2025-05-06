@@ -36,6 +36,7 @@
   withHypre ? withCommonDeps && mpiSupport,
   withFftw ? withCommonDeps,
   withSuperLu ? withCommonDeps,
+  withSuperLuDist ? withCommonDeps && mpiSupport,
   withSuitesparse ? withCommonDeps,
 
   # External libraries
@@ -52,10 +53,12 @@
   hypre,
   fftw,
   superlu,
+  superlu_dist,
   suitesparse,
 
   # Used in passthru.tests
   petsc,
+  mpich,
 }:
 assert withFullDeps -> withCommonDeps;
 
@@ -69,10 +72,12 @@ assert withPtscotch -> (mpiSupport && withZlib);
 assert withScalapack -> mpiSupport;
 assert (withMumps && mpiSupport) -> withScalapack;
 assert withHypre -> mpiSupport;
+assert withSuperLuDist -> mpiSupport;
 
 let
   petscPackages = lib.makeScope newScope (self: {
     inherit
+      mpi
       # global override options
       mpiSupport
       fortranSupport
@@ -83,7 +88,6 @@ let
 
     petscPackages = self;
     # external libraries
-    mpi = self.callPackage mpi.override { };
     blas = self.callPackage blas.override { };
     lapack = self.callPackage lapack.override { };
     hdf5 = self.callPackage hdf5.override {
@@ -99,6 +103,7 @@ let
     hypre = self.callPackage hypre.override { };
     fftw = self.callPackage fftw.override { };
     superlu = self.callPackage superlu.override { };
+    superlu_dist = self.callPackage superlu_dist.override { };
     suitesparse = self.callPackage suitesparse.override { };
   });
 in
@@ -141,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withMumps petscPackages.mumps
     ++ lib.optional withHypre petscPackages.hypre
     ++ lib.optional withSuperLu petscPackages.superlu
+    ++ lib.optional withSuperLuDist petscPackages.superlu_dist
     ++ lib.optional withFftw petscPackages.fftw
     ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
@@ -161,16 +167,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [
-      "--with-blas=1"
-      "--with-lapack=1"
+      "--with-blaslapack=1"
       "--with-scalar-type=${scalarType}"
       "--with-precision=${precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
+    ++ lib.optionals (!mpiSupport) [
+      "--with-cc=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "gcc" else "clang"}"
+      "--with-cxx=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "g++" else "clang++"}"
+      "--with-fc=${gfortran}/bin/gfortran"
+    ]
     ++ lib.optionals mpiSupport [
-      "--CC=mpicc"
-      "--with-cxx=mpicxx"
-      "--with-fc=mpif90"
+      "--with-cc=${lib.getDev mpi}/bin/mpicc"
+      "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
+      "--with-fc=${lib.getDev mpi}/bin/mpif90"
     ]
     ++ lib.optionals (!debug) [
       "--with-debugging=0"
@@ -192,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withHdf5 "--with-hdf5=1"
     ++ lib.optional withHypre "--with-hypre=1"
     ++ lib.optional withSuperLu "--with-superlu=1"
+    ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
     ++ lib.optional withFftw "--with-fftw=1"
     ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
@@ -203,6 +214,30 @@ stdenv.mkDerivation (finalAttrs: {
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
+
+  # Ensure petscvariables contains absolute paths for compilers and flags so that downstream
+  # packages relying on PETSc's runtime configuration (e.g. form compilers, code generators)
+  # can correctly compile and link generated code
+  postInstall = lib.concatStringsSep "\n" (
+    map (
+      package:
+      let
+        pname = package.pname or package.name;
+        prefix =
+          if (pname == "blas" || pname == "lapack") then
+            "BLASLAPACK"
+          else
+            lib.toUpper (builtins.elemAt (lib.splitString "-" pname) 0);
+      in
+      ''
+        substituteInPlace $out/lib/petsc/conf/petscvariables \
+          --replace-fail "${prefix}_INCLUDE =" "${prefix}_INCLUDE = -I${lib.getDev package}/include" \
+          --replace-fail "${prefix}_LIB =" "${prefix}_LIB = -L${lib.getLib package}/lib"
+      ''
+    ) finalAttrs.buildInputs
+  );
+
+  __darwinAllowLocalNetworking = true;
 
   # This is needed as the checks need to compile and link the test cases with
   # -lpetsc, which is not available in the checkPhase, which is executed before
@@ -254,6 +289,9 @@ stdenv.mkDerivation (finalAttrs: {
         fullDeps = petsc.override {
           withFullDeps = true;
           withParmetis = false;
+        };
+        mpich = petsc.override {
+          mpi = mpich;
         };
       };
   };

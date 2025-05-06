@@ -1688,6 +1688,13 @@ in
     checkInputs = [ self.luasnip ];
   };
 
+  luau-lsp-nvim = super.luau-lsp-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+
+    # TODO: add luau-lsp to nixpkgs (#395892)
+    # runtimeDeps = [ luau-lsp ];
+  };
+
   magma-nvim = super.magma-nvim.overrideAttrs {
     passthru.python3Dependencies =
       ps: with ps; [

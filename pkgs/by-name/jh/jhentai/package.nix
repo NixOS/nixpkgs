@@ -1,9 +1,10 @@
 {
-  autoPatchelfHook,
   lib,
-  fetchFromGitHub,
   flutter324,
+  fetchFromGitHub,
+  autoPatchelfHook,
   webkitgtk_4_1,
+  glib-networking,
   runCommand,
   yq,
   jhentai,
@@ -13,13 +14,13 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "jhentai";
-  version = "8.0.6+279";
+  version = "8.0.7";
 
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
     tag = "v${version}";
-    hash = "sha256-omaGtqaWIE43j7BPAw2G3SUVQgjTdUb5F1d/loCvzHE=";
+    hash = "sha256-+ZXLtlZ7YPD8CvraDHga4DsTyksFOx6QehdcmZIEFfw=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -34,15 +35,19 @@ flutter324.buildFlutterApplication rec {
     like_button = "sha256-OVzfpIEnw88496H345NHn7nZ48+QDTaneBzN2UCdwk8=";
     photo_view = "sha256-k/+ncCzGkF4XmFpo3wmJOQbElSh2r+SlyeI3M9yDFtM=";
     fluttertoast = "sha256-/2VJ1x7l5Idjwkm4Ennz8H/EC3j4/slRODj/82yO3iI=";
-    http_proxy = "sha256-GFb2xy8RSn6x/JGHRSa7Gl5TAsY+DHo8k3xxPqXGmfo=";
+    http_proxy = "sha256-/udhj2Tyc7PEtL6eU4TWIdrz/7Uh7D26jDSDxTr3X+I=";
     scrollable_positioned_list = "sha256-8WfyUpTs+Cfv2VzFECrW/DGoKOsu9KY6hf6sP81xuBg=";
-    system_network_proxy = "sha256-TAiFiIbO3v2awkaw8YYj7YnmuplnkSBclUVdGyHIRCs=";
+    system_network_proxy = "sha256-boPbPO0Xs86Yu4OJmBr/nXGfX/vtZwosP6vRN4g3FQA=";
     zoom_view = "sha256-/JPvmLg8syn5IlKucj3R765kedCZ1LdzkreUIsvdwEg=";
+    receive_sharing_intent = "sha256-8D5ZENARPZ7FGrdIErxOoV3Ao35/XoQ2tleegI42ZUY=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    webkitgtk_4_1
+    glib-networking
+  ];
 
   flutterBuildFlags = [
     "--target lib/src/main.dart"

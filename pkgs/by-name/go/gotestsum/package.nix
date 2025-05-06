@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gotestsum";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nIdGon14bAaSxUmJNlpLztQVbA8SJ76+Ve46gbM0awk=";
+    hash = "sha256-l4K+8J24egaKS64inQrBWnPLLGBu1W03OUi4WWQoAgs=";
   };
 
-  vendorHash = "sha256-x48jjd6cIX/M8U+5QwrKalt1iLgeQKeJItLJsxXrPgY=";
+  vendorHash = "sha256-SJacdFAdMiKDGLnEEBKnblvHglIBIKf2N20EOFCPs88=";
 
   doCheck = false;
 

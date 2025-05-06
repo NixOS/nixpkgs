@@ -38,13 +38,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "ucx";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-ve9/h8DntyEClZA0P/iIg8WAuWOwYD7yzfKeN779eIo=";
+    sha256 = "sha256-LW57wbQFwW14Z86p9jo1ervkCafVy+pnIQQ9t0i8enY=";
   };
 
   outputs = [

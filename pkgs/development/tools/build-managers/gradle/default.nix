@@ -91,15 +91,9 @@ rec {
       installPhase =
         with builtins;
         let
-          toolchain = rec {
-            prefix = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
-            varDefs = (lib.imap0 (i: x: "${prefix i} ${x}") javaToolchains);
-            varNames = lib.imap0 (i: x: prefix i) javaToolchains;
-            property = " -Porg.gradle.java.installations.fromEnv='${concatStringsSep "," varNames}'";
-          };
-          varDefs = concatStringsSep "\n" (
-            map (x: "  --set ${x} \\") ([ "JAVA_HOME ${java}" ] ++ toolchain.varDefs)
-          );
+          # set toolchains via installations.path property in gradle.properties.
+          # See https://docs.gradle.org/current/userguide/toolchains.html#sec:custom_loc
+          toolchainPaths = "org.gradle.java.installations.paths=${concatStringsSep "," javaToolchains}";
           jnaLibraryPath = if stdenv.hostPlatform.isLinux then lib.makeLibraryPath [ udev ] else "";
           jnaFlag =
             if stdenv.hostPlatform.isLinux then "--add-flags \"-Djna.library.path=${jnaLibraryPath}\"" else "";
@@ -111,9 +105,11 @@ rec {
           gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
           test -f $gradle_launcher_jar
           makeWrapper ${java}/bin/java $out/bin/gradle \
-            ${varDefs}
+            --set JAVA_HOME ${java} \
             ${jnaFlag} \
-            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
+            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
+
+          echo "${toolchainPaths}" > $out/lib/gradle/gradle.properties
         '';
 
       dontFixup = !stdenv.hostPlatform.isLinux;

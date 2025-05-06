@@ -31,13 +31,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird";
-  version = "0.43.1";
+  version = "0.43.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-otjdzt+RLjic3VyoRh/uneP6qChy8QaxkIQT9YFS1pY=";
+    hash = "sha256-VZWd7KXMfh/OOnvprF5S69ztDK3N5w3lmfO2OGUC+FQ=";
   };
 
   vendorHash = "sha256-/STnSegRtpdMhh9RaCqwc6dSXvt7UO5GVz7/M9JzamM=";
@@ -119,6 +119,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       vrifox
       saturn745
+      loc
     ];
     mainProgram = if ui then "netbird-ui" else "netbird";
   };

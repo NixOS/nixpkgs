@@ -2803,6 +2803,8 @@ self: super: with self; {
 
   consonance = callPackage ../development/python-modules/consonance { };
 
+  constantdict = callPackage ../development/python-modules/constantdict { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   construct = callPackage ../development/python-modules/construct { };
@@ -4368,7 +4370,9 @@ self: super: with self; {
 
   eheimdigital = callPackage ../development/python-modules/eheimdigital { };
 
-  eigenpy = callPackage ../development/python-modules/eigenpy { };
+  eigenpy = callPackage ../development/python-modules/eigenpy {
+    inherit (pkgs) graphviz; # need the `dot` program, not the python module
+  };
 
   einops = callPackage ../development/python-modules/einops { };
 
@@ -4853,6 +4857,8 @@ self: super: with self; {
 
   fenics = callPackage ../development/python-modules/fenics { hdf5 = pkgs.hdf5_1_10; };
 
+  fenics-ufl = callPackage ../development/python-modules/fenics-ufl { };
+
   ffcv = callPackage ../development/python-modules/ffcv { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
@@ -5164,6 +5170,8 @@ self: super: with self; {
   flyingsquid = callPackage ../development/python-modules/flyingsquid { };
 
   flynt = callPackage ../development/python-modules/flynt { };
+
+  fmpy = callPackage ../development/python-modules/fmpy { };
 
   fnllm = callPackage ../development/python-modules/fnllm { };
 
@@ -7528,6 +7536,8 @@ self: super: with self; {
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
 
+  langchain-deepseek = callPackage ../development/python-modules/langchain-deepseek { };
+
   langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
 
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
@@ -8966,7 +8976,7 @@ self: super: with self; {
 
   mmtf-python = callPackage ../development/python-modules/mmtf-python { };
 
-  mne-python = callPackage ../development/python-modules/mne-python { };
+  mne = callPackage ../development/python-modules/mne { };
 
   mnemonic = callPackage ../development/python-modules/mnemonic { };
 

@@ -19,13 +19,13 @@ assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 stdenv.mkDerivation {
   pname = "flameshot";
   # wlr screenshotting is currently only available on unstable version (>12.1.0)
-  version = "12.1.0-unstable-2025-04-07";
+  version = "12.1.0-unstable-2025-05-04";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "63a4ab669bba83bdde878963df80a3c4e9331e21";
-    hash = "sha256-+DwWiO41pck3FedtAeTWmshBwQyYNlACCK4M5qhxsas=";
+    rev = "f4cde19c63473f8fadd448ad2056c22f0f847f34";
+    hash = "sha256-B/piB8hcZR11vnzvue/1eR+SFviTSGJoek1w4abqsek=";
   };
 
   patches = [

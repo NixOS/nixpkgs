@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "django-modeltranslation";
-  version = "0.19.13";
+  version = "0.19.14";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "deschler";
     repo = "django-modeltranslation";
     tag = "v${version}";
-    hash = "sha256-mn3dGSJbujULPT/PBAVvd1hlCukMItC4Z8dIZ+MWZ2w=";
+    hash = "sha256-jvVzSltq4wkSmndyyOGxldXJVpydmCCrHMGTGiMUNA0=";
   };
 
   build-system = [ setuptools ];

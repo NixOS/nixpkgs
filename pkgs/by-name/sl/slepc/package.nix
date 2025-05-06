@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeInstallCheckInputs =
     [
       mpiCheckPhaseHook

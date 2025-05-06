@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   callPackage,
   makeWrapper,
   removeReferencesTo,
@@ -43,6 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
+
+  # Fix output programs segfaulting on macOS Sequoia 15.4 - see:
+  # https://github.com/NixOS/nixpkgs/issues/398443
+  # https://github.com/ldc-developers/ldc/issues/4899
+  # TODO: Remove this when upgrading to a fixed version (>= 1.41.0-beta2)
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ldc-developers/ldc/commit/60079c3b596053b1a70f9f2e0cf38a287089df56.patch";
+      hash = "sha256-Y/5+zt5ou9rzU7rLJq2OqUxMDvC7aSFS6AsPeDxNATQ=";
+    })
+  ];
 
   postPatch =
     ''

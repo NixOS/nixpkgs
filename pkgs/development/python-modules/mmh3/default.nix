@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hajimes/mmh3";
     changelog = "https://github.com/hajimes/mmh3/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.cc0;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

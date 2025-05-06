@@ -38,6 +38,11 @@ lib.makeOverridable (
       nonConeMode ? false,
       name ? null,
       nativeBuildInputs ? [ ],
+      # Shell code executed before the file has been fetched.  This, in
+      # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
+      # run operations between the checkout completing and deleting the .git
+      # directory.
+      preFetch ? "",
       # Shell code executed after the file has been fetched
       # successfully. This can do things like check or transform the file.
       postFetch ? "",
@@ -75,7 +80,6 @@ lib.makeOverridable (
       server admins start using the new version?
     */
 
-    assert deepClone -> leaveDotGit;
     assert nonConeMode -> (sparseCheckout != [ ]);
 
     let
@@ -130,6 +134,7 @@ lib.makeOverridable (
           deepClone
           branchName
           nonConeMode
+          preFetch
           postFetch
           ;
         rev = revWithTag;

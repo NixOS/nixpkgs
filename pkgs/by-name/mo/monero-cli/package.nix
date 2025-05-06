@@ -19,7 +19,7 @@
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf,
+  protobuf_21,
   udev,
 }:
 
@@ -40,22 +40,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.3.4";
+  version = "0.18.4.0";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-nDiFJjhsISYM8kTgJUaPYL44iyccnz5+Pd5beBh+lsM=";
+    hash = "sha256-0byMtX2f+8FqNhLPN1oLxIUTWg5RSbHfwiL8pUIAcgQ=";
   };
 
   patches = [
     ./use-system-libraries.patch
-    # https://github.com/monero-project/monero/pull/9462
-    (fetchpatch2 {
-      url = "https://github.com/monero-project/monero/commit/65568d3a884857ce08d1170f5801a6891a5c187c.patch?full_index=1";
-      hash = "sha256-Btuy69y02UyVMmsOiCRPZhM7qW5+FRNujOZjNMRdACQ=";
-    })
   ];
 
   postPatch = ''
@@ -88,7 +83,7 @@ stdenv.mkDerivation rec {
       python3
       hidapi
       libusb1
-      protobuf
+      protobuf_21
     ]
     ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [ udev ];
 
@@ -99,6 +94,7 @@ stdenv.mkDerivation rec {
       # required by monero-gui
       "-DBUILD_GUI_DEPS=ON"
       "-DReadline_ROOT_DIR=${readline.dev}"
+      "-Wno-dev"
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
     ++ lib.optional trezorSupport [

@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--disable-privsep"
     "--dbdir=/var/lib/dhcpcd"
+    "--with-default-hostname=nixos"
     (lib.enableFeature enablePrivSep "privsep")
   ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
@@ -62,7 +63,12 @@ stdenv.mkDerivation rec {
   ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = {
-    inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
+    inherit (nixosTests.networking.scripted)
+      macvlan
+      dhcpSimple
+      dhcpHostname
+      dhcpOneIf
+      ;
   };
 
   meta = with lib; {

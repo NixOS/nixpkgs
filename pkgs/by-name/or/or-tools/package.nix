@@ -1,5 +1,5 @@
 {
-  abseil-cpp,
+  abseil-cpp_202407,
   bzip2,
   cbc,
   cmake,
@@ -11,7 +11,7 @@
   highs,
   lib,
   pkg-config,
-  protobuf,
+  protobuf_29,
   python3,
   re2,
   stdenv,
@@ -20,6 +20,17 @@
   zlib,
 }:
 
+let
+  # OR-Tools strictly requires specific versions of abseil-cpp and
+  # protobuf. Do not un-pin these, even if you're upgrading them to
+  # what might happen to be the latest version at the current moment;
+  # future upgrades *will* break the build.
+  abseil-cpp = abseil-cpp_202407;
+  protobuf = protobuf_29.override { inherit abseil-cpp; };
+  python-protobuf = python3.pkgs.protobuf5.override { inherit protobuf; };
+  pybind11-protobuf = python3.pkgs.pybind11-protobuf.override { inherit protobuf; };
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "or-tools";
   version = "9.12";
@@ -104,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.absl-py
     python3.pkgs.pybind11
     python3.pkgs.pybind11-abseil
-    python3.pkgs.pybind11-protobuf
+    pybind11-protobuf
     python3.pkgs.pytest
     python3.pkgs.scipy
     python3.pkgs.setuptools
@@ -116,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     abseil-cpp
     highs
     protobuf
-    python3.pkgs.protobuf
+    python-protobuf
     python3.pkgs.immutabledict
     python3.pkgs.numpy
     python3.pkgs.pandas

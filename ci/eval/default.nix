@@ -9,6 +9,7 @@
   nixVersions,
   jq,
   sta,
+  python3,
 }:
 
 let
@@ -270,6 +271,7 @@ let
       runCommand
       writeText
       supportedSystems
+      python3
       ;
   };
 

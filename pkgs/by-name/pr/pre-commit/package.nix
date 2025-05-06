@@ -197,6 +197,11 @@ buildPythonApplication rec {
     "pre_commit"
   ];
 
+  # add gitMinimal as fallback, if git is not installed
+  preFixup = ''
+    makeWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gitMinimal ]})
+  '';
+
   passthru.tests = callPackage ./tests.nix {
     inherit gitMinimal pre-commit;
   };
