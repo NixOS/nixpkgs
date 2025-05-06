@@ -30,20 +30,20 @@
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf,
+  protobuf_21,
   python3,
   udev,
 }:
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.3.4";
+  version = "0.18.4.0";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    hash = "sha256-wnU24EmZig2W/psy4OhaQVy2WwR0CgljlyYwOg4bzwM=";
+    hash = "sha256-JwYx5TjGp3VPPSgjN0+w1A4RoZGm7A73Gpg44fre1/c=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals trezorSupport [
       hidapi
       libusb1
-      protobuf
+      protobuf_21
       python3
     ]
     ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
