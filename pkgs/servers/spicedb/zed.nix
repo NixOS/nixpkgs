@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -20,6 +21,15 @@ buildGoModule rec {
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd zed \
+      --bash <($out/bin/zed completion bash) \
+      --fish <($out/bin/zed completion fish) \
+      --zsh <($out/bin/zed completion zsh)
+  '';
 
   meta = with lib; {
     description = "Command line for managing SpiceDB";
