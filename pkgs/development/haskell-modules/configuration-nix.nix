@@ -1322,7 +1322,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_24;
+          nixPackage = pkgs.nixVersions.nix_2_28;
         };
       })
       (
