@@ -15,8 +15,6 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   vala,
   python3,
-  gi-docgen,
-  graphviz,
   libxml2,
   glib,
   wrapGAppsNoGuiHook,
@@ -67,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       gettext
       glib
       wrapGAppsNoGuiHook
-      gi-docgen
-      graphviz
       (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
     ]
     ++ lib.optionals withIntrospection [
@@ -126,15 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   postPatch = ''
-    chmod +x \
-      docs/reference/docgen-wrapper.sh \
-      docs/reference/embed-files.py \
-      docs/reference/generate-svgs.sh
     patchShebangs \
-      utils/data-generators/cc/generate \
-      docs/reference/docgen-wrapper.sh \
-      docs/reference/embed-files.py \
-      docs/reference/generate-svgs.sh
+      utils/data-generators/cc/generate
 
     # File "/build/tinysparql-3.8.0/tests/functional-tests/test_cli.py", line 233, in test_help
     # self.assertIn("TINYSPARQL-IMPORT(1)", output, "Manpage not found")
