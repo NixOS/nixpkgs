@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}.dmg";
-    hash = "sha256-OOoz6GeBVQZBQyNIQUe4grbZffSvl1m8oKZNmMlQKbM=";
+    hash = "sha256-o2H4cfMudjoQHfKeV4ORiO9/szoomFP0IP6D6ecMAI4=";
   };
   sourceRoot = ".";
 
