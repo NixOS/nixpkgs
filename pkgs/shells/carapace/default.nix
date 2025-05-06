@@ -6,14 +6,14 @@
   carapace,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "carapace";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ewZ06HPAS7UXmnRlrOaHegVrfYxwko/jyHqtQV/0JwY=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "./cmd/carapace" ];
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = licenses.mit;
     mainProgram = "carapace";
   };
-}
+})
