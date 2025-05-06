@@ -37,14 +37,14 @@
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.21.1";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-XlV0ovIF3w/u6f65+3c4zAfisCoQDbzMiINJJTR/I6o=";
+    hash = "sha256-sjpTTOYv5FXMieUJvCQ2nJ1I0zaguyd7//vdLlt8Bmk=";
   };
 
   # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
@@ -155,7 +155,7 @@ buildPythonPackage rec {
   meta = {
     description = "WebGPU for Python";
     homepage = "https://github.com/pygfx/wgpu-py";
-    changelog = "https://github.com/pygfx/wgpu-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pygfx/wgpu-py/blob/${src.tag}/CHANGELOG.md";
 
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
