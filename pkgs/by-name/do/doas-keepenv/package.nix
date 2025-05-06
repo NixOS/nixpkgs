@@ -4,15 +4,15 @@
   bash,
   coreutils,
   doas,
-  wrapProgram,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "doas-keepenv";
-  version = "%-!";
+  version = "1.0-1";
 
   src = fetchTarball {
-    url = "https://github.com/stas-badzi/doas-keepenv/archive/refs/tags/%.tar.gz";
+    url = "https://github.com/stas-badzi/doas-keepenv/archive/refs/tags/1.0.tar.gz";
     sha256 = "sha256:15xh3dgw78v6mfgkqv6mphpw0bxxbg7jqrpkb4y5151a9xjc9962";
   };
 
