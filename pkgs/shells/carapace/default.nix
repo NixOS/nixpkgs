@@ -4,6 +4,7 @@
   fetchFromGitHub,
   testers,
   carapace,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,6 +34,7 @@ buildGoModule (finalAttrs: {
     GOOS= GOARCH= go generate ./...
   '';
 
+  passthru.updateScript = nix-update-script { };
   passthru.tests.version = testers.testVersion { package = carapace; };
 
   meta = with lib; {
