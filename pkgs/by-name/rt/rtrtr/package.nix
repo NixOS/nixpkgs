@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rtrtr";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-c1jzUP7cYjqn49gbjXLWTge8ywHBI29gSnhzWDzNCV8=";
+    hash = "sha256-1TmzC/d/odfYdo1CiCsFW3U7OCpTF4Gkw2w4c2yaxxw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RPCT2mmzuvDYSTTDM7S1yRcmCe8RlkA1i80dW7OPVO4=";
+  cargoHash = "sha256-SeQ2zRBbETabAhOItu3C6PUjL7vUsVDzWGbYcUIslF4=";
   nativeBuildInputs = [ pkg-config ];
 
   buildNoDefaultFeatures = true;
