@@ -1,7 +1,7 @@
 {
     "testing": {
-        "version": "6.15-rc4",
-        "hash": "sha256:0zg817b9bbpl80cjmxgmxivi6xr80hng704mdl6m5knrl0v4ay5j"
+        "version": "6.15-rc5",
+        "hash": "sha256:158bpvdbgaknywz4wh3k72qf85p5n3szk5h74cnpya8ic5z5qpmb"
     },
     "6.1": {
         "version": "6.1.136",
