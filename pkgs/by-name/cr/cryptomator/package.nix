@@ -17,13 +17,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-v4UCNUbnCCccwmRMtHbN8BEHlzLcAcJ9HIU5Ak94FS8=";
+    hash = "sha256-gATygecFVUOvJXtq/0R7nqLCvR2UErFlQ0oeFwBoNGM=";
   };
 
   mvnJdk = jdk;
