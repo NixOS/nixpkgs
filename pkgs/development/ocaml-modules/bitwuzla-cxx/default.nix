@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.6.1";
+  version = "0.7.0";
 in
 
 buildDunePackage {
@@ -17,7 +17,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/bitwuzla/ocaml-bitwuzla/releases/download/${version}/bitwuzla-cxx-${version}.tbz";
-    hash = "sha256-QgZy0a4QPVkgiB+lhEw40pE9TeuOOeMowtUb0F+BN6c=";
+    hash = "sha256-q5j5+bVIb0W3gNFOloTjRS76qo42QgcaHZPrtQbqlx8=";
   };
 
   propagatedBuildInputs = [ zarith ];
