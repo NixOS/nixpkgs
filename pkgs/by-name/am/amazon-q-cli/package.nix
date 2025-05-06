@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   protobuf_26,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +25,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "q_cli"
   ];
+
+  nativeBuildInputs = [
+    protobuf_26
+  ];
+
+  postInstall = ''
+    install -m 0755 $out/bin/q_cli $out/bin/amazon-q
+  '';
+
   cargoTestFlags = [
     "-p"
     "q_cli"
@@ -52,13 +62,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=init_lint_zsh_pre_zshrc"
   ];
 
-  nativeBuildInputs = [
-    protobuf_26
-  ];
-
-  postInstall = ''
-    install -m 0755 $out/bin/q_cli $out/bin/amazon-q
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/amazon-q";
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Amazon Q Developer AI coding agent CLI";
