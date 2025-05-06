@@ -8699,6 +8699,8 @@ self: super: with self; {
 
   mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
 
+  minecraft-resource-pack = callPackage ../development/python-modules/minecraft-resource-pack { };
+
   minexr = callPackage ../development/python-modules/minexr { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio {
