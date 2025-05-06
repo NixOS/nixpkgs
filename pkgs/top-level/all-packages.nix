@@ -5786,9 +5786,7 @@ with pkgs;
       graalvmDrv = graalvmPackages.graalvm-ce;
     }).override;
 
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt {
-    python3 = python311;
-  };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })
     julia_19-bin
