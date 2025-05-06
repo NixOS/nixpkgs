@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple build configuration and project generation tool using lua";
     mainProgram = "premake5";
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sarahec ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
