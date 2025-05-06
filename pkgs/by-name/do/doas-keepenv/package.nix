@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     # don't add doas to path, 'cause we need the wrapper to funtion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A bash script for running the doas command with keeping environment variables";
     homepage = "https://github.com/stas-badzi/doas-keepenv";
     mainProgram = "doas-keepenv";
