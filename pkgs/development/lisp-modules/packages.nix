@@ -540,6 +540,33 @@ let
         };
       });
 
+      flac-metadata-bindings = build-asdf-system {
+        pname = "flac-metadata-bindings";
+        version = "0.1.0";
+        src = pkgs.fetchFromGitLab {
+          domain = "forge.tedomum.net";
+          owner = "koizel";
+          repo = "cl-flac-metadata-bindings";
+          rev = "b0a4fb6c943dd7426b0f65dab1cfac1552f6d7bc";
+          hash = "sha256-3peGwYdwDeZc7tMxclQYHfv8546U0Ld2CM9PKinksIM=";
+        };
+        lispLibs = builtins.attrValues {
+          inherit (self)
+            anaphora
+            cffi
+            cl-ppcre
+            check-it
+            ;
+        };
+        nativeLibs = [ pkgs.flac ];
+        nativeBuildInputs = [ pkgs.flac ];
+        meta = {
+          description = "Bindings for the metadata part of the FLAC library";
+          homepage = "https://forge.tedomum.net/koizel/cl-flac-metadata-bindings";
+          license = pkgs.lib.licenses.bsd2;
+        };
+      };
+
     }
     // optionalAttrs pkgs.config.allowAliases {
       cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";
