@@ -1,5 +1,4 @@
 {
-  fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
@@ -35,16 +34,11 @@ rustPlatform.buildRustPackage rec {
 
   version = "0.3.14";
 
-  src = fetchFromGitHub {
-    owner = "nvim-neorocks";
-    repo = "lux";
-    tag = "v${version}";
-    hash = "sha256-gkUj3eeN0GnHM5sN4SKM/nHeBKe9ifrkg8TZRvA7FlM=";
-  };
+  src = lua52Packages.lux-lua.src;
 
   buildAndTestSubdir = "lux-cli";
   useFetchCargoVendor = true;
-  cargoHash = "sha256-2bFVF4X4OpWwbxAjTr0orCLQNHKSO/koyeTXtD6d76M=";
+  cargoHash = lua52Packages.lux-lua.cargoHash;
 
   nativeInstallCheckInputs = [
     versionCheckHook
