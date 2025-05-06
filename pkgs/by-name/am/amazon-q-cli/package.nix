@@ -5,14 +5,14 @@
   protobuf_26,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BiVCiMBL5LLm8RYw58u6P7yqQq9XnN8b6fTbxNE2QsA=";
   };
 
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.jamesward ];
     platforms = lib.platforms.linux;
   };
-}
+})
