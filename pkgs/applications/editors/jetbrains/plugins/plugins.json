@@ -570,6 +570,37 @@
       },
       "name": "minecraft-development"
     },
+    "8527": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.22562.218": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "243.24978.603": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.424": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.426": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.429": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.430": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.435": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.436": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.437": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.442": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.444": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip",
+        "251.23774.445": "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip"
+      },
+      "name": "google-java-format"
+    },
     "8554": {
       "compatible": [
         "clion",
@@ -1971,6 +2002,7 @@
     "https://plugins.jetbrains.com/files/8195/715934/toml-251.23774.429.zip": "sha256-cNWs+ycKlqednnqJAm4AkqF3LTdMt8jhwWWiEDdKQE4=",
     "https://plugins.jetbrains.com/files/8327/615097/Minecraft_Development-2024.3-1.8.2.zip": "sha256-4c1nxjbEsNs9twmQnJllk1OIVmm0nnUYZ0R7f/6bJt4=",
     "https://plugins.jetbrains.com/files/8327/718480/Minecraft_Development-2025.1-1.8.4.zip": "sha256-PNKG9qHZRrPDw95ZWs8gwkcomxFFLl5WEvCk6NR7gSk=",
+    "https://plugins.jetbrains.com/files/8527/704785/idea_plugin.zip": "sha256-d0jEW2rrINoa+sJ5xwT68uIdUoEGRQWwlmSytNvZa70=",
     "https://plugins.jetbrains.com/files/8554/684425/featuresTrainer-243.24978.79.zip": "sha256-1oI8hw6YYhUzhfv5RjtlBFG0OvucqVs/XUXMioRIuzA=",
     "https://plugins.jetbrains.com/files/8554/716074/featuresTrainer-251.23774.436.zip": "sha256-P6ux6UgbjeJW3lF4w696bZ73zumY8hEm1iM98IsKgTQ=",
     "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip": "sha256-OFisV6Vs/xlbDvchxfrREDVgVh7wcfGnot+zUrgQU6M=",
