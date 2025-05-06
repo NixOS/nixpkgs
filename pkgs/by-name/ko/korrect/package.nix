@@ -3,6 +3,7 @@
   stdenv,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
   cargoHash = "sha256-vpjldD+aVVgCMQ/n+WZDPMMBRFPEeQZa09b45Q3m5UM=";
 
-  # TODO updatescript
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Kubectl version managing shim that invokes the correct kubectl version";
     homepage = "https://gitlab.com/cromulentbanana/korrect";
