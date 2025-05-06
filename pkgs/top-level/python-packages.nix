@@ -1993,6 +1993,8 @@ self: super: with self; {
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
+  bot-safe-agents = callPackage ../development/python-modules/bot-safe-agents { };
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto3-stubs = callPackage ../development/python-modules/boto3-stubs { };
@@ -2008,8 +2010,6 @@ self: super: with self; {
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
   bottombar = callPackage ../development/python-modules/bottombar { };
-
-  bot-safe-agents = callPackage ../development/python-modules/bot-safe-agents { };
 
   bpemb = callPackage ../development/python-modules/bpemb { };
 
@@ -2802,6 +2802,8 @@ self: super: with self; {
   consolekit = callPackage ../development/python-modules/consolekit { };
 
   consonance = callPackage ../development/python-modules/consonance { };
+
+  constantdict = callPackage ../development/python-modules/constantdict { };
 
   constantly = callPackage ../development/python-modules/constantly { };
 
@@ -4855,6 +4857,8 @@ self: super: with self; {
 
   fenics = callPackage ../development/python-modules/fenics { hdf5 = pkgs.hdf5_1_10; };
 
+  fenics-ufl = callPackage ../development/python-modules/fenics-ufl { };
+
   ffcv = callPackage ../development/python-modules/ffcv { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
@@ -5865,8 +5869,6 @@ self: super: with self; {
 
   gophish = callPackage ../development/python-modules/gophish { };
 
-  gotify = callPackage ../development/python-modules/gotify { };
-
   gorilla = callPackage ../development/python-modules/gorilla { };
 
   goslide-api = callPackage ../development/python-modules/goslide-api { };
@@ -5874,6 +5876,8 @@ self: super: with self; {
   gotailwind = callPackage ../development/python-modules/gotailwind { };
 
   gotenberg-client = callPackage ../development/python-modules/gotenberg-client { };
+
+  gotify = callPackage ../development/python-modules/gotify { };
 
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
@@ -8968,7 +8972,7 @@ self: super: with self; {
 
   mmtf-python = callPackage ../development/python-modules/mmtf-python { };
 
-  mne-python = callPackage ../development/python-modules/mne-python { };
+  mne = callPackage ../development/python-modules/mne { };
 
   mnemonic = callPackage ../development/python-modules/mnemonic { };
 
@@ -11242,9 +11246,9 @@ self: super: with self; {
 
   ploomber-extension = callPackage ../development/python-modules/ploomber-extension { };
 
-  plotille = callPackage ../development/python-modules/plotille { };
-
   plotext = callPackage ../development/python-modules/plotext { };
+
+  plotille = callPackage ../development/python-modules/plotille { };
 
   plotly = callPackage ../development/python-modules/plotly { };
 
@@ -11535,11 +11539,11 @@ self: super: with self; {
 
   proton-vpn-api-core = callPackage ../development/python-modules/proton-vpn-api-core { };
 
+  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
+
   proton-vpn-network-manager =
     callPackage ../development/python-modules/proton-vpn-network-manager
       { };
-
-  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
@@ -13784,9 +13788,9 @@ self: super: with self; {
 
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
 
-  pytest-run-parallel = callPackage ../development/python-modules/pytest-run-parallel { };
-
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
+
+  pytest-run-parallel = callPackage ../development/python-modules/pytest-run-parallel { };
 
   pytest-scim2-server = callPackage ../development/python-modules/pytest-scim2-server { };
 
@@ -16317,9 +16321,9 @@ self: super: with self; {
 
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
-  sphinx-reredirects = callPackage ../development/python-modules/sphinx-reredirects { };
-
   sphinx-remove-toctrees = callPackage ../development/python-modules/sphinx-remove-toctrees { };
+
+  sphinx-reredirects = callPackage ../development/python-modules/sphinx-reredirects { };
 
   sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
 
@@ -17431,11 +17435,11 @@ self: super: with self; {
 
   toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
 
-  torch = callPackage ../development/python-modules/torch { };
+  torch = callPackage ../development/python-modules/torch/source { };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
 
-  torch-bin = callPackage ../development/python-modules/torch/bin.nix { triton = self.triton-bin; };
+  torch-bin = callPackage ../development/python-modules/torch/bin { triton = self.triton-bin; };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 
