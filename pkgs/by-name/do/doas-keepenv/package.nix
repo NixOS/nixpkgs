@@ -4,7 +4,7 @@
   coreutils,
   doas,
   makeWrapper,
-  fetchurl
+  fetchurl,
 }:
 
 stdenv.mkDerivation {
@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/doas-keepenv --prefix PATH : "${
       lib.makeBinPath [
         coreutils
+        doas
       ]
     }:/run/wrappers/bin/doas"
   '';
