@@ -240,6 +240,10 @@ let
     # In particular, this triggered warnings from cuda's `aliases.nix`
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport && (effectiveMagma.cudaPackages.cudaVersion != cudaPackages.cudaVersion);
+    # ... fatal error: 'ck/config.h' file not found
+    # 6 | #include "ck/config.h"
+    #   |          ^~~~~~~~~~~~~
+    "ROCm is failing to compile" = rocmSupport;
   };
 
   unroll-src = writeShellScript "unroll-src" ''
