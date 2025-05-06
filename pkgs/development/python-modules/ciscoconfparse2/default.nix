@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "ciscoconfparse2";
-  version = "0.8.7";
+  version = "0.8.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpenning";
     repo = "ciscoconfparse2";
     tag = version;
-    hash = "sha256-8LyGta+b18mSWbdwmnOmgbjyHmQi0dehABTXKs0RloI=";
+    hash = "sha256-d5o5x0q9oDICxBPrq2b8Sbkier+mHmZAxhrS6OTnFHM=";
   };
 
   pythonRelaxDeps = [
