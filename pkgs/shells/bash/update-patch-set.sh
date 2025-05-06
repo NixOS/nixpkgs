@@ -14,9 +14,9 @@ fi
 
 PROJECT="$1"
 VERSION="$2"
-DIR=$(dirname "$0")
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 VERSION_CONDENSED="$(echo "$VERSION" | sed -es/\\.//g)"
-PATCH_LIST="$DIR/$PROJECT-$VERSION-patches.nix"
+PATCH_LIST="${SCRIPT_DIRECTORY}/$PROJECT-$VERSION-patches.nix"
 
 set -e
 
@@ -35,14 +35,14 @@ rm gpgkey.asc{,.md5}
 
 for i in {001..100}
 do
-    wget -P "$DIR" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i" || break
-    wget -P "$DIR" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i.sig"
-    gpg --verify "$DIR/$PROJECT$VERSION_CONDENSED-$i.sig"
-    hash=$(nix-hash --flat --type sha256 --base32 "$DIR/$PROJECT$VERSION_CONDENSED-$i")
+    wget -P "${SCRIPT_DIRECTORY}" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i" || break
+    wget -P "${SCRIPT_DIRECTORY}" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i.sig"
+    gpg --verify "${SCRIPT_DIRECTORY}/$PROJECT$VERSION_CONDENSED-$i.sig"
+    hash=$(nix-hash --flat --type sha256 --base32 "${SCRIPT_DIRECTORY}/$PROJECT$VERSION_CONDENSED-$i")
     echo "(patch \"$i\" \"$hash\")"	\
     >> "$PATCH_LIST"
 
-    rm -f "$DIR/$PROJECT$VERSION_CONDENSED-$i"{,.sig}
+    rm -f "${SCRIPT_DIRECTORY}/$PROJECT$VERSION_CONDENSED-$i"{,.sig}
 done
 
 echo "]" >> "$PATCH_LIST"
