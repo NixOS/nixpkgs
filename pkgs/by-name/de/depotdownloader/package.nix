@@ -7,13 +7,13 @@
 
 buildDotnetModule rec {
   pname = "depotdownloader";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
     rev = "DepotDownloader_${version}";
-    hash = "sha256-xqy2SNyvJjisaPUyPsnXs6cVbT9SGdeVegVub+cs/LQ=";
+    hash = "sha256-e2dnZUC6cM7g+rgk2dxrXDhO2N0A6gljUBoURbOILy8=";
   };
 
   projectFile = "DepotDownloader.sln";
