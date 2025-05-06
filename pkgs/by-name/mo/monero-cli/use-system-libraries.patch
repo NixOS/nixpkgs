@@ -1,8 +1,8 @@
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index 5b7f69a56..cc4b0a346 100644
+index 538e4d215..cc4b0a346 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -35,25 +35,14 @@
+@@ -35,26 +35,14 @@
  # ...except for FreeBSD, because FreeBSD is a special case that doesn't play well with
  # others.
  
@@ -10,6 +10,7 @@ index 5b7f69a56..cc4b0a346 100644
 -
 -message(STATUS "Using in-tree miniupnpc")
 -set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
+-set(UPNPC_BUILD_SHARED OFF CACHE BOOL "Disable building shared library" FORCE)
 -add_subdirectory(miniupnp/miniupnpc)
 -set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
 -set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -34,13 +35,13 @@ index 5b7f69a56..cc4b0a346 100644
  
  if(NOT UNBOUND_INCLUDE_DIR)
    die("Could not find libunbound")
-@@ -69,4 +58,3 @@ endif()
+@@ -70,4 +58,3 @@ endif()
  add_subdirectory(db_drivers)
  add_subdirectory(easylogging++)
  add_subdirectory(qrcodegen)
 -add_subdirectory(randomx EXCLUDE_FROM_ALL)
 diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
-index 71f5393e8..bb48083d0 100644
+index 884a7b5fc..24c10334e 100644
 --- a/src/p2p/net_node.inl
 +++ b/src/p2p/net_node.inl
 @@ -60,9 +60,9 @@

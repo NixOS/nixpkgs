@@ -81,7 +81,6 @@ appimageTools.wrapAppImage {
     license = licenses.unfree;
     maintainers = with maintainers; [
       jshcmpbll
-      mjm
       edmundmiller
       zh4ngx
     ];

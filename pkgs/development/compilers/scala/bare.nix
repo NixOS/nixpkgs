@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     mainProgram = "scala";
     maintainers = with maintainers; [
-      karolchmist
       virusdave
       kashw2
       natsukagami
