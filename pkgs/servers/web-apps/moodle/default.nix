@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "4.4.5";
+  version = "4.4.8";
 
   versionParts = lib.take 2 (lib.splitVersion version);
   # 4.2 -> 402, 3.11 -> 311
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.moodle.org/download.php/direct/stable${stableVersion}/${pname}-${version}.tgz";
-    hash = "sha256-CronmobN0OFZHhMCmruPae34j1FNrvMLO02q1VlQfgY=";
+    hash = "sha256-x7EOAc54yoe/L/cRK00swLRB3HESManuVIJExX2+laU=";
   };
 
   phpConfig = writeText "config.php" ''
