@@ -23,6 +23,7 @@
   json_c,
   fftw,
   miniupnpc,
+  nanopb,
   speexdsp,
   libplacebo,
   vulkan-loader,
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     json_c
     fftw
     miniupnpc
+    nanopb
     libevdev
     udev
     speexdsp
