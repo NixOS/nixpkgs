@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin/ $out/share/licenses/doas-keepenv $out/share/doc/doas-keepenv
+    mkdir -p $out/bin/
     install -m 755 doas-keepenv $out/bin
     wrapProgram $out/bin/doas-keepenv --prefix PATH : "${
       pkgs.lib.makeBinPath [
