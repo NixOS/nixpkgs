@@ -2,7 +2,10 @@
 #!nix-shell -i bash -p curl gojq nix-prefetch-github common-updater-scripts
 
 set -eou pipefail
-pkg_dir="$(dirname "$0")"
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+pkg_dir="${SCRIPT_DIRECTORY}"
 
 gh-curl () {
   curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$1"

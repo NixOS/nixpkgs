@@ -3,8 +3,10 @@
 
 set -x -eu -o pipefail
 
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
 NIXPKGS_PATH="$(git rev-parse --show-toplevel)"
-FLUXCD_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+FLUXCD_PATH="${SCRIPT_DIRECTORY}"
 
 OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_PATH {}; fluxcd.version or (builtins.parseDrvName fluxcd.name).version" | tr -d '"')"
 LATEST_TAG=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --silent https://api.github.com/repos/fluxcd/flux2/releases/latest | jq -r '.tag_name')

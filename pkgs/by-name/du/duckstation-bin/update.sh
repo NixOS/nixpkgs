@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-cd "$(dirname "$0")" || exit 1
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd "${SCRIPT_DIRECTORY} || exit 1
 
 # Grab latest version, ignoring "latest" and "preview" tags
 LATEST_VER="$(curl --fail -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/stenzek/duckstation/releases" | jq -r '.[].tag_name' | grep '^v' | head -n 1 | sed 's/^v//')"

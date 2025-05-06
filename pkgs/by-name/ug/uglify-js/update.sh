@@ -3,8 +3,9 @@
 
 set -xeu -o pipefail
 
-PACKAGE_DIR="$(realpath "$(dirname "$0")")"
-cd "$PACKAGE_DIR/.."
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd "${SCRIPT_DIRECTORY}/.."
 while ! test -f flake.nix; do cd .. ; done
 NIXPKGS_DIR="$PWD"
 
@@ -26,7 +27,7 @@ cp $src/package*.json .
 # Maybe one day upstream may ship a package-lock.json,
 # until then we must generate a fresh one
 test -f package-lock.json || npm install --package-lock-only
-cp -v package-lock.json "$PACKAGE_DIR/package-lock.json"
+cp -v package-lock.json "${SCRIPT_DIRECTORY}/package-lock.json"
 
 prev_npm_hash=$(
   nix-instantiate "$NIXPKGS_DIR" \
@@ -34,4 +35,4 @@ prev_npm_hash=$(
   | jq -r .
 )
 new_npm_hash=$(prefetch-npm-deps ./package-lock.json)
-sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "$PACKAGE_DIR/package.nix"
+sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "${SCRIPT_DIRECTORY}/package.nix"
