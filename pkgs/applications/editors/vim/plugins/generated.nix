@@ -7419,6 +7419,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  luau-lsp-nvim = buildVimPlugin {
+    pname = "luau-lsp.nvim";
+    version = "2025-02-01";
+    src = fetchFromGitHub {
+      owner = "lopi-py";
+      repo = "luau-lsp.nvim";
+      rev = "f81c6c713e4598abc484cbeabca918475d176c54";
+      sha256 = "15w51wnyvq8n0xar9az5bxdma0mjcq8lfk4bllarxapzpk84qiz8";
+    };
+    meta.homepage = "https://github.com/lopi-py/luau-lsp.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lushtags = buildVimPlugin {
     pname = "lushtags";
     version = "2017-04-19";
