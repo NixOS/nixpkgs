@@ -3,6 +3,7 @@
   stdenv,
   fetchCrate,
   rustPlatform,
+  installShellFiles,
   nix-update-script,
 }:
 
@@ -17,6 +18,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-vpjldD+aVVgCMQ/n+WZDPMMBRFPEeQZa09b45Q3m5UM=";
 
   passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd ${finalAttrs.pname} \
+      --bash <($out/bin/${finalAttrs.pname} completions bash) \
+      --fish <($out/bin/${finalAttrs.pname} completions fish) \
+      --zsh <($out/bin/${finalAttrs.pname} completions zsh)
+  '';
 
   meta = {
     description = "Kubectl version managing shim that invokes the correct kubectl version";
