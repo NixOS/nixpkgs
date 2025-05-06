@@ -44,7 +44,7 @@
   withConnPrometheus ? false,
   withConnPubSub ? false,
   withCups ? false,
-  withDBengine ? false,
+  withDBengine ? true,
   withDebug ? false,
   withEbpf ? false,
   withIpmi ? (stdenv.hostPlatform.isLinux),
@@ -57,14 +57,14 @@
   withML ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.4.0";
+  version = "2.5.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-egHsWmhnrl8D59gr7uD5hBnleCOI8gVEBGwdO5GSnOg=";
+    hash = "sha256-77k93mg7iED53k38jATbS2Y1N0eLKhjo0RYyinApkuE=";
     fetchSubmodules = true;
   };
 
@@ -133,10 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withCloudUi (
       replaceVars ./dashboard-v3-add.patch {
         # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 03/16/2025 23:56:24
+        # last update 04/01/2025 04:45:14
         dashboardTarball = fetchurl {
-          url = "https://web.archive.org/web/20250316235624/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-Vtw+CbBgqGRenkis0ZR2/TLsoM83NjNA6mbndb95EK8=";
+          url = "https://web.archive.org/web/20250401044514/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-NtmM1I3VrvFErMoBl+w63Nt0DzOOsaB98cxE/axm8mE=";
         };
       }
     );
@@ -220,9 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWEB_DIR=share/netdata/web"
     (lib.cmakeBool "ENABLE_DASHBOARD" withCloudUi)
-    # FIXME uncomment when https://github.com/netdata/netdata/issues/19901#issuecomment-2819701451 resolved
-    (lib.cmakeBool "ENABLE_DBENGINE" true)
-    # (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
+    (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
     (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
     (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
@@ -260,7 +258,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-PgQs3+++iD9Lg8psTBVzF4b+kGJzhV5yNQBkw/+Dqks=";
+        vendorHash = "sha256-N03IGTtF78PCo4kf0Sdtzv6f8z47ohg8g3YIXtINRjU=";
         doCheck = false;
         proxyVendor = true;
 
