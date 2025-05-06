@@ -42,16 +42,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  #version = "413feff21f9f7310023d8cfd92b83f2a251b1aa4";
-  version = "416c38f0215361238e21af268db22862ed449795";
+  version = "413feff21f9f7310023d8cfd92b83f2a251b1aa4";
 
   src = fetchFromGitHub {
-    owner = "yrashk";
-    #owner = "omnigres";
+    owner = "omnigres";
     repo = "omnigres";
     rev = finalAttrs.version;
-    #hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
-    hash = "sha256-9cHFMrtIK00/mWDO56Q2FBc3g9LrOBop1WdhYltHvGE=";
+    hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
   };
 
   nativeBuildInputs = [
