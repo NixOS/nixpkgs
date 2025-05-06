@@ -22,6 +22,9 @@ buildGoModule {
     "-w"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  
   meta = {
     description = "API and CLI to get information of your N26 account";
     homepage = "https://github.com/pasqui23/n26";
