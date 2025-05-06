@@ -22,14 +22,6 @@ pkgs.stdenv.mkDerivation rec {
     pkgs.makeWrapper
   ];
 
-  configurePhase = ''
-  
-  '';
-
-  buildPhase = ''
-    
-  '';
-
   installPhase = ''
     mkdir -p $out/bin/ $out/share/licenses/doas-keepenv $out/share/doc/doas-keepenv
     install -m 755 doas-keepenv $out/bin
