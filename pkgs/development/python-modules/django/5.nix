@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   replaceVars,
 
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.8";
+  version = "5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,8 +51,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    rev = "refs/tags/${version}";
-    hash = "sha256-TZjqB9khEHnkkxYvAC/RzAvOIwdemh0uT4UVdosMq6M=";
+    tag = version;
+    hash = "sha256-IH5UWBlMjSteOYHsFJsneBPydkQeok7BUsl95i5wYCk=";
   };
 
   patches =
@@ -65,13 +64,6 @@ buildPythonPackage rec {
       ./django_5_tests_pythonpath.patch
       # disable test that expects timezone issues
       ./django_5_disable_failing_tests.patch
-
-      # fix filename length limit tests on bcachefs
-      # FIXME: remove in 5.2
-      (fetchpatch {
-        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
-        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
-      })
     ]
     ++ lib.optionals withGdal [
       (replaceVars ./django_5_set_geos_gdal_lib.patch {
