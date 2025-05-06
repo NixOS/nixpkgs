@@ -12,6 +12,7 @@
   testers,
   skopeo,
   buildGo124Module,
+  fetchpatch2,
 }:
 
 let
@@ -49,6 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
+    # Backport "runtime: cleanup M vgetrandom state before dropping P" (CL 662496)
+    # to fix segfault in Go 1.24.
+    # https://go-review.googlesource.com/c/go/+/662496
+    # https://github.com/golang/go/issues/73141
+    # https://github.com/golang/go/issues/73144
+    # https://github.com/NixOS/nixpkgs/issues/392815
+    (fetchpatch2 {
+      name = "backport-cleanup-M-vgetrandom-state-before-dropping-P.patch";
+      url = "https://go.googlesource.com/go/+/0ab64e2caad9c09f6db3de23898a2294b07b9fd3^!?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-XS4VACiMLaYxq1i3Wy26x0ifD9HoYajg7v4/RX42dsA=";
+    })
     (replaceVars ./iana-etc-1.17.patch {
       iana = iana-etc;
     })
