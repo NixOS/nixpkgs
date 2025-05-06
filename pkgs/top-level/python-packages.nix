@@ -4857,6 +4857,8 @@ self: super: with self; {
 
   fenics-basix = callPackage ../development/python-modules/fenics-basix { };
 
+  fenics-dolfinx = callPackage ../development/python-modules/fenics-dolfinx { };
+
   fenics-ffcx = callPackage ../development/python-modules/fenics-ffcx { };
 
   fenics-ufl = callPackage ../development/python-modules/fenics-ufl { };
