@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "stas-badzi";
     repo = "doas-keepenv";
-    tag = "${version};
+    tag = "${version}";
     sha256 = "15xh3dgw78v6mfgkqv6mphpw0bxxbg7jqrpkb4y5151a9xjc9962";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin/
     install -m 755 doas-keepenv $out/bin
-    wrapProgram $out/bin/doas-keepenv --prefix PATH : ${
+    wrapProgram $out/bin/doas-keepenv --prefix PATH : "${
       lib.makeBinPath [
         coreutils
       ]
-    }:/run/wrappers/bin/doas
+    }:/run/wrappers/bin/doas"
   '';
 
   meta = {
