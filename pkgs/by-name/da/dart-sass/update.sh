@@ -3,7 +3,9 @@
 
 set -xeu -o pipefail
 
-PACKAGE_DIR="$(realpath "$(dirname "$0")")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+PACKAGE_DIR="$SCRIPT_DIRECTORY"
 cd "$PACKAGE_DIR/.."
 while ! test -f default.nix; do cd .. ; done
 NIXPKGS_DIR="$PWD"

@@ -21,8 +21,9 @@
 
 set -ex
 
-BASEDIR="$(dirname "$0")/../../../.."
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
+BASEDIR="${SCRIPT_DIRECTORY}/../../../.."
 
 CURRENT_PATH=$(nix-build --no-out-link -A cacert.out)
 PATCHED_PATH=$(nix-build --no-out-link -E "with import $BASEDIR {}; (cacert.override { nssOverride = nss_latest; }).out")

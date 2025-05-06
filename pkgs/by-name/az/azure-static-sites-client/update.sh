@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-dirname="$(dirname "$0")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
-curl -O --silent --output-dir "$dirname" 'https://swalocaldeploy.azureedge.net/downloads/versions.json'
-echo "" >> "$dirname/versions.json"
+curl -O --silent --output-dir "${SCRIPT_DIRECTORY}" 'https://swalocaldeploy.azureedge.net/downloads/versions.json'
+echo "" >> "${SCRIPT_DIRECTORY}/versions.json"

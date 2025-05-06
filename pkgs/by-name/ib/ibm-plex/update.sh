@@ -3,6 +3,8 @@
 #  shellcheck shell=bash
 set -eo pipefail
 
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
 families=(
     "serif"
     "sans"
@@ -22,22 +24,22 @@ families=(
 
 version=$(curl --silent 'https://api.github.com/repos/IBM/plex/releases/latest' | jq -r '.tag_name | sub("^@ibm/[\\w-]+@"; "")')
 
-dirname="$(dirname "$0")"
-echo \""${version}"\" >"$dirname/version-new.nix"
-if diff -q "$dirname/version-new.nix" "$dirname/version.nix"; then
+
+echo \""${version}"\" >"${SCRIPT_DIRECTORY}/version-new.nix"
+if diff -q "${SCRIPT_DIRECTORY}/version-new.nix" "${SCRIPT_DIRECTORY}/version.nix"; then
     echo No new version available, current: "$version"
-    rm "$dirname/version-new.nix"
+    rm "${SCRIPT_DIRECTORY}/version-new.nix"
     exit 0
 else
     echo Updated to version "$version"
-    mv "$dirname/version-new.nix" "$dirname/version.nix"
+    mv "${SCRIPT_DIRECTORY}/version-new.nix" "${SCRIPT_DIRECTORY}/version.nix"
 fi
 
-printf '{\n' > "$dirname/hashes.nix"
+printf '{\n' > "${SCRIPT_DIRECTORY}/hashes.nix"
 
 for family in "${families[@]}"; do
     url="https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip"
-    printf '  "%s" = "%s";\n' "$family" "$(nix-prefetch-url --unpack "$url" | xargs nix hash convert --hash-algo sha256)" >>"$dirname/hashes.nix"
+    printf '  "%s" = "%s";\n' "$family" "$(nix-prefetch-url --unpack "$url" | xargs nix hash convert --hash-algo sha256)" >>"${SCRIPT_DIRECTORY}/hashes.nix"
 done
 
-printf '}\n' >> "$dirname/hashes.nix"
+printf '}\n' >> "${SCRIPT_DIRECTORY}/hashes.nix"

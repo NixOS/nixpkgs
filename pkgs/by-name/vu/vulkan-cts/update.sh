@@ -17,5 +17,9 @@ trap "rm -rf $tmpDir" EXIT
 
 curl -s "https://raw.githubusercontent.com/KhronosGroup/VK-GL-CTS/$rawVersion/external/fetch_sources.py" -o "$tmpDir/fetch_sources.py"
 sed -i '/from ctsbuild.common import/d' "$tmpDir/fetch_sources.py"
-cd "$(dirname "$0")"
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
+
 PYTHONPATH="$tmpDir/" ./vk-cts-sources.py

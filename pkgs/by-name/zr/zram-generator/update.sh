@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
 version=$(curl -s https://api.github.com/repos/systemd/zram-generator/tags | jq -r '.[0].name')
 update-source-version zram-generator "${version#v}"
 
@@ -12,4 +14,4 @@ trap 'rm -rf -- "${tmp}"' EXIT
 
 git clone --depth 1 --branch "${version}" https://github.com/systemd/zram-generator.git "${tmp}/zram-generator"
 cargo generate-lockfile --manifest-path "${tmp}/zram-generator/Cargo.toml"
-cp "${tmp}/zram-generator/Cargo.lock" "$(dirname "$0")/Cargo.lock"
+cp "${tmp}/zram-generator/Cargo.lock" "${SCRIPT_DIRECTORY}/Cargo.lock"

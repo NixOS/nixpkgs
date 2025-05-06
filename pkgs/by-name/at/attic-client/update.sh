@@ -15,7 +15,10 @@ fi
 
 set -x
 
-cd "$(dirname "$0")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
+
 rev="$1"
 
 set -euo pipefail

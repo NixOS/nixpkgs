@@ -4,12 +4,12 @@
 
 set -e
 
-dirname="$(dirname "$0")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
 updateVersion() {
   version=$1
   echo "Updating the version..."
-  sed -i "s#version = \"[0-9.]*\"#version = \"$version\"#" "$dirname/package.nix"
+  sed -i "s#version = \"[0-9.]*\"#version = \"$version\"#" "${SCRIPT_DIRECTORY}/package.nix"
 }
 
 updateHash()
@@ -26,12 +26,12 @@ updateHash()
   hash=$(nix-prefetch-url --type sha256 --name "whisparr-$system-$version.tar.gz" "$url")
   sriHash="$(nix hash to-sri --type sha256 "$hash")"
 
-  sed -i "s#$hashKey = \"[a-zA-Z0-9\/+-=]*\"#$hashKey = \"$sriHash\"#" "$dirname/package.nix"
+  sed -i "s#$hashKey = \"[a-zA-Z0-9\/+-=]*\"#$hashKey = \"$sriHash\"#" "${SCRIPT_DIRECTORY}/package.nix"
 }
 
 echo "Checking for updates of Whisparr..."
 
-currentVersion=$(nix eval --raw -f "$dirname"/../../../.. whisparr.version)
+currentVersion=$(nix eval --raw -f "${SCRIPT_DIRECTORY}"/../../../.. whisparr.version)
 echo "Current version: \`$currentVersion\`."
 
 echo "Fetching the latest version..."

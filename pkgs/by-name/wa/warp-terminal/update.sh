@@ -3,7 +3,10 @@
 #shellcheck shell=bash
 set -eu -o pipefail
 
-cd "$(dirname "$0")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
+
 nixpkgs=../../../../.
 
 err() {

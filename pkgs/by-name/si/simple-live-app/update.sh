@@ -3,8 +3,9 @@
 
 set -eou pipefail
 
-PACKAGE_DIR="$(realpath "$(dirname "$0")")"
-cd "$PACKAGE_DIR"/..
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd "${SCRIPT_DIRECTORY}"/..
 while ! test -f flake.nix; do cd ..; done
 NIXPKGS_DIR="$PWD"
 
@@ -30,5 +31,5 @@ TMPDIR="$(mktemp -d)"
 cp --recursive --no-preserve=mode "$src"/* $TMPDIR
 cd "$TMPDIR"/simple_live_app
 flutter pub get
-yq . pubspec.lock >"$PACKAGE_DIR"/pubspec.lock.json
+yq . pubspec.lock >"${SCRIPT_DIRECTORY}"/pubspec.lock.json
 rm -rf $TMPDIR

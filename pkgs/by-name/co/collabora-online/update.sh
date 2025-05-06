@@ -4,8 +4,9 @@
 
 set -xeu -o pipefail
 
-PACKAGE_DIR="$(realpath "$(dirname "$0")")"
-cd "$PACKAGE_DIR/.."
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd "${SCRIPT_DIRECTORY}/.."
 while ! test -f default.nix; do cd .. ; done
 NIXPKGS_DIR="$PWD"
 
@@ -26,7 +27,7 @@ cd "$TMPDIR"
 src="$(nix-build --no-link "$NIXPKGS_DIR" -A collabora-online.src)"
 cp "$src"/browser/package.json .
 npm install --package-lock-only
-cp ./package-lock.json "$PACKAGE_DIR"
+cp ./package-lock.json "${SCRIPT_DIRECTORY}"
 
 prev_npm_hash="$(nix-instantiate "$NIXPKGS_DIR" \
   --eval --json \
@@ -35,4 +36,4 @@ prev_npm_hash="$(nix-instantiate "$NIXPKGS_DIR" \
 )"
 new_npm_hash="$(prefetch-npm-deps ./package-lock.json)"
 
-sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "$PACKAGE_DIR/package.nix"
+sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "${SCRIPT_DIRECTORY}/package.nix"
