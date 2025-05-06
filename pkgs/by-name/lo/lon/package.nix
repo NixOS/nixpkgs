@@ -2,6 +2,9 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
+  makeBinaryWrapper,
+  nix-prefetch-git,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +22,17 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-cr1+WBlq/uuOVDIbgN5UhsQ0ISLDYOxyGRnQ6ntEH5w=";
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/lon --prefix PATH : ${
+      lib.makeBinPath [
+        nix-prefetch-git
+        gitMinimal
+      ]
+    }
+  '';
 
   meta = {
     description = "Lock & update Nix dependencies";
