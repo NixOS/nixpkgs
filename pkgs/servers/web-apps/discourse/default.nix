@@ -434,8 +434,8 @@ let
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
       tests = import ../../../../nixos/tests/discourse.nix {
-        inherit (stdenv) system;
-        inherit pkgs;
+        inherit lib;
+        hostPkgs = stdenv.hostPlatform.pkgs;
         package = pkgs.discourse.override args;
       };
     };
