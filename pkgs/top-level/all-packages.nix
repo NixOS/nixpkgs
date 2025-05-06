@@ -14846,8 +14846,6 @@ with pkgs;
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
-
   napari = with python3Packages; toPythonApplication napari;
 
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
