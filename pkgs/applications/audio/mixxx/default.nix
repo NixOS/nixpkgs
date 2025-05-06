@@ -32,7 +32,6 @@
   microsoft-gsl,
   mp4v2,
   opusfile,
-  pcre,
   pkg-config,
   portaudio,
   portmidi,
@@ -102,7 +101,6 @@ stdenv.mkDerivation rec {
     microsoft-gsl
     mp4v2
     opusfile
-    pcre
     portaudio
     portmidi
     protobuf
