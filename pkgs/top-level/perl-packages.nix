@@ -6974,17 +6974,16 @@ with self;
 
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
-    version = "2.33";
+    version = "3.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-2.33.tar.gz";
-      hash = "sha256-anDeIbbMfysQAGfo4Yjblm6agAG122+pdufLWylK5kU=";
+      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-3.04.tar.gz";
+      hash = "sha256-QCbFfQ2/ZJbA1WGibxYbdj07jt81ETnAc0kuIbX7zgc=";
     };
+    propagatedBuildInputs = [
+      CryptPBKDF2
+      CryptX
+    ];
     meta = {
-      description = "Encrypt Data with Cipher Block Chaining Mode";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
     };
   };
 
@@ -18517,6 +18516,53 @@ with self;
     };
   };
 
+  LaTeXDriver = buildPerlPackage {
+    pname = "LaTeX-Driver";
+    version = "1.2.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/LaTeX-Driver-1.2.0.tar.gz";
+      hash = "sha256-X7gXBy71tnnwOEXjsk2tLxNqxyRjNspH0hfAuOhMzPk=";
+    };
+    propagatedBuildInputs = [
+      CaptureTiny
+      ClassAccessor
+      ExceptionClass
+      FileSlurp
+      Filepushd
+      LogAny
+      Readonly
+    ];
+    buildInputs = [ pkgs.texliveFull ];
+    meta = {
+      description = "Latex driver";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LaTeXEncode = buildPerlPackage {
+    pname = "LaTeX-Encode";
+    version = "0.092.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EI/EINHVERFR/LaTeX-Encode-0.092.0.tar.gz";
+      hash = "sha256-rKC5eg+0ff7kdAkld390CQAzV3d9/aaMABwR+0Y7ZfE=";
+    };
+    buildInputs = [ CarpAlways ];
+    propagatedBuildInputs = [
+      HTMLParser
+      Readonly
+    ];
+    meta = {
+      description = "Encode characters for LaTeX formatting";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   LatexIndent = buildPerlPackage rec {
     pname = "latexindent.pl";
     version = "3.21";
@@ -18543,6 +18589,29 @@ with self;
       description = "Perl script to add indentation to LaTeX files";
       homepage = "https://github.com/cmhughes/latexindent.pl";
       license = lib.licenses.gpl3Plus;
+    };
+  };
+
+  LaTeXTable = buildPerlPackage {
+    pname = "LaTeX-Table";
+    version = "1.0.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LI/LIMAONE/LaTeX-Table-v1.0.6.tar.gz";
+      hash = "sha256-1sypAdR4fGRuimpjPEQ5LhrpdXv/axigaxPyMV15Qz8=";
+    };
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [
+      ModulePluggable
+      Moose
+      MooseXFollowPBP
+      TemplateToolkit
+    ];
+    meta = {
+      description = "Perl extension for the automatic generation of LaTeX tables";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -24787,6 +24856,20 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  MooseXFollowPBP = buildPerlPackage {
+    pname = "MooseX-FollowPBP";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-FollowPBP-0.05.tar.gz";
+      hash = "sha256-+zJJUee+IimfX2iLPsNJHaRzYPnEojpZtrko0o0+IEc=";
+    };
+    propagatedBuildInputs = [ Moose ];
+    meta = {
+      description = "Name your accessors get_foo() and set_foo()";
+      license = lib.licenses.artistic2;
     };
   };
 
@@ -34032,6 +34115,24 @@ with self;
     };
   };
 
+  TemplatePluginLatex = buildPerlPackage {
+    pname = "Template-Plugin-Latex";
+    version = "3.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/Template-Plugin-Latex-3.12.tar.gz";
+      hash = "sha256-NyvGpY3OeDKzhrfgxlKKfg7luaQ91xyvzZ2j6B/2+9U=";
+    };
+    propagatedBuildInputs = [
+      LaTeXDriver
+      LaTeXEncode
+      LaTeXTable
+      TemplateToolkit
+    ];
+    meta = {
+      description = "Latex support for the Template Toolkit";
+    };
+  };
+
   TemplateTimer = buildPerlPackage {
     pname = "Template-Timer";
     version = "1.00";
@@ -36910,6 +37011,23 @@ with self;
         gpl1Plus
       ];
       mainProgram = "test-yaml";
+    };
+  };
+
+  TeXEncode = buildPerlPackage {
+    pname = "TeX-Encode";
+    version = "2.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AT/ATHREEF/TeX-Encode-2.010.tar.gz";
+      hash = "sha256-P1j5CO4nK0Q4zzOGRpQct9UgHk6/XnvzNdcNb7tzmc8=";
+    };
+    meta = {
+      homepage = "https://github.com/athreef/TeX-Encode";
+      description = "Encode/decode Perl utf-8 strings into TeX";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
