@@ -30,6 +30,7 @@
   utf8proc,
   versionCheckHook,
   which,
+  wrapQtAppsHook,
   writeScript,
   zlib,
   darwin,
@@ -76,8 +77,6 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
-  dontWrapQtApps = true;
-
   # https://docs.mamedev.org/initialsetup/compilingmame.html
   buildInputs =
     [
@@ -116,6 +115,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     which
+    wrapQtAppsHook
   ];
 
   patches = [
