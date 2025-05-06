@@ -17,6 +17,7 @@
   python3,
   # Misc dependencies
   code-minimap,
+  dailies,
   dasht,
   deno,
   direnv,
@@ -374,6 +375,12 @@ in
       '';
   };
 
+  claude-code-nvim = super.claude-code-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  };
+
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${lib.getLib llvmPackages.clang.cc}/lib/libclang.so')|" \
@@ -610,7 +617,7 @@ in
     ];
   };
 
-  codeium-nvim =
+  windsurf-nvim =
     let
       # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
       codeiumVersion = "1.20.9";
@@ -648,7 +655,7 @@ in
       };
 
     in
-    super.codeium-nvim.overrideAttrs {
+    super.windsurf-nvim.overrideAttrs {
       dependencies = [ self.plenary-nvim ];
       buildPhase = ''
         cat << EOF > lua/codeium/installation_defaults.lua
@@ -882,6 +889,12 @@ in
       patchShebangs .
       ./install.sh
     '';
+  };
+
+  dailies-nvim = super.dailies-nvim.overrideAttrs {
+    runtimeDeps = [
+      dailies
+    ];
   };
 
   darkearth-nvim = super.darkearth-nvim.overrideAttrs {
@@ -1204,6 +1217,10 @@ in
   fzf-lua = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.fzf-lua;
     runtimeDeps = [ fzf ];
+    nvimSkipModules = [
+      "fzf-lua.shell_helper"
+      "fzf-lua.spawn"
+    ];
   };
 
   fzf-vim = super.fzf-vim.overrideAttrs {
@@ -1438,6 +1455,14 @@ in
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
+  };
+
+  kanagawa-paper-nvim = super.kanagawa-paper-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # skipping wezterm theme switcher since it relies on a wezterm module
+      # that does not seem to be available, tried to build setting wezterm-nvim as a dep
+      "wezterm.theme_switcher"
+    ];
   };
 
   kulala-nvim = super.kulala-nvim.overrideAttrs {
@@ -2153,6 +2178,13 @@ in
     ];
   };
 
+  neovim-trunk = super.neovim-trunk.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   nlsp-settings-nvim = super.nlsp-settings-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -2214,6 +2246,9 @@ in
       "nvchad.themes.mappings"
       "nvchad.cheatsheet.grid"
       "nvchad.cheatsheet.simple"
+      "nvchad.blink.config"
+      # Circular dependency with base46
+      "nvchad.utils"
     ];
   };
 
@@ -2550,9 +2585,15 @@ in
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      nvim-tree-lua
+      neo-tree-nvim
+      # FIXME: should propagate from neo-tree-nvim
+      nui-nvim
+      plenary-nvim
+    ];
     dependencies = [ self.nvzone-volt ];
-    # Optional nvimtree integration
-    nvimSkipModules = "menus.nvimtree";
   };
 
   nvzone-minty = super.nvzone-minty.overrideAttrs {
@@ -2572,6 +2613,10 @@ in
       telescope-nvim
     ];
     dependencies = [ self.plenary-nvim ];
+    nvimSkipModules = [
+      # Issue reproduction file
+      "minimal"
+    ];
   };
 
   octo-nvim = super.octo-nvim.overrideAttrs {
@@ -2579,10 +2624,15 @@ in
       # Pickers, can use telescope or fzf-lua
       fzf-lua
       telescope-nvim
+      snacks-nvim
     ];
     dependencies = with self; [
       plenary-nvim
     ];
+  };
+
+  oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
   };
 
   ollama-nvim = super.ollama-nvim.overrideAttrs {
@@ -2706,6 +2756,16 @@ in
     ];
   };
 
+  peek-nvim = super.peek-nvim.overrideAttrs (old: {
+    patches = [
+      # Patch peek-nvim to run using nixpkgs deno
+      # This means end-users have to build peek-nvim the first time they use it...
+      (replaceVars ./patches/peek-nvim/cmd.patch {
+        deno = lib.getExe deno;
+      })
+    ];
+  });
+
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
       # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)
@@ -2713,6 +2773,12 @@ in
       "persisted"
       "persisted.config"
       "persisted.utils"
+    ];
+  };
+
+  persistent-breakpoints-nvim = super.persistent-breakpoints-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-dap
     ];
   };
 
@@ -3821,6 +3887,15 @@ in
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
+  };
+
+  xmake-nvim = super.xmake-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # attempt to index upvalue 'options' (a nil value)
+      "xmake.action"
+      "xmake.command"
+      "xmake.runner_wrapper"
+    ];
   };
 
   yanky-nvim = super.yanky-nvim.overrideAttrs {

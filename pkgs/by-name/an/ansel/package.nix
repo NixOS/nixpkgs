@@ -15,7 +15,7 @@
   libxml2,
   cmake,
   exiftool,
-  openexr_3,
+  openexr,
   glib,
   python3Packages,
   perlPackages,
@@ -71,9 +71,12 @@ let
     src = fetchFromGitHub {
       owner = "AOMediaCodec";
       repo = "libavif";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-mUi0DU99XV3FzUZ8/9uJZU+W3fc6Bk6+y6Z78IRZ9Qs=";
     };
+
+    patches = [ ];
+    doCheck = false;
   };
 in
 stdenv.mkDerivation {
@@ -147,7 +150,7 @@ stdenv.mkDerivation {
     libxkbcommon
     libxslt
     libXtst
-    openexr_3
+    openexr
     openjpeg
     osm-gps-map
     pcre

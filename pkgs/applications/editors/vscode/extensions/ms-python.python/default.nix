@@ -8,15 +8,15 @@
   # Defaults to `false` as we expect it to be project specific most of the time.
   pythonUseFixed ? false,
   # For updateScript
-  vscode-extensions-update-script,
+  vscode-extension-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2025.3.2025031001";
-    hash = "sha256-uYz0WgFqbLohCEmT8ewYgvlFrVLuZr9OAiKnrbNup7U=";
+    version = "2025.4.0";
+    hash = "sha256-/yQbmZTnkks1gvMItEApRzfk8Lczjq+JC5rnyJxr6fo=";
   };
 
   buildInputs = [ icu ];
@@ -45,7 +45,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
         --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
     '';
 
-  passthru.updateScript = vscode-extensions-update-script { };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Visual Studio Code extension with rich support for the Python language";

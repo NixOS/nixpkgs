@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.13.2";
+  version = "2.13.4";
 in
 buildGoModule {
   pname = "wakapi";
@@ -16,7 +16,7 @@ buildGoModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-+Kd2SLxfnPWrjJBaH4EH0SlSsDV648KOMIlXACoMwY4=";
+    hash = "sha256-r4bk82+c2f2VZ8ObpeoIbIClJRhPPb5OyollMq3iS4I=";
   };
 
   vendorHash = "sha256-8SjBRagqdzJvW8eCKLeHBOQL4qX83USMIDDyS+8Mpvo=";

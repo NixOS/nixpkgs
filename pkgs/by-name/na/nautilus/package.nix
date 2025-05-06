@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Nautilus/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     mainProgram = "nautilus";
   };
 })

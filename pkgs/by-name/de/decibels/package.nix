@@ -17,15 +17,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "decibels";
-  version = "46.0";
+  version = "48.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "GNOME";
     owner = "Incubator";
     repo = "decibels";
-    rev = version;
-    hash = "sha256-3LQQcrpmWrTfk8A8GR+KnxJEB1HGozgEsM+j5ECK8kc=";
+    tag = version;
+    hash = "sha256-qtKiKfcxGLuV1bE3lb7l4s+reZRJXcjlV35M8eZmvHc=";
     fetchSubmodules = true;
   };
 
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Play audio files";
     homepage = "https://gitlab.gnome.org/GNOME/Incubator/decibels";
-    changelog = "https://gitlab.gnome.org/GNOME/Incubator/decibels/-/blob/main/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/decibels/-/blob/${version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "org.gnome.Decibels";
     platforms = lib.platforms.linux;
   };

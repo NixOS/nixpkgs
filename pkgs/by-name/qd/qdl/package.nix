@@ -9,41 +9,43 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "unstable-2024-06-10";
+  version = "0-unstable-2025-03-19";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
-    rev = "cbd46184d33af597664e08aff2b9181ae2f87aa6";
-    sha256 = "sha256-0PeOunYXY0nEEfGFGdguf5+GNN950GhPfMaD8h1ez/8=";
+    rev = "30ac3a8abcfb0825157185f11e595d0c7562c0df";
+    hash = "sha256-5ZV39whIm8qJIBLNdAsR2e8+f0jYjwE9dGNgh6ARPUY=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail 'pkg-config' '${stdenv.cc.targetPrefix}pkg-config'
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    systemd
     libxml2
     libusb1
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 ./qdl -t $out/bin
-    runHook postInstall
-  '';
+  makeFlags = [
+    "VERSION=${finalAttrs.src.rev}"
+    "prefix=${placeholder "out"}"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linux-msm/qdl";
     description = "Tool for flashing images to Qualcomm devices";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       muscaln
       anas
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "qdl";
   };
 
   passthru.updateScript = unstableGitUpdater { };
-}
+})

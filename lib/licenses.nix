@@ -257,6 +257,11 @@ lib.mapAttrs mkLicense (
       fullName = "BSD Protection License";
     };
 
+    bsdSourceCode = {
+      spdxId = "BSD-Source-Code";
+      fullName = "BSD Source Code Attribution";
+    };
+
     bsl11 = {
       spdxId = "BUSL-1.1";
       fullName = "Business Source License 1.1";
@@ -450,6 +455,11 @@ lib.mapAttrs mkLicense (
     cpl10 = {
       spdxId = "CPL-1.0";
       fullName = "Common Public License 1.0";
+    };
+
+    cronyx = {
+      spdxId = "Cronyx";
+      fullName = "Cronyx License";
     };
 
     curl = {
@@ -937,6 +947,11 @@ lib.mapAttrs mkLicense (
       fullName = "MIT No Attribution";
     };
 
+    mitOpenGroup = {
+      spdxId = "MIT-open-group";
+      fullName = "MIT Open Group variant";
+    };
+
     mpl10 = {
       spdxId = "MPL-1.0";
       fullName = "Mozilla Public License 1.0";
@@ -1164,6 +1179,13 @@ lib.mapAttrs mkLicense (
       fullName = "Sendmail License";
     };
 
+    sfl = {
+      fullName = "Source First License 1.1";
+      url = "https://gitlab.futo.org/videostreaming/grayjay/-/blob/master/LICENSE.md";
+      free = false;
+      redistributable = true;
+    };
+
     sgi-b-20 = {
       spdxId = "SGI-B-2.0";
       fullName = "SGI Free Software License B v2.0";
@@ -1319,6 +1341,11 @@ lib.mapAttrs mkLicense (
     unicode-dfs-2016 = {
       spdxId = "Unicode-DFS-2016";
       fullName = "Unicode License Agreement - Data Files and Software (2016)";
+    };
+
+    unicodeTOU = {
+      spdxId = "Unicode-TOU";
+      fullName = "Unicode Terms of Use";
     };
 
     unlicense = {

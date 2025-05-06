@@ -3,13 +3,13 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  setuptools,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "otpauth";
-  version = "2.1.1";
+  version = "2.2.0";
 
   pyproject = true;
 
@@ -17,14 +17,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4J7WOgGzWs14t7sPmB/c29HZ2cAb4aPg1wJMZdDnTio=";
+    hash = "sha256-Ev2uZNBmT/v6/a39weyP5XGs0OcaYveSM9072giNOcI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [ "otpauth" ];
 
   meta = with lib; {
     description = "Implements one time password of HOTP/TOTP";

@@ -5,6 +5,9 @@
   buildEnv,
 
   maintainers,
+  teams,
+
+  version,
 
   nix-util,
   nix-util-c,
@@ -15,6 +18,7 @@
   nix-store-tests,
 
   nix-fetchers,
+  nix-fetchers-c,
   nix-fetchers-tests,
 
   nix-expr,
@@ -63,14 +67,20 @@ let
         nix-cmd
         ;
     }
-    // lib.optionalAttrs
-      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      {
-        # Currently fails in static build
-        inherit
-          nix-perl-bindings
-          ;
-      };
+    // lib.optionalAttrs (lib.versionAtLeast version "2.29pre") {
+      inherit
+        nix-fetchers-c
+        ;
+    }
+    //
+      lib.optionalAttrs
+        (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+        {
+          # Currently fails in static build
+          inherit
+            nix-perl-bindings
+            ;
+        };
 
   devdoc = buildEnv {
     name = "nix-${nix-cli.version}-devdoc";
@@ -220,25 +230,32 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = nix-cli.meta.homepage;
     license = nix-cli.meta.license;
     maintainers = maintainers;
+    teams = teams;
     platforms = nix-cli.meta.platforms;
     outputsToInstall = [
       "out"
       "man"
     ];
-    pkgConfigModules = [
-      "nix-cmd"
-      "nix-expr"
-      "nix-expr-c"
-      "nix-fetchers"
-      "nix-flake"
-      "nix-flake-c"
-      "nix-main"
-      "nix-main-c"
-      "nix-store"
-      "nix-store-c"
-      "nix-util"
-      "nix-util-c"
-    ];
+    pkgConfigModules =
+      [
+        "nix-cmd"
+        "nix-expr"
+        "nix-expr-c"
+        "nix-fetchers"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+        "nix-fetchers-c"
+      ]
+      ++ [
+        "nix-flake"
+        "nix-flake-c"
+        "nix-main"
+        "nix-main-c"
+        "nix-store"
+        "nix-store-c"
+        "nix-util"
+        "nix-util-c"
+      ];
   };
 
 })

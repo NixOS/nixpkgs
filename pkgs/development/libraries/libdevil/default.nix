@@ -8,11 +8,10 @@
   libmng,
   lcms1,
   libtiff,
-  openexr_3,
+  openexr,
   libGL,
   libX11,
   pkg-config,
-  OpenGL,
   runtimeShell,
   withXorg ? true,
   testers,
@@ -47,13 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
       libmng
       lcms1
       libtiff
-      openexr_3
+      openexr
     ]
     ++ lib.optionals withXorg [
       libX11
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
+    ];
 
   configureFlags = [
     "--enable-ILU"

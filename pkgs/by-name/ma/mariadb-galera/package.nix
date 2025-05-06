@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     mainProgram = "garbd";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ izorkin ];
+    teams = [ teams.helsinki-systems ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };

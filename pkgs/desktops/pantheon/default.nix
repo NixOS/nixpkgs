@@ -41,7 +41,7 @@ lib.makeScope pkgs.newScope (
       wingpanel-quick-settings
     ];
 
-    maintainers = lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
 
     mutter = pkgs.mutter46;
 

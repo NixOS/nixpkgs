@@ -45,7 +45,11 @@ gem 'bootsnap', '~> 1.18.3', require: false, feature_category: :shared
 
 # Avoid the precompiled native gems because Omnibus needs to build this to ensure
 # LD_LIBRARY_PATH is correct: https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7730
-gem 'ffi', '~> 1.17', force_ruby_platform: true, feature_category: :shared
+if RUBY_PLATFORM.include?('darwin')
+  gem 'ffi', '~> 1.17', feature_category: :shared
+else
+  gem 'ffi', '~> 1.17', force_ruby_platform: true, feature_category: :shared
+end
 
 gem 'openssl', '~> 3.0', feature_category: :shared
 
@@ -95,7 +99,8 @@ gem 'doorkeeper', '~> 5.8', '>= 5.8.1', feature_category: :system_access
 gem 'doorkeeper-openid_connect', '~> 1.8.10', feature_category: :system_access
 gem 'doorkeeper-device_authorization_grant', '~> 1.0.0', feature_category: :system_access
 gem 'rexml', '~> 3.4.0', feature_category: :shared
-gem 'ruby-saml', '~> 1.18.0', path: 'vendor/gems/ruby-saml', feature_category: :system_access
+gem 'ruby-saml', '~> 1.18', feature_category: :system_access
+gem 'omniauth-saml', '~> 2.2.1', feature_category: :system_access
 gem 'omniauth', '~> 2.1.0', feature_category: :system_access
 gem 'omniauth-auth0', '~> 3.1', feature_category: :system_access
 gem 'omniauth-azure-activedirectory-v2', '~> 2.0', feature_category: :system_access
@@ -105,7 +110,6 @@ gem 'omniauth-github', '2.0.1', feature_category: :system_access
 gem 'omniauth-gitlab', '~> 4.0.0', path: 'vendor/gems/omniauth-gitlab', feature_category: :system_access
 gem 'omniauth-google-oauth2', '~> 1.1', feature_category: :system_access
 gem 'omniauth-oauth2-generic', '~> 0.2.2', feature_category: :system_access
-gem 'omniauth-saml', '~> 2.2.1', feature_category: :system_access
 gem 'omniauth-shibboleth-redux', '~> 2.0', require: 'omniauth-shibboleth', feature_category: :system_access
 # See vendor/gems/omniauth_crowd/README.md
 gem 'omniauth_crowd', '~> 2.4.0', path: 'vendor/gems/omniauth_crowd', feature_category: :system_access
@@ -167,7 +171,6 @@ gem 'rack-cors', '~> 2.0.1', require: 'rack/cors', feature_category: :shared
 gem 'graphql', '2.4.11', path: 'vendor/gems/graphql', feature_category: :api
 gem 'graphql-docs', '~> 5.0.0', group: [:development, :test], feature_category: :api
 gem 'apollo_upload_server', '~> 2.1.6', feature_category: :api
-gem 'graphlient', '~> 0.8.0', feature_category: :importers # Used by BulkImport feature (group::import)
 
 # Cells
 gem 'gitlab-topology-service-client', '~> 0.1',
@@ -267,7 +270,7 @@ gem 'asciidoctor-kroki', '~> 0.10.0', require: false, feature_category: :markdow
 gem 'rouge', '~> 4.5.0', feature_category: :shared
 gem 'truncato', '~> 0.7.13', feature_category: :team_planning
 gem 'nokogiri', '~> 1.18', feature_category: :shared
-gem 'gitlab-glfm-markdown', '~> 0.0.27', feature_category: :markdown
+gem 'gitlab-glfm-markdown', '~> 0.0.29', feature_category: :markdown
 gem 'tanuki_emoji', '~> 0.13', feature_category: :markdown
 gem 'unicode-emoji', '~> 4.0', feature_category: :markdown
 
@@ -292,7 +295,7 @@ end
 gem 'state_machines-activerecord', '~> 0.8.0', feature_category: :shared
 
 # Background jobs
-gem 'sidekiq', path: 'vendor/gems/sidekiq-7.2.4', require: 'sidekiq', feature_category: :scalability
+gem 'sidekiq', '~> 7.3.9', feature_category: :scalability
 gem 'sidekiq-cron', '~> 1.12.0', feature_category: :scalability
 gem 'gitlab-sidekiq-fetcher',
   path: 'vendor/gems/sidekiq-reliable-fetch',
@@ -378,7 +381,7 @@ gem 'gitlab_chronic_duration', '~> 0.12', feature_category: :shared
 
 gem 'rack-proxy', '~> 0.7.7', feature_category: :shared
 
-gem 'cssbundling-rails', '1.4.2', feature_category: :shared
+gem 'cssbundling-rails', '1.4.3', feature_category: :shared
 gem 'terser', '1.0.2', feature_category: :shared
 
 gem 'click_house-client', path: 'gems/click_house-client', require: 'click_house/client', feature_category: :database
@@ -398,7 +401,7 @@ gem 'sentry-sidekiq', '~> 5.22.0', feature_category: :observability
 
 # PostgreSQL query parsing
 #
-gem 'pg_query', '~> 6.0.0', feature_category: :database
+gem 'pg_query', '~> 6.1.0', feature_category: :database
 
 gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation', feature_category: :shared
 gem 'gitlab-http', path: 'gems/gitlab-http', feature_category: :shared
@@ -518,11 +521,11 @@ group :development, :test do
   # Prevent occasions where minitest is not bundled in packaged versions of ruby (see #3826)
   gem 'minitest', '~> 5.11.0', feature_category: :shared
 
-  gem 'spring', '~> 4.1.0', feature_category: :shared
+  gem 'spring', '~> 4.3.0', feature_category: :shared
   gem 'spring-commands-rspec', '~> 1.0.4', feature_category: :shared
 
   gem 'gitlab-styles', '~> 13.1.0', feature_category: :tooling, require: false
-  gem 'haml_lint', '~> 0.58', feature_category: :tooling
+  gem 'haml_lint', '~> 0.58', feature_category: :tooling, require: false
 
   # Benchmarking & profiling
   gem 'benchmark-ips', '~> 2.14.0', require: false, feature_category: :shared
@@ -551,6 +554,8 @@ group :development, :test do
   gem 'vite_ruby', '~> 3.9.0', feature_category: :shared
 
   gem 'gitlab-housekeeper', path: 'gems/gitlab-housekeeper', feature_category: :tooling
+
+  gem 'yard', '~> 0.9', require: false, feature_category: :tooling
 end
 
 group :development, :test, :danger do
@@ -724,7 +729,7 @@ gem 'cvss-suite', '~> 3.3.0', require: 'cvss_suite', feature_category: :software
 gem 'arr-pm', '~> 0.0.12', feature_category: :package_registry
 
 # Remote Development
-gem 'devfile', '~> 0.1.1', feature_category: :workspaces
+gem 'devfile', '~> 0.4.0', feature_category: :workspaces
 
 # Apple plist parsing
 gem 'CFPropertyList', '~> 3.0.0', feature_category: :mobile_devops
@@ -755,4 +760,4 @@ gem 'paper_trail', '~> 15.0', feature_category: :shared
 
 gem "i18n_data", "~> 0.13.1", feature_category: :system_access
 
-gem "gitlab-cloud-connector", "~> 1.0.0", require: 'gitlab/cloud_connector', feature_category: :cloud_connector
+gem "gitlab-cloud-connector", "~> 1.5", require: 'gitlab/cloud_connector', feature_category: :cloud_connector

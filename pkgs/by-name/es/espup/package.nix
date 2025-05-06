@@ -9,51 +9,43 @@
   xz,
   zstd,
   stdenv,
-  darwin,
   testers,
-  espup,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espup";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
-    rev = "v${version}";
-    hash = "sha256-sPWGpQi9JrkdaPV2jvwaY9zjb8urK+ibhvxw/CC2UOQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1muyZd7jhhDkif/8mX7QZEMnV105jNMHT0RaZPinD/4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-k6hczvuEvutUWOrKYFUltA0ZD+AHa8E0+5YW1+0TKQA=";
+  cargoHash = "sha256-fX6nl0DZZNiH/VWR9eWMnTuBW9r1jz3IWIxbOGC4Amg=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    xz
+    zstd
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = [
     # makes network calls
@@ -67,21 +59,24 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/espup completions zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = espup;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for installing and maintaining Espressif Rust ecosystem";
     homepage = "https://github.com/esp-rs/espup/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       knightpp
       beeb
     ];
     mainProgram = "espup";
   };
-}
+})

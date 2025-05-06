@@ -15,8 +15,6 @@ buildHomeAssistantComponent rec {
     hash = "sha256-UAVyfI+cHYx0va2P14moyy6BbhNegsdLWtiex5QeFrs=";
   };
 
-  dontBuild = true;
-
   # AttributeError: 'async_generator' object has no attribute 'data'
   doCheck = false;
 

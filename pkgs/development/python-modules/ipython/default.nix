@@ -12,6 +12,7 @@
   # Runtime dependencies
   decorator,
   exceptiongroup,
+  ipython-pygments-lexers,
   jedi,
   matplotlib-inline,
   pexpect,
@@ -43,13 +44,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.32.0";
+  version = "9.0.2";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-viyRiVsLnqe6SdM7I+IEDDUrM+tqUZzKfObgx0NEQlE=";
+    hash = "sha256-7HtHnj5WVr9PWMZSwSBJTfGCD08o9SL7fKCeITwqq1I=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   dependencies =
     [
       decorator
+      ipython-pygments-lexers
       jedi
       matplotlib-inline
       pexpect
@@ -123,6 +125,7 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ] ++ teams.jupyter.members;
+    maintainers = with maintainers; [ bjornfor ];
+    teams = [ teams.jupyter ];
   };
 }

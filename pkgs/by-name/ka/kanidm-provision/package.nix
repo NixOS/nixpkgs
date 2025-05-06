@@ -2,29 +2,51 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  yq,
+  versionCheckHook,
+  nix-update-script,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm-provision";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "kanidm-provision";
-    rev = "v${version}";
-    hash = "sha256-pgPjkj0nMb5j3EvyJTTDpfmh0WigAcMzoleF5EOqBAM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+NQJEAJ0DqKEV1cYZN7CLzGoBJNUL3SQAMmxRQG5DMI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kbctfPhEF1PdVLjE62GyLDzjOnZxH/kOWUS4x2vd/+8=";
+  postPatch = ''
+    tomlq -ti '.package.version = "${finalAttrs.version}"' Cargo.toml
+  '';
 
-  meta = with lib; {
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uo/TGyfNChq/t6Dah0HhXhAwktyQk0V/wewezZuftNk=";
+
+  nativeBuildInputs = [
+    yq # for `tomlq`
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) kanidm-provisioning; };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "A small utility to help with kanidm provisioning";
     homepage = "https://github.com/oddlama/kanidm-provision";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ oddlama ];
+    maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "kanidm-provision";
   };
-}
+})

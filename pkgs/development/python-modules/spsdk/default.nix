@@ -27,12 +27,16 @@
   packaging,
   platformdirs,
   prettytable,
+  pyasn1,
   pyocd,
   pyserial,
   requests,
   ruamel-yaml,
   sly,
+  spsdk-mcu-link,
+  spsdk-pyocd,
   typing-extensions,
+  x690,
 
   # tests
   ipykernel,
@@ -40,26 +44,25 @@
   pytestCheckHook,
   voluptuous,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.5.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     tag = "v${version}";
-    hash = "sha256-Ua32c6hNjwfjsQIugiqtRL50AvOrPgqyKoG1Lb0NVqE=";
+    hash = "sha256-AdW19Zf5TZ6hChXbW9dLGcMpFTQOT1wrPzEqaSfWzDE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=72.1,<74" "setuptools"
-
-    substituteInPlace setup.py \
-      --replace-fail "setuptools>=72.1,<74" "setuptools"
+      --replace-fail "setuptools>=72.1,<74" "setuptools" \
+      --replace-fail "setuptools_scm<8.2" "setuptools_scm"
   '';
 
   build-system = [
@@ -69,8 +72,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "cryptography"
-    "requests"
+    "filelock"
+    "importlib-metadata"
     "packaging"
+    "prettytable"
+    "requests"
+    "setuptools_scm"
     "typing-extensions"
   ];
 
@@ -100,19 +107,19 @@ buildPythonPackage rec {
     packaging
     platformdirs
     prettytable
+    pyasn1
     pyocd
     pyserial
     requests
     ruamel-yaml
     sly
+    spsdk-mcu-link
+    spsdk-pyocd
     typing-extensions
+    x690
   ];
 
   pythonImportsCheck = [ "spsdk" ];
-
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   nativeCheckInputs = [
     ipykernel
@@ -120,6 +127,7 @@ buildPythonPackage rec {
     pytestCheckHook
     voluptuous
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
 
@@ -129,7 +137,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/v${version}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = lib.licenses.bsd3;

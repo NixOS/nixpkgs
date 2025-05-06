@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.4.304.0";
+  version = "1.4.309.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-nudyg5YF2j4kv0fCx3vV/jGsYrEaTMf0xydvdHF6XCU=";
+    hash = "sha256-M4DM9gUJXB+4npbtxPdVaxsh4AqKQ9J6nexa9y1an9w=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
   preFixup = ''
-    for f in "$out"/etc/vulkan/explicit_layer.d/*.json "$out"/etc/vulkan/implicit_layer.d/*.json; do
+    for f in "$out"/share/vulkan/explicit_layer.d/*.json "$out"/share/vulkan/implicit_layer.d/*.json; do
       jq <"$f" >tmp.json ".layer.library_path = \"$out/lib/\" + .layer.library_path"
       mv tmp.json "$f"
     done

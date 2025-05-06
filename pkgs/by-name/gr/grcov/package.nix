@@ -4,23 +4,19 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grcov";
-  version = "0.8.19";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "grcov";
-    tag = "v${version}";
-    sha256 = "sha256-1t+hzB9sSApLScCkjBnLk9i2dsoEwZmWCFukEOvHhZI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e3RQn6wKvVm40UK8ZlgIi2gRS9eEFBnEXdmXtCgv0Go=";
   };
 
-  cargoPatches = [
-    ./0001-update-time-rs.patch
-  ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WOVIlUBPiZyBFfl3hwfN63jSxd3vysRY9VKUqk0lCc8=";
+  cargoHash = "sha256-v4laGVbWmK8WFJXX5ChtViyKyMtmwpehSgNG6F31Mn0=";
 
   # tests do not find grcov path correctly
   checkFlags =
@@ -46,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ DieracDelta ];
   };
-}
+})

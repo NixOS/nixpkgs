@@ -2,7 +2,6 @@
   lib,
   autoAddDriverRunpath,
   cmake,
-  darwin,
   fetchFromGitHub,
   nix-update-script,
   stdenv,
@@ -50,15 +49,6 @@ let
     optionalString
     ;
 
-  darwinBuildInputs =
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      CoreVideo
-      CoreGraphics
-    ]
-    ++ optionals metalSupport [ MetalKit ];
-
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
 
@@ -82,13 +72,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "4958";
+  version = "5186";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-Llw2lDLNjkG6nDMQG4hQCPokKgUg/tnPVJQId75XR9g=";
+    hash = "sha256-f07FvHgRobUbei06kcKHJ1ulLCYARAvo64oWsDBwHO0=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -126,8 +116,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs =
-    optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
-    ++ optionals cudaSupport cudaBuildInputs
+    optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
@@ -152,16 +141,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals cudaSupport [
       (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
     ]
-    ++ optionals rocmSupport [
-      (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
-      (cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
-
-      # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
-      # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
-      # and select the line that matches the current nixpkgs version of rocBLAS.
-      # Should likely use `rocmPackages.clr.gpuTargets`.
-      "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
-    ]
+    ++ optionals rocmSupport ([
+      (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
+      # TODO: this should become `clr.gpuTargets` in the future.
+      (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
+    ])
     ++ optionals metalSupport [
       (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
       (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)

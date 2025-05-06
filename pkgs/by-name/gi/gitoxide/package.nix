@@ -31,6 +31,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-q35MQGN/tvsK7gg0a/ljoVY6wedy7rwKlSakONgBIgk=";
 
   patches = [
+    # TODO: remove after next update
+    # https://github.com/GitoxideLabs/gitoxide/pull/1929
     ./fix-cargo-dependencies.patch
   ];
 

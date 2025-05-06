@@ -34,6 +34,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "fsspec" ];
+
   dependencies = [
     aiobotocore
     fsspec

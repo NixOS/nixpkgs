@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "daisydisk";
-  version = "4.30";
+  version = "4.31";
 
   src = fetchzip {
     url = "https://daisydiskapp.com/download/DaisyDisk.zip";
-    hash = "sha256-4nVD5FXj0Ol+QQ7NYUxGH3DzkXEpTawJoZpUgdIUNVY=";
+    hash = "sha256-z0F1sHihmXR5hN/AwrxLr9ZxfcCN+OSeWvWBe+qwWMU=";
     stripRoot = false;
   };
 

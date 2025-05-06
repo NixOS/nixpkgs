@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "25.1.1";
+  version = "25.1.2";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    hash = "sha256-H/iLCCX1fMozs/G8erX7cia7wRLjvLxofuiu6pGVJ58=";
+    hash = "sha256-+xPhHmuogNuolmMFcUAP2hMfJh1D+O4DrPkcuR6+mR8=";
   };
 
   postPatch = ''

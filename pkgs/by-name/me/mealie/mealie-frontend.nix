@@ -2,7 +2,7 @@ src: version:
 {
   lib,
   fetchYarnDeps,
-  nodejs_18,
+  nodejs_20,
   fixup-yarn-lock,
   stdenv,
   yarn,
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_18
-    (yarn.override { nodejs = nodejs_18; })
+    nodejs_20
+    (yarn.override { nodejs = nodejs_20; })
   ];
 
   configurePhase = ''
@@ -55,5 +55,7 @@ stdenv.mkDerivation {
     description = "Frontend for Mealie";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ litchipi ];
+    # Depends on nodejs_18 that has been removed.
+    broken = true;
   };
 }

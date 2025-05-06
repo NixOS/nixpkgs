@@ -1,9 +1,4 @@
 {
-  Cocoa,
-  CoreGraphics,
-  ForceFeedback,
-  OpenAL,
-  OpenGL,
   SDL,
   addDriverRunpath,
   alembic,
@@ -53,12 +48,14 @@
   llvmPackages,
   makeWrapper,
   mesa,
+  nix-update-script,
+  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openal,
   opencollada-blender,
   opencolorio,
   openexr,
   openimagedenoise,
-  openimageio,
+  openimageio_2,
   openjpeg,
   openpgl,
   opensubdiv,
@@ -92,7 +89,6 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
-  openUsdSupport = !stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
@@ -104,20 +100,21 @@ let
   });
 
   optix = fetchzip {
-    # URL from https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/commit/333add667b43255dcb011215a2d2af48281e83cf#9b9baac1eb9b72790eef5540a1685306fc43fd6c_30_30
-    url = "https://developer.download.nvidia.com/redist/optix/v7.3/OptiX-7.3.0-Include.zip";
-    hash = "sha256-aMrp0Uff4c3ICRn4S6zedf6Q4Mc0/duBhKwKgYgMXVU=";
+    # Look at upstream Blender BuildBot logs to determine the current version,
+    # see Git blame here for historical details
+    url = "https://developer.download.nvidia.com/redist/optix/v7.4/OptiX-7.4.0-Include.zip";
+    hash = "sha256-ca08XetwaUYC9foeP5bff9kcDfuFgEzopvjspn2s8RY=";
   };
 in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.0";
+  version = "4.4.3";
 
-  srcs = fetchzip {
+  src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pAzOayAPyRYgTixAyg2prkUtI70uFulRuBYhgU9ZNw4=";
+    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
   };
 
   patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
@@ -251,7 +248,7 @@ stdenv'.mkDerivation (finalAttrs: {
       libwebp
       opencolorio
       openexr
-      openimageio
+      openimageio_2
       openjpeg
       openpgl
       (opensubdiv.override { inherit cudaSupport; })
@@ -281,11 +278,6 @@ stdenv'.mkDerivation (finalAttrs: {
         ]
       else
         [
-          Cocoa
-          CoreGraphics
-          ForceFeedback
-          OpenAL
-          OpenGL
           SDL
           brotli
           llvmPackages.openmp
@@ -321,7 +313,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.requests
       ps.zstandard
     ]
-    ++ lib.optional openUsdSupport [ pyPkgsOpenusd ];
+    ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ];
 
   blenderExecutable =
     placeholder "out"
@@ -413,6 +405,12 @@ stdenv'.mkDerivation (finalAttrs: {
           ]
         }], check=True)  # noqa: E501
       '';
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://projects.blender.org/blender/blender"
+      ];
     };
   };
 

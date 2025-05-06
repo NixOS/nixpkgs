@@ -39,12 +39,12 @@
 
 buildPythonPackage rec {
   pname = "coiled";
-  version = "1.90.2";
+  version = "1.92.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5u33FbSB86jR9KIAhR24J0wSz9kRCaOJ0ituEzULHH8=";
+    hash = "sha256-dwHPhXro/E0XOR2iJJkSKYIRlFi2OhD2qXO4GmzDg2I=";
   };
 
   build-system = [

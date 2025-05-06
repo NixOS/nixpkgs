@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       peterhoeg
-      hetraeus
     ];
     platforms = lib.platforms.linux;
   };

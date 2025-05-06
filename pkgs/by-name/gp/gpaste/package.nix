@@ -85,6 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gpaste-client";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

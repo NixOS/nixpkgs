@@ -316,13 +316,13 @@ stdenv.mkDerivation {
         license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = platforms.all;
-        maintainers =
-          with maintainers;
-          [
-            fpletz
-            raitobezarius
-          ]
-          ++ teams.helsinki-systems.members
-          ++ teams.stridtech.members;
+        maintainers = with maintainers; [
+          fpletz
+          raitobezarius
+        ];
+        teams = with teams; [
+          helsinki-systems
+          stridtech
+        ];
       };
 }

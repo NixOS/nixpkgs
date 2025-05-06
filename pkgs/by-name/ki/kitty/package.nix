@@ -28,11 +28,6 @@
   installShellFiles,
   dbus,
   sudo,
-  Libsystem,
-  Cocoa,
-  Kernel,
-  UniformTypeIdentifiers,
-  UserNotifications,
   libcanberra,
   libicns,
   wayland-scanner,
@@ -85,16 +80,9 @@ buildPythonApplication rec {
       xxHash
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Kernel
-      UniformTypeIdentifiers
-      UserNotifications
       libpng
       python3
       zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       fontconfig
@@ -294,7 +282,7 @@ buildPythonApplication rec {
 
     # dereference the `kitty` symlink to make sure the actual executable
     # is wrapped on macOS as well (and not just the symlink)
-    wrapProgram $(realpath "$out/bin/kitty") --prefix PATH : "$out/bin:${
+    wrapProgram $(realpath "$out/bin/kitty") --suffix PATH : "$out/bin:${
       lib.makeBinPath [
         imagemagick
         ncurses.dev

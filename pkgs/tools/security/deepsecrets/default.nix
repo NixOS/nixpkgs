@@ -16,12 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-VfIsPgStHcIYGbfrOs1mvgoq0ZoVSZwILFVBeMt/5Jc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-warn 'pyyaml = "^5.4.1"' 'pyyaml = "*"' \
-      --replace-warn 'regex = "^2023.3.23"' 'regex = "*"' \
-      --replace-warn 'mmh3 = "^3.0.0"' 'mmh3 = "*"'
-  '';
+  pythonRelaxDeps = [
+    "pyyaml"
+    "regex"
+    "mmh3"
+  ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core

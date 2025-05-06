@@ -110,9 +110,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   postInstall = ''
-    ln -s ${
-      vgmstream.override { buildAudaciousPlugin = true; }
-    }/lib/audacious/Input/* $out/lib/audacious/Input
+    ln -s ${vgmstream.audacious}/lib/audacious/Input/* $out/lib/audacious/Input
   '';
 
   meta = audacious-bare.meta // {

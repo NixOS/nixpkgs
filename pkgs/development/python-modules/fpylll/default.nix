@@ -68,7 +68,7 @@ buildPythonPackage rec {
     description = "Python interface for fplll";
     changelog = "https://github.com/fplll/fpylll/releases/tag/${src.tag}";
     homepage = "https://github.com/fplll/fpylll";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     license = licenses.gpl2Plus;
   };
 }

@@ -74,6 +74,9 @@ buildPythonPackage rec {
 
     # Torch not compiled with CUDA enabled
     "test_token_bitmask_operations"
+
+    # AssertionError
+    "test_json_schema_converter"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];

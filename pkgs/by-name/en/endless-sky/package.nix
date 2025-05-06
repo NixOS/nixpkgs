@@ -5,6 +5,7 @@
   SDL2,
   libpng,
   libjpeg,
+  libX11,
   glew,
   openal,
   scons,
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     SDL2
     libpng
     libjpeg
+    libX11
     glew
     openal
     libmad

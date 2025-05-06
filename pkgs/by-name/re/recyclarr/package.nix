@@ -1,22 +1,12 @@
 {
   lib,
   openssl,
-  writeText,
   git,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
   testers,
 }:
-let
-  nuget-config = writeText "nuget.config" ''
-    <configuration>
-      <packageSources>
-        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
-      </packageSources>
-    </configuration>
-  '';
-in
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
   version = "7.4.1";
@@ -46,8 +36,6 @@ buildDotnetModule (finalAttrs: {
   patches = [ ./001-Git-Version.patch ];
 
   enableParallelBuilding = false;
-
-  dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 
   doCheck = false;
 

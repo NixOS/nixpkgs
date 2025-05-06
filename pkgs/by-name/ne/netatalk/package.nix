@@ -23,17 +23,23 @@
   glib,
   dbus,
   docbook-xsl-nons,
-  libxslt,
+  cmark-gfm,
+  iniparser,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.1.2";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qCX2/37+2wm7nKdXJ6tDEmeXAA+Jd123LI2VIL9IHpw=";
+    hash = "sha256-doqRAU4pjcHRTvKOvjMN2tSZKOPDTzBzU7i90xf1ClI=";
   };
+
+  patches = [
+    ./0000-no-install-under-usr-cupsd.patch
+    ./0001-no-install-under-var-CNID.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -59,11 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     dbus
     docbook-xsl-nons
-    libxslt
+    cmark-gfm
+    iniparser
   ];
 
   mesonFlags = [
     "-Dwith-appletalk=true"
+    "-Dwith-statedir-path=/var/lib"
     "-Dwith-bdb-path=${db.out}"
     "-Dwith-bdb-include-path=${db.dev}/include"
     "-Dwith-install-hooks=false"

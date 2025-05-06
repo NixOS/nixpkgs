@@ -160,6 +160,8 @@ rec {
           ./manual.md \
           $dst/${common.indexPath}
 
+        cp ${pkgs.roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dst/Roboto.ttf"
+
         mkdir -p $out/nix-support
         echo "nix-build out $out" >> $out/nix-support/hydra-build-products
         echo "doc manual $dst" >> $out/nix-support/hydra-build-products

@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.1";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-4thzEyXANDKARwWR8NvPsTW9/ZsV26B1NLXR0UsAWyg=";
+    hash = "sha256-6gM4Ke63lFzxji7+hfuzMYN3MK4wkI6+iMH/qYM92oE=";
   };
 
   frontend = buildNpmPackage rec {
@@ -30,7 +30,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-JTOl1qDcERdVq6g1nt5wD+Z9MjJw0MFxq0N2e5Hvo7M=";
+    npmDepsHash = "sha256-T1cVyq2xnpF8yTcLdVPj4pyASVRFpEdIoWRh3hQaPv4=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -82,6 +82,7 @@ python312.pkgs.buildPythonApplication rec {
   dependencies =
     with python312.pkgs;
     [
+      accelerate
       aiocache
       aiofiles
       aiohttp
@@ -151,6 +152,7 @@ python312.pkgs.buildPythonApplication rec {
       peewee-migrate
       pgvector
       pillow
+      pinecone-client
       playwright
       psutil
       psycopg2-binary
@@ -178,6 +180,7 @@ python312.pkgs.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      tencentcloud-sdk-python
       tiktoken
       transformers
       unstructured

@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kernelshark";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernelshark-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-+Vi1Tj42bAxJKgGqVXbCYywqQAdz5y+Zv2hQH8iaJkM=";
+    hash = "sha256-OT6ClyZRE+pxWwm+sfzvN3CnoCIyxcAiVsi1fdzaT4M=";
   };
 
   outputs = [ "out" ];

@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
     ];
     mainProgram = "lomiri-mediaplayer-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

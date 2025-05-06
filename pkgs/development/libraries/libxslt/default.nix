@@ -9,7 +9,6 @@
   gettext,
   python,
   ncurses,
-  libxcrypt,
   libgcrypt,
   cryptoSupport ? false,
   pythonSupport ? libxml2.pythonSupport,
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxslt";
-  version = "1.1.42";
+  version = "1.1.43";
 
   outputs = [
     "bin"
@@ -31,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxslt/${lib.versions.majorMinor finalAttrs.version}/libxslt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hcpiysDUH8d9P2Az2p32/XPSDqL8GLCjYJ/7QRDhuus=";
+    hash = "sha256-Wj1rODylr8I1sXERjpD1/2qifp/qMwMGUjGm1APwGDo=";
   };
 
   strictDeps = true;
@@ -44,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       libxml2.dev
-      libxcrypt
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       gettext
@@ -62,17 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     findXMLCatalogs
   ];
 
-  configureFlags =
-    [
-      "--without-debug"
-      "--without-mem-debug"
-      "--without-debugger"
-      (lib.withFeature pythonSupport "python")
-      (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-    ]
-    ++ lib.optionals (!cryptoSupport) [
-      "--without-crypto"
-    ];
+  configureFlags = [
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+    (lib.withFeature cryptoSupport "crypto")
+  ];
 
   enableParallelBuilding = true;
 

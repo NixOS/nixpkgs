@@ -29,7 +29,6 @@
   patchelf,
   perl,
   python3, # FIXME: CUDAToolkit 10 may still need python27
-  python39,
   python310,
   python311,
   pulseaudio,
@@ -155,7 +154,6 @@ backendStdenv.mkDerivation rec {
       # libcrypt.so.1
       libxcrypt-legacy
       ncurses6
-      python39
       python310
       python311
     ];
@@ -358,6 +356,6 @@ backendStdenv.mkDerivation rec {
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];
     license = licenses.nvidiaCuda;
-    maintainers = teams.cuda.members;
+    teams = [ teams.cuda ];
   };
 }

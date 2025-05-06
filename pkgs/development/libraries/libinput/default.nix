@@ -147,7 +147,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    maintainers = with maintainers; [ codyopel ];
+    teams = [ teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
   };
 }

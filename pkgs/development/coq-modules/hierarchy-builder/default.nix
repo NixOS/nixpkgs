@@ -16,8 +16,8 @@ let
       with lib.versions;
       lib.switch coq.coq-version [
         {
-          case = range "9.0" "9.0";
-          out = "1.8.1";
+          case = range "8.20" "9.0";
+          out = "1.9.1";
         }
         {
           case = range "8.19" "8.20";
@@ -52,6 +52,7 @@ let
           out = "0.10.0";
         }
       ] null;
+    release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     release."1.8.1".sha256 = "sha256-Z0WAHDyycqgL+Le/zNfEAoLWzFb7WIL+3G3vEBExlb4=";
     release."1.8.0".sha256 = "sha256-4s/4ZZKj5tiTtSHGIM8Op/Pak4Vp52WVOpd4l9m19fY=";
     release."1.7.1".sha256 = "sha256-MCmOzMh/SBTFAoPbbIQ7aqd3hMcSMpAKpiZI7dbRaGs=";

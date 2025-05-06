@@ -4,6 +4,7 @@
   src,
   officialRelease,
   maintainers,
+  teams,
   version,
 }:
 
@@ -186,6 +187,7 @@ let
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
       maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
+      teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
   };
@@ -201,12 +203,15 @@ let
       }
     );
 
+  whenAtLeast = v: thing: if lib.versionAtLeast version v then thing else null;
+
 in
 
 # This becomes the pkgs.nixComponents attribute set
 {
   inherit version;
   inherit maintainers;
+  inherit teams;
 
   inherit filesetToSource;
 
@@ -336,6 +341,7 @@ in
   nix-store-tests = callPackage ../src/libstore-tests/package.nix { };
 
   nix-fetchers = callPackage ../src/libfetchers/package.nix { };
+  ${whenAtLeast "2.29pre" "nix-fetchers-c"} = callPackage ../src/libfetchers-c/package.nix { };
   nix-fetchers-tests = callPackage ../src/libfetchers-tests/package.nix { };
 
   nix-expr = callPackage ../src/libexpr/package.nix { };

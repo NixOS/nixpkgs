@@ -13,14 +13,15 @@
 
 buildPythonPackage rec {
   pname = "python-swiftclient";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1NGFQEE4k/wWrYd5HXQPgj92NDXoIS5o61PWDaJjgjM=";
+    pname = "python_swiftclient";
+    inherit version;
+    hash = "sha256-r9dXV1PY5JYXrcsRVQGH/QsSD82Bnx54LAtTjy0JN3M=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -56,6 +57,6 @@ buildPythonPackage rec {
     description = "Python bindings to the OpenStack Object Storage API";
     mainProgram = "swift";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

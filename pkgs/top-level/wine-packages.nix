@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   config,
   callPackage,
@@ -63,4 +64,10 @@ rec {
   waylandFull = full.override {
     x11Support = false;
   };
+
+  yabridge =
+    let
+      yabridge = base.override { wineRelease = "yabridge"; };
+    in
+    if wineBuild == "wineWow" then yabridge else lib.dontDistribute yabridge;
 }

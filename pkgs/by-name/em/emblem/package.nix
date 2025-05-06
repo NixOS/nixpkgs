@@ -13,7 +13,6 @@
   wrapGAppsHook4,
   libadwaita,
   libxml2,
-  darwin,
   nix-update-script,
 }:
 
@@ -48,14 +47,10 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libxml2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    libadwaita
+    libxml2
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
@@ -73,12 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers =
-      with lib.maintainers;
-      [
-        figsoda
-        foo-dogsquared
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      figsoda
+      foo-dogsquared
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

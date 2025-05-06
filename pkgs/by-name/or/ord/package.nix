@@ -4,36 +4,29 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ord";
-  version = "0.22.1";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
     rev = version;
-    hash = "sha256-95da/aoBhrQ/GaM4fojFufs6+OI2KLF6SGsSw6qtYUc=";
+    hash = "sha256-jYu9NPvs7nwgiqMCvZlLQqoYESwjKAYlhJ9ehev70EY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PGC3R+iy3evp7BtEpyXDPvi6mlB7CGtd8uzfpkmHzMU=";
+  cargoHash = "sha256-U5bGNgiy98PK2Le5BbzCOAajeEKb/zYTIID1uOE6p3c=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   dontUseCargoParallelTests = true;
 

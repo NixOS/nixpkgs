@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 let
-  version = "3.4.0";
-  srcHash = "sha256-2zKzNaNe057iJkhhLaEBfE84YkR0X5lGpB4b3WNq3ec=";
+  version = "3.5.2";
+  srcHash = "sha256-aHzaBYQ+IHen15FwmSIHaRLe8oWm3BpADrmqW4UWwj0=";
   # The tarball contains vendored dependencies
   vendorHash = null;
 in

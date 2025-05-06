@@ -16,13 +16,9 @@
   libvorbis,
   libGLU,
   libGL,
+  libX11,
   SDL2,
   zlib,
-  Cocoa,
-  AudioToolbox,
-  Carbon,
-  CoreMIDI,
-  AudioUnit,
   cctools,
   nix-update-script,
 }:
@@ -46,13 +42,6 @@ stdenv.mkDerivation rec {
       libGLU
       libGL
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      AudioToolbox
-      Carbon
-      CoreMIDI
-      AudioUnit
-    ]
     ++ [
       curl
       freetype
@@ -65,6 +54,7 @@ stdenv.mkDerivation rec {
       libtheora
       libvorbis
       SDL2
+      libX11
       zlib
     ];
 

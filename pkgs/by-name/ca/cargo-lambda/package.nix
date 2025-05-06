@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
     tag = "v${version}";
-    hash = "sha256-1i/nBuO7B6GHWmaibO8+w9LNCWGV5HdCP2B3WQPT/7c=";
+    hash = "sha256-v4QWHbgxzizB1Za2jRi0YxCCqnympHGzOioNFk0DED4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-i11bDmzCvsv4jTBsjCdryM8rx6FBefUXh4mbiGhyLt4=";
+  cargoHash = "sha256-MTI+ESP0DLGjNoVZjMCpD2IXxkP7IXpB3AlSTpUf3rM=";
 
   nativeCheckInputs = [ cacert ];
 

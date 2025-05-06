@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   glib,
   expat,
@@ -61,6 +62,12 @@ stdenv.mkDerivation rec {
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
+
+    (fetchpatch {
+      name = "elogind.patch";
+      url = "https://github.com/polkit-org/polkit/commit/55ee1b70456eca8281dda9612c485c619122f202.patch";
+      hash = "sha256-XOsDyYFBDWxs0PGAgqm3OSUycKR8fYa2ySZqBl8EX7E=";
+    })
   ];
 
   depsBuildBuild = [
@@ -120,10 +127,6 @@ stdenv.mkDerivation rec {
   ];
 
   env = {
-    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
-    PKG_CONFIG_SYSTEMD_TMPFILES_DIR = "${placeholder "out"}/lib/tmpfiles.d";
-
     # HACK: We want to install policy files files to $out/share but polkit
     # should read them from /run/current-system/sw/share on a NixOS system.
     # Similarly for config files in /etc.
@@ -132,6 +135,11 @@ stdenv.mkDerivation rec {
     # so we need to convince it to install all files to a temporary
     # location using DESTDIR and then move it to proper one in postInstall.
     DESTDIR = "dest";
+
+    # Set these to the default locations, so the builds with and
+    # without systemd can have the same installation path below.
+    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "/usr/lib/sysusers.d";
+    PKG_CONFIG_SYSTEMD_TMPFILES_DIR = "/usr/lib/tmpfiles.d";
   };
 
   mesonFlags =
@@ -144,6 +152,7 @@ stdenv.mkDerivation rec {
       "-Dtests=${lib.boolToString doCheck}"
       "-Dgtk_doc=${lib.boolToString withIntrospection}"
       "-Dman=true"
+      "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
@@ -172,9 +181,13 @@ stdenv.mkDerivation rec {
         mv "$DESTDIR/''${!o}" "''${!o}"
     done
     mv "$DESTDIR/etc" "$out"
+    mv "$DESTDIR/usr/lib"/{sysusers,tmpfiles}.d "$out/lib"
     mv "$DESTDIR${system}/share"/* "$out/share"
     # Ensure we did not forget to install anything.
-    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}" "$DESTDIR${system}/share"
+    rmdir --parents --ignore-fail-on-non-empty \
+        "$DESTDIR${builtins.storeDir}" \
+        "$DESTDIR/usr/lib" \
+        "$DESTDIR${system}/share"
     ! test -e "$DESTDIR"
   '';
 
@@ -187,6 +200,6 @@ stdenv.mkDerivation rec {
       # mandatory libpolkit-gobject shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
   };
 }

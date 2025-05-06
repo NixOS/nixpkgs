@@ -7,8 +7,6 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
 let
@@ -28,26 +26,19 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
 
   cargoPatches = [
-    (fetchpatch {
-      name = "libgit2-update.patch";
-      url = "https://github.com/PurpleBooth/git-mit/pull/1543/commits/3e82a4f5017972c7d28151a468bb71fe7d2279e0.patch";
-      hash = "sha256-M9RpZHjOpZZqdHQe57LwMZ9zX6/4BNg3ymz8H3qupFk=";
-    })
+    # https://github.com/PurpleBooth/git-mit/pull/1543
+    ./libgit2-update.patch
   ];
 
   cargoHash = "sha256-uoS6vmHmOVkHS81mrsbbXqP/dAC/FNHAlpTDHSa632k=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+    zlib
+  ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;

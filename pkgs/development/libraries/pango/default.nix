@@ -7,7 +7,6 @@
   harfbuzz,
   libintl,
   libthai,
-  darwin,
   fribidi,
   gnome,
   gi-docgen,
@@ -30,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.56.1";
+  version = "1.56.2";
 
   outputs = [
     "bin"
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QmvmZGDJi4N4Vz5/awsqtFD2u20ux87MM66BF48kZIA=";
+    hash = "sha256-A7ev1+1zC+9lEVXL+1MgVWuO+SsNwEq7uXhNzUBXr+c=";
   };
 
   depsBuildBuild = [
@@ -61,20 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
       gobject-introspection
     ];
 
-  buildInputs =
-    [
-      fribidi
-      libthai
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-        Carbon
-        CoreGraphics
-        CoreText
-      ]
-    );
+  buildInputs = [
+    fribidi
+    libthai
+  ];
 
   propagatedBuildInputs =
     [
@@ -141,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.pango.org/";
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
 
     pkgConfigModules = [

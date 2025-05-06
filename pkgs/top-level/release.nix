@@ -365,6 +365,7 @@ let
               "ghc96"
               "ghc98"
               "ghc910"
+              "ghc912"
             ]
             (compilerName: {
               inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
@@ -375,10 +376,6 @@ let
         agdaPackages = packagePlatforms pkgs.agdaPackages;
 
         pkgsLLVM.stdenv = [
-          "x86_64-linux"
-          "aarch64-linux"
-        ];
-        pkgsLLVMLibc.stdenv = [
           "x86_64-linux"
           "aarch64-linux"
         ];

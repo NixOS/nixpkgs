@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.5.1";
+  version = "9.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     tag = version;
-    hash = "sha256-qmXvs9CjHjkd/DsbqMPA90wCDiS+pMwaHXCRBUNnv30=";
+    hash = "sha256-zHy/EqoWuQ3fZuA8wqatmcg+YwQB7w+kAGTWY453PnY=";
   };
 
   build-system = [ setuptools ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
-    changelog = "https://github.com/twilio/twilio-python/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/twilio/twilio-python/blob/${src.tag}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
     tag = "v${version}";
-    hash = "sha256-cqDGntubHbv6TJ0CSouTyCcDGpheLazbavYglHQRd10=";
+    hash = "sha256-d/GtP6PyIs5mqpMBl086XoQ0AqZmvI4+jidH7GHgyzk=";
   };
 
   # remove if updating to rust 1.85
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   env.RUSTC_BOOTSTRAP = 1;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EY44uwf1b61UlulNwtN8JIG2CaEjxSnfuqE29/zdxBM=";
+  cargoHash = "sha256-OX3I2TjpRtDutbrnysFVFyWeFkISvWn5SLxMaUgBhes=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 

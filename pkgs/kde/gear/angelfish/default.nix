@@ -17,7 +17,7 @@ mkKdeDerivation rec {
     # include version in the name so we invalidate the FOD
     name = "${pname}-${version}";
     src = sources.${pname};
-    hash = "sha256-5TMHytHLIjdzY6O1+V9do/JCfxFfBkYD+bd+FNLlrMk=";
+    hash = "sha256-FgzmWw8FZb+DNSf2n6H14Rq07+x1LzG9hX4hFetuqDw=";
   };
 
   extraNativeBuildInputs = [

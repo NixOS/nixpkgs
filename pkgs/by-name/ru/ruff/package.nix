@@ -10,24 +10,23 @@
   versionCheckHook,
 
   # passthru
-  ruff-lsp,
   nixosTests,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.11.4";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-6Nfnn8VOT0VBPxrMQJAsFt+FrR/rYbh6pyEsW8Ca43s=";
+    hash = "sha256-HVZADn9xpwywubEbaMJgOs3yCXa4pNWnnrfSICF2+DE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zFF7DvkzgF0mVFFAvllz01DVmpdJrln0srd5Z9MwLPk=";
+  cargoHash = "sha256-TB7ARPTwYTNqbrcfwl9RCYmAw+y0uudaBp1YyDg52/w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -70,13 +69,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests =
-      {
-        inherit ruff-lsp;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
-      };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+    };
     updateScript = nix-update-script { };
   };
 

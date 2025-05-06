@@ -54,10 +54,34 @@ lib.recurseIntoAttrs (
       };
     };
 
+    simplebookmark = {
+      scriptPath = "scripts/SimpleBookmark.lua";
+      meta = {
+        description = "Simple bookmarks script based on assigning keys";
+        maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+      };
+    };
+
+    simplehistory = {
+      scriptPath = "scripts/SimpleHistory.lua";
+      meta = {
+        description = "Store videos in a history file, continue watching your last played or resume previously played videos, manage and play from your history, and more";
+        maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+      };
+    };
+
     smartskip = {
       scriptPath = "scripts/SmartSkip.lua";
       meta = {
         description = "Automatically or manually skip opening, intro, outro, and preview";
+        maintainers = with lib.maintainers; [ iynaix ];
+      };
+    };
+
+    undoredo = {
+      scriptPath = "scripts/UndoRedo.lua";
+      meta = {
+        description = "Undo / redo any accidental time jumps";
         maintainers = with lib.maintainers; [ iynaix ];
       };
     };

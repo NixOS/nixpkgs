@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     ];
 
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

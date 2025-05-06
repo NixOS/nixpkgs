@@ -2,7 +2,6 @@
   lib,
   blueprint-compiler,
   cargo,
-  darwin,
   desktop-file-utils,
   fetchFromGitHub,
   glib,
@@ -47,15 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -73,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Fretboard/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "fretboard";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

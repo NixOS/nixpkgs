@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utility for getting the ROCm release version";
     homepage = "https://github.com/ROCm/rocm-core";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

@@ -16,9 +16,9 @@
 {
   application-insights = mkAzExtension rec {
     pname = "application-insights";
-    version = "1.2.3";
+    version = "2.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
-    hash = "sha256-yUHCMtBDZmNuE1TP4AcIUhAT+IpbHnR0DYBH7EbZBZk=";
+    hash = "sha256-4akS+zbaKxFrs0x0uKP/xX28WyK5KLduOkgZaBYeANM=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
@@ -140,9 +140,9 @@
 
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "2.1.1";
+    version = "2.1.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    hash = "sha256-3Pgwppp4IssNYhJ+USQNwMEp91XdZDwNlnNWzVWrHFM=";
+    hash = "sha256-DOuH7BG4WrhP7SQH3GInFh7DHT0qN3JhSG76EXmNn24=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = with lib.maintainers; [ ];

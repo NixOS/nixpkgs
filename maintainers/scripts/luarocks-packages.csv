@@ -4,7 +4,7 @@ ansicolors,,,,,,Freed-Wu
 argparse,,,,,,
 basexx,,,,,,
 binaryheap,,,,,,vcunat
-bit32,,,,5.3.0-1,5.1,lblasc
+bit32,,,,,5.1,lblasc
 busted,,,,,,
 busted-htest,,,,,,mrcjkb
 cassowary,,,,,,alerque
@@ -26,8 +26,9 @@ funnyfiles.nvim,,,,,,mrcjkb
 fzf-lua,,,,,,mrcjkb
 fzy,,,,,,mrcjkb
 gitsigns.nvim,https://raw.githubusercontent.com/lewis6991/gitsigns.nvim/main/gitsigns.nvim-scm-1.rockspec,,,,5.1,
+grug-far.nvim,,,,,,teto
 haskell-tools.nvim,,,,,,mrcjkb
-http,,,,0.3-0,,vcunat
+http,,,,0.4-0,,vcunat
 image.nvim,,,,,,teto
 inspect,,,,,,
 jsregexp,,,,,,

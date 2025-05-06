@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/ploticus/ploticus/${finalAttrs.version}/ploticus${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }_src.tar.gz";
-    sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
+    hash = "sha256-PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
   patches = [
@@ -33,6 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     # This is required for non-ASCII fonts to work:
     # https://ploticus.sourceforge.net/doc/fonts.html
     ./use-gd-package.patch
+
+    # svg.c:752:26: error: passing argument 1 of 'gzclose' from incompatible pointer type []
+    #  752 |                 gzclose( outfp );
+    # note: expected 'gzFile' {aka 'struct gzFile_s *'} but argument is of type 'FILE *'
+    ./fix-zlib-file-type.patch
   ];
 
   buildInputs = [
@@ -55,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [ "CC:=$(CC)" ];
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -84,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Non-interactive software package for producing plots and charts";
     longDescription = ''
       Ploticus is a free, GPL'd, non-interactive
@@ -94,9 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
       statistical capabilities.  It allows significant user control
       over colors, styles, options and details.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
     homepage = "https://ploticus.sourceforge.net/";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

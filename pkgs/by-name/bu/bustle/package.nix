@@ -64,12 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical D-Bus message analyser and profiler";
     homepage = "https://gitlab.gnome.org/World/bustle";
     license = lib.licenses.lgpl21Plus;
-    maintainers =
-      with lib.maintainers;
-      [
-        jtojnar
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      jtojnar
+    ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "bustle";
     platforms = lib.platforms.unix;
   };

@@ -118,7 +118,7 @@ treefmtWithConfig.overrideAttrs {
     '';
     # All the code is in this file, so same license as Nixpkgs
     license = lib.licenses.mit;
-    maintainers = lib.teams.formatter.members;
+    teams = [ lib.teams.formatter ];
     platforms = lib.platforms.all;
   };
 

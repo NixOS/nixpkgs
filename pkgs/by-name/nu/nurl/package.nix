@@ -4,8 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   makeBinaryWrapper,
-  stdenv,
-  darwin,
   gitMinimal,
   mercurial,
   nixForLinking,
@@ -28,10 +26,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   # tests require internet access

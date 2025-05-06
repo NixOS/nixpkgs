@@ -257,6 +257,7 @@ let
                     config
                     specialArgs
                     ;
+                  _class = class;
                 }
                 // specialArgs
               );
@@ -1097,10 +1098,16 @@ let
         # Process mkMerge and mkIf properties.
         defs' = concatMap (
           m:
-          map (value: {
-            inherit (m) file;
-            inherit value;
-          }) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          map (
+            value:
+            if value._type or null == "definition" then
+              value
+            else
+              {
+                inherit (m) file;
+                inherit value;
+              }
+          ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
         ) defs;
 
         # Process mkOverride properties.
@@ -1364,6 +1371,11 @@ let
     _type = "merge";
     inherit contents;
   };
+
+  /**
+    Return a definition with file location information.
+  */
+  mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
   mkOverride = priority: content: {
     _type = "override";
@@ -2095,6 +2107,7 @@ private
     mkBefore
     mkChangedOptionModule
     mkDefault
+    mkDefinition
     mkDerivedConfig
     mkFixStrictness
     mkForce

@@ -121,8 +121,6 @@ let
               "uclibc"
             else if final.isAndroid then
               "bionic"
-            else if final.isLLVMLibc then
-              "llvm"
             else if
               final.isLinux # default
             then
@@ -209,6 +207,8 @@ let
                 "ppc${optionalString final.isLittleEndian "le"}"
               else if final.isMips64 then
                 "mips64" # endianness is *not* included on mips64
+              else if final.isDarwin then
+                final.darwinArch
               else
                 final.parsed.cpu.name;
 
@@ -303,6 +303,8 @@ let
           qemuArch =
             if final.isAarch32 then
               "arm"
+            else if final.isAarch64 then
+              "aarch64"
             else if final.isS390 && !final.isS390x then
               null
             else if final.isx86_64 then
@@ -329,12 +331,7 @@ let
             else
               final.parsed.cpu.name;
 
-          darwinArch =
-            {
-              armv7a = "armv7";
-              aarch64 = "arm64";
-            }
-            .${final.parsed.cpu.name} or final.parsed.cpu.name;
+          darwinArch = parse.darwinArch final.parsed.cpu;
 
           darwinPlatform =
             if final.isMacOS then
@@ -488,8 +485,8 @@ let
                   }
                   .${cpu.name} or cpu.name;
                 vendor_ = final.rust.platform.vendor;
-                # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
               in
+              # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
               args.rust.rustcTarget or args.rustc.config or (
                 # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
                 # We cannot know which subversion does the user want, and
@@ -533,6 +530,35 @@ let
               "switch"
               "-uefi"
             ];
+          };
+        }
+        // {
+          go = {
+            # See https://pkg.go.dev/internal/platform for a list of known platforms
+            GOARCH =
+              {
+                "aarch64" = "arm64";
+                "arm" = "arm";
+                "armv5tel" = "arm";
+                "armv6l" = "arm";
+                "armv7l" = "arm";
+                "i686" = "386";
+                "loongarch64" = "loong64";
+                "mips" = "mips";
+                "mips64el" = "mips64le";
+                "mipsel" = "mipsle";
+                "powerpc64" = "ppc64";
+                "powerpc64le" = "ppc64le";
+                "riscv64" = "riscv64";
+                "s390x" = "s390x";
+                "x86_64" = "amd64";
+                "wasm32" = "wasm";
+              }
+              .${final.parsed.cpu.name} or (throw "Unknown CPU variant ${final.parsed.cpu.name} by Go");
+            GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
+
+            # See https://go.dev/wiki/GoArm
+            GOARM = toString (lib.intersectLists [ (final.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
           };
         };
     in

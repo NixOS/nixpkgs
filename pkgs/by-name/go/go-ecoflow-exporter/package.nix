@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tess1o";
     repo = "go-ecoflow-exporter";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-VCzMItYgnuDXDYdrk/ojzqUE2Fjr7KWGNnLhoQ+ZPYs=";
   };
 

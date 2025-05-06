@@ -24,6 +24,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "CPU Freq load plugin for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

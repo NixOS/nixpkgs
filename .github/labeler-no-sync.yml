@@ -1,12 +1,7 @@
 # This file is used by .github/workflows/labels.yml
 # This version uses `sync-labels: false`, meaning that a non-match will NOT remove the label
 
-"backport release-24.11":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - .github/workflows/*
-        - ci/**/*.*
+# keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
 
 "6.topic: policy discussion":
   - any:
@@ -26,3 +21,12 @@
       - any-glob-to-any-file:
         - doc/**/*
         - nixos/doc/**/*
+
+"backport release-24.11":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - .github/workflows/*
+        - ci/**/*.*
+
+# keep-sorted end

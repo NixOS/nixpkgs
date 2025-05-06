@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "goconst";
-  version = "1.7.1";
+  version = "1.8.1";
 
   excludedPackages = [ "tests" ];
 
@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "jgautheron";
     repo = "goconst";
     rev = "v${version}";
-    sha256 = "sha256-GpOZJ5/5aNw1o8fk2RSAx200v6AZ+pbNu/25i8OSS1Y=";
+    sha256 = "sha256-pvCmCf3ZjhB4lxP6GLO6vnhNswKdNDWgD2YyHmRi6oE=";
   };
 
   vendorHash = null;

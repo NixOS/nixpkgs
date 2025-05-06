@@ -2,33 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenvNoCC,
+
+  # build system
+  poetry-core,
+
+  # dependencies
   langgraph-checkpoint,
-  langgraph-sdk,
-  orjson,
+  ormsgpack,
   psycopg,
   psycopg-pool,
-  poetry-core,
-  pythonOlder,
+
+  # testing
   pgvector,
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
   pytest-asyncio,
-  stdenvNoCC,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.15";
+  version = "2.0.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-8JNPKaaKDM7VROd1n9TDALN6yxKRz1CuAultBcqBMG0=";
+    hash = "sha256-hl1EBOtUkSfHGxsM+LOZPLSvkW7hdHS08klpvA7/Bd0=";
   };
 
   postgresqlTestSetupPost = ''
@@ -43,7 +48,7 @@ buildPythonPackage rec {
 
   dependencies = [
     langgraph-checkpoint
-    orjson
+    ormsgpack
     psycopg
     psycopg-pool
   ];
@@ -83,11 +88,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
-
-    # multiple tags confuse the bulk updater
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "checkpointpostgres==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

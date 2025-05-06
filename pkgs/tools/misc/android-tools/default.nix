@@ -8,7 +8,7 @@
   perl,
   go,
   python3,
-  protobuf,
+  protobuf_29, # does not build with 30+
   zlib,
   gtest,
   brotli,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     go
   ];
   buildInputs = [
-    protobuf
+    protobuf_29
     zlib
     gtest
     brotli
@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
+    teams = [ teams.android ];
   };
 }

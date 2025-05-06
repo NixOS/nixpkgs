@@ -13,14 +13,14 @@ The following is an example expression using `buildGoModule`:
 
 ```nix
 {
-  pet = buildGoModule rec {
+  pet = buildGoModule (finalAttrs: {
     pname = "pet";
     version = "0.3.4";
 
     src = fetchFromGitHub {
       owner = "knqyf263";
       repo = "pet";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
     };
 
@@ -32,7 +32,7 @@ The following is an example expression using `buildGoModule`:
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ kalbasit ];
     };
-  };
+  });
 }
 ```
 
@@ -187,6 +187,13 @@ Defaults to `true`.
 Whether the build result should be allowed to contain references to the Go tool chain. This might be needed for programs that are coupled with the compiler, but shouldn't be set without a good reason.
 
 Defaults to `false`
+
+### `goSum` {#var-go-goSum}
+
+Specifies the contents of the `go.sum` file and triggers rebuilds when it changes. This helps combat inconsistent dependency errors on `go.sum` changes.
+
+Defaults to `null`
+
 
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 

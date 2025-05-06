@@ -82,7 +82,7 @@ makeScopeWithSplicing' {
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
-      qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
+      qca = callPackage ../development/libraries/qca {
         inherit (qt6) qtbase qt5compat;
       };
       qcoro = callPackage ../development/libraries/qcoro { };
@@ -96,9 +96,7 @@ makeScopeWithSplicing' {
 
       qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
-      qtkeychain = callPackage ../development/libraries/qtkeychain {
-        inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
-      };
+      qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
       qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 

@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hipfc";
     homepage = "https://github.com/ROCm/hipfort";
     license = with licenses; [ mit ]; # mitx11
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

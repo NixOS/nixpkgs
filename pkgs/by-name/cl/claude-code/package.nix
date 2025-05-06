@@ -6,14 +6,14 @@
 
 buildNpmPackage rec {
   pname = "claude-code";
-  version = "0.2.62";
+  version = "0.2.101";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-O6jkpx3OxEh/npZjyJb+osoeJrG+HZ6NRB9T4EMkdf8=";
+    hash = "sha256-rz5SNDj0amXZ32pCuCSHkG08fhi9j8H7JKOl4RYFIrM=";
   };
 
-  npmDepsHash = "sha256-tVA4VbPaPc+KwZzUK0QI9In3QSXXoELaNM2U65wxGGA=";
+  npmDepsHash = "sha256-bOVgp7GljkOrs0gH8cKnjbW7oINm4Pl5TXRAzug+UF0=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -24,8 +24,7 @@ buildNpmPackage rec {
   AUTHORIZED = "1";
 
   # `claude-code` tries to auto-update by default, this disables that functionality.
-  # Note that the `DISABLE_AUTOUPDATER` environment variable is not documented, so this trick may
-  # not continue to work.
+  # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1

@@ -33,6 +33,6 @@ buildKodiBinaryAddon rec {
     description = "Nintendo - NES / Famicom (Nestopia UE) GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

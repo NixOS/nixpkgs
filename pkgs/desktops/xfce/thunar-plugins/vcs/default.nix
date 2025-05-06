@@ -35,6 +35,7 @@ mkXfceDerivation {
 
   meta = {
     description = "Thunar plugin providing support for Subversion and Git";
-    maintainers = with lib.maintainers; [ lordmzte ] ++ lib.teams.xfce.members;
+    maintainers = with lib.maintainers; [ lordmzte ];
+    teams = [ lib.teams.xfce ];
   };
 }

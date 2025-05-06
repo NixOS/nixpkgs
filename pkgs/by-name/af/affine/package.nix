@@ -21,6 +21,8 @@
   nix-update-script,
   buildType ? "stable",
   commandLineArgs ? "",
+  llvmPackages,
+  apple-sdk_15,
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
@@ -41,17 +43,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.20.5";
+  version = "0.21.4";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eMVHwjJe6u3A3Dxo6SurusRuMksp/moPmXAUv0FXBwc=";
+    hash = "sha256-Xd8b+JXL46r9Jv5Uv5wdtvSKwnHafEo52v1aERmyxrI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ob+A7NMTFuJ2wmRkHmemHnqkEAiY7G8NyxXXrT7NTR8=";
+    hash = "sha256-1BTSvHaSPE55v6awnvRry1Exms+zeGug3PNldZ2v2HY=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -96,8 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-e5GNWgeYw4CcpOGDd/LNk+syBupqAuws0hz+wUbaFL4=";
+    outputHash = "sha256-w9Lz8wFq34VXInoE5pUeg1B7N92D+TnBWbL2qJ/q8ik=";
   };
+
+  buildInputs = lib.optionals hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
+
   nativeBuildInputs =
     [
       nodejs
@@ -113,10 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals hostPlatform.isLinux [
       copyDesktopItems
       makeWrapper
+    ]
+    ++ lib.optionals hostPlatform.isDarwin [
+      # bindgenHook is needed to build `coreaudio-sys` on darwin
+      rustPlatform.bindgenHook
     ];
 
-  # force yarn install run in CI mode
-  env.CI = "1";
+  env = {
+    # force yarn install run in CI mode
+    CI = "1";
+    # `LIBCLANG_PATH` is needed to build `coreaudio-sys` on darwin
+    LIBCLANG_PATH = lib.optionalString hostPlatform.isDarwin "${lib.getLib llvmPackages.libclang}/lib";
+  };
 
   # Remove code under The AFFiNE Enterprise Edition (EE) license.
   # Keep file package.json for `yarn install --immutable` lockfile check.

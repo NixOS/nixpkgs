@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.8";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ej04ONaeNt55mbQ5RTKM4MySYsw3UJky9ZK9h1gMEzo=";
+    hash = "sha256-sGRR3nHPQttiBIIaA2yYFyRezEq+2Ds+mgCpy6TYueU=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     cp -r dist/${lib.optionalString buildWebExtension "chromium-unpacked/"} $out
+    cp package.json $out # Presence is checked by Vesktop.
 
     runHook postInstall
   '';

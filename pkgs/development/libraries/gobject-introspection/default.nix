@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   glib,
   flex,
   bison,
@@ -66,6 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
       # with LD_LIBRARY_PATH environment variable.
       (replaceVars ./absolute_shlib_path.patch {
         inherit nixStoreDir;
+      })
+
+      # Add _Complex support for glibc-2.41:
+      #   https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/519
+      (fetchpatch {
+        name = "complex-clang.patch";
+        url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/2812471365c75ab51347a9101771128f8ab283ab.patch";
+        hash = "sha256-MR0tCOVfoAAPUIlT/Y8IYWiz48j1EnhNjUBzvsCUsEI=";
       })
     ]
     ++ lib.optionals x11Support [
@@ -178,12 +187,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
-        lovek323
-        artturin
-      ]);
+    maintainers = with maintainers; [
+      lovek323
+      artturin
+    ];
+    teams = [ teams.gnome ];
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

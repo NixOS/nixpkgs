@@ -5,6 +5,7 @@
   mkMesonExecutable,
 
   nix-fetchers,
+  nix-fetchers-c,
   nix-store-test-support,
 
   libgit2,
@@ -30,6 +31,9 @@ mkMesonExecutable (finalAttrs: {
       nix-store-test-support
       rapidcheck
       gtest
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+      nix-fetchers-c
     ]
     ++ lib.optionals (lib.versionAtLeast version "2.27") [
       libgit2

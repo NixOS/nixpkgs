@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  pandoc_3_6,
+  pandoc,
   typst,
   esbuild,
   deno,
@@ -16,14 +16,15 @@
   quarto,
   extraPythonPackages ? ps: [ ],
   sysctl,
+  which,
 }:
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.6.42";
+  version = "1.7.29";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-9mf1YfcfCWMZaYFlYyJN9WKlRHk8U2sq2ESb4mqz3sY=";
+    hash = "sha256-UFXNyovsvRmLTAHQ3P/XYZwL4su9xwmrTQCFy3VXkak=";
   };
 
   patches = [
@@ -32,6 +33,7 @@ stdenv.mkDerivation (final: {
 
   nativeBuildInputs = [
     makeWrapper
+    which
   ];
 
   dontStrip = true;
@@ -39,7 +41,7 @@ stdenv.mkDerivation (final: {
   preFixup = ''
     wrapProgram $out/bin/quarto \
       --prefix QUARTO_DENO : ${lib.getExe deno} \
-      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
+      --prefix QUARTO_PANDOC : ${lib.getExe pandoc} \
       --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \
@@ -81,7 +83,7 @@ stdenv.mkDerivation (final: {
     quarto-check =
       runCommand "quarto-check"
         {
-          nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
+          nativeBuildInputs = [ which ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
         }
         ''
           export HOME="$(mktemp -d)"

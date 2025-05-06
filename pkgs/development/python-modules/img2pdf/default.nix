@@ -1,7 +1,9 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitea,
+  fetchpatch,
   replaceVars,
   colord,
   setuptools,
@@ -9,7 +11,6 @@
   pillow,
   stdenv,
   exiftool,
-  ghostscript,
   imagemagick,
   mupdf-headless,
   netpbm,
@@ -34,6 +35,11 @@ buildPythonPackage rec {
   };
 
   patches = [
+    (fetchpatch {
+      name = "exiftool-13.23-compat.patch";
+      url = "https://gitlab.mister-muffin.de/josch/img2pdf/commit/59132f20f8a40f6ed4e5cd2a3719bf55473ba4d7.patch";
+      hash = "sha256-A36YSZ6kBFzEa2lSKIVHRg9r6Oi8FGkOnmt2YxlkwWw=";
+    })
     (replaceVars ./default-icc-profile.patch {
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then
@@ -61,7 +67,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     exiftool
-    ghostscript
+    pkgs.ghostscript
     imagemagick
     mupdf-headless
     netpbm

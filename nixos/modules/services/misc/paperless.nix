@@ -21,7 +21,8 @@ let
       PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
       PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
       PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
-      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+      GRANIAN_HOST = cfg.address;
+      GRANIAN_PORT = toString cfg.port;
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -196,7 +197,7 @@ in
 
     address = lib.mkOption {
       type = lib.types.str;
-      default = "localhost";
+      default = "127.0.0.1";
       description = "Web interface address.";
     };
 
@@ -357,6 +358,14 @@ in
         description = "Settings to pass to the document exporter as CLI arguments.";
       };
     };
+
+    configureTika = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to configure Tika and Gotenberg to process Office and e-mail files with OCR.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -377,12 +386,18 @@ in
           ];
         };
 
-        services.paperless.settings = lib.mkIf cfg.database.createLocally {
-          PAPERLESS_DBENGINE = "postgresql";
-          PAPERLESS_DBHOST = "/run/postgresql";
-          PAPERLESS_DBNAME = "paperless";
-          PAPERLESS_DBUSER = "paperless";
-        };
+        services.paperless.settings = lib.mkMerge [
+          (lib.mkIf cfg.database.createLocally {
+            PAPERLESS_DBENGINE = "postgresql";
+            PAPERLESS_DBHOST = "/run/postgresql";
+            PAPERLESS_DBNAME = "paperless";
+            PAPERLESS_DBUSER = "paperless";
+          })
+          (lib.mkIf cfg.configureTika {
+            PAPERLESS_GOTENBERG_ENABLED = true;
+            PAPERLESS_TIKA_ENABLED = true;
+          })
+        ];
 
         systemd.slices.system-paperless = {
           description = "Paperless Document Management System Slice";
@@ -539,16 +554,15 @@ in
                 echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
                 exit 1
               fi
-              exec ${cfg.package.python.pkgs.gunicorn}/bin/gunicorn \
-                -c ${cfg.package}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
+              exec ${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws "paperless.asgi:application"
             '';
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             Restart = "on-failure";
 
             LimitNOFILE = 65536;
-            # gunicorn needs setuid, liblapack needs mbind
-            SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
+            # liblapack needs mbind
+            SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
             # Needs to serve web page
             PrivateNetwork = false;
           };
@@ -570,6 +584,18 @@ in
           groups.${defaultUser} = {
             gid = config.ids.gids.paperless;
           };
+        };
+
+        services.gotenberg = lib.mkIf cfg.configureTika {
+          enable = true;
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.15.3/docker/compose/docker-compose.sqlite-tika.yml#L64-L69
+          chromium.disableJavascript = true;
+          extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
+        };
+
+        services.tika = lib.mkIf cfg.configureTika {
+          enable = true;
+          enableOcr = true;
         };
       }
 

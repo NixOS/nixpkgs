@@ -8,16 +8,16 @@
   glib,
   intltool,
   gtk3,
-  gtksourceview,
+  gtksourceview4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xpad";
-  version = "5.4.0";
+  version = "5.8.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/xpad/trunk/${version}/+download/xpad-${version}.tar.bz2";
-    sha256 = "1qpmlwn0bcw1q73ag0l0fdnlzmwawfvsy4g9y5b0vyrc58lcp5d3";
+    url = "https://launchpad.net/xpad/trunk/${finalAttrs.version}/+download/xpad-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-8mBSMIhQxAaxWtuNhqzTli7xCvIrQnuxpc/07slvguk=";
   };
 
   nativeBuildInputs = [
@@ -30,15 +30,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    gtksourceview
+    gtksourceview4
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sticky note application for jotting down things to remember";
     mainProgram = "xpad";
     homepage = "https://launchpad.net/xpad";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ michalrus ];
   };
-}
+})

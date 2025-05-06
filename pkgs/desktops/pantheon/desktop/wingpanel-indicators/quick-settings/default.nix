@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/elementary/quick-settings";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
   };
 })

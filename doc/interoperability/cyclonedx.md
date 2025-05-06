@@ -63,17 +63,27 @@ For example, the `fetchFromGitHub` is commonly used within Nixpkgs but should be
 `nix:fod` properties may be extracted and evaluated to a derivation using code similar to the following, assuming a fictitious function `filterPropertiesToAttrs`:
 
 ```nix
-{ pkgs, filterPropertiesToAttrs, properties }:
+{
+  pkgs,
+  filterPropertiesToAttrs,
+  properties,
+}:
 let
   fodProps = filterPropertiesToAttrs "nix:fod:" properties;
 
   methods = {
     fetchzip =
-      { name, url, sha256, ... }:
+      {
+        name,
+        url,
+        sha256,
+        ...
+      }:
       pkgs.fetchzip {
         inherit name url sha256;
       };
   };
 
-in methods.${fodProps.method} fodProps
+in
+methods.${fodProps.method} fodProps
 ```

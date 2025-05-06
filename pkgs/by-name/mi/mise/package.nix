@@ -1,10 +1,10 @@
 {
+  stdenv,
   lib,
   nix-update-script,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
   coreutils,
   bash,
   direnv,
@@ -12,8 +12,6 @@
   pkg-config,
   openssl,
   cacert,
-  Security,
-  SystemConfiguration,
   usage,
   mise,
   testers,
@@ -23,29 +21,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.3.11";
+  version = "2025.4.11";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-n7A6LGjcVz6LWz8fkkG5XS2WZf3FFkbidnt/S5jxy5g=";
+    hash = "sha256-qnVLVT+evB/gUxU8HQaOhT3imdtVN2Iwh+7ldx6NR6s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-On2+ROA71RyZdFPvH4Zem/494Q4uCYS4EZSvQL1DDWQ=";
+  cargoHash = "sha256-TBkU10eqNT5825QlDyeBUAw3CZXUGSu4ufoC5XrmJ04=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   postPatch = ''
     patchShebangs --build \
@@ -70,12 +63,16 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ cacert ];
 
-  checkFlags = [
-    # last_modified will always be different in nix
-    "--skip=tera::tests::test_last_modified"
-    # requires https://github.com/rbenv/ruby-build
-    "--skip=plugins::core::ruby::tests::test_list_versions_matching"
-  ];
+  checkFlags =
+    [
+      # last_modified will always be different in nix
+      "--skip=tera::tests::test_last_modified"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+      # started failing mid-April 2025
+      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
+      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+    ];
 
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions

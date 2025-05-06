@@ -6,7 +6,6 @@
   makeWrapper,
   perf,
   nix-update-script,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +23,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-uErlNPkacAmURNKAZp1wLsV2NB1w9HfjLZl5PgeMRu0=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/cargo-flamegraph \

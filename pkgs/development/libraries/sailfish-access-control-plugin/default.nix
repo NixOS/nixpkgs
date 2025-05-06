@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       homepage
       changelog
       license
-      maintainers
+      teams
       platforms
       ;
   };

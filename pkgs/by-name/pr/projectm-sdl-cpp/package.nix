@@ -4,6 +4,8 @@
   fetchFromGitHub,
   cmake,
   libprojectm,
+  libGL,
+  libX11,
   poco,
   utf8proc,
   SDL2,
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
     libprojectm
     poco
     utf8proc
+    libGL
+    libX11
     SDL2
   ];
 

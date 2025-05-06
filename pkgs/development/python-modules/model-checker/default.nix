@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  networkx,
   pythonOlder,
   setuptools,
   tqdm,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "model-checker";
-  version = "0.8.20";
+  version = "0.9.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "model_checker";
     inherit version;
-    hash = "sha256-NSgsMKjnZIRrzLZJD9XlXgsc92Gx1VmeKmyuz5WyHc4=";
+    hash = "sha256-OzK2TqEXujCdpOyS2qo5L8PAv8cfLLbiItD+OkzlyyI=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    networkx
     tqdm
     z3-solver
   ];

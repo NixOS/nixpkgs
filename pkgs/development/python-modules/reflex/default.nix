@@ -6,9 +6,11 @@
   attrs,
   build,
   charset-normalizer,
+  ruff,
   dill,
   distro,
   fastapi,
+  granian,
   gunicorn,
   hatchling,
   httpx,
@@ -25,6 +27,7 @@
   pydantic,
   pytest-asyncio,
   pytest-mock,
+  python-dotenv,
   pytestCheckHook,
   python-engineio,
   python-multipart,
@@ -48,24 +51,26 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.4a0";
+  version = "0.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-KFNcdPoZc+Zps8OV3aLIkk9rlbfy6rx0I9JrYFt2b5E=";
+    hash = "sha256-/Kf1V1goGaoYarhJ9wlZ2lf6e3BUH/F7UJqoPEnMnk0=";
   };
 
+  # 'rich' is also somehow checked when building the wheel,
+  # pythonRelaxDepsHook modifies the wheel METADATA in postBuild
+  pypaBuildFlags = [ "--skip-dependency-check" ];
+
   pythonRelaxDeps = [
+    # needed
+    "rich"
+    # preventative
     "fastapi"
     "gunicorn"
-  ];
-
-  pythonRemoveDeps = [
-    "setuptools"
-    "build"
   ];
 
   build-system = [ hatchling ];
@@ -74,9 +79,12 @@ buildPythonPackage rec {
     alembic
     build # used in custom_components/custom_components.py
     charset-normalizer
+    ruff
     dill
     distro
     fastapi
+    granian
+    granian.optional-dependencies.reload
     gunicorn
     httpx
     jinja2
@@ -106,6 +114,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+    python-dotenv
+    ruff
     playwright
     attrs
     numpy

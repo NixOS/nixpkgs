@@ -12,7 +12,6 @@
   python3,
   rustPlatform,
   stdenv,
-  darwin,
   testers,
   deltachat-desktop,
   yq,
@@ -65,10 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       copyDesktopItems
     ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     VERSION_INFO_GIT_REF = finalAttrs.src.tag;
@@ -115,6 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags $out/opt/DeltaChat/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
+
+    install -Dt "$out/share/icons/hicolor/scalable/apps" images/tray/deltachat.svg
 
     runHook postInstall
   '';

@@ -62086,27 +62086,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  rollup = nodeEnv.buildNodePackage {
-    name = "rollup";
-    packageName = "rollup";
-    version = "4.35.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/rollup/-/rollup-4.35.0.tgz";
-      sha512 = "kg6oI4g+vc41vePJyO6dHt/yl0Rz3Thv0kJeVQ3D1kS3E5XSuKbPc29G4IpT/Kv1KQwgHVcN+HtyS+HYLNSvQg==";
-    };
-    dependencies = [
-      sources."@types/estree-1.0.6"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Next-generation ES module bundler";
-      homepage = "https://rollupjs.org/";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   sass = nodeEnv.buildNodePackage {
     name = "sass";
     packageName = "sass";

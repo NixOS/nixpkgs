@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Set timers to properly cook your food
     '';
     mainProgram = "gnome-clocks";
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };

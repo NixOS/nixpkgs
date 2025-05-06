@@ -5,30 +5,24 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
-  IOKit,
-  Foundation,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_highlight";
-  version = "1.4.4+0.103.0";
+  version = "1.4.5+0.104.0";
 
   src = fetchFromGitHub {
     repo = "nu-plugin-highlight";
     owner = "cptpiepmatz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XxYsxoHeRhZ4A52ctyJZVqJ40J3M3R42NUetZZIbk0w=";
+    hash = "sha256-B2CkdftlxczA6KHJsNmbPH7Grzq4MG7r6CRMvVTMkzQ=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-y0SCpDU1GM5JrixOffP1DRGtaXZsBjr7fYgYxhn4NDg=";
+  cargoHash = "sha256-3bLATtK9r4iVpxdbg5eCvzeGpIqWMl/GTDGCORuQfgY=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    IOKit
-    Foundation
-  ];
   cargoBuildFlags = [ "--package nu_plugin_highlight" ];
 
   checkPhase = ''

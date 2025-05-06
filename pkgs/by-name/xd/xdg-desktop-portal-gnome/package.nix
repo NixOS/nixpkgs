@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Backend implementation for xdg-desktop-portal for the GNOME desktop environment";
     homepage = "https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
   };

@@ -51,7 +51,6 @@
   odbcSupport ? false,
   odbcPackages ? [ unixODBC ],
   opensslPackage ? openssl,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wxPackages ? [
     libGL
     libGLU
@@ -246,7 +245,7 @@ stdenv.mkDerivation (
           '';
 
           platforms = platforms.unix;
-          maintainers = teams.beam.members;
+          teams = [ teams.beam ];
           license = licenses.asl20;
         }
         // meta

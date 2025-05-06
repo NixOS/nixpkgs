@@ -136,7 +136,8 @@ stdenv.mkDerivation rec {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
+    maintainers = [ maintainers.marcweber ];
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
   };
 }

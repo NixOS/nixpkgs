@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2025.2.0";
+  version = "2025.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "gcsfs";
     tag = version;
-    hash = "sha256-CXv0SbwOaEjD5HkJgPRfGk+VfciDjpvwomM5oCi6VIw=";
+    hash = "sha256-mlEo83Q4Y7i8Za7q+oE0OILWyH4vW49rkG8ijyLehAY=";
   };
 
   build-system = [

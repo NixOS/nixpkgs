@@ -3,24 +3,24 @@
   fetchFromGitHub,
   lib,
   libkrb5,
-  nixosTests,
   openssl,
   postgresql,
   postgresqlBuildExtension,
+  postgresqlTestExtension,
   stdenv,
 
   enableUnfree ? true,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.19.1";
+  version = "2.19.3";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
-    tag = version;
-    hash = "sha256-OaDBCspZKscnmKjZK7duijT3I9WFjm6I1hLEkzXsBKU=";
+    tag = finalAttrs.version;
+    hash = "sha256-CMK9snkMXsXqmq3f1hTDYCduL0arwM7XyIg4xq6UfR8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -50,15 +50,58 @@ postgresqlBuildExtension rec {
     done
   '';
 
-  passthru.tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    withPackages = [ "timescaledb_toolkit" ];
+    postgresqlExtraSettings = ''
+      shared_preload_libraries='timescaledb,timescaledb_toolkit'
+    '';
+    sql = ''
+      CREATE EXTENSION timescaledb;
+      CREATE EXTENSION timescaledb_toolkit;
+
+      CREATE TABLE sth (
+        time TIMESTAMPTZ NOT NULL,
+        value DOUBLE PRECISION
+      );
+
+      SELECT create_hypertable('sth', 'time');
+
+      INSERT INTO sth (time, value) VALUES
+      ('2003-04-12 04:05:06 America/New_York', 1.0),
+      ('2003-04-12 04:05:07 America/New_York', 2.0),
+      ('2003-04-12 04:05:08 America/New_York', 3.0),
+      ('2003-04-12 04:05:09 America/New_York', 4.0),
+      ('2003-04-12 04:05:10 America/New_York', 5.0)
+      ;
+
+      WITH t AS (
+        SELECT
+          time_bucket('1 day'::interval, time) AS dt,
+          stats_agg(value) AS stats
+        FROM sth
+        GROUP BY time_bucket('1 day'::interval, time)
+      )
+      SELECT
+        average(stats)
+      FROM t;
+    '';
+    asserts = [
+      {
+        query = "SELECT count(*) FROM sth";
+        expected = "5";
+        description = "hypertable can be queried successfully.";
+      }
+    ];
+  };
 
   meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
-    changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/timescale/timescaledb/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
     license = with lib.licenses; if enableUnfree then tsl else asl20;
     broken = lib.versionOlder postgresql.version "14";
   };
-}
+})
