@@ -26045,6 +26045,12 @@
     githubId = 93639059;
     name = "wattmto";
   };
+  watwea = {
+    email = "aaditya.watwe@gmail.com";
+    github = "watwea";
+    githubId = 45186715;
+    name = "Aaditya Watwe";
+  };
   waynr = {
     name = "Wayne Warren";
     email = "wayne.warren.s@gmail.com";

@@ -15568,6 +15568,10 @@ self: super: with self; {
 
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
+  sdwire = sdwire-cli;
+
+  sdwire-cli = callPackage ../development/python-modules/sdwire-cli { };
+
   seaborn = callPackage ../development/python-modules/seaborn { };
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
