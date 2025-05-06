@@ -190,9 +190,7 @@ makeScopeWithSplicing' {
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
-        libopenshot = callPackage ../development/libraries/libopenshot {
-          python3 = pkgs.python311;
-        };
+        libopenshot = callPackage ../development/libraries/libopenshot { };
 
         packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
