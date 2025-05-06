@@ -4,14 +4,14 @@ on:
   pull_request_target:
     # Re-run should be triggered when the base branch is updated, instead of silently failing
     types: [opened, synchronize, reopened, edited]
-    branches:
-      - 'nixos-**'
-      - 'nixpkgs-**'
 
 permissions: {}
 
 jobs:
   fail:
+    if: |
+      startsWith(github.event.pull_request.base.ref, 'nixos-') ||
+      startsWith(github.event.pull_request.base.ref, 'nixpkgs-')
     name: "This PR is is targeting a channel branch"
     runs-on: ubuntu-24.04
     steps:
