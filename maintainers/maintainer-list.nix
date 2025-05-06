@@ -23281,6 +23281,12 @@
     githubId = 145975416;
     name = "Starzation";
   };
+  stasbadzi {
+      name = "Stanislaw Badziak"
+      email = "stasbadzi@gmail.com"
+      github = "stas-badzi"
+      githubId = 151390437
+  }
   stasjok = {
     name = "Stanislav Asunkin";
     email = "nixpkgs@stasjok.ru";
