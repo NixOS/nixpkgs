@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   qt6,
+  libsForQt5,
   # transports
   curl,
   libmms,
@@ -106,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     # effect plugins
     libsamplerate
   ];
+
+  postInstall = ''
+    substituteInPlace $out/share/qmmp/scripts/kwin.sh \
+      --replace-fail 'kreadconfig5' '${libsForQt5.kconfig}/bin/kreadconfig5' \
+      --replace-fail 'kwriteconfig5' '${libsForQt5.kconfig}/bin/kwriteconfig5'
+  '';
 
   meta = {
     description = "Qt-based audio player that looks like Winamp";
