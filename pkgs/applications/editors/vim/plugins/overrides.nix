@@ -118,6 +118,8 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # luau-lsp-nvim dependencies
+  luau-lsp,
 }:
 self: super:
 let
@@ -1690,9 +1692,7 @@ in
 
   luau-lsp-nvim = super.luau-lsp-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
-
-    # TODO: add luau-lsp to nixpkgs (#395892)
-    # runtimeDeps = [ luau-lsp ];
+    runtimeDeps = [ luau-lsp ];
   };
 
   magma-nvim = super.magma-nvim.overrideAttrs {
