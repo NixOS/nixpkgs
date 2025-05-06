@@ -23,9 +23,6 @@ dont-distribute-packages:
  - adhoc-network
  - adict
  - adp-multi-monadiccp
- - ADPfusion
- - ADPfusionForest
- - ADPfusionSet
  - Advgame
  - Advise-me
  - AERN-Net
@@ -55,14 +52,11 @@ dont-distribute-packages:
  - algorithmic-composition-complex
  - algorithmic-composition-frequency-shift
  - algorithmic-composition-overtones
- - AlignmentAlgorithms
  - alloy-proxy-fd
  - alms
  - alpha
- - alsa-gui
  - alsa-pcm-tests
  - alsa-seq-tests
- - alto
  - amazon-emailer-client-snap
  - amby
  - ampersand
@@ -149,10 +143,6 @@ dont-distribute-packages:
  - authoring
  - AutoForms
  - autonix-deps-kf5
- - avers
- - avers-api
- - avers-api-docs
- - avers-server
  - aviation-cessna172-diagrams
  - aviation-cessna172-weight-balance
  - aviation-navigation
@@ -239,22 +229,10 @@ dont-distribute-packages:
  - binembed-example
  - bioace
  - bioalign
- - Biobase
- - BiobaseBlast
  - BiobaseDotP
- - BiobaseENA
  - BiobaseEnsembl
- - BiobaseFasta
- - BiobaseFR3D
  - BiobaseHTTP
- - BiobaseHTTPTools
- - BiobaseInfernal
  - BiobaseMAF
- - BiobaseTrainingData
- - BiobaseTurner
- - BiobaseTypes
- - BiobaseVienna
- - BiobaseXNA
  - biofasta
  - biofastq
  - BioHMM
@@ -284,7 +262,6 @@ dont-distribute-packages:
  - bittorrent
  - bla
  - blakesum-demo
- - BlastHTTP
  - blastxml
  - blatex
  - blaze-builder-enumerator
@@ -356,7 +333,6 @@ dont-distribute-packages:
  - calculator
  - caldims
  - call
- - camfort
  - campfire
  - canadian-income-tax
  - canteven-http
@@ -470,7 +446,6 @@ dont-distribute-packages:
  - clod
  - cloud-haskell
  - cloud-seeder
- - cloudyfs
  - clr-bindings
  - clr-inline
  - clua
@@ -479,9 +454,7 @@ dont-distribute-packages:
  - clustertools
  - clutterhs
  - cmathml3
- - CMCompare
  - cmptype
- - cmv
  - cnc-spec-compiler
  - co-feldspar
  - Coadjute
@@ -693,7 +666,6 @@ dont-distribute-packages:
  - definitive-graphics
  - definitive-parser
  - definitive-reactive
- - definitive-sound
  - deka-tests
  - delicious
  - delimited-text
@@ -722,7 +694,6 @@ dont-distribute-packages:
  - dhall-secret
  - dia-functions
  - diagrams-html5
- - diagrams-reflex
  - diagrams-wx
  - dialog
  - diff
@@ -754,7 +725,6 @@ dont-distribute-packages:
  - dmenu-pmount
  - dmenu-search
  - DMuCheck
- - DnaProteinAlignment
  - dnf-repo
  - dobutokO-poetry
  - dobutokO-poetry-general
@@ -985,8 +955,6 @@ dont-distribute-packages:
  - foldl-transduce-attoparsec
  - follower
  - foo
- - Forestry
- - FormalGrammars
  - format
  - format-status
  - formlets
@@ -1042,7 +1010,6 @@ dont-distribute-packages:
  - functor-monad
  - funflow
  - funflow-nix
- - funion
  - funsat
  - fwgl-glfw
  - g2
@@ -1069,7 +1036,6 @@ dont-distribute-packages:
  - gemini-textboard
  - Genbank
  - gencheck
- - Gene-CluEDO
  - generic-accessors
  - generic-override-aeson
  - generic-xml
@@ -1081,7 +1047,6 @@ dont-distribute-packages:
  - geni-util
  - geniconvert
  - geniserver
- - GenussFold
  - geodetic
  - geolite-csv
  - getemx
@@ -1168,7 +1133,6 @@ dont-distribute-packages:
  - grab-form
  - graflog
  - grammar-combinators
- - GrammarProducts
  - grapefruit-examples
  - grapefruit-frp
  - grapefruit-records
@@ -1236,7 +1200,6 @@ dont-distribute-packages:
  - h3spec
  - habit
  - hablo
- - hablog
  - Hach
  - hack-contrib
  - hack-contrib-press
@@ -1264,8 +1227,6 @@ dont-distribute-packages:
  - hakyll-ogmarkup
  - hakyll-shortcut-links
  - halberd
- - halide-arrayfire
- - halide-JuicyPixels
  - hall-symbols
  - halma-gui
  - halma-telegram-bot
@@ -1594,7 +1555,6 @@ dont-distribute-packages:
  - hps-cairo
  - hpython
  - hq
- - HQu
  - hranker
  - HRay
  - hreq-client
@@ -1812,6 +1772,7 @@ dont-distribute-packages:
  - irc-fun-client
  - irc-fun-color
  - irc-fun-messages
+ - iri-orphans
  - ironforge
  - isevaluated
  - ismtp
@@ -1893,7 +1854,6 @@ dont-distribute-packages:
  - kafka-device-joystick
  - kafka-device-leap
  - kafka-device-spacenav
- - kafka-device-vrpn
  - kaleidoscope
  - kansas-lava
  - kansas-lava-cores
@@ -1917,11 +1877,6 @@ dont-distribute-packages:
  - keera-hails-reactive-yampa
  - keera-hails-reactivelenses
  - keera-posture
- - keid-core
- - keid-frp-banana
- - keid-geometry
- - keid-resource-gltf
- - keid-sound-openal
  - kerry
  - kevin
  - key-vault
@@ -2069,7 +2024,6 @@ dont-distribute-packages:
  - ListT
  - liszt
  - lit
- - live-sequencer
  - llvm
  - llvm-analysis
  - llvm-base-types
@@ -2183,7 +2137,6 @@ dont-distribute-packages:
  - maxent
  - maxent-learner-hw-gui
  - maxsharing
- - MC-Fold-DP
  - mcmc-samplers
  - mDNSResponder-client
  - medea
@@ -2211,7 +2164,6 @@ dont-distribute-packages:
  - micro-gateway
  - microformats2-types
  - MicrosoftTranslator
- - midimory
  - mig-server
  - mighttpd
  - migrant-hdbc
@@ -2342,7 +2294,6 @@ dont-distribute-packages:
  - musicbrainz-email
  - musicxml2
  - mutable-iter
- - MutationOrder
  - mute-unmute
  - mvclient
  - mwc-random-monad
@@ -2442,7 +2393,6 @@ dont-distribute-packages:
  - numhask-hedgehog
  - numhask-range
  - numhask-test
- - Nussinov78
  - nyan
  - nyan-interpolation
  - nyan-interpolation-simple
@@ -2467,6 +2417,7 @@ dont-distribute-packages:
  - ogma-language-fret-cs
  - ogma-language-fret-reqs
  - ois-input-manager
+ - ollama-holes-plugin
  - olwrapper
  - om-kubernetes
  - one-time-password
@@ -2842,12 +2793,9 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-dom-colonnade
  - reflex-ghci
  - reflex-gloss-scene
- - reflex-libtelnet
  - reflex-localize
- - reflex-localize-dom
  - reflex-monad-auth
  - reflex-process
  - reform-blaze
@@ -2932,12 +2880,6 @@ dont-distribute-packages:
  - rlwe-challenges
  - rmonad
  - RMP
- - RNAdesign
- - RNAdraw
- - RNAFold
- - RNAFoldProgs
- - RNAlien
- - RNAwolf
  - rncryptor
  - rob
  - robot
@@ -3134,7 +3076,6 @@ dont-distribute-packages:
  - shine-varying
  - short-vec
  - short-vec-lens
- - ShortestPathProblems
  - showdown
  - Shpadoinkle-backend-pardiff
  - Shpadoinkle-backend-snabbdom
@@ -3205,7 +3146,6 @@ dont-distribute-packages:
  - snap-utils
  - snaplet-actionlog
  - snaplet-auth-acid
- - snaplet-customauth
  - snaplet-fay
  - snaplet-hasql
  - snaplet-haxl
@@ -3234,7 +3174,6 @@ dont-distribute-packages:
  - snowflake-core
  - snowflake-server
  - snumber
- - Snusmumrik
  - soap-openssl
  - soap-tls
  - SoccerFun
@@ -3272,6 +3211,7 @@ dont-distribute-packages:
  - sql-simple-pool
  - sql-simple-postgresql
  - sql-simple-sqlite
+ - sqlc-hs
  - sqlcli-odbc
  - sqlite-simple-interpolate
  - sqlite-simple-typed
@@ -3341,9 +3281,7 @@ dont-distribute-packages:
  - sunroof-examples
  - sunroof-server
  - supercollider-ht
- - supercollider-midi
  - superconstraints
- - supernova
  - supply-chain
  - supply-next
  - sv
@@ -3436,6 +3374,10 @@ dont-distribute-packages:
  - th-instances
  - theoremquest-client
  - thimk
+ - thrift-compiler
+ - thrift-haxl
+ - thrift-http
+ - thrift-lib
  - thumbnail-polish
  - tic-tac-toe
  - tickle
@@ -3463,6 +3405,7 @@ dont-distribute-packages:
  - toboggan
  - todos
  - toktok
+ - toml-reader_0_3_0_0
  - tomlcheck
  - tonatona
  - tonatona-google-server-api
@@ -3491,7 +3434,6 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
- - trasa-reflex
  - trasa-server
  - trasa-th
  - traversal-template
@@ -3525,7 +3467,6 @@ dont-distribute-packages:
  - twidge
  - twilight-stm
  - twill
- - twirl
  - twitter-enumerator
  - txt
  - type-assertions
@@ -3639,7 +3580,6 @@ dont-distribute-packages:
  - vectortiles
  - venzone
  - verdict-json
- - verifiable-expressions
  - verismith
  - versioning-servant
  - vertexenum
@@ -3647,7 +3587,6 @@ dont-distribute-packages:
  - vformat-aeson
  - vformat-time
  - vfr-waypoints
- - ViennaRNA-extras
  - vigilance
  - vimeta
  - vinyl-operational
@@ -3722,7 +3661,6 @@ dont-distribute-packages:
  - wikimusic-api-spec
  - wikimusic-ssr
  - wikipedia4epub
- - wild-bind-task-x11
  - windowslive
  - winery
  - winio
@@ -3735,7 +3673,6 @@ dont-distribute-packages:
  - wobsurv
  - wolf
  - word
- - WordAlignment
  - workflow-extra
  - workflow-pure
  - workflow-types
@@ -3818,7 +3755,6 @@ dont-distribute-packages:
  - yesod-articles
  - yesod-auth-ldap
  - yesod-auth-lti13
- - yesod-auth-simple
  - yesod-colonnade
  - yesod-continuations
  - yesod-examples

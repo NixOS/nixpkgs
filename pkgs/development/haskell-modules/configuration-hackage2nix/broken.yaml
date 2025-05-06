@@ -1977,7 +1977,6 @@ broken-packages:
   - gemini-server # failure in job https://hydra.nixos.org/build/295093453 at 2025-04-22
   - gemmula-altera # failure in job https://hydra.nixos.org/build/252721416 at 2024-03-16
   - gemstone # failure in job https://hydra.nixos.org/build/233202246 at 2023-09-02
-  - genai-lib # failure in job https://hydra.nixos.org/build/295093478 at 2025-04-22
   - gender # failure in job https://hydra.nixos.org/build/233235712 at 2023-09-02
   - genders # failure in job https://hydra.nixos.org/build/233238566 at 2023-09-02
   - general-prelude # failure in job https://hydra.nixos.org/build/233248628 at 2023-09-02
@@ -2016,7 +2015,6 @@ broken-packages:
   - gentlemark # failure in job https://hydra.nixos.org/build/233202158 at 2023-09-02
   - genvalidity-appendful # failure in job https://hydra.nixos.org/build/295093519 at 2025-04-22
   - genvalidity-mergeful # failure in job https://hydra.nixos.org/build/295093508 at 2025-04-22
-  - genvalidity-network-uri # failure in job https://hydra.nixos.org/build/295454526 at 2025-05-02
   - geocode-google # failure in job https://hydra.nixos.org/build/233191594 at 2023-09-02
   - GeocoderOpenCage # failure in job https://hydra.nixos.org/build/233214852 at 2023-09-02
   - geodetic-types # failure in job https://hydra.nixos.org/build/233209496 at 2023-09-02
@@ -5336,7 +5334,6 @@ broken-packages:
   - scotty-resource # failure in job https://hydra.nixos.org/build/233258457 at 2023-09-02
   - scotty-rest # failure in job https://hydra.nixos.org/build/233209040 at 2023-09-02
   - scotty-session # failure in job https://hydra.nixos.org/build/233258736 at 2023-09-02
-  - scotty-tls # failure in job https://hydra.nixos.org/build/233250916 at 2023-09-02
   - scotty-utils # failure in job https://hydra.nixos.org/build/252727834 at 2024-03-16
   - scotty-view # failure in job https://hydra.nixos.org/build/233245343 at 2023-09-02
   - scrapbook-core # failure in job https://hydra.nixos.org/build/233222406 at 2023-09-02
@@ -5447,8 +5444,6 @@ broken-packages:
   - servant-streaming # failure in job https://hydra.nixos.org/build/233215168 at 2023-09-02
   - servant-streamly # failure in job https://hydra.nixos.org/build/233231404 at 2023-09-02
   - servant-subscriber # failure in job https://hydra.nixos.org/build/295096905 at 2025-04-22
-  - servant-swagger-ui-jensoleg # failure in job https://hydra.nixos.org/build/295096896 at 2025-04-22
-  - servant-swagger-ui-redoc # failure in job https://hydra.nixos.org/build/295096893 at 2025-04-22
   - servant-to-elm # failure in job https://hydra.nixos.org/build/253681347 at 2024-03-31
   - servant-tracing # failure in job https://hydra.nixos.org/build/233229308 at 2023-09-02
   - servant-typed-error # failure in job https://hydra.nixos.org/build/252727241 at 2024-03-16
@@ -5545,7 +5540,6 @@ broken-packages:
   - simple-css # failure in job https://hydra.nixos.org/build/233244675 at 2023-09-02
   - simple-download # failure in job https://hydra.nixos.org/build/233227569 at 2023-09-02
   - simple-effects # failure in job https://hydra.nixos.org/build/233246128 at 2023-09-02
-  - simple-enumeration # failure in job https://hydra.nixos.org/build/295096986 at 2025-04-22
   - simple-eval # failure in job https://hydra.nixos.org/build/233227793 at 2023-09-02
   - simple-form # failure in job https://hydra.nixos.org/build/233243669 at 2023-09-02
   - simple-genetic-algorithm # failure in job https://hydra.nixos.org/build/233200097 at 2023-09-02
@@ -6703,7 +6697,6 @@ broken-packages:
   - wide-word-instances # failure in job https://hydra.nixos.org/build/233253084 at 2023-09-02
   - wikicfp-scraper # failure in job https://hydra.nixos.org/build/233198432 at 2023-09-02
   - WikimediaParser # failure in job https://hydra.nixos.org/build/233242393 at 2023-09-02
-  - wild-bind-indicator # bounds issues relating to gtk https://hydra.nixos.org/build/295428436
   - willow # failure in job https://hydra.nixos.org/build/233215807 at 2023-09-02
   - windns # failure in job https://hydra.nixos.org/build/233242724 at 2023-09-02
   - winerror # failure in job https://hydra.nixos.org/build/233196100 at 2023-09-02
