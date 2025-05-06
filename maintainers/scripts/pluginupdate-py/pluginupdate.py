@@ -615,9 +615,9 @@ class Editor:
             "--github-token",
             "-t",
             type=str,
-            default=os.getenv("GITHUB_API_TOKEN"),
+            default=os.getenv("GITHUB_TOKEN"),
             help="""Allows to set --proc to higher values.
-            Uses GITHUB_API_TOKEN environment variables as the default value.""",
+            Uses GITHUB_TOKEN environment variables as the default value.""",
         )
         common.add_argument(
             "--no-commit",
