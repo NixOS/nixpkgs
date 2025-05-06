@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stas-badzi/doas-keepenv";
     mainProgram = "doas-keepenv";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stasbadzi ];
+    #maintainers = with lib.maintainers; [ stasbadzi ];
     platforms = lib.platforms.linux;
   };
 }
