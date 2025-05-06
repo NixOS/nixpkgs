@@ -65,6 +65,8 @@
    file located in the root of the Nixpkgs repo.
 */
 {
+  # keep-sorted start case=no numeric=no block=yes
+
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
@@ -24947,5 +24949,6 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  # keep-sorted end
 }
 # Keep the list alphabetically sorted.
