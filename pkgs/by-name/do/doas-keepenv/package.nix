@@ -4,7 +4,7 @@
   bash,
   coreutils,
   doas,
-  wrapProgram
+  wrapProgram,
 }:
 
 stdenv.mkDerivation rec {
