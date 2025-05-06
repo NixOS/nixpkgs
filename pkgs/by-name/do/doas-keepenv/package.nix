@@ -8,7 +8,7 @@
   fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "doas-keepenv";
   version = "1.0-1";
 
