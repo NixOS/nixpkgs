@@ -160,6 +160,7 @@ def test_build_remote(
                 extra_env={
                     "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
                 },
+                remote=None,
             ),
             call(
                 ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
@@ -234,6 +235,7 @@ def test_build_remote_flake(
                 extra_env={
                     "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
                 },
+                remote=None,
             ),
             call(
                 [
@@ -265,6 +267,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         mock_run.assert_called_with(
             ["nix-copy-closure", "--to", "user@target.host", closure],
             extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+            remote=None,
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
@@ -275,15 +278,21 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
             extra_env={
                 "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-opt"])
             },
+            remote=None,
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
-    monkeypatch.setattr(n, "WITH_NIX_2_18", True)
     extra_env = {
         "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-target-opt"])
     }
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
+        n.copy_closure(
+            closure,
+            target_host,
+            build_host,
+            {"copy_flag": True},
+            transfer_mode=m.TransferMode.DEFAULT,
+        )
         mock_run.assert_called_with(
             [
                 "nix",
@@ -298,18 +307,45 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
             extra_env=extra_env,
         )
 
-    monkeypatch.setattr(n, "WITH_NIX_2_18", False)
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.copy_closure(closure, target_host, build_host)
+        n.copy_closure(
+            closure,
+            target_host,
+            build_host,
+            transfer_mode=m.TransferMode.NIX_2_3,
+        )
         mock_run.assert_has_calls(
             [
                 call(
                     ["nix-copy-closure", "--from", "user@build.host", closure],
                     extra_env=extra_env,
+                    remote=None,
                 ),
                 call(
                     ["nix-copy-closure", "--to", "user@target.host", closure],
                     extra_env=extra_env,
+                    remote=None,
+                ),
+            ]
+        )
+
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(
+            closure,
+            target_host,
+            build_host,
+            transfer_mode=m.TransferMode.BASTION,
+        )
+        mock_run.assert_has_calls(
+            [
+                call(
+                    ["nix-copy-closure", "--to", "user@target.host", closure],
+                    extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
+                    remote=m.Remote(
+                        host="user@build.host",
+                        opts=[],
+                        sudo_password=None,
+                    ),
                 ),
             ]
         )

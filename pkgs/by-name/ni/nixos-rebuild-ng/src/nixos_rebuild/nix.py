@@ -12,7 +12,6 @@ from subprocess import PIPE, CalledProcessError
 from typing import Final, Literal
 
 from . import tmpdir
-from .constants import WITH_NIX_2_18
 from .models import (
     Action,
     BuildAttr,
@@ -23,6 +22,7 @@ from .models import (
     NRError,
     Profile,
     Remote,
+    TransferMode,
 )
 from .process import SSH_DEFAULT_OPTS, run_wrapper
 from .utils import Args, dict_to_flags
@@ -185,29 +185,39 @@ def copy_closure(
     to_host: Remote | None,
     from_host: Remote | None = None,
     copy_flags: Args | None = None,
+    transfer_mode: TransferMode = TransferMode.DEFAULT,
 ) -> None:
     """Copy a nix closure to or from host to localhost.
 
     Also supports copying a closure from a remote to another remote."""
-
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
-    }
+    local_sshopts = " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
 
-    def nix_copy_closure(host: Remote, to: bool) -> None:
+    def nix_copy_closure(
+        from_host: Remote | None = None,
+        to_host: Remote | None = None,
+    ) -> None:
+        host = to_host or from_host
+        assert host, "to_host and to_host are both None"
+
         run_wrapper(
             [
                 "nix-copy-closure",
                 *dict_to_flags(copy_flags),
-                "--to" if to else "--from",
+                "--to" if to_host else "--from",
                 host.host,
                 closure,
             ],
-            extra_env=extra_env,
+            extra_env={
+                # We do not add the SSH_DEFAULT_OPTS in the remote to remote
+                # case, otherwise it will fail because ControlPath will
+                # not exist in remote
+                "NIX_SSHOPTS": sshopts if from_host and to_host else local_sshopts
+            },
+            remote=from_host if to_host else None,
         )
 
-    def nix_copy(to_host: Remote, from_host: Remote) -> None:
+    def nix_copy(from_host: Remote, to_host: Remote) -> None:
         run_wrapper(
             [
                 "nix",
@@ -219,27 +229,33 @@ def copy_closure(
                 f"ssh://{to_host.host}",
                 closure,
             ],
-            extra_env=extra_env,
+            extra_env={"NIX_SSHOPTS": local_sshopts},
         )
 
-    match (to_host, from_host):
-        case (None, None):
+    match (from_host, to_host, transfer_mode):
+        case (None, None, _):
             return
-        case (Remote(_) as host, None) | (None, Remote(_) as host):
-            nix_copy_closure(host, to=bool(to_host))
-        case (Remote(_), Remote(_)):
-            if WITH_NIX_2_18:
-                # With newer Nix, use `nix copy` instead of `nix-copy-closure`
-                # since it supports `--to` and `--from` at the same time
-                # TODO: once we drop Nix 2.3 from nixpkgs, remove support for
-                # `nix-copy-closure`
-                nix_copy(to_host, from_host)
-            else:
-                # With older Nix, we need to copy from to local and local to
-                # host. This means it is slower and need additional disk space
-                # in local
-                nix_copy_closure(from_host, to=False)
-                nix_copy_closure(to_host, to=True)
+        case (Remote(_), None, _):
+            nix_copy_closure(from_host=from_host)
+        case (None, Remote(_), _):
+            nix_copy_closure(to_host=to_host)
+        case (Remote(_), Remote(_), TransferMode.DEFAULT):
+            # With newer Nix, use `nix copy` instead of `nix-copy-closure`
+            # since it supports `--to` and `--from` at the same time
+            # TODO: once we drop Nix 2.3 from nixpkgs, remove support for
+            # `nix-copy-closure`
+            nix_copy(from_host, to_host)
+        case (Remote(_), Remote(_), TransferMode.NIX_2_3):
+            # With older Nix, we need to copy from to local and local to
+            # host. This means it is slower and need additional disk space
+            # in local
+            nix_copy_closure(from_host=from_host)
+            nix_copy_closure(to_host=to_host)
+        case (Remote(_), Remote(_), TransferMode.BASTION):
+            # Bastion mode will connect to build host and copy data from it
+            # to target host. This is generally more efficient, but also need
+            # extra setup (and this is why it is not the default)
+            nix_copy_closure(from_host, to_host)
 
 
 def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
