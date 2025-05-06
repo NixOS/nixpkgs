@@ -12262,8 +12262,6 @@ self: super: with self; {
 
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
 
-  pyephember = callPackage ../development/python-modules/pyephember { };
-
   pyephember2 = callPackage ../development/python-modules/pyephember2 { };
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
