@@ -5,7 +5,7 @@
   boost,
   cmake,
   git,
-  hyperscan,
+  vectorscan,
   openssl,
   pkg-config,
 }:
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     boost
-    hyperscan
+    vectorscan
     openssl
   ];
 
@@ -59,7 +59,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/praetorian-inc/noseyparker/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ _0x4A6F ];
-    # limited by hyperscan
-    platforms = [ "x86_64-linux" ];
   };
 }

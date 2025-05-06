@@ -10568,6 +10568,7 @@ with pkgs;
   nginx = nginxStable;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -10581,6 +10582,7 @@ with pkgs;
   };
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -10592,6 +10594,7 @@ with pkgs;
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -13054,7 +13057,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_29
     k3s_1_30
     k3s_1_31
     k3s_1_32
@@ -14851,8 +14853,6 @@ with pkgs;
   };
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
-
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
   napari = with python3Packages; toPythonApplication napari;
 
