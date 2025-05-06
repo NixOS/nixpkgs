@@ -18,13 +18,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    bash
-    coreutils
     doas
   ];
 
   nativeBuildInputs = [
-    coreutils
     makeWrapper
   ];
 
