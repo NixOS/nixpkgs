@@ -7536,8 +7536,6 @@ self: super: with self; {
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
 
-  langchain-deepseek = callPackage ../development/python-modules/langchain-deepseek { };
-
   langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
 
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
