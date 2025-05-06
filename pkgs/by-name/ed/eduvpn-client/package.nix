@@ -1,6 +1,6 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitea,
   gdk-pixbuf,
   gobject-introspection,
   gtk3,
@@ -13,12 +13,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.4.0";
+  version = "4.5.0";
   format = "pyproject";
 
-  src = fetchurl {
-    url = "https://codeberg.org/eduVPN/linux-app/releases/download/${version}/python-${pname}-${version}.tar.xz";
-    hash = "sha256-IHRIjryAIeGcFqz5BMWsE0/gClaSmnwWhjc1f1c69vk=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "eduVPN";
+    repo = "linux-app";
+    rev = version;
+    hash = "sha256-cm1N/Z6/9zyhWBYUIUIYeB+KphHl+89MD4M9mO/tNMg=";
   };
 
   nativeBuildInputs = [

@@ -224,6 +224,7 @@ mapAliases {
 
   ### _ ###
   _1password = lib.warnOnInstantiate "_1password has been renamed to _1password-cli to better follow upstream name usage" _1password-cli; # Added 2024-10-24
+  _5etools = throw "'_5etools' has been removed, as upstream is in a questionable legal position and the build was broken.";
   "7z2hashcat" =
     throw "'7z2hashcat' has been renamed to '_7z2hashcat' as the former isn't a valid variable name."; # Added 2024-11-27
 
@@ -490,6 +491,7 @@ mapAliases {
   clang-tools_18 = llvmPackages_18.clang-tools; # Added 2024-04-22
   clang-tools_19 = llvmPackages_19.clang-tools; # Added 2024-08-21
 
+  cligh = throw "'cligh' has been removed since it was unmaintained and its upstream deleted"; # Added 2025-05-05
   cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
 
   ### D ###
@@ -538,6 +540,7 @@ mapAliases {
   dtv-scan-tables_linuxtv = dtv-scan-tables; # Added 2023-03-03
   dtv-scan-tables_tvheadend = dtv-scan-tables; # Added 2023-03-03
   du-dust = dust; # Added 2024-01-19
+  dump1090 = dump1090-fa; # Added 2024-02-12
   dwfv = throw "'dwfv' has been removed due to lack of upstream maintenance";
   dylibbundler = throw "'dylibbundler' has been renamed to/replaced by 'macdylibbundler'"; # Converted to throw 2024-10-17
 
@@ -728,6 +731,7 @@ mapAliases {
   ''; # Added 2024-10-12
   git-backup = throw "git-backup has been removed, as it has been abandoned upstream. Consider using git-backup-go instead.";
   git-credential-1password = throw "'git-credential-1password' has been removed, as the upstream project is deleted."; # Added 2024-05-20
+  git-stree = throw "'git-stree' has been deprecated by upstream. Upstream recommends using 'git-subrepo' as a replacement."; # Added 2025-05-05
 
   gitAndTools = self // {
     darcsToGit = darcs-to-git;
@@ -832,6 +836,7 @@ mapAliases {
   HentaiAtHome = hentai-at-home; # Added 2024-06-12
   hll2390dw-cups = throw "The hll2390dw-cups package was dropped since it was unmaintained."; # Added 2024-06-21
   hoarder = throw "'hoarder' has been renamed to 'karakeep'"; # Added 2025-04-21
+  hmetis = throw "'hmetis' has been removed as it was unmaintained and the upstream was unavailable"; # Added 2025-05-05
   hop-cli = throw "hop-cli has been removed as the service has been shut-down"; # Added 2024-08-13
   hpp-fcl = coal; # Added 2024-11-15
   ht-rust = throw "'ht-rust' has been renamed to/replaced by 'xh'"; # Converted to throw 2024-10-17
@@ -869,6 +874,7 @@ mapAliases {
   isl_0_11 = throw "isl_0_11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   isl_0_14 = throw "isl_0_14 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   isl_0_17 = throw "isl_0_17 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
+  istatmenus = throw "istatmenus has beend renamed to istat-menus"; # Added 2025-05-05
   iso-flags-png-320x420 = lib.warnOnInstantiate "iso-flags-png-320x420 has been renamed to iso-flags-png-320x240" iso-flags-png-320x240; # Added 2024-07-17
   itktcl = tclPackages.itktcl; # Added 2024-10-02
   iv = throw "iv has been removed as it was no longer required for neuron and broken"; # Added 2025-04-18
@@ -1002,6 +1008,7 @@ mapAliases {
   lightstep-tracer-cpp = throw "lightstep-tracer-cpp is deprecated since 2022-08-29; the upstream recommends migration to opentelemetry projects.";
   lime3ds = throw "lime3ds is deprecated, use 'azahar' instead."; # Added 2025-03-22
   limesctl = throw "limesctl has been removed because it is insignificant."; # Added 2024-11-25
+  linenoise-ng = throw "'linenoise-ng' has been removed as the upstream project was archived. Consider using 'linenoise' instead."; # Added 2025-05-05
   lispPackages_new = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   lispPackages = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   lispPackagesFor = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
@@ -1594,6 +1601,7 @@ mapAliases {
   rippled = throw "rippled has been removed as it was broken and had not been updated since 2022"; # Added 2024-11-25
   rippled-validator-keys-tool = throw "rippled-validator-keys-tool has been removed as it was broken and had not been updated since 2022"; # Added 2024-11-25
   rke2_testing = throw "'rke2_testing' has been removed from nixpkgs as the RKE2 testing channel no longer serves releases"; # Added 2025-06-02
+  rl_json = tclPackages.rl_json; # Added 2025-05-03
   rockbox_utility = rockbox-utility; # Added 2022-03-17
   rnix-hashes = throw "'rnix-hashes' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
@@ -1653,6 +1661,7 @@ mapAliases {
   shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   sky = throw "'sky' has been removed because its upstream website disappeared"; # Added 2024-07-21
   SkypeExport = skypeexport; # Added 2024-06-12
+  skypeforlinux = throw "Skype has been shut down in May 2025"; # Added 2025-05-05
   slack-dark = throw "'slack-dark' has been renamed to/replaced by 'slack'"; # Converted to throw 2024-10-17
   slimerjs = throw "slimerjs does not work with any version of Firefox newer than 59; upstream ended the project in 2021. <https://slimerjs.org/faq.html#end-of-development>"; # added 2025-01-06
   slurm-llnl = slurm; # renamed July 2017
