@@ -7,6 +7,7 @@
   numpy,
   scipy,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-timeout,
   matplotlib,
   decorator,
@@ -41,10 +42,6 @@ buildPythonPackage rec {
   env.SETUPTOOLS_SCM_PRETEND_VERSION = stableVersion;
 
   postPatch = ''
-    substituteInPlace pyproject.toml  \
-      --replace-fail "--cov-report=" ""  \
-      --replace-fail "--cov-branch" ""
-
     substituteInPlace doc/conf.py \
       --replace-fail '"optipng"' '"${lib.getExe optipng}"'
     substituteInPlace mne/utils/config.py \
@@ -76,6 +73,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-timeout
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
