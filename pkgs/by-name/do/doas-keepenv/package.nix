@@ -34,12 +34,11 @@ stdenv.mkDerivation {
     install -m 755 doas-keepenv $out/bin
     install -Dm644 LICENSE $out/share/licenses/doas-keepenv
     install -Dm644 README.md $out/share/doc/doas-keepenv
-    wrapProgram $out/bin/doas-keepenv --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
+    wrapProgram $out/bin/doas-keepenv --prefix PATH : "${
+      pkgs.lib.makeBinPath [
+        pkgs.coreutils
       ]
-    }
-    # don't add doas to path, 'cause we need the wrapper to funtion
+    }:/run/wrappers/bin/doas"
   '';
 
   meta = {
