@@ -34,8 +34,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin/
     install -m 755 doas-keepenv $out/bin
     wrapProgram $out/bin/doas-keepenv --prefix PATH : "${
-      pkgs.lib.makeBinPath [
-        pkgs.coreutils
+      lib.makeBinPath [
+        coreutils
       ]
     }:/run/wrappers/bin/doas"
   '';
