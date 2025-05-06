@@ -92,7 +92,7 @@ rec {
   fix =
     f:
     let
-      x = f x;
+      x = lib.seq (f x) f x;
     in
     x;
 
