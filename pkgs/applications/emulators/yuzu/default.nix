@@ -33,10 +33,9 @@ rec {
       # Add explicit cast for CRC checksum value
       ./fix-udp-protocol.patch
       (fetchpatch {
-          url = "https://git.citron-emu.org/citron/emu/-/commit/21ca0b31191c4af56a78576c502e8382b4c128b4.patch";
-          hash = "sha256-DkCGjeNYjCA7RdB+hBRXuHL8Ckjb+IgWbZ13leQZUF0=";
-        }
-      )
+        url = "https://git.citron-emu.org/citron/emu/-/commit/21ca0b31191c4af56a78576c502e8382b4c128b4.patch";
+        hash = "sha256-DkCGjeNYjCA7RdB+hBRXuHL8Ckjb+IgWbZ13leQZUF0=";
+      })
     ];
     cmakeFlagsPrefix = "CITRON";
     udevFileName = "72-citron-input.rules";
