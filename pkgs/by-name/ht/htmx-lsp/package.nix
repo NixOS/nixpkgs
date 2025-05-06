@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-EQHNFiyQ7TwY4LldMFOTX0epilU76LPOiHQIIUsNhS8=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Language server implementation for htmx";
