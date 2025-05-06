@@ -3,6 +3,8 @@
 
 set -eu -o pipefail
 
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
 curl https://translatelocally.com/models.json \
   | jq '.models | map(with_entries(select([.key] | inside([
       "name",
@@ -11,4 +13,4 @@ curl https://translatelocally.com/models.json \
       "url",
       "checksum"
     ]))))' \
-  > "$(dirname "$0")/models.json"
+  > "${SCRIPT_DIRECTORY}/models.json"

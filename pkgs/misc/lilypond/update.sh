@@ -3,13 +3,15 @@
 
 set -euo pipefail
 
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
 if [ $# -gt 0 ] && [ "$1" = "unstable" ]; then
     ATTR="lilypond-unstable"
-    FILE="$(dirname "${BASH_SOURCE[@]}")/unstable.nix"
+    FILE="${SCRIPT_DIRECTORY})/unstable.nix"
     QUERY="VERSION_DEVEL="
 else
     ATTR="lilypond"
-    FILE="$(dirname "${BASH_SOURCE[@]}")/default.nix"
+    FILE="${SCRIPT_DIRECTORY}/default.nix"
     QUERY="VERSION_STABLE="
 fi
 

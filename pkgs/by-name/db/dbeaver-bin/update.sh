@@ -1,6 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts
-BASEDIR="$(dirname "$0")/../../../.."
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+BASEDIR="${SCRIPT_DIRECTORY}/../../../.."
 
 latestVersion=$(curl "https://api.github.com/repos/dbeaver/dbeaver/tags" | jq -r '.[0].name')
 currentVersion=$(nix-instantiate --eval -E "with import ${BASEDIR} {}; lib.getVersion dbeaver-bin" | tr -d '"')

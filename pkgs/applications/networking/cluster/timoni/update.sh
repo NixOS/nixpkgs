@@ -2,7 +2,9 @@
 #!nix-shell -i bash -p curl gnused nix jq
 set -euo pipefail
 
-PKG_DIR=$(dirname "${BASH_SOURCE[@]}")
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+PKG_DIR=$SCRIPT_DIRECTORY
 FILE="$PKG_DIR/default.nix"
 NIXPKGS_ROOT=$(cd $PKG_DIR && git rev-parse --show-toplevel)
 ATTR="timoni"
