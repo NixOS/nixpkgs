@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "doas-keepenv";
-  version = "1.0-1";
+  version = "1.0";
 
   src = fetchurl {
     url = "https://github.com/stas-badzi/doas-keepenv/archive/refs/tags/1.0.tar.gz";
