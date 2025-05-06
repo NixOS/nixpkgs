@@ -6,11 +6,11 @@
   lib,
   libogg,
   nix-update-script,
-  pandoc,
+  buildPackages,
   pkg-config,
   stdenv,
   versionCheckHook,
-  enableManpages ? !stdenv.buildPlatform.isRiscV64 && !stdenv.buildPlatform.isLoongArch64,
+  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
-  ] ++ lib.optional enableManpages pandoc;
+  ] ++ lib.optional enableManpages buildPackages.pandoc;
 
   buildInputs = [ libogg ];
 

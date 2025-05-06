@@ -7,8 +7,8 @@
   pkg-config,
   gobject-introspection,
   vala,
-  enableManpages ? !stdenv.buildPlatform.isLoongArch64 && !stdenv.buildPlatform.isRiscV64,
-  pandoc,
+  buildPackages,
+  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
   gi-docgen,
   python3,
   libsoup_3,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     vala
     gi-docgen
     python3
-  ] ++ lib.optionals enableManpages [ pandoc ];
+  ] ++ lib.optionals enableManpages [ buildPackages.pandoc ];
 
   buildInputs = [
     libsoup_3
