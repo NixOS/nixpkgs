@@ -6640,6 +6640,8 @@ self: super: with self; {
 
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
+  imeon-inverter-api = callPackage ../development/python-modules/imeon-inverter-api { };
+
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   imgcat = callPackage ../development/python-modules/imgcat { };
