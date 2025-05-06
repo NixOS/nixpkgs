@@ -15,7 +15,6 @@
   markdown-code-runner,
   roboto,
 }:
-
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
@@ -97,7 +96,6 @@ stdenvNoCC.mkDerivation (
       dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
-      mv "$dest/index.html" "$dest/manual.html"
 
       cp ${roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dest/Roboto.ttf"
 
