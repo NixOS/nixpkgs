@@ -5,13 +5,14 @@
   coreutils,
   doas,
   makeWrapper,
+  fetchurl
 }:
 
 stdenv.mkDerivation rec {
   pname = "doas-keepenv";
   version = "1.0-1";
 
-  src = fetchTarball {
+  src = fetchurl {
     url = "https://github.com/stas-badzi/doas-keepenv/archive/refs/tags/1.0.tar.gz";
     sha256 = "sha256:15xh3dgw78v6mfgkqv6mphpw0bxxbg7jqrpkb4y5151a9xjc9962";
   };
@@ -26,6 +27,10 @@ stdenv.mkDerivation rec {
     coreutils
     makeWrapper
   ];
+
+  buildPhase = ''
+
+  '';
 
   installPhase = ''
     mkdir -p $out/bin/ $out/share/licenses/doas-keepenv $out/share/doc/doas-keepenv
