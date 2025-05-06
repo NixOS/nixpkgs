@@ -35,7 +35,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.6.0";
+  version = "2.7.0";
 in
 buildPythonPackage {
   inherit version;
@@ -69,6 +69,7 @@ buildPythonPackage {
       cusparselt
       libcublas
       libcufft
+      libcufile
       libcurand
       libcusolver
       libcusparse
@@ -130,7 +131,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ./tests.nix { };
+  passthru.tests = callPackage ../tests { };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
@@ -153,6 +154,9 @@ buildPythonPackage {
       "x86_64-linux"
     ];
     hydraPlatforms = [ ]; # output size 3.2G on 1.11.0
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }
