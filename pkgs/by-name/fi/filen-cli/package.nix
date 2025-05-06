@@ -14,16 +14,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "filen-cli";
-  version = "0.0.33";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "FilenCloudDienste";
     repo = "filen-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-piGXcPUwJDOg8EAYML0BiSPRM+1LogU8s2BXtBud5ww=";
+    hash = "sha256-iISW9EAk8haWUCh9I8qHhrBKLqHeBUC8sWA0MnXqQSA=";
   };
 
-  npmDepsHash = "sha256-4GdipHnaqv3LrejMXF73duNyZKgD/0ApzUjiI/QQ30g=";
+  npmDepsHash = "sha256-0DpiUjUFc0ThzP6/qrSEebKDq2fnr/CpcmtPFaIVHhU=";
 
   inherit nodejs;
 
