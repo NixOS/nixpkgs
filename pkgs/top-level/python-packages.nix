@@ -343,6 +343,8 @@ self: super: with self; {
 
   aiokef = callPackage ../development/python-modules/aiokef { };
 
+  aiokem = callPackage ../development/python-modules/aiokem { };
+
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
   aiolifx-connection = callPackage ../development/python-modules/aiolifx-connection { };
