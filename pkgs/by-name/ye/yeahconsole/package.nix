@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jceb ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
