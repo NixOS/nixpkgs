@@ -14501,6 +14501,8 @@ self: super: with self; {
 
   pyvista = callPackage ../development/python-modules/pyvista { };
 
+  pyvistaqt = callPackage ../development/python-modules/pyvistaqt { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvizio = callPackage ../development/python-modules/pyvizio { };
