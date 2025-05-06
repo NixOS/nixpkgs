@@ -35,6 +35,10 @@ buildGoModule rec {
     go test --race $(go list ./... | grep -v /test/)
   '';
 
+  # Trusted by this computer: no: x509: “cert-manager” certificate is not
+  # trusted
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cmctl \
         --bash <($out/bin/cmctl completion bash) \
@@ -43,11 +47,11 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "`cmctl` is the command line utility that makes cert-manager'ing easier.";
+    description = "Command line utility to interact with a cert-manager instalation on Kubernetes";
     mainProgram = "cmctl";
     longDescription = ''
-      cmctl is a command line tool that can help you manage cert-manager and
-      its resources inside your cluster.
+      cmctl is a command line tool to help you manage cert-manager and its
+      resources inside your Kubernetes cluster.
     '';
     downloadPage = "https://github.com/cert-manager/cmctl";
     license = licenses.asl20;
