@@ -19358,459 +19358,701 @@ with self;
     };
   };
 
-  LocaleCLDRLocalesAr = buildPerlPackage {
+  LocaleCLDRLocalesAr = buildPerlModule {
     pname = "Locale-CLDR-Locales-Ar";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ar-v0.46.0.tar.gz";
-      sha256 = "04sbjh38gh0qhl1rzqs52ix6hjw6sbrlh04bnpd36d8fwmzi29wv";
+      hash = "sha256-mycRf+UONTPatYsASPPShktoehRF458DhRjAhwaUSxM=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Ar locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Arabic )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesBg = buildPerlPackage {
+  LocaleCLDRLocalesBg = buildPerlModule {
     pname = "Locale-CLDR-Locales-Bg";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Bg-v0.46.0.tar.gz";
-      sha256 = "1qj9dzna6ycaqfwd1qr4xhi0lmbxi4p6vdx710z29pin2a717k20";
+      hash = "sha256-QMwTjhI23iQ+CKe3bS6JfVUKIuwk49C4w4p5o+xvSeI=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Bg locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Bulgarian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesCa = buildPerlPackage {
+  LocaleCLDRLocalesCa = buildPerlModule {
     pname = "Locale-CLDR-Locales-Ca";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ca-v0.46.0.tar.gz";
-      sha256 = "1l7v0a1qcbp6f6swr8q80y9j3pwy8xw3j60s0xzskcjkvszcvi9v";
+      hash = "sha256-O8XNvt5Tsql/BxoYOXhHnt8hkwcIo8y1ceYuhoMC+9A=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Ca locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Catalan )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesCs = buildPerlPackage {
+  LocaleCLDRLocalesCs = buildPerlModule {
     pname = "Locale-CLDR-Locales-Cs";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Cs-v0.46.0.tar.gz";
-      sha256 = "0y1qbkhyrac9v58nnbw2211ks36i50jl3z25n8idygpycbh34zni";
+      hash = "sha256-0X4y4GL+Pt8iskX8QSUo0Qw9QxCCL2tR2Ymp7OFcOHg=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Cs locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Czech )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesDa = buildPerlPackage {
+  LocaleCLDRLocalesDa = buildPerlModule {
     pname = "Locale-CLDR-Locales-Da";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Da-v0.46.0.tar.gz";
-      sha256 = "0ki0j7ly2fbgkfxbgc99ziqlkmq0a3z2xpvzhqzz6rhj2vng6klp";
+      hash = "sha256-l07z7BYSZvM/hn/fLv5QANdJcfwpsbe6m2854emRIE4=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Da locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Danish )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesDe = buildPerlPackage {
+  LocaleCLDRLocalesDe = buildPerlModule {
     pname = "Locale-CLDR-Locales-De";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-De-v0.46.0.tar.gz";
-      sha256 = "0rbrkqa502y63nsgww3c1z1ysvgwkcrirnzzy1ym1q1z1idmq7mz";
+      hash = "sha256-vx5cWww/4FB98P/bHDOb/G3tww9scP60HcYLUBSeeWU=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the De locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for German )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesEl = buildPerlPackage {
+  LocaleCLDRLocalesEl = buildPerlModule {
     pname = "Locale-CLDR-Locales-El";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-El-v0.46.0.tar.gz";
-      sha256 = "10ls1cpyi0gkykm67i70gkzimwwly5l1p0g9zkg5lwlk30ibwvr4";
+      hash = "sha256-JG++IhiTclre/OmBG2jxlPMa/3zgxGPq9POB6C8LmoI=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the El locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Greek )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesEn = buildPerlPackage {
+  LocaleCLDRLocalesEn = buildPerlModule {
     pname = "Locale-CLDR-Locales-En";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-En-v0.46.0.tar.gz";
-      sha256 = "0lcp364ns3dj7ggd90w0rhkfdgwps78x1dh8g13gwppzysq5y431";
+      hash = "sha256-YRBfsPb/Xv5GeAi20NHRl7/mJsyAg9TeO7INbYkZl1E=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the En locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for English )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesEs = buildPerlPackage {
+  LocaleCLDRLocalesEs = buildPerlModule {
     pname = "Locale-CLDR-Locales-Es";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Es-v0.46.0.tar.gz";
-      sha256 = "094mis7wgir5f9d3nsx0wvq759zs3svd8i05r1rphfxdyq0m513m";
+      hash = "sha256-dYRSAfatO3hzyAVE1LYe+qdy8OagaztaciXHx4+OlSQ=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Es locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Spanish )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesEt = buildPerlPackage {
+  LocaleCLDRLocalesEt = buildPerlModule {
     pname = "Locale-CLDR-Locales-Et";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Et-v0.46.0.tar.gz";
-      sha256 = "0khin62c036vqbqn6v12pgb4n3mlshwgjyvh3dw9jzc8xziwmpnk";
+      hash = "sha256-097K4++IfZl4G3B7+TjUtA5L1rsibGPxwtsMwISxEU4=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Et locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Estonian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesFi = buildPerlPackage {
+  LocaleCLDRLocalesFi = buildPerlModule {
     pname = "Locale-CLDR-Locales-Fi";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Fi-v0.46.0.tar.gz";
-      sha256 = "173a2yphbk0dq90nig9rchwsvdlkpk4d9gravrm6kgzz033kq9bj";
+      hash = "sha256-ciU8xwD/v2lq3iq/1Mi8k7atOWQ5vWhBwg3MBa8Xapw=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Fi locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Finnish )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesFr = buildPerlPackage {
+  LocaleCLDRLocalesFr = buildPerlModule {
     pname = "Locale-CLDR-Locales-Fr";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Fr-v0.46.0.tar.gz";
-      sha256 = "02b4r3fli897b40y16bm6izzsav17nc8fy01jd0cy9zq02d9n97m";
+      hash = "sha256-9SSbmgD4J89AkwF4h5g9YSv9fzR1meABWSehSN3IZAk=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Fr locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for French )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesHu = buildPerlPackage {
+  LocaleCLDRLocalesHu = buildPerlModule {
     pname = "Locale-CLDR-Locales-Hu";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Hu-v0.46.0.tar.gz";
-      sha256 = "1k1zkbbvc4yayz4q7qbrjdnr53gg3ayjc1l8si6789549cnbwq3x";
+      hash = "sha256-fWC+LEukJHRM1IgGJr0a742SbZN54YPJ98oTtteaP8w=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Hu locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Hungarian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesId = buildPerlPackage {
+  LocaleCLDRLocalesId = buildPerlModule {
     pname = "Locale-CLDR-Locales-Id";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Id-v0.46.0.tar.gz";
-      sha256 = "0cfb7n88kvp9qxwmvmk7gwh8gby9d3fq4axrhv8k1nfq7vv7p2zz";
+      hash = "sha256-/4t79j7Y2TDRhrkrgt1oya+HIH9n1l15x+nuiZA9yzE=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Id locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Indonesian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesIs = buildPerlPackage {
+  LocaleCLDRLocalesIs = buildPerlModule {
     pname = "Locale-CLDR-Locales-Is";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Is-v0.46.0.tar.gz";
-      sha256 = "12mi9kcv51h74ahm0c0sl2hff10yr32yrdzxh2ivpv9jidi4qv58";
+      hash = "sha256-qGxMYosy7bujgP237MXIHgTnoKAaMFChIgeGstlMsYo=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Is locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Icelandic )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesIt = buildPerlPackage {
+  LocaleCLDRLocalesIt = buildPerlModule {
     pname = "Locale-CLDR-Locales-It";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-It-v0.46.0.tar.gz";
-      sha256 = "04f24zfhg25ccrkpaj4dx41s5x2ckgh6nmzfy3df32l3lwdrdqhj";
+      hash = "sha256-EuKWG6eDiuHa8O5Xa+CbTPSiA+mNSHVnZqyIB90nwhE=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the It locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Italian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesLt = buildPerlPackage {
+  LocaleCLDRLocalesLt = buildPerlModule {
     pname = "Locale-CLDR-Locales-Lt";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Lt-v0.46.0.tar.gz";
-      sha256 = "1lllzgjzi37ar0s0b7jqvfqrcqqyxac4pgq6wbaf6s3s3d9lz1jv";
+      hash = "sha256-W4ZPUxt6aOPU4ga/S5jqHmOWsdtYngU0yOqM+OX7lNI=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Lt locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Lithuanian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesMs = buildPerlPackage {
+  LocaleCLDRLocalesMs = buildPerlModule {
     pname = "Locale-CLDR-Locales-Ms";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ms-v0.46.0.tar.gz";
-      sha256 = "121f4m5hz4bhhavhrvzl22zkwpcrxh7cb8i37wr689qs1q8sr4bz";
+      hash = "sha256-f5GsEQ4aJ2QyPyOixQ7smV0+vxD07wy3gnCRD0slLog=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Ms locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Malay )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesNb = buildPerlPackage {
+  LocaleCLDRLocalesNb = buildPerlModule {
     pname = "Locale-CLDR-Locales-Nb";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Nb-v0.46.0.tar.gz";
-      sha256 = "0xcf8p0ha6zbf65d7nf2a9cx78mfb17i011lqmsb8j2ry5ihxdnv";
+      hash = "sha256-27YOY/FZSLR0xTQEEE9YrqLTWVLC2dOKcesbBcFFjnU=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Nb locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      LocaleCLDRLocalesNo
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Norwegian Bokml )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesNl = buildPerlPackage {
+  LocaleCLDRLocalesNl = buildPerlModule {
     pname = "Locale-CLDR-Locales-Nl";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Nl-v0.46.0.tar.gz";
-      sha256 = "196gx0r4d4lsifhhcrbbrqarjcwv9iad8c5r9cw2zbk45xdkh03a";
+      hash = "sha256-agA4Wy9kri84S7kw1FRMmzOZFc5rZQahi5qSRjLoz6Q=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Nl locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Dutch )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesPl = buildPerlPackage {
+  LocaleCLDRLocalesNo = buildPerlModule {
+    pname = "Locale-CLDR-Locales-No";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-No-v0.46.0.tar.gz";
+      hash = "sha256-p5+h0USizdgXQD/v9mktiYmhDqj9S/eI7Jh9DKXue0k=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Norwegian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesPl = buildPerlModule {
     pname = "Locale-CLDR-Locales-Pl";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Pl-v0.46.0.tar.gz";
-      sha256 = "07ickr23wq6v95838mn795qc9m9iznx63v25yczg25w3dw65725n";
+      hash = "sha256-tohTDG+DF/E+80XsYbr9MdXEcEnHVjRQSdtgPkSeLB4=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Pl locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Polish )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesPt = buildPerlPackage {
+  LocaleCLDRLocalesPt = buildPerlModule {
     pname = "Locale-CLDR-Locales-Pt";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Pt-v0.46.0.tar.gz";
-      sha256 = "13n53v1hyv5dlmfbwv0844s78js8div8dpm895grq9g7pqf6nd0w";
+      hash = "sha256-HDRrHL7nJZxfSajehnZsSEt0NCEIbL5cpa1sD8MexY4=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Pt locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Portuguese )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesRu = buildPerlPackage {
+  LocaleCLDRLocalesRu = buildPerlModule {
     pname = "Locale-CLDR-Locales-Ru";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ru-v0.46.0.tar.gz";
-      sha256 = "19nyv65r4aq6ri1k3npzrlwlfl6ggs29fif8jdanpyqbd5hifpjj";
+      hash = "sha256-Ul4XYWkL+2tVk8hFl4R+z1BHOc3/2jFDzAYrkovZ3qY=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Ru locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Russian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesSv = buildPerlPackage {
+  LocaleCLDRLocalesSv = buildPerlModule {
     pname = "Locale-CLDR-Locales-Sv";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Sv-v0.46.0.tar.gz";
-      sha256 = "0acdjz3n29x9i6qz99bh9mdgif8y217j2ivylvddry6cyhsljxvj";
+      hash = "sha256-cndJNfTM+Nzapn5HIU8QHrn4Wk1wpfSxiaknYceXjSk=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Sv locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Swedish )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesTr = buildPerlPackage {
+  LocaleCLDRLocalesTr = buildPerlModule {
     pname = "Locale-CLDR-Locales-Tr";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Tr-v0.46.0.tar.gz";
-      sha256 = "1614ahdzwfqc7qws08rxm1axx1dms0540asm5pj13hbr86s7cdk7";
+      hash = "sha256-ZzZ2tEF5wRHkLVUrQArQtYXeVag9I6A5Pgw7/htUJJg=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Tr locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Turkish )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesUk = buildPerlPackage {
+  LocaleCLDRLocalesUk = buildPerlModule {
     pname = "Locale-CLDR-Locales-Uk";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Uk-v0.46.0.tar.gz";
-      sha256 = "0l0my33c0a1h727qb89kh2fmjrxfhdhg4rhlrvmamh6x1jnv2ap2";
+      hash = "sha256-4iqxrQzdwKrqzhRm8mCDrmdZnYAzoYWPODAowMbwFVA=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Uk locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Ukrainian )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
     };
   };
 
-  LocaleCLDRLocalesZh = buildPerlPackage {
+  LocaleCLDRLocalesZh = buildPerlModule {
     pname = "Locale-CLDR-Locales-Zh";
     version = "0.46.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Zh-v0.46.0.tar.gz";
-      sha256 = "1igh5qna28ccym6z5i18kx9vc2kavi49agkd2rkh6r3xsl3q3c53";
+      hash = "sha256-o7CBB9V9ZANnFm0+lUjcagq2U58oxPJN9YwhoSwu8MU=";
     };
-    propagatedBuildInputs = [ LocaleCLDR ];
-    meta = with lib; {
-      description = "CLDR data for the Zh locale";
-      license = with licenses; [
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Chinese )";
+      license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
