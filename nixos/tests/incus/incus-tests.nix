@@ -30,7 +30,7 @@ import ../make-test-python.nix (
           boot.initrd.systemd.enable = init == "systemd";
 
           # Arbitrary sysctl modification to ensure containers can update sysctl
-          boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+          boot.kernel.sysctl.net.ipv4.ip_forward = true;
         };
       };
 

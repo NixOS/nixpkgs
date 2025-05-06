@@ -57,7 +57,7 @@ import ./make-test-python.nix (
             1
             2
           ];
-          boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+          boot.kernel.sysctl.net.ipv4.ip_forward = true;
           networking.firewall.extraCommands = "iptables -A nixos-fw -i eth2 -p ospfigp -j ACCEPT";
           services.frr = {
             ospfd.enable = true;
@@ -76,7 +76,7 @@ import ./make-test-python.nix (
             3
             2
           ];
-          boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+          boot.kernel.sysctl.net.ipv4.ip_forward = true;
           networking.firewall.extraCommands = "iptables -A nixos-fw -i eth2 -p ospfigp -j ACCEPT";
           services.frr = {
             ospfd.enable = true;

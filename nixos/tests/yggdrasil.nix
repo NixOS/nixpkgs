@@ -86,7 +86,7 @@ in
           );
         };
 
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+        boot.kernel.sysctl.net.ipv6.conf.all.forwarding = 1;
 
         networking = {
           bridges.br0.interfaces = [ ];

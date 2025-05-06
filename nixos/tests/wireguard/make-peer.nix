@@ -7,9 +7,9 @@
 lib.mkMerge [
   {
     boot.kernel.sysctl = {
-      "net.ipv6.conf.all.forwarding" = "1";
-      "net.ipv6.conf.default.forwarding" = "1";
-      "net.ipv4.ip_forward" = "1";
+      net.ipv6.conf.all.forwarding = true;
+      net.ipv6.conf.default.forwarding = true;
+      net.ipv4.ip_forward = true;
     };
 
     networking.useDHCP = false;

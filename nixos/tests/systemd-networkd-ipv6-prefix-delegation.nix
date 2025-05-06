@@ -191,7 +191,7 @@ import ./make-test-python.nix (
 
         boot.kernel.sysctl = {
           # we want to forward packets from the ISP to the client and back.
-          "net.ipv6.conf.all.forwarding" = 1;
+          net.ipv6.conf.all.forwarding = 1;
         };
 
         networking = {

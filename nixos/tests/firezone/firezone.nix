@@ -244,10 +244,10 @@ import ../make-test-python.nix (
             '';
           };
 
-          boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
-          # boot.kernel.sysctl."net.ipv4.conf.all.src_valid_mark" = "1";
-          boot.kernel.sysctl."net.ipv6.conf.default.forwarding" = "1";
-          boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = "1";
+          boot.kernel.sysctl.net.ipv4.ip_forward = true;
+          # boot.kernel.sysctl.net.ipv4.conf.all.src_valid_mark = "1";
+          boot.kernel.sysctl.net.ipv6.conf.default.forwarding = true;
+          boot.kernel.sysctl.net.ipv6.conf.all.forwarding = true;
 
           security.pki.certificateFiles = [ certs.ca.cert ];
           networking.extraHosts = ''
