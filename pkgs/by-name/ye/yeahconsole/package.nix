@@ -31,6 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jceb/yeahconsole";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jceb ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })
