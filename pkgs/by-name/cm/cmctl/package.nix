@@ -50,6 +50,15 @@ buildGoModule rec {
     description = "Command line utility to interact with a cert-manager instalation on Kubernetes";
     mainProgram = "cmctl";
     longDescription = ''
+      cert-manager adds certificates and certificate issuers as resource types
+      in Kubernetes clusters, and simplifies the process of obtaining, renewing
+      and using those certificates.
+
+      It can issue certificates from a variety of supported sources, including
+      Let's Encrypt, HashiCorp Vault, and Venafi as well as private PKI, and it
+      ensures certificates remain valid and up to date, attempting to renew
+      certificates at an appropriate time before expiry.
+
       cmctl is a command line tool to help you manage cert-manager and its
       resources inside your Kubernetes cluster.
     '';
