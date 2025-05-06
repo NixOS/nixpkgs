@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   flake8,
   python,
   pythonOlder,
@@ -10,18 +11,20 @@
 buildPythonPackage rec {
   pname = "pep8-naming";
   version = "0.15.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
+    repo = "pep8-naming";
     tag = version;
     hash = "sha256-LOHPLS0BtKsocghi3K24VitlRCwyHbYZB6916i7Gj9c=";
   };
 
-  propagatedBuildInputs = [ flake8 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ flake8 ];
 
   checkPhase = ''
     runHook preCheck
