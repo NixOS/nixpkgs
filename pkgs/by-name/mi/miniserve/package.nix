@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SosRbtk5gBcOVropy+HVFFmLLexu29GjchC6zFweiYw=";
+  cargoHash = "sha256-BIBAj57mgMca7mrPFLMKP+yBhLJhNQ4I5mqSRaKxqjA=";
 
   nativeBuildInputs = [
     installShellFiles
