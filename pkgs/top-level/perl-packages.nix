@@ -2359,12 +2359,23 @@ with self;
       url = "mirror://cpan/authors/id/P/PR/PREACTION/Beam-Emitter-1.007.tar.gz";
       hash = "sha256-cBmNscasPWIX2Nl8ZXfRZpVBijuM+q6FOIojUJ9GnZU=";
     };
-    buildInputs = [ TestAPI TestFatal TestLib ];
-    propagatedBuildInputs = [ ModuleRuntime Moo TypeTiny ];
+    buildInputs = [
+      TestAPI
+      TestFatal
+      TestLib
+    ];
+    propagatedBuildInputs = [
+      ModuleRuntime
+      Moo
+      TypeTiny
+    ];
     meta = {
       homepage = "https://github.com/preaction/Beam-Emitter";
       description = "Role for event emitting classes";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -2376,11 +2387,17 @@ with self;
       hash = "sha256-YSj9I8RZC/jYBYoBV6VgoiU3fDx7iZJYsD/BcZBZUdQ=";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ Moo TypeTiny ];
+    propagatedBuildInputs = [
+      Moo
+      TypeTiny
+    ];
     meta = {
       homepage = "https://github.com/preaction/Beam-Service";
       description = "Role for services to access Beam::Wire features";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -2391,12 +2408,31 @@ with self;
       url = "mirror://cpan/authors/id/P/PR/PREACTION/Beam-Wire-1.026.tar.gz";
       hash = "sha256-L+6L9WXeEQpGu0ZQAn6cdLjTaQqWlCdxEaJdwAI632c=";
     };
-    buildInputs = [ TestDeep TestDifferences TestException TestLib ];
-    propagatedBuildInputs = [ BeamEmitter BeamService ConfigAny DataDPath ModuleRuntime Moo PathTiny Throwable TypeTiny YAML ];
+    buildInputs = [
+      TestDeep
+      TestDifferences
+      TestException
+      TestLib
+    ];
+    propagatedBuildInputs = [
+      BeamEmitter
+      BeamService
+      ConfigAny
+      DataDPath
+      ModuleRuntime
+      Moo
+      PathTiny
+      Throwable
+      TypeTiny
+      YAML
+    ];
     meta = {
       homepage = "https://github.com/preaction/Beam-Wire";
       description = "Lightweight Dependency Injection Container";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -8086,11 +8122,19 @@ with self;
       hash = "sha256-mfRCbUWMW7jUxRDgwmKcioiuT0ZhwLHkXFVQNi+S7ME=";
     };
     buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ ClassXSAccessor IteratorUtil SubExporter aliased ];
+    propagatedBuildInputs = [
+      ClassXSAccessor
+      IteratorUtil
+      SubExporter
+      aliased
+    ];
     meta = {
       homepage = "http://metacpan.org/release/Data-DPath";
       description = "DPath is not XPath!";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -9080,7 +9124,10 @@ with self;
     meta = {
       homepage = "https://metacpan.org/release/DateTime-Format-Duration-ISO8601";
       description = "Parse and format ISO8601 duration";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -13824,7 +13871,10 @@ with self;
     propagatedBuildInputs = [ ParamsUtil ];
     meta = {
       description = "Find a file within a set of paths (like @INC or Java classpaths)";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -13838,7 +13888,10 @@ with self;
     propagatedBuildInputs = [ TestException ];
     meta = {
       description = "Recursive versions of mkdir() and rmdir() without as much overhead as File::Path";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -17941,7 +17994,10 @@ with self;
       url = "mirror://cpan/authors/id/R/RO/ROODE/Iterator-Util-0.02.tar.gz";
       hash = "sha256-YYLkiPHxlh2GU9a7PssSIndv8oNbUawSCRjFI4wetWM=";
     };
-    propagatedBuildInputs = [ ExceptionClass Iterator ];
+    propagatedBuildInputs = [
+      ExceptionClass
+      Iterator
+    ];
     meta = {
     };
   };
@@ -19282,11 +19338,23 @@ with self;
       hash = "sha256-UMQgOSWX4L9LARxdPsQ/Ft9BT0vT+SleaAERh0xPMZI=";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ ClassLoad DateTime DateTimeLocale Moo MooXClassAttribute TypeTiny UnicodeRegexSet namespaceautoclean ];
+    propagatedBuildInputs = [
+      ClassLoad
+      DateTime
+      DateTimeLocale
+      Moo
+      MooXClassAttribute
+      TypeTiny
+      UnicodeRegexSet
+      namespaceautoclean
+    ];
     meta = {
       homepage = "https://github.com/ThePilgrim/perlcldr";
       description = "A Module to create locale objects with localisation data from the CLDR";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19300,7 +19368,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Ar locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19314,7 +19385,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Bg locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19328,7 +19402,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Ca locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19342,7 +19419,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Cs locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19356,7 +19436,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Da locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19370,7 +19453,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the De locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19384,7 +19470,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the El locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19398,7 +19487,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the En locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19412,7 +19504,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Es locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19426,7 +19521,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Et locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19440,7 +19538,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Fi locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19454,7 +19555,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Fr locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19468,7 +19572,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Hu locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19482,7 +19589,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Id locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19496,7 +19606,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Is locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19510,7 +19623,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the It locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19524,7 +19640,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Lt locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19538,7 +19657,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Ms locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19552,7 +19674,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Nb locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19566,7 +19691,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Nl locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19580,7 +19708,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Pl locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19594,7 +19725,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Pt locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19608,7 +19742,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Ru locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19622,7 +19759,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Sv locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19636,7 +19776,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Tr locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19650,7 +19793,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Uk locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19664,7 +19810,10 @@ with self;
     propagatedBuildInputs = [ LocaleCLDR ];
     meta = with lib; {
       description = "CLDR data for the Zh locale";
-      license = with licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19816,7 +19965,12 @@ with self;
       url = "mirror://cpan/authors/id/D/DM/DMUEY/Locales-0.34.tar.gz";
       hash = "sha256-6k3c6fTc/5PSBeF7xYSCQJDXqlpbrtVjMFwm6IngkM0=";
     };
-    propagatedBuildInputs = [ FileSlurp ModuleWant StringUnicodeUTF8 TestCarp ];
+    propagatedBuildInputs = [
+      FileSlurp
+      ModuleWant
+      StringUnicodeUTF8
+      TestCarp
+    ];
     meta = {
       description = "Methods for getting localized CLDR language/territory names (and a subset of other data)";
     };
@@ -22971,7 +23125,10 @@ with self;
       url = "mirror://cpan/authors/id/D/DM/DMUEY/Module-Want-0.6.tar.gz";
       hash = "sha256-xyUkQjT1qncmI/7gDTDz9tnFOaQW3i2wXz7KU7O6Nt4=";
     };
-    propagatedBuildInputs = [ FilePathTiny TestCarp ];
+    propagatedBuildInputs = [
+      FilePathTiny
+      TestCarp
+    ];
     meta = {
       description = "Check @INC once for modules that you want but may not have";
     };
@@ -23894,15 +24051,21 @@ with self;
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-ClassAttribute-0.29.tar.gz";
       hash = "sha256-YUTHfFJ3DU+DHK22yto3ElyAs+T/yyRtp+6dVZIu5yU=";
     };
-    buildInputs = [ TestFatal TestRequires ];
-    propagatedBuildInputs = [ Moose namespaceautoclean namespaceclean ];
+    buildInputs = [
+      TestFatal
+      TestRequires
+    ];
+    propagatedBuildInputs = [
+      Moose
+      namespaceautoclean
+      namespaceclean
+    ];
     meta = {
       homepage = "http://metacpan.org/release/MooseX-ClassAttribute";
       description = "Declare class attributes Moose-style";
       license = lib.licenses.artistic2;
     };
   };
-
 
   MooseXStorageFormatJSONpm = buildPerlPackage {
     pname = "MooseX-Storage-Format-JSONpm";
@@ -24010,11 +24173,18 @@ with self;
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooX-ClassAttribute-0.011.tar.gz";
       hash = "sha256-wLmKZi7ynJv2X0SknCR6VS6Jhic1oXimVoExgf0NQ/M=";
     };
-    propagatedBuildInputs = [ ExporterTiny Moo RoleTiny ];
+    propagatedBuildInputs = [
+      ExporterTiny
+      Moo
+      RoleTiny
+    ];
     meta = {
       homepage = "https://metacpan.org/release/MooX-ClassAttribute";
       description = "Declare class attributes Moose-style... but without Moose";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -27009,7 +27179,10 @@ with self;
     meta = {
       homepage = "https://github.com/rjbs/Number-Tolerant";
       description = "Tolerance ranges for inexact numbers";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -28122,7 +28295,12 @@ with self;
       hash = "sha256-zrqlPujd6TDNlFlrwfOseR1s4EtD9zITr/GOOiO19r8=";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ CarpClan DBDPg ListMoreUtils LogAny ];
+    propagatedBuildInputs = [
+      CarpClan
+      DBDPg
+      ListMoreUtils
+      LogAny
+    ];
     meta = {
       description = "A toolkit integrating intelligent PostgreSQL dbs into Perl objects";
       license = lib.licenses.bsd3;
@@ -28136,7 +28314,11 @@ with self;
       url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Simple-3.1.0.tar.gz";
       hash = "sha256-9qG1vjnqZw5r62gFR8/qVtDI04Z4I36Z4UVJVg0858M=";
     };
-    propagatedBuildInputs = [ CarpClan LogAny PGObject ];
+    propagatedBuildInputs = [
+      CarpClan
+      LogAny
+      PGObject
+    ];
     meta = {
       description = "Minimalist stored procedure mapper based on LedgerSMB's DBObject";
       license = lib.licenses.bsd3;
@@ -28151,7 +28333,13 @@ with self;
       hash = "sha256-scoiO8sjkzBA0/8WI66lYr10I/1jZgDo6NqYH4QdvHM=";
     };
     # nix-generate-from-cpan did not pick up required TestException dep
-    propagatedBuildInputs = [ CarpClan LogAny Moo TestException PGObjectSimple ];
+    propagatedBuildInputs = [
+      CarpClan
+      LogAny
+      Moo
+      TestException
+      PGObjectSimple
+    ];
     meta = {
       description = "Moo/Moose mappers for minimalist PGObject framework";
       license = lib.licenses.bsd3;
@@ -28179,7 +28367,13 @@ with self;
       url = "mirror://cpan/authors/id/E/EI/EINHVERFR/PGObject-Type-DateTime-2.1.1.tar.gz";
       hash = "sha256-UXCgDzbiILMHWZ3FaemhSSZKmUmB6Jz1vLqFQ951n1k=";
     };
-    propagatedBuildInputs = [ DateTime DateTimeTimeZone PGObject TermTable TestSimple ];
+    propagatedBuildInputs = [
+      DateTime
+      DateTimeTimeZone
+      PGObject
+      TermTable
+      TestSimple
+    ];
     meta = {
       description = "DateTime Wrappers for PGObject";
       license = lib.licenses.bsd3;
@@ -28194,7 +28388,11 @@ with self;
       hash = "sha256-9FG++wsSIQicvAtvYNFApT0uorV6ijXorWi0xft9odU=";
     };
     buildInputs = [ FileSlurp ];
-    propagatedBuildInputs = [ DBDPg PGObject RefUtil ];
+    propagatedBuildInputs = [
+      DBDPg
+      PGObject
+      RefUtil
+    ];
     meta = {
       description = "Wrapper for raw strings mapping to BYTEA columns";
       license = lib.licenses.bsd3;
@@ -28221,8 +28419,20 @@ with self;
       url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Util-DBAdmin-1.6.2.tar.gz";
       hash = "sha256-lMu6KNKVgpYvigwZ7w4GEpjIcpcog0r15AqQHt7kGtY=";
     };
-    buildInputs = [ PerlCritic PerlCriticStricterSubs TestException ];
-    propagatedBuildInputs = [ CaptureTiny DBDPg DBI LogAny Moo ScopeGuard namespaceclean ];
+    buildInputs = [
+      PerlCritic
+      PerlCriticStricterSubs
+      TestException
+    ];
+    propagatedBuildInputs = [
+      CaptureTiny
+      DBDPg
+      DBI
+      LogAny
+      Moo
+      ScopeGuard
+      namespaceclean
+    ];
     meta = {
       description = "PostgreSQL Database Management Facilities for PGObject";
       license = lib.licenses.bsd3;
@@ -28501,11 +28711,19 @@ with self;
       hash = "sha256-zeFNMUMEKUdE0q3ZIzhrMEf0MLx9Cn0mZAUqTtv8KgM=";
     };
     buildInputs = [ TestWarnings ];
-    propagatedBuildInputs = [ FilePathList ListMoreUtils PPI PerlCritic ];
+    propagatedBuildInputs = [
+      FilePathList
+      ListMoreUtils
+      PPI
+      PerlCritic
+    ];
     meta = {
       homepage = "http://perlcritic.com";
       description = "Perl::Critic plugin for stricter subroutine checking";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -28860,11 +29078,18 @@ with self;
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Plack-Builder-Conditionals-0.05.tar.gz";
       hash = "sha256-TUyym5kmx76eTL4vnNPUdUJpxcQEaYh0Mx39Gdb6cIs=";
     };
-    propagatedBuildInputs = [ ListMoreUtils NetCIDRLite Plack ];
+    propagatedBuildInputs = [
+      ListMoreUtils
+      NetCIDRLite
+      Plack
+    ];
     meta = {
       homepage = "https://github.com/kazeburo/Plack-Builder-Conditionals";
       description = "Plack::Builder extension";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -29098,12 +29323,21 @@ with self;
       url = "mirror://cpan/authors/id/M/MO/MOZNION/Plack-Request-WithEncoding-0.14.tar.gz";
       hash = "sha256-+4xC1epaGPx+8Fv2TJolmU/PBZzV0EFFuxENBFj+tAc=";
     };
-    buildInputs = [ HTTPMessage ModuleBuildTiny ];
-    propagatedBuildInputs = [ HashMultiValue Plack ];
+    buildInputs = [
+      HTTPMessage
+      ModuleBuildTiny
+    ];
+    propagatedBuildInputs = [
+      HashMultiValue
+      Plack
+    ];
     meta = {
       homepage = "https://github.com/moznion/Plack-Request-WithEncoding";
       description = "Subclass of L<Plack::Request> which supports encoded requests";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -31236,8 +31470,23 @@ with self;
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Session-Storage-Secure-1.000.tar.gz";
       hash = "sha256-WLLwTrpWqZJElLs+3dQmr/p1w93tHFY/gpb8wT+OZms=";
     };
-    buildInputs = [ NumberTolerant TestDeep TestFatal ];
-    propagatedBuildInputs = [ CryptCBC CryptRijndael CryptURandom MathRandomISAACXS Moo MooXTypesMooseLike SerealDecoder SerealEncoder StringCompareConstantTime namespaceclean ];
+    buildInputs = [
+      NumberTolerant
+      TestDeep
+      TestFatal
+    ];
+    propagatedBuildInputs = [
+      CryptCBC
+      CryptRijndael
+      CryptURandom
+      MathRandomISAACXS
+      Moo
+      MooXTypesMooseLike
+      SerealDecoder
+      SerealEncoder
+      StringCompareConstantTime
+      namespaceclean
+    ];
     meta = {
       homepage = "https://github.com/dagolden/Session-Storage-Secure";
       description = "Encrypted, expiring, compressed, serialized session data with integrity";
@@ -32545,10 +32794,17 @@ with self;
       url = "mirror://cpan/authors/id/D/DM/DMUEY/String-UnicodeUTF8-0.23.tar.gz";
       hash = "sha256-NqYZfdb6S482FR3xAIZVyquN799qHo/uql45azbuRVo=";
     };
-    propagatedBuildInputs = [ BFlags ModuleWant StringUnquotemeta ];
+    propagatedBuildInputs = [
+      BFlags
+      ModuleWant
+      StringUnquotemeta
+    ];
     meta = {
       description = "Non-collation related unicode/utf-8 bytes string-type-agnostic utils that work as far back as perl 5.6";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -33885,7 +34141,10 @@ with self;
     };
     meta = {
       description = "Format a header and rows into a table";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -34070,7 +34329,10 @@ with self;
     buildInputs = [ TermTable ];
     meta = {
       description = "Basic utilities for writing tests";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -34997,7 +35259,10 @@ with self;
     };
     meta = {
       description = "Use libraries from a t/lib directory";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -38179,7 +38444,10 @@ with self;
     };
     meta = {
       description = "Subtraction and Intersection of Character Sets in Unicode Regular Expressions";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
