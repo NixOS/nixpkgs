@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A bash script for running the doas command with keeping environment variables";
+    description = "A bash script for running the doas command while keeping environment variables";
     homepage = "https://github.com/stas-badzi/doas-keepenv";
     mainProgram = "doas-keepenv";
     license = lib.licenses.mit;
