@@ -53,9 +53,7 @@ let
     // {
       # TODO: Refactor this so we can ping entire teams instead of the individual members.
       # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
-      maintainers =
-        meta.maintainers or [ ]
-        ++ lib.flatten (map (team: team.members or [ ]) (meta.teams or [ ]));
+      maintainers = meta.maintainers or [ ];
     }
   ) attrsWithPackages;
 
