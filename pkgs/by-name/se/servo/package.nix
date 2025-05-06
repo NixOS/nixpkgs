@@ -132,6 +132,11 @@ rustPlatform.buildRustPackage {
       apple-sdk_14
     ];
 
+  # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
+  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "servo_allocator/use-system-allocator"
+  ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   # copy resources into `$out` to be used during runtime
