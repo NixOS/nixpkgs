@@ -3,10 +3,9 @@
   feature,
   libraries,
   versionAttr,
-  pythonPackages,
 }:
 
-(cudaPackages.writeGpuTestPython.override { python3Packages = pythonPackages; })
+cudaPackages.writeGpuTestPython
   {
     inherit feature;
     inherit libraries;
