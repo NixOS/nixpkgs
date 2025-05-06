@@ -31,17 +31,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "bulloak";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "alexfertel";
     repo = "bulloak";
     rev = "v${version}";
-    hash = "sha256-OAjy8SXaD+2/C5jLNIezv/KdrPHlwJC5L1LwGhqBWQs=";
+    hash = "sha256-8Qp8ceafAkw7Tush/dvBl27q5oNDzbOqyvSLXhjf4fo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-sdnpnKWKCJeBbooM0Qe/wccF1b3LLiTfZe4RdxbJYcs=";
+  cargoHash = "sha256-yaRaB3U8Wxhp7SK5E44CF8AudhG7ar7L5ey+CRVfYqc=";
 
   # tests run in CI on the source repo
   doCheck = false;
