@@ -76,4 +76,5 @@ in
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../pkgs/top-level/release.nix { }).manual;
   manual-nixpkgs-tests = (import ../pkgs/top-level/release.nix { }).manual.tests;
+  shell = import ../shell.nix { inherit nixpkgs system; };
 }
