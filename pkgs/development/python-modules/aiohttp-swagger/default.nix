@@ -7,6 +7,8 @@
   aiohttp,
   jinja2,
   markupsafe,
+  pytest-aiohttp,
+  pytestCheckHook,
   pythonOlder,
   pyyaml,
 }:
@@ -45,6 +47,11 @@ buildPythonPackage rec {
     jinja2
     markupsafe
     pyyaml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-aiohttp
   ];
 
   pythonRelaxDeps = [
