@@ -43,7 +43,7 @@ jobs:
           git worktree add "$target" "$(git rev-parse HEAD^1)"
           echo "target=$target" >> "$GITHUB_ENV"
 
-      - uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
+      - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
       - name: Fetching the pinned tool
         # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
