@@ -12258,6 +12258,8 @@ self: super: with self; {
 
   pyephember = callPackage ../development/python-modules/pyephember { };
 
+  pyephember2 = callPackage ../development/python-modules/pyephember2 { };
+
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
