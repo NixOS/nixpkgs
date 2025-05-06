@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "9.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jabesq";
