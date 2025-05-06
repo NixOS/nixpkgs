@@ -1,3 +1,11 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2016
+
+# shellcheck source=../../../stdenv/generic/setup.sh
+source /dev/null
+# shellcheck source=../../../build-support/setup-hooks/multiple-outputs.sh
+source /dev/null
+
 cmakePcfileCheckPhase() {
     while IFS= read -rd $'\0' file; do
         grepout=$(grep --line-number '}//nix/store' "$file" || true)
