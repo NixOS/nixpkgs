@@ -1301,6 +1301,13 @@
     githubId = 45176912;
     name = "Tomasz Hołubowicz";
   };
+  altsalt = {
+    email = "salt@sal.td";
+    github = "altsalt";
+    githubId = 2441328;
+    matrix = "@salt:sal.td";
+    name = "Wm Salt Hale";
+  };
   alunduil = {
     email = "alunduil@gmail.com";
     github = "alunduil";
@@ -1588,6 +1595,13 @@
     github = "andrewgazelka";
     githubId = 7644264;
     name = "Andrew Gazelka";
+  };
+  AndrewKvalheim = {
+    email = "andrew@kvalhe.im";
+    github = "AndrewKvalheim";
+    githubId = 1844746;
+    matrix = "@andrew:kvalhe.im";
+    name = "Andrew Kvalheim";
   };
   andrewrk = {
     email = "superjoe30@gmail.com";
