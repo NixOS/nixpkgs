@@ -11,6 +11,7 @@
 
   # nativeBuildInputs
   cmake,
+  ninja,
 
   # dependencies
   cloudpickle,
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-yEwuCsIKNHQf8iCSB38R8mJXvdOi0+MeNk9M9+jWfxU=";
+    hash = "sha256-Qk+pVSwKAIOz6EczGjf4gsOsxAno/vHCgO1EQZDNTsk=";
   };
 
   build-system = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
   dontUseCmakeConfigure = true;
 

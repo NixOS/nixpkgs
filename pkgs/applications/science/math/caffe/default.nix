@@ -14,9 +14,6 @@
   protobuf,
   doxygen,
   blas,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
   lmdbSupport ? true,
   lmdb,
   leveldbSupport ? true,
@@ -82,11 +79,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals pythonSupport [
       python
       numpy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreGraphics
-      CoreVideo
     ];
 
   propagatedBuildInputs = lib.optionals pythonSupport (

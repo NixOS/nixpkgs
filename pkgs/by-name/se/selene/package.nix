@@ -5,8 +5,6 @@
   robloxSupport ? true,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,13 +25,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals robloxSupport [
-      openssl
-    ]
-    ++ lib.optionals (robloxSupport && stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optionals robloxSupport [
+    openssl
+  ];
 
   buildNoDefaultFeatures = !robloxSupport;
 

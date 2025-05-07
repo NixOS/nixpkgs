@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cpu_features";
-  version = "0.9.0";
+  version = "0.10.0";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "cpu_features";
     rev = "v${version}";
-    hash = "sha256-uXN5crzgobNGlLpbpuOxR+9QVtZKrWhxC/UjQEakJwk=";
+    hash = "sha256-YnNcNzlFVTHKCxfmhTDhOxluxK2VCBuEi7VZGgUB4VU=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -7,7 +7,6 @@
   makeWrapper,
   pkg-config,
   openssl,
-  darwin,
   maa-assistant-arknights,
   android-tools,
   git,
@@ -30,15 +29,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   # https://github.com/MaaAssistantArknights/maa-cli/pull/126
   buildNoDefaultFeatures = true;

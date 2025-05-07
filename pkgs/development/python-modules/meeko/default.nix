@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  gemmi,
   numpy,
   pytestCheckHook,
   pythonOlder,
@@ -24,22 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-ViIBiczwxTwraYn8UnFAZFCFT28v3WEYm04W2YpU/4g=";
   };
 
-  patches = [
-    # https://github.com/forlilab/Meeko/issues/60
-    (fetchpatch {
-      name = "fix-unknown-sidechains.patch";
-      url = "https://github.com/forlilab/Meeko/commit/28c9fbfe3b778aa1bd5e8d7e4f3e6edf44633a0c.patch";
-      hash = "sha256-EJbLnbKTTOsTxKtLiU7Af07yjfY63ungGUHbGvrm0AU=";
-    })
-    (fetchpatch {
-      name = "add-test-data.patch";
-      url = "https://github.com/forlilab/Meeko/commit/57b52e3afffb82685cdd1ef1bf6820d55924b97a.patch";
-      hash = "sha256-nLnyIjT68iaY3lAEbH9EJ5jZflhxABBwDqw8kaRKf3k=";
-    })
-  ];
-
   propagatedBuildInputs = [
     # setup.py only requires numpy but others are needed at runtime
+    gemmi
     numpy
     rdkit
     scipy

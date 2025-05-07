@@ -8,7 +8,6 @@
 
   boost,
   cairo,
-  darwin,
   gettext,
   glibmm,
   gtk3,
@@ -77,26 +76,22 @@ let
       gettext
       intltool
     ];
-    buildInputs =
-      [
-        ETL
-        boost
-        cairo
-        glibmm
-        mlt
-        libsigcxx
-        libxmlxx
-        pango
-        imagemagick
-        harfbuzz
-        freetype
-        fribidi
-        openexr
-        fftw
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.Foundation
-      ];
+    buildInputs = [
+      ETL
+      boost
+      cairo
+      glibmm
+      mlt
+      libsigcxx
+      libxmlxx
+      pango
+      imagemagick
+      harfbuzz
+      freetype
+      fribidi
+      openexr
+      fftw
+    ];
   };
 in
 stdenv.mkDerivation {

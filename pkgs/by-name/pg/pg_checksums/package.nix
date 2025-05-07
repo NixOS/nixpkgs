@@ -1,13 +1,13 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   libxslt,
   docbook_xsl,
   postgresql,
 }:
 
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "pg_checksums";
   version = "1.2";
 

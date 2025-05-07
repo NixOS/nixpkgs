@@ -13,13 +13,13 @@
   nix-update-script,
 }:
 let
-  version = "25.4.0";
+  version = "25.5.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-+XYl4Bh0+8bs/FCqlig9egLg3SJCy2SRN2ovxWRE1Ok=";
+    hash = "sha256-NYAO1Yx3u0wm9F6zSwIolQkXBfFO1YkSKV5UMCBi8nw=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -95,7 +95,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-Tac2gOkdc2tzNKB3ARMfJad1MkOphudvN74gI8bGMtY=";
+    outputHash = "sha256-NPyFzklzAUIrTADTF/JBOieWMXOhL+X3pF3qXrfdyCs=";
   };
 
   webUi = stdenvNoCC.mkDerivation {
@@ -168,7 +168,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
-    cp -r ./packages/sync-server/{app.js,src,migrations,package.json} $out/lib/actual/packages/sync-server
+    cp -r ./packages/sync-server/{app.js,src,migrations,package.json,bin} $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine path to web ui.
     cp ./packages/desktop-client/package.json $out/lib/actual/packages/desktop-client
     cp -r ${webUi} $out/lib/actual/packages/desktop-client/build
@@ -189,7 +189,7 @@ stdenv.mkDerivation {
     cp -r ./node_modules $out/lib/actual/
 
     makeWrapper ${lib.getExe nodejs_20} "$out/bin/actual-server" \
-      --add-flags "$out/lib/actual/packages/sync-server/app.js" \
+      --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
     runHook postInstall

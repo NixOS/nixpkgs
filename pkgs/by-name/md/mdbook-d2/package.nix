@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,11 +18,6 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-emfO7D7JU/fQYdnaK7eWR8tCPx3ffvU/pTutSURZMBQ=";
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   meta = with lib; {
     description = "D2 diagram generator plugin for MdBook";

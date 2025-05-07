@@ -46,15 +46,17 @@ stdenv.mkDerivation rec {
     libxml2 # xml2-config
   ];
 
-  buildInputs = [
-    curl
-    hdf5
-    libxml2
-    mpi
-    bzip2
-    libzip
-    zstd
-  ] ++ lib.optional szipSupport szip;
+  buildInputs =
+    [
+      curl
+      hdf5
+      libxml2
+      bzip2
+      libzip
+      zstd
+    ]
+    ++ lib.optional szipSupport szip
+    ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
 

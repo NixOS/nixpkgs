@@ -6,8 +6,6 @@
   pkg-config,
   openssl,
   samba,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,14 +26,10 @@ rustPlatform.buildRustPackage rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl.dev
-      samba
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl.dev
+    samba
+  ];
 
   # Paho C test fails due to permission issue
   doCheck = false;

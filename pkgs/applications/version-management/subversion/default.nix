@@ -16,8 +16,6 @@
   openssl,
   lz4,
   utf8proc,
-  CoreServices,
-  Security,
   autoconf,
   libtool,
   apacheHttpd ? null,

@@ -1600,6 +1600,10 @@ This flag adds the `-fstack-clash-protection` compiler option, which causes grow
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
+#### `nostrictaliasing` {#nostrictaliasing}
+
+This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
+
 #### `pie` {#pie}
 
 This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for

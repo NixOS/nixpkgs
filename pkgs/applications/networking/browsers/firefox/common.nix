@@ -152,7 +152,10 @@ in
   # Set to `!privacySupport` or `false`.
 
   crashreporterSupport ?
-    !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl,
+    !privacySupport
+    && !stdenv.hostPlatform.isLoongArch64
+    && !stdenv.hostPlatform.isRiscV
+    && !stdenv.hostPlatform.isMusl,
   curl,
   geolocationSupport ? !privacySupport,
   webrtcSupport ? !privacySupport,

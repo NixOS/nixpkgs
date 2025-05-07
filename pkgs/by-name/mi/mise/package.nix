@@ -1,10 +1,10 @@
 {
+  stdenv,
   lib,
   nix-update-script,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
   coreutils,
   bash,
   direnv,
@@ -12,8 +12,6 @@
   pkg-config,
   openssl,
   cacert,
-  Security,
-  SystemConfiguration,
   usage,
   mise,
   testers,
@@ -40,12 +38,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   postPatch = ''
     patchShebangs --build \

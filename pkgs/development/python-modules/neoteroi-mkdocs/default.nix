@@ -12,6 +12,7 @@
   pytestCheckHook,
   rich,
   setuptools,
+  stdenv,
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";
@@ -47,6 +48,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "neoteroi.mkdocs" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests start a server using a hardcoded port, and since
+    # multiple Python versions are always built simultaneously, this
+    # failure is quite likely to occur.
+    "tests/test_http.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Neoteroi/mkdocs-plugins";

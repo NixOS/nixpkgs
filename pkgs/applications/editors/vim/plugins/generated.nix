@@ -1609,6 +1609,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  bloat-nvim = buildVimPlugin {
+    pname = "bloat.nvim";
+    version = "2025-04-30";
+    src = fetchFromGitHub {
+      owner = "dundalek";
+      repo = "bloat.nvim";
+      rev = "f90bef655ac40fecbaae53e10db1cf7894d090b1";
+      sha256 = "0ah5c84172wkc75zx5ll2dp9y3r867lik29aw5mm7i3lj530p0ri";
+    };
+    meta.homepage = "https://github.com/dundalek/bloat.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
     version = "2023-10-10";
@@ -6079,12 +6092,12 @@ final: prev: {
 
   idris2-nvim = buildVimPlugin {
     pname = "idris2-nvim";
-    version = "2024-11-28";
+    version = "2025-05-04";
     src = fetchFromGitHub {
       owner = "idris-community";
       repo = "idris2-nvim";
-      rev = "fd051fa8dde6541a6d345e020a05d2cc8f7a3f8d";
-      sha256 = "0pqrnwa3685p9lbfmy09c72nq6d3l54qbi4r9xpk43vl4b6q6j83";
+      rev = "bd282b74068e53e94d0c40ccc52f59eed3be909a";
+      sha256 = "0z4airqw1cdnrhd0gdgpym981dyjrj40b3ah15wwmnmbgyvmgqjl";
     };
     meta.homepage = "https://github.com/idris-community/idris2-nvim/";
     meta.hydraPlatforms = [ ];
@@ -6532,6 +6545,19 @@ final: prev: {
       sha256 = "0mi15a4cxbrqzwb9xl47scar8ald5xm108r35jxcdrmahinw62rz";
     };
     meta.homepage = "https://github.com/rebelot/kanagawa.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  kanagawa-paper-nvim = buildVimPlugin {
+    pname = "kanagawa-paper.nvim";
+    version = "2025-04-27";
+    src = fetchFromGitHub {
+      owner = "thesimonho";
+      repo = "kanagawa-paper.nvim";
+      rev = "4f41353f6a2bf9f25b2466a0f1eb6883d8fd09c1";
+      sha256 = "0gan0jqn4azkqln5xsnffpyjqmzqv1wwv02xv2d0yykmlqk9yqc8";
+    };
+    meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7390,6 +7416,19 @@ final: prev: {
       sha256 = "15kaxhi5r58ibm6y8vwxvrgnz6mz345rfgxal5bxbrsr64gl85ca";
     };
     meta.homepage = "https://github.com/alvarosevilla95/luatab.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  luau-lsp-nvim = buildVimPlugin {
+    pname = "luau-lsp.nvim";
+    version = "2025-02-01";
+    src = fetchFromGitHub {
+      owner = "lopi-py";
+      repo = "luau-lsp.nvim";
+      rev = "f81c6c713e4598abc484cbeabca918475d176c54";
+      sha256 = "15w51wnyvq8n0xar9az5bxdma0mjcq8lfk4bllarxapzpk84qiz8";
+    };
+    meta.homepage = "https://github.com/lopi-py/luau-lsp.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10205,6 +10244,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-early-retirement = buildVimPlugin {
+    pname = "nvim-early-retirement";
+    version = "2025-05-03";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-early-retirement";
+      rev = "0a320915970f8b505918f446b538af50c513e97e";
+      sha256 = "0044168k95wv1vy3y35462fm0ckpwwb33yyjfrsz1y5fvlzncsy5";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-early-retirement/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-expand-expr = buildVimPlugin {
     pname = "nvim-expand-expr";
     version = "2021-08-14";
@@ -11437,6 +11489,19 @@ final: prev: {
       sha256 = "16xh0fyv2yzanqwvs1k4159yf6241p6y18h1fbhl6gnzim0i7yw5";
     };
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  oil-git-status-nvim = buildVimPlugin {
+    pname = "oil-git-status.nvim";
+    version = "2025-04-03";
+    src = fetchFromGitHub {
+      owner = "refractalize";
+      repo = "oil-git-status.nvim";
+      rev = "4b5cf53842c17a09420919e655a6a559da3112d7";
+      sha256 = "1jzw6lkvi9xxzqy8xz056xlb45byr1arklh87zmyf0nj9plm2nsp";
+    };
+    meta.homepage = "https://github.com/refractalize/oil-git-status.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

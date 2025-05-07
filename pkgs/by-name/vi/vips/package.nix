@@ -13,9 +13,7 @@
   buildPackages,
 
   # Build inputs
-  ApplicationServices,
   expat,
-  Foundation,
   glib,
   libxml2,
   python3,
@@ -87,41 +85,36 @@ stdenv.mkDerivation (finalAttrs: {
       gtk-doc
     ];
 
-  buildInputs =
-    [
-      glib
-      libxml2
-      expat
-      (python3.withPackages (p: [ p.pycairo ]))
+  buildInputs = [
+    glib
+    libxml2
+    expat
+    (python3.withPackages (p: [ p.pycairo ]))
 
-      # Optional dependencies
-      cfitsio
-      cgif
-      fftw
-      imagemagick
-      lcms2
-      libarchive
-      libexif
-      libheif
-      libhwy
-      libimagequant
-      libjpeg
-      libjxl
-      librsvg
-      libspng
-      libtiff
-      libwebp
-      matio
-      openexr
-      openjpeg
-      openslide
-      pango
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Foundation
-    ];
+    # Optional dependencies
+    cfitsio
+    cgif
+    fftw
+    imagemagick
+    lcms2
+    libarchive
+    libexif
+    libheif
+    libhwy
+    libimagequant
+    libjpeg
+    libjxl
+    librsvg
+    libspng
+    libtiff
+    libwebp
+    matio
+    openexr
+    openjpeg
+    openslide
+    pango
+    poppler
+  ];
 
   # Required by .pc file
   propagatedBuildInputs = [

@@ -5,7 +5,6 @@
   wrapRustc,
   bash,
   curl,
-  darwin,
   zlib,
   autoPatchelfHook,
   gcc,
@@ -17,7 +16,6 @@
 
 let
   inherit (lib) optionalString;
-  inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
 
@@ -46,8 +44,7 @@ rec {
     buildInputs =
       [ bash ]
       ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib
-      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib;
 
     postPatch = ''
       patchShebangs .
@@ -152,10 +149,9 @@ rec {
     nativeBuildInputs = [
       makeWrapper
     ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
-    buildInputs =
-      [ bash ]
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+    buildInputs = [
+      bash
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib;
 
     postPatch = ''
       patchShebangs .

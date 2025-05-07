@@ -661,8 +661,14 @@ in
 
         mailman-web-setup = {
           description = "Prepare mailman-web files and database";
-          before = [ "mailman-uwsgi.service" ];
-          requiredBy = [ "mailman-uwsgi.service" ];
+          before = [
+            "hyperkitty.service"
+            "mailman-uwsgi.service"
+          ];
+          requiredBy = [
+            "hyperkitty.service"
+            "mailman-uwsgi.service"
+          ];
           restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
           script = ''
             [[ -e "${webSettings.STATIC_ROOT}" ]] && find "${webSettings.STATIC_ROOT}/" -mindepth 1 -delete

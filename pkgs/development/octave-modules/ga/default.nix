@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-hsrjh2rZFhP6WA+qaKjiGfJkDtT2nTlXlKr3jAJ5Y44=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/ga/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/ga/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Genetic optimization code";
   };
 }

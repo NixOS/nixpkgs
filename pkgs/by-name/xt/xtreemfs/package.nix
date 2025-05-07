@@ -7,7 +7,7 @@
   stripJavaArchivesHook,
   ant,
   attr,
-  boost,
+  boost186,
   cmake,
   file,
   fuse,
@@ -17,6 +17,10 @@
   valgrind,
   which,
 }:
+
+let
+  boost = boost186;
+in
 
 stdenv.mkDerivation {
   pname = "XtreemFS";

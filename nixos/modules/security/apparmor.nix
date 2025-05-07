@@ -172,7 +172,7 @@ in
               logfiles = /dev/stdin
 
               parser = ${pkgs.apparmor-parser}/bin/apparmor_parser
-              ldd = ${pkgs.glibc.bin}/bin/ldd
+              ldd = ${lib.getExe' pkgs.stdenv.cc.libc "ldd"}
               logger = ${pkgs.util-linux}/bin/logger
 
               # customize how file ownership permissions are presented
@@ -275,8 +275,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    julm
-    grimmauld
-  ];
+  meta.maintainers = lib.teams.apparmor.members;
 }

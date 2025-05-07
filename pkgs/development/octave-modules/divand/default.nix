@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "0nmaz5j37dflz7p4a4lmwzkh7g1gghdh7ccvkbyy0fpgv9lr1amg";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/divand/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/divand/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Performs an n-dimensional variational analysis (interpolation) of arbitrarily located observations";
   };
 }

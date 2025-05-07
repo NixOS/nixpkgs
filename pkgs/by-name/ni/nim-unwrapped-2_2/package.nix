@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
     readline
     sqlite
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   patches = [
     ./NIM_CONFIG_DIR.patch

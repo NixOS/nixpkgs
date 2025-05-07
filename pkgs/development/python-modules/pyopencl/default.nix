@@ -14,7 +14,6 @@
   # buildInputs
   opencl-headers,
   pybind11,
-  darwin,
   ocl-icd,
 
   # dependencies

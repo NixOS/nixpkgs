@@ -91,6 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-fdata-sections -ffunction-sections"
     + (if stdenv.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
+  # This flag was introduced upstream in:
+  # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
+  # It causes errors when linking against libpq.a in pkgsStatic:
+  #   undefined reference to `pg_encoding_to_char'
+  # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
+  # to have initdb load a libpq.so from a different major version and how to avoid that.
+  # This doesn't apply to us with Nix.
+  env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
+
   configureFlags =
     [
       "--enable-debug"

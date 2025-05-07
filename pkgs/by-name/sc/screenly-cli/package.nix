@@ -1,12 +1,10 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   perl,
   pkg-config,
   openssl,
   rustPlatform,
-  stdenv,
   nix-update-script,
 }:
 
@@ -29,14 +27,7 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   passthru.updateScript = nix-update-script { };
 

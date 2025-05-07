@@ -5,8 +5,6 @@
   m4,
   acl,
   libcap,
-  Carbon,
-  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,17 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ m4 ];
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        Carbon
-        IOKit
-      ]
-    else
-      [
-        acl
-        libcap
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    acl
+    libcap
+  ];
 
   env.CFLAGS = toString [
     "-Wno-error=implicit-int"

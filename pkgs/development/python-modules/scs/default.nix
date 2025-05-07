@@ -9,8 +9,6 @@
   numpy,
   pkg-config,
 
-  # buildInputs
-  Accelerate,
   blas,
   lapack,
 
@@ -45,14 +43,10 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [ Accelerate ]
-    else
-      [
-        blas
-        lapack
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    blas
+    lapack
+  ];
 
   dependencies = [
     numpy

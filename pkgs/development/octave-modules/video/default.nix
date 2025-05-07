@@ -26,13 +26,13 @@ buildOctavePackage rec {
     ffmpeg
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/video/index.html";
-    license = with licenses; [
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/video/";
+    license = with lib.licenses; [
       gpl3Plus
       bsd3
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
   };
 }

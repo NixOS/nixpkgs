@@ -6,7 +6,6 @@
   zlib,
   boost,
   libiconv,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.CoreServices
     ];
 
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit;

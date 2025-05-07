@@ -13,7 +13,6 @@
   lib,
   buildPackages,
   pkgs,
-  darwin,
   fetchurl,
   fetchpatch,
   fetchpatch2,
@@ -20056,7 +20055,6 @@ with self;
       url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.103.tar.gz";
       hash = "sha256-L16N0tsNZEVVhITKbULYOcWpfuiqGyUOaU1n1bf2Y0w=";
     };
-    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
     meta = {
       description = "Manipulate Mac OS X pasteboards";
       license = with lib.licenses; [
@@ -26609,6 +26607,7 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from EPEL
+      badPlatforms = lib.platforms.darwin;
     };
   };
 
@@ -32234,7 +32233,6 @@ with self;
         hash = "sha256-nCypGyi6bZDEXqdb7wlGGzk9cFzmYkWGP1slBpXDfHw=";
       })
     ];
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
     doCheck = !stdenv.hostPlatform.isAarch64;
     meta = {
       description = "Perl extension for getting CPU information. Currently only number of CPU's supported";
@@ -32538,16 +32536,12 @@ with self;
       url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.27.tar.gz";
       hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
     };
-    propagatedBuildInputs =
-      [
-        pkgs.tclPackages.bwidget
-        pkgs.tcl
-        pkgs.tclPackages.tix
-        pkgs.tk
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreServices
-      ];
+    propagatedBuildInputs = [
+      pkgs.tclPackages.bwidget
+      pkgs.tcl
+      pkgs.tclPackages.tix
+      pkgs.tk
+    ];
     makeMakerFlags = lib.optionals stdenv.hostPlatform.isLinux [
       "--tclsh=${pkgs.tcl}/bin/tclsh"
       "--nousestubs"

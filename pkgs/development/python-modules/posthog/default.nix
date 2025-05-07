@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.25.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${version}";
-    hash = "sha256-DETcD6VJseQelGhSYKqXpIxsQxB3/5RY2wWB9pxhI68=";
+    hash = "sha256-JEoltzbpbHOehdqaKkGJbrcjaOXC7wDQh++S/klsW9o=";
   };
 
   build-system = [ setuptools ];

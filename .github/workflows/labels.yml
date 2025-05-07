@@ -20,12 +20,41 @@ jobs:
     if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        if: |
+          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+            github.head_ref == 'haskell-updates' ||
+            github.head_ref == 'python-updates' ||
+            github.head_ref == 'staging-next' ||
+            startsWith(github.head_ref, 'staging-next-')
+          )
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml # default
           sync-labels: true
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        if: |
+          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+            github.head_ref == 'haskell-updates' ||
+            github.head_ref == 'python-updates' ||
+            github.head_ref == 'staging-next' ||
+            startsWith(github.head_ref, 'staging-next-')
+          )
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-no-sync.yml
           sync-labels: false
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        # Development branches like staging-next, haskell-updates and python-updates get special labels.
+        # This is to avoid the mass of labels there, which is mostly useless - and really annoying for
+        # the backport labels.
+        if: |
+          github.event.pull_request.head.repo.owner.login == 'NixOS' && (
+            github.head_ref == 'haskell-updates' ||
+            github.head_ref == 'python-updates' ||
+            github.head_ref == 'staging-next' ||
+            startsWith(github.head_ref, 'staging-next-')
+          )
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler-development-branches.yml
+          sync-labels: true

@@ -66,8 +66,6 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
-  AppKit,
-  Cocoa,
 }:
 
 let
@@ -202,8 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       llvmPackages.openmp
-      AppKit
-      Cocoa
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libgudev

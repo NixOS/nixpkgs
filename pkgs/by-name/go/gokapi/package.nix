@@ -20,6 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-9GRAlgng+yq7q0VQz374jIOCjeDIIDD631BglM/FsQQ=";
 
+  patches = [
+    ./go-1.24.patch
+  ];
+
   # This is the go generate is ran in the upstream builder, but we have to run the components separately for things to work.
   preBuild = ''
     cd ./cmd/gokapi/

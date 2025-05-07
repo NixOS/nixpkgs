@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nekoray";
-  version = "4.2.12";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     owner = "Mahdi-zarei";
     repo = "nekoray";
     tag = finalAttrs.version;
-    hash = "sha256-5BXrfNPBZ+smpniA1jOPWE0X/be/C9MzswfbwmWEnyQ=";
+    hash = "sha256-h0LkH58+QQFeSwqhqOZDcFF0n98YJEHH/1tq72LdZpI=";
   };
 
   strictDeps = true;
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/core/server";
 
-    vendorHash = "sha256-PDED6Haa3m2CZLij2A8Am7vSwep2YFrR984UNypduWo=";
+    vendorHash = "sha256-CTI9wDPJ9dYpUwvszY2nRfi+NW0nO8imt9lsQ7Nd1Q8=";
 
     # ldflags and tags are taken from script/build_go.sh
     ldflags = [
@@ -115,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
       "with_dhcp"
     ];
   };
+
+  # this tricks nix-update into also updating the vendorHash of nekobox-core
+  passthru.goModules = finalAttrs.passthru.nekobox-core.goModules;
 
   meta = {
     description = "Qt based cross-platform GUI proxy configuration manager";

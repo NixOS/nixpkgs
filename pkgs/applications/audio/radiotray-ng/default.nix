@@ -11,7 +11,6 @@
   boost,
   jsoncpp,
   libbsd,
-  pcre,
   # GUI/Desktop
   dbus,
   glibmm,
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
       boost
       jsoncpp
       libbsd
-      pcre
       glibmm
       hicolor-icon-theme
       gsettings-desktop-schemas

@@ -36,7 +36,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf,
+  protobuf_29,
   python3,
   rapidjson,
   re2,
@@ -51,12 +51,19 @@
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
+  # Disable also on RiscV
+  # configure: error: cannot determine number of significant virtual address bits
+  enableJemalloc ?
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
-  enableGcs ? !stdenv.hostPlatform.isDarwin,
+  # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
 }:
 
 let
+  # https://github.com/apache/arrow/issues/45807
+  protobuf = protobuf_29;
+
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";

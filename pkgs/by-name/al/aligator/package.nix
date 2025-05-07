@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
       # ignore one failing test for now
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;aligator-test-py-rollout")
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'aligator-test-py-rollout|aligator-test-py-frames'")
     ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)

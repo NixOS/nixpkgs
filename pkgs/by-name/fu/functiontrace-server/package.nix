@@ -2,26 +2,20 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "functiontrace-server";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-xTNNAYhxyL5/Sip+nZJleWOjTYs2MH3QM7pzLYk/6Gs=";
+    hash = "sha256-i+lXjFXCPT6Skr+r/RKYQm+iJ+WETJ/tAQg5U6qFFi8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zwarLDKaI4TMCId8+3wVtioOMw2F8Z7Rnl0bKbQVndQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
+  cargoHash = "sha256-61+hEq0cdJZ+DTgN/ZtK6IKuwLCq3oxk0SrzqWewQXs=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   protobuf,
   nix-update-script,
   testers,
@@ -25,8 +24,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-AIj59MqK+TqyTTDjGzN1Oec3svPaXRBkHJTBtxTwZNg=";
 
   nativeBuildInputs = [ protobuf ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   doCheck = false;
 

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ _1000101 ];
   };
 }

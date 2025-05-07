@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitea,
   makeWrapper,
@@ -10,7 +9,6 @@
   vips,
   ffmpeg,
   callPackage,
-  darwin,
   testers,
   faircamp,
 }:
@@ -38,15 +36,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      libopus
-      vips
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    glib
+    libopus
+    vips
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/faircamp \

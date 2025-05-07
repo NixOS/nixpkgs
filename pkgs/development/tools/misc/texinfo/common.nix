@@ -10,6 +10,7 @@
   gnulib,
   gawk,
   freebsd,
+  glibcLocales,
   libiconv,
   xz,
 
@@ -113,8 +114,18 @@ stdenv.mkDerivation {
   ];
 
   nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
+  checkInputs = optionals (lib.versionAtLeast version "7.2") [ glibcLocales ];
 
   doCheck = interactive && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
+
+  # musl does not support locales.
+  preCheck =
+    if interactive && stdenv.hostPlatform.isMusl then
+      ''
+        checkFlagsArray+=(XFAIL_TESTS="different_languages_gen_master_menu.sh test_scripts/formatting_documentlanguage_cmdline.sh test_scripts/layout_formatting_fr_info.sh test_scripts/layout_formatting_fr.sh test_scripts/layout_formatting_fr_icons.sh")
+      ''
+    else
+      null;
 
   checkFlags = optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:

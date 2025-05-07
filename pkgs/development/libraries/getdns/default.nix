@@ -5,7 +5,6 @@
   stdenv,
   fetchurl,
   cmake,
-  darwin,
   doxygen,
   libidn2,
   libyaml,
@@ -97,14 +96,11 @@ rec {
       yq
     ];
 
-    buildInputs =
-      [
-        getdns
-        libyaml
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
+    buildInputs = [
+      getdns
+      libyaml
+      openssl
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
     postInstall = ''
       rm -r $out/share/doc

@@ -11,7 +11,6 @@
   cereal,
   cgal,
   curl,
-  darwin,
   dbus,
   eigen,
   expat,
@@ -28,7 +27,6 @@
   nlopt,
   opencascade-occt_7_6_1,
   openvdb,
-  pcre,
   qhull,
   tbb_2021_11,
   wxGTK32,
@@ -130,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
       nlopt
       opencascade-override'
       openvdb_tbb_2021_8
-      pcre
       qhull
       tbb_2021_11
       wxGTK-override'
@@ -142,9 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withSystemd [
       systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreWLAN
     ];
 
   strictDeps = true;

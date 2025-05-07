@@ -22,14 +22,12 @@
 
   # build-tools
   bootPkgs,
-  autoconf,
-  automake,
+  autoreconfHook,
   coreutils,
   fetchurl,
   fetchgit,
   perl,
   python3,
-  m4,
   sphinx,
   xattr,
   autoSignDarwinBinariesHook,
@@ -183,9 +181,42 @@
       in
 
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-      lib.optionals (lib.versionOlder version "9.8") [
+      lib.optionals (lib.versionOlder version "9.6.7") [
         ./docs-sphinx-7.patch
       ]
+      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.5") [
+        # Fix aarch64-linux builds of 9.6.0 - 9.6.4.
+        # Fixes a pointer type mismatch in the RTS.
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/24348
+        (fetchpatch {
+          name = "fix-incompatible-pointer-types.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1e48c43483693398001bfb0ae644a3558bf6a9f3.diff";
+          hash = "sha256-zUlzpX7J1n+MCEv9AWpj69FTy2uzJH8wrQDkTexGbgM=";
+        })
+      ]
+      ++
+        lib.optionals
+          (
+            # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
+            lib.versionOlder version "9.11"
+            && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
+            && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+          )
+          [
+            # Determine size of time related types using hsc2hs instead of assuming CLong.
+            # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+            # https://github.com/haskell/ghcup-hs/issues/1107
+            # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+            # Note that in normal situations this shouldn't be the case since nixpkgs
+            # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+            (fetchpatch {
+              name = "unix-fix-ctimeval-size-32-bit.patch";
+              url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+              sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+              stripLen = 1;
+              extraPrefix = "libraries/unix/";
+            })
+          ]
       ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
         (fetchpatch {
           name = "fix-fully_static.patch";
@@ -240,7 +271,26 @@
           ])
           [
             ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
-          ];
+          ]
+      ++ lib.optionals (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.12") [
+        (fetchpatch {
+          name = "enable-ignore-build-platform-mismatch.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4ee094d46effd06093090fcba70f0a80d2a57e6c.patch";
+          includes = [ "configure.ac" ];
+          hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
+        })
+      ]
+      # Fixes stack overrun in rts which crashes an process whenever
+      # freeHaskellFunPtr is called with nixpkgs' hardening flags.
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
+      ++ lib.optionals (lib.versionOlder version "9.13" && stdenv.hostPlatform.is32bit) [
+        (fetchpatch {
+          name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
+          sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
+        })
+      ];
 
     stdenv = stdenvNoCC;
   },
@@ -604,7 +654,15 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals enableUnregisterised [
         "--enable-unregisterised"
-      ];
+      ]
+      ++
+        lib.optionals
+          (stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl && lib.versionOlder version "9.12")
+          [
+            # The bootstrap binaries for aarch64 musl were built for the wrong triple.
+            # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13182
+            "--enable-ignore-build-platform-mismatch"
+          ];
 
     # Make sure we never relax`$PATH` and hooks support for compatibility.
     strictDeps = true;
@@ -614,15 +672,12 @@ stdenv.mkDerivation (
 
     nativeBuildInputs =
       [
+        autoreconfHook
         perl
         hadrian
         bootPkgs.alex
         bootPkgs.happy
         bootPkgs.hscolour
-        # autoconf and friends are necessary for hadrian to create the bindist
-        autoconf
-        automake
-        m4
         # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
         python3
         # Tool used to update GHC's settings file in postInstall
@@ -660,11 +715,17 @@ stdenv.mkDerivation (
     depsTargetTarget = map lib.getDev (libDeps targetPlatform);
     depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
 
-    hadrianFlags = [
-      "--flavour=${ghcFlavour}"
-      "--bignum=${if enableNativeBignum then "native" else "gmp"}"
-      "--docs=${if enableDocs then "no-sphinx-pdfs" else "no-sphinx"}"
-    ];
+    hadrianFlags =
+      [
+        "--flavour=${ghcFlavour}"
+        "--bignum=${if enableNativeBignum then "native" else "gmp"}"
+        "--docs=${if enableDocs then "no-sphinx-pdfs" else "no-sphinx"}"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "9.8") [
+        # In 9.14 this will be default with release flavour.
+        # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13444
+        "--hash-unit-ids"
+      ];
 
     buildPhase = ''
       runHook preBuild

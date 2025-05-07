@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       gst_all_1.gst-plugins-base
       libgudev
-      umockdev
 
       # For icon validator
       gdk-pixbuf
@@ -124,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
     umockdev
   ];
+
+  checkInputs = [ umockdev ];
 
   mesonFlags =
     [

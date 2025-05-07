@@ -7,6 +7,7 @@
   glib,
   db,
   pkg-config,
+  nix-update-script,
 }:
 
 let
@@ -15,15 +16,15 @@ let
     hash = "sha256-WcaOidQ/+F9aMJSJSZy83igtKwS9kYiHNIhLfe/LEVU=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpinyin";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "libpinyin";
-    tag = version;
-    hash = "sha256-WUC1l+8q4TYDVbKwwk9lG5Wc5DM52BaZefcre0WQoBE=";
+    tag = finalAttrs.version;
+    hash = "sha256-bvPxbi/QwRQ5fFgVKC9kdqY/wbZApZaaIYXozQtHprY=";
   };
 
   postUnpack = ''
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
     db
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Library for intelligent sentence-based Chinese pinyin input method";
     homepage = "https://github.com/libpinyin/libpinyin";
@@ -52,4 +55,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

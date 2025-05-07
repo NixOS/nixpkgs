@@ -12,7 +12,6 @@
   callPackage,
   zlib,
   swiftPackages,
-  darwin,
   icu,
   lndir,
   replaceVars,
@@ -222,17 +221,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
                 [
                   zlib
                 ]
-                ++ lib.optional stdenv.hostPlatform.isDarwin (
-                  with darwin;
-                  with apple_sdk.frameworks;
-                  [
-                    swiftPackages.swift
-                    Foundation
-                    CryptoKit
-                    GSS
-                    ICU
-                  ]
-                );
+                ++ lib.optional stdenv.hostPlatform.isDarwin [
+                  swiftPackages.swift
+                ];
               build = ''
                 dotnet restore -p:PublishAot=true
                 dotnet publish -p:PublishAot=true -o $out/bin

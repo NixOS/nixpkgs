@@ -9,10 +9,6 @@
   bison,
   boost,
   gettext,
-  Accelerate,
-  AudioUnit,
-  CoreAudio,
-  CoreMIDI,
   portaudio,
   alsa-lib ? null,
   libpulseaudio ? null,
@@ -61,10 +57,6 @@ stdenv.mkDerivation {
       boost
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      AudioUnit
-      CoreAudio
-      CoreMIDI
       portaudio
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux (

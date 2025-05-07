@@ -19,12 +19,6 @@ let
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
-      # pdm requires hishel and subsequentially pytest-regressions -> matplotlib -> ghostscript -> jbig2dec which is AGPL only
-      matplotlib = super.matplotlib.override ({ enableGhostscript = false; });
-      # avoid many extra dependencies
-      moto = super.moto.overridePythonAttrs (old: rec {
-        doCheck = false;
-      });
     };
   };
 in

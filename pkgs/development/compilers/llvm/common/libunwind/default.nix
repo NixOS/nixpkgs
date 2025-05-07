@@ -15,72 +15,50 @@
   devExtraCmakeFlags ? [ ],
   getVersionFile,
 }:
-let
-  pname = "libunwind";
-  src' =
-    if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/${pname} "$out"
-          mkdir -p "$out/libcxx"
-          cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
-          cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
-          mkdir -p "$out/llvm"
-          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "15") ''
-          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-          cp -r ${monorepoSrc}/runtimes "$out"
-        ''
-      )
-    else
-      src;
-
-  patches = lib.optional (lib.versionOlder release_version "17") (
-    getVersionFile "libunwind/gnu-install-dirs.patch"
-  );
-
-  hasPatches = builtins.length patches > 0;
-
-  prePatch =
-    lib.optionalString
-      (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-      ''
-        cd ../${pname}
-        chmod -R u+w .
-      '';
-
-  postPatch =
-    lib.optionalString
-      (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-      ''
-        cd ../runtimes
-      '';
-
-  postInstall =
-    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
-      ''
-        # libcxxabi wants to link to libunwind_shared.so (?).
-        ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
-      ''
-    + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
-      ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
-    '';
-in
 stdenv.mkDerivation (
-  rec {
-    inherit pname version patches;
+  finalAttrs:
+  let
+    hasPatches = builtins.length finalAttrs.patches > 0;
+  in
+  {
+    pname = "libunwind";
 
-    src = src';
+    inherit version;
+
+    patches = lib.optional (lib.versionOlder release_version "17") (
+      getVersionFile "libunwind/gnu-install-dirs.patch"
+    );
+
+    src =
+      if monorepoSrc != null then
+        runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } (
+          ''
+            mkdir -p "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "14") ''
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/libunwind "$out"
+            mkdir -p "$out/libcxx"
+            cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+            cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "15") ''
+            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+            cp -r ${monorepoSrc}/runtimes "$out"
+          ''
+        )
+      else
+        src;
 
     sourceRoot =
-      if lib.versionAtLeast release_version "15" then "${src.name}/runtimes" else "${src.name}/${pname}";
+      if lib.versionAtLeast release_version "15" then
+        "${finalAttrs.src.name}/runtimes"
+      else
+        "${finalAttrs.src.name}/libunwind";
 
     outputs = [
       "out"
@@ -95,12 +73,39 @@ stdenv.mkDerivation (
       ];
 
     cmakeFlags =
-      lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
-      ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
+      [ (lib.cmakeBool "LIBUNWIND_ENABLE_SHARED" enableShared) ]
+      ++ lib.optional (lib.versionAtLeast release_version "15") (
+        lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind"
+      )
       ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
-        "-DCMAKE_CXX_COMPILER_WORKS=ON"
+        (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
       ]
       ++ devExtraCmakeFlags;
+
+    prePatch =
+      lib.optionalString
+        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
+        ''
+          cd ../libunwind
+          chmod -R u+w .
+        '';
+
+    postPatch =
+      lib.optionalString
+        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
+        ''
+          cd ../runtimes
+        '';
+
+    postInstall =
+      lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
+        ''
+          # libcxxabi wants to link to libunwind_shared.so (?).
+          ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
+        ''
+      + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
+        ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
+      '';
 
     meta = llvm_meta // {
       # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst
@@ -114,7 +119,4 @@ stdenv.mkDerivation (
       '';
     };
   }
-  // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else { })
-  // (if prePatch != "" then { inherit prePatch; } else { })
-  // (if postPatch != "" then { inherit postPatch; } else { })
 )

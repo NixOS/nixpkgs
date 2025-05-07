@@ -50,6 +50,11 @@ buildPythonPackage rec {
     six
   ];
 
+  disabledTests = [
+    # The memory usage goes *down* on Darwin, which the test confuses for an increase and fails
+    "test_get_metadata_memory_usage"
+  ];
+
   pythonImportsCheck = [ "pyeclib" ];
 
   meta = with lib; {

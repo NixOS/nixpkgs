@@ -1,20 +1,21 @@
 {
   lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  # Mitmproxy requirements
   aioquic,
   argon2-cffi,
   asgiref,
   brotli,
+  buildPythonPackage,
   certifi,
   cryptography,
+  fetchFromGitHub,
   flask,
   h11,
   h2,
   hyperframe,
+  hypothesis,
   kaitaistruct,
   ldap3,
+  mitmproxy-linux,
   mitmproxy-rs,
   msgpack,
   passlib,
@@ -22,41 +23,38 @@
   pyopenssl,
   pyparsing,
   pyperclip,
-  ruamel-yaml,
-  setuptools,
-  sortedcontainers,
-  tornado,
-  urwid,
-  wsproto,
-  zstandard,
-  # Additional check requirements
-  hypothesis,
   pytest-asyncio,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   requests,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  stdenv,
+  tornado,
+  urwid,
+  wsproto,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.1.3";
+  version = "12.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-gTeXxNQWVMQYiGdIyy7SS6JcuYG16KLnjxBBdjhi+lE=";
+    hash = "sha256-2dEoPgT8g59sLRV5gMPo7XII0XjTrn2cVdYetxDj/V0=";
   };
 
   pythonRelaxDeps = [
+    "h11" # https://github.com/NixOS/nixpkgs/pull/399393
     "h2"
     "passlib"
-    "protobuf"
-    "pyparsing"
-    "ruamel.yaml"
-    "urwid"
+    "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
   ];
 
   build-system = [ setuptools ];

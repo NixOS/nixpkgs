@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  testers,
   buildPackages,
   fetchFromGitLab,
   python3,
@@ -81,7 +82,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.1";
+  version = "1.4.2";
 
   outputs = [
     "out"
@@ -97,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-TnGn6EVjjpEybslLEvBb66uqOiLg5ngpNV9LYO6TfvA=";
+    sha256 = "sha256-uxTzdvmazLNmWqc1v1LGiq34zV9IT0y1vTGc/+JiEU8=";
   };
 
   patches = [
@@ -253,7 +254,12 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/pw-jack" "$jack"
   '';
 
-  passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.pipewire;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
@@ -264,6 +270,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       kranzes
       k900
+    ];
+    pkgConfigModules = [
+      "libpipewire-0.3"
+      "libspa-0.2"
     ];
   };
 })

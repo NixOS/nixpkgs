@@ -15,7 +15,6 @@
   sqlcipher,
   sqlite,
   fixDarwinDylibNames,
-  darwin,
   libiconv,
 }:
 
@@ -59,9 +58,6 @@ stdenv.mkDerivation rec {
       sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 

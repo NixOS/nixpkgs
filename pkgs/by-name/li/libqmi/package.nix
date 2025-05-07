@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.34.0";
+  version = "1.36.0";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "mobile-broadband";
     repo = "libqmi";
     rev = version;
-    hash = "sha256-l9ev9ZOWicVNZ/Wj//KNd3NHcefIrLVriqJhEpwWvtQ=";
+    hash = "sha256-cGNnw0vO/Hr9o/eIf6lLTsoGiEkTvZiArgO7tAc208U=";
   };
 
   nativeBuildInputs =
@@ -88,10 +88,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  patches = [
-    # https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/issues/124
-    ./build_doc_deps_by_default.patch
-  ];
 
   postPatch = ''
     patchShebangs \

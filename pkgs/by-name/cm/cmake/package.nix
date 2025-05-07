@@ -29,13 +29,11 @@
   useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin),
   uiToolkits ? [ ], # can contain "ncurses" and/or "qt5"
   buildDocs ? !(isMinimalBuild || (uiToolkits == [ ])),
-  darwin,
   libsForQt5,
   gitUpdater,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
@@ -117,9 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional cursesUI ncurses
-    ++ lib.optional qt5UI qtbase
-    ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && !isMinimalBuild) SystemConfiguration;
+    ++ lib.optional qt5UI qtbase;
 
   preConfigure = ''
     fixCmakeFiles .

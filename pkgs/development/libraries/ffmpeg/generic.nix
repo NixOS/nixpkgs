@@ -56,7 +56,7 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withHeadlessDeps, # CELT decoder
+  withCelt ? withFullDeps, # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
@@ -472,6 +472,13 @@ stdenv.mkDerivation (
           name = "CVE-2023-50008.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
+        })
+      ]
+      ++ optionals (lib.versionOlder version "7.1.1") [
+        (fetchpatch2 {
+          name = "texinfo-7.1.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";
+          hash = "sha256-BZsq1WI6OgtkCQE8koQu0CNcb5c8WgTu/LzQzu6ZLuo=";
         })
       ]
       ++ optionals (lib.versionOlder version "7" && stdenv.hostPlatform.isAarch32) [
@@ -1031,6 +1038,10 @@ stdenv.mkDerivation (
   }
   // lib.optionalAttrs withCudaLLVM {
     # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
-    hardeningDisable = [ "zerocallusedregs" ];
+    hardeningDisable = [
+      "pacret"
+      "shadowstack"
+      "zerocallusedregs"
+    ];
   }
 )

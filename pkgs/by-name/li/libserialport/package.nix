@@ -4,7 +4,6 @@
   fetchurl,
   pkg-config,
   udev,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev;
 
   meta = {
     description = "Cross-platform shared library for serial port access";

@@ -47,13 +47,15 @@ let
     && lib.versionAtLeast release_version "16";
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
+in
 
-  baseName = "compiler-rt";
-  pname = baseName + lib.optionalString (haveLibc) "-libc";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
+  inherit version;
 
-  src' =
+  src =
     if monorepoSrc != null then
-      runCommand "${baseName}-src-${version}" { inherit (monorepoSrc) passthru; } (
+      runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
         ''
           mkdir -p "$out"
         ''
@@ -61,23 +63,23 @@ let
           cp -r ${monorepoSrc}/cmake "$out"
         ''
         + ''
-          cp -r ${monorepoSrc}/${baseName} "$out"
+          cp -r ${monorepoSrc}/compiler-rt "$out"
         ''
       )
     else
       src;
-in
 
-stdenv.mkDerivation {
-  inherit pname version;
-
-  src = src';
-  sourceRoot = "${src'.name}/${baseName}";
+  sourceRoot = "${finalAttrs.src.name}/compiler-rt";
 
   patches =
     lib.optional (lib.versionOlder release_version "15") (getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
     ++ [
       (getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
+      # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+      # extra `/`.
+      (getVersionFile "compiler-rt/normalize-var.patch")
+      # Fix build on armv6l
+      ./armv6-no-ldrexd-strexd.patch
     ]
     ++ lib.optional (lib.versions.major release_version == "12") (fetchpatch {
       # fixes the parallel build on aarch64 darwin
@@ -98,11 +100,6 @@ stdenv.mkDerivation {
           stripLen = 1;
           hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
         })
-    ++ [
-      # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
-      # extra `/`.
-      (getVersionFile "compiler-rt/normalize-var.patch")
-    ]
     ++
       lib.optional (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
         # Prevent a compilation error on darwin
@@ -129,10 +126,6 @@ stdenv.mkDerivation {
           # Fix build on armv6l
           ./armv6-scudo-no-yield.patch
         ]
-    ++ [
-      # Fix build on armv6l
-      ./armv6-no-ldrexd-strexd.patch
-    ]
     ++ lib.optionals (lib.versionAtLeast release_version "13") [
       (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
     ]
@@ -143,118 +136,112 @@ stdenv.mkDerivation {
     });
 
   nativeBuildInputs =
-    [ cmake ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [
+    [
+      cmake
       python3
       libllvm.dev
     ]
+    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = toString (
-        [
-          "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
-        ]
-        ++ lib.optionals (!haveLibc) [
-          # The compiler got stricter about this, and there is a usellvm patch below
-          # which patches out the assert include causing an implicit definition of
-          # assert. It would be nicer to understand why compiler-rt thinks it should
-          # be able to #include <assert.h> in the first place; perhaps it's in the
-          # wrong, or perhaps there is a way to provide an assert.h.
-          "-Wno-error=implicit-function-declaration"
-        ]
-      );
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
-      # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
-      NIX_CFLAGS_LINK = "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+      ]
+      ++ lib.optionals (!haveLibc) [
+        # The compiler got stricter about this, and there is a usellvm patch below
+        # which patches out the assert include causing an implicit definition of
+        # assert. It would be nicer to understand why compiler-rt thinks it should
+        # be able to #include <assert.h> in the first place; perhaps it's in the
+        # wrong, or perhaps there is a way to provide an assert.h.
+        "-Wno-error=implicit-function-declaration"
+      ]
+    );
+
+    # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
+    NIX_CFLAGS_LINK = lib.optionalString (stdenv.hostPlatform.isDarwin) "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
+  };
 
   cmakeFlags =
     [
-      "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
-      "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-      "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+      (lib.cmakeBool "COMPILER_RT_DEFAULT_TARGET_ONLY" true)
+      (lib.cmakeFeature "CMAKE_C_COMPILER_TARGET" stdenv.hostPlatform.config)
+      (lib.cmakeFeature "CMAKE_ASM_COMPILER_TARGET" stdenv.hostPlatform.config)
     ]
     ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
-      "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
+      (lib.cmakeFeature "SANITIZER_COMMON_CFLAGS" "-I${libxcrypt}/include")
     ]
     ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
-      "-DSANITIZER_CXX_ABI=libcxxabi"
-      "-DSANITIZER_CXX_ABI_LIBNAME=libcxxabi"
-      "-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON"
+      (lib.cmakeFeature "SANITIZER_CXX_ABI" "libcxxabi")
+      (lib.cmakeFeature "SANITIZER_CXX_ABI_LIBNAME" "libcxxabi")
+      (lib.cmakeBool "COMPILER_RT_USE_BUILTINS_LIBRARY" true)
     ]
     ++
       lib.optionals
         ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13"))
         [
-          "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+          (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
         ]
     ++ lib.optionals (useLLVM && haveLibc) [
-      "-DCOMPILER_RT_BUILD_SANITIZERS=ON"
+      (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
+      (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
     ]
     ++ lib.optionals (noSanitizers) [
-      "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+      (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
     ]
     ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
-      "-DCOMPILER_RT_BUILD_XRAY=OFF"
-      "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-      "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
-      "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-    ]
-    ++ lib.optionals (useLLVM && haveLibc) [
-      "-DCOMPILER_RT_BUILD_PROFILE=ON"
+      (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
+      (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
+      (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
+      (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
     ]
     ++ lib.optionals (!haveLibc || bareMetal) [
-      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+      (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
+      (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+      (lib.cmakeBool "COMPILER_RT_BAREMETAL_BUILD" true)
+      (lib.cmakeFeature "CMAKE_SIZEOF_VOID_P" (toString (stdenv.hostPlatform.parsed.cpu.bits / 8)))
     ]
     ++ lib.optionals (!haveLibc || bareMetal || isDarwinStatic) [
-      "-DCMAKE_CXX_COMPILER_WORKS=ON"
-    ]
-    ++ lib.optionals (!haveLibc || bareMetal) [
-      "-DCMAKE_C_COMPILER_WORKS=ON"
-      "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
-      "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
     ]
     ++ lib.optionals (!haveLibc) [
-      "-DCMAKE_C_FLAGS=-nodefaultlibs"
+      (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
     ]
     ++ lib.optionals (useLLVM) [
-      "-DCOMPILER_RT_BUILD_BUILTINS=ON"
+      (lib.cmakeBool "COMPILER_RT_BUILD_BUILTINS" true)
       #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
-      "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
+      (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
     ]
     ++ lib.optionals (bareMetal) [
-      "-DCOMPILER_RT_OS_DIR=baremetal"
+      (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) (
       lib.optionals (lib.versionAtLeast release_version "16") [
-        "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"
+        (lib.cmakeFeature "CMAKE_LIPO" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo")
       ]
       ++ lib.optionals (!haveLibcxx) [
         # Darwin fails to detect that the compiler supports the `-g` flag when there is no libc++ during the
         # compiler-rt bootstrap, which prevents compiler-rt from building. The `-g` flag is required by the
         # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
-        "-DCOMPILER_RT_HAS_G_FLAG=ON"
+        (lib.cmakeBool "COMPILER_RT_HAS_G_FLAG" true)
       ]
       ++ [
-        "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
-        "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
-        "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
+        (lib.cmakeFeature "DARWIN_osx_ARCHS" stdenv.hostPlatform.darwinArch)
+        (lib.cmakeFeature "DARWIN_osx_BUILTIN_ARCHS" stdenv.hostPlatform.darwinArch)
+        (lib.cmakeFeature "SANITIZER_MIN_OSX_VERSION" stdenv.hostPlatform.darwinMinVersion)
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
         # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
-        "-DCOMPILER_RT_ENABLE_IOS=OFF"
+        (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" false)
       ]
     )
     ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
-      "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
+      (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
     ]
     ++ devExtraCmakeFlags;
 
@@ -369,4 +356,4 @@ stdenv.mkDerivation {
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };
-}
+})

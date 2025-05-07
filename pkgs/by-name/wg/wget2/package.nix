@@ -11,7 +11,6 @@
   # libraries
   brotli,
   bzip2,
-  darwin,
   gpgme,
   libhsts,
   libidn2,
@@ -76,9 +75,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals sslSupport [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
     ];
 
   # TODO: include translation files

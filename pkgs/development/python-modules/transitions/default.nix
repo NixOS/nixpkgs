@@ -42,6 +42,11 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # sleep is not accurate on Darwin
+    "tests/test_async.py"
+  ];
+
   disabledTests =
     [
       "test_diagram"
@@ -50,6 +55,16 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
       "test_binary_stream"
+
+      # sleep is not accurate on Darwin
+      "test_timeout"
+      "test_timeout_callbacks"
+      "test_timeout_transitioning"
+      "test_thread_access"
+      "test_parallel_access"
+      "test_parallel_deep"
+      "test_conditional_access"
+      "test_pickle"
     ];
 
   pythonImportsCheck = [ "transitions" ];

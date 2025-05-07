@@ -8,7 +8,6 @@
   frei0r,
   opencolorio,
   ffmpeg_6,
-  CoreFoundation,
   cmake,
   wrapQtAppsHook,
   openimageio,
@@ -83,7 +82,7 @@ stdenv.mkDerivation {
     qtwayland
     qtmultimedia
     qttools
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
+  ];
 
   meta = with lib; {
     description = "Professional open-source NLE video editor";

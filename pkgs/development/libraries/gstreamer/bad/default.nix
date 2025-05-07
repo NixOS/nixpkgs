@@ -95,14 +95,6 @@
   libfreeaptx,
   zxing-cpp,
   usrsctp,
-  VideoToolbox,
-  AudioToolbox,
-  AVFoundation,
-  Cocoa,
-  CoreMedia,
-  CoreVideo,
-  Foundation,
-  MediaToolbox,
   directoryListingUpdater,
   enableGplPlugins ? true,
   bluezSupport ? stdenv.hostPlatform.isLinux,
@@ -113,7 +105,7 @@
   hotdoc,
   guiSupport ? true,
   gst-plugins-bad,
-  apple-sdk_13,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -274,18 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # For unknown reasons the order is important, e.g. if
-      # VideoToolbox is last, we get:
-      #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
-      VideoToolbox
-      AudioToolbox
-      AVFoundation
-      Cocoa
-      CoreMedia
-      CoreVideo
-      Foundation
-      MediaToolbox
-      apple-sdk_13
+      apple-sdk_gstreamer
     ];
 
   mesonFlags =

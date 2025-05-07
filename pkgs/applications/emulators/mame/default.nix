@@ -30,14 +30,11 @@
   utf8proc,
   versionCheckHook,
   which,
+  wrapQtAppsHook,
   writeScript,
   zlib,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-in
 stdenv.mkDerivation rec {
   pname = "mame";
   version = "0.276";
@@ -76,8 +73,6 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
-  dontWrapQtApps = true;
-
   # https://docs.mamedev.org/initialsetup/compilingmame.html
   buildInputs =
     [
@@ -105,8 +100,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libpcap
-      CoreAudioKit
-      ForceFeedback
     ];
 
   nativeBuildInputs = [
@@ -116,6 +109,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     which
+    wrapQtAppsHook
   ];
 
   patches = [

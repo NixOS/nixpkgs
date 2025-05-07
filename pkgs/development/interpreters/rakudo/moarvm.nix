@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitHub,
   perl,
-  CoreServices,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,12 +31,7 @@ stdenv.mkDerivation rec {
         --replace '`sw_vers -productVersion`' '"11.0"'
     '';
 
-  buildInputs =
-    [ perl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      ApplicationServices
-    ];
+  buildInputs = [ perl ];
   doCheck = false; # MoarVM does not come with its own test suite
 
   configureScript = "${perl}/bin/perl ./Configure.pl";

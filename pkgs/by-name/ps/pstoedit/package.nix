@@ -2,7 +2,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  darwin,
   lib,
   zlib,
   ghostscript,
@@ -42,13 +41,9 @@ stdenv.mkDerivation rec {
       libjpeg
       libwebp
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        libiconv
-        ApplicationServices
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   # '@LIBPNG_LDFLAGS@' is no longer substituted by autoconf (the code is commented out)
   # so we need to remove it from the pkg-config file as well

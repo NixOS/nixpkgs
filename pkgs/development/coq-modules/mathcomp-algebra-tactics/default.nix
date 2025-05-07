@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  mathcomp-ssreflect,
   mathcomp-algebra,
   coq-elpi,
   mathcomp-zify,
@@ -60,6 +61,7 @@ mkCoqDerivation {
   release."1.2.4".sha256 = "sha256-BRxt0LGPz2u3kJRjcderaZqCfs8M8qKAAwNSWmIck7Q=";
 
   propagatedBuildInputs = [
+    mathcomp-ssreflect
     mathcomp-algebra
     coq-elpi
     mathcomp-zify

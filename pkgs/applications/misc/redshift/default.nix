@@ -19,7 +19,6 @@
   pyxdg,
 
   withQuartz ? stdenv.hostPlatform.isDarwin,
-  ApplicationServices,
   withRandr ? stdenv.hostPlatform.isLinux,
   libxcb,
   withDrm ? stdenv.hostPlatform.isLinux,
@@ -29,9 +28,6 @@
 
   withGeolocation ? true,
   withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin,
-  CoreLocation,
-  Foundation,
-  Cocoa,
   withGeoclue ? withGeolocation && stdenv.hostPlatform.isLinux,
   geoclue,
   withAppIndicator ? stdenv.hostPlatform.isLinux,
@@ -99,12 +95,6 @@ let
         ++ lib.optional withGeoclue geoclue
         ++ lib.optional withDrm libdrm
         ++ lib.optional withVidmode libXxf86vm
-        ++ lib.optional withQuartz ApplicationServices
-        ++ lib.optionals withCoreLocation [
-          CoreLocation
-          Foundation
-          Cocoa
-        ]
         ++ lib.optional withAppIndicator (
           if (pname != "gammastep") then libappindicator else libayatana-appindicator
         );

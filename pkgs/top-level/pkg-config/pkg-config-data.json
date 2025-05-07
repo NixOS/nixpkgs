@@ -726,11 +726,6 @@
         "openssl"
       ]
     },
-    "orte": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
     "panel": {
       "attrPath": [
         "ncurses"

@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  libobjc,
-  IOKit,
   nixosTests,
 }:
 
@@ -18,13 +15,13 @@ let
 in
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.15.8";
+  version = "1.15.10";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dEGPObm3Hy2MHOYrk+lga0PAeHrdSt0jfsTrk74wCUA=";
+    hash = "sha256-QVgi4IDPDGlvg8J3Wwrjtzkd6eYi3aAwU8IJbnIr5fU=";
   };
 
   proxyVendor = true;
@@ -58,12 +55,6 @@ buildGoModule rec {
 
   # Following upstream: https://github.com/ethereum/go-ethereum/blob/v1.11.6/build/ci.go#L218
   tags = [ "urfave_cli_no_docs" ];
-
-  # Fix for usb-related segmentation faults on darwin
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libobjc
-    IOKit
-  ];
 
   passthru.tests = { inherit (nixosTests) geth; };
 

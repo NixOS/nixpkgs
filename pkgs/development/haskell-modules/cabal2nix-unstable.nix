@@ -2,6 +2,7 @@
 {
   mkDerivation,
   aeson,
+  ansi-terminal,
   ansi-wl-pprint,
   base,
   bytestring,
@@ -34,16 +35,17 @@
 }:
 mkDerivation {
   pname = "cabal2nix";
-  version = "unstable-2024-12-31";
+  version = "unstable-2025-04-22";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/e290b906f056dd1414ede71b4bb6375be2d0aa5d.tar.gz";
-    sha256 = "0x94w4dfjfxp3f5h7w5738znkyb8barzjki0xsf94asiffiqsgxn";
+    url = "https://github.com/NixOS/cabal2nix/archive/e6ed81965def7775aabdda7456d0c13f626295ee.tar.gz";
+    sha256 = "1fh428r4wfrqjj77dxy1l3d9scm4ywz89rp7dhp07y3bq5yr7hs4";
   };
   postUnpack = "sourceRoot+=/cabal2nix; echo source root reset to $sourceRoot";
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     aeson
+    ansi-terminal
     ansi-wl-pprint
     base
     bytestring

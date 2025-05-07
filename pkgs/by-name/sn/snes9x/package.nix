@@ -5,7 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
-  libGL,
+  libGLX,
   libX11,
   libXdmcp,
   libXext,
@@ -91,11 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-avx2"
     ];
 
-  postPatch = ''
+  postPatch = lib.optionalString withGtk ''
     substituteInPlace external/glad/src/egl.c \
-      --replace-fail libEGL.so.1 "${lib.getLib libGL}/lib/libEGL.so.1"
+      --replace-fail libEGL.so.1 "${lib.getLib libGLX}/lib/libEGL.so.1"
     substituteInPlace external/glad/src/glx.c \
-      --replace-fail libGL.so.1 ${lib.getLib libGL}/lib/libGL.so.1
+      --replace-fail libGL.so.1 ${lib.getLib libGLX}/lib/libGL.so.1
   '';
 
   preConfigure = ''

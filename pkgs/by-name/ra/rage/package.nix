@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,10 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
   ];
 
   # cargo test has an x86-only dependency

@@ -6,13 +6,15 @@
 }:
 let
   aggregatedLocales =
-    builtins.map
+    (builtins.map
       (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
       (
         [ config.i18n.defaultLocale ]
-        ++ config.i18n.extraLocales
+        ++ (lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales)
         ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
-      );
+      )
+    )
+    ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
 in
 {
   ###### interface
@@ -53,13 +55,14 @@ in
       };
 
       extraLocales = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+        type = lib.types.either (lib.types.listOf lib.types.str) (lib.types.enum [ "all" ]);
         default = [ ];
         example = [ "nl_NL.UTF-8" ];
         description = ''
           Additional locales that the system should support, besides the ones
           configured with {option}`i18n.defaultLocale` and
           {option}`i18n.extraLocaleSettings`.
+          Set this to `"all"` to install all available locales.
         '';
       };
 
@@ -108,7 +111,13 @@ in
 
   config = {
     warnings =
-      lib.optional ((lib.subtractLists config.i18n.supportedLocales aggregatedLocales) != [ ])
+      lib.optional
+        (
+          !(
+            (lib.subtractLists config.i18n.supportedLocales aggregatedLocales) == [ ]
+            || lib.any (x: x == "all") config.i18n.supportedLocales
+          )
+        )
         ''
           `i18n.supportedLocales` is deprecated in favor of `i18n.extraLocales`,
           and it seems you are using `i18n.supportedLocales` and forgot to

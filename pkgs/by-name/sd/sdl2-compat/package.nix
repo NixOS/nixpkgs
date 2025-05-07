@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.52";
+  version = "2.32.54";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-adtFcBFclfub//KGpxqObuTIZbh9r4k/jdJEnP1Hzpw=";
+    hash = "sha256-tkiKJ/YPipeqAiioWZKlL1dXKPnvbW57v97rtITpV0Y=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # allow as a drop in replacement for SDL2
     # Can be removed after treewide switch from pkg-config to pkgconf
-    ln -s $dev/lib/pkgconfig/sdl2_compat.pc $dev/lib/pkgconfig/sdl2.pc
+    ln -s $dev/lib/pkgconfig/sdl2-compat.pc $dev/lib/pkgconfig/sdl2.pc
   '';
 
   passthru = {
@@ -108,6 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       marcin-serwin
     ];
     platforms = lib.platforms.all;
-    pkgConfigModules = [ "sdl2_compat" ];
+    pkgConfigModules = [ "sdl2-compat" ];
   };
 })

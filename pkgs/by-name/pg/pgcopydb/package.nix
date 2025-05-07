@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   libkrb5,
   openssl,
@@ -13,7 +13,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "pgcopydb";
   version = "0.15";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       sqlite
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       pam
     ];
 

@@ -35,8 +35,12 @@ indent_size = 1
 [*.{json,lock,md,nix,rb}]
 indent_size = 2
 
-# Match perl/python/shell scripts, set indent width of four
-[*.{bash,pl,pm,py,sh}]
+# Match all the Bash code in Nix files, set indent width of two
+[*.{bash,sh}]
+indent_size = 2
+
+# Match Perl and Python scripts, set indent width of four
+[*.{pl,pm,py}]
 indent_size = 4
 
 # Match gemfiles, set indent to spaces with width of two
@@ -104,7 +108,7 @@ insert_final_newline = unset
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset
 
-[pkgs/tools/misc/timidity/timidity.cfg]
+[pkgs/by-name/ti/timidity/timidity.cfg]
 trim_trailing_whitespace = unset
 
 [pkgs/tools/security/qdigidoc/vendor/*]

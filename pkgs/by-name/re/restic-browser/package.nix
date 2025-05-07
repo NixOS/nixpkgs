@@ -11,7 +11,6 @@
   wrapGAppsHook3,
   webkitgtk_4_0,
   dbus,
-  darwin,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
@@ -46,17 +45,10 @@ rustPlatform.buildRustPackage rec {
       wrapGAppsHook3
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_0
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        WebKit
-      ]
-    );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_0
+    dbus
+  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;

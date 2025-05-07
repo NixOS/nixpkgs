@@ -45,11 +45,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.311.0";
+  version = "1.312.0";
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-wiEaQpdDyJ3K3BgFlpf8LtgRmRXSpdBGSnC5HAelrdc=";
+    hash = "sha256-glZR72+5lpghItwHuzDZKd/KONsCrjjCwcyNK0k9jr8=";
     stripRoot = false;
   };
 

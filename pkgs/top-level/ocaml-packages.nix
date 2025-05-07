@@ -118,9 +118,7 @@ let
 
         bitwuzla-cxx = callPackage ../development/ocaml-modules/bitwuzla-cxx { };
 
-        bjack = callPackage ../development/ocaml-modules/bjack {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreAudio;
-        };
+        bjack = callPackage ../development/ocaml-modules/bjack { };
 
         bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
         bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
@@ -145,9 +143,7 @@ let
 
         ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
 
-        cairo2 = callPackage ../development/ocaml-modules/cairo2 {
-          inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
-        };
+        cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
@@ -561,45 +557,24 @@ let
         ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
         ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
         };
         ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
         };
         ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            AppKit
-            AudioToolbox
-            AVFoundation
-            Cocoa
-            CoreImage
-            ForceFeedback
-            OpenGL
-            VideoToolbox
-            ;
         };
         ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            AppKit
-            CoreImage
-            OpenGL
-            VideoToolbox
-            ;
         };
         ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
         };
         ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
         };
         ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
         };
 
         fiber = callPackage ../development/ocaml-modules/fiber { };
@@ -717,9 +692,7 @@ let
           inherit (pkgs) gsl;
         };
 
-        gstreamer = callPackage ../development/ocaml-modules/gstreamer {
-          inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
-        };
+        gstreamer = callPackage ../development/ocaml-modules/gstreamer { };
 
         ### H ###
 
@@ -1018,6 +991,8 @@ let
 
         jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
+        jose = callPackage ../development/ocaml-modules/jose { };
+
         js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
         js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix { };
@@ -1088,9 +1063,7 @@ let
 
         lablgtk3-sourceview3 = callPackage ../development/ocaml-modules/lablgtk3/sourceview3.nix { };
 
-        labltk = callPackage ../development/ocaml-modules/labltk {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-        };
+        labltk = callPackage ../development/ocaml-modules/labltk { };
 
         lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
@@ -1450,9 +1423,7 @@ let
 
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
-        ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Foundation AppKit;
-        };
+        ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
         ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
@@ -1613,6 +1584,8 @@ let
         ogg = callPackage ../development/ocaml-modules/ogg { };
 
         ohex = callPackage ../development/ocaml-modules/ohex { };
+
+        oidc = callPackage ../development/ocaml-modules/oidc { };
 
         ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
@@ -2083,15 +2056,7 @@ let
 
         trie = callPackage ../development/ocaml-modules/trie { };
 
-        tsdl = callPackage ../development/ocaml-modules/tsdl {
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            AudioToolbox
-            Cocoa
-            CoreAudio
-            CoreVideo
-            ForceFeedback
-            ;
-        };
+        tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
         tsdl-image = callPackage ../development/ocaml-modules/tsdl-image { };
 

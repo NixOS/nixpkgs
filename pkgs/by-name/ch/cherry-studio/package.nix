@@ -18,20 +18,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pxxv6f6YHjc1BAT93ASY2XUsB0CGVo4F/DcM7tReS9U=";
+    hash = "sha256-txzZbtA6Fvc/2cpD9YM5wwtZix+qjtW0B6aAV4I7Ce8=";
   };
+
+  postPatch = ''
+    substituteInPlace src/main/services/ConfigManager.ts \
+      --replace-fail "ConfigKeys.AutoUpdate, true" "ConfigKeys.AutoUpdate, false" \
+      --replace-fail "ConfigKeys.AutoUpdate, value" "ConfigKeys.AutoUpdate, false"
+    substituteInPlace src/main/services/AppUpdater.ts \
+      --replace-fail " = isActive" " = false"
+    substituteInPlace src/renderer/src/hooks/useSettings.ts \
+      --replace-fail "isAutoUpdate)" "false)"
+  '';
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-I5K0JEFOuk9ugLBz/TON8RxBx4MojMk8Ol9XRg0Rxi8=";
+    hash = "sha256-rKXUGfBL8upKU5MIe9fqHyEETNKsWdiUdsbHmvJPQdQ=";
   };
 
   nativeBuildInputs = [

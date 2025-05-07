@@ -50,9 +50,9 @@ mkCoqDerivation {
       null;
 
   propagatedBuildInputs = [
-    mathcomp.ssreflect
-    mathcomp.algebra
+    mathcomp.boot
     mathcomp.fingroup
+    mathcomp.algebra
     stdlib
   ];
 

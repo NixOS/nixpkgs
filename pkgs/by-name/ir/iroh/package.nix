@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,14 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-O/j+/sRyMtqd4GaER2trn9SEFpZuSlc5q1MTXU+rwLg=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Security
-      SystemConfiguration
-    ]
-  );
 
   # Some tests require network access which is not available in nix build sandbox.
   doCheck = false;

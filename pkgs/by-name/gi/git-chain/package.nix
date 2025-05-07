@@ -6,8 +6,6 @@
   openssl,
   git,
   nix-update-script,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -26,14 +24,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-      ]
-    );
+  buildInputs = [ openssl ];
 
   nativeCheckInputs = [ git ];
 

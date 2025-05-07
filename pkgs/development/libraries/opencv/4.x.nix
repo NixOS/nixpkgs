@@ -87,7 +87,6 @@
   enabledModules ? [ ],
 
   bzip2,
-  apple-sdk_14, # earlier SDKs cause linking issues on x86_64
   callPackage,
 }@inputs:
 
@@ -415,7 +414,6 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals effectiveStdenv.hostPlatform.isDarwin [
       bzip2
-      apple-sdk_14
     ]
     ++ optionals enableDocs [
       doxygen

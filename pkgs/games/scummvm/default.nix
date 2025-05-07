@@ -19,11 +19,6 @@
   libX11,
   SDL2,
   zlib,
-  Cocoa,
-  AudioToolbox,
-  Carbon,
-  CoreMIDI,
-  AudioUnit,
   cctools,
   nix-update-script,
 }:
@@ -46,13 +41,6 @@ stdenv.mkDerivation rec {
       alsa-lib
       libGLU
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      AudioToolbox
-      Carbon
-      CoreMIDI
-      AudioUnit
     ]
     ++ [
       curl

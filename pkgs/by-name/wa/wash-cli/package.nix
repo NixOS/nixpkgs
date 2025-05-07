@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   fetchCrate,
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
   fetchurl,
 }:
 
@@ -34,12 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [ openssl ];
 
   preBuild = "
     export WASI_PREVIEW1_COMMAND_COMPONENT_ADAPTER=${wasiPreviewCommandComponentAdapter}

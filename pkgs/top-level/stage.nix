@@ -396,6 +396,7 @@ let
               super'.stdenv.cc.defaultHardeningFlags
               ++ [
                 "shadowstack"
+                "nostrictaliasing"
                 "pacret"
                 "trivialautovarinit"
               ]

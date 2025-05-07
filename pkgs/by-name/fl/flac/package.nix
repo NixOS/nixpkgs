@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B6XRai5UOAtY/7JXNbI3YuBgazi1Xd2ZOs6vvLq9LIs=";
   };
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   nativeBuildInputs = [
     cmake
     doxygen

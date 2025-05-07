@@ -421,7 +421,7 @@ in
   ecryptfs = handleTest ./ecryptfs.nix { };
   fscrypt = handleTest ./fscrypt.nix { };
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
-  eintopf = handleTest ./eintopf.nix { };
+  eintopf = runTest ./eintopf.nix;
   ejabberd = handleTest ./xmpp/ejabberd.nix { };
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -619,7 +619,6 @@ in
   odoo = handleTest ./odoo.nix { };
   odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
   odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
-  odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
@@ -1117,7 +1116,7 @@ in
   private-gpt = handleTest ./private-gpt.nix { };
   privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix { };
-  prometheus = handleTest ./prometheus { };
+  prometheus = import ./prometheus { inherit runTest; };
   prometheus-exporters = handleTest ./prometheus-exporters.nix { };
   prosody = handleTest ./xmpp/prosody.nix { };
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };

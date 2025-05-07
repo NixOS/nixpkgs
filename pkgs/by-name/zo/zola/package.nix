@@ -5,7 +5,6 @@
   rustPlatform,
   pkg-config,
   oniguruma,
-  darwin,
   installShellFiles,
   zola,
   testers,
@@ -30,17 +29,9 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    oniguruma
+  ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 

@@ -7,7 +7,7 @@
   fetchpatch2,
   alsa-lib,
   aubio,
-  boost,
+  boost186,
   cairomm,
   cppunit,
   curl,
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     [
       alsa-lib
       aubio
-      boost
+      boost186
       cairomm
       cppunit
       curl

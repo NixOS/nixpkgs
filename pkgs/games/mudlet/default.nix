@@ -22,7 +22,6 @@
   qtmultimedia,
   discord-rpc,
   yajl,
-  AppKit,
 }:
 
 let
@@ -86,25 +85,21 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost
-      hunspell
-      libGLU
-      libsForQt5.qtkeychain
-      libsecret
-      libzip
-      luaEnv
-      pcre
-      pugixml
-      qtbase
-      qtmultimedia
-      yajl
-      discord-rpc
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      AppKit
-    ];
+  buildInputs = [
+    boost
+    hunspell
+    libGLU
+    libsForQt5.qtkeychain
+    libsecret
+    libzip
+    luaEnv
+    pcre
+    pugixml
+    qtbase
+    qtmultimedia
+    yajl
+    discord-rpc
+  ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/

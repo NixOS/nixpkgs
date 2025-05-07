@@ -56,7 +56,7 @@ import ./make-test-python.nix (
         server.succeed("sudo -iu canaille -- canaille create user --user-name admin --password adminpass --emails admin@${domain}")
         json_str = server.succeed("sudo -iu canaille -- canaille get user")
         assert json.loads(json_str)[0]["user_name"] == "admin"
-        server.succeed("sudo -iu canaille -- canaille check")
+        server.succeed("sudo -iu canaille -- canaille config check")
       '';
   }
 )

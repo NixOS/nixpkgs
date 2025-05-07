@@ -10,7 +10,6 @@
   autoreconfHook,
   autoconf-archive,
   xz,
-  Security,
   meson,
   ninja,
   bzip2,
@@ -47,18 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'config-store.hh' 'nix/config.h'
   '';
 
-  buildInputs =
-    [
-      boost
-      bzip2
-      curl
-      libsodium
-      nix
-      perl
-      xz
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin) Security
-    ++ lib.optional atLeast226 libarchive;
+  buildInputs = [
+    boost
+    bzip2
+    curl
+    libsodium
+    nix
+    perl
+    xz
+  ] ++ lib.optional atLeast226 libarchive;
 
   # Not cross-safe since Nix checks for curl/perl via
   # NEED_PROG/find_program, but both seem to be needed at runtime

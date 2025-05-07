@@ -92,34 +92,33 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # touch the network
-      "test_create_from_cookiecutter"
+  disabledTests = [
+    # touch the network
+    "test_create_from_cookiecutter"
 
-      # flaky?
-      "test_execution_timeout"
+    # flaky?
+    "test_execution_timeout"
 
-      # require texlive
-      "test_toc"
-      "test_toc_latex_parts"
-      "test_toc_latex_urllink"
+    # require texlive
+    "test_toc"
+    "test_toc_latex_parts"
+    "test_toc_latex_urllink"
 
-      # AssertionError: assert 'There was an error in building your book' in '1'
-      "test_build_errors"
+    # AssertionError: assert 'There was an error in building your book' in '1'
+    "test_build_errors"
 
-      # WARNING: Executing notebook failed: CellExecutionError [mystnb.exec]
-      "test_build_dirhtml_from_template"
-      "test_build_from_template"
-      "test_build_page"
-      "test_build_singlehtml_from_template"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <sqlite3.Connection object at 0x115dcc9a0>
-      # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x115dcc9a0>
-      "test_clean_html_latex"
-      "test_clean_latex"
-    ];
+    # WARNING: Executing notebook failed: CellExecutionError [mystnb.exec]
+    "test_build_dirhtml_from_template"
+    "test_build_from_template"
+    "test_build_page"
+    "test_build_singlehtml_from_template"
+
+    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <sqlite3.Connection object at 0x115dcc9a0>
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x115dcc9a0>
+    "test_clean_book"
+    "test_clean_html_latex"
+    "test_clean_latex"
+  ];
 
   disabledTestPaths = [
     # require texlive

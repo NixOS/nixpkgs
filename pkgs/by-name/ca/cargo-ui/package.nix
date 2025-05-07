@@ -10,7 +10,6 @@
   fontconfig,
   libGL,
   xorg,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,9 +42,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libXi
       xorg.libXrandr
       xorg.libxcb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
     ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

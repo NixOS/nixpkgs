@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -96,6 +97,7 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
+    aws = automated-providers.aws.override { mkProviderGoModule = buildGo123Module; };
     # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
     checkly = automated-providers.checkly.override { spdx = "MIT"; };
     gitlab = automated-providers.gitlab.override {

@@ -29,6 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-7lSK9IGu/K03xSDxZv+BSTJwLrQoHs+POBq/ixYTVR4=";
   };
 
+  # Upstream setup.py installs both the CLI and GUI versions.
+  # To pull only the required dependencyes, either setup_cli.py or setup_gui.py should be used.
+  postPatch = ''
+    mv setup_cli.py setup.py
+  '';
+
   pythonRelaxDeps = [ "pyasyncore" ];
 
   build-system = [ setuptools ];
@@ -48,7 +54,12 @@ buildPythonPackage rec {
     "test_monitor_get_stats"
     "test_monitor_update_with_reporting_enabled"
     "test_erasure_recovery"
+    # Non-NixOS package managers are not present in the build environment.
+    "test_parse_upgradable_list_apt"
+    "test_parse_upgradable_list_dnf"
   ];
+
+  disabledTestPaths = [ "blocksatgui/tests/" ];
 
   pythonImportsCheck = [ "blocksatcli" ];
 

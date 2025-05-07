@@ -45,25 +45,19 @@ stdenv.mkDerivation rec {
     pkg-config
     git
   ];
-  buildInputs =
-    [
-      boehmgc
-      zlib
-      sqlite
-      pcre
-      apacheHttpd
-      apr
-      aprutil
-      libmysqlclient
-      mbedtls_2
-      openssl
-      libpthreadstubs
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux gtk2
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkgs.darwin.apple_sdk.frameworks.Security
-      pkgs.darwin.apple_sdk.frameworks.Carbon
-    ];
+  buildInputs = [
+    boehmgc
+    zlib
+    sqlite
+    pcre
+    apacheHttpd
+    apr
+    aprutil
+    libmysqlclient
+    mbedtls_2
+    openssl
+    libpthreadstubs
+  ] ++ lib.optional stdenv.hostPlatform.isLinux gtk2;
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";

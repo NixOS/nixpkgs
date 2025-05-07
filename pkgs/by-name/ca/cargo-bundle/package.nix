@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   stdenv,
-  darwin,
   libxkbcommon,
   wayland,
 }:
@@ -28,14 +27,10 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    wayland
+  ];
 
   meta = with lib; {
     description = "Wrap rust executables in OS-specific app bundles";

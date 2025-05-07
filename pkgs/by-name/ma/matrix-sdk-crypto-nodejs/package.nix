@@ -64,5 +64,7 @@ stdenv.mkDerivation rec {
       dandellion
     ];
     inherit (nodejs.meta) platforms;
+    # napi_build doesn't handle most cross-compilation configurations
+    broken = (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) || stdenv.hostPlatform.isStatic;
   };
 }

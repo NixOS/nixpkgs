@@ -9,7 +9,6 @@
   curl,
   pcre2,
   libiconv,
-  darwin,
   php,
 }:
 
@@ -32,19 +31,12 @@ buildPecl rec {
 
   env.NIX_CFLAGS_COMPILE = "-O2";
 
-  nativeBuildInputs =
-    [
-      cargo
-      rustc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      rustPlatform.bindgenHook
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.rustPlatform.bindgenHook
-      darwin.apple_sdk_11_0.rustPlatform.cargoSetupHook
-    ];
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs =
     [
@@ -52,8 +44,6 @@ buildPecl rec {
       pcre2
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
       libiconv
     ];
 

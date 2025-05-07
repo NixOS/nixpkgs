@@ -6,11 +6,8 @@
   installShellFiles,
   udev,
   stdenv,
-  CoreServices,
-  Security,
   nix-update-script,
   openssl,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,11 +33,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      SystemConfiguration
     ];
 
   useFetchCargoVendor = true;

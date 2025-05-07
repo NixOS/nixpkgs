@@ -7,7 +7,6 @@
   qtwebsockets,
   minizinc,
   makeWrapper,
-  Cocoa,
 }:
 
 let
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebsockets
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
 

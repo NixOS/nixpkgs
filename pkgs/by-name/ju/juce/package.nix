@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
 
   # Native build inputs
@@ -32,14 +31,6 @@
   versionCheckHook,
   nix-update-script,
 }:
-
-let
-  # Rebind this in a separate let-binding so that we can then rebind stdenv without infrec below
-  stdenv' = stdenv;
-in
-let
-  stdenv = if stdenv'.hostPlatform.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";

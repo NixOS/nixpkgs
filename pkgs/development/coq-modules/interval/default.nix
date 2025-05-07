@@ -5,7 +5,7 @@
   coq,
   coquelicot,
   flocq,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-fingroup,
   bignums ? null,
   gnuplot_qt,
@@ -82,7 +82,7 @@ mkCoqDerivation rec {
     ++ [
       coquelicot
       flocq
-      mathcomp-ssreflect
+      mathcomp-boot
       mathcomp-fingroup
     ]
     ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];

@@ -1,19 +1,30 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nitrokey-udev-rules";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-udev-rules";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uq1+YQg+oe5UFphpy1AdxEYaPFyRle6ffYOPoU6Li28=";
+    hash = "sha256-LKpd6O9suAc2+FFgpuyTClEgL/JiZiokH3DV8P3C7Aw=";
   };
+
+  nativeBuildInputs = [ python3 ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    make generate
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     install -D 41-nitrokey.rules -t $out/etc/udev/rules.d

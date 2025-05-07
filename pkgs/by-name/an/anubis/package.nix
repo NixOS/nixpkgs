@@ -12,20 +12,20 @@
 }:
 let
   pname = "anubis";
-  version = "1.16.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${version}";
-    hash = "sha256-/7GMf0QGR0rtz05vHN/yYYuzxN25NhqidITdAf6jSXY=";
+    hash = "sha256-8b2rVVuxhsY0+5IZvzMm7ki3HGbJAnUUoAqpD1PuqZ4=";
   };
 
   anubisXess = buildNpmPackage {
     inherit version src;
     pname = "${pname}-xess";
 
-    npmDepsHash = "sha256-QrW0grgNRZRum2mCec86Za1UV4R5QSRlhjVYFsZDwY8=";
+    npmDepsHash = "sha256-jiLrqn0jenug2ff/mqhOIfc7f+CsQja5g2K9n+W1kVM=";
 
     buildPhase = ''
       runHook preBuild
@@ -44,7 +44,7 @@ in
 buildGoModule (finalAttrs: {
   inherit pname version src;
 
-  vendorHash = "sha256-D0+SDJIagAPqd71fIHCh29vPMVL0ZZAFg0rmgW2EaGw=";
+  vendorHash = "sha256-v9GsTUzBYfjh6/ETBbFpN5dqMzMaOz8w39Xz1omaPJE=";
 
   nativeBuildInputs = [
     esbuild
@@ -88,6 +88,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       knightpp
       soopyc
+      ryand56
     ];
     mainProgram = "anubis";
   };
