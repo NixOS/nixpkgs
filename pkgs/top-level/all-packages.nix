@@ -7578,8 +7578,6 @@ with pkgs;
     })
   );
 
-  pnpm-lock-export = callPackage ../development/web/pnpm-lock-export { };
-
   portableService = callPackage ../build-support/portable-service { };
 
   polar = callPackage ../tools/misc/polar { };
@@ -10953,8 +10951,6 @@ with pkgs;
   shairport-sync-airplay2 = shairport-sync.override {
     enableAirplay2 = true;
   };
-
-  showoff = callPackage ../servers/http/showoff { };
 
   stalwart-mail-webadmin = stalwart-mail.webadmin;
 

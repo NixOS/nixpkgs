@@ -7,22 +7,22 @@
 }:
 
 let
-  version = "0.14.3";
+  version = "1.0.0";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Klasse-Methode";
-    repo = "eintopf";
-    rev = "v${version}";
-    hash = "sha256-cWHWRxZFoArBB5PiuY6EQubKJKm3/79fwNhnABOtBrM=";
+    repo = "lauti";
+    tag = "v${version}";
+    hash = "sha256-cO9rK7GAVRlv5x4WI/xbXNJ594QqB+KIPUteB3TifKM=";
   };
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
 
 buildGoModule rec {
-  pname = "eintopf";
+  pname = "lauti";
   inherit version src;
 
-  vendorHash = "sha256-ysAgyaewREI8TaMnKH+kh33QT6AN1eLhog35lv7CbVU=";
+  vendorHash = "sha256-ushTvIpvRLZP3q6tLN6BA4tl2Xp/UImWugm2ZgTAm8k=";
 
   ldflags = [
     "-s"
@@ -37,19 +37,20 @@ buildGoModule rec {
 
   preCheck = ''
     # Disable test, requires running Docker daemon
-    rm cmd/eintopf/main_test.go
+    rm cmd/lauti/main_test.go
     rm service/email/email_test.go
   '';
 
   passthru.tests = {
-    inherit (nixosTests) eintopf;
+    inherit (nixosTests) lauti;
   };
 
   meta = {
-    description = "A calendar for Stuttgart, showing events, groups and places";
-    homepage = "https://codeberg.org/Klasse-Methode/eintopf";
+    description = "An open source calendar for events, groups and places";
+    homepage = "https://lauti.org";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ onny ];
     platforms = lib.platforms.unix;
+    mainProgram = "lauti";
   };
 }
