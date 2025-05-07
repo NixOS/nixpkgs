@@ -4,20 +4,18 @@
   src,
   version,
   nodejs,
-  eintopf,
+  lauti,
   yarnConfigHook,
   yarnBuildHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "eintopf";
+  pname = "lauti";
   inherit version src;
 
-  sourceRoot = "${finalAttrs.src.name}/backstage";
-
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/backstage/yarn.lock";
-    hash = "sha256-3TPBrQxvTfmBfhAavHy8eDcZwRZMwu0dCovnE1fcuTE=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-uIDBE4ewdzrtJqOjFQTAei1TpAjQMRqls7CtG1h8KnA=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Needed for executing package.json scripts
     nodejs
   ];
+
+  preBuild = ''
+    cd backstage
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    inherit (eintopf.meta)
+    inherit (lauti.meta)
       homepage
       description
       license
