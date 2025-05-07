@@ -11424,6 +11424,8 @@ with pkgs;
 
   sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
 
+  sddm-tokyo-night = libsForQt5.callPackage ../data/themes/sddm-tokyo-night { };
+
   sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel { };
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
