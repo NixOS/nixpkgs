@@ -57,7 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
     })
 
-    # PR: https://github.com/SELinuxProject/selinux/pull/464
+    # commit 5c3fcbd931b7f9752b5ce29cec3b6813991d61c0 plus an additional
+    # fix for a musl build regression caused by that commit:
+    # https://lore.kernel.org/selinux/20250426151356.7116-2-hi@alyssa.is/
     # Fix build on 32-bit LFS platforms
     ./fix-build-32bit-lfs.patch
   ];

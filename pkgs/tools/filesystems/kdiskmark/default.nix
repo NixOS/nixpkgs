@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
     qttools
-    extra-cmake-modules
     polkit-qt
   ];
 

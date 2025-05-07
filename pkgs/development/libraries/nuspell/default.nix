@@ -7,6 +7,7 @@
   pkg-config,
   icu,
   catch2_3,
+  enableManpages ? !stdenv.buildPlatform.isRiscV64 && !stdenv.buildPlatform.isLoongArch64,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,15 +21,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pandoc
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals enableManpages [
+      pandoc
+    ];
+
   buildInputs = [ catch2_3 ];
+
   propagatedBuildInputs = [ icu ];
 
-  cmakeFlags = [ "-DBUILD_TESTING=YES" ];
+  cmakeFlags =
+    [
+      "-DBUILD_TESTING=YES"
+    ]
+    ++ lib.optionals (!enableManpages) [
+      "-DBUILD_DOCS=OFF"
+    ];
+
   doCheck = true;
 
   outputs = [

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
-  strictDpes = true;
+  strictDeps = true;
   nativeBuildInputs = [
     makeWrapper
     perlPackages.perl

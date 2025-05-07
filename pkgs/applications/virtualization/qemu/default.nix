@@ -31,6 +31,7 @@
   libcap_ng,
   socat,
   libslirp,
+  libcbor,
   apple-sdk_13,
   darwinMinVersionHook,
   guestAgentSupport ?
@@ -195,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       snappy
       libtasn1
       libslirp
+      libcbor
     ]
     ++ lib.optionals (!userOnly) [ curl ]
     ++ lib.optionals ncursesSupport [ ncurses ]

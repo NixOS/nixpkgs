@@ -1,0 +1,155 @@
+From 5fbd78eb2dc4afbd8884e8eed27147fc3d4318f6 Mon Sep 17 00:00:00 2001
+From: Stefan Eissing <stefan@eissing.org>
+Date: Fri, 4 Apr 2025 10:43:13 +0200
+Subject: [PATCH] http2: fix stream window size after unpausing
+
+When pausing a HTTP/2 transfer, the stream's local window size
+is reduced to 0 to prevent the server from sending further data
+which curl cannot write out to the application.
+
+When unpausing again, the stream's window size was not correctly
+increased again. The attempt to trigger a window update was
+ignored by nghttp2, the server never received it and the transfer
+stalled.
+
+Add a debug feature to allow use of small window sizes which
+reproduces this bug in test_02_21.
+
+Fixes #16955
+Closes #16960
+---
+ docs/libcurl/libcurl-env-dbg.md |  5 +++++
+ lib/http2.c                     | 31 +++++++++++++++++++++++++++++++
+ tests/http/test_02_download.py  | 27 +++++++++++++++++++++++++--
+ 3 files changed, 61 insertions(+), 2 deletions(-)
+
+diff --git a/docs/libcurl/libcurl-env-dbg.md b/docs/libcurl/libcurl-env-dbg.md
+index 471533625f6b..60c887bfd5a9 100644
+--- a/docs/libcurl/libcurl-env-dbg.md
++++ b/docs/libcurl/libcurl-env-dbg.md
+@@ -147,3 +147,8 @@ Make a blocking, graceful shutdown of all remaining connections when
+ a multi handle is destroyed. This implicitly triggers for easy handles
+ that are run via easy_perform. The value of the environment variable
+ gives the shutdown timeout in milliseconds.
++
++## `CURL_H2_STREAM_WIN_MAX`
++
++Set to a positive 32-bit number to override the HTTP/2 stream window's
++default of 10MB. Used in testing to verify correct window update handling.
+diff --git a/lib/http2.c b/lib/http2.c
+index 88fbcceb7135..a1221dcc51de 100644
+--- a/lib/http2.c
++++ b/lib/http2.c
+@@ -44,6 +44,7 @@
+ #include "connect.h"
+ #include "rand.h"
+ #include "strdup.h"
++#include "strparse.h"
+ #include "transfer.h"
+ #include "dynbuf.h"
+ #include "headers.h"
+@@ -141,6 +142,9 @@ struct cf_h2_ctx {
+   uint32_t goaway_error;        /* goaway error code from server */
+   int32_t remote_max_sid;       /* max id processed by server */
+   int32_t local_max_sid;        /* max id processed by us */
++#ifdef DEBUGBUILD
++  int32_t stream_win_max;       /* max h2 stream window size */
++#endif
+   BIT(initialized);
+   BIT(via_h1_upgrade);
+   BIT(conn_closed);
+@@ -166,6 +170,18 @@ static void cf_h2_ctx_init(struct cf_h2_ctx *ctx, bool via_h1_upgrade)
+   Curl_hash_offt_init(&ctx->streams, 63, h2_stream_hash_free);
+   ctx->remote_max_sid = 2147483647;
+   ctx->via_h1_upgrade = via_h1_upgrade;
++#ifdef DEBUGBUILD
++  {
++    const char *p = getenv("CURL_H2_STREAM_WIN_MAX");
++
++    ctx->stream_win_max = H2_STREAM_WINDOW_SIZE_MAX;
++    if(p) {
++      curl_off_t l;
++      if(!Curl_str_number(&p, &l, INT_MAX))
++        ctx->stream_win_max = (int32_t)l;
++    }
++  }
++#endif
+   ctx->initialized = TRUE;
+ }
+ 
+@@ -285,7 +301,15 @@ static int32_t cf_h2_get_desired_local_win(struct Curl_cfilter *cf,
+      * This gets less precise the higher the latency. */
+     return (int32_t)data->set.max_recv_speed;
+   }
++#ifdef DEBUGBUILD
++  else {
++    struct cf_h2_ctx *ctx = cf->ctx;
++    CURL_TRC_CF(data, cf, "stream_win_max=%d", ctx->stream_win_max);
++    return ctx->stream_win_max;
++  }
++#else
+   return H2_STREAM_WINDOW_SIZE_MAX;
++#endif
+ }
+ 
+ static CURLcode cf_h2_update_local_win(struct Curl_cfilter *cf,
+@@ -302,6 +326,13 @@ static CURLcode cf_h2_update_local_win(struct Curl_cfilter *cf,
+     int32_t wsize = nghttp2_session_get_stream_effective_local_window_size(
+                       ctx->h2, stream->id);
+     if(dwsize > wsize) {
++      rv = nghttp2_session_set_local_window_size(ctx->h2, NGHTTP2_FLAG_NONE,
++                                                 stream->id, dwsize);
++      if(rv) {
++        failf(data, "[%d] nghttp2 set_local_window_size(%d) failed: "
++              "%s(%d)", stream->id, dwsize, nghttp2_strerror(rv), rv);
++        return CURLE_HTTP2;
++      }
+       rv = nghttp2_submit_window_update(ctx->h2, NGHTTP2_FLAG_NONE,
+                                         stream->id, dwsize - wsize);
+       if(rv) {
+diff --git a/tests/http/test_02_download.py b/tests/http/test_02_download.py
+index 4b9ae3caefab..b55f022338ad 100644
+--- a/tests/http/test_02_download.py
++++ b/tests/http/test_02_download.py
+@@ -313,9 +313,9 @@ def test_02_20_h2_small_frames(self, env: Env, httpd):
+         assert httpd.stop()
+         assert httpd.start()
+ 
+-    # download via lib client, 1 at a time, pause/resume at different offsets
++    # download serial via lib client, pause/resume at different offsets
+     @pytest.mark.parametrize("pause_offset", [0, 10*1024, 100*1023, 640000])
+-    @pytest.mark.parametrize("proto", ['http/1.1', 'h2', 'h3'])
++    @pytest.mark.parametrize("proto", ['http/1.1', 'h3'])
+     def test_02_21_lib_serial(self, env: Env, httpd, nghttpx, proto, pause_offset):
+         if proto == 'h3' and not env.have_h3():
+             pytest.skip("h3 not supported")
+@@ -332,6 +332,29 @@ def test_02_21_lib_serial(self, env: Env, httpd, nghttpx, proto, pause_offset):
+         srcfile = os.path.join(httpd.docs_dir, docname)
+         self.check_downloads(client, srcfile, count)
+ 
++    # h2 download parallel via lib client, pause/resume at different offsets
++    # debug-override stream window size to reproduce #16955
++    @pytest.mark.parametrize("pause_offset", [0, 10*1024, 100*1023, 640000])
++    @pytest.mark.parametrize("swin_max", [0, 10*1024])
++    def test_02_21_h2_lib_serial(self, env: Env, httpd, pause_offset, swin_max):
++        proto = 'h2'
++        count = 2
++        docname = 'data-10m'
++        url = f'https://localhost:{env.https_port}/{docname}'
++        run_env = os.environ.copy()
++        run_env['CURL_DEBUG'] = 'multi,http/2'
++        if swin_max > 0:
++            run_env['CURL_H2_STREAM_WIN_MAX'] = f'{swin_max}'
++        client = LocalClient(name='hx-download', env=env, run_env=run_env)
++        if not client.exists():
++            pytest.skip(f'example client not built: {client.name}')
++        r = client.run(args=[
++             '-n', f'{count}', '-P', f'{pause_offset}', '-V', proto, url
++        ])
++        r.check_exit_code(0)
++        srcfile = os.path.join(httpd.docs_dir, docname)
++        self.check_downloads(client, srcfile, count)
++
+     # download via lib client, several at a time, pause/resume
+     @pytest.mark.parametrize("pause_offset", [100*1023])
+     @pytest.mark.parametrize("proto", ['http/1.1', 'h2', 'h3'])
