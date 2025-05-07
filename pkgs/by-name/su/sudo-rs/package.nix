@@ -87,7 +87,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ nicoo ];
+    maintainers = with maintainers; [
+      nicoo
+      rvdp
+    ];
     mainProgram = "sudo";
     platforms = platforms.linux;
   };
