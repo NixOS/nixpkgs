@@ -18056,6 +18056,12 @@
     githubId = 49906709;
     name = "Dakota";
   };
+  ohheyrj = {
+    email = "richard+nix@ohheyrj.co.uk";
+    github = "ohheyrj";
+    name = "ohheyrj";
+    githubId = 5339261;
+  };
   oida = {
     email = "oida@posteo.de";
     github = "oida";
