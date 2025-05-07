@@ -269,135 +269,182 @@ import ./make-test-python.nix (
     };
 
     testScript = ''
-      start_all()
+      client.start()
 
-      server.wait_for_unit("sshd", timeout=30)
-      server_x11.wait_for_unit("sshd", timeout=30)
-      server_x11_disable.wait_for_unit("sshd", timeout=30)
-      server_allowed_users.wait_for_unit("sshd", timeout=30)
-      server_localhost_only.wait_for_unit("sshd", timeout=30)
-      server_match_rule.wait_for_unit("sshd", timeout=30)
-      server_no_openssl.wait_for_unit("sshd", timeout=30)
-      server_no_pam.wait_for_unit("sshd", timeout=30)
+      with subtest("server, server-lazy, server-lazy-socket"):
+          server.start()
+          server_lazy.start()
+          server_lazy_socket.start()
 
-      server_lazy.wait_for_unit("sshd.socket", timeout=30)
-      server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
-      server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
+          client.wait_for_unit("multi-user.target")
+          server.wait_for_unit("sshd", timeout=30)
+          server_lazy.wait_for_unit("sshd.socket", timeout=30)
+          server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
 
-      with subtest("manual-authkey"):
-          client.succeed(
-              '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N ""'
-          )
-          public_key = client.succeed(
-              "${pkgs.openssh}/bin/ssh-keygen -y -f /root/.ssh/id_ed25519"
-          )
-          public_key = public_key.strip()
-          client.succeed("chmod 600 /root/.ssh/id_ed25519")
+          with subtest("manual-authkey"):
+              client.succeed(
+                  '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N ""'
+              )
+              public_key = client.succeed(
+                  "${pkgs.openssh}/bin/ssh-keygen -y -f /root/.ssh/id_ed25519"
+              )
+              public_key = public_key.strip()
+              client.succeed("chmod 600 /root/.ssh/id_ed25519")
 
-          server.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
-          server_lazy.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
+              server.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
+              server_lazy.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
 
-          client.wait_for_unit("network.target")
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2",
-              timeout=30
-          )
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024",
-              timeout=30
-          )
+              client.wait_for_unit("network.target")
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2",
+                  timeout=30
+              )
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024",
+                  timeout=30
+              )
 
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
-              timeout=30
-          )
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
-              timeout=30
-          )
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
+                  timeout=30
+              )
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
+                  timeout=30
+              )
 
-      with subtest("socket activation on a non-standard port"):
-          client.succeed(
-              "cat ${snakeOilPrivateKey} > privkey.snakeoil"
-          )
-          client.succeed("chmod 600 privkey.snakeoil")
-          # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
-          client.succeed(
-              "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
-              timeout=30
-          )
+          with subtest("socket activation on a non-standard port"):
+              client.succeed(
+                  "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+              )
+              client.succeed("chmod 600 privkey.snakeoil")
+              # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
+              client.succeed(
+                  "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
+                  timeout=30
+              )
 
-      with subtest("configured-authkey"):
-          client.succeed(
-              "cat ${snakeOilPrivateKey} > privkey.snakeoil"
-          )
-          client.succeed("chmod 600 privkey.snakeoil")
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server true",
-              timeout=30
-          )
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
-              timeout=30
-          )
+          with subtest("configured-authkey"):
+              client.succeed(
+                  "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+              )
+              client.succeed("chmod 600 privkey.snakeoil")
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server true",
+                  timeout=30
+              )
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
+                  timeout=30
+              )
 
-      with subtest("x11-forwarding"):
-          client.succeed(
-              "[ \"$(ssh -Y -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-x11 'xauth list' | tee /dev/stderr | wc -l)\" -eq 1 ]",
-              timeout=30
-          )
-          client.succeed(
-              "[ \"$(ssh -Y -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-x11-disable 'xauth list' | tee /dev/stderr | wc -l)\" -eq 0 ]",
-              timeout=30
-          )
+          # None of the per-connection units should have failed.
+          server_lazy.fail("systemctl is-failed 'sshd@*.service'")
 
-      with subtest("localhost-only"):
-          server_localhost_only.succeed("ss -nlt | grep '127.0.0.1:22'")
-          server_localhost_only_lazy.succeed("ss -nlt | grep '127.0.0.1:22'")
+          server.shutdown()
+          server_lazy.shutdown()
+          server_lazy_socket.shutdown()
 
-      with subtest("match-rules"):
-          server_match_rule.succeed("ss -nlt | grep '127.0.0.1:22'")
+      with subtest("server-x11, server-x11-disable"):
+          server_x11.start()
+          server_x11_disable.start()
 
-      with subtest("allowed-users"):
-          client.succeed(
-              "cat ${snakeOilPrivateKey} > privkey.snakeoil"
-          )
-          client.succeed("chmod 600 privkey.snakeoil")
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowed-users true",
-              timeout=30
-          )
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowed-users true",
-              timeout=30
-          )
-          client.fail(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowed-users true",
-              timeout=30
-          )
+          server_x11.wait_for_unit("sshd", timeout=30)
+          server_x11_disable.wait_for_unit("sshd", timeout=30)
 
-      with subtest("no-openssl"):
-          client.succeed(
-              "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
-          )
-          client.succeed("chmod 600 privkey.snakeoil")
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-openssl true",
-              timeout=30
-          )
+          with subtest("x11-forwarding"):
+              client.succeed(
+                  "[ \"$(ssh -Y -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-x11 'xauth list' | tee /dev/stderr | wc -l)\" -eq 1 ]",
+                  timeout=30
+              )
+              client.succeed(
+                  "[ \"$(ssh -Y -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-x11-disable 'xauth list' | tee /dev/stderr | wc -l)\" -eq 0 ]",
+                  timeout=30
+              )
 
-      with subtest("no-pam"):
-          client.succeed(
-              "cat ${snakeOilPrivateKey} > privkey.snakeoil"
-          )
-          client.succeed("chmod 600 privkey.snakeoil")
-          client.succeed(
-              "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
-              timeout=30
-          )
+          server_x11.shutdown()
+          server_x11_disable.shutdown()
 
-      # None of the per-connection units should have failed.
-      server_lazy.fail("systemctl is-failed 'sshd@*.service'")
+      with subtest("server-localhost-only, server-localhost-only-lazy"):
+          server_localhost_only.start()
+          server_localhost_only_lazy.start()
+
+          server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
+          server_localhost_only.wait_for_unit("sshd", timeout=30)
+
+          with subtest("localhost-only"):
+              server_localhost_only.succeed("ss -nlt | grep '127.0.0.1:22'")
+              server_localhost_only_lazy.succeed("ss -nlt | grep '127.0.0.1:22'")
+
+          server_localhost_only.shutdown()
+          server_localhost_only_lazy.shutdown()
+
+      with subtest("server-match-rule"):
+          server_match_rule.start()
+
+          server_match_rule.wait_for_unit("sshd", timeout=30)
+
+          with subtest("match-rules"):
+              server_match_rule.succeed("ss -nlt | grep '127.0.0.1:22'")
+
+          server_match_rule.shutdown()
+
+      with subtest("server-allowed-users"):
+          server_allowed_users.start()
+
+          server_allowed_users.wait_for_unit("sshd", timeout=30)
+
+          with subtest("allowed-users"):
+              client.succeed(
+                  "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+              )
+              client.succeed("chmod 600 privkey.snakeoil")
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowed-users true",
+                  timeout=30
+              )
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowed-users true",
+                  timeout=30
+              )
+              client.fail(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowed-users true",
+                  timeout=30
+              )
+
+          server_allowed_users.shutdown()
+
+      with subtest("server-no-openssl, server-no-pam"):
+          server_no_openssl.start()
+          server_no_pam.start()
+
+          server_no_openssl.wait_for_unit("sshd", timeout=30)
+          server_no_pam.wait_for_unit("sshd", timeout=30)
+
+          with subtest("no-openssl"):
+              client.succeed(
+                  "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
+              )
+              client.succeed("chmod 600 privkey.snakeoil")
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-openssl true",
+                  timeout=30
+              )
+
+          with subtest("no-pam"):
+              client.succeed(
+                  "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+              )
+              client.succeed("chmod 600 privkey.snakeoil")
+              client.succeed(
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
+                  timeout=30
+              )
+
+          server_no_openssl.shutdown()
+          server_no_pam.shutdown()
+
+      client.shutdown()
     '';
   }
 )
