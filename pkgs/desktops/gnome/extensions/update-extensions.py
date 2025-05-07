@@ -31,6 +31,7 @@ supported_versions = {
     "45": "45",
     "46": "46",
     "47": "47",
+    "48": "48",
 }
 
 # shell versions that we want to put into the gnomeExtensions attr set
