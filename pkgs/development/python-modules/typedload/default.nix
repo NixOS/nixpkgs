@@ -1,11 +1,11 @@
-{
-  attrs,
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  pytestCheckHook,
-  python,
-  setuptools,
+{ attrs
+, buildPythonPackage
+, fetchPypi
+, lib
+, pytestCheckHook
+, python
+, setuptools
+,
 }:
 
 let
