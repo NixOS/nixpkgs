@@ -6069,7 +6069,7 @@ with pkgs;
     );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
-  cargo-flamegraph = callPackage ../development/tools/rust/cargo-flamegraph {
+  cargo-flamegraph = callPackage ../by-name/ca/cargo-flamegraph/package.nix {
     inherit (linuxPackages) perf;
   };
 
