@@ -10,47 +10,38 @@
   miniupnpc,
   monero-cli,
   pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qtmacextras,
-  qtmultimedia,
-  qtquickcontrols,
-  qtquickcontrols2,
-  qttools,
-  qtxmlpatterns,
+  qt5,
   quirc,
   randomx,
   rapidjson,
   stdenv,
   unbound,
-  wrapQtAppsHook,
   zeromq,
 
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf,
+  protobuf_21,
   python3,
   udev,
 }:
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.3.4";
+  version = "0.18.4.0";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    hash = "sha256-wnU24EmZig2W/psy4OhaQVy2WwR0CgljlyYwOg4bzwM=";
+    hash = "sha256-JwYx5TjGp3VPPSgjN0+w1A4RoZGm7A73Gpg44fre1/c=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
-    (lib.getDev qttools)
+    qt5.wrapQtAppsHook
+    (lib.getDev qt5.qttools)
   ];
 
   buildInputs =
@@ -60,24 +51,24 @@ stdenv.mkDerivation rec {
       libgpg-error
       libsodium
       miniupnpc
-      qtbase
-      qtdeclarative
-      qtgraphicaleffects
-      qtmultimedia
-      qtquickcontrols
-      qtquickcontrols2
-      qtxmlpatterns
+      qt5.qtbase
+      qt5.qtdeclarative
+      qt5.qtgraphicaleffects
+      qt5.qtmultimedia
+      qt5.qtquickcontrols
+      qt5.qtquickcontrols2
+      qt5.qtxmlpatterns
       quirc
       randomx
       rapidjson
       unbound
       zeromq
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ qt5.qtmacextras ]
     ++ lib.optionals trezorSupport [
       hidapi
       libusb1
-      protobuf
+      protobuf_21
       python3
     ]
     ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
