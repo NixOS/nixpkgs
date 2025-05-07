@@ -6,8 +6,6 @@
 {
   autoFixElfFiles,
   cuda_compat ? null,
-  flags,
-  lib,
   makeSetupHook,
 }:
 makeSetupHook {
@@ -15,13 +13,17 @@ makeSetupHook {
   propagatedBuildInputs = [ autoFixElfFiles ];
 
   substitutions = {
-    # Hotfix Ofborg evaluation
-    libcudaPath = if flags.isJetsonBuild then "${cuda_compat}/compat" else null;
+    libcudaPath = "${cuda_compat}/compat";
   };
 
-  meta.broken = !flags.isJetsonBuild;
-
-  # Pre-cuda_compat CUDA release:
-  meta.badPlatforms = lib.optionals (cuda_compat == null) lib.platforms.all;
-  meta.platforms = cuda_compat.meta.platforms or [ ];
+  meta =
+    let
+      # Handle `null`s in pre-`cuda_compat` releases,
+      # and `badPlatform`s for `!isJetsonBuild`.
+      platforms = cuda_compat.meta.platforms or [ ];
+      badPlatforms = cuda_compat.meta.badPlatforms or platforms;
+    in
+    {
+      inherit badPlatforms platforms;
+    };
 } ./auto-add-cuda-compat-runpath.sh
