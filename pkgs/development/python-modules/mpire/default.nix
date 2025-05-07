@@ -73,7 +73,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.testing;
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   meta = {
     description = "A Python package for easy multiprocessing, but faster than multiprocessing";

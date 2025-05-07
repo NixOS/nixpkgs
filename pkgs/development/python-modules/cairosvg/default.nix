@@ -46,7 +46,7 @@ buildPythonPackage rec {
       --replace "--isort" ""
   '';
 
-  pytestFlagsArray = [ "cairosvg/test_api.py" ];
+  enabledTestPaths = [ "cairosvg/test_api.py" ];
 
   pythonImportsCheck = [ "cairosvg" ];
 

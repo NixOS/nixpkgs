@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   meta = with lib; {
     description = "Mopidy extension for playing music from Tidal";

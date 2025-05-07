@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "s3ql" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

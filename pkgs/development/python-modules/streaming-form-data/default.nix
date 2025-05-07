@@ -33,7 +33,7 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "streaming_form_data" ];
 

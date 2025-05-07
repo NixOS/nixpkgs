@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "livekit-api/tests" ];
+  enabledTestPaths = [ "livekit-api/tests" ];
 
   pythonImportsCheck = [ "livekit" ];
 

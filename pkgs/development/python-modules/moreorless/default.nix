@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moreorless" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "moreorless/tests/click.py"
     "moreorless/tests/general.py"
     "moreorless/tests/patch.py"

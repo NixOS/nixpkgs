@@ -67,7 +67,7 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  pytestFlagsArray = [ "cvxpy" ];
+  enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
     # Disable the slowest benchmarking tests, cuts test time in half

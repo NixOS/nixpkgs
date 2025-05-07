@@ -78,7 +78,7 @@ buildPythonPackage rec {
     squashfsTools
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

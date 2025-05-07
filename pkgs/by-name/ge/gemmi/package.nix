@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "test_reading"
   ];
 
-  pytestFlagsArray = [ "../tests" ];
+  enabledTestPaths = [ "../tests" ];
 
   meta = {
     description = "Macromolecular crystallography library and utilities";

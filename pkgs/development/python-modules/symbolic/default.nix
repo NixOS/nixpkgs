@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "py" ];
+  enabledTestPaths = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
 

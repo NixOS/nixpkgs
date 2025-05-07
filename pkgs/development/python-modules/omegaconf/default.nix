@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "omegaconf" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "-W"
     "ignore::DeprecationWarning"
   ];

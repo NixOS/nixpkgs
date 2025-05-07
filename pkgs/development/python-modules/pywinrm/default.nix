@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "winrm" ];
 
-  pytestFlagsArray = [ "winrm/tests/" ];
+  enabledTestPaths = [ "winrm/tests/" ];
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";

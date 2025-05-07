@@ -99,7 +99,7 @@ buildPythonPackage rec {
     mv onnx/__init__.py onnx/__init__.py.hidden
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "onnx/test"
     "examples"
   ];

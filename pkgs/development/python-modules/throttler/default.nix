@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   meta = with lib; {
     description = "Zero-dependency Python package for easy throttling with asyncio support";
