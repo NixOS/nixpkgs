@@ -33,7 +33,7 @@ in
         };
 
         ntfyBAuthPass = lib.mkOption {
-          type = lib.types.path;
+          type = lib.types.nullOr lib.types.path;
           description = ''
             The path to the password for the specified ntfy-sh user.
             Setting this option is required when using a ntfy-sh instance with access control enabled.
