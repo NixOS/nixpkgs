@@ -26,11 +26,12 @@
   vulkan-loader,
   systemd,
   libGL,
+  krb5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.1.5";
+  version = "5.2.7";
 
   src =
     let
@@ -43,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/beekeeper-studio_${finalAttrs.version}_${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-ClKD5OnNhEBo1O3E3rXOGu9X8vVGZAOrfXQFppuEnbU=";
-        aarch64-linux = "sha256-64ID+psuwfiVTfBayILeotJ3en21Hsv8FMQj+IQjjyE=";
+        x86_64-linux = "sha256-lP+8tX0NNsBDnrBvjJxu2PwVAMbtnnoc+oFteq6KECs=";
+        aarch64-linux = "sha256-pbVppWkXZb184icW9CevdNQ3FBC/Wpjr9BSd9fwbzCs=";
       };
     };
 
@@ -82,11 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     libgbm
     vulkan-loader
+    krb5
   ];
 
-  runtimeDependencies = map lib.getLib [
-    systemd
-  ];
+  runtimeDependencies = map lib.getLib [ systemd ];
 
   installPhase = ''
     runHook preInstall
@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     patchelf --add-needed libGL.so.1 \
+      --add-needed libEGL.so.1 \
       --add-rpath ${
         lib.makeLibraryPath [
           libGL
