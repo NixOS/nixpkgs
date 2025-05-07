@@ -69,7 +69,6 @@ mirror://xorg/individual/app/xvinfo-1.1.5.tar.xz
 mirror://xorg/individual/app/xwd-1.0.9.tar.xz
 mirror://xorg/individual/app/xwininfo-1.1.6.tar.xz
 mirror://xorg/individual/app/xwud-1.0.7.tar.xz
-mirror://xorg/individual/data/xbitmaps-1.1.3.tar.xz
 mirror://xorg/individual/data/xcursor-themes-1.0.7.tar.xz
 mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.44.tar.xz
 mirror://xorg/individual/doc/xorg-docs-1.7.3.tar.xz
@@ -174,14 +173,13 @@ mirror://xorg/individual/lib/libXaw-1.0.16.tar.xz
 mirror://xorg/individual/lib/libxcb-1.17.0.tar.xz
 mirror://xorg/individual/lib/libXcomposite-0.4.6.tar.xz
 mirror://xorg/individual/lib/libXcursor-1.2.3.tar.xz
-mirror://xorg/individual/lib/libxcvt-0.1.3.tar.xz
 mirror://xorg/individual/lib/libXdamage-1.1.6.tar.xz
 mirror://xorg/individual/lib/libXdmcp-1.1.5.tar.xz
 mirror://xorg/individual/lib/libXext-1.3.6.tar.xz
 mirror://xorg/individual/lib/libXfixes-6.0.1.tar.xz
 mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2
 mirror://xorg/individual/lib/libXfont2-2.0.7.tar.xz
-mirror://xorg/individual/lib/libXft-2.3.8.tar.xz
+mirror://xorg/individual/lib/libXft-2.3.9.tar.xz
 mirror://xorg/individual/lib/libXi-1.8.2.tar.xz
 mirror://xorg/individual/lib/libXinerama-1.1.5.tar.xz
 mirror://xorg/individual/lib/libxkbfile-1.1.3.tar.xz
@@ -204,12 +202,9 @@ mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2
 mirror://xorg/individual/lib/libXxf86vm-1.1.6.tar.xz
 mirror://xorg/individual/lib/xcb-util-cursor-0.1.5.tar.xz
 mirror://xorg/individual/lib/xtrans-1.6.0.tar.xz
-mirror://xorg/individual/proto/xcb-proto-1.17.0.tar.xz
 mirror://xorg/individual/proto/xorgproto-2024.1.tar.xz
 mirror://xorg/individual/util/bdftopcf-1.1.2.tar.xz
 mirror://xorg/individual/util/imake-1.0.10.tar.xz
 mirror://xorg/individual/util/lndir-1.0.5.tar.xz
-mirror://xorg/individual/util/makedepend-1.0.9.tar.xz
-mirror://xorg/individual/util/util-macros-1.20.2.tar.xz
 mirror://xorg/individual/util/xorg-cf-files-1.0.8.tar.xz
 mirror://xorg/individual/xserver/xorg-server-21.1.16.tar.xz

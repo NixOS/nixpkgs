@@ -7,7 +7,7 @@
   jdk,
   libsecret,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   _7zz,
   nixosTests,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH : ${
             lib.makeLibraryPath ([
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
             ])
           } \
           --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \

@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     xorgproto
     uthash
   ];
 
   buildInputs = [
-    extra-cmake-modules
     xcbutil
     xcbutilkeysyms
   ];
