@@ -13284,7 +13284,9 @@ with pkgs;
     lua = lua5_1;
   };
 
-  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris { };
+  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
+    inherit (pkgs) meson;
+  };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
   lutris-free = lutris.override {
     steamSupport = false;
