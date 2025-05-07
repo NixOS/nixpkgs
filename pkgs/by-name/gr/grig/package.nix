@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
     homepage = "https://groundstation.sourceforge.net/grig/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [
+      melling
+      mafo
+    ];
   };
 }
