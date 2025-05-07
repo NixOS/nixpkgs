@@ -43,5 +43,6 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.lgpl21;
 
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [tohmais];
   };
 }
