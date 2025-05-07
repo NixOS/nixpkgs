@@ -137,8 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pytest
     python3Packages.pytest-check
     python3Packages.pytest-mpi
+    python3Packages.pythonImportsCheckHook
     mpiCheckPhaseHook
   ];
+
+  pythonImportsCheck = [ "netgen" ];
 
   passthru = {
     inherit avxSupport avx2Support avx512Support;
