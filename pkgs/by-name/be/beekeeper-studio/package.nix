@@ -26,8 +26,6 @@
   vulkan-loader,
   systemd,
   libGL,
-  writeShellScript,
-  nix-update,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -113,10 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       } $out/opt/beekeeper-studio/beekeeper-studio-bin
   '';
 
-  passthru.updateScript = writeShellScript "beekeeper-studio-update-script" ''
-    ${lib.getExe nix-update} beekeeper-studio --system x86_64-linux
-    ${lib.getExe nix-update} beekeeper-studio --system aarch64-linux --version "skip"
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more";
