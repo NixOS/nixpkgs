@@ -357,6 +357,9 @@ buildPythonPackage rec {
       "test_matplotlib_plotly_with_multiple_axes"
       "test_matplotlib_to_plotly"
       "test_plotly_from_matplotlib_with_image"
+
+      # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+      "test_wandb_image_with_matplotlib_figure"
     ];
 
   pythonImportsCheck = [ "wandb" ];
