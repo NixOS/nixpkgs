@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.23.0";
+  version = "1.23.0-unstable-2025-04-21";
   pyproject = true;
 
-  # No tags on GitHub
-  src = fetchPypi {
-    pname = "dbt_common";
-    inherit version;
-    hash = "sha256-LsczRn2rTb9RVlGpNHznHkKJht3Lke1MLVCExeneouM=";
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = pname;
+    rev = "03e09c01f20573975e8e17776a4b7c9088b3f212"; # They don't tag releases
+    hash = "sha256-KqnwlFZZRYuWRflMzjrqCPBnzY9q/pPhceM2DGqz5bw=";
   };
 
   build-system = [ hatchling ];
@@ -77,7 +77,6 @@ buildPythonPackage rec {
     "test_extra_dict_on_event"
   ];
 
-  # No tests in the pypi archive
   doCheck = false;
 
   pythonImportsCheck = [ "dbt_common" ];
