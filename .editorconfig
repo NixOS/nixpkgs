@@ -44,9 +44,10 @@ indent_size = 4
 indent_size = 2
 indent_style = space
 
-# Match package.json, which are generally pulled from upstream and accept them as they are
-[package.json]
+# Match package.json and package-lock.json, which are generally pulled from upstream and accept them as they are
+[package{,-lock}.json]
 indent_style = unset
+insert_final_newline = unset
 
 # Disable file types or individual files
 # some of these files may be auto-generated and/or require significant changes
