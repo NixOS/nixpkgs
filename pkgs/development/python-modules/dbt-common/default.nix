@@ -70,6 +70,11 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
+  disabledTests = [
+    # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
+    "TestFindMatching"
+  ];
+
   pythonImportsCheck = [ "dbt_common" ];
 
   meta = {
