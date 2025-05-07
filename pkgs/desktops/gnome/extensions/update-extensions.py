@@ -223,9 +223,15 @@ def process_extension(extension: dict[str, Any]) -> dict[str, Any] | None:
 
 @contextmanager
 def request(url: str, retries: int = 5, retry_codes: list[int] = [500, 502, 503, 504]):
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "NixpkgsGnomeExtensionUpdate (+https://github.com/NixOS/nixpkgs)"
+        },
+    )
     for attempt in range(retries + 1):
         try:
-            with urllib.request.urlopen(url) as response:
+            with urllib.request.urlopen(req) as response:
                 yield response
                 break
         except urllib.error.HTTPError as e:
