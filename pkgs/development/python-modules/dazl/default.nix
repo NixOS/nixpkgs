@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "8.0.0";
+  version = "8.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2EXbfXNl/vNhOIKfBv18TKMPizab72LlNV7QhEf4aVs=";
+    hash = "sha256-RwLjvVRAb7B1y0Hqd0lwYiqS8qrL8MhoH92RIMPWLqQ=";
   };
 
   pythonRelaxDeps = [
