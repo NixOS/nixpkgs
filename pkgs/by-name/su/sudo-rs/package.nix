@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vZv3IVSW6N0puoWJBYQPmNntgHPt9SPV07TEuWN/bHw=";
   };
   useFetchCargoVendor = true;
@@ -79,19 +79,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = nixosTests.sudo-rs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
     changelog = "${finalAttrs.meta.homepage}/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nicoo
       rvdp
     ];
     mainProgram = "sudo";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
