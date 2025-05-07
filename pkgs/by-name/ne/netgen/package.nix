@@ -73,13 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   # when generating python stub file utilizing system python pybind11_stubgen module
   # cmake need to inherit pythonpath
-  postPatch = ''
+  postPatch =
+    ''
     substituteInPlace python/CMakeLists.txt \
       --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
                      ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
 
     substituteInPlace ng/ng.tcl ng/onetcl.cpp \
       --replace-fail "libnggui" "$out/lib/libnggui"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+      # mesh generation differs on x86_64 and aarch64 platform
+      # test_tutorials will fail on aarch64 platform
+      rm tests/pytest/test_tutorials.py
   '';
 
   nativeBuildInputs = [
@@ -122,9 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doInstallCheck)
   ];
 
-  # mesh generation differs on x86_64 and aarch64 platform
-  # tests will fail on aarch64 platform
-  doInstallCheck = stdenv.hostPlatform.isx86_64;
+  doInstallCheck = true;
 
   preInstallCheck = ''
     export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
