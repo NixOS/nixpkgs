@@ -1,11 +1,11 @@
-{ attrs
-, buildPythonPackage
-, fetchPypi
-, lib
-, pytestCheckHook
-, python
-, setuptools
-,
+{
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytestCheckHook,
+  python,
+  setuptools,
 }:
 
 let
@@ -26,20 +26,16 @@ let
       maintainers = with maintainers; [ ppentchev ];
     };
 
-    propagatedBuildInputs = [
-      setuptools
-    ];
+    propagatedBuildInputs = [ setuptools ];
 
     nativeCheckInputs = [
       attrs
       pytestCheckHook
     ];
-    disabledTestPaths = [
-    ] ++ lib.optionals (python.pythonOlder "3.10") [
-      "tests/test_orunion.py"
-    ] ++ lib.optionals (python.pythonOlder "3.12") [
-      "tests/test_typealias.py"
-    ];
+    disabledTestPaths =
+      [ ]
+      ++ lib.optionals (python.pythonOlder "3.10") [ "tests/test_orunion.py" ]
+      ++ lib.optionals (python.pythonOlder "3.12") [ "tests/test_typealias.py" ];
 
     pythonImportsCheck = [ "typedload" ];
   };
