@@ -30,6 +30,7 @@ in
   spaceTimeSupport ? false,
   unsafeStringSupport ? false,
   framePointerSupport ? false,
+  noNakedPointers ? false,
 }:
 
 assert useX11 -> safeX11 stdenv;
@@ -38,6 +39,7 @@ assert flambdaSupport -> lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> lib.versionAtLeast version "4.04" && lib.versionOlder version "4.12";
 assert unsafeStringSupport -> lib.versionAtLeast version "4.06" && lib.versionOlder version "5.0";
 assert framePointerSupport -> lib.versionAtLeast version "4.01";
+assert noNakedPointers -> lib.versionAtLeast version "4.02" && lib.versionOlder version "5.0";
 
 let
   src =
@@ -112,7 +114,8 @@ stdenv.mkDerivation (
       ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
         "-host ${stdenv.hostPlatform.config}"
         "-target ${stdenv.targetPlatform.config}"
-      ];
+      ]
+      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
     # on aarch64-darwin using --host and --target causes the build to invoke
