@@ -897,9 +897,9 @@
   },
   "resource-mover": {
     "pname": "resource-mover",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/resource_mover-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-O8n0GqMMT2vAT/eA3DDo3wW/yIfyrb356J1Z+DieVfM=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/resource_mover-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-p+Ug4CXDyrokp4JTY3cEjxdJqZzrVPAJ8zOS/JZDVw8=",
     "description": "Microsoft Azure Command-Line Tools ResourceMoverServiceAPI Extension"
   },
   "sap-hana": {
