@@ -10246,6 +10246,31 @@ with pkgs;
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
 
+  positronWrapper = callPackage ../development/r-modules/wrapper-positron.nix {
+    recommendedPackages = with rPackages; [
+      boot
+      class
+      cluster
+      codetools
+      foreign
+      KernSmooth
+      lattice
+      MASS
+      Matrix
+      mgcv
+      nlme
+      nnet
+      rpart
+      spatial
+      survival
+    ];
+    positron = positron-bin;
+    # Override this attribute to register additional libraries.
+    packages = [ ];
+    # A python3 or python3.withPackages environment.
+    pythonEnv = python3;
+  };
+
   rPackages =
     (dontRecurseIntoAttrs (
       callPackage ../development/r-modules {
