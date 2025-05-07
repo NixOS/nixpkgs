@@ -3,8 +3,9 @@
 
 set -xeu -o pipefail
 
-PACKAGE_DIR="$(realpath "$(dirname "$0")")"
-cd "$PACKAGE_DIR/.."
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd "${SCRIPT_DIRECTORY}/.."
 while ! test -f flake.nix; do cd .. ; done
 NIXPKGS_DIR="$PWD"
 
@@ -28,4 +29,4 @@ prev_npm_hash="$(
   | jq -r .
 )"
 new_npm_hash="$(prefetch-npm-deps "$src/package-lock.json")"
-sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "$PACKAGE_DIR/default.nix"
+sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "${SCRIPT_DIRECTORY}/default.nix"

@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
 version="$(
   curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/bufbuild/protobuf-es/releases" |
     jq -r 'map(select(.prerelease == false)) | .[0].tag_name' |
@@ -23,7 +25,7 @@ npm-lockfile-fix package-lock.json
 npm_hash=$(prefetch-npm-deps package-lock.json)
 popd
 
-pushd "$(dirname "${BASH_SOURCE[0]}")"
+pushd "${SCRIPT_DIRECTORY}"
 sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 popd
 

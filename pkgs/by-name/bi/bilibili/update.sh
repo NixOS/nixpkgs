@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 payload=$(curl https://api.github.com/repos/msojocs/bilibili-linux/releases/latest)
 version=$(jq -r .tag_name <<< "$payload" | cut -c 2-)

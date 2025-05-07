@@ -5,8 +5,9 @@
 #   1. Copy Gemfile from new Redmine version to this folder
 #   2. Manually modify the database lines in Gemfile (diff the two files, it's obvious)
 
-pkg_dir="$(dirname "$0")"
-cd ${pkg_dir}
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 for file in "gemset.nix" "Gemfile.lock"; do
   if [ -f ${file} ]; then

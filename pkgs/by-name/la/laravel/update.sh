@@ -5,7 +5,10 @@ set -eou pipefail
 
 PACKAGE_NAME="laravel"
 PACKAGE_VERSION=$(nix eval --raw -f. $PACKAGE_NAME.version)
-PACKAGE_DIR="$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+PACKAGE_DIR="${SCRIPT_DIRECTORY}"
 
 # Get latest version from git
 GIT_VERSION="$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/laravel/installer/releases/latest" | jq '.tag_name' --raw-output)"
