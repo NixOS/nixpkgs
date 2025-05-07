@@ -42,5 +42,6 @@ buildGoModule (finalAttrs: {
     description = "The temporal cloud cli.";
     homepage = "https://www.github.com/temporalio/tcld";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jkachmar ];
   };
 })
