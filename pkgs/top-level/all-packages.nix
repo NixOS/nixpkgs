@@ -8191,7 +8191,6 @@ with pkgs;
 
   givaro = callPackage ../development/libraries/givaro { };
   givaro_3 = callPackage ../development/libraries/givaro/3.nix { };
-  givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix { };
 
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
