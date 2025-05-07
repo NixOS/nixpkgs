@@ -608,6 +608,13 @@
     "hash": "sha256-z1cp6dAgKaGJGCUjVDKFyXN9UV9BxhDIM41D+HL58B0=",
     "description": "Microsoft Azure Command-Line Tools KustoManagementClient Extension"
   },
+  "lambda-test": {
+    "pname": "lambda-test",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/lambda_test-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-KnNCZsTNn4948xKiHJ6Nba3NYLHy+T5yEF55BtQ9a1Q=",
+    "description": "Microsoft Azure Command-Line Tools LambdaTest Extension"
+  },
   "log-analytics": {
     "pname": "log-analytics",
     "version": "1.0.0b1",
