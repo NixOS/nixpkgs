@@ -70,15 +70,6 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  disabledTests = [
-    # Assertion errors (TODO: Notify upstream)
-    "test_create_print_json"
-    "test_events"
-    "test_extra_dict_on_event"
-  ];
-
-  doCheck = false;
-
   pythonImportsCheck = [ "dbt_common" ];
 
   meta = {
