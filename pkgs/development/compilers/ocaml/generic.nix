@@ -39,7 +39,7 @@ assert flambdaSupport -> lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> lib.versionAtLeast version "4.04" && lib.versionOlder version "4.12";
 assert unsafeStringSupport -> lib.versionAtLeast version "4.06" && lib.versionOlder version "5.0";
 assert framePointerSupport -> lib.versionAtLeast version "4.01";
-assert noNakedPointers -> lib.versionOlder version "5.0";
+assert noNakedPointers -> lib.versionAtLeast version "4.02" && lib.versionOlder version "5.0";
 
 let
   src =
