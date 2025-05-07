@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "amazon-cloudwatch-agent";
-  version = "1.300055.0";
+  version = "1.300055.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-cloudwatch-agent";
     tag = "v${version}";
-    hash = "sha256-/L3pq8c3d8AruKI5hvpW22bYqPypYNMO5ehdCgVrfZc=";
+    hash = "sha256-snCzSLXksDVoP/7b44w+8yec03QkL1RyooWPDxd2+lA=";
   };
 
   vendorHash = "sha256-WhmkVN31snLDGvLCg3pukWIDM5yUXeiYh0ywCF83Y8E=";
