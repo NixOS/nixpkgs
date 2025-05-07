@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "octodns-bind";
-  version = "0.0.7";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,15 +19,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-bind";
-    rev = "v${version}";
-    hash = "sha256-cJbmGh0YNIu9fYH4It5SZG39ZsFoiOBERQXRd7kz8FY=";
+    tag = "v${version}";
+    hash = "sha256-ezLaNeqJoi3fcfwQFkiEyYUSlw7cTCikmv0qmPTzrvI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     octodns
     dnspython
   ];
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "RFC compliant (Bind9) provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-bind";
-    changelog = "https://github.com/octodns/octodns-bind/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/octodns/octodns-bind/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.octodns.members;
+    teams = [ lib.teams.octodns ];
   };
 }

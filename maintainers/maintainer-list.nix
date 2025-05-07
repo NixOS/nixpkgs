@@ -1703,6 +1703,11 @@
     githubId = 81317317;
     name = "Anna Aurora";
   };
+  anninzy = {
+    github = "anninzy";
+    githubId = 143312793;
+    name = "Annin";
+  };
   anoa = {
     matrix = "@andrewm:amorgan.xyz";
     email = "andrew@amorgan.xyz";
@@ -19873,6 +19878,12 @@
     github = "PsyanticY";
     githubId = 20524473;
     name = "Psyanticy";
+  };
+  psyclyx = {
+    email = "me@psyclyx.xyz";
+    github = "psyclyx";
+    githubId = 176348922;
+    name = "psyclyx";
   };
   psydvl = {
     email = "psydvl@fea.st";
