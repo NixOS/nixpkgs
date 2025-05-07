@@ -211,9 +211,9 @@
   },
   "confidentialledger": {
     "pname": "confidentialledger",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/confidentialledger-1.0.0-py3-none-any.whl",
-    "hash": "sha256-Ovv0nxDN3dlnVWI2TOInX29w61MY+oW2WNcRseJNyU4=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/confidentialledger-2.0.0-py3-none-any.whl",
+    "hash": "sha256-N9YcNSvlUXT6z+XLLxQ0h1fXquNAEJKpMKd7VOSMY8k=",
     "description": "Microsoft Azure Command-Line Tools ConfidentialLedger Extension"
   },
   "confluent": {
