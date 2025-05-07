@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
-  makeWrapper,
   cmake,
   python3Packages,
   mpi,
@@ -85,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    makeWrapper
     python3Packages.pybind11-stubgen
   ];
 
