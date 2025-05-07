@@ -13269,6 +13269,8 @@ self: super: with self; {
 
   pysatochip = callPackage ../development/python-modules/pysatochip { };
 
+  pycryptotools = callPackage ../development/python-modules/pycryptotools { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pysc2 = callPackage ../development/python-modules/pysc2 { };
