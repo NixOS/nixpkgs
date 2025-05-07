@@ -35,13 +35,19 @@
 
     with subtest("lomiri filemanager launches"):
         machine.execute("lomiri-filemanager-app >&2 &")
-        machine.wait_for_text(r"(filemanager.ubports|alice|items|directories|files|folder)")
+        machine.wait_for_window("filemanager.ubports")
+        machine.sleep(10)
+        machine.wait_for_text(r"(alice|items|directories|files|folder)")
         machine.screenshot("lomiri-filemanager_open")
 
-    machine.succeed("pkill -f lomiri-filemanager-app")
+    machine.succeed("pgrep -afx lomiri-filemanager-app >&2")
+    machine.succeed("pkill -efx lomiri-filemanager-app >&2")
+    machine.wait_until_fails("pgrep -afx lomiri-filemanager-app >&2")
 
     with subtest("lomiri filemanager localisation works"):
         machine.execute("env LANG=de_DE.UTF-8 lomiri-filemanager-app >&2 &")
+        machine.wait_for_window("filemanager.ubports")
+        machine.sleep(10)
         machine.wait_for_text(r"(Elemente|Verzeichnisse|Dateien|Ordner)")
         machine.screenshot("lomiri-filemanager_localised")
   '';
