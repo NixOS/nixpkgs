@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.22.0";
+  version = "1.23.0";
   pyproject = true;
 
   # No tags on GitHub
   src = fetchPypi {
     pname = "dbt_common";
     inherit version;
-    hash = "sha256-6cdTMVCCB6SNEUsQtzKUBnKuJgwfttl7o2+zBp8Fu5g=";
+    hash = "sha256-LsczRn2rTb9RVlGpNHznHkKJht3Lke1MLVCExeneouM=";
   };
 
   build-system = [ hatchling ];
