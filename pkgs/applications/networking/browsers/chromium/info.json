@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "136.0.7103.59",
+    "version": "136.0.7103.92",
     "chromedriver": {
-      "version": "136.0.7103.49",
-      "hash_darwin": "sha256-n9gOEQmMBzeoSj8Mxum2UnKe6yrmUjMKLXRD2ty8upw=",
-      "hash_darwin_aarch64": "sha256-q3iz4fAUcXyoDP4fS5vDAuEIZWftwJhlfkwDUhR57Cc="
+      "version": "136.0.7103.93",
+      "hash_darwin": "sha256-6u+hJWBZZlqjc81Hs/5dL6csWP3QiWzQvfW3O+bfaaA=",
+      "hash_darwin_aarch64": "sha256-b4MfxITtIwqV41Jc5Hv42WgOt1+U6dNjIvSDG4VNqw8="
     },
     "deps": {
       "depot_tools": {
@@ -20,8 +20,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "d4b493843f5f23217df99a83aa28747602841382",
-        "hash": "sha256-5SKNNEPYSAxQUWtcCq/LW7gxGjjEhuw0Uxo1ob+F7to=",
+        "rev": "cb81a4cc5087a8303a6c8827ee2b80b71d26e334",
+        "hash": "sha256-mySbSMnbM/KBEGnOyJKJMr4WD4PNgIDDeNK0fTPfcnI=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -641,8 +641,8 @@
       },
       "src/third_party/sqlite/src": {
         "url": "https://chromium.googlesource.com/chromium/deps/sqlite.git",
-        "rev": "567495a62a62dc013888500526e82837d727fe01",
-        "hash": "sha256-ltl3OTk/wZPSj3yYthNlKd3mBxef6l5uW6UYTwebNek="
+        "rev": "8a22b25ad7244abaf07e372cc6dc97e041d663a9",
+        "hash": "sha256-1vAGAF3idxgHGaqb5gT5k3KIGC2H3gqC3RTVU2ZRf4A="
       },
       "src/third_party/swiftshader": {
         "url": "https://swiftshader.googlesource.com/SwiftShader.git",
