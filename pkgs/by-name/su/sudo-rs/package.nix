@@ -11,14 +11,14 @@
   tzdata,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vZv3IVSW6N0puoWJBYQPmNntgHPt9SPV07TEuWN/bHw=";
   };
   useFetchCargoVendor = true;
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
-    changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
+    changelog = "${finalAttrs.meta.homepage}/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with licenses; [
       asl20
       mit
@@ -94,4 +94,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sudo";
     platforms = platforms.linux;
   };
-}
+})
