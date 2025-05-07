@@ -575,9 +575,9 @@
   },
   "internet-analyzer": {
     "pname": "internet-analyzer",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/internet_analyzer-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-RWSIGnyQus/YgcYppBgjmAB8iG0JnqiNuX4f8QBTpcQ=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/internet_analyzer-1.0.0b2-py2.py3-none-any.whl",
+    "hash": "sha256-0VPsQG6yLh+rTMGNKgMJLgNTGHBzj5OYCKPOr5y322k=",
     "description": "Microsoft Azure Command-Line Tools Internet Analyzer Extension"
   },
   "ip-group": {
