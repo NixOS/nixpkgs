@@ -13287,10 +13287,6 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  lumail = callPackage ../applications/networking/mailreaders/lumail {
-    lua = lua5_1;
-  };
-
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris { };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
   lutris-free = lutris.override {
