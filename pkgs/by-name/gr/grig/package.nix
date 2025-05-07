@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/fillods/grig/issues/22
-    ./0001-Fix-grig-for-hamlib-4.6.x.patch
+    ./0001-Fix-grig-for-hamlib-4.6.2.patch
   ];
 
   nativeBuildInputs = [
