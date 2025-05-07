@@ -1,0 +1,24 @@
+--- a/src/sudachi_cmd/emu_window/emu_window_sdl3_vk.cpp
++++ b/src/sudachi_cmd/emu_window/emu_window_sdl3_vk.cpp
+@@ -40,17 +40,17 @@
+ #elif defined(SDL_PLATFORM_LINUX)
+     if (SDL_strcmp(SDL_GetCurrentVideoDriver(), "x11") == 0) {
+         Display* xdisplay = (Display*)SDL_GetPointerProperty(
+-            SDL_GetWindowProperties(window), SDL_PROP_WINDOW_X11_DISPLAY_POINTER, NULL);
+-        Window xwindow = (Window)SDL_GetNumberProperty(SDL_GetWindowProperties(window),
++            SDL_GetWindowProperties(render_window), SDL_PROP_WINDOW_X11_DISPLAY_POINTER, NULL);
++        Window xwindow = (Window)SDL_GetNumberProperty(SDL_GetWindowProperties(render_window),
+                                                        SDL_PROP_WINDOW_X11_WINDOW_NUMBER, 0);
+         window_info.type = Core::Frontend::WindowSystemType::X11;
+         window_info.display_connection = xdisplay;
+         window_info.render_surface = reinterpret_cast<void*>(xwindow);
+     } else if (SDL_strcmp(SDL_GetCurrentVideoDriver(), "wayland") == 0) {
+         struct wl_display* display = (struct wl_display*)SDL_GetPointerProperty(
+-            SDL_GetWindowProperties(window), SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER, NULL);
++            SDL_GetWindowProperties(render_window), SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER, NULL);
+         struct wl_surface* surface = (struct wl_surface*)SDL_GetPointerProperty(
+-            SDL_GetWindowProperties(window), SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER, NULL);
++            SDL_GetWindowProperties(render_window), SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER, NULL);
+         window_info.type = Core::Frontend::WindowSystemType::Wayland;
+         window_info.display_connection = display;
+         window_info.render_surface = reinterpret_cast<void*>(surface);

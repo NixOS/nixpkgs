@@ -1,4 +1,21 @@
 {
+  forkName,
+  version,
+  source,
+  patches ? [
+    # Remove coroutines from debugger to fix boost::asio compatibility issues
+    ./fix-debugger.patch
+    # Add explicit cast for CRC checksum value
+    ./fix-udp-protocol.patch
+    # Use specific boost::asio includes and update to modern io_context
+    ./fix-udp-client.patch
+    # Updates suppressed diagnostics
+    ./fix-aarch64-linux-build.patch
+  ],
+  cmakeFlagsPrefix ? "YUZU",
+  udevFileName ? "72-yuzu-input.rules",
+  homepage,
+  mainProgram,
   lib,
   stdenv,
   SDL2,
@@ -8,9 +25,7 @@
   fetchFromGitHub,
   cpp-jwt,
   cubeb,
-  discord-rpc,
   enet,
-  fetchgit,
   fetchurl,
   ffmpeg-headless,
   fmt,
@@ -20,10 +35,10 @@
   lz4,
   python3,
   unzip,
-  nix-update-script,
   nlohmann_json,
   pkg-config,
   qt6,
+  rapidjson,
   spirv-tools,
   spirv-headers,
   vulkan-utility-libraries,
@@ -81,26 +96,11 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "torzu";
-  version = "unstable-2025-02-22";
+  pname = forkName;
+  inherit version;
+  src = source;
 
-  src = fetchgit {
-    url = "https://git.ynh.ovh/liberodark/torzu.git";
-    rev = "eaa9c9e3a46eb5099193b11d620ddfe96b6aec83";
-    hash = "sha256-KxLRXM8Y+sIW5L9oYMSeK95HRb30zGRRSfil9DO+utU=";
-    fetchSubmodules = true;
-  };
-
-  patches = [
-    # Remove coroutines from debugger to fix boost::asio compatibility issues
-    ./fix-debugger.patch
-    # Add explicit cast for CRC checksum value
-    ./fix-udp-protocol.patch
-    # Use specific boost::asio includes and update to modern io_context
-    ./fix-udp-client.patch
-    # Updates suppressed diagnostics
-    ./fix-aarch64-linux-build.patch
-  ];
+  inherit patches;
 
   nativeBuildInputs = [
     cmake
@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     catch2_3
     cpp-jwt
     cubeb
-    discord-rpc
     # intentionally omitted: dynarmic - prefer vendored version for compatibility
     enet
 
@@ -137,6 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
     qtmultimedia
     qtwayland
     qtwebengine
+
+    rapidjson
+
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     # intentionally omitted: stb - header only libraries, vendor uses git snapshot
@@ -157,30 +159,37 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   cmakeFlags = [
     # actually has a noticeable performance impact
-    (lib.cmakeBool "YUZU_ENABLE_LTO" true)
-    (lib.cmakeBool "YUZU_TESTS" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_ENABLE_LTO" true)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_TESTS" false)
 
     (lib.cmakeBool "ENABLE_QT6" true)
     (lib.cmakeBool "ENABLE_QT_TRANSLATION" true)
+    (lib.cmakeBool "ENABLE_LIBUSB" false)
 
     # use system libraries
     # NB: "external" here means "from the externals/ directory in the source",
     # so "false" means "use system"
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_SDL2" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_HEADERS" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_UTILITY_LIBRARIES" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_SDL2" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_VULKAN_HEADERS" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_VULKAN_UTILITY_LIBRARIES" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_VULKAN_SPIRV_TOOLS" false)
+
+    # Sudachi specific flags
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_SDL3" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_BUNDLED_SDL3" false)
+    (lib.cmakeBool "USE_SDL3_FROM_EXTERNALS" false)
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-unused-variable")
 
     # don't check for missing submodules
-    (lib.cmakeBool "YUZU_CHECK_SUBMODULES" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_CHECK_SUBMODULES" false)
 
     # enable some optional features
-    (lib.cmakeBool "YUZU_USE_QT_WEB_ENGINE" true)
-    (lib.cmakeBool "YUZU_USE_QT_MULTIMEDIA" true)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_QT_WEB_ENGINE" true)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_QT_MULTIMEDIA" true)
     (lib.cmakeBool "USE_DISCORD_PRESENCE" true)
 
     # We dont want to bother upstream with potentially outdated compat reports
-    (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_ENABLE_COMPATIBILITY_REPORTING" false)
     (lib.cmakeBool "ENABLE_COMPATIBILITY_LIST_DOWNLOAD" false) # We provide this deterministically
 
     (lib.cmakeFeature "TITLE_BAR_FORMAT_IDLE" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}")
@@ -209,13 +218,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = "
-    install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
+    install -Dm444 $src/dist/${udevFileName} $out/lib/udev/rules.d/${udevFileName}
   ";
 
   meta = {
     description = "Fork of yuzu, an open-source Nintendo Switch emulator";
-    homepage = "https://notabug.org/litucks/torzu";
-    mainProgram = "yuzu";
+    inherit homepage;
+    inherit mainProgram;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ liberodark ];
     license = with lib.licenses; [
