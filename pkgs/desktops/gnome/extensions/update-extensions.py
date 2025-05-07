@@ -35,14 +35,6 @@ ShellVersion = str
 Uuid = str
 ExtensionVersion = int
 
-# Keep track of all names that have been used till now to detect collisions.
-# This works because we deterministically process all extensions in historical order
-# The outer dict level is the shell version, as we are tracking duplicates only per same Shell version.
-# key: shell version, value: dict with key: pname, value: list of UUIDs with that pname
-package_name_registry: dict[ShellVersion, dict[PackageName, list[Uuid]]] = {}
-for shell_version in supported_versions.keys():
-    package_name_registry[shell_version] = {}
-
 updater_dir_path = Path(__file__).resolve().parent
 
 
@@ -219,15 +211,6 @@ def process_extension(extension: dict[str, Any]) -> dict[str, Any] | None:
     # Fetch a human-readable name for the package.
     (pname, _pname_id) = pname_from_url(extension["link"])
 
-    for shell_version in shell_version_map.keys():
-        if pname in package_name_registry[shell_version]:
-            logging.warning(
-                f"Package name '{pname}' for GNOME '{shell_version}' is colliding."
-            )
-            package_name_registry[shell_version][pname].append(uuid)
-        else:
-            package_name_registry[shell_version][pname] = [uuid]
-
     return {
         "uuid": uuid,
         "name": extension["name"],
@@ -342,20 +325,19 @@ def serialize_extensions(processed_extensions: list[dict[str, Any]]) -> None:
 
 
 def find_collisions(
+    extensions: list[dict[str, Any]],
     versions: list[str],
 ) -> dict[PackageName, list[Uuid]]:
-    package_name_registry_for_versions = [
-        package_name_registry
-        for version, package_name_registry in package_name_registry.items()
-        if version in versions
-    ]
-    package_name_registry_merged: dict[PackageName, set[Uuid]] = {}
-    for pkgs in package_name_registry_for_versions:
-        for pname, uuids in pkgs.items():
-            package_name_registry_merged.setdefault(pname, set()).update(uuids)
+    package_name_registry: dict[PackageName, set[Uuid]] = {}
+    for extension in extensions:
+        pname = extension["pname"]
+        uuid = extension["uuid"]
+        for shell_version in versions:
+            if shell_version in extension["shell_version_map"]:
+                package_name_registry.setdefault(pname, set()).add(uuid)
     return {
         pname: list(uuids)
-        for pname, uuids in package_name_registry_merged.items()
+        for pname, uuids in package_name_registry.items()
         if len(uuids) > 1
     }
 
@@ -372,10 +354,9 @@ def main() -> None:
     )
 
     with open(updater_dir_path / "extensions.json", "r") as out:
-        # Check that the generated file actually is valid JSON, just to be sure
-        json.load(out)
+        extensions = json.load(out)
 
-    collisions = find_collisions(versions_to_merge)
+    collisions = find_collisions(extensions, versions_to_merge)
 
     with open(updater_dir_path / "collisions.json", "w") as out:
         json.dump(collisions, out, indent=2, ensure_ascii=False)
