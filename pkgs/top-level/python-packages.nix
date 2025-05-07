@@ -12362,6 +12362,8 @@ self: super: with self; {
 
   phe = callPackage ../development/python-modules/phe { };
 
+  phidget22 = callPackage ../development/python-modules/phidget22 { };
+
   phik = callPackage ../development/python-modules/phik { };
 
   philipstv = callPackage ../development/python-modules/philipstv { };
