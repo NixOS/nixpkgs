@@ -1,0 +1,89 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a38513d9..674f320a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -445,6 +445,9 @@ install(FILES
+ configure_file("znc-buildmod.cmake.in" "znc-buildmod" @ONLY)
+ install(PROGRAMS "${PROJECT_BINARY_DIR}/znc-buildmod"
+ 	DESTINATION "${CMAKE_INSTALL_BINDIR}")
++configure_file("znc-buildmod-old.cmake.in" "znc-buildmod-old" @ONLY)
++install(PROGRAMS "${PROJECT_BINARY_DIR}/znc-buildmod-old"
++	DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+ configure_file("znc.pc.cmake.in" "znc.pc" @ONLY)
+ install(FILES "${PROJECT_BINARY_DIR}/znc.pc"
+diff --git a/znc-buildmod-old.cmake.in b/znc-buildmod-old.cmake.in
+new file mode 100755
+index 00000000..da6ce7a7
+--- /dev/null
++++ b/znc-buildmod-old.cmake.in
+@@ -0,0 +1,69 @@
++#!/bin/sh
++
++ERROR="[ !! ]"
++WARNING="[ ** ]"
++OK="[ ok ]"
++
++# Check if we got everything we need
++
++check_binary()
++{
++	which $1 > /dev/null 2>&1
++	if test $? = 1 ; then
++		echo "${ERROR} Could not find $1. $2"
++		exit 1
++	fi
++}
++
++if test "x$CXX" = "x" ; then
++	CXX="@CMAKE_CXX_COMPILER@"
++fi
++if test "x$CXX" = "x" ; then
++	CXX=g++
++fi
++
++check_binary ${CXX} "What happened to your compiler?"
++
++if test -z "$1"; then
++	echo "${WARNING} USAGE: $0 <file.cpp> [file.cpp ... ]"
++	exit 1
++fi
++
++CXXFLAGS="  -O2 -Wall -W -Wno-unused-parameter -Woverloaded-virtual -Wshadow -I@openssl@/include -I@icu@/include -fvisibility=hidden -fPIC -include znc/zncconfig.h -I${prefix}/@CMAKE_INSTALL_INCLUDEDIR@ $CXXFLAGS"
++LIBS="-L@openssl@/lib -lssl -lcrypto -lz -L@icu@/lib -licuuc -licudata $LIBS"
++MODLINK="-shared $MODLINK"
++VERSION="@ZNC_VERSION@"
++
++# Ugly cygwin stuff :(
++if test -n "@LIBZNC@"; then
++	prefix="@prefix@"
++	exec_prefix="${prefix}"
++	LDFLAGS="-L${exec_prefix}/lib $LDFLAGS"
++	LIBS="-lznc $LIBS"
++fi
++
++while test -n "$1"
++do
++	FILE=$1
++	shift
++
++	MOD="${FILE%.cpp}"
++	MOD="${MOD%.cc}"
++	MOD="${MOD##*/}"
++
++	if test ! -f "${FILE}"; then
++		echo "${ERROR} Building \"${MOD}\" for ZNC $VERSION... File not found"
++		exit 1
++	else
++		printf "Building \"${MOD}.so\" for ZNC $VERSION... "
++		printf "${CXX} ${CXXFLAGS} ${INCLUDES} ${LDFLAGS} ${MODLINK} -o \"${MOD}.so\" \"${FILE}\" ${LIBS}"
++		if ${CXX} ${CXXFLAGS} ${INCLUDES} ${LDFLAGS} ${MODLINK} -o "${MOD}.so" "${FILE}" ${LIBS} ; then
++			echo "${OK}"
++		else
++			echo "${ERROR} Error while building \"${MOD}.so\""
++			exit 1
++		fi
++	fi
++done
++
++exit 0
