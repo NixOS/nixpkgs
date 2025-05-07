@@ -10,7 +10,6 @@
   readline,
   sqlite,
   darwin,
-  Security ? darwin.Security,
 }:
 
 let
