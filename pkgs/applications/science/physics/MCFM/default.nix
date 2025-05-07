@@ -7,25 +7,20 @@
   lhapdf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "MCFM";
-  version = "10.0.1";
+  version = "10.3";
 
   src = fetchurl {
-    url = "https://mcfm.fnal.gov/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3Dg4KoILb0XhgGkzItDh/1opCtYrrIvtbuALYqPUvE8=";
+    url = "https://mcfm.fnal.gov/downloads/MCFM-${finalAttrs.version}.tar.gz";
+    hash = "sha256-l2d8vMsGsoIaX6FWnR9WGyU70GUal6sF0TJHxwiGSEA=";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'target_link_libraries(mcfm lhapdf_lib)' \
-                'target_link_libraries(mcfm ''${lhapdf_lib})'
-  '';
 
   nativeBuildInputs = [
     cmake
     gfortran
   ];
+
   buildInputs = [ lhapdf ];
 
   cmakeFlags = [
@@ -33,11 +28,11 @@ stdenv.mkDerivation rec {
     "-Duse_internal_lhapdf=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Monte Carlo for FeMtobarn processes";
     homepage = "https://mcfm.fnal.gov";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
     platforms = lib.platforms.x86_64;
   };
-}
+})
