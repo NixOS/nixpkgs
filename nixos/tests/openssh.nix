@@ -296,7 +296,7 @@ import ./make-test-python.nix (
 
               client.wait_for_unit("network.target")
               client.succeed(
-                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2",
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server true",
                   timeout=30
               )
               client.succeed(
@@ -305,7 +305,7 @@ import ./make-test-python.nix (
               )
 
               client.succeed(
-                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
+                  "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy true",
                   timeout=30
               )
               client.succeed(
