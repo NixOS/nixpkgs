@@ -4,6 +4,7 @@
 import base64
 import json
 import logging
+import argparse
 import subprocess
 import urllib.error
 import urllib.request
@@ -350,14 +351,22 @@ def find_collisions(
 
 def main() -> None:
     logging.basicConfig(level=logging.DEBUG)
-
-    processed_extensions = fetch_extensions()
-
-    serialize_extensions(processed_extensions)
-
-    logging.info(
-        f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--skip-fetch",
+        action="store_true",
+        help="Skip fetching extensions. When this option is set, the script does not fetch extensions from the internet, but checks for name collisions.",
     )
+    args = parser.parse_args()
+
+    if not args.skip_fetch:
+        processed_extensions = fetch_extensions()
+
+        serialize_extensions(processed_extensions)
+
+        logging.info(
+            f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
+        )
 
     with open(updater_dir_path / "extensions.json", "r") as out:
         extensions = json.load(out)
