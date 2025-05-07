@@ -907,6 +907,50 @@ in
         '';
       };
 
+      secrets.activeRecordPrimaryKeyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the secret used to encrypt some rails data
+          in the DB. This should not be the same as `services.gitlab.secrets.activeRecordDeterministicKeyFile`!
+
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      secrets.activeRecordDeterministicKeyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the secret used to encrypt some rails data in a deterministic way
+          in the DB. This should not be the same as `services.gitlab.secrets.activeRecordPrimaryKeyFile`!
+
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      secrets.activeRecordSaltFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the salt for active record encryption in the DB.
+
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
       extraShellConfig = mkOption {
         type = types.attrs;
         default = { };
@@ -1179,6 +1223,18 @@ in
       {
         assertion = cfg.secrets.jwsFile != null;
         message = "services.gitlab.secrets.jwsFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.activeRecordPrimaryKeyFile != null;
+        message = "services.gitlab.secrets.activeRecordPrimaryKeyFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.activeRecordDeterministicKeyFile != null;
+        message = "services.gitlab.secrets.activeRecordDeterministicKeyFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.activeRecordSaltFile != null;
+        message = "services.gitlab.secrets.activeRecordSaltFile must be set!";
       }
       {
         assertion = versionAtLeast postgresqlPackage.version "14.9";
@@ -1480,11 +1536,17 @@ in
             db="$(<'${cfg.secrets.dbFile}')"
             otp="$(<'${cfg.secrets.otpFile}')"
             jws="$(<'${cfg.secrets.jwsFile}')"
-            export secret db otp jws
+            arprimary="$(<'${cfg.secrets.activeRecordPrimaryKeyFile}')"
+            ardeterministic="$(<'${cfg.secrets.activeRecordDeterministicKeyFile}')"
+            arsalt="$(<'${cfg.secrets.activeRecordSaltFile}')"
+            export secret db otp jws arprimary ardeterministic arsalt
             jq -n '{production: {secret_key_base: $ENV.secret,
                     otp_key_base: $ENV.otp,
                     db_key_base: $ENV.db,
-                    openid_connect_signing_key: $ENV.jws}}' \
+                    openid_connect_signing_key: $ENV.jws,
+                    active_record_encryption_primary_key: $ENV.arprimary,
+                    active_record_encryption_deterministic_key: $ENV.ardeterministic,
+                    active_record_encryption_key_derivation_salt: $ENV.arsalt}}' \
                > '${cfg.statePath}/config/secrets.yml'
           )
 
