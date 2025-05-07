@@ -17,25 +17,25 @@ let
     aarch64-darwin = rec {
       archSuffix = "Darwin-arm64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "fa3836128e19920ca7113bbcc9908399c56f0665b4b04f294dd76aa02ef38905";
+      hash = "sha256-+jg2Eo4ZkgynETu8yZCDmcVvBmW0sE8pTddqoC7ziQU=";
     };
 
     x86_64-darwin = rec {
       archSuffix = "Darwin-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "1fa5211968d5a3f895fa2ddc9a36695ac287a3f6526b83147c62582d837055cc";
+      hash = "sha256-H6UhGWjVo/iV+i3cmjZpWsKHo/ZSa4MUfGJYLYNwVcw=";
     };
 
     aarch64-linux = rec {
       archSuffix = "Linux-aarch64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "1f702c69f912ecb874a241dcd03f05387ae5408e5be504cd3de85b5143958ccf";
+      hash = "sha256-H3AsafkS7Lh0okHc0D8FOHrlQI5b5QTNPehbUUOVjM8=";
     };
 
     x86_64-linux = rec {
       archSuffix = "Linux-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "b0c439f3eb621a8c879368378f98c94837f627eb20d43501242726489c464a0e";
+      hash = "sha256-sMQ58+tiGoyHk2g3j5jJSDf2J+sg1DUBJCcmSJxGSg4=";
     };
   };
 in
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
         or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
       )
       url
-      sha256
+      hash
       ;
   };
 
@@ -123,11 +123,11 @@ stdenvNoCC.mkDerivation {
       rm SHA256SUMS
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tricktron ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tricktron ];
+    platforms = lib.platforms.unix;
   };
 }
