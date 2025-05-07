@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "3.7.8";
+  version = "3.12.2";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    hash = "sha256-5oJV8gr2rwvSdpX5w3gmIw/LTrWtXVnl6oLr/soNTDk=";
+    hash = "sha256-iHIHXrGAGZ5vYA/pbFmHVVczRtH34lC5IIqyj0SF1r4=";
   };
 
   outputs = [
