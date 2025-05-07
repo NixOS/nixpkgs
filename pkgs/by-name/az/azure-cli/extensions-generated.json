@@ -71,9 +71,9 @@
   },
   "alertsmanagement": {
     "pname": "alertsmanagement",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/alertsmanagement-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-4eFa7/GrmyX7gguRTmAs6Ep9AOU4LrB9QT8UktkLCdE=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/alertsmanagement-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-N/N2I0+AR9+T18U1XMhk817BlfbHur4Uj1c0kwOvZpY=",
     "description": "Microsoft Azure Command-Line Tools AlertsManagementClient Extension"
   },
   "amg": {
