@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   installShellFiles,
   nixosTests,
@@ -32,6 +33,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-8y8zaKJfoIXc9AvG1wi3EzZA7BR2wVFLuOyD+zpBY0s=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # The patch is taken from upstream's main branch. Drop it for the next release.
+    (fetchpatch {
+      name = "Adapt-for-protobuf-30.0-API-changes-650.patch";
+      url = "https://github.com/USBGuard/usbguard/commit/52e32de1312ba72d92b2f501d3c0485b5d7a5169.patch";
+      hash = "sha256-Ywu35a/+gEfeI0korngXtzD0mXK2K1A6ayiGDiEBZg0=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
