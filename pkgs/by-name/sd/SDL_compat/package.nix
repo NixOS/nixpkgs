@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sdl-config";
     maintainers = with lib.maintainers; [ peterhoeg ];
     teams = [ lib.teams.sdl ];
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.all;
   };
 })
