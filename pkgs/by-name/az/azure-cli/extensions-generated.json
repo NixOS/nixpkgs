@@ -960,9 +960,9 @@
   },
   "spring-cloud": {
     "pname": "spring-cloud",
-    "version": "3.1.8",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/spring_cloud-3.1.8-py3-none-any.whl",
-    "hash": "sha256-FJk6vjUkwopCsum6DwqKcIMWK6kXSXXgnYzqg0uYKe4=",
+    "version": "3.1.9",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/spring_cloud-3.1.9-py3-none-any.whl",
+    "hash": "sha256-ySMrn4B/ff7cLESAZJUFrR5AajwTbAYeC0hd3ypJivU=",
     "description": "Microsoft Azure Command-Line Tools spring-cloud Extension"
   },
   "stack-hci": {
