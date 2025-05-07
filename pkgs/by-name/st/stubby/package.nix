@@ -5,13 +5,11 @@
   lib,
   stdenv,
   cmake,
-  darwin,
   getdns,
   libyaml,
   openssl,
   systemd,
   yq,
-  stubby,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,14 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     yq
   ];
 
-  buildInputs =
-    [
-      getdns
-      libyaml
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
+  buildInputs = [
+    getdns
+    libyaml
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
   postInstall = ''
     rm -r $out/share/doc
@@ -47,7 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
       > $stubbyExampleJson
   '';
 
-  passthru.settingsExample = builtins.fromJSON (builtins.readFile stubby.stubbyExampleJson);
+  passthru.settingsExample = builtins.fromJSON (
+    builtins.readFile finalAttrs.finalPackage.stubbyExampleJson
+  );
 
   meta = getdns.meta // {
     description = "Local DNS Privacy stub resolver (using DNS-over-TLS)";
