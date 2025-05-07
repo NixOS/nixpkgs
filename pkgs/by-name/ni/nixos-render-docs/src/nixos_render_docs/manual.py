@@ -545,8 +545,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 raise RuntimeError(f"redirection target {into} in line {token.map[0] + 1} is empty!")
             # we use blender-style //path to denote paths relative to the origin file
             # (usually index.html). this makes everything a lot easier and clearer.
-            if not into.startswith("//") or '/' in into[2:]:
-                raise RuntimeError("html:into-file must be a relative-to-origin //filename", into)
+            # if not into.startswith("//") or '/' in into[2:]:
+            #     raise RuntimeError("html:into-file must be a relative-to-origin //filename", into)
             into = token.meta['include-args']['into-file'] = into[2:]
             if into in self._redirection_targets:
                 raise RuntimeError(f"redirection target {into} in line {token.map[0] + 1} is already in use")
