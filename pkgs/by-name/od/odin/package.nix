@@ -24,6 +24,9 @@ stdenv.mkDerivation {
   patches = [
     ./darwin-remove-impure-links.patch
   ];
+  postPatch = ''
+    patchShebangs --build build_odin.sh
+  '';
 
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
