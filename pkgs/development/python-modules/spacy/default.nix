@@ -144,7 +144,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "spacy";
-    # Cython.Compiler.Errors.CompileError: spacy/ml/parser_model.pyx
-    broken = true;
   };
 }
