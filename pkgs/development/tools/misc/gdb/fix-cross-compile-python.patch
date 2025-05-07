@@ -1,0 +1,55 @@
+--- a/gdb/python/python-config.py	(revision fa93e88f754e10dfb60dd4c9bf9cef858d4c7e4a)
++++ b/gdb/python/python-config.py	(revision 1605cab3f0f578a75778efdc4c380bbb8463ad6f)
+@@ -1,6 +1,15 @@
+ # Program to fetch python compilation parameters.
+ # Copied from python-config of the 2.7 release.
+
++# In this script, we should only use the following to retrieve configuration values:
++# - `sysconfig.get_config_var`
++# - `sysconfig.get_platform`
++# This is because certain variables may return invalid data during cross-compilation, for example:
++# - sys.prefix -> Use sysconfig.get_config_var("prefix") instead.
++# - sysconfig.get_path("include") -> Don't use, it may return paths for native python, not our target python
++# - os.name -> Use sysconfig.get_platform() for platform detection.
++
++
+ import getopt
+ import os
+ import sys
+@@ -26,7 +35,7 @@
+
+ pyver = sysconfig.get_config_var("VERSION")
+ getvar = sysconfig.get_config_var
+-abiflags = getattr(sys, "abiflags", "")
++abiflags = getvar("ABIFLAGS")
+
+ opt_flags = [flag for (flag, val) in opts]
+
+@@ -49,15 +58,14 @@
+
+ for opt in opt_flags:
+     if opt == "--prefix":
+-        print(to_unix_path(os.path.normpath(sys.prefix)))
++        print(to_unix_path(os.path.normpath(getvar("prefix"))))
+
+     elif opt == "--exec-prefix":
+-        print(to_unix_path(os.path.normpath(sys.exec_prefix)))
++        print(to_unix_path(os.path.normpath(getvar("exec_prefix"))))
+
+     elif opt in ("--includes", "--cflags"):
+         flags = [
+-            "-I" + sysconfig.get_path("include"),
+-            "-I" + sysconfig.get_path("platinclude"),
++            "-I" + getvar("INCLUDEPY"),
+         ]
+         if opt == "--cflags":
+             flags.extend(getvar("CFLAGS").split())
+@@ -76,7 +84,7 @@
+                 if getvar("LIBPL") is not None:
+                     libs.insert(0, "-L" + getvar("LIBPL"))
+                 elif os.name == "nt":
+-                    libs.insert(0, "-L" + os.path.normpath(sys.prefix) + "/libs")
++                    libs.insert(0, "-L" + os.path.normpath(getvar("prefix")) + "/libs")
+             if getvar("LINKFORSHARED") is not None:
+                 libs.extend(getvar("LINKFORSHARED").split())
+         print(to_unix_path(" ".join(libs)))
