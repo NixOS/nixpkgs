@@ -3,10 +3,13 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
 
   # build-system
   hatch-jupyter-builder,
   hatchling,
+  jupyterlab,
 
   # dependencies
   markdown-it-py,
@@ -20,6 +23,7 @@
   # tests
   jupyter-client,
   notebook,
+  pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
@@ -27,19 +31,43 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.16.6";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${version}";
-    hash = "sha256-MkFTIHXpe0rYBJsaXwFqDEao+wSL2tG4JtPx1CjHGoY=";
+    hash = "sha256-Rkz2rite0hKcts4+3SmFsDF6tH2kQa4d2DtyZsAx3rA=";
   };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  missingHashes = ./missing-hashes.json;
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    sourceRoot = "${src.name}/jupyterlab";
+    hash = "sha256-UOsQsvnPpwpiKilaS0Rs/j1YReDljpLbEWZaeoRVK9g=";
+  };
+
+  env.HATCH_BUILD_HOOKS_ENABLE = true;
+
+  preConfigure = ''
+    pushd jupyterlab
+  '';
+
+  preBuild = ''
+    popd
+  '';
 
   build-system = [
     hatch-jupyter-builder
     hatchling
+    jupyterlab
   ];
 
   dependencies = [
@@ -53,6 +81,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jupyter-client
     notebook
+    pytest-asyncio
     pytest-xdist
     pytestCheckHook
     versionCheckHook
@@ -63,6 +92,10 @@ buildPythonPackage rec {
     # Tests that use a Jupyter notebook require $HOME to be writable
     export HOME=$(mktemp -d);
     export PATH=$out/bin:$PATH;
+
+    substituteInPlace tests/functional/contents_manager/test_async_and_sync_contents_manager_are_in_sync.py \
+      --replace-fail "from black import FileMode, format_str" "" \
+      --replace-fail "format_str(sync_code, mode=FileMode())" "sync_code"
   '';
 
   disabledTestPaths = [

@@ -12,16 +12,6 @@ let
   extraArgs = builtins.removeAttrs args [ "callPackage" ];
 in
 {
-  k3s_1_29 = common (
-    (import ./1_29/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "29"
-      ];
-    }
-  ) extraArgs;
-
   k3s_1_30 = common (
     (import ./1_30/versions.nix)
     // {

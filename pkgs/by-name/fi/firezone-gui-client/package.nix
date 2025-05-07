@@ -24,12 +24,12 @@
   copyDesktopItems,
 }:
 let
-  version = "1.4.9";
+  version = "1.4.12";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "gui-client-${version}";
-    hash = "sha256-nOf7+48WUzQ7VmP7PFo07ZhtgyG7VOI/Hb/rXyBU5o0=";
+    hash = "sha256-jvrkAbXHFWdNInDCrktC7eMZQ2a/rzUxfCOny7nHQmQ=";
   };
 
   frontend = stdenvNoCC.mkDerivation rec {
@@ -39,7 +39,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version;
       src = "${src}/rust/gui-client";
-      hash = "sha256-9ywC920EF6UxkXHs+0WWaU8fr5J35/C+0nNGbSVHESE=";
+      hash = "sha256-bVWpyGwEaxYi3N6BJqOilnHJDgAykKHgRC2QKlvSm4Q=";
     };
     pnpmRoot = "rust/gui-client";
 
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
   inherit version src;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ltxyI3Xoute0/HHXYU4XdFjcQ9zSLx6ZzAZFEjDk6zw=";
+  cargoHash = "sha256-YETCRhECbMTRmNsvOFl7R2YScY6ArjsOYJKdPVuUyGI=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";
   RUSTFLAGS = "--cfg system_certs";

@@ -711,6 +711,8 @@ in
     };
   });
 
+  lux-lua = final.callPackage ./lux-lua.nix { inherit lua; };
+
   lz-n = prev.lz-n.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [

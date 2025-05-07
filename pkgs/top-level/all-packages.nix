@@ -5126,6 +5126,7 @@ with pkgs;
   );
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
+  flutter332 = flutterPackages.v3_32;
   flutter329 = flutterPackages.v3_29;
   flutter327 = flutterPackages.v3_27;
   flutter326 = flutterPackages.v3_26;
@@ -5713,6 +5714,7 @@ with pkgs;
   openjfx17 = openjfx;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
   openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
+  openjfx24 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "24"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -5743,6 +5745,11 @@ with pkgs;
   openjdk23_headless = javaPackages.compiler.openjdk23.headless;
   jdk23 = openjdk23;
   jdk23_headless = openjdk23_headless;
+
+  openjdk24 = javaPackages.compiler.openjdk24;
+  openjdk24_headless = javaPackages.compiler.openjdk24.headless;
+  jdk24 = openjdk24;
+  jdk24_headless = openjdk24_headless;
 
   # default JDK
   jdk = jdk21;
@@ -5779,9 +5786,7 @@ with pkgs;
       graalvmDrv = graalvmPackages.graalvm-ce;
     }).override;
 
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt {
-    python3 = python311;
-  };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })
     julia_19-bin
@@ -6244,6 +6249,7 @@ with pkgs;
   zulu17 = callPackage ../development/compilers/zulu/17.nix { };
   zulu21 = callPackage ../development/compilers/zulu/21.nix { };
   zulu23 = callPackage ../development/compilers/zulu/23.nix { };
+  zulu24 = callPackage ../development/compilers/zulu/24.nix { };
   zulu = zulu21;
 
   ### DEVELOPMENT / INTERPRETERS
@@ -7571,8 +7577,6 @@ with pkgs;
       };
     })
   );
-
-  pnpm-lock-export = callPackage ../development/web/pnpm-lock-export { };
 
   portableService = callPackage ../build-support/portable-service { };
 
@@ -10562,6 +10566,7 @@ with pkgs;
   nginx = nginxStable;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -10575,6 +10580,7 @@ with pkgs;
   };
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -10586,6 +10592,7 @@ with pkgs;
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -10944,8 +10951,6 @@ with pkgs;
   shairport-sync-airplay2 = shairport-sync.override {
     enableAirplay2 = true;
   };
-
-  showoff = callPackage ../servers/http/showoff { };
 
   stalwart-mail-webadmin = stalwart-mail.webadmin;
 
@@ -13048,7 +13053,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_29
     k3s_1_30
     k3s_1_31
     k3s_1_32
@@ -14845,8 +14849,6 @@ with pkgs;
   };
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
-
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
   napari = with python3Packages; toPythonApplication napari;
 
