@@ -8,6 +8,7 @@
 }:
 {
   featureRelease = lib.optionalAttrs (redistArch != "unsupported") {
+    inherit (package) cudnnVersion minCudaVersion maxCudaVersion;
     ${redistArch}.outputs = {
       bin = true;
       lib = true;
@@ -19,6 +20,6 @@
   };
   redistribRelease = {
     name = "TensorRT: a high-performance deep learning interface";
-    inherit (package) version;
+    inherit (package) hash filename version;
   };
 }
