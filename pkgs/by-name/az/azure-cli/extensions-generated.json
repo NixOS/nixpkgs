@@ -267,9 +267,9 @@
   },
   "customlocation": {
     "pname": "customlocation",
-    "version": "0.1.3",
-    "url": "https://arcplatformcliextprod.z13.web.core.windows.net/customlocation-0.1.3-py2.py3-none-any.whl",
-    "hash": "sha256-XjZDWxqB3iXnTnDEXCrJ+YBlE4w1BQ8pIQrkDBhITig=",
+    "version": "0.1.4",
+    "url": "https://arcplatformcliextprod.z13.web.core.windows.net/customlocation-0.1.4-py2.py3-none-any.whl",
+    "hash": "sha256-4Ou6/8XRwH5c1hXZy54hJE7fxEeyjLAYcTmhGNyIkrc=",
     "description": "Microsoft Azure Command-Line Tools Customlocation Extension"
   },
   "databox": {
