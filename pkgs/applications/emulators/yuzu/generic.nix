@@ -14,7 +14,8 @@
   ],
   cmakeFlagsPrefix ? "YUZU",
   udevFileName ? "72-yuzu-input.rules",
-
+  homepage,
+  mainProgram,
   lib,
   stdenv,
   SDL2,
@@ -25,7 +26,6 @@
   cpp-jwt,
   cubeb,
   enet,
-  fetchgit,
   fetchurl,
   ffmpeg-headless,
   fmt,
@@ -35,7 +35,6 @@
   lz4,
   python3,
   unzip,
-  nix-update-script,
   nlohmann_json,
   pkg-config,
   qt6,
@@ -165,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "ENABLE_QT6" true)
     (lib.cmakeBool "ENABLE_QT_TRANSLATION" true)
+    (lib.cmakeBool "ENABLE_LIBUSB" false)
 
     # use system libraries
     # NB: "external" here means "from the externals/ directory in the source",
@@ -173,6 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_VULKAN_HEADERS" false)
     (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_VULKAN_UTILITY_LIBRARIES" false)
     (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_VULKAN_SPIRV_TOOLS" false)
+
+    # Sudachi specific flags
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_EXTERNAL_SDL3" false)
+    (lib.cmakeBool "${cmakeFlagsPrefix}_USE_BUNDLED_SDL3" false)
+    (lib.cmakeBool "USE_SDL3_FROM_EXTERNALS" false)
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-unused-variable")
 
     # don't check for missing submodules
     (lib.cmakeBool "${cmakeFlagsPrefix}_CHECK_SUBMODULES" false)
@@ -217,8 +223,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Fork of yuzu, an open-source Nintendo Switch emulator";
-    homepage = "https://notabug.org/litucks/torzu";
-    mainProgram = "yuzu";
+    inherit homepage;
+    inherit mainProgram;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ liberodark ];
     license = with lib.licenses; [
