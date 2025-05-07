@@ -1134,8 +1134,6 @@ with pkgs;
     };
   };
 
-  memos = callPackage ../servers/memos { };
-
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
   mkosi-full = mkosi.override { withQemu = true; };
