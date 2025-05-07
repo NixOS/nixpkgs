@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
-  userExec = "astro class greg imager mapping sic";
+  userExec = "astro class greg mapping sic";
 
   postInstall = ''
     mkdir -p $out/bin
