@@ -13,6 +13,9 @@
   libei,
   libepoxy,
   libdrm,
+  libva,
+  vulkan-loader,
+  shaderc,
   nv-codec-headers-11,
   pipewire,
   systemd,
@@ -31,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "47.3";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
-    hash = "sha256-QE2wiHLmkDlD4nUam2Myf2NZcKnKodL2dTCcpEV8+cI=";
+    hash = "sha256-vPN3D8oPrtovrjsaP/by6QoCd492pC6P0QPK4YYo9PI=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     asciidoc
+    shaderc # for glslc
     wrapGAppsHook3
   ];
 
@@ -58,6 +62,8 @@ stdenv.mkDerivation rec {
     libei
     libepoxy
     libdrm
+    libva
+    vulkan-loader
     nv-codec-headers-11
     libnotify
     libopus
