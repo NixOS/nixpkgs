@@ -5,7 +5,6 @@
   lib,
   stdenv,
   cmake,
-  darwin,
   getdns,
   libyaml,
   openssl,
@@ -31,14 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     yq
   ];
 
-  buildInputs =
-    [
-      getdns
-      libyaml
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
+  buildInputs = [
+    getdns
+    libyaml
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
   postInstall = ''
     rm -r $out/share/doc
