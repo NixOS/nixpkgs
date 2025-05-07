@@ -14981,9 +14981,13 @@ with pkgs;
     physfs = physfs_2;
   };
 
-  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
+  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
+    inherit (python3Packages) beancount beangulp;
+  };
 
-  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
+  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix {
+    inherit (python3Packages) beancount beancount-plugin-utils;
+  };
 
   cataclysmDDA = callPackage ../games/cataclysm-dda { };
 

@@ -4630,6 +4630,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  famous-quotes-nvim = buildVimPlugin {
+    pname = "famous-quotes.nvim";
+    version = "2025-05-07";
+    src = fetchFromGitHub {
+      owner = "mahyarmirrashed";
+      repo = "famous-quotes.nvim";
+      rev = "dc493abfb51581b6716986b4311c367c6a100bab";
+      sha256 = "179hgxyhzca4g0xmx02kl7gy7c6058kgww4zv7f1dvl2mf59ln67";
+    };
+    meta.homepage = "https://github.com/mahyarmirrashed/famous-quotes.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   far-vim = buildVimPlugin {
     pname = "far.vim";
     version = "2024-05-14";
