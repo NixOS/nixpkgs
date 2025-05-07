@@ -15,6 +15,8 @@
   astring,
   camlp-streams,
   base,
+  runCommand,
+  ocamlformat,
 }:
 
 # Freeze ocaml-lsp-version at 1.17.0 for OCaml 5.0
@@ -79,7 +81,21 @@ buildDunePackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/ocamllsp --prefix PATH : ${dot-merlin-reader}/bin
+    wrapProgram $out/bin/ocamllsp --prefix PATH : ${
+      lib.makeBinPath [
+        dot-merlin-reader
+        # If ocamlformat-rpc is missing, users will get annoying plugin
+        # warnings. The binary must be copied from ocamlformat since if the
+        # whole bin directory is on the path, it will include *both*
+        # ocamlformat & ocamlformat-rpc. This has adverse side effects since if
+        # ocamlformat is found, files will then be automatically formatted with
+        # this ocamlformat — however, not all projects use ocamlformat.
+        (runCommand "extract-ocamlformat-rpc-bin" { } ''
+          mkdir -p $out/bin
+          cp ${lib.getBin ocamlformat}/bin/ocamlformat-rpc $out/bin/
+        '')
+      ]
+    }
   '';
 
   meta = lsp.meta // {
