@@ -43,6 +43,7 @@ in
           ]
           ++ (with pkgs.lomiri; [
             lomiri-indicator-network
+            lomiri-indicator-transfer
             lomiri-telephony-service
           ]);
       };
