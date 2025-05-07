@@ -582,9 +582,9 @@
   },
   "ip-group": {
     "pname": "ip-group",
-    "version": "0.1.2",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/ip_group-0.1.2-py2.py3-none-any.whl",
-    "hash": "sha256-r7otiophKGO2P1BNbP9tVZYQuWHkx33C/Um5/gPsZ6I=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/ip_group-1.0.1-py2.py3-none-any.whl",
+    "hash": "sha256-d/Yzd3mdYssQDJO9kSTZKHC2hY4OleQ1XQf1pLDfax0=",
     "description": "Microsoft Azure Command-Line Tools IpGroup Extension"
   },
   "k8s-extension": {
