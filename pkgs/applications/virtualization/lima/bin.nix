@@ -7,34 +7,35 @@
   qemu,
   makeBinaryWrapper,
   autoPatchelfHook,
+  lima,
 }:
 
 let
-  version = "0.22.0";
+  version = "1.0.7";
 
   dist = {
     aarch64-darwin = rec {
       archSuffix = "Darwin-arm64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "271e0224d3e678450424abd4e6766a14ea52b146824bf8cfac7a0f486ceb2a0c";
+      sha256 = "fa3836128e19920ca7113bbcc9908399c56f0665b4b04f294dd76aa02ef38905";
     };
 
     x86_64-darwin = rec {
       archSuffix = "Darwin-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "f2d331ef783e0bb00e193efc3d5c9438df5d284b1cbac771e5d239c3459b2b3d";
+      sha256 = "1fa5211968d5a3f895fa2ddc9a36695ac287a3f6526b83147c62582d837055cc";
     };
 
     aarch64-linux = rec {
       archSuffix = "Linux-aarch64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "8c5c6dc21fae19c5645bf8db8f441aeab7fba21fbe882b2b9db58c126d07846b";
+      sha256 = "1f702c69f912ecb874a241dcd03f05387ae5408e5be504cd3de85b5143958ccf";
     };
 
     x86_64-linux = rec {
       archSuffix = "Linux-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "58e66114ae1e991512a86b6952ab3a1ffe0e12e08199a9a3ea13c3d2f24b307e";
+      sha256 = "b0c439f3eb621a8c879368378f98c94837f627eb20d43501242726489c464a0e";
     };
   };
 in
@@ -71,6 +72,7 @@ stdenvNoCC.mkDerivation {
       # the shell completion only works with a patched $out/bin/limactl and so
       # needs to run after the autoPatchelfHook is executed in postFixup.
       doShellCompletion() {
+        export LIMA_HOME="$(mktemp -d)"
         installShellCompletion --cmd limactl \
           --bash <($out/bin/limactl completion bash) \
           --fish <($out/bin/limactl completion fish) \
@@ -83,10 +85,14 @@ stdenvNoCC.mkDerivation {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    USER=nix $out/bin/limactl validate $out/share/lima/examples/default.yaml
-    USER=nix $out/bin/limactl validate $out/share/lima/examples/experimental/vz.yaml
-  '';
+  installCheckPhase =
+    ''
+      pushd $out/share/lima
+    ''
+    + lima.installCheckPhase
+    + ''
+      popd
+    '';
 
   # Stripping removes entitlements of the binary on Darwin making it non-operational.
   # Therefore, disable stripping on Darwin.
