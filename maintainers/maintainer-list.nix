@@ -21970,6 +21970,12 @@
     github = "sdaqo";
     githubId = 63876564;
   };
+  sdedovic = {
+    name = "Stevan Dedovic";
+    email = "stevan@dedovic.com";
+    github = "sdedovic";
+    githubId = 599915;
+  };
   sdht0 = {
     email = "nixpkgs@sdht.in";
     github = "sdht0";
