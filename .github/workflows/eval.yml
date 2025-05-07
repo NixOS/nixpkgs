@@ -219,7 +219,7 @@ jobs:
           # Use the target branch to get accurate maintainer info
           nix-build target/ci -A eval.compare \
             --arg beforeResultDir ./targetResult \
-            --arg afterResultDir ./prResult \
+            --arg afterResultDir $(realpath prResult) \
             --arg touchedFilesJson ./touched-files.json \
             -o comparison
 
