@@ -24,14 +24,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  doCheck = false;
   pythonImportsCheck = [ "survey" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for creating beautiful interactive prompts";
     homepage = "https://github.com/Exahilosys/survey";
     changelog = "https://github.com/Exahilosys/survey/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }
