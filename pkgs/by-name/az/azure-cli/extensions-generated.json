@@ -202,6 +202,13 @@
     "hash": "sha256-nqYWLTf8M5C+Tc5kywXFxYgHAQTz6SpwGrR1RzVlqKk=",
     "description": "Translate ARM template to executable Azure CLI scripts"
   },
+  "computeschedule": {
+    "pname": "computeschedule",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/computeschedule-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-0Y9gWNep/StKi09aOHUCCY37k/mkLLSZnQSvlq30gVc=",
+    "description": "Microsoft Azure Command-Line Tools Computeschedule Extension"
+  },
   "confidentialledger": {
     "pname": "confidentialledger",
     "version": "1.0.0",
