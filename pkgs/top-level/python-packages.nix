@@ -21427,6 +21427,8 @@ self: super: with self; {
 
   yfinance = callPackage ../development/python-modules/yfinance { };
 
+  yoctopuce = callPackage ../development/python-modules/yoctopuce { };
+
   yoda = toPythonModule (pkgs.yoda.override { python3 = python; });
 
   yolink-api = callPackage ../development/python-modules/yolink-api { };
