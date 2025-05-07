@@ -556,6 +556,7 @@ mapAliases {
   ecryptfs-helper = throw "'ecryptfs-helper' has been removed, for filesystem-level encryption, use fscrypt"; # Added 2025-04-08
   edUnstable = throw "edUnstable was removed; use ed instead"; # Added 2024-07-01
   edgedb = throw "edgedb replaced to gel because of change of upstream"; # Added 2025-02-24
+  eintopf = lauti; # Project was renamed, added 2025-05-01
   elasticsearch7Plugins = elasticsearchPlugins;
   electronplayer = throw "'electronplayer' has been removed as it had been discontinued upstream since October 2024"; # Added 2024-12-17
 
@@ -901,6 +902,7 @@ mapAliases {
   k3s_1_26 = throw "'k3s_1_26' has been removed from nixpkgs as it has reached end of life"; # Added 2024-05-20
   k3s_1_27 = throw "'k3s_1_27' has been removed from nixpkgs as it has reached end of life on 2024-06-28"; # Added 2024-06-01
   k3s_1_28 = throw "'k3s_1_28' has been removed from nixpkgs as it has reached end of life"; # Added 2024-12-15
+  k3s_1_29 = throw "'k3s_1_29' has been removed from nixpkgs as it has reached end of life"; # Added 2025-05-05
   # k3d was a 3d editing software k-3d - "k3d has been removed because it was broken and has seen no release since 2016" Added 2022-01-04
   # now kube3d/k3d will take it's place
   kube3d = k3d; # Added 2022-0705
@@ -1817,6 +1819,8 @@ mapAliases {
   libtransmission = lib.warnOnInstantiate (transmission3Warning {
     prefix = "lib";
   }) libtransmission_3; # Added 2024-06-10
+  lpcnetfreedv = throw "lpcnetfreedv was removed in favor of LPCNet"; # Added 2025-05-05
+  LPCNet = lpcnet; # Added 2025-05-05
   tracker = lib.warnOnInstantiate "tracker has been renamed to tinysparql" tinysparql; # Added 2024-09-30
   tracker-miners = lib.warnOnInstantiate "tracker-miners has been renamed to localsearch" localsearch; # Added 2024-09-30
   transcode = throw "transcode has been removed as it is unmaintained"; # Added 2024-12-11
