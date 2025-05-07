@@ -14983,7 +14983,9 @@ with pkgs;
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
 
-  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
+  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix {
+    inherit (python3Packages) beancount beancount-plugin-utils;
+  };
 
   cataclysmDDA = callPackage ../games/cataclysm-dda { };
 
