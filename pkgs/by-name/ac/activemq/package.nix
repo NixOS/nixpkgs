@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/activemq/${version}/apache-activemq-${version}-bin.tar.gz";
+    url = "mirror://apache/activemq/${version}/apache-activemq-${version}-bin.tar.gz";
     hash = "sha256-JrLLSm6+Be1vSBTTryRcZfbiGK0PrmJ/pM2uYnGuN9E=";
   };
 
