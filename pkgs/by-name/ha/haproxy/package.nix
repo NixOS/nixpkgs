@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       "LUA_INC=${lua5_4}/include"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "USE_SYSTEMD=yes"
       "USE_GETADDRINFO=1"
     ]
     ++ lib.optionals withPrometheusExporter [
