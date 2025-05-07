@@ -2474,11 +2474,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "libXft";
-      version = "2.3.8";
+      version = "2.3.9";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXft-2.3.8.tar.xz";
-        sha256 = "0jfxqsqhjl2b2ll6b7x21mj02hxp5znkhjvbxw5a9h6lq95kr32y";
+        url = "mirror://xorg/individual/lib/libXft-2.3.9.tar.xz";
+        sha256 = "1xbn77zqjzx2zdzqcsbf8pvivlqplnciifxk6lk97mjyjiw5p8k0";
       };
       hardeningDisable = [
         "bindnow"
