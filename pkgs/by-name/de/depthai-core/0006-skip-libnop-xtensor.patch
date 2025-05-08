@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 162eb12b0..83f2776d4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -827,7 +824,6 @@ endif()
+ target_link_libraries(${TARGET_CORE_NAME}
+     PUBLIC
+         nlohmann_json::nlohmann_json
+-        libnop
+         spdlog::spdlog
+         yaml-cpp::yaml-cpp
+     INTERFACE
+@@ -901,7 +898,7 @@ endif()
+ 
+ if(DEPTHAI_XTENSOR_SUPPORT)
+     target_compile_definitions(${TARGET_CORE_NAME} PUBLIC DEPTHAI_XTENSOR_SUPPORT)
+-    target_link_libraries(${TARGET_CORE_NAME} PUBLIC xtensor)
++    #target_link_libraries(${TARGET_CORE_NAME} PUBLIC xtensor)
+ endif()
+ 
+ # Specify available FW
