@@ -260,6 +260,18 @@ pkgs.recurseIntoAttrs (rec {
     [ "$result" = 0 ]
   '';
 
+  # Generate a neovim wrapper with only a init.lua and no init.vim file
+  nvim_with_only_init_lua = wrapNeovim2 "-only-lua-init-file" {
+    luaRcContent = "-- some text";
+  };
+
+  # check that we do not generate an init.vim file if it is not needed
+  no_init_vim_file = runTest nvim_with_only_init_lua ''
+    ${nvim_with_only_init_lua}/bin/nvim -i NONE -e --headless -c 'if len(getscriptinfo({"name":"init.vim"})) == 0 | quit | else | cquit | fi'
+    ${nvim_with_only_init_lua}/bin/nvim -i NONE -e --headless -c 'if len(getscriptinfo({"name":"init.lua"})) == 1 | quit | else | cquit | fi'
+    grep -F -- ' -u ' ${nvim_with_only_init_lua}/bin/nvim
+  '';
+
   # check that the vim-doc hook correctly generates the tag
   # we know for a fact packer has a doc folder
   checkForTags = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
