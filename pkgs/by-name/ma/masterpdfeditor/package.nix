@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
     pkcs11helper
   ];
 
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ nss ]}"
+  ];
+
   dontStrip = true;
 
   installPhase = ''
