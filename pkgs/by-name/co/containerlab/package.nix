@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook
+  versionCheckHook,
 }:
 
 buildGoModule rec {
