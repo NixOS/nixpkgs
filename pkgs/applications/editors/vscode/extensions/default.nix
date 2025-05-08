@@ -824,6 +824,8 @@ let
         };
       };
 
+      budparr.language-hugo-vscode = callPackage ./budparr.language-hugo-vscode { };
+
       bungcip.better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "better-toml";
