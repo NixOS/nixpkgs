@@ -2677,6 +2677,12 @@
     githubId = 31864305;
     name = "William Hai";
   };
+  baileylu = {
+    name = "Luke Bailey";
+    email = "baileylu@tcd.ie";
+    github = "baileyluTCD";
+    githubId = 156000062;
+  };
   baitinq = {
     email = "manuelpalenzuelamerino@gmail.com";
     name = "Baitinq";
