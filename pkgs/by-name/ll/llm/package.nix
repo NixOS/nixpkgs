@@ -6,6 +6,7 @@
   enable-llm-gemini ? false,
   enable-llm-gguf ? false,
   enable-llm-jq ? false,
+  enable-llm-ollama ? false,
 }:
 
 let
@@ -17,6 +18,7 @@ let
     llm-gemini
     llm-gguf
     llm-jq
+    llm-ollama
     ;
 in
 
@@ -28,6 +30,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-cmd [ llm-cmd ]
       ++ lib.optionals enable-llm-gemini [ llm-gemini ]
       ++ lib.optionals enable-llm-gguf [ llm-gguf ]
-      ++ lib.optionals enable-llm-jq [ llm-jq ];
+      ++ lib.optionals enable-llm-jq [ llm-jq ]
+      ++ lib.optionals enable-llm-ollama [ llm-ollama ];
   })
 )
