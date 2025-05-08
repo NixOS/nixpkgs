@@ -3990,8 +3990,6 @@ with pkgs;
 
   olive-editor = qt6Packages.callPackage ../applications/video/olive-editor { };
 
-  ombi = callPackage ../servers/ombi { };
-
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
