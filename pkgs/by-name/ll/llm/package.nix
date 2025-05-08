@@ -6,6 +6,7 @@
   enable-llm-command-r ? false,
   enable-llm-deepseek ? false,
   enable-llm-fragments-github ? false,
+  enable-llm-fragments-pypi ? false,
   enable-llm-gemini ? false,
   enable-llm-grok ? false,
   enable-llm-groq ? false,
@@ -31,6 +32,7 @@ let
     llm-command-r
     llm-deepseek
     llm-fragments-github
+    llm-fragments-pypi
     llm-gemini
     llm-gguf
     llm-grok
@@ -57,6 +59,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-cmd [ llm-command-r ]
       ++ lib.optionals enable-llm-deepseek [ llm-deepseek ]
       ++ lib.optionals enable-llm-fragments-github [ llm-fragments-github ]
+      ++ lib.optionals enable-llm-fragments-pypi [ llm-fragments-pypi ]
       ++ lib.optionals enable-llm-gemini [ llm-gemini ]
       ++ lib.optionals enable-llm-gguf [ llm-gguf ]
       ++ lib.optionals enable-llm-grok [ llm-grok ]
