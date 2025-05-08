@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.13.2";
+  version = "0.13.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
     tag = "v${version}";
-    hash = "sha256-C6uNp3knKKY0AX7fQYU85N82L6kyyO4HcExTz1bBtpE=";
+    hash = "sha256-S++MnI0GgpQxS6kFkt05kcE4JMW7jyFjJ3o7DhfYoVA=";
   };
 
   buildInputs = [
