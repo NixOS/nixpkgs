@@ -30,11 +30,29 @@ Before adding a new package, please consider the following questions:
 
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
 * Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
-* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
+* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small. A good estimate is checking upstream issues and pull requests, or other software repositories.
+* Is the software maintained upstream? Especially packages that are security-critical, rely on fast-moving dependencies or could endanger data integrity should see regular maintenance.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
   * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
 
 If any of these questions' answer is no, then you should probably not add the package.
+
+Special care has to be taken with security-critical software components.
+* Any package that immediately would need to be tagged with `meta.knownVulnerabilities` is unlikely to be fit for nixpkgs.
+* Any package depending on a known-vulnerable library should be considered carefully.
+* Packages typically used with untrusted data should have a maintained and responsible upstream. For example:
+  * Web engines like Blink, Gecko or Webkit receive frequent updates. Any package which does not keep up-to-date web engines should be considered vulnerable.
+  * Typically publicly exposed web-services working on untrusted input
+  * Archives or rich documents commonly shared by email should be considered as potentially untrusted input, which should be considered for any package working with such files.
+* Applications in the Unix authentication stack such as PAM/DBUS-modules or SUID binaries should be considered carefully, and should have a maintained and responsible upstream.
+* Encryption libraries should have a maintained and responsible upstream.
+* Especially security-critical components that are part of larger packages should be unvendored (=use the nix package as dependency, instead of vendored and pinned sources).
+* A "responsible upstream" includes various aspects, such as:
+  * channels to disclose security concerns
+  * being responsive to security concerns, providing fixes or workarounds
+  * transparent public disclosure of security issues when they are found or fixed
+  * These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
+* Free software should be built from source where possible. Relying on vendored binary blobs can have devastating effects on security.
 
 This section describes a general framework of understanding and exceptions might apply.
 
