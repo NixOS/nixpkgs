@@ -5863,6 +5863,8 @@ self: super: with self; {
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
+  google-maps-routing = callPackage ../development/python-modules/google-maps-routing { };
+
   google-nest-sdm = callPackage ../development/python-modules/google-nest-sdm { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
