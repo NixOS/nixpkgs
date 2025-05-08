@@ -44,12 +44,12 @@ lib.makeExtensible (
 
     beets-unstable = callPackage ./common.nix {
       inherit python3Packages;
-      version = "2.2.0-unstable-2025-03-12";
+      version = "2.3.0";
       src = fetchFromGitHub {
         owner = "beetbox";
         repo = "beets";
-        rev = "670a3bcd17a46883c71cf07dd313fcd0dff4be9d";
-        hash = "sha256-hSY7FhpPL4poOY1/gqk7oLNgQ7KA/MJqx50xOLIP0QA=";
+        rev = "250b0da900c095a09bedc1a0717381010c01a3c6";
+        hash = "sha256-mH3m2O+q5Ys9DJD3ulmhViyf/VPEpHevjmNerVe327s=";
       };
     };
 
