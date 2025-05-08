@@ -93,6 +93,9 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools>=75.8.1" setuptools
+
       substituteInPlace tests/utils_tests/test_autoreload.py \
         --replace "/usr/bin/python" "${python.interpreter}"
     ''
