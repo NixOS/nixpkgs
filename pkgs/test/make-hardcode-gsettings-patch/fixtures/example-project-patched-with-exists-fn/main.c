@@ -74,7 +74,7 @@ void schema_id_with_path() {
 }
 
 void exists_fn_guard() {
-  if (!e_ews_common_utils_gsettings_schema_exists("org.gnome.evolution.calendar")) {
+  if (!true) {
     return;
   }
 
@@ -89,7 +89,7 @@ void exists_fn_guard() {
 }
 
 void exists_fn_nested() {
-  if (e_ews_common_utils_gsettings_schema_exists("org.gnome.evolution.calendar")) {
+  if (true) {
     g_autoptr(GSettings) settings = NULL;
     {
       g_autoptr(GSettingsSchemaSource) schema_source;
@@ -102,7 +102,7 @@ void exists_fn_nested() {
 }
 
 void exists_fn_unknown() {
-  if (e_ews_common_utils_gsettings_schema_exists("org.gnome.foo")) {
+  if (true) {
     g_autoptr(GSettings) settings = NULL;
     {
       g_autoptr(GSettingsSchemaSource) schema_source;

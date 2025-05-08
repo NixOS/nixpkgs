@@ -173,6 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXinerama
     libXau
+
+    # for gdctl shebang
+    (python3.withPackages (pp: [
+      pp.pygobject3
+      pp.argcomplete
+    ]))
   ];
 
   postPatch = ''
