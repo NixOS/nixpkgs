@@ -14,6 +14,7 @@
   enable-llm-ollama ? false,
   enable-llm-openai-plugin ? false,
   enable-llm-openrouter ? false,
+  enable-llm-venice ? false,
 }:
 
 let
@@ -33,6 +34,7 @@ let
     llm-ollama
     llm-openai-plugin
     llm-openrouter
+    llm-venice
     ;
 in
 
@@ -52,6 +54,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-mistral [ llm-mistral ]
       ++ lib.optionals enable-llm-ollama [ llm-ollama ]
       ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ]
-      ++ lib.optionals enable-llm-openrouter [ llm-openrouter ];
+      ++ lib.optionals enable-llm-openrouter [ llm-openrouter ]
+      ++ lib.optionals enable-llm-venice [ llm-venice ];
   })
 )
