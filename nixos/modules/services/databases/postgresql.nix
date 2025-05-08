@@ -90,6 +90,12 @@ in
       "extraConfig"
     ] "Use services.postgresql.settings instead.")
 
+    (mkRemovedOptionModule [
+      "services"
+      "postgresql"
+      "recoveryConfig"
+    ] "PostgreSQL v12+ doesn't support recovery.conf.")
+
     (mkRenamedOptionModule
       [ "services" "postgresql" "logLinePrefix" ]
       [ "services" "postgresql" "settings" "log_line_prefix" ]
@@ -588,14 +594,6 @@ in
         '';
       };
 
-      recoveryConfig = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-        description = ''
-          Contents of the {file}`recovery.conf` file.
-        '';
-      };
-
       superUser = mkOption {
         type = types.str;
         default = "postgres";
@@ -741,10 +739,6 @@ in
         fi
 
         ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
-        ${optionalString (cfg.recoveryConfig != null) ''
-          ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
-            "${cfg.dataDir}/recovery.conf"
-        ''}
       '';
 
       # Wait for PostgreSQL to be ready to accept connections.
