@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scooter";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${version}";
-    hash = "sha256-wu9SNcd1+JqTkhUghOiRlGP/za/9Md/lgGrwNA2lCJE=";
+    hash = "sha256-+l2XkG6xUOkfSPe20oXjUKdmBYB7GX0xZuqddC8w/lc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-DQU3djlSjG1VG2bs+JuegwF3ii+asJXpEEPb95xeXqk=";
+  cargoHash = "sha256-+KvHeTa8x77cMbZNbSeMcr66lAqWSBmfkn1rY+PfqHs=";
 
   checkFlags = [
     # failed only for buildRustPackage
