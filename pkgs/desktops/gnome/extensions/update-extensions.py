@@ -315,23 +315,23 @@ if __name__ == "__main__":
             else:
                 out.write(", ")
             # Dump each extension into a single-line string forst
-            extension = json.dumps(extension, ensure_ascii=False)
+            serialized_extension = json.dumps(extension, ensure_ascii=False)
             # Inject line breaks for each supported version
             for version in supported_versions:
                 # This one only matches the first entry
-                extension = extension.replace(
+                serialized_extension = serialized_extension.replace(
                     f'{{"{version}": {{',
                     f'{{\n    "{version}": {{',
                 )
                 # All other entries
-                extension = extension.replace(
+                serialized_extension = serialized_extension.replace(
                     f', "{version}": {{',
                     f',\n    "{version}": {{',
                 )
             # One last line break around the closing braces
-            extension = extension.replace("}}}", "}\n  }}")
+            serialized_extension = serialized_extension.replace("}}}", "}\n  }}")
 
-            out.write(extension)
+            out.write(serialized_extension)
             out.write("\n")
         out.write("]\n")
 
