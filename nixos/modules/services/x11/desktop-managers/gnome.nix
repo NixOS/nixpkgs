@@ -378,9 +378,9 @@ in
 
       services.orca.enable = notExcluded pkgs.orca;
 
-      fonts.packages = [
+      fonts.packages = utils.removePackagesByName [
         pkgs.adwaita-fonts
-      ];
+      ] config.environment.gnome.excludePackages;
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
