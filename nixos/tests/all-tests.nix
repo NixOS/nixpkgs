@@ -1386,6 +1386,7 @@ in
   tt-rss = handleTest ./web-apps/tt-rss.nix { };
   txredisapi = handleTest ./txredisapi.nix { };
   tuptime = handleTest ./tuptime.nix { };
+  turborepo-remote-cache = runTest ./turborepo-remote-cache.nix;
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix { };
   turn-rs = handleTest ./turn-rs.nix { };
   tuxguitar = runTest ./tuxguitar.nix;
