@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation( finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "space2meta";
   version = "0.2.0";
 
