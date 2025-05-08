@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
       "sparc64-linux"
     ];
     license = licenses.gpl2Only;
+    mainProgram = "kexec";
   };
 }
