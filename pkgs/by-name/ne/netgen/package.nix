@@ -3,6 +3,10 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
+  libicns,
+  imagemagick,
+  makeDesktopItem,
+  copyDesktopItems,
   cmake,
   python3Packages,
   mpi,
@@ -92,9 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [
+    libicns
+    imagemagick
     cmake
     python3Packages.pybind11-stubgen
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     metis
@@ -139,14 +145,41 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    rm $out/bin/{Netgen1,startup.sh}
-    mkdir -p $out/Applications/${finalAttrs.pname}.app/Contents/{MacOS,Resouces}
-    substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
-    mv $out/Info.plist $out/Applications/${finalAttrs.pname}.app/Contents
-    mv $out/Netgen.icns $out/Applications/${finalAttrs.pname}.app/Contents/Resouces
-    ln -s $out/bin/netgen $out/Applications/${finalAttrs.pname}.app/Contents/MacOS/netgen
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "netgen";
+      exec = "netgen";
+      comment = finalAttrs.meta.description;
+      desktopName = "Netgen Mesh Generator";
+      genericName = "3D Mesh Generator";
+      categories = [ "Science" ];
+      icon = "netgen";
+    })
+  ];
+
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      rm $out/bin/{Netgen1,startup.sh}
+      mkdir -p $out/Applications/${finalAttrs.pname}.app/Contents/{MacOS,Resouces}
+      substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
+      mv $out/Info.plist $out/Applications/${finalAttrs.pname}.app/Contents
+      mv $out/Netgen.icns $out/Applications/${finalAttrs.pname}.app/Contents/Resouces
+      ln -s $out/bin/netgen $out/Applications/${finalAttrs.pname}.app/Contents/MacOS/netgen
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Extract pngs from the Apple icon image and create
+      # the missing ones from the 512x512 image.
+      icns2png --extract ../netgen.icns
+      for size in 16 24 32 48 64 128 256 512; do
+        mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
+        if [ -e netgen_"$size"x"$size"x32.png ]
+        then
+          mv netgen_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/netgen.png
+        else
+          convert -resize "$size"x"$size" netgen_512x512x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/netgen.png
+        fi
+      done;
+    '';
 
   doInstallCheck = true;
 
