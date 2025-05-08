@@ -51,22 +51,28 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
 
     # The download URLs follow this schema
     uuid = uuid.replace("@", "")
-    url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
+    url: str = (
+        f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
+    )
 
     # Download extension and add the zip content to nix-store
     for _ in range(0, 10):
         process = subprocess.run(
-            ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
+            ["nix-prefetch-url", "--unpack", "--print-path", url],
+            capture_output=True,
+            text=True,
         )
         if process.returncode == 0:
             break
         else:
             logging.warning(f"Nix-prefetch-url failed for {url}:")
             logging.warning(f"Stderr: {process.stderr}")
-            logging.warning(f"Retrying")
+            logging.warning("Retrying")
 
     if process.returncode != 0:
-        raise Exception("Retried 10 times, but still failed to download the extension. Exiting.")
+        raise Exception(
+            "Retried 10 times, but still failed to download the extension. Exiting."
+        )
 
     lines = process.stdout.splitlines()
 
@@ -84,7 +90,8 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
 
 
 def generate_extension_versions(
-        extension_version_map: Dict[ShellVersion, ExtensionVersion], uuid: str
+    extension_version_map: Dict[ShellVersion, ExtensionVersion],
+    uuid: str,
 ) -> Dict[ShellVersion, Dict[str, str]]:
     """
     Takes in a mapping from shell versions to extension versions and transforms it the way we need it:
@@ -114,11 +121,11 @@ def generate_extension_versions(
     # Download information once for all extension versions chosen above
     extension_info_cache: Dict[ExtensionVersion, Tuple[str, str]] = {}
     for extension_version in sorted(set(extension_versions.values())):
-        logging.debug(
-            f"[{uuid}] Downloading v{extension_version}"
+        logging.debug(f"[{uuid}] Downloading v{extension_version}")
+        extension_info_cache[extension_version] = fetch_extension_data(
+            uuid,
+            str(extension_version),
         )
-        extension_info_cache[extension_version] = \
-            fetch_extension_data(uuid, str(extension_version))
 
     # Fill map
     extension_versions_full: Dict[ShellVersion, Dict[str, str]] = {}
@@ -211,7 +218,9 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
     for shell_version in shell_version_map.keys():
         if pname in package_name_registry[shell_version]:
-            logging.warning(f"Package name '{pname}' for GNOME '{shell_version}' is colliding.")
+            logging.warning(
+                f"Package name '{pname}' for GNOME '{shell_version}' is colliding."
+            )
             package_name_registry[shell_version][pname].append(uuid)
         else:
             package_name_registry[shell_version][pname] = [uuid]
@@ -227,7 +236,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
 
 @contextmanager
-def request(url: str, retries: int = 5, retry_codes: List[int] = [ 500, 502, 503, 504 ]):
+def request(url: str, retries: int = 5, retry_codes: List[int] = [500, 502, 503, 504]):
     for attempt in range(retries + 1):
         try:
             with urllib.request.urlopen(url) as response:
@@ -255,7 +264,7 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
         try:
 
             with request(
-                    f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
+                f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
             ) as response:
                 data = json.loads(response.read().decode())["extensions"]
                 response_length = len(data)
@@ -310,9 +319,15 @@ if __name__ == "__main__":
             # Inject line breaks for each supported version
             for version in supported_versions:
                 # This one only matches the first entry
-                extension = extension.replace(f"{{\"{version}\": {{", f"{{\n    \"{version}\": {{")
+                extension = extension.replace(
+                    f'{{"{version}": {{',
+                    f'{{\n    "{version}": {{',
+                )
                 # All other entries
-                extension = extension.replace(f", \"{version}\": {{", f",\n    \"{version}\": {{")
+                extension = extension.replace(
+                    f', "{version}": {{',
+                    f',\n    "{version}": {{',
+                )
             # One last line break around the closing braces
             extension = extension.replace("}}}", "}\n  }}")
 
@@ -330,8 +345,14 @@ if __name__ == "__main__":
 
     with open(updater_dir_path / "collisions.json", "w") as out:
         # Find the name collisions only for the last 3 shell versions
-        last_3_versions = sorted(supported_versions.keys(), key=lambda v: float(v), reverse=True)[:3]
-        package_name_registry_for_versions = [v for k, v in package_name_registry.items() if k in last_3_versions]
+        last_3_versions = sorted(
+            supported_versions.keys(),
+            key=lambda v: float(v),
+            reverse=True,
+        )[:3]
+        package_name_registry_for_versions = [
+            v for k, v in package_name_registry.items() if k in last_3_versions
+        ]
         # Merge all package names into a single dictionary
         package_name_registry_filtered: Dict[PackageName, Set[Uuid]] = {}
         for pkgs in package_name_registry_for_versions:
@@ -340,9 +361,13 @@ if __name__ == "__main__":
                     package_name_registry_filtered[pname] = set()
                 package_name_registry_filtered[pname].update(uuids)
         # Filter out those that are not duplicates
-        package_name_registry_filtered = {k: v for k, v in package_name_registry_filtered.items() if len(v) > 1}
+        package_name_registry_filtered = {
+            k: v for k, v in package_name_registry_filtered.items() if len(v) > 1
+        }
         # Convert set to list
-        collisions: Dict[PackageName, List[Uuid]] = {k: list(v) for k, v in package_name_registry_filtered.items()}
+        collisions: Dict[PackageName, List[Uuid]] = {
+            k: list(v) for k, v in package_name_registry_filtered.items()
+        }
         json.dump(collisions, out, indent=2, ensure_ascii=False)
         out.write("\n")
 
