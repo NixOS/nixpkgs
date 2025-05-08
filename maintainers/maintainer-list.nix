@@ -1996,6 +1996,12 @@
     githubId = 628387;
     name = "Arian van Putten";
   };
+  arichtman = {
+    email = "ariel@richtman.au";
+    github = "arichtman";
+    githubId = 10679234;
+    name = "Ariel Richtman";
+  };
   arikgrahl = {
     email = "mail@arik-grahl.de";
     github = "arikgrahl";
@@ -2676,6 +2682,12 @@
     github = "baduhai";
     githubId = 31864305;
     name = "William Hai";
+  };
+  baileylu = {
+    name = "Luke Bailey";
+    email = "baileylu@tcd.ie";
+    github = "baileyluTCD";
+    githubId = 156000062;
   };
   baitinq = {
     email = "manuelpalenzuelamerino@gmail.com";
@@ -18104,6 +18116,12 @@
     github = "offsetcyan";
     githubId = 49906709;
     name = "Dakota";
+  };
+  ohheyrj = {
+    email = "richard+nix@ohheyrj.co.uk";
+    github = "ohheyrj";
+    name = "ohheyrj";
+    githubId = 5339261;
   };
   oida = {
     email = "oida@posteo.de";
