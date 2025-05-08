@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  capstone_4,
+  capstone,
   cmsis-pack-manager,
   colorama,
   importlib-metadata,
@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   patches = [
     # https://github.com/pyocd/pyOCD/pull/1332
+    # merged into develop
     (fetchpatch {
       name = "libusb-package-optional.patch";
       url = "https://github.com/pyocd/pyOCD/commit/0b980cf253e3714dd2eaf0bddeb7172d14089649.patch";
@@ -45,12 +46,13 @@ buildPythonPackage rec {
     })
   ];
 
+  pythonRelaxDeps = [ "capstone" ];
   pythonRemoveDeps = [ "libusb-package" ];
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    capstone_4
+    capstone
     cmsis-pack-manager
     colorama
     importlib-metadata
