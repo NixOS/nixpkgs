@@ -8,19 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trippy";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "fujiapple852";
     repo = "trippy";
     rev = version;
-    hash = "sha256-LRO2blzzSaYjQVmXpN2aF3qPhfzCrbyc9R7C11UVyV8=";
+    hash = "sha256-+WLWtHguDm23VLjZ4aQnyLAnE/uynONj8lsfVMTTuwY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+PaSLq++tKA6dy4CI1EYrEDdXi2TI9XHjvMLfwDp/HA=";
+  cargoHash = "sha256-kVqj+rYPxfv/9h+HDdSL5jU6DoU5KoJVVQot4O4WVNc=";
 
   cargoBuildFlags = [ "--package trippy" ];
 
