@@ -1,12 +1,11 @@
-diff --git i/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt w/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
-index df88c423..ae1db500 100644
---- i/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
-+++ w/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
-@@ -1497,6 +1497,7 @@ result = someLib.x
-     assertThat(output).isEqualTo("result = 1\n")
-   }
- 
-+  @Disabled
-   @Test
-   fun `eval file with non-ASCII name`() {
-     val tempDirUri = tempDir.toUri()
+diff --git a/pkl-core/src/test/kotlin/org/pkl/core/LanguageSnippetTestsEngine.kt b/pkl-core/src/test/kotlin/org/pkl/core/LanguageSnippetTestsEngine.kt
+index 99cf9479..45269d6d 100644
+--- a/pkl-core/src/test/kotlin/org/pkl/core/LanguageSnippetTestsEngine.kt
++++ b/pkl-core/src/test/kotlin/org/pkl/core/LanguageSnippetTestsEngine.kt
+@@ -215,6 +215,7 @@ abstract class AbstractNativeLanguageSnippetTestsEngine : AbstractLanguageSnippe
+       // on the other hand, don't exclude /native/
+       Regex(".*/import1b\\.pkl"),
+       // URIs get rendered slightly differently (percent-encoded vs raw)
++      Regex(".*日本語.pkl"),
+       Regex(".*日本語_error\\.pkl"),
+     ) + exclusionsForThisJvm()

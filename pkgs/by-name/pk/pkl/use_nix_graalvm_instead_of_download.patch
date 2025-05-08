@@ -1,0 +1,69 @@
+diff --git i/buildSrc/src/main/kotlin/BuildInfo.kt w/buildSrc/src/main/kotlin/BuildInfo.kt
+index 3020857b..54d0da41 100644
+--- i/buildSrc/src/main/kotlin/BuildInfo.kt
++++ w/buildSrc/src/main/kotlin/BuildInfo.kt
+@@ -100,10 +100,10 @@ open class BuildInfo(private val project: Project) {
+       File(homeDir, "${baseName}.$extension")
+     }
+
+-    val installDir: File by lazy { File(homeDir, baseName) }
++    val installDir: File by lazy { File("@graalvmDir@") }
+
+     val baseDir: String by lazy {
+-      if (os.isMacOsX) "$installDir/Contents/Home" else installDir.toString()
++      "@graalvmDir@"
+     }
+   }
+
+diff --git i/pkl-cli/pkl-cli.gradle.kts w/pkl-cli/pkl-cli.gradle.kts
+index facfeabb..7b48201f 100644
+--- i/pkl-cli/pkl-cli.gradle.kts
++++ w/pkl-cli/pkl-cli.gradle.kts
+@@ -313,7 +313,6 @@ fun Exec.configureExecutable(
+ /** Builds the pkl CLI for macOS/amd64. */
+ val macExecutableAmd64: TaskProvider<Exec> by
+   tasks.registering(Exec::class) {
+-    dependsOn(":installGraalVmAmd64")
+     configureExecutable(
+       buildInfo.graalVmAmd64,
+       layout.buildDirectory.file("executable/pkl-macos-amd64"),
+@@ -323,7 +322,6 @@ val macExecutableAmd64: TaskProvider<Exec> by
+ /** Builds the pkl CLI for macOS/aarch64. */
+ val macExecutableAarch64: TaskProvider<Exec> by
+   tasks.registering(Exec::class) {
+-    dependsOn(":installGraalVmAarch64")
+     configureExecutable(
+       buildInfo.graalVmAarch64,
+       layout.buildDirectory.file("executable/pkl-macos-aarch64"),
+@@ -334,7 +332,6 @@ val macExecutableAarch64: TaskProvider<Exec> by
+ /** Builds the pkl CLI for linux/amd64. */
+ val linuxExecutableAmd64: TaskProvider<Exec> by
+   tasks.registering(Exec::class) {
+-    dependsOn(":installGraalVmAmd64")
+     configureExecutable(
+       buildInfo.graalVmAmd64,
+       layout.buildDirectory.file("executable/pkl-linux-amd64"),
+@@ -349,7 +346,6 @@ val linuxExecutableAmd64: TaskProvider<Exec> by
+  */
+ val linuxExecutableAarch64: TaskProvider<Exec> by
+   tasks.registering(Exec::class) {
+-    dependsOn(":installGraalVmAarch64")
+     configureExecutable(
+       buildInfo.graalVmAarch64,
+       layout.buildDirectory.file("executable/pkl-linux-aarch64"),
+@@ -369,7 +365,6 @@ val linuxExecutableAarch64: TaskProvider<Exec> by
+  */
+ val alpineExecutableAmd64: TaskProvider<Exec> by
+   tasks.registering(Exec::class) {
+-    dependsOn(":installGraalVmAmd64")
+     configureExecutable(
+       buildInfo.graalVmAmd64,
+       layout.buildDirectory.file("executable/pkl-alpine-linux-amd64"),
+@@ -379,7 +374,6 @@ val alpineExecutableAmd64: TaskProvider<Exec> by
+
+ val windowsExecutableAmd64: TaskProvider<Exec> by
+   tasks.registering(Exec::class) {
+-    dependsOn(":installGraalVmAmd64")
+     configureExecutable(
+       buildInfo.graalVmAmd64,
+       layout.buildDirectory.file("executable/pkl-windows-amd64"),
