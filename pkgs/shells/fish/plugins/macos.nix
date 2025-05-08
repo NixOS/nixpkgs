@@ -2,6 +2,7 @@
   lib,
   buildFishPlugin,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildFishPlugin rec {
@@ -14,6 +15,8 @@ buildFishPlugin rec {
     tag = "v${version}";
     hash = "sha256-E5HfcGEP5YnUXY50eSPPtLxXL9N7nDInlAw91dNehhc=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "MacOS functions for Fish";
