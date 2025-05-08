@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 
-  passthru.tests.basic = nixosTests.sway;
+  passthru.tests = { inherit (nixosTests) sway lightdm-sway; };
 
   meta = {
     description = "I3-compatible tiling Wayland compositor";
