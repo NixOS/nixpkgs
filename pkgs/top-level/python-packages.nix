@@ -8320,6 +8320,8 @@ self: super: with self; {
 
   llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
 
+  llm-templates-github = callPackage ../development/python-modules/llm-templates-github { };
+
   llm-venice = callPackage ../development/python-modules/llm-venice { };
 
   llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
