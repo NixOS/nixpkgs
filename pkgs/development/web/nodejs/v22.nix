@@ -56,5 +56,10 @@ buildNodejs {
         url = "https://github.com/nodejs/node/commit/33f6e1ea296cd20366ab94e666b03899a081af94.patch?full_index=1";
         hash = "sha256-aVBMcQlhQeviUQpMIfC988jjDB2BgYzlMYsq+w16mzU=";
       })
+      # Fix builds with shared zstd, remove in the next point release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/3e996dff22da0b61f34d2b60037326434b005eac.patch?full_index=1";
+        hash = "sha256-YZNGRQiEaTFCSgXkTdjduvrl1974QrPS+oRLHlnz3AI=";
+      })
     ];
 }
