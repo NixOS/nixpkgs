@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  cmakeFlags = [ (lib.cmakeFeature "WITH_APPS" apps) ];
+  cmakeFlags = [
+    (lib.cmakeFeature "WITH_APPS" apps)
+    (lib.cmakeFeature "WITH_MP4V2" "ON")
+  ];
 
   env = {
     DOCBOOKDIR = "${docbook_xsl}/xml/xsl/docbook/";
