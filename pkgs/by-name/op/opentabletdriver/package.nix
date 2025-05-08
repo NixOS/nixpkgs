@@ -100,6 +100,10 @@ buildDotnetModule (finalAttrs: {
 
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
+    # Copy libinput quirks
+    mkdir -p $out/share/libinput
+    cp eng/linux/Generic/usr/share/libinput/* $out/share/libinput
+
     # Generate udev rules from source
     mkdir -p $out/lib/udev/rules.d
     ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
