@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "lizard";
-  version = "1.17.10";
+  version = "1.17.30";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "terryyin";
     repo = "lizard";
     rev = version;
-    hash = "sha256-4jq6gXpI1hFtX7ka2c/qQ+S6vZCThKOGhQwJ2FOYItY=";
+    hash = "sha256-yXiRbC85IeeNR8rWSqLTQD9qy2CzAhlDD7YeTm5Vj9c=";
   };
 
   propagatedBuildInputs = [ jinja2 ];
