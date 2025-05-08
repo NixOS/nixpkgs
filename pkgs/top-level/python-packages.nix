@@ -17608,6 +17608,8 @@ self: super: with self; {
       )
   );
 
+  tree-sitter-cpp = callPackage ../development/python-modules/tree-sitter-cpp { };
+
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 
   tree-sitter-javascript = callPackage ../development/python-modules/tree-sitter-javascript { };
