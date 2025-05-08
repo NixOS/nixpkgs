@@ -1219,6 +1219,7 @@ in
   snapcast = runTest ./snapcast.nix;
   snapper = handleTest ./snapper.nix { };
   snipe-it = runTest ./web-apps/snipe-it.nix;
+  snips-sh = runTest ./snips-sh.nix;
   soapui = handleTest ./soapui.nix { };
   soft-serve = handleTest ./soft-serve.nix { };
   sogo = handleTest ./sogo.nix { };
