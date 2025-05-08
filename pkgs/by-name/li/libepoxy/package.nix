@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
+  propagatedBuildInputs =
     lib.optionals (x11Support && !stdenv.hostPlatform.isDarwin) [
       libGL
     ]
