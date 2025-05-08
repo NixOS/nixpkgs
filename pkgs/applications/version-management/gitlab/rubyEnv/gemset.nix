@@ -1623,10 +1623,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1yca2rd1xb9h3his5kpnawjgki2rpgslchrn44imhig9v8l7fnw8";
+      sha256 = "1zblvpxzb8qp17dn7sjnfqs6iw3yyzv2cwvnhzrzgxj8k0d0ddjs";
       type = "gem";
     };
-    version = "0.4.0";
+    version = "0.4.3";
   };
   device_detector = {
     groups = [ "default" ];
@@ -3843,10 +3843,11 @@ src: {
     ];
     platforms = [ ];
     source = {
-      path = "${src}/vendor/gems/graphql";
-      type = "path";
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "17dayn5422rnbaqs33dnl8d9jw7acpn6cg88z2awk4scwblvc7gv";
+      type = "gem";
     };
-    version = "2.4.11";
+    version = "2.4.13";
   };
   graphql-docs = {
     dependencies = [
