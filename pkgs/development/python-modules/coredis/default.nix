@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.20.0";
+  version = "4.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = pname;
     tag = version;
-    hash = "sha256-N7RQEgpBnXa+xtthySfec1Xw3JHtGCT2ZjmOK7H5B+A=";
+    hash = "sha256-EMiZkKUcVbinWtYimNSQ715PH7pCrXpNKqseLFCu/48=";
   };
 
   postPatch = ''
