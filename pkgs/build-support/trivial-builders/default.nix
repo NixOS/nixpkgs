@@ -1028,6 +1028,16 @@ rec {
     if patches == [ ] && prePatch == "" && postPatch == "" then
       src # nothing to do, so use original src to avoid additional drv
     else
+      let
+        keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
+        # enables tools like nix-update to determine what src attributes to replace
+        extraPassthru = keepAttrs [
+          "rev"
+          "tag"
+          "url"
+          "outputHash"
+        ] src;
+      in
       stdenvNoCC.mkDerivation (
         {
           inherit
@@ -1042,11 +1052,19 @@ rec {
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }
-        # Carry `meta` information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta) { inherit (src) meta; })
+        # Carry and merge information from the underlying `src` if present.
+        // (optionalAttrs (src ? meta || args ? meta) {
+          meta = src.meta or { } // args.meta or { };
+        })
+        // (optionalAttrs (extraPassthru != { } || src ? passthru || args ? passthru) {
+          passthru = extraPassthru // src.passthru or { } // args.passthru or { };
+        })
+        # Forward any additional arguments to the derviation
         // (removeAttrs args [
           "src"
           "name"
+          "meta"
+          "passthru"
           "patches"
           "prePatch"
           "postPatch"
