@@ -11,6 +11,12 @@
   pkg-config,
   pkg-config-unwrapped,
   stdenv,
+  testers,
+  dosbox,
+  SDL_image,
+  SDL_ttf,
+  SDL_mixer,
+  SDL_sound,
   # Boolean flags
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
@@ -91,6 +97,18 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
 
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+    inherit
+      SDL_image
+      SDL_ttf
+      SDL_mixer
+      SDL_sound
+      dosbox
+      ;
+  };
+
   meta = {
     homepage = "https://www.libsdl.org/";
     description = "Cross-platform multimedia library - build SDL 1.2 applications against 2.0";
@@ -99,5 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ peterhoeg ];
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [
+      "sdl"
+      "sdl12_compat"
+    ];
   };
 })
