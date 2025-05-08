@@ -830,41 +830,24 @@ in
     services.openssh.extraConfig = lib.mkOrder 0 (
       lib.concatStringsSep "\n" (
         [
-          ''
-            Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
-
-            AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-            ${lib.concatMapStrings (port: ''
-              Port ${toString port}
-            '') cfg.ports}
-
-            ${lib.concatMapStrings (
-              { port, addr, ... }:
-              ''
-                ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}
-              ''
-            ) cfg.listenAddresses}
-
-          ''
+          ''Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}''
+          ''AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}''
         ]
+        ++ lib.map (port: ''Port ${toString port}'') cfg.ports
+        ++ lib.map (
+          { port, addr, ... }:
+          ''ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}''
+        ) cfg.listenAddresses
         ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"
         ++ lib.optional cfg.allowSFTP ''Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}''
         ++ [
-          ''
-            AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-          ''
+          ''AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}''
         ]
         ++ lib.optional (cfg.authorizedKeysCommand != "none") ''
           AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
           AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
         ''
-        ++ [
-          ''
-            ${lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
-              HostKey ${k.path}
-            '')}
-          ''
-        ]
+        ++ lib.map (k: ''HostKey ${k.path}'') cfg.hostKeys
       )
     );
 
