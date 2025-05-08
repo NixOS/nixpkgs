@@ -8318,6 +8318,8 @@ self: super: with self; {
 
   llm-venice = callPackage ../development/python-modules/llm-venice { };
 
+  llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
+
   llmx = callPackage ../development/python-modules/llmx { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
