@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.12";
+  version = "0.3.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-pIXdXGrYOoE8sF+cKpX82QfTaYna8kbzUv0n+yR7uHE=";
+    hash = "sha256-e8y5rL+OUFOAPfXTC+XHn/wVfsecPInsS8hBxm1USAw=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
