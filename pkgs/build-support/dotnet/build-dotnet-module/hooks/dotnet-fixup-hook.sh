@@ -33,8 +33,14 @@ dotnetFromEnv'
     local dotnetRuntimeDepsFlags=()
     if (( ${#dotnetRuntimeDepsArray[@]} > 0 )); then
         local libraryPathArray=("${dotnetRuntimeDepsArray[@]/%//lib}")
+        local libraryPathName
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            libraryPathName="DYLD_LIBRARY_PATH"
+        else
+            libraryPathName="LD_LIBRARY_PATH"
+        fi
         local OLDIFS="$IFS" IFS=':'
-        dotnetRuntimeDepsFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPathArray[*]}")
+        dotnetRuntimeDepsFlags+=("--suffix" "$libraryPathName" ":" "${libraryPathArray[*]}")
         IFS="$OLDIFS"
     fi
 
