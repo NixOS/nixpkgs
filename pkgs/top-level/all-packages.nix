@@ -11419,6 +11419,8 @@ with pkgs;
 
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
+  sddm-tokyo-night = libsForQt5.callPackage ../data/themes/sddm-tokyo-night { };
+
   sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
 
   sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel { };
