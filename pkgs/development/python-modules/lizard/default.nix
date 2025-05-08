@@ -6,6 +6,8 @@
   pytestCheckHook,
   mock,
   jinja2,
+  pygments, # for Erlang support
+  pathspec, # for .gitignore support
 }:
 
 buildPythonPackage rec {
@@ -21,7 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-yXiRbC85IeeNR8rWSqLTQD9qy2CzAhlDD7YeTm5Vj9c=";
   };
 
-  propagatedBuildInputs = [ jinja2 ];
+  propagatedBuildInputs = [
+    jinja2
+    pygments
+    pathspec
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
