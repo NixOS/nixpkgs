@@ -345,21 +345,19 @@ def find_collisions(
     versions: list[str],
 ) -> dict[PackageName, list[Uuid]]:
     package_name_registry_for_versions = [
-        v for k, v in package_name_registry.items() if k in versions
+        package_name_registry
+        for version, package_name_registry in package_name_registry.items()
+        if version in versions
     ]
-    # Merge all package names into a single dictionary
-    package_name_registry_filtered: dict[PackageName, set[Uuid]] = {}
+    package_name_registry_merged: dict[PackageName, set[Uuid]] = {}
     for pkgs in package_name_registry_for_versions:
         for pname, uuids in pkgs.items():
-            if pname not in package_name_registry_filtered:
-                package_name_registry_filtered[pname] = set()
-            package_name_registry_filtered[pname].update(uuids)
-    # Filter out those that are not duplicates
-    package_name_registry_filtered = {
-        k: v for k, v in package_name_registry_filtered.items() if len(v) > 1
+            package_name_registry_merged.setdefault(pname, set()).update(uuids)
+    return {
+        pname: list(uuids)
+        for pname, uuids in package_name_registry_merged.items()
+        if len(uuids) > 1
     }
-    # Convert set to list
-    return {k: list(v) for k, v in package_name_registry_filtered.items()}
 
 
 def main() -> None:
