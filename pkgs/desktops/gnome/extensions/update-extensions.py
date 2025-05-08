@@ -291,9 +291,7 @@ def scrape_extensions_index() -> list[dict[str, Any]]:
     return extensions
 
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-
+def fetch_extensions() -> list[dict[str, Any]]:
     raw_extensions = scrape_extensions_index()
 
     logging.info(f"Downloaded {len(raw_extensions)} extensions. Processing …")
@@ -304,6 +302,10 @@ if __name__ == "__main__":
             processed_extensions.append(processed_extension)
             logging.debug(f"Processed {num + 1} / {len(raw_extensions)}")
 
+    return processed_extensions
+
+
+def serialize_extensions(processed_extensions: list[dict[str, Any]]) -> None:
     # We micro-manage a lot of the serialization process to keep the diffs optimal.
     # We generally want most of the attributes of an extension on one line,
     # but then each of its supported versions with metadata on a new line.
@@ -335,6 +337,39 @@ if __name__ == "__main__":
             out.write("\n")
         out.write("]\n")
 
+
+def find_collisions() -> dict[PackageName, list[Uuid]]:
+    # Find the name collisions only for the last 3 shell versions
+    last_3_versions = sorted(
+        supported_versions.keys(),
+        key=lambda v: float(v),
+        reverse=True,
+    )[:3]
+    package_name_registry_for_versions = [
+        v for k, v in package_name_registry.items() if k in last_3_versions
+    ]
+    # Merge all package names into a single dictionary
+    package_name_registry_filtered: dict[PackageName, set[Uuid]] = {}
+    for pkgs in package_name_registry_for_versions:
+        for pname, uuids in pkgs.items():
+            if pname not in package_name_registry_filtered:
+                package_name_registry_filtered[pname] = set()
+            package_name_registry_filtered[pname].update(uuids)
+    # Filter out those that are not duplicates
+    package_name_registry_filtered = {
+        k: v for k, v in package_name_registry_filtered.items() if len(v) > 1
+    }
+    # Convert set to list
+    return {k: list(v) for k, v in package_name_registry_filtered.items()}
+
+
+def main() -> None:
+    logging.basicConfig(level=logging.DEBUG)
+
+    processed_extensions = fetch_extensions()
+
+    serialize_extensions(processed_extensions)
+
     logging.info(
         f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
     )
@@ -343,34 +378,16 @@ if __name__ == "__main__":
         # Check that the generated file actually is valid JSON, just to be sure
         json.load(out)
 
+    collisions = find_collisions()
+
     with open(updater_dir_path / "collisions.json", "w") as out:
-        # Find the name collisions only for the last 3 shell versions
-        last_3_versions = sorted(
-            supported_versions.keys(),
-            key=lambda v: float(v),
-            reverse=True,
-        )[:3]
-        package_name_registry_for_versions = [
-            v for k, v in package_name_registry.items() if k in last_3_versions
-        ]
-        # Merge all package names into a single dictionary
-        package_name_registry_filtered: dict[PackageName, set[Uuid]] = {}
-        for pkgs in package_name_registry_for_versions:
-            for pname, uuids in pkgs.items():
-                if pname not in package_name_registry_filtered:
-                    package_name_registry_filtered[pname] = set()
-                package_name_registry_filtered[pname].update(uuids)
-        # Filter out those that are not duplicates
-        package_name_registry_filtered = {
-            k: v for k, v in package_name_registry_filtered.items() if len(v) > 1
-        }
-        # Convert set to list
-        collisions: dict[PackageName, list[Uuid]] = {
-            k: list(v) for k, v in package_name_registry_filtered.items()
-        }
         json.dump(collisions, out, indent=2, ensure_ascii=False)
         out.write("\n")
 
     logging.info(
         "Done. Writing name collisions to collisions.json (please check manually)"
     )
+
+
+if __name__ == "__main__":
+    main()
