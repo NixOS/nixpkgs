@@ -20,7 +20,8 @@ in
         {
           options = {
             passwordFile = lib.mkOption {
-              type = lib.types.str;
+              type = with lib.types; nullOr str;
+              default = null;
               description = ''
                 Read the repository password from a file.
               '';
@@ -331,10 +332,18 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (n: v: {
-      assertion = (v.repository == null) != (v.repositoryFile == null);
-      message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
-    }) config.services.restic.backups;
+    assertions = lib.flatten (
+      lib.mapAttrsToList (n: v: [
+        {
+          assertion = ((v.repository == null) != (v.repositoryFile == null)) || (v.environmentFile != null);
+          message = "services.restic.backups.${n}: exactly one of repository, repositoryFile or environmentFile must be set";
+        }
+        {
+          assertion = (v.passwordFile != null) || (v.environmentFile != null);
+          message = "services.restic.backups.${n}: passwordFile or environmentFile must be set";
+        }
+      ]) config.services.restic.backups
+    );
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
