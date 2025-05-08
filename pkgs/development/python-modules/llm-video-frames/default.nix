@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-video-frames,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +23,12 @@ buildPythonPackage rec {
     setuptools
     llm
   ];
+
   dependencies = [ ];
 
   pythonImportsCheck = [ "llm_video_frames" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-video-frames;
 
   meta = {
     description = "LLM plugin to turn a video into individual frames";

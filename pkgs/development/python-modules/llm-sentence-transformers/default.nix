@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-sentence-transformers,
   einops,
   sentence-transformers,
   pytestCheckHook,
@@ -46,9 +46,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_sentence_transformers" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-sentence-transformers;
 
   meta = {
     description = "LLM plugin for embeddings using sentence-transformers";

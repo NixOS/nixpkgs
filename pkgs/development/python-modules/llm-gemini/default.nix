@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-gemini,
   httpx,
   ijson,
   pytestCheckHook,
@@ -45,9 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_gemini" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-gemini;
 
   meta = {
     description = "LLM plugin to access Google's Gemini family of models";

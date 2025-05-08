@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -11,6 +10,7 @@
   httpx,
   llama-cpp-python,
   llm,
+  llm-gguf,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +40,7 @@ buildPythonPackage rec {
   # Tests require internet access (downloading models)
   doCheck = false;
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-gguf;
 
   meta = {
     description = "Run models distributed as GGUF files using LLM";

@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-grok,
   httpx,
   httpx-sse,
   rich,
@@ -44,9 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_grok" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-grok;
 
   meta = {
     description = "LLM plugin providing access to Grok models using the xAI API";

@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-openrouter,
   httpx,
   openai,
   pytestCheckHook,
@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "openrouter";
+  pname = "llm-openrouter";
   version = "0.4.1";
   pyproject = true;
 
@@ -44,9 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_openrouter" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-openrouter;
 
   meta = {
     description = "LLM plugin for models hosted by OpenRouter";
