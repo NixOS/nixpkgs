@@ -14132,6 +14132,8 @@ self: super: with self; {
 
   python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
 
+  python-melcloud = callPackage ../development/python-modules/python-melcloud { };
+
   python-memcached = callPackage ../development/python-modules/python-memcached {
     inherit (pkgs) memcached;
   };
