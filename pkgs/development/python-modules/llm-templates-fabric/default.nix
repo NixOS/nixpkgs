@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-templates-fabric,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +23,12 @@ buildPythonPackage rec {
     setuptools
     llm
   ];
+
   dependencies = [ ];
 
   pythonImportsCheck = [ "llm_templates_fabric" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-templates-fabric;
 
   meta = {
     description = "Load LLM templates from Fabric";

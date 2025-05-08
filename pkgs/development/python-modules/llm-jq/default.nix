@@ -1,11 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
-  nix-update-script,
+  llm-jq,
 }:
 buildPythonPackage rec {
   pname = "llm-jq";
@@ -28,9 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_jq" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-jq;
 
   meta = {
     description = "Write and execute jq programs with the help of LLM";

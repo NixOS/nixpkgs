@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-venice,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_venice" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-venice;
 
   meta = {
     description = "LLM plugin to access models available via the Venice API";

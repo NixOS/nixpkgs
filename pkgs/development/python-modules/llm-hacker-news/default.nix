@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-hacker-news,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_hacker_news" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-hacker-news;
 
   meta = {
     description = "LLM plugin for pulling content from Hacker News";

@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-templates-github,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +23,12 @@ buildPythonPackage rec {
     setuptools
     llm
   ];
+
   dependencies = [ ];
 
   pythonImportsCheck = [ "llm_templates_github" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-templates-github;
 
   meta = {
     description = "Load LLM templates from GitHub repositories";

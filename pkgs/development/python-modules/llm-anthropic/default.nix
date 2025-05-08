@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-anthropic,
   anthropic,
   pytestCheckHook,
   pytest-asyncio,
@@ -28,6 +28,7 @@ buildPythonPackage rec {
     setuptools
     llm
   ];
+
   dependencies = [ anthropic ];
 
   nativeCheckInputs = [
@@ -39,9 +40,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_anthropic" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-anthropic;
 
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";

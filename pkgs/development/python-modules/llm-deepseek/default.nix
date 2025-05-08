@@ -1,11 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
-  groq,
+  llm-deepseek,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_deepseek" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-deepseek;
 
   meta = {
     description = "LLM plugin providing access to Deepseek models.";

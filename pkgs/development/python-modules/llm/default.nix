@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -75,6 +76,9 @@ let
 
     passthru = {
       inherit withPlugins;
+      mkPluginTest = plugin: {
+        ${plugin.pname} = callPackage ./mk-plugin-test.nix { inherit llm plugin; };
+      };
     };
 
     meta = with lib; {

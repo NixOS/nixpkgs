@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -18,6 +17,7 @@
   pytest-asyncio,
   pytest-mock,
   writableTmpDirAsHomeHook,
+  llm-ollama,
 }:
 
 buildPythonPackage rec {
@@ -55,9 +55,7 @@ buildPythonPackage rec {
     "llm_ollama"
   ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-ollama;
 
   meta = {
     description = "LLM plugin providing access to Ollama models using HTTP API";

@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-openai-plugin,
   openai,
   pytestCheckHook,
   pytest-asyncio,
@@ -45,9 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_openai" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-openai-plugin;
 
   meta = {
     description = "OpenAI plugin for LLM";
