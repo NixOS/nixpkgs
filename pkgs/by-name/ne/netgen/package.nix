@@ -146,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://ngsolve.org";
+    downloadPage = "https://github.com/NGSolve/netgen";
     description = "Atomatic 3d tetrahedral mesh generator";
     license = with lib.licenses; [
       lgpl2Plus
