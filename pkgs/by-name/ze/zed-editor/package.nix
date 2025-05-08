@@ -40,6 +40,7 @@
   livekit-libwebrtc,
   testers,
   writableTmpDirAsHomeHook,
+  eslint
 
   withGLES ? false,
   buildRemoteServer ? true,
