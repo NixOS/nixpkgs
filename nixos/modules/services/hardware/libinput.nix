@@ -435,7 +435,10 @@ in
 
     services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
 
-    environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
+    environment.systemPackages = [
+      pkgs.xorg.xf86inputlibinput
+      pkgs.libinput.out
+    ];
 
     environment.etc =
       let
