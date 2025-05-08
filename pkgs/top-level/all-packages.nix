@@ -4259,11 +4259,6 @@ with pkgs;
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
 
-  projectlibre = callPackage ../applications/misc/projectlibre {
-    jre = jre8;
-    jdk = jdk8;
-  };
-
   projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
