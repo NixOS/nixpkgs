@@ -28,7 +28,6 @@
   libuuid,
   libxcb,
   libxkbcommon,
-  libxshmfence,
   libgbm,
   nspr,
   nss,
@@ -202,16 +201,14 @@ let
 
         # Fix the desktop link
         substituteInPlace $out/share/applications/slack.desktop \
-          --replace /usr/bin/ $out/bin/ \
-          --replace /usr/share/pixmaps/slack.png slack \
-          --replace bin/slack "bin/slack -s"
-      ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
+          --replace-fail /usr/bin/ $out/bin/ \
+          --replace-fail /usr/share/pixmaps/slack.png slack \
+          --replace-fail bin/slack "bin/slack -s"
+
         # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
         # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
         sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
-      ''
-      + ''
+
         runHook postInstall
       '';
   };
