@@ -8,6 +8,7 @@
   protobuf,
   livekit-protocol,
   pytestCheckHook,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -42,6 +43,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "livekit-api/tests" ];
 
   pythonImportsCheck = [ "livekit" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "api-v"; };
 
   meta = {
     description = "LiveKit real-time and server SDKs for Python";
