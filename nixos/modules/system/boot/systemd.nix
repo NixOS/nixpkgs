@@ -649,6 +649,7 @@ in
             DefaultIOAccounting=yes
             DefaultBlockIOAccounting=yes
             DefaultIPAccounting=yes
+            MemoryAccounting=yes
           ''}
           DefaultLimitCORE=infinity
           ${optionalString (cfg.watchdog.device != null) ''
