@@ -14,6 +14,7 @@ with import common/ec2.nix { inherit makeTest pkgs; };
 let
   config =
     (import ../lib/eval-config.nix {
+      system = null;
       modules = [
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
