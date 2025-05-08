@@ -8326,6 +8326,8 @@ self: super: with self; {
 
   llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
 
+  llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
+
   llm-templates-fabric = callPackage ../development/python-modules/llm-templates-fabric { };
 
   llm-templates-github = callPackage ../development/python-modules/llm-templates-github { };
