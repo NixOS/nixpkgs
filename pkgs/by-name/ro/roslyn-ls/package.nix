@@ -45,7 +45,6 @@ buildDotnetModule rec {
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
   version = "5.0.0-1.25204.1";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
-  useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
 
   nativeBuildInputs = [ jq ];
