@@ -5,28 +5,11 @@
   grype,
   nix,
   nix-visualize,
-  python,
+  python3,
   vulnix,
-  # python libs
-  beautifulsoup4,
-  colorlog,
-  dfdiskcache,
-  filelock,
-  graphviz,
-  numpy,
-  packageurl-python,
-  packaging,
-  pandas,
-  pyrate-limiter,
-  requests,
-  requests-cache,
-  requests-ratelimiter,
-  reuse,
-  setuptools,
-  tabulate,
 }:
 
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
   version = "1.7.2";
   pyproject = true;
@@ -49,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
       lib.makeBinPath [
         git
         nix
-        graphviz
+        python3.pkgs.graphviz
         nix-visualize
         vulnix
         grype
@@ -57,9 +40,9 @@ python.pkgs.buildPythonApplication rec {
     }"
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     colorlog
     dfdiskcache
@@ -78,6 +61,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "sbomnix" ];
+
   # Tests require network access
   doCheck = false;
 
