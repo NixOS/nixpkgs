@@ -1,25 +1,3 @@
-diff --git a/src/main.c b/src/main.c
-index d16a7f7..2c596e9 100644
---- a/src/main.c
-+++ b/src/main.c
-@@ -125,7 +125,7 @@ static gint        grig_app_delete     (GtkWidget *, GdkEvent *, gpointer);
- static void        grig_app_destroy    (GtkWidget *, gpointer);
- static void        grig_show_help      (void);
- static void        grig_show_version   (void);
--static gint        grig_list_add       (const struct rig_caps *, void *);
-+static gint        grig_list_add       (struct rig_caps *, void *);
- static gint        grig_list_compare   (gconstpointer, gconstpointer);
- static void        grig_sig_handler    (int sig);
- 
-@@ -729,7 +729,7 @@ grig_list_rigs ()
-  * \sa grig_list_rigs, grig_list_compare
-  */
- static gint
--grig_list_add (const struct rig_caps *caps, void *array)
-+grig_list_add (struct rig_caps *caps, void *array)
- {
- 	grig_rig_info_t *info;
- 
 diff --git a/src/rig-selector.c b/src/rig-selector.c
 index 425d41a..e040c0e 100644
 --- a/src/rig-selector.c
