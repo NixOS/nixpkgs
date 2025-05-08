@@ -9,6 +9,7 @@
   enable-llm-grok ? false,
   enable-llm-groq ? false,
   enable-llm-gguf ? false,
+  enable-llm-hacker-news ? false,
   enable-llm-jq ? false,
   enable-llm-mistral ? false,
   enable-llm-ollama ? false,
@@ -32,6 +33,7 @@ let
     llm-gguf
     llm-grok
     llm-groq
+    llm-hacker-news
     llm-jq
     llm-mistral
     llm-ollama
@@ -56,6 +58,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-gguf [ llm-gguf ]
       ++ lib.optionals enable-llm-grok [ llm-grok ]
       ++ lib.optionals enable-llm-groq [ llm-groq ]
+      ++ lib.optionals enable-llm-hacker-news [ llm-hacker-news ]
       ++ lib.optionals enable-llm-jq [ llm-jq ]
       ++ lib.optionals enable-llm-mistral [ llm-mistral ]
       ++ lib.optionals enable-llm-ollama [ llm-ollama ]
