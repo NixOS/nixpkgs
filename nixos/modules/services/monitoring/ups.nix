@@ -663,7 +663,6 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.nut}/bin/upsdrvctl shutdown";
-        Slice = "system-ups.slice";
       };
     };
 
