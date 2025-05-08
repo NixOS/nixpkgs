@@ -1,0 +1,67 @@
+From 2a41c823bc051bfaebd082e6441d17591ab13991 Mon Sep 17 00:00:00 2001
+From: Hongbo <hehongbo@mail.com>
+Date: Mon, 23 Dec 2024 10:28:29 +0800
+Subject: [XEN PATCH 1/1] tools/libxl: search PATH for QEMU if `QEMU_XEN_PATH` is
+ not absolute
+
+`QEMU_XEN_PATH` will be configured as `qemu-system-i386` with no clue where, if
+`--with-system-qemu` is set without giving a path (as matched in the case `yes`
+but not `*`). However, the existence of the executable is checked by `access()`,
+that will not look for anywhere in $PATH but the current directory. And since it
+is possible for `qemu-system-i386` (or any other configured values) to be
+executed from PATH later, we'd better find that in PATH and return the full path
+for the caller to check against.
+
+Signed-off-by: Hongbo <hehongbo@mail.com>
+
+---
+ tools/libs/light/libxl_dm.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/tools/libs/light/libxl_dm.c b/tools/libs/light/libxl_dm.c
+index 1f2f5bd97a..db05f20a5b 100644
+--- a/tools/libs/light/libxl_dm.c
++++ b/tools/libs/light/libxl_dm.c
+@@ -332,7 +332,39 @@ const char *libxl__domain_device_model(libxl__gc *gc,
+             dm = libxl__abs_path(gc, "qemu-dm", libxl__private_bindir_path());
+             break;
+         case LIBXL_DEVICE_MODEL_VERSION_QEMU_XEN:
+-            dm = qemu_xen_path(gc);
++            const char *configured_dm = qemu_xen_path(gc);
++            if (strchr(configured_dm, '/'))
++                dm = libxl__strdup(gc, configured_dm);
++            else
++            {
++                const char *path_env = getenv("PATH");
++                if (!path_env)
++                    dm = libxl__strdup(gc, configured_dm);
++                else
++                {
++                    char *path_dup = libxl__strdup(gc, path_env);
++                    char *saveptr;
++
++                    char *path = strtok_r(path_dup, ":", &saveptr);
++                    char fullpath[PATH_MAX];
++                    bool dm_found = false;
++                    while (path)
++                    {
++                        snprintf(fullpath, sizeof(fullpath), "%s/%s", path,
++                                 configured_dm);
++                        if (access(fullpath, X_OK) == 0)
++                        {
++                            dm = libxl__strdup(gc, fullpath);
++                            dm_found = true;
++                            break;
++                        }
++                        path = strtok_r(NULL, ":", &saveptr);
++                    }
++
++                    if (!dm_found)
++                        dm = libxl__strdup(gc, configured_dm);
++                }
++            }
+             break;
+         default:
+             LOG(ERROR, "invalid device model version %d",
+-- 
+
