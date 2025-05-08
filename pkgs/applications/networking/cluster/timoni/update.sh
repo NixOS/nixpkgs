@@ -40,6 +40,6 @@ cat <<EOF
     "attrPath": "$ATTR",
     "oldVersion": "$PREV_VERSION",
     "newVersion": "$NEXT_VERSION",
-    "files": ["$PWD/default.nix.nix"]
+    "files": ["$NIXPKGS_ROOT/pkgs/applications/networking/cluster/timoni/default.nix"]
 }]
 EOF
