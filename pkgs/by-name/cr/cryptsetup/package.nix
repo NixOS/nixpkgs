@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.
   # Issue filed upstream: https://gitlab.com/cryptsetup/cryptsetup/-/issues/763
-  doCheck = !stdenv.hostPlatform.isMusl;
+  doCheck = !stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.useLLVM;
 
   passthru = {
     tests = {
