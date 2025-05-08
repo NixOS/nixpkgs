@@ -378,11 +378,8 @@ in
 
       services.orca.enable = notExcluded pkgs.orca;
 
-      fonts.packages = with pkgs; [
-        cantarell-fonts
-        dejavu_fonts
-        source-code-pro # Default monospace font in 3.32
-        source-sans
+      fonts.packages = [
+        pkgs.adwaita-fonts
       ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
