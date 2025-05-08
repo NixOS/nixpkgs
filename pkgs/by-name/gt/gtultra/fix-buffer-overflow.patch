@@ -1,0 +1,22 @@
+From 3eafda2d3419539b1d64e609e802cc002d236c2c Mon Sep 17 00:00:00 2001
+From: Francesco Gazzetta <fgaz@fgaz.me>
+Date: Sun, 7 Jul 2024 15:45:09 +0200
+Subject: [PATCH] Fix buffer overflow in setPaletteName()
+
+---
+ src/gpaletteeditor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gpaletteeditor.c b/src/gpaletteeditor.c
+index 0dda0d5..92b94e2 100644
+--- a/src/gpaletteeditor.c
++++ b/src/gpaletteeditor.c
+@@ -619,7 +619,7 @@ void setPaletteName(char* paletteName, int index)
+ 	{
+ 		free(paletteNames[index]);
+ 	}
+-	paletteNames[index] = malloc(strlen(paletteName));
++	paletteNames[index] = malloc(strlen(paletteName) + 1);
+ 	strcpy(paletteNames[index], paletteName);	// copy filename. This is saved in the cfg file as the one to start up with
+ }
+ 
