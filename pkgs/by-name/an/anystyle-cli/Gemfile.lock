@@ -1,0 +1,36 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    anystyle (1.5.0)
+      anystyle-data (~> 1.3)
+      bibtex-ruby (~> 6.0)
+      namae (~> 1.0)
+      wapiti (~> 2.1)
+    anystyle-cli (1.4.5)
+      anystyle (~> 1.4)
+      gli (~> 2.17)
+    anystyle-data (1.3.0)
+    bibtex-ruby (6.1.0)
+      latex-decode (~> 0.0)
+      racc (~> 1.7)
+    builder (3.3.0)
+    gli (2.22.2)
+      ostruct
+    latex-decode (0.4.0)
+    namae (1.2.0)
+      racc (~> 1.7)
+    ostruct (0.6.1)
+    racc (1.8.1)
+    rexml (3.4.1)
+    wapiti (2.1.0)
+      builder (~> 3.2)
+      rexml (~> 3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  anystyle-cli
+
+BUNDLED WITH
+   2.6.6

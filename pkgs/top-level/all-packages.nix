@@ -2524,8 +2524,6 @@ with pkgs;
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
-  anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
-
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
