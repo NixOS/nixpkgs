@@ -4362,6 +4362,10 @@ with pkgs;
 
   rstcheck = with python3Packages; toPythonApplication rstcheck;
 
+  rstcheckWithSphinx = rstcheck.overridePythonAttrs (oldAttrs: {
+    dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.sphinx;
+  });
+
   rtmpdump_gnutls = rtmpdump.override {
     gnutlsSupport = true;
     opensslSupport = false;
