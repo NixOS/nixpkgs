@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
   substituteAll,
 
@@ -65,6 +66,13 @@ buildPythonPackage rec {
       ./django_5_tests_pythonpath.patch
       # disable test that excpects timezone issues
       ./django_5_disable_failing_tests.patch
+
+      # fix filename length limit tests on bcachefs
+      # FIXME: remove in 5.2
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+      })
     ]
     ++ lib.optionals withGdal [
       (substituteAll {
