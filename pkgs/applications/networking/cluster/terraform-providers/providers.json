@@ -198,13 +198,13 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "btp": {
-    "hash": "sha256-fny/kOPCJFySYPJwKpU5eCB6IClBE4KIjZoHpQplZHA=",
+    "hash": "sha256-c2nYUsjErdjxk6IyqpcDxExLLNjxh5A7Mq7WW2BWviw=",
     "homepage": "https://registry.terraform.io/providers/SAP/btp",
     "owner": "SAP",
     "repo": "terraform-provider-btp",
-    "rev": "v1.11.0",
+    "rev": "v1.12.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-DUc06D22wqYG/O27NkOxJ2bu+dwirReAq9Y6p135ICY="
+    "vendorHash": "sha256-arLGaa/o9X0MYg/qIl6qhpBqcduu5Bu06FteR5KGSPw="
   },
   "buildkite": {
     "hash": "sha256-i16wgxO2rhs/wg1In+3VYstuUrfuj/ChVO4un5wDmgk=",
@@ -243,13 +243,13 @@
     "vendorHash": null
   },
   "cloudamqp": {
-    "hash": "sha256-nUzWtow4FLQzGoxGWA68LAs4Nau7xTdtxATSwsF6s9c=",
+    "hash": "sha256-jB2tR53z9/ZHe/oI1TH4tQ0YrJmK7HiFCSzeI3brnRI=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.33.0",
+    "rev": "v1.34.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-nbz0QEIfnLnMOE/zGILMVBK+/hjYLlWeIqiwOLP6ebQ="
+    "vendorHash": "sha256-f6sqKzoQAUpCDrpQdMuK1SuLTKrd2PUn/J6VuKxXGZI="
   },
   "cloudflare": {
     "hash": "sha256-FPZBU93x82+szFCC8djO88WFedbsVRFlVxZfTf4uAxI=",
@@ -1291,13 +1291,13 @@
     "vendorHash": "sha256-X2YjJvMboS04ViaIP1ebzIX8txumlvTEpGmEAlZNV9E="
   },
   "talos": {
-    "hash": "sha256-49woELLSpheuyGnXuwamZwsHdOfjwSB4v8/INzSrMRU=",
+    "hash": "sha256-kGAzJtc09wL9hvu13rqZnFWdwu6mrfdxgm8XxigKzK4=",
     "homepage": "https://registry.terraform.io/providers/siderolabs/talos",
     "owner": "siderolabs",
     "repo": "terraform-provider-talos",
-    "rev": "v0.7.1",
+    "rev": "v0.8.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-iEi3zkr4kIZ1FTAft/Fy//v7xtlX/8uSrnbuxgFTDyA="
+    "vendorHash": "sha256-V0dK5G3zheyyqexBud+9Hg9ExYI/9X1wuYx+lEn6pVg="
   },
   "temporalcloud": {
     "hash": "sha256-scM3cz4DVv66+VyLKWSjNbGFRcbUt9uZU4QooWQPioI=",

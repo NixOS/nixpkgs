@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "carapace-bridge";
-  version = "1.2.7";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bridge";
-    tag = "v${version}";
-    hash = "sha256-8i516GwXJFEB4VdvsV1KS0q2U9ZbpRBmZxqzTrzYlPk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y69byUUDJJ+nJuZ6lcl+McFtJGYb5zgE8+QTbhoZ9Bc=";
   };
 
   # buildGoModule try to run `go mod vendor` instead of `go work vendor` on the
@@ -36,9 +36,9 @@ buildGoModule rec {
   meta = {
     description = "Multi-shell completion bridge for carapace";
     homepage = "https://carapace.sh/";
-    changelog = "https://github.com/carapace-sh/carapace-bridge/releases/tag/v${version}";
+    changelog = "https://github.com/carapace-sh/carapace-bridge/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ famfo ];
     license = lib.licenses.mit;
     mainProgram = "carapace-bridge";
   };
-}
+})

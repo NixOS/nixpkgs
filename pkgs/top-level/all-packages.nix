@@ -405,7 +405,7 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
-  mumps_par = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
+  mumps-mpi = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web {
     protobuf = protobuf_21;
@@ -2913,7 +2913,7 @@ with pkgs;
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
   emscripten = callPackage ../development/compilers/emscripten {
-    llvmPackages = llvmPackages_19;
+    llvmPackages = llvmPackages_20;
   };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
@@ -8174,11 +8174,6 @@ with pkgs;
 
   geos_3_9 = callPackage ../development/libraries/geos/3.9.nix { };
 
-  inherit (callPackages ../development/libraries/getdns { })
-    getdns
-    stubby
-    ;
-
   gettext = callPackage ../development/libraries/gettext { };
 
   gdalMinimal = gdal.override {
@@ -8190,8 +8185,6 @@ with pkgs;
   };
 
   givaro = callPackage ../development/libraries/givaro { };
-  givaro_3 = callPackage ../development/libraries/givaro/3.nix { };
-  givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix { };
 
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
@@ -13287,10 +13280,6 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  lumail = callPackage ../applications/networking/mailreaders/lumail {
-    lua = lua5_1;
-  };
-
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris { };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
   lutris-free = lutris.override {
@@ -14981,9 +14970,13 @@ with pkgs;
     physfs = physfs_2;
   };
 
-  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
+  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
+    inherit (python3Packages) beancount beangulp;
+  };
 
-  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
+  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix {
+    inherit (python3Packages) beancount beancount-plugin-utils;
+  };
 
   cataclysmDDA = callPackage ../games/cataclysm-dda { };
 

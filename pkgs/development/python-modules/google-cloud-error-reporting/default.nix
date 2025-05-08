@@ -1,17 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   google-api-core,
   google-cloud-logging,
-  google-cloud-testutils,
-  mock,
   proto-plus,
   protobuf,
+
+  # testing
+  google-cloud-testutils,
+  mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,15 +24,16 @@ buildPythonPackage rec {
   version = "1.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_error_reporting";
-    inherit version;
-    hash = "sha256-1ir8o3jwzmfi7E8QPTn3E6RGtTOL9KM05NRaMRYzh5A=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-error-reporting";
+    tag = "v${version}";
+    hash = "sha256-z1ogY4W4RGKv0h2jW0jVpIHUY1X3P0Vw++3jYtnYTRA=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = [
     google-api-core
@@ -61,11 +67,11 @@ buildPythonPackage rec {
     "google.cloud.errorreporting_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
     changelog = "https://github.com/googleapis/python-error-reporting/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

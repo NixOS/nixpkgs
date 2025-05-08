@@ -28,7 +28,7 @@ let
   abseil-cpp = abseil-cpp_202407;
   protobuf = protobuf_29.override { inherit abseil-cpp; };
   python-protobuf = python3.pkgs.protobuf5.override { inherit protobuf; };
-  pybind11-protobuf = python3.pkgs.pybind11-protobuf.override { inherit protobuf; };
+  pybind11-protobuf = python3.pkgs.pybind11-protobuf.override { protobuf_29 = protobuf; };
 
 in
 stdenv.mkDerivation (finalAttrs: {

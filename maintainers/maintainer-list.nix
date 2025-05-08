@@ -1301,6 +1301,13 @@
     githubId = 45176912;
     name = "Tomasz Hołubowicz";
   };
+  altsalt = {
+    email = "salt@sal.td";
+    github = "altsalt";
+    githubId = 2441328;
+    matrix = "@salt:sal.td";
+    name = "Wm Salt Hale";
+  };
   alunduil = {
     email = "alunduil@gmail.com";
     github = "alunduil";
@@ -1589,6 +1596,13 @@
     githubId = 7644264;
     name = "Andrew Gazelka";
   };
+  AndrewKvalheim = {
+    email = "andrew@kvalhe.im";
+    github = "AndrewKvalheim";
+    githubId = 1844746;
+    matrix = "@andrew:kvalhe.im";
+    name = "Andrew Kvalheim";
+  };
   andrewrk = {
     email = "superjoe30@gmail.com";
     github = "andrewrk";
@@ -1688,6 +1702,11 @@
     github = "auroraanna";
     githubId = 81317317;
     name = "Anna Aurora";
+  };
+  anninzy = {
+    github = "anninzy";
+    githubId = 143312793;
+    name = "Annin";
   };
   anoa = {
     matrix = "@andrewm:amorgan.xyz";
@@ -19860,6 +19879,12 @@
     githubId = 20524473;
     name = "Psyanticy";
   };
+  psyclyx = {
+    email = "me@psyclyx.xyz";
+    github = "psyclyx";
+    githubId = 176348922;
+    name = "psyclyx";
+  };
   psydvl = {
     email = "psydvl@fea.st";
     github = "psydvl";
@@ -21615,6 +21640,12 @@
     email = "emre@cebi.io";
     github = "samemrecebi";
     githubId = 64419750;
+  };
+  samestep = {
+    name = "Sam Estep";
+    email = "sam@samestep.com";
+    github = "samestep";
+    githubId = 8246041;
   };
   samfundev = {
     name = "samfundev";

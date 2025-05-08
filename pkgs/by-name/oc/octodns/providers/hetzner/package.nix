@@ -12,24 +12,23 @@
 
 buildPythonPackage rec {
   pname = "octodns-hetzner";
-  # the latest release tag is over a year behind.
-  version = "0.0.2-unstable-2023-09-29";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-hetzner";
-    rev = "620840593a520dac9e365240b3ab361ded309c8e";
-    hash = "sha256-WdYy8tc0+PYsKuyp3uqOzbxwhLSZ+06L3JVaTSATEKM=";
+    tag = "v${version}";
+    hash = "sha256-JYVztSO38y4F+p0glgtT9/QRdt9uDnOziMFXxBikzLg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     octodns
     requests
   ];
@@ -41,11 +40,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Hetzner DNS provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-hetzner/";
-    changelog = "https://github.com/octodns/octodns-hetzner/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.octodns.members;
+    changelog = "https://github.com/octodns/octodns-hetzner/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    teams = [ lib.teams.octodns ];
   };
 }
