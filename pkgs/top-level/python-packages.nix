@@ -8304,6 +8304,8 @@ self: super: with self; {
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
 
+  llm-grok = callPackage ../development/python-modules/llm-grok { };
+
   llm-jq = callPackage ../development/python-modules/llm-jq { };
 
   llm-mistral = callPackage ../development/python-modules/llm-mistral { };
