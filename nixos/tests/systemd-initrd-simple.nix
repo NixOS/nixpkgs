@@ -50,6 +50,9 @@ import ./make-test-python.nix (
           newAvail = machine.succeed("df --output=avail / | sed 1d")
 
           assert int(oldAvail) < int(newAvail), "File system did not grow"
+
+      with subtest("no warnings from systemd about write permissions"):
+          machine.fail("journalctl -b 0 | grep 'is marked world-writable, which is a security risk as it is executed with privileges'")
     '';
   }
 )
