@@ -364,7 +364,7 @@ buildPythonPackage rec {
     ''
     + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
       export CUDNN_INCLUDE_DIR=${lib.getLib cudnn}/include
-      export CUDNN_LIB_DIR=${cudnn.lib}/lib
+      export CUDNN_LIB_DIR=${lib.getLib cudnn}/lib
     ''
     + lib.optionalString rocmSupport ''
       export ROCM_PATH=${rocmtoolkit_joined}
