@@ -7,6 +7,7 @@
   enable-llm-gguf ? false,
   enable-llm-jq ? false,
   enable-llm-ollama ? false,
+  enable-llm-openai-plugin ? false,
 }:
 
 let
@@ -19,6 +20,7 @@ let
     llm-gguf
     llm-jq
     llm-ollama
+    llm-openai-plugin
     ;
 in
 
@@ -31,6 +33,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-gemini [ llm-gemini ]
       ++ lib.optionals enable-llm-gguf [ llm-gguf ]
       ++ lib.optionals enable-llm-jq [ llm-jq ]
-      ++ lib.optionals enable-llm-ollama [ llm-ollama ];
+      ++ lib.optionals enable-llm-ollama [ llm-ollama ]
+      ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ];
   })
 )
