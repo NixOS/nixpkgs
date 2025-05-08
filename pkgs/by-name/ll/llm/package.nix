@@ -6,6 +6,7 @@
   enable-llm-gemini ? false,
   enable-llm-gguf ? false,
   enable-llm-jq ? false,
+  enable-llm-mistral ? false,
   enable-llm-ollama ? false,
   enable-llm-openai-plugin ? false,
 }:
@@ -19,6 +20,7 @@ let
     llm-gemini
     llm-gguf
     llm-jq
+    llm-mistral
     llm-ollama
     llm-openai-plugin
     ;
@@ -33,6 +35,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-gemini [ llm-gemini ]
       ++ lib.optionals enable-llm-gguf [ llm-gguf ]
       ++ lib.optionals enable-llm-jq [ llm-jq ]
+      ++ lib.optionals enable-llm-mistral [ llm-mistral ]
       ++ lib.optionals enable-llm-ollama [ llm-ollama ]
       ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ];
   })
