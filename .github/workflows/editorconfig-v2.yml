@@ -32,11 +32,16 @@ jobs:
         with:
           ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
 
+      - name: Get Nixpkgs revision for editorconfig-checker
+        run: |
+          # Pin to a commit from nixpkgs-unstable to avoid building from e.g. staging.
+          # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
+          rev=$(jq -r .rev ci/pinned-nixpkgs.json)
+          echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
+
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
         with:
-          # nixpkgs commit is pinned so that it doesn't break
-          # editorconfig-checker 2.4.0
-          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/c473cc8714710179df205b153f4e9fa007107ff9.tar.gz
+          nix_path: nixpkgs=${{ env.url }}
 
       - name: Checking EditorConfig
         run: |

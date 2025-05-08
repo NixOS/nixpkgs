@@ -60,6 +60,7 @@ def load_all_metrics(directory: Path) -> dict:
     return metrics
 
 def dataframe_to_markdown(df: pd.DataFrame) -> str:
+    df = df.sort_values(by=df.columns[0], ascending=True)
     markdown_lines = []
 
     # Header (get column names and format them)

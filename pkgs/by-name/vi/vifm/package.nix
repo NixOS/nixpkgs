@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if isFullPackage then "vifm-full" else "vifm";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    hash = "sha256-AfGeEU4p9IHSD6prNaQriDo/SHMk3bL3EHzhwQLEpJY=";
+    hash = "sha256-zRsF0lQ832gp1gsjvCJcb94T0+98EAj4IbkgmDfx4rA=";
   };
 
   nativeBuildInputs = [

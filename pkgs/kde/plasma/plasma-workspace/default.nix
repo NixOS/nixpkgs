@@ -17,7 +17,6 @@
   qttools,
   qqc2-breeze-style,
   gpsd,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";
@@ -32,13 +31,6 @@ mkKdeDerivation {
       xrdb = lib.getExe xorg.xrdb;
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
-    })
-
-    # Backport patch recommended by upstream
-    # FIXME: remove in 6.3.5
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/47d502353720004fa2d0e7b0065994b75b3e0ded.patch";
-      hash = "sha256-wt0ZIF4zcEOmP0o4ZcjBYxVjr2hVUlOKVJ8SMNSYt68=";
     })
   ];
 

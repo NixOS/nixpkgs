@@ -1,31 +1,35 @@
 {
-  fetchFromGitHub,
   lib,
   llvmPackages,
+  fetchFromGitHub,
   makeBinaryWrapper,
-  nix-update-script,
   which,
+  nix-update-script,
 }:
 
 let
   inherit (llvmPackages) stdenv;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2025-01";
+  version = "dev-2025-04";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "dev-2025-01";
-    hash = "sha256-GXea4+OIFyAhTqmDh2q+ewTUqI92ikOsa2s83UH2r58=";
+    tag = finalAttrs.version;
+    hash = "sha256-dVC7MgaNdgKy3X9OE5ZcNCPnuDwqXszX9iAoUglfz2k=";
   };
 
   patches = [
     ./darwin-remove-impure-links.patch
   ];
 
-  LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+  postPatch = ''
+    patchShebangs ./build_odin.sh
+  '';
+
+  LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
 
   dontConfigure = true;
 
@@ -72,6 +76,7 @@ stdenv.mkDerivation {
     description = "Fast, concise, readable, pragmatic and open sourced programming language";
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
+    changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
@@ -80,4 +85,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
   };
-}
+})

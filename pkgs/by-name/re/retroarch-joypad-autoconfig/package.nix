@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "retroarch-joypad-autoconfig";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "retroarch-joypad-autoconfig";
     rev = "v${version}";
-    hash = "sha256-TdNyQOMLBgwpeYDE8qrRrIMUYcagiBJ02rSVU4Ycn1o=";
+    hash = "sha256-yLxJaHvscNHvuX1ak1bQ1yGMYv5yO4gTj53neT+JsRo=";
   };
 
   makeFlags = [

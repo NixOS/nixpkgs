@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/run-test.sh
   '';
 
-  preCheck = ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # For test_trash_file
     export HOME=$(mktemp -d)
 

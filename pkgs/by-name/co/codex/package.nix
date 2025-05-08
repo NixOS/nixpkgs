@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codex";
-  version = "0.1.2504251709"; # from codex-cli/package.json
+  version = "0.1.2504301751"; # from codex-cli/package.json
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
-    rev = "103093f79324482020490cb658cc1a696aece3bc";
-    hash = "sha256-GmMQi67HRanGKhiTKX8wgnpUbA1UwkPVe3siU4qC02Y=";
+    rev = "463a230991393c7b39f2543a9766e6133ef65393";
+    hash = "sha256-CSd5e6BsGEigENjPu6R6s+QhZRLQ2CTmI5XBI9mPkmA=";
   };
 
   pnpmWorkspaces = [ "@openai/codex" ];

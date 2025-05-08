@@ -171,14 +171,6 @@ PATH
       grpc
 
 PATH
-  remote: vendor/gems/graphql
-  specs:
-    graphql (2.4.11)
-      base64
-      fiber-storage
-      logger
-
-PATH
   remote: vendor/gems/mail-smtp_pool
   specs:
     mail-smtp_pool (0.1.0)
@@ -519,7 +511,7 @@ GEM
       thor (>= 0.19, < 2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
-    devfile (0.4.0)
+    devfile (0.4.3)
     device_detector (1.0.0)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -939,6 +931,10 @@ GEM
       grape
       rack
     graphlyte (1.0.0)
+    graphql (2.4.13)
+      base64
+      fiber-storage
+      logger
     graphql-docs (5.0.0)
       commonmarker (~> 0.23, >= 0.23.6)
       escape_utils (~> 1.2)
@@ -2053,7 +2049,7 @@ DEPENDENCIES
   declarative_policy (~> 1.1.0)
   deprecation_toolkit (~> 1.5.1)
   derailed_benchmarks
-  devfile (~> 0.4.0)
+  devfile (~> 0.4.3)
   device_detector
   devise (~> 4.9.3)
   devise-pbkdf2-encryptable (~> 0.0.0)!
@@ -2152,7 +2148,7 @@ DEPENDENCIES
   grape-swagger-entity (~> 0.5.5)
   grape_logging (~> 1.8, >= 1.8.4)
   graphlyte (~> 1.0.0)
-  graphql (= 2.4.11)!
+  graphql (= 2.4.13)
   graphql-docs (~> 5.0.0)
   grpc (= 1.63.0)
   gssapi (~> 1.3.1)

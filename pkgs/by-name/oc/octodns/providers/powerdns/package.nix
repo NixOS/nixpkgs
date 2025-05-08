@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "octodns-powerdns";
-  version = "0.0.7";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-powerdns";
     tag = "v${version}";
-    hash = "sha256-wa/SHyTfj+iHnTq8t+3yzyGn+YULOdI88Aii16qPwPM=";
+    hash = "sha256-bdCX1oHFZRYr9PvLVbag/La087DMSXZfZ2W0mXffcUY=";
   };
 
   build-system = [
@@ -42,11 +42,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PowerDNS API provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-powerdns/";
-    changelog = "https://github.com/octodns/octodns-powerdns/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.octodns.members;
+    changelog = "https://github.com/octodns/octodns-powerdns/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    teams = [ lib.teams.octodns ];
   };
 }

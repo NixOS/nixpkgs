@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "openrsync";
-  version = "unstable-2022-05-08";
+  version = "unstable-2025-01-27";
 
   src = fetchFromGitHub {
     owner = "kristapsdz";
     repo = "openrsync";
-    rev = "f50d0f8204ea18306a0c29c6ae850292ea826995";
-    hash = "sha256-4tygoCQGIM0wqLfdWp55/oOPhD3lPUuTd9/LXQAASXU=";
+    rev = "a257c0f495af2b5ee6b41efc6724850a445f87ed";
+    hash = "sha256-pc1lo8d5FY8/1K2qUWzSlrSnA7jnRg4FQRyHqC8I38k=";
   };
 
   # Uses oconfigure

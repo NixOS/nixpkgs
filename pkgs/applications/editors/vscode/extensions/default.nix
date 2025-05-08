@@ -9,7 +9,6 @@
   jq,
   lib,
   llvmPackages,
-  llvmPackages_14,
   moreutils,
   protobuf,
   python3Packages,
@@ -824,6 +823,8 @@ let
           license = lib.licenses.mpl20;
         };
       };
+
+      budparr.language-hugo-vscode = callPackage ./budparr.language-hugo-vscode { };
 
       bungcip.better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -5119,7 +5120,7 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb { llvmPackages = llvmPackages_14; };
+      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb { };
 
       valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
         mktplcRef = {

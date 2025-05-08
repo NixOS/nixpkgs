@@ -9,7 +9,6 @@
   openssl,
   pcre,
   nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
-  Security ? darwin.Security,
 }:
 
 let

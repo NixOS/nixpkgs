@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firecracker";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
     rev = "v${version}";
-    hash = "sha256-Iqhj4BteFTBhhgQmyJVNdRHrXd/kaMRbOJ3eRKilYpw=";
+    hash = "sha256-joypOLe/cagPT+sNd9LEY5ueCPYjK47/RzNZBOZBbHQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-G6PtJb0Qh7TOq5PcfoYvkY4LEwRj63RbDdxYbzqVxkc=";
+  cargoHash = "sha256-/ko1WjJ2Z7B00hcTfqNiOqWj0QmDNDroT9HoaySoeYU=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
   AWS_LC_SYS_EXTERNAL_BINDGEN = "true";

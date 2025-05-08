@@ -82,29 +82,10 @@ buildPythonPackage rec {
     # GetPrefPath for OrgName/AppName is None
     "test_SDL_GetPrefPath"
 
-    # broken with sdl2-compat
-    "test_SDL_AddDelHintCallback"
-    "test_SDL_HasIntersectionF"
-    "test_SDL_IntersectFRect"
-    "test_SDL_UnionFRect"
-    "test_SDL_EncloseFPoints"
-    "test_SDL_IntersectFRectAndLine"
-    "test_SDL_GetSetTextureScaleMode"
-    "test_init"
-    "test_logical_size"
-    "test_copy"
-
-    # sdl2-compat fails on these in our build sandbox
-    "test_create_sprite"
-    "test_create_software_sprite"
-    "test_create_texture_sprite"
-    "test_from_image"
-    "test_from_surface"
-    "test_from_text"
-
-    "test_SDL_Init"
-    "test_SDL_InitSubSystem"
-    "test_SDL_SetWindowIcon"
+    # TODO: Remove once sdl2-compat is updated to 2.32.56
+    "test_SDL_SetWindowDisplayMode"
+    "test_SDL_SetWindowFullscreen"
+    "test_SDL_GetPlatform"
   ];
 
   meta = {
