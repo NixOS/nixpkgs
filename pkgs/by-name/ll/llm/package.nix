@@ -3,6 +3,7 @@
   python3Packages,
   enable-llm-anthropic ? false,
   enable-llm-cmd ? false,
+  enable-llm-command-r ? false,
   enable-llm-gemini ? false,
   enable-llm-gguf ? false,
   enable-llm-jq ? false,
@@ -17,6 +18,7 @@ let
     llm
     llm-anthropic
     llm-cmd
+    llm-command-r
     llm-gemini
     llm-gguf
     llm-jq
@@ -32,6 +34,7 @@ toPythonApplication (
       (finalAttrs.propagatedBuildInputs or [ ])
       ++ lib.optionals enable-llm-anthropic [ llm-anthropic ]
       ++ lib.optionals enable-llm-cmd [ llm-cmd ]
+      ++ lib.optionals enable-llm-cmd [ llm-command-r ]
       ++ lib.optionals enable-llm-gemini [ llm-gemini ]
       ++ lib.optionals enable-llm-gguf [ llm-gguf ]
       ++ lib.optionals enable-llm-jq [ llm-jq ]
