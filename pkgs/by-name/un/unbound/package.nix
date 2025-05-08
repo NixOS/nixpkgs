@@ -48,6 +48,8 @@
   withMakeWrapper ? !stdenv.hostPlatform.isMinGW,
   libnghttp2,
 
+  # for passthru.updateScript
+  nix-update-script,
   # for passthru.tests
   gnutls,
 }:
@@ -203,17 +205,24 @@ stdenv.mkDerivation (finalAttrs: {
       ) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'"
     ) (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
-  passthru.tests = {
-    inherit gnutls;
-    nixos-test = nixosTests.unbound;
-    nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=release-(.+)"
+      ];
+    };
+    tests = {
+      inherit gnutls;
+      nixos-test = nixosTests.unbound;
+      nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Validating, recursive, and caching DNS resolver";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = [ ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ Scrumplex ];
+    platforms = with lib.platforms; unix ++ windows;
   };
 })
