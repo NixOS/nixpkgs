@@ -59,11 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontPatchELF = true; # don't strip rpath
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl2-compat ]))
-  ];
+  cmakeFlags =
+    let
+      rpath = lib.makeLibraryPath [ sdl2-compat ];
+    in
+    [
+      (lib.cmakeFeature "CMAKE_INSTALL_RPATH" rpath)
+      (lib.cmakeFeature "CMAKE_BUILD_RPATH" rpath)
+      (lib.cmakeBool "SDL12TESTS" finalAttrs.finalPackage.doCheck)
+    ];
 
   enableParallelBuilding = true;
+
+  # Darwin fails with "Critical error: required built-in appearance SystemAppearance not found"
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  checkPhase = ''
+    runHook preCheck
+    ./testver
+    runHook postCheck
+  '';
 
   postInstall = ''
     # allow as a drop in replacement for SDL
