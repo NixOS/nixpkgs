@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook
 }:
 
 buildGoModule rec {
@@ -40,6 +41,12 @@ buildGoModule rec {
       --fish <($out/bin/containerlab completion fish) \
       --zsh <($out/bin/containerlab completion zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Container-based networking lab";
