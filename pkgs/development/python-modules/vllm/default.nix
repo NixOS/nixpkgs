@@ -427,5 +427,11 @@ buildPythonPackage rec {
       happysalada
       lach
     ];
+    badPlatforms = [
+      # CMake Error at cmake/cpu_extension.cmake:78 (find_isa):
+      # find_isa Function invoked with incorrect arguments for function named:
+      # find_isa
+      "x86_64-darwin"
+    ];
   };
 }
