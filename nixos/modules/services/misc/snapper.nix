@@ -334,6 +334,10 @@ in
         unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
       };
 
+      systemd.tmpfiles.rules = lib.mapAttrsToList (
+        configName: configOptions: "Q ${configOptions.SUBVOLUME}/.snapshots 0755 root root -"
+      ) cfg.configs;
+
       assertions = lib.concatMap (
         name:
         let
