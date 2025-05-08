@@ -26,6 +26,9 @@ supported_versions = {
     "47": "47",
 }
 
+# shell versions that we want to put into the gnomeExtensions attr set
+versions_to_merge = ["45", "46", "47"]
+
 # Some type alias to increase readability of complex compound types
 PackageName = str
 ShellVersion = str
@@ -338,15 +341,11 @@ def serialize_extensions(processed_extensions: list[dict[str, Any]]) -> None:
         out.write("]\n")
 
 
-def find_collisions() -> dict[PackageName, list[Uuid]]:
-    # Find the name collisions only for the last 3 shell versions
-    last_3_versions = sorted(
-        supported_versions.keys(),
-        key=lambda v: float(v),
-        reverse=True,
-    )[:3]
+def find_collisions(
+    versions: list[str],
+) -> dict[PackageName, list[Uuid]]:
     package_name_registry_for_versions = [
-        v for k, v in package_name_registry.items() if k in last_3_versions
+        v for k, v in package_name_registry.items() if k in versions
     ]
     # Merge all package names into a single dictionary
     package_name_registry_filtered: dict[PackageName, set[Uuid]] = {}
@@ -378,7 +377,7 @@ def main() -> None:
         # Check that the generated file actually is valid JSON, just to be sure
         json.load(out)
 
-    collisions = find_collisions()
+    collisions = find_collisions(versions_to_merge)
 
     with open(updater_dir_path / "collisions.json", "w") as out:
         json.dump(collisions, out, indent=2, ensure_ascii=False)
