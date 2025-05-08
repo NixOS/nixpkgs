@@ -6815,6 +6815,13 @@
     githubId = 277927;
     name = "Dylan Taylor";
   };
+  dyniec = {
+    email = "pawel+nixpkgs@dybiec.info";
+    matrix = "@dyniec:matrix.org";
+    github = "dyniec";
+    githubId = 7108963;
+    name = "Paweł Dybiec";
+  };
   dysinger = {
     email = "tim@dysinger.net";
     github = "dysinger";
