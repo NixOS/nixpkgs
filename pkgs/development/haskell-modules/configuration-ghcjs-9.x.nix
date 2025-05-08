@@ -61,4 +61,6 @@ with haskellLib;
     sha256 = "sha256-n2q4FGf/pPcI1bhb9srHjHLzaNVehkdN6kQgL0F4MMg=";
   }) super.splitmix;
 
+  # See https://gitlab.haskell.org/ghc/ghc/-/issues/26019#note_621324, without this flag the build OOMs
+  SHA = haskellLib.appendConfigureFlag "--ghc-option=-fignore-interface-pragmas" super.SHA;
 })
