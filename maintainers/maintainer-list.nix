@@ -5829,6 +5829,11 @@
     githubId = 39909293;
     name = "Dominic Delabruere";
   };
+  ddogfoodd = {
+    github = "ddogfoodd";
+    githubId = 58050402;
+    name = "Jost Alemann";
+  };
   dduan = {
     email = "daniel@duan.ca";
     github = "dduan";
