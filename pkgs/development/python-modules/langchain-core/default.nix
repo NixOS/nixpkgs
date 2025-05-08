@@ -29,6 +29,9 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -85,9 +88,11 @@ buildPythonPackage rec {
       doCheck = true;
     });
 
-    updateScript = {
-      command = [ ./update.sh ];
-      supportedFeatures = [ "commit" ];
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "langchain-core==([0-9.]+)"
+      ];
     };
   };
 
