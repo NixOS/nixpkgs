@@ -1647,6 +1647,8 @@ let
   #
   mkAliasDefinitions = mkAliasDefinitionsWith {
     keepPriority = false;
+    # Set `keepLocation = false` to preserve existing behaviour. TODO: Should it be true?
+    keepLocation = false;
   };
 
   mkAliasAndWrapDefinitions =
@@ -1654,6 +1656,8 @@ let
     mkAliasDefinitionsWith {
       inherit wrap;
       keepPriority = false;
+      # Set `keepLocation = false` to preserve existing behaviour. TODO: Should it be true?
+      keepLocation = false;
     };
 
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
@@ -1664,6 +1668,8 @@ let
     wrap:
     mkAliasDefinitionsWith {
       inherit wrap;
+      # Set `keepLocation = false` to preserve existing behaviour. TODO: Should it be true?
+      keepLocation = false;
     };
 
   /**
@@ -1704,6 +1710,10 @@ let
 
       : Whether to wrap definition with the option's overall priority (`true` by default)
 
+      `keepLocation` (Bool)
+
+      : Whether to preserve definitions original file location (`true` by default)
+
     `option` (Option or Any)
 
     : The option from which to copy definitions, if defined.
@@ -1712,7 +1722,7 @@ let
     # Type
 
     ```
-    mkAliasDefinitionsWith :: { wrap :: Function, keepPriority :: Bool } -> Option -> AttrSet
+    mkAliasDefinitionsWith :: { wrap :: Function, keepPriority :: Bool, keepLocation :: Bool } -> Option -> AttrSet
     ```
 
     # Example
@@ -1734,12 +1744,17 @@ let
     {
       wrap ? id,
       keepPriority ? true,
+      keepLocation ? true,
     }:
     option:
     let
       prio = option.highestPrio or defaultOverridePriority;
       wrapPrio = if keepPriority then mkOverride prio else id;
-      defs = map wrapPrio option.definitions;
+      defs =
+        if keepLocation then
+          map (def: mkDefinition (def // { value = wrapPrio def.value; })) option.definitionsWithLocations
+        else
+          map wrapPrio option.definitions;
     in
     mkIf option.isDefined (wrap (mkMerge defs));
 
@@ -2089,6 +2104,8 @@ let
       use,
       # Legacy option, enabled by default: whether to preserve the priority of definitions in `old`.
       withPriority ? true,
+      # Legacy option, enabled by default: whether to preserve the location of definitions in `old`.
+      keepLocation ? true,
       # A boolean that defines the `mkIf` condition for `to`.
       # If the condition evaluates to `true`, and the `to` path points into an
       # `attrsOf (submodule ...)`, then `doRename` would cause an empty module to
@@ -2158,6 +2175,7 @@ let
               "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
         })
         (mkAliasDefinitionsWith {
+          inherit keepLocation;
           keepPriority = withPriority;
           wrap = setAttrByPath to;
         } fromOpt)
