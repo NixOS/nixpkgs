@@ -288,6 +288,7 @@ in
       hardware.bluetooth.enable = mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
+      security.rtkit.enable = mkDefault true;
       services.accounts-daemon.enable = true;
       services.dleyna.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
@@ -378,12 +379,9 @@ in
 
       services.orca.enable = notExcluded pkgs.orca;
 
-      fonts.packages = with pkgs; [
-        cantarell-fonts
-        dejavu_fonts
-        source-code-pro # Default monospace font in 3.32
-        source-sans
-      ];
+      fonts.packages = utils.removePackagesByName [
+        pkgs.adwaita-fonts
+      ] config.environment.gnome.excludePackages;
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
