@@ -19,7 +19,7 @@ in
       };
 
       dates = lib.mkOption {
-        type = lib.types.singleLineStr;
+        type = with lib.types; either singleLineStr (listOf str);
         default = "03:15";
         example = "weekly";
         description = ''
@@ -86,7 +86,11 @@ in
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       serviceConfig.Type = "oneshot";
-      startAt = lib.optional cfg.automatic cfg.dates;
+      startAt =
+        if lib.isList cfg.dates then
+          lib.optionals cfg.automatic cfg.dates
+        else
+          lib.optional cfg.automatic cfg.dates;
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {
