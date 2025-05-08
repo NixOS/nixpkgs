@@ -38,6 +38,7 @@
   xorg,
   yyjson,
   zlib,
+  zfs,
   # Feature flags
   audioSupport ? true,
   brightnessSupport ? true,
@@ -54,6 +55,7 @@
   waylandSupport ? true,
   x11Support ? true,
   xfceSupport ? true,
+  zfsSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
@@ -175,6 +177,10 @@ stdenv.mkDerivation (finalAttrs: {
           #  Needed for XFWM theme and XFCE Terminal font.
           xfce.xfconf
         ]
+        ++ lib.optionals zfsSupport [
+          # Needed for zpool module
+          zfs
+        ]
       );
 
       macosDeps = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -198,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
 
       (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
+
+      (lib.cmakeBool "ENABLE_LIBZFS" zfsSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeBool "ENABLE_PULSE" audioSupport)
@@ -270,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Fast and highly customizable system info script.
 
-      Feature flags (all default to 'true' except rpmSupport and flashfetchSupport):
+      Feature flags (all default to 'true' except rpmSupport, flashfetchSupport and zfsSupport):
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
@@ -286,6 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
       * waylandSupport: Wayland display detection
       * x11Support: X11 display information
       * xfceSupport: XFCE integration for theme and terminal font detection
+      * zfsSupport: zpool information
     '';
   };
 })
