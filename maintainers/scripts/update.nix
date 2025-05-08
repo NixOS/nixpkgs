@@ -94,6 +94,7 @@ let
               path == rootPath
               || evaluatedPathContent.recurseForDerivations or false
               || evaluatedPathContent.recurseForRelease or false
+              || evaluatedPathContent.__recurseIntoDerivationForReleaseJobs or false
             then
               dedupResults (
                 lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [ name ]) elem) evaluatedPathContent
