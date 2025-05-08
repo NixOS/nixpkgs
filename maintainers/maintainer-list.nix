@@ -15104,6 +15104,12 @@
     githubId = 31626748;
     name = "Martin Ramm";
   };
+  mart-mihkel = {
+    email = "mart.mihkel.aun@gmail.com";
+    github = "mart-mihkel";
+    githubId = 73405010;
+    name = "Mart-Mihkel Aun";
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
