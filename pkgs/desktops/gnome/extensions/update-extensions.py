@@ -336,7 +336,7 @@ def find_collisions(
             if shell_version in extension["shell_version_map"]:
                 package_name_registry.setdefault(pname, set()).add(uuid)
     return {
-        pname: list(uuids)
+        pname: sorted(uuids)
         for pname, uuids in package_name_registry.items()
         if len(uuids) > 1
     }
