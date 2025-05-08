@@ -12,6 +12,7 @@
   enable-llm-mistral ? false,
   enable-llm-ollama ? false,
   enable-llm-openai-plugin ? false,
+  enable-llm-openrouter ? false,
 }:
 
 let
@@ -29,6 +30,7 @@ let
     llm-mistral
     llm-ollama
     llm-openai-plugin
+    llm-openrouter
     ;
 in
 
@@ -46,6 +48,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-jq [ llm-jq ]
       ++ lib.optionals enable-llm-mistral [ llm-mistral ]
       ++ lib.optionals enable-llm-ollama [ llm-ollama ]
-      ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ];
+      ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ]
+      ++ lib.optionals enable-llm-openrouter [ llm-openrouter ];
   })
 )
