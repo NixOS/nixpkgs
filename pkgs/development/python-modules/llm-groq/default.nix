@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-groq,
   groq,
 }:
 
@@ -29,9 +29,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_groq" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-groq;
 
   meta = {
     description = "LLM plugin providing access to Groqcloud models.";

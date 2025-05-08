@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   llm,
+  llm-fragments-pypi,
   httpx,
 }:
 
@@ -28,9 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_fragments_pypi" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-fragments-pypi;
 
   meta = {
     description = "LLM fragments plugin for PyPI packages metadata";

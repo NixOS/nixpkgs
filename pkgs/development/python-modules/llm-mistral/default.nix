@@ -1,12 +1,12 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   httpx,
   httpx-sse,
   llm,
+  llm-mistral,
   pytestCheckHook,
   pytest-asyncio,
   pytest-httpx,
@@ -44,9 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_mistral" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-mistral;
 
   meta = {
     description = "LLM plugin providing access to Mistral models using the Mistral API";

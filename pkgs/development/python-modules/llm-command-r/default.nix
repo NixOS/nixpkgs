@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-command-r,
   cohere,
   pytestCheckHook,
   pytest-recording,
@@ -38,9 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_command_r" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-command-r;
 
   meta = {
     description = "Access the Cohere Command R family of models";
