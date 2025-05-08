@@ -9,7 +9,25 @@
   vulnix,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python3;
+    packageOverrides = self: super: {
+      pyrate-limiter = super.pyrate-limiter.overridePythonAttrs (oldAttrs: rec {
+        version = "2.10.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
   version = "1.7.2";
   pyproject = true;
@@ -32,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
       lib.makeBinPath [
         git
         nix
-        python3.pkgs.graphviz
+        python.pkgs.graphviz
         nix-visualize
         vulnix
         grype
@@ -40,9 +58,9 @@ python3.pkgs.buildPythonApplication rec {
     }"
   ];
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = [ python.pkgs.setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python.pkgs; [
     beautifulsoup4
     colorlog
     dfdiskcache
