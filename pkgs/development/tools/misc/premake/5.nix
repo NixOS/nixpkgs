@@ -2,24 +2,30 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libuuid,
+
+  # build inputs
   cacert,
+  libuuid,
+
+  # build inputs (darwin)
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "premake5";
   version = "5.0.0-beta4";
 
   src = fetchFromGitHub {
     owner = "premake";
     repo = "premake-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sNLCyIHWDW/8jIrMFCZAqtWsh4SRugqtPR4HaoW/Vzk=";
   };
 
   buildInputs =
-    [ libuuid ]
+    [
+      libuuid
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       readline
     ];
@@ -28,11 +34,10 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       substituteInPlace contrib/curl/premake5.lua \
-        --replace "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
+        --replace-fail "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace premake5.lua \
-        --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5 \
         --replace-fail '"-arch arm64"' '""' \
         --replace-fail '"-arch x86_64"' '""'
     ''
@@ -40,17 +45,21 @@ stdenv.mkDerivation rec {
       substituteInPlace \
         binmodules/example/premake5.lua \
         binmodules/luasocket/premake5.lua \
-        --replace SharedLib StaticLib
+        --replace-fail SharedLib StaticLib
     '';
 
   buildPhase =
     if stdenv.hostPlatform.isDarwin then
+      # Error compiling the builtin zlib source, but it's not used currently
       ''
-        make -f Bootstrap.mak osx
+        make PREMAKE_OPTS="--zlib-src=none" \
+             PLATFORM="Universal" \
+             -f Bootstrap.mak osx
       ''
     else
       ''
-        make -f Bootstrap.mak linux
+        make PLATFORM=${stdenv.hostPlatform.linuxArch} \
+          -f Bootstrap.mak linux
       '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -71,6 +80,12 @@ stdenv.mkDerivation rec {
     description = "Simple build configuration and project generation tool using lua";
     mainProgram = "premake5";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    maintainers = [ lib.maintainers.sarahec ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
-}
+})

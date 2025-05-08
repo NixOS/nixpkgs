@@ -35,14 +35,13 @@ let
     fixedPoints
     lists
     strings
-    trivial
     versions
     ;
   # Backbone
   gpus = builtins.import ../development/cuda-modules/gpus.nix;
   nvccCompatibilities = builtins.import ../development/cuda-modules/nvcc-compatibilities.nix;
   flags = callPackage ../development/cuda-modules/flags.nix { inherit cudaVersion gpus; };
-  passthruFunction = final: ({
+  passthruFunction = final: {
     inherit cudaVersion lib pkgs;
     inherit gpus nvccCompatibilities flags;
     cudaMajorVersion = versions.major cudaVersion;
@@ -63,26 +62,14 @@ let
     # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
     cudaFlags = flags;
 
-    # Exposed as cudaPackages.backendStdenv.
-    # This is what nvcc uses as a backend,
-    # and it has to be an officially supported one (e.g. gcc11 for cuda11).
-    #
-    # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
-    # when linked with other C++ libraries.
-    # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
-    # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
-    backendStdenv = final.callPackage ../development/cuda-modules/backend-stdenv.nix { };
-
     # Loose packages
+    # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
+    # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically
+    # discovered and added to the package set.
 
     # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
     cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
-
-    cudnn-frontend = final.callPackage ../development/cuda-modules/cudnn-frontend/default.nix { };
-    saxpy = final.callPackage ../development/cuda-modules/saxpy { };
-    nccl = final.callPackage ../development/cuda-modules/nccl { };
-    nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
     tests =
       let
@@ -122,9 +109,7 @@ let
           };
       in
       attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
-
-    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
-  });
+  };
 
   mkVersionedPackageName =
     name: version:
@@ -135,7 +120,13 @@ let
 
   composedExtension = fixedPoints.composeManyExtensions (
     [
-      (import ../development/cuda-modules/setup-hooks/extension.nix)
+      (
+        final: _:
+        lib.packagesFromDirectoryRecursive {
+          inherit (final) callPackage;
+          directory = ../development/cuda-modules/packages;
+        }
+      )
       (callPackage ../development/cuda-modules/cuda/extension.nix { inherit cudaVersion; })
       (import ../development/cuda-modules/cuda/overrides.nix)
       (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
