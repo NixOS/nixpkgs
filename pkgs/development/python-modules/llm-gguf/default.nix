@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+    llm
   ];
 
   dependencies = [
     httpx
     llama-cpp-python
-    llm
   ];
 
   pythonImportsCheck = [ "llm_gguf" ];
