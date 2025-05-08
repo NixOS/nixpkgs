@@ -1114,6 +1114,8 @@ self: super: with self; {
 
   authres = callPackage ../development/python-modules/authres { };
 
+  auto-lazy-imports = callPackage ../development/python-modules/auto-lazy-imports { };
+
   autobahn = callPackage ../development/python-modules/autobahn { };
 
   autocommand = callPackage ../development/python-modules/autocommand { };
