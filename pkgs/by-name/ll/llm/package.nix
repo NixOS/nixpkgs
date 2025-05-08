@@ -17,6 +17,7 @@
   enable-llm-ollama ? false,
   enable-llm-openai-plugin ? false,
   enable-llm-openrouter ? false,
+  enable-llm-sentence-transformers ? false,
   enable-llm-templates-fabric ? false,
   enable-llm-templates-github ? false,
   enable-llm-venice ? false,
@@ -43,6 +44,7 @@ let
     llm-ollama
     llm-openai-plugin
     llm-openrouter
+    llm-sentence-transformers
     llm-templates-fabric
     llm-templates-github
     llm-venice
@@ -70,6 +72,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-ollama [ llm-ollama ]
       ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ]
       ++ lib.optionals enable-llm-openrouter [ llm-openrouter ]
+      ++ lib.optionals enable-llm-sentence-transformers [ llm-sentence-transformers ]
       ++ lib.optionals enable-llm-templates-fabric [ llm-templates-fabric ]
       ++ lib.optionals enable-llm-templates-github [ llm-templates-github ]
       ++ lib.optionals enable-llm-venice [ llm-venice ]
