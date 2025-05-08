@@ -172,5 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "Ladybird";
     # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
     broken = stdenv.hostPlatform.isDarwin;
+    knownVulnerabilities = [
+      "https://jessie.cafe/posts/pwning-ladybirds-libjs/"
+    ];
   };
 })
