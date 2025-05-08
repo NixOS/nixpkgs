@@ -1,0 +1,36 @@
+From 7275048e9eee8801f7a76ae22f351666b0966b0b Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Wed, 9 Apr 2025 08:12:06 +0400
+Subject: [PATCH 2/2] Add support for building with Swift Package Manager
+
+---
+ Package.swift | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 Package.swift
+
+diff --git a/Package.swift b/Package.swift
+new file mode 100644
+index 0000000..87c1241
+--- /dev/null
++++ b/Package.swift
+@@ -0,0 +1,17 @@
++// swift-tools-version: 5.8
++
++import PackageDescription
++
++let package = Package(
++    name: "desktoppr",
++    targets: [
++        .executableTarget(
++            name: "desktoppr",
++            path: "desktoppr",
++            exclude: [
++                "Info.plist",
++                "ToDo.markdown"
++            ]
++        ),
++    ]
++)
+-- 
+2.48.1
+
