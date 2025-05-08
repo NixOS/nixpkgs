@@ -260,6 +260,11 @@ pkgs.recurseIntoAttrs (rec {
     [ "$result" = 0 ]
   '';
 
+  # check that we do not generate an init.vim file if it is not needed
+  no_init_vim_file = runTest nvim_with_ftplugin ''
+    ${nvim_with_ftplugin}/bin/nvim -i NONE -e -c 'if len(getscriptinfo({"name":"init.vim"})) == 0 | quit | else | cquit | fi'
+  '';
+
   # check that the vim-doc hook correctly generates the tag
   # we know for a fact packer has a doc folder
   checkForTags = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
