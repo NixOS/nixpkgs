@@ -1,10 +1,16 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../.. -i python3 -p python3
 
+### After making change:
+### - Format the script by running: nix run nixpkgs#black pkgs/desktops/gnome/extensions/update-extensions.py
+### - Run the unit test by running: python3 -m unittest pkgs/desktops/gnome/extensions/update-extensions.py
+### - Run the type checking by running: nix run nixpkgs#mypy pkgs/desktops/gnome/extensions/update-extensions.py
+
 import base64
 import json
 import logging
 import argparse
+import unittest
 import subprocess
 import urllib.error
 import urllib.request
@@ -384,3 +390,53 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+class FindCollisions(unittest.TestCase):
+    extensions = [
+        {
+            "pname": "foo",
+            "uuid": "foo_38_to_40@doe.example",
+            "shell_version_map": {
+                "38": {},
+                "40": {},
+            },
+        },
+        {
+            "pname": "bar",
+            "uuid": "bar_42_to_45@chulsoo.example",
+            "shell_version_map": {
+                "42": {},
+                "43": {},
+                "44": {},
+                "45": {},
+            },
+        },
+        {
+            "pname": "bar",
+            "uuid": "bar_44_to_47@younghee.example",
+            "shell_version_map": {
+                "44": {},
+                "45": {},
+                "46": {},
+                "47": {},
+            },
+        },
+    ]
+
+    def test_no_collision(self) -> None:
+        self.assertEqual(
+            {},
+            find_collisions(self.extensions, ["40", "41", "42"]),
+        )
+
+    def test_collision(self) -> None:
+        self.assertEqual(
+            {
+                "bar": [
+                    "bar_42_to_45@chulsoo.example",
+                    "bar_44_to_47@younghee.example",
+                ],
+            },
+            find_collisions(self.extensions, ["45", "46", "47"]),
+        )
