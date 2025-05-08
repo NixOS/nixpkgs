@@ -52,6 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals openglSupport [ libGLU ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_SKIP_RPATH TRUE)' 'set(CMAKE_SKIP_RPATH FALSE)'
+  '';
+
+  dontPatchELF = true; # don't strip rpath
+
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl2-compat ]))
+  ];
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -65,25 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   # is patched to use these variables to produce correct flags for compiler.
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
-
-  postFixup = ''
-    for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
-      if [[ -L "$lib" ]]; then
-        ${
-          if stdenv.hostPlatform.isDarwin then
-            ''
-              install_name_tool ${
-                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") finalAttrs.buildInputs
-              } "$lib"
-            ''
-          else
-            ''
-              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.buildInputs}" "$lib"
-            ''
-        }
-      fi
-    done
-  '';
 
   meta = {
     homepage = "https://www.libsdl.org/";
