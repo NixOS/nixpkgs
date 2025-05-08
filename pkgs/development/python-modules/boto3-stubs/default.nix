@@ -359,7 +359,7 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.38.9";
+  version = "1.38.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -367,7 +367,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;
-    hash = "sha256-TNnEl09LymxJYq7y5kWjFiwyx9eGnJR9BCsFQ436qAQ=";
+    hash = "sha256-QnrqRjn7YptC1BjhOXLc0VahE9oEKQkgeHLrgBqPCcM=";
   };
 
   build-system = [ setuptools ];
