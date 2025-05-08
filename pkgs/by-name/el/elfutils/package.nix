@@ -117,6 +117,8 @@ stdenv.mkDerivation rec {
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   configureFlags =
     [
       "--program-prefix=eu-" # prevent collisions with binutils

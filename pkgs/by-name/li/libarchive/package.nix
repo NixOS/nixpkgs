@@ -123,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
   preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
