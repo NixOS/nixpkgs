@@ -39,7 +39,7 @@ mkWrapper "sdk" (
       ''
         mkdir -p "$out"/share/dotnet
         cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
-        cp -R "${cli}"/nix-support "$out"/
+        [ -d "${cli}"/nix-support ] && cp -R "${cli}"/nix-support "$out"/
         mkdir "$out"/bin
         ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
       ''
