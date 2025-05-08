@@ -15,6 +15,7 @@
   enable-llm-openai-plugin ? false,
   enable-llm-openrouter ? false,
   enable-llm-venice ? false,
+  enable-llm-video-frames ? false,
 }:
 
 let
@@ -35,6 +36,7 @@ let
     llm-openai-plugin
     llm-openrouter
     llm-venice
+    llm-video-frames
     ;
 in
 
@@ -55,6 +57,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-ollama [ llm-ollama ]
       ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ]
       ++ lib.optionals enable-llm-openrouter [ llm-openrouter ]
-      ++ lib.optionals enable-llm-venice [ llm-venice ];
+      ++ lib.optionals enable-llm-venice [ llm-venice ]
+      ++ lib.optionals enable-llm-video-frames [ llm-video-frames ];
   })
 )
