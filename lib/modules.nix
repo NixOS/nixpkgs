@@ -1424,20 +1424,103 @@ let
   # as a definition, as the new definition will not keep the mkOverride /
   # mkDefault properties of the previous option.
   #
-  mkAliasDefinitions = mkAliasAndWrapDefinitions id;
-  mkAliasAndWrapDefinitions = wrap: option: mkAliasIfDef option (wrap (mkMerge option.definitions));
+  mkAliasDefinitions = mkAliasDefinitionsWith {
+    keepPriority = false;
+  };
+
+  mkAliasAndWrapDefinitions =
+    wrap:
+    mkAliasDefinitionsWith {
+      inherit wrap;
+      keepPriority = false;
+    };
 
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
   #
   # If a priority is not set, it assumes a priority of defaultOverridePriority.
   mkAliasAndWrapDefsWithPriority =
-    wrap: option:
+    wrap:
+    mkAliasDefinitionsWith {
+      inherit wrap;
+    };
+
+  /**
+    A function which copies all definitions from one option to another.
+    This is useful for renaming options, and also for including properties from another module system, including sub-modules.
+
+    Naturally, definitions are only copied if the option is defined.
+    Supplying a non-option value is silently ignored, which allows using options which may not exist in the `options` set.
+
+    :::{.note}
+
+    This is different from taking the value of the option and using it as a definition, as the new definition will not keep the `mkOverride` / `mkDefault` properties of the previous option.
+
+    If the option you are copying does not have nested properties, or you need to perform some transformation to the value, you may prefer `mkDerivedConfig`, which preserves the option's _overall_ override priority.
+
+    :::
+
+    :::{.caution}
+
+    Copying definitions to an option with a different `type` may result in the unexpected merge semantics.
+
+    The original option's `type` is completely ignored when the target option merges its definitions.
+
+    :::
+
+    # Inputs
+
+    `config` (AttrSet)
+
+    : `wrap` (Any -> Any)
+
+      : A function to wrap the final `mkMerge` definition
+        (e.g. `setAttrByPath [ "foo" "bar" ]`) (default `lib.id`)
+
+        The argument is a `mkMerge` result, but should normally be treated as a black box.
+
+      `keepPriority` (Bool)
+
+      : Whether to wrap definition with the option's overall priority (`true` by default)
+
+    `option` (Option or Any)
+
+    : The option from which to copy definitions, if defined.
+      Non-option values are silently ignored.
+
+    # Type
+
+    ```
+    mkAliasDefinitionsWith :: { wrap :: Function, keepPriority :: Bool } -> Option -> AttrSet
+    ```
+
+    # Example
+
+    ```nix
+    { options, ... }:
+    {
+      # Use the `. or` operator when an option may not be present.
+      # (e.g. not in `imports` or the `modules` in `evalModules`/`submodule`)
+      # https://nix.dev/manual/nix/stable/language/operators#attribute-selection
+      config.foo.enable = mkAliasDefinitionsWith { } (options.bar.enable or { });
+
+      # Otherwise, for example, 'barbaz' must be declared in the current module set.
+      config.foobar.paths = mkAliasDefinitionsWith { } options.barbaz.paths;
+    }
+    ```
+  */
+  mkAliasDefinitionsWith =
+    {
+      wrap ? id,
+      keepPriority ? true,
+    }:
+    option:
     let
       prio = option.highestPrio or defaultOverridePriority;
-      defsWithPrio = map (mkOverride prio) option.definitions;
+      wrapPrio = if keepPriority then mkOverride prio else id;
+      defs = map wrapPrio option.definitions;
     in
-    mkAliasIfDef option (wrap (mkMerge defsWithPrio));
+    mkAliasIfDef option (wrap (mkMerge defs));
 
   mkAliasIfDef = option: mkIf (isOption option && option.isDefined);
 
@@ -1845,12 +1928,10 @@ let
             optional (warn && fromOpt.isDefined)
               "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
         })
-        (
-          if withPriority then
-            mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
-          else
-            mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt
-        )
+        (mkAliasDefinitionsWith {
+          keepPriority = withPriority;
+          wrap = setAttrByPath to;
+        } fromOpt)
       ]);
     };
 
@@ -2100,6 +2181,7 @@ private
     mkAliasAndWrapDefinitions
     mkAliasAndWrapDefsWithPriority
     mkAliasDefinitions
+    mkAliasDefinitionsWith
     mkAliasIfDef
     mkAliasOptionModule
     mkAliasOptionModuleMD
