@@ -5622,6 +5622,8 @@ self: super: with self; {
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
+  gkeepapi = callPackage ../development/python-modules/gkeepapi { };
+
   glad = callPackage ../development/python-modules/glad { };
 
   glad2 = callPackage ../development/python-modules/glad2 { };
