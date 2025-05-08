@@ -6,13 +6,13 @@
 
 buildFishPlugin rec {
   pname = "macos";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "halostatue";
     repo = "fish-macos";
     tag = "v${version}";
-    hash = "sha256-o5VBeoA62KRDcnJXdXzllF1FMaSLMW1rxhaRC4rzWrg=";
+    hash = "sha256-E5HfcGEP5YnUXY50eSPPtLxXL9N7nDInlAw91dNehhc=";
   };
 
   meta = {
