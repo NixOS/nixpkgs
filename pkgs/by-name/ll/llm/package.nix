@@ -5,6 +5,7 @@
   enable-llm-cmd ? false,
   enable-llm-gemini ? false,
   enable-llm-gguf ? false,
+  enable-llm-jq ? false,
 }:
 
 let
@@ -15,6 +16,7 @@ let
     llm-cmd
     llm-gemini
     llm-gguf
+    llm-jq
     ;
 in
 
@@ -25,6 +27,7 @@ toPythonApplication (
       ++ lib.optionals enable-llm-anthropic [ llm-anthropic ]
       ++ lib.optionals enable-llm-cmd [ llm-cmd ]
       ++ lib.optionals enable-llm-gemini [ llm-gemini ]
-      ++ lib.optionals enable-llm-gguf [ llm-gguf ];
+      ++ lib.optionals enable-llm-gguf [ llm-gguf ]
+      ++ lib.optionals enable-llm-jq [ llm-jq ];
   })
 )

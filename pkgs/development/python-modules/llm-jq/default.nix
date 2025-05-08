@@ -21,11 +21,10 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-  ];
-
-  dependencies = [
     llm
   ];
+
+  dependencies = [ ];
 
   pythonImportsCheck = [ "llm_jq" ];
 
