@@ -1,81 +1,46 @@
-{
-  lib,
-  python3Packages,
-  enable-llm-anthropic ? false,
-  enable-llm-cmd ? false,
-  enable-llm-command-r ? false,
-  enable-llm-deepseek ? false,
-  enable-llm-fragments-github ? false,
-  enable-llm-fragments-pypi ? false,
-  enable-llm-gemini ? false,
-  enable-llm-grok ? false,
-  enable-llm-groq ? false,
-  enable-llm-gguf ? false,
-  enable-llm-hacker-news ? false,
-  enable-llm-jq ? false,
-  enable-llm-mistral ? false,
-  enable-llm-ollama ? false,
-  enable-llm-openai-plugin ? false,
-  enable-llm-openrouter ? false,
-  enable-llm-sentence-transformers ? false,
-  enable-llm-templates-fabric ? false,
-  enable-llm-templates-github ? false,
-  enable-llm-venice ? false,
-  enable-llm-video-frames ? false,
-}:
+# The `...` allows this derivation to be overridden with `enable-<llm-plugin>`.
+#
+# Example:
+#
+# ```nix
+# llm.override {
+#    enable-llm-anthropic = true;
+#    enable-llm-gemini = true;
+#    enable-llm-cmd = true;
+#    enable-llm-templates-github = true;
+# }
+# ```
+#
+# Whatever names are accepted by `llm.withPlugins` are accepted with an added `enable-` prefix as
+# an override of this derivation. The user can also do `llm.withPlugins { llm-anthropic = true; }`.
+{ lib, python3Packages, ... }@args:
 
 let
-  inherit (python3Packages)
-    toPythonApplication
-    llm
-    llm-anthropic
-    llm-cmd
-    llm-command-r
-    llm-deepseek
-    llm-fragments-github
-    llm-fragments-pypi
-    llm-gemini
-    llm-gguf
-    llm-grok
-    llm-groq
-    llm-hacker-news
-    llm-jq
-    llm-mistral
-    llm-ollama
-    llm-openai-plugin
-    llm-openrouter
-    llm-sentence-transformers
-    llm-templates-fabric
-    llm-templates-github
-    llm-venice
-    llm-video-frames
-    ;
+  inherit (python3Packages) llm;
+
+  hasEnablePrefix = lib.hasPrefix "enable-";
+  addEnablePrefix = name: "enable-${name}";
+  removeEnablePrefix = lib.removePrefix "enable-";
+
+  # Filter to just the attributes which are named "enable-<plugin-name>"
+  enableArgs = lib.filterAttrs (name: value: hasEnablePrefix name) args;
+  pluginArgs = lib.mapAttrs' (
+    name: value: lib.nameValuePair (removeEnablePrefix name) value
+  ) enableArgs;
+
+  # Provide some diagnostics for the plugin names
+  pluginNames = lib.attrNames (lib.functionArgs llm.withPlugins);
+  enableNames = lib.map addEnablePrefix pluginNames;
+  unknownPluginNames = lib.removeAttrs pluginArgs pluginNames;
+  unknownNames = lib.map addEnablePrefix (lib.attrNames unknownPluginNames);
+  unknownNamesDiagnostic = ''
+    Unknown plugins specified in override: ${lib.concatStringsSep ", " unknownNames}
+
+    Valid overrides:
+      - ${lib.concatStringsSep "\n  - " enableNames}
+  '';
 in
 
-toPythonApplication (
-  llm.overrideAttrs (finalAttrs: {
-    propagatedBuildInputs =
-      (finalAttrs.propagatedBuildInputs or [ ])
-      ++ lib.optionals enable-llm-anthropic [ llm-anthropic ]
-      ++ lib.optionals enable-llm-cmd [ llm-cmd ]
-      ++ lib.optionals enable-llm-cmd [ llm-command-r ]
-      ++ lib.optionals enable-llm-deepseek [ llm-deepseek ]
-      ++ lib.optionals enable-llm-fragments-github [ llm-fragments-github ]
-      ++ lib.optionals enable-llm-fragments-pypi [ llm-fragments-pypi ]
-      ++ lib.optionals enable-llm-gemini [ llm-gemini ]
-      ++ lib.optionals enable-llm-gguf [ llm-gguf ]
-      ++ lib.optionals enable-llm-grok [ llm-grok ]
-      ++ lib.optionals enable-llm-groq [ llm-groq ]
-      ++ lib.optionals enable-llm-hacker-news [ llm-hacker-news ]
-      ++ lib.optionals enable-llm-jq [ llm-jq ]
-      ++ lib.optionals enable-llm-mistral [ llm-mistral ]
-      ++ lib.optionals enable-llm-ollama [ llm-ollama ]
-      ++ lib.optionals enable-llm-openai-plugin [ llm-openai-plugin ]
-      ++ lib.optionals enable-llm-openrouter [ llm-openrouter ]
-      ++ lib.optionals enable-llm-sentence-transformers [ llm-sentence-transformers ]
-      ++ lib.optionals enable-llm-templates-fabric [ llm-templates-fabric ]
-      ++ lib.optionals enable-llm-templates-github [ llm-templates-github ]
-      ++ lib.optionals enable-llm-venice [ llm-venice ]
-      ++ lib.optionals enable-llm-video-frames [ llm-video-frames ];
-  })
-)
+assert lib.assertMsg (lib.length unknownNames == 0) unknownNamesDiagnostic;
+
+llm.withPlugins pluginArgs
