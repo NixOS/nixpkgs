@@ -1031,12 +1031,14 @@ rec {
       let
         keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
         # enables tools like nix-update to determine what src attributes to replace
-        extraPassthru = keepAttrs [
-          "rev"
-          "tag"
-          "url"
-          "outputHash"
-        ] src;
+        extraPassthru = lib.optionalAttrs (lib.isAttrs src) (
+          keepAttrs [
+            "rev"
+            "tag"
+            "url"
+            "outputHash"
+          ] src
+        );
       in
       stdenvNoCC.mkDerivation (
         {

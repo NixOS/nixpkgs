@@ -1,13 +1,12 @@
 {
+  cudaOlder,
+  cudaPackages,
   cudaVersion,
-  final,
   lib,
   mkVersionedPackageName,
-  package,
   patchelf,
   requireFile,
   stdenv,
-  ...
 }:
 let
   inherit (lib)
@@ -28,18 +27,19 @@ finalAttrs: prevAttrs: {
   # Useful for inspecting why something went wrong.
   brokenConditions =
     let
-      cudaTooOld = strings.versionOlder cudaVersion package.minCudaVersion;
+      cudaTooOld = cudaOlder finalAttrs.passthru.featureRelease.minCudaVersion;
       cudaTooNew =
-        (package.maxCudaVersion != null) && strings.versionOlder package.maxCudaVersion cudaVersion;
-      cudnnVersionIsSpecified = package.cudnnVersion != null;
-      cudnnVersionSpecified = versions.majorMinor package.cudnnVersion;
+        (finalAttrs.passthru.featureRelease.maxCudaVersion != null)
+        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaVersion;
+      cudnnVersionIsSpecified = finalAttrs.passthru.featureRelease.cudnnVersion != null;
+      cudnnVersionSpecified = versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion;
       cudnnVersionProvided = versions.majorMinor finalAttrs.passthru.cudnn.version;
       cudnnTooOld =
         cudnnVersionIsSpecified && (strings.versionOlder cudnnVersionProvided cudnnVersionSpecified);
       cudnnTooNew =
         cudnnVersionIsSpecified && (strings.versionOlder cudnnVersionSpecified cudnnVersionProvided);
     in
-    prevAttrs.brokenConditions
+    prevAttrs.brokenConditions or { }
     // {
       "CUDA version is too old" = cudaTooOld;
       "CUDA version is too new" = cudaTooNew;
@@ -48,27 +48,27 @@ finalAttrs: prevAttrs: {
     };
 
   src = requireFile {
-    name = package.filename;
-    inherit (package) hash;
+    name = finalAttrs.passthru.redistribRelease.filename;
+    inherit (finalAttrs.passthru.redistribRelease) hash;
     message = ''
       To use the TensorRT derivation, you must join the NVIDIA Developer Program and
-      download the ${package.version} TAR package for CUDA ${cudaVersion} from
+      download the ${finalAttrs.version} TAR package for CUDA ${cudaVersion} from
       ${finalAttrs.meta.homepage}.
 
       Once you have downloaded the file, add it to the store with the following
       command, and try building this derivation again.
 
-      $ nix-store --add-fixed sha256 ${package.filename}
+      $ nix-store --add-fixed sha256 ${finalAttrs.passthru.redistribRelease.filename}
     '';
   };
 
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
 
-  buildInputs = prevAttrs.buildInputs ++ [ (finalAttrs.passthru.cudnn.lib or null) ];
+  buildInputs = prevAttrs.buildInputs or [ ] ++ [ (finalAttrs.passthru.cudnn.lib or null) ];
 
   preInstall =
-    (prevAttrs.preInstall or "")
+    prevAttrs.preInstall or ""
     + strings.optionalString (targetArch != "unsupported") ''
       # Replace symlinks to bin and lib with the actual directories from targets.
       for dir in bin lib; do
@@ -87,7 +87,7 @@ finalAttrs: prevAttrs: {
     let
       versionTriple = "${versions.majorMinor finalAttrs.version}.${versions.patch finalAttrs.version}";
     in
-    (prevAttrs.postFixup or "")
+    prevAttrs.postFixup or ""
     + ''
       ${meta.getExe' patchelf "patchelf"} --add-needed libnvinfer.so \
         "$lib/lib/libnvinfer.so.${versionTriple}" \
@@ -95,7 +95,7 @@ finalAttrs: prevAttrs: {
         "$lib/lib/libnvinfer_builder_resource.so.${versionTriple}"
     '';
 
-  passthru = {
+  passthru = prevAttrs.passthru or { } // {
     useCudatoolkitRunfile = strings.versionOlder cudaVersion "11.3.999";
     # The CUDNN used with TensorRT.
     # If null, the default cudnn derivation will be used.
@@ -103,12 +103,15 @@ finalAttrs: prevAttrs: {
     # unless it is not available, in which case the default cudnn derivation will be used.
     cudnn =
       let
-        desiredName = mkVersionedPackageName "cudnn" package.cudnnVersion;
+        desiredName = mkVersionedPackageName "cudnn" finalAttrs.passthru.featureRelease.cudnnVersion;
       in
-      if package.cudnnVersion == null || (final ? desiredName) then final.cudnn else final.${desiredName};
+      if finalAttrs.passthru.featureRelease.cudnnVersion == null || (cudaPackages ? desiredName) then
+        cudaPackages.cudnn
+      else
+        cudaPackages.${desiredName};
   };
 
-  meta = prevAttrs.meta // {
+  meta = prevAttrs.meta or { } // {
     badPlatforms =
       prevAttrs.meta.badPlatforms or [ ]
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];

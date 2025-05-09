@@ -18,14 +18,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.128.0";
+  version = "1.129.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-QgVx/9mZ3Do+42YwO8OtI2dcuckMX/xIaiBUi4HrK4Q=";
+    hash = "sha256-JDaTFbRb2eNtzxZBLn8wOBEN5uJcInNrhFnGFZjI8is=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

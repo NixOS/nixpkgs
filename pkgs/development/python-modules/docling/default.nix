@@ -7,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   beautifulsoup4,
   certifi,
   docling-core,
@@ -34,6 +35,8 @@
   rtree,
   scipy,
   tesserocr,
+  tqdm,
+  transformers,
   typer,
 
   # optional dependencies
@@ -64,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     beautifulsoup4
     certifi
     docling-core
@@ -91,6 +95,8 @@ buildPythonPackage rec {
     rtree
     scipy
     tesserocr
+    tqdm
+    transformers
     typer
   ];
 

@@ -1996,6 +1996,12 @@
     githubId = 628387;
     name = "Arian van Putten";
   };
+  arichtman = {
+    email = "ariel@richtman.au";
+    github = "arichtman";
+    githubId = 10679234;
+    name = "Ariel Richtman";
+  };
   arikgrahl = {
     email = "mail@arik-grahl.de";
     github = "arikgrahl";
@@ -13078,6 +13084,11 @@
     github = "knl";
     githubId = 361496;
     name = "Nikola Knežević";
+  };
+  koffydrop = {
+    github = "koffydrop";
+    githubId = 67888720;
+    name = "Kira";
   };
   kolaente = {
     email = "k@knt.li";

@@ -8,6 +8,7 @@
 }:
 {
   featureRelease = lib.optionalAttrs (redistArch != "unsupported") {
+    inherit (package) minCudaVersion maxCudaVersion;
     ${redistArch}.outputs = {
       lib = true;
       static = true;
@@ -16,6 +17,6 @@
   };
   redistribRelease = {
     name = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
-    inherit (package) version;
+    inherit (package) hash url version;
   };
 }

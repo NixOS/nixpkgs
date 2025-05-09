@@ -1005,10 +1005,6 @@ with pkgs;
 
   _3llo = callPackage ../tools/misc/3llo { };
 
-  _1password-gui = callPackage ../applications/misc/1password-gui { };
-
-  _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
-
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
   acquire = with python3Packages; toPythonApplication acquire;
@@ -3989,8 +3985,6 @@ with pkgs;
   };
 
   olive-editor = qt6Packages.callPackage ../applications/video/olive-editor { };
-
-  ombi = callPackage ../servers/ombi { };
 
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
@@ -7491,10 +7485,6 @@ with pkgs;
   minizincide = qt6Packages.callPackage ../development/tools/minizinc/ide.nix { };
 
   mkdocs = with python3Packages; toPythonApplication mkdocs;
-
-  mold = callPackage ../by-name/mo/mold/package.nix {
-    tbb = tbb_2021_11;
-  };
 
   mold-wrapped = wrapBintoolsWith {
     bintools = mold;
@@ -13468,10 +13458,6 @@ with pkgs;
   mpv = mpv-unwrapped.wrapper { mpv = mpv-unwrapped; };
 
   mpvScripts = mpv-unwrapped.scripts;
-
-  shaka-packager = callPackage ../by-name/sh/shaka-packager/package.nix {
-    abseil-cpp = abseil-cpp_202401;
-  };
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 

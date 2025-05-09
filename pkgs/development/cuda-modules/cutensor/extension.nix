@@ -25,7 +25,6 @@ let
     lists
     modules
     versions
-    strings
     trivial
     ;
 
@@ -127,29 +126,8 @@ let
         redistribRelease = redistrib.${pname};
         featureRelease = feature.${pname};
       };
-      fixedDrv = drv.overrideAttrs (prevAttrs: {
-        buildInputs =
-          prevAttrs.buildInputs
-          ++ lists.optionals (strings.versionOlder cudaVersion "11.4") [ final.cudatoolkit ]
-          ++ lists.optionals (strings.versionAtLeast cudaVersion "11.4") (
-            [ final.libcublas.lib ]
-            # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
-            ++ lists.optionals (strings.hasPrefix "1.4" redistrib.${pname}.version) [ final.cuda_cudart.lib ]
-          );
-        meta = prevAttrs.meta // {
-          description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
-          homepage = "https://developer.nvidia.com/cutensor";
-          maintainers = prevAttrs.meta.maintainers or [ ] ++ [ lib.maintainers.obsidian-systems-maintenance ];
-          teams = prevAttrs.meta.teams;
-          license = lib.licenses.unfreeRedistributable // {
-            shortName = "cuTENSOR EULA";
-            fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
-            url = "https://docs.nvidia.com/cuda/cutensor/license.html";
-          };
-        };
-      });
     in
-    attrsets.nameValuePair (computeName redistrib.${pname}) fixedDrv;
+    attrsets.nameValuePair (computeName redistrib.${pname}) drv;
 
   extension =
     let

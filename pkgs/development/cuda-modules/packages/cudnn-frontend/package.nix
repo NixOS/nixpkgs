@@ -2,13 +2,18 @@
   autoAddDriverRunpath,
   catch2_3,
   cmake,
-  cudaPackages,
   fetchFromGitHub,
   gitUpdater,
   lib,
   ninja,
   nlohmann_json,
   stdenv,
+  cuda_cccl ? null,
+  cuda_cudart ? null,
+  cuda_nvcc ? null,
+  cuda_nvrtc ? null,
+  cudnn ? null,
+  libcublas ? null,
 }:
 let
   inherit (lib.lists) optionals;
@@ -16,14 +21,6 @@ let
     cmakeBool
     cmakeFeature
     optionalString
-    ;
-  inherit (cudaPackages)
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cuda_nvrtc
-    cudnn
-    libcublas
     ;
 in
 
@@ -125,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A c++ wrapper for the cudnn backend API";
     homepage = "https://github.com/NVIDIA/cudnn-frontend";
     license = lib.licenses.mit;
+    badPlatforms = optionals (cudnn == null) finalAttrs.meta.platforms;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

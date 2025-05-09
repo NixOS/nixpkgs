@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sherlock-launcher";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "Skxxtz";
     repo = "sherlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PCgnGRujbeQ2ckXYGAU38+WxGTpIayPVOL3ivnPYFwQ=";
+    hash = "sha256-YuAJbLQc7SIV9HkWGcQBPdZ6uxI5qeeSIaK0t8owe4A=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
   ];
 
-  cargoHash = "sha256-053x0ChpE5MCYKzW/nJ29LzGnMgut2RLgb5KkTF17Vc=";
+  cargoHash = "sha256-1swjAwDH1vyMcVv/Mx4P8lrdUJGdvoR1SVIjaUe4zZo=";
 
   meta = {
     description = "Lightweight and efficient application launcher for Wayland built with Rust and GTK4";
