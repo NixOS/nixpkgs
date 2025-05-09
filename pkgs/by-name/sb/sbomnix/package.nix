@@ -5,26 +5,27 @@
   grype,
   nix,
   nix-visualize,
-  python,
+  python3,
   vulnix,
-  # python libs
-  beautifulsoup4,
-  colorlog,
-  dfdiskcache,
-  filelock,
-  graphviz,
-  numpy,
-  packageurl-python,
-  packaging,
-  pandas,
-  pyrate-limiter,
-  requests,
-  requests-cache,
-  requests-ratelimiter,
-  reuse,
-  setuptools,
-  tabulate,
 }:
+
+let
+  python = python3.override {
+    self = python3;
+    packageOverrides = self: super: {
+      pyrate-limiter = super.pyrate-limiter.overridePythonAttrs (oldAttrs: rec {
+        version = "2.10.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+
+in
 
 python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
@@ -49,7 +50,7 @@ python.pkgs.buildPythonApplication rec {
       lib.makeBinPath [
         git
         nix
-        graphviz
+        python.pkgs.graphviz
         nix-visualize
         vulnix
         grype
@@ -57,9 +58,9 @@ python.pkgs.buildPythonApplication rec {
     }"
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ python.pkgs.setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = with python.pkgs; [
     beautifulsoup4
     colorlog
     dfdiskcache
@@ -78,6 +79,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "sbomnix" ];
+
   # Tests require network access
   doCheck = false;
 
