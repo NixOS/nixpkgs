@@ -70,15 +70,18 @@ stdenv.mkDerivation (finalAttrs: {
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
       if [[ -L "$lib" ]]; then
         ${
+          let
+            nonNullBuildInputs = builtins.filter (p: p != null) finalAttrs.buildInputs;
+          in
           if stdenv.hostPlatform.isDarwin then
             ''
               install_name_tool ${
-                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") finalAttrs.buildInputs
+                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") nonNullBuildInputs
               } "$lib"
             ''
           else
             ''
-              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.buildInputs}" "$lib"
+              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath nonNullBuildInputs}" "$lib"
             ''
         }
       fi
