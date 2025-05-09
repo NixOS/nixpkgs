@@ -1823,6 +1823,9 @@
   "sec-test-options-reference": [
     "index.html#sec-test-options-reference"
   ],
+  "test-opt-sshBackdoor.enable": [
+    "index.html#test-opt-sshBackdoor.enable"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
@@ -1909,6 +1912,9 @@
   ],
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
+  ],
+  "sec-nixos-test-ssh-access": [
+    "index.html#sec-nixos-test-ssh-access"
   ],
   "sec-nixos-test-port-forwarding": [
     "index.html#sec-nixos-test-port-forwarding"

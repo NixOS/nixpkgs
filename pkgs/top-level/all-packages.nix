@@ -1005,10 +1005,6 @@ with pkgs;
 
   _3llo = callPackage ../tools/misc/3llo { };
 
-  _1password-gui = callPackage ../applications/misc/1password-gui { };
-
-  _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
-
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
   acquire = with python3Packages; toPythonApplication acquire;
