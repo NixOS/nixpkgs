@@ -12952,6 +12952,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  screenkey-nvim = buildVimPlugin rec {
+    pname = "screenkey.nvim";
+    version = "2.4.2";
+    src = fetchFromGitHub {
+      owner = "NStefan002";
+      repo = "screenkey.nvim";
+      rev = "v${version}";
+      sha256 = "sha256-EGyIkWcQbCurkBbeHpXvQAKRTovUiNx1xqtXmQba8Gg=";
+    };
+    meta.homepage = "https://github.com/NStefan002/screenkey.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   scretch-nvim = buildVimPlugin {
     pname = "scretch.nvim";
     version = "2025-02-05";
