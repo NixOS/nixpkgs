@@ -105,6 +105,14 @@ database migrations.
 
 #### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
 
+Make sure to run this service after `postgresql.target`, not `postgresql.service`.
+
+They differ in two aspects:
+- `postgresql.target` includes `postgresql-setup`, so users managed via `ensureUsers` are already created.
+- `postgresql.target` will wait until PostgreSQL is in read-write mode after restoring from backup, while `postgresql.service` will already be ready when PostgreSQL is still recovering in read-only mode.
+
+Both can lead to unexpected errors either during initial database creation or restore, when using `postgresql.service`.
+
 ```nix
   {
     systemd.services."migrate-service1-db1" = {
