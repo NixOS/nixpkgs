@@ -112,7 +112,7 @@ in
       serviceConfig.ExecStart = [
         ""
         ''
-          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
+          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --no-drm --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
         ''
       ];
 
@@ -142,7 +142,6 @@ in
           )
         );
         render = optionals cfg.hwRender [
-          "drm"
           "hwaccel"
         ];
         fonts =
