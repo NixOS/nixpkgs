@@ -112,7 +112,7 @@ def main() -> None:
     arg_parser.add_argument(
         "--dump-vsocks",
         help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
-        action="store_true",
+        type=int,
     )
 
     args = arg_parser.parse_args()
@@ -141,8 +141,8 @@ def main() -> None:
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
-            if args.dump_vsocks:
-                driver.dump_machine_ssh()
+            if offset := args.dump_vsocks:
+                driver.dump_machine_ssh(offset)
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,
