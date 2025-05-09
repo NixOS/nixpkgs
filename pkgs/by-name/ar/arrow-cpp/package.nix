@@ -281,6 +281,8 @@ stdenv.mkDerivation (finalAttrs: {
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
+        # File already exists in database: orc_proto.proto
+        "arrow-orc-adapter-test"
       ];
     in
     ''
