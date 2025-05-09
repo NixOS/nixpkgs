@@ -6831,6 +6831,13 @@
     githubId = 39825;
     name = "Dominik Honnef";
   };
+  donottellmetonottellyou = {
+    name = "Jade Masker";
+    email = "donottellmetonottellyou@gmail.com";
+    github = "donottellmetonottellyou";
+    githubId = 115233539;
+    keys = [ { fingerprint = "5C8B 7128 4AB3 000D 4AC6  6234 9B81 35A2 4A75 CB86"; } ];
+  };
   donovanglover = {
     github = "donovanglover";
     githubId = 2374245;
