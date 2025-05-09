@@ -447,6 +447,14 @@ The propagated equivalent of `buildInputs`. This would be called `depsHostTarget
 
 The propagated equivalent of `depsTargetTarget`. This is prefixed for the same reason of alerting potential users.
 
+##### `strictDeps` {#var-stdenv-strictDeps}
+
+When using native compilation, `stdenv` is lenient towards incorrect placement of a dependency into one of the dependency lists described above. That means a dependency needed at runtime often works, even if it is only present in `nativeBuildInputs`. Vice-versa, dependencies containing binaries that need to be executed during the build will work even if they are only listed in `buildInputs`.
+
+While convenient for getting to a package quickly, this behavior can break cross-compilation. Adding `strictDeps = true` as a parameter to `mkDerivation` or any of its language specific wrappers disables this behavior.
+
+The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, and rust enable this option by default.
+
 ## Attributes {#ssec-stdenv-attributes}
 
 ### Variables affecting `stdenv` initialisation {#variables-affecting-stdenv-initialisation}
