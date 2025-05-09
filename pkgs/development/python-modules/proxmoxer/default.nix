@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "develop";
+  version = "2.2.0-unstable-2025-02-18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
