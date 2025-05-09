@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.11.8";
+  version = "0.11.9";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-HVZADn9xpwywubEbaMJgOs3yCXa4pNWnnrfSICF2+DE=";
+    hash = "sha256-TJHBaru0L2pMdZ9omtJ+OqGP764fSwoP54xndWVV6ls=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-TB7ARPTwYTNqbrcfwl9RCYmAw+y0uudaBp1YyDg52/w=";
+  cargoHash = "sha256-/xIQ8JJI2WfX3rxLZQCwsN2ylURqi+SjkBvnn0Hdij0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # used by ruff currently and can thus be safely skipped.
   cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--workspace"
-    "--exclude=red_knot"
+    "--exclude=ty"
   ];
 
   nativeInstallCheckInputs = [
