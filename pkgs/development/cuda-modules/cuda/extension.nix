@@ -1,4 +1,4 @@
-{ cudaVersion, lib }:
+{ cudaMajorMinorVersion, lib }:
 let
   inherit (lib) attrsets modules trivial;
   redistName = "cuda";
@@ -23,10 +23,10 @@ let
   };
 
   # Check if the current CUDA version is supported.
-  cudaVersionMappingExists = builtins.hasAttr cudaVersion cudaVersionMap;
+  cudaVersionMappingExists = builtins.hasAttr cudaMajorMinorVersion cudaVersionMap;
 
   # fullCudaVersion : String
-  fullCudaVersion = cudaVersionMap.${cudaVersion};
+  fullCudaVersion = cudaVersionMap.${cudaMajorMinorVersion};
 
   evaluatedModules = modules.evalModules {
     modules = [

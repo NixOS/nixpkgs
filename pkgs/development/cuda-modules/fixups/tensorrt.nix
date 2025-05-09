@@ -1,7 +1,7 @@
 {
   cudaOlder,
   cudaPackages,
-  cudaVersion,
+  cudaMajorMinorVersion,
   lib,
   mkVersionedPackageName,
   patchelf,
@@ -30,7 +30,7 @@ finalAttrs: prevAttrs: {
       cudaTooOld = cudaOlder finalAttrs.passthru.featureRelease.minCudaVersion;
       cudaTooNew =
         (finalAttrs.passthru.featureRelease.maxCudaVersion != null)
-        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaVersion;
+        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaMajorMinorVersion;
       cudnnVersionIsSpecified = finalAttrs.passthru.featureRelease.cudnnVersion != null;
       cudnnVersionSpecified = versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion;
       cudnnVersionProvided = versions.majorMinor finalAttrs.passthru.cudnn.version;
@@ -52,7 +52,7 @@ finalAttrs: prevAttrs: {
     inherit (finalAttrs.passthru.redistribRelease) hash;
     message = ''
       To use the TensorRT derivation, you must join the NVIDIA Developer Program and
-      download the ${finalAttrs.version} TAR package for CUDA ${cudaVersion} from
+      download the ${finalAttrs.version} TAR package for CUDA ${cudaMajorMinorVersion} from
       ${finalAttrs.meta.homepage}.
 
       Once you have downloaded the file, add it to the store with the following
@@ -96,7 +96,7 @@ finalAttrs: prevAttrs: {
     '';
 
   passthru = prevAttrs.passthru or { } // {
-    useCudatoolkitRunfile = strings.versionOlder cudaVersion "11.3.999";
+    useCudatoolkitRunfile = strings.versionOlder cudaMajorMinorVersion "11.3.999";
     # The CUDNN used with TensorRT.
     # If null, the default cudnn derivation will be used.
     # If a version is specified, the cudnn derivation with that version will be used,
