@@ -31,7 +31,6 @@
   tzdata,
   desktop-file-utils,
   shared-mime-info,
-  makeHardcodeGsettingsPatch,
   testers,
   gobject-introspection,
   libsystemtap,
@@ -365,18 +364,6 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };
-
-    mkHardcodeGsettingsPatch =
-      {
-        src,
-        glib-schema-to-var,
-      }:
-      builtins.trace
-        "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"
-        (makeHardcodeGsettingsPatch {
-          inherit src;
-          schemaIdToVariableMapping = glib-schema-to-var;
-        });
   };
 
   meta = with lib; {

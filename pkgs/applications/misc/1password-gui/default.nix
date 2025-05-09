@@ -26,8 +26,6 @@ let
   };
 
   meta = {
-    # Requires to be installed in "/Application" which is not possible for now (https://github.com/NixOS/nixpkgs/issues/254944)
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
