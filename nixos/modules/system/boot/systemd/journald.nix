@@ -7,6 +7,25 @@
 }:
 let
   cfg = config.services.journald;
+  format = pkgs.formats.systemd;
+
+  journaldSettings = {
+    Journal =
+      cfg.settings
+      // {
+        Storage = cfg.storage;
+        RateLimitInterval = cfg.rateLimitInterval;
+        RateLimitBurst = toString cfg.rateLimitBurst;
+        Audit = utils.systemdUtils.lib.toOption cfg.audit;
+      }
+      // lib.optional (cfg.console != "") {
+        ForwardToConsole = "yes";
+        TTYPath = cfg.console;
+      }
+      // lib.optional cfg.forwardToSyslog {
+        ForwardToSyslog = "yes";
+      };
+  };
 in
 {
   imports = [
@@ -16,14 +35,14 @@ in
     )
   ];
 
-  options = {
-    services.journald.console = lib.mkOption {
+  options.services.journald = {
+    console = lib.mkOption {
       default = "";
       type = lib.types.str;
       description = "If non-empty, write log messages to the specified TTY device.";
     };
 
-    services.journald.rateLimitInterval = lib.mkOption {
+    rateLimitInterval = lib.mkOption {
       default = "30s";
       type = lib.types.str;
       description = ''
@@ -39,7 +58,7 @@ in
       '';
     };
 
-    services.journald.storage = lib.mkOption {
+    storage = lib.mkOption {
       default = "persistent";
       type = lib.types.enum [
         "persistent"
@@ -53,7 +72,7 @@ in
       '';
     };
 
-    services.journald.rateLimitBurst = lib.mkOption {
+    rateLimitBurst = lib.mkOption {
       default = 10000;
       type = lib.types.int;
       description = ''
@@ -78,7 +97,7 @@ in
       '';
     };
 
-    services.journald.audit = lib.mkOption {
+    audit = lib.mkOption {
       default = null;
       type = lib.types.nullOr lib.types.bool;
       description = ''
@@ -95,17 +114,35 @@ in
       '';
     };
 
-    services.journald.extraConfig = lib.mkOption {
+    settings = lib.mkOption {
+      default = { };
+      description = ''
+        Configuration for systemd-journald. See {manpage}`journald.conf(5)`
+        for available options.
+
+        Note that the dedicated options like {option}`services.journald.storage` will
+        take precedence over the values specified here.
+      '';
+      type = lib.types.submodule {
+        freeformType = format.type;
+        options = { };
+      };
+    };
+
+    extraConfig = lib.mkOption {
       default = "";
       type = lib.types.lines;
       example = "Storage=volatile";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd-journald. See {manpage}`journald.conf(5)`
         for available options.
+
+        Note: This option is deprecated. Please use {option}`services.journald.settings`
+        instead, which supports proper type checking and option merging.
       '';
     };
 
-    services.journald.forwardToSyslog = lib.mkOption {
+    forwardToSyslog = lib.mkOption {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
       defaultText = lib.literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = lib.types.bool;
@@ -116,6 +153,10 @@ in
   };
 
   config = {
+    warnings =
+      lib.optional (cfg.extraConfig != "")
+        "The option 'services.journald.extraConfig' is deprecated. Please use 'services.journald.settings' instead.";
+
     systemd.additionalUpstreamSystemUnits =
       [
         "systemd-journald.socket"
@@ -140,18 +181,7 @@ in
 
     environment.etc = {
       "systemd/journald.conf".text = ''
-        [Journal]
-        Storage=${cfg.storage}
-        RateLimitInterval=${cfg.rateLimitInterval}
-        RateLimitBurst=${toString cfg.rateLimitBurst}
-        ${lib.optionalString (cfg.console != "") ''
-          ForwardToConsole=yes
-          TTYPath=${cfg.console}
-        ''}
-        ${lib.optionalString (cfg.forwardToSyslog) ''
-          ForwardToSyslog=yes
-        ''}
-        Audit=${utils.systemdUtils.lib.toOption cfg.audit}
+        ${format.generate "journald.conf" journaldSettings}
         ${cfg.extraConfig}
       '';
     };
