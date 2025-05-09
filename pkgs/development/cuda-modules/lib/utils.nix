@@ -414,7 +414,7 @@
       [ ];
 
   /**
-    Function to map Nix system to NVIDIA redist arch
+    Function to map Nix system to NVIDIA redist system
 
     NOTE: We swap out the default `linux-sbsa` redist (for server-grade ARM chips) with the
     `linux-aarch64` redist (which is for Jetson devices) if we're building any Jetson devices.
