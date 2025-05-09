@@ -15,6 +15,7 @@
   fmt,
   wayland,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wayland-protocols,
   json_c,
   isocodes,
@@ -77,7 +78,6 @@ stdenv.mkDerivation rec {
     libthai
     libdatrie
     fribidi
-    systemd
     gdk-pixbuf
     wayland
     wayland-protocols
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     xcb-imdkit
     xkeyboard_config
     libxkbfile
-  ];
+  ] ++ lib.optional withSystemd systemd;
 
   cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   passthru = {
+    features = { inherit withSystemd; };
     updateScript = ./update.py;
     tests = {
       inherit (nixosTests) fcitx5;
