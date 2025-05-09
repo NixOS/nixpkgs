@@ -33,7 +33,7 @@ let
 
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_BIN = lib.getExe ffmpeg;
+    FFMPEG_PATH = lib.getExe ffmpeg;
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
     PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
