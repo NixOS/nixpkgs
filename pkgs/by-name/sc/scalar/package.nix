@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
-    hash = "sha256:05qixx9lqvw69wl1vmvfnnd3yv0hzpvsvy8h5g0i7rxcav95p2f1";
+    hash = "sha256-ZziTuqCuJcgRBLeF8ipXhI1vUmzfckvaEtA5BiYuCnA=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  installPhase = ''    
+  installPhase = ''
     runHook preInstall
 
     mkdir -p $out/lib/${pname} $out/bin
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "scalar";
+      exec = "scalar %U";
+      icon = "scalar";
       desktopName = "Scalar";
       genericName = "API Platform";
       categories = [
