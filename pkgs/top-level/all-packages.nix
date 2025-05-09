@@ -7643,8 +7643,6 @@ with pkgs;
     buildDocs = false;
   };
 
-  sbomnix = python3.pkgs.callPackage ../tools/security/sbomnix { };
-
   seer = libsForQt5.callPackage ../development/tools/misc/seer { };
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };

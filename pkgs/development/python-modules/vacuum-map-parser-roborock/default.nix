@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "vacuum-map-parser-roborock";
-  version = "0.1.2";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "PiotrMachowski";
     repo = "Python-package-${pname}";
     tag = "v${version}";
-    hash = "sha256-y7Q8C7ZvOn/KSUMJ7A/oH+HZMVBpuPitsXqsqHvvYHE=";
+    hash = "sha256-MqsLvAs4PU/K2yBxEhVJucstZg9QFPYgOTCbgT2Uq/A=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Functionalities for Roborock vacuum map parsing";
     homepage = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-roborock";
-    changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-roborock/releases/tag/v${version}";
+    changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-roborock/releases/tag/${src.tag}";
     maintainers = with maintainers; [ jamiemagee ];
     license = licenses.asl20;
   };
