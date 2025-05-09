@@ -1,32 +1,41 @@
 {
-  cmake,
-  crocoddyl,
-  doxygen,
-  fetchFromGitHub,
-  fmt,
-  fontconfig,
-  gbenchmark,
-  graphviz,
   lib,
+  fetchFromGitHub,
+  fontconfig,
   llvmPackages,
-  pinocchio,
-  pkg-config,
-  proxsuite-nlp,
+  nix-update-script,
   python3Packages,
   pythonSupport ? false,
   stdenv,
+
+  # nativeBuildInputs
+  doxygen,
+  cmake,
+  graphviz,
+  pkg-config,
+
+  # buildInputs
+  fmt,
+
+  # propagatedBuildInputs
   suitesparse,
+  crocoddyl,
+  pinocchio,
+  proxsuite-nlp,
+
+  # checkInputs
+  gbenchmark,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oy2qcJbIGr5pe+XYWKntfsc6Ie7oEU1qqrPXjuqULmY=";
+    hash = "sha256-i+NQzhYdHQ+KcNxSLELgnMk98mdfN/vbXfRlU3k/dUU=";
   };
 
   outputs = [
@@ -44,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
     ]
     ++ lib.optionals pythonSupport [
+      python3Packages.python
       python3Packages.pythonImportsCheckHook
     ];
   buildInputs =
@@ -98,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   pythonImportsCheck = [ "aligator" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Versatile and efficient framework for constrained trajectory optimization";
