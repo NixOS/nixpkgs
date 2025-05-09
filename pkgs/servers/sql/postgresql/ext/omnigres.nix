@@ -22,23 +22,14 @@
   postgresql,
   postgresqlBuildExtension,
   postgresqlTestExtension,
-  postgresqlPackages,
   python3,
   python3Packages,
   readline,
-  stdenv,
   zlib,
 }:
 
 let
-  # TODO: I'll remove this as well, just testing stuff
-  extensions = buildEnv {
-    name = "postgresql-custom";
-    paths = [
-      postgresql
-      postgresqlPackages.plpython3
-    ];
-  };
+  pgWithExtensions = postgresql.withPackages (ps: [ ps.plpython3 ]);
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
@@ -74,6 +65,7 @@ postgresqlBuildExtension (finalAttrs: {
     netcat
     openssl
     perl
+    pgWithExtensions
     python3
     python3Packages.build
     readline
@@ -83,11 +75,11 @@ postgresqlBuildExtension (finalAttrs: {
   cmakeFlags = [
     "-DNETCAT=${netcat}/bin/nc"
     "-DOPENSSL_CONFIGURED=1"
-    "-DPG_CONFIG=${postgresql.pg_config}/bin/pg_config"
+    "-DPG_CONFIG=${pgWithExtensions.pg_config}/bin/pg_config"
     # Can remove this later after hack is deprecated
-    "-DPostgreSQL_EXTENSION_DIR=${lib.getDev extensions}/share/postgresql/extension"
+    "-DPostgreSQL_EXTENSION_DIR=${lib.getDev pgWithExtensions}/share/postgresql/extension"
     #"-DPostgreSQL_EXTENSION_DIR=$out/share/postgresql/extension"
-    "-DPostgreSQL_PACKAGE_LIBRARY_DIR=${lib.getDev postgresql}/lib"
+    "-DPostgreSQL_PACKAGE_LIBRARY_DIR=${lib.getDev pgWithExtensions}/lib"
     "-DPython3_EXECUTABLE=${python3}/bin/python3"
     "-DPython_EXECUTABLE=${python3}/bin/python3"
     "-DDOXYGEN_EXECUTABLE=${doxygen}/bin/doxygen"
@@ -96,25 +88,13 @@ postgresqlBuildExtension (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = false;
 
-  preConfigure = ''
-    mkdir -p $out/{lib,share}
-    cp --no-preserve=mode -rLv ${extensions}/lib/* $out/lib
-    cp --no-preserve=mode -rLv ${extensions}/share/* $out/share
+  # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
+  preInstall = ''
+    patchShebangs script_omni*
   '';
 
   # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
-  installPhase = ''
-    runHook preInstall
-
-    for f in script_omni_*; do
-      patchShebangs $f
-    done
-
-    #mkdir -p $out/share/postgresql/extension
-    cmake --build . --target install_extensions
-
-    runHook postInstall
-  '';
+  installTargets = [ "install_extensions" ];
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
