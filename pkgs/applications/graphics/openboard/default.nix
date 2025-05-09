@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
+  cmake,
+  pkg-config,
   qmake,
   qtbase,
   qtxmlpatterns,
@@ -65,20 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace OpenBoard.pro \
-      --replace-fail '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
-      --replace-fail '-lquazip5' '-lquazip1-qt5' \
-      --replace-fail '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
-
     substituteInPlace resources/etc/OpenBoard.config \
       --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
       --replace-fail 'EnableSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
       --replace-fail 'HideCheckForSoftwareUpdate=false' 'HideCheckForSoftwareUpdate=true'
   '';
 
+  # Required by Poppler
+  cmakeFlags = [
+    "-DCMAKE_CXX_STANDARD=20"
+  ];
+
   nativeBuildInputs = [
-    qmake
-    copyDesktopItems
+    cmake
+    pkg-config
     wrapQtAppsHook
   ];
 
@@ -111,43 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ importer ];
 
-  makeFlags = [ "release-install" ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "OpenBoard";
-      exec = "OpenBoard %f";
-      icon = "OpenBoard";
-      comment = "OpenBoard, an interactive white board application";
-      desktopName = "OpenBoard";
-      mimeTypes = [ "application/ubz" ];
-      categories = [ "Education" ];
-      startupNotify = true;
-    })
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    lrelease OpenBoard.pro
-
-    # Replicated release_scripts/linux/package.sh
-    mkdir -p $out/opt/openboard/i18n
-    cp -R resources/customizations build/linux/release/product/* $out/opt/openboard/
-    cp resources/i18n/*.qm $out/opt/openboard/i18n/
-    install -m644 resources/linux/openboard-ubz.xml $out/opt/openboard/etc/
-    install -Dm644 resources/images/OpenBoard.png $out/share/icons/hicolor/64x64/apps/OpenBoard.png
-
-    runHook postInstall
-  '';
-
-  dontWrapQtApps = true;
-
-  postFixup = ''
-    makeWrapper $out/opt/openboard/OpenBoard $out/bin/OpenBoard \
-      "''${qtWrapperArgs[@]}"
-  '';
-
   meta = with lib; {
     description = "Interactive whiteboard application";
     homepage = "https://openboard.ch/";
@@ -157,6 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
       fufexan
     ];
     platforms = platforms.linux;
-    mainProgram = "OpenBoard";
+    mainProgram = "openboard";
   };
 })
