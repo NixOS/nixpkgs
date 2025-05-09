@@ -19,9 +19,9 @@
   libX11,
   portmidi,
   SDL2_classic,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  SDL2_classic_image,
+  SDL2_classic_mixer_2_0,
+  SDL2_classic_ttf,
   numpy,
 
   pygame-gui,
@@ -99,9 +99,9 @@ buildPythonPackage rec {
     libpng
     portmidi
     SDL2_classic
-    (SDL2_image.override { enableSTB = false; })
-    SDL2_mixer
-    SDL2_ttf
+    (SDL2_classic_image.override { enableSTB = false; })
+    SDL2_classic_mixer_2_0
+    SDL2_classic_ttf
   ];
 
   nativeCheckInputs = [
