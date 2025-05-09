@@ -138,9 +138,7 @@ with pkgs;
 
   ld-library-path = callPackage ./ld-library-path { };
 
-  cross = callPackage ./cross { } // {
-    __attrsFailEvaluation = true;
-  };
+  cross = callPackage ./cross { };
 
   php = recurseIntoAttrs (callPackages ./php { });
 
