@@ -11,13 +11,13 @@
 }:
 let
   pname = "backrest";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-p2CKXQeA0rHhS6uP0x2tNsFzHBCOi6sRDlr+o4HeBjk=";
+    hash = "sha256-lpYny+5bXIxj+ZFhbSn200sBrDShISESZw+L5sy+X+Q=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
-      hash = "sha256-rBu+6QwTmQsjHh0yd8QjdHPc3VOmadJQ+NK9X6qbSx8=";
+      hash = "sha256-q7VMQb/FRT953yT2cyGMxUPp8p8XkA9mvqGI7S7Eifg=";
     };
 
     buildPhase = ''
@@ -53,7 +53,7 @@ in
 buildGoModule {
   inherit pname src version;
 
-  vendorHash = "sha256-OVJnJ5fdpa1vpYTCxtvRGbnICbfwZeYiCwAS8c4Tg2Y=";
+  vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
 
   nativeBuildInputs = [ gzip ];
 
