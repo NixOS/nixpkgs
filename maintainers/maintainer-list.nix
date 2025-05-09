@@ -14547,6 +14547,17 @@
     githubId = 2309868;
     name = "Luo Chen";
   };
+  lurgrid = {
+    email = "lurgrid@sagbot.com";
+    name = "Edouard Haddag";
+    github = "lurgrid";
+    githubId = 59392138;
+    keys = [
+      {
+        fingerprint = "DB6E 77D2 7188 153E 5479  2346 30A6 4AF6 8E7E 61A0";
+      }
+    ];
+  };
   lurkki = {
     email = "jussi.kuokkanen@protonmail.com";
     github = "Lurkki14";
