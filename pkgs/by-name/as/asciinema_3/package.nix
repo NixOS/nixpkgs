@@ -56,7 +56,10 @@ let
       '';
       license = with lib.licenses; [ gpl3Plus ];
       mainProgram = "asciinema";
-      maintainers = with lib.maintainers; [ jiriks74 ];
+      maintainers = with lib.maintainers; [
+        jiriks74
+        llakala
+      ];
     };
   };
 in
