@@ -241,7 +241,7 @@ rec {
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
     version = "00427b6";
-    hash = "";
+    hash = "sha256-yC0uWjjBnvNMWL2o7emAq74FC89TGk5ZA74iy5F+8QM=";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;
