@@ -89,6 +89,21 @@ in
 
     sshBackdoor = {
       enable = mkEnableOption "vsock-based ssh backdoor for the VM";
+      vsockOffset = mkOption {
+        default = 2;
+        type = types.ints.between 2 4294967296;
+        description = ''
+          By default this assigns vsock numbers starting at 3 to the nodes.
+          On e.g. large builders used by multiple people, this would cause conflicts
+          between multiple users doing interactive debugging.
+
+          This option allows to assign an offset to each vsock number to
+          resolve this.
+
+          This is a 32bit number. The lowest possible vsock number is `3`
+          (i.e. with the lowest node number being `1`, this is 2+1).
+        '';
+      };
     };
 
   };
@@ -193,7 +208,9 @@ in
         package = lib.mkDefault pkgs.qemu_test;
 
         options = mkIf config.testing.sshBackdoor.enable [
-          "-device vhost-vsock-pci,guest-cid=${toString (config.virtualisation.test.nodeNumber + 2)}"
+          "-device vhost-vsock-pci,guest-cid=${
+            toString (config.virtualisation.test.nodeNumber + config.testing.sshBackdoor.vsockOffset)
+          }"
         ];
       };
     };

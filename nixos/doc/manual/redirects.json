@@ -1826,6 +1826,9 @@
   "test-opt-sshBackdoor.enable": [
     "index.html#test-opt-sshBackdoor.enable"
   ],
+  "test-opt-sshBackdoor.vsockOffset": [
+    "index.html#test-opt-sshBackdoor.vsockOffset"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
