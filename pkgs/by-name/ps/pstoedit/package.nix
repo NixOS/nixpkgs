@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-VYi0MtLGsq2YKLRJFepYE/+aOjMSpB+g3kw43ayd9y8=";
   };
 
+  postPatch = ''
+    # don't use gnu-isms like link.h on macos
+    substituteInPlace src/pstoedit.cpp --replace-fail '#ifndef _MSC_VER' '#if !defined(_MSC_VER) && !defined(__APPLE__)'
+  '';
+
   outputs = [
     "out"
     "dev"
