@@ -9,13 +9,13 @@
   dpkg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scalar";
   version = "0.1.188";
 
   src = fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
-    name = "scalar-app-${version}amd64.deb";
+    name = "scalar-app-${finalAttrs.version}amd64.deb";
     hash = "sha256-ZziTuqCuJcgRBLeF8ipXhI1vUmzfckvaEtA5BiYuCnA=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     cp -r opt/Scalar/* $out/opt/scalar/
 
-    makeWrapper ${electron}/bin/electron $out/bin/scalar \
+    makeWrapper ${lib.getExe electron} $out/bin/scalar \
       --add-flags "$out/opt/scalar/resources/app.asar --no-startup-window"  # Prevent startup window
 
     # Install all icons in their specific resolutions
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "scalar";
     maintainers = with lib.maintainers; [ redyf ];
   };
-}
+})
