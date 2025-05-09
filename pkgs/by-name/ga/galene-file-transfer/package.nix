@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   gitUpdater,
+  nixosTests,
   writeShellApplication,
   _experimental-update-script-combinators,
   nix,
@@ -30,6 +31,7 @@ buildGoModule (finalAttrs: {
   ];
 
   passthru = {
+    tests.vm = nixosTests.galene.file-transfer;
     updateScriptSrc = gitUpdater {
       rev-prefix = "galene-file-transfer-";
     };
