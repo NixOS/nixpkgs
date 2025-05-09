@@ -9,6 +9,7 @@
   mathcomp-experimental-reals,
   extructures,
   deriving,
+  mathcomp-word,
 }:
 
 (mkCoqDerivation {
@@ -67,6 +68,7 @@
     mathcomp-experimental-reals
     extructures
     deriving
+    mathcomp-word
   ];
 
   meta = with lib; {
