@@ -16,9 +16,6 @@ scope. These are typically required for the creation of the finalized
 
 - `backend-stdenv.nix`: Standard environment for CUDA packages.
 - `flags.nix`: Flags set, or consumed by, NVCC in order to build packages.
-- `gpus.nix`: A list of supported NVIDIA GPUs.
-- `nvcc-compatibilities.nix`: NVCC releases and the version range of GCC/Clang
-    they support.
 
 ## Top-level directories
 

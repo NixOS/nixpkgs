@@ -3,6 +3,7 @@
   autoAddDriverRunpath,
   autoAddCudaCompatRunpath,
   autoPatchelfHook,
+  cudaLib,
   cudaStdenv,
   callPackage,
   fetchurl,
@@ -47,15 +48,15 @@ let
   maybeFixup = fixups.${pname} or null;
   fixup = if maybeFixup != null then callPackage maybeFixup { } else { };
 
-  # Get the redist architectures for which package provides distributables.
+  # Get the redist systems for which package provides distributables.
   # These are used by meta.platforms.
-  supportedRedistArchs = builtins.attrNames featureRelease;
-  # redistArch :: String
-  # The redistArch is the name of the architecture for which the redistributable is built.
-  # It is `"unsupported"` if the redistributable is not supported on the target platform.
-  redistArch = flags.getRedistArch hostPlatform.system;
+  supportedRedistSystems = builtins.attrNames featureRelease;
+  # redistSystem :: String
+  # The redistSystem is the name of the system for which the redistributable is built.
+  # It is `"unsupported"` if the redistributable is not supported on the target system.
+  redistSystem = cudaLib.utils.getRedistSystem cudaStdenv.hasJetsonCudaCapability hostPlatform.system;
 
-  sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
+  sourceMatchesHost = lib.elem hostPlatform.system (cudaLib.utils.getNixSystems redistSystem);
 in
 (cudaStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
@@ -81,7 +82,7 @@ in
       hasOutput =
         output:
         attrsets.attrByPath [
-          redistArch
+          redistSystem
           "outputs"
           output
         ] false featureRelease;
@@ -99,12 +100,15 @@ in
       # NOTE: In the case the redistributable isn't supported on the target platform,
       # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
       # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
-      # The alternative would be to have `outputs = [ "out" ]` when`redistArch = "unsupported"`, but that would
+      # The alternative would be to have `outputs = [ "out" ]` when`redistSystem = "unsupported"`, but that would
       # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
       # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
       # `cudaSupport = false`!
       additionalOutputs =
-        if redistArch == "unsupported" then possibleOutputs else builtins.filter hasOutput possibleOutputs;
+        if redistSystem == "unsupported" then
+          possibleOutputs
+        else
+          builtins.filter hasOutput possibleOutputs;
       # The out output is special -- it's the default output and we always include it.
       outputs = [ "out" ] ++ additionalOutputs;
     in
@@ -155,14 +159,14 @@ in
   };
 
   # src :: Optional Derivation
-  # If redistArch doesn't exist in redistribRelease, return null.
+  # If redistSystem doesn't exist in redistribRelease, return null.
   src = trivial.mapNullable (
     { relative_path, sha256, ... }:
     fetchurl {
       url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
       inherit sha256;
     }
-  ) (redistribRelease.${redistArch} or null);
+  ) (redistribRelease.${redistSystem} or null);
 
   postPatch =
     # Pkg-config's setup hook expects configuration files in $out/share/pkgconfig
@@ -321,11 +325,13 @@ in
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
-    platforms = trivial.pipe supportedRedistArchs [
-      # Map each redist arch to the equivalent nix system or null if there is no equivalent.
-      (builtins.map flags.getNixSystem)
-      # Filter out unsupported systems
-      (builtins.filter (nixSystem: !(strings.hasPrefix "unsupported-" nixSystem)))
+    platforms = trivial.pipe supportedRedistSystems [
+      # Map each redist system to the equivalent nix systems.
+      (lib.concatMap cudaLib.utils.getNixSystems)
+      # Take all the unique values.
+      lib.unique
+      # Sort the list.
+      lib.naturalSort
     ];
     badPlatforms =
       let
