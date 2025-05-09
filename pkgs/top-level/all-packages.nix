@@ -9299,7 +9299,6 @@ with pkgs;
   zunclient = with python312Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
-  openvdb_11 = callPackage ../development/libraries/openvdb/11.nix { };
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_6
