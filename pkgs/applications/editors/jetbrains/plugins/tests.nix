@@ -24,11 +24,13 @@ let
         dataspell
         gateway
         goland
-        idea-community
+        idea-community-src
+        idea-community-bin
         idea-ultimate
         mps
         phpstorm
-        pycharm-community
+        pycharm-community-src
+        pycharm-community-bin
         pycharm-professional
         rider
         ruby-mine
