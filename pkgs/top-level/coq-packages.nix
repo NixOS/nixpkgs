@@ -94,6 +94,7 @@ let
       coqtail-math = callPackage ../development/coq-modules/coqtail-math { };
       coquelicot = callPackage ../development/coq-modules/coquelicot { };
       coqutil = callPackage ../development/coq-modules/coqutil { };
+      coqfmt = callPackage ../development/coq-modules/coqfmt { };
       corn = callPackage ../development/coq-modules/corn { };
       deriving = callPackage ../development/coq-modules/deriving { };
       dpdgraph = callPackage ../development/coq-modules/dpdgraph { };
