@@ -11,10 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "scalar";
-  version = "0-unstable-2025-05-04";
+  version = "0.1.188";
 
   src = fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
+    name = "scalar-app-${version}amd64.deb";
     hash = "sha256-ZziTuqCuJcgRBLeF8ipXhI1vUmzfckvaEtA5BiYuCnA=";
   };
 
