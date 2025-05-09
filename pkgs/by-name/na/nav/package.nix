@@ -2,25 +2,22 @@
   stdenv,
   lib,
   fetchzip,
-  nix-update-script,
+  writeScript,
+  nix-update,
   autoPatchelfHook,
   libxcrypt-legacy,
 }:
 
-let
-  system = stdenv.hostPlatform.parsed.cpu.name;
-  platform = "${system}-unknown-linux-gnu";
-in
 stdenv.mkDerivation rec {
   pname = "nav";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchzip {
-    url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${platform}.tar.gz";
+    url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
     sha256 =
       {
-        x86_64-linux = "sha256-ihn5wlagmujHlSfJpgojQNqa4NjLF1wk2pt8wHi60DY=";
-        aarch64-linux = "sha256-l3rKu3OU/TUUjmx3p06k9V5eN3ZDNcxbxObLqVQ2B7U=";
+        x86_64-linux = "sha256-ZDta1qbkdR3p9BJ0fy7or8MvE6QCL+wCKWd/KLavrhw=";
+        aarch64-linux = "sha256-RD6z/oNjCwig7NC+9qK5eKAoqtQIbL11tmY5jkqeoc8=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
@@ -40,7 +37,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = writeScript "update" ''
+    ${nix-update}/bin/nix-update nav --system x86_64-linux
+    ${nix-update}/bin/nix-update nav --system aarch64-linux --version "skip"
+  '';
 
   meta = {
     description = "Interactive and stylish replacement for ls & cd";
