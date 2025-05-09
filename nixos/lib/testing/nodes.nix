@@ -88,9 +88,10 @@ in
         default = 2;
         type = types.ints.between 2 4294967296;
         description = ''
-          By default this assigns vsock numbers starting at 3 to the nodes.
-          On e.g. large builders used by multiple people, this would cause conflicts
-          between multiple users doing interactive debugging.
+          This field is only relevant when multiple users run the (interactive) 
+          driver outside the sandbox and with the SSH backdoor activated.
+          The typical symptom for this being a problem are error messages like this:
+          `vhost-vsock: unable to set guest cid: Address already in use`
 
           This option allows to assign an offset to each vsock number to
           resolve this.
