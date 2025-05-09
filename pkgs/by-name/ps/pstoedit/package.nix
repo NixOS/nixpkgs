@@ -50,12 +50,6 @@ stdenv.mkDerivation rec {
       libiconv
     ];
 
-  # '@LIBPNG_LDFLAGS@' is no longer substituted by autoconf (the code is commented out)
-  # so we need to remove it from the pkg-config file as well
-  preConfigure = ''
-    substituteInPlace config/pstoedit.pc.in --replace '@LIBPNG_LDFLAGS@' ""
-  '';
-
   postInstall = ''
     wrapProgram $out/bin/pstoedit \
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]}
