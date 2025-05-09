@@ -244,7 +244,7 @@ rec {
     hash = "";
     owner = "Winetricks";
     repo = "winetricks";
-    rev = "00427b6";
+    rev = version;
 
     updateScript = writeShellScript "update-winetricks" ''
       ${updateScriptPreamble}
