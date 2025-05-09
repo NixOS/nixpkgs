@@ -11,7 +11,7 @@
   replaceVars,
   enableCmdlib ? false,
   enableDmeventd ? false,
-  udevSupport ? !stdenv.hostPlatform.isStatic,
+  udevSupport ? (!stdenv.hostPlatform.isStatic && udev.passthru.features.withSystemd),
   udev,
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have a infinity recursion during static compilation
@@ -181,14 +181,17 @@ stdenv.mkDerivation rec {
     moveToOutput lib/libdevmapper.so $lib
   '';
 
-  passthru.tests = {
-    installer = nixosTests.installer.lvm;
-    lvm2 = recurseIntoAttrs nixosTests.lvm2;
+  passthru = {
+    features = { inherit (udev.passthru.features) withSystemd; };
+    tests = {
+      installer = nixosTests.installer.lvm;
+      lvm2 = recurseIntoAttrs nixosTests.lvm2;
 
-    # https://github.com/NixOS/nixpkgs/issues/369732
-    lvm2-fhs-env = buildFHSEnv {
-      name = "lvm2-fhs-env-test";
-      targetPkgs = p: [ p.lvm2 ];
+      # https://github.com/NixOS/nixpkgs/issues/369732
+      lvm2-fhs-env = buildFHSEnv {
+        name = "lvm2-fhs-env-test";
+        targetPkgs = p: [ p.lvm2 ];
+      };
     };
   };
 
