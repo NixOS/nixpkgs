@@ -16,6 +16,7 @@
   # runtime deps
   glib,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   lua5_4,
   pipewire,
   # options
@@ -68,10 +69,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
     lua5_4
     pipewire
-  ];
+  ] ++ lib.optional withSystemd systemd;
 
   mesonFlags = [
     (lib.mesonBool "system-lua" true)
@@ -83,7 +83,10 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "sysconfdir" "/etc")
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    features = { inherit withSystemd; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Modular session / policy manager for PipeWire";
