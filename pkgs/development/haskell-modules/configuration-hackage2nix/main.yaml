@@ -791,7 +791,9 @@ unsupported-platforms:
   xmonad-volume:                                [ platforms.darwin ]
   xnobar:                                       [ platforms.darwin ]
   kmonad:                                       [ platforms.darwin ]
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no
 supported-platforms:
   AWin32Console:                                [ platforms.windows ]
   alsa-mixer:                                   [ platforms.linux ]
