@@ -13459,10 +13459,6 @@ with pkgs;
 
   mpvScripts = mpv-unwrapped.scripts;
 
-  shaka-packager = callPackage ../by-name/sh/shaka-packager/package.nix {
-    abseil-cpp = abseil-cpp_202401;
-  };
-
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
   murmur =
