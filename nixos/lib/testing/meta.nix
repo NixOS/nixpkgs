@@ -4,7 +4,7 @@ let
 in
 {
   options = {
-    meta = lib.mkOption {
+    meta = mkOption {
       description = ''
         The [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes that will be set on the returned derivations.
 
@@ -15,35 +15,35 @@ in
         { config, ... }:
         {
           options = {
-            maintainers = lib.mkOption {
+            maintainers = mkOption {
               type = types.listOf types.raw;
               default = [ ];
               description = ''
                 The [list of maintainers](https://nixos.org/manual/nixpkgs/stable/#var-meta-maintainers) for this test.
               '';
             };
-            timeout = lib.mkOption {
+            timeout = mkOption {
               type = types.nullOr types.int;
               default = 3600; # 1 hour
               description = ''
                 The [{option}`test`](#test-opt-test)'s [`meta.timeout`](https://nixos.org/manual/nixpkgs/stable/#var-meta-timeout) in seconds.
               '';
             };
-            broken = lib.mkOption {
+            broken = mkOption {
               type = types.bool;
               default = false;
               description = ''
                 Sets the [`meta.broken`](https://nixos.org/manual/nixpkgs/stable/#var-meta-broken) attribute on the [{option}`test`](#test-opt-test) derivation.
               '';
             };
-            platforms = lib.mkOption {
+            platforms = mkOption {
               type = types.listOf types.raw;
               default = lib.platforms.linux ++ lib.platforms.darwin;
               description = ''
                 Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.
               '';
             };
-            hydraPlatforms = lib.mkOption {
+            hydraPlatforms = mkOption {
               type = types.listOf types.raw;
               default = config.platforms;
               defaultText = literalExpression "meta.platforms";
