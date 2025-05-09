@@ -2,7 +2,7 @@
   stdenv,
   lib,
   callPackage,
-  fetchgit,
+  fetchFromGitHub,
   fetchurl,
   makeWrapper,
   writeText,
@@ -51,24 +51,28 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.08";
+  version = "6.36.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
   src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-gGBFsVbeA/6PVmGmcOq4d/Lk0tpsI03D4x6Y4tfZb+g=";
+    url = "https://root.cern.ch/download/root_v${version}-rc1.source.tar.gz";
+    hash = "sha256-WkB2IP4BZMv2yfJrGuiCoXwQFRRy1yaPutF2AnVkscA=";
   };
 
-  clad_src = fetchgit {
-    url = "https://github.com/vgvassilev/clad";
+  clad_src = fetchFromGitHub {
+    owner = "vgvassilev";
+    repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.7";
-    hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
+    rev = "refs/tags/v1.9";
+    hash = "sha256-TKCRAfwdTp/uDH7rk9EE4z2hwqBybklHhhYH6hQFYpg=";
   };
+
+  # ROOT requires a patched version on clang
+  clang = (callPackage ./clang-root.nix { });
 
   nativeBuildInputs = [
     makeWrapper
@@ -81,6 +85,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     [
+      clang
       davix
       fftw
       ftgl
@@ -128,8 +133,8 @@ stdenv.mkDerivation rec {
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-        --replace-fail 'add_clang_symlink(''${link} clang)' ""
+      substituteInPlace core/clingutils/CMakeLists.txt \
+        --replace-fail 'set(CLANG_RESOURCE_DIR_STEM ''${LLVM_LIBRARY_DIR}/clang)' 'set(CLANG_RESOURCE_DIR_STEM ${clang}/lib/clang)'
 
       patchShebangs cmake/unix/
     ''
@@ -151,14 +156,15 @@ stdenv.mkDerivation rec {
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
       "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_OSX_SYSROOT=/tmp" # random path to not trigger automatic detection in SetUpMacOS.cmake
+      "-DClang_DIR=${clang}/lib/cmake/clang"
+      "-Dbuiltin_clang=OFF"
       "-Dbuiltin_llvm=OFF"
       "-Dfail-on-missing=ON"
       "-Dfftw3=ON"
       "-Dfitsio=OFF"
       "-Dgnuinstall=ON"
       "-Dmathmore=ON"
-      "-Dmysql=OFF"
-      "-Dpgsql=OFF"
       "-Dsqlite=OFF"
       "-Dvdt=OFF"
     ]
