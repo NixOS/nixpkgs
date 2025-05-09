@@ -1,5 +1,6 @@
 {
   lib,
+  versionCheckHook,
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
@@ -36,7 +37,12 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/etix/mirrorbits/core.VERSION=${finalAttrs.version}"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Geographical download redirector for distributing files efficiently across a set of mirrors";
