@@ -5544,12 +5544,12 @@ final: prev: {
 
   gruvbox-community = buildVimPlugin {
     pname = "gruvbox-community";
-    version = "2025-04-21";
+    version = "2025-05-08";
     src = fetchFromGitHub {
       owner = "gruvbox-community";
       repo = "gruvbox";
-      rev = "c2e10b3eff61ae96a27d741150e5fbcb2dd9c5b0";
-      sha256 = "1gg1acf6q6rgz0jksk1klxn84ka6qz6kgr3g1ibvfzv604q994g4";
+      rev = "365d399948022e187aa74dc86c0e2b88156551fe";
+      sha256 = "1zvm8innmibjz9msjhlzn2b6bcfbkc67fjiknyjn99i1idvm3mkj";
     };
     meta.homepage = "https://github.com/gruvbox-community/gruvbox/";
     meta.hydraPlatforms = [ ];
