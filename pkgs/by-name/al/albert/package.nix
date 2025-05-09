@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      ericsagnes
       synthetica
       eljamm
     ];
