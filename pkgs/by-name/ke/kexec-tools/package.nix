@@ -7,6 +7,7 @@
   nixosTests,
   gitUpdater,
   zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +45,10 @@ stdenv.mkDerivation rec {
   ];
   configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ zlib ];
+  buildInputs = [
+    zlib
+    zstd
+  ];
 
   enableParallelBuilding = true;
 
