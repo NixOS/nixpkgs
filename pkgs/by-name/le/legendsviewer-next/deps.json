@@ -1,0 +1,107 @@
+[
+  {
+    "pname": "coverlet.collector",
+    "version": "6.0.0",
+    "hash": "sha256-IEmweTMapcPhFHpmJsPXfmMhravYOrWupgjeOvMmQ4o="
+  },
+  {
+    "pname": "Microsoft.CodeCoverage",
+    "version": "17.8.0",
+    "hash": "sha256-cv/wAXfTNS+RWEsHWNKqRDHC7LOQSSdFJ1a9cZuSfJw="
+  },
+  {
+    "pname": "Microsoft.Extensions.ApiDescription.Server",
+    "version": "6.0.5",
+    "hash": "sha256-RJjBWz+UHxkQE2s7CeGYdTZ218mCufrxl0eBykZdIt4="
+  },
+  {
+    "pname": "Microsoft.NET.Test.Sdk",
+    "version": "17.8.0",
+    "hash": "sha256-uz7QvW+NsVRsp8FR1wjnGEOkUaPX4JyieywvCN6g2+s="
+  },
+  {
+    "pname": "Microsoft.OpenApi",
+    "version": "1.6.14",
+    "hash": "sha256-dSJUic2orPGfYVgto9DieRckbtLpPyxHtf+RJ2tmKPM="
+  },
+  {
+    "pname": "Microsoft.TestPlatform.ObjectModel",
+    "version": "17.8.0",
+    "hash": "sha256-9TwGrjVvbtyetw67Udp3EMK5MX8j0RFRjduxPCs9ESw="
+  },
+  {
+    "pname": "Microsoft.TestPlatform.TestHost",
+    "version": "17.8.0",
+    "hash": "sha256-+CTYFu631uovLCO47RKe86YaAqfoLA4r73vKORJUsjg="
+  },
+  {
+    "pname": "MSTest.TestAdapter",
+    "version": "3.1.1",
+    "hash": "sha256-TLysbO9bgiztIap44o875ZPpuVAOC6ueaRTKsiVicXg="
+  },
+  {
+    "pname": "MSTest.TestFramework",
+    "version": "3.1.1",
+    "hash": "sha256-Vqu+IDuYjiR39QOJW7GHiH7CeF2cBfNIYYTXmVeeb9E="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.1",
+    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+  },
+  {
+    "pname": "NuGet.Frameworks",
+    "version": "6.5.0",
+    "hash": "sha256-ElqfN4CcKxT3hP2qvxxObb4mnBlYG89IMxO0Sm5oZ2g="
+  },
+  {
+    "pname": "SkiaSharp",
+    "version": "2.88.8",
+    "hash": "sha256-rD5gc4SnlRTXwz367uHm8XG5eAIQpZloGqLRGnvNu0A="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Linux",
+    "version": "2.88.8",
+    "hash": "sha256-fOmNbbjuTazIasOvPkd2NPmuQHVCWPnow7AxllRGl7Y="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.macOS",
+    "version": "2.88.8",
+    "hash": "sha256-CdcrzQHwCcmOCPtS8EGtwsKsgdljnH41sFytW7N9PmI="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Win32",
+    "version": "2.88.8",
+    "hash": "sha256-b8Vb94rNjwPKSJDQgZ0Xv2dWV7gMVFl5GwTK/QiZPPM="
+  },
+  {
+    "pname": "Swashbuckle.AspNetCore",
+    "version": "6.9.0",
+    "hash": "sha256-fmJjAfVHzbw/31IFPFUP31g46Y1XXIc1kr6VvYW5pCc="
+  },
+  {
+    "pname": "Swashbuckle.AspNetCore.Swagger",
+    "version": "6.9.0",
+    "hash": "sha256-8KM21CWckFghGaqWahMa3V64+hUBrifAJnQ6P2VXlEk="
+  },
+  {
+    "pname": "Swashbuckle.AspNetCore.SwaggerGen",
+    "version": "6.9.0",
+    "hash": "sha256-Ni8Z9CFs+ybTX8IgDuSKA580ISQ55w032EeqWYQXwoc="
+  },
+  {
+    "pname": "Swashbuckle.AspNetCore.SwaggerUI",
+    "version": "6.9.0",
+    "hash": "sha256-V+3bEEpxSXPi9Sy1hHZEjY9qxuIpRWV5dKzaqYMSu40="
+  },
+  {
+    "pname": "System.Reflection.Metadata",
+    "version": "1.6.0",
+    "hash": "sha256-JJfgaPav7UfEh4yRAQdGhLZF1brr0tUWPl6qmfNWq/E="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "8.0.0",
+    "hash": "sha256-fjCLQc1PRW0Ix5IZldg0XKv+J1DqPSfu9pjMyNBp7dE="
+  }
+]
