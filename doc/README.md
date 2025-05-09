@@ -34,6 +34,45 @@ $ nix-build doc
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
+### Shell utilities
+
+In order to ease up your contribution workflow, consider loading the provided shell by using `nix-shell`.
+
+You can load it from the root of the nixpkgs tree with:
+
+```ShellSession
+$ cd /path/to/nixpkgs
+$ nix-shell doc
+```
+
+Alternatively, you can load it by first entering the doc folder:
+
+```ShellSession
+$ cd /path/to/nixpkgs/doc
+$ nix-shell
+```
+
+From there, all utilities provided by the `shell.nix` file will be available in your PATH.
+
+#### Automatic shell loading
+
+If you would like to load the shell utilities automatically, you could use a tool like `direnv` with `nix-direnv`. If you already use NixOS, add `programs.direnv.enable = true;` to your configuration file to make them available.
+
+Once `direnv` and `nix-direnv` are available in your system you can create a `.envrc` file inside the `doc` folder with the following content:
+
+```
+use nix shell.nix
+```
+
+To make sure that your commits are clear from direnv files, make sure to edit `.git/info/exclude` at the root of the repo with the following lines:
+
+```
+/**/.envrc
+/**/.direnv
+```
+
+Now, everytime you enter the `/path/to/nixpkgs/doc`, the shell will be loaded for you automatically.
+
 ### devmode
 
 The shell in the manual source directory makes available a command, `devmode`.
