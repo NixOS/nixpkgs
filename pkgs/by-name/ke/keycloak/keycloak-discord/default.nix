@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak-discord";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/wadahiro/keycloak-discord/releases/download/v${version}/keycloak-discord-${version}.jar";
-    hash = "sha256-radvUu2a6t0lbo5f/ADqy7+I/ONXB7/8pk2d1BtYzQA=";
+    hash = "sha256-rz+YKV8oiYy+iuwrW0F01gOKuRt0w7FOkxMhFCbzNvs=";
   };
 
   dontUnpack = true;
