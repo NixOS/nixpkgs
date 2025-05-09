@@ -850,7 +850,7 @@ in
       # Wait for PostgreSQL to be ready to accept connections.
       script =
         ''
-          while ! psql -d postgres -c "" 2> /dev/null; do
+          while ! psql -d postgres -c 'DO $$ BEGIN IF pg_is_in_recovery() THEN RAISE read_only_sql_transaction; END IF; END$$;' 2> /dev/null; do
               if ! systemctl is-active --quiet postgresql.service; then exit 1; fi
               sleep 0.1
           done
