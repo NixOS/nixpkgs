@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   fixDarwinDylibNames,
+  apache-orc,
   autoconf,
   aws-sdk-cpp,
   aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [
+      apache-orc
       boost
       brotli
       bzip2
@@ -169,6 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
       grpc
       nlohmann_json
     ];
+
+  # apache-orc looks for things in caps
+  env = {
+    LZ4_ROOT = lz4;
+    ZSTD_ROOT = zstd.dev;
+  };
 
   preConfigure = ''
     patchShebangs build-support/
@@ -214,6 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
       "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
       "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+      "-DARROW_ORC=ON"
       # Parquet options:
       "-DARROW_PARQUET=ON"
       "-DPARQUET_BUILD_EXECUTABLES=ON"
