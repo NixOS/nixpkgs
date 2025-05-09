@@ -8,20 +8,21 @@
   pam,
   pandoc,
   rustPlatform,
+  tzdata,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
-    rev = "v${version}";
-    hash = "sha256-apvMcn/1dV9uujyoHikiOxregwWtAFPvrZvYjd3XQwM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vZv3IVSW6N0puoWJBYQPmNntgHPt9SPV07TEuWN/bHw=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EAfNg7hUsynFZ+EcUqeD9o44BakBYIMgxRXc4vcl8HY=";
+  cargoHash = "sha256-/CbU2ds2VQ2IXx7GKxRO3vePzLXJXabA1FcyIGPsngw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,8 +34,11 @@ rustPlatform.buildRustPackage rec {
   # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
     substituteInPlace util/generate-docs.sh \
-      --replace "/usr/bin/env bash" ${lib.getExe bash} \
-      --replace util/pandoc.sh pandoc
+      --replace-fail "/usr/bin/env bash" ${lib.getExe bash} \
+      --replace-fail util/pandoc.sh pandoc
+
+    substituteInPlace build.rs \
+      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   postInstall = ''
@@ -75,16 +79,19 @@ rustPlatform.buildRustPackage rec {
     tests = nixosTests.sudo-rs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
-    changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "${finalAttrs.meta.homepage}/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ nicoo ];
+    maintainers = with lib.maintainers; [
+      nicoo
+      rvdp
+    ];
     mainProgram = "sudo";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

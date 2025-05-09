@@ -11323,6 +11323,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-vtsls = buildVimPlugin {
+    pname = "nvim-vtsls";
+    version = "2025-04-27";
+    src = fetchFromGitHub {
+      owner = "yioneko";
+      repo = "nvim-vtsls";
+      rev = "60b493e641d3674c030c660cabe7a2a3f7a914be";
+      sha256 = "00qj7b70afpgxmb6ml4knjwdwcn29yk8mvsb575b6ww9zsxh34il";
+    };
+    meta.homepage = "https://github.com/yioneko/nvim-vtsls/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-whichkey-setup-lua = buildVimPlugin {
     pname = "nvim-whichkey-setup.lua";
     version = "2021-04-16";

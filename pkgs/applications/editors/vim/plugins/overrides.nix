@@ -120,6 +120,8 @@
   websocat,
   # luau-lsp-nvim dependencies
   luau-lsp,
+  # nvim-vstsl dependencies
+  vtsls,
 }:
 self: super:
 let
@@ -2589,6 +2591,11 @@ in
   nvim-unception = super.nvim-unception.overrideAttrs {
     # Attempt rpc socket connection
     nvimSkipModules = "client.client";
+  };
+
+  nvim-vtsls = super.nvim-vtsls.overrideAttrs {
+    runtimeDeps = [ vtsls ];
+    dependencies = [ self.nvim-lspconfig ];
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {
