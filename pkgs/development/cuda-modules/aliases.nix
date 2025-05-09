@@ -9,6 +9,11 @@ in
 builtins.mapAttrs mkRenamed {
   # A comment to prevent empty { } from collapsing into a single line
 
+  backendStdenv = {
+    path = "cudaPackages.cudaStdenv";
+    package = final.cudaStdenv;
+  };
+
   cudaVersion = {
     path = "cudaPackages.cudaMajorMinorVersion";
     package = final.cudaMajorMinorVersion;
