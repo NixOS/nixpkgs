@@ -2,30 +2,32 @@
   lib,
   stdenv,
   fetchgit,
+
   ant,
   jdk,
-  stripJavaArchivesHook,
   makeWrapper,
-  jre,
+  stripJavaArchivesHook,
+
   coreutils,
+  jre,
   which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "projectlibre";
-  version = "1.9.3";
+  version = "1.9.8";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/projectlibre/code";
-    rev = "20814e88dc83694f9fc6780c2550ca5c8a87aa16"; # version 1.9.3 was not tagged
-    hash = "sha256-yXgYyy3jWxYMXKsNCRWdO78gYRmjKpO9U5WWU6PtwMU=";
+    rev = "0530be227f4a10c5545cce8d3db20ac5a4d76a66"; # version 1.9.8 was not tagged
+    hash = "sha256-eGoPtHy1XfPLnJXNDOMcek4spNKkNyZdby0IsZFZfME=";
   };
 
   nativeBuildInputs = [
     ant
     jdk
-    stripJavaArchivesHook
     makeWrapper
+    stripJavaArchivesHook
   ];
 
   runtimeDeps = [
@@ -33,8 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     which
   ];
-
-  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=UTF8";
 
   buildPhase = ''
     runHook preBuild
@@ -57,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     substituteInPlace $out/bin/projectlibre \
-        --replace-fail "/usr/share/projectlibre" "$out/share/projectlibre"
+      --replace-fail "/usr/share/projectlibre" "$out/share/projectlibre"
 
     wrapProgram $out/bin/projectlibre \
-        --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 
     runHook postInstall
   '';
