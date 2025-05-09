@@ -15523,6 +15523,7 @@ with pkgs;
     gnome45Extensions
     gnome46Extensions
     gnome47Extensions
+    gnome48Extensions
     ;
 
   gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };

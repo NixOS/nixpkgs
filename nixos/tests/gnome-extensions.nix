@@ -121,11 +121,14 @@ import ./make-test-python.nix (
             #   "${run "gsettings set org.gnome.shell disable-extension-version-validation true"}"
             # )
 
-        # Assert that some extension is in a specific state
-        def checkState(target, extension):
-            state = machine.succeed(
+        def getState(extension):
+            return machine.succeed(
                 f"${run "gnome-extensions info {extension}"} | grep '^  State: .*$'"
             )
+
+        # Assert that some extension is in a specific state
+        def checkState(target, extension):
+            state = getState(extension)
             assert target in state, f"{state} instead of {target}"
 
         def checkExtension(extension, disable):
@@ -143,6 +146,10 @@ import ./make-test-python.nix (
                 # Enable and optionally disable
 
                 machine.succeed(f"${run "gnome-extensions enable {extension}"}")
+                wait_time = 5
+                while getState(extension) == "ACTIVATING" and (wait_time := wait_time - 1) > 0:
+                    machine.log(f"Extension {extension} is still activating, waiting {wait_time} more seconds")
+                    machine.sleep(1)
                 checkState("ACTIVE", extension)
 
                 if disable:
