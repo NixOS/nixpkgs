@@ -13818,8 +13818,6 @@ with pkgs;
 
   qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
 
-  qmmp = qt6Packages.callPackage ../applications/audio/qmmp { };
-
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
   qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
