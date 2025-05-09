@@ -107,7 +107,7 @@ let
 
   goBuild =
     if enableCuda then
-      buildGoModule.override { stdenv = cudaPackages.backendStdenv; }
+      buildGoModule.override { stdenv = cudaPackages.cudaStdenv; }
     else if enableRocm then
       buildGoModule.override { stdenv = rocmPackages.stdenv; }
     else

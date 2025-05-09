@@ -7,7 +7,7 @@
 }:
 let
   inherit (cudaPackages)
-    backendStdenv
+    cudaStdenv
     cuda_cccl
     cuda_cudart
     cuda_nvcc
@@ -19,7 +19,7 @@ let
     ;
   inherit (lib) getDev getLib getOutput;
 in
-backendStdenv.mkDerivation {
+cudaStdenv.mkDerivation {
   pname = "saxpy";
   version = "unstable-2023-07-11";
 

@@ -36,7 +36,7 @@ let
     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
 
-  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv = if cublasSupport then cudaPackages.cudaStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";

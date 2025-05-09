@@ -13,7 +13,7 @@
 }:
 let
   inherit (cudaPackages)
-    backendStdenv
+    cudaStdenv
     cuda_cccl
     cuda_cudart
     cuda_nvcc
@@ -23,7 +23,7 @@ let
     nccl
     ;
 in
-backendStdenv.mkDerivation (finalAttrs: {
+cudaStdenv.mkDerivation (finalAttrs: {
 
   pname = "nccl-tests";
   version = "2.15.0";

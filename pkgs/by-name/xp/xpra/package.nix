@@ -91,7 +91,7 @@ buildPythonApplication rec {
   pname = "xpra";
   version = "6.3";
 
-  stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
+  stdenv = if withNvenc then cudaPackages.cudaStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";

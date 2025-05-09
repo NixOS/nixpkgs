@@ -40,7 +40,7 @@ let
   };
 
   stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.cudaStdenv else inputs.stdenv;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 

@@ -38,10 +38,10 @@
 }:
 
 let
-  # It's necessary to consistently use backendStdenv when building with CUDA support,
+  # It's necessary to consistently use cudaStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
   # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.cudaStdenv else stdenv;
   inherit (lib)
     cmakeBool
     cmakeFeature

@@ -249,7 +249,7 @@ let
     echo "# Update using: unroll-src [version]"
   '';
 
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv' = if cudaSupport then cudaPackages.cudaStdenv else stdenv;
 in
 buildPythonPackage rec {
   pname = "torch";

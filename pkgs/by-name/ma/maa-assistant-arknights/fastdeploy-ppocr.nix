@@ -12,7 +12,7 @@
 }@inputs:
 
 let
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.cudaStdenv else inputs.stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "fastdeploy-ppocr";

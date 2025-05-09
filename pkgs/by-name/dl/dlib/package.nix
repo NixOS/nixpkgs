@@ -18,7 +18,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }@inputs:
-(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
+(if cudaSupport then cudaPackages.cudaStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
   version = "19.24.8";
 
