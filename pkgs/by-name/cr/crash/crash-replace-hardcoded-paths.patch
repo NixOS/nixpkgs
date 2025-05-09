@@ -1,0 +1,448 @@
+diff --git a/cmdline.c b/cmdline.c
+index 65da04c..86884e0 100644
+--- a/cmdline.c
++++ b/cmdline.c
+@@ -362,7 +362,7 @@ dump_history(void)
+  */
+ 
+ static char *less_argv[5] = {
+-	"/usr/bin/less",
++	"@less@",
+ 	"-E",
+ 	"-X",
+         "-Ps -- MORE --  forward\\: <SPACE>, <ENTER> or j  backward\\: b or k  quit\\: q",
+@@ -370,7 +370,7 @@ static char *less_argv[5] = {
+ };
+ 
+ static char *more_argv[2] = {
+-	"/bin/more",
++	"@more@",
+ 	NULL
+ };
+ 
+@@ -2103,8 +2103,8 @@ set_my_tty(void)
+ 
+         strcpy(pc->my_tty, "?");
+ 
+-	if (file_exists("/usr/bin/tty", NULL)) {
+-	        sprintf(buf, "/usr/bin/tty");
++	if (file_exists("@tty@", NULL)) {
++	        sprintf(buf, "@tty@");
+ 	        if ((pipe = popen(buf, "r")) == NULL) 
+ 	                return;
+ 	
+@@ -2118,7 +2118,7 @@ set_my_tty(void)
+ 		return;
+ 	}
+ 
+-        sprintf(buf, "ps -ef | grep ' %d '", getpid());
++        sprintf(buf, "@ps@ -ef | @grep@ ' %d '", getpid());
+ 
+ 	if (CRASHDEBUG(1))
+ 		fprintf(fp, "popen(%s)\n", buf);
+diff --git a/crash.8 b/crash.8
+index c7dc27d..8675649 100644
+--- a/crash.8
++++ b/crash.8
+@@ -429,9 +429,9 @@ Set the initial context to that of the "swapper" task on cpu 0.
+ .TP
+ .B --more
+ Use 
+-.I /bin/more 
++.I more 
+ as the command output scroller, overriding the default of 
+-.I /usr/bin/less
++.I less
+ and any settings in either 
+ .I ./.crashrc 
+ or
+@@ -439,7 +439,7 @@ or
+ .TP
+ .B --less
+ Use 
+-.I /usr/bin/less 
++.I less 
+ as the command output scroller, overriding 
+ any settings in either 
+ .I ./.crashrc 
+@@ -848,7 +848,7 @@ If
+ .B CRASHPAGER
+ is set, its value is used as the name of the program to which command output will be sent. 
+ If not, then command output is sent to 
+-.B /usr/bin/less -E -X 
++.B less -E -X 
+ by default.
+ .TP
+ .B CRASH_MODULE_PATH
+diff --git a/extensions/snap.c b/extensions/snap.c
+index 04b9c60..359d644 100644
+--- a/extensions/snap.c
++++ b/extensions/snap.c
+@@ -143,7 +143,7 @@ cmd_snap(void)
+ 
+         fprintf(stderr, "\r%s: [100%%] ", filename);
+ 	fprintf(fp, "\n");
+-	sprintf(buf, "/bin/ls -l %s\n", filename);
++	sprintf(buf, "@ls@ -l %s\n", filename);
+ 	system(buf);
+ 
+ 	FREEBUF(elf_header);
+diff --git a/filesys.c b/filesys.c
+index 34944e2..0a8b208 100644
+--- a/filesys.c
++++ b/filesys.c
+@@ -1024,14 +1024,14 @@ search_directory_tree(char *directory, char *file, int follow_links)
+ 	regex_t regex;
+ 	int regex_used, done;
+ 
+-	if (!file_exists("/usr/bin/find", NULL) || 
+-	    !file_exists("/bin/echo", NULL) ||
++	if (!file_exists("@find@", NULL) || 
++	    !file_exists("@echo@", NULL) ||
+ 	    !is_directory(directory) ||
+ 	    (*file == '(')) 
+ 		return NULL;
+ 
+ 	sprintf(command, 
+-            "/usr/bin/find %s %s -name %s -print; /bin/echo search done",
++            "@find@ %s %s -name %s -print; @echo@ search done",
+ 		follow_links ? "-L" : "", directory, file);
+ 
+         if ((pipe = popen(command, "r")) == NULL) {
+@@ -4377,7 +4377,7 @@ match_file_string(char *filename, char *string, char *buffer)
+ 	FILE *pipe;
+ 
+ 
+-	sprintf(command, "/usr/bin/strings %s", filename);
++	sprintf(command, "@strings@ %s", filename);
+         if ((pipe = popen(command, "r")) == NULL) {
+                 error(INFO, "%s: %s\n", filename, strerror(errno));
+                 return FALSE;
+diff --git a/help.c b/help.c
+index 78d7a5c..25641d3 100644
+--- a/help.c
++++ b/help.c
+@@ -296,12 +296,12 @@ char *program_usage_info[] = {
+     "    on cpu 0.",
+     "",
+     "  --more ",
+-    "    Use /bin/more as the command output scroller, overriding the",
+-    "    default of /usr/bin/less and any settings in either ./.crashrc",
++    "    Use more as the command output scroller, overriding the",
++    "    default of less and any settings in either ./.crashrc",
+     "    or $HOME/.crashrc.",
+     "",
+     "  --less ",
+-    "    Use /usr/bin/less as the command output scroller, overriding any",
++    "    Use less as the command output scroller, overriding any",
+     "    settings in either ./.crashrc or $HOME/.crashrc.",
+     "",
+     "  --CRASHPAGER",
+@@ -384,7 +384,7 @@ char *program_usage_info[] = {
+     "  CRASHPAGER",
+     "    If CRASHPAGER is set, its value is used as the name of the program",
+     "    to which command output will be sent.  If not, then command output",
+-    "    output is sent to \"/usr/bin/less -E -X\" by default.",
++    "    output is sent to \"/less -E -X\" by default.",
+     "",
+     "  CRASH_MODULE_PATH",
+     "    Specifies an alternative directory tree to search for kernel",
+@@ -1156,7 +1156,7 @@ char *help_set[] = {
+ "  argument is entered, the current value of the %s variable is shown.  These",
+ "  are the %s variables, acceptable arguments, and purpose:\n",
+ "          scroll  on | off     controls output scrolling.",
+-"          scroll  less         /usr/bin/less as the output scrolling program.",
++"          scroll  less         less as the output scrolling program.",
+ "          scroll  more         /bin/more as the output scrolling program.",
+ "          scroll  CRASHPAGER   use CRASHPAGER environment variable as the",
+ "                               output scrolling program.",
+@@ -1239,11 +1239,11 @@ char *help_set[] = {
+ "       STATE: TASK_RUNNING (PANIC)\n",
+ "  Turn off output scrolling:\n",
+ "    %s> set scroll off",
+-"    scroll: off (/usr/bin/less)",
++"    scroll: off (less)",
+ " ",
+ "  Show the current state of %s internal variables:\n", 
+ "    %s> set -v",
+-"            scroll: on (/usr/bin/less)",
++"            scroll: on (less)",
+ "             radix: 10 (decimal)",
+ "           refresh: on",
+ "         print_max: 256",
+@@ -8485,7 +8485,7 @@ display_input_info(void)
+ static
+ char *output_info[] = {
+ 
+-"\nBy default, %s command output is piped to \"/usr/bin/less -E -X\" along",
++"\nBy default, %s command output is piped to \"less -E -X\" along",
+ "with a prompt line.  This behavior can be turned off in two ways:\n",
+ "  1. During runtime, enter \"set scroll off\" or the alias \"sf\".",
+ "  2. Enter \"set scroll off\" in a .%src file, which can be located either",
+diff --git a/kernel.c b/kernel.c
+index e077275..2867c5c 100644
+--- a/kernel.c
++++ b/kernel.c
+@@ -1363,7 +1363,7 @@ verify_namelist()
+ 		goto found;
+ 	}
+ 
+-        sprintf(command, "/usr/bin/strings %s", namelist);
++        sprintf(command, "@strings@ %s", namelist);
+         if ((pipe = popen(command, "r")) == NULL) {
+                 error(INFO, "%s: %s\n", namelist, strerror(errno));
+                 return;
+@@ -1485,7 +1485,7 @@ source_tree_init(void)
+ 		return;
+ 	}
+ 
+-	sprintf(command, "/usr/bin/ls -d %s/arch/*/include/asm 2>/dev/null", 
++	sprintf(command, "@ls@ -d %s/arch/*/include/asm 2>/dev/null", 
+ 		kt->source_tree);
+ 	if ((pipe = popen(command, "r"))) {
+ 		if (fgets(buf, BUFSIZE-1, pipe)) {
+@@ -5885,7 +5885,7 @@ debug_kernel_version(char *namelist)
+ 	if (debug_kernel_version_string)
+ 		return debug_kernel_version_string;
+ 
+-        sprintf(command, "/usr/bin/strings %s", namelist);
++        sprintf(command, "@strings@ %s", namelist);
+ 
+         if ((pipe = popen(command, "r")) == NULL) { 
+ 		debug_kernel_version_string = " ";
+diff --git a/main.c b/main.c
+index 71bcc15..d49420f 100644
+--- a/main.c
++++ b/main.c
+@@ -192,13 +192,13 @@ main(int argc, char **argv)
+ 
+ 		        else if (STREQ(long_options[option_index].name, "more")) {
+ 				if ((pc->scroll_command != SCROLL_NONE) &&
+-				    file_exists("/bin/more", NULL))
++				    file_exists("@more@", NULL))
+ 					pc->scroll_command = SCROLL_MORE;
+ 			}
+ 
+ 		        else if (STREQ(long_options[option_index].name, "less")) {
+ 				if ((pc->scroll_command != SCROLL_NONE) &&
+-				    file_exists("/usr/bin/less", NULL))
++				    file_exists("@less@", NULL))
+ 					pc->scroll_command = SCROLL_LESS;
+ 			}
+ 
+@@ -1160,10 +1160,10 @@ setup_environment(int argc, char **argv)
+ 		if (CRASHPAGER_valid()) {
+ 			pc->flags |= SCROLL;
+ 			pc->scroll_command = SCROLL_CRASHPAGER;
+-		} else if (file_exists("/usr/bin/less", NULL)) {
++		} else if (file_exists("@less@", NULL)) {
+ 			pc->flags |= SCROLL;
+ 			pc->scroll_command = SCROLL_LESS;
+-		} else if (file_exists("/bin/more", NULL)) {
++		} else if (file_exists("@more@", NULL)) {
+ 			pc->flags |= SCROLL;
+ 			pc->scroll_command = SCROLL_MORE;
+ 		} else {
+diff --git a/makedumpfile.c b/makedumpfile.c
+index 26d12b6..99c6be3 100644
+--- a/makedumpfile.c
++++ b/makedumpfile.c
+@@ -375,7 +375,7 @@ flattened_format_get_osrelease(char *file)
+ 	char buf[BUFSIZE], *p1, *p2;
+ 
+ 	c = strlen("OSRELEASE=");
+-	sprintf(buf, "/usr/bin/strings -n %d %s", c, file);
++	sprintf(buf, "@strings@ -n %d %s", c, file);
+ 			
+ 	if ((pipe = popen(buf, "r")) == NULL)
+ 		return;
+diff --git a/remote.c b/remote.c
+index 50a5e14..5ebef84 100644
+--- a/remote.c
++++ b/remote.c
+@@ -466,7 +466,7 @@ handle_connection(int sock)
+                         file = strtok(NULL, " ");    /* filename */
+ 
+ 			sprintf(readbuf, 
+-			    "/usr/bin/strings %s | grep 'Linux version'", 
++			    "@strings@ %s | grep 'Linux version'", 
+ 				file);
+ 
+         		if ((pipe = popen(readbuf, "r"))) {
+@@ -496,7 +496,7 @@ handle_connection(int sock)
+ 			errno = 0;
+ 			reqsize = bufsize - DATA_HDRSIZE;
+ 
+-                        sprintf(readbuf, "/usr/bin/gzip -c %s", file);
++                        sprintf(readbuf, "@gzip@ -c %s", file);
+ 
+                         if ((pipe = popen(readbuf, "r")) == NULL) {
+ 				sprintf(readbuf, "%s%07ld", FAILMSG, 
+@@ -1085,7 +1085,7 @@ no_debugging_symbols_found(char *file)
+ 	FILE *pipe;
+ 	char buf[BUFSIZE];
+ 
+-	sprintf(buf, "echo 'q' | /usr/bin/gdb %s", file);
++	sprintf(buf, "echo 'q' | @gdb@ %s", file);
+ 	if ((pipe = popen(buf, "r")) == NULL)
+ 		return "NO_GDB";
+ 
+@@ -1112,7 +1112,7 @@ daemon_proc_version(char *buf)
+         if (stat("/proc/version", &sbuf) == -1)
+                 return FALSE;
+ 
+-        if ((pipe = popen("/bin/cat /proc/version", "r")) == NULL)
++        if ((pipe = popen("@cat@ /proc/version", "r")) == NULL)
+                 return FALSE;
+ 
+         if (fread(buf, sizeof(char),
+@@ -1188,9 +1188,9 @@ daemon_is_elf_file(char *s)
+         if (!STREQ(magic, ELFMAG))
+                 return FALSE;
+ 
+-	sprintf(buf, "/usr/bin/file -L %s", s);
++	sprintf(buf, "@file@ -L %s", s);
+         if ((pipe = popen(buf, "r")) == NULL) {
+-        	console("/usr/bin/strings popen failed\n");
++        	console("file popen failed\n");
+                 return TRUE;
+         } 
+ 
+@@ -1316,9 +1316,9 @@ daemon_find_booted_kernel(char *namelist)
+                             !daemon_is_elf_file(kernel))
+ 				continue;
+ 
+-			sprintf(command, "/usr/bin/strings %s", kernel);
++			sprintf(command, "@strings@ %s", kernel);
+ 	        	if ((pipe = popen(command, "r")) == NULL) {
+-				console("/usr/bin/strings popen failed\n");
++				console("strings popen failed\n");
+ 				continue;
+ 			}
+ 
+@@ -1453,9 +1453,9 @@ daemon_mount_point(char *name)
+ 		found = mount_points_gathered = 0; 
+ 
+         	if (stat("/proc/mounts", &sbuf) == 0)
+-			sprintf(cmd, "/bin/cat /proc/mounts");
++			sprintf(cmd, "@cat@ /proc/mounts");
+ 		else if (stat("/etc/mtab", &sbuf) == 0)
+-			sprintf(cmd, "/bin/cat /etc/mtab");
++			sprintf(cmd, "@cat@ /etc/mtab");
+ 		else
+                 	return FALSE;
+ 
+@@ -1723,13 +1723,13 @@ daemon_search_directory_tree(char *directory, char *file, char *retbuf)
+ 	FILE *pipe;
+ 	int found;
+ 
+-	if (!daemon_file_exists("/usr/bin/find", NULL) || 
+-	    !daemon_file_exists("/bin/echo", NULL) ||
++	if (!daemon_file_exists("@find@", NULL) || 
++	    !daemon_file_exists("@echo@", NULL) ||
+ 	    !daemon_is_directory(directory)) 
+ 		return FALSE;
+ 
+ 	sprintf(command, 
+-            "/usr/bin/find %s -name %s -print; /bin/echo search done",
++            "@find@ %s -name %s -print; @echo@ search done",
+ 		directory, file);
+ 
+         if ((pipe = popen(command, "r")) == NULL) 
+@@ -2783,7 +2783,7 @@ identical_namelist(char *file, struct remote_file *rfp)
+ 
+         vers = recvbuf;
+ 
+-        sprintf(readbuf, "/usr/bin/strings %s | grep 'Linux version'", 
++        sprintf(readbuf, "@strings@ %s | grep 'Linux version'", 
+ 		file);
+         if ((pipe = popen(readbuf, "r"))) {
+         	BZERO(readbuf, BUFSIZE);
+@@ -3368,7 +3368,7 @@ copy_remote_gzip_file(struct remote_file *rfp, char *file, char *ttystr)
+ 	struct stat sbuf;
+         ulong pct, ret, req, tot, total;
+ 
+-	sprintf(readbuf, "/usr/bin/gunzip > %s", pc->namelist);
++	sprintf(readbuf, "@gunzip@ > %s", pc->namelist);
+         if ((pipe = popen(readbuf, "w")) == NULL)
+ 		error(FATAL, "cannot open pipe to create %s\n", pc->namelist);
+ 
+diff --git a/symbols.c b/symbols.c
+index 480fdb6..1d5ab29 100644
+--- a/symbols.c
++++ b/symbols.c
+@@ -4461,21 +4461,15 @@ is_compressed_kernel(char *file, char **tmp)
+ 	switch (type)
+ 	{
+ 	case GZIP:
+-		sprintf(command, "%s -c %s > %s", 
+-			file_exists("/bin/gunzip", NULL) ?
+-			"/bin/gunzip" : "/usr/bin/gunzip",
++		sprintf(command, "@gunzip@ -c %s > %s", 
+ 			file, tempname);
+ 		break;
+ 	case BZIP2:
+-		sprintf(command, "%s -c %s > %s", 
+-			file_exists("/bin/bunzip2", NULL) ?
+-			"/bin/bunzip2" : "/usr/bin/bunzip2",
++		sprintf(command, "@bunzip2@ -c %s > %s", 
+ 			file, tempname);
+ 		break;
+ 	case XZ:
+-		sprintf(command, "%s -c %s > %s", 
+-			file_exists("/bin/unxz", NULL) ?
+-			"/bin/unxz" : "/usr/bin/unxz",
++		sprintf(command, "@unxz@ -c %s > %s", 
+ 			file, tempname);
+ 		break;
+ 	}
+@@ -14723,15 +14717,15 @@ dump_trace(void **retaddr)
+         }
+ 	fflush(stderr);
+ 
+-	if (!file_exists("/usr/bin/nm", NULL)) {
+-		fprintf(stderr, "crash: /usr/bin/nm: no such file\n");
++	if (!file_exists("@nm@", NULL)) {
++		fprintf(stderr, "crash: @nm@: no such file\n");
+ 		return;
+ 	}
+ 
+ 	if (is_binary_stripped(thisfile))
+-		nm_call = "/usr/bin/nm -DSBn %s";
++		nm_call = "@nm@ -DSBn %s";
+ 	else
+-		nm_call = "/usr/bin/nm -BSn %s";
++		nm_call = "@nm@ -BSn %s";
+ 
+ 	last_size = 0;
+ 
+diff --git a/tools.c b/tools.c
+index a9ad18d..2ba7e56 100644
+--- a/tools.c
++++ b/tools.c
+@@ -2136,10 +2136,10 @@ cmd_set(void)
+ 				switch (pc->scroll_command)
+ 				{
+ 				case SCROLL_LESS:
+-					fprintf(fp, "(/usr/bin/less)\n");
++					fprintf(fp, "(less)\n");
+ 					break;
+ 				case SCROLL_MORE:
+-					fprintf(fp, "(/bin/more)\n");
++					fprintf(fp, "(more)\n");
+ 					break;
+ 				case SCROLL_NONE:
+ 					fprintf(fp, "(none)\n");
+@@ -2614,10 +2614,10 @@ show_options(void)
+ 	switch (pc->scroll_command)
+ 	{
+ 	case SCROLL_LESS:
+-		fprintf(fp, "(/usr/bin/less)\n");
++		fprintf(fp, "(less)\n");
+ 		break;
+ 	case SCROLL_MORE:
+-		fprintf(fp, "(/bin/more)\n");
++		fprintf(fp, "(more)\n");
+ 		break;
+ 	case SCROLL_NONE:
+ 		fprintf(fp, "(none)\n");
