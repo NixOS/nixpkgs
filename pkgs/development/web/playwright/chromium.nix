@@ -8,27 +8,102 @@
   suffix,
   system,
   throwSystem,
+  lib,
+  alsa-lib,
+  at-spi2-atk,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  glib,
+  gobject-introspection,
+  libGL,
+  libgbm,
+  libgcc,
+  libxkbcommon,
+  nspr,
+  nss,
+  pango,
+  patchelf,
+  pciutils,
+  stdenv,
+  systemd,
+  vulkan-loader,
+  xorg,
   ...
 }:
 let
-  chromium-linux =
-    runCommand "playwright-chromium"
-      {
-        nativeBuildInputs = [
-          makeWrapper
-        ];
-      }
-      ''
-        mkdir -p $out/chrome-linux
+  chromium-linux = stdenv.mkDerivation {
+    name = "playwright-chromium";
+    src = fetchzip {
+      url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
+      hash =
+        {
+          x86_64-linux = "sha256-9bK8HOGoQY5kYYfJypYHeuAoVlXIh/1tv1IsXPpUTpA=";
+          aarch64-linux = "sha256-KL6tYnPDszXjCHiSNOPHLtz839JPljSOoP7biQfTTAI=";
+        }
+        .${system} or throwSystem;
+    };
 
-        # See here for the Chrome options:
-        # https://github.com/NixOS/nixpkgs/issues/136207#issuecomment-908637738
-        # We add --disable-gpu to be able to run in gpu-less environments such
-        # as headless nixos test vms.
-        makeWrapper ${chromium}/bin/chromium $out/chrome-linux/chrome \
-          --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-          --set-default FONTCONFIG_FILE ${fontconfig_file}
-      '';
+    nativeBuildInputs = [
+      autoPatchelfHook
+      patchelf
+      makeWrapper
+    ];
+    buildInputs = [
+      alsa-lib
+      at-spi2-atk
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      glib
+      gobject-introspection
+      libgbm
+      libgcc
+      libxkbcommon
+      nspr
+      nss
+      pango
+      stdenv.cc.cc.lib
+      systemd
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libxcb
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/chrome-linux
+      cp -R . $out/chrome-linux
+
+      wrapProgram $out/chrome-linux/chrome \
+        --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
+        --set-default FONTCONFIG_FILE ${fontconfig_file}
+
+      runHook postInstall
+    '';
+
+    appendRunpaths = lib.makeLibraryPath [
+      libGL
+      vulkan-loader
+      pciutils
+    ];
+
+    postFixup = ''
+      # replace bundled vulkan-loader since we are also already adding our own to RPATH
+      rm "$out/chrome-linux/libvulkan.so.1"
+      ln -s -t "$out/chrome-linux" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+    '';
+  };
   chromium-darwin = fetchzip {
     url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
     stripRoot = false;
