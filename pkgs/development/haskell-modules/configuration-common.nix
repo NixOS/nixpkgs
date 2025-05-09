@@ -89,12 +89,10 @@ self: super:
     (
       let
         # !!! Use cself/csuper inside for the actual overrides
-        cabalInstallOverlay =
-          cself: csuper:
-          lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
-            Cabal = cself.Cabal_3_14_2_0;
-            Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
-          };
+        cabalInstallOverlay = cself: csuper: {
+          Cabal = cself.Cabal_3_14_2_0;
+          Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
+        };
       in
       {
         cabal-install =
