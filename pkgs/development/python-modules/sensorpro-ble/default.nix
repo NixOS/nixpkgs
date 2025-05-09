@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sensorpro-ble";
-  version = "0.5.3";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "sensorpro-ble";
     tag = "v${version}";
-    hash = "sha256-Zqa6qa0Jw79Iu4VEw6KN0GsZcC1X7OpiYUiyT4zwKyY=";
+    hash = "sha256-YMcpe4daM4X23nOMubYNcmqlW8PttwDGC4WL9g4P+4I=";
   };
 
   build-system = [ poetry-core ];
