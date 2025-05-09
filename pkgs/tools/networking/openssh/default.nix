@@ -32,7 +32,13 @@ in
       hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
     };
 
-    extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraPatches = [
+      # Use ssh-keysign from PATH
+      # ssh-keysign is used for host-based authentication, and is designed to be used
+      # as SUID-root program. OpenSSH defaults to referencing it from libexec, which
+      # cannot be made SUID in Nix.
+      ./ssh-keysign-8.5.patch
+    ];
     extraMeta = {
       maintainers = [ lib.maintainers.philiptaron ];
       teams = [ lib.teams.helsinki-systems ];
