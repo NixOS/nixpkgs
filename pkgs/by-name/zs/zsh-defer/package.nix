@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/zsh-defer
     cp zsh-defer* $out/share/zsh-defer
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Deferred execution of zsh commands";
