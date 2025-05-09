@@ -92,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
+      bengsparks
       figsoda
       GaetanLepage
     ];
