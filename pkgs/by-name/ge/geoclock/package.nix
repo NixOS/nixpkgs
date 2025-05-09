@@ -1,10 +1,9 @@
-
 {
   lib,
   fetchCrate,
   rustPlatform,
   openssl,
-  pkg-config
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
