@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+  # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
+  mesonFlags = [
+    "-Dcanfigger:b_sanitize=none"
+  ];
+
   meta = with lib; {
     description = "Trashcan/ recycle bin utility for the command line";
     homepage = "https://github.com/theimpossibleastronaut/rmw";
