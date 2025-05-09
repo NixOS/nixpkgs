@@ -646,7 +646,7 @@ in
         {
           where = "/sysroot/run";
           what = "/run";
-          options = "bind";
+          options = "rbind";
           unitConfig = {
             # See the comment on the mount unit for /run/etc-metadata
             DefaultDependencies = false;
