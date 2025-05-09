@@ -88,7 +88,7 @@ with haskellLib;
   extensions = doDistribute self.extensions_0_1_0_3;
   doctest = doDistribute self.doctest_0_24_0;
   ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
-  ghc-lib = doDistribute self.ghc-lib_9_12_2_20250320;
+  ghc-lib = doDistribute self.ghc-lib_9_12_2_20250421;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250421;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
