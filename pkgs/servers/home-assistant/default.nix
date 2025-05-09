@@ -3,7 +3,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchPypi,
   python313,
   replaceVars,
@@ -368,7 +367,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.0";
+  hassVersion = "2025.5.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -389,13 +388,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-aypBPEI9AOAW9BUkcjJtXa9ssLo4jwEeX47m8320/Gg=";
+    hash = "sha256-/ItMm6/SV0MazK16NfW53XPcIV7ERUUabjcwHBC4c7Y=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-7bRBKCchBjAKmW4fjSzShr1RdNRQ677Dd1FXW6sqOQQ=";
+    hash = "sha256-zllQ0h1Ws+HNyfBvAAoKtovQtwkr0fNNtnF2pAjRrqM=";
   };
 
   build-system = with python.pkgs; [
@@ -411,12 +410,6 @@ python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
-    (fetchpatch {
-      name = "fix-point-import-error.patch";
-      url = "https://github.com/home-assistant/core/commit/3c4c3dc08e306b75dce486f5f5236a731fd04cf4.patch";
-      hash = "sha256-ke04kJWuBHMANVZo75QL5QwU51DZtO4FBBNu4Szu9q8=";
-    })
-
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
