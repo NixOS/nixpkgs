@@ -8,7 +8,6 @@
 }:
 
 let
-
   file-compose = buildGoModule {
     pname = "file-compose";
     version = "unstable-2023-10-21";
@@ -27,14 +26,14 @@ in
 
 buildGoModule rec {
   pname = "readeck";
-  version = "0.17.1";
+  version = "0.18.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "readeck";
     repo = "readeck";
     tag = version;
-    hash = "sha256-+GgjR1mxD93bFNaLeDuEefPlQEV9jNgFIo8jTAxphyo=";
+    hash = "sha256-geKhug1sQ51i+6qw2LVzW8lXyvre6AlVHWvGlEXWki8=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +51,8 @@ buildGoModule rec {
     go run ./tools/docs docs/src docs/assets
   '';
 
+  subPackages = [ "." ];
+
   tags = [
     "netgo"
     "osusergo"
@@ -66,6 +67,7 @@ buildGoModule rec {
     "-X"
     "codeberg.org/readeck/readeck/configs.version=${version}"
   ];
+
   overrideModAttrs = oldAttrs: {
     # Do not add `npmConfigHook` to `goModules`
     nativeBuildInputs = lib.remove npmHooks.npmConfigHook oldAttrs.nativeBuildInputs;
@@ -75,18 +77,17 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-7fRSkXKAMEC7rFmSF50DM66SVhV68g93PMBjrtkd9/E=";
+    hash = "sha256-3MVrzpilJKptT0iRBQx2Cl0iKVoOJu5cBT987U1/C1k=";
   };
 
-  vendorHash = "sha256-O/ZrpT6wTtPwBDUCAmR0XHRgQmd46/MPvWNE0EvD3bg=";
+  vendorHash = "sha256-RjU3PW7GeMkQE0oHkI4EmFNr4HT3vRyFITUzYX9AHpw=";
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever.";
     mainProgram = "readeck";
     homepage = "https://readeck.org/";
-    changelog = "https://github.com/readeck/readeck/releases/tag/${version}";
+    changelog = "https://codeberg.org/readeck/readeck/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ julienmalka ];
   };
-
 }
