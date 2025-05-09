@@ -47,6 +47,12 @@ buildPythonPackage rec {
     ipywidgets
   ];
 
+  disabledTests = [
+    # broken with plotly 6.0.1, anywidget needed, adding it to nativeCheckInputs doesn't help
+    "test_hovering_widgets_node_hist_fig"
+    "test_format_meta"
+  ];
+
   meta = with lib; {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
     homepage = "https://kepler-mapper.scikit-tda.org/";
