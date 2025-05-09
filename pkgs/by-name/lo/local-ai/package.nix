@@ -329,9 +329,9 @@ let
 
   effectiveStdenv =
     if with_cublas then
-      # It's necessary to consistently use backendStdenv when building with CUDA support,
+      # It's necessary to consistently use cudaStdenv when building with CUDA support,
       # otherwise we get libstdc++ errors downstream.
-      cudaPackages.backendStdenv
+      cudaPackages.cudaStdenv
     else
       stdenv;
 

@@ -60,10 +60,10 @@ let
   pname = "jaxlib";
   version = "0.4.28";
 
-  # It's necessary to consistently use backendStdenv when building with CUDA
+  # It's necessary to consistently use cudaStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
   stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.cudaStdenv else inputs.stdenv;
 
   meta = with lib; {
     description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";

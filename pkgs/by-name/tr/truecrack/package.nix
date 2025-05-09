@@ -10,7 +10,7 @@
 }:
 
 let
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else gccStdenv;
+  stdenv = if cudaSupport then cudaPackages.cudaStdenv else gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "truecrack";

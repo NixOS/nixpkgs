@@ -84,7 +84,7 @@
 }:
 
 let
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv' = if cudaSupport then cudaPackages.cudaStdenv else stdenv;
 
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;

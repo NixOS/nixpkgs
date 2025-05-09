@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeBool "USE_CUDA" true)
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe cudaPackages.backendStdenv.cc))
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe cudaPackages.cudaStdenv.cc))
     ]
     ++ lib.optionals openclSupport [
       (lib.cmakeBool "USE_GPU" true)

@@ -13,7 +13,7 @@
 }:
 let
   inherit (cudaPackages)
-    backendStdenv
+    cudaStdenv
     cuda_cccl
     cuda_cudart
     cuda_nvcc
@@ -31,7 +31,7 @@ let
     else
       "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
 in
-backendStdenv.mkDerivation (finalAttrs: {
+cudaStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
   version = version;
 

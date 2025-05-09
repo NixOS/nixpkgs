@@ -102,7 +102,7 @@ let
   # translation units, so the build fails at link time
   stdenv =
     if cudaSupport then
-      cudaPackages.backendStdenv
+      cudaPackages.cudaStdenv
     else if originalStdenv.hostPlatform.isDarwin then
       llvmPackages.stdenv
     else

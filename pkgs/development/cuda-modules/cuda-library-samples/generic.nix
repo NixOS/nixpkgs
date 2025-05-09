@@ -2,7 +2,7 @@
   addDriverRunpath,
   autoAddDriverRunpath,
   autoPatchelfHook,
-  backendStdenv,
+  cudaStdenv,
   cmake,
   cuda_cccl ? null,
   cuda_cudart ? null,
@@ -19,7 +19,7 @@
 }:
 
 let
-  base = backendStdenv.mkDerivation (finalAttrs: {
+  base = cudaStdenv.mkDerivation (finalAttrs: {
     src = fetchFromGitHub {
       owner = "NVIDIA";
       repo = "CUDALibrarySamples";

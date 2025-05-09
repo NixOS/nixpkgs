@@ -3,7 +3,7 @@
   autoAddDriverRunpath,
   autoAddCudaCompatRunpath,
   autoPatchelfHook,
-  backendStdenv,
+  cudaStdenv,
   callPackage,
   fetchurl,
   fixups,
@@ -57,7 +57,7 @@ let
 
   sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
 in
-(backendStdenv.mkDerivation (finalAttrs: {
+(cudaStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
   # redistributables are sensitive to the compiler flags provided to stdenv. The patchelf package
   # is sensitive to the compiler flags provided to stdenv, and we depend on it. As such, we are
@@ -314,7 +314,7 @@ in
     # Provide access to the release information for fixup functions.
     inherit redistribRelease featureRelease;
     # Make the CUDA-patched stdenv available
-    stdenv = backendStdenv;
+    stdenv = cudaStdenv;
   };
 
   meta = {

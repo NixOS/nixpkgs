@@ -28,7 +28,7 @@ let
   # This ensures xgboost gets the correct libstdc++ when
   # built with cuda support. This may be removed once
   # #226165 rewrites cudaStdenv
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.cudaStdenv else inputs.stdenv;
   # Ensures we don't use the stdenv value by accident.
   stdenv = builtins.throw "Use effectiveStdenv instead of stdenv in xgboost derivation.";
 in

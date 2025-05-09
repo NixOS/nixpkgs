@@ -34,7 +34,7 @@
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv;
+  inherit (cudaPackages) cudaStdenv;
 in
 buildPythonPackage rec {
   pname = "mmcv";
@@ -94,8 +94,8 @@ buildPythonPackage rec {
       export MMCV_WITH_OPS=1
     ''
     + lib.optionalString cudaSupport ''
-      export CC=${lib.getExe' backendStdenv.cc "cc"}
-      export CXX=${lib.getExe' backendStdenv.cc "c++"}
+      export CC=${lib.getExe' cudaStdenv.cc "cc"}
+      export CXX=${lib.getExe' cudaStdenv.cc "c++"}
       export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
       export FORCE_CUDA=1
     '';

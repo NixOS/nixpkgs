@@ -19,7 +19,7 @@
   pythonSupport ? false,
 }:
 let
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else llvmPackages.stdenv;
+  stdenv = if cudaSupport then cudaPackages.cudaStdenv else llvmPackages.stdenv;
 in
 
 stdenv.mkDerivation (finalAttrs: {

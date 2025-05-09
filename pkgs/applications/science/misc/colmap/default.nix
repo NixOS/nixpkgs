@@ -28,7 +28,7 @@ assert cudaSupport -> cudaPackages != { };
 
 let
   boost_static = boost.override { enableStatic = true; };
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv' = if cudaSupport then cudaPackages.cudaStdenv else stdenv;
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;

@@ -143,8 +143,8 @@ buildPythonPackage {
       TRITON_OFFLINE_BUILD = true;
     }
     // lib.optionalAttrs cudaSupport {
-      CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
-      CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
+      CC = lib.getExe' cudaPackages.cudaStdenv.cc "cc";
+      CXX = lib.getExe' cudaPackages.cudaStdenv.cc "c++";
 
       # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
       TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
@@ -254,7 +254,7 @@ buildPythonPackage {
             if os.environ.get("HOME", None) == "/homeless-shelter":
               os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
             if "CC" not in os.environ:
-              os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+              os.environ["CC"] = "${lib.getExe' cudaPackages.cudaStdenv.cc "cc"}"
             torch.manual_seed(0)
             size = 12345
             x = torch.rand(size, device='cuda')

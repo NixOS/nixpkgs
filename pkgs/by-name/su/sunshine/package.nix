@@ -52,7 +52,7 @@
   cudaPackages ? { },
 }:
 let
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv' = if cudaSupport then cudaPackages.cudaStdenv else stdenv;
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";

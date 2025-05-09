@@ -105,10 +105,10 @@ let
 
   version = "4.11.0";
 
-  # It's necessary to consistently use backendStdenv when building with CUDA
+  # It's necessary to consistently use cudaStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
   stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if enableCuda then cudaPackages.cudaStdenv else inputs.stdenv;
 
   src = fetchFromGitHub {
     owner = "opencv";

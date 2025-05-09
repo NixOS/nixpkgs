@@ -1,7 +1,7 @@
 {
   lib,
   symlinkJoin,
-  backendStdenv,
+  cudaStdenv,
   cudaOlder,
   cudatoolkit-legacy-runfile,
   cudaMajorMinorVersion,
@@ -72,7 +72,7 @@ else
     paths = builtins.concatMap getAllOutputs allPackages;
 
     passthru = {
-      cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
+      cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" cudaStdenv.cc;
       lib = symlinkJoin {
         inherit name;
         paths = map (p: lib.getLib p) allPackages;
