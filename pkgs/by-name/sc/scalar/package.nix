@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/scalar $out/bin
+    mkdir -p $out/opt/scalar $out/bin
 
-    cp -r opt/Scalar/* $out/lib/scalar/
+    cp -r opt/Scalar/* $out/opt/scalar/
 
     makeWrapper ${electron}/bin/electron $out/bin/scalar \
-    --add-flags "$out/lib/scalar/resources/app.asar --no-startup-window"  # Prevent startup window
+      --add-flags "$out/opt/scalar/resources/app.asar --no-startup-window"  # Prevent startup window
 
     # Install all icons in their specific resolutions
     mkdir -p $out/share/icons/hicolor
