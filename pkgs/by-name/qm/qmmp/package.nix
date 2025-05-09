@@ -4,10 +4,7 @@
   fetchurl,
   cmake,
   pkg-config,
-  qtbase,
-  qttools,
-  qtmultimedia,
-  wrapQtAppsHook,
+  qt6,
   # transports
   curl,
   libmms,
@@ -67,14 +64,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     # basic requirements
-    qtbase
-    qttools
-    qtmultimedia
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtmultimedia
     # transports
     curl
     libmms
