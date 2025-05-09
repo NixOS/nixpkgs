@@ -1396,6 +1396,7 @@ in
   ucarp = handleTest ./ucarp.nix { };
   udisks2 = handleTest ./udisks2.nix { };
   ulogd = handleTest ./ulogd/ulogd.nix { };
+  umami = handleTest ./web-apps/umami.nix { };
   umurmur = handleTest ./umurmur.nix { };
   unbound = handleTest ./unbound.nix { };
   unifi = runTest ./unifi.nix;
