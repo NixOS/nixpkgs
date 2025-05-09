@@ -18657,6 +18657,12 @@
     githubId = 45835846;
     name = "Gavin John";
   };
+  pandapipbot = {
+    email = "gavinnjohn@gmail.com";
+    github = "Pandapipbot";
+    githubId = 183133546;
+    name = "Gavin John's Helper Robot";
+  };
   panicgh = {
     email = "nbenes.gh@xandea.de";
     github = "panicgh";
