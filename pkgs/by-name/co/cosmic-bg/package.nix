@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cosmic-wallpapers,
+  libcosmicAppHook,
   just,
   pkg-config,
   makeBinaryWrapper,
@@ -12,23 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-bg";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.7";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
-    hash = "sha256-lAFAZBo5FnXgJV3MrZhaYmBxqtH1E7+Huj53ho/hPik=";
-  };
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
-      "cosmic-config-0.1.0" = "sha256-mdRRfXLyDBYQIPmbuXgXGoOKUlyw6CiSmOUBz1b3vJY=";
-      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
-    };
+    repo = "cosmic-bg";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-KMP7TmamtbycF/nKctjYozMJwVr9zdp4A8AWriswo2g=";
   };
 
   postPatch = ''
