@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_33,
+  electron_36,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -11,22 +11,22 @@
 }:
 let
   pname = "feishin";
-  version = "0.12.3";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-Tjh68b+41YrMNB14AZ3jXqBXDOmaaOYQKXJOyTUF474=";
+    hash = "sha256-cnlPks/sJdcxHdIppHn8Q8d2tkwVlPMofQxjdAlBreg=";
   };
 
-  electron = electron_33;
+  electron = electron_36;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-KZsxKDAQ7UTnEemr6S9rqKtqPeTvqrhfxURSGTKkMMM=";
+  npmDepsHash = "sha256-lThh29prT/cHRrp2mEtUW4eeVfCtkk+54EPNUyGHyq8=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-98P2dNmWcp8Hc8Xe43LM3dtxye7myhp1bHucKoKEcjI=";
+        npmDepsHash = "sha256-kEe5HH/oslH8vtAcJuWTOLc0ZQPxlDVMS4U0RpD8enE=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
