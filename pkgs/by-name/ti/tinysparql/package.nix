@@ -29,6 +29,7 @@
   json-glib,
   avahi,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   dbus,
   man-db,
   writeText,
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       libstemmer
       dbus
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals withSystemd [
       systemd
     ];
 
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         "--cross-file=${crossFile}"
       ]
     )
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    ++ lib.optionals (!withSystemd) [
       "-Dsystemd_user_services=false"
     ];
 
@@ -182,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    features = { inherit withSystemd; };
     updateScript = gnome.updateScript { packageName = finalAttrs.pname; };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
