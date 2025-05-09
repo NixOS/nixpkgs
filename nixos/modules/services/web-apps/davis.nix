@@ -381,6 +381,7 @@ in
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
+        phpPackage = lib.mkDefault cfg.package.passthru.php;
         settings =
           {
             "listen.mode" = "0660";
