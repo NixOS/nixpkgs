@@ -203,12 +203,41 @@ in
               inherit certificateFile originRequest;
 
               credentialsFile = lib.mkOption {
-                type = lib.types.path;
+                type = with lib.types; nullOr path;
+                default = null;
                 description = ''
                   Credential file.
 
                   See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
                 '';
+              };
+
+              token = lib.mkOption {
+                type = with lib.types; nullOr str;
+                default = null;
+                description = ''
+                  Cloudflare tunnel token to use instead of a configuration file.
+                  If set, the tunnel will be run using `cloudflared tunnel run --token <token>`.
+                  This option is mutually exclusive with the config file-based approach
+                  (which requires `credentialsFile`).
+                  Note: Using a token bypasses locally defined ingress rules and uses
+                  rules configured via the Cloudflare dashboard.
+                '';
+                example = "eyJhIj...zUzZg==";
+              };
+
+              tokenFile = lib.mkOption {
+                type = with lib.types; nullOr path;
+                default = null;
+                description = ''
+                  Cloudflare tunnel tokenFile to use instead of a configuration file.
+                  If set, the tunnel will be run using `cloudflared tunnel run --token-file <tokenFile>`.
+                  This option is mutually exclusive with the config file-based approach
+                  (which requires `credentialsFile`).
+                  Note: Using a tokenFile bypasses locally defined ingress rules and uses
+                  rules configured via the Cloudflare dashboard.
+                '';
+                example = "/path/to/my/token_file";
               };
 
               warp-routing = {
@@ -231,6 +260,7 @@ in
                   See `service`.
                 '';
                 example = "http_status:404";
+                default = "http_status:404";
               };
 
               ingress = lib.mkOption {
@@ -298,11 +328,34 @@ in
           };
           default = "http_status:404";
         };
+        # Example for token-based
+        "my-token-tunnel" = {
+          token = "eyJhIj...zUzZg==";
+          # No credentialsFile, default, or ingress needed here
+        };
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mapAttrsToList (
+      name: tunnel:
+      if tunnel.token != null then
+        "[cloudflared-service | ${name}] Tunnel is using raw token value, which is world-readable!"
+      else
+        ""
+    ) cfg.tunnels;
+
+    assertions = lib.mapAttrsToList (name: tunnel: {
+      assertion =
+        (lib.count (x: !builtins.isNull x) [
+          tunnel.token
+          tunnel.tokenFile
+          tunnel.credentialsFile
+        ]) <= 1;
+      message = "[cloudflared-service | ${name}] You must specify AT MOST ONE of 'token', 'tokenFile', or 'credentialsFile'.";
+    }) cfg.tunnels;
+
     systemd.targets = lib.mapAttrs' (
       name: tunnel:
       lib.nameValuePair "cloudflared-tunnel-${name}" {
@@ -311,7 +364,7 @@ in
         after = [ "cloudflared-tunnel-${name}.service" ];
         unitConfig.StopWhenUnneeded = true;
       }
-    ) config.services.cloudflared.tunnels;
+    ) cfg.tunnels;
 
     systemd.services = lib.mapAttrs' (
       name: tunnel:
@@ -368,21 +421,28 @@ in
           RuntimeDirectory = "cloudflared-tunnel-${name}";
           RuntimeDirectoryMode = "0400";
           LoadCredential = [
-            "credentials.json:${tunnel.credentialsFile}"
-          ] ++ (lib.optional (certFile != null) "cert.pem:certFile");
+            (lib.optional (tunnel.credentialsFile != null) ("credentials.json:${tunnel.credentialsFile}"))
+          ] ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          ExecStart =
+            if tunnel.token != null then
+              "${cfg.package}/bin/cloudflared tunnel run --token ${lib.escapeShellArg tunnel.token}"
+            else if tunnel.tokenFile != null then
+              "${cfg.package}/bin/cloudflared tunnel run --token-file ${lib.escapeShellArg tunnel.token}"
+            else
+              "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
 
         environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
       }
-    ) config.services.cloudflared.tunnels;
+    ) cfg.tunnels;
   };
 
   meta.maintainers = with lib.maintainers; [
     bbigras
+    bn
     anpin
   ];
 }
