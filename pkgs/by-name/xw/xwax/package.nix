@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  alsa-lib,
   SDL,
   SDL_ttf,
   jack2,
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
+    alsa-lib
+
     # sdl
     SDL
     SDL_ttf
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cp xwax  $out/bin/xwax
+    cp xwax $out/bin/xwax
     runHook postInstall
   '';
 
