@@ -10,6 +10,7 @@
   copyDesktopItems,
   cctools,
   clojure,
+  darwin,
   makeDesktopItem,
   makeWrapper,
   nodejs,
@@ -150,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
+      darwin.autoSignDarwinBinariesHook
       xcbuild
     ];
 
