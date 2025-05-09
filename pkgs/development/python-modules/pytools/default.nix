@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2025.1.2";
+  version = "2025.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wA25T92aljmJlzLL+RvLKReGdRzJA4CwfXOBgspQ8rE=";
+    hash = "sha256-nGqLnXCnn6yEbwysrAgwtTjQhFjhD05gRshF1UDN6Jk=";
   };
 
   build-system = [ hatchling ];
