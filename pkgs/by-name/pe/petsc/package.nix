@@ -78,6 +78,8 @@ let
   petscPackages = lib.makeScope newScope (self: {
     inherit
       mpi
+      python3
+      python3Packages
       # global override options
       mpiSupport
       fortranSupport
