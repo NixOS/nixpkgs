@@ -127,7 +127,7 @@ They originate from these sources:
   - `options`,
   - `_class`,
   - `_prefix`,
-2. Attributes from the [`specialArgs`] which were passed to [`evalModules`] or `submoduleWith`. These are application-specific.
+2. Attributes from the [`specialArgs`] argument passed to [`evalModules`] or `submoduleWith`. These are application-specific.
 3. Attributes from the `_module.args` option value. These are application-specific and can be provided by any module.
 
 The prior two categories are available while evaluating the `imports`, whereas
@@ -152,11 +152,13 @@ The [expected class](#module-system-lib-evalModules-param-class) of the loaded m
 
 ### `_prefix` {#module-system-module-argument-_prefix}
 
-The location under which the module is evaluated. This is used to improve error reporting and find the implicit `name` module argument in submodules.
+The location under which the module is evaluated.
+This is used to improve error reporting and to find the implicit `name` module argument in submodules.
+It is exposed as a module argument due to how the module system is implemented, which cannot be avoided without breaking compatibility.
 
 It is a good practice not to rely on `_prefix`. A module should not make assumptions about its location in the configuration tree.
 For example, the root of a NixOS configuration may have a non-empty prefix, for example when it is a specialisation, or when it is part of a larger, multi-host configuration such as a [NixOS test](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests).
-Any dependencies on `_prefix` should be replaced with explicit options, whose default definitions can be provided by the module that imports them.
+Instead of depending on `_prefix` use explicit options, whose default definitions can be provided by the module that imports them.
 
 [`evalModules`]: #module-system-lib-evalModules
 [`specialArgs`]: #module-system-lib-evalModules-param-specialArgs
