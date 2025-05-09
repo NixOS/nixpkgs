@@ -16,6 +16,7 @@
   # runtime deps
   glib,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   lua5_4,
   pipewire,
   # options
@@ -68,17 +69,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
     lua5_4
     pipewire
-  ];
+  ] ++ lib.optional withSystemd systemd;
 
   mesonFlags = [
     (lib.mesonBool "system-lua" true)
     (lib.mesonEnable "elogind" false)
     (lib.mesonEnable "doc" enableDocs)
     (lib.mesonEnable "introspection" enableGI)
-    (lib.mesonBool "systemd-system-service" true)
+    (lib.mesonEnable "systemd" withSystemd)
+    (lib.mesonBool "systemd-system-service" withSystemd)
     (lib.mesonOption "systemd-system-unit-dir" "${placeholder "out"}/lib/systemd/system")
     (lib.mesonOption "sysconfdir" "/etc")
   ];
