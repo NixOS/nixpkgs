@@ -409,6 +409,7 @@ in
   domination = handleTest ./domination.nix { };
   dovecot = handleTest ./dovecot.nix { };
   drawterm = discoverTests (import ./drawterm.nix);
+  draupnir = runTest ./matrix/draupnir.nix;
   drbd = handleTest ./drbd.nix { };
   druid = handleTestOn [ "x86_64-linux" ] ./druid { };
   drbd-driver = handleTest ./drbd-driver.nix { };
