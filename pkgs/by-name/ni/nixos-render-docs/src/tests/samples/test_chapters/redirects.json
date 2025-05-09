@@ -2,10 +2,16 @@
   "index": [
     "index.html#index"
   ],
+  "chapters": [
+    "index.html#chapters"
+  ],
   "chapter1": [
     "index.html#chapter1"
   ],
   "chapter2": [
     "index.html#chapter2"
+  ],
+  "appendix": [
+    "appendix.html#appendix"
   ]
 }

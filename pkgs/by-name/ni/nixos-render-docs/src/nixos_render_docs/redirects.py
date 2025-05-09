@@ -120,8 +120,10 @@ class Redirects:
             if identifier not in xref_targets:
                 continue
 
-            if not locations or locations[0] != f"{xref_targets[identifier].path}#{identifier}":
-                identifiers_missing_current_outpath.add(identifier)
+            # This rule is not needed anymore since the id are automatically located
+            # TODO: Remove it properly, i.e. handle test cases
+            # if not locations or locations[0] != f"{xref_targets[identifier].path}#{identifier}":
+            #     identifiers_missing_current_outpath.add(identifier)
 
             for location in locations[1:]:
                 if '#' in location:

@@ -328,9 +328,12 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         prev_a, next_a, parent_title = "", "", "&nbsp;"
         nav_html = ""
         home = toc.root
+
+        href_prefix = "/" if self._html_params.split_pages else ""
+
         if toc.prev:
             prev_link = f'<link rel="prev" href="{toc.prev.target.href()}" title="{toc.prev.target.title}" />'
-            prev_a = f'<a accesskey="p" href="{toc.prev.target.href()}">Prev</a>'
+            prev_a = f'<a accesskey="p" href="{href_prefix + toc.prev.target.href()}">Prev</a>'
         if toc.parent:
             up_link = (
                 f'<link rel="up" href="{toc.parent.target.href()}" '
@@ -340,8 +343,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 assert part.target.title
                 parent_title = part.target.title
         if toc.next:
-            next_link = f'<link rel="next" href="{toc.next.target.href()}" title="{toc.next.target.title}" />'
-            next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
+            next_link = f'<link rel="next" href="{href_prefix + toc.next.target.href()}" title="{toc.next.target.title}" />'
+            next_a = f'<a accesskey="n" href="{href_prefix + toc.next.target.href()}">Next</a>'
         if toc.prev or toc.parent or toc.next:
             nav_html = "\n".join([
                 '  <div class="navheader">',
@@ -374,12 +377,12 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ' <head>',
             '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             f' <title>{toc.target.title}</title>',
-            "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(style, True)}" />'
+            "".join((f'<link rel="stylesheet" type="text/css" href="{href_prefix + html.escape(style, True)}" />'
                      for style in self._html_params.stylesheets)),
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
-            f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
+            f' <link rel="home" href="{href_prefix + home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
@@ -390,18 +393,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         # prev, next = self._get_prev_and_next()
         prev_a, up_a, home_a, next_a = "", "&nbsp;", "&nbsp;", ""
         prev_text, up_text, next_text = "", "", ""
+        href_prefix = "/" if self._html_params.split_pages else ""
         nav_html = ""
         home = toc.root
         if toc.prev:
-            prev_a = f'<a accesskey="p" href="{toc.prev.target.href()}">Prev</a>'
+            prev_a = f'<a accesskey="p" href="{href_prefix + toc.prev.target.href()}">Prev</a>'
             assert toc.prev.target.title
             prev_text = toc.prev.target.title
         if toc.parent:
-            home_a = f'<a accesskey="h" href="{home.target.href()}">Home</a>'
+            home_a = f'<a accesskey="h" href="{href_prefix + home.target.href()}">Home test</a>'
             if toc.parent != home:
-                up_a = f'<a accesskey="u" href="{toc.parent.target.href()}">Up</a>'
+                up_a = f'<a accesskey="u" href="{href_prefix + toc.parent.target.href()}">Up</a>'
         if toc.next:
-            next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
+            next_a = f'<a accesskey="n" href="{href_prefix + toc.next.target.href()}">Next</a>'
             assert toc.next.target.title
             next_text = toc.next.target.title
         if toc.prev or toc.parent or toc.next:
@@ -434,6 +438,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return super()._heading_tag(token, tokens, i)
     def _build_toc(self, tokens: Sequence[Token], i: int) -> str:
         toc = TocEntry.of(tokens[i])
+        href_prefix = "/" if self._html_params.split_pages else ""
         if toc.kind == 'section' and self._html_params.section_toc_depth < 1:
             return ""
         def walk_and_emit(toc: TocEntry, depth: int) -> list[str]:
@@ -444,7 +449,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 result.append(
                     f'<dt>'
                     f' <span class="{html.escape(child.kind, True)}">'
-                    f'  <a href="{child.target.href()}">{child.target.toc_html}</a>'
+                    f'  <a href="{href_prefix + child.target.href()}">{child.target.toc_html}</a>'
                     f' </span>'
                     f'</dt>'
                 )
@@ -458,8 +463,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             if not lst:
                 return ""
             entries = [
-                f'<dt>{i}. <a href="{e.target.href()}">{e.target.toc_html}</a></dt>'
-                for i, e in enumerate(lst, start=1)
+                f'<dt>{i}. <a href="{href_prefix + e.target.href()}">{e.target.toc_html}</a></dt>'
+                for _, e in enumerate(lst, start=1)
             ]
             return (
                 f'<div class="{id}">'
@@ -833,7 +838,6 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             for item in xref_queue:
                 try:
                     target = item if isinstance(item, XrefTarget) else self._render_xref(*item)
-                    print(target)
                 except UnresolvedXrefError:
                     if failed:
                         raise
@@ -863,7 +867,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     drop_target=True
                 )
 
-        TocEntry.collect_and_link(self._xref_targets, tokens)
+        res = TocEntry.collect_and_link(self._xref_targets, tokens)
 
         if self._redirects:
             self._redirects.validate(self._xref_targets)
