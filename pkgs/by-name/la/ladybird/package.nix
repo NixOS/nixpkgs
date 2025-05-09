@@ -32,11 +32,6 @@
 }:
 
 let
-  adobe-icc-profiles = fetchurl {
-    url = "https://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesCS4Win_end-user.zip";
-    hash = "sha256-kgQ7fDyloloPaXXQzcV9tgpn3Lnr37FbFiZzEb61j5Q=";
-    name = "adobe-icc-profiles.zip";
-  };
   # Note: The cacert version is synthetic and must match the version in the package's CMake
   cacert_version = "2023-12-12";
 in
@@ -83,10 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
-
-    mkdir build/Caches/AdobeICCProfiles
-    cp ${adobe-icc-profiles} build/Caches/AdobeICCProfiles/adobe-icc-profiles.zip
-    chmod +w build/Caches/AdobeICCProfiles
   '';
 
   nativeBuildInputs = [
