@@ -7440,12 +7440,6 @@
     githubId = 7820865;
     name = "Eric Dallo";
   };
-  ericsagnes = {
-    email = "eric.sagnes@gmail.com";
-    github = "ericsagnes";
-    githubId = 367880;
-    name = "Eric Sagnes";
-  };
   ericson2314 = {
     email = "John.Ericson@Obsidian.Systems";
     matrix = "@ericson2314:matrix.org";
