@@ -94,10 +94,15 @@ let
       };
     };
 
-  nerdFonts = lib.trivial.pipe fontsInfo [
-    (map (font: lib.nameValuePair (convertAttrName font.caskName) (makeNerdFont font)))
-    builtins.listToAttrs
-  ];
+  nerdFonts =
+    lib.trivial.pipe fontsInfo [
+      (map (font: lib.nameValuePair (convertAttrName font.caskName) (makeNerdFont font)))
+      builtins.listToAttrs
+    ]
+    // import ./aliases.nix {
+      inherit lib;
+      nerd-fonts = nerdFonts;
+    };
 in
 
 nerdFonts
