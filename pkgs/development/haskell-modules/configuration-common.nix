@@ -891,6 +891,14 @@ self: super:
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
 
+  # Skip test that checks a race condition between stm and stm-queue
+  stm-queue = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "--skip"
+      "/Data.Queue/behaves faster than TQueue in its worst case/"
+    ];
+  }) super.stm-queue;
+
   # https://github.com/pixbi/duplo/issues/25
   duplo = doJailbreak super.duplo;
 
