@@ -240,11 +240,11 @@ rec {
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20250102";
-    hash = "sha256-Km2vVTYsLs091cjmNTW8Kqku3vdsEA0imTtZfqZWDQo=";
+    # version = "20250102";
+    hash = "";
     owner = "Winetricks";
     repo = "winetricks";
-    rev = version;
+    rev = "00427b6";
 
     updateScript = writeShellScript "update-winetricks" ''
       ${updateScriptPreamble}
