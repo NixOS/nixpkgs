@@ -17,6 +17,7 @@
   "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
 
+  "battery-time@eetumos.github.com" = "battery-time-3";
   "batterytime@typeof.pw" = "battery-time-2";
   "batime@martin.zurowietz.de" = "battery-time";
 

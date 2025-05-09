@@ -101,6 +101,6 @@ buildPythonPackage {
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ ericsagnes ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
