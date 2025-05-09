@@ -18552,12 +18552,6 @@
     githubId = 16345849;
     name = "Parthiv Seetharaman";
   };
-  paddygord = {
-    email = "pgpatrickgordon@gmail.com";
-    github = "avagordon01";
-    githubId = 10776658;
-    name = "Patrick Gordon";
-  };
   paepcke = {
     email = "git@paepcke.de";
     github = "paepckehh";
