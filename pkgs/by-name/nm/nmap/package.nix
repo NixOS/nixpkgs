@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  versionCheckHook,
   libpcap,
   pkg-config,
   openssl,
@@ -62,6 +63,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false; # fails 3 tests, probably needs the net
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   meta = {
     description = "Free and open source utility for network discovery and security auditing";
