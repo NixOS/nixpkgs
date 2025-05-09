@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   gitUpdater,
+  nixosTests,
   gobject-introspection,
   gst_all_1,
   libnice,
@@ -64,6 +65,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru = {
+    tests.vm = nixosTests.galene.stream;
     updateScript = gitUpdater { };
   };
 
