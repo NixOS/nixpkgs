@@ -96,6 +96,7 @@ let
         "docs"
         "release=1"
       ],
+      hasEpochFile ? true, # Available since 1.13.0 https://github.com/crystal-lang/crystal/pull/14574
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
@@ -164,12 +165,16 @@ let
         '';
 
       # Defaults are 4
-      preBuild = ''
-        export CRYSTAL_WORKERS=$NIX_BUILD_CORES
-        export threads=$NIX_BUILD_CORES
-        export CRYSTAL_CACHE_DIR=$TMP
-        export MACOSX_DEPLOYMENT_TARGET=10.11
-      '';
+      preBuild =
+        ''
+          export CRYSTAL_WORKERS=$NIX_BUILD_CORES
+          export threads=$NIX_BUILD_CORES
+          export CRYSTAL_CACHE_DIR=$TMP
+          export MACOSX_DEPLOYMENT_TARGET=10.11
+        ''
+        + lib.optionalString hasEpochFile ''
+          export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
+        '';
 
       strictDeps = true;
       nativeBuildInputs = [
@@ -299,6 +304,7 @@ rec {
     sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_15;
+    hasEpochFile = false;
   };
 
   crystal_1_14 = generic {
