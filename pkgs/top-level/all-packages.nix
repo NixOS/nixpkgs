@@ -12955,6 +12955,7 @@ with pkgs;
       libXtSupport = false;
       fontconfigSupport = false;
       freetypeSupport = false;
+      libraqmSupport = false;
       libjpegSupport = false;
       djvulibreSupport = false;
       lcms2Support = false;
