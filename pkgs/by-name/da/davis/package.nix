@@ -1,11 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  php,
+  php83,
   nixosTests,
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+# NOTE: davis does not support php 8.4 yet
+#       https://github.com/tchapi/davis/issues/195
+php83.buildComposerProject2 (finalAttrs: {
   pname = "davis";
   version = "5.0.2";
 
