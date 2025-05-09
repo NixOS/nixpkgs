@@ -14,13 +14,13 @@
 stdenv.mkDerivation rec {
 
   pname = "savvycan";
-  version = "213";
+  version = "220";
 
   src = fetchFromGitHub {
     owner = "collin80";
     repo = "SavvyCAN";
     rev = "V${version}";
-    hash = "sha256-duITY6s/uadeBCFuG42JbLCaq7yaYv1qB8Q3GA8UJ0A=";
+    hash = "sha256-Du6Pc0JePdJNwBaWKKjTMWOmKCnk6Azojh8IJ7I+ngY=";
   };
 
   buildInputs = [
