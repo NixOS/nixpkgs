@@ -3990,8 +3990,6 @@ with pkgs;
 
   olive-editor = qt6Packages.callPackage ../applications/video/olive-editor { };
 
-  ombi = callPackage ../servers/ombi { };
-
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
@@ -7491,10 +7489,6 @@ with pkgs;
   minizincide = qt6Packages.callPackage ../development/tools/minizinc/ide.nix { };
 
   mkdocs = with python3Packages; toPythonApplication mkdocs;
-
-  mold = callPackage ../by-name/mo/mold/package.nix {
-    tbb = tbb_2021_11;
-  };
 
   mold-wrapped = wrapBintoolsWith {
     bintools = mold;

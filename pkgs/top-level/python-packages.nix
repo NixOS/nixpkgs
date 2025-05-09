@@ -692,7 +692,9 @@ self: super: with self; {
 
   ansible = callPackage ../development/python-modules/ansible { };
 
-  ansible-builder = callPackage ../development/python-modules/ansible-builder { };
+  ansible-builder = callPackage ../development/python-modules/ansible-builder {
+    inherit (pkgs) podman;
+  };
 
   ansible-compat = callPackage ../development/python-modules/ansible-compat { };
 
