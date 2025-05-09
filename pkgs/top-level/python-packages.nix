@@ -4861,6 +4861,12 @@ self: super: with self; {
 
   fenics = callPackage ../development/python-modules/fenics { hdf5 = pkgs.hdf5_1_10; };
 
+  fenics-basix = callPackage ../development/python-modules/fenics-basix { };
+
+  fenics-dolfinx = callPackage ../development/python-modules/fenics-dolfinx { };
+
+  fenics-ffcx = callPackage ../development/python-modules/fenics-ffcx { };
+
   fenics-ufl = callPackage ../development/python-modules/fenics-ufl { };
 
   ffcv = callPackage ../development/python-modules/ffcv { };
