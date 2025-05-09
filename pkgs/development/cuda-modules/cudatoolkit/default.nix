@@ -1,5 +1,5 @@
 {
-  cudaVersion,
+  cudaMajorMinorVersion,
   runPatches ? [ ],
   autoPatchelfHook,
   autoAddDriverRunpath,
@@ -54,7 +54,7 @@
 let
   # Version info for the classic cudatoolkit packages that contain everything that is in redist.
   releases = builtins.import ./releases.nix;
-  release = releases.${cudaVersion};
+  release = releases.${cudaMajorMinorVersion};
 in
 
 backendStdenv.mkDerivation rec {
