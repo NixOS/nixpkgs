@@ -90,12 +90,22 @@ let
 
   inherit
     (rec {
+
+      metaModule = {
+        _file = "${__curPos.file}##metaModule";
+        meta = {
+          # Infra issue: virtualization on darwin doesn't seem to work yet.
+          hydraPlatforms = platforms.linux;
+        };
+      };
+
       doRunTest =
         arg:
         ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
           imports = [
             arg
             readOnlyPkgs
+            metaModule
           ];
         }).config.result;
       findTests =
