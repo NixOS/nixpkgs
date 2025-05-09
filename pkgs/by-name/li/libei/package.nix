@@ -11,6 +11,8 @@
   protobuf,
   protobufc,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  basu,
   buildPackages,
 }:
 let
@@ -38,8 +40,9 @@ stdenv.mkDerivation rec {
     libxkbcommon
     protobuf
     protobufc
-    systemd
+    (if withSystemd then systemd else basu)
   ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -55,6 +58,10 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  passthru = {
+    features = { inherit withSystemd; };
+  };
 
   postPatch = ''
     ln -s "${munit}" ./subprojects/munit
