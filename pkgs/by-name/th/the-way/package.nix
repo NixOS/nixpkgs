@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  useNextest = true;
-
   postInstall = ''
     $out/bin/the-way config default tmp.toml
     for shell in bash fish zsh; do
