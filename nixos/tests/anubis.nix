@@ -1,7 +1,10 @@
 { lib, ... }:
 {
   name = "anubis";
-  meta.maintainers = [ lib.maintainers.soopyc ];
+  meta.maintainers = with lib.maintainers; [
+    soopyc
+    nullcube
+  ];
 
   nodes.machine =
     {
@@ -10,29 +13,66 @@
       ...
     }:
     {
-      services.anubis.instances = {
-        "".settings.TARGET = "http://localhost:8080";
-
-        "tcp" = {
-          user = "anubis-tcp";
-          group = "anubis-tcp";
+      services.anubis = {
+        defaultOptions = {
+          # Get default botPolicy
+          botPolicy = lib.importJSON "${config.services.anubis.package.src}/data/botPolicies.json";
           settings = {
-            TARGET = "http://localhost:8080";
-            BIND = ":9000";
-            BIND_NETWORK = "tcp";
-            METRICS_BIND = ":9001";
-            METRICS_BIND_NETWORK = "tcp";
+            DIFFICULTY = 3;
+            USER_DEFINED_DEFAULT = true;
           };
         };
+        instances = {
+          "".settings = {
+            TARGET = "http://localhost:8080";
+            DIFFICULTY = 5;
+            USER_DEFINED_INSTANCE = true;
+          };
 
-        "unix-upstream" = {
-          group = "nginx";
-          settings.TARGET = "unix:///run/nginx/nginx.sock";
+          "tcp" = {
+            user = "anubis-tcp";
+            group = "anubis-tcp";
+            settings = {
+              TARGET = "http://localhost:8080";
+              BIND = ":9000";
+              BIND_NETWORK = "tcp";
+              METRICS_BIND = ":9001";
+              METRICS_BIND_NETWORK = "tcp";
+            };
+          };
+
+          "unix-upstream" = {
+            group = "nginx";
+            settings.TARGET = "unix:///run/nginx/nginx.sock";
+          };
+
+          "botPolicy-default" = {
+            botPolicy = null;
+            settings.TARGET = "http://localhost:8080";
+          };
+
+          "botPolicy-file" = {
+            settings = {
+              TARGET = "http://localhost:8080";
+              POLICY_FNAME = "/etc/anubis-botPolicy.json";
+            };
+          };
         };
       };
 
+      # Empty json for testing
+      environment.etc."anubis-botPolicy.json".text = lib.generators.toJSON { } {
+        bots = [
+          {
+            name = "allow-all";
+            user_agent_regex = ".*";
+            action = "ALLOW";
+          }
+        ];
+      };
+
       # support
-      users.users.nginx.extraGroups = [ config.users.groups.anubis.name ];
+      users.users.nginx.extraGroups = [ config.services.anubis.defaultOptions.group ];
       services.nginx = {
         enable = true;
         recommendedProxySettings = true;
@@ -94,5 +134,22 @@
 
     # Upstream is a unix socket mode
     machine.succeed('curl -f http://unix.localhost/index.html | grep "it works"')
+
+    # Default user-defined environment variables
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "USER_DEFINED_DEFAULT"')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "USER_DEFINED_DEFAULT"')
+
+    # Instance-specific user-specified environment variables
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "USER_DEFINED_INSTANCE"')
+    machine.fail('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "USER_DEFINED_INSTANCE"')
+
+    # Make sure defaults don't overwrite themselves
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "DIFFICULTY=5"')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-tcp.service | grep "DIFFICULTY=3"')
+
+    # Check correct BotPolicy settings are applied
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis.service | grep "POLICY_FNAME=/nix/store"')
+    machine.fail('cat /run/current-system/etc/systemd/system/anubis-botPolicy-default.service | grep "POLICY_FNAME="')
+    machine.succeed('cat /run/current-system/etc/systemd/system/anubis-botPolicy-file.service | grep "POLICY_FNAME=/etc/anubis-botPolicy.json"')
   '';
 }
