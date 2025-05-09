@@ -2,7 +2,7 @@
   stdenv,
   lib,
   makeDesktopItem,
-  makeWrapper,
+  makeBinaryWrapper,
   lndir,
   config,
   buildPackages,
@@ -285,7 +285,7 @@ let
       );
 
       nativeBuildInputs = [
-        makeWrapper
+        makeBinaryWrapper
         lndir
         jq
       ];
