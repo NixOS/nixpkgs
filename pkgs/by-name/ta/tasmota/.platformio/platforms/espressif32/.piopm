@@ -1,0 +1,12 @@
+{
+  "type": "platform",
+  "name": "espressif32",
+  "version": "2024.12.30",
+  "spec": {
+    "owner": null,
+    "id": null,
+    "name": "platform-espressif32",
+    "requirements": null,
+    "uri": "https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "toolchain-xtensa",
+  "version": "2.40802.200502",
+  "spec": {
+    "owner": "platformio",
+    "id": 8221,
+    "name": "toolchain-xtensa",
+    "requirements": null,
+    "uri": null
+  }
+}
