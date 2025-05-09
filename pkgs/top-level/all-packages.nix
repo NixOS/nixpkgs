@@ -12955,6 +12955,7 @@ with pkgs;
       libXtSupport = false;
       fontconfigSupport = false;
       freetypeSupport = false;
+      libraqmSupport = false;
       libjpegSupport = false;
       djvulibreSupport = false;
       lcms2Support = false;
@@ -12987,8 +12988,6 @@ with pkgs;
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
-
-  inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
@@ -13458,10 +13457,6 @@ with pkgs;
   mpv = mpv-unwrapped.wrapper { mpv = mpv-unwrapped; };
 
   mpvScripts = mpv-unwrapped.scripts;
-
-  shaka-packager = callPackage ../by-name/sh/shaka-packager/package.nix {
-    abseil-cpp = abseil-cpp_202401;
-  };
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
@@ -15528,6 +15523,7 @@ with pkgs;
     gnome45Extensions
     gnome46Extensions
     gnome47Extensions
+    gnome48Extensions
     ;
 
   gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
