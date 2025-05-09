@@ -12076,7 +12076,11 @@ with pkgs;
     withUkify = true;
   };
 
-  udev = if lib.meta.availableOn stdenv.hostPlatform systemdLibs then systemdLibs else libudev-zero;
+  udev =
+    if (lib.meta.availableOn stdenv.hostPlatform systemdLibs) && (config.withSystemd or true) then
+      systemdLibs
+    else
+      libudev-zero;
 
   sysvtools = sysvinit.override {
     withoutInitTools = true;
