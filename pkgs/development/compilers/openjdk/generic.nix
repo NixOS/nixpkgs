@@ -78,7 +78,6 @@
   temurin-bin-11,
   temurin-bin-17,
   temurin-bin-21,
-  temurin-bin-23,
   temurin-bin-24,
   jdk-bootstrap ?
     {
@@ -86,7 +85,6 @@
       "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
       "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
     }
     .${featureVersion},
