@@ -13079,6 +13079,11 @@
     githubId = 361496;
     name = "Nikola Knežević";
   };
+  koffydrop = {
+    github = "koffydrop";
+    githubId = 67888720;
+    name = "Kira";
+  };
   kolaente = {
     email = "k@knt.li";
     github = "kolaente";
