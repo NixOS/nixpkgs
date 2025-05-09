@@ -379,7 +379,7 @@ buildPythonPackage rec {
       (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.cudaFlags.cmakeCudaArchitecturesString
       }")
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
-        name = "cuda-merged-${cudaPackages.cudaVersion}";
+        name = "cuda-merged-${cudaPackages.cudaMajorMinorVersion}";
         paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
       }}")
       (lib.cmakeFeature "CAFFE2_USE_CUDNN" "ON")

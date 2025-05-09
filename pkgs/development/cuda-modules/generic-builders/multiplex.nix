@@ -1,7 +1,7 @@
 {
   # callPackage-provided arguments
   lib,
-  cudaVersion,
+  cudaMajorMinorVersion,
   flags,
   stdenv,
   # Expected to be passed by the caller
@@ -69,8 +69,8 @@ let
   isSupported =
     package:
     redistArch == package.redistArch
-    && strings.versionAtLeast cudaVersion package.minCudaVersion
-    && strings.versionAtLeast package.maxCudaVersion cudaVersion;
+    && strings.versionAtLeast cudaMajorMinorVersion package.minCudaVersion
+    && strings.versionAtLeast package.maxCudaVersion cudaMajorMinorVersion;
 
   # Get all of the packages for our given platform.
   # redistArch :: String

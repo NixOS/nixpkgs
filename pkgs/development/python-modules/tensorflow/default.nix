@@ -149,7 +149,7 @@ let
   ];
 
   cudatoolkitDevMerged = symlinkJoin {
-    name = "cuda-${cudaPackages.cudaVersion}-dev-merged";
+    name = "cuda-${cudaPackages.cudaMajorMinorVersion}-dev-merged";
     paths = lib.concatMap (p: [
       (lib.getBin p)
       (lib.getDev p)
