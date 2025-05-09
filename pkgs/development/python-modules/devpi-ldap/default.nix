@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "devpi-ldap";
-  version = "2.1.1";
+  version = "2.1.1-unstable-2023-11-28";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi-ldap";
-    tag = version;
-    hash = "sha256-Upz6+pCS+8fStHkt5+q9uuawc8IOkZNppjnnnxa4wW4=";
+    rev = "281a21d4e8d11bfec7dca2cf23fa39660a6d5796";
+    hash = "sha256-vwX0bOb2byN3M6iBk0tZJy8H39fjwBYvA0Nxi7OTzFQ=";
   };
 
   build-system = [ setuptools ];
