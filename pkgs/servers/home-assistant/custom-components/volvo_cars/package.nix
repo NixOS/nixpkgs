@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "thomasddn";
   domain = "volvo_cars";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "thomasddn";
     repo = "ha-volvo-cars";
     tag = "v${version}";
-    hash = "sha256-UG/anp9ThEOQsRWraTayuyx6kS9r2vTH/8Bak4ZzYzo";
+    hash = "sha256-f7+RBAOkNUVJ4P/B/cMK7eGFrTnn8TGsC26vfSHc8Z4=";
   };
 
   meta = with lib; {
