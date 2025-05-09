@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-
   installPhase = ''
     runHook preInstall
 
