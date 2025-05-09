@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib) types mkOption literalExpression;
+  inherit (lib) types mkOption literalMD;
 in
 {
   options = {
@@ -45,8 +45,10 @@ in
             };
             hydraPlatforms = mkOption {
               type = types.listOf types.raw;
-              default = config.platforms;
-              defaultText = literalExpression "meta.platforms";
+              # Ideally this would default to `platforms` again:
+              # default = config.platforms;
+              default = lib.platforms.linux;
+              defaultText = literalMD "`lib.platforms.linux` only, as the `hydra.nixos.org` build farm does not currently support virtualisation on Darwin.";
               description = ''
                 Sets the [`meta.hydraPlatforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-hydraPlatforms) attribute on the [{option}`test`](#test-opt-test) derivation.
               '';
