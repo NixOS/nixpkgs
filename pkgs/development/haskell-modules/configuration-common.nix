@@ -203,6 +203,18 @@ self: super:
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
 
+  # Support hie-bios >= 0.15 (unreleased to hackage)
+  ghcide = appendPatch (pkgs.fetchpatch2 {
+    name = "ghcide-hie-bios-0.15.patch";
+    url = "https://github.com/haskell/haskell-language-server/commit/eb06c6f6ad7d7fcc29ff4b62f679f428897147f8.patch";
+    sha256 = "0im3mf71chsgk787lz942c8zlmq00gfsd5rclprlsncg0zli1whq";
+    includes = [
+      "ghcide.cabal"
+      "**/Diagnostics.hs"
+    ];
+    stripLen = 1;
+  }) super.ghcide;
+
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
