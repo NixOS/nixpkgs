@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  coreutils,
 
   perl,
   pkg-config,
@@ -21,37 +19,22 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multipath-tools";
-  version = "0.9.8";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
-    tag = version;
-    sha256 = "sha256-4cby19BjgnmWf7klK1sBgtZnyvo7q3L1uyVPlVoS+uk=";
+    tag = finalAttrs.version;
+    hash = "sha256-H5DY15On3mFwUHQhmC9s2thm0TUUIZbXM/Ot2FPL41Y=";
   };
-
-  patches = [
-    # Backport build fix for musl libc 1.2.5
-    (fetchpatch {
-      url = "https://github.com/openSUSE/multipath-tools/commit/e5004de8296cd596aeeac0a61b901e98cf7a69d2.patch";
-      hash = "sha256-3Qt8zfrWi9aOdqMObZQaNAaXDmjhvSYrXK7qycC9L1Q=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace create-config.mk \
-      --replace-fail /bin/echo ${coreutils}/bin/echo
-
-    substituteInPlace multipathd/multipathd.service.in \
-      --replace-fail /sbin/multipathd "$out/bin/multipathd"
-  '';
 
   nativeBuildInputs = [
     perl
     pkg-config
   ];
+
   buildInputs = [
     json_c
     libaio
@@ -62,6 +45,7 @@ stdenv.mkDerivation rec {
     systemd
     util-linuxMinimal # for libmount
   ];
+
   strictDeps = true;
 
   makeFlags = [
@@ -83,10 +67,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for the Linux multipathing storage driver";
     homepage = "http://christophe.varoqui.free.fr/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})
