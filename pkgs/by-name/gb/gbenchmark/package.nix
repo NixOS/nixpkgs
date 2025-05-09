@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
-    hash = "sha256-5xDg1duixLoWIuy59WT0r5ZBAvTR6RPP7YrhBYkMxc8=";
+    hash = "sha256-VuNXH7dmhEMPGYOwsinKd6tO68p20S8tArcFDkVMyDg=";
   };
 
   nativeBuildInputs = [
