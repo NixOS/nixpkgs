@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.0.0-rc.3";
-  sha256 = "9bbca08fba05f075a20f734ea80b195a4a39218476b60b32db79e1d393fda20b";
+  version = "24.0.0";
+  sha256 = "914f3f1b03f84a0994d7357f190ff13c038800c693b6c06da2290eb588c82761";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -51,6 +51,13 @@ buildNodejs {
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+
+      # Can be removed after https://github.com/NixOS/nixpkgs/pull/403958.
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
+        hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
+        revert = true;
+      })
     ]
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts

@@ -281,6 +281,7 @@ in
       hardware.bluetooth.enable = mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
+      security.rtkit.enable = mkDefault true;
       services.accounts-daemon.enable = true;
       services.dleyna.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;

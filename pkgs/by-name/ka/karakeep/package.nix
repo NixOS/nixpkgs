@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.23.2";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cm6e1XEmMHzQ3vODxa9+Yuwt+9zLvQ9S7jmwAozjA/k=";
+    hash = "sha256-eiDTNMB/CipAR3FkUqPUGYdTAC6lSxT9gRXPQJLx5YE=";
   };
 
   patches = [
@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/dont-lock-pnpm-version.patch
   ];
   postPatch = ''
-    ln -s ${inter}/share/fonts/truetype ./apps/landing/app/fonts
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
   '';
 
@@ -52,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    hash = "sha256-HZb11CAbnlGSmP/Gxyjncd/RuIWkPv3GvwYs9QZ12Ss=";
+    hash = "sha256-2n61uKdT9Q1fobpHunRhC3Eql3fqsV+DcyaEGjYDOyY=";
   };
   buildPhase = ''
     runHook preBuild

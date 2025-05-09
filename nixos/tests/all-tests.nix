@@ -421,7 +421,7 @@ in
   ecryptfs = handleTest ./ecryptfs.nix { };
   fscrypt = handleTest ./fscrypt.nix { };
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
-  eintopf = handleTest ./eintopf.nix { };
+  eintopf = runTest ./eintopf.nix;
   ejabberd = handleTest ./xmpp/ejabberd.nix { };
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -619,7 +619,6 @@ in
   odoo = handleTest ./odoo.nix { };
   odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
   odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
-  odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
@@ -1297,7 +1296,7 @@ in
   systemd-initrd-luks-unl0kr = handleTest ./systemd-initrd-luks-unl0kr.nix { };
   systemd-initrd-modprobe = handleTest ./systemd-initrd-modprobe.nix { };
   systemd-initrd-shutdown = handleTest ./systemd-shutdown.nix { systemdStage1 = true; };
-  systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix { };
+  systemd-initrd-simple = runTest ./systemd-initrd-simple.nix;
   systemd-initrd-swraid = handleTest ./systemd-initrd-swraid.nix { };
   systemd-initrd-vconsole = handleTest ./systemd-initrd-vconsole.nix { };
   systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix { };

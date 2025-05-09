@@ -86,6 +86,9 @@ buildPythonPackage rec {
     # Checks magic values and this fails on Python 3.13
     "test_raw_base64_autodetect_jpeg"
     "test_raw_base64_autodetect_png"
+
+    # Performance benchmarks that sometimes fail when running many parallel builds
+    "test_extract_system_messages_benchmark"
   ];
 
   disabledTestPaths = [

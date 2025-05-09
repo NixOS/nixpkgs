@@ -7,7 +7,8 @@
   - any:
     - base-branch:
       - '^release-'
-      - '^staging-'
+      - '^staging-\d'
+      - '^staging-next-\d'
 
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":

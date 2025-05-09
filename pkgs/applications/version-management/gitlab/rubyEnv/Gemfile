@@ -168,7 +168,7 @@ gem 'grape-path-helpers', '~> 2.0.1', feature_category: :api
 gem 'rack-cors', '~> 2.0.1', require: 'rack/cors', feature_category: :shared
 
 # GraphQL API
-gem 'graphql', '2.4.11', path: 'vendor/gems/graphql', feature_category: :api
+gem 'graphql', '2.4.13', feature_category: :api
 gem 'graphql-docs', '~> 5.0.0', group: [:development, :test], feature_category: :api
 gem 'apollo_upload_server', '~> 2.1.6', feature_category: :api
 
@@ -729,7 +729,7 @@ gem 'cvss-suite', '~> 3.3.0', require: 'cvss_suite', feature_category: :software
 gem 'arr-pm', '~> 0.0.12', feature_category: :package_registry
 
 # Remote Development
-gem 'devfile', '~> 0.4.0', feature_category: :workspaces
+gem 'devfile', '~> 0.4.3', feature_category: :workspaces
 
 # Apple plist parsing
 gem 'CFPropertyList', '~> 3.0.0', feature_category: :mobile_devops

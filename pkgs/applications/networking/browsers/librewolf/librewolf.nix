@@ -15,7 +15,7 @@ rec {
 
   extraPostPatch = ''
     while read patch_name; do
-      if [ "$patch_name" -neq "patches/macos-import-vector.patch"]; then
+      if [ "$patch_name" != "patches/macos-import-vector.patch" ]; then
         echo "applying LibreWolf patch: $patch_name"
         patch -p1 < ${source}/$patch_name
       else

@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proksi";
-  version = "0.5.3";
+  version = "0.5.3-unstable-2025-05-05";
 
   src = fetchFromGitHub {
     owner = "luizfonseca";
     repo = "proksi";
-    tag = "proksi-v${finalAttrs.version}";
-    hash = "sha256-zwLF6yL/EqyBtZ+hHXLJRe2UaZyhSzotEFYlpoLXKZ4=";
+    rev = "d0d95bd0bc142fafbe095248597a057524ff0721";
+    hash = "sha256-D+MS7Y7aKlgAY7T2vq+rayZ8fjP+98gGJrF5qLvH37Q=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vFZUcHh/gI4fdlM6LcN+6kjweLUnPNYNq6Y+XxWoSl8=";
+  cargoHash = "sha256-HEwtaERPw6llwhXPgifrtuO1fjV1gCEuH80PaIukp6Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -61,11 +61,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+  # remove after updating to the next stable version
+  preVersionCheck = ''
+    export version=0.5.3
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      "--version-regex"
-      "proksi-v(.*)"
+      "--version=branch"
+      "--version-regex=proksi-v(.*)"
     ];
   };
 

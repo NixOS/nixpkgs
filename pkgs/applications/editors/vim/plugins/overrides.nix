@@ -118,6 +118,10 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # luau-lsp-nvim dependencies
+  luau-lsp,
+  # nvim-vstsl dependencies
+  vtsls,
 }:
 self: super:
 let
@@ -1688,6 +1692,11 @@ in
     checkInputs = [ self.luasnip ];
   };
 
+  luau-lsp-nvim = super.luau-lsp-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [ luau-lsp ];
+  };
+
   magma-nvim = super.magma-nvim.overrideAttrs {
     passthru.python3Dependencies =
       ps: with ps; [
@@ -2582,6 +2591,11 @@ in
   nvim-unception = super.nvim-unception.overrideAttrs {
     # Attempt rpc socket connection
     nvimSkipModules = "client.client";
+  };
+
+  nvim-vtsls = super.nvim-vtsls.overrideAttrs {
+    runtimeDeps = [ vtsls ];
+    dependencies = [ self.nvim-lspconfig ];
   };
 
   nvzone-menu = super.nvzone-menu.overrideAttrs {

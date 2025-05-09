@@ -19,6 +19,7 @@
   which,
   z3,
   cctools,
+  procps,
 }:
 
 stdenv.mkDerivation (rec {
@@ -73,6 +74,7 @@ stdenv.mkDerivation (rec {
     [
       # Sandbox disallows network access, so disabling problematic networking tests
       ./disable-networking-tests.patch
+      ./disable-process-tests.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (replaceVars ./fix-darwin-build.patch {
@@ -102,10 +104,19 @@ stdenv.mkDerivation (rec {
         --replace-fail "https://github.com/google/googletest/archive/refs/tags/v$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
 
-  preBuild = ''
-    make libs build_flags=-j$NIX_BUILD_CORES
-    make configure build_flags=-j$NIX_BUILD_CORES
-  '';
+  preBuild =
+    ''
+      extraFlags=(build_flags=-j$NIX_BUILD_CORES)
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      # See this relnote about building on Raspbian:
+      # https://github.com/ponylang/ponyc/blob/0.46.0/.release-notes/0.45.2.md
+      extraFlags+=(pic_flag=-fPIC)
+    ''
+    + ''
+      make libs "''${extraFlags[@]}"
+      make configure "''${extraFlags[@]}"
+    '';
 
   makeFlags = [
     "PONYC_VERSION=${version}"
@@ -117,8 +128,9 @@ stdenv.mkDerivation (rec {
     "-Wno-error=implicit-fallthrough"
   ];
 
-  # make: *** [Makefile:222: test-full-programs-release] Killed: 9
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
+
+  nativeCheckInputs = [ procps ];
 
   installPhase =
     ''

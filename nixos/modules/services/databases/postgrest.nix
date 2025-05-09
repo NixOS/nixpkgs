@@ -245,6 +245,10 @@ in
       lib.optional (cfg.settings.admin-server-port != null && cfg.settings.server-host != "127.0.0.1")
         "The PostgREST admin server is potentially listening on a public host. This may expose sensitive information via the `/config` endpoint.";
 
+    # Since we're using DynamicUser, we can't add the e.g. nginx user to
+    # a postgrest group, so the unix socket must be world-readable to make it useful.
+    services.postgrest.settings.service-unix-socket-mode = "666";
+
     systemd.services.postgrest = {
       description = "PostgREST";
 

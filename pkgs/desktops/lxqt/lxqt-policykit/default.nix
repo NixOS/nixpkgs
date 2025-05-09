@@ -7,7 +7,6 @@
   liblxqt,
   libqtxdg,
   lxqt-build-tools,
-  pcre,
   pkg-config,
   polkit,
   polkit-qt-1,
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
-    pcre
     polkit
     polkit-qt-1
     qtbase

@@ -45,14 +45,14 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.5.6";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${version}";
-    hash = "sha256-nMGqsgE3IXyC8lcM9+3U7ytEgDeYsFEbkgByHI4xI0E=";
+    hash = "sha256-OGEnB+GVqBwtYQegPuR7MOYFxmc4aNHCQt2+OKHLZ5M=";
   };
 
   postPatch = ''
@@ -106,7 +106,7 @@ mkDerivationWith buildPythonPackage rec {
   meta = {
     description = "Fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
-    changelog = "https://github.com/napari/napari/releases/tag/v${version}";
+    changelog = "https://github.com/napari/napari/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };

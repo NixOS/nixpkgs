@@ -394,8 +394,8 @@ rec {
       "sha256-vkRJVKcgvG0sZBoRAuHfSB3XiOAi5yNqLH0FRRjTRhg=";
 
   mypy-boto3-devicefarm =
-    buildMypyBoto3Package "devicefarm" "1.38.0"
-      "sha256-ym1xyz+EPxEK/U8/90CU107Y+cGqI90pgcLXU4GJdco=";
+    buildMypyBoto3Package "devicefarm" "1.38.9"
+      "sha256-nb+AiG24s1vyTXwf2wwJlusMd1qvilQOd1mKY2tO0Lk=";
 
   mypy-boto3-devops-guru =
     buildMypyBoto3Package "devops-guru" "1.38.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-RQh46jrXqj4bXTRJ+tPR9sql7yUn7Ek9u4p0OU0A7b0=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.38.6"
-      "sha256-jkfIR/cdjFrsW05jU8Vmc4HZIO0AmD9TVhZH17B/q6c=";
+    buildMypyBoto3Package "ec2" "1.38.9"
+      "sha256-3/V/xDCP9ZGqU8sUapGPrJWpwRhj1qFw2hICNTHC/fQ=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.38.0"
@@ -462,8 +462,8 @@ rec {
       "sha256-aSZu8mxsTho4pvWWbNwlJf0IROjqjTlIUEE5DJkAje4=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.38.3"
-      "sha256-Jzft9wDE6k5v0nCCtVg48eyg545/+kRWwSl44GdwtLE=";
+    buildMypyBoto3Package "ecs" "1.38.9"
+      "sha256-LxgLG+uNpChV9MZ/9xsF5RayVU5i2qjYp73jAQFBA6s=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.38.0"
@@ -862,8 +862,8 @@ rec {
       "sha256-F6Yv7tgHnzgsekH7HJ8s7/Kpq1JiZkHs+qZEez5snUI=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.38.0"
-      "sha256-b3Qjbd4tarXBC5HwA6BjnJy5ClnBnaO4xOqBnOUG3w8=";
+    buildMypyBoto3Package "mediaconvert" "1.38.9"
+      "sha256-n6yMEzEVwlorfkyPVf3wYsNjbTVvujEd6GR/SRPTCOk=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.38.0"

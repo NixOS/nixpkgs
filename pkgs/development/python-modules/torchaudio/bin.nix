@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.6.0";
+  version = "2.7.0";
   format = "wheel";
 
   src =
@@ -90,6 +90,9 @@ buildPythonPackage rec {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

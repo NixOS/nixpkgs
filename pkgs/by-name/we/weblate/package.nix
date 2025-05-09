@@ -148,6 +148,8 @@ python.pkgs.buildPythonApplication rec {
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi;
 
+  pythonRelaxDeps = [ "django-otp-webauthn" ];
+
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
   };
