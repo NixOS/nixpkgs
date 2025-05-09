@@ -7643,8 +7643,6 @@ with pkgs;
     buildDocs = false;
   };
 
-  sbomnix = python3.pkgs.callPackage ../tools/security/sbomnix { };
-
   seer = libsForQt5.callPackage ../development/tools/misc/seer { };
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
@@ -10457,14 +10455,19 @@ with pkgs;
 
   kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { kanidm = kanidm_1_4; };
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
+  kanidm_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix { kanidm = kanidm_1_6; };
 
-  kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
+  kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
 
   kanidmWithSecretProvisioning_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix {
     enableSecretProvisioning = true;
   };
 
   kanidmWithSecretProvisioning_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix {
+    enableSecretProvisioning = true;
+  };
+
+  kanidmWithSecretProvisioning_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix {
     enableSecretProvisioning = true;
   };
 

@@ -3,6 +3,7 @@
   lib,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   fetchPypi,
   python313,
   replaceVars,
@@ -169,16 +170,6 @@ let
           inherit (oldAttrs.src) owner repo;
           rev = "refs/tags/${version}";
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
-        };
-      });
-
-      pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
-        version = "2.5.9";
-        src = fetchFromGitHub {
-          owner = "vilppuvuorinen";
-          repo = "pymelcloud";
-          rev = "33a827b6cd0b34f276790faa49bfd0994bb7c2e4"; # 2.5.x branch
-          sha256 = "sha256-Q3FIo9YJwtWPHfukEBjBANUQ1N1vr/DMnl1dgiN7vYg=";
         };
       });
 
@@ -377,7 +368,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.4.4";
+  hassVersion = "2025.5.0";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -388,7 +379,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.11";
+  disabled = python.pythonOlder "3.13";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -398,13 +389,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-MiBsVsgV/M8ge7XQ4e4VpdAKTVZBCDu3Jqql2YHx9rY=";
+    hash = "sha256-aypBPEI9AOAW9BUkcjJtXa9ssLo4jwEeX47m8320/Gg=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-qOhOs6I2Jx/7GWVeCBJ6d77w3RCFjsvFxDUbR60Ucf0=";
+    hash = "sha256-7bRBKCchBjAKmW4fjSzShr1RdNRQ677Dd1FXW6sqOQQ=";
   };
 
   build-system = with python.pkgs; [
@@ -420,6 +411,12 @@ python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    (fetchpatch {
+      name = "fix-point-import-error.patch";
+      url = "https://github.com/home-assistant/core/commit/3c4c3dc08e306b75dce486f5f5236a731fd04cf4.patch";
+      hash = "sha256-ke04kJWuBHMANVZo75QL5QwU51DZtO4FBBNu4Szu9q8=";
+    })
+
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
