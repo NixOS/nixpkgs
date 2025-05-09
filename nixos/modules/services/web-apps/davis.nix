@@ -81,6 +81,8 @@ in
       type = lib.types.str;
     };
 
+    # NOTE: davis does not support php 8.4 yet
+    #       https://github.com/tchapi/davis/issues/195
     package = lib.mkPackageOption pkgs "davis" { };
 
     dataDir = lib.mkOption {
@@ -381,6 +383,7 @@ in
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
+        phpPackage = lib.mkDefault pkgs.php83;
         settings =
           {
             "listen.mode" = "0660";
