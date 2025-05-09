@@ -17,7 +17,7 @@ import ./make-test-python.nix (
       hedgedocPostgresWithTCPSocket =
         { ... }:
         {
-          systemd.services.hedgedoc.after = [ "postgresql.service" ];
+          systemd.services.hedgedoc.after = [ "postgresql.target" ];
           services = {
             hedgedoc = {
               enable = true;
@@ -51,7 +51,7 @@ import ./make-test-python.nix (
       hedgedocPostgresWithUNIXSocket =
         { ... }:
         {
-          systemd.services.hedgedoc.after = [ "postgresql.service" ];
+          systemd.services.hedgedoc.after = [ "postgresql.target" ];
           services = {
             hedgedoc = {
               enable = true;
@@ -87,14 +87,14 @@ import ./make-test-python.nix (
           hedgedocSqlite.wait_until_succeeds("curl -sSf http://localhost:3000/new")
 
       with subtest("HedgeDoc postgres with TCP socket"):
-          hedgedocPostgresWithTCPSocket.wait_for_unit("postgresql.service")
+          hedgedocPostgresWithTCPSocket.wait_for_unit("postgresql.target")
           hedgedocPostgresWithTCPSocket.wait_for_unit("hedgedoc.service")
           hedgedocPostgresWithTCPSocket.wait_for_open_port(5432)
           hedgedocPostgresWithTCPSocket.wait_for_open_port(3000)
           hedgedocPostgresWithTCPSocket.wait_until_succeeds("curl -sSf http://localhost:3000/new")
 
       with subtest("HedgeDoc postgres with UNIX socket"):
-          hedgedocPostgresWithUNIXSocket.wait_for_unit("postgresql.service")
+          hedgedocPostgresWithUNIXSocket.wait_for_unit("postgresql.target")
           hedgedocPostgresWithUNIXSocket.wait_for_unit("hedgedoc.service")
           hedgedocPostgresWithUNIXSocket.wait_for_open_port(5432)
           hedgedocPostgresWithUNIXSocket.wait_for_open_port(3000)

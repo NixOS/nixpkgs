@@ -336,11 +336,11 @@ in
         mediagoblin-paster = lib.recursiveUpdate serviceDefaults {
           after = [
             "mediagoblin-celeryd.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           requires = [
             "mediagoblin-celeryd.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           preStart = ''
             cp --remove-destination ${pasteConfig} /var/lib/mediagoblin/paste.ini
