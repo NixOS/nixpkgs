@@ -8052,7 +8052,7 @@
     github = "FGRCL";
     githubId = 35940434;
     name = "Francois LaBerge";
-  }
+  };
   fidgetingbits = {
     name = "fidgetingbits";
     email = "nixpkgs.xe7au@passmail.net";
