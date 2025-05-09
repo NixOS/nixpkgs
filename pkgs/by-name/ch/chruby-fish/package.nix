@@ -1,25 +1,19 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  chruby,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chruby-fish";
-  version = "0.8.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "JeanMertz";
     repo = "chruby-fish";
-    rev = "v${version}";
-    sha256 = "15q0ywsn9pcypbpvlq0wb41x4igxm9bsvhg9a05dqw1n437qjhyb";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Lk6XvmKgEjXVjO3jMjJkCxoX7TGMxq3ib0Ohh/J4IPI=";
   };
-
-  postInstall = ''
-    sed -i -e '1iset CHRUBY_ROOT ${chruby}' $out/share/chruby/auto.fish
-    sed -i -e '1iset CHRUBY_ROOT ${chruby}' $out/share/chruby/chruby.fish
-  '';
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -30,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.cohei ];
   };
-}
+})
