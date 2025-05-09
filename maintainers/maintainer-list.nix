@@ -9148,6 +9148,12 @@
     githubId = 1621335;
     name = "Andrew Trachenko";
   };
+  goodylove = {
+    github = "goodylove";
+    email = "goodyc474@gmail.com";
+    githubId = 104577296;
+    name = "Nwachukwu Goodness";
+  };
   gordon-bp = {
     email = "gordy@hanakano.com";
     github = "Gordon-BP";
