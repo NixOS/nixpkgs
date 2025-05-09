@@ -15,7 +15,7 @@ in
 
       dates = lib.mkOption {
         default = [ "03:45" ];
-        type = with lib.types; listOf str;
+        type = with lib.types; either singleLineStr (listOf str);
         description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
@@ -67,7 +67,11 @@ in
         # No point this if the nix daemon (and thus the nix store) is outside
         unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
-        startAt = lib.optionals cfg.automatic cfg.dates;
+        startAt =
+          if lib.isList cfg.dates then
+            lib.optionals cfg.automatic cfg.dates
+          else
+            lib.optional cfg.automatic cfg.dates;
       };
 
       timers.nix-optimise = lib.mkIf cfg.automatic {
