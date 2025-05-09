@@ -364,10 +364,17 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
         scripts = self._html_params.scripts
         if self._redirects:
-            redirects_name = f'{toc.target.path.split('.html')[0]}-redirects.js'
-            with open(self._base_path / redirects_name, 'w') as file:
-                file.write(self._redirects.get_redirect_script(toc.target.path))
-            scripts.append(f'./{redirects_name}')
+            redirects_file_name = f'{toc.target.path.split('.html')[0]}-redirects.js'
+            redirects_path = Path(f'{Path(self._base_path)}/{redirects_file_name}')
+
+            # TODO: Is this the best place to create the directory ?
+            if not redirects_path.parent.exists():
+                redirects_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(redirects_path.as_posix(), 'w') as file:
+                file.write(self._redirects.get_redirect_script(str(self._outfile)))
+
+            scripts.append(redirects_file_name)
 
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',

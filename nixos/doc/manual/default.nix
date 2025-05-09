@@ -192,6 +192,7 @@ rec {
           --script ./anchor-use.js \
           --toc-depth 1 \
           --chunk-toc-depth 1 \
+          --into-pages \
           ./manual.md \
           $dst/${common.indexPath}
 
@@ -199,7 +200,11 @@ rec {
 
         mkdir -p $out/nix-support
         echo "nix-build out $out" >> $out/nix-support/hydra-build-products
+
         echo "doc manual $dst" >> $out/nix-support/hydra-build-products
+
+        ${pkgs.ripgrep}/bin/rg /nix/store
+        ${pkgs.eza}/bin/eza --tree
       ''; # */
 
   # Alias for backward compatibility. TODO(@oxij): remove eventually.

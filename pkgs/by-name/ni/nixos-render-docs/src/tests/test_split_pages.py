@@ -22,5 +22,5 @@ def test_chapters(tmp_path: Path):
     run_test(tmp_path, md)
 
     for f in tmp_path.iterdir():
-        shutil.copytree(tmp_path, "tmp/generated_test", dirs_exist_ok=True)
+        shutil.copytree(tmp_path, "src/tmp/generated_test", dirs_exist_ok=True)
 
