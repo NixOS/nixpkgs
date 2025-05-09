@@ -44,6 +44,8 @@ let
         # By default it's info, which is too noisy since we have many unmatched files
         settings.on-unmatched = "debug";
 
+        programs.keep-sorted.enable = true;
+
         # This uses nixfmt-rfc-style underneath,
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
