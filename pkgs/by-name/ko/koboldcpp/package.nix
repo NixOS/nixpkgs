@@ -23,10 +23,11 @@
   clblast,
   ocl-icd,
 
-  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
+  vulkanSupport ? true,
   vulkan-loader,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
+  shaderc,
 }:
 
 let
@@ -40,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.86.2";
+  version = "1.90";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zB/X4tfygpf3ZrQ9FtQCd3sxN11Ewlxz1+YCiw7iUZU=";
+    hash = "sha256-7UzWCIHvd8d7cUoozsZI/if9REvxzn+7bnVwr5Yk2WU=";
   };
 
   enableParallelBuilding = true;
@@ -54,6 +55,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
+    shaderc
   ];
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
