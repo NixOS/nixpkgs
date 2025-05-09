@@ -240,7 +240,7 @@ rec {
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    # version = "20250102";
+    version = "00427b6";
     hash = "";
     owner = "Winetricks";
     repo = "winetricks";
