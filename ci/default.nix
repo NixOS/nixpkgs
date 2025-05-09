@@ -48,6 +48,13 @@ let
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
+
+        settings.formatter.editorconfig-checker = {
+          command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
+          options = [ "-disable-indent-size" ];
+          includes = [ "*" ];
+          priority = 1;
+        };
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
