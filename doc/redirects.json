@@ -28,6 +28,15 @@
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
   ],
+  "ex-ociTools-buildImage": [
+    "index.html#ex-ociTools-buildImage"
+  ],
+  "ex-ociTools-buildLayeredImage": [
+    "index.html#ex-ociTools-buildLayeredImage"
+  ],
+  "ex-ociTools-toOCIImage": [
+    "index.html#ex-ociTools-toOCIImage"
+  ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
   ],
@@ -128,6 +137,9 @@
   ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-deprecations"
   ],
   "sec-nixpkgs-release-25.05-highlights": [
     "release-notes.html#sec-nixpkgs-release-25.05-highlights"
@@ -392,6 +404,27 @@
   ],
   "ssec-cosmic-settings-fallback": [
     "index.html#ssec-cosmic-settings-fallback"
+  ],
+  "ssec-pkgs-ociTools-buildImage": [
+    "index.html#ssec-pkgs-ociTools-buildImage"
+  ],
+  "ssec-pkgs-ociTools-buildImage-examples": [
+    "index.html#ssec-pkgs-ociTools-buildImage-examples"
+  ],
+  "ssec-pkgs-ociTools-buildLayeredImage": [
+    "index.html#ssec-pkgs-ociTools-buildLayeredImage"
+  ],
+  "ssec-pkgs-ociTools-buildLayeredImage-examples": [
+    "index.html#ssec-pkgs-ociTools-buildLayeredImage-examples"
+  ],
+  "ssec-pkgs-ociTools-toOCIImage": [
+    "index.html#ssec-pkgs-ociTools-toOCIImage"
+  ],
+  "ssec-pkgs-ociTools-toOCIImage-examples": [
+    "index.html#ssec-pkgs-ociTools-toOCIImage-examples"
+  ],
+  "ssec-pkgs-ociTools-toOCIImage-inputs": [
+    "index.html#ssec-pkgs-ociTools-toOCIImage-inputs"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
