@@ -88,7 +88,7 @@ in
         default = 2;
         type = types.ints.between 2 4294967296;
         description = ''
-          This field is only relevant when multiple users run the (interactive) 
+          This field is only relevant when multiple users run the (interactive)
           driver outside the sandbox and with the SSH backdoor activated.
           The typical symptom for this being a problem are error messages like this:
           `vhost-vsock: unable to set guest cid: Address already in use`
@@ -206,11 +206,31 @@ in
         nixpkgs.pkgs = config.node.pkgs;
         imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
       })
-      (mkIf config.sshBackdoor.enable {
-        testing.sshBackdoor = {
-          inherit (config.sshBackdoor) enable vsockOffset;
-        };
-      })
+      (mkIf config.sshBackdoor.enable (
+        let
+          inherit (config.sshBackdoor) vsockOffset;
+        in
+        { config, ... }:
+        {
+          services.openssh = {
+            enable = true;
+            settings = {
+              PermitRootLogin = "yes";
+              PermitEmptyPasswords = "yes";
+            };
+          };
+
+          security.pam.services.sshd = {
+            allowNullPassword = true;
+          };
+
+          virtualisation.qemu.options = [
+            "-device vhost-vsock-pci,guest-cid=${
+              toString (config.virtualisation.test.nodeNumber + vsockOffset)
+            }"
+          ];
+        }
+      ))
     ];
 
   };

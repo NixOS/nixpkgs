@@ -86,27 +86,6 @@ in
       enables commands to be sent to test and debug stage 1. Use
       machine.switch_root() to leave stage 1 and proceed to stage 2
     '';
-
-    sshBackdoor = {
-      enable = mkEnableOption "vsock-based ssh backdoor for the VM";
-      vsockOffset = mkOption {
-        default = 2;
-        type = types.ints.between 2 4294967296;
-        description = ''
-          This field is only relevant when multiple users run the (interactive)
-          driver outside the sandbox and with the SSH backdoor activated.
-          The typical symptom for this being a problem are error messages like this:
-          `vhost-vsock: unable to set guest cid: Address already in use`
-
-          This option allows to assign an offset to each vsock number to
-          resolve this.
-
-          This is a 32bit number. The lowest possible vsock number is `3`
-          (i.e. with the lowest node number being `1`, this is 2+1).
-        '';
-      };
-    };
-
   };
 
   config = {
@@ -119,18 +98,6 @@ in
         '';
       }
     ];
-
-    services.openssh = mkIf config.testing.sshBackdoor.enable {
-      enable = true;
-      settings = {
-        PermitRootLogin = "yes";
-        PermitEmptyPasswords = "yes";
-      };
-    };
-
-    security.pam.services.sshd = mkIf config.testing.sshBackdoor.enable {
-      allowNullPassword = true;
-    };
 
     systemd.services.backdoor = lib.mkMerge [
       backdoorService
@@ -207,12 +174,6 @@ in
         #       we avoid defining attributes if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
         package = lib.mkDefault pkgs.qemu_test;
-
-        options = mkIf config.testing.sshBackdoor.enable [
-          "-device vhost-vsock-pci,guest-cid=${
-            toString (config.virtualisation.test.nodeNumber + config.testing.sshBackdoor.vsockOffset)
-          }"
-        ];
       };
     };
 
