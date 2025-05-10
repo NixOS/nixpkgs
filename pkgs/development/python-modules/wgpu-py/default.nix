@@ -27,24 +27,26 @@
   imageio,
   numpy,
   psutil,
+  pypng,
   pytest,
   ruff,
   trio,
 
   # passthru
-  wgpu-py,
+  pkgs,
   testers,
+  wgpu-py,
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.21.1";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-XlV0ovIF3w/u6f65+3c4zAfisCoQDbzMiINJJTR/I6o=";
+    hash = "sha256-sjpTTOYv5FXMieUJvCQ2nJ1I0zaguyd7//vdLlt8Bmk=";
   };
 
   # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
@@ -96,66 +98,62 @@ buildPythonPackage rec {
     imageio
     numpy
     psutil
+    pypng
     pytest
     ruff
     trio
   ];
 
-  # Tests break due to sandboxing on everything except darwin
-  # Prefer to run them in passthru
+  # Tests break due in Linux CI due to wgpu being unable to find any adapters.
+  # Ordinarily, this would be fixed in an approach similar to `pkgs/by-name/wg/wgpu-native/examples.nix`'s
+  # usage of `runtimeInputs` and `makeWrapperArgs`.
+  # Unfortunately, as this is a Python module without a `mainProgram`, `makeWrapperArgs` will not apply here,
+  # as there is no "script" to wrap.
+  #
+  # In addition thereto, the structure of the tests in `wgpu-py` is unconventional, spread in separate folders
+  # all in the repository's root, which causes `pytestCheckHook` to fail for Darwin platforms too.
+  # As such, we delegate testing to `passthru`.
   doCheck = false;
 
-  passthru = {
-    tests =
-      {
-        version = testers.testVersion {
-          package = wgpu-py;
-          command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
-        };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
-        tests = testers.runCommand {
-          name = "tests";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-
-        examples = testers.runCommand {
-          name = "examples";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/examples
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-
-        codegen = testers.runCommand {
-          name = "codegen";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/codegen
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-
-        tests_mem = testers.runCommand {
-          name = "tests_mem";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests_mem
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+  passthru.tests =
+    {
+      version = testers.testVersion {
+        package = wgpu-py;
+        command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
       };
-  };
+    }
+    // lib.optionalAttrs stdenv.buildPlatform.isDarwin (
+      let
+        runWGpuPyTestCommand =
+          name: text:
+          pkgs.runCommandNoCC name {
+            nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
+            env.WGPU_LIB_PATH = "${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library}";
+          } text;
+      in
+      {
+        tests = runWGpuPyTestCommand "tests" ''
+          pytest -v ${wgpu-py.src}/tests
+        '';
+
+        examples = runWGpuPyTestCommand "examples" ''
+          pytest -v ${wgpu-py.src}/examples
+        '';
+
+        codegen = runWGpuPyTestCommand "codegen" ''
+          pytest -v ${wgpu-py.src}/codegen
+        '';
+
+        tests_mem = runWGpuPyTestCommand "tests_mem" ''
+          pytest -v ${wgpu-py.src}/tests_mem
+        '';
+      }
+    );
 
   meta = {
     description = "WebGPU for Python";
     homepage = "https://github.com/pygfx/wgpu-py";
-    changelog = "https://github.com/pygfx/wgpu-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pygfx/wgpu-py/blob/${src.tag}/CHANGELOG.md";
 
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
