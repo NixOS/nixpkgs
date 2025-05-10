@@ -136,8 +136,8 @@ let
     inherit version;
     pyproject = true;
 
-    # needs exactly Python 3.12
-    disabled = pythonOlder "3.12" || pythonAtLeast "3.13";
+    # dont support python 3.13 (Aider-AI/aider#3037)
+    disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
     src = fetchFromGitHub {
       owner = "Aider-AI";
