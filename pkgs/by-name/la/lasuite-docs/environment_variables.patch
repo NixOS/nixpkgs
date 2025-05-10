@@ -1,0 +1,115 @@
+diff --git a/impress/settings.py b/impress/settings.py
+index 3fc497b7..078a2c58 100755
+--- a/impress/settings.py
++++ b/impress/settings.py
+@@ -37,6 +37,34 @@ def get_release():
+     except (FileNotFoundError, KeyError):
+         return "NA"  # Default: not available
+ 
++class SecretFileValue(values.Value):
++    file_suffix = 'FILE'
++
++    def setup(self, name):
++        value = self.default
++        if self.environ:
++            full_environ_name = self.full_environ_name(name)
++            full_environ_name_file = f'{full_environ_name}_{self.file_suffix}'
++            if full_environ_name_file in os.environ:
++                filename = os.environ[full_environ_name_file]
++                if not os.path.exists(filename):
++                    raise ValueError('Path {0!r} does not exist.'.format(filename))
++                try:
++                    file = open(filename, 'r')
++                    value = self.to_python(file.read().removesuffix("\n"))
++                    file.close()
++                except:
++                    raise ValueError('Path {0!r} cannot be read.'.format(filename))
++            elif full_environ_name in os.environ:
++                value = self.to_python(os.environ[full_environ_name])
++            elif self.environ_required:
++                raise ValueError('Value {0!r} is required to be set as the '
++                                 'environment variable {1!r} or {2!r}'
++                                 .format(name, full_environ_name_file, full_environ_name))
++        self.value = value
++        return value
++
++
+ 
+ class Base(Configuration):
+     """
+@@ -65,7 +93,7 @@ class Base(Configuration):
+ 
+     # Security
+     ALLOWED_HOSTS = values.ListValue([])
+-    SECRET_KEY = values.Value(None)
++    SECRET_KEY = SecretFileValue(None)
+     SERVER_TO_SERVER_API_TOKENS = values.ListValue([])
+ 
+     # Application definition
+@@ -84,7 +112,7 @@ class Base(Configuration):
+                 "impress", environ_name="DB_NAME", environ_prefix=None
+             ),
+             "USER": values.Value("dinum", environ_name="DB_USER", environ_prefix=None),
+-            "PASSWORD": values.Value(
++            "PASSWORD": SecretFileValue(
+                 "pass", environ_name="DB_PASSWORD", environ_prefix=None
+             ),
+             "HOST": values.Value(
+@@ -122,10 +150,10 @@ class Base(Configuration):
+     AWS_S3_ENDPOINT_URL = values.Value(
+         environ_name="AWS_S3_ENDPOINT_URL", environ_prefix=None
+     )
+-    AWS_S3_ACCESS_KEY_ID = values.Value(
++    AWS_S3_ACCESS_KEY_ID = SecretFileValue(
+         environ_name="AWS_S3_ACCESS_KEY_ID", environ_prefix=None
+     )
+-    AWS_S3_SECRET_ACCESS_KEY = values.Value(
++    AWS_S3_SECRET_ACCESS_KEY = SecretFileValue(
+         environ_name="AWS_S3_SECRET_ACCESS_KEY", environ_prefix=None
+     )
+     AWS_S3_REGION_NAME = values.Value(
+@@ -378,7 +406,7 @@ class Base(Configuration):
+     EMAIL_BRAND_NAME = values.Value(None)
+     EMAIL_HOST = values.Value(None)
+     EMAIL_HOST_USER = values.Value(None)
+-    EMAIL_HOST_PASSWORD = values.Value(None)
++    EMAIL_HOST_PASSWORD = SecretFileValue(None)
+     EMAIL_LOGO_IMG = values.Value(None)
+     EMAIL_PORT = values.PositiveIntegerValue(None)
+     EMAIL_USE_TLS = values.BooleanValue(False)
+@@ -401,7 +429,7 @@ class Base(Configuration):
+     COLLABORATION_API_URL = values.Value(
+         None, environ_name="COLLABORATION_API_URL", environ_prefix=None
+     )
+-    COLLABORATION_SERVER_SECRET = values.Value(
++    COLLABORATION_SERVER_SECRET = SecretFileValue(
+         None, environ_name="COLLABORATION_SERVER_SECRET", environ_prefix=None
+     )
+     COLLABORATION_WS_URL = values.Value(
+@@ -470,7 +498,7 @@ class Base(Configuration):
+     OIDC_RP_CLIENT_ID = values.Value(
+         "impress", environ_name="OIDC_RP_CLIENT_ID", environ_prefix=None
+     )
+-    OIDC_RP_CLIENT_SECRET = values.Value(
++    OIDC_RP_CLIENT_SECRET = SecretFileValue(
+         None,
+         environ_name="OIDC_RP_CLIENT_SECRET",
+         environ_prefix=None,
+@@ -565,7 +593,7 @@ class Base(Configuration):
+     AI_FEATURE_ENABLED = values.BooleanValue(
+         default=False, environ_name="AI_FEATURE_ENABLED", environ_prefix=None
+     )
+-    AI_API_KEY = values.Value(None, environ_name="AI_API_KEY", environ_prefix=None)
++    AI_API_KEY = SecretFileValue(None, environ_name="AI_API_KEY", environ_prefix=None)
+     AI_BASE_URL = values.Value(None, environ_name="AI_BASE_URL", environ_prefix=None)
+     AI_MODEL = values.Value(None, environ_name="AI_MODEL", environ_prefix=None)
+     AI_ALLOW_REACH_FROM = values.Value(
+@@ -586,7 +614,7 @@ class Base(Configuration):
+     }
+ 
+     # Y provider microservice
+-    Y_PROVIDER_API_KEY = values.Value(
++    Y_PROVIDER_API_KEY = SecretFileValue(
+         environ_name="Y_PROVIDER_API_KEY",
+         environ_prefix=None,
+     )
