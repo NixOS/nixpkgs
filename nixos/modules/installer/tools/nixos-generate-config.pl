@@ -684,8 +684,14 @@ if ($showHardwareConfig) {
     mkpath($outDir, 0, 0755);
     write_file($fn, $hwConfig);
 
+    my $nixConfig = "";
     $fn = "$outDir/flake.nix";
     if ($flake) {
+        $nixConfig = <<EOF;
+  # Enable flakes to allow rebuilding the system.
+  nix.settings.experimental-features = [ "flakes" "nix-command" ];
+
+EOF
         if ($force || ! -e $fn) {
             print STDERR "writing $fn...\n";
             mkpath($outDir, 0, 0755);
