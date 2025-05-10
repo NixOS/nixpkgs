@@ -9718,9 +9718,6 @@ with pkgs;
     gtk3 = gtk4;
   };
 
-  webrtc-audio-processing_1 = callPackage ../by-name/we/webrtc-audio-processing/1.nix { };
-  webrtc-audio-processing_0_3 = callPackage ../by-name/we/webrtc-audio-processing/0.3.nix { };
-
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
