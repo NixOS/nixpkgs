@@ -11,6 +11,7 @@
   wrapGAppsHook3,
   dbus,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   dconf ? null,
   glib,
   gdk-pixbuf,
@@ -156,7 +157,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       dbus
-      systemd
       dconf
       gdk-pixbuf
       python3.pkgs.pygobject3 # for pygobject overrides
@@ -171,7 +171,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withWayland [
       libxkbcommon
       wayland
-    ];
+    ]
+    ++ lib.optional withSystemd systemd;
 
   enableParallelBuilding = true;
 
@@ -195,6 +196,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    features = { inherit withSystemd withWayland; };
     tests = {
       installed-tests = nixosTests.installed-tests.ibus;
     };
