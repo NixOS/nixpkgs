@@ -382,8 +382,8 @@ let
           description = ''
             The full path to a file that contains the hash of the user's
             password. The password file is read on each system activation. The
-            file should contain exactly one line, which should be the password in
-            an encrypted form that is suitable for the `chpasswd -e` command.
+            file should contain exactly one line, the salted password hash
+            produced by `mkpasswd`.
 
             ${passwordDescription}
           '';
