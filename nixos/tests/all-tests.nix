@@ -379,6 +379,7 @@ in
   davis = runTest ./davis.nix;
   db-rest = handleTest ./db-rest.nix { };
   dconf = handleTest ./dconf.nix { };
+  ddns-go = runTest ./ddns-go.nix;
   ddns-updater = handleTest ./ddns-updater.nix { };
   deconz = handleTest ./deconz.nix { };
   deepin = handleTest ./deepin.nix { };
