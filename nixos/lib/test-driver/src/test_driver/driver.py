@@ -1,6 +1,9 @@
 import os
+import random
 import re
+import shutil
 import signal
+import subprocess
 import sys
 import tempfile
 import threading
@@ -12,6 +15,7 @@ from typing import Any
 from unittest import TestCase
 
 from colorama import Style
+from remote_pdb import RemotePdb  # type:ignore
 
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
@@ -56,6 +60,34 @@ def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
 
 
+class Debug:
+    def __init__(self, logger: AbstractLogger) -> None:
+        self.breakpoint_on_failure = False
+        self.logger = logger
+
+    def enable_failure_hook(self) -> None:
+        self.breakpoint_on_failure = True
+
+    def breakpoint(self, host: str = "127.0.0.1", port: int = 4444) -> None:
+        rand_id = str(random.randrange(999999, 9999999))
+        self.logger.log_test_error(
+            f"Breakpoint reached, run 'sudo @attach@ {rand_id}'"
+        )
+        os.environ["bashInteractive"] = shutil.which("bash")  # type:ignore
+        if not os.fork():
+            subprocess.run(["sleep", rand_id])
+        else:
+            RemotePdb(host=host, port=port).set_trace(sys._getframe().f_back)
+
+    def break_on_failure(self) -> None:
+        rand_id = str(random.randrange(999999, 9999999))
+        self.logger.log_test_error(
+            f"Breakpoint reached, run 'sudo @attach@ {rand_id}'"
+        )
+        os.environ["bashInteractive"] = shutil.which("bash")  # type:ignore
+        subprocess.run(["sleep", rand_id])
+
+
 class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
@@ -67,6 +99,7 @@ class Driver:
     global_timeout: int
     race_timer: threading.Timer
     logger: AbstractLogger
+    debug: Debug
 
     def __init__(
         self,
@@ -83,6 +116,8 @@ class Driver:
         self.global_timeout = global_timeout
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
+
+        self.debug = Debug(self.logger)
 
         tmp_dir = get_tmp_dir()
 
@@ -158,7 +193,9 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
+            debug=self.debug,
             t=AssertionTester(),
+            dump=self.logger.dump,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -178,14 +215,14 @@ class Driver:
         )
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
-    def dump_machine_ssh(self) -> None:
+    def dump_machine_ssh(self, offset: int) -> None:
         print("SSH backdoor enabled, the machines can be accessed like this:")
         print(
             f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
         )
         names = [machine.name for machine in self.machines]
         longest_name = len(max(names, key=len))
-        for num, name in enumerate(names, start=3):
+        for num, name in enumerate(names, start=offset + 1):
             spaces = " " * (longest_name - len(name) + 2)
             print(
                 f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock/{num}{Style.RESET_ALL}"
@@ -219,12 +256,18 @@ class Driver:
                     if lineno := frame.lineno:
                         self.logger.log_test_error(f"    {code[lineno - 1].strip()}")
 
-                self.logger.log_test_error("")  # blank line for readability
+                self.logger.log_test_error("\n")  # blank line for readability
                 exc_prefix = exc_type.__name__ if exc_type is not None else "Error"
-                for line in f"{exc_prefix}: {exc}".splitlines():
-                    self.logger.log_test_error(line)
+                self.logger.log_test_error(f"{exc_prefix}: {exc}")
+
+                if self.debug.breakpoint_on_failure:
+                    self.debug.break_on_failure()
 
                 sys.exit(1)
+            except Exception:
+                if self.debug.breakpoint_on_failure:
+                    self.debug.break_on_failure()
+                raise
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""

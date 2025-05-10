@@ -84,6 +84,21 @@ in
         type = types.bool;
         description = "Whether to turn on the VSOCK-based access to all VMs. This provides an unauthenticated access intended for debugging.";
       };
+      vsockOffset = mkOption {
+        default = 2;
+        type = types.ints.between 2 4294967296;
+        description = ''
+          By default this assigns vsock numbers starting at 3 to the nodes.
+          On e.g. large builders used by multiple people, this would cause conflicts
+          between multiple users doing interactive debugging.
+
+          This option allows to assign an offset to each vsock number to
+          resolve this.
+
+          This is a 32bit number. The lowest possible vsock number is `3`
+          (i.e. with the lowest node number being `1`, this is 2+1).
+        '';
+      };
     };
 
     node.type = mkOption {
@@ -182,7 +197,7 @@ in
     passthru.nodes = config.nodesCompat;
 
     extraDriverArgs = mkIf config.sshBackdoor.enable [
-      "--dump-vsocks"
+      "--dump-vsocks=${toString config.sshBackdoor.vsockOffset}"
     ];
 
     defaults = mkMerge [
@@ -191,7 +206,9 @@ in
         imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
       })
       (mkIf config.sshBackdoor.enable {
-        testing.sshBackdoor.enable = true;
+        testing.sshBackdoor = {
+          inherit (config.sshBackdoor) enable vsockOffset;
+        };
       })
     ];
 

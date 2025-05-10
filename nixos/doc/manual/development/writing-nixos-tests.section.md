@@ -205,6 +205,34 @@ way:
 }
 ```
 
+To print out values from the test script itself, e.g. for debugging or more detailed logs,
+it's recommended to use `dump(…)` instead of `print()` since this prefixes each line of the
+output to make it easier to spot between the other log output.
+
+For instance,
+
+```nix
+{
+  nodes.machine = {};
+  testScript = ''
+    start_all()
+    machine.wait_for_unit("multi-user.target")
+    dump(machine.succeed("uname -a"))
+  '';
+};
+```
+
+will result in an output like this:
+
+```
+machine: must succeed: uname -a
+machine: (finished: must succeed: uname -a, in 0.02 seconds)
+(test-script) Linux machine 6.12.19 #1-NixOS SMP PREEMPT_DYNAMIC Thu Mar 13 12:02:20 UTC 2025 x86_64 GNU/Linux
+(finished: run the VM test script, in 14.40 seconds)
+test script finished in 14.49s
+cleanup
+```
+
 ## Failing tests early {#ssec-failing-tests-early}
 
 To fail tests early when certain invariants are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
@@ -283,4 +311,54 @@ The following options can be used when writing tests.
 id-prefix: test-opt-
 list-id: test-options-list
 source: @NIXOS_TEST_OPTIONS_JSON@
+```
+
+## Accessing VMs in the sandbox with SSH {#sec-test-sandbox-breakpoint}
+
+As explained in [](#sec-nixos-test-ssh-access), it's possible to configure an
+SSH backdoor based on AF_VSOCK. This can be used to SSH into a VM of a running build
+in a sandbox.
+
+This can be either done when something in the test fails, e.g.
+
+```nix
+{
+  nodes.machine = {};
+  sshBackdoor.enable = true;
+
+  testScript = ''
+    start_all()
+    debug.enable_failure_hook()
+    machine.succeed("false")
+  '';
+}
+```
+
+For the AF_VSOCK feature to work, `/dev/vhost-vsock` is needed in the sandbox which
+can be done with e.g.
+
+```
+nix-build -A nixosTests.foo --option sandbox-paths /dev/vhost-vsock
+```
+
+This will halt the test execution on a test-failure and print instructions
+on how to enter the sandbox shell of the VM test. Inside, one can log into
+e.g. `machine` with
+
+```
+ssh -F ./ssh_config vsock/3
+```
+
+As explained in [](#sec-nixos-test-ssh-access), the numbers for vsock start at `3`
+instead of `1`. So the first VM in the network (sorted alphabetically) can be
+accessed with `vsock/3`.
+
+Alternatively, it's possible to explicitly set a breakpoint with
+`debug.breakpoint()`. This also has the benefit, that one can step through
+`testScript` with `pdb` like this:
+
+```
+$ sudo /nix/store/eeeee-attach <id>
+bash# telnet 127.0.0.1 4444
+pdb$ …
 ```
