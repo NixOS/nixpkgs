@@ -25,6 +25,11 @@ let
 in
 
 {
+  inherit (builtins)
+    baseNameOf
+    dirOf
+    isPath
+    ;
 
   /**
     The type of a path. The path needs to exist and be accessible.

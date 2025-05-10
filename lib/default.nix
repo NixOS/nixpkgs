@@ -105,12 +105,23 @@ let
       # network
       network = callLibs ./network;
 
-      # TODO: For consistency, all builtins should also be available from a sub-library;
-      # these are the only ones that are currently not
       inherit (builtins)
         addErrorContext
-        isPath
+        getContext
+        hasContext
+        convertHash
+        hashString
+        hasFile
+        parseDrvName
+        placeholder
+        fromJSON
+        fromTOML
+        toFile
+        toJSON
+        toString
+        toXML
         trace
+        tryEval
         typeOf
         unsafeGetAttrPos
         ;
@@ -121,6 +132,8 @@ let
         concat
         or
         and
+        mul
+        div
         xor
         bitAnd
         bitOr
@@ -171,6 +184,8 @@ let
         pathExists
         genericClosure
         readFile
+        ceil
+        floor
         ;
       inherit (self.fixedPoints)
         fix
@@ -416,10 +431,13 @@ let
         getExe'
         ;
       inherit (self.filesystem)
-        pathType
+        baseNameOf
+        dirOf
+        isPath
+        packagesFromDirectoryRecursive
         pathIsDirectory
         pathIsRegularFile
-        packagesFromDirectoryRecursive
+        pathType
         ;
       inherit (self.sources)
         cleanSourceFilter
@@ -431,6 +449,7 @@ let
         pathHasContext
         canCleanSource
         pathIsGitRepo
+        filterSource
         ;
       inherit (self.modules)
         evalModules
@@ -561,6 +580,7 @@ let
         imap
         ;
       inherit (self.versions)
+        compareVersions
         splitVersion
         ;
     }
