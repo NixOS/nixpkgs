@@ -37577,12 +37577,17 @@ with self;
       url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.003.tar.gz";
       hash = "sha256-4S9sgrg1dcORd3O0HA+1HPeDx8bPcuDJkWks4u8Hg2I=";
     };
-    postPatch = lib.optionalString (stdenv.hostPlatform.isAarch64) ''
-      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
-      # printf SYS_getrandom | gcc -include sys/syscall.h -E -
-      substituteInPlace lib/UUID4/Tiny.pm \
-        --replace "syscall( 318" "syscall( 278"
-    '';
+    postPatch =
+      lib.optionalString
+        (
+          stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isRiscV64
+        )
+        ''
+          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
+          # printf SYS_getrandom | gcc -include sys/syscall.h -E -
+          substituteInPlace lib/UUID4/Tiny.pm \
+            --replace "syscall( 318" "syscall( 278"
+        '';
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
       license = with lib.licenses; [
