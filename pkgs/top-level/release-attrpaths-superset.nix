@@ -50,6 +50,7 @@ let
 
     # cross packagesets
     pkgsLLVM = true;
+    pkgsBolt = true;
     pkgsMusl = true;
     pkgsStatic = true;
     pkgsCross = true;

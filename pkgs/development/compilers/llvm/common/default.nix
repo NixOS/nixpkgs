@@ -29,6 +29,7 @@
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  libxml2,
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -114,7 +115,21 @@ let
   tools = lib.makeExtensible (
     tools:
     let
-      callPackage = newScope (tools // args // metadata);
+      callPackage = newScope (
+        tools
+        // args
+        // metadata
+        // {
+          libxml2 =
+            if stdenv.targetPlatform.useBolt then
+              # Prevent infinite-recursion within "linuxHeaders".
+              libxml2.override {
+                pythonSupport = false;
+              }
+            else
+              libxml2;
+        }
+      );
       clangVersion =
         if (lib.versionOlder metadata.release_version "16") then
           metadata.release_version
