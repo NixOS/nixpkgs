@@ -2,16 +2,15 @@
   lib,
   buildNpmPackage,
   fetchurl,
-  testers,
-  mongosh,
+  versionCheckHook,
 }:
 
 let
   source = lib.importJSON ./source.json;
 in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  inherit (source) version;
+  version = source.version;
 
   src = fetchurl {
     url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
@@ -28,18 +27,20 @@ buildNpmPackage {
   dontNpmBuild = true;
   npmFlags = [ "--omit=optional" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = mongosh;
-    };
     updateScript = ./update.sh;
   };
 
   meta = {
     homepage = "https://www.mongodb.com/try/download/shell";
     description = "MongoDB Shell";
+    changelog = "https://www.mongodb.com/docs/mongodb-shell/changelog/#v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ aaronjheng ];
     license = lib.licenses.asl20;
     mainProgram = "mongosh";
   };
-}
+})
