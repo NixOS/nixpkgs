@@ -13,6 +13,7 @@
   unixODBC,
   utf8proc,
   libmysqlclient,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -89,10 +90,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isLinux ./disable-broken-tests-linux.patch;
 
   doCheck = true;
-  preCheck = ''
+  nativeCheckInputs = [
     # workaround for some tests trying to write to /homeless-shelter
-    export HOME=$(mktemp -d)
-  '';
+    writableTmpDirAsHomeHook
+  ];
 
   postFixup = ''
     grep -rlF INTERFACE_INCLUDE_DIRECTORIES "$dev/lib/cmake/Poco" | while read -r f; do
