@@ -640,6 +640,8 @@ rec {
       includeNixDB ? false,
       # Deprecated.
       contents ? null,
+      # Metadata about the image.
+      meta ? { },
     }:
 
     let
