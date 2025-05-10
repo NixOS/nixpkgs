@@ -28,14 +28,11 @@
 }:
 
 let
-  inherit (lib) optionalString optionals;
-
   version = "${majorVersion}.${minorVersion}";
   pythonMajor = lib.substring 0 1 python.pythonVersion;
-
 in
 stdenv.mkDerivation {
-  pname = "vtk" + optionalString enableEgl "-egl" + optionalString enableQt "-qvtk";
+  pname = "vtk" + lib.optionalString enableEgl "-egl" + lib.optionalString enableQt "-qvtk";
   inherit version;
 
   src = fetchurl {
@@ -50,22 +47,22 @@ stdenv.mkDerivation {
       libpng
       libtiff
     ]
-    ++ optionals enableQt [
+    ++ lib.optionals enableQt [
       (qtEnv "qvtk-qt-env" [
         qtx11extras
         qttools
         qtdeclarative
       ])
     ]
-    ++ optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       xorgproto
       libXt
     ]
-    ++ optionals enablePython [
+    ++ lib.optionals enablePython [
       python
     ];
-  propagatedBuildInputs = optionals stdenv.hostPlatform.isLinux [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libGL
   ];
@@ -80,7 +77,7 @@ stdenv.mkDerivation {
         -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
         -i IO/Image/vtkSEPReader.h
     ''
-    + optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
       sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
       sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
@@ -111,10 +108,10 @@ stdenv.mkDerivation {
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DVTK_VERSIONED_INSTALL=OFF"
     ]
-    ++ optionals enableQt [
+    ++ lib.optionals enableQt [
       "-DVTK_GROUP_ENABLE_Qt:STRING=YES"
     ]
-    ++ optionals enablePython [
+    ++ lib.optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
     ];
@@ -128,21 +125,21 @@ stdenv.mkDerivation {
         "-Wno-error=incompatible-pointer-types";
   };
 
-  postInstall = optionalString enablePython ''
+  postInstall = lib.optionalString enablePython ''
     substitute \
       ${./vtk.egg-info} \
       $out/${python.sitePackages}/vtk-${version}.egg-info \
       --subst-var-by VTK_VER "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       tfmoraes
     ];
-    platforms = platforms.unix;
-    badPlatforms = optionals enableEgl platforms.darwin;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.optionals enableEgl lib.platforms.darwin;
   };
 }
