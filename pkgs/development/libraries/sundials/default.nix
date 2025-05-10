@@ -3,7 +3,7 @@
   stdenv,
   cmake,
   fetchurl,
-  python,
+  python3,
   blas,
   lapack,
   gfortran,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      python
+      python3
     ]
     ++
       lib.optionals (lapackSupport)
