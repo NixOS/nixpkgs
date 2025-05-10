@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pynina";
-  version = "0.3.5";
+  version = "0.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M+0gujriblTDj/qDmBnC4DlKjlZbbStsr7tep5HeNlg=";
+    hash = "sha256-w5iJXmOd0fqWIZnVG6zDop1t2h4B+4v0/EuwgS00LkA=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
