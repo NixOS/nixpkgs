@@ -14,7 +14,7 @@ jobs:
 
   nixpkgs-lib-tests:
     name: nixpkgs-lib-tests
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: get-merge-commit
     if: needs.get-merge-commit.outputs.mergedSha
     steps:
