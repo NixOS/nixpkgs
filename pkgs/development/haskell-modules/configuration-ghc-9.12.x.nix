@@ -103,6 +103,8 @@ with haskellLib;
 
   lucid = doJailbreak super.lucid; # base <4.21
   extensions_0_1_0_3 = doJailbreak super.extensions_0_1_0_3; # hedgehog >=1.0 && <1.5, hspec-hedgehog >=0.0.1 && <0.2
+  # https://github.com/haskell-party/feed/issues/73
+  feed = doJailbreak super.feed; # base, time
   hie-compat = doJailbreak super.hie-compat; # base <4.21
   hiedb = doJailbreak super.hiedb; # base >=4.12 && <4.21, ghc >=8.6 && <9.11
   ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
