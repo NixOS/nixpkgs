@@ -11,7 +11,7 @@ jobs:
 
   tests:
     name: nix-files-parseable-check
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: get-merge-commit
     if: "needs.get-merge-commit.outputs.mergedSha && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:

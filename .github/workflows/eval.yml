@@ -21,7 +21,7 @@ jobs:
 
   attrs:
     name: Attributes
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: get-merge-commit
     if: needs.get-merge-commit.outputs.mergedSha
     outputs:
@@ -61,7 +61,7 @@ jobs:
 
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ get-merge-commit ]
     steps:
       - name: Check out the PR at the test merge commit
@@ -84,7 +84,7 @@ jobs:
 
   outpaths:
     name: Outpaths
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ attrs, get-merge-commit ]
     strategy:
       fail-fast: false
@@ -93,10 +93,10 @@ jobs:
     steps:
       - name: Enable swap
         run: |
-          sudo fallocate -l 10G /swapfile
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
+          sudo fallocate -l 10G /swap
+          sudo chmod 600 /swap
+          sudo mkswap /swap
+          sudo swapon /swap
 
       - name: Download the list of all attributes
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
@@ -133,7 +133,7 @@ jobs:
 
   process:
     name: Process
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ outpaths, attrs, get-merge-commit ]
     outputs:
       targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
@@ -235,7 +235,7 @@ jobs:
   # Separate job to have a very tightly scoped PR write token
   tag:
     name: Tag
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ attrs, process ]
     if: needs.process.outputs.targetRunId
     permissions:

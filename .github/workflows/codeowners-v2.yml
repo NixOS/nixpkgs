@@ -41,7 +41,7 @@ jobs:
   # Check that code owners is valid
   check:
     name: Check
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: get-merge-commit
     if: github.repository_owner == 'NixOS' && needs.get-merge-commit.outputs.mergedSha
     steps:
@@ -89,7 +89,7 @@ jobs:
   # Request reviews from code owners
   request:
     name: Request
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     if: github.repository_owner == 'NixOS'
     steps:
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
