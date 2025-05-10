@@ -4992,7 +4992,7 @@
     githubId = 15233006;
   };
   connorbaker = {
-    email = "connor.baker@tweag.io";
+    email = "ConnorBaker01@gmail.com";
     matrix = "@connorbaker:matrix.org";
     github = "ConnorBaker";
     name = "Connor Baker";
@@ -7439,12 +7439,6 @@
     github = "ericdallo";
     githubId = 7820865;
     name = "Eric Dallo";
-  };
-  ericsagnes = {
-    email = "eric.sagnes@gmail.com";
-    github = "ericsagnes";
-    githubId = 367880;
-    name = "Eric Sagnes";
   };
   ericson2314 = {
     email = "John.Ericson@Obsidian.Systems";
@@ -11402,12 +11396,6 @@
     github = "jevy";
     githubId = 110620;
     name = "Jevin Maltais";
-  };
-  jfb = {
-    email = "james@yamtime.com";
-    github = "tftio";
-    githubId = 143075;
-    name = "James Felix Black";
   };
   jfchevrette = {
     email = "jfchevrette@gmail.com";
@@ -18563,12 +18551,6 @@
     github = "Pacman99";
     githubId = 16345849;
     name = "Parthiv Seetharaman";
-  };
-  paddygord = {
-    email = "pgpatrickgordon@gmail.com";
-    github = "avagordon01";
-    githubId = 10776658;
-    name = "Patrick Gordon";
   };
   paepcke = {
     email = "git@paepcke.de";

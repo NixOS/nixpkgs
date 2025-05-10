@@ -99,7 +99,7 @@ rec {
         Defines how unit configuration is provided for systemd:
 
         `asDropinIfExists` creates a unit file when no unit file is provided by the package
-        otherwise a drop-in file name `overrides.conf`.
+        otherwise it creates a drop-in file named `overrides.conf`.
 
         `asDropin` creates a drop-in file named `overrides.conf`.
         Mainly needed to define instances for systemd template units (e.g. `systemd-nspawn@mycontainer.service`).

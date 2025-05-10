@@ -232,7 +232,8 @@ let
     # effectiveMagma.cudaPackages, making torch too strict in cudaPackages.
     # In particular, this triggered warnings from cuda's `aliases.nix`
     "Magma cudaPackages does not match cudaPackages" =
-      cudaSupport && (effectiveMagma.cudaPackages.cudaVersion != cudaPackages.cudaVersion);
+      cudaSupport
+      && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
   };
 
   unroll-src = writeShellScript "unroll-src" ''
@@ -414,12 +415,12 @@ buildPythonPackage rec {
     [
       (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
       # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
-      (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaVersion)
+      (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaMajorMinorVersion)
     ]
     ++ lib.optionals cudaSupport [
       # Unbreaks version discovery in enable_language(CUDA) when wrapping nvcc with ccache
       # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/26363
-      (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaVersion)
+      (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaMajorMinorVersion)
     ];
 
   preBuild = ''
@@ -529,10 +530,10 @@ buildPythonPackage rec {
         # Some platforms do not support NCCL (i.e., Jetson)
         nccl # Provides nccl.h AND a static copy of NCCL!
       ]
-      ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
+      ++ lists.optionals (cudaOlder "11.8") [
         cuda_nvprof # <cuda_profiler_api.h>
       ]
-      ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+      ++ lists.optionals (cudaAtLeast "11.8") [
         cuda_profiler_api # <cuda_profiler_api.h>
       ]
     )

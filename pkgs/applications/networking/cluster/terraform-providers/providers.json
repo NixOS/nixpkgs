@@ -90,13 +90,13 @@
     "vendorHash": "sha256-YIn8akPW+DCVF0eYZxsmJxmrJuYhK4QLG/uhmmrXd4c="
   },
   "auth0": {
-    "hash": "sha256-ZSbanDR9PpvHHVr7uObGbf0nQD3CzKzT5QKCEwJojH8=",
+    "hash": "sha256-T8Ob7wv/GgAR+5/AoD0SJ0k+xRvpK5lTWKrhJkme2wg=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.16.0",
+    "rev": "v1.19.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ZBvIfLUMgGXJM5VgsOrerfN3TiMou3VFUrMqzMAwWaA="
+    "vendorHash": "sha256-8jUEFJz2m8orL4n/w+c+hzwiQJkZia9TpVfYhkgyrrY="
   },
   "avi": {
     "hash": "sha256-e8yzc3nRP0ktcuuKyBXydS9NhoceYZKzJcqCWOfaPL0=",
@@ -135,11 +135,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-r2ttKyaV/cjIXYECwYmKuTe2Z1HYgiJFfMzd58Se99g=",
+    "hash": "sha256-jc8mv1W9586jPaxUmmUUBk824kvQbuG7vcEbZ1k64yw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.27.0",
+    "rev": "v4.28.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
