@@ -9,7 +9,7 @@
   zlib,
 }:
 let
-  version = "0.2.0";
+  version = "0.3.0";
 in
 rustPlatform.buildRustPackage {
   pname = "forgejo-cli";
@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage {
     owner = "Cyborus";
     repo = "forgejo-cli";
     rev = "v${version}";
-    hash = "sha256-rHyPncAARIPakkv2/CD1/aF2G5AS9bb3T2x8QCQWl5o=";
+    hash = "sha256-8KPR7Fx26hj5glKDjczCLP6GgQBUsA5TpjhO5UZOpik=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PkKinAZrZ+v1/eygiPis4F7EJnmjYfeQFPKfGpza0yA=";
+  cargoHash = "sha256-kW7Pexydkosaufk1e8P5FaY+dgkeeTG5qgJxestWkVs=";
 
   nativeBuildInputs = [ pkg-config ];
 
