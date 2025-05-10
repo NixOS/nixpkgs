@@ -8,7 +8,8 @@
 }:
 let
   name = "sbarlua";
-in lua54Packages.buildLuaPackage {
+in
+lua54Packages.buildLuaPackage {
   inherit name;
   pname = name;
   version = "0-unstable-2024-10-12";
