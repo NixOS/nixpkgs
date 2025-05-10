@@ -3,7 +3,7 @@
 {
   lib,
   stdenv,
-  cudaVersion,
+  cudaMajorMinorVersion,
   flags,
   mkVersionedPackageName,
 }:
@@ -53,15 +53,6 @@ let
       configEvaluator
       releaseGrabber
     ]) cusparseltVersions;
-
-  # Our cudaVersion tells us which version of CUDA we're building against.
-  # The subdirectories in lib/ tell us which versions of CUDA are supported.
-  # Typically the names will look like this:
-  #
-  # - 10.2
-  # - 11
-  # - 11.0
-  # - 12
 
   # A release is supported if it has a libPath that matches our CUDA version for our platform.
   # LibPath are not constant across the same release -- one platform may support fewer
