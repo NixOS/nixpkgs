@@ -37,6 +37,7 @@ tauri.section.md
 tetex-tex-live.section.md
 unzip.section.md
 validatePkgConfig.section.md
+autoPatchPkgConfigHook.section.md
 versionCheckHook.section.md
 waf.section.md
 zig.section.md
