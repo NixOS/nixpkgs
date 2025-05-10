@@ -1649,6 +1649,7 @@ mapAliases {
   s2n = throw "'s2n' has been renamed to/replaced by 's2n-tls'"; # Converted to throw 2024-10-17
   sandboxfs = throw "'sandboxfs' has been removed due to being unmaintained, consider using linux namespaces for sandboxing instead"; # Added 2024-06-06
   sane-backends-git = throw "'sane-backends-git' has been renamed to/replaced by 'sane-backends'"; # Converted to throw 2024-10-17
+  samtools_0_1_19 = throw "'samtools_0_1_19' has been removed because it is unmaintained. Consider using 'samtools' instead"; # Added 2025-05-10
   scantailor = scantailor-advanced; # Added 2022-05-26
   schildichat-web = throw ''
     schildichat has been removed as it is severely lacking behind the Element upstream and does not receive regular security fixes.
