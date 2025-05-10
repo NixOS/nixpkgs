@@ -4,7 +4,7 @@
   buildPackages,
   fetchurl,
   flex,
-  db4,
+  gdbm,
   gettext,
   audit,
   libxcrypt,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [
-    db4
+    gdbm
     libxcrypt
   ] ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linux-pam/linux-pam";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;
-    license = licenses.bsd3;
+    # license = licenses.bsd3; because of gdbm
+    license = licenses.gpl3Plus;
   };
 }
