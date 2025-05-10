@@ -161,7 +161,7 @@ Here are security considerations for this scenario:
 
 Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automatically inherit proxy-related environment variables (`http_proxy`, `https_proxy`, etc) via [impureEnvVars](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-impureEnvVars).
 
-The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
+TODO: FIGURE OUT WHAT TO WRITE HERE INSTEAD
 
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
