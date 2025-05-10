@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "opshin";
-  version = "0.24.1";
+  version = "0.24.2";
 
   format = "pyproject";
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "OpShin";
     repo = "opshin";
     tag = version;
-    hash = "sha256-+uuTEszA5p/qhvthM3Uje6yX3urbIUAKKfDZ4JXEYYQ=";
+    hash = "sha256-L0vWEXlghXssT9oUw5AYG3/4ALoB/NH90JV8Kdl2n30=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -26,11 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     frozenlist2
     astunparse
     ordered-set
-  ];
-
-  pythonRelaxDeps = [
-    "pluthon"
-    "uplc"
   ];
 
   meta = with lib; {
