@@ -20,4 +20,5 @@
   "unite@hardpixel.eu" = callPackage ./unite { };
   "valent@andyholmes.ca" = callPackage ./valent { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
+  "hanabi-extension@jeffshee.github.io" = callPackage ./hanabi { };
 }
