@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.19.0";
+  version = "0.20.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beartype";
     repo = "beartype";
     tag = "v${version}";
-    hash = "sha256-uUwqgK7K8x61J7A6S/DGLJljSKABxsbOCsFBDtsameU=";
+    hash = "sha256-/jIQJEkRv5CxwrDofHkCQ9kkFpQwH2YCykwm9yDCqKM=";
   };
 
   build-system = [ hatchling ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast runtime type checking for Python";
     homepage = "https://github.com/beartype/beartype";
-    changelog = "https://github.com/beartype/beartype/releases/tag/v${version}";
+    changelog = "https://github.com/beartype/beartype/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
