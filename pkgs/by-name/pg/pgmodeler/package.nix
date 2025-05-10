@@ -4,14 +4,11 @@
   copyDesktopItems,
   fetchFromGitHub,
   makeDesktopItem,
-  wrapQtAppsHook,
   pkg-config,
-  qmake,
-  qtwayland,
-  qtsvg,
   libpq,
   cups,
   libxml2,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +24,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    qmake
-    wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
     copyDesktopItems
   ];
+
   qmakeFlags =
     [
       "pgmodeler.pro"
@@ -46,10 +44,11 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
+      qt6.qtbase
+      qt6.qtsvg
       libpq
-      qtsvg
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cups
       libxml2

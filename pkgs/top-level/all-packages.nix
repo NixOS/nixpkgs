@@ -16631,8 +16631,6 @@ with pkgs;
 
   pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
 
-  pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
-
   philipstv = with python3Packages; toPythonApplication philipstv;
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
