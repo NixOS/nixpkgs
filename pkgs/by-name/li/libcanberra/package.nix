@@ -13,8 +13,9 @@
   libvorbis,
   libcap,
   systemd,
-  withAlsa ? stdenv.hostPlatform.isLinux,
   alsa-lib,
+  withAlsa ? stdenv.hostPlatform.isLinux,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,8 +48,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libcap
-      systemd
     ]
+    ++ lib.optional withSystemd systemd
     ++ lib.optional withAlsa alsa-lib;
 
   configureFlags =
@@ -82,9 +83,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru = lib.optionalAttrs (gtkSupport != null) {
-    gtkModule = if gtkSupport == "gtk2" then "/lib/gtk-2.0" else "/lib/gtk-3.0/";
-  };
+  passthru =
+    {
+      features = { inherit withAlsa withSystemd; };
+    }
+    // lib.optionalAttrs (gtkSupport != null) {
+      gtkModule = if gtkSupport == "gtk2" then "/lib/gtk-2.0" else "/lib/gtk-3.0/";
+    };
 
   meta = with lib; {
     description = "Implementation of the XDG Sound Theme and Name Specifications";
