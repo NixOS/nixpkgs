@@ -566,7 +566,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
-- `setuptoolsBuildHook` to build a wheel using `setuptools`.
+- `setuptoolsBuildHook` executes`setup.py` directly, which is deprecated. Use the pypaBuildHook instead.
 - `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
