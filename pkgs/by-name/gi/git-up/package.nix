@@ -4,6 +4,7 @@
   python3Packages,
   writableTmpDirAsHomeHook,
   gitMinimal,
+  gitSetupHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,13 +39,8 @@ python3Packages.buildPythonApplication rec {
     gitMinimal
     python3Packages.pytest7CheckHook
     writableTmpDirAsHomeHook
+    gitSetupHook
   ];
-
-  # git fails without email address
-  preCheck = ''
-    git config --global user.email "nobody@example.com"
-    git config --global user.name "Nobody"
-  '';
 
   postInstall = ''
     rm -r $out/${python3Packages.python.sitePackages}/PyGitUp/tests

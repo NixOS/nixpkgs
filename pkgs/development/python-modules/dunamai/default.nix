@@ -12,6 +12,7 @@
   # tests
   addBinToPathHook,
   gitMinimal,
+  gitSetupHook,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -32,16 +33,12 @@ buildPythonPackage rec {
 
   dependencies = [ packaging ];
 
-  preCheck = ''
-    git config --global user.email "nobody@example.com"
-    git config --global user.name "Nobody"
-  '';
-
   nativeCheckInputs = [
     addBinToPathHook
     gitMinimal
     pytestCheckHook
     writableTmpDirAsHomeHook
+    gitSetupHook
   ];
 
   disabledTests = [

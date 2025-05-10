@@ -8,6 +8,8 @@
   openssl,
   stdenv,
   gitMinimal,
+  gitSetupHook,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,16 +42,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+    gitSetupHook
+  ];
 
   # disable vendored libgit2 and openssl
   buildNoDefaultFeatures = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d) USER=nixbld
-    git config --global user.name Nixbld
-    git config --global user.email nixbld@localhost.localnet
-  '';
 
   # Exclude some tests that don't work in sandbox:
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
