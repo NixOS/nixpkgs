@@ -1,4 +1,5 @@
 {
+  bash,
   faust,
   gtk2,
   jack2,
@@ -15,6 +16,10 @@ faust.wrapWithBuildEnv {
   scripts = [
     "faust2jack"
     "faust2jackconsole"
+  ];
+
+  buildInputs = [
+    bash # required for some scripts
   ];
 
   propagatedBuildInputs = [
