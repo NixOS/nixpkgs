@@ -1118,6 +1118,8 @@ self: super: with self; {
 
   authres = callPackage ../development/python-modules/authres { };
 
+  auto-lazy-imports = callPackage ../development/python-modules/auto-lazy-imports { };
+
   autobahn = callPackage ../development/python-modules/autobahn { };
 
   autocommand = callPackage ../development/python-modules/autocommand { };
@@ -6205,6 +6207,8 @@ self: super: with self; {
   hassil = callPackage ../development/python-modules/hassil { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
+
+  hatch-autorun = callPackage ../development/python-modules/hatch-autorun { };
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
