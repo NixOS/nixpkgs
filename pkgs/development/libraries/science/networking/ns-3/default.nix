@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitLab,
-  python,
+  python3,
   libxml2,
   sqlite,
 
@@ -48,7 +48,7 @@
 }:
 
 let
-  pythonEnv = python.withPackages (
+  pythonEnv = python3.withPackages (
     ps:
     lib.optional withManual ps.sphinx
     ++ lib.optionals pythonSupport (
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
 
   # Make generated python bindings discoverable in customized python environment
   passthru = {
-    pythonModule = python;
+    pythonModule = python3;
   };
 
   cmakeFlags = [

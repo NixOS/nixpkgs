@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.41.0";
+  version = "1.43.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "casbin";
     repo = "pycasbin";
     tag = "v${version}";
-    hash = "sha256-axW09wU/xywVui1fZKoTTIeHL0ooV1KsMhynqxiy2dI=";
+    hash = "sha256-vRT8Z0XHDPOnAxy67j88vBX6W20mRWY7O/IrGLM/vuQ=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Authorization library that supports access control models like ACL, RBAC and ABAC";
     homepage = "https://github.com/casbin/pycasbin";
-    changelog = "https://github.com/casbin/pycasbin/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/casbin/pycasbin/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

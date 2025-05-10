@@ -142,8 +142,8 @@ rec {
       "sha256-ksKIbASQfKzf67Pkdv5HUipoep/8Qv7jVcjC4KCqAoI=";
 
   mypy-boto3-athena =
-    buildMypyBoto3Package "athena" "1.38.0"
-      "sha256-SiR/6d9mfd7nTd4aPtyknkBDhYTClMUkNLsNudW534o=";
+    buildMypyBoto3Package "athena" "1.38.13"
+      "sha256-1Fonc55fVM8ksqCTBwXVHeqhypgsYegoW8PEEPqcTF4=";
 
   mypy-boto3-auditmanager =
     buildMypyBoto3Package "auditmanager" "1.38.0"
@@ -810,8 +810,8 @@ rec {
       "sha256-uypKW3Cqj98SLeWmSwCXVKhKpXWXEvwdUexqqFgXeEc=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.38.6"
-      "sha256-Fpe+7mXJQHikCVyn/hcRvFPu/U+wvDL0JmDN0/Vvxwc=";
+    buildMypyBoto3Package "logs" "1.38.13"
+      "sha256-VOkEcgDn4G1v1DB/Berg5yP+PYUf7YBfQ+T4yvATVBs=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.38.0"
@@ -1346,8 +1346,8 @@ rec {
       "sha256-b6TgvxWdQI5TAI/OsJzmzlte1v30NdJucdedKgCb9LY=";
 
   mypy-boto3-synthetics =
-    buildMypyBoto3Package "synthetics" "1.38.11"
-      "sha256-t9gwrPdz8QSB6pDeOZgB+Jl/I91vG58et5XzTXXqZuA=";
+    buildMypyBoto3Package "synthetics" "1.38.13"
+      "sha256-goFpYJQHLzYybY8gt9FTUVXXMX+8k58YNxZ8VsNfwr4=";
 
   mypy-boto3-textract =
     buildMypyBoto3Package "textract" "1.38.0"
@@ -1426,8 +1426,8 @@ rec {
       "sha256-naClNCiAqHalhT/+8cI510kBzYxpY3Z+wppDpQbZtdg=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.38.0"
-      "sha256-Xcp58ZVmnGNDx3vnt2Nb27ipDKoTArbWa6MwkoTlR+k=";
+    buildMypyBoto3Package "workspaces" "1.38.13"
+      "sha256-j4ccEWcU2RBS9TZvVzmPwI2n58JkRFkmyVRyovMtKS4=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.38.0"
