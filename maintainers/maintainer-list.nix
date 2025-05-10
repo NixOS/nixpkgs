@@ -9684,7 +9684,6 @@
     name = "guserav";
   };
   guyonvarch = {
-    email = "joris@guyonvarch.me";
     github = "guyonvarch";
     githubId = 6768842;
     name = "Joris Guyonvarch";
