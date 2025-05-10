@@ -1,0 +1,13 @@
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 7332903704..27a8b5bedb 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -236,7 +236,7 @@
+   esac
+   tmake_file="$tmake_file t-slibgcc-darwin"
+   case ${host} in
+-    *-*-darwin2*)
++    *-*-darwin2* | *-*-darwin)
+       tmake_file="t-darwin-min-11 $tmake_file"
+       ;;
+     *-*-darwin1[89]*)

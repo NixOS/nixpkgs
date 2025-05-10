@@ -1,0 +1,101 @@
+commit 5acf3bdea5140e90135d15d6479f29fbf624f75e
+Author: John Ericson <John.Ericson@Obsidian.Systems>
+Date:   Wed Sep 1 15:38:56 2021 +0000
+
+    Don't force building and installing for the build platform
+    
+    Also remove `compat/` subdir from install directories.
+
+diff --git a/Makefile b/Makefile
+index 4bcf227f0e75..9ed1d6eea6ff 100644
+--- a/tools/compat/Makefile
++++ b/tools/compat/Makefile
+@@ -1,6 +1,6 @@
+ #	$NetBSD: Makefile,v 1.87 2019/05/08 02:25:50 thorpej Exp $
+ 
+-HOSTLIB=	nbcompat
++LIB=	nbcompat
+ 
+-.include <bsd.hostinit.mk>
++.include <bsd.own.mk>
+ 
+@@ -94,63 +94,37 @@ include/.stamp:
+ 
+ # Install rules
+ 
+-HOST_LIBDIR=	${TOOLDIR}/lib
+-HOST_INCSDIR=	${TOOLDIR}/include
+-HOST_SHAREDIR= ${TOOLDIR}/share
+-
+-install:	.PHONY install.lib includes install.defs.mk
+-
+-# Install lib${HOSTLIB}.a in ${TOOLDIR}/lib
+-install.lib: .PHONY ${HOST_LIBDIR}/lib${HOSTLIB}.a
+-${HOST_LIBDIR}/lib${HOSTLIB}.a: lib${HOSTLIB}.a
+-	${_MKTARGET_INSTALL}
+-	${HOST_INSTALL_DIR} ${HOST_LIBDIR}
+-	${HOST_INSTALL_FILE} -m ${LIBMODE} ${.ALLSRC} ${.TARGET}
++install:	.PHONY includes install.defs.mk
+ 
+ .for _f in ${INCFILES}
+-HOST_INCINSTFILES+= ${HOST_INCSDIR}/compat/${_f}
+-${HOST_INCSDIR}/compat/${_f}: ${_f}
++INCINSTFILES+= ${INCSDIR}/${_f}
++${INCSDIR}/${_f}: ${_f}
+ 	${_MKTARGET_INSTALL}
+-	${HOST_INSTALL_FILE} ${.ALLSRC} ${.TARGET}
++	${INSTALL_FILE} ${.ALLSRC} ${.TARGET}
+ .endfor
+ 
+ .for _d in ${INCSUBDIRS}
+-HOST_INCINSTDIRS+= ${HOST_INCSDIR}/compat/${_d}
+-${HOST_INCSDIR}/compat/${_d}:
++INCINSTDIRS+= ${INCSDIR}/${_d}
++${INCSDIR}/${_d}:
+ 	${_MKTARGET_INSTALL}
+-	${HOST_INSTALL_DIR} ${.TARGET}
++	${INSTALL_DIR} ${.TARGET}
+ .endfor
+ 
+-# Install include files in ${TOOLDIR}/include/compat
+-includes: .PHONY ${HOST_INCINSTDIRS} .WAIT ${HOST_INCINSTFILES}
++# Install include files in ${INCSDIR}
++includes: .PHONY ${INCINSTDIRS} .WAIT ${INCINSTFILES}
+ 	@(cd include && find . -name '*.h' -print | while read f ; do \
+-	    ${HOST_INSTALL_FILE} $$f ${HOST_INCSDIR}/compat/$$f ; \
++	    ${INSTALL_FILE} $$f ${INCSDIR}/$$f ; \
+ 	done)
+ 
+ 
+-# Install defs.mk in ${TOOLDIR}/share/compat
+-install.defs.mk: .PHONY ${HOST_SHAREDIR}/compat/defs.mk
+-${HOST_SHAREDIR}/compat/defs.mk: defs.mk
++# Install defs.mk in ${DATADIR}
++install.defs.mk: .PHONY ${DATADIR}/defs.mk
++${DATADIR}/defs.mk: defs.mk
+ 	${_MKTARGET_INSTALL}
+-	${HOST_INSTALL_DIR} ${HOST_SHAREDIR}
+-	${HOST_INSTALL_DIR} ${HOST_SHAREDIR}/compat
+-	${HOST_INSTALL_FILE} ${.ALLSRC} ${.TARGET}
+-
+-# bsd.hostlib.mk wants HOST_CPPFLAGS, not CPPFLAGS
+-
+-HOST_CPPFLAGS:=	${CPPFLAGS}
+-CPPFLAGS:=	# empty
+-
+-.include <bsd.hostlib.mk>
+-
+-# Use uninstalled copy of host-mkdep
+-HOST_MKDEP_OBJ!= cd ${.CURDIR}/../host-mkdep && ${PRINTOBJDIR}
+-HOST_MKDEP=	${HOST_MKDEP_OBJ}/host-mkdep
+-MKDEP=		${HOST_MKDEP}
++	${INSTALL_DIR} ${DATADIR}
++	${INSTALL_FILE} ${.ALLSRC} ${.TARGET}
+ 
+-# Use uninstalled copy of the install program
+-INSTALL_OBJ!=	cd ${NETBSDSRCDIR}/tools/binstall && ${PRINTOBJDIR}
+-INSTALL=	${INSTALL_OBJ}/xinstall
++.include <bsd.lib.mk>
+ 
+ # Run "${TOOLDIR}/bin/nbmake-${MACHINE} regen" by hand after editing
+ # configure.ac.  See more detailed instructions in configure.ac.

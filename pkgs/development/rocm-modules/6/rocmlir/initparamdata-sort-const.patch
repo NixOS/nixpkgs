@@ -1,0 +1,13 @@
+diff --git a/mlir/include/mlir/Dialect/Rock/Tuning/GridwiseGemmParams.h b/mlir/include/mlir/Dialect/Rock/Tuning/GridwiseGemmParams.h
+index 3f5ee596819a..590d53788822 100644
+--- a/mlir/include/mlir/Dialect/Rock/Tuning/GridwiseGemmParams.h
++++ b/mlir/include/mlir/Dialect/Rock/Tuning/GridwiseGemmParams.h
+@@ -209,7 +209,7 @@ private:
+     size_t original_pos;
+     int64_t padding_amount;
+ 
+-    bool operator<(const InitParamData &rhs) {
++    bool operator<(const InitParamData &rhs) const {
+       if (this->padding_amount < rhs.padding_amount) {
+         return true;
+       } else if (this->padding_amount == rhs.padding_amount) {

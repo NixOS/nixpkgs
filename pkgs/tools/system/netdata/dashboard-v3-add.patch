@@ -1,0 +1,35 @@
+diff --git a/packaging/cmake/Modules/NetdataDashboard.cmake b/packaging/cmake/Modules/NetdataDashboard.cmake
+index 098eaffcf..e52375bd0 100644
+--- a/packaging/cmake/Modules/NetdataDashboard.cmake
++++ b/packaging/cmake/Modules/NetdataDashboard.cmake
+@@ -26,29 +26,12 @@ function(bundle_dashboard)
+   set(dashboard_src_dir "${CMAKE_BINARY_DIR}/dashboard-src")
+   set(dashboard_src_prefix "${dashboard_src_dir}/dist/agent")
+   set(dashboard_bin_dir "${CMAKE_BINARY_DIR}/dashboard-bin")
+-  set(DASHBOARD_URL "https://app.netdata.cloud/agent.tar.gz" CACHE STRING
+-      "URL used to fetch the local agent dashboard code")
+
+   message(STATUS "Preparing local agent dashboard code")
+
+-  message(STATUS "  Fetching ${DASHBOARD_URL}")
+-  file(DOWNLOAD
+-       "${DASHBOARD_URL}"
+-       "${CMAKE_BINARY_DIR}/dashboard.tar.gz"
+-       TIMEOUT 180
+-       STATUS fetch_status)
+-
+-  list(GET fetch_status 0 result)
+-
+-  if(result)
+-    message(FATAL_ERROR "Failed to fetch dashboard code")
+-  else()
+-    message(STATUS "  Fetching ${DASHBOARD_URL} -- Done")
+-  endif()
+-
+   message(STATUS "  Extracting dashboard code")
+   extract_gzipped_tarball(
+-    "${CMAKE_BINARY_DIR}/dashboard.tar.gz"
++    "@dashboardTarball@"
+     "${dashboard_src_dir}"
+   )
+   message(STATUS "  Extracting dashboard code -- Done")

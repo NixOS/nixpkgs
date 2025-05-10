@@ -1,0 +1,21 @@
+diff --git a/xsdata/formats/dataclass/generator.py b/xsdata/formats/dataclass/generator.py
+index f30196b1..b7934b3d 100644
+--- a/xsdata/formats/dataclass/generator.py
++++ b/xsdata/formats/dataclass/generator.py
+@@ -240,14 +240,14 @@ class DataclassGenerator(AbstractGenerator):
+         """
+         commands = [
+             [
+-                "ruff",
++                "@ruff@",
+                 "format",
+                 "--config",
+                 f"line-length={self.config.output.max_line_length}",
+                 *file_paths,
+             ],
+             [
+-                "ruff",
++                "@ruff@",
+                 "check",
+                 "--config",
+                 f"line-length={self.config.output.max_line_length}",

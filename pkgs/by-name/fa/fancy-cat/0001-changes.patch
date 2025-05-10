@@ -1,0 +1,22 @@
+diff --git a/build.zig b/build.zig
+index 5a16b8a..3c36c20 100755
+--- a/build.zig
++++ b/build.zig
+@@ -5,7 +5,7 @@ fn addMupdfStatic(exe: *std.Build.Step.Compile, b: *std.Build, prefix: []const u
+     exe.addLibraryPath(.{ .cwd_relative = b.fmt("{s}/lib", .{prefix}) });
+ 
+     exe.addObjectFile(.{ .cwd_relative = b.fmt("{s}/lib/libmupdf.a", .{prefix}) });
+-    exe.addObjectFile(.{ .cwd_relative = b.fmt("{s}/lib/libmupdf-third.a", .{prefix}) });
++    exe.addObjectFile(.{ .cwd_relative = b.fmt("{s}/lib/libmupdf.a", .{prefix}) });
+ 
+     exe.linkLibC();
+ }
+@@ -22,7 +22,7 @@ fn addMupdfDynamic(exe: *std.Build.Step.Compile, target: std.Target) void {
+         exe.addLibraryPath(.{ .cwd_relative = "/home/linuxbrew/.linuxbrew/lib" });
+ 
+         const linux_libs = [_][]const u8{
+-            "mupdf-third", "harfbuzz",
++            "mupdf", "harfbuzz",
+             "freetype",    "jbig2dec",
+             "jpeg",        "openjp2",
+             "gumbo",       "mujs",

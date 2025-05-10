@@ -1,0 +1,37 @@
+{
+  "logging": {
+    "formats": [
+      {
+        "name": "welf",
+        "format": "id=firewall time=\"%<cqtd> %<cqtt>\" fw=%<phn> pri=6 proto=%<cqus> duration=%<ttmsf> sent=%<psql> rcvd=%<cqhl> src=%<chi> dst=%<shi> dstname=%<shn> user=%<caun> op=%<cqhm> arg=\"%<cqup>\" result=%<pssc> ref=\"%<{Referer}cqh>\" agent=\"%<{user-agent}cqh>\" cache=%<crc>"
+      },
+      {
+        "name": "squid_seconds_only_timestamp",
+        "format": "%<cqts> %<ttms> %<chi> %<crc>/%<pssc> %<psql> %<cqhm> %<cquc> %<caun> %<phr>/%<shn> %<psct>"
+      },
+      {
+        "name": "squid",
+        "format": "%<cqtq> %<ttms> %<chi> %<crc>/%<pssc> %<psql> %<cqhm> %<cquc> %<caun> %<phr>/%<shn> %<psct>"
+      },
+      {
+        "name": "common",
+        "format": "%<chi> - %<caun> [%<cqtn>] \"%<cqtx>\" %<pssc> %<pscl>"
+      },
+      {
+        "name": "extended",
+        "format": "%<chi> - %<caun> [%<cqtn>] \"%<cqtx>\" %<pssc> %<pscl> %<sssc> %<sscl> %<cqcl> %<pqcl> %<cqhl> %<pshl> %<pqhl> %<sshl> %<tts>"
+      },
+      {
+        "name": "extended2",
+        "format": "%<chi> - %<caun> [%<cqtn>] \"%<cqtx>\" %<pssc> %<pscl> %<sssc> %<sscl> %<cqcl> %<pqcl> %<cqhl> %<pshl> %<pqhl> %<sshl> %<tts> %<phr> %<cfsc> %<pfsc> %<crc>"
+      }
+    ],
+    "logs": [
+      {
+        "filename": "squid",
+        "format": "squid",
+        "mode": "binary"
+      }
+    ]
+  }
+}

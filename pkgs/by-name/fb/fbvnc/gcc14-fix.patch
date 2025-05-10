@@ -1,0 +1,25 @@
+diff --git a/vncauth.c b/vncauth.c
+index 79c4448..6348007 100644
+--- a/vncauth.c
++++ b/vncauth.c
+@@ -26,6 +26,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <time.h>
+ #include <unistd.h>
+ 
+ #include "vncauth.h"
+diff --git a/vncauth.h b/vncauth.h
+index 86dc455..7fdb8d4 100644
+--- a/vncauth.h
++++ b/vncauth.h
+@@ -25,6 +25,8 @@
+ #define CHALLENGESIZE 16
+ 
+ extern int vncEncryptAndStorePasswd(char *passwd, char *fname);
++extern int vncEncryptAndStorePasswd2(char *passwd, char *passwdViewOnly, char *fname);
+ extern char *vncDecryptPasswdFromFile(char *fname);
++extern int vncDecryptPasswdFromFile2(char *fname, char *passwdFullControl, char *passwdViewOnly);
+ extern void vncRandomBytes(unsigned char *bytes);
+ extern void vncEncryptBytes(unsigned char *bytes, char *passwd);

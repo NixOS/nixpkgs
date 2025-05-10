@@ -1,0 +1,39 @@
+diff --git a/NifSkope.pro b/NifSkope.pro
+index 89b8471f6410..8e136ddf44c6 100644
+--- a/NifSkope.pro
++++ b/NifSkope.pro
+@@ -17,7 +17,7 @@ contains(QT_VERSION, ^5\\.[0-6]\\..*) {
+ CONFIG += c++14
+
+ # Dependencies
+-CONFIG += nvtristrip qhull zlib lz4 fsengine gli
++CONFIG += nvtristrip qhull lz4 fsengine gli
+
+ # Debug/Release options
+ CONFIG(debug, debug|release) {
+@@ -345,14 +345,6 @@ gli {
+     HEADERS += $$files($$PWD/lib/gli/external/glm/*.inl, true)
+ }
+
+-zlib {
+-    !*msvc*:QMAKE_CFLAGS += -isystem ./lib/zlib
+-    !*msvc*:QMAKE_CXXFLAGS += -isystem ./lib/zlib
+-    else:INCLUDEPATH += lib/zlib
+-    HEADERS += $$files($$PWD/lib/zlib/*.h, false)
+-    SOURCES += $$files($$PWD/lib/zlib/*.c, false)
+-}
+-
+ lz4 {
+     DEFINES += LZ4_STATIC XXH_PRIVATE_API
+
+@@ -442,6 +434,10 @@ win32 {
+     LIBS += -lopengl32 -lglu32
+ }
+
++unix {
++  LIBS += -lz
++}
++
+ unix:!macx {
+ 	LIBS += -lGLU
+ }

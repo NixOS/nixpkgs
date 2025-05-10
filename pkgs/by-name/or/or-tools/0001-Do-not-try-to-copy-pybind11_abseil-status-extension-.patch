@@ -1,0 +1,41 @@
+--- a/cmake/python.cmake
++++ b/cmake/python.cmake
+@@ -322,7 +322,6 @@
+ file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/linear_solver/__init__.py CONTENT "")
+ file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/linear_solver/python/__init__.py CONTENT "")
+ if(BUILD_MATH_OPT)
+-  file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/../pybind11_abseil/__init__.py CONTENT "")
+   file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/math_opt/__init__.py CONTENT "")
+   file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/math_opt/core/__init__.py CONTENT "")
+   file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/math_opt/core/python/__init__.py CONTENT "")
+@@ -635,9 +634,6 @@
+   COMMAND ${CMAKE_COMMAND} -E
+    $<IF:$<BOOL:${BUILD_MATH_OPT}>,copy,true>
+    $<TARGET_FILE:math_opt_pybind11> ${PYTHON_PROJECT}/math_opt/core/python
+-  COMMAND ${CMAKE_COMMAND} -E
+-   $<IF:$<BOOL:${BUILD_MATH_OPT}>,copy,true>
+-   $<TARGET_FILE:status_py_extension_stub> ${PYTHON_PROJECT}/../pybind11_abseil
+   COMMAND ${CMAKE_COMMAND} -E
+    $<IF:$<TARGET_EXISTS:pdlp_pybind11>,copy,true>
+    $<$<TARGET_EXISTS:pdlp_pybind11>:$<TARGET_FILE:pdlp_pybind11>> ${PYTHON_PROJECT}/pdlp/python
+@@ -696,7 +692,6 @@
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.constraint_solver.pywrapcp --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.linear_solver.pywraplp --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.linear_solver.python.model_builder_helper --output .
+-  COMMAND ${stubgen_EXECUTABLE} -p pybind11_abseil.status --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.math_opt.core.python.solver --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.pdlp.python.pdlp --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.sat.python.cp_model_helper --output .
+--- a/ortools/python/setup.py.in
++++ b/ortools/python/setup.py.in
+@@ -83,10 +83,6 @@
+             '*.pyi',
+             'py.typed'
+         ],
+-        'pybind11_abseil':[
+-            '$<TARGET_FILE_NAME:status_py_extension_stub>',
+-            '*.pyi'
+-        ],
+         '@PYTHON_PROJECT@.math_opt':['*.pyi'],
+         '@PYTHON_PROJECT@.math_opt.core.python':[
+             '$<TARGET_FILE_NAME:math_opt_pybind11>',

@@ -1,0 +1,26 @@
+From 77d703b11d298f6be88b04f7e8ca85de139e82be Mon Sep 17 00:00:00 2001
+From: Morgan Jones <me@numin.it>
+Date: Mon, 5 May 2025 20:34:02 -0700
+Subject: [PATCH] process: disable KillLongRunningChild test
+
+---
+ packages/process/_test.pony | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/packages/process/_test.pony b/packages/process/_test.pony
+index fe9fdb04..756588f9 100644
+--- a/packages/process/_test.pony
++++ b/packages/process/_test.pony
+@@ -18,7 +18,8 @@ actor \nodoc\ Main is TestList
+     test(_TestChdir)
+     test(_TestExpect)
+     test(_TestFileExecCapabilityIsRequired)
+-    test(_TestKillLongRunningChild)
++    // (@booxter/@numinit) Appears to be flaky.
++    // test(_TestKillLongRunningChild)
+     test(_TestLongRunningChild)
+     test(_TestNonExecutablePathResultsInExecveError)
+     test(_TestPrintvOrdering)
+-- 
+2.47.0
+

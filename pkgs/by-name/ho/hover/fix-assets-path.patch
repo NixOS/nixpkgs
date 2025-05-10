@@ -1,0 +1,78 @@
+diff --git a/internal/fileutils/assets.go b/internal/fileutils/assets.go
+index 83eacd9..0b80e51 100644
+--- a/internal/fileutils/assets.go
++++ b/internal/fileutils/assets.go
+@@ -1,28 +1,7 @@
+ //go:generate rice embed
+ package fileutils
+ 
+-import (
+-	"os"
+-	"sync"
+-
+-	rice "github.com/GeertJohan/go.rice"
+-	"github.com/go-flutter-desktop/hover/internal/log"
+-)
+-
+-var (
+-	assetsBox     *rice.Box
+-	assetsBoxOnce sync.Once
+-)
+-
+ // AssetsBox hover's assets box
+-func AssetsBox() *rice.Box {
+-	assetsBoxOnce.Do(func() {
+-		var err error
+-		assetsBox, err = rice.FindBox("../../assets")
+-		if err != nil {
+-			log.Errorf("Failed to find hover assets: %v", err)
+-			os.Exit(1)
+-		}
+-	})
+-	return assetsBox
++func AssetsBox() string {
++	return "@assetsFolder@"
+ }
+diff --git a/internal/fileutils/file.go b/internal/fileutils/file.go
+index cb75563..3822e80 100644
+--- a/internal/fileutils/file.go
++++ b/internal/fileutils/file.go
+@@ -11,8 +11,6 @@ import (
+ 	"strings"
+ 	"text/template"
+ 
+-	rice "github.com/GeertJohan/go.rice"
+-
+ 	"github.com/go-flutter-desktop/hover/internal/log"
+ )
+ 
+@@ -215,24 +213,24 @@ func ExecuteTemplateFromFile(boxed, to string, templateData interface{}) {
+ }
+ 
+ // ExecuteTemplateFromAssetsBox create file from a template asset
+-func ExecuteTemplateFromAssetsBox(boxed, to string, assetsBox *rice.Box, templateData interface{}) {
+-	templateString, err := assetsBox.String(boxed)
++func ExecuteTemplateFromAssetsBox(boxed, to string, assetsBox string, templateData interface{}) {
++	templateString, err := ioutil.ReadFile(assetsBox + "/" + boxed)
+ 	if err != nil {
+ 		log.Errorf("Failed to find template file: %v\n", err)
+ 		os.Exit(1)
+ 	}
+-	executeTemplateFromString(templateString, to, templateData)
++	executeTemplateFromString(string(templateString), to, templateData)
+ }
+ 
+ // CopyAsset copies a file from asset
+-func CopyAsset(boxed, to string, assetsBox *rice.Box) {
++func CopyAsset(boxed string, to string, assetsBox string) {
+ 	file, err := os.Create(to)
+ 	if err != nil {
+ 		log.Errorf("Failed to create %s: %v", to, err)
+ 		os.Exit(1)
+ 	}
+ 	defer file.Close()
+-	boxedFile, err := assetsBox.Open(boxed)
++	boxedFile, err := os.OpenFile(assetsBox + "/" + boxed, os.O_RDONLY, 0666)
+ 	if err != nil {
+ 		log.Errorf("Failed to find boxed file %s: %v", boxed, err)
+ 		os.Exit(1)

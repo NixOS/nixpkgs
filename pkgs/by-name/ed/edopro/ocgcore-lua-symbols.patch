@@ -1,0 +1,29 @@
+From 41e750142b44465f3af197b7e2f0d6f54fc48c2d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 21 Oct 2024 17:42:24 +0200
+Subject: [PATCH] Mark Lua symbols as C symbols
+
+Otherwise linking against our Lua built by a C-compiler fails due to the symbols being resolved as C++ symbols.
+---
+ interpreter.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/interpreter.h b/interpreter.h
+index 6c405a1..c471ecb 100644
+--- a/interpreter.h
++++ b/interpreter.h
+@@ -9,9 +9,11 @@
+ #define INTERPRETER_H_
+ 
+ // Due to longjmp behaviour, we must build Lua as C++ to avoid UB
++extern "C" {
+ #include <lua.h>
+ #include <lualib.h>
+ #include <lauxlib.h>
++}
+ 
+ #include "common.h"
+ #include <unordered_map>
+-- 
+2.44.1
+

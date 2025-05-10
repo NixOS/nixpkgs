@@ -1,0 +1,32 @@
+From eafe8476566e1d8e8b9a486ca808685cb439a767 Mon Sep 17 00:00:00 2001
+From: Sveinung Rundhovde <ssru@equinor.com>
+Date: Mon, 29 Jul 2024 10:46:35 +0200
+Subject: [PATCH] Explicitly cast from BinField to int
+
+Parsing segyio.BinField type as int in PyArg_ParseTuple is no longer
+possible.
+---
+ python/segyio/open.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/python/segyio/open.py b/python/segyio/open.py
+index cd902c15..80bc3a5b 100644
+--- a/python/segyio/open.py
++++ b/python/segyio/open.py
+@@ -166,8 +166,8 @@ def open(filename, mode="r", iline = 189,
+     f = segyio.SegyFile(fd,
+             filename = str(filename),
+             mode = mode,
+-            iline = iline,
+-            xline = xline,
++            iline = int(iline),
++            xline = int(xline),
+             endian = endian,
+     )
+ 
+@@ -189,4 +189,4 @@ def open(filename, mode="r", iline = 189,
+     if ignore_geometry:
+         return f
+ 
+-    return infer_geometry(f, metrics, iline, xline, strict)
++    return infer_geometry(f, metrics, int(iline), int(xline), strict)

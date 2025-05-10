@@ -1,0 +1,44 @@
+From 7a95b33f8fe9b2d426c2680291ccbae2e973faa0 Mon Sep 17 00:00:00 2001
+From: Tom Hunze <dev@thunze.de>
+Date: Sun, 4 May 2025 00:49:57 +0200
+Subject: [PATCH] Fix `test_ast_expr` for Python 3.13
+
+---
+ tests/test_prettier.py | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/tests/test_prettier.py b/tests/test_prettier.py
+index 298dc58..0f24756 100644
+--- a/tests/test_prettier.py
++++ b/tests/test_prettier.py
+@@ -486,6 +486,7 @@ class User(SQLAlchemyBase):
+ 
+ 
+ @pytest.mark.skipif(sys.version_info < (3, 9), reason='no indent on older versions')
++@pytest.mark.skipif(sys.version_info >= (3, 13), reason='show_empty=False on newer versions')
+ def test_ast_expr():
+     assert pformat(ast.parse('print(1, 2, round(3))', mode='eval')) == (
+         "Expression("
+@@ -503,6 +504,22 @@ def test_ast_expr():
+     )
+ 
+ 
++@pytest.mark.skipif(sys.version_info < (3, 13), reason='no show_empty on older versions')
++def test_ast_expr_show_empty():
++    assert pformat(ast.parse('print(1, 2, round(3))', mode='eval')) == (
++        "Expression("
++        "\n    body=Call("
++        "\n        func=Name(id='print', ctx=Load()),"
++        "\n        args=["
++        "\n            Constant(value=1),"
++        "\n            Constant(value=2),"
++        "\n            Call("
++        "\n                func=Name(id='round', ctx=Load()),"
++        "\n                args=["
++        "\n                    Constant(value=3)])]))"
++    )
++
++
+ @pytest.mark.skipif(sys.version_info < (3, 9), reason='no indent on older versions')
+ def test_ast_module():
+     assert pformat(ast.parse('print(1, 2, round(3))')).startswith('Module(\n    body=[')
