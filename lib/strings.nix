@@ -1501,6 +1501,63 @@ rec {
       );
 
   /**
+    Converts a string to camelCase. Handles snake_case, PascalCase,
+    kebab-case strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to camelCase
+
+    # Type
+
+    ```
+    toCamelCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toCamelCase` usage example
+
+    ```nix
+    toCamelCase "hello-world"
+    => "helloWorld"
+    toCamelCase "hello_world"
+    => "helloWorld"
+    toCamelCase "hello world"
+    => "helloWorld"
+    toCamelCase "HelloWorld"
+    => "helloWorld"
+    ```
+
+    :::
+  */
+  toCamelCase =
+    str:
+    lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
+      let
+        separators = splitStringBy (
+          prev: curr:
+          elem curr [
+            "-"
+            "_"
+            " "
+          ]
+        ) false str;
+
+        parts = lib.flatten (
+          map (splitStringBy (
+            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+          ) true) separators
+        );
+
+        first = if length parts > 0 then toLower (head parts) else "";
+        rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
+      in
+      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
+    );
+
+  /**
     Appends string context from string like object `src` to `target`.
 
     :::{.warning}
