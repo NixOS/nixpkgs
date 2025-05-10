@@ -27,6 +27,7 @@
   pipewire,
   pkg-config,
   portaudio,
+  SDL2,
   sndio,
   spirv-tools,
   soundtouch,
@@ -34,10 +35,7 @@
   vulkan-headers,
   xorg,
   zstd,
-  enableSDL2 ? true,
-  SDL2,
-  enableQt ? true,
-  enableQtTranslations ? enableQt,
+  enableQtTranslations ? true,
   qt6,
   enableCubeb ? true,
   cubeb,
@@ -66,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     pkg-config
-  ] ++ lib.optionals enableQt [ qt6.wrapQtAppsHook ];
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs =
     [
@@ -91,7 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       pipewire
       portaudio
+      qt6.qtbase
+      qt6.qtmultimedia
+      qt6.qttools
+      qt6.qtwayland
       soundtouch
+      SDL2
       sndio
       spirv-tools
       vulkan-headers
@@ -99,17 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXext
       zstd
     ]
-    ++ optionals enableQt (
-      with qt6;
-      [
-        qtbase
-        qtmultimedia
-        qttools
-        qtwayland
-      ]
-    )
     ++ optionals enableQtTranslations [ qt6.qttools ]
-    ++ optionals enableSDL2 [ SDL2 ]
     ++ optionals enableCubeb [ cubeb ]
     ++ optionals useDiscordRichPresence [ rapidjson ];
 
@@ -147,10 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
     (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
-    (cmakeBool "ENABLE_QT" enableQt)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
-    (cmakeBool "ENABLE_SDL2" enableSDL2)
-    (cmakeBool "ENABLE_SDL2_FRONTEND" enableSDL2)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
   ];
