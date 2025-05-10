@@ -27,6 +27,7 @@
   rustc-demangle,
   elfutils,
   perf,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
+    "--suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
   ];
 
   meta = with lib; {
