@@ -19,6 +19,7 @@
   attrs,
   backoff,
   beautifulsoup4,
+  cachetools,
   certifi,
   cffi,
   charset-normalizer,
@@ -33,8 +34,11 @@
   fsspec,
   gitdb,
   gitpython,
+  google-ai-generativelanguage,
+  google-generativeai,
   grep-ast,
   h11,
+  hf-xet,
   httpcore,
   httpx,
   huggingface-hub,
@@ -54,6 +58,7 @@
   networkx,
   numpy,
   openai,
+  oslex,
   packaging,
   pathspec,
   pexpect,
@@ -78,6 +83,7 @@
   rich,
   rpds-py,
   scipy,
+  shtab,
   smmap,
   sniffio,
   sounddevice,
@@ -124,7 +130,7 @@ let
     ];
   };
 
-  version = "0.82.2";
+  version = "0.83.0";
   aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -137,7 +143,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-lV0d6/cT/B3zmn8/uEyAc3D0n6oFsLoWa/qYmGv3EiI=";
+      hash = "sha256-hXKrjo/9Y3WLgluwEK2q123QcfBVA0ByEKaq8Rtd70E=";
     };
 
     pythonRelaxDeps = true;
@@ -153,6 +159,7 @@ let
       attrs
       backoff
       beautifulsoup4
+      cachetools
       certifi
       cffi
       charset-normalizer
@@ -167,8 +174,11 @@ let
       fsspec
       gitdb
       gitpython
+      google-ai-generativelanguage
+      google-generativeai
       grep-ast
       h11
+      hf-xet
       httpcore
       httpx
       huggingface-hub
@@ -188,6 +198,7 @@ let
       networkx
       numpy
       openai
+      oslex
       packaging
       pathspec
       pexpect
@@ -212,6 +223,7 @@ let
       rich
       rpds-py
       scipy
+      shtab
       smmap
       sniffio
       sounddevice
@@ -273,6 +285,9 @@ let
         "test_main_exit_calls_version_check"
         # AssertionError: assert 2 == 1
         "test_simple_send_non_retryable_error"
+        # Broken tests (Aider-AI/aider#3679)
+        "test_language_ocaml"
+        "test_language_ocaml_interface"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Tests fails on darwin
