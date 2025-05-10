@@ -5,7 +5,6 @@
   libiconv,
   libpng,
   ncurses,
-  pcre,
   readline,
   zlib,
   writeScript,
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-pcre=${pcre.dev}"
+    "--without-pcre"
     "--with-png=${libpng.dev}"
     "--with-readline=${readline.dev}"
     "--with-z=${zlib.dev}"
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng
-    pcre
     readline
     zlib
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];

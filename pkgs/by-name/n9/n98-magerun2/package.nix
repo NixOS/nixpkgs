@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  php,
+  php83,
   versionCheckHook,
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+php83.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun2";
   version = "8.0.0";
 
