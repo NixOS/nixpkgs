@@ -8,6 +8,7 @@
   ninja,
   clang,
   python3,
+  tde2e,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
   qtimageformats,
@@ -46,32 +47,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.13.1";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-E9d5jWw4HeCO4sqDB0tXXgxM91kg1Gixi9B0xZQYe14=";
+    hash = "sha256-A9bP1aX+YRoc9Y4ZwWzJc4In2IF1y2adOzQhGoWXR/s=";
   };
 
-  # Combined backport to fix Qt 6.9 issues:
-  # - https://github.com/telegramdesktop/tdesktop/commit/8b92ab25c776899c5432bf935447cac6f0b3ea2d
-  # - https://github.com/telegramdesktop/tdesktop/commit/c261c3367a11eeef69e6e346d339706dc4f00406
-  # FIXME: remove in next update
-  patches = [
-    ./qt-6.9.patch
-  ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
-  '';
+  postPatch =
+    # https://github.com/desktop-app/cmake_helpers/issues/393
+    ''
+      substituteInPlace cmake/external/lz4/CMakeLists.txt \
+        --replace-fail 'lz4::lz4' 'LZ4::lz4'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+        --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+        --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+        --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
+    '';
 
   nativeBuildInputs =
     [
@@ -104,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       microsoft-gsl
       boost
       ada
+      tde2e
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       protobuf
