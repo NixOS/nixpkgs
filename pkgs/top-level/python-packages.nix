@@ -7733,7 +7733,7 @@ self: super: with self; {
 
   lexilang = callPackage ../development/python-modules/lexilang { };
 
-  lhapdf = toPythonModule (pkgs.lhapdf.override { inherit python; });
+  lhapdf = toPythonModule (pkgs.lhapdf.override { python3 = python; });
 
   lib4package = callPackage ../development/python-modules/lib4package { };
 
@@ -7769,7 +7769,7 @@ self: super: with self; {
         };
       })
     )
-    (p: p.override { inherit python; })
+    (p: p.override { python3 = python; })
     (p: p.py)
   ];
 
@@ -7785,7 +7785,7 @@ self: super: with self; {
         };
       })
     )
-    (p: p.override { inherit python; })
+    (p: p.override { python3 = python; })
     (p: p.py)
   ];
 
@@ -7798,7 +7798,7 @@ self: super: with self; {
     }
   );
 
-  libfive = toPythonModule (pkgs.libfive.override { inherit python; });
+  libfive = toPythonModule (pkgs.libfive.override { python3 = python; });
 
   libgpiod = callPackage ../development/python-modules/libgpiod { inherit (pkgs) libgpiod; };
 
@@ -7808,7 +7808,7 @@ self: super: with self; {
     (toPythonModule (
       pkgs.libiio.override {
         pythonSupport = true;
-        inherit python;
+        python3 = python;
       }
     )).python;
 
@@ -7872,7 +7872,7 @@ self: super: with self; {
       p:
       p.override {
         enablePython = true;
-        inherit python;
+        python3 = python;
       }
     )
     (p: p.py)
@@ -7901,7 +7901,7 @@ self: super: with self; {
         };
       })
     )
-    (p: p.override { inherit python; })
+    (p: p.override { python3 = python; })
     (p: p.py)
   ];
 
@@ -7981,7 +7981,8 @@ self: super: with self; {
     (toPythonModule (
       pkgs.libxslt.override {
         pythonSupport = true;
-        inherit (self) python libxml2;
+        python3 = python;
+        inherit (self) libxml2;
       }
     )).py;
 
@@ -7991,7 +7992,7 @@ self: super: with self; {
 
   lida = callPackage ../development/python-modules/lida { };
 
-  lief = (toPythonModule (pkgs.lief.override { inherit python; })).py;
+  lief = (toPythonModule (pkgs.lief.override { python3 = python; })).py;
 
   life360 = callPackage ../development/python-modules/life360 { };
 
@@ -10329,7 +10330,7 @@ self: super: with self; {
   openapi3 = callPackage ../development/python-modules/openapi3 { };
 
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
-    openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
+    openbabel = pkgs.openbabel.override { python3 = python; };
   };
 
   opencamlib = callPackage ../development/python-modules/opencamlib { };
