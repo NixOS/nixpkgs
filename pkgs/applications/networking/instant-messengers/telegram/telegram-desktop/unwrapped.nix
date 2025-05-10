@@ -8,6 +8,7 @@
   ninja,
   clang,
   python3,
+  tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
   qtimageformats,
@@ -46,23 +47,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.13.1";
+  version = "5.14.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-E9d5jWw4HeCO4sqDB0tXXgxM91kg1Gixi9B0xZQYe14=";
+    hash = "sha256-nNYQpWbBK+E/LAbwTWpNUhs2+wb8iuMfqkxJKjaFmhg=";
   };
-
-  # Combined backport to fix Qt 6.9 issues:
-  # - https://github.com/telegramdesktop/tdesktop/commit/8b92ab25c776899c5432bf935447cac6f0b3ea2d
-  # - https://github.com/telegramdesktop/tdesktop/commit/c261c3367a11eeef69e6e346d339706dc4f00406
-  # FIXME: remove in next update
-  patches = [
-    ./qt-6.9.patch
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
@@ -104,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       microsoft-gsl
       boost
       ada
+      (tdlib.override { tde2eOnly = true; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       protobuf
