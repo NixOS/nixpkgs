@@ -13640,6 +13640,13 @@ with pkgs;
     vm = callPackage ../applications/audio/open-music-kontrollers/vm.nix { };
   };
 
+  inherit (callPackages ../data/fonts/open-relay { })
+    constructium
+    fairfax
+    fairfax-hd
+    kreative-square
+    ;
+
   openscad = libsForQt5.callPackage ../applications/graphics/openscad { };
 
   opentoonz = libsForQt5.callPackage ../applications/graphics/opentoonz { };
