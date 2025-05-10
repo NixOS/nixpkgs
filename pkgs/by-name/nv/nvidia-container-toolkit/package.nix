@@ -64,6 +64,7 @@ buildGoModule rec {
 
   subPackages = [
     "cmd/nvidia-cdi-hook"
+    "cmd/nvidia-container-runtime"
     "cmd/nvidia-container-runtime.cdi"
     "cmd/nvidia-container-runtime-hook"
     "cmd/nvidia-container-runtime.legacy"
@@ -104,11 +105,13 @@ buildGoModule rec {
 
   postInstall =
     ''
-      wrapProgram $out/bin/nvidia-container-runtime-hook \
-        --prefix PATH : ${libnvidia-container}/bin
-
       mkdir -p $tools/bin
-      mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
+      mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
+
+      for bin in nvidia-container-runtime-hook nvidia-container-runtime; do
+        wrapProgram $tools/bin/$bin \
+          --prefix PATH : ${libnvidia-container}/bin:$out/bin
+      done
     ''
     + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
       mkdir -p $out/etc/nvidia-container-runtime
