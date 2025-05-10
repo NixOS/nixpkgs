@@ -16,7 +16,6 @@ mkYaziPlugin {
 
   meta = {
     description = "Previewing archive contents with smart-filter";
-    homepage = "https://github.com/yazi-rs/plugins/tree/main/smart-paste.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
