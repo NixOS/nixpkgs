@@ -393,7 +393,10 @@ let
       homepage = "https://github.com/paul-gauthier/aider";
       changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ happysalada ];
+      maintainers = with lib.maintainers; [
+        happysalada
+        yzx9
+      ];
       mainProgram = "aider";
     };
   };
