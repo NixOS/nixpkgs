@@ -8,22 +8,22 @@
   pyyaml,
   python,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
   unzip,
 }:
 
 let
-  version = "0.15.4";
+  version = "0.16.1";
   gqlgen = import ./fix-gqlgen-trimpath.nix {
     inherit unzip;
-    gqlgenVersion = "0.17.45";
+    gqlgenVersion = "0.17.64";
   };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    hash = "sha256-M38hAMRdMzcqxJv7j7foOIYEImr/ZYz/lbYOF9R9g2M=";
+    hash = "sha256-SWtkE2/sTTJo0zAVFRfsA7fVF359OvgiHOT+yRaiads=";
   };
 
   pastesrht-api = buildGoModule (
@@ -31,7 +31,7 @@ let
       inherit src version;
       pname = "pastesrht-api";
       modRoot = "api";
-      vendorHash = "sha256-vt5nSPcx+Y/SaWcqjV38DTL3ZtzmdjbkJYMv5Fhhnq4=";
+      vendorHash = "sha256-298OaOnpStS8qkQB6aTy7QW8k8EfqaWYo5ZugthDooA=";
     }
     // gqlgen
   );
@@ -43,14 +43,9 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api" ""
-  '';
-
   nativeBuildInputs = [
     pip
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -58,14 +53,20 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
     mkdir -p $out/bin
-    ln -s ${pastesrht-api}/bin/api $out/bin/pastesrht-api
+    ln -s ${pastesrht-api}/bin/api $out/bin/paste.sr.ht-api
+    make install-share
   '';
 
   pythonImportsCheck = [ "pastesrht" ];

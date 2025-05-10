@@ -10,21 +10,21 @@
   python,
   unzip,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 
 let
-  version = "0.75.10";
+  version = "0.77.5";
   gqlgen = import ./fix-gqlgen-trimpath.nix {
     inherit unzip;
-    gqlgenVersion = "0.17.45";
+    gqlgenVersion = "0.17.64";
   };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    hash = "sha256-3dVZdupsygM7/6T1Mn7yRc776aa9pKgwF0hgZX6uVQ0=";
+    hash = "sha256-P+ypiW3GHoMClBmW5lUNAG6/sydHHnFGyGajmC3WARg=";
   };
 
   todosrht-api = buildGoModule (
@@ -32,7 +32,7 @@ let
       inherit src version;
       pname = "todosrht-api";
       modRoot = "api";
-      vendorHash = "sha256-fImOQLnQLHTrg5ikuYRZ+u+78exAiYA19DGQoUjQBOM=";
+      vendorHash = "sha256-/JMCb7ZipbAfwcPWguuYQE3RTon5m+VyNLYv1dOlM34=";
     }
     // gqlgen
   );
@@ -44,13 +44,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api" ""
-  '';
-
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -58,13 +53,20 @@ buildPythonPackage rec {
     alembic
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
-    ln -s ${todosrht-api}/bin/api $out/bin/todosrht-api
+    ln -s ${todosrht-api}/bin/api $out/bin/todo.sr.ht-api
+    install -Dm644 schema.sql $out/share/sourcehut/todo.sr.ht-schema.sql
+    make install-share
   '';
 
   # pytest tests fail
