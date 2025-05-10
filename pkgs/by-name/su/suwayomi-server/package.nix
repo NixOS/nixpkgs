@@ -3,22 +3,21 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  jdk17_headless,
+  jdk21_headless,
   nixosTests,
 }:
 
 let
-  jdk = jdk17_headless;
+  jdk = jdk21_headless;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suwayomi-server";
-  version = "1.1.1";
-  revision = 1535;
+  version = "2.0.1727";
 
   src = fetchurl {
-    url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}-r${toString finalAttrs.revision}.jar";
-    hash = "sha256-mPzREuH89RGhZLK+5aIPuq1gmNGc9MGG0wh4ZV5dLTg=";
+    url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}.jar";
+    hash = "sha256-+nq9/uQ/3Xjyj8oKiXrTF34y7Ig/I95spRWjwPP7+Uw=";
   };
 
   nativeBuildInputs = [
