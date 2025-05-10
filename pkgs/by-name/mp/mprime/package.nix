@@ -1,8 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  unzip,
+  fetchzip,
   boost,
   curl,
   hwloc,
@@ -27,30 +26,33 @@ let
       x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
+
+  # The program recommends reading stress.txt, but the text files are not included in the source zip.
+  # So we also download the binary tarball, to extract the text files from.
+  # Note: 30.19b20 is the latest binary version at the time of writing, and is not the same as the actual source below.
+  binSrc = fetchzip {
+    url = "https://www.mersenne.org/download/software/v30/30.19/p95v3019b20.linux64.tar.gz";
+    hash = "sha256-JJQ2HYq4nH42sigVajZMJQkbzVsiP8QKnJnGK/a/QmA=";
+    stripRoot = false;
+  };
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mprime";
-  version = "30.8b15";
+  version = "30.19b21";
 
-  src = fetchurl {
-    url = "https://www.mersenne.org/ftp_root/gimps/p95v${
-      lib.replaceStrings [ "." ] [ "" ] version
-    }.source.zip";
-    hash = "sha256-CNYorZStHV0aESGX9LfLZ4oD5PFR2UOFLN1MiLaKw58=";
+  src = fetchzip {
+    url = "https://www.mersenne.org/download/software/v30/30.19/p95v3019b21.source.zip";
+    hash = "sha256-ThZ1A29ZP8RyXGBBdO12+OIBppN0pzNBkXgo/J/z6XQ=";
+    stripRoot = false;
   };
 
   postPatch = ''
     sed -i ${srcDir}/makefile \
       -e 's/^LFLAGS =.*//'
     substituteInPlace ${srcDir}/makefile \
-      --replace '-Wl,-Bstatic'  "" \
-      --replace '-Wl,-Bdynamic' ""
+      --replace-fail '-Wl,-Bstatic'  "" \
+      --replace-fail '-Wl,-Bdynamic' ""
   '';
-
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ unzip ];
 
   buildInputs = [
     boost
@@ -68,6 +70,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm555 -t $out/bin ${srcDir}/mprime
+
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/license.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/readme.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/stress.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/undoc.txt
+    install -Dm444 -t $out/share/mprime/doc ${binSrc}/whatsnew.txt
   '';
 
   meta = with lib; {
