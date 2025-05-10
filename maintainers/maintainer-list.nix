@@ -22705,6 +22705,11 @@
     matrix = "@c3n21:matrix.org";
     githubId = 37077738;
   };
+  sinjin2300 = {
+    name = "Sinjin";
+    github = "Sinjin2300";
+    githubId = 35543336;
+  };
   sioodmy = {
     name = "Antoni Sokołowski";
     github = "sioodmy";
