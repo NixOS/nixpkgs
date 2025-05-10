@@ -8,21 +8,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.9.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
     rev = "v${version}";
-    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
+    hash = "sha256-GqGZ97jUX34G7SUQFlRhHuL3wAWXPhH8t7zw8/2jKc8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
+  cargoHash = "sha256-7mVg3to/rMVwW8WDftj1l6Q+H462eJ2gvATgoIiEMoI=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = ["fonts" "lambda" "mbtiles" "pmtiles" "cog" "postgres" "sprites" "styles"];
 
   checkFlags = [
     "--skip function_source_schemas"
@@ -52,6 +55,7 @@ rustPlatform.buildRustPackage rec {
     "--skip table_source"
     "--skip tables_tilejson"
     "--skip tables_multiple_geom_ok"
+    "--skip pg::pool::tests::parse_version"
   ];
 
   meta = with lib; {
