@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   makeFlags = [
+    "TARGET=iotop-c"
     "PREFIX=${placeholder "out"}"
     "BINDIR=${placeholder "out"}/bin"
   ];
