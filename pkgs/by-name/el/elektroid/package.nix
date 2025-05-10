@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "3.2";
+  version = "3.2.3";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     owner = "dagargo";
     repo = "elektroid";
     rev = version;
-    hash = "sha256-8tKs0i1dkoLlk1a33n7+6eIXqjNu3PHUTznrEC/HPIM=";
+    hash = "sha256-gK6WQA0KenyksLLFHejCXDTpBm2uhJwn6/E4TXUdeJ8=";
   };
 
   nativeBuildInputs = [
