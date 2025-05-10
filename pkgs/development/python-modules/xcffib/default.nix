@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "xcffib";
-  version = "1.7.1";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M3dcHQRh8ZJV/FTiLOkU4QoT+2W8e7oOq6/ufwh4z9s=";
+    hash = "sha256-CUpfGM4mcAdjICY5cwnUIyRNAei9pvNXcPkdv+sV3qA=";
   };
 
   postPatch = ''
