@@ -929,6 +929,7 @@ mapAliases {
   kodiPlugins = kodiPackages; # Added 2021-03-09;
   kramdown-rfc2629 = throw "'kramdown-rfc2629' has been renamed to/replaced by 'rubyPackages.kramdown-rfc2629'"; # Converted to throw 2024-10-17
   krb5Full = krb5;
+  kreative-square-fonts = throw "'kreative-square-fonts' has been renamed to 'kreative-square'"; # Added 2025-04-16
   krita-beta = throw "'krita-beta' has been renamed to/replaced by 'krita'"; # Converted to throw 2024-10-17
   krun = throw "'krun' has been renamed to/replaced by 'muvm'"; # Added 2025-05-01
   kubei = kubeclarity; # Added 2023-05-20
