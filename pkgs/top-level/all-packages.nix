@@ -16530,6 +16530,30 @@ with pkgs;
     in
     c.config.system.build // c;
 
+  nixosMinimal =
+    configuration:
+    let
+      c = import (path + "/nixos/lib/eval-config.nix") {
+        baseModules = import (path + "/nixos/modules/base-modules.nix");
+        modules = [
+          (
+            { lib, ... }:
+            {
+              config.nixpkgs.pkgs = lib.mkDefault pkgs;
+              config.nixpkgs.localSystem = lib.mkDefault stdenv.hostPlatform;
+              # TODO: fix documentation not building
+              config.documentation.enable = lib.mkDefault false;
+            }
+          )
+        ] ++ (if builtins.isList configuration then configuration else [ configuration ]);
+
+        # The system is inherited from the current pkgs above.
+        # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+        system = null;
+      };
+    in
+    lib.warn "nixosMinimal is experimental and subject to change" c.config.system.build // c;
+
   # A NixOS/home-manager/arion/... module that sets the `pkgs` module argument.
   pkgsModule =
     { options, ... }:
