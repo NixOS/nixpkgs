@@ -67,4 +67,6 @@ mkDerivation {
   installPhase = ''
     cp -r . $out
   '';
+
+  meta.platforms = lib.platforms.unix;
 }

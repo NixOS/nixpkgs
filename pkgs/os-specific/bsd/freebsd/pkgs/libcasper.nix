@@ -23,4 +23,6 @@ mkDerivation {
     make -C $BSDSRCDIR/lib/libcasper/services $makeFlags CFLAGS="-DWITH_CASPER -I$out/include"
     make -C $BSDSRCDIR/lib/libcasper/services $makeFlags install
   '';
+
+  meta.platforms = lib.platforms.unix;
 }
