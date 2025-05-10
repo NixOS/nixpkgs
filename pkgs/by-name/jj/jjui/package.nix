@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jjui";
   version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FfodDPHMNiB4vh+v+m2k6x9o82idHM68Os9OuXpyVGY=";
   };
 
@@ -22,11 +22,11 @@ buildGoModule rec {
   meta = {
     description = "A TUI for Jujutsu VCS";
     homepage = "https://github.com/idursun/jjui";
-    changelog = "https://github.com/idursun/jjui/releases/tag/v${version}";
+    changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       adda
     ];
     mainProgram = "jjui";
   };
-}
+})
