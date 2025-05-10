@@ -15,8 +15,11 @@
   substitute,
   installShellFiles,
   buildPackages,
+  cmake,
+  wasmtime,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  wasmSupport ? true,
   webUISupport ? false,
   extraGrammars ? { },
 
@@ -167,6 +170,31 @@ let
 
   allGrammars = builtins.attrValues builtGrammars;
 
+  wasmtime-29_0_1 = wasmtime.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "29.0.1";
+
+      src = fetchFromGitHub {
+        owner = "bytecodealliance";
+        repo = "wasmtime";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-BYTPBerWCDGqcN3TpMLhtL92f413IjCgGDQqQUu5D7Y=";
+        fetchSubmodules = true;
+      };
+
+      patches = (prevAttrs.patches or [ ]) ++ [ ./wasmtime/bump-wasm-parser.patch ];
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs)
+          pname
+          version
+          src
+          patches
+          ;
+        hash = "sha256-sutupZ5TcYm/ZxEZJdPXcqjZa4gsOz6yLfkKeqARbRo=";
+      };
+    }
+  );
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -177,11 +205,13 @@ rustPlatform.buildRustPackage {
 
   buildInputs =
     [ installShellFiles ]
+    ++ lib.optionals wasmSupport [ wasmtime-29_0_1 ]
     ++ lib.optionals webUISupport [
       openssl
     ];
   nativeBuildInputs =
     [ which ]
+    ++ lib.optionals wasmSupport [ cmake ]
     ++ lib.optionals webUISupport [
       emscripten
       pkg-config
@@ -207,9 +237,21 @@ rustPlatform.buildRustPackage {
     cargo run --package xtask -- build-wasm --debug
   '';
 
+  cmakeDir = lib.optionalString wasmSupport "../lib";
+  cmakeFlags = lib.optionals wasmSupport [
+    (lib.cmakeBool "TREE_SITTER_FEATURE_WASM" true)
+    # these are needed so we don't need to patch https://github.com/tree-sitter/tree-sitter/blob/v0.25.3/lib/tree-sitter.pc.in#L1-L3
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+  cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
+  configurePhase = lib.optionalString wasmSupport "cmakeConfigurePhase && cd ..";
+  postBuild = lib.optionalString wasmSupport "cmake --build $cmakeBuildDir";
+
   postInstall =
     ''
       PREFIX=$out make install
+      ${lib.optionalString wasmSupport "cmake --install $cmakeBuildDir"}
       ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
       ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
     ''
@@ -242,6 +284,8 @@ rustPlatform.buildRustPackage {
       ;
 
     updateScript = nix-update-script { };
+
+    wasmtime = wasmtime-29_0_1;
 
     tests = {
       # make sure all grammars build
