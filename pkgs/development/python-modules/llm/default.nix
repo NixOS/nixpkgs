@@ -6,6 +6,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  replaceVars,
   setuptools,
   click-default-group,
   condense-json,
@@ -25,12 +26,10 @@
   sqlite-utils,
 }:
 let
-  # The function signature of `withPlugins` is the list of all the plugins `llm` knows about.
-  # The plugin directory is at <https://llm.datasette.io/en/stable/plugins/directory.html>
-  withPluginsArgNames = lib.functionArgs withPlugins;
-
   /**
     Make a derivation for `llm` that contains `llm` plus the relevant plugins.
+    The function signature of `withPlugins` is the list of all the plugins `llm` knows about.
+    Adding a parameter here requires that it be in `python3Packages` attrset.
 
     # Type
 
@@ -81,6 +80,7 @@ let
       llm-templates-github ? false,
       llm-venice ? false,
       llm-video-frames ? false,
+      ...
     }@args:
     let
       # Filter to just the attributes which are set to a true value.
@@ -97,9 +97,9 @@ let
         ps:
         let
           # Throw a diagnostic if this list gets out of sync with the names in python3Packages
-          allPluginsPresent = pluginNames == (lib.attrNames withPluginsArgNames);
-          pluginNames = lib.attrNames (lib.intersectAttrs ps withPluginsArgNames);
-          missingNamesList = lib.attrNames (lib.removeAttrs withPluginsArgNames pluginNames);
+          allPluginsPresent = pluginNames == withPluginsArgNames;
+          pluginNames = lib.attrNames (lib.intersectAttrs ps withPluginsArgs);
+          missingNamesList = lib.attrNames (lib.removeAttrs withPluginsArgs pluginNames);
           missingNames = lib.concatStringsSep ", " missingNamesList;
 
           # The relevant plugins are the ones the user asked for.
@@ -120,7 +120,24 @@ let
     '';
 
   # Uses the `withPlugins` names to make a Python environment with everything.
-  withAllPlugins = withPlugins (lib.genAttrs (lib.attrNames withPluginsArgNames) (name: true));
+  withAllPlugins = withPlugins (lib.genAttrs withPluginsArgNames (name: true));
+
+  # The function signature of `withPlugins` is the list of all the plugins `llm` knows about.
+  # The plugin directory is at <https://llm.datasette.io/en/stable/plugins/directory.html>
+  withPluginsArgs = lib.functionArgs withPlugins;
+  withPluginsArgNames = lib.attrNames withPluginsArgs;
+
+  # In order to help with usability, we patch `llm install` and `llm uninstall` to tell users how to
+  # customize `llm` with plugins in Nix, including the name of the plugin, its description, and
+  # where it's coming from.
+  listOfPackagedPlugins = builtins.toFile "plugins.txt" (
+    lib.concatStringsSep "\n  " (
+      map (name: ''
+        # ${python.pkgs.${name}.meta.description} <${python.pkgs.${name}.meta.homepage}>
+          ${name} = true;
+      '') withPluginsArgNames
+    )
+  );
 
   llm = buildPythonPackage rec {
     pname = "llm";
@@ -139,6 +156,10 @@ let
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
+
+    postPatch = ''
+      substituteInPlace llm/cli.py --replace-fail "@listOfPackagedPlugins@" "$(< ${listOfPackagedPlugins})"
+    '';
 
     dependencies = [
       click-default-group
