@@ -115,3 +115,46 @@ A nominal type marker, always `"configuration"`.
 #### `class` {#module-system-lib-evalModules-return-value-_configurationClass}
 
 The [`class` argument](#module-system-lib-evalModules-param-class).
+
+## Module arguments {#module-system-module-arguments}
+
+Module arguments are the attribute values passed to modules when they are evaluated.
+
+They originate from these sources:
+1. Built-in arguments
+    - `lib`,
+    - `config`,
+    - `options`,
+    - `_class`,
+    - `_prefix`,
+2. Attributes from the [`specialArgs`] argument passed to [`evalModules`] or `submoduleWith`. These are application-specific.
+3. Attributes from the `_module.args` option value. These are application-specific and can be provided by any module.
+
+The prior two categories are available while evaluating the `imports`, whereas
+the last category is only available after the `imports` have been resolved.
+
+[`lib`]{#module-system-module-argument-lib} [🔗](#module-system-module-argument-lib)
+: A reference to the Nixpkgs library.
+
+[`config`]{#module-system-module-argument-config} [🔗](#module-system-module-argument-config)
+: All option values.
+  Unlike the `evalModules` [`config` return attribute](#module-system-lib-evalModules-return-value-config), this includes `_module`.
+
+[`options`]{#module-system-module-argument-options} [🔗](#module-system-module-argument-options)
+: All evaluated option declarations.
+
+[`_class`]{#module-system-module-argument-_class} [🔗](#module-system-module-argument-_class)
+: The [expected class](#module-system-lib-evalModules-param-class) of the loaded modules.
+
+[`_prefix`]{#module-system-module-argument-_prefix} [🔗](#module-system-module-argument-_prefix)
+: The location under which the module is evaluated.
+  This is used to improve error reporting and to find the implicit `name` module argument in submodules.
+  It is exposed as a module argument due to how the module system is implemented, which cannot be avoided without breaking compatibility.
+
+  It is a good practice not to rely on `_prefix`. A module should not make assumptions about its location in the configuration tree.
+  For example, the root of a NixOS configuration may have a non-empty prefix, for example when it is a specialisation, or when it is part of a larger, multi-host configuration such as a [NixOS test](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests).
+  Instead of depending on `_prefix` use explicit options, whose default definitions can be provided by the module that imports them.
+
+<!-- markdown link aliases -->
+[`evalModules`]: #module-system-lib-evalModules
+[`specialArgs`]: #module-system-lib-evalModules-param-specialArgs
