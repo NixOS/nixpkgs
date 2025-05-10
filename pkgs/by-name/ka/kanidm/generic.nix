@@ -49,7 +49,8 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+  KANIDM_BUILD_PROFILE =
+    if stdenv.hostPlatform.isDarwin then "release_freebsd" else "release_nixos_${arch}";
 
   patches = lib.optionals enableSecretProvisioning [
     "${patchDir}/oauth2-basic-secret-modify.patch"
@@ -94,13 +95,16 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    udev
-    openssl
-    sqlite
-    pam
-    rust-jemalloc-sys
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+      pam
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ];
 
   # The UI needs to be in place before the tests are run.
   postBuild =
@@ -125,15 +129,17 @@ rustPlatform.buildRustPackage rec {
     ''profile.release.lto="off"''
   ];
 
-  preFixup = ''
-    installShellCompletion \
-      --bash $releaseDir/build/completions/*.bash \
-      --zsh $releaseDir/build/completions/_*
-
-    # PAM and NSS need fix library names
-    mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
-    mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
-  '';
+  preFixup =
+    ''
+      installShellCompletion \
+        --bash $releaseDir/build/completions/*.bash \
+        --zsh $releaseDir/build/completions/_*
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      # PAM and NSS need fix library names
+      mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
+      mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
+    '';
 
   passthru = {
     tests = {
@@ -166,7 +172,7 @@ rustPlatform.buildRustPackage rec {
       description = "Simple, secure and fast identity management platform";
       homepage = "https://github.com/kanidm/kanidm";
       license = licenses.mpl20;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [
         adamcstephens
         Flakebi
