@@ -58,6 +58,7 @@ buildGoModule {
   subPackages = [
     "cmd/derper"
     "cmd/derpprobe"
+    "cmd/get-authkey"
     "cmd/tailscaled"
     "cmd/tsidp"
   ];
