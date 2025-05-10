@@ -42,6 +42,7 @@ assert lib.assertMsg (
   libarchive,
   libcpuid,
   libsodium,
+  libsystemtap,
   llvmPackages,
   lowdown,
   lowdown-unsandboxed,
@@ -59,9 +60,11 @@ assert lib.assertMsg (
   pkg-config,
   rapidcheck,
   sqlite,
+  systemtap-sdt,
   util-linuxMinimal,
   removeReferencesTo,
   xz,
+  yq,
   nixosTests,
   rustPlatform,
   # Only used for versions before 2.92.
@@ -76,6 +79,10 @@ assert lib.assertMsg (
   enableStrictLLVMChecks ? true,
   withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   aws-sdk-cpp,
+  # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
+  withDtrace ?
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap
+    && lib.meta.availableOn stdenv.buildPlatform systemtap-sdt,
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
@@ -88,6 +95,8 @@ let
   isLLVMOnly = lib.versionAtLeast version "2.92";
   hasExternalLixDoc = lib.versionOlder version "2.92";
   isLegacyParser = lib.versionOlder version "2.91";
+  hasDtraceSupport = lib.versionAtLeast version "2.93";
+  parseToYAML = lib.versionAtLeast version "2.93";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -159,6 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
       mdbook-linkcheck
       doxygen
     ]
+    ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+    ++ lib.optionals parseToYAML [ yq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs =
@@ -187,7 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
     ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
     ++ lib.optionals withLibseccomp [ libseccomp ]
-    ++ lib.optionals withAWS [ aws-sdk-cpp ];
+    ++ lib.optionals withAWS [ aws-sdk-cpp ]
+    ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
 
   inherit cargoDeps;
 
@@ -255,6 +267,9 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "store-dir" storeDir)
       (lib.mesonOption "state-dir" stateDir)
       (lib.mesonOption "sysconfdir" confDir)
+    ]
+    ++ lib.optionals hasDtraceSupport [
+      (lib.mesonEnable "dtrace-probes" withDtrace)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
@@ -347,8 +362,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit aws-sdk-cpp boehmgc;
     tests = {
-      misc = nixosTests.nix-misc.lix;
-      installer = nixosTests.installer.lix-simple;
+      misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
+      installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
     };
   };
 
