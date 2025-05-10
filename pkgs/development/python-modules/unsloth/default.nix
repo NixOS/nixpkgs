@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "unsloth";
-  version = "2025.4.1";
+  version = "2025.4.7";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit version;
-    hash = "sha256-9LtDGfdWH7R3U/xi+aK3V4zA+vs83S6Cp0F2NQKvSdY=";
+    hash = "sha256-R5Z5s3E0hq8NdLN27u/mS70saz5265MtYlsQ4ddq0wY=";
   };
 
   build-system = [
