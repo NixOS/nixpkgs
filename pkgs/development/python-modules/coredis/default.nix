@@ -2,21 +2,25 @@
   lib,
   async-timeout,
   buildPythonPackage,
+  setuptools,
+  versioneer,
   deprecated,
   fetchFromGitHub,
+  packaging,
   pympler,
   pytest-asyncio,
   pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
+  typing-extensions,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "coredis";
   version = "4.22.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,14 +32,25 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    sed -i '/mypy==/d' pyproject.toml
+    sed -i '/packaging/d' pyproject.toml
+    sed -i '/pympler/d' pyproject.toml
+    sed -i '/types_deprecated/d' pyproject.toml
     substituteInPlace pytest.ini \
       --replace "-K" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     async-timeout
     deprecated
+    packaging
     pympler
+    typing-extensions
     wrapt
   ];
 
