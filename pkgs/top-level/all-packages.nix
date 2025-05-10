@@ -13952,8 +13952,6 @@ with pkgs;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
 
-  savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan { };
-
   sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
   scantailor-advanced = libsForQt5.callPackage ../applications/graphics/scantailor/advanced.nix { };

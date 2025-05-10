@@ -2,39 +2,38 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qtbase,
-  qttools,
-  qmake,
-  qtserialbus,
-  qtserialport,
-  qtdeclarative,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "savvycan";
-  version = "213";
+  version = "220";
 
   src = fetchFromGitHub {
     owner = "collin80";
     repo = "SavvyCAN";
     rev = "V${version}";
-    hash = "sha256-duITY6s/uadeBCFuG42JbLCaq7yaYv1qB8Q3GA8UJ0A=";
+    hash = "sha256-Du6Pc0JePdJNwBaWKKjTMWOmKCnk6Azojh8IJ7I+ngY=";
   };
 
   buildInputs = [
-    qtbase
-    qttools
-    qtserialbus
-    qtserialport
-    qtdeclarative
+    qt5.qtbase
+    qt5.qttools
+    qt5.qtserialbus
+    qt5.qtserialport
+    qt5.qtdeclarative
   ];
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/SavvyCAN.app $out/Applications
+    ln -s $out/Applications/SavvyCAN.app/Contents/MacOS/SavvyCAN $out/bin/SavvyCAN
+  '';
 
   meta = with lib; {
     description = "QT based cross platform canbus tool";
@@ -70,5 +69,4 @@ stdenv.mkDerivation rec {
         it!
     '';
   };
-
 }
