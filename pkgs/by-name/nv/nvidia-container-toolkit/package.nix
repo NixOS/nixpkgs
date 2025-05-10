@@ -80,6 +80,8 @@ buildGoModule rec {
     # "-X name=value"
     "-X"
     "${cliVersionPackage}.version=${version}"
+    "-X"
+    "github.com/NVIDIA/nvidia-container-toolkit/internal/info.gitCommit=${src.rev}"
   ];
 
   nativeBuildInputs = [
