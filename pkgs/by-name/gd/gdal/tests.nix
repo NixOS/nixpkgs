@@ -11,46 +11,42 @@ let
 
 in
 {
-  ogrinfo-version = testers.testVersion {
+  gdal-version = testers.testVersion {
     package = gdal;
-    command = "ogrinfo --version";
-  };
-
-  gdalinfo-version = testers.testVersion {
-    package = gdal;
-    command = "gdalinfo --version";
+    command = "gdal --version";
   };
 
   ogrinfo-format-geopackage = runCommand "${pname}-ogrinfo-format-geopackage" { } ''
-    ${lib.getExe' gdal "ogrinfo"} --formats \
+    ${lib.getExe gdal} raster info --formats \
       | grep 'GPKG.*GeoPackage'
     touch $out
   '';
 
   gdalinfo-format-geotiff = runCommand "${pname}-gdalinfo-format-geotiff" { } ''
-    ${lib.getExe' gdal "gdalinfo"} --formats \
+    ${lib.getExe gdal} vector info --formats \
       | grep 'GTiff.*GeoTIFF'
     touch $out
   '';
 
   vector-file = runCommand "${pname}-vector-file" { } ''
     echo -e "Latitude,Longitude,Name\n48.1,0.25,'Test point'" > test.csv
-    ${lib.getExe' gdal "ogrinfo"} ./test.csv
+    ${lib.getExe gdal} vector info ./test.csv \
+      | grep '"driverShortName":"CSV"'
     touch $out
   '';
 
   raster-file = runCommand "${pname}-raster-file" { } ''
-    ${lib.getExe' gdal "gdal_create"} \
-      -a_srs "EPSG:4326" \
-      -of GTiff \
-      -ot UInt16 \
-      -a_nodata 255 \
-      -burn 0 \
-      -outsize 800 600 \
-      -co COMPRESS=LZW \
-      test.tif
+    ${lib.getExe gdal} raster create \
+      --crs "EPSG:4326" \
+      --output-format GTiff \
+      --output-data-type UInt16 \
+      --creation-option COMPRESS=LZW \
+      --nodata 255 \
+      --burn 10 \
+      --size 800,600 \
+      ./test.tif
 
-    ${lib.getExe' gdal "gdalinfo"} ./test.tif
+    ${lib.getExe gdal} raster info ./test.tif
     touch $out
   '';
 
