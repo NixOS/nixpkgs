@@ -33,13 +33,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "413feff21f9f7310023d8cfd92b83f2a251b1aa4";
+  version = "00dccfb85c613f9986e0e891432b066cafb60c93";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
     rev = finalAttrs.version;
-    hash = "sha256-OEKXz/98VpaBhLhC2mkWx73lQmlflv3sI7eXLvgoDiI=";
+    hash = "sha256-uOwj/OSE8RcDsejd+xQCqzRPJ/lqtQz9qshONs+/+WE=";
   };
 
   nativeBuildInputs = [
@@ -78,8 +78,8 @@ postgresqlBuildExtension (finalAttrs: {
     "-DPG_CONFIG=${pgWithExtensions.pg_config}/bin/pg_config"
     # Can remove this later after hack is deprecated
     "-DPostgreSQL_EXTENSION_DIR=${lib.getDev pgWithExtensions}/share/postgresql/extension"
-    #"-DPostgreSQL_EXTENSION_DIR=$out/share/postgresql/extension"
     "-DPostgreSQL_PACKAGE_LIBRARY_DIR=${lib.getDev pgWithExtensions}/lib"
+    "-DPostgreSQL_TARGET_EXTENSION_DIR=$out/share/postgresql/extension"
     "-DPython3_EXECUTABLE=${python3}/bin/python3"
     "-DPython_EXECUTABLE=${python3}/bin/python3"
     "-DDOXYGEN_EXECUTABLE=${doxygen}/bin/doxygen"
@@ -91,6 +91,7 @@ postgresqlBuildExtension (finalAttrs: {
   # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
   preInstall = ''
     patchShebangs script_omni*
+    mkdir -p $out/share/postgresql/extension
   '';
 
   # https://github.com/omnigres/omnigres?tab=readme-ov-file#building--using-extensions
