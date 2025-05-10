@@ -11,7 +11,7 @@ let
   inherit (lib.trivial) boolToString;
   inherit (config) cudaSupport;
   inherit (cudaPackages)
-    backendStdenv
+    cudaStdenv
     cuda_cccl
     cuda_cudart
     cuda_nvcc
@@ -19,7 +19,7 @@ let
     ;
   inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot isJetsonBuild;
 in
-backendStdenv.mkDerivation {
+cudaStdenv.mkDerivation {
   pname = "gpu-burn";
   version = "unstable-2024-04-09";
 

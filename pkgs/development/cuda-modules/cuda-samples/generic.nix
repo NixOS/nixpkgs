@@ -1,6 +1,6 @@
 {
   autoAddDriverRunpath,
-  backendStdenv,
+  cudaStdenv,
   cmake,
   cudatoolkit,
   cudaMajorMinorVersion,
@@ -16,7 +16,7 @@
 let
   inherit (lib) lists strings;
 in
-backendStdenv.mkDerivation (finalAttrs: {
+cudaStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "cuda-samples";

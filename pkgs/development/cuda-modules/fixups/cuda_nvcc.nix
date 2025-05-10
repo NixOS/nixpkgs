@@ -1,6 +1,6 @@
 {
   lib,
-  backendStdenv,
+  cudaStdenv,
   cudaOlder,
   setupCudaHook,
 }:
@@ -46,7 +46,7 @@ prevAttrs: {
       cat << EOF >> bin/nvcc.profile
 
       # Fix a compatible backend compiler
-      PATH += "${backendStdenv.cc}/bin":
+      PATH += "${cudaStdenv.cc}/bin":
 
       # Expose the split-out nvvm
       LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"

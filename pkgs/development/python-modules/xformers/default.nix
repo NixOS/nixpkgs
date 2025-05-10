@@ -64,7 +64,7 @@ buildPythonPackage {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
   };
 
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv = if cudaSupport then cudaPackages.cudaStdenv else stdenv;
 
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;

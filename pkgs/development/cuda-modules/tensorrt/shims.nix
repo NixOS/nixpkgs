@@ -2,14 +2,14 @@
 {
   lib,
   package,
-  # redistArch :: String
+  # redistSystem :: String
   # String is `"unsupported"` if the given architecture is unsupported.
-  redistArch,
+  redistSystem,
 }:
 {
-  featureRelease = lib.optionalAttrs (redistArch != "unsupported") {
+  featureRelease = lib.optionalAttrs (redistSystem != "unsupported") {
     inherit (package) cudnnVersion minCudaVersion maxCudaVersion;
-    ${redistArch}.outputs = {
+    ${redistSystem}.outputs = {
       bin = true;
       lib = true;
       static = true;

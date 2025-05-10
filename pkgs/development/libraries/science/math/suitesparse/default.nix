@@ -17,7 +17,7 @@
 
 let
   stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if enableCuda then cudaPackages.cudaStdenv else inputs.stdenv;
 in
 effectiveStdenv.mkDerivation rec {
   pname = "suitesparse";

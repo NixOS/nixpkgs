@@ -13,7 +13,7 @@
 }:
 let
   inherit (lib) lists strings;
-  inherit (cudaPackages) backendStdenv cudaAtLeast flags;
+  inherit (cudaPackages) cudaStdenv cudaAtLeast flags;
 
   cuda-common-redist = with cudaPackages; [
     (lib.getDev cuda_cudart) # cuda_runtime.h
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     export TCNN_CUDA_ARCHITECTURES="${cudaArchitecturesString}"
     export CUDA_HOME="${cuda-native-redist}"
     export LIBRARY_PATH="${cuda-native-redist}/lib/stubs:$LIBRARY_PATH"
-    export CC="${backendStdenv.cc}/bin/cc"
-    export CXX="${backendStdenv.cc}/bin/c++"
+    export CC="${cudaStdenv.cc}/bin/cc"
+    export CXX="${cudaStdenv.cc}/bin/c++"
   '';
 
   # When building the python bindings, we cannot re-use the artifacts from the C++ build so we

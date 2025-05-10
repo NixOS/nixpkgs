@@ -1,11 +1,9 @@
 {
-  # callPackage-provided arguments
   lib,
+  cudaLib,
   cudaMajorMinorVersion,
-  flags,
+  redistSystem,
   stdenv,
-  # Expected to be passed by the caller
-  mkVersionedPackageName,
   # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
@@ -26,7 +24,7 @@
   # The featureRelease is used to populate meta.platforms (by way of looking at the attribute names), determine the
   # outputs of the package, and provide additional package-specific constraints (e.g., min/max supported CUDA versions,
   # required versions of other packages, etc.).
-  # shimFn :: {package, redistArch} -> AttrSet
+  # shimFn :: {package, redistSystem} -> AttrSet
   shimsFn ? (throw "shimsFn must be provided"),
 }:
 let
@@ -41,10 +39,6 @@ let
   # - Releases: ../modules/${pname}/releases/releases.nix
   # - Package: ../modules/${pname}/releases/package.nix
 
-  # redistArch :: String
-  # Value is `"unsupported"` if the platform is not supported.
-  redistArch = flags.getRedistArch stdenv.hostPlatform.system;
-
   # Check whether a package supports our CUDA version.
   # satisfiesCudaVersion :: Package -> Bool
   satisfiesCudaVersion =
@@ -56,13 +50,14 @@ let
   # See ../modules/${pname}/releases/releases.nix
   # allPackages :: List Package
   allPackages = lib.filter satisfiesCudaVersion (
-    evaluatedModules.config.${pname}.releases.${redistArch} or [ ]
+    evaluatedModules.config.${pname}.releases.${redistSystem} or [ ]
   );
 
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: Package -> String
-  computeName = package: mkVersionedPackageName pname package.version;
+  computeName =
+    { version, ... }: cudaLib.utils.mkVersionedName pname (lib.versions.majorMinor version);
 
   # The newest package for each major-minor version, with newest first.
   # newestPackages :: List Package
@@ -99,7 +94,7 @@ let
       buildPackage =
         package:
         let
-          shims = final.callPackage shimsFn { inherit package redistArch; };
+          shims = final.callPackage shimsFn { inherit package redistSystem; };
           name = computeName package;
           drv = final.callPackage ./manifest.nix {
             inherit pname redistName;

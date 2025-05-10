@@ -41,7 +41,7 @@ let
         "tensorrt"
       ]
     then
-      cudaPackages.backendStdenv
+      cudaPackages.cudaStdenv
     else
       stdenv;
 in

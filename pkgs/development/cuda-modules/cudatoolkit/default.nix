@@ -34,7 +34,7 @@
   pulseaudio,
   setupCudaHook,
   stdenv,
-  backendStdenv, # E.g. gcc11Stdenv, set in extension.nix
+  cudaStdenv, # E.g. gcc11Stdenv, set in extension.nix
   unixODBC,
   wayland,
   xorg,
@@ -57,7 +57,7 @@ let
   release = releases.${cudaMajorMinorVersion};
 in
 
-backendStdenv.mkDerivation rec {
+cudaStdenv.mkDerivation rec {
   pname = "cudatoolkit";
   inherit (release) version;
   inherit runPatches;
@@ -164,7 +164,7 @@ backendStdenv.mkDerivation rec {
     (placeholder "lib")
     (placeholder "out")
     "${placeholder "out"}/nvvm"
-    # NOTE: use the same libstdc++ as the rest of nixpkgs, not from backendStdenv
+    # NOTE: use the same libstdc++ as the rest of nixpkgs, not from cudaStdenv
     "${lib.getLib stdenv.cc.cc}/lib64"
     "${placeholder "out"}/jre/lib/amd64/jli"
     "${placeholder "out"}/lib64"
@@ -346,7 +346,7 @@ backendStdenv.mkDerivation rec {
     popd
   '';
   passthru = {
-    inherit (backendStdenv) cc;
+    inherit (cudaStdenv) cc;
     majorMinorVersion = lib.versions.majorMinor version;
     majorVersion = lib.versions.majorMinor version;
   };

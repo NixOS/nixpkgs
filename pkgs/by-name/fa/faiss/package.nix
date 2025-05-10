@@ -27,9 +27,9 @@ let
   pname = "faiss";
   version = "1.11.0";
 
-  inherit (cudaPackages) flags backendStdenv;
+  inherit (cudaPackages) flags cudaStdenv;
 
-  stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
+  stdenv = if cudaSupport then cudaStdenv else inputs.stdenv;
 
   cudaComponents = with cudaPackages; [
     cuda_cudart # cuda_runtime.h
