@@ -24450,6 +24450,15 @@
     githubId = 1220572;
     name = "Christian Theune";
   };
+  thevar1able = {
+    email = "var1able+nixpkgs@var1able.network";
+    github = "thevar1able";
+    githubId = 875885;
+    name = "Konstantin Bogdanov";
+    keys = [
+      { fingerprint = "3221 7A73 EB95 0E9E E550  36A3 DB39 9448 D9FE 52F1"; }
+    ];
+  };
   thiagokokada = {
     email = "thiagokokada@gmail.com";
     github = "thiagokokada";
