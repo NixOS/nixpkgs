@@ -35,6 +35,7 @@ let
       kernel ? null,
       kernelModuleMakeFlags ? [ ],
       enablePython ? true,
+      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
       ...
     }@outerArgs:
 
@@ -123,13 +124,15 @@ let
           substituteInPlace ./udev/vdev_id \
             --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
              "PATH=${
-               makeBinPath [
-                 coreutils
-                 gawk
-                 gnused
-                 gnugrep
-                 systemd
-               ]
+               makeBinPath (
+                 [
+                   coreutils
+                   gawk
+                   gnused
+                   gnugrep
+                 ]
+                 ++ optional withSystemd systemd
+               )
              }"
 
           substituteInPlace ./config/zfs-build.m4 \
@@ -183,9 +186,9 @@ let
           "--libexecdir=$(out)/libexec"
           "--sysconfdir=/etc"
           "--localstatedir=/var"
-          "--enable-systemd"
           "--enable-pam"
         ]
+        ++ optional withSystemd "--enable-systemd"
         ++ optionals buildKernel (
           [
             "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
@@ -278,6 +281,7 @@ let
         ) innerArgs;
 
         inherit tests;
+        features = { inherit withSystemd; };
       };
 
       meta = {
