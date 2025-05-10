@@ -101,7 +101,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-D64W2+eBR2RGiN+puJW3QIO1334SgOOHv5fws5r3wmg=";
+    hash = "sha256-KeV0xzuFaKiEyth811lO6ezW4aNjuSSHcKPpPyxZCXI=";
   };
 
   dontCargoBuild = true;
@@ -153,8 +153,6 @@ flutter.buildFlutterApplication rec {
 
   patches = [
     ./make-build-reproducible.patch
-    # Multiple version of core-foundation-sys will make fetchCargoVendor unhappy. Keep one of it.
-    ./update-cargo-lock.patch
   ];
 
   prepareBuildRunner = ''
@@ -168,10 +166,10 @@ flutter.buildFlutterApplication rec {
   postPatch = ''
     cd flutter
     if [ $cargoDepsCopy ]; then # That will be inherited to buildDartPackage and it doesn't have cargoDepsCopy
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
-      sed -i 's/static=//g' $cargoDepsCopy/hwcodec-*/build.rs
+      sed -i 's/static=//g' $cargoDepsCopy/*/hwcodec-*/build.rs
     fi
 
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""
