@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.45.0";
+  version = "0.45.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-ruhG9HsD1PzTs/S6IDtuqIxg7UBmn67Ne2Y/H8y/9Cs=";
+    hash = "sha256-L2CjS/12TfVG9elr97pgXfjNc3EJojTy0S6Z3sDu280=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyvista" ];
 
   meta = with lib; {
-    broken = pythonAtLeast "3.13"; # segfault
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
     changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
