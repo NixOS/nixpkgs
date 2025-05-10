@@ -1465,13 +1465,13 @@ mapAliases {
   powerdns = pdns; # Added 2022-03-28
   projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
 
-  # postgresql plugins
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_cron = postgresqlPackages.pg_cron;
   pg_hll = postgresqlPackages.pg_hll;
   pg_repack = postgresqlPackages.pg_repack;
   pg_similarity = postgresqlPackages.pg_similarity;
   pg_topn = postgresqlPackages.pg_topn;
+  pgf1 = throw "'pgf1' has been removed since it is unmaintained. Consider using 'pgf' instead"; # Added 2025-05-10
   pgjwt = postgresqlPackages.pgjwt;
   pgroonga = postgresqlPackages.pgroonga;
   pgtap = postgresqlPackages.pgtap;
