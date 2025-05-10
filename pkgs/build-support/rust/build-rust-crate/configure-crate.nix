@@ -246,9 +246,10 @@ in
      IFS="$_OLDIFS"
 
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
+     CRATEVERSION=$(echo ${crateVersion} | sed -e "s/[\.\+]/_/g")
      grep -P "^cargo:(?!:?(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
        | awk -F= "/^cargo::metadata=/ {  gsub(/-/, \"_\", \$2); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$2) \"=\" \"\\\"\"\$3\"\\\"\"; next }
-                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
+                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; print \"export \" toupper(\"DEP_$(echo $CRATENAME)_$(echo $CRATEVERSION)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
      set -e
   fi
   runHook postConfigure
