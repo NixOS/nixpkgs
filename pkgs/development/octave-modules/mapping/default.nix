@@ -16,7 +16,7 @@ buildOctavePackage rec {
     sha256 = "sha256-IYiyRjnHCHhAFy5gR/dcuKWY11gSCubggQzmMAqGmhs=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     gdal
   ];
 
