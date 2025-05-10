@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
@@ -12,14 +11,14 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
     tag = "v${version}";
-    hash = "sha256-iDvgL5dQerQnu2ERKAWGvWppG7cQ/0uKEfVY93ItvO4=";
+    hash = "sha256-DEs6jbWYJFJgpaPtF5NT3DQs3erjzdm2brLNHpjrEPA=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +41,9 @@ python3Packages.buildPythonPackage rec {
       poetry-dynamic-versioning
       setuptools
       pyinotify
+      urwid
+      pyasyncore
+      requests
     ]
     ++ [ getent ];
 
@@ -58,13 +60,6 @@ python3Packages.buildPythonPackage rec {
     ./prevent-install-and-copy.patch
     # patch to prevent update
     ./prevent-update.patch
-
-    # ps-util python package bounds are too strict for version 2.5.0
-    (fetchpatch {
-      name = "auto-cpufreq-2.5.0-ps-util-relax-constraints.patch";
-      url = "https://github.com/AdnanHodzic/auto-cpufreq/commit/8f026ac6497050c0e07c55b751c4b80401e932ec.patch";
-      sha256 = "sha256-hcEcuy7oW4fZgfOLSap3pnWk7H1Q757tgfl7HIUyWiM=";
-    })
   ];
 
   postPatch = ''
