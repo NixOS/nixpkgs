@@ -51,13 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2120.3";
+  version = "2121.1";
 
   src = fetchzip {
-    # TODO: use this when https://github.com/azahar-emu/azahar/issues/779 is resolved
-    # url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-20250414-00e3bbb.tar.xz";
-    hash = "sha256-3QKicmpmWDM7x9GDJ8sxm2Xu+0Yfho4LkSWMp+ixzRk=";
+    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
+    hash = "sha256-jadQsuU1SfvUc5DO5XqZXTe53U9XGOHScDGx66Oh18Q=";
   };
 
   nativeBuildInputs = [
