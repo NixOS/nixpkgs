@@ -681,6 +681,43 @@ writeTextFile {
 }
 ```
 
+### `writeExeclineScript` {#trivial-builder-writeExeclineScript}
+
+Write an [Execline](https://skarnet.org/software/execline/) script to the store.
+
+`writeExeclineScript` takes the following arguments:
+
+`name` (String)
+
+: The name used in the Nix store path.
+
+`options` (String)
+
+: The option flags passed to `execlineb`.
+
+`script` (String)
+
+: The contents of the file.
+
+The created file is marked as executable.
+The store path will include the name, and it will be a file.
+A limited syntax check will performed on the output.
+
+::: {.example #ex-writeExeclineScript}
+# Usage of `writeExeclineScript`
+
+```nix
+writeExeclineScript "cowsay-errors.el" "-s0" ''
+  fdswap 1 2
+  pipeline -w {
+    ${pkgs.cowsay}/bin/cowsay
+  }
+  fdswap 1 2
+  $@
+''
+```
+:::
+
 ## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
 
 These functions concatenate `files` to the Nix store in a single file. This is useful for configuration files structured in lines of text. `concatTextFile` takes an attribute set and expects two arguments, `name` and `files`. `name` corresponds to the name used in the Nix store path. `files` will be the files to be concatenated. You can also set `executable` to true to make this file have the executable bit set.

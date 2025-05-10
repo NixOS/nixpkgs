@@ -1608,6 +1608,12 @@
   "ex-writeShellScriptBin": [
     "index.html#ex-writeShellScriptBin"
   ],
+  "trivial-builder-writeExeclineScript": [
+    "index.html#trivial-builder-writeExeclineScript"
+  ],
+  "ex-writeExeclineScript": [
+    "index.html#ex-writeExeclineScript"
+  ],
   "trivial-builder-concatText": [
     "index.html#trivial-builder-concatText"
   ],

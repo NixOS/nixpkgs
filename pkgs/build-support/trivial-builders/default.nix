@@ -7,6 +7,7 @@
   lndir,
   runtimeShell,
   shellcheck-minimal,
+  execline,
 }:
 
 let
@@ -395,6 +396,9 @@ rec {
         else
           checkPhase;
     };
+
+  # Documented in ../../../doc/build-helpers/trivial-build-helpers.chapter.md
+  writeExeclineScript = execline.passthru.writeScript;
 
   # Create a C binary
   # TODO: add to writers? pkgs/build-support/writers
