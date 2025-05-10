@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.19";
+  version = "3.0.20";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-ZJXxi1LOZyEpgdcmoK0pe5IA3+l9WY0zLu6Ttzy1QSc=";
+    sha256 = "sha256-KIMqZ6QAh+fTcKEYrcLlxgip91CLAwL9rwjUdKzBsQk=";
   };
 
   strictDeps = true;
@@ -91,11 +91,6 @@ stdenv.mkDerivation rec {
     # Will appear in 3.1.0
     # https://github.com/libical/libical/issues/350
     ./respect-env-tzdir.patch
-
-    # CMake setup fix for tests
-    # Submitted upstream: https://github.com/libical/libical/pull/885
-    # FIXME: remove when merged
-    ./fix-cmake.patch
   ];
 
   # Using install check so we do not have to manually set GI_TYPELIB_PATH
