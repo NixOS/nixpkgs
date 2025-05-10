@@ -9198,6 +9198,8 @@ self: super: with self; {
 
   msldap = callPackage ../development/python-modules/msldap { };
 
+  mslex = callPackage ../development/python-modules/mslex { };
+
   msmart-ng = callPackage ../development/python-modules/msmart-ng { };
 
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
@@ -10619,6 +10621,8 @@ self: super: with self; {
   oscscreen = callPackage ../development/python-modules/oscscreen { };
 
   oset = callPackage ../development/python-modules/oset { };
+
+  oslex = callPackage ../development/python-modules/oslex { };
 
   oslo-concurrency = callPackage ../development/python-modules/oslo-concurrency { };
 
