@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.4";
+  version = "3.13.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KoZ2V0M4ezW58c65wc9vJHrYMZ2ywKUjCOietKYS94Q=";
+    hash = "sha256-sc1SPBBjRK1+XhHSWHT/QR8XfSjTyjTbdqrr0f+SC84=";
   };
 
   build-system = [ hatchling ];
@@ -79,20 +79,15 @@ buildPythonPackage rec {
 
   _darwinAllowLocalNetworking = true;
 
-  disabledTests =
-    [
-      # tests that require network access (like DNS lookups)
-      "test_truesendall_with_dump_from_recording"
-      "test_aiohttp"
-      "test_asyncio_record_replay"
-      "test_gethostbyname"
-      # httpx read failure
-      "test_no_dangling_fds"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
-      "test_httprettish_httpx_session"
-    ];
+  disabledTests = [
+    # tests that require network access (like DNS lookups)
+    "test_truesendall_with_dump_from_recording"
+    "test_aiohttp"
+    "test_asyncio_record_replay"
+    "test_gethostbyname"
+    # httpx read failure
+    "test_no_dangling_fds"
+  ];
 
   pythonImportsCheck = [ "mocket" ];
 
