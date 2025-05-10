@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
+      silvanshade
       thoughtpolice
       tmarkus
     ];
