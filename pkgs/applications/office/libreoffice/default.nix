@@ -353,7 +353,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (variant == "collabora") [
       ./fix-unpack-collabora.patch
-      ./skip-broken-sentence-breaking-rules.patch
     ];
 
   postPatch = ''
@@ -613,7 +612,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-gtk3-kde5"
     ]
     ++ (
-      if variant == "fresh" then
+      if variant == "fresh" || variant == "collabora" then
         [
           "--with-system-rhino"
           "--with-rhino-jar=${rhino}/share/java/js.jar"
