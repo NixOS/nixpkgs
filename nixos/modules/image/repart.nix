@@ -88,6 +88,31 @@ in
 {
   imports = [
     ./repart-verity-store.nix
+    ./file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFileBasename"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFile"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
   ];
 
   options.image.repart = {
@@ -95,7 +120,7 @@ in
     name = lib.mkOption {
       type = lib.types.str;
       description = ''
-        Name of the image.
+          Name of the image.
 
         If this option is unset but config.system.image.id is set,
         config.system.image.id is used as the default value.
@@ -107,23 +132,6 @@ in
       default = config.system.image.version;
       defaultText = lib.literalExpression "config.system.image.version";
       description = "Version of the image";
-    };
-
-    imageFileBasename = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Basename of the image filename without any extension (e.g. `image_1`).
-      '';
-    };
-
-    imageFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Filename of the image including all extensions (e.g `image_1.raw` or
-        `image_1.raw.zst`).
-      '';
     };
 
     compression = {
@@ -152,7 +160,7 @@ in
       # Generated with `uuidgen`. Random but fixed to improve reproducibility.
       default = "0867da16-f251-457d-a9e8-c31f9a3c220b";
       description = ''
-        A UUID to use as a seed. You can set this to `null` to explicitly
+          A UUID to use as a seed. You can set this to `null` to explicitly
         randomize the partition UUIDs.
       '';
     };
@@ -161,7 +169,7 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Enables generation of split artifacts from partitions. If enabled, for
+          Enables generation of split artifacts from partitions. If enabled, for
         each partition with SplitName= set, a separate output file containing
         just the contents of that partition is generated.
       '';
@@ -172,7 +180,7 @@ in
       default = 512;
       example = lib.literalExpression "4096";
       description = ''
-        The sector size of the disk image produced by systemd-repart. This
+          The sector size of the disk image produced by systemd-repart. This
         value must be a power of 2 between 512 and 4096.
       '';
     };
@@ -191,7 +199,7 @@ in
       type = with lib.types; attrsOf (submodule partitionOptions);
       default = { };
       example = lib.literalExpression ''
-        {
+          {
           "10-esp" = {
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
@@ -213,7 +221,7 @@ in
         };
       '';
       description = ''
-        Specify partitions as a set of the names of the partitions with their
+          Specify partitions as a set of the names of the partitions with their
         configuration as the key.
       '';
     };
@@ -222,12 +230,12 @@ in
       type = with lib.types; attrsOf (listOf str);
       default = { };
       example = lib.literalExpression ''
-        {
+          {
           vfat = [ "-S 512" "-c" ];
         }
       '';
       description = ''
-        Specify extra options for created file systems. The specified options
+          Specify extra options for created file systems. The specified options
         are converted to individual environment variables of the format
         `SYSTEMD_REPART_MKFS_OPTIONS_<FSTYPE>`.
 
@@ -253,7 +261,6 @@ in
   };
 
   config = {
-
     assertions = lib.mapAttrsToList (
       fileName: partitionConfig:
       let
@@ -295,10 +302,14 @@ in
       ) cfg.partitions
     );
 
-    image.repart =
+    image.baseName =
       let
         version = config.image.repart.version;
         versionInfix = if version != null then "_${version}" else "";
+      in
+      cfg.name + versionInfix;
+    image.extension =
+      let
         compressionSuffix =
           lib.optionalString cfg.compression.enable
             {
@@ -308,6 +319,11 @@ in
             }
             ."${cfg.compression.algorithm}";
 
+      in
+      "raw" + compressionSuffix;
+
+    image.repart =
+      let
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
 
         # Add the closure of the provided Nix store paths to cfg.partitions so
@@ -321,9 +337,6 @@ in
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
-        imageFileBasename = cfg.name + versionInfix;
-        imageFile = cfg.imageFileBasename + ".raw" + compressionSuffix;
-
         compression = {
           # Generally default to slightly faster than default compression
           # levels under the assumption that most of the building will be done
@@ -357,10 +370,10 @@ in
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
+        imageFileBasename = config.image.baseName;
         inherit (cfg)
           name
           version
-          imageFileBasename
           compression
           split
           seed
