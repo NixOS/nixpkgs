@@ -19732,7 +19732,7 @@
     githubId = 38314551;
     name = "Peter Okelmann";
   };
-  Pokeylooted = { 
+  Pokeylooted = {
     email = "pokeyrandomgaming@gmail.com";
     github = "Pokeylooted";
     githubId = 79169880;
