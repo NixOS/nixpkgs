@@ -11,7 +11,6 @@
   pytest-asyncio,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
   redis,
   typing-extensions,
   wrapt,
@@ -22,11 +21,9 @@ buildPythonPackage rec {
   version = "4.22.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "alisaifee";
-    repo = pname;
+    repo = "coredis";
     tag = version;
     hash = "sha256-EMiZkKUcVbinWtYimNSQ715PH7pCrXpNKqseLFCu/48=";
   };
@@ -37,7 +34,7 @@ buildPythonPackage rec {
     sed -i '/pympler/d' pyproject.toml
     sed -i '/types_deprecated/d' pyproject.toml
     substituteInPlace pytest.ini \
-      --replace "-K" ""
+      --replace-fail "-K" ""
   '';
 
   build-system = [
@@ -71,11 +68,11 @@ buildPythonPackage rec {
     "tests/test_utils.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
-    teams = [ teams.wdz ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.wdz ];
   };
 }
