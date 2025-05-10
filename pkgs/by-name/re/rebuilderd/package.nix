@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.22.1";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YMBq+Z9yMQRXOM3U679g2lnBZlH/h0VLjoxySxi4SCo=";
+    hash = "sha256-ARm81++VByh/erog1aDQTOaxd60M9OuTbJGdgHx24pw=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-MjFQ5d9VWHodjj+hIsKgAIUdaiarXIi5GCS+47n5MGU=";
+  cargoHash = "sha256-O+1ARimSN26geZanLV5E94vnZk0HsE4pyjNS3dADg8Y=";
 
   nativeBuildInputs = [
     pkg-config
