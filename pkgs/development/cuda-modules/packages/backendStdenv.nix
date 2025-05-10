@@ -7,7 +7,7 @@
 # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
 # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
 {
-  cudaVersion,
+  cudaMajorMinorVersion,
   lib,
   nvccCompatibilities,
   pkgs,
@@ -16,7 +16,7 @@
 }:
 
 let
-  gccMajorVersion = nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
+  gccMajorVersion = nvccCompatibilities.${cudaMajorMinorVersion}.gccMaxMajorVersion;
   cudaStdenv = stdenvAdapters.useLibsFrom stdenv pkgs."gcc${gccMajorVersion}Stdenv";
   passthruExtra = {
     # cudaPackages.backendStdenv.nixpkgsCompatibleLibstdcxx has been removed,

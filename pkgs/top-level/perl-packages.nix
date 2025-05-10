@@ -22396,10 +22396,10 @@ with self;
 
   mod_perl2 = buildPerlPackage {
     pname = "mod_perl";
-    version = "2.0.12";
+    version = "2.0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.12.tar.gz";
-      hash = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.13.tar.gz";
+      hash = "sha256-reO+McRHuESIaf7N/KziWNbVh7jGx3PF8ic19w2C1to=";
     };
 
     makeMakerFlags = [ "MP_AP_DESTDIR=$out" ];
