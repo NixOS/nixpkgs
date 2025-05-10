@@ -223,6 +223,7 @@ in
             "char-nvidia-uvm"
             # ROCm
             "char-drm"
+            "char-fb"
             "char-kfd"
             # WSL (Windows Subsystem for Linux)
             "/dev/dxg"
