@@ -1768,8 +1768,12 @@ in
   };
 
   mason-nvim = super.mason-nvim.overrideAttrs {
-    # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
-    nvimSkipModules = "mason-vendor.zzlib.inflate-bwo";
+    nvimSkipModules = [
+      # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
+      "mason-vendor.zzlib.inflate-bwo"
+      # E5108: Error executing lua ...mplugin-mason.nvim-2025-05-06/lua/mason-test/helpers.lua:7: module 'luassert.spy' not found:
+      "mason-test.helpers"
+    ];
   };
 
   mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs {
