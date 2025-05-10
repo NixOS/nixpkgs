@@ -65,6 +65,11 @@ in
           '';
         };
       };
+
+      clamonacc = {
+        enable = lib.mkEnableOption "ClamAV on-access scanner";
+      };
+
       updater = {
         enable = lib.mkEnableOption "ClamAV freshclam updater";
 
@@ -172,6 +177,17 @@ in
   };
 
   config = lib.mkIf (cfg.updater.enable || cfg.daemon.enable) {
+    assertions = [
+      {
+        assertion = cfg.scanner.enable -> cfg.daemon.enable;
+        message = "ClamAV scanner requires ClamAV daemon to operate";
+      }
+      {
+        assertion = cfg.clamonacc.enable -> cfg.daemon.enable;
+        message = "ClamAV on-access scanner requires ClamAV daemon to operate";
+      }
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     users.users.${clamavUser} = {
@@ -189,8 +205,10 @@ in
       DatabaseDirectory = stateDir;
       LocalSocket = "/run/clamav/clamd.ctl";
       PidFile = "/run/clamav/clamd.pid";
-      User = "clamav";
+      User = clamavUser;
       Foreground = true;
+      # Prevent infinite recursion in scanning
+      OnAccessExcludeUname = clamavUser;
     };
 
     services.clamav.updater.settings = {
@@ -216,11 +234,24 @@ in
       description = "ClamAV Antivirus Slice";
     };
 
+    systemd.sockets.clamav-daemon = lib.mkIf cfg.daemon.enable {
+      description = "Socket for ClamAV daemon (clamd)";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [
+        cfg.daemon.settings.LocalSocket
+      ];
+      socketConfig = {
+        SocketUser = clamavUser;
+        SocketGroup = clamavGroup;
+      };
+    };
+
     systemd.services.clamav-daemon = lib.mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       documentation = [ "man:clamd(8)" ];
       after = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
       wants = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      requires = [ "clamav-daemon.socket" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
@@ -234,6 +265,20 @@ in
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
+        Slice = "system-clamav.slice";
+      };
+    };
+
+    systemd.services.clamav-clamonacc = lib.mkIf cfg.clamonacc.enable {
+      description = "ClamAV on-access scanner (clamonacc)";
+      after = [ "clamav-daemon.service" ];
+      requires = [ "clamav-daemon.service" ];
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ clamdConfigFile ];
+
+      # This unit must start as root to be able to use fanotify.
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/clamonacc -F --fdpass";
         Slice = "system-clamav.slice";
       };
     };
