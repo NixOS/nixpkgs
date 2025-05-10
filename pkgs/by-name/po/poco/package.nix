@@ -86,8 +86,12 @@ stdenv.mkDerivation rec {
         hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
       })
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./disable-broken-tests-darwin.patch
-    ++ lib.optional stdenv.hostPlatform.isLinux ./disable-broken-tests-linux.patch;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./disable-broken-tests-darwin.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      ./disable-broken-tests-linux.patch
+    ];
 
   doCheck = true;
   nativeCheckInputs = [
