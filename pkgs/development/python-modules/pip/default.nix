@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -47,24 +48,28 @@ let
       find -type f -name '*.exe' -delete
     '';
 
-    nativeBuildInputs = [
-      installShellFiles
-      setuptools
-      wheel
+    nativeBuildInputs =
+      [
+        installShellFiles
+        setuptools
+        wheel
+      ]
+      ++ lib.optionals (enableDocs) [
+        # docs
+        sphinx
+        sphinx-issues
+      ];
 
-      # docs
-      sphinx
-      sphinx-issues
-    ];
+    # Ensure both sphinx and sphinx-issues are not broken
+    enableDocs = !(sphinx.meta.broken || sphinx-issues.meta.broken);
 
     outputs = [
       "out"
-      "man"
-    ];
+    ] ++ lib.optional (enableDocs) "man";
 
     # pip uses a custom sphinx extension and unusual conf.py location, mimic the internal build rather than attempting
     # to fit sphinxHook see https://github.com/pypa/pip/blob/0778c1c153da7da457b56df55fb77cbba08dfb0c/noxfile.py#L129-L148
-    postBuild = ''
+    postBuild = lib.optionalString (enableDocs) ''
       cd docs
 
       # remove references to sphinx extentions only required for html doc generation
