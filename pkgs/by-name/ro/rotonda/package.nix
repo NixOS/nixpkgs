@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rotonda";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "rotonda";
     tag = "v${version}";
-    hash = "sha256-iLHOt7eVCgtYwSiqpgrp8kjfi90Mz0+X2n+P6bJDWbw=";
+    hash = "sha256-rSIjlLr1mtgyFKRAkcnDKV/MwtYb/ifXewLXhZ4zp7E=";
   };
 
   doCheck = false;
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-fp4HhJs/x4w/FML0odbF17y7dlGfc+Ug/fkeC2s0fyk=";
+  cargoHash = "sha256-MKFSvmU3lgQZ1c5L1GmMmzXiXK28uCgYtrjIjhAhcfY=";
 
   meta = {
     description = "Rotonda - composable, programmable BGP Engine";
