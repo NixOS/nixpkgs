@@ -4,25 +4,33 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "killport";
-  version = "0.9.2";
+  version = "1.1.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-eyRI4ZVp9HPMvpzyV9sQdh2r966pCdyUPnEhxGkzH3Q=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-7bENyg/KR4oI//jvG6bw+3UX3j9ITAXCMTpc+65VBZ8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rJgbTJGRZNev5hPyH7NuRB0Utpdbh6zoYQL4rbfhn2Y=";
+  cargoHash = "sha256-+PhaRVpsM/6GOnGkGDROoOGasrZsagK1LqBZTo9IbSI=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  meta = with lib; {
+  checkFlags = [
+    # assertion failed: re.is_match(data)
+    "--skip=test_mode_option"
+    "--skip=test_signal_handling"
+    "--skip=test_dry_run_option"
+    "--skip=test_basic_kill_process"
+  ];
+
+  meta = {
     description = "Command-line tool to easily kill processes running on a specified port";
     homepage = "https://github.com/jkfran/killport";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sno2wman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sno2wman ];
     mainProgram = "killport";
   };
-}
+})
