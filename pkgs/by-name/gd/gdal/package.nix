@@ -320,5 +320,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ teams.geospatial ];
     platforms = platforms.unix;
+    mainProgram = "gdal";
   };
 })
