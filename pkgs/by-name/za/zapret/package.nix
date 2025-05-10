@@ -44,8 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/usr/share/zapret/init.d/sysv
     mkdir -p $out/usr/share/docs
+    mkdir -p $out/share
 
     cp $src/blockcheck.sh $out/bin/blockcheck
+
+    cp $src/files/fake/* $out/share
 
     substituteInPlace $out/bin/blockcheck \
       --replace-fail '$(cd "$EXEDIR"; pwd)' "$out/usr/share/zapret"
