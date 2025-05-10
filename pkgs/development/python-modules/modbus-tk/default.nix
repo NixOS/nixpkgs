@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "modbus-tk";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "modbus_tk";
     inherit version;
-    hash = "sha256-aJd3ZusQRplz3VaigUvZgbhd0YC3kEMkh4bYgAjyWTs=";
+    hash = "sha256-d6cqOtnV0yodIRC8BCFmgMpX11IpEuDycem/XxtwGzY=";
   };
 
   build-system = [ setuptools ];
