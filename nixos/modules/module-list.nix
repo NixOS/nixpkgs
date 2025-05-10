@@ -538,6 +538,7 @@
   ./services/desktops/deepin/dde-daemon.nix
   ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/dleyna.nix
+  ./services/desktops/dunst.nix
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
