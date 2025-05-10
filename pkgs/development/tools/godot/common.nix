@@ -394,7 +394,7 @@ let
                     include_filter=""
                     exclude_filter=""
                     [preset.0.options]
-                    __empty=""
+                    binary_format/architecture="${arch}"
                     EOF
                   ''
                   + lib.optionalString withMono ''
