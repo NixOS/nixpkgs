@@ -913,6 +913,44 @@ in
         '';
       };
 
+      secrets.activeRecordPrimaryKeyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the secret used to encrypt some rails data
+          in the DB. This should not be the same as `services.gitlab.secrets.activeRecordDeterministicKeyFile`!
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      secrets.activeRecordDeterministicKeyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the secret used to encrypt some rails data in a deterministic way
+          in the DB. This should not be the same as `services.gitlab.secrets.activeRecordPrimaryKeyFile`!
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      secrets.activeRecordSaltFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          A file containing the salt for active record encryption in the DB.
+          Make sure the secret is at ideally 32 characters and all random,
+          no regular words or you'll be exposed to dictionary attacks.
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
       extraShellConfig = mkOption {
         type = types.attrs;
         default = { };
@@ -1154,6 +1192,15 @@ in
         ''
           GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
           Check the upstream documentation for a workaround: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later''
+      )
+      (mkIf (cfg.secrets.activeRecordPrimaryKeyFile == null)
+        "services.gitlab.secrets.activeRecordPrimaryKeyFile is null. Please set this key file to make this secret stable and avoid decryption errors."
+      )
+      (mkIf (cfg.secrets.activeRecordDeterministicKeyFile == null)
+        "services.gitlab.secrets.activeRecordDeterministicKeyFile is null. Please set this key file to make this secret stable and avoid decryption errors."
+      )
+      (mkIf (cfg.secrets.activeRecordSaltFile == null)
+        "services.gitlab.secrets.activeRecordSaltFile is null. Please set this key file to make this secret stable and avoid decryption errors."
       )
     ];
 
@@ -1487,10 +1534,25 @@ in
             otp="$(<'${cfg.secrets.otpFile}')"
             jws="$(<'${cfg.secrets.jwsFile}')"
             export secret db otp jws
+            ${lib.optionalString (cfg.secrets.activeRecordPrimaryKeyFile != null) ''
+              arprimary="$(<'${cfg.secrets.activeRecordPrimaryKeyFile}')"
+              export arprimary
+            ''}
+            ${lib.optionalString (cfg.secrets.activeRecordDeterministicKeyFile != null) ''
+              ardeterministic="$(<'${cfg.secrets.activeRecordDeterministicKeyFile}')"
+              export ardeterminstic
+            ''}
+            ${lib.optionalString (cfg.secrets.activeRecordSaltFile != null) ''
+              arsalt="$(<'${cfg.secrets.activeRecordSaltFile}')"
+              export arsalt
+            ''}
             jq -n '{production: {secret_key_base: $ENV.secret,
                     otp_key_base: $ENV.otp,
                     db_key_base: $ENV.db,
-                    openid_connect_signing_key: $ENV.jws}}' \
+                    openid_connect_signing_key: $ENV.jws,
+                    active_record_encryption_primary_key: $ENV.arprimary,
+                    active_record_encryption_deterministic_key: $ENV.ardeterministic,
+                    active_record_encryption_key_derivation_salt: $ENV.arsalt}}' \
                > '${cfg.statePath}/config/secrets.yml'
           )
 
