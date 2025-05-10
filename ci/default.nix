@@ -79,4 +79,16 @@ in
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
   eval = pkgs.callPackage ./eval { };
+
+  # CI jobs
+  lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
+  manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
+  manual-nixpkgs = (import ../pkgs/top-level/release.nix { }).manual;
+  manual-nixpkgs-tests = (import ../pkgs/top-level/release.nix { }).manual.tests;
+  parse = pkgs.lib.recurseIntoAttrs {
+    latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
+    lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
+  };
+  shell = import ../shell.nix { inherit nixpkgs system; };
 }
