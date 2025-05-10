@@ -16,7 +16,6 @@ mkYaziPlugin {
 
   meta = {
     description = "Execute chmod on the selected files to change their mode";
-    homepage = "https://yazi-rs.github.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
