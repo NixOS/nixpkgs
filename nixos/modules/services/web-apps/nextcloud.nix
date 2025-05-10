@@ -1205,6 +1205,8 @@ in
 
               ${lib.getExe occ} upgrade
 
+              ${lib.getExe occ} security:certificates:import /etc/ssl/certs/ca-certificates.crt
+
               ${lib.getExe occ} config:system:delete trusted_domains
 
               ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
