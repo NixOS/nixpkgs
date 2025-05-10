@@ -342,6 +342,22 @@ sub findStableDevPath {
     return $dev unless -e $dev;
 
     my $st = stat($dev) or return $dev;
+    
+    # Special handling for mapper devices (LVM volumes, LUKS devices, etc.)
+    # Convert to UUID-based paths when possible for stability
+    if ($dev =~ m#^/dev/mapper/(.+)$#) {
+        # First try to find a UUID-based path for this device
+        foreach my $uuid_path (glob("/dev/disk/by-uuid/*")) {
+            my $st2 = stat($uuid_path) or next;
+            if ($st->rdev == $st2->rdev) {
+                return $uuid_path;
+            }
+        }
+        
+        # If no UUID path is found, preserve the mapper path as fallback
+        # This is critical for both LUKS and LVM devices to work correctly
+        return $dev;
+    }
 
     foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
         my $st2 = stat($dev2) or next;
@@ -413,6 +429,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     my @superOptions = split /,/, $fields[$n + 2];
     $device =~ s/\\040/ /g; # account for devices with spaces in the name (\040 is the escape character)
     $device =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
+    
 
     # Skip the read-only bind-mount on /nix/store.
     next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
@@ -437,11 +454,44 @@ EOF
         }
     }
     $fsByDev{$fields[2]} = $mountPoint;
+    
 
     # We don't know how to handle FUSE filesystems.
     if ($fsType eq "fuseblk" || $fsType eq "fuse") {
         print STDERR "warning: don't know how to emit ‘fileSystem’ option for FUSE filesystem ‘$mountPoint’\n";
         next;
+    }
+
+    # Special handling for LVM volumes to ensure they're detected properly
+    if ($device =~ m#^/dev/mapper/(.+)$#) {
+        my $mapper_name = $1;
+        if (defined $ENV{"DEBUG"}) {
+            print STDERR "Processing mapper device: $mapper_name for mountpoint $mountPoint\n";
+        }
+        
+        # Make sure this is actually an LVM volume
+        if ($mapper_name =~ /^([^-]+)-(.+)$/) {
+            my $vg = $1;
+            my $lv = $2;
+            if (defined $ENV{"DEBUG"}) {
+                print STDERR "  Appears to be LVM volume: VG=$vg, LV=$lv\n";
+            }
+            
+            # Verify this is really an LVM volume
+            if (-e "/sys/class/block/" . basename(readlink($device))) {
+                my $dmDir = "/sys/class/block/" . basename(readlink($device));
+                if (-e "$dmDir/dm/uuid") {
+                    my $uuid = read_file("$dmDir/dm/uuid", err_mode => 'quiet');
+                    if (defined $uuid && $uuid =~ /^LVM-/) {
+                        if (defined $ENV{"DEBUG"}) {
+                            print STDERR "  Confirmed as LVM volume by UUID\n";
+                        }
+                        # Note: We intentionally don't override stableDevPath here yet
+                        # as findStableDevPath will handle it properly
+                    }
+                }
+            }
+        }
     }
 
     # Is this a mount of a loopback device?
@@ -546,20 +596,97 @@ EOF
         my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
         if ($dmUuid =~ /^CRYPT-LUKS/)
         {
-            my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
-            if (scalar @slaves == 1) {
-                my $slave = "/dev/" . basename($slaves[0]);
-                if (-e $slave) {
-                    my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
-                    chomp $dmName;
-                    # Ensure to add an entry only once
-                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
-                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
-                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+            my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
+            chomp $dmName;
+            
+            # Prevent duplicates - check if we already configured this LUKS device
+            my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\"";
+            if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+                my $isLvmBased = 0;
+                my $slaveDevice = "";
+                
+                # Check if this is LUKS on top of LVM
+                if (scalar @slaves >= 1) {
+                    foreach my $slave (@slaves) {
+                        my $slaveName = basename($slave);
+                        my $slaveDmUuid = read_file("/sys/class/block/$slaveName/dm/uuid", err_mode => 'quiet');
+                        if (defined $slaveDmUuid && $slaveDmUuid =~ /^LVM-/) {
+                            $isLvmBased = 1;
+                            $slaveDevice = "/dev/$slaveName";
+                            last;
+                        }
+                    }
+                }
+                
+                # If we have a single non-LVM slave, use the standard approach
+                if (scalar @slaves == 1 && !$isLvmBased) {
+                    my $slave = "/dev/" . basename($slaves[0]);
+                    if (-e $slave) {
+                        $fileSystems .= "$luksDevice.device = \"${\(findStableDevPath $slave)}\";\n";
+                    }
+                } 
+                # For LUKS on top of LVM, we need to set preLVM=false
+                elsif ($isLvmBased) {
+                    $fileSystems .= "$luksDevice = {\n";
+                    $fileSystems .= "    device = \"${\(findStableDevPath $slaveDevice || $device)}\";\n";
+                    $fileSystems .= "    preLVM = false;\n";
+                    $fileSystems .= "  };\n\n";
+                }
+                # For any other complex setup, use a generic approach
+                else {
+                    $fileSystems .= "$luksDevice = {\n";
+                    $fileSystems .= "    device = \"${\(findStableDevPath $device)}\";\n";
+                    $fileSystems .= "  };\n\n";
+                }
+            }
+        }
+        
+        # Check for LVM-over-LUKS, when the current device is LVM but sits on top of LUKS
+        if (-e "/sys/class/block/$deviceName/dm/uuid") {
+            my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
+            if (defined $dmUuid && $dmUuid =~ /^LVM-/) {
+                # Add debug information
+                if (defined $ENV{"DEBUG"}) {
+                    print STDERR "Found LVM device: $deviceName, mountPoint: $mountPoint, device: $device\n";
+                }
+                
+                # Check if any slave is a LUKS device
+                my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+                foreach my $slave (@slaves) {
+                    my $slaveName = basename($slave);
+                    if (defined $ENV{"DEBUG"}) {
+                        print STDERR "  Checking slave: $slaveName\n";
+                    }
+                    
+                    my $slaveDmUuid = read_file("/sys/class/block/$slaveName/dm/uuid", err_mode => 'quiet');
+                    if (defined $slaveDmUuid && $slaveDmUuid =~ /^CRYPT-LUKS/) {
+                        my $dmName = read_file("/sys/class/block/$slaveName/dm/name");
+                        chomp $dmName;
+                        
+                        if (defined $ENV{"DEBUG"}) {
+                            print STDERR "    Found LUKS device: $dmName\n";
+                        }
+                        
+                        # Ensure we haven't already added this device
+                        my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\"";
+                        if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                            my @luks_slaves = glob("/sys/class/block/$slaveName/slaves/*");
+                            if (scalar @luks_slaves == 1) {
+                                my $luks_slave = "/dev/" . basename($luks_slaves[0]);
+                                if (-e $luks_slave) {
+                                    $fileSystems .= "$luksDevice = {\n";
+                                    $fileSystems .= "    device = \"${\(findStableDevPath $luks_slave)}\";\n";
+                                    $fileSystems .= "    preLVM = true;\n";
+                                    $fileSystems .= "  };\n\n";
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+        
         if (-e "/sys/class/block/$deviceName/md/uuid") {
             $useSwraid = 1;
         }
