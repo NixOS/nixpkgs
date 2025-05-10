@@ -15677,9 +15677,6 @@ with pkgs;
   raxml-mpi = raxml.override { useMpi = true; };
 
   samtools = callPackage ../applications/science/biology/samtools { };
-  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix {
-    stdenv = gccStdenv;
-  };
 
   inherit (callPackages ../applications/science/biology/sumatools { })
     sumalibs
