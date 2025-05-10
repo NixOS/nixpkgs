@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     grep -rlF INTERFACE_INCLUDE_DIRECTORIES "$dev/lib/cmake/Poco" | while read -r f; do
       substituteInPlace "$f" \
-        --replace "$"'{_IMPORT_PREFIX}/include' ""
+        --replace-quiet "$"'{_IMPORT_PREFIX}/include' ""
     done
   '';
 
