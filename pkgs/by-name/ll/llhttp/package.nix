@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.2.1";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
-    rev = "release/v${finalAttrs.version}";
+    tag = "release/v${finalAttrs.version}";
     hash = "sha256-cnEp7Ds32bqu3jeUU/rqJOr/VW3KNmJU4pmNNaTpXRs=";
   };
 
