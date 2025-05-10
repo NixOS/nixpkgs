@@ -1278,6 +1278,10 @@ in
     configurePhase = "cd plugins/nvim";
   };
 
+  gh-nvim = super.gh-nvim.overrideAttrs {
+    dependencies = [ self.litee-nvim ];
+  };
+
   gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
