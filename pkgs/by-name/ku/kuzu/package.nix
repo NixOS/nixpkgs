@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kuzu";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "kuzudb";
     repo = "kuzu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3B2E51PluPKl0OucmTPZYEa9BzYoU0Y8G1PQY86ynFA=";
+    hash = "sha256-mc9MLIdlxMTQjvpKAa2N8AlhWJDzydd70x/YU6xX6h0=";
   };
 
   outputs = [
