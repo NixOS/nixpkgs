@@ -4,7 +4,7 @@
   cunit,
   docbook5,
   fetchFromGitHub,
-  file,
+  fetchpatch,
   gdalMinimal,
   geos,
   jitSupport,
@@ -49,6 +49,15 @@ postgresqlBuildExtension (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
+
+  patches = [
+    # Backport patch for compatibility with GDAL 3.11
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://git.osgeo.org/gitea/postgis/postgis/commit/614eca7c169cd6e9819801d3ea99d5258262c58b.patch";
+      hash = "sha256-VkNZFANAt8Jv+ExCusGvi+ZWB7XLcAheefSx7akA7Go=";
+    })
+  ];
 
   buildInputs =
     [
