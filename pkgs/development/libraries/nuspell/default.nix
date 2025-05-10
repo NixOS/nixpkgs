@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  pandoc,
+  buildPackages,
   pkg-config,
   icu,
   catch2_3,
-  enableManpages ? !stdenv.buildPlatform.isRiscV64 && !stdenv.buildPlatform.isLoongArch64,
+  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       pkg-config
     ]
     ++ lib.optionals enableManpages [
-      pandoc
+      buildPackages.pandoc
     ];
 
   buildInputs = [ catch2_3 ];
