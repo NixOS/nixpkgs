@@ -3240,6 +3240,14 @@ with pkgs;
     xenSupport = true;
   };
 
+  grub2_xen_pvh = grub2.override {
+    xenPvhSupport = true;
+  };
+
+  grub2_pvgrub_image = grub2_pvhgrub_image.override {
+    grubPlatform = "xen";
+  };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
