@@ -35,6 +35,7 @@ let
       kernel ? null,
       kernelModuleMakeFlags ? [ ],
       enablePython ? true,
+      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
       ...
     }@outerArgs:
 
@@ -123,13 +124,15 @@ let
           substituteInPlace ./udev/vdev_id \
             --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
              "PATH=${
-               makeBinPath [
-                 coreutils
-                 gawk
-                 gnused
-                 gnugrep
-                 systemd
-               ]
+               makeBinPath (
+                 [
+                   coreutils
+                   gawk
+                   gnused
+                   gnugrep
+                 ]
+                 ++ optional withSystemd systemd
+               )
              }"
 
           substituteInPlace ./config/zfs-build.m4 \
@@ -183,9 +186,9 @@ let
           "--libexecdir=$(out)/libexec"
           "--sysconfdir=/etc"
           "--localstatedir=/var"
-          "--enable-systemd"
           "--enable-pam"
         ]
+        ++ optional withSystemd "--enable-systemd"
         ++ optionals buildKernel (
           [
             "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
@@ -225,7 +228,7 @@ let
           mkdir -p "$out/nix-support"
           echo "${util-linux}" >> "$out/nix-support/extra-refs"
         ''
-        + optionalString buildUser ''
+        + optionalString (buildUser && withSystemd) ''
           # Remove provided services as they are buggy
           rm $out/etc/systemd/system/zfs-import-*.service
 
@@ -236,7 +239,8 @@ let
              sed -i '/zfs-import-scan.service/d' $i
              substituteInPlace $i --replace-warn "zfs-import-cache.service" "zfs-import.target"
           done
-
+        ''
+        + optionalString buildUser ''
           # Remove tests because they add a runtime dependency on gcc
           rm -rf $out/share/zfs/zfs-tests
         '';
