@@ -703,6 +703,14 @@ self: super:
   # https://github.com/alphaHeavy/lzma-conduit/issues/23
   lzma-conduit = doJailbreak super.lzma-conduit;
 
+  # doctest suite needs adjustment with GHC 9.12
+  xml-conduit = appendPatch (pkgs.fetchpatch {
+    name = "xml-conduit-ghc-9.12.patch";
+    url = "https://github.com/snoyberg/xml/commit/73ce67029c61decaa6525536377a15581325fd9e.patch";
+    sha256 = "1gvdhwz7f6rw28xqm82h1kx2kwbdvigipfcb0y66520lvd544sm6";
+    stripLen = 1;
+  }) super.xml-conduit;
+
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2024-01-15: too strict bound on free < 5.2
   hnix = doJailbreak (
