@@ -8610,6 +8610,12 @@
     github = "fzakaria";
     githubId = 605070;
   };
+  fzdslr = {
+    name = "FZDSLR";
+    email = "fzdslr@outlook.com";
+    github = "fzdslr";
+    githubId = 62922415;
+  };
   gabesoft = {
     email = "gabesoft@gmail.com";
     github = "gabesoft";
