@@ -33,12 +33,12 @@ import ./make-test-python.nix (
     };
 
     testScript = ''
-        start_all()
+      start_all()
 
-        netdata.wait_for_unit("netdata.service")
+      netdata.wait_for_unit("netdata.service")
 
-        # wait for the service to listen before sending a request
-        netdata.wait_for_open_port(19999)
+      # wait for the service to listen before sending a request
+      netdata.wait_for_open_port(19999)
 
       # check if the netdata main page loads.
       netdata.succeed("curl --fail http://127.0.0.1:19999")
