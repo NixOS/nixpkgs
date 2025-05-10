@@ -95,10 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests =
     [
       "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+      "test.fileclone" # flaky on hydra, also seems to fail on zfs
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test.basedir"
-      "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
       "test.multi_arch"
       "test.nocpp2"
     ];
