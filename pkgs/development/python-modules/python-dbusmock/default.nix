@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   runCommand,
@@ -18,6 +19,8 @@
   bluez,
   networkmanager,
   pytestCheckHook,
+
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform networkmanager,
 }:
 
 let
@@ -47,15 +50,18 @@ buildPythonPackage rec {
 
   dependencies = [ dbus-python ];
 
-  nativeCheckInputs = [
-    dbus
-    gobject-introspection
-    pygobject3
-    bluez
-    pbap-client
-    networkmanager
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    [
+      dbus
+      gobject-introspection
+      pygobject3
+      bluez
+      pbap-client
+    ]
+    ++ lib.optional withSystemd networkmanager
+    ++ [
+      pytestCheckHook
+    ];
 
   disabledTests = [
     # wants to call upower, which is a reverse-dependency
@@ -64,6 +70,10 @@ buildPythonPackage rec {
     "test_system_service_activation"
     "test_session_service_activation"
   ];
+
+  passthru = {
+    features = { inherit withSystemd; };
+  };
 
   meta = with lib; {
     changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
