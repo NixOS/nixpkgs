@@ -1,15 +1,16 @@
 {
   lua54Packages,
   gcc,
-  darwin,
   fetchFromGitHub,
   readline,
   lib,
   ...
 }:
-lua54Packages.buildLuaPackage {
+let
   name = "sbarlua";
-  pname = "sbarlua";
+in lua54Packages.buildLuaPackage {
+  inherit name;
+  pname = name;
   version = "0-unstable-2024-10-12";
 
   src = fetchFromGitHub {
@@ -21,20 +22,16 @@ lua54Packages.buildLuaPackage {
 
   buildInputs = [
     gcc
-    darwin.apple_sdk.frameworks.CoreFoundation
     readline
   ];
 
-  installPhase = ''
-    mkdir -p $out/lib/lua/5.4/
-    cp bin/sketchybar.so $out/lib/lua/5.4
-  '';
+  makeFlags = [ "INSTALL_DIR=$(out)/lib/lua/${lua54Packages.lua.luaversion}" ];
 
-  meta = {
-    description = "Lua bindings for configuring Sketchybar macOS Window Manager";
+  meta = with lib; {
+    description = "Lua bindings for configuring Sketchybar macOS menu bar";
     homepage = "https://github.com/FelixKratz/SbarLua";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amusingimpala75 ];
-    platforms = lib.platforms.darwin;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ amusingimpala75 ];
+    platforms = platforms.darwin;
   };
 }
