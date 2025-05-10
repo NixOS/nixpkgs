@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "PickleDB is an in memory key-value store using Python's orjson module for persistence";
     homepage = "https://github.com/patx/pickledb";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ katzenbiber ];
   };
 }
