@@ -490,6 +490,11 @@ stdenvNoCC.mkDerivation {
       elif [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
+
+      if [ -e $ccPath/${targetPrefix}gcc-nm ]; then
+        export plugin="${cc}/libexec/gcc/${targetPlatform.config}/14.2.1/liblto_plugin.so"
+        wrap ${targetPrefix}gcc-nm ${./bintools-wrapper.sh} $ccPath/${targetPrefix}gcc-nm
+      fi
     ''
 
     # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
@@ -851,6 +856,20 @@ stdenvNoCC.mkDerivation {
       export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
       export defaultTarget=${targetPlatform.config}
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+    ''
+
+    ###
+    ### LTO support
+    ###
+
+    + optionalString (targetPlatform.useLTO) ''
+      echo " -flto -fuse-linker-plugin" >> $out/nix-support/cc-cflags
+      echo " -flto -fuse-linker-plugin" >> $out/nix-support/cc-ldflags
+    ''
+
+    + optionalString (targetPlatform.useLTO && isGNU) ''
+      echo " -fuse-linker-plugin -Wl,--plugin=${cc}/libexec/gcc/${targetPlatform.config}/14.2.1/liblto_plugin.so" >> $out/nix-support/cc-cflags
+      echo " -fuse-linker-plugin --plugin=${cc}/libexec/gcc/${targetPlatform.config}/14.2.1/liblto_plugin.so" >> $out/nix-support/cc-ldflags
     ''
 
     ##
