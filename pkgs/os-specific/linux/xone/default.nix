@@ -4,16 +4,15 @@
   fetchFromGitHub,
   kernel,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3-unstable-2024-12-23";
+  version = "0.3-unstable-2025-04-18";
 
   src = fetchFromGitHub {
     owner = "dlundqvist";
     repo = "xone";
-    rev = "6b9d59aed71f6de543c481c33df4705d4a590a31";
-    hash = "sha256-MpxP2cb0KEPKaarjfX/yCbkxIFTwwEwVpTMhFcis+A4=";
+    rev = "c682b0cd4fd56d2d9639b64787034a375535eb4b";
+    hash = "sha256-QGmrOCiMa/Nrm2ln7aO+QVL3F5nAK2n6qWMVn+VMwcM=";
   };
 
   setSourceRoot = ''
