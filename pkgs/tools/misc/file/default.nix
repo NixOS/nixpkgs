@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ycx3x8VgxUMTXtxVWvYJ1WGdvvARmX6YjOQKPXXYYIg=";
   };
 
+  patches = [
+    # https://github.com/file/file/commit/60b2032b96fc185b37fb0f2152e834efb2edad6e
+    # Fix for misclassification of some zip files
+    ./PR-571-jschleus-Some-zip-files-are-misclassified-as-data.patch
+  ];
+
   outputs = [
     "out"
     "dev"
