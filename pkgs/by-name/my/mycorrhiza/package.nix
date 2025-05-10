@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
@@ -34,7 +33,7 @@ buildGoModule rec {
     homepage = "https://github.com/bouncepaw/mycorrhiza";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ chekoopa ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "mycorrhiza";
   };
 }
