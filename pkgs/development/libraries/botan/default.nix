@@ -75,10 +75,12 @@ let
         ];
 
       buildTargets =
-        [ "cli" ]
-        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
+        lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
         ++ lib.optionals static [ "static" ]
-        ++ lib.optionals (!static) [ "shared" ];
+        ++ lib.optionals (!static) [
+          "cli"
+          "shared"
+        ];
 
       botanConfigureFlags =
         [
@@ -131,7 +133,7 @@ let
         ln -s botan-*.pc botan.pc || true
       '';
 
-      doCheck = true;
+      doCheck = !static;
 
       meta = with lib; {
         description = "Cryptographic algorithms library";
