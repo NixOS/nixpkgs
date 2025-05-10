@@ -27,13 +27,13 @@
 
 let
   pname = "dragonflydb";
-  version = "0.1.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "dragonfly";
     rev = "v${version}";
-    hash = "sha256-P6WMW/n+VezWDXGagT4B+ZYyCp8oufDV6MTrpKpLZcs=";
+    hash = "sha256-70e9c82e1db30e8cddde260ccf8c0fb6f41b1ff6e1360b23879f81737948eca7";
     fetchSubmodules = true;
   };
 
