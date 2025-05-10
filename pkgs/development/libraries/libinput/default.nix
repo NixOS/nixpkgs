@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./Allow-changing-quirks-directory.diff
     ./udev-absolute-path.patch
   ];
 
@@ -116,6 +117,7 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    "-Dquirks-dir=/run/current-system/sw/share/libinput"
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
