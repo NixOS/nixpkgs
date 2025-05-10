@@ -420,6 +420,7 @@ let
       which
     ];
     audio = [ pkgs.portaudio ];
+    BayesChange = [ pkgs.gsl ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
     BayesXsrc = with pkgs; [
@@ -471,6 +472,7 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
+    DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
       gsl
       fftw
@@ -541,6 +543,7 @@ let
       bzip2.dev
       xz.dev
     ];
+    HiCParser = [ pkgs.zlib ];
     yyjsonr = with pkgs; [ zlib.dev ];
     RNifti = with pkgs; [ zlib.dev ];
     RNiftyReg = with pkgs; [ zlib.dev ];
@@ -561,6 +564,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
+    Rigraphlib = [ pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     imbibe = [ pkgs.zlib.dev ];
@@ -692,10 +696,12 @@ let
     ];
     rjags = [ pkgs.jags ];
     rJava = with pkgs; [
+      stripJavaArchivesHook
       zlib
       bzip2.dev
       icu
       xz.dev
+      zstd.dev
       pcre.dev
       jdk
       libzip
@@ -710,7 +716,10 @@ let
       gmp
       mpfr.dev
     ];
-    Rmpi = [ pkgs.mpi ];
+    Rmpi = with pkgs; [
+      mpi.dev
+      prrte.dev
+    ];
     RMySQL = with pkgs; [
       zlib
       libmysqlclient
@@ -786,6 +795,10 @@ let
       libtiff
       curl
     ];
+    fio = with pkgs; [
+      cargo
+      rustc
+    ];
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
@@ -794,7 +807,10 @@ let
       geos
     ];
     tok = [ pkgs.cargo ];
-    rshift = [ pkgs.cargo ];
+    rshift = with pkgs; [
+      cargo
+      rustc
+    ];
     arcgisutils = with pkgs; [
       cargo
       rustc
@@ -987,7 +1003,12 @@ let
       libdeflate
     ];
     island = [ pkgs.gsl.dev ];
+    knowYourCG = with pkgs; [
+      zlib.dev
+      ncurses.dev
+    ];
     svKomodo = [ pkgs.which ];
+    transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
     unrtf = with pkgs; [
       xz.dev
@@ -1716,6 +1737,15 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    rshift = old.rshift.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    SynExtend = old.SynExtend.overrideAttrs (attrs: {
+      # build might fail due to race condition
+      enableParallelBuilding = false;
+    });
+
     xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
@@ -1729,6 +1759,17 @@ let
           --replace-fail 'python_cmds[which(python_cmds != "")]' \
           'python_cmds <- c(python_cmds, file.path("${lib.getBin pkgs.python3}", "bin", "python3"))
            python_cmds[which(python_cmds != "")]'
+      '';
+    });
+
+    fio = old.fio.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    hypeR = old.hypeR.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace NAMESPACE R/db_msig.R --replace-fail \
+        "msigdbr_show_species" "msigdbr_species"
       '';
     });
 
@@ -1750,21 +1791,45 @@ let
       '';
     });
 
+    cn_farms = old.cn_farms.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/sparse_farms.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    PICS = old.PICS.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/segment.c" \
+        --replace-fail "Calloc" "R_Calloc"
+      '';
+    });
+
+    genoCN = old.genoCN.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/xCNV.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    trigger = old.trigger.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/trigger.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
     lwgeom = old.lwgeom.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
       ];
-    });
-
-    scDDboost = old.scDDboost.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/scDDboost/commit/f704a727c906075a2e271e9e2db93cf31e3822f5
-        substituteInPlace "DESCRIPTION" \
-          --replace-fail "c++11" "c++14"
-        # https://code.bioconductor.org/browse/scDDboost/commit/74d46e266957b38fe77185fa3ce683f891706538
-        substituteInPlace "src/Makevars" \
-          --replace-fail "#CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
     });
 
     sf = old.sf.overrideAttrs (attrs: {
@@ -1825,17 +1890,6 @@ let
       postPatch = "patchShebangs configure";
     });
 
-    EBSeq = old.EBSeq.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/EBSeq/commit/d18c41cc3eb96ca82a7c55f0d60287e28785281e
-        substituteInPlace "DESCRIPTION" \
-          --replace-fail "c++11" "c++14"
-        # https://code.bioconductor.org/browse/EBSeq/commit/fd9ccf425b3c8c0f209de77e7d6e9a1d0c839d68
-        substituteInPlace "src/Makevars" \
-          --replace-fail "#CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
-    });
-
     gmailr = old.gmailr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1890,6 +1944,14 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    AneuFinder = old.AneuFinder.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace src/utility.cpp src/densities.cpp src/loghmm.cpp src/scalehmm.cpp \
+          --replace-fail "Calloc(" "R_Calloc(" \
+          --replace-fail "Free(" "R_Free("
+      '';
+    });
+
     b64 = old.b64.overrideAttrs (attrs: {
       nativeBuildInputs =
         with pkgs;
@@ -1899,14 +1961,6 @@ let
         ]
         ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
-    });
-
-    bandle = old.bandle.overrideAttrs (attrs: {
-      postPatch = ''
-        # https://code.bioconductor.org/browse/bandle/commit/e8f7aaa29c1ba772cee5d51e09b1f500bfee44b8
-        substituteInPlace "src/Makevars" \
-          --replace-fail "CXX_STD = CXX11" "CXX_STD = CXX14"
-      '';
     });
 
     graper = old.graper.overrideAttrs (attrs: {
@@ -2516,16 +2570,6 @@ let
 
     rgl = old.rgl.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
-    });
-
-    methylKit = old.methylKit.overrideAttrs (attrs: {
-      # resolve missing function from data.table
-      patches = [
-        (pkgs.fetchpatch {
-          url = "https://github.com/al2na/methylKit/commit/5c30347630bc064d7aefc918923f723671f35253.patch";
-          sha256 = "sha256-hwtybBmSYwVInMIEZ7i7zudJWjiRJmrD0/tU7v78pPc=";
-        })
-      ];
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
