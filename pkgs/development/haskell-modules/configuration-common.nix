@@ -1057,7 +1057,13 @@ self: super:
               }
               + "/${name}";
             # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
-            jailbreak = true;
+            # Note: jailbreak can't handle constraints under an if(flag)
+            postPatch = ''
+              sed -i ${name}.cabal \
+                -e 's/\(bytestring\) .*/\1/w c1' \
+                -e 's/\(text\) .*/\1/w c2'
+              test -s c1 && test -s c2
+            '';
           }) super.${name};
       in
       lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
