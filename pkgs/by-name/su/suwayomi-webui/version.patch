@@ -1,0 +1,22 @@
+diff --git a/package.json b/package.json
+index ee2b1953..03e829e2 100644
+--- a/package.json
++++ b/package.json
+@@ -10,7 +10,7 @@
+     "build": "vite build",
+     "test": "node -e \"console.log('imagine')\"",
+     "build-md5": "find build -type f | sort | xargs md5sum | awk '{ print $1 }' | tr -d '\n' | md5sum| awk '{ print $1 }' > buildZip/md5sum ",
+-    "build-zip": "cd build && rev=$(git rev-list HEAD --count) && echo r$rev > revision && zip -9 -r ../buildZip/Suwayomi-WebUI-r$rev *",
++    "build-zip": "cd build && rev=@revision@ && echo r$rev > revision && zip -9 -r ../buildZip/Suwayomi-WebUI-r$rev *",
+     "lint": "eslint src --ext .ts,.tsx,.js,.jsx --max-warnings=0 --cache",
+     "createCommitChangelog": "tsx tools/scripts/release/createCommitChangelog.ts",
+     "createTranslationChangelog": "tsx tools/scripts/release/createTranslationChangelog.ts",
+@@ -26,7 +26,7 @@
+     "prepare": "husky"
+   },
+   "engines": {
+-    "node": "22.12.0"
++    "node": "@version@"
+   },
+   "lint-staged": {
+     "*.{ts,tsx,js,jsx}": "eslint --fix"
