@@ -80,7 +80,7 @@ let
       # serialization
       cli = callLibs ./cli.nix;
       gvariant = callLibs ./gvariant.nix;
-      generators = callLibs ./generators.nix;
+      generators = callLibs ./generators;
 
       # misc
       asserts = callLibs ./asserts.nix;
