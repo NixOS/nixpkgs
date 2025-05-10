@@ -19,9 +19,7 @@ let
 in
 
 {
-
   options = {
-
     networking.firewall = {
       extraInputRules = lib.mkOption {
         type = lib.types.lines;
@@ -59,11 +57,9 @@ in
         '';
       };
     };
-
   };
 
-  config = lib.mkIf (cfg.enable && config.networking.nftables.enable) {
-
+  config = lib.mkIf (cfg.enable && cfg.backend == "nftables") {
     assertions = [
       {
         assertion = cfg.extraCommands == "";
@@ -82,6 +78,8 @@ in
         message = "networking.nftables.rulesetFile conflicts with the firewall";
       }
     ];
+
+    environment.systemPackages = [ pkgs.nixos-firewall-tool ];
 
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
@@ -203,7 +201,5 @@ in
         }
       ''}
     '';
-
   };
-
 }

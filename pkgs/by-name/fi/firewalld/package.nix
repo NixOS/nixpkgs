@@ -26,6 +26,7 @@
   sysctl,
   wrapGAppsNoGuiHook,
   withGui ? false,
+  nixosTests,
 }:
 
 let
@@ -155,6 +156,11 @@ stdenv.mkDerivation rec {
     patchShebangs --host $out/share/firewalld/*.py
     wrapPythonProgramsIn "$out/bin" "$out ${pythonPath}"
   '';
+
+  passthru.tests = {
+    firewalld = nixosTests.firewalld;
+    firewall-firewalld = nixosTests.firewall-firewalld;
+  };
 
   meta = {
     description = "Firewall daemon with D-Bus interface";
