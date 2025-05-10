@@ -309,6 +309,9 @@ stdenv.mkDerivation (finalAttrs: {
       directory = "vendor"
       EOF
     ''
+    + ''
+      export RUSTFLAGS="$RUSTFLAGS --remap-path-prefix ''${NIX_BUILD_TOP:-/build}=/build"
+    ''
     + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
       # lzma-sys bundles an old version of xz that doesn't build
       # on modern FreeBSD, use the system one instead

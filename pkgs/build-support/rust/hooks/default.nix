@@ -115,7 +115,7 @@
             "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
             "rustflags" = [ "-C", "target-feature=${
               if pkgsTargetTarget.stdenv.targetPlatform.isStatic then "+" else "-"
-            }crt-static" ]
+            }crt-static", "--remap-path-prefix", "@BUILD_TOP@=/build" ]
           '';
       };
       passthru.tests =

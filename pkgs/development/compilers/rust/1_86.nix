@@ -56,6 +56,13 @@ import ./default.nix
         url = "https://github.com/rust-lang/rust/commit/97962d7643300b91c102496ba3ab6d9279d2c536.patch";
         hash = "sha256-DKl9PWqJP3mX4B1pFeRLQ8/sO6mx1JhbmVLTOOMLZI4=";
       })
+
+      # Fixes ICE in rustdoc when using `--remap-path-prefix`, shipping in Rust 1.87
+      (fetchpatch {
+        name = "rustdoc-fix-remap-path-prefix-ice.patch";
+        url = "https://github.com/rust-lang/rust/commit/b14810669a805003cf6392447c08eed79441936f.patch";
+        hash = "sha256-tAVLi3VnkSDUPJmNFn8/eyrGaybMZp1iBHqyymo1e9M=";
+      })
     ];
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
