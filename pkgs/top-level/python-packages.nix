@@ -2795,6 +2795,8 @@ self: super: with self; {
 
   connect-box = callPackage ../development/python-modules/connect-box { };
 
+  connected-components-3d = callPackage ../development/python-modules/connected-components-3d { };
+
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
   connexion = callPackage ../development/python-modules/connexion { };
@@ -4823,6 +4825,8 @@ self: super: with self; {
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 { };
 
   fastprogress = callPackage ../development/python-modules/fastprogress { };
+
+  fastremap = callPackage ../development/python-modules/fastremap { };
 
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
