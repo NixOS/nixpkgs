@@ -14,13 +14,13 @@ let
             mkHyprlandPlugin,
           }:
           let
-            version = "0.48.0";
+            version = "0.49.0";
 
             hyprland-plugins-src = fetchFromGitHub {
               owner = "hyprwm";
               repo = "hyprland-plugins";
               tag = "v${version}";
-              hash = "sha256-q6v3nkJZdu45bwCuymQ+q3U7uwfA+M3GqsvZ0TgNsi4=";
+              hash = "sha256-GpsLyK/U05q7QnyFIWrnGS2loVyjPZByTtPitwu9UNw=";
             };
           in
           mkHyprlandPlugin hyprland {
@@ -44,8 +44,10 @@ let
         csgo-vulkan-fix = "CS:GO/CS2 Vulkan fix";
         hyprbars = "window title";
         hyprexpo = "workspaces overview";
+        hyprscrolling = "scrolling layout";
         hyprtrails = "smooth trails behind moving windows";
         hyprwinwrap = "xwinwrap-like";
+        xtra-dispatchers = "extra dispatchers";
       };
 in
 hyprland-plugins

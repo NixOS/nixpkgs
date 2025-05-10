@@ -35,12 +35,9 @@ with haskellLib;
   patch = haskellLib.disableParallelBuilding super.patch;
   reflex-dom-core = haskellLib.disableParallelBuilding super.reflex-dom-core;
 
-  reflex-dom =
-    lib.warn "reflex-dom builds with JS backend but it is missing fixes for working at runtime"
-      super.reflex-dom.override
-      (drv: {
-        jsaddle-webkit2gtk = null;
-      });
+  reflex-dom = super.reflex-dom.override (drv: {
+    jsaddle-webkit2gtk = null;
+  });
 
   miso-examples = pkgs.lib.pipe super.miso-examples [
     (addBuildDepends (

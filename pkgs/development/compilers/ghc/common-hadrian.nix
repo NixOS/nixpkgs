@@ -284,7 +284,7 @@
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
-      ++ lib.optionals (lib.versionOlder version "9.13" && stdenv.hostPlatform.is32bit) [
+      ++ lib.optionals (lib.versionOlder version "9.13") [
         (fetchpatch {
           name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";

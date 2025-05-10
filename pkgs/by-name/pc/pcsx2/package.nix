@@ -54,6 +54,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook
@@ -62,7 +63,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    extra-cmake-modules
     ffmpeg
     libaio
     libbacktrace

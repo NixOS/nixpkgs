@@ -46,6 +46,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     ninja
     pkg-config
     qttools
@@ -57,7 +58,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     SDL2
     cpuinfo
     curl
-    extra-cmake-modules
     libXrandr
     libbacktrace
     libwebp

@@ -3491,37 +3491,6 @@ final: prev: {
     }
   ) { };
 
-  luv = callPackage (
-    {
-      buildLuarocksPackage,
-      cmake,
-      fetchurl,
-      luaOlder,
-    }:
-    buildLuarocksPackage {
-      pname = "luv";
-      version = "1.48.0-2";
-      knownRockspec =
-        (fetchurl {
-          url = "mirror://luarocks/luv-1.48.0-2.rockspec";
-          sha256 = "0353bjn9z90a1hd7rksdfrd9fbdd31hbvdaxr1fb0fh0bc1cpy94";
-        }).outPath;
-      src = fetchurl {
-        url = "https://github.com/luvit/luv/releases/download/1.48.0-2/luv-1.48.0-2.tar.gz";
-        sha256 = "0yivq14dw0vjyl8ibrgdgrj9fbhjyy4yf3m4jc15bxmlxggisfic";
-      };
-
-      disabled = luaOlder "5.1";
-      nativeBuildInputs = [ cmake ];
-
-      meta = {
-        homepage = "https://github.com/luvit/luv";
-        description = "Bare libuv bindings for lua";
-        license.fullName = "Apache 2.0";
-      };
-    }
-  ) { };
-
   lyaml = callPackage (
     {
       buildLuarocksPackage,

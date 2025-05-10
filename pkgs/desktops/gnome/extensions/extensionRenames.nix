@@ -14,7 +14,6 @@
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
-  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
 
   "battery-time@eetumos.github.com" = "battery-time-3";

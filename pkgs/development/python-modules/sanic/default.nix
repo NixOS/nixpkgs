@@ -80,9 +80,6 @@ buildPythonPackage rec {
     PATH="$out/bin:$PATH"
     PYTHONPATH=$PWD:$PYTHONPATH
 
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-
     # needed for relative paths for some packages
     cd tests
   '';

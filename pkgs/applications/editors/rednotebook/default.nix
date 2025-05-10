@@ -8,7 +8,7 @@
   gtk3,
   gtksourceview,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   pygobject3,
   pyyaml,
   setuptools,
@@ -39,7 +39,7 @@ buildPythonApplication rec {
     gtk3
     gtksourceview
     pango
-    webkitgtk_4_0
+    webkitgtk_4_1
     pygobject3
     pyyaml
   ];

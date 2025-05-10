@@ -9,7 +9,7 @@
   makeDesktopItem,
   openjdk21,
   stdenvNoCC,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -29,7 +29,7 @@ let
     glib-networking
     gtk3
     libsecret
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {

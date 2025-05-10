@@ -211,7 +211,10 @@ in
       pkgs.gnome-session
       pkgs.gnome-shell
     ];
-    environment.systemPackages = [ pkgs.adwaita-icon-theme ];
+    environment.systemPackages = [
+      pkgs.adwaita-icon-theme
+      pkgs.gdm # For polkit rules
+    ];
 
     # We dont use the upstream gdm service
     # it has to be disabled since the gdm package has it

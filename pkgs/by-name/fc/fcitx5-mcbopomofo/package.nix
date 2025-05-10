@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    extra-cmake-modules
     fcitx5
     fmt
     gtest

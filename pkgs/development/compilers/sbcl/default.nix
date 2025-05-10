@@ -9,6 +9,7 @@
   strace,
   texinfo,
   which,
+  writableTmpDirAsHomeHook,
   writeText,
   zstd,
   version,
@@ -32,11 +33,11 @@ let
     };
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.1" = {
-      sha256 = "sha256-QTOzbNFtFNYzlpw3/VHCyJqOpdbhYRVSgZ2R9xshn4s=";
-    };
     "2.5.2" = {
       sha256 = "sha256-XcJ+un3aQz31P9dEHeixFHSoLNrBaJwfbOVfoGXWX6w=";
+    };
+    "2.5.4" = {
+      sha256 = "sha256-XxS07ZKUKp44dZT6wAC5bbdGfpzlYTBn/8CSPfPsIHI=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
@@ -97,6 +98,7 @@ stdenv.mkDerivation (self: {
     ++ lib.optionals self.doCheck (
       [
         which
+        writableTmpDirAsHomeHook
       ]
       ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
         strace
@@ -133,18 +135,20 @@ stdenv.mkDerivation (self: {
   # altogether. One by one hopefully we can fix these (on ofBorg,
   # upstream--somehow some way) in due time.
   disabledTestFiles =
-    lib.optionals
-      (builtins.elem stdenv.hostPlatform.system [
-        "x86_64-linux"
-        "aarch64-linux"
-      ])
-      [
-        "foreign-stack-alignment.impure.lisp"
-        # Floating point tests are fragile
-        # https://sourceforge.net/p/sbcl/mailman/message/58728554/
-        "compiler.pure.lisp"
-        "float.pure.lisp"
-      ]
+    lib.optionals (lib.versionOlder "2.5.2" self.version) [ "debug.impure.lisp" ]
+    ++
+      lib.optionals
+        (builtins.elem stdenv.hostPlatform.system [
+          "x86_64-linux"
+          "aarch64-linux"
+        ])
+        [
+          "foreign-stack-alignment.impure.lisp"
+          # Floating point tests are fragile
+          # https://sourceforge.net/p/sbcl/mailman/message/58728554/
+          "compiler.pure.lisp"
+          "float.pure.lisp"
+        ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # This is failing on aarch64-linux on ofBorg. Not on my local machine nor on
       # a VM on my laptop. Not sure what’s wrong.
@@ -153,16 +157,24 @@ stdenv.mkDerivation (self: {
       # have it block a release.
       "futex-wait.test.sh"
     ];
-  patches = [
+  patches =
     # Support the NIX_SBCL_DYNAMIC_SPACE_SIZE envvar. Upstream SBCL didn’t want
     # to include this (see
     # "https://sourceforge.net/p/sbcl/mailman/sbcl-devel/thread/2cf20df7-01d0-44f2-8551-0df01fe55f1a%400brg.net/"),
     # but for Nix envvars are sufficiently useful that it’s worth maintaining
     # this functionality downstream.
-    ./dynamic-space-size-envvar-feature.patch
-    ./dynamic-space-size-envvar-tests.patch
-  ];
-  postPatch =
+    if lib.versionOlder "2.5.2" self.version then
+      [
+        ./dynamic-space-size-envvar-2.5.3-feature.patch
+        ./dynamic-space-size-envvar-2.5.3-tests.patch
+      ]
+    else
+      [
+        ./dynamic-space-size-envvar-2.5.2-feature.patch
+        ./dynamic-space-size-envvar-2.5.2-tests.patch
+      ];
+
+  sbclPatchPhase =
     lib.optionalString (self.disabledTestFiles != [ ]) ''
       (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})
     ''
@@ -191,11 +203,7 @@ stdenv.mkDerivation (self: {
       fi
     '';
 
-  preBuild = ''
-    export INSTALL_ROOT=$out
-    mkdir -p test-home
-    export HOME=$PWD/test-home
-  '';
+  preConfigurePhases = "sbclPatchPhase";
 
   enableFeatures =
     assert lib.assertMsg (
@@ -232,6 +240,7 @@ stdenv.mkDerivation (self: {
   buildPhase = ''
     runHook preBuild
 
+    export INSTALL_ROOT=$out
     sh make.sh ${lib.concatStringsSep " " self.buildArgs}
     (cd doc/manual ; make info)
 
@@ -257,7 +266,7 @@ stdenv.mkDerivation (self: {
     ''
       runHook preInstall
 
-      INSTALL_ROOT=$out sh install.sh
+      sh install.sh
 
     ''
     + lib.optionalString (!self.purgeNixReferences) ''
