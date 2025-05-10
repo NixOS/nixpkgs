@@ -20,7 +20,6 @@
   pytest-mock,
   pytest-subprocess,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   responses,
   setuptools-scm,
@@ -30,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.10.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-9M49/XQuWwKuQqseleTeZYcrwd/S16lNCljvlVsoXbs=";
+    hash = "sha256-p1p6uWP2DxGCIHgf0AQV3aHXNH5/hu0Yfi5QlFT+ULc=";
   };
 
   postPatch = ''
@@ -90,6 +89,9 @@ buildPythonPackage rec {
 
     substituteInPlace craft_application/util/platforms.py \
       --replace-fail "os_utils.OsRelease()" "os_utils.OsRelease(os_release_file='$HOME/os-release')"
+
+    substituteInPlace tests/conftest.py \
+      --replace-fail "include_lsb=False, include_uname=False, include_oslevel=False" "include_lsb=False, include_uname=False, include_oslevel=False, os_release_file='$HOME/os-release'"
   '';
 
   pythonImportsCheck = [ "craft_application" ];
@@ -109,6 +111,8 @@ buildPythonPackage rec {
       # slightly in a later revision of craft-platforms. No functional error.
       "test_platform_invalid_arch"
       "test_platform_invalid_build_arch"
+      # Asserts against string output which fails when not on Ubuntu.
+      "test_run_error_with_docs_url"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
@@ -116,6 +120,11 @@ buildPythonPackage rec {
       "test_process_grammar_platform"
       "test_process_grammar_default"
     ];
+
+  disabledTestPaths = [
+    # These tests assert outputs of commands that assume Ubuntu-related output.
+    "tests/unit/services/test_lifecycle.py"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
