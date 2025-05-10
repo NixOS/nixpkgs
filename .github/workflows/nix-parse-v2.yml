@@ -15,18 +15,6 @@ jobs:
     needs: get-merge-commit
     if: "needs.get-merge-commit.outputs.mergedSha && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
-      - name: Get list of changed files from PR
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api \
-            repos/${{ github.repository }}/pulls/${{github.event.number}}/files --paginate \
-            | jq --raw-output '.[] | select(.status != "removed" and (.filename | endswith(".nix"))) | .filename' \
-            > "$HOME/changed_files"
-          if [[ -s "$HOME/changed_files" ]]; then
-            echo "CHANGED_FILES=$HOME/changed_files" > "$GITHUB_ENV"
-          fi
-
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
@@ -37,11 +25,6 @@ jobs:
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=channel:nixpkgs-unstable
 
-      - name: Parse all changed or added nix files
+      - name: Parse all nix files
         run: |
-          ret=0
-          while IFS= read -r file; do
-            out="$(nix-instantiate --parse "$file")" || { echo "$out" && ret=1; }
-          done < "$HOME/changed_files"
-          exit "$ret"
-        if: ${{ env.CHANGED_FILES && env.CHANGED_FILES != '' }}
+          nix-build ci -A parse
