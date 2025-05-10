@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   sphinx,
   fetchFromGitHub,
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ sphinx ];
 
   meta = with lib; {
+    # sphinx requires GHC which does not support native RISC-V
+    broken = stdenv.hostPlatform == stdenv.targetPlatform && stdenv.hostPlatform.isRiscV64;
     homepage = "https://github.com/sloria/sphinx-issues";
     description = "Sphinx extension for linking to your project's issue tracker";
     license = licenses.mit;
