@@ -9775,7 +9775,9 @@ with pkgs;
     wine = wineWowPackages.staging;
   };
 
-  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix {
+  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix { };
+
+  vtk_9_2 = libsForQt5.callPackage ../development/libraries/vtk/9.2.x.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
   };
 
@@ -15625,7 +15627,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };
+  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   nest = callPackage ../applications/science/biology/nest { };
 
