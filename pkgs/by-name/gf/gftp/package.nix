@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-0zdv2oYl24BXh61IGCWby/2CCkzNjLpDrAFc0J89Pw4=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types" # https://github.com/masneyb/gftp/issues/178
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
