@@ -2017,7 +2017,6 @@ with pkgs;
     });
 
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
-    python = python3;
     boost = boost.override {
       enablePython = true;
       python = python3;
@@ -2308,9 +2307,7 @@ with pkgs;
 
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
-  lief = callPackage ../development/libraries/lief {
-    python = python3;
-  };
+  lief = callPackage ../development/libraries/lief { };
 
   # Less secure variant of lowdown for use inside Nix builds.
   lowdown-unsandboxed = lowdown.override {
@@ -3187,11 +3184,8 @@ with pkgs;
     isStereo = true;
   };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
-    python = python3;
-  };
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
   google-cloud-sdk-gce = google-cloud-sdk.override {
-    python = python3;
     with-gce = true;
   };
 
@@ -7278,9 +7272,7 @@ with pkgs;
     else
       gcc.cc;
 
-  libsigrok = callPackage ../development/tools/libsigrok {
-    python = python3;
-  };
+  libsigrok = callPackage ../development/tools/libsigrok { };
 
   distcc = callPackage ../development/tools/misc/distcc {
     libiberty_static = libiberty.override { staticBuild = true; };
@@ -7793,10 +7785,6 @@ with pkgs;
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
 
   xxdiff-tip = xxdiff;
-
-  ycmd = callPackage ../by-name/yc/ycmd/package.nix {
-    python = python3;
-  };
 
   yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
     jre = jdk21;
@@ -8693,7 +8681,7 @@ with pkgs;
 
   libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
-  libcomps = callPackage ../tools/package-management/libcomps { python = python3; };
+  libcomps = callPackage ../tools/package-management/libcomps { };
 
   libcxxrt = callPackage ../development/libraries/libcxxrt {
     stdenv =
@@ -8717,7 +8705,7 @@ with pkgs;
     withXorg = false;
   };
 
-  libdnf = callPackage ../tools/package-management/libdnf { python = python3; };
+  libdnf = callPackage ../tools/package-management/libdnf { };
 
   libdvdnav = callPackage ../development/libraries/libdvdnav { };
   libdvdnav_4_2_1 = callPackage ../development/libraries/libdvdnav/4.2.1.nix {
@@ -8742,17 +8730,13 @@ with pkgs;
     callPackage ../development/libraries/libgnome-games-support/2.0.nix
       { };
 
-  libiio = callPackage ../development/libraries/libiio {
-    python = python3;
-  };
+  libiio = callPackage ../development/libraries/libiio { };
 
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
 
-  libfive = libsForQt5.callPackage ../development/libraries/libfive {
-    python = python3;
-  };
+  libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
   # Use Apple’s fork of libffi by default, which provides APIs and trampoline functionality that is not yet
   # merged upstream. This is needed by some packages (such as cffi).
@@ -8789,9 +8773,7 @@ with pkgs;
 
   libremines = qt6.callPackage ../games/libremines { };
 
-  librepo = callPackage ../tools/package-management/librepo {
-    python = python3;
-  };
+  librepo = callPackage ../tools/package-management/librepo { };
 
   libretranslate = with python3.pkgs; toPythonApplication libretranslate;
 
@@ -8915,9 +8897,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  libpwquality = callPackage ../development/libraries/libpwquality {
-    python = python3;
-  };
+  libpwquality = callPackage ../development/libraries/libpwquality { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
@@ -9030,9 +9010,7 @@ with pkgs;
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
   libxmlxx3 = callPackage ../development/libraries/libxmlxx/v3.nix { };
 
-  libxslt = callPackage ../development/libraries/libxslt {
-    python = python3;
-  };
+  libxslt = callPackage ../development/libraries/libxslt { };
 
   libwpe = callPackage ../development/libraries/libwpe { };
 
@@ -9224,9 +9202,7 @@ with pkgs;
 
   openbabel2 = callPackage ../development/libraries/openbabel/2.nix { };
 
-  openbabel3 = callPackage ../development/libraries/openbabel {
-    python = python3;
-  };
+  openbabel3 = callPackage ../development/libraries/openbabel { };
 
   opencascade-occt_7_6 = opencascade-occt.overrideAttrs rec {
     pname = "opencascade-occt";
@@ -9730,9 +9706,7 @@ with pkgs;
 
   structuresynth = libsForQt5.callPackage ../development/libraries/structuresynth { };
 
-  sundials = callPackage ../development/libraries/sundials {
-    python = python3;
-  };
+  sundials = callPackage ../development/libraries/sundials { };
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
@@ -12103,13 +12077,9 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
-  brotab = callPackage ../tools/misc/brotab {
-    python = python3;
-  };
+  brotab = callPackage ../tools/misc/brotab { };
 
-  bumblebee-status = callPackage ../applications/window-managers/i3/bumblebee-status {
-    python = python3;
-  };
+  bumblebee-status = callPackage ../applications/window-managers/i3/bumblebee-status { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
@@ -12889,7 +12859,6 @@ with pkgs;
   };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
-    python = python3;
     inherit
       (perlPackages.override {
         pkgs = pkgs // {
@@ -15197,9 +15166,7 @@ with pkgs;
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
-  mnemosyne = callPackage ../games/mnemosyne {
-    python = python3;
-  };
+  mnemosyne = callPackage ../games/mnemosyne { };
 
   mrrescue = callPackage ../games/mrrescue { love = love_0_10; };
 
@@ -15673,7 +15640,7 @@ with pkgs;
     useRx3d = true;
   };
 
-  mrtrix = callPackage ../applications/science/biology/mrtrix { python = python3; };
+  mrtrix = callPackage ../applications/science/biology/mrtrix { };
 
   minc_tools = callPackage ../applications/science/biology/minc-tools {
     inherit (perlPackages) perl TextFormat;
@@ -15859,7 +15826,7 @@ with pkgs;
     stdenv = gccStdenv;
     lhapdf = lhapdf.override {
       stdenv = gccStdenv;
-      python = null;
+      python3 = null;
     };
   };
 
@@ -16183,7 +16150,7 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
+  ns-3 = callPackage ../development/libraries/science/networking/ns-3 { };
 
   spyder = with python3.pkgs; toPythonApplication spyder;
 
@@ -16199,9 +16166,7 @@ with pkgs;
     python = null;
   };
 
-  lhapdf = callPackage ../development/libraries/physics/lhapdf {
-    python = python3;
-  };
+  lhapdf = callPackage ../development/libraries/physics/lhapdf { };
 
   pythia = callPackage ../development/libraries/physics/pythia {
     hepmc = hepmc2;
