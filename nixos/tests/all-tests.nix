@@ -373,7 +373,6 @@ in
   croc = handleTest ./croc.nix { };
   cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
-  darling = handleTest ./darling.nix { };
   darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix { };
   davis = runTest ./davis.nix;
