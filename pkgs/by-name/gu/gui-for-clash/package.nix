@@ -17,13 +17,13 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-XQbiric4iAxvWRLKCCZtDrpFpPCylQlwnCm9dHSq/KM=";
+    hash = "sha256-z9y0S3ADMmjbuu4IarQpGzSApSAXDVkKojzLTSc8VqY=";
   };
 
   metaCommon = {
@@ -43,7 +43,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-5SVu8eCyN89k6BvNEqgs4hOrP5IjvjUZrzrVuDwtYCk=";
+      hash = "sha256-RIkdnDyHjl5C0+Hdtne1NYEh46+yylW7Q/agT7AtDBo=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -81,7 +81,7 @@ buildGoModule {
       --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-Zt3We+Ai8oEqof2eQvcaIkocH85goeldmPf4mmDX17o=";
+  vendorHash = "sha256-4MPKAI1/F/sgfUORulhcpKJYHX7LpLknlzZx4DqnCfY=";
 
   nativeBuildInputs = [
     wails
