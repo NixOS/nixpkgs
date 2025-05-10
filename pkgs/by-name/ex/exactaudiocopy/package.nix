@@ -13,11 +13,11 @@
 
 let
   pname = "exact-audio-copy";
-  version = "1.6.0";
+  version = "1.8.0";
 
   eac_exe = fetchurl {
     url = "http://www.exactaudiocopy.de/eac-${lib.versions.majorMinor version}.exe";
-    sha256 = "8291d33104ebab2619ba8d85744083e241330a286f5bd7d54c7b0eb08f2b84c1";
+    sha256 = "205530cfbfdff82343858f38b0e709e586051fb8900ecd513d7992a3c1ef031b";
   };
 
   cygwin = fetchurl {
