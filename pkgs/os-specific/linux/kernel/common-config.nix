@@ -1102,7 +1102,10 @@ let
 
         # enable support for device trees and overlays
         OF = option yes;
-        OF_OVERLAY = option yes;
+        # OF_OVERLAY breaks v5.10 on x86_64, see https://github.com/NixOS/nixpkgs/issues/403985
+        OF_OVERLAY = lib.mkIf (!(lib.versionOlder version "5.15" && stdenv.hostPlatform.isx86_64)) (
+          option yes
+        );
 
         # Enable initrd support.
         BLK_DEV_INITRD = yes;
