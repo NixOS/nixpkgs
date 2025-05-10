@@ -8,12 +8,12 @@
 let
   themeName = "Ant-Bloody";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ant-bloody-theme";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://github.com/EliverLara/${themeName}/releases/download/v${version}/${themeName}.tar";
+    url = "https://github.com/EliverLara/${themeName}/releases/download/v${finalAttrs.version}/${themeName}.tar";
     sha256 = "0rrz50kmzjmqj17hvrw67pbaclwxv85i5m08s7842iky6dnn5z8s";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ alexarice ];
   };
-}
+})

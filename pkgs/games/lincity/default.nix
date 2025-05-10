@@ -12,12 +12,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lincity";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lincity/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/lincity/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "0p81wl7labyfb6rgp0hi42l2akn3n7r2bnxal1wyvjylzw8vsk3v";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

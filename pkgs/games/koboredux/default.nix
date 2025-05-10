@@ -51,7 +51,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   src = [ main_src ] ++ optional useProprietaryAssets assets_src;

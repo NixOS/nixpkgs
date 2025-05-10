@@ -8,13 +8,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "layan-kde";
   version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "layan-kde";
     rev = "7ab7cd7461dae8d8d6228d3919efbceea5f4272c";
     hash = "sha256-Wh8tZcQEdTTlgtBf4ovapojHcpPBZDDkWOclmxZv9zA=";
   };

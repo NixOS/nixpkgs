@@ -33,14 +33,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeciv";
   version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
-    rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "R${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-lT3sXD5lFjG/63eBXEG+rU9idem/8kXfUXj6iB3AGOg=";
   };
 
@@ -137,4 +137,4 @@ stdenv.mkDerivation rec {
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
     broken = qtClient && stdenv.hostPlatform.isDarwin; # Missing Qt5 development files
   };
-}
+})

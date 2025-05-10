@@ -12,14 +12,14 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orthorobot";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Stabyourself";
-    repo = pname;
-    rev = "v${version}";
+    repo = "orthorobot";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
   };
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "orthorobot";
-      exec = pname;
-      icon = icon;
+      exec = "orthorobot";
+      icon = finalAttrs.icon;
       comment = "Robot game";
       desktopName = "Orthorobot";
       genericName = "orthorobot";
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     downloadPage = "https://stabyourself.net/orthorobot/";
   };
-}
+})

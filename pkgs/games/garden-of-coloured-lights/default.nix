@@ -7,7 +7,7 @@
   allegro,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "garden-of-coloured-lights";
   version = "1.0.9";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "mirror://sourceforge/garden/${version}/garden-${version}.tar.gz";
+    url = "mirror://sourceforge/garden/${finalAttrs.version}/garden-${finalAttrs.version}.tar.gz";
     sha256 = "1qsj4d7r22m5f9f5f6cyvam1y5q5pbqvy5058r7w0k4s48n77y6s";
   };
 
@@ -40,5 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = licenses.gpl3;
   };
-
-}
+})

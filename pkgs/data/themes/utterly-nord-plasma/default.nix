@@ -9,13 +9,13 @@
   plasma-workspace,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "utterly-nord-plasma";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "HimDek";
-    repo = pname;
+    repo = "utterly-nord-plasma";
     rev = "e513b4dfeddd587a34bfdd9ba6b1d1eac8ecadf5";
     hash = "sha256-moLgBFR+BgoiEBzV3y/LA6JZfLHrG1weL1+h8LN9ztA=";
   };

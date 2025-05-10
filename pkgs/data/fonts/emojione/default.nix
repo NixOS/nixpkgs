@@ -10,14 +10,14 @@
   scfbuild,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emojione";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "eosrei";
     repo = "emojione-color-font";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1781kxfbhnvylypbkwxc3mx6hi0gcjisfjr9cf0jdz4d1zkf09b3";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     license = licenses.cc-by-40;
     maintainers = with maintainers; [ abbradar ];
   };
-}
+})

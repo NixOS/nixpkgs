@@ -12,12 +12,12 @@
   SDL_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.5.0";
   pname = "bloodspilot-client";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bloodspilot/client-sdl/v${version}/bloodspilot-client-sdl-${version}.tar.gz";
+    url = "mirror://sourceforge/project/bloodspilot/client-sdl/v${finalAttrs.version}/bloodspilot-client-sdl-${finalAttrs.version}.tar.gz";
     sha256 = "1qwl95av5an2zl01m7saj6fyy49xpixga7gbn4lwbpgpqs1rbwxj";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

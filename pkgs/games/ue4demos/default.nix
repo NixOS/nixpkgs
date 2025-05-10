@@ -17,7 +17,7 @@ let
 
   buildDemo =
     { name, src }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       inherit name src;
 
       nativeBuildInputs = [
@@ -43,7 +43,7 @@ let
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \
-          --set-rpath ${rtdeps} \
+          --set-rpath ${finalAttrs.rtdeps} \
           "$binary"
 
         # Workaround on
@@ -69,7 +69,7 @@ let
         platforms = [ "x86_64-linux" ];
         license = lib.licenses.unfree;
       };
-    };
+    });
 
 in
 {

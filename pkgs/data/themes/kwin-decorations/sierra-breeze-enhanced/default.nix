@@ -15,14 +15,14 @@ let
   qt5Version = "1.3.3";
   qt5Sha256 = "sha256-zTUTsSzy4p0Y7RPOidCtxTjjyvPRyWSQCxA5sUzXcLc=";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sierra-breeze-enhanced";
   version = if useQt5 then qt5Version else latestVersion;
 
   src = fetchFromGitHub {
     owner = "kupiqu";
     repo = "SierraBreezeEnhanced";
-    rev = if version == "2.1.0" then "V.2.1.0" else "V${version}";
+    rev = if finalAttrs.version == "2.1.0" then "V.2.1.0" else "V${finalAttrs.version}";
     sha256 = if useQt5 then qt5Sha256 else latestSha256;
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ A1ca7raz ];
   };
-}
+})

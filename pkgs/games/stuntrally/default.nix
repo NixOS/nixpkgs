@@ -33,20 +33,20 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stuntrally";
   version = "2.7";
 
   src = fetchFromGitHub {
     owner = "stuntrally";
     repo = "stuntrally";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-0Eh9ilIHSh/Uz8TuPnXxLQfy7KF7qqNXUgBXQUCz9ys=";
   };
   tracks = fetchFromGitHub {
     owner = "stuntrally";
     repo = "tracks";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-fglm1FetFGHM/qGTtpxDb8+k2iAREn5DQR5GPujuLms=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rmdir data/tracks
-    ln -s ${tracks}/ data/tracks
+    ln -s ${finalAttrs.tracks}/ data/tracks
   '';
 
   nativeBuildInputs = [
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
   };
-}
+})

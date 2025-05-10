@@ -8,12 +8,12 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fltrator";
   version = "2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fltrator/fltrator-${version}-code.zip";
+    url = "mirror://sourceforge/fltrator/fltrator-${finalAttrs.version}-code.zip";
     sha256 = "125aqq1sfrm0c9cm6gyylwdmc8xrb0rjf563xvw7q28sdbl6ayp7";
   };
 
@@ -60,5 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marius851000 ];
     license = licenses.gpl3;
   };
-
-}
+})

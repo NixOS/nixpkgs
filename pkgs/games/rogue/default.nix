@@ -5,15 +5,15 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rogue";
   version = "5.4.4";
 
   src = fetchurl {
     urls = [
-      "https://src.fedoraproject.org/repo/pkgs/rogue/rogue${version}-src.tar.gz/033288f46444b06814c81ea69d96e075/rogue${version}-src.tar.gz"
-      "http://ftp.vim.org/ftp/pub/ftp/os/Linux/distr/slitaz/sources/packages-cooking/r/rogue${version}-src.tar.gz"
-      "http://rogue.rogueforge.net/files/rogue${lib.versions.majorMinor version}/rogue${version}-src.tar.gz"
+      "https://src.fedoraproject.org/repo/pkgs/rogue/rogue${finalAttrs.version}-src.tar.gz/033288f46444b06814c81ea69d96e075/rogue${finalAttrs.version}-src.tar.gz"
+      "http://ftp.vim.org/ftp/pub/ftp/os/Linux/distr/slitaz/sources/packages-cooking/r/rogue${finalAttrs.version}-src.tar.gz"
+      "http://rogue.rogueforge.net/files/rogue${lib.versions.majorMinor finalAttrs.version}/rogue${finalAttrs.version}-src.tar.gz"
     ];
     sha256 = "18g81274d0f7sr04p7h7irz0d53j6kd9j1y3zbka1gcqq0gscdvx";
   };
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

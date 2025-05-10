@@ -83,7 +83,7 @@ let
     startupNotify = false;
   };
 
-  xonotic-unwrapped = stdenv.mkDerivation rec {
+  xonotic-unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "xonotic${variant}-unwrapped";
     inherit version;
 
@@ -117,7 +117,7 @@ let
     # "debug", "release", "profile"
     target = "release";
 
-    dontStrip = target != "release";
+    dontStrip = finalAttrs.target != "release";
 
     postConfigure = ''
       pushd ../d0_blind_id
@@ -128,13 +128,13 @@ let
     buildPhase =
       (
         lib.optionalString withDedicated ''
-          make -j $NIX_BUILD_CORES sv-${target}
+          make -j $NIX_BUILD_CORES sv-${finalAttrs.target}
         ''
         + lib.optionalString withGLX ''
-          make -j $NIX_BUILD_CORES cl-${target}
+          make -j $NIX_BUILD_CORES cl-${finalAttrs.target}
         ''
         + lib.optionalString withSDL ''
-          make -j $NIX_BUILD_CORES sdl-${target}
+          make -j $NIX_BUILD_CORES sdl-${finalAttrs.target}
         ''
       )
       + ''
@@ -205,7 +205,7 @@ let
             --add-needed ${libtheora}/lib/libtheora.so \
             $out/bin/xonotic-sdl
       '';
-  };
+  });
 
 in
 rec {

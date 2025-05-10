@@ -8,7 +8,7 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duckmarines";
   version = "1.0c";
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = pname;
-    icon = icon;
+    exec = "duckmarines";
+    icon = finalAttrs.icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";
+    url = "https://github.com/SimonLarsen/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-1.0c.love";
     sha256 = "1rvgpkvi4h9zhc4fwb4knhsa789yjcx4a14fi4vqfdyybhvg5sh9";
   };
 
@@ -44,13 +44,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
-    cp -v ${src} $out/share/games/lovegames/${pname}.love
+    cp -v $src $out/share/games/lovegames/duckmarines.love
 
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
+    makeWrapper ${love}/bin/love $out/bin/duckmarines \
+        --add-flags $out/share/games/lovegames/duckmarines.love
 
-    chmod +x $out/bin/${pname}
+    chmod +x $out/bin/duckmarines
     mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
   '';
 
   meta = with lib; {
@@ -61,5 +62,4 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
-
-}
+})

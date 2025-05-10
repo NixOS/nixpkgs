@@ -4,11 +4,11 @@
   fetchurl,
   allegro,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.6.5";
   pname = "liquidwar5";
   src = fetchurl {
-    url = "http://www.ufoot.org/download/liquidwar/v5/${version}/liquidwar-${version}.tar.gz";
+    url = "http://www.ufoot.org/download/liquidwar/v5/${finalAttrs.version}/liquidwar-${finalAttrs.version}.tar.gz";
     sha256 = "2tCqhN1BbK0FVCHtm0DfOe+ueNPfdZwFg8ZMVPfy/18=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})

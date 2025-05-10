@@ -5,14 +5,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-theme-framework";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "jaxwilko";
-    repo = pname;
-    rev = "v${version}";
+    repo = "gtk-theme-framework";
+    rev = "v${finalAttrs.version}";
     sha256 = "1z5s5rsgiypanf2z0avaisbflnvwrc8aiy5qskrsvbbaja63jy3s";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

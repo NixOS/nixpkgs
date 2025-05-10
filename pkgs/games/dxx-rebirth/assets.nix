@@ -11,12 +11,12 @@ let
     let
       pname = "descent${toString ver}";
     in
-    stdenv.mkDerivation rec {
-      name = "${pname}-assets-${version}";
+    stdenv.mkDerivation (finalAttrs: {
+      name = "${pname}-assets-${finalAttrs.version}";
       version = "2.0.0.7";
 
       src = requireFile rec {
-        name = "setup_descent12_${version}.exe";
+        name = "setup_descent12_${finalAttrs.version}.exe";
         sha256 = "1r1drbfda6czg21f9qqiiwgnkpszxgmcn5bafp5ljddh34swkn3f";
         message = ''
           While the Descent ${toString ver} game engine is free, the game assets are not.
@@ -55,7 +55,7 @@ let
         maintainers = with maintainers; [ peterhoeg ];
         hydraPlatforms = [ ];
       };
-    };
+    });
 
 in
 {

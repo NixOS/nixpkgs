@@ -37,7 +37,7 @@
 
 let
   version = "2024.1.1";
-  data = stdenv.mkDerivation rec {
+  data = stdenv.mkDerivation {
     pname = "flightgear-data";
     inherit version;
 
@@ -52,11 +52,11 @@ let
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
-      cp ${src}/* -a "$out/share/FlightGear/"
+      cp $src/* -a "$out/share/FlightGear/"
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flightgear";
   # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
   inherit version data;

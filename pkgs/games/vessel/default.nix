@@ -8,22 +8,22 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vessel";
   version = "12082012";
 
   goBuyItNow = ''
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${version}-bin" in the
+    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${finalAttrs.version}-bin" in the
     directory where you saved it.
   '';
 
   src =
     if (stdenv.hostPlatform.isi686) then
       requireFile {
-        message = goBuyItNow;
-        name = "vessel-${version}-bin";
+        message = finalAttrs.goBuyItNow;
+        name = "vessel-${finalAttrs.version}-bin";
         sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
       }
     else
@@ -100,5 +100,4 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
   };
-
-}
+})

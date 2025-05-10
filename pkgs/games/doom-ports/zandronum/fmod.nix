@@ -16,20 +16,20 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fmod";
   version = "4.44.64";
-  shortVersion = builtins.replaceStrings [ "." ] [ "" ] version;
+  shortVersion = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchurl (
     if stdenv.hostPlatform.isLinux then
       {
-        url = "https://zdoom.org/files/fmod/fmodapi${shortVersion}linux.tar.gz";
+        url = "https://zdoom.org/files/fmod/fmodapi${finalAttrs.shortVersion}linux.tar.gz";
         sha256 = "047hk92xapwwqj281f4zwl0ih821rrliya70gfj82sdfjh9lz8i1";
       }
     else
       {
-        url = "https://zdoom.org/files/fmod/fmodapi${shortVersion}mac-installer.dmg";
+        url = "https://zdoom.org/files/fmod/fmodapi${finalAttrs.shortVersion}mac-installer.dmg";
         sha256 = "1m1y4cpcwpkl8x31d3s68xzp107f343ma09w2437i2adn5y7m8ii";
       }
   );
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm755 api/lib/libfmodex${bits}-${version}.so $out/lib/libfmodex-${version}.so
-      ln -s libfmodex-${version}.so $out/lib/libfmodex.so
+      install -Dm755 api/lib/libfmodex${bits}-${finalAttrs.version}.so $out/lib/libfmodex-${finalAttrs.version}.so
+      ln -s libfmodex-${finalAttrs.version}.so $out/lib/libfmodex.so
       patchelf --set-rpath ${libPath} $out/lib/libfmodex.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ maintainers.lassulus ];
   };
-}
+})

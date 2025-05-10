@@ -8,13 +8,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "graphite-kde-theme";
   version = "unstable-2023-10-25";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "graphite-kde-theme";
     rev = "33cc85c49c424dfcba73e6ee84b0dc7fb9e52566";
     hash = "sha256-iQGT2x0wY2EIuYw/a1MB8rT9BxiqWrOyBo6EGIJwsFw=";
   };
