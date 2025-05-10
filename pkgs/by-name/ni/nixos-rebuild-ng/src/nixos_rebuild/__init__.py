@@ -5,7 +5,7 @@ import os
 import sys
 from pathlib import Path
 from subprocess import CalledProcessError, run
-from typing import assert_never
+from typing import Final, assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
@@ -13,7 +13,7 @@ from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
-logger = logging.getLogger()
+logger: Final = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 

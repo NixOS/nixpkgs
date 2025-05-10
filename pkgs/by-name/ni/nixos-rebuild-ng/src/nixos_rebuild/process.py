@@ -1,6 +1,7 @@
 import atexit
 import logging
 import os
+import re
 import shlex
 import subprocess
 from collections.abc import Sequence
@@ -10,7 +11,7 @@ from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
 
-logger = logging.getLogger(__name__)
+logger: Final = logging.getLogger(__name__)
 
 SSH_DEFAULT_OPTS: Final = [
     "-o",
@@ -20,6 +21,8 @@ SSH_DEFAULT_OPTS: Final = [
     "-o",
     "ControlPersist=60",
 ]
+
+type Args = Sequence[str | bytes | os.PathLike[str] | os.PathLike[bytes]]
 
 
 @dataclass(frozen=True)
@@ -82,7 +85,7 @@ atexit.register(cleanup_ssh)
 
 
 def run_wrapper(
-    args: Sequence[str | bytes | os.PathLike[str] | os.PathLike[bytes]],
+    args: Args,
     *,
     check: bool = True,
     extra_env: dict[str, str] | None = None,
@@ -93,6 +96,8 @@ def run_wrapper(
     "Wrapper around `subprocess.run` that supports extra functionality."
     env = None
     process_input = None
+    run_args = args
+
     if remote:
         if extra_env:
             extra_env_args = [f"{env}={value}" for env, value in extra_env.items()]
@@ -103,7 +108,7 @@ def run_wrapper(
                 process_input = remote.sudo_password + "\n"
             else:
                 args = ["sudo", *args]
-        args = [
+        run_args = [
             "ssh",
             *remote.opts,
             *SSH_DEFAULT_OPTS,
@@ -119,32 +124,39 @@ def run_wrapper(
         if extra_env:
             env = os.environ | extra_env
         if sudo:
-            args = ["sudo", *args]
+            run_args = ["sudo", *run_args]
 
     logger.debug(
         "calling run with args=%r, kwargs=%r, extra_env=%r",
-        args,
+        run_args,
         kwargs,
         extra_env,
     )
 
     try:
         r = subprocess.run(
-            args,
+            run_args,
             check=check,
             env=env,
             input=process_input,
-            # Hope nobody is using NixOS with non-UTF8 encodings, but "surrogateescape"
-            # should still work in those systems.
+            # Hope nobody is using NixOS with non-UTF8 encodings, but
+            # "surrogateescape" should still work in those systems.
             text=True,
             errors="surrogateescape",
             **kwargs,
         )
 
         if kwargs.get("capture_output") or kwargs.get("stderr") or kwargs.get("stdout"):
-            logger.debug("captured output stdout=%r, stderr=%r", r.stdout, r.stderr)
+            logger.debug(
+                "captured output with stdout=%r, stderr=%r", r.stdout, r.stderr
+            )
 
         return r
+    except KeyboardInterrupt:
+        # sudo commands are activation only and unlikely to be long running
+        if remote and not sudo:
+            _kill_long_running_ssh_process(args, remote)
+        raise
     except subprocess.CalledProcessError:
         if sudo and remote and remote.sudo_password is None:
             logger.error(
@@ -152,3 +164,55 @@ def run_wrapper(
                 + "--ask-sudo-password?"
             )
         raise
+
+
+# SSH does not send the signals to the process when running without usage of
+# pseudo-TTY (that causes a whole other can of worms), so if the process is
+# long running (e.g.: a build) this will result in the underlying process
+# staying alive.
+# See: https://stackoverflow.com/a/44354466
+# Issue: https://github.com/NixOS/nixpkgs/issues/403269
+def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
+    logger.info("cleaning-up remote process, please wait...")
+
+    # We need to escape both the shell and regex here (since pkill interprets
+    # its arguments as regex)
+    quoted_args = re.escape(shlex.join(str(a) for a in args))
+    logger.debug("killing remote process using pkill with args=%r", quoted_args)
+    cleanup_interrupted = False
+
+    try:
+        r = subprocess.run(
+            [
+                "ssh",
+                *remote.opts,
+                *SSH_DEFAULT_OPTS,
+                remote.host,
+                "--",
+                "pkill",
+                "--signal",
+                "SIGINT",
+                "--full",
+                "--",
+                quoted_args,
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        logger.debug(
+            "remote pkill captured output with stdout=%r, stderr=%r, returncode=%s",
+            r.stdout,
+            r.stderr,
+            r.returncode,
+        )
+    except KeyboardInterrupt:
+        cleanup_interrupted = True
+        raise
+    finally:
+        if cleanup_interrupted or r.returncode:
+            logger.warning(
+                "could not clean-up remote process, the command %s may still be running in host '%s'",
+                args,
+                remote.host,
+            )
