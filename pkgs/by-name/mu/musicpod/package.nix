@@ -1,6 +1,6 @@
 {
   lib,
-  flutter327,
+  flutter329,
   fetchFromGitHub,
   mpv-unwrapped,
   libass,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "2.9.0";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
     tag = "v${version}";
-    hash = "sha256-jq133GdeuEENPb2igNWkjeFTpI5qqxF2RuCu78y6L8o=";
+    hash = "sha256-bZAVkYSQ8NFW4wAXjfEZYt/Z/gSYn51MPLY+hENWQac=";
   };
 
   postPatch = ''
@@ -30,14 +30,18 @@ flutter327.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    audio_service_mpris = "sha256-QRZ4a3w4MZP8/A4yXzP4P9FPwEVNXlntmBwE8I+s2Kk=";
-    media_kit = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
-    media_kit_libs_video = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
-    media_kit_video = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
-    phoenix_theme = "sha256-HGMRQ5wdhoqYNkrjLTfz6mE/dh45IRyuQ79/E4oo+9w=";
-    yaru = "sha256-lwyl5aRf5HzWHk7aXYXFj6a9QiFpDN9piHYXzVccYWY=";
-  };
+  gitHashes =
+    let
+      media_kit-hash = "sha256-uSVSLh4E/iUJaxA1JxKRYmDFyMpuoTWTyEwsbJuPldU=";
+    in
+    {
+      audio_service_mpris = "sha256-QRZ4a3w4MZP8/A4yXzP4P9FPwEVNXlntmBwE8I+s2Kk=";
+      media_kit = media_kit-hash;
+      media_kit_libs_video = media_kit-hash;
+      media_kit_video = media_kit-hash;
+      phoenix_theme = "sha256-HGMRQ5wdhoqYNkrjLTfz6mE/dh45IRyuQ79/E4oo+9w=";
+      yaru = "sha256-8TgDrI1vWIi8V1e/DrKVb4PS+KLCguG0bB15/XFFnX4=";
+    };
 
   buildInputs = [
     mpv-unwrapped
