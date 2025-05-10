@@ -28,7 +28,7 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) Set NIXPKGS_GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
+  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
   version = "0.25.3";
   hash = "sha256-xafeni6Z6QgPiKzvhCT2SyfPn0agLHo47y+6ExQXkzE=";
@@ -78,6 +78,7 @@ let
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
           generate = grammar.generate or false;
+          broken = grammar.broken or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars =
@@ -121,6 +122,7 @@ let
           tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
             language = "tree-sitter-markdown_inline";
             location = "tree-sitter-markdown-inline";
+            broken = true;
           };
         }
         // {
@@ -134,7 +136,7 @@ let
           };
         };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
