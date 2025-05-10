@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   imaplib2,
@@ -8,7 +9,6 @@
   pyopenssl,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
@@ -16,8 +16,6 @@ buildPythonPackage rec {
   pname = "aioimaplib";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iroco-co";
@@ -37,10 +35,17 @@ buildPythonPackage rec {
     pytz
   ];
 
-  disabledTests = [
-    # TimeoutError
-    "test_idle_start__exits_queue_get_without_timeout_error"
-  ];
+  disabledTests =
+    [
+      # TimeoutError
+      "test_idle_start__exits_queue_get_without_timeout_error"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Comparison to magic strings
+      "test_idle_loop"
+    ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aioimaplib" ];
 
