@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/SavvyCAN.app $out/Applications
+    ln -s $out/Applications/SavvyCAN.app/Contents/MacOS/SavvyCAN $out/bin/SavvyCAN
+  '';
+
   meta = with lib; {
     description = "QT based cross platform canbus tool";
     homepage = "https://savvycan.com/";
