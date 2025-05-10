@@ -15,10 +15,16 @@
   python3,
   replaceVars,
   systemdMinimal,
+  udev,
   usbutils,
   vala,
   which,
+  withSystemd ? udev.passthru.features.withSystemd,
 }:
+
+let
+  udev' = if withSystemd then systemdMinimal else udev;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
@@ -36,18 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LOzg6ONmuJtAcL508zicn3+iGspW2KU1fpbjDNjU9CY=";
   };
 
-  patches = [
-    # Hardcode absolute paths to libraries so that consumers
-    # do not need to set LD_LIBRARY_PATH themselves.
-    ./hardcode-paths.patch
-
-    # Replace references to udevadm with an absolute paths, so programs using
-    # umockdev will just work without having to provide it in their test environment
-    # $PATH.
-    (replaceVars ./substitute-udevadm.patch {
-      udevadm = "${systemdMinimal}/bin/udevadm";
-    })
-  ];
+  patches =
+    [
+      # Hardcode absolute paths to libraries so that consumers
+      # do not need to set LD_LIBRARY_PATH themselves.
+      ./hardcode-paths.patch
+    ]
+    ++ lib.optional withSystemd
+      # Replace references to udevadm with an absolute paths, so programs using
+      # umockdev will just work without having to provide it in their test environment
+      # $PATH.
+      (
+        replaceVars ./substitute-udevadm.patch {
+          udevadm = "${systemdMinimal}/bin/udevadm";
+        }
+      );
 
   nativeBuildInputs =
     [
@@ -65,11 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemdMinimal
+    udev'
     libpcap
   ];
 
-  checkInputs = lib.optionals finalAttrs.passthru.withGudev [
+  checkInputs = lib.optionals finalAttrs.passthru.features.withGudev [
     libgudev
   ];
 
@@ -85,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=true"
   ];
 
-  doCheck = true;
+  doCheck = withSystemd;
 
   postPatch = ''
     # Substitute the path to this derivation in the patch we apply.
@@ -103,12 +112,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # libgudev is needed for an optional test but it itself relies on umockdev for testing.
-    withGudev = false;
+    features = {
+      inherit withSystemd;
+
+      # libgudev is needed for an optional test but it itself relies on umockdev for testing.
+      withGudev = false;
+    };
 
     tests = {
       withGudev = finalAttrs.finalPackage.overrideAttrs (attrs: {
-        passthru = attrs.passthru // {
+        passthru.features = attrs.passthru.features // {
           withGudev = true;
         };
       });

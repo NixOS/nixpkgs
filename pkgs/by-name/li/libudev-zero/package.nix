@@ -27,8 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = lib.optionals stdenv.hostPlatform.isStatic "install-static";
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    # Indicate that this is not the systemd udev.
+    features.withSystemd = false;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
