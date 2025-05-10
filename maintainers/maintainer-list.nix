@@ -2124,6 +2124,11 @@
     githubId = 56650223;
     name = "Artturi N";
   };
+  artur-sannikov = {
+    name = "Artur Sannikov";
+    github = "artur-sannikov";
+    githubId = 40318410;
+  };
   arturcygan = {
     email = "arczicygan@gmail.com";
     github = "arcz";
