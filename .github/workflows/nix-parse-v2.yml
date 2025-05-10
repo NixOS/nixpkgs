@@ -27,4 +27,5 @@ jobs:
 
       - name: Parse all nix files
         run: |
-          nix-build ci -A parse
+          # Tests multiple versions at once, let's make sure all of them run, so keep-going.
+          nix-build ci -A parse --keep-going
