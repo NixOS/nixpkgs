@@ -2,8 +2,6 @@
   lib,
   stdenv,
   runCommandLocal,
-  buildEnv,
-  writeText,
   writeShellScriptBin,
   pkgs,
   pkgsHostTarget,
@@ -15,7 +13,6 @@
   multiPkgs ? pkgs: [ ],
   multiArch ? false, # Whether to include 32bit packages
   includeClosures ? false, # Whether to include closures of all packages
-  nativeBuildInputs ? [ ],
   extraBuildCommands ? "",
   extraBuildCommandsMulti ? "",
   extraOutputsToInstall ? [ ],
