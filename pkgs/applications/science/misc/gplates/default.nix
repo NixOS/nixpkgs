@@ -28,13 +28,6 @@ let
       numpy
     ]
   );
-  boost' = boost.override {
-    enablePython = true;
-    inherit python;
-  };
-  cgal' = cgal.override {
-    boost = boost';
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
@@ -63,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost'
-    cgal'
+    (boost.withPython python3)
+    cgal
     gdal
     glew
     gmp

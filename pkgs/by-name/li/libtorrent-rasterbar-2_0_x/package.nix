@@ -10,24 +10,14 @@
   ncurses,
 }:
 
-let
-  version = "2.0.11";
-
-  # Make sure we override python, so the correct version is chosen
-  boostPython = boost.override {
-    enablePython = true;
-    python = python3;
-  };
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rasterbar";
-  inherit version;
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
     fetchSubmodules = true;
   };
@@ -35,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boostPython
+    (boost.withPython python3)
     openssl
     zlib
     python3
@@ -84,4 +74,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = platforms.unix;
   };
-}
+})
