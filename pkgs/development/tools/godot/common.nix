@@ -66,7 +66,7 @@ let
   dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
 
   attrs = finalAttrs: rec {
-    pname = "godot4${suffix}";
+    pname = "godot${suffix}";
     inherit version;
 
     src = fetchFromGitHub {
