@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   fetchurl,
   autoreconfHook,
@@ -14,7 +15,7 @@
   libdeflate,
   libselinux,
   fuseSupport ? stdenv.hostPlatform.isLinux,
-  selinuxSupport ? false,
+  selinuxSupport ? config.selinuxSupport,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

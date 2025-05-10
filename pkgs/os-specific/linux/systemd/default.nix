@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  config,
   nixosTests,
   pkgsCross,
   testers,
@@ -57,7 +58,7 @@
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   gnutls,
   iptables,
-  withSelinux ? false,
+  withSelinux ? config.selinuxSupport,
   libselinux,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,

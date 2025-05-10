@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   pkgsCross,
   appstream,
@@ -75,7 +76,7 @@
   withMan ? withDocbookDocs,
   withP11Kit ? lib.meta.availableOn stdenv.hostPlatform p11-kit,
   withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
-  withSELinuxModule ? false,
+  withSELinuxModule ? config.selinuxSupport,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
