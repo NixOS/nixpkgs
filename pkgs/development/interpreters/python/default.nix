@@ -113,6 +113,10 @@
           sqlite = null;
           tzdata = null;
           libuuid = null;
+          bzip2 = null;
+          libxcrypt = null;
+          xz = null;
+          zlib = null;
           libffi = libffiBoot; # without test suite
           stripConfig = true;
           stripIdlelib = true;
@@ -124,6 +128,16 @@
           enableOptimizations = false;
           enableLTO = false;
           mimetypesSupport = false;
+          withExpat = false;
+          withMpdecimal = false;
+          /*
+            The actual 'allowedReferences' attribute is set inside the cpython derivation.
+            This is necessary in order to survive overrides of dependencies.
+          */
+          allowedReferenceNames = [
+            "bashNonInteractive"
+            "libffi"
+          ];
         }
         // sources.python312
       )).overrideAttrs
