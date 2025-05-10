@@ -60,6 +60,7 @@ buildGoModule {
     "cmd/derpprobe"
     "cmd/tailscaled"
     "cmd/tsidp"
+    "cmd/get-authkey"
   ];
 
   excludedPackages = [
