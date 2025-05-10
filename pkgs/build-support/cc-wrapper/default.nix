@@ -775,8 +775,12 @@ stdenvNoCC.mkDerivation {
       export hardening_unsupported_flags="${concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
+    + optionalString (!targetPlatform.isx86_32) ''
+      echo " -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer" >> $out/nix-support/cc-cflags-before
+    ''
+
     # For clang, this is handled in add-clang-cc-cflags-before.sh
-    + lib.optionalString (!isClang && machineFlags != [ ]) ''
+    + optionalString (!isClang && machineFlags != [ ]) ''
       printf "%s\n" ${lib.escapeShellArgs machineFlags} >> $out/nix-support/cc-cflags-before
     ''
 
