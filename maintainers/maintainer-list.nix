@@ -17671,6 +17671,12 @@
     githubId = 41154684;
     name = "nokazn";
   };
+  nomaterials = {
+    email = "nomaterials@gmail.com";
+    github = "no-materials";
+    githubId = 16938952;
+    name = "nomaterials";
+  };
   nomeata = {
     email = "mail@joachim-breitner.de";
     github = "nomeata";
