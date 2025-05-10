@@ -901,6 +901,7 @@
   ./services/misc/servarr/sonarr.nix
   ./services/misc/servarr/whisparr.nix
   ./services/misc/serviio.nix
+  ./services/misc/shoko.nix
   ./services/misc/sickbeard.nix
   ./services/misc/signald.nix
   ./services/misc/siproxd.nix

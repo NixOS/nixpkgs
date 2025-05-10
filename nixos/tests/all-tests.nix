@@ -1208,6 +1208,7 @@ in
   shadowsocks = handleTest ./shadowsocks { };
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix { };
   shiori = handleTest ./shiori.nix { };
+  shoko = handleTest ./shoko.nix { };
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = handleTest ./silverbullet.nix { };
   simple = handleTest ./simple.nix { };
