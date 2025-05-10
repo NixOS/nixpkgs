@@ -3,9 +3,8 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
-  electron_35,
+  electron_36,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -14,30 +13,20 @@
 }:
 
 let
-  electron = electron_35;
+  electron = electron_36;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.22.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vVKdaFKOx4xm4BK+AjVr4cEDOHpOjOe58k2wUAhB9XA=";
+    hash = "sha256-uJ3cCwGp2cZ/6uCi0YmRZ+0Q9X7KuPfJRDbIUZqmdmU=";
   };
 
-  npmDepsHash = "sha256-OS5DR+24F98ICgQ6zL4VD231Rd5JB/gJKl+qNfnP3PE=";
-
-  patches = [
-    # Make it possible to load the electron-builder config without sideeffects.
-    # PR at https://github.com/sunfish-shogi/shogihome/pull/1184
-    # Should be removed next 1.22.X ShogiHome update or possibly 1.23.X.
-    (fetchpatch {
-      url = "https://github.com/sunfish-shogi/shogihome/commit/a075571a3bf4f536487e1212a2e7a13802dc7ec7.patch";
-      sha256 = "sha256-dJyaoWOC+fEufzpYenmfnblgd2C9Ymv4Cl8Y/hljY6c=";
-    })
-  ];
+  npmDepsHash = "sha256-QYTnOZ9eSE6H3iXbWCQG6FUlNR6LLQdsmsfayawolBQ=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -46,6 +35,10 @@ buildNpmPackage (finalAttrs: {
 
     substituteInPlace .electron-builder.config.mjs \
       --replace-fail 'AppImage' 'dir'
+
+    # Workaround for https://github.com/electron/electron/issues/31121
+    substituteInPlace src/background/window/path.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 
   env = {
