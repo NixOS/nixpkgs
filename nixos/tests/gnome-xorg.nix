@@ -17,7 +17,7 @@ import ./make-test-python.nix (
 
         services.xserver.enable = true;
 
-        services.xserver.displayManager = {
+        services.displayManager = {
           gdm.enable = true;
           gdm.debug = true;
         };
@@ -27,8 +27,8 @@ import ./make-test-python.nix (
           user = user.name;
         };
 
-        services.xserver.desktopManager.gnome.enable = true;
-        services.xserver.desktopManager.gnome.debug = true;
+        services.desktopManager.gnome.enable = true;
+        services.desktopManager.gnome.debug = true;
         services.displayManager.defaultSession = "gnome-xorg";
 
         systemd.user.services = {
