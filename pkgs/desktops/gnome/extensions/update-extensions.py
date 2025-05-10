@@ -351,7 +351,7 @@ def find_collisions(
                 package_name_registry.setdefault(pname, set()).add(uuid)
     return {
         pname: sorted(uuids)
-        for pname, uuids in package_name_registry.items()
+        for pname, uuids in sorted(package_name_registry.items())
         if len(uuids) > 1
     }
 
