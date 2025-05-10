@@ -347,8 +347,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit aws-sdk-cpp boehmgc;
     tests = {
-      misc = nixosTests.nix-misc.lix;
-      installer = nixosTests.installer.lix-simple;
+      misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
+      installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
     };
   };
 
