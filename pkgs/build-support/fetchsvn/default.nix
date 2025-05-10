@@ -52,7 +52,7 @@ in
 if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
-  stdenvNoCC.mkDerivation {
+  stdenvNoCC.mkDerivation (finalAttrs: {
     name = name_;
     builder = ./builder.sh;
     nativeBuildInputs = [
@@ -82,4 +82,10 @@ else
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
     inherit preferLocalBuild;
-  }
+
+    passthru = {
+      unpacked = lib.removeAttrs finalAttrs.finalPackage [ "unpacked" ] // {
+        passthru = removeAttrs finalAttrs.finalPackage.passthru [ "unpacked" ];
+      };
+    };
+  })
