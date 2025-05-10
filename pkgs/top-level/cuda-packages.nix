@@ -64,6 +64,9 @@ let
       nvccCompatibilities
       pkgs
       ;
+
+    cudaNamePrefix = "cuda${cudaMajorMinorVersion}";
+
     cudaMajorVersion = versions.major cudaMajorMinorVersion;
     cudaOlder = strings.versionOlder cudaMajorMinorVersion;
     cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
