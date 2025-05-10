@@ -1197,6 +1197,7 @@ in
   seafile = handleTest ./seafile.nix { };
   searx = runTest ./searx.nix;
   seatd = handleTest ./seatd.nix { };
+  selinux = runTest ./selinux.nix;
   send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix { };
   servo = runTest ./servo.nix;
