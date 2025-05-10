@@ -5932,6 +5932,14 @@
     github = "deinferno";
     githubId = 14363193;
   };
+  delafthi = {
+    name = "Thierry Delafontaine";
+    email = "thierry@delafontaine.xyz";
+    matrix = "@delafthi:matrix.org";
+    github = "delafthi";
+    githubId = 50531499;
+    keys = [ { fingerprint = "24A0 D053 B044 E46D E0BD  F61F F284 24F9 874E 6696"; } ];
+  };
   delehef = {
     name = "Franklin Delehelle";
     email = "nix@odena.eu";
