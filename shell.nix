@@ -10,6 +10,7 @@
 # If you'd like to test out changes to the tools themselves, you can pass
 #
 #     nix-shell --arg nixpkgs ./.
+# TEST
 #
 {
   system ? builtins.currentSystem,

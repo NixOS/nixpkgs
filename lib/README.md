@@ -1,5 +1,7 @@
 # Nixpkgs lib
 
+TEST
+
 This directory contains the implementation, documentation and tests for the Nixpkgs `lib` library.
 
 ## Overview
