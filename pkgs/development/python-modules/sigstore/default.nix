@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "3.6.1";
+  version = "3.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "sigstore";
     repo = "sigstore-python";
     tag = "v${version}";
-    hash = "sha256-BdVX2LWCsMx9r0bDTJjMdrvy4Hqn6hrw9wAcub0nRMk=";
+    hash = "sha256-fghieYu5TDYwJCwesXbqRiuYCaTTDZhmHWvCwSbIO6w=";
   };
 
   pythonRelaxDeps = [
