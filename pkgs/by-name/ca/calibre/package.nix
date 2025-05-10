@@ -17,6 +17,7 @@
   libuchardet,
   libusb1,
   libwebp,
+  nix-update-script,
   optipng,
   piper-tts,
   pkg-config,
@@ -227,6 +228,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
+  };
 
   meta = {
     homepage = "https://calibre-ebook.com";
