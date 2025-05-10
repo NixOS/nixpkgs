@@ -46,6 +46,7 @@
   SDL2_ttf,
   SDL2_image,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   libjpeg_turbo,
   libkrb5,
   libopus,
@@ -145,9 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       fuse3
-      systemd
       wayland
       wayland-scanner
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
     ]
     ++ lib.optionals withUnfree [
       faac
@@ -194,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   passthru.tests = {
+    features = { inherit withSystemd withUnfree; };
     inherit remmina;
     inherit gnome-remote-desktop;
   };
