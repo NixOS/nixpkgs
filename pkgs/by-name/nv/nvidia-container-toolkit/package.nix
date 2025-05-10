@@ -52,11 +52,11 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace internal/config/config.go \
-      --replace '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace tools/container/toolkit/toolkit.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
   '';
 
   subPackages = [
