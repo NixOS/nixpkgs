@@ -158,6 +158,7 @@ let
       metacoq-utils = self.metacoq.utils;
       metacoq-common = self.metacoq.common;
       metacoq-template-coq = self.metacoq.template-coq;
+      metacoq-template-rocq = self.metacoq.template-rocq;
       metacoq-pcuic = self.metacoq.pcuic;
       metacoq-safechecker = self.metacoq.safechecker;
       metacoq-template-pcuic = self.metacoq.template-pcuic;

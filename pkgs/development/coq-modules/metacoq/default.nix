@@ -51,7 +51,7 @@ let
     }
     {
       case = "9.0";
-      out = "1.3.4-9.0";
+      out = "1.4-9.0";
     }
   ] null;
   release = {
@@ -74,22 +74,30 @@ let
     "1.3.3-8.19".sha256 = "sha256-SBTv49zQXZ+oGvIqWM53hjBKru9prFgZRv8gVgls40k=";
     "1.3.4-8.20".sha256 = "sha256-ofRP0Uo48G2LBuIy/5ZLyK+iVZXleKiwfMEBD0rX9fQ=";
     "1.3.4-9.0".sha256 = "sha256-BiAeuwL6WvDNs+ZGzPWj59kTS69J4kjrS3XIZyzpLOQ=";
+    "1.4-9.0".sha256 = "sha256-5QecDAMkvgfDPZ7/jDfnOgcE+Eb1LTAozP7nz6nkuxg=";
   };
   releaseRev = v: "v${v}";
+
+  template-coq-rocq =
+    if (lib.versionAtLeast coq.coq-version "9.0" || coq.coq-version == "dev") then
+      "template-rocq"
+    else
+      "template-coq";
 
   # list of core metacoq packages and their dependencies
   packages = {
     "utils" = [ ];
     "common" = [ "utils" ];
     "template-coq" = [ "common" ];
+    "template-rocq" = [ "common" ];
     "pcuic" =
       if (lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev") then
         [ "common" ]
       else
-        [ "template-coq" ];
+        [ template-coq-rocq ];
     "safechecker" = [ "pcuic" ];
     "template-pcuic" = [
-      "template-coq"
+      template-coq-rocq
       "pcuic"
     ];
     "erasure" = [
@@ -97,7 +105,7 @@ let
       "template-pcuic"
     ];
     "quotation" = [
-      "template-coq"
+      template-coq-rocq
       "pcuic"
       "template-pcuic"
     ];
@@ -109,7 +117,7 @@ let
       "template-pcuic"
       "erasure"
     ];
-    "translations" = [ "template-coq" ];
+    "translations" = [ template-coq-rocq ];
     "all" = [
       "safechecker-plugin"
       "erasure-plugin"
@@ -118,7 +126,7 @@ let
     ];
   };
 
-  template-coq = metacoq_ "template-coq";
+  template-coq = metacoq_ template-coq-rocq;
 
   metacoq_ =
     package:
@@ -151,7 +159,17 @@ let
             ] ++ metacoq-deps;
 
             patchPhase =
-              if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev" then
+              if lib.versionAtLeast coq.coq-version "9.0" || coq.coq-version == "dev" then
+                ''
+                  patchShebangs ./configure.sh
+                  patchShebangs ./template-rocq/update_plugin.sh
+                  patchShebangs ./template-rocq/gen-src/to-lower.sh
+                  patchShebangs ./safechecker-plugin/clean_extraction.sh
+                  patchShebangs ./erasure-plugin/clean_extraction.sh
+                  echo "CAMLFLAGS+=-w -60 # Unused module" >> ./safechecker/Makefile.plugin.local
+                  sed -i -e 's/mv $i $newi;/mv $i tmp; mv tmp $newi;/' ./template-rocq/gen-src/to-lower.sh ./safechecker-plugin/clean_extraction.sh ./erasure-plugin/clean_extraction.sh
+                ''
+              else if lib.versionAtLeast coq.coq-version "8.17" then
                 ''
                   patchShebangs ./configure.sh
                   patchShebangs ./template-coq/update_plugin.sh
@@ -177,6 +195,7 @@ let
               lib.optionalString (package == "all") pkgallMake
               + ''
                 touch ${pkgpath}/metacoq-config
+                touch ${pkgpath}/metarocq-config
               ''
               +
                 lib.optionalString
@@ -190,6 +209,7 @@ let
                   ])
                   ''
                     echo  "-I ${template-coq}/lib/coq/${coq.coq-version}/user-contrib/MetaCoq/Template/" > ${pkgpath}/metacoq-config
+                    echo  "-I ${template-coq}/lib/coq/${coq.coq-version}/user-contrib/MetaRocq/Template/" > ${pkgpath}/metarocq-config
                   ''
               + lib.optionalString (package == "single") ''
                 ./configure.sh local
