@@ -10613,6 +10613,8 @@ self: super: with self; {
 
   oset = callPackage ../development/python-modules/oset { };
 
+  oslex = callPackage ../development/python-modules/oslex { };
+
   oslo-concurrency = callPackage ../development/python-modules/oslo-concurrency { };
 
   oslo-config = callPackage ../development/python-modules/oslo-config { };
