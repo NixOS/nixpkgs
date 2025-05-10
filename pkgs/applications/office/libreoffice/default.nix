@@ -343,6 +343,14 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
       ./readd-explicit-zlib-link.patch
+
+      # Backport patch to fix build with Poppler 25.05
+      # FIXME: conditionalize/remove as upstream updates
+      (fetchpatch2 {
+        url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+        includes = [ "sdext/*" ];
+        hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+      })
     ]
     ++ lib.optionals (lib.versionOlder version "24.8") [
       (fetchpatch2 {
