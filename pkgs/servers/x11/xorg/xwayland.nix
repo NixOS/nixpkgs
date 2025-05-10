@@ -40,6 +40,7 @@
   pixman,
   stdenv,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -107,7 +108,6 @@ stdenv.mkDerivation rec {
       mesa-gl-headers
       openssl
       pixman
-      systemd
       wayland
       wayland-protocols
       xkbcomp
@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
       xtrans
       zlib
     ]
+    ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withLibunwind [
       libunwind
     ];
@@ -127,10 +128,13 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "libunwind" withLibunwind)
   ];
 
-  passthru.updateScript = gitUpdater {
-    # No nicer place to find latest release.
-    url = "https://gitlab.freedesktop.org/xorg/xserver.git";
-    rev-prefix = "xwayland-";
+  passthru = {
+    features = { inherit withSystemd withLibunwind; };
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://gitlab.freedesktop.org/xorg/xserver.git";
+      rev-prefix = "xwayland-";
+    };
   };
 
   meta = with lib; {
