@@ -57,6 +57,9 @@ buildGoModule rec {
 
     substituteInPlace tools/container/toolkit/toolkit.go \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+
+    substituteInPlace cmd/nvidia-cdi-hook/update-ldcache/update-ldcache.go \
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
   '';
 
   subPackages = [
