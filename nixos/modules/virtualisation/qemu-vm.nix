@@ -311,7 +311,7 @@ let
         ${drivesCmdLine config.virtualisation.qemu.drives} \
         ${concatStringsSep " \\\n    " config.virtualisation.qemu.options} \
         $QEMU_OPTS \
-        "$@"
+        $@
   '';
 
   regInfo = hostPkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
