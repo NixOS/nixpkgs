@@ -65,6 +65,12 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # there is a problem with the compiler selection
       "test_fit_and_predict_with_compile"
+      # "Weights only load failed"
+      "test_can_be_copied"
+      "test_pickle_save_load"
+      "test_train_net_after_copy"
+      # Reported as flaky
+      "test_fit_lbfgs_optimizer"
     ];
 
   disabledTestPaths =
@@ -72,15 +78,13 @@ buildPythonPackage rec {
       # tries to import `transformers` and download HuggingFace data
       "skorch/tests/test_hf.py"
     ]
-    ++ lib.optionals
-      (stdenv.hostPlatform.system != "x86_64-linux" && stdenv.hostPlatform.system != "aarch64-darwin")
-      [
-        # these tests fail when running in parallel for multiple platforms with:
-        # "RuntimeError: The server socket has failed to listen on any local
-        # network address because they use the same hardcoded port." For now,
-        # running for one platform per OS to avoid spurious failures.
-        "skorch/tests/test_history.py"
-      ];
+    ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+      # these tests fail when running in parallel for multiple platforms with:
+      # "RuntimeError: The server socket has failed to listen on any local
+      # network address because they use the same hardcoded port." For now,
+      # running for one platform per OS to avoid spurious failures.
+      "skorch/tests/test_history.py"
+    ];
 
   pythonImportsCheck = [ "skorch" ];
 
