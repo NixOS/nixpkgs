@@ -1,7 +1,7 @@
 {
   cudaOlder,
   cudatoolkit,
-  cudaVersion,
+  cudaMajorMinorVersion,
   fetchurl,
   lib,
   libcublas ? null, # cuDNN uses CUDA Toolkit on old releases, where libcublas is not available.
@@ -25,7 +25,7 @@ finalAttrs: prevAttrs: {
       cudaTooOld = cudaOlder finalAttrs.passthru.featureRelease.minCudaVersion;
       cudaTooNew =
         (finalAttrs.passthru.featureRelease.maxCudaVersion != null)
-        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaVersion;
+        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaMajorMinorVersion;
     in
     prevAttrs.badPlatformsConditions or { }
     // {

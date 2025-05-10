@@ -4992,7 +4992,7 @@
     githubId = 15233006;
   };
   connorbaker = {
-    email = "connor.baker@tweag.io";
+    email = "ConnorBaker01@gmail.com";
     matrix = "@connorbaker:matrix.org";
     github = "ConnorBaker";
     name = "Connor Baker";
@@ -18551,12 +18551,6 @@
     github = "Pacman99";
     githubId = 16345849;
     name = "Parthiv Seetharaman";
-  };
-  paddygord = {
-    email = "pgpatrickgordon@gmail.com";
-    github = "avagordon01";
-    githubId = 10776658;
-    name = "Patrick Gordon";
   };
   paepcke = {
     email = "git@paepcke.de";
