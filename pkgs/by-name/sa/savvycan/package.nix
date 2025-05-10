@@ -2,17 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qtbase,
-  qttools,
-  qmake,
-  qtserialbus,
-  qtserialport,
-  qtdeclarative,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "savvycan";
   version = "220";
 
@@ -24,16 +17,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase
-    qttools
-    qtserialbus
-    qtserialport
-    qtdeclarative
+    qt5.qtbase
+    qt5.qttools
+    qt5.qtserialbus
+    qt5.qtserialport
+    qt5.qtdeclarative
   ];
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
   meta = with lib; {
@@ -70,5 +63,4 @@ stdenv.mkDerivation rec {
         it!
     '';
   };
-
 }
