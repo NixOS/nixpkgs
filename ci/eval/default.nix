@@ -31,7 +31,7 @@ let
       );
     };
 
-  nix = nixVersions.nix_2_24;
+  nix = nixVersions.nix_2_28;
 
   supportedSystems = import ../supportedSystems.nix;
 
