@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   python3Packages,
   ninja,
@@ -27,6 +28,14 @@ python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "sha256-O8qBD92P2g8QrBdMXa6j0Ozk+W80Ny5yk0KNTy7ekfE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "replace-imp-with-importlib.patch";
+      url = "https://github.com/getting-things-gnome/gtg/commit/568a00a3296d12cf3b2846c59bc99d13ecba7d47.patch";
+      hash = "sha256-i3F638ZGiKfSxVUZm6rzzPRpcIHLOO9dgV0SzNLSroI=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
