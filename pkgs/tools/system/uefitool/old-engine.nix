@@ -1,9 +1,4 @@
 {
-  version,
-  sha256,
-  installFiles,
-}:
-{
   lib,
   mkDerivation,
   fetchFromGitHub,
@@ -14,19 +9,14 @@
 }:
 
 mkDerivation rec {
-  passthru = {
-    inherit version;
-    inherit sha256;
-    inherit installFiles;
-  };
   pname = "uefitool";
-  inherit version;
+  version = "0.28.0";
 
   src = fetchFromGitHub {
-    inherit sha256;
+    hash = "sha256-StqrOMsKst2X2yQQ/Xl7iLAuA4QXEOyj2KtE7ZtoUNg=";
     owner = "LongSoft";
-    repo = pname;
-    rev = version;
+    repo = "uefitool";
+    tag = version;
   };
 
   buildInputs = [ qtbase ];
@@ -43,15 +33,16 @@ mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/bin
-    cp ${lib.concatStringsSep " " installFiles} "$out"/bin
+    cp UEFITool UEFIReplace/UEFIReplace UEFIPatch/UEFIPatch "$out"/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UEFI firmware image viewer and editor";
     homepage = "https://github.com/LongSoft/uefitool";
-    license = licenses.bsd2;
-    maintainers = [ ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ athre0z ];
     # uefitool supposedly works on other platforms, but their build script only works on linux in nixpkgs
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    mainProgram = "UEFITool";
   };
 }
