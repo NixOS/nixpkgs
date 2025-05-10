@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  patches = [
+    ./int_main.patch
+  ];
+
   preConfigure = "export LIBS=-lncurses";
 
   meta = with lib; {
