@@ -54,6 +54,9 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
+            identMap = ''
+              postgres root postgres
+            '';
             # TODO(@Ma27) split this off into its own VM test and move a few other
             # extension tests to use postgresqlTestExtension.
             extensions = ps: with ps; [ plv8 ];
@@ -73,7 +76,7 @@ let
         in
         ''
           def check_count(statement, lines):
-              return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+              return 'test $(psql -U postgres postgres -tAc "{}"|wc -l) -eq {}'.format(
                   statement, lines
               )
 
