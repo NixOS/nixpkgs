@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
+    broken = stdenv.hostPlatform.isDarwin;
     inherit (SDL.meta) platforms;
   };
 })
