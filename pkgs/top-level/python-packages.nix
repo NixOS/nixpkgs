@@ -17840,6 +17840,8 @@ self: super: with self; {
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
+  typedload = callPackage ../development/python-modules/typedload { };
+
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   typepy = callPackage ../development/python-modules/typepy { };
