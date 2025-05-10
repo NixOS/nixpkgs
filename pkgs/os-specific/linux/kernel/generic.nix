@@ -201,11 +201,14 @@ let
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = import ./common-flags.nix {
+          inherit
+            lib
+            stdenv
+            buildPackages
+            extraMakeFlags
+            ;
+        };
 
         postPatch =
           kernel.postPatch
@@ -226,18 +229,40 @@ let
           make $makeFlags \
               -C . O="$buildRoot" $kernelBaseConfig \
               ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-              $makeFlags
+              ''${makeFlags[@]}
 
           # Create the config file.
           echo "generating kernel configuration..."
           ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
           DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
             KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
-            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
+            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="''${makeFlags[@]}" \
             perl -w $generateConfig
         '';
 
         installPhase = "mv $buildRoot/.config $out";
+
+        doCheck = true;
+
+        checkPhase =
+          lib.optionalString stdenv.cc.isClang ''
+            if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
+              echo "Kernel config didn't recognize the clang compiler?"
+              exit 1
+            fi
+          ''
+          + lib.optionalString stdenv.cc.bintools.isLLVM ''
+            if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
+              echo "Kernel config didn't recognize the LLVM linker?"
+              exit 1
+            fi
+          ''
+          + lib.optionalString withRust ''
+            if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
+              echo "Kernel config didn't find Rust toolchain?"
+              exit 1
+            fi
+          '';
 
         enableParallelBuilding = true;
 
