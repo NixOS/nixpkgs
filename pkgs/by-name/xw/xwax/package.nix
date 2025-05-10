@@ -4,6 +4,7 @@
   fetchurl,
   SDL,
   SDL_ttf,
+  alsa-lib,
   jack2,
   libmpg123,
   ffmpeg,
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     SDL_ttf
 
+    alsa-lib
+
     # audio server
     jack2
 
@@ -54,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-alsa"
     "--enable-jack"
   ];
+
+  enableParallelBuilding = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-h";
