@@ -9,6 +9,11 @@ with lib;
 
 let
   cfg = config.services.nextcloud;
+
+  overridePackage = cfg.package.override {
+    inherit (config.security.pki) caBundle;
+  };
+
   fpm = config.services.phpfpm.pools.nextcloud;
 
   jsonFormat = pkgs.formats.json { };
@@ -51,13 +56,13 @@ let
   };
 
   webroot =
-    pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps"
+    pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
       {
         preferLocalBuild = true;
       }
       ''
         mkdir $out
-        ln -sfv "${cfg.package}"/* "$out"
+        ln -sfv "${overridePackage}"/* "$out"
         ${concatStrings (
           mapAttrsToList (
             name: store:
@@ -184,8 +189,8 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
-  nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
-  nextcloudOlderThan = versionOlder cfg.package.version;
+  nextcloudGreaterOrEqualThan = versionAtLeast overridePackage.version;
+  nextcloudOlderThan = versionOlder overridePackage.version;
 
   # https://github.com/nextcloud/documentation/pull/11179
   ocmProviderIsNotAStaticDirAnymore =
@@ -1019,12 +1024,12 @@ in
           If you have an existing installation with a custom table prefix, make sure it is
           set correctly in `config.php` and remove the option from your NixOS config.
         '')
-        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
-        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"));
+        ++ (optional (versionOlder overridePackage.version "26") (upgradeWarning 25 "23.05"))
+        ++ (optional (versionOlder overridePackage.version "27") (upgradeWarning 26 "23.11"))
+        ++ (optional (versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
+        ++ (optional (versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
+        ++ (optional (versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
+        ++ (optional (versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"));
 
       services.nextcloud.package =
         with pkgs;
