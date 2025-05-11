@@ -21158,8 +21158,6 @@ with pkgs;
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
 
-  widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
-
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 
   tubekit = callPackage ../applications/networking/cluster/tubekit/wrapper.nix { };
