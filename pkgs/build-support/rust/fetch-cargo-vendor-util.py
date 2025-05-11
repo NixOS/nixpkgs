@@ -78,15 +78,19 @@ def get_dl_for_registry(registry_uri: str, session: requests.Session) -> str:
     else:
         raise Exception(f"Unknown registry format in URI: {registry_uri}")
 
-    return registry_config["dl"]
+    dl = registry_config["dl"]
+    auth_required = registry_config.get("auth-required", False)
+    if auth_required:
+        eprint(f'Warning: Registry "{registry_uri}" requires authentication!')
+    return dl
 
 
 # See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-files
 def name_to_prefix(name: str) -> str:
-    l = len(name)
-    if l <= 2:
-        return str(l)
-    if l == 3:
+    nl = len(name)
+    if nl <= 2:
+        return str(nl)
+    if nl == 3:
         return "3/" + name[0]
     return name[0:2] + "/" + name[2:4]
 
@@ -103,18 +107,11 @@ def get_download_url_for_tarball(pkg: dict[str, Any], dl: str) -> str:
     return url
 
 
-def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path, dl: str) -> None:
-    url = get_download_url_for_tarball(pkg, dl)
-    filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
+def download_crate_tarball(session: requests.Session, url: str, out_path: Path, expected_checksum: str) -> None:
+    out_path.parent.mkdir(exist_ok=True)
 
-    # TODO: allow legacy checksum specification, see importCargoLock for example
-    #       also, don't forget about the other usage of the checksum
-    expected_checksum = pkg["checksum"]
-
-    tarball_out_dir = out_dir / "tarballs" / filename
-    eprint(f"Fetching {url} -> tarballs/{filename}")
-
-    calculated_checksum = download_file_with_checksum(session, url, tarball_out_dir)
+    eprint(f"Fetching {url} -> {out_path}")
+    calculated_checksum = download_file_with_checksum(session, url, out_path)
 
     if calculated_checksum != expected_checksum:
         raise Exception(f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}.")
@@ -180,12 +177,26 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
         source_info = parse_git_source(pkg["source"], lockfile_version)
         git_sha_rev_to_url[source_info["git_sha_rev"]] = source_info["url"]
 
-    registry_to_dl = {}
+    registry_source_to_dir_name = {}
+
+    # the download directory name must be kept "tarballs" for crates-io registries for legacy reasons
+    registry_source_to_dir_name["registry+https://github.com/rust-lang/crates.io-index"] = "tarballs"
+    registry_source_to_dir_name["sparse+https://index.crates.io/"] = "tarballs"
+
+    # all other registies are numbered starting from 1
+    next_registry_ind = 1
+    for pkg in registry_packages:
+        source = pkg["source"]
+        if source not in registry_source_to_dir_name:
+            registry_source_to_dir_name[source] = f"registry-{next_registry_ind}"
+            next_registry_ind += 1
+
+    registry_source_to_dl = {}
     session_0 = create_http_session()
     for pkg in registry_packages:
-        registry_uri = pkg["source"]
-        if registry_uri not in registry_to_dl:
-            registry_to_dl[registry_uri] = get_dl_for_registry(registry_uri, session_0)
+        source = pkg["source"]
+        if source not in registry_source_to_dl:
+            registry_source_to_dl[source] = get_dl_for_registry(source, session_0)
 
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
@@ -201,8 +212,22 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
         if len(registry_packages) != 0:
             (out_dir / "tarballs").mkdir()
             session = create_http_session()
-            tarball_args_gen = ((session, pkg, out_dir, registry_to_dl[pkg["source"]]) for pkg in registry_packages)
-            pool.starmap(download_tarball, tarball_args_gen)
+
+            def make_registry_crate_download_args(pkg: dict[str, Any]):
+                nonlocal session, registry_source_to_dl, registry_source_to_dir_name
+                source = pkg["source"]
+                dl = registry_source_to_dl[source]
+                url = get_download_url_for_tarball(pkg, dl)
+                dir_name = registry_source_to_dir_name[source]
+
+                # Note: lockfile v1 doesn't have its checksum in the pkg dictionary itself, so it's not supported
+                checksum = pkg["checksum"]
+                filename = f'{pkg["name"]}-{pkg["version"]}.tar.gz'
+                out_path = out_dir / dir_name / filename
+                return (session, url, out_path, checksum)
+
+            tarball_args_gen = (make_registry_crate_download_args(pkg) for pkg in registry_packages)
+            pool.starmap(download_crate_tarball, tarball_args_gen)
 
 
 def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
