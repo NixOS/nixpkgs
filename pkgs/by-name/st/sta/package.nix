@@ -31,7 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/simonccarter/sta";
     maintainers = [ ];
     platforms = platforms.all;
-    badPlatforms = platforms.darwin;
     mainProgram = "sta";
   };
 }
