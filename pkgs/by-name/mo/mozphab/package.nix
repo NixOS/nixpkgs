@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozphab";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
     tag = version;
-    hash = "sha256-ZiM+4EZjM7WXQfWkHVRTJ/hOHJvf9dRlqzqDHi++xQc=";
+    hash = "sha256-CVpsq9YoEww47uruHYEsJk9YQ39ZFQsMdL0nBc8AHUM=";
   };
 
   build-system = with python3.pkgs; [
