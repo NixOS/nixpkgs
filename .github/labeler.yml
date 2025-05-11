@@ -39,7 +39,7 @@
     - changed-files:
       - any-glob-to-any-file:
         - .github/**/*
-        - ci/**/*
+        - ci/**/*.*
 
 "6.topic: coq":
   - any:

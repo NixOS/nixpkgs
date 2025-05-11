@@ -21,7 +21,6 @@ stdenvNoCC.mkDerivation (
       postgresqlTestHook
       (postgresql.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages)))
     ];
-    failureHook = "postgresqlStop";
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
     passAsFile = [ "sql" ];
     sql =

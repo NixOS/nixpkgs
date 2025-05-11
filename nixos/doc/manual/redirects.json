@@ -1286,6 +1286,12 @@
   "module-services-postgres-initializing-extra-permissions-service-user-oneshot": [
     "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
   ],
+  "module-services-postgres-authentication": [
+    "index.html#module-services-postgres-authentication"
+  ],
+  "module-services-postgres-authentication-user-mapping": [
+    "index.html#module-services-postgres-authentication-user-mapping"
+  ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
   ],
@@ -1825,6 +1831,9 @@
   ],
   "test-opt-sshBackdoor.enable": [
     "index.html#test-opt-sshBackdoor.enable"
+  ],
+  "test-opt-sshBackdoor.vsockOffset": [
+    "index.html#test-opt-sshBackdoor.vsockOffset"
   ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
