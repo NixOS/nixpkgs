@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncftp";
-  version = "3.2.7";
+  version = "3.3.0";
 
   src = fetchurl {
-    url = "https://www.ncftp.com/public_ftp/ncftp/ncftp-${finalAttrs.version}-src.tar.xz";
-    hash = "sha256-1BxcTWYUqOri7U5NetprbTr8yftlpO2bhxE0S+8k9+g=";
+    url = "https://www.ncftp.com/public_ftp/ncftp/ncftp-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-eSD4hMKtr8gsjkHEbW89ImmHhcez9W9Wd6jVyGY5Y4Y=";
   };
 
   buildInputs = [ ncurses ];
