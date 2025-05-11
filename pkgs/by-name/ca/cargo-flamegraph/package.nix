@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flamegraph";
-  version = "0.6.7";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
     rev = "v${version}";
-    sha256 = "sha256-OpneGyulSreUKhmnLfsJ2sEbkDPCcrDjkRu9ccKZcJc=";
+    sha256 = "sha256-JGUABNCZhDyTTrjFCRsT+wkuAeZn9mCHCI6XgGYEl7Y=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uErlNPkacAmURNKAZp1wLsV2NB1w9HfjLZl5PgeMRu0=";
+  cargoHash = "sha256-FjLjEoorbZC2WZ424w2aFLmd4dIfy5s13sR8BSRVNIo=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ];
 
