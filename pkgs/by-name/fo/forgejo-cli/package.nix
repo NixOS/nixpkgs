@@ -45,7 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      awwpotato
+      isabelroses
+    ];
     mainProgram = "fj";
   };
 })
