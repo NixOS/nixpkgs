@@ -26,6 +26,10 @@ let
       renderExtraVeth = (
         name: cfg: ''
           echo "Bringing ${name} up"
+          ${optionalString (cfg.mtu != null) ''
+            echo "Setting MTU for ${name}"
+            ip link set dev ${name} mtu ${builtins.toString cfg.mtu}
+          ''}
           ip link set dev ${name} up
           ${optionalString (cfg.localAddress != null) ''
             echo "Setting ip for ${name}"
@@ -55,8 +59,11 @@ let
       # Initialise the container side of the veth pair.
       if [[ -n "''${HOST_ADDRESS-}" ]]   || [[ -n "''${HOST_ADDRESS6-}" ]]  ||
          [[ -n "''${LOCAL_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
-         [[ -n "''${HOST_BRIDGE-}" ]]; then
+         [[ -n "''${HOST_BRIDGE-}" ]] || [[ -n "''${NET_MTU-}" ]]; then
         ip link set host0 name eth0
+        if [[ -n "''${NET_MTU-}" ]]; then
+          ip link set dev eth0 mtu $NET_MTU
+        fi
         ip link set dev eth0 up
 
         if [[ -n "''${LOCAL_ADDRESS-}" ]]; then
@@ -198,8 +205,9 @@ let
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
       ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
-      --setenv PRIVATE_NETWORK="''${PRIVATE_NETWORK-}" \
       --setenv PRIVATE_USERS="''${PRIVATE_USERS-}" \
+      --setenv PRIVATE_NETWORK="''${PRIVATE_NETWORK-}" \
+      --setenv NET_MTU="''${NET_MTU-}" \
       --setenv HOST_BRIDGE="''${HOST_BRIDGE-}" \
       --setenv HOST_ADDRESS="''${HOST_ADDRESS-}" \
       --setenv LOCAL_ADDRESS="''${LOCAL_ADDRESS-}" \
@@ -227,7 +235,8 @@ let
     machinectl terminate "$INSTANCE" 2> /dev/null || true
 
     if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
-       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
+       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
+       [[ -n "''${NET_MTU-}" ]]; then
       ip link del dev "ve-$INSTANCE" 2> /dev/null || true
       ip link del dev "vb-$INSTANCE" 2> /dev/null || true
     fi
@@ -260,6 +269,9 @@ let
         else
           ''
             echo "Bring ${name} up"
+            ${optionalString (cfg.mtu != null) ''
+              ip link set dev "${name}" mtu ${builtins.toString cfg.mtu}
+            ''}
             ip link set dev "${name}" up
             # Set IPs and routes for ${name}
             ${optionalString (cfg.hostAddress != null) ''
@@ -278,9 +290,13 @@ let
     in
     ''
       if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
-         [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
+         [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
+         [[ -n "''${NET_MTU-}" ]]; then
         if [[ -z "''${HOST_BRIDGE-}" ]]; then
           ifaceHost=ve-$INSTANCE
+          if [[ -n "''${NET_MTU-}" ]]; then
+            ip link set dev "$ifaceHost" mtu "$NET_MTU"
+          fi
           ip link set dev "$ifaceHost" up
 
           ${ipcall cfg "ip addr" "HOST_ADDRESS" "hostAddress"}
@@ -440,6 +456,16 @@ let
         is specified by protocol, hostPort and containerPort. By default,
         protocol is tcp and hostPort and containerPort are assumed to be
         the same if containerPort is not explicitly given.
+      '';
+    };
+
+    mtu = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      example = 1500;
+      description = ''
+        The MTU to be assigned to the interface.
+        (Not used when hostBridge is set.)
       '';
     };
 
@@ -1095,6 +1121,9 @@ in
                   ''}
                   ${optionalString (length cfg.forwardPorts > 0) ''
                     HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
+                  ''}
+                  ${optionalString (cfg.mtu != null) ''
+                    NET_MTU=${builtins.toString cfg.mtu}
                   ''}
                   ${optionalString (cfg.hostAddress != null) ''
                     HOST_ADDRESS=${cfg.hostAddress}
