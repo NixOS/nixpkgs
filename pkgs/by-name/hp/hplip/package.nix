@@ -161,8 +161,8 @@ python3Packages.buildPythonApplication {
   postPatch = ''
     # https://github.com/NixOS/nixpkgs/issues/44230
     substituteInPlace createPPD.sh \
-      --replace ppdc "${cups}/bin/ppdc" \
-      --replace "gzip -c" "gzip -cn"
+      --replace-fail ppdc "${cups}/bin/ppdc" \
+      --replace-fail "gzip -c" "gzip -cn"
 
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -347,15 +347,15 @@ python3Packages.buildPythonApplication {
     "lib/sane"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license =
       if withPlugin then
-        licenses.unfree
+        lib.licenses.unfree
       else
-        with licenses;
+        with lib.licenses;
         [
           mit
           bsd2
@@ -368,6 +368,6 @@ python3Packages.buildPythonApplication {
       "armv7l-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }
