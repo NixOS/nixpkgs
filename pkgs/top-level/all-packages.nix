@@ -1533,7 +1533,7 @@ with pkgs;
     inherit lib udisks2 python3;
   };
 
-  xfe = callPackage ../applications/file-managers/xfe {
+  xfe = callPackage ../by-name/xf/xfe/package.nix {
     fox = fox_1_6;
   };
 
