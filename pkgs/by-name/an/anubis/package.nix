@@ -4,6 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   stdenv,
 
   esbuild,
@@ -78,7 +79,10 @@ buildGoModule (finalAttrs: {
     export DONT_USE_NETWORK=1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) anubis; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Weighs the soul of incoming HTTP requests using proof-of-work to stop AI crawlers";
