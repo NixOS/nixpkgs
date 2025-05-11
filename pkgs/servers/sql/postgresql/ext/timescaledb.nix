@@ -7,7 +7,6 @@
   postgresql,
   postgresqlBuildExtension,
   postgresqlTestExtension,
-  stdenv,
 
   enableUnfree ? true,
 }:

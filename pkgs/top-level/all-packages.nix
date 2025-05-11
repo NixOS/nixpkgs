@@ -1528,18 +1528,12 @@ with pkgs;
     inherit (libsForQt5) libqtpas wrapQtAppsHook;
   };
 
-  krusader = kdePackages.callPackage ../applications/file-managers/krusader { };
-
-  mc = callPackage ../applications/file-managers/mc {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   vifm-full = vifm.override {
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
 
-  xfe = callPackage ../applications/file-managers/xfe {
+  xfe = callPackage ../by-name/xf/xfe/package.nix {
     fox = fox_1_6;
   };
 
@@ -3164,18 +3158,22 @@ with pkgs;
     godot3-mono-headless
     godot3-mono-debug-server
     godot3-mono-server
+    godotPackages_4_3
+    godotPackages_4_4
+    godotPackages_4
+    godotPackages
     godot_4_3
     godot_4_3-mono
-    godot_4_3-export-templates
+    godot_4_3-export-templates-bin
     godot_4_4
     godot_4_4-mono
-    godot_4_4-export-templates
+    godot_4_4-export-templates-bin
     godot_4
     godot_4-mono
-    godot_4-export-templates
+    godot_4-export-templates-bin
     godot
     godot-mono
-    godot-export-templates
+    godot-export-templates-bin
     ;
 
   goattracker = callPackage ../applications/audio/goattracker { };
