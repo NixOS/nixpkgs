@@ -28,4 +28,4 @@ jobs:
 
       - name: Building Nixpkgs lib-tests
         run: |
-          nix-build --arg pkgs "(import ./ci/. {}).pkgs" ./lib/tests/release.nix
+          nix-build ci -A lib-tests
