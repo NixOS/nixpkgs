@@ -27,9 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.matroska.org";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ cawilliamson ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.platforms.unix;
   };
 })
