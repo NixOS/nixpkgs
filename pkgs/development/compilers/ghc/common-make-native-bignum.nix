@@ -364,6 +364,18 @@ stdenv.mkDerivation (
           else
             ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
         )
+      ]
+      # Fixes stack overrun in rts which crashes an process whenever
+      # freeHaskellFunPtr is called with nixpkgs' hardening flags.
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
+      # TODO: patch doesn't apply for < 9.4, but may still be necessary?
+      ++ lib.optionals (lib.versionAtLeast version "9.4") [
+        (fetchpatch {
+          name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
+          sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
+        })
       ];
 
     postPatch = "patchShebangs .";
