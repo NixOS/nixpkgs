@@ -18,7 +18,8 @@ let
   };
 
   frontend = buildNpmPackage rec {
-    inherit pname version src;
+    pname = "open-webui-frontend";
+    inherit version src;
 
     # the backend for run-on-client-browser python execution
     # must match lock file in open-webui
@@ -207,7 +208,23 @@ python312.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/open-webui/open-webui/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
-    license = lib.licenses.mit;
+    # License history is complex: originally MIT, then a potentially problematic
+    # relicensing to a modified BSD-3 clause occurred around v0.5.5/v0.6.6.
+    # Due to these concerns and non-standard terms, it's treated as custom non-free.
+    license = {
+      fullName = "Open WebUI License";
+      url = "https://github.com/open-webui/open-webui/blob/0cef844168e97b70de2abee4c076cc30ffec6193/LICENSE";
+      # Marked non-free due to concerns over the MIT -> modified BSD-3 relicensing process,
+      # potentially unclear/contradictory statements, and non-standard branding requirements.
+      free = false;
+    };
+    longDescription = ''
+      User-friendly WebUI for LLMs. Note on licensing: Code in Open WebUI prior
+      to version 0.5.5 was MIT licensed. Since version 0.6.6, the project has
+      adopted a modified BSD-3-Clause license that includes branding requirements
+      and whose relicensing process from MIT has raised concerns within the community.
+      Nixpkgs treats this custom license as non-free due to these factors.
+    '';
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
       drupol
