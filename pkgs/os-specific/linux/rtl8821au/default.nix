@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8821au";
-  version = "${kernel.version}-unstable-2024-03-16";
+  version = "${kernel.version}-unstable-2025-04-08";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821au-20210708";
-    rev = "168ac48174067e17ffb9f8b15ab802f37447dacc";
-    hash = "sha256-eB9RCoU5jg5fgZkfcef9fsQ6tyD8gTPD+wYcR6PbWNw=";
+    rev = "b90b76d30709fb82705cbc2e295a7dde9372a0a8";
+    hash = "sha256-rS7UXey2x00Dn9E2l5nRiVElYNKMRjIYDa+qDCGt5ac=";
   };
 
   nativeBuildInputs = [
