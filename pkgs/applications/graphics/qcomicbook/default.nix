@@ -1,16 +1,14 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
-  pkg-config,
   cmake,
-  qtbase,
-  qttools,
-  qtx11extras,
+  pkg-config,
+  libsForQt5,
   poppler,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qcomicbook";
   version = "0.9.1";
 
@@ -24,12 +22,13 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.qtx11extras
     poppler
   ];
 
