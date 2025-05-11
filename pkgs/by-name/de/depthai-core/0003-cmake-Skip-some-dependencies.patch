@@ -1,0 +1,26 @@
+From fb197990a62cf5bafee7e99bf4e8d973c63106da Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@protonmail.com>
+Date: Mon, 21 Apr 2025 18:44:33 +0200
+Subject: [PATCH] cmake: Skip some dependencies
+
+
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 812623291..b30571d93 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -96,10 +96,10 @@ find_package(Threads ${_QUIET} REQUIRED)
+ find_package(nlohmann_json 3.6.0 ${_QUIET} CONFIG REQUIRED)
+ 
+ # libnop for serialization
+-find_package(libnop ${_QUIET} CONFIG REQUIRED)
++# find_package(libnop ${_QUIET} CONFIG REQUIRED)
+ 
+ # MP4V2 for video encoding
+-find_package(mp4v2 ${_QUIET} CONFIG REQUIRED)
++# find_package(mp4v2 ${_QUIET} CONFIG REQUIRED)
+ 
+ if(DEPTHAI_ENABLE_PROTOBUF)
+     find_package(Protobuf ${_QUIET} REQUIRED)
+-- 
+2.48.1
+
