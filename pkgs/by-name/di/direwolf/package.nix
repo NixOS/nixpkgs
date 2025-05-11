@@ -7,7 +7,8 @@
   alsa-lib,
   gpsd,
   gpsdSupport ? false,
-  hamlib,
+  hamlib_4,
+  hamlib ? hamlib_4,
   hamlibSupport ? true,
   perl,
   portaudio,
@@ -64,23 +65,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace conf/CMakeLists.txt \
-      --replace /etc/udev/rules.d/ $out/lib/udev/rules.d/
+      --replace-fail /etc/udev/rules.d/ $out/lib/udev/rules.d/
     substituteInPlace src/symbols.c \
-      --replace /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
-      --replace /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
+      --replace-fail /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
+      --replace-fail /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
     substituteInPlace src/decode_aprs.c \
-      --replace /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
-      --replace /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
+      --replace-fail /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
+      --replace-fail /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
     substituteInPlace cmake/cpack/direwolf.desktop.in \
-      --replace 'Terminal=false' 'Terminal=true' \
-      --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
-    substituteInPlace src/dwgpsd.c \
-      --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 14'
+      --replace-fail 'Terminal=false' 'Terminal=true' \
+      --replace-fail 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
   ''
   + lib.optionalString extraScripts ''
     patchShebangs scripts/dwespeak.sh
     substituteInPlace scripts/dwespeak.sh \
-      --replace espeak ${espeak}/bin/espeak
+      --replace-fail espeak ${espeak}/bin/espeak
   '';
 
   doInstallCheck = true;
