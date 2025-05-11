@@ -1,7 +1,4 @@
-# NOTE: Formatting with the RFC-style nixfmt command is not yet stable.
-# See https://github.com/NixOS/rfcs/pull/166.
-
-name: Check that Nix files are formatted
+name: Check that files are formatted
 
 on:
   pull_request_target:
@@ -14,7 +11,7 @@ jobs:
     uses: ./.github/workflows/get-merge-commit.yml
 
   nixos:
-    name: nixfmt-check
+    name: fmt-check
     runs-on: ubuntu-24.04
     needs: get-merge-commit
     if: needs.get-merge-commit.outputs.mergedSha
@@ -27,13 +24,13 @@ jobs:
         with:
           extra_nix_config: sandbox = true
 
-      - name: Check that Nix files are formatted
+      - name: Check that files are formatted
         run: |
           # Note that it's fine to run this on untrusted code because:
           # - There's no secrets accessible here
           # - The build is sandboxed
           if ! nix-build ci -A fmt.check; then
-            echo "Some Nix files are not properly formatted"
+            echo "Some files are not properly formatted"
             echo "Please format them by going to the Nixpkgs root directory and running one of:"
             echo "  nix-shell --run treefmt"
             echo "  nix develop --command treefmt"
