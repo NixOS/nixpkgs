@@ -70,50 +70,51 @@ Finally, if the depending package is a compiler or other machine-code-producing 
 
 Putting this all together, that means that we have dependency types of the form "X→ E", which means that the dependency executes on X and emits code for E; each of X and E can be `build`, `host`, or `target`, and E can be `*` to indicate that the dependency is not a compiler-like package.
 
-Dependency types describe the relationships that a package has with each of its transitive dependencies.  You could think of attaching one or more dependency types to each of the formal parameters at the top of a package's `.nix` file, as well as to all of *their* formal parameters, and so on.   Triples like `(foo, bar, baz)`, on the other hand, are a property of an instantiated derivation -- you could would attach a triple `(mips-linux, mips-linux, sparc-solaris)` to a `.drv` file in `/nix/store`.
+Dependency types describe the relationships that a package has with each of its transitive dependencies. You could think of attaching one or more dependency types to each of the formal parameters at the top of a package's `.nix` file, as well as to all of _their_ formal parameters, and so on. Triples like `(foo, bar, baz)`, on the other hand, are a property of an instantiated derivation -- you could would attach a triple `(mips-linux, mips-linux, sparc-solaris)` to a `.drv` file in `/nix/store`.
 
 Only nine dependency types matter in practice:
 
 #### Possible dependency types {#possible-dependency-types}
 
 | Dependency type | Dependency’s host platform | Dependency’s target platform |
-|-----------------|----------------------------|------------------------------|
-| build → *       | build                      | (none)                       |
+| --------------- | -------------------------- | ---------------------------- |
+| build → \*      | build                      | (none)                       |
 | build → build   | build                      | build                        |
 | build → host    | build                      | host                         |
 | build → target  | build                      | target                       |
-| host → *        | host                       | (none)                       |
+| host → \*       | host                       | (none)                       |
 | host → host     | host                       | host                         |
 | host → target   | host                       | target                       |
-| target → *      | target                     | (none)                       |
+| target → \*     | target                     | (none)                       |
 | target → target | target                     | target                       |
 
-Let's use `g++` as an example to make this table clearer.  `g++` is a C++ compiler written in C.  Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`.  This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
+Let's use `g++` as an example to make this table clearer. `g++` is a C++ compiler written in C. Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`. This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
 
-* `g++` links against the host platform's `glibc` C library, which is a "host→ *" dependency with a triple of `(bar, bar, *)`.  Since it is a library, not a compiler, it has no "target".
+- `g++` links against the host platform's `glibc` C library, which is a "host→ _" dependency with a triple of `(bar, bar, _)`. Since it is a library, not a compiler, it has no "target".
 
-* Since `g++` is written in C, the `gcc` compiler used to compile it is a "build→ host" dependency of `g++` with a triple of `(foo, foo, bar)`.  This compiler runs on the build platform and emits code for the host platform.
+- Since `g++` is written in C, the `gcc` compiler used to compile it is a "build→ host" dependency of `g++` with a triple of `(foo, foo, bar)`. This compiler runs on the build platform and emits code for the host platform.
 
-* `gcc` links against the build platform's `glibc` C library, which is a "build→ *" dependency with a triple of `(foo, foo, *)`.  Since it is a library, not a compiler, it has no "target".
+- `gcc` links against the build platform's `glibc` C library, which is a "build→ _" dependency with a triple of `(foo, foo, _)`. Since it is a library, not a compiler, it has no "target".
 
-* This `gcc` is itself compiled by an *earlier* copy of `gcc`.  This earlier copy of `gcc` is a "build→ build" dependency of `g++` with a triple of `(foo, foo, foo)`.  This "early `gcc`" runs on the build platform and emits code for the build platform.
+- This `gcc` is itself compiled by an _earlier_ copy of `gcc`. This earlier copy of `gcc` is a "build→ build" dependency of `g++` with a triple of `(foo, foo, foo)`. This "early `gcc`" runs on the build platform and emits code for the build platform.
 
-* `g++` is bundled with `libgcc`, which includes a collection of target-machine routines for exception handling and
-software floating point emulation.  `libgcc` would be a "target→ *" dependency with triple `(foo, baz, *)`, because it consists of machine code which gets linked against the output of the compiler that we are building.  It is a library, not a compiler, so it has no target of its own.
+- `g++` is bundled with `libgcc`, which includes a collection of target-machine routines for exception handling and
+  software floating point emulation. `libgcc` would be a "target→ _" dependency with triple `(foo, baz, _)`, because it consists of machine code which gets linked against the output of the compiler that we are building. It is a library, not a compiler, so it has no target of its own.
 
-* `libgcc` is written in C and compiled with `gcc`.  The `gcc` that compiles it will be a "build→ target" dependency with triple `(foo, foo, baz)`.  It gets compiled *and run* at `g++`-build-time (on platform `foo`), but must emit code for the `baz`-platform.
+- `libgcc` is written in C and compiled with `gcc`. The `gcc` that compiles it will be a "build→ target" dependency with triple `(foo, foo, baz)`. It gets compiled _and run_ at `g++`-build-time (on platform `foo`), but must emit code for the `baz`-platform.
 
-* `g++` allows inline assembler code, so it depends on access to a copy of the `gas` assembler.  This would be a "host→ target" dependency with triple `(foo, bar, baz)`.
+- `g++` allows inline assembler code, so it depends on access to a copy of the `gas` assembler. This would be a "host→ target" dependency with triple `(foo, bar, baz)`.
 
-* `g++` (and `gcc`) include a library `libgccjit.so`, which wrap the compiler in a library to create a just-in-time compiler.  In nixpkgs, this library is in the `libgccjit` package; if C++ required that programs have access to a JIT, `g++` would need to add a "target→ target" dependency for `libgccjit` with triple `(foo, baz, baz)`.  This would ensure that the compiler ships with a copy of `libgccjit` which both executes on and generates code for the `baz`-platform.
+- `g++` (and `gcc`) include a library `libgccjit.so`, which wrap the compiler in a library to create a just-in-time compiler. In nixpkgs, this library is in the `libgccjit` package; if C++ required that programs have access to a JIT, `g++` would need to add a "target→ target" dependency for `libgccjit` with triple `(foo, baz, baz)`. This would ensure that the compiler ships with a copy of `libgccjit` which both executes on and generates code for the `baz`-platform.
 
-* If `g++` itself linked against `libgccjit.so` (for example, to allow compile-time-evaluated C++ expressions), then the `libgccjit` package used to provide this functionality would be a "host→ host" dependency of `g++`: it is code which runs on the `host` and emits code for execution on the `host`.
+- If `g++` itself linked against `libgccjit.so` (for example, to allow compile-time-evaluated C++ expressions), then the `libgccjit` package used to provide this functionality would be a "host→ host" dependency of `g++`: it is code which runs on the `host` and emits code for execution on the `host`.
 
 ### Cross packaging cookbook {#ssec-cross-cookbook}
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
 
 #### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
+
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
 
 ```nix
@@ -123,7 +124,8 @@ Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is availa
 ```
 
 #### How do I avoid compiling a GCC cross-compiler from source? {#cross-qa-avoid-compiling-gcc-cross-compiler}
-On less powerful machines, it can be inconvenient to cross-compile a package only to find out that GCC has to be compiled from source, which could take up to several hours. Nixpkgs maintains a limited [cross-related jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk), which tests cross-compilation to various platforms from build platforms "x86\_64-linux", "aarch64-linux", and "aarch64-darwin".  See `pkgs/top-level/release-cross.nix` for the full list of target platforms and packages.  For instance, the following invocation fetches the pre-built cross-compiled GCC for `armv6l-unknown-linux-gnueabihf` and builds GNU Hello from source.
+
+On less powerful machines, it can be inconvenient to cross-compile a package only to find out that GCC has to be compiled from source, which could take up to several hours. Nixpkgs maintains a limited [cross-related jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk), which tests cross-compilation to various platforms from build platforms "x86_64-linux", "aarch64-linux", and "aarch64-darwin". See `pkgs/top-level/release-cross.nix` for the full list of target platforms and packages. For instance, the following invocation fetches the pre-built cross-compiled GCC for `armv6l-unknown-linux-gnueabihf` and builds GNU Hello from source.
 
 ```ShellSession
 $ nix-build '<nixpkgs>' -A pkgsCross.raspberryPi.hello
@@ -175,7 +177,6 @@ Example of an error which this fixes.
 
 Add `stdenv.cc.libc.static` (static output of glibc) to `buildInputs` conditionally on if `hostPlatform` uses `glibc`.
 
-
 e.g.
 
 ```nix
@@ -220,7 +221,7 @@ While one is free to pass both parameters in full, there's a lot of logic to fil
 Many sources (manual, wiki, etc) probably mention passing `system`, `platform`, along with the optional `crossSystem` to Nixpkgs: `import <nixpkgs> { system = ..; platform = ..; crossSystem = ..; }`. Passing those two instead of `localSystem` is still supported for compatibility, but is discouraged. Indeed, much of the inference we do for these parameters is motivated by compatibility as much as convenience.
 :::
 
-One would think that `localSystem` and `crossSystem` overlap horribly with the three `*Platforms` (`buildPlatform`, `hostPlatform,` and `targetPlatform`; see `stage.nix` or the manual). Actually, those identifiers are purposefully not used here to draw a subtle but important distinction: While the granularity of having 3 platforms is necessary to properly *build* packages, it is overkill for specifying the user's *intent* when making a build plan or package set. A simple "build vs deploy" dichotomy is adequate: the sliding window principle described in the previous section shows how to interpolate between the these two "end points" to get the 3 platform triple for each bootstrapping stage. That means for any package a given package set, even those not bound on the top level but only reachable via dependencies or `buildPackages`, the three platforms will be defined as one of `localSystem` or `crossSystem`, with the former replacing the latter as one traverses build-time dependencies. A last simple difference is that `crossSystem` should be null when one doesn't want to cross-compile, while the `*Platform`s are always non-null. `localSystem` is always non-null.
+One would think that `localSystem` and `crossSystem` overlap horribly with the three `*Platforms` (`buildPlatform`, `hostPlatform,` and `targetPlatform`; see `stage.nix` or the manual). Actually, those identifiers are purposefully not used here to draw a subtle but important distinction: While the granularity of having 3 platforms is necessary to properly _build_ packages, it is overkill for specifying the user's _intent_ when making a build plan or package set. A simple "build vs deploy" dichotomy is adequate: the sliding window principle described in the previous section shows how to interpolate between the these two "end points" to get the 3 platform triple for each bootstrapping stage. That means for any package a given package set, even those not bound on the top level but only reachable via dependencies or `buildPackages`, the three platforms will be defined as one of `localSystem` or `crossSystem`, with the former replacing the latter as one traverses build-time dependencies. A last simple difference is that `crossSystem` should be null when one doesn't want to cross-compile, while the `*Platform`s are always non-null. `localSystem` is always non-null.
 
 ## Cross-compilation infrastructure {#sec-cross-infra}
 
@@ -253,16 +254,18 @@ The native stages are bootstrapped in legacy ways that predate the current cross
 :::
 
 If one looks at the 3 platform triples, one can see that they overlap such that one could put them together into a chain like:
+
 ```
 (native, native, native, foreign, foreign)
 ```
 
 If one imagines the saturating self references at the end being replaced with infinite stages, and then overlays those platform triples, one ends up with the infinite tuple:
+
 ```
 (native..., native, native, native, foreign, foreign, foreign...)
 ```
-One can then imagine any sequence of platforms such that there are bootstrap stages with their 3 platforms determined by "sliding a window" that is the 3 tuple through the sequence. This was the original model for bootstrapping. Without a target platform (assume a better world where all compilers are multi-target and all standard libraries are built in their own derivation), this is sufficient. Conversely if one wishes to cross compile "faster", with a "Canadian Cross" bootstrapping stage where `build != host != target`, more bootstrapping stages are needed since no sliding window provides the pesky `pkgsBuildTarget` package set since it skips the Canadian cross stage's "host".
 
+One can then imagine any sequence of platforms such that there are bootstrap stages with their 3 platforms determined by "sliding a window" that is the 3 tuple through the sequence. This was the original model for bootstrapping. Without a target platform (assume a better world where all compilers are multi-target and all standard libraries are built in their own derivation), this is sufficient. Conversely if one wishes to cross compile "faster", with a "Canadian Cross" bootstrapping stage where `build != host != target`, more bootstrapping stages are needed since no sliding window provides the pesky `pkgsBuildTarget` package set since it skips the Canadian cross stage's "host".
 
 ::: {.note}
 It is much better to refer to `buildPackages` than `targetPackages`, or more broadly package sets that do not mention “target”. There are three reasons for this.

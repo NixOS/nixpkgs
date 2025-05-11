@@ -47,9 +47,9 @@ pkgs.makeSetupHook
 
 ## Attributes {#sec-pkgs.makeSetupHook-attributes}
 
-* `name` Set the name of the hook.
-* `propagatedBuildInputs` Runtime dependencies (such as binaries) of the hook.
-* `depsTargetTargetPropagated` Non-binary dependencies.
-* `meta`
-* `passthru`
-* `substitutions` Variables for `substituteAll`
+- `name` Set the name of the hook.
+- `propagatedBuildInputs` Runtime dependencies (such as binaries) of the hook.
+- `depsTargetTargetPropagated` Non-binary dependencies.
+- `meta`
+- `passthru`
+- `substitutions` Variables for `substituteAll`

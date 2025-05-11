@@ -5,6 +5,7 @@ This chapter describes several testing builders which are available in the `test
 ## `hasPkgConfigModules` {#tester-hasPkgConfigModules}
 
 <!-- Old anchor name so links still work -->
+
 []{#tester-hasPkgConfigModule}
 Checks whether a package exposes a given list of `pkg-config` modules.
 If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.pkgConfigModules`.
@@ -114,6 +115,7 @@ It has two modes:
 Run files through `shellcheck`, a static analysis tool for shell scripts, failing if there are any issues.
 
 :::{.example #ex-shellcheck}
+
 # Run `testers.shellcheck`
 
 A single script
@@ -166,6 +168,7 @@ The build will fail if `shellcheck` finds any issues.
 Run files through `shfmt`, a shell script formatter, failing if any files are reformatted.
 
 :::{.example #ex-shfmt}
+
 # Run `testers.shfmt`
 
 A single script
@@ -272,18 +275,18 @@ Make sure that a build does not succeed. This is useful for testing testers.
 
 This returns a derivation with an override on the builder, with the following effects:
 
- - Fail the build when the original builder succeeds
- - Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
- - Save the build log to `$out/testBuildFailure.log` (same)
+- Fail the build when the original builder succeeds
+- Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
+- Save the build log to `$out/testBuildFailure.log` (same)
 
 While `testBuildFailure` is designed to keep changes to the original builder's environment to a minimum, some small changes are inevitable:
 
- - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
- - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
- - One or two extra processes are present in the sandbox during the original builder's execution.
- - The derivation and output hashes are different, but not unusual.
- - The derivation includes a dependency on `buildPackages.bash` and `expect-failure.sh`, which is built to include a transitive dependency on `buildPackages.coreutils` and possibly more.
-   These are not added to `PATH` or any other environment variable, so they should be hard to observe.
+- The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
+- `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
+- One or two extra processes are present in the sandbox during the original builder's execution.
+- The derivation and output hashes are different, but not unusual.
+- The derivation includes a dependency on `buildPackages.bash` and `expect-failure.sh`, which is built to include a transitive dependency on `buildPackages.coreutils` and possibly more.
+  These are not added to `PATH` or any other environment variable, so they should be hard to observe.
 
 :::{.example #ex-testBuildFailure-showingenvironmentchanges}
 
@@ -453,7 +456,7 @@ NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
   - `actualArray` (available when `expectedArray` is provided to the tester)
   - `actualMap` (available when `expectedMap` is provided to the tester)
 
-  While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they *must not* be accessed or modified from within `script`.
+  While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they _must not_ be accessed or modified from within `script`.
 
 - `valuesArray` (array of string-like values, optional): An array of string-like values.
   This array may be used within `script`.
@@ -462,11 +465,11 @@ NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
   This attribute set may be used within `script`.
 
 - `expectedArray` (array of string-like values, optional): An array of string-like values.
-  This array *must not* be accessed or modified from within `script`.
+  This array _must not_ be accessed or modified from within `script`.
   When provided, `script` is expected to populate `actualArray`.
 
 - `expectedMap` (attribute set of string-like values, optional): An attribute set of string-like values.
-  This attribute set *must not* be accessed or modified from within `script`.
+  This attribute set _must not_ be accessed or modified from within `script`.
   When provided, `script` is expected to populate `actualMap`.
 
 ### Return value {#tester-testEqualArrayOrMap-return}
@@ -536,10 +539,12 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 `runCommand :: { name, script, stdenv ? stdenvNoCC, hash ? "...", ... } -> Derivation`
 
 This is a wrapper around `pkgs.runCommandWith`, which
+
 - produces a fixed-output derivation, enabling the command(s) to access the network ;
 - salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
 
 It accepts the following attributes:
+
 - the derivation's `name` ;
 - the `script` to be executed ;
 - `stdenv`, the environment to use, defaulting to `stdenvNoCC` ;
@@ -643,6 +648,6 @@ A derivation that runs the VM test.
 
 Notable attributes:
 
- * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
+- `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
- * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+- `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.

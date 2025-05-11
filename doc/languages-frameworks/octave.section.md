@@ -8,6 +8,7 @@ A majority of the packages supported by Octave from their [website](https://gnu-
 ## Structure {#ssec-octave-structure}
 
 All Octave add-on packages are available in two ways:
+
 1. Under the top-level `Octave` attribute, `octave.pkgs`.
 2. As a top-level attribute, `octavePackages`.
 
@@ -85,6 +86,6 @@ To this end, when all the requested packages have been built, the Octave package
 2. Because of the way `buildEnv` works, all tarballs that are present (which should be all Octave packages to install) should be removed.
 3. The path down to the default install location of Octave packages is recreated so that Nix-operated Octave can install the packages.
 4. Install the packages into the `$out` environment while writing package entries to the database file.
-This database file is unique for each different (according to Nix) environment invocation.
+   This database file is unique for each different (according to Nix) environment invocation.
 5. Rewrite the Octave-wide startup file to read from the list of packages installed in that particular environment.
 6. Wrap any programs that are required by the Octave packages so that they work with all the paths defined within the environment.

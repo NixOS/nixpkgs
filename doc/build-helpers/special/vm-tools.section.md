@@ -8,9 +8,9 @@ A bash script fragment that produces a disk image at `destination`.
 
 ### Attributes {#vm-tools-createEmptyImage-attributes}
 
-* `size`. The disk size, in MiB.
-* `fullName`. Name that will be written to `${destination}/nix-support/full-name`.
-* `destination` (optional, default `$out`). Where to write the image files.
+- `size`. The disk size, in MiB.
+- `fullName`. Name that will be written to `${destination}/nix-support/full-name`.
+- `destination` (optional, default `$out`). Where to write the image files.
 
 ## `vmTools.runInLinuxVM` {#vm-tools-runInLinuxVM}
 
@@ -22,7 +22,7 @@ If the build fails and Nix is run with the `-K/--keep-failed` option, a script `
 
 ### Attributes {#vm-tools-runInLinuxVM-attributes}
 
-- `preVM` (optional): Shell command to be evaluated *before* the VM is started (i.e., on the host).
+- `preVM` (optional): Shell command to be evaluated _before_ the VM is started (i.e., on the host).
 - `memSize` (optional, default `512`): The memory size of the VM in MiB.
 - `diskImage` (optional): A file system image to be attached to `/dev/sda`.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
@@ -30,11 +30,13 @@ If the build fails and Nix is run with the `-K/--keep-failed` option, a script `
 ### Examples {#vm-tools-runInLinuxVM-examples}
 
 Build the derivation hello inside a VM:
+
 ```nix
 { pkgs }: with pkgs; with vmTools; runInLinuxVM hello
 ```
 
 Build inside a VM with extra memory:
+
 ```nix
 { pkgs }:
 with pkgs;
@@ -47,6 +49,7 @@ runInLinuxVM (
 ```
 
 Use VM with a disk image (implicitly sets `diskImage`, see [`vmTools.createEmptyImage`](#vm-tools-createEmptyImage)):
+
 ```nix
 { pkgs }:
 with pkgs;
@@ -74,6 +77,7 @@ Takes a file, such as an ISO, and extracts its contents into the store.
 ### Examples {#vm-tools-extractFs-examples}
 
 Extract the contents of an ISO file:
+
 ```nix
 { pkgs }: with pkgs; with vmTools; extractFs { file = ./image.iso; }
 ```
@@ -93,11 +97,13 @@ Generate a script that can be used to run an interactive session in the given im
 ### Examples {#vm-tools-makeImageTestScript-examples}
 
 Create a script for running a Fedora 27 VM:
+
 ```nix
 { pkgs }: with pkgs; with vmTools; makeImageTestScript diskImages.fedora27x86_64
 ```
 
 Create a script for running an Ubuntu 20.04 VM:
+
 ```nix
 { pkgs }: with pkgs; with vmTools; makeImageTestScript diskImages.ubuntu2004x86_64
 ```
@@ -108,40 +114,41 @@ A set of functions that build a predefined set of minimal Linux distributions im
 
 ### Images {#vm-tools-diskImageFuns-images}
 
-* Fedora
-  * `fedora26x86_64`
-  * `fedora27x86_64`
-* CentOS
-  * `centos6i386`
-  * `centos6x86_64`
-  * `centos7x86_64`
-* Ubuntu
-  * `ubuntu1404i386`
-  * `ubuntu1404x86_64`
-  * `ubuntu1604i386`
-  * `ubuntu1604x86_64`
-  * `ubuntu1804i386`
-  * `ubuntu1804x86_64`
-  * `ubuntu2004i386`
-  * `ubuntu2004x86_64`
-  * `ubuntu2204i386`
-  * `ubuntu2204x86_64`
-* Debian
-  * `debian10i386`
-  * `debian10x86_64`
-  * `debian11i386`
-  * `debian11x86_64`
-  * `debian12i386`
-  * `debian12x86_64`
+- Fedora
+  - `fedora26x86_64`
+  - `fedora27x86_64`
+- CentOS
+  - `centos6i386`
+  - `centos6x86_64`
+  - `centos7x86_64`
+- Ubuntu
+  - `ubuntu1404i386`
+  - `ubuntu1404x86_64`
+  - `ubuntu1604i386`
+  - `ubuntu1604x86_64`
+  - `ubuntu1804i386`
+  - `ubuntu1804x86_64`
+  - `ubuntu2004i386`
+  - `ubuntu2004x86_64`
+  - `ubuntu2204i386`
+  - `ubuntu2204x86_64`
+- Debian
+  - `debian10i386`
+  - `debian10x86_64`
+  - `debian11i386`
+  - `debian11x86_64`
+  - `debian12i386`
+  - `debian12x86_64`
 
 ### Attributes {#vm-tools-diskImageFuns-attributes}
 
-* `size` (optional, defaults to `4096`): The size of the image, in MiB.
-* `extraPackages` (optional): A list names of additional packages from the distribution that should be included in the image.
+- `size` (optional, defaults to `4096`): The size of the image, in MiB.
+- `extraPackages` (optional): A list names of additional packages from the distribution that should be included in the image.
 
 ### Examples {#vm-tools-diskImageFuns-examples}
 
 8GiB image containing Firefox in addition to the default packages:
+
 ```nix
 { pkgs }:
 with pkgs;
