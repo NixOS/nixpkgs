@@ -54,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     ''
       substituteInPlace conf/CMakeLists.txt \
-        --replace /etc/udev/rules.d/ $out/lib/udev/rules.d/
+        --replace /etc/udev/rules.d/ ${placeholder "out"}/lib/udev/rules.d/
       substituteInPlace src/symbols.c \
-        --replace /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
-        --replace /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
+        --replace /usr/share/direwolf/symbols-new.txt ${placeholder "out"}/share/direwolf/symbols-new.txt \
+        --replace /opt/local/share/direwolf/symbols-new.txt ${placeholder "out"}/share/direwolf/symbols-new.txt
       substituteInPlace src/decode_aprs.c \
-        --replace /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
-        --replace /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
+        --replace /usr/share/direwolf/tocalls.txt ${placeholder "out"}/share/direwolf/tocalls.txt \
+        --replace /opt/local/share/direwolf/tocalls.txt ${placeholder "out"}/share/direwolf/tocalls.txt
       substituteInPlace cmake/cpack/direwolf.desktop.in \
         --replace 'Terminal=false' 'Terminal=true' \
         --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
