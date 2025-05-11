@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "11";
 
   src = fetchurl {
-    url = "http://call-with-current-continuation.org/ma/ma.tar.gz";
+    url = "https://web.archive.org/web/20250511210225/http://call-with-current-continuation.org/ma/ma.tar.gz";
     hash = "sha256-1UVxXbN2jSNm13BjyoN3jbKtkO3DUEEHaDOC2Ibbxf4=";
   };
 
