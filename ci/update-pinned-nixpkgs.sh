@@ -3,12 +3,11 @@
 
 set -euo pipefail
 
-# https://stackoverflow.com/a/246128
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
 
 repo=https://github.com/nixos/nixpkgs
 branch=nixpkgs-unstable
-file=$SCRIPT_DIR/pinned-nixpkgs.json
+file=${SCRIPT_DIRECTORY}/pinned-nixpkgs.json
 
 defaultRev=$(git ls-remote "$repo" refs/heads/"$branch" | cut -f1)
 rev=${1:-$defaultRev}

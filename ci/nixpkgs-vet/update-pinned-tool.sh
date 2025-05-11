@@ -5,10 +5,10 @@ set -o pipefail -o errexit -o nounset
 
 trace() { echo >&2 "$@"; }
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
 
 repository=NixOS/nixpkgs-vet
-pin_file=$SCRIPT_DIR/pinned-version.txt
+pin_file=${SCRIPT_DIRECTORY}/pinned-version.txt
 
 trace -n "Fetching latest release of $repository.. "
 latestRelease=$(curl -sSfL \
