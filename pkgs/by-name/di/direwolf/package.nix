@@ -16,6 +16,7 @@
   espeak,
   udev,
   udevCheckHook,
+  nix-update-script,
   extraScripts ? false,
 }:
 
@@ -83,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
