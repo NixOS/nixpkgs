@@ -14,6 +14,10 @@ stdenv.mkDerivation {
     hash = "sha256-1UVxXbN2jSNm13BjyoN3jbKtkO3DUEEHaDOC2Ibbxf4=";
   };
 
+  postPatch = ''
+    substituteInPlace ./build --replace-fail gcc ${lib.getExe stdenv.cc}
+  '';
+
   buildInputs = [
     tclPackages.tk
   ];
