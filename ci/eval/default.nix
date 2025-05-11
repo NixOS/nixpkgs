@@ -26,14 +26,14 @@ let
           "nixos"
           "pkgs"
           ".version"
-          "ci/supportedSystems.nix"
+          "ci/supportedSystems.json"
         ]
       );
     };
 
   nix = nixVersions.nix_2_24;
 
-  supportedSystems = import ../supportedSystems.nix;
+  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
   attrpathsSuperset =
     runCommand "attrpaths-superset.json"
@@ -43,8 +43,6 @@ let
           nix
           time
         ];
-        env.supportedSystems = builtins.toJSON supportedSystems;
-        passAsFile = [ "supportedSystems" ];
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -58,7 +56,6 @@ let
             --option restrict-eval true \
             --option allow-import-from-derivation false \
             --arg enableWarnings false > $out/paths.json
-        mv "$supportedSystemsPath" $out/systems.json
       '';
 
   singleSystem =
