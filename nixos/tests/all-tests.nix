@@ -269,6 +269,7 @@ in
   btrbk-doas = handleTest ./btrbk-doas.nix { };
   btrbk-no-timer = handleTest ./btrbk-no-timer.nix { };
   btrbk-section-order = handleTest ./btrbk-section-order.nix { };
+  btrbk-sudo-wheel = handleTest ./btrbk-sudo-wheel.nix { };
   budgie = handleTest ./budgie.nix { };
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = handleTest ./buildkite-agents.nix { };
