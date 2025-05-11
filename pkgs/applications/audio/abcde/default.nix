@@ -8,23 +8,20 @@
   which,
   vorbis-tools,
   id3v2,
-  eyed3,
+  python3Packages,
   lame,
   flac,
   glyr,
   perlPackages,
   makeWrapper,
 }:
-
-let
-  version = "2.9.3";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abcde";
-  inherit version;
+  version = "2.9.3";
+
   src = fetchurl {
-    url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
-    sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
+    url = "https://abcde.einval.com/download/abcde-${finalAttrs.version}.tar.gz";
+    hash = "sha256-BGzQu6eN1LvcvPgv5iWGXGDfNaAFSC3hOmaZxaO4MSQ=";
   };
 
   # FIXME: This package does not support `distmp3', `eject', etc.
@@ -35,7 +32,7 @@ stdenv.mkDerivation {
             s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
       "Makefile";
 
-    echo 'CDPARANOIA=${libcdio-paranoia}/bin/cd-paranoia' >>abcde.conf
+    echo 'CDPARANOIA=${lib.getExe libcdio-paranoia}' >>abcde.conf
     echo CDROMREADERSYNTAX=cdparanoia >>abcde.conf
 
     substituteInPlace "abcde" \
@@ -66,7 +63,7 @@ stdenv.mkDerivation {
             wget
             vorbis-tools
             id3v2
-            eyed3
+            python3Packages.eyed3
             lame
             flac
             glyr
@@ -75,10 +72,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://abcde.einval.com/wiki/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
     description = "Command-line audio CD ripper";
     longDescription = ''
       abcde is a front-end command-line utility (actually, a shell
@@ -86,6 +83,6 @@ stdenv.mkDerivation {
       Ogg/Vorbis, MP3, FLAC, Ogg/Speex and/or MPP/MP+ (Musepack)
       format, and tags them, all in one go.
     '';
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
