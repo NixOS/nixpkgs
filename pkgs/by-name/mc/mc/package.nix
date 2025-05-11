@@ -17,7 +17,7 @@
   libssh2,
   openssl,
   coreutils,
-  autoSignDarwinBinariesHook,
+  darwin,
   x11Support ? true,
   libX11,
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # The preFixup hook rewrites the binary, which invaliates the code
     # signature. Add the fixup hook to sign the output.
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
+      darwin.autoSignDarwinBinariesHook
     ];
 
   buildInputs =
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     homepage = "https://midnight-commander.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sander ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "mc";
   };
 }
