@@ -87,10 +87,32 @@ $ ssh vsock/3 -o User=root
 
 The socket numbers correspond to the node number of the test VM, but start
 at three instead of one because that's the lowest possible
-vsock number.
+vsock number. The exact SSH commands are also printed out when starting
+`nixos-test-driver`.
 
 On non-NixOS systems you'll probably need to enable
 the SSH config from {manpage}`systemd-ssh-proxy(1)` yourself.
+
+If starting VM fails with an error like
+
+```
+qemu-system-x86_64: -device vhost-vsock-pci,guest-cid=3: vhost-vsock: unable to set guest cid: Address already in use
+```
+
+it means that the vsock numbers for the VMs are already in use. This can happen
+if another interactive test with SSH backdoor enabled is running on the machine.
+
+In that case, you need to assign another range of vsock numbers. You can pick another
+offset with
+
+```nix
+{
+  sshBackdoor = {
+    enable = true;
+    vsockOffset = 23542;
+  };
+}
+```
 
 ## Port forwarding to NixOS test VMs {#sec-nixos-test-port-forwarding}
 
