@@ -3338,8 +3338,8 @@ let
         mktplcRef = {
           publisher = "ms-azuretools";
           name = "vscode-docker";
-          version = "1.29.5";
-          hash = "sha256-WQiVqC/+qJkEHpYTRbg5NbzQG1+jtifvjF/wbQJfQeY=";
+          version = "1.29.6";
+          hash = "sha256-kHQuS6wxp3Gu5WSjWRXXMLwSrv7LBSsnsNu7VY4H/J0=";
         };
         meta = {
           description = "Docker Extension for Visual Studio Code";
