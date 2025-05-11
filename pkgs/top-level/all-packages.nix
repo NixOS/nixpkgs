@@ -12037,10 +12037,6 @@ with pkgs;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
-  calf = callPackage ../applications/audio/calf {
-    inherit (gnome2) libglade;
-  };
-
   calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
 
   calibre = callPackage ../by-name/ca/calibre/package.nix {
