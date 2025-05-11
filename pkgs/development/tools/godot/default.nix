@@ -1,5 +1,9 @@
+# TODO:
+# - combine binary and source tests
+# - filter builtInputs by builtin_ flags
 {
   callPackage,
+  lib,
   nix-update-script,
   fetchzip,
 }:
@@ -8,43 +12,40 @@ let
     versionPrefix:
     let
       attrs = import (./. + "/${versionPrefix}/default.nix");
-      inherit (attrs)
-        version
-        hash
-        exportTemplatesHash
-        nugetDeps
-        ;
+      updateScript = [
+        ./update.sh
+        versionPrefix
+        (builtins.unsafeGetAttrPos "version" attrs).file
+      ];
     in
-    rec {
-      godot = (callPackage ./common.nix { inherit version hash nugetDeps; }).overrideAttrs (old: {
-        passthru = old.passthru or { } // {
-          inherit export-templates-bin;
-          updateScript = [
-            ./update.sh
-            versionPrefix
-            (builtins.unsafeGetAttrPos "version" attrs).file
-          ];
-        };
-      });
+    lib.recurseIntoAttrs rec {
+      godot = callPackage ./common.nix {
+        inherit updateScript;
+        inherit (attrs)
+          version
+          hash
+          ;
+        inherit (attrs.default)
+          exportTemplatesHash
+          ;
+      };
 
       godot-mono = godot.override {
         withMono = true;
+        inherit (attrs.mono)
+          exportTemplatesHash
+          nugetDeps
+          ;
       };
 
-      export-templates-bin = (
-        callPackage ./export-templates-bin.nix {
-          inherit version godot;
-          hash = exportTemplatesHash;
-        }
-      );
-    };
+      export-template = godot.export-template;
+      export-template-mono = godot-mono.export-template;
 
-  godotPackages_4_3 = mkGodotPackages "4.3";
-  godotPackages_4_4 = mkGodotPackages "4.4";
-  godotPackages_4 = godotPackages_4_4;
-  godotPackages = godotPackages_4;
+      export-templates-bin = godot.export-templates-bin;
+      export-templates-mono-bin = godot-mono.export-templates-bin;
+    };
 in
-{
+rec {
   godot3 = callPackage ./3 { };
   godot3-export-templates = callPackage ./3/export-templates.nix { };
   godot3-headless = callPackage ./3/headless.nix { };
@@ -56,16 +57,21 @@ in
   godot3-mono-debug-server = callPackage ./3/mono/debug-server.nix { };
   godot3-mono-server = callPackage ./3/mono/server.nix { };
 
+  godotPackages_4_3 = mkGodotPackages "4.3";
+  godotPackages_4_4 = mkGodotPackages "4.4";
+  godotPackages_4 = godotPackages_4_4;
+  godotPackages = godotPackages_4;
+
   godot_4_3 = godotPackages_4_3.godot;
   godot_4_3-mono = godotPackages_4_3.godot-mono;
-  godot_4_3-export-templates = godotPackages_4_3.export-templates-bin;
+  godot_4_3-export-templates-bin = godotPackages_4_3.export-templates-bin;
   godot_4_4 = godotPackages_4_4.godot;
   godot_4_4-mono = godotPackages_4_4.godot-mono;
-  godot_4_4-export-templates = godotPackages_4_4.export-templates-bin;
+  godot_4_4-export-templates-bin = godotPackages_4_4.export-templates-bin;
   godot_4 = godotPackages_4.godot;
   godot_4-mono = godotPackages_4.godot-mono;
-  godot_4-export-templates = godotPackages_4.export-templates-bin;
+  godot_4-export-templates-bin = godotPackages_4.export-templates-bin;
   godot = godotPackages.godot;
   godot-mono = godotPackages.godot-mono;
-  godot-export-templates = godotPackages.export-templates-bin;
+  godot-export-templates-bin = godotPackages.export-templates-bin;
 }

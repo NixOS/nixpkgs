@@ -3158,18 +3158,22 @@ with pkgs;
     godot3-mono-headless
     godot3-mono-debug-server
     godot3-mono-server
+    godotPackages_4_3
+    godotPackages_4_4
+    godotPackages_4
+    godotPackages
     godot_4_3
     godot_4_3-mono
-    godot_4_3-export-templates
+    godot_4_3-export-templates-bin
     godot_4_4
     godot_4_4-mono
-    godot_4_4-export-templates
+    godot_4_4-export-templates-bin
     godot_4
     godot_4-mono
-    godot_4-export-templates
+    godot_4-export-templates-bin
     godot
     godot-mono
-    godot-export-templates
+    godot-export-templates-bin
     ;
 
   goattracker = callPackage ../applications/audio/goattracker { };
