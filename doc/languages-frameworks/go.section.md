@@ -69,7 +69,6 @@ You can read more about [vendoring in the Go documentation](https://go.dev/ref/m
 To obtain the hash, set `vendorHash = lib.fakeHash;` and run the build. ([more details here](#sec-source-hashes)).
 Another way is to use use `nix-prefetch` to obtain the hash. The following command gets the value of `vendorHash` for package `pet`:
 
-
 ```sh
 cd path/to/nixpkgs
 nix-prefetch -E "{ sha256 }: ((import ./. { }).my-package.overrideAttrs { vendorHash = sha256; }).goModules"
@@ -104,12 +103,10 @@ if any dependency has case-insensitive conflicts which will produce platform-dep
 
 Defaults to `false`.
 
-
 ### `modPostBuild` {#var-go-modPostBuild}
 
 Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash`.
 Note that if you change this attribute, you need to update `vendorHash` attribute.
-
 
 ### `modRoot` {#var-go-modRoot}
 
@@ -133,7 +130,7 @@ The most common use case for this argument is to make the resulting executable a
 
 ### `tags` {#var-go-tags}
 
-A string list of [Go build tags (also called build constraints)](https://pkg.go.dev/cmd/go#hdr-Build_constraints) that are passed via the `-tags` argument of `go build`.  These constraints control whether Go files from the source should be included in the build. For example:
+A string list of [Go build tags (also called build constraints)](https://pkg.go.dev/cmd/go#hdr-Build_constraints) that are passed via the `-tags` argument of `go build`. These constraints control whether Go files from the source should be included in the build. For example:
 
 ```nix
 {
@@ -193,7 +190,6 @@ Defaults to `false`
 Specifies the contents of the `go.sum` file and triggers rebuilds when it changes. This helps combat inconsistent dependency errors on `go.sum` changes.
 
 Defaults to `null`
-
 
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 

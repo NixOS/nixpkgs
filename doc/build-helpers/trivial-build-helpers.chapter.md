@@ -3,12 +3,11 @@
 Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations.
 Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
 
-
 ## `runCommandWith` {#trivial-builder-runCommandWith}
 
 The function `runCommandWith` returns a derivation built using the specified command(s), in a specified environment.
 
-It is the underlying base function of  all [`runCommand*` variants].
+It is the underlying base function of all [`runCommand*` variants].
 The general behavior is controlled via a single attribute set passed
 as the first argument, and allows specifying `stdenv` freely.
 
@@ -33,29 +32,29 @@ runCommandWith :: {
   : The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
 
 - `runLocal` (Boolean)
-    : If set to `true` this forces the derivation to be built locally, not using [substitutes] nor remote builds.
-    This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
-    Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
+  : If set to `true` this forces the derivation to be built locally, not using [substitutes] nor remote builds.
+  This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
+  Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
 
-   ::: {.note}
-   This prevents the use of [substituters][substituter], so only set `runLocal` (or use `runCommandLocal`) when certain the user will
-   always have a builder for the `system` of the derivation. This should be true for most trivial use cases
-   (e.g., just copying some files to a different location or adding symlinks) because there the `system`
-   is usually the same as `builtins.currentSystem`.
-   :::
+  ::: {.note}
+  This prevents the use of [substituters][substituter], so only set `runLocal` (or use `runCommandLocal`) when certain the user will
+  always have a builder for the `system` of the derivation. This should be true for most trivial use cases
+  (e.g., just copying some files to a different location or adding symlinks) because there the `system`
+  is usually the same as `builtins.currentSystem`.
+  :::
 
 - `stdenv` (Derivation)
-    : The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
+  : The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
 
 - `derivationArgs` (Attribute set)
-    : Additional arguments for [`mkDerivation`](#sec-using-stdenv).
+  : Additional arguments for [`mkDerivation`](#sec-using-stdenv).
 
 - `buildCommand` (String)
-    : Shell commands to run in the derivation builder.
+  : Shell commands to run in the derivation builder.
 
-    ::: {.note}
-    You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
-    :::
+  ::: {.note}
+  You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
+  :::
 
 [allowSubstitutes]: https://nixos.org/nix/manual/#adv-attr-allowSubstitutes
 [preferLocalBuild]: https://nixos.org/nix/manual/#adv-attr-preferLocalBuild
@@ -63,6 +62,7 @@ runCommandWith :: {
 [substitutes]: https://nix.dev/manual/nix/2.23/glossary#gloss-substitute
 
 ::: {.example #ex-runcommandwith}
+
 # Invocation of `runCommandWith`
 
 ```nix
@@ -80,7 +80,6 @@ runCommandWith
 ```
 
 :::
-
 
 ## `runCommand` and `runCommandCC` {#trivial-builder-runCommand}
 
@@ -107,16 +106,16 @@ runCommandLocal :: String -> AttrSet -> String -> Derivation
 While the type signature(s) differ from [`runCommandWith`], individual arguments with the same name will have the same type and meaning:
 
 - `name` (String)
-  :   The derivation's name
+  : The derivation's name
 
 - `derivationArgs` (Attribute set)
-  :   Additional parameters passed to [`mkDerivation`]
+  : Additional parameters passed to [`mkDerivation`]
 
 - `buildCommand` (String)
-  :   The command(s) run to build the derivation.
-
+  : The command(s) run to build the derivation.
 
 ::: {.example #ex-runcommand-simple}
+
 # Invocation of `runCommand`
 
 ```nix
@@ -139,10 +138,12 @@ runCommand "my-example" { } ''
   date
 ''
 ```
+
 :::
 
 ::: {.note}
 `runCommand name derivationArgs buildCommand` is equivalent to
+
 ```nix
 runCommandWith {
   inherit name derivationArgs;
@@ -151,13 +152,14 @@ runCommandWith {
 ```
 
 Likewise, `runCommandCC name derivationArgs buildCommand` is equivalent to
+
 ```nix
 runCommandWith {
   inherit name derivationArgs;
 } buildCommand
 ```
-:::
 
+:::
 
 ## Writing text files {#trivial-builder-text-writing}
 
@@ -192,6 +194,7 @@ writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
 ''
 ```
+
 ::::
 
 ### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
@@ -230,6 +233,7 @@ The following fields are either required, are of a different type than in the sp
 #### Examples {#trivial-builder-makeDesktopItem-examples}
 
 ::: {.example #ex-makeDesktopItem}
+
 # Usage 1 of `makeDesktopItem`
 
 Write a desktop file `/nix/store/<store path>/my-program.desktop` to the Nix store.
@@ -271,6 +275,7 @@ makeDesktopItem {
 :::
 
 ::: {.example #ex2-makeDesktopItem}
+
 # Usage 2 of `makeDesktopItem`
 
 Override the `hello` package to add a desktop item.
@@ -359,6 +364,7 @@ Write a text file to the Nix store.
 The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
 
 ::: {.example #ex-writeTextFile}
+
 # Usage 1 of `writeTextFile`
 
 Write `my-file` to `/nix/store/<store path>/some/subpath/my-cool-script`, making it executable.
@@ -383,9 +389,11 @@ writeTextFile {
   preferLocalBuild = false;
 }
 ```
+
 :::
 
 ::: {.example #ex2-writeTextFile}
+
 # Usage 2 of `writeTextFile`
 
 Write the string `Contents of File` to `/nix/store/<store path>`.
@@ -399,9 +407,11 @@ writeTextFile {
   '';
 }
 ```
+
 :::
 
 ::: {.example #ex3-writeTextFile}
+
 # Usage 3 of `writeTextFile`
 
 Write an executable script `my-script` to `/nix/store/<store path>/bin/my-script`.
@@ -417,6 +427,7 @@ writeTextFile {
   destination = "/bin/my-script";
 }
 ```
+
 :::
 
 ### `writeText` {#trivial-builder-writeText}
@@ -434,6 +445,7 @@ Write a text file to the Nix store
 The store path will include the name, and it will be a file.
 
 ::: {.example #ex-writeText}
+
 # Usage of `writeText`
 
 Write the string `Contents of File` to `/nix/store/<store path>`:
@@ -443,6 +455,7 @@ writeText "my-file" ''
   Contents of File
 ''
 ```
+
 :::
 
 This is equivalent to:
@@ -471,6 +484,7 @@ Write a text file within a subdirectory of the Nix store.
 The store path will be a directory.
 
 ::: {.example #ex-writeTextDir}
+
 # Usage of `writeTextDir`
 
 Write the string `Contents of File` to `/nix/store/<store path>/share/my-file`:
@@ -480,6 +494,7 @@ writeTextDir "share/my-file" ''
   Contents of File
 ''
 ```
+
 :::
 
 This is equivalent to:
@@ -510,6 +525,7 @@ The created file is marked as executable.
 The store path will include the name, and it will be a file.
 
 ::: {.example #ex-writeScript}
+
 # Usage of `writeScript`
 
 Write the string `Contents of File` to `/nix/store/<store path>` and make the file executable.
@@ -531,6 +547,7 @@ writeTextFile {
   executable = true;
 }
 ```
+
 :::
 
 ### `writeScriptBin` {#trivial-builder-writeScriptBin}
@@ -551,6 +568,7 @@ The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
 The store path will include the name, and it will be a directory.
 
 ::: {.example #ex-writeScriptBin}
+
 # Usage of `writeScriptBin`
 
 ```nix
@@ -558,6 +576,7 @@ writeScriptBin "my-script" ''
   echo "hi"
 ''
 ```
+
 :::
 
 This is equivalent to:
@@ -589,9 +608,11 @@ The created file is marked as executable.
 The store path will include the name, and it will be a file.
 
 This function is almost exactly like [](#trivial-builder-writeScript), except that it prepends to the file a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) line that points to the version of Bash used in Nixpkgs.
+
 <!-- this cannot be changed in practice, so there is no point pretending it's somehow generic -->
 
 ::: {.example #ex-writeShellScript}
+
 # Usage of `writeShellScript`
 
 ```nix
@@ -599,6 +620,7 @@ writeShellScript "my-script" ''
   echo "hi"
 ''
 ```
+
 :::
 
 This is equivalent to:
@@ -632,6 +654,7 @@ The store path will include the the name, and it will be a directory.
 This function is a combination of [](#trivial-builder-writeShellScript) and [](#trivial-builder-writeScriptBin).
 
 ::: {.example #ex-writeShellScriptBin}
+
 # Usage of `writeShellScriptBin`
 
 ```nix
@@ -639,6 +662,7 @@ writeShellScriptBin "my-script" ''
   echo "hi"
 ''
 ```
+
 :::
 
 This is equivalent to:
@@ -661,6 +685,7 @@ These functions concatenate `files` to the Nix store in a single file. This is u
 `concatText` and`concatScript` are simple wrappers over `concatTextFile`.
 
 Here are a few examples:
+
 ```nix
 # Writes my-file to /nix/store/<store path>
 concatTextFile
@@ -728,6 +753,7 @@ writeShellApplication {
 
 This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` (or alternatively `pname` and `version`) is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
 Here is an example:
+
 ```nix
 # adds symlinks of hello and stack to current build and prints "links added"
 symlinkJoin {
@@ -739,7 +765,9 @@ symlinkJoin {
   postBuild = "echo links added";
 }
 ```
+
 This creates a derivation with a directory structure like the following:
+
 ```
 /nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
 |-- bin

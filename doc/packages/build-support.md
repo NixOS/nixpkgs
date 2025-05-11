@@ -5,8 +5,8 @@
 `pkgs.substitute` is a wrapper around [the `substitute` Bash function](#fun-substitute) in the standard environment.
 It replaces strings in `src` as specified by the `substitutions` argument.
 
-
 :::{.example #ex-pkgs-substitute}
+
 # Usage of `pkgs.substitute`
 
 In a build script, the line:
@@ -28,6 +28,7 @@ substitute {
   ];
 }
 ```
+
 :::
 
 ## `pkgs.replaceVars` {#pkgs-replacevars}
@@ -35,6 +36,7 @@ substitute {
 `pkgs.replaceVars <src> <replacements>` replaces all instances of `@varName@` (`@`s included) in file `src` with the respective value in the attribute set `replacements`.
 
 :::{.example #ex-pkgs-replace-vars}
+
 # Usage of `pkgs.replaceVars`
 
 If `say-goodbye.sh` contains the following:
@@ -79,6 +81,7 @@ Any unreferenced `@...@` pattern in the source file will throw an error.
 `pkgs.replaceVarsWith` works the same way as [pkgs.replaceVars](#pkgs-replacevars), but additionally allows more options.
 
 :::{.example #ex-pkgs-replace-vars-with}
+
 # Usage of `pkgs.replaceVarsWith`
 
 With the example file `say-goodbye.sh`, consider:

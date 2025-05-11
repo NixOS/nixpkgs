@@ -7,6 +7,7 @@ The `buildIdris` function takes an attribute set that defines at a minimum the `
 Importantly, `buildIdris` does not create a single derivation but rather an attribute set with two properties: `executable` and `library`. The `executable` property is a derivation and the `library` property is a function that will return a derivation for the library with or without source code included. Source code need not be included unless you are aiming to use IDE or LSP features that are able to jump to definitions within an editor.
 
 A simple example of a fully packaged library would be the [`LSP-lib`](https://github.com/idris-community/LSP-lib) found in the `idris-community` GitHub organization.
+
 ```nix
 { fetchFromGitHub, idris2Packages }:
 let
@@ -27,6 +28,7 @@ lspLibPkg.library { withSource = true; }
 The above results in a derivation with the installed library results (with sourcecode).
 
 A slightly more involved example of a fully packaged executable would be the [`idris2-lsp`](https://github.com/idris-community/idris2-lsp) which is an Idris2 language server that uses the `LSP-lib` found above.
+
 ```nix
 {
   callPackage,

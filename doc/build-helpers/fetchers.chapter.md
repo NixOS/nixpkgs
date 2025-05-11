@@ -18,10 +18,10 @@ For these reasons, Nix's built-in fetchers are not allowed in Nixpkgs.
 
 The following table summarises the differences:
 
-| Fetchers | Download | Output | Cache | Re-download when |
-|-|-|-|-|-|
+| Fetchers          | Download        | Output     | Cache                        | Re-download when                                                                            |
+| ----------------- | --------------- | ---------- | ---------------------------- | ------------------------------------------------------------------------------------------- |
 | `builtins.fetch*` | evaluation time | store path | `/nix/store`, `~/.cache/nix` | `tarball-ttl` expires, cache miss in `~/.cache/nix`, output store object not in local store |
-| `pkgs.fetch*` | build time | derivation | `/nix/store`, substituters | output store object not available |
+| `pkgs.fetch*`     | build time      | derivation | `/nix/store`, substituters   | output store object not available                                                           |
 
 :::{.tip}
 `pkgs.fetchFrom*` helpers retrieve _snapshots_ of version-controlled sources, as opposed to the entire version history, which is more efficient.
@@ -67,6 +67,7 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    :::
 
    :::{.example #ex-fetchers-update-fod-hash}
+
    # Update source hash with the fake hash method
 
    Consider the following recipe that produces a plain file:
@@ -110,6 +111,7 @@ Unless you understand how the fetcher you're using calculates the hash from the 
                got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
    error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
    ```
+
    :::
 
 2. Prefetch the source with [`nix-prefetch-<type> <URL>`](https://search.nixos.org/packages?buckets={%22package_attr_set%22%3A[%22No%20package%20set%22]%2C%22package_license_set%22%3A[]%2C%22package_maintainers_set%22%3A[]%2C%22package_platforms%22%3A[]}&query=nix-prefetch), where `<type>` is one of
@@ -152,7 +154,7 @@ Here are security considerations for this scenario:
 
 - `https://` URLs give you more protections when using `nix-prefetch-*` or for upstream hashes.
 
-- `https://` URLs are secure when using the [fake hash method](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method) *only if* you use one of the listed fake hashes.
+- `https://` URLs are secure when using the [fake hash method](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method) _only if_ you use one of the listed fake hashes.
   If you use any other hash, the download will be exposed to MITM attacks even if you use HTTPS URLs.
 
   In more concrete terms, if you use any other hash, the [`--insecure` flag](https://curl.se/docs/manpage.html#-k) will be passed to the underlying call to `curl` when downloading content.
@@ -164,6 +166,7 @@ Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automaticall
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
 
 []{#fetchurl}
+
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
 `fetchurl` returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads content from a given URL and stores the unaltered contents within the Nix store.
@@ -401,6 +404,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 ### Examples {#ssec-pkgs-fetchers-fetchurl-examples}
 
 :::{.example #ex-fetchers-fetchurl-nixpkgs-version}
+
 # Using `fetchurl` to download a file
 
 The following package downloads a small file from a URL and shows the most common way to use `fetchurl`:
@@ -423,9 +427,11 @@ $ nix-build
 $ cat /nix/store/4g9y3x851wqrvim4zcz5x2v3zivmsq8n-version
 23.11
 ```
+
 :::
 
 :::{.example #ex-fetchers-fetchurl-nixpkgs-version-multiple-urls}
+
 # Using `fetchurl` to download a file with multiple possible URLs
 
 The following package adapts [](#ex-fetchers-fetchurl-nixpkgs-version) to use multiple URLs.
@@ -481,9 +487,11 @@ $ nix-build
 (output removed for clarity)
 /nix/store/zczb6wl3al6jm9sm5h3pr6nqn0i5ji9z-nixpkgs-version
 ```
+
 :::
 
 :::{.example #ex-fetchers-fetchurl-nixpkgs-version-postfetch}
+
 # Manipulating the content downloaded by `fetchurl`
 
 It might be useful to manipulate the content downloaded by `fetchurl` directly in its derivation.
@@ -600,6 +608,7 @@ The attributes below are treated differently by `fetchzip` when compared to what
 ### Examples {#sec-pkgs-fetchers-fetchzip-examples}
 
 ::::{.example #ex-fetchers-fetchzip-simple-striproot}
+
 # Using `fetchzip` to output contents directly
 
 The following recipe shows how to use `fetchzip` to decompress a `.tar.gz` archive:
@@ -654,9 +663,11 @@ $ nix-build
 $ ls /nix/store/2hy5bxw7xgbgxkn0i4x6hjr8w3dbx16c-source
 patchelf-0.18.0
 ```
+
 ::::
 
 ::::{.example #ex-fetchers-fetchzip-rar-archive}
+
 # Using `fetchzip` to decompress a `.rar` file
 
 The `unrar` package provides a [setup hook](#ssec-setup-hooks) to decompress `.rar` archives during the [unpack phase](#ssec-unpack-phase), which can be used with `fetchzip` to decompress those archives:
@@ -684,6 +695,7 @@ $ ls /nix/store/zpn7knxfva6rfjja2gbb4p3l9w1f0d36-source
 FONT.DAT      PINBALL.DAT  PINBALL.EXE	PINBALL2.MID  TABLE.BMP    WMCONFIG.EXE
 MSCREATE.DIR  PINBALL.DOC  PINBALL.MID	Sounds	     WAVEMIX.INF
 ```
+
 ::::
 
 ## `fetchpatch` {#fetchpatch}
@@ -700,13 +712,12 @@ MSCREATE.DIR  PINBALL.DOC  PINBALL.MID	Sounds	     WAVEMIX.INF
 
 Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `hash` argument is changed as well.
 
-
 Most other fetchers return a directory rather than a single file.
-
 
 ## `fetchDebianPatch` {#fetchdebianpatch}
 
 A wrapper around `fetchpatch`, which takes:
+
 - `patch` and `hash`: the patch's filename,
   and its hash after normalization by `fetchpatch` ;
 - `pname`: the Debian source package's name ;
@@ -742,14 +753,13 @@ buildPythonPackage rec {
 ```
 
 Patches are fetched from `sources.debian.org`, and so must come from a
-package version that was uploaded to the Debian archive.  Packages may
+package version that was uploaded to the Debian archive. Packages may
 be removed from there once that specific version isn't in any suite
 anymore (stable, testing, unstable, etc.), so maintainers should use
 `copy-tarballs.pl` to archive the patch if it needs to be available
 longer-term.
 
 [Debian revision number]: https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
-
 
 ## `fetchsvn` {#fetchsvn}
 
@@ -764,35 +774,35 @@ This is safer than just setting `rev = version` w.r.t. possible branch and tag n
 
 Additionally, the following optional arguments can be given:
 
-*`fetchSubmodules`* (Boolean)
+_`fetchSubmodules`_ (Boolean)
 
 : Whether to also fetch the submodules of a repository.
 
-*`fetchLFS`* (Boolean)
+_`fetchLFS`_ (Boolean)
 
 : Whether to fetch LFS objects.
 
-*`preFetch`* (String)
+_`preFetch`_ (String)
 
 : Shell code to be executed before the repository has been fetched, to allow
-  changing the environment the fetcher runs in.
+changing the environment the fetcher runs in.
 
-*`postFetch`* (String)
+_`postFetch`_ (String)
 
 : Shell code executed after the repository has been fetched successfully.
-  This can do things like check or transform the file.
+This can do things like check or transform the file.
 
-- *`leaveDotGit`* (Boolean)
-  : Whether the `.git` directory of the clone should *not* be removed after checkout.
+- _`leaveDotGit`_ (Boolean)
+  : Whether the `.git` directory of the clone should _not_ be removed after checkout.
 
   Be warned though that the git repository format is not stable and this flag is therefore not suitable for actual use by itself.
   Only use this for testing purposes or in conjunction with removing the `.git` directory in `postFetch`.
 
-- *`deepClone`* (Boolean)
+- _`deepClone`_ (Boolean)
   : Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
 
-- *`sparseCheckout`* (List of String)
+- _`sparseCheckout`_ (List of String)
   : Prevent git from fetching unnecessary blobs from server.
   This is useful if only parts of the repository are needed.
 
@@ -815,6 +825,7 @@ Additionally, the following optional arguments can be given:
     };
   }
   ```
+
   :::
 
   See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
@@ -853,7 +864,6 @@ To use a different GitHub instance, use `githubBase` (defaults to `"github.com"`
 This is used with GitLab repositories. It behaves similarly to `fetchFromGitHub`, and expects `owner`, `repo`, `rev`, and `hash`.
 
 To use a specific GitLab instance, use `domain` (defaults to `"gitlab.com"`).
-
 
 ## `fetchFromGitiles` {#fetchfromgitiles}
 
@@ -896,7 +906,9 @@ requireFile {
   hash = "sha256-lL00+F7jjT71nlKJ7HRQuUQ7kkxVYlZh//5msD8sjeI=";
 }
 ```
+
 results in this error message:
+
 ```
 ***
 Unfortunately, we cannot download file jdk-11.0.10_linux-x64_bin.tar.gz automatically.
@@ -936,4 +948,3 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
-

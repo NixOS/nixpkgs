@@ -40,7 +40,7 @@ nix-shell -p 'julia.withPackages ["Plots"]' --run julia
 
 ### Arguments {#julia-withpackage-arguments}
 
-* `precompile`: Whether to run `Pkg.precompile()` on the generated environment.
+- `precompile`: Whether to run `Pkg.precompile()` on the generated environment.
 
   This will make package imports faster, but may fail in some cases.
   For example, there is an upstream issue with `Gtk.jl` that prevents precompilation from working in the Nix build sandbox, because the precompiled code tries to access a display.
@@ -48,28 +48,28 @@ nix-shell -p 'julia.withPackages ["Plots"]' --run julia
 
   Defaults: `true`
 
-* `extraLibs`: Extra library dependencies that will be placed on the `LD_LIBRARY_PATH` for Julia.
+- `extraLibs`: Extra library dependencies that will be placed on the `LD_LIBRARY_PATH` for Julia.
 
   Should not be needed as we try to obtain library dependencies automatically using Julia's artifacts system.
 
-* `makeWrapperArgs`: Extra arguments to pass to the `makeWrapper` call which we use to wrap the Julia binary.
-* `setDefaultDepot`: Whether to automatically prepend `$HOME/.julia` to the `JULIA_DEPOT_PATH`.
+- `makeWrapperArgs`: Extra arguments to pass to the `makeWrapper` call which we use to wrap the Julia binary.
+- `setDefaultDepot`: Whether to automatically prepend `$HOME/.julia` to the `JULIA_DEPOT_PATH`.
 
   This is useful because Julia expects a writable depot path as the first entry, which the one we build in Nixpkgs is not.
   If there's no writable depot, then Julia will show a warning and be unable to save command history logs etc.
 
   Default: `true`
 
-* `packageOverrides`: Allows you to override packages by name by passing an alternative source.
+- `packageOverrides`: Allows you to override packages by name by passing an alternative source.
 
   For example, you can use a custom version of the `LanguageServer` package by passing `packageOverrides = { "LanguageServer" = fetchFromGitHub {...}; }`.
 
-* `augmentedRegistry`: Allows you to change the registry from which Julia packages are drawn.
+- `augmentedRegistry`: Allows you to change the registry from which Julia packages are drawn.
 
   This normally points at a special augmented version of the Julia [General packages registry](https://github.com/JuliaRegistries/General).
   If you want to use a bleeding-edge version to pick up the latest package updates, you can plug in a later revision than the one in Nixpkgs.
 
-* `juliaCpuTarget`: Allows you to set `JULIA_CPU_TARGET` when precompiling. Has no effect if `precompile=false`.
+- `juliaCpuTarget`: Allows you to set `JULIA_CPU_TARGET` when precompiling. Has no effect if `precompile=false`.
 
   You may want to use this if you're building a Julia depot that will end up in a Nix cache and used on machines with
   different CPUs.
