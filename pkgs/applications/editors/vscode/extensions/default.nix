@@ -5363,8 +5363,8 @@ let
         mktplcRef = {
           name = "vscode-icons";
           publisher = "vscode-icons-team";
-          version = "12.12.0";
-          hash = "sha256-C73ZpmVJ9ltzbfV3LmawV2X/2e+e1F3dxaYZzKMBZdQ=";
+          version = "12.13.0";
+          hash = "sha256-HghVnyYLUcC54PNYgqFypZqiynqWzT6l/ihyClUvH0c=";
         };
         meta = {
           description = "Bring real icons to your Visual Studio Code";
