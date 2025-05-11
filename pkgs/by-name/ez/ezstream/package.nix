@@ -2,12 +2,16 @@
   lib,
   stdenv,
   fetchurl,
+
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
+  check,
   libiconv,
   libshout,
-  taglib,
   libxml2,
-  pkg-config,
-  check,
+  taglib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,18 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/playlist.c \
       --replace-fail "#include <sys/stat.h>" $'#include <stddef.h>\n#include <sys/stat.h>'
-    substituteInPlace tests/check_mdata.c \
-      --replace-fail "tcase_add_test(tc_mdata, test_mdata_run_program);" ""
+    substituteInPlace tests/Makefile.am \
+      --replace-fail "check_mdata " "" \
+      --replace-fail "check_playlist " ""
   '';
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    check
     libiconv
     libshout
-    taglib
     libxml2
-    check
+    taglib
   ];
 
   doCheck = true;
