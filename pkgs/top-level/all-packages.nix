@@ -5883,16 +5883,19 @@ with pkgs;
     self = python313FreeThreading;
     pythonAttr = "python313FreeThreading";
     enableGIL = false;
+    enableJIT = false;
   };
   python314FreeThreading = python314.override {
     self = python314FreeThreading;
     pythonAttr = "python314FreeThreading";
     enableGIL = false;
+    enableJIT = false;
   };
   python315FreeThreading = python315.override {
     self = python315FreeThreading;
     pythonAttr = "python315FreeThreading";
     enableGIL = false;
+    enableJIT = false;
   };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };

@@ -87,6 +87,10 @@
     !withMinimalDeps
     && (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux)),
 
+  # enable experimental just-in-time compilation on 3.13 and newer,
+  enableJIT ? !withMinimalDeps,
+  llvmPackages_19,
+
   # enable asserts to ensure the build remains reproducible
   reproducibleBuild ? false,
 
@@ -149,6 +153,7 @@ let
   inherit (passthru) pythonOnBuildForHost;
 
   tzdataSupport = !withMinimalDeps && tzdata != null && passthru.pythonAtLeast "3.9";
+  jitSupport = enableJIT && passthru.pythonAtLeast "3.14";
 
   passthru =
     let
@@ -222,15 +227,19 @@ let
     pythonOnBuildForHost
   ]
   ++
-    optionals
-      (
-        stdenv.cc.isClang
-        && (!stdenv.hostPlatform.useAndroidPrebuilt or false)
-        && (enableLTO || enableOptimizations)
-      )
-      [
-        stdenv.cc.cc.libllvm.out
-      ];
+      optionals
+        (
+          stdenv.cc.isClang
+          && (!stdenv.hostPlatform.useAndroidPrebuilt or false)
+          && (enableLTO || enableOptimizations)
+        )
+        [
+          stdenv.cc.cc.libllvm.out
+        ]
+    ++ optionals jitSupport [
+      llvmPackages_19.clang
+      llvmPackages_19.llvm
+    ];
 
   buildInputs = lib.filter (p: p != null) (
     optionals (!withMinimalDeps) [
@@ -437,20 +446,25 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "@mime-types@" "${mailcap}"
     '';
 
-  env = {
-    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin && withLibxcrypt) "-lcrypt"}";
-    NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
-      {
-        "glibc" = "-lgcc_s";
-        "musl" = "-lgcc_eh";
-      }
-      ."${stdenv.hostPlatform.libc}" or ""
-    );
-    # Determinism: We fix the hashes of str, bytes and datetime objects.
-    PYTHONHASHSEED = 0;
-  };
+  env =
+     {
+      CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+      LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
+      LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin && withLibxcrypt) "-lcrypt"}";
+      NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
+        {
+          "glibc" = "-lgcc_s";
+          "musl" = "-lgcc_eh";
+        }
+        ."${stdenv.hostPlatform.libc}" or ""
+      );
+      # Determinism: We fix the hashes of str, bytes and datetime objects.
+      PYTHONHASHSEED = 0;
+    }
+    // lib.optionalAttrs jitSupport {
+      PYTHON_FOR_REGEN = lib.getExe pkgsBuildBuild.python3Minimal;
+      LLVM_VERSION = lib.versions.major llvmPackages_19.llvm.version;
+    };
 
   # https://docs.python.org/3/using/configure.html
   configureFlags = [
@@ -482,6 +496,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (pythonAtLeast "3.13") [
     (enableFeature enableGIL "gil")
+  ]
+  ++ optionals jitSupport [
+    "--enable-experimental-jit=yes-off"
   ]
   ++ optionals enableOptimizations [
     "--enable-optimizations"
