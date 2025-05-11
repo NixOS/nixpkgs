@@ -3,7 +3,6 @@
   lib,
   postgresql,
   postgresqlTestExtension,
-  tcl,
   tclPackages,
 }:
 
