@@ -1528,7 +1528,7 @@ with pkgs;
     inherit (libsForQt5) libqtpas wrapQtAppsHook;
   };
 
-  krusader = kdePackages.callPackage ../applications/file-managers/krusader { };
+  krusader = callPackage ../applications/file-managers/krusader { };
 
   mc = callPackage ../applications/file-managers/mc {
     inherit (darwin) autoSignDarwinBinariesHook;
