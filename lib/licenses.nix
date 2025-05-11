@@ -1078,6 +1078,14 @@ lib.mapAttrs mkLicense (
       fullName = "Open Market License";
     };
 
+    open-webui = {
+      fullName = "Open WebUI License";
+      url = "https://github.com/open-webui/open-webui/blob/0cef844168e97b70de2abee4c076cc30ffec6193/LICENSE";
+      # Marked non-free due to concerns over the MIT -> modified BSD-3 relicensing process,
+      # potentially unclear/contradictory statements, and non-standard branding requirements.
+      free = false;
+    };
+
     openldap = {
       spdxId = "OLDAP-2.8";
       fullName = "Open LDAP Public License v2.8";
