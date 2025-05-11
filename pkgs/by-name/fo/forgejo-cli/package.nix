@@ -8,18 +8,15 @@
   openssl,
   zlib,
 }:
-let
-  version = "0.3.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  inherit version;
+  version = "0.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Cyborus";
     repo = "forgejo-cli";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8KPR7Fx26hj5glKDjczCLP6GgQBUsA5TpjhO5UZOpik=";
   };
 
@@ -43,7 +40,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CLI application for interacting with Forgejo";
     homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${version}";
+    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -51,4 +48,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ isabelroses ];
     mainProgram = "fj";
   };
-}
+})
