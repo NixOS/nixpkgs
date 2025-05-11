@@ -7,7 +7,7 @@ on:
     paths:
       - 'doc/**'
       - 'lib/**'
-      - 'pkgs/tools/nix/nixdoc/**'
+      - 'pkgs/by-name/ni/nixdoc/**'
 
 permissions: {}
 
