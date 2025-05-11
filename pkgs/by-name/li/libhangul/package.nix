@@ -23,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hangul";
     homepage = "https://github.com/libhangul/libhangul";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.ianwookim ];
+    maintainers = with maintainers; [
+      ianwookim
+      honnip
+    ];
     platforms = platforms.linux;
   };
 })
