@@ -11,7 +11,7 @@ jobs:
 
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ get-merge-commit ]
     steps:
       - name: Check out the PR at the test merge commit
