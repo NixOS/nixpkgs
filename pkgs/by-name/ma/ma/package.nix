@@ -18,6 +18,11 @@ stdenv.mkDerivation {
     tclPackages.tk
   ];
 
+  postPatch = ''
+    substituteInPlace build \
+      --replace-fail 'gcc' '$CC'
+  '';
+
   buildPhase = ''
     runHook preBuild
     ./build
