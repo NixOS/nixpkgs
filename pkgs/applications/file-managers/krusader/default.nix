@@ -3,17 +3,8 @@
   stdenv,
   fetchurl,
   extra-cmake-modules,
-  kdoctools,
-  karchive,
-  kconfig,
-  kcrash,
-  kguiaddons,
-  kparts,
-  kwindowsystem,
   cmake,
-  wrapQtAppsHook,
-  qt5compat,
-  kstatusnotifieritem,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,11 +19,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    kdoctools
-    wrapQtAppsHook
+    kdePackages.kdoctools
+    kdePackages.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with kdePackages; [
     karchive
     kconfig
     kcrash
