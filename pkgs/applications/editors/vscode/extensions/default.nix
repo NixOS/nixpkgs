@@ -258,8 +258,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "19.2.4";
-          hash = "sha256-LJpv7ZVnJrPb4Ty0H250WcliCoJS4lXc878BTYHfJ+8=";
+          version = "20.0.0";
+          hash = "sha256-87SImzcGbwvf9xtdbD3etqaWe6fMVeCKc+f8qTyFnUA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
