@@ -4620,8 +4620,8 @@ let
         mktplcRef = {
           name = "vscode-tmux-keybinding";
           publisher = "stephlin";
-          version = "0.0.7";
-          hash = "sha256-MrW0zInweAhU2spkEEiDLyuT6seV3GFFurWTqYMzqgY=";
+          version = "1.0.0";
+          hash = "sha256-ZV5iyZ8pkTG9RPGObFtGbU5Iq7w/cDlUMuOVskg/39g=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/stephlin.vscode-tmux-keybinding/changelog";
