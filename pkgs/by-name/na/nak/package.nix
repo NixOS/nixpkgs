@@ -1,27 +1,28 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
-buildGo123Module rec {
+
+buildGoModule (finalAttrs: {
   pname = "nak";
-  version = "0.11.4";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = "nak";
-    tag = "v${version}";
-    hash = "sha256-xFATXMK7wyEgnJXmTq9BdW27xqgXUP1Mo0m5QhFIv0I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ecn3hIdGzwcUrfSvESCGAYlPo7Kf0425RJ4GBzVYGNs=";
   };
 
-  vendorHash = "sha256-VkeQLWtyDfZiR0nrhmd5KCi/BIuqrFem9WhcTd3VRcc=";
+  vendorHash = "sha256-ZDOlQiSVe0hssTsMEtpwIKu5v5zH4RJ+Haq+zS0GTnc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Integration tests fail (requires connection to relays)
@@ -36,9 +37,9 @@ buildGo123Module rec {
   meta = {
     description = "Command-line tool for Nostr things";
     homepage = "https://github.com/fiatjaf/nak";
-    changelog = "https://github.com/fiatjaf/nak/releases/tag/${src.tag}";
+    changelog = "https://github.com/fiatjaf/nak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "nak";
   };
-}
+})
