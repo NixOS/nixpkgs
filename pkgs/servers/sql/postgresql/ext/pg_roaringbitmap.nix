@@ -3,8 +3,6 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  postgresqlTestHook,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
