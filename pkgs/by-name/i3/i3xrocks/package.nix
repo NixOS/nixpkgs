@@ -21,13 +21,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-qZWuYRwgSNVURxaZDzBU6yUcpIMUeGZg3HXlI8KzyX4=";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [
     autoconf
     automake
     pkg-config
     xcbutilxrm
     xcbutil
-    autoreconfHook
   ];
 
   meta = {
