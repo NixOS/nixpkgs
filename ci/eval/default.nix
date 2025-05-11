@@ -36,6 +36,9 @@ let
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
   attrpathsSuperset =
+    {
+      evalSystem ? "x86_64-linux",
+    }:
     runCommand "attrpaths-superset.json"
       {
         src = nixpkgs;
@@ -55,6 +58,7 @@ let
             -I "$src" \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
+            --option eval-system "$evalSystem" \
             --arg enableWarnings false > $out/paths.json
       '';
 
@@ -65,7 +69,8 @@ let
       # because `--argstr system` would only be passed to the ci/default.nix file!
       evalSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile ? "${attrpathsSuperset}/paths.json",
+      attrpathFile ? "${attrpathsSuperset { evalSystem = attrpathEvalSystem; }}/paths.json",
+      attrpathEvalSystem ? "x86_64-linux",
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       checkMeta ? true,
