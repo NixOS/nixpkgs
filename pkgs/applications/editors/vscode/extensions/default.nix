@@ -5111,8 +5111,8 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.25.0";
-          hash = "sha256-Gszz6sGJt6DBgVCH7tgTGTX73TbKBwityJn7cY39WmU=";
+          version = "3.26.0";
+          hash = "sha256-pAkk3QURnlLNMZ2cFBks2lAEl/Hk8Z2i/QgvjUv+u2Y=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
