@@ -9,6 +9,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   floodSettings ? null,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -37,6 +38,8 @@ buildNpmPackage (finalAttrs: {
   postInstall = lib.optionalString (floodSettings != null) ''
     echo '${builtins.toJSON floodSettings}' > $out/config.json
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flood clone for Transmission";
