@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  nix-update-script,
   rustPlatform,
 }:
 
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-mLtzdWHC7HN+hju71WQQZ4nJDMzybEfjzckbfeu32Qo=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal User Interface for Logstash";
