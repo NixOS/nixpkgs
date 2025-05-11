@@ -2033,10 +2033,6 @@ with pkgs;
   capstone = callPackage ../development/libraries/capstone { };
   capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
-  casync = callPackage ../applications/networking/sync/casync {
-    sphinx = buildPackages.python3Packages.sphinx;
-  };
-
   cataract = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
 
