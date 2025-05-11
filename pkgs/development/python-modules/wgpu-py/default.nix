@@ -33,8 +33,8 @@
   trio,
 
   # passthru
-  wgpu-py,
   testers,
+  wgpu-py,
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
@@ -51,6 +51,8 @@ buildPythonPackage rec {
   # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
   # As we retrieve `wgpu-native` from nixpkgs instead, none of this is needed, and
   # remove an extra dependency.
+  #
+  # We also patch the `get_wgpu_lib_path()` to always return the path to nixpkg' wgpu-native
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'requires = ["requests", "hatchling"]' 'requires = ["hatchling"]' \
@@ -103,62 +105,26 @@ buildPythonPackage rec {
     trio
   ];
 
-  # Tests break due in Linux CI due to wgpu being unable to find any adapters.
+  # Tests break in Linux CI due to wgpu being unable to find any adapters.
   # Ordinarily, this would be fixed in an approach similar to `pkgs/by-name/wg/wgpu-native/examples.nix`'s
   # usage of `runtimeInputs` and `makeWrapperArgs`.
   # Unfortunately, as this is a Python module without a `mainProgram`, `makeWrapperArgs` will not apply here,
   # as there is no "script" to wrap.
-  #
-  # In addition thereto, the structure of the tests in `wgpu-py` is unconventional, spread in separate folders
-  # all in the repository's root, which causes `pytestCheckHook` to fail for Darwin platforms too.
-  # As such, we delegate testing to `passthru`.
-  doCheck = false;
+  doCheck = stdenv.hostPlatform.isDarwin;
 
-  passthru = {
-    tests =
-      {
-        version = testers.testVersion {
-          package = wgpu-py;
-          command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
-        };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
-        tests = testers.runCommand {
-          name = "tests";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-        examples = testers.runCommand {
-          name = "examples";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/examples
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+    for suite in tests examples codegen tests_mem; do
+      pytest -v $suite
+    done
 
-        codegen = testers.runCommand {
-          name = "codegen";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/codegen
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+    runHook postInstallCheck
+  '';
 
-        tests_mem = testers.runCommand {
-          name = "tests_mem";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests_mem
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-      };
+  passthru.tests.version = testers.testVersion {
+    package = wgpu-py;
+    command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
   };
 
   meta = {
