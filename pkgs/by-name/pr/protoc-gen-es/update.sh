@@ -23,7 +23,10 @@ npm-lockfile-fix package-lock.json
 npm_hash=$(prefetch-npm-deps package-lock.json)
 popd
 
-pushd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+pushd "${SCRIPT_DIRECTORY}"
+
 sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 popd
 

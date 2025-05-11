@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+cd -- "${SCRIPT_DIRECTORY}"
+
 DRV_DIR="$PWD"
 
 relinfo=$(curl -sL 'https://api.github.com/repos/keyboardio/chrysalis/releases' | jq 'map(select(.prerelease == false)) | max_by(.tag_name)')

@@ -1,7 +1,10 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=./. -i bash -p unzip curl jq common-updater-scripts
 set -eo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 bin_file="$(realpath ./package.nix)"
 

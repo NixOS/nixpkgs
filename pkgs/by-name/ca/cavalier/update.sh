@@ -4,6 +4,8 @@
 
 set -eu -o pipefail
 
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
 version=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/NickvisionApps/Cavalier/releases/latest | jq -e -r .tag_name)
 old_version=$(nix-instantiate --eval -A cavalier.version | jq -e -r)
@@ -15,4 +17,4 @@ fi
 
 update-source-version cavalier "$version"
 
-$(nix-build -A cavalier.fetch-deps --no-out-link) "$(dirname -- "${BASH_SOURCE[0]}")/deps.nix"
+$(nix-build -A cavalier.fetch-deps --no-out-link) "${SCRIPT_DIRECTORY}/deps.nix"

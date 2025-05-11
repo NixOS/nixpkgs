@@ -2,7 +2,11 @@
 #!nix-shell -i bash -p curl gnused nixfmt-rfc-style common-updater-scripts
 set -eEuo pipefail
 [ -z "${DEBUG:-}" ] || set -x
-cd "${BASH_SOURCE[0]%/*}"
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
+
 # run: nix-shell maintainers/scripts/update.nix --argstr package msgraph-cli
 
 package_file="./package.nix"

@@ -3,8 +3,9 @@
 
 set -euo pipefail
 
-scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
-nixpkgs=$(realpath "$scriptDir"/../../../..)
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+nixpkgs=$(realpath "${SCRIPT_DIRECTORY}"/../../../..)
 
 # All architectures are released together, therefore we get the latest version from the linux release
 # NOTE: for some reason, the darwin RELEASES (ie. /darwin/RELEASES) file returns a frozen version...

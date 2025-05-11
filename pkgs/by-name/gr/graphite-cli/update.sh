@@ -2,7 +2,10 @@
 #! nix-shell -i bash -p gnused nix nodejs prefetch-npm-deps wget
 
 set -euo pipefail
-pushd "$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+pushd -- "${SCRIPT_DIRECTORY}"
 
 version=$(npm view @withgraphite/graphite-cli version)
 tarball="graphite-cli-$version.tgz"

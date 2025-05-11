@@ -2,7 +2,10 @@
 #! nix-shell -i bash -p gnugrep coreutils curl wget jq nix-update prefetch-yarn-deps
 
 set -euo pipefail
-pushd "$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+pushd "${SCRIPT_DIRECTORY}"
 
 owner="pomerium"
 repo="pomerium"

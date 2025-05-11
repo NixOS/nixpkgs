@@ -4,7 +4,9 @@
 
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 old_vs_version="$(sed -nE 's/\s*vsVersion = "(.*)".*/\1/p' ./package.nix)"
 new_vs_version="$(curl -s "https://api.github.com/repos/dotnet/vscode-csharp/tags?per_page=1" | jq -r '.[0].name' | sed 's/v//')"

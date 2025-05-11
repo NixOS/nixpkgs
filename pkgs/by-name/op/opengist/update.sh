@@ -7,7 +7,10 @@ set -eou pipefail
 set -x
 
 NIXPKGS_DIR="$(git rev-parse --show-toplevel)"
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # Get latest release
 OPENGIST_RELEASE=$(
@@ -32,7 +35,7 @@ pushd "$NIXPKGS_DIR" >/dev/null || exit 1
 update-source-version opengist "${latestVersion}"
 popd >/dev/null
 
-pushd "$SCRIPT_DIR" >/dev/null || exit 1
+pushd "$SCRIPT_DIRECTORY" >/dev/null || exit 1
 
 ## npm hash
 rm -f package{,-lock}.json
@@ -47,7 +50,7 @@ popd >/dev/null
 # nix-update with goModules broken for this package
 
 setKV() {
-    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${SCRIPT_DIR}/package.nix"
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${SCRIPT_DIRECTORY}/package.nix"
 }
 
 setKV vendorHash "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" # The same as lib.fakeHash

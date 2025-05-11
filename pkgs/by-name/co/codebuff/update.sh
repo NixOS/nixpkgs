@@ -6,7 +6,9 @@ set -euo pipefail
 version=$(npm view codebuff version)
 
 # Generate updated lock file
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 npm i --package-lock-only codebuff@"$version"
 rm -f package.json
 

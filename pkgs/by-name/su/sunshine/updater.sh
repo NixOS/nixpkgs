@@ -2,7 +2,10 @@
 #! nix-shell -i bash -p gnugrep gnused coreutils curl wget jq nix-update prefetch-npm-deps nodejs
 
 set -euo pipefail
-pushd "$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+pushd "${SCRIPT_DIRECTORY}"
 
 version=$(curl -s "https://api.github.com/repos/LizardByte/sunshine/tags" | jq -r .[0].name | grep -oP "^v\K.*")
 url="https://raw.githubusercontent.com/LizardByte/sunshine/v$version/"

@@ -5,7 +5,7 @@ set -eou pipefail
 
 PACKAGE_NAME="laravel"
 PACKAGE_VERSION=$(nix eval --raw -f. $PACKAGE_NAME.version)
-PACKAGE_DIR="$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
 
 # Get latest version from git
 GIT_VERSION="$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/laravel/installer/releases/latest" | jq '.tag_name' --raw-output)"
@@ -23,7 +23,7 @@ trap 'rm -rf -- "${TMPDIR}"' EXIT
 
 git clone --depth 1 --branch "${GIT_VERSION}" https://github.com/laravel/installer.git "${TMPDIR}/laravel"
 composer -d "${TMPDIR}/laravel" install
-cp "${TMPDIR}/laravel/composer.lock" "${PACKAGE_DIR}/composer.lock"
+cp "${TMPDIR}/laravel/composer.lock" "${SCRIPT_DIRECTORY}/composer.lock"
 
 # update package.nix version, hash and vendorHash
 nix-update $PACKAGE_NAME --version="${NEW_VERSION}"

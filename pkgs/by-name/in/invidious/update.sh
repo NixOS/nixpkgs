@@ -7,7 +7,9 @@ pkg='invidious'
 
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 info() {
     if [ -t 2 ]; then

@@ -3,9 +3,9 @@
 
 set -euo pipefail
 
-# This is the directory of this update.sh script.
-script_dir="$(dirname "${BASH_SOURCE[0]}")"
-derivation_file="${script_dir}/generated-package.nix"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+derivation_file="${SCRIPT_DIRECTORY}/generated-package.nix"
 latest_version="$(curl --silent 'https://api.github.com/repos/gren-lang/compiler/releases/latest' | jq --raw-output '.tag_name')"
 
 echo "Updating gren to version ${latest_version}."

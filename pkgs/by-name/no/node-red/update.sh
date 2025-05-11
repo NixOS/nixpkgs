@@ -3,7 +3,9 @@
 
 set -eu -o pipefail
 
-pushd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+pushd "${SCRIPT_DIRECTORY}"
 
 tag=$(curl -sfL ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/node-red/node-red/releases/latest | jq -r .tag_name)
 

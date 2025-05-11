@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 old_rzls_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 apiUrl="https://feeds.dev.azure.com/azure-public/vside/_apis/packaging/Feeds/msft_consumption/packages/577084ea-e5be-4fad-951b-00d0b05fb170?api-version=7.2-preview.1"

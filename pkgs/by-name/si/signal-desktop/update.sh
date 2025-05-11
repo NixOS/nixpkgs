@@ -3,7 +3,7 @@
 
 set -ex
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
 curl_github() {
   curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
@@ -27,13 +27,13 @@ ringrtcVersion=`jq -r '.dependencies."@signalapp/ringrtc"' <<< $packageJson`
 ringrtcVersionProperties="`curl_github "https://raw.githubusercontent.com/signalapp/ringrtc/refs/tags/v$ringrtcVersion/config/version.properties"`"
 webrtcVersion="`grep --only-matching "^webrtc.version=.*$" <<< $ringrtcVersionProperties | sed "s/webrtc.version=//g"`"
 
-sed -E -i "s/(nodejs_)../\1$nodeVersion/" $SCRIPT_DIR/package.nix
-sed -E -i "s/(electron_)../\1$electronVersion/" $SCRIPT_DIR/package.nix
-sed -E -i "s/(SOURCE_DATE_EPOCH = )[0-9]+/\1$releaseEpoch/" $SCRIPT_DIR/package.nix
+sed -E -i "s/(nodejs_)../\1$nodeVersion/" $SCRIPT_DIRECTORY/package.nix
+sed -E -i "s/(electron_)../\1$electronVersion/" $SCRIPT_DIRECTORY/package.nix
+sed -E -i "s/(SOURCE_DATE_EPOCH = )[0-9]+/\1$releaseEpoch/" $SCRIPT_DIRECTORY/package.nix
 
-sed -E -i "s/(withAppleEmojis \? )false/\1true/" $SCRIPT_DIR/package.nix
+sed -E -i "s/(withAppleEmojis \? )false/\1true/" $SCRIPT_DIRECTORY/package.nix
 nix-update signal-desktop --subpackage sticker-creator --version="$latestVersion"
-sed -E -i "s/(withAppleEmojis \? )true/\1false/" $SCRIPT_DIR/package.nix
+sed -E -i "s/(withAppleEmojis \? )true/\1false/" $SCRIPT_DIRECTORY/package.nix
 update-source-version signal-desktop \
   --ignore-same-version \
   --source-key=pnpmDeps
@@ -61,4 +61,4 @@ update-source-version signal-desktop.ringrtc \
   --ignore-same-version \
   --source-key=cargoDeps.vendorStaging
 
-gclient2nix generate "https://github.com/signalapp/webrtc@$webrtcVersion" > $SCRIPT_DIR/webrtc-sources.json
+gclient2nix generate "https://github.com/signalapp/webrtc@$webrtcVersion" > $SCRIPT_DIRECTORY/webrtc-sources.json

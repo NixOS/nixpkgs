@@ -6,9 +6,10 @@ set -eu -o pipefail
 
 # ASSUMES; The Cargo.lock file inside this directory holds the correct librusty version
 
-PACKAGE_DIR=$(dirname "$(readlink --canonicalize-existing "${BASH_SOURCE[0]}")")
-OUTPUT_FILE="$PACKAGE_DIR/librusty_v8.nix"
-NEW_VERSION="$(grep --after-context 5 'name = "v8"' "$PACKAGE_DIR/Cargo.lock" | grep 'version =' | sed -E 's/version = "//;s/"//')"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+OUTPUT_FILE="$SCRIPT_DIRECTORY/librusty_v8.nix"
+NEW_VERSION="$(grep --after-context 5 'name = "v8"' "$SCRIPT_DIRECTORY/Cargo.lock" | grep 'version =' | sed -E 's/version = "//;s/"//')"
 
 CURRENT_VERSION=""
 if [ -f "$OUTPUT_FILE" ]; then

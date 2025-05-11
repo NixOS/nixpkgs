@@ -2,7 +2,10 @@
 #! nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl common-updater-scripts nix-prefetch-git jq
 # shellcheck shell=bash
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # provide a github token so you don't get rate limited
 # if you use gh cli you can use:

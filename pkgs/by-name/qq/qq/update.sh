@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 payload=$(curl https://im.qq.com/rainbow/linuxQQDownload | grep -oP "var params= \K\{.*\}(?=;)")
 amd64_url=$(jq -r .x64DownloadUrl.deb <<< "$payload")

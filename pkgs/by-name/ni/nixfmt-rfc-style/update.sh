@@ -7,10 +7,12 @@
 set -eo pipefail
 
 # This is the directory of this update.sh script.
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
-derivation_file="${script_dir}/generated-package.nix"
-date_file="${script_dir}/date.txt"
+cd -- "${SCRIPT_DIRECTORY}"
+
+derivation_file="${SCRIPT_DIRECTORY}/generated-package.nix"
+date_file="${SCRIPT_DIRECTORY}/date.txt"
 
 # This is the latest version of nixfmt-rfc-style branch on GitHub.
 new_version=$(curl --silent https://api.github.com/repos/nixos/nixfmt/git/refs/heads/master | jq '.object.sha' --raw-output)

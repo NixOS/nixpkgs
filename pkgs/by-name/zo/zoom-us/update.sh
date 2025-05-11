@@ -3,8 +3,9 @@
 
 set -eu -o pipefail
 
-scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
-nixpkgs=$(realpath "$scriptDir"/../../../..)
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+nixpkgs=$(realpath "$SCRIPT_DIRECTORY"/../../../..)
 
 echo >&2 "=== Obtaining version data from https://zoom.us/rest/download ..."
 linux_data=$(curl -Ls 'https://zoom.us/rest/download?os=linux' | jq .result.downloadVO)

@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
 function prefetch-sri() {
     nix-prefetch-url "$1" 2>/dev/null |
@@ -17,7 +17,7 @@ declare -A platforms=(
     [aarch64-apple-darwin]="aarch64-darwin"
 )
 
-old_version="$(jq -r '.version' "$SCRIPT_DIR/sources.json")"
+old_version="$(jq -r '.version' "$SCRIPT_DIRECTORY/sources.json")"
 new_version="$(curl -sS https://update.tabnine.com/bundles/version)"
 
 echo "Updating $old_version -> $new_version"
@@ -39,12 +39,12 @@ for platform in "${!platforms[@]}"; do
     cat <<<"$(jq --arg nix_platform "$nix_platform" --arg platform "$platform" --arg hash "$hash" '.platforms += {($nix_platform): {name: $platform, hash: $hash}}' "$sources_tmp")" >"$sources_tmp"
 done
 
-cp "$sources_tmp" "$SCRIPT_DIR/sources.json"
+cp "$sources_tmp" "$SCRIPT_DIRECTORY/sources.json"
 
-if [[ `git status --porcelain "$SCRIPT_DIR/sources.json"` ]]; then
-    git add "$SCRIPT_DIR/sources.json"
+if [[ `git status --porcelain "$SCRIPT_DIRECTORY/sources.json"` ]]; then
+    git add "$SCRIPT_DIRECTORY/sources.json"
     git commit -m "tabnine: $old_version -> $new_version"
 else
-    echo "No changes made to $SCRIPT_DIR/sources.json, skipping commit"
+    echo "No changes made to $SCRIPT_DIRECTORY/sources.json, skipping commit"
 fi
 

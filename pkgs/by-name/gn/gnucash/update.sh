@@ -18,7 +18,10 @@ src_hash=$(nix-hash --to-sri --type sha256 "$src_hash")
 src_doc_hash=$(nix-prefetch-github Gnucash gnucash-docs --rev "$latest_version" | jq -r .hash)
 src_doc_hash=$(nix-hash --to-sri --type sha256 "$src_doc_hash")
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
+
 sed -i default.nix -e "s|$old_src_hash|$src_hash|"
 sed -i default.nix -e "s|$old_src_doc_hash|$src_doc_hash|"
 sed -i default.nix -e "/ version =/s|\"${UPDATE_NIX_OLD_VERSION}\"|\"${latest_version}\"|"

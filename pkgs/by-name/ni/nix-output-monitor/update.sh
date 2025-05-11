@@ -6,10 +6,11 @@
 
 set -eo pipefail
 
-# This is the directory of this update.sh script.
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
-derivation_file="${script_dir}/generated-package.nix"
+cd -- "${SCRIPT_DIRECTORY}"
+
+derivation_file="${SCRIPT_DIRECTORY}/generated-package.nix"
 
 # This is the latest released version of nix-output-monitor on GitHub.
 new_version=$(curl --silent "https://code.maralorn.de/api/v1/repos/maralorn/nix-output-monitor/releases" | jq '.[0].tag_name' --raw-output)

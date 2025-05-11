@@ -22,7 +22,9 @@ version="${version#v}"
 web_src="https://raw.githubusercontent.com/element-hq/element-web/v$version"
 web_src_hash=$(nix-prefetch-github element-hq element-web --rev v${version} | jq -r .hash)
 
-cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}" || exit 1
 
 web_tmpdir=$(mktemp -d)
 trap 'rm -rf "$web_tmpdir"' EXIT

@@ -2,7 +2,9 @@
 #! nix-shell -i bash -p curl jq
 
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 release=$(curl -s https://api.github.com/repos/be5invis/Iosevka/releases/latest)
 

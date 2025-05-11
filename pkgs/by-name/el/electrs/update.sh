@@ -4,8 +4,9 @@ set -euo pipefail
 
 # Fetch latest release, GPG-verify the tag, update derivation
 
-scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
-nixpkgs=$(realpath "$scriptDir"/../../../..)
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+nixpkgs=$(realpath "$SCRIPT_DIRECTORY"/../../../..)
 
 oldVersion=$(nix-instantiate --eval -E "(import \"$nixpkgs\" { config = {}; overlays = []; }).electrs.version" | tr -d '"')
 version=$(curl -s --show-error "https://api.github.com/repos/romanz/electrs/releases/latest" | jq -r '.tag_name' | tail -c +2)

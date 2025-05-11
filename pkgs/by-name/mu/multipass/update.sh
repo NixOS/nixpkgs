@@ -4,7 +4,9 @@
 
 set -euo pipefail
 
-cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # Download the latest pubspec.lock (which is a YAML file), convert it to JSON and write it to
 # the package directory as pubspec.lock.json

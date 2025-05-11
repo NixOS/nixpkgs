@@ -2,7 +2,9 @@
 #!nix-shell -i bash -p coreutils curl jq
 set -euo pipefail
 
-cd $(dirname "${BASH_SOURCE[0]}")
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd ${SCRIPT_DIRECTORY}
 
 setKV () {
     sed -i "s|$2 = \".*\"|$2 = \"${3:-}\"|" $1

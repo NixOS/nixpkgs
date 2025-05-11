@@ -3,9 +3,9 @@
 
 set -euo pipefail
 
-# This is the directory of this update.sh script.
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-derivation_file="${script_dir}/generated-package.nix"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+derivation_file="${SCRIPT_DIRECTORY}/generated-package.nix"
 latest_version="$(curl --silent https://api.github.com/repos/pdobsan/oama/releases/latest | jq --raw-output '.tag_name')"
 
 echo "Updating oama to version ${latest_version}."

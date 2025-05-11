@@ -4,8 +4,9 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-PKG=$(basename "$SCRIPT_DIR")
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+PKG=$(basename "$SCRIPT_DIRECTORY")
 
 LATEST="18" # increment manually
 VERSION="${PKG/#odoo}"
@@ -25,7 +26,7 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
     exit 0
 fi
 
-cd "$SCRIPT_DIR"
+cd "$SCRIPT_DIRECTORY"
 
 sed -ri "s| hash.+ # odoo| hash = \"$(nix-prefetch -q fetchzip --option extra-experimental-features flakes --url "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.zip")\"; # odoo|g" package.nix
 sed -ri "s|odoo_version = .+|odoo_version = \"$VERSION\";|" package.nix

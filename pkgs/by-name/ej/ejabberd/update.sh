@@ -16,7 +16,8 @@ fi
 update-source-version ejabberd "$version"
 
 sqlite=$(nix-build . -A sqlite.dev --no-link)
-rebardeps=$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/rebar-deps.nix
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+rebardeps=${SCRIPT_DIRECTORY}/rebar-deps.nix
 tmpdir=$(mktemp -d)
 cp -r $(nix-build . --no-out-link -A ejabberd.src)/. "$tmpdir"
 cd "$tmpdir"

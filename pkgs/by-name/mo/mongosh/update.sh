@@ -4,7 +4,9 @@
 
 set -exuo pipefail
 
-cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 TMPDIR="$(mktemp -d)"
 trap 'rm -r -- "$TMPDIR"' EXIT

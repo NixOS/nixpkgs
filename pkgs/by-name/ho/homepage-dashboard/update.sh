@@ -3,7 +3,10 @@
 # shellcheck shell=bash
 set -euo pipefail
 nixpkgs="$(pwd)"
-cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # Generate the patch file that makes homepage-dashboard aware of the NIXPKGS_HOMEPAGE_CACHE_DIR environment variable.
 # Generating the patch this way ensures that both the patch is included, and the lock file is updated.

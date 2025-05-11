@@ -5,7 +5,9 @@ set -o errexit -o nounset -o pipefail
 
 # TODO: Expand to get new version automatically once implemented upstream
 
-package_dir="$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # Create new pubspec.lock.json
 cleanup() {
@@ -21,4 +23,4 @@ if ! [[ -f pubspec.lock ]]; then
     dart pub --directory="${tmpdir}" update
 fi
 
-yq . "${tmpdir}/pubspec.lock" >"${package_dir}/pubspec.lock.json"
+yq . "${tmpdir}/pubspec.lock" >"${SCRIPT_DIRECTORY}/pubspec.lock.json"

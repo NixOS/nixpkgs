@@ -6,8 +6,10 @@ set -x -eu -o pipefail
 WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
 
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
 NIXPKGS_CRC_FOLDER=$(
-    cd $(dirname ${BASH_SOURCE[0]})
+    cd -- ${SCRIPT_DIRECTORY}
     pwd -P
 )
 cd ${NIXPKGS_CRC_FOLDER}

@@ -3,7 +3,10 @@
 # shellcheck shell=bash
 set -euo pipefail
 nixpkgs="$(pwd)"
-cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
+
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 # Update the hash of the parca source code in the Nix expression.
 update_parca_source() {

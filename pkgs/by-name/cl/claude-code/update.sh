@@ -6,7 +6,9 @@ set -euo pipefail
 version=$(npm view @anthropic-ai/claude-code version)
 
 # Generate updated lock file
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 npm i --package-lock-only @anthropic-ai/claude-code@"$version"
 rm -f package.json
 

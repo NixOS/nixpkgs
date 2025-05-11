@@ -4,7 +4,8 @@
 set -eux
 
 NIXPKGS_DIR="$PWD"
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
 
 # Get latest release
 YAZI_RELEASE=$(
@@ -30,7 +31,7 @@ echo "Updating code sources"
 
 update-source-version yazi-unwrapped "${latestVersion}" --source-key=passthru.srcs.code_src
 
-pushd "$SCRIPT_DIR"
+pushd "$SCRIPT_DIRECTORY"
 echo "Updating build date"
 
 sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' package.nix

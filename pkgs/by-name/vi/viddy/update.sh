@@ -7,7 +7,7 @@
 set -eou pipefail
 
 NIXPKGS_DIR="$PWD"
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
 
 # Get latest release
 VIDDY_RELEASE=$(
@@ -35,6 +35,6 @@ echo "Updating viddy $oldVersion -> $latestVersion"
 nix-update viddy --version "$latestVersion"
 
 # Build date
-sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' "$SCRIPT_DIR/package.nix"
+sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' "$SCRIPT_DIRECTORY/package.nix"
 
 

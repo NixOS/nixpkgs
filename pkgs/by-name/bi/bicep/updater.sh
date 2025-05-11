@@ -2,7 +2,10 @@
 #!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts
 
 set -eo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+cd -- ${SCRIPT_DIRECTORY}
 
 deps_file="$(realpath "./deps.json")"
 new_version="$(curl -s "https://api.github.com/repos/azure/bicep/releases?per_page=1" | jq -r '.[0].name')"

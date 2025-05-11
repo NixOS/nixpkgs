@@ -3,7 +3,9 @@
 
 set -ex
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 latestTag=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} \
   "https://api.github.com/repos/signalapp/Signal-Desktop/releases/latest" \
@@ -19,15 +21,15 @@ latestVersionAarch64=$(jq -r '.source_package.version' <<< $latestBuildInfoAarch
 echo "Updating signal-desktop for x86_64-linux"
 update-source-version signal-desktop-bin "$latestVersion" \
   --system=x86_64-linux \
-  --file="$SCRIPT_DIR/signal-desktop.nix"
+  --file="$SCRIPT_DIRECTORY/signal-desktop.nix"
 
 echo "Updating signal-desktop for aarch64-linux"
 update-source-version signal-desktop-bin "$latestVersionAarch64" "" \
   "https://download.copr.fedorainfracloud.org/results/useidel/signal-desktop/fedora-42-aarch64/$(printf "%08d" $latestBuildAarch64)-signal-desktop/signal-desktop-$latestVersionAarch64.fc42.aarch64.rpm" \
   --system=aarch64-linux \
-  --file="$SCRIPT_DIR/signal-desktop-aarch64.nix"
+  --file="$SCRIPT_DIRECTORY/signal-desktop-aarch64.nix"
 
 echo "Updating signal-desktop for darwin"
 update-source-version signal-desktop-bin "$latestVersion" \
   --system=aarch64-darwin \
-  --file="$SCRIPT_DIR/signal-desktop-darwin.nix"
+  --file="$SCRIPT_DIRECTORY/signal-desktop-darwin.nix"

@@ -10,7 +10,9 @@ DOWNLOAD_URL=$(echo "$XML_DATA" | xmllint --xpath 'string(//item[1]/enclosure/@u
 
 HASH=$(nix-prefetch-url $DOWNLOAD_URL | xargs nix hash convert --hash-algo sha256)
 
-SOURCE_NIX="$(dirname ${BASH_SOURCE[0]})/source.nix"
+SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo .)")"; pwd)
+
+SOURCE_NIX="${SCRIPT_DIRECTORY}/source.nix"
 
 cat > "${SOURCE_NIX}" << _EOF_
 {

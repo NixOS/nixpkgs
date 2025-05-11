@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
-cd "$scriptDir"
+SCRIPT_DIRECTORY=$(cd $(dirname ${BASH_SOURCE[0]}); cd -P $(dirname $(readlink ${BASH_SOURCE[0]} || echo .)); pwd)
+
+cd -- "${SCRIPT_DIRECTORY}"
 
 echo "Updating nbxplorer"
 ../../nb/nbxplorer/update.sh
