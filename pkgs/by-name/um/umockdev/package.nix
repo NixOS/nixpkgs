@@ -15,9 +15,11 @@
   python3,
   replaceVars,
   systemdMinimal,
+  udev,
   usbutils,
   vala,
   which,
+  withSystemd ? lib.hasPrefix "systemd" udev.name,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,18 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LOzg6ONmuJtAcL508zicn3+iGspW2KU1fpbjDNjU9CY=";
   };
 
-  patches = [
-    # Hardcode absolute paths to libraries so that consumers
-    # do not need to set LD_LIBRARY_PATH themselves.
-    ./hardcode-paths.patch
-
-    # Replace references to udevadm with an absolute paths, so programs using
-    # umockdev will just work without having to provide it in their test environment
-    # $PATH.
-    (replaceVars ./substitute-udevadm.patch {
-      udevadm = "${systemdMinimal}/bin/udevadm";
-    })
-  ];
+  patches =
+    [
+      # Hardcode absolute paths to libraries so that consumers
+      # do not need to set LD_LIBRARY_PATH themselves.
+      ./hardcode-paths.patch
+    ]
+    ++ lib.optional withSystemd
+      # Replace references to udevadm with an absolute paths, so programs using
+      # umockdev will just work without having to provide it in their test environment
+      # $PATH.
+      (
+        replaceVars ./substitute-udevadm.patch {
+          udevadm = "${systemdMinimal}/bin/udevadm";
+        }
+      );
 
   nativeBuildInputs =
     [
@@ -65,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemdMinimal
+    (if withSystemd then systemdMinimal else udev)
     libpcap
   ];
 
@@ -85,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=true"
   ];
 
-  doCheck = true;
+  doCheck = withSystemd;
 
   postPatch = ''
     # Substitute the path to this derivation in the patch we apply.
