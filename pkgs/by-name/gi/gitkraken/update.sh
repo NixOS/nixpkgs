@@ -25,7 +25,7 @@ for arch in "${!tarballs[@]}"; do
   hash=$(nix-hash --sri --type sha256 "$(nix-prefetch-url --print-path --unpack "${tarballs[${arch}]}" | tail -n1)")
   echo >&2 "=== Updating package.nix for ${arch}..."
   # update-source-version expects to be at the root of nixpkgs
-  (cd "${nixpkgs}" && update-source-version gitkraken "${version}" "${hash}" --system="${arch}" --version-key="srcs.${arch}")
+  (cd "${nixpkgs}" && update-source-version gitkraken "${version}" "${hash}" --system="${arch}" --ignore-same-version)
 done
 
 echo >&2 "=== Done!"
