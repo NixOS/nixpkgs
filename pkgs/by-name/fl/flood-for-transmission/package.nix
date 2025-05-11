@@ -11,20 +11,18 @@
   floodSettings ? null,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood-for-transmission";
   version = "2024-11-16T12-26-17";
 
   src = fetchFromGitHub {
     owner = "johman10";
     repo = "flood-for-transmission";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OED2Ypi1V+wwnJ5KFVRbJAyh/oTYs90E6uhSnSwJwJU=";
   };
 
   npmDepsHash = "sha256-J3gRzvSXXyoS0OoLrTSV1vBSupFqky0Jt99nyz+hy1k=";
-
-  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
@@ -47,4 +45,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ al3xtjames ];
     platforms = lib.platforms.all;
   };
-}
+})
