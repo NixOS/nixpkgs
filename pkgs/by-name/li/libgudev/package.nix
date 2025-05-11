@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
-  doCheck = withIntrospection;
+  doCheck = withIntrospection && (lib.hasPrefix "systemd" udev.name);
   mesonFlags = [
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "vapi" withIntrospection)
