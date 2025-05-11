@@ -14,6 +14,7 @@
   python3,
   espeak,
   udev,
+  nix-update-script,
   extraScripts ? false,
 }:
 
@@ -71,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace scripts/dwespeak.sh \
         --replace espeak ${espeak}/bin/espeak
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
