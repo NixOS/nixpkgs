@@ -1,15 +1,11 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
   gettext,
-  packaging,
-  pexpect,
-  pyyaml,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "sosreport";
   version = "4.9.1";
   pyproject = true;
@@ -21,13 +17,13 @@ buildPythonPackage rec {
     hash = "sha256-97S8b4PfjUN8uzvp01PGCLs4J3CbwpJsgBKtY8kI0HE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [
     gettext
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     packaging
     pexpect
     pyyaml
