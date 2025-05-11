@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood-for-transmission";
   version = "2025-07-19T10-51-22";
 
   src = fetchFromGitHub {
     owner = "johman10";
     repo = "flood-for-transmission";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2oHEVvZZcxH9RBKreaiwFKp7Iu5ijYdpXdgVknCxwKw=";
   };
 
@@ -36,4 +36,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ al3xtjames ];
     platforms = lib.platforms.all;
   };
-}
+})
