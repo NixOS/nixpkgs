@@ -10,6 +10,8 @@
   ploomber-core,
   pytestCheckHook,
   pytest-jupyter,
+  redisTestHook,
+  valkey,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-jupyter
+    redisTestHook
+    valkey
   ];
 
   pythonImportsCheck = [ "ploomber_extension" ];

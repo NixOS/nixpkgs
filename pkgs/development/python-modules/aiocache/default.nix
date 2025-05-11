@@ -12,18 +12,16 @@
   pytest-mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   redis,
   redisTestHook,
   setuptools,
+  stdenvNoCC,
 }:
 
 buildPythonPackage rec {
   pname = "aiocache";
   version = "0.12.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -66,6 +64,10 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/aio-libs/aiocache/issues/863
       "test_cache_write_doesnt_wait_for_future"
+    ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+      # flaky / timing dependent
+      "test_cached_stampede"
     ];
 
   disabledTestPaths = [
@@ -73,15 +75,18 @@ buildPythonPackage rec {
     "tests/performance/"
   ];
 
+  # Disable checks on Darwin due to redisTestHook hanging indefinitely
+  doCheck = stdenvNoCC.hostPlatform.isLinux;
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aiocache" ];
 
-  meta = with lib; {
-    description = "Python API Rate Limit Decorator";
+  meta = {
+    description = "Asyncio cache supporting multiple backends (memory, redis, memcached, etc.)";
     homepage = "https://github.com/aio-libs/aiocache";
     changelog = "https://github.com/aio-libs/aiocache/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
