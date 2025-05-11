@@ -4942,8 +4942,8 @@ let
         mktplcRef = {
           name = "helm-intellisense";
           publisher = "Tim-Koehler";
-          version = "0.14.3";
-          hash = "sha256-TcXn8n6mKEFpnP8dyv+nXBjsyfUfJNgdL9iSZwA5eo0=";
+          version = "0.15.0";
+          hash = "sha256-Tl0X2jtgTsjf2tvyAJLGxEGrmLXACYWWErcDJuQYg+o=";
         };
         meta = {
           description = "Extension to help writing Helm-Templates by providing intellisense";
