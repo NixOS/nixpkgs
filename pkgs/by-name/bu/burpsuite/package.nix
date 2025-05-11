@@ -111,6 +111,7 @@ buildFHSEnv {
       bennofs
       blackzeshi
       fab
+      yechielw
     ];
     mainProgram = "burpsuite";
   };
