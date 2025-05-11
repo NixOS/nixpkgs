@@ -57,6 +57,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;
