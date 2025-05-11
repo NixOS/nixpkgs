@@ -13952,8 +13952,6 @@ with pkgs;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
 
-  savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan { };
-
   sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
   scantailor-advanced = libsForQt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
@@ -15651,9 +15649,6 @@ with pkgs;
   raxml-mpi = raxml.override { useMpi = true; };
 
   samtools = callPackage ../applications/science/biology/samtools { };
-  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix {
-    stdenv = gccStdenv;
-  };
 
   inherit (callPackages ../applications/science/biology/sumatools { })
     sumalibs
