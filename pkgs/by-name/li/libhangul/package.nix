@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhangul";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libhangul/libhangul-${finalAttrs.version}.tar.gz";
-    sha256 = "0ni9b0v70wkm0116na7ghv03pgxsfpfszhgyj3hld3bxamfal1ar";
+    url = "https://github.com/libhangul/libhangul/releases/download/libhangul-${finalAttrs.version}/libhangul-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6gTmoM9IQKKjtWQcF2EGjHhpEDbbg50IOPTnplU6USA=";
   };
 
   configureFlags = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Core algorithm library for Korean input routines";
     mainProgram = "hangul";
-    homepage = "https://github.com/choehwanjin/libhangul";
+    homepage = "https://github.com/libhangul/libhangul";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.ianwookim ];
     platforms = lib.platforms.linux;
