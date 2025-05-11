@@ -65,7 +65,7 @@ let
       # because `--argstr system` would only be passed to the ci/default.nix file!
       evalSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile,
+      attrpathFile ? "${attrpathsSuperset}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       checkMeta ? true,
@@ -286,7 +286,6 @@ let
           name = evalSystem;
           path = singleSystem {
             inherit quickTest evalSystem chunkSize;
-            attrpathFile = attrpathsSuperset + "/paths.json";
           };
         }) evalSystems
       );
