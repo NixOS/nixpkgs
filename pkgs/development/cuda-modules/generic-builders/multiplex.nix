@@ -52,24 +52,17 @@ let
     lib.versionAtLeast cudaMajorMinorVersion package.minCudaVersion
     && lib.versionAtLeast package.maxCudaVersion cudaMajorMinorVersion;
 
-  # Releases for our CUDA version.
-  # Collapses the releases into a single list of packages, filtering out packages for unsupported CUDA versions and
-  # augmenting those supporting the current CUDA version with the redistArch to which the package belongs.
-  # See ../modules/${pname}/releases/releases.nix
-  # allPackages :: List (Package + { redistArch: String })
-  allPackages =
-    let
-      redistArchs = lib.attrNames evaluatedModules.config.${pname}.releases;
-    in
-    lib.concatMap (
-      redistArch:
-      let
-        packages = evaluatedModules.config.${pname}.releases.${redistArch};
-      in
-      lib.concatMap (
-        package: lib.optionals (satisfiesCudaVersion package) [ ({ inherit redistArch; } // package) ]
-      ) packages
-    ) redistArchs;
+  # FIXME: do this at the module system level
+  propagatePlatforms = lib.mapAttrs (redistArch: lib.map (p: { inherit redistArch; } // p));
+
+  # Releases for all platforms and all CUDA versions.
+  allReleases = propagatePlatforms evaluatedModules.config.${pname}.releases;
+
+  # Releases for all platforms and our CUDA version.
+  allReleases' = lib.mapAttrs (_: lib.filter satisfiesCudaVersion) allReleases;
+
+  # Packages for all platforms and our CUDA versions.
+  allPackages = lib.concatLists (lib.attrValues allReleases');
 
   packageOlder = p1: p2: lib.versionOlder p1.version p2.version;
   packageSupportedPlatform = p: p.redistArch == redistArch;
@@ -109,6 +102,7 @@ let
     in
     # Sort the packages by version so the newest is first.
     # NOTE: builtins.sort requires a strict weak ordering, so we must use versionOlder rather than versionAtLeast.
+    # See https://github.com/NixOS/nixpkgs/commit/9fd753ea84e5035b357a275324e7fd7ccfb1fc77.
     lib.sort (lib.flip packageOlder) (lib.attrValues newestForEachMajorMinorVersion);
 
   extension =
