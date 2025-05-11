@@ -1528,10 +1528,6 @@ with pkgs;
     inherit (libsForQt5) libqtpas wrapQtAppsHook;
   };
 
-  mc = callPackage ../applications/file-managers/mc {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   vifm-full = vifm.override {
     mediaSupport = true;
     inherit lib udisks2 python3;
