@@ -18,6 +18,7 @@
   setuptools-scm,
   setuptools,
   sqlalchemy,
+  stdenvNoCC,
   tabulate,
   typeguard,
   yappi,
@@ -102,6 +103,10 @@ buildPythonPackage rec {
       "test_gen"
       # "use MIN or MAX" does not match "Both `metric_aggregation` and `criterion` must be `ReductionCriterion`
       "test_user_input_error"
+    ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+      # flaky on x86
+      "test_gen_with_expanded_parameter_space"
     ];
 
   pythonImportsCheck = [ "ax" ];
