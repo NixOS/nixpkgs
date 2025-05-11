@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   runCommand,
   writeShellScript,
   writeText,
@@ -10,6 +11,7 @@
   jq,
   sta,
   python3,
+  darwin,
 }:
 
 let
@@ -35,6 +37,11 @@ let
 
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
+  # TODO(winterqt): Upstream this to Nix/Lix, then eventually drop from here.
+  sandboxProfile = ''
+    (allow file-read-metadata (literal "${builtins.storeDir}/.links"))
+  '';
+
   attrpathsSuperset =
     runCommand "attrpaths-superset.json"
       {
@@ -43,6 +50,7 @@ let
           nix
           time
         ];
+        inherit sandboxProfile;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -74,6 +82,28 @@ let
       quickTest ? false,
     }:
     let
+      abortCmd =
+        if stdenv.isDarwin then
+          ''
+            # For some reason, `kill` (or `kill -9`) won't
+            # actually kill an entire process tree on macOS
+            # as it does on Linux. So instead, we'll just
+            # use xargs' native termination feature, which
+            # will at least guarantee that the iteration
+            # will be stopped.
+            #
+            # (Yes, technically we can just keep the `kill`
+            # command so that xargs dies and then the pending
+            # chunks will finish, but I'd rather just do this
+            # if it's going to have the same effect anyways.)
+            exit 255
+          ''
+        else
+          ''
+            # This immediately halts all xargs processes
+            kill $PPID
+          '';
+
       singleChunk = writeShellScript "single-chunk" ''
         set -euo pipefail
         chunkSize=$1
@@ -110,11 +140,10 @@ let
         cat "$outputDir/timestats/$myChunk"
         if (( exitCode != 0 )); then
           echo "Evaluation failed with exit code $exitCode"
-          # This immediately halts all xargs processes
-          kill $PPID
+          ${abortCmd}
         elif [[ -s "$outputDir/stderr/$myChunk" ]]; then
           echo "Nixpkgs on $system evaluated with warnings, aborting"
-          kill $PPID
+          ${abortCmd}
         fi
       '';
     in
@@ -125,10 +154,11 @@ let
           time
           procps
           jq
-        ];
+        ] ++ lib.optional stdenv.isDarwin darwin.system_cmds;
         env = {
           inherit evalSystem chunkSize;
         };
+        inherit sandboxProfile;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -149,8 +179,24 @@ let
         # Record and print stats on free memory and swap in the background
         (
           while true; do
-            availMemory=$(free -b | grep Mem | awk '{print $7}')
-            freeSwap=$(free -b | grep Swap | awk '{print $4}')
+            ${
+              if stdenv.isDarwin then
+                ''
+                  # Based on https://apple.stackexchange.com/a/48195
+
+                  output=$(vm_stat | sed 's/\.//g')
+                  freeBlocks=$(awk '/free/ { print $3 }' <<<$output)
+                  inactiveBlocks=$(awk '/inactive/ { print $3 }' <<<$output)
+                  speculativeBlocks=$(awk '/speculative/ { print $3 }' <<<$output)
+                  availMemory=$(( (freeBlocks+inactiveBlocks+speculativeBlocks) * $(pagesize) ))
+                  freeSwap=$(( $(sysctl vm.swapusage | awk '{ printf "%d", $10 }') * 1024 * 1024 ))
+                ''
+              else
+                ''
+                  availMemory=$(free -b | grep Mem | awk '{print $7}')
+                  freeSwap=$(free -b | grep Swap | awk '{print $4}')
+                ''
+            }
             echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
 
             if [[ ! -f "$out/min-avail-memory" ]] || (( availMemory < $(<$out/min-avail-memory) )); then
