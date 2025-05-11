@@ -1,13 +1,17 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    bigdecimal (3.1.9)
     chronic (0.10.2)
-    sequel (5.30.0)
-    sqlite3 (1.4.2)
-    timetrap (1.15.2)
+    mini_portile2 (2.8.8)
+    sequel (5.90.0)
+      bigdecimal
+    sqlite3 (1.7.3)
+      mini_portile2 (~> 2.8.0)
+    timetrap (1.15.5)
       chronic (~> 0.10.2)
-      sequel (~> 5.30.0)
-      sqlite3 (~> 1.4.2)
+      sequel (~> 5.90.0)
+      sqlite3 (~> 1.4)
 
 PLATFORMS
   ruby
@@ -16,4 +20,4 @@ DEPENDENCIES
   timetrap
 
 BUNDLED WITH
-   2.1.4
+   2.6.6

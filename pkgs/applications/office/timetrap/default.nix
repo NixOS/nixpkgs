@@ -34,18 +34,18 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
-    mkdir $out;
-    cd $out;
+    mkdir $out
+    cd $out
 
-    mkdir bin; pushd bin;
-    ln -vs ${ttBundlerApp}/bin/t;
-    ln -vs ${ttBundlerApp}/bin/timetrap;
-    popd;
+    mkdir bin; pushd bin
+    ln -vs ${ttBundlerApp}/bin/t
+    ln -vs ${ttBundlerApp}/bin/timetrap
+    popd
 
     for c in t timetrap; do
-      installShellCompletion --cmd $c --bash ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/bash/*;
-      installShellCompletion --cmd $c --zsh ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/zsh/*;
-    done;
+      installShellCompletion --cmd $c --bash ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/bash/*
+      installShellCompletion --cmd $c --zsh ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/zsh/*
+    done
   '';
 
   meta = with lib; {
@@ -58,5 +58,9 @@ stdenv.mkDerivation {
       nicknovitski
     ];
     platforms = platforms.unix;
+  };
+
+  passthru = {
+    updateScript = ttBundlerApp.passthru.updateScript;
   };
 }
