@@ -63,44 +63,58 @@ let
     else
       concatLists (mapAttrsToList (genSection name) value);
 
-  sudoRule = {
-    users = [ "btrbk" ];
-    commands = [
-      {
-        command = "${pkgs.btrfs-progs}/bin/btrfs";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "${pkgs.coreutils}/bin/mkdir";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "${pkgs.coreutils}/bin/readlink";
-        options = [ "NOPASSWD" ];
-      }
-      # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
-      {
-        command = "/run/current-system/sw/bin/btrfs";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "/run/current-system/sw/bin/mkdir";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "/run/current-system/sw/bin/readlink";
-        options = [ "NOPASSWD" ];
-      }
-    ];
-  };
+  sudoRules = [
+    {
+      users = [ "btrbk" ];
+      commands = [
+        { command = "!ALL"; }
+      ];
+    }
+    {
+      users = [ "btrbk" ];
+      commands = [
+        {
+          command = "${pkgs.btrfs-progs}/bin/btrfs";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.coreutils}/bin/mkdir";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.coreutils}/bin/readlink";
+          options = [ "NOPASSWD" ];
+        }
+        # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
+        {
+          command = "/run/current-system/sw/bin/btrfs";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/mkdir";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/readlink";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
+  cfgSec = config.security;
 
   sudo_doas =
-    if config.security.sudo.enable || config.security.sudo-rs.enable then
+    if cfgSec.sudo.enable || cfgSec.sudo-rs.enable then
       "sudo"
-    else if config.security.doas.enable then
+    else if cfgSec.doas.enable then
       "doas"
     else
       throw "The btrbk nixos module needs either sudo or doas enabled in the configuration";
+
+  sudo_exec_wheel = cfgSec.sudo.execWheelOnly || cfgSec.sudo-rs.execWheelOnly;
+
+  sudoWheel = optional (sudo_doas == "sudo" && sudo_exec_wheel) "wheel";
 
   addDefaults = settings: { backend = "btrfs-progs-${sudo_doas}"; } // settings;
 
@@ -287,8 +301,8 @@ in
 
     environment.systemPackages = [ pkgs.btrbk ] ++ cfg.extraPackages;
 
-    security.sudo.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
-    security.sudo-rs.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
+    security.sudo.extraRules = mkIf (sudo_doas == "sudo") sudoRules;
+    security.sudo-rs.extraRules = mkIf (sudo_doas == "sudo") sudoRules;
 
     security.doas = mkIf (sudo_doas == "doas") {
       extraRules =
@@ -321,6 +335,7 @@ in
       createHome = true;
       shell = "${pkgs.bash}/bin/bash";
       group = "btrbk";
+      extraGroups = sudoWheel;
       openssh.authorizedKeys.keys = map (
         v:
         let

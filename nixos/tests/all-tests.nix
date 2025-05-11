@@ -306,6 +306,7 @@ in
   btrbk-doas = runTest ./btrbk-doas.nix;
   btrbk-no-timer = runTest ./btrbk-no-timer.nix;
   btrbk-section-order = runTest ./btrbk-section-order.nix;
+  btrbk-sudo-wheel = runTest ./btrbk-sudo-wheel.nix;
   budgie = runTest ./budgie.nix;
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = runTest ./buildkite-agents.nix;
