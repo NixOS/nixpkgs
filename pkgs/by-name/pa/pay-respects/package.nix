@@ -3,7 +3,7 @@
   fetchFromGitea,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
   version = "0.7.6";
 
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "iff";
     repo = "pay-respects";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+50MKpZgJqjuUvJeFFv8fMILkJ3cOAN7R7kmlR+98II=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pay-respects";
   };
-}
+})
