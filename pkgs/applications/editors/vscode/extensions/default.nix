@@ -2573,8 +2573,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.25.7";
-          hash = "sha256-6AN6LrFGWmLsCwRrtLqW1Mf+txReGeg7fvZ8W2Jv8Uo=";
+          version = "7.25.8";
+          hash = "sha256-/pnLLFj6Iwn14GLGbuc2Ex7IbNmXFiH1Btd12cCGGes=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
