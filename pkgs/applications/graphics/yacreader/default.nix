@@ -1,20 +1,15 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
-  qmake,
+  libsForQt5,
   poppler,
   pkg-config,
   libunarr,
   libGLU,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qtmultimedia,
-  qtquickcontrols2,
-  qtscript,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "yacreader";
   version = "9.15.0";
 
@@ -26,20 +21,21 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     poppler
     libunarr
     libGLU
-    qtmultimedia
-    qtscript
+    libsForQt5.qtmultimedia
+    libsForQt5.qtscript
   ];
   propagatedBuildInputs = [
-    qtquickcontrols2
-    qtgraphicaleffects
-    qtdeclarative
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtgraphicaleffects
+    libsForQt5.qtdeclarative
   ];
 
   meta = {

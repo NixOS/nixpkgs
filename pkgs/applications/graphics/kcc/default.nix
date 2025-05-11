@@ -1,13 +1,13 @@
 {
   lib,
-  mkDerivationWith,
   python3Packages,
   fetchPypi,
+  libsForQt5,
   p7zip,
   archiveSupport ? true,
 }:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "kcc";
   version = "5.5.1";
 
@@ -16,6 +16,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     pname = "KindleComicConverter";
     sha256 = "5dbee5dc5ee06a07316ae5ebaf21ffa1970094dbae5985ad735e2807ef112644";
   };
+
+  nativeBuildInputs = [ libsForQt5.wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     pillow
