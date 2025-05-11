@@ -26,8 +26,15 @@ mkCoqDerivation {
       [
         {
           cases = [
+            (range "8.18" "9.0")
+            (range "2.1.0" "2.4.0")
+          ];
+          out = "2.4.0";
+        }
+        {
+          cases = [
             (range "8.17" "9.0")
-            (isGe "2.1.0")
+            (range "2.1.0" "2.3.0")
           ];
           out = "2.3.0";
         }
@@ -111,6 +118,7 @@ mkCoqDerivation {
       ]
       null;
   release = {
+    "2.4.0".sha256 = "sha256-7zfIddRH+Sl4nhEPtS/lMZwRUZI45AVFpcC/UC8Z0Yo=";
     "2.3.0".sha256 = "sha256-usIcxHOAuN+f/j3WjVbPrjz8Hl9ac8R6kYeAKi3CEts=";
     "2.2.0".sha256 = "sha256-Cie6paweITwPZy6ej9+qIvHFWknVR382uJPW927t/fo=";
     "2.1.0".sha256 = "sha256-QT91SBJ6DXhyg4j/okTvPP6yj2DnnPbnSlJ/p8pvZbY=";

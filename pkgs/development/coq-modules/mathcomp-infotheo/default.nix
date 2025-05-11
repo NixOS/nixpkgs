@@ -25,6 +25,13 @@
       [
         {
           cases = [
+            (range "8.20" "8.20")
+            (isGe "1.10")
+          ];
+          out = "0.9.3";
+        }
+        {
+          cases = [
             (range "8.19" "8.20")
             (isGe "1.9")
           ];
@@ -88,6 +95,7 @@
         }
       ]
       null;
+  release."0.9.3".sha256 = "sha256-8+cnVKNAvZ3MVV3BpS8UmCIxJphsQRBv3swek1eEBjE=";
   release."0.9.1".sha256 = "sha256-WI20HxMHr1ZUwOGPIUl+nRI8TxVUa2+F1xcGjRDHO9g=";
   release."0.7.7".sha256 = "sha256-kEbpMl7U+I2kvqi1VrjhIVFkZFO6h0tTHEUZRbHYG7E=";
   release."0.7.5".sha256 = "sha256-pzPo+Acjx3vlyqOkSZQ8uT2BDLSTfbAnRm39e+/CqE0=";

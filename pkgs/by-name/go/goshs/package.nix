@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  gitUpdater,
   stdenv,
   versionCheckHook,
   lib,
@@ -32,8 +31,6 @@ buildGoModule (finalAttrs: {
     # does not work in sandbox even with __darwinAllowLocalNetworking
     "-skip=^TestGetIPv4Addr$"
   ];
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Simple, yet feature-rich web server written in Go";

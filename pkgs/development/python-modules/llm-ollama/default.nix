@@ -16,19 +16,20 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-mock,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "llm-ollama";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "taketwo";
     repo = "llm-ollama";
     tag = version;
-    hash = "sha256-NAJ0tfGRQOxYVAi2X0AI2d9+wyUS3ro1bfMSViZjaR0=";
+    hash = "sha256-IA9Tb82XB+Gr6YwMVqzsw1dPtT3GWK2W/ZtuDVznF1A";
   };
 
   build-system = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-mock
     writableTmpDirAsHomeHook
   ];
 

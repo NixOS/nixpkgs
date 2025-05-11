@@ -18,6 +18,7 @@ mkCoqDerivation {
   release."1.3.0".sha256 = "sha256-h9pa6vaKT6jCEaIdEdcu0498Ou5kEXtZdb9P7WXK1DQ=";
   release."1.3.1".sha256 = "sha256-wBizm1hJXPYBu0tHFNScQHd22FebsJYoggT5OlhY/zM=";
   release."1.4.0".sha256 = "sha256-8TtNPEbp3uLAH+MjOKiTZHOjPb3vVYlabuqsdWxbg80=";
+  release."1.4.1".sha256 = "sha256-0UASpo9CdpvidRv33BDWrevo+NSOhxLQFPCJAWPXf+s=";
 
   inherit version;
   defaultVersion =
@@ -30,7 +31,7 @@ mkCoqDerivation {
             (isGe "8.16")
             (isGe "2.0")
           ];
-          out = "1.4.0";
+          out = "1.4.1";
         }
         {
           cases = [

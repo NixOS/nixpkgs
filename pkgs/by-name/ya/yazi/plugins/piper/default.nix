@@ -16,7 +16,6 @@ mkYaziPlugin {
 
   meta = {
     description = "Pipe any shell command as a previewer";
-    homepage = "https://yazi-rs.github.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

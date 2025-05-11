@@ -4966,6 +4966,12 @@
     githubId = 6487079;
     name = "Dane Rieber";
   };
+  conduktorbot = {
+    email = "automation@conduktor.io";
+    github = "conduktorbot";
+    githubId = 96434751;
+    name = "Conduktor Bot";
+  };
   confus = {
     email = "con-f-use@gmx.net";
     github = "con-f-use";
@@ -15055,6 +15061,12 @@
     github = "marmolak";
     githubId = 1709273;
     name = "Robin Hack";
+  };
+  marnas = {
+    email = "marco@santonastaso.com";
+    name = "Marco Santonastaso";
+    github = "marnas";
+    githubId = 39352252;
   };
   marnym = {
     email = "markus@nyman.dev";
