@@ -1011,12 +1011,8 @@ with pkgs;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
-  adlplug = callPackage ../applications/audio/adlplug {
-    jack = libjack2;
-  };
-  opnplug = adlplug.override {
-    type = "OPN";
-  };
+  adlplug = callPackage ../applications/audio/adlplug {};
+  opnplug = adlplug.override { type = "OPN"; };
 
   akkoma = callPackage ../by-name/ak/akkoma/package.nix {
     beamPackages = beam_minimal.packages.erlang_26.extend (
