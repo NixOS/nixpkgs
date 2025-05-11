@@ -11898,8 +11898,6 @@ with pkgs;
     patches = config."2bwm".patches or [ ];
   };
 
-  abcde = callPackage ../applications/audio/abcde { };
-
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python3Packages)
       buildPythonApplication
