@@ -5,6 +5,7 @@
   pkg-config,
   systemd,
   coreutils,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,16 +30,14 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX="
     "DESTDIR=$(out)"
-    "ENABLE_SYSTEMD=1"
-  ];
+  ] ++ lib.optional withSystemd "ENABLE_SYSTEMD=1";
 
   installTargets = [
     "install"
-    "install_udev_rules"
-  ];
+  ] ++ lib.optional withSystemd "install_udev_rules";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ systemd ];
+  buildInputs = lib.optional withSystemd systemd;
 
   meta = with lib; {
     homepage = "https://github.com/Hummer12007/brightnessctl";
