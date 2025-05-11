@@ -24,7 +24,6 @@
   wrapGAppsHook3,
   glib-networking,
   gsettings-desktop-schemas,
-  pcre,
   vala,
   cmake,
   ninja,
@@ -102,7 +101,6 @@ stdenv.mkDerivation rec {
       openldap
       glib-networking
       libcanberra-gtk3
-      pcre
       libphonenumber
       libuuid
       boost

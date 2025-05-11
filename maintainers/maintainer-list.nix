@@ -24373,6 +24373,12 @@
     github = "thelissimus";
     githubId = 70096720;
   };
+  themadbit = {
+    name = "Mark Tanui";
+    email = "marktanui75@gmail.com";
+    github = "themadbit";
+    githubId = 84702057;
+  };
   themaxmur = {
     name = "Maxim Muravev";
     email = "muravjev.mak@yandex.ru";
