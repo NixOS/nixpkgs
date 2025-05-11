@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Core algorithm library for Korean input routines";
     mainProgram = "hangul";
     homepage = "https://github.com/libhangul/libhangul";
-    license = lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       ianwookim
       honnip
