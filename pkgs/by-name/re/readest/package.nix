@@ -15,17 +15,18 @@
   nix-update-script,
   moreutils,
   jq,
+  gst_all_1,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.38";
+  version = "0.9.40";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lr1bLNm68jeCjllVWpM07fkRy/PY1C3Ud8XMUQwIef4=";
+    hash = "sha256-GpdlxDwjWveFvkGP2pju5cMlXPbjOOxEIdmpxz6RNTw=";
     fetchSubmodules = true;
   };
 
@@ -78,6 +79,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     librsvg
     openssl
+    # TTS
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 
   preBuild = ''

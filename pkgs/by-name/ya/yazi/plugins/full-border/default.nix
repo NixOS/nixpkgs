@@ -16,7 +16,6 @@ mkYaziPlugin {
 
   meta = {
     description = "Add a full border to Yazi to make it look fancier";
-    homepage = "https://yazi-rs.github.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

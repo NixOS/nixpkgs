@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  pcre,
   qtbase,
   glib,
   perl,
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     glib
-    pcre
   ];
 
   propagatedBuildInputs = [

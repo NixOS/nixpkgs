@@ -12,7 +12,11 @@
     stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
   perl,
   withPython ?
-    !stdenv.hostPlatform.isStatic && lib.meta.availableOn stdenv.hostPlatform python3Packages.python,
+    # static can't load python libraries
+    !stdenv.hostPlatform.isStatic
+    && lib.meta.availableOn stdenv.hostPlatform python3Packages.python
+    # m4 python include script fails if cpu bit depth is different across machines
+    && stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
   python3Packages,
   swig,
   ncurses,

@@ -496,6 +496,7 @@ mapAliases {
 
   ### D ###
 
+  dap = throw "'dap' has been removed because it doesn't compile and has been unmaintained since 2014"; # Added 2025-05-10
   dart_stable = throw "'dart_stable' has been renamed to/replaced by 'dart'"; # Converted to throw 2024-10-17
   dart-sass-embedded = throw "dart-sass-embedded has been removed from nixpkgs, as is now included in Dart Sass itself.";
   dat = nodePackages.dat;
@@ -929,6 +930,7 @@ mapAliases {
   kodiPlugins = kodiPackages; # Added 2021-03-09;
   kramdown-rfc2629 = throw "'kramdown-rfc2629' has been renamed to/replaced by 'rubyPackages.kramdown-rfc2629'"; # Converted to throw 2024-10-17
   krb5Full = krb5;
+  kreative-square-fonts = throw "'kreative-square-fonts' has been renamed to 'kreative-square'"; # Added 2025-04-16
   krita-beta = throw "'krita-beta' has been renamed to/replaced by 'krita'"; # Converted to throw 2024-10-17
   krun = throw "'krun' has been renamed to/replaced by 'muvm'"; # Added 2025-05-01
   kubei = kubeclarity; # Added 2023-05-20
@@ -1312,6 +1314,7 @@ mapAliases {
 
   nixosTest = testers.nixosTest; # Added 2022-05-05
   nmap-unfree = throw "'nmap-unfree' has been renamed to/replaced by 'nmap'"; # Converted to throw 2024-10-17
+  noah = throw "'noah' has been removed because it was broken and its upstream archived"; # Added 2025-05-10
   nodejs_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed"; # Added 2025-04-23
   nodejs-slim_18 = nodejs_18; # Added 2025-04-23
   corepack_18 = nodejs_18; # Added 2025-04-23
@@ -1381,6 +1384,7 @@ mapAliases {
   opensyclWithRocm = lib.warnOnInstantiate "'opensyclWithRocm' has been renamed to 'adaptivecppWithRocm'" adaptivecppWithRocm; # Added 2024-12-04
   openvdb_11 = throw "'openvdb_11' has been removed in favor of the latest version'"; # Added 2025-05-03
   orchis = throw "'orchis' has been renamed to/replaced by 'orchis-theme'"; # Converted to throw 2024-10-17
+  omping = throw "'omping' has been removed because its upstream has been archived"; # Added 2025-05-10
   onlyoffice-bin = onlyoffice-desktopeditors; # Added 2024-09-20
   onlyoffice-bin_latest = onlyoffice-bin; # Added 2024-07-03
   onlyoffice-bin_7_2 = throw "onlyoffice-bin_7_2 has been removed. Please use the latest version available under onlyoffice-bin"; # Added 2024-07-03
@@ -1465,13 +1469,13 @@ mapAliases {
   powerdns = pdns; # Added 2022-03-28
   projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
 
-  # postgresql plugins
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_cron = postgresqlPackages.pg_cron;
   pg_hll = postgresqlPackages.pg_hll;
   pg_repack = postgresqlPackages.pg_repack;
   pg_similarity = postgresqlPackages.pg_similarity;
   pg_topn = postgresqlPackages.pg_topn;
+  pgf1 = throw "'pgf1' has been removed since it is unmaintained. Consider using 'pgf' instead"; # Added 2025-05-10
   pgjwt = postgresqlPackages.pgjwt;
   pgroonga = postgresqlPackages.pgroonga;
   pgtap = postgresqlPackages.pgtap;
@@ -1522,6 +1526,7 @@ mapAliases {
   pocket-updater-utility = pupdate; # Added 2024-01-25
   poppler_utils = poppler-utils; # Added 2025-02-27
   powerline-rs = throw "'powerline-rs' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
+  premake3 = throw "'premake3' has been removed since it is unmaintained. Consider using 'premake' instead"; # Added 2025-05-10
   prismlauncher-qt5 = throw "'prismlauncher-qt5' has been removed from nixpkgs. Please use 'prismlauncher'"; # Added 2024-04-20
   prismlauncher-qt5-unwrapped = throw "'prismlauncher-qt5-unwrapped' has been removed from nixpkgs. Please use 'prismlauncher-unwrapped'"; # Added 2024-04-20
   probe-rs = probe-rs-tools; # Added 2024-05-23
@@ -1543,6 +1548,8 @@ mapAliases {
   ); # Added 2025-04-23
   proxmark3-rrg = proxmark3; # Added 2023-07-25
   psensor = throw "'psensor' has been removed due to lack of maintenance upstream. Consider using 'mission-center', 'resources' or 'monitorets' instead"; # Added 2024-09-14
+  psstop = throw "'psstop' has been removed because the upstream repo has been archived"; # Added 2025-05-10
+  ptask = throw "'ptask' has been removed because its upstream is unavailable"; # Added 2025-05-10
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxlib = throw "pxlib has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
   pxview = throw "pxview has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
@@ -1578,6 +1585,7 @@ mapAliases {
   quicklispPackagesFor = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quicklispPackagesGCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quicklispPackagesSBCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
+  quickserve = throw "'quickserve' has been removed because its upstream is unavailable"; # Added 2025-05-10
   qxw = throw "'qxw' has been removed due to lack of maintenance upstream. Consider using 'crosswords' instead"; # Added 2024-10-19
 
   ### R ###
@@ -1641,6 +1649,7 @@ mapAliases {
   s2n = throw "'s2n' has been renamed to/replaced by 's2n-tls'"; # Converted to throw 2024-10-17
   sandboxfs = throw "'sandboxfs' has been removed due to being unmaintained, consider using linux namespaces for sandboxing instead"; # Added 2024-06-06
   sane-backends-git = throw "'sane-backends-git' has been renamed to/replaced by 'sane-backends'"; # Converted to throw 2024-10-17
+  samtools_0_1_19 = throw "'samtools_0_1_19' has been removed because it is unmaintained. Consider using 'samtools' instead"; # Added 2025-05-10
   scantailor = scantailor-advanced; # Added 2022-05-26
   schildichat-web = throw ''
     schildichat has been removed as it is severely lacking behind the Element upstream and does not receive regular security fixes.
@@ -1861,7 +1870,7 @@ mapAliases {
   unifi5 = throw "'unifi5' has been removed since its required MongoDB version is EOL."; # Added 2024-04-11
   unifi6 = throw "'unifi6' has been removed since its required MongoDB version is EOL."; # Added 2024-04-11
   unifi7 = throw "'unifi7' has been removed since it is vulnerable to CVE-2024-42025 and its required MongoDB version is EOL."; # Added 2024-10-01
-  unifi8 = unifi; # Added 2024-11-15
+  unifi8 = throw "'unifi8' has been removed. Use `pkgs.unifi` instead."; # Converted to throw 2025-05-10
   unifiLTS = throw "'unifiLTS' has been removed since UniFi no longer has LTS and stable releases. Use `pkgs.unifi` instead."; # Added 2024-04-11
   unifiStable = throw "'unifiStable' has been removed since UniFi no longer has LTS and stable releases. Use `pkgs.unifi` instead."; # Converted to throw 2024-04-11
   unl0kr = throw "'unl0kr' is now included with buffybox. Use `pkgs.buffybox` instead."; # Removed 2024-12-20

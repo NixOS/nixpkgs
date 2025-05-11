@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python,
+  python3,
   cmake,
   ninja,
 }:
 
 let
-  pyEnv = python.withPackages (ps: [
+  pyEnv = python3.withPackages (ps: [
     ps.setuptools
     ps.tomli
     ps.pip
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Not in propagatedBuildInputs because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = with python.pkgs; [
+  buildInputs = with python3.pkgs; [
     python
     build
     pathspec
