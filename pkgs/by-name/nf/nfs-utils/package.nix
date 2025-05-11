@@ -26,14 +26,17 @@
   libxml2,
   enablePython ? true,
   enableLdap ? true,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 let
-  statdPath = lib.makeBinPath [
-    systemd
-    util-linux
-    coreutils
-  ];
+  statdPath = lib.makeBinPath (
+    [
+      util-linux
+      coreutils
+    ]
+    ++ lib.optional withSystemd systemd
+  );
 in
 
 stdenv.mkDerivation rec {
