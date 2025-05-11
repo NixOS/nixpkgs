@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ johnrtitor ];
+    mainProgram = "SvtAv1EncApp";
   };
 })
