@@ -11937,9 +11937,6 @@ with pkgs;
     pdfstudioviewer
     ;
 
-  aeolus = callPackage ../applications/audio/aeolus { };
-  aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
-
   airwave = libsForQt5.callPackage ../applications/audio/airwave { };
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
