@@ -3,6 +3,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -27,6 +28,8 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flood clone for Transmission";
