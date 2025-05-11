@@ -4105,8 +4105,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-xml";
-          version = "0.28.2025031108";
-          hash = "sha256-SO/Q27v5rzoA5NBp5WJ8S7KcwbGLUmkK2FoaaSb6nYI=";
+          version = "0.29.0";
+          hash = "sha256-I6ZRtt43Qo3m8OfmjkVfBIaNWWvLULlwnJZqIp/WEuI=";
         };
         meta.license = lib.licenses.epl20;
       };
