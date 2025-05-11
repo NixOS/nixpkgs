@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "sea-orm-cli";
     homepage = "https://www.sea-ql.org/SeaORM";
+    changelog = "https://github.com/SeaQL/sea-orm/releases/tag/${finalAttrs.version}";
     description = "Command line utility for SeaORM";
     license = with lib.licenses; [
       mit # or
