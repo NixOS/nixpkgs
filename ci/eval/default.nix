@@ -209,6 +209,8 @@ let
           done
         ) &
 
+        trap "kill %%" EXIT
+
         seq_end=$(( chunkCount - 1 ))
 
         ${lib.optionalString quickTest ''
