@@ -4590,8 +4590,6 @@ with pkgs;
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
-  timetrap = callPackage ../applications/office/timetrap { };
-
   tinc = callPackage ../tools/networking/tinc { };
 
   tikzit = libsForQt5.callPackage ../tools/typesetting/tikzit { };
