@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  python312,
+  python3Packages,
   nixosTests,
   fetchurl,
 }:
@@ -57,11 +57,11 @@ let
     '';
   };
 in
-python312.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
-  build-system = with python312.pkgs; [ hatchling ];
+  build-system = with python3Packages; [ hatchling ];
 
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
@@ -80,7 +80,7 @@ python312.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python312.pkgs;
+    with python3Packages;
     [
       accelerate
       aiocache
