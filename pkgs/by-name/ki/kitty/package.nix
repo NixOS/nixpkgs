@@ -51,21 +51,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.41.1";
+  version = "0.42.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-oTkzFEPgbFa2wPBJxh/9ZbK8liM9isWGEwExJq5/h2o=";
+    hash = "sha256-Y9fXSVqkvY4IY5/RYRXXnXWH5kV+9RoHSrp5wSZKZVQ=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-ld3cGJUjoi3od6gINyGE7fQodl9CSKmakJ1CPLMX+Ss=";
+      vendorHash = "sha256-Zp5z5fzCy1q0rXeawWRKBfZkuFbd7N7XkTep94EjnrU=";
     }).goModules;
 
   buildInputs =
@@ -135,9 +135,6 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
-    ./fix-test_ssh_env_vars.patch
-
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -148,11 +145,6 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
-    # Makes man page generation respect SOURCE_DATE_EPOCH. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
-    ./fix-timestamp-reproducibility.patch
-
-    # Ensures deterministic ordering of fish shell completions. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
-    ./fix-fish-completion-ordering.patch
   ];
 
   hardeningDisable = [
