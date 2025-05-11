@@ -1,8 +1,11 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitea,
   pkg-config,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   libgit2,
   oniguruma,
   openssl,
@@ -23,7 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-kW7Pexydkosaufk1e8P5FaY+dgkeeTG5qgJxestWkVs=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    writableTmpDirAsHomeHook # Needed for shell completions
+  ];
 
   buildInputs = [
     libgit2
@@ -36,6 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTONIG_SYSTEM_LIBONIG = true;
     BUILD_TYPE = "nixpkgs";
   };
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fj \
+      --bash <($out/bin/fj completion bash) \
+      --fish <($out/bin/fj completion fish) \
+      --zsh <($out/bin/fj completion zsh)
+  '';
 
   meta = {
     description = "CLI application for interacting with Forgejo";
