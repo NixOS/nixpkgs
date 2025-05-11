@@ -62,7 +62,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "rtl8821AU and rtl8812AU chipset driver with firmware";
-    homepage = "https://github.com/morrownr/8821au";
+    homepage = "https://github.com/morrownr/8821au-20210708";
     license = licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with maintainers; [ plchldr ];
