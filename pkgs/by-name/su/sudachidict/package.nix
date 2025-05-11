@@ -47,6 +47,7 @@ lib.checkListOfEnum "${pname}: dict-type" [ "core" "full" "small" ] [ dict-type 
 
     passthru = {
       dict-type = dict-type;
+      updateScript = ./update.sh;
     };
 
     meta = {
