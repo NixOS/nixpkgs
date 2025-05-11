@@ -4,7 +4,11 @@
 }:
 
 ## Usage
-# In NixOS, set programs.dotool.enable = true;
+# In NixOS, set:
+# programs.dotool = {
+#   enable = true;
+#   allowedUsers = [ "alice" ];
+# };
 
 stdenv.mkDerivation {
   pname = "dotool-udev-rules";
