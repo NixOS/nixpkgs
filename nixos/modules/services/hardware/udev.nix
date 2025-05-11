@@ -57,7 +57,10 @@ let
         packages = lib.unique (map toString udevPackages);
 
         nativeBuildInputs = [
-          pkgs.systemdMinimal
+          # We only include the out output here to avoid needing to include all
+          # other outputs in the installer tests as well
+          # We only need the udevadm command anyway
+          pkgs.systemdMinimal.out
         ];
       }
       ''
