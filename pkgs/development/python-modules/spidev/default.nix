@@ -10,7 +10,6 @@ buildPythonPackage rec {
   version = "3.7";
   pyproject = true;
 
-
   src = fetchFromGitHub {
     owner = "doceme";
     repo = "py-spidev";
