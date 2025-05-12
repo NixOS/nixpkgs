@@ -5,7 +5,6 @@
   openssl,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 let

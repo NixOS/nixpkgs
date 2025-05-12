@@ -251,6 +251,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
+/pkgs/by-name/po/postgresqlTestHook @NixOS/postgres
 /pkgs/by-name/ps/psqlodbc @NixOS/postgres
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /pkgs/development/tools/rust/cargo-pgrx @NixOS/postgres
@@ -472,3 +473,6 @@ pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
 pkgs/servers/teleport   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+
+# Warp-terminal
+pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @donteatoreo @johnrtitor

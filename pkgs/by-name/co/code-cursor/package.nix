@@ -163,7 +163,7 @@ stdenvNoCC.mkDerivation {
 
       wrapProgram $out/bin/cursor \
         --add-flags "--update=false" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=x11 --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
     ''}
 

@@ -23,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Cadair";
     repo = "parfive";
     tag = "v${version}";
-    hash = "sha256-fzyXKw+/aWlnE09CCHqak8MVIk/kcjXkFyV1EKw2cjA=";
+    hash = "sha256-DIjS2q/SOrnLspomLHk8ZJ+krdzMyQfbIpXxad30s1k=";
   };
 
   pyproject = true;
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     description = "HTTP and FTP parallel file downloader";
     mainProgram = "parfive";
     homepage = "https://parfive.readthedocs.io/";
-    changelog = "https://github.com/Cadair/parfive/releases/tag/v${version}";
+    changelog = "https://github.com/Cadair/parfive/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sarahec ];
   };
