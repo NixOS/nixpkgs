@@ -4,20 +4,18 @@
   pkgs,
   ...
 }:
-
-with lib;
 let
   cfg = config.services.xserver.windowManager.wmii;
-  wmii = pkgs.wmii_hg;
 in
 {
-  options = {
-    services.xserver.windowManager.wmii.enable = mkEnableOption "wmii";
+  options.services.xserver.windowManager.wmii = {
+    enable = lib.mkEnableOption "wmii";
+    package = lib.mkPackageOption pkgs "wmii_hg" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.windowManager.session =
-      singleton
+      lib.singleton
         # stop wmii by
         #   $wmiir xwrite /ctl quit
         # this will cause wmii exiting with exit code 0
@@ -36,11 +34,11 @@ in
           name = "wmii";
           start = ''
             while :; do
-              ${wmii}/bin/wmii && break
+              ${cfg.package}/bin/wmii && break
             done
           '';
         };
 
-    environment.systemPackages = [ wmii ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

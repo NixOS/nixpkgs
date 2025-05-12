@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.leftwm;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.leftwm.enable = mkEnableOption "leftwm";
+  options.services.xserver.windowManager.leftwm = {
+    enable = lib.mkEnableOption "leftwm";
+    package = lib.mkPackageOption pkgs "leftwm" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "leftwm";
       start = ''
-        ${pkgs.leftwm}/bin/leftwm &
+        ${cfg.package}/bin/leftwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.leftwm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
