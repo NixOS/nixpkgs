@@ -28,12 +28,12 @@
   withAI ? true, # support for AI Interfaces and Skirmish AIs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spring";
   version = "106.0";
 
   src = fetchurl {
-    url = "https://springrts.com/dl/buildbot/default/master/${version}/source/spring_${version}_src.tar.gz";
+    url = "https://springrts.com/dl/buildbot/default/master/${finalAttrs.version}/source/spring_${finalAttrs.version}_src.tar.gz";
     sha256 = "sha256-mSA4ioIv68NMEB72lYnwDb1QOuWr1VHwu4+grAoHlV0=";
   };
 
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     broken = true;
   };
-}
+})

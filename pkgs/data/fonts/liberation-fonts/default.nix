@@ -21,7 +21,7 @@ let
       nativeBuildInputs,
       postPatch ? null,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "liberation-fonts";
       inherit version;
 
@@ -38,7 +38,7 @@ let
 
         for i in ${toString docsToInstall}; do
           # not all docs exist in all versions
-          install -m444 -Dt $out/share/doc/${pname}-${version} $i || true
+          install -m444 -Dt $out/share/doc/liberation-fonts-${version} $i || true
         done
       '';
 

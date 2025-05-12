@@ -28,12 +28,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquidwar6";
   version = "0.6.3902";
 
   src = fetchurl {
-    url = "mirror://gnu/liquidwar6/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/liquidwar6/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1976nnl83d8wspjhb5d5ivdvdxgb8lp34wp54jal60z4zad581fn";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

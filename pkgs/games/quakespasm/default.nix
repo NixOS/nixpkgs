@@ -20,16 +20,16 @@
   useSDL2 ? stdenv.hostPlatform.isDarwin, # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quakespasm";
   version = "0.96.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tar.gz";
+    url = "mirror://sourceforge/quakespasm/quakespasm-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-tXjWzkpPf04mokRY8YxLzI04VK5iUuuZgu6B2V5QGA4=";
   };
 
-  sourceRoot = "${pname}-${version}/Quake";
+  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Makes Darwin Makefile use system libraries instead of ones from app bundle
@@ -130,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mikroskeem ];
     mainProgram = "quake";
   };
-}
+})

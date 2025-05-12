@@ -27,21 +27,21 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openloco";
   version = "25.02";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RsiEYBNx+Lf7OyyyCShQmgtwBuxDrZkRCYCbMmZ8ZMM=";
   };
 
   postPatch = ''
     # the upstream build process determines the version tag from git; since we
     # are not using a git checkout, we patch it manually
-    sed -i '/#define NAME "OpenLoco"/a#define OPENLOCO_VERSION_TAG "${version}"' src/OpenLoco/src/Version.cpp
+    sed -i '/#define NAME "OpenLoco"/a#define OPENLOCO_VERSION_TAG "${finalAttrs.version}"' src/OpenLoco/src/Version.cpp
 
     # prefetch sfl header sources
     grep -q 'GIT_TAG \+${sfl-src.tag}' thirdparty/CMakeLists.txt
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ icewind1991 ];
   };
-}
+})

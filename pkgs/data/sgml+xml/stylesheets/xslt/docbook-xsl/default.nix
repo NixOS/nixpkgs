@@ -21,12 +21,12 @@ let
     }:
     let
       legacySuffix = lib.optionalString (suffix != "-nons") "-ns";
-      self = stdenv.mkDerivation rec {
+      self = stdenv.mkDerivation (finalAttrs: {
         inherit pname;
         version = "1.79.2";
 
         src = fetchurl {
-          url = "https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F${version}/docbook-xsl${suffix}-${version}.tar.bz2";
+          url = "https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F${finalAttrs.version}/docbook-xsl${suffix}-${finalAttrs.version}.tar.bz2";
           inherit sha256;
         };
 
@@ -51,7 +51,8 @@ let
 
             # Add legacy sourceforge.net URIs to the catalog
             (replaceVars ./catalog-legacy-uris.patch {
-              inherit legacySuffix suffix version;
+              inherit legacySuffix suffix;
+              inherit (finalAttrs) version;
             })
           ]
           ++ lib.optionals withManOptDedupPatch [
@@ -90,7 +91,7 @@ let
           maintainers = [ ];
           platforms = lib.platforms.all;
         };
-      };
+      });
     in
     self;
 

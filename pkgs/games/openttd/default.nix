@@ -53,12 +53,12 @@ let
     sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
   version = "14.1";
 
   src = fetchzip {
-    url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
+    url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}-source.tar.xz";
     hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
 
@@ -150,4 +150,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

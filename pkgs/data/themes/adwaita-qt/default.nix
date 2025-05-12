@@ -12,7 +12,7 @@
   useQt6 ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adwaita-qt";
   version = "1.4.2";
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
-    repo = pname;
-    rev = version;
+    repo = "adwaita-qt";
+    rev = finalAttrs.version;
     sha256 = "sha256-K/+SL52C+M2OC4NL+mhBnm/9BwH0KNNTGIDmPwuUwkM=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.all;
   };
-}
+})
