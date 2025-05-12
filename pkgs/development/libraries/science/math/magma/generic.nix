@@ -56,7 +56,7 @@ let
   #   lists.subtractLists a b = b - a
 
   # For ROCm
-  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
+  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArchs.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
   rocmArches = lists.map (x: strings.removePrefix "gfx" x) effectiveRocmPackages.clr.gpuTargets;
@@ -90,7 +90,7 @@ let
   minArch =
     let
       # E.g. [ "80" "86" "90" ]
-      cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
+      cudaArchitectures = (builtins.map flags.dropDots flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
     # "75" -> "750"  Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L200-L201

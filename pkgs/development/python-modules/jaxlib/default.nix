@@ -319,7 +319,7 @@ let
         build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${cudnnMerged},${lib.getDev nccl}"
         build --action_env TF_CUDA_VERSION="${cudaMajorMinorVersion}"
         build --action_env TF_CUDNN_VERSION="${lib.versions.major cudaPackages.cudnn.version}"
-        build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," flags.realArches}"
+        build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," flags.realArchs}"
       ''
       +
         # Note that upstream conditions this on `wheel_cpu == "x86_64"`. We just
