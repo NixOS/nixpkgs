@@ -119,7 +119,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/slimevr" \
       --set JAVA_HOME "${slimevr-server.passthru.java.home}" \
       --set JAVA_TOOL_OPTIONS "${slimevr-server.passthru.javaOptions}" \
-      --add-flags "--launch-from-path ${slimevr-server}/share/slimevr"
+      --add-flags "--launch-from-path ${slimevr-server}/share/slimevr" \
+      --set ELECTRON_FORCE_IS_PACKAGED 1
   '';
 
   passthru.updateScript = ./update.sh;
