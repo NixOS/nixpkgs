@@ -111,7 +111,7 @@ final: prev: {
 }
 ```
 
-## Using cudaPackages {#cuda-using-cudapackages}
+## Using `cudaPackages` {#cuda-using-cudapackages}
 
 ::: {.caution}
 A non-trivial amount of CUDA package discoverability and usability relies on the various setup hooks used by a CUDA package set. As a result, users will likely encounter issues trying to perform builds within a `devShell` without manually invoking phases.
@@ -152,6 +152,44 @@ When using `callPackage`, you can choose to pass in a different variant, e.g. wh
 ::: {.caution}
 Overriding the CUDA package set used by a package may cause inconsistencies, since the override does not affect dependencies of the package. As a result, it is easy to end up with a package which uses a different CUDA package set than its dependencies. If at all possible, it is recommended to change the default CUDA package set globally, to ensure a consistent environment.
 :::
+
+## Using `cudaPackages.pkgs` {#cuda-using-cudapackages-pkgs}
+
+Each CUDA package set has a `pkgs` attribute, which is a variant of Nixpkgs where the enclosing CUDA package set is made the default CUDA package set. This was done primarily to avoid package set leakage, wherein a member of a non-default CUDA package set has a (potentially transitive) dependency on a member of the default CUDA package set.
+
+::: {.note}
+Package set leakage is a common problem in Nixpkgs and is not limited to CUDA package sets.
+:::
+
+As an added benefit of `pkgs` being configured this way, building a package with a non-default version of CUDA is as simple as accessing an attribute. As an example, `cudaPackages_12_8.pkgs.opencv` provides OpenCV built against CUDA 12.8.
+
+## Using `pkgsCuda` {#cuda-using-pkgscuda}
+
+The `pkgsCuda` attribute set is a variant of Nixpkgs configured with `cudaSupport = true;` and `rocmSupport = false`. It is a convenient way access a variant of Nixpkgs configured with the default set of CUDA capabilities.
+
+## Using `pkgsForCudaArch` {#cuda-using-pkgsforcudaarch}
+
+The `pkgsForCudaArch` attribute set maps CUDA architectures (e.g., `sm_89` for Ada Lovelace or `sm_90a` for architecture-specific Hopper) to Nixpkgs variants configured to support exactly that architecture. As an example, `pkgsForCudaArch.sm_89` is a Nixpkgs variant extending `pkgs` and setting the following values in `config`:
+
+```nix
+{
+  cudaSupport = true;
+  cudaCapabilities = [ "8.9" ];
+  cudaForwardCompat = false;
+}
+```
+
+::: {.note}
+In `pkgsForCudaArch`, the `cudaForwardCompat` option is set to `false` because exactly one CUDA architecture is supported by the corresponding Nixpkgs variant. Furthermore, some architectures, including architecture-specific feature sets like `sm_90a`, cannot be built with forward compatibility.
+:::
+
+::: {.caution}
+Not every version of CUDA supports every architecture!
+
+To illustrate: support for Blackwell (e.g., `sm_100`) was only added in CUDA 12.8. Assume our Nixpkgs' default CUDA package set is to CUDA 12.6. Then the Nixpkgs variant available through `pkgsForCudaArch.sm_100` is useless, since packages like `pkgsForCudaArch.sm_100.opencv` and `pkgsForCudaArch.sm_100.python3Packages.torch` will try to generate code for `sm_100`, an architecture unknown to CUDA 12.6. In such a case, you should use `pkgsForCudaArch.sm_100.cudaPackages_12_8.pkgs` instead (see [Using cudaPackages.pkgs](#cuda-using-cudapackages-pkgs) for more details).
+:::
+
+The `pkgsForCudaArch` attribute set makes it possible to access packages built for a specific architecture without needing to manually call `pkgs.extend` and supply a new `config`. As an example, `pkgsForCudaArch.sm_89.python3Packages.torch` provides PyTorch built for Ada Lovelace GPUs.
 
 ## Running Docker or Podman containers with CUDA support {#cuda-docker-podman}
 
