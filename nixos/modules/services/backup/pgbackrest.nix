@@ -71,6 +71,23 @@ let
       ) cfg.stanzas
     )
   );
+
+  disabledOption = lib.mkOption {
+    default = null;
+    readOnly = true;
+    internal = true;
+  };
+
+  secretPathOption =
+    with lib.types;
+    lib.mkOption {
+      type = nullOr (pathWith {
+        inStore = false;
+        absolute = true;
+      });
+      default = null;
+      internal = true;
+    };
 in
 
 {
@@ -135,6 +152,22 @@ in
                   The file must be accessible by both the pgbackrest and the postgres users.
                 '';
               };
+
+              # The following options should not be used; they would store secrets in the store.
+              options.azure-key = disabledOption;
+              options.cipher-pass = disabledOption;
+              options.s3-key = disabledOption;
+              options.s3-key-secret = disabledOption;
+              options.s3-kms-key-id = disabledOption; # unsure whether that's a secret or not
+              options.s3-sse-customer-key = disabledOption; # unsure whether that's a secret or not
+              options.s3-token = disabledOption;
+              options.sftp-private-key-passphrase = disabledOption;
+
+              # The following options are not fully supported / tested, yet, but point to files with secrets.
+              # Users can already set those options, but we'll force non-store paths.
+              options.gcs-key = secretPathOption;
+              options.host-cert-file = secretPathOption;
+              options.host-key-file = secretPathOption;
             }
           )
         );
@@ -211,6 +244,11 @@ in
                         defaultText = lib.literalExpression ''if name == "localhost" then null else name'';
                         description = "PostgreSQL host for operating remotely.";
                       };
+
+                      # The following options are not fully supported / tested, yet, but point to files with secrets.
+                      # Users can already set those options, but we'll force non-store paths.
+                      options.host-cert-file = secretPathOption;
+                      options.host-key-file = secretPathOption;
                     }
                   )
                 );
@@ -236,7 +274,14 @@ in
             };
 
             settings = lib.mkOption {
-              type = settingsType;
+              type = lib.types.submodule {
+                freeformType = settingsType;
+
+                # The following options are not fully supported / tested, yet, but point to files with secrets.
+                # Users can already set those options, but we'll force non-store paths.
+                options.tls-server-cert-file = secretPathOption;
+                options.tls-server-key-file = secretPathOption;
+              };
               default = { };
               description = ''
                 An attribute set of options as described in:
@@ -262,7 +307,14 @@ in
     };
 
     settings = lib.mkOption {
-      type = settingsType;
+      type = lib.types.submodule {
+        freeformType = settingsType;
+
+        # The following options are not fully supported / tested, yet, but point to files with secrets.
+        # Users can already set those options, but we'll force non-store paths.
+        options.tls-server-cert-file = secretPathOption;
+        options.tls-server-key-file = secretPathOption;
+      };
       default = { };
       description = ''
         An attribute set of options as described in:
