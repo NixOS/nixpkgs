@@ -32,14 +32,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool
-    pkg-config
+    libxslt
     makeWrapper
+    pkg-config
     wrapGAppsHook3
   ];
   buildInputs = [
     gtk3
-    libxslt
   ];
+
+  postPatch = ''
+    substituteInPlace xarchiver.tap \
+      --replace-fail '#!/bin/sh' '#!${stdenv.shell}'
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/xarchiver \
@@ -57,6 +62,8 @@ stdenv.mkDerivation rec {
       ]
     }
   '';
+
+  strictDeps = true;
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
