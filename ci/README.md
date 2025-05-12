@@ -44,14 +44,14 @@ Why not just build the tooling right from the PRs Nixpkgs version?
 ## `get-merge-commit.sh GITHUB_REPO PR_NUMBER`
 
 Check whether a PR is mergeable and return the test merge commit as
-[computed by GitHub](https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests).
+[computed by GitHub](https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests) and its parent.
 
 Arguments:
 - `GITHUB_REPO`: The repository of the PR, e.g. `NixOS/nixpkgs`
 - `PR_NUMBER`: The PR number, e.g. `1234`
 
 Exit codes:
-- 0: The PR can be merged, the test merge commit hash is returned on stdout
+- 0: The PR can be merged, the hashes of the test merge commit and the target commit are returned on stdout
 - 1: The PR cannot be merged because it's not open anymore
 - 2: The PR cannot be merged because it has a merge conflict
 - 3: The merge commit isn't being computed, GitHub is likely having internal issues, unknown if the PR is mergeable
