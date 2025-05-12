@@ -14,6 +14,7 @@
   python3,
   espeak,
   udev,
+  versionCheckHook,
   nix-update-script,
   extraScripts ? false,
 }:
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       perl
       espeak
     ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   preConfigure = lib.optionals (!extraScripts) ''
     echo "" > scripts/CMakeLists.txt
@@ -70,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace scripts/dwespeak.sh \
         --replace-fail espeak ${espeak}/bin/espeak
     '';
+
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "-u" ];
 
   passthru.updateScript = nix-update-script { };
 
