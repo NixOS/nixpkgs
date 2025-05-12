@@ -125,6 +125,6 @@ stdenv.mkDerivation rec {
       toasteruwu
     ];
     mainProgram = "ed-odyssey-materials-helper";
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
