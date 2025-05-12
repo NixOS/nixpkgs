@@ -4311,8 +4311,8 @@ let
         mktplcRef = {
           name = "sas-lsp";
           publisher = "SAS";
-          version = "1.13.1";
-          hash = "sha256-Ol79+z/W4RzAQ0jjDMkxPrg8eOWanOqtIF7ZxNrskOk=";
+          version = "1.14.0";
+          hash = "sha256-layaVQGcIOS8tToHt99yjaFlrw0hsOoiUW66FPJz+AY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";

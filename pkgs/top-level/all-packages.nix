@@ -2022,10 +2022,6 @@ with pkgs;
   capstone = callPackage ../development/libraries/capstone { };
   capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
-  casync = callPackage ../applications/networking/sync/casync {
-    sphinx = buildPackages.python3Packages.sphinx;
-  };
-
   cataract = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
 
@@ -11896,10 +11892,6 @@ with pkgs;
     patches = config."2bwm".patches or [ ];
   };
 
-  abcde = callPackage ../applications/audio/abcde {
-    inherit (python3Packages) eyed3;
-  };
-
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python3Packages)
       buildPythonApplication
@@ -11944,9 +11936,6 @@ with pkgs;
     pdfstudio2024
     pdfstudioviewer
     ;
-
-  aeolus = callPackage ../applications/audio/aeolus { };
-  aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
   airwave = libsForQt5.callPackage ../applications/audio/airwave { };
 
@@ -12044,10 +12033,6 @@ with pkgs;
   };
 
   breezy = with python3Packages; toPythonApplication breezy;
-
-  calf = callPackage ../applications/audio/calf {
-    inherit (gnome2) libglade;
-  };
 
   calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
 
@@ -13009,6 +12994,7 @@ with pkgs;
     k3s_1_30
     k3s_1_31
     k3s_1_32
+    k3s_1_33
     ;
   k3s = k3s_1_32;
 

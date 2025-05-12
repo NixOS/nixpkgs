@@ -9,7 +9,7 @@
   gtk2,
   libjack2,
   ladspaH,
-  libglade,
+  gnome2,
   lv2,
   pkg-config,
   fetchFromGitHub,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     gtk2
     libjack2
     ladspaH
-    libglade
+    gnome2.libglade
     lv2
   ];
 
