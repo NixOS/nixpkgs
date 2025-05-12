@@ -97,6 +97,9 @@ let
     pkgs.callPackage ../../../nixos/lib/test-driver/nixos-test-driver-docstrings.nix
       { };
 
+  # List of doucumentation files defined in meta attribute of nixos options
+  docFiles = concatMapStringsSep " " (p: "${p.value}") config.meta.doc;
+
   prepareManualFromMD = ''
     cp -r --no-preserve=all $inputs/* .
 
@@ -104,10 +107,16 @@ let
 
     substituteInPlace ./manual.md \
       --replace-fail '@NIXOS_VERSION@' "${version}"
+
+    for file in ${docFiles}; do
+      ln -s $file configuration/$(basename $file);
+    done
+
     substituteInPlace ./configuration/configuration.md \
       --replace-fail \
           '@MODULE_CHAPTERS@' \
           ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+
     substituteInPlace ./nixos-options.md \
       --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
@@ -164,7 +173,7 @@ rec {
         nativeBuildInputs = [ buildPackages.nixos-render-docs ];
         inputs = sourceFilesBySuffices ./. [ ".md" ];
         meta.description = "The NixOS manual in HTML format";
-        allowedReferences = [ "out" ];
+        # allowedReferences = [ "out" ];
       }
       ''
         # Generate the HTML manual.
@@ -202,9 +211,6 @@ rec {
         echo "nix-build out $out" >> $out/nix-support/hydra-build-products
 
         echo "doc manual $dst" >> $out/nix-support/hydra-build-products
-
-        ${pkgs.ripgrep}/bin/rg /nix/store
-        ${pkgs.eza}/bin/eza --tree
       ''; # */
 
   # Alias for backward compatibility. TODO(@oxij): remove eventually.
