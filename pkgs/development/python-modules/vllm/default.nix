@@ -77,7 +77,7 @@ let
     trivial
     ;
 
-  inherit (cudaPackages) cudaFlags;
+  inherit (cudaPackages) flags;
 
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
@@ -179,10 +179,10 @@ let
   #   lists.subtractLists a b = b - a
 
   # For CUDA
-  supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
-  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
+  supportedCudaCapabilities = lists.intersectLists flags.cudaCapabilities supportedTorchCudaCapabilities;
+  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities flags.cudaCapabilities;
 
-  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
@@ -376,8 +376,7 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
-      (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.cudaFlags.cmakeCudaArchitecturesString
-      }")
+      (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
         name = "cuda-merged-${cudaPackages.cudaMajorMinorVersion}";
         paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
