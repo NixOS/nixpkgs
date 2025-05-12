@@ -924,6 +924,25 @@ let
                     ounit
                     ctypes
                     ctypes-foreign
+                    inotify
+                    js_of_ocaml-ppx
+                    js_of_ocaml
+                    js_of_ocaml-compiler
+                    uri-sexp
+                    cryptokit
+                    zarith
+                    angstrom
+                    base64
+                    magic-mime
+                    gen_js_api
+                    ojs
+                    lambdasoup
+                    tyxml
+                    faraday
+                    ocaml_pcre
+                    sedlex
+                    pyml
+                    angstrom-async
                     ;
                   ppxlib = self.ppxlib.override { inherit (self') stdio; };
                   cohttp-async = self.cohttp-async.override {
