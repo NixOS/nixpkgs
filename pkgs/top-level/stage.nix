@@ -386,6 +386,26 @@ let
       };
     });
 
+    # This maps each entry in cudaLib.data.cudaCapabilityToInfo to its own package set. Each of these will contain all
+    # packages built for that target system.
+    # For instance, pkgsCuda.sm_90a.python3Packages.torch will refer to PyTorch built for the Hopper architecture,
+    # leveraging architecture-specific features.
+    # NOTE: Not every package set is supported on every architecture!
+    # See `Using pkgsCuda` in doc/languages-frameworks/cuda.section.md for more information.
+    pkgsCuda = lib.mapAttrs' (cudaCapability: cudaCapabilityInfo: {
+      name = self.cudaLib.utils.mkRealArchitecture cudaCapability;
+      value = nixpkgsFun {
+        config = super.config // {
+          cudaSupport = true;
+          rocmSupport = false;
+          # Not supported by architecture-specific feature sets, so disable for all.
+          # Users can choose to build for family-specific feature sets if they wish.
+          cudaForwardCompat = false;
+          cudaCapabilities = [ cudaCapabilityInfo.cudaCapability ];
+        };
+      };
+    }) self.cudaLib.data.cudaCapabilityToInfo;
+
     pkgsExtraHardening = nixpkgsFun {
       overlays = [
         (
