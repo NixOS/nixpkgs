@@ -15956,6 +15956,8 @@ self: super: with self; {
 
   skl2onnx = callPackage ../development/python-modules/skl2onnx { };
 
+  sklearn-compat = callPackage ../development/python-modules/sklearn-compat { };
+
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   skodaconnect = callPackage ../development/python-modules/skodaconnect { };
@@ -19103,6 +19105,8 @@ self: super: with self; {
   x11-hash = callPackage ../development/python-modules/x11-hash { };
 
   x256 = callPackage ../development/python-modules/x256 { };
+
+  x3dh = callPackage ../development/python-modules/x3dh { };
 
   x690 = callPackage ../development/python-modules/x690 { };
 

@@ -13,6 +13,8 @@
   zlib,
   zstd,
   scx-common,
+  protobuf,
+  libseccomp,
 }:
 
 let
@@ -74,6 +76,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       jq
       pkg-config
       zstd
+      protobuf
     ]
     ++ bpftools.buildInputs
     ++ bpftools.nativeBuildInputs;
@@ -81,6 +84,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     elfutils
     zlib
+    libseccomp
   ];
 
   mesonFlags = [

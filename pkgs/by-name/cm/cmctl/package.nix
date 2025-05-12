@@ -9,24 +9,20 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.14.7";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
-    repo = "cert-manager";
+    repo = "cmctl";
     rev = "v${version}";
-    hash = "sha256-ZvrR8k1jiyAMUKM9VA6vKH2uhMKnd22OQe08CIlxXjs=";
+    hash = "sha256-Kr7vwVW6v08QRbJDs2u0vK241ljNfhLVYIQCBl31QSs=";
   };
 
-  sourceRoot = "${src.name}/cmd/ctl";
-
-  vendorHash = "sha256-qaSzAPNVe25Fbbfqy0OFFnMJ21IlWuoJKwnT7y2wmOs=";
+  vendorHash = "sha256-D83Ufpa7PLQWBCHX5d51me3aYprGzc9RoKVma2Ax1Is=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cert-manager/cert-manager/cmd/ctl/pkg/build.name=cmctl"
-    "-X github.com/cert-manager/cert-manager/cmd/ctl/pkg/build/commands.registerCompletion=true"
     "-X github.com/cert-manager/cert-manager/pkg/util.AppVersion=v${version}"
     "-X github.com/cert-manager/cert-manager/pkg/util.AppGitCommit=${src.rev}"
   ];
@@ -35,24 +31,23 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  # Trusted by this computer: no: x509: “cert-manager” certificate is not trusted
+  checkPhase = ''
+    go test --race $(go list ./... | grep -v /test/)
+  '';
+
+  # Trusted by this computer: no: x509: “cert-manager” certificate is not
+  # trusted
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postInstall =
-    ''
-      mv $out/bin/ctl $out/bin/cmctl
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd cmctl \
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd cmctl \
         --bash <($out/bin/cmctl completion bash) \
         --fish <($out/bin/cmctl completion fish) \
         --zsh <($out/bin/cmctl completion zsh)
-    '';
-
-  passthru.updateScript = nix-update-script { };
+  '';
 
   meta = with lib; {
-    description = "CLI tool for managing cert-manager service on Kubernetes clusters";
+    description = "Command line utility to interact with a cert-manager instalation on Kubernetes";
     mainProgram = "cmctl";
     longDescription = ''
       cert-manager adds certificates and certificate issuers as resource types
@@ -63,8 +58,11 @@ buildGoModule rec {
       Let's Encrypt, HashiCorp Vault, and Venafi as well as private PKI, and it
       ensures certificates remain valid and up to date, attempting to renew
       certificates at an appropriate time before expiry.
+
+      cmctl is a command line tool to help you manage cert-manager and its
+      resources inside your Kubernetes cluster.
     '';
-    downloadPage = "https://github.com/cert-manager/cert-manager";
+    downloadPage = "https://github.com/cert-manager/cmctl";
     license = licenses.asl20;
     homepage = "https://cert-manager.io/";
     maintainers = with maintainers; [ joshvanl ];

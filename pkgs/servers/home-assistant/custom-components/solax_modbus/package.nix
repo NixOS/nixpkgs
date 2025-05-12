@@ -17,6 +17,12 @@ buildHomeAssistantComponent rec {
     hash = "sha256-fgvhF+1fz3pNOZJQjf/iF2Lh9j6mMkUXjgLyCja84K0=";
   };
 
+  postPatch = ''
+    substituteInPlace custom_components/solax_modbus/payload.py --replace-fail \
+      'from pymodbus.utilities import (' \
+      'from pymodbus.pdu.pdu import ('
+  '';
+
   dependencies = [ pymodbus ];
 
   meta = {
