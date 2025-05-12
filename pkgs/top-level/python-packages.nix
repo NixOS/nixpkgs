@@ -8025,6 +8025,8 @@ self: super: with self; {
 
   llama-cloud = callPackage ../development/python-modules/llama-cloud { };
 
+  llama-cloud-services = callPackage ../development/python-modules/llama-cloud-services { };
+
   llama-cpp-python = callPackage ../development/python-modules/llama-cpp-python { };
 
   llama-index = callPackage ../development/python-modules/llama-index { };
