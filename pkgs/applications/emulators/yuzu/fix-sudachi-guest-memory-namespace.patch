@@ -1,0 +1,15 @@
+--- a/src/core/guest_memory.h
++++ b/src/core/guest_memory.h
+@@ -31,7 +31,6 @@
+     UnsafeReadCachedWrite = UnsafeReadWrite | Cached,
+ };
+ 
+-namespace {
+ template <typename M, typename T, GuestMemoryFlags FLAGS>
+ class GuestMemory {
+     using iterator = T*;
+@@ -221,4 +220,3 @@
+ };
+ } // namespace
+ 
+-} // namespace Core::Memory

@@ -4,6 +4,10 @@
   fetchpatch,
   fetchFromGitea,
   fmt_11,
+  fetchzip,
+  git,
+  dos2unix,
+  sdl3,
 }:
 
 {
@@ -84,6 +88,70 @@
       fmt = fmt_11;
       homepage = "https://git.citron-emu.org/citron/emu/-/releases";
       mainProgram = "citron";
+    }
+  );
+
+  sudachi = callPackage ./generic.nix (
+    let
+      version = "1.0.15";
+    in
+    {
+      forkName = "sudachi";
+      inherit version;
+      source = fetchzip {
+        url = "https://github.com/emuplace/sudachi.emuplace.app/releases/download/v${version}/latest.zip";
+        hash = "sha256-9qfDtuJWE4KpCY7RFXw/VdYOR0bNe+80afO7/FJ+Cog=";
+        stripRoot = false;
+        nativeBuildInputs = [
+          git
+          dos2unix
+        ];
+        postFetch = ''
+          pushd $out
+          # Patches will fail to apply because of line endings
+          find . -type f -print0 | xargs -0 dos2unix
+
+          # Restore submodules from .gitmodules file
+          # https://stackoverflow.com/a/11258810
+          git init
+          git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
+              while read path_key local_path
+              do
+                  url_key=$(echo $path_key | sed 's/\.path/.url/')
+                  url=$(git config -f .gitmodules --get "$url_key")
+                  rmdir $local_path
+                  git submodule add $url $local_path
+              done
+          # Fetch nested submodules
+          git submodule update --init --recursive
+
+          # Fix submodules versions
+          (cd externals/cpp-jwt && git checkout 4a970bc302d671476122cbc6b43cc89fbf4a96ec)
+
+          # Remove .git dirs
+          find . -name .git -type f -exec rm -rf {} +
+          rm -rf .git/
+        '';
+      };
+      patches = [
+        # Add explicit cast for CRC checksum value
+        ./fix-udp-protocol.patch
+        # Updates suppressed diagnostics
+        ./fix-aarch64-linux-build.patch
+        # Revert imports to codec.h
+        ./fix-libavcodec-import.patch
+        # Revert libav function usage
+        ./fix-libavcodec-function.patch
+        # Fix code mistakes
+        # from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=sudachi
+        ./fix-sudachi-window.patch
+        ./fix-sudachi-guest-memory-namespace.patch
+      ];
+      cmakeFlagsPrefix = "SUDACHI";
+      udevFileName = "72-sudachi-input.rules";
+      SDL2 = sdl3;
+      homepage = "https://sudachi.emuplace.app/";
+      mainProgram = "sudachi";
     }
   );
 }

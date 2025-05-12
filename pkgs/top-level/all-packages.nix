@@ -16862,6 +16862,7 @@ with pkgs;
   inherit (callPackage ../applications/emulators/yuzu { })
     citron-emu
     torzu
+    sudachi
     ;
 
   zap-chip-gui = zap-chip.override { withGui = true; };

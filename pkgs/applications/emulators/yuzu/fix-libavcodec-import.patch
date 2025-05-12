@@ -1,0 +1,11 @@
+--- a/src/video_core/host1x/ffmpeg/ffmpeg.h
++++ b/src/video_core/host1x/ffmpeg/ffmpeg.h
+@@ -22,7 +22,7 @@
+ #include <libavcodec/avcodec.h>
+ #include <libavutil/opt.h>
+ #ifndef ANDROID
+-#include <libavcodec/codec_internal.h>
++#include <libavcodec/codec.h>
+ #endif
+ 
+ #if defined(__GNUC__) || defined(__clang__)
