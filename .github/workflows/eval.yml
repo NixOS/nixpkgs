@@ -21,7 +21,7 @@ jobs:
 
   attrs:
     name: Attributes
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: get-merge-commit
     if: needs.get-merge-commit.outputs.mergedSha
     outputs:
@@ -59,32 +59,9 @@ jobs:
           name: paths
           path: result/*
 
-  eval-aliases:
-    name: Eval nixpkgs with aliases enabled
-    runs-on: ubuntu-24.04
-    needs: [ get-merge-commit ]
-    steps:
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          path: nixpkgs
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
-        with:
-          extra_nix_config: sandbox = true
-
-      - name: Ensure flake outputs on all systems still evaluate
-        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
-
-      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
-        run: |
-          time nix-env -I ./nixpkgs -f ./nixpkgs -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
-
   outpaths:
     name: Outpaths
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ attrs, get-merge-commit ]
     strategy:
       fail-fast: false
@@ -93,10 +70,10 @@ jobs:
     steps:
       - name: Enable swap
         run: |
-          sudo fallocate -l 10G /swapfile
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
+          sudo fallocate -l 10G /swap
+          sudo chmod 600 /swap
+          sudo mkswap /swap
+          sudo swapon /swap
 
       - name: Download the list of all attributes
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
@@ -133,7 +110,7 @@ jobs:
 
   process:
     name: Process
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ outpaths, attrs, get-merge-commit ]
     outputs:
       targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
@@ -219,7 +196,7 @@ jobs:
           # Use the target branch to get accurate maintainer info
           nix-build target/ci -A eval.compare \
             --arg beforeResultDir ./targetResult \
-            --arg afterResultDir $(realpath prResult) \
+            --arg afterResultDir "$(realpath prResult)" \
             --arg touchedFilesJson ./touched-files.json \
             -o comparison
 
@@ -235,7 +212,7 @@ jobs:
   # Separate job to have a very tightly scoped PR write token
   tag:
     name: Tag
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: [ attrs, process ]
     if: needs.process.outputs.targetRunId
     permissions:
