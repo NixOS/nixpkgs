@@ -1,4 +1,6 @@
-{ lib }:
+let
+  lib = import ../../../../lib;
+in
 lib.fixedPoints.makeExtensible (final: {
   data = import ./data.nix {
     inherit lib;
