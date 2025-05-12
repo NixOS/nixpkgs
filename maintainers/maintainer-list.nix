@@ -8908,6 +8908,12 @@
     githubId = 6578603;
     name = "Jonas Rembser";
   };
+  guno327 = {
+    name = "Gunnar Hovik";
+    github = "Guno327";
+    githubId = 95594654;
+    email = "gunnarhovik@outlook.com";
+  };
   gurjaka = {
     name = "Gurami Esartia";
     email = "esartia.gurika@gmail.com";
