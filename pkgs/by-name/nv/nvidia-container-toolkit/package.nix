@@ -127,6 +127,9 @@ buildGoModule rec {
     description = "NVIDIA Container Toolkit";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      christoph-heiss
+    ];
   };
 }
