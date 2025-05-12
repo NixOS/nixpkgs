@@ -22650,6 +22650,11 @@
     githubId = 96694484;
     name = "Sandeep Patel";
   };
+  sanferdsouza = {
+    name = "Sanfer D'souza";
+    github = "sanferdsouza";
+    githubId = 9338001;
+  };
   Sanskarzz = {
     email = "sanskar.gur@gmail.com";
     github = "Sanskarzz";
