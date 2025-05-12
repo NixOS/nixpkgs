@@ -22,7 +22,8 @@ let
       installPhase = ''
         runHook preInstall
 
-        install -D -m444 -t "$out/share/fonts/truetype" "${directory}/*.ttf"
+
+        install -D -m444 -t "$out/share/fonts/truetype" "${directory}/"*.ttf
         install -D -m644 -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}" "${directory}/OFL.txt"
 
         runHook postInstall
