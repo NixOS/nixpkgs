@@ -32,6 +32,7 @@
   pkg-config,
   polkit,
   python3Packages,
+  sscg,
   systemd,
   udev,
   xmlto,
@@ -167,6 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
+          sscg
           openssl
         ]
       } \
