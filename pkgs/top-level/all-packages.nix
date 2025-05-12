@@ -16859,6 +16859,10 @@ with pkgs;
 
   yamale = with python3Packages; toPythonApplication yamale;
 
+  inherit (callPackage ../applications/emulators/yuzu { })
+    torzu
+    ;
+
   zap-chip-gui = zap-chip.override { withGui = true; };
 
   myEnvFun = callPackage ../misc/my-env {
