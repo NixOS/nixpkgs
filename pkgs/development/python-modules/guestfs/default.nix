@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "guestfs";
-  version = "1.40.1";
+  version = "1.40.2";
   format = "setuptools";
 
   src = fetchurl {
     url = "http://download.libguestfs.org/python/guestfs-${version}.tar.gz";
-    sha256 = "06a4b5xf1rkhnzfvck91n0z9mlkrgy90s9na5a8da2g4p776lhkf";
+    hash = "sha256-GCKwkhrIXPz0hPrwe3YrhlEr6TuDYQivDzpMlZ+CAzI=";
   };
 
   propagatedBuildInputs = [
