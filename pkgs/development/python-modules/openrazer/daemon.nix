@@ -13,6 +13,7 @@
   wrapGAppsNoGuiHook,
   notify2,
   glib,
+  libnotify,
 }:
 
 let
@@ -56,6 +57,7 @@ buildPythonPackage (
       pyudev
       setproctitle
       notify2
+      libnotify
     ];
 
     postInstall = ''
