@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "alda-lang";
     repo = "alda";
-    rev = "release-${version}";
+    tag = "release-${version}";
     hash = "sha256-//VfegK8wkGKSpvtsNTEQqbVJkcucNiamoNIXaEBLb8=";
   };
   license = lib.licenses.epl20;
@@ -46,6 +46,8 @@ let
       inherit license;
       homepage = "https://github.com/alda-lang/alda/tree/master/client";
       broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      maintainers = [ lib.maintainers.ericdallo ];
+      platforms = lib.platforms.unix;
     };
   };
   alda_player = stdenv.mkDerivation {
@@ -67,16 +69,22 @@ let
     gradleBuildTask = "fatJar";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/{bin,share}
       cp build/libs/alda-player-fat.jar $out/share
 
       makeWrapper ${lib.getExe jre} $out/bin/alda-player \
         --add-flags "-jar $out/share/alda-player-fat.jar"
+
+      runHook postInstall
     '';
 
     meta = {
       inherit license;
       homepage = "https://github.com/alda-lang/alda/tree/master/player";
+      maintainers = [ lib.maintainers.ericdallo ];
+      platforms = lib.platforms.unix;
     };
   };
 in
@@ -96,6 +104,6 @@ symlinkJoin {
       binaryBytecode
     ];
     maintainers = [ lib.maintainers.ericdallo ];
-    platforms = jre.meta.platforms;
+    platforms = lib.platforms.unix;
   };
 }
