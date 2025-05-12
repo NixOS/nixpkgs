@@ -40,7 +40,7 @@ lib.extendMkDerivation {
     {
       name = "typst-package-${finalAttrs.pname}-${finalAttrs.version}";
 
-      dontUnpack = true;
+      dontBuild = true;
 
       installPhase =
         let
