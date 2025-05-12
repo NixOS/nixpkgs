@@ -217,7 +217,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit homepage;
     inherit mainProgram;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ liberodark ];
+    maintainers = with lib.maintainers; [
+      liberodark
+      nyanloutre
+    ];
     license = with lib.licenses; [
       gpl3Plus
       # Icons
