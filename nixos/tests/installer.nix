@@ -681,7 +681,7 @@ let
         {
           # The configuration of the system used to run "nixos-install".
           installer =
-            { config, ... }:
+            { config, pkgs, ... }:
             {
               imports = [
                 commonConfig
@@ -739,6 +739,11 @@ let
                   unionfs-fuse
                   xorg.lndir
                   shellcheck-minimal
+
+                  # Only the out output is included here, which is what is
+                  # required to build the NixOS udev rules
+                  # See the comment in services/hardware/udev.nix
+                  systemdMinimal.out
 
                   # add curl so that rather than seeing the test attempt to download
                   # curl's tarball, we see what it's trying to download
