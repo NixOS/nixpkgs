@@ -30,9 +30,14 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     beets
   ];
-  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [ six ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    six
+  ];
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
