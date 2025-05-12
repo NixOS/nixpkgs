@@ -5802,7 +5802,7 @@
     email = "me@dblsaiko.net";
     github = "2xsaiko";
     githubId = 3987560;
-    name = "Marco Rebhan";
+    name = "Katalin Rebhan";
   };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
@@ -10734,6 +10734,12 @@
     github = "iv-nn";
     githubId = 49885246;
     keys = [ { fingerprint = "6358 EF87 86E0 EF2F 1628  103F BAB5 F165 1C71 C9C3"; } ];
+  };
+  ivalery111 = {
+    name = "Valery";
+    email = "ivalery111@gmail.com";
+    github = "ivalery111";
+    githubId = 37245535;
   };
   ivan = {
     email = "ivan@ludios.org";

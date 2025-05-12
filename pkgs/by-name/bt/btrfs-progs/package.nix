@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     homepage = "https://btrfs.readthedocs.io/en/latest/";
     changelog = "https://github.com/kdave/btrfs-progs/raw/v${version}/CHANGES";
     license = licenses.gpl2Only;
+    mainProgram = "btrfs";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
