@@ -5802,7 +5802,7 @@
     email = "me@dblsaiko.net";
     github = "2xsaiko";
     githubId = 3987560;
-    name = "Marco Rebhan";
+    name = "Katalin Rebhan";
   };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
