@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  callPackage,
   autoPatchelfHook,
   wrapGAppsHook4,
   libusb1,
@@ -14,6 +15,25 @@
 let
   pname = "keymapp";
   version = "1.3.6";
+
+  sources = rec {
+    aarch64-darwin = {
+      # Upstream does not provide archives of previous versions,
+      # therefore a capture using the wayback machine is used
+      url = "https://web.archive.org/web/20250427080926/https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-latest.dmg";
+      hash = "sha256-sn8IkSV8AEqm8z/TiS1399hITBC9lnSSjQn/k0xWl6I=";
+    };
+    x86_64-darwin = aarch64-darwin;
+    aarch64-linux = {
+      url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
+      hash = "sha256-LWO4aeNmGgZ+T41pb6HwC3tnwaiGviDIq63QMsrlkEc=";
+    };
+    x86_64-linux = aarch64-linux;
+  };
+  src = fetchurl {
+    inherit (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) url hash;
+  };
+
   meta = {
     homepage = "https://www.zsa.io/flash/";
     description = "Application for ZSA keyboards";
@@ -22,83 +42,34 @@ let
       shawn8901
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
   };
 
-  linux = stdenv.mkDerivation (finalAttrs: {
-    inherit pname version meta;
-
-    src = fetchurl {
-      url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${finalAttrs.version}.tar.gz";
-      hash = "sha256-LWO4aeNmGgZ+T41pb6HwC3tnwaiGviDIq63QMsrlkEc=";
-    };
-
-    nativeBuildInputs = [
-      copyDesktopItems
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      undmg
+      ;
+  }
+else
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      libusb1
+      libsoup_3
+      webkitgtk_4_1
       autoPatchelfHook
       wrapGAppsHook4
-    ];
-
-    buildInputs = [
-      libusb1
-      webkitgtk_4_1
-      libsoup_3
-    ];
-
-    sourceRoot = ".";
-
-    installPhase = ''
-      runHook preInstall
-
-      install -m755 -D keymapp "$out/bin/keymapp"
-      install -Dm644 icon.png "$out/share/pixmaps/keymapp.png"
-
-      runHook postInstall
-    '';
-
-    preFixup = ''
-      gappsWrapperArgs+=(--set-default '__NV_PRIME_RENDER_OFFLOAD' 1)
-    '';
-
-    desktopItem = makeDesktopItem {
-      name = "keymapp";
-      icon = "keymapp";
-      desktopName = "Keymapp";
-      categories = [
-        "Settings"
-        "HardwareSettings"
-      ];
-      type = "Application";
-      exec = "keymapp";
-    };
-  });
-
-  darwin = stdenv.mkDerivation (finalAttrs: {
-    inherit pname version meta;
-
-    src = fetchurl {
-      # Upstream does not provide archives of previous versions,
-      # therefore a capture using the wayback machine is used
-      url = "https://web.archive.org/web/20250427080926/https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-latest.dmg";
-      hash = "sha256-sn8IkSV8AEqm8z/TiS1399hITBC9lnSSjQn/k0xWl6I=";
-    };
-
-    dontPatch = true;
-    dontConfigure = true;
-    dontBuild = true;
-
-    nativeBuildInputs = [ undmg ];
-
-    sourceRoot = ".";
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/Applications
-      mv Keymapp.app $out/Applications
-
-      runHook postInstall
-    '';
-  });
-in
-if stdenv.hostPlatform.isDarwin then darwin else linux
+      copyDesktopItems
+      makeDesktopItem
+      ;
+  }
