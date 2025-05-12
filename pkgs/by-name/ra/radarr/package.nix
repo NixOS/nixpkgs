@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "5.24.1.10017";
+  version = "5.25.0.10024";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,14 +29,14 @@ let
       owner = "Radarr";
       repo = "Radarr";
       tag = "v${version}";
-      hash = "sha256-JVHFKRvcAWT/hVZhkctO5M/ZpqhLEngDwG9zIiRGAgk=";
+      hash = "sha256-Pzdkm9oxPJRdzdCjRC22XgLBS5ffBY5u9m2QwkoZzOM=";
     };
     patches =
       [
         ./nuget-config.patch
       ]
       ++ lib.optionals (lib.versionOlder version "6.0") [
-        # See https://github.com/Radarr/Radarr/pull/10258
+        # See https://github.com/Radarr/Radarr/pull/11064
         # Unfortunately, the .NET 8 upgrade will be merged into the v6 branch,
         # and it may take some time for that to become stable.
         # However, the patches cleanly apply to v5 as well.
