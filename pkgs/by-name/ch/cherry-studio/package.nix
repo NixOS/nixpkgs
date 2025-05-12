@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.2.10";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-txzZbtA6Fvc/2cpD9YM5wwtZix+qjtW0B6aAV4I7Ce8=";
+    hash = "sha256-/cj4wMYPWjO5tJxIDdP7GkciWLVZBiDivEIHiOxpk0s=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-rKXUGfBL8upKU5MIe9fqHyEETNKsWdiUdsbHmvJPQdQ=";
+    hash = "sha256-WUsG8mqozphU2YIT73KqMNP62TBiay3EiGrMBgd2QJw=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "cherry-studio --no-sandbox %U";
       terminal = false;
       icon = "cherry-studio";
-      startupWMClass = "Cherry Studio";
+      startupWMClass = "CherryStudio";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/cherrystudio" ];
     })
@@ -88,12 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/cherry-studio
-    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/cherry-studio
+    mkdir -p $out/opt/cherry-studio
+    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio
     install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
-      --add-flags $out/lib/cherry-studio/resources/app.asar \
+      --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
