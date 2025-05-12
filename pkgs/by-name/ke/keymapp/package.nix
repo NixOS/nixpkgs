@@ -38,6 +38,7 @@ let
     homepage = "https://www.zsa.io/flash/";
     description = "Application for ZSA keyboards";
     maintainers = with lib.maintainers; [
+      afh
       jankaifer
       shawn8901
     ];
