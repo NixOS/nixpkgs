@@ -843,6 +843,7 @@ with lib.maintainers;
       Gabriella439
       curran
       lf-
+      jkachmar
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
