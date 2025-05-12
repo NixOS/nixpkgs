@@ -67,6 +67,8 @@ buildGoModule rec {
       --zsh <($out/bin/argocd completion zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Declarative continuous deployment for Kubernetes";
     mainProgram = "argocd";
@@ -77,6 +79,7 @@ buildGoModule rec {
       shahrukh330
       bryanasdev000
       qjoly
+      FKouhai
     ];
   };
 }
