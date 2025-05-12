@@ -44,7 +44,6 @@ in
   lib,
   pkgs,
   stdenv,
-  fetchpatch,
   patchelf,
 
   # build time
@@ -467,7 +466,7 @@ buildStdenv.mkDerivation {
     ]
     ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
     ++ lib.optional (!drmSupport) "--disable-eme"
-    ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
+    ++ lib.optional allowAddonSideload "--allow-addon-sideload"
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
       "--enable-system-pixman"
