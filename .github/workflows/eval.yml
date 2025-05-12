@@ -19,54 +19,14 @@ jobs:
   get-merge-commit:
     uses: ./.github/workflows/get-merge-commit.yml
 
-  attrs:
-    name: Attributes
-    runs-on: ubuntu-24.04-arm
-    needs: get-merge-commit
-    if: needs.get-merge-commit.outputs.mergedSha
-    outputs:
-      targetSha: ${{ steps.targetSha.outputs.targetSha }}
-      systems: ${{ steps.systems.outputs.systems }}
-    steps:
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          fetch-depth: 2
-          path: nixpkgs
-
-      - name: Determine target commit
-        if: github.event_name == 'pull_request_target'
-        id: targetSha
-        run: |
-          targetSha=$(git -C nixpkgs rev-parse HEAD^1)
-          echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
-        with:
-          extra_nix_config: sandbox = true
-
-      - name: Evaluate the list of all attributes and get the systems matrix
-        id: systems
-        run: |
-          nix-build nixpkgs/ci -A eval.attrpathsSuperset
-          echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Upload the list of all attributes
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: paths
-          path: result/*
-
   outpaths:
     name: Outpaths
     runs-on: ubuntu-24.04-arm
-    needs: [ attrs, get-merge-commit ]
+    needs: [ get-merge-commit ]
     strategy:
       fail-fast: false
       matrix:
-        system: ${{ fromJSON(needs.attrs.outputs.systems) }}
+        system: ${{ fromJSON(needs.get-merge-commit.outputs.systems) }}
     steps:
       - name: Enable swap
         run: |
@@ -74,12 +34,6 @@ jobs:
           sudo chmod 600 /swap
           sudo mkswap /swap
           sudo swapon /swap
-
-      - name: Download the list of all attributes
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        with:
-          name: paths
-          path: paths
 
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -98,7 +52,6 @@ jobs:
         run: |
           nix-build nixpkgs/ci -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
-            --arg attrpathFile ./paths/paths.json \
             --arg chunkSize 10000
           # If it uses too much memory, slightly decrease chunkSize
 
@@ -111,7 +64,7 @@ jobs:
   process:
     name: Process
     runs-on: ubuntu-24.04-arm
-    needs: [ outpaths, attrs, get-merge-commit ]
+    needs: [ outpaths, get-merge-commit ]
     outputs:
       targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     steps:
@@ -146,7 +99,7 @@ jobs:
           path: prResult/*
 
       - name: Get target run id
-        if: needs.attrs.outputs.targetSha
+        if: needs.get-merge-commit.outputs.targetSha
         id: targetRunId
         run: |
           # Get the latest eval.yml workflow run for the PR's target commit
@@ -175,7 +128,7 @@ jobs:
           echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
         env:
           REPOSITORY: ${{ github.repository }}
-          TARGET_SHA: ${{ needs.attrs.outputs.targetSha }}
+          TARGET_SHA: ${{ needs.get-merge-commit.outputs.targetSha }}
           GH_TOKEN: ${{ github.token }}
 
       - uses: actions/download-artifact@v4
@@ -189,8 +142,8 @@ jobs:
       - name: Compare against the target branch
         if: steps.targetRunId.outputs.targetRunId
         run: |
-          git -C nixpkgs worktree add ../target ${{ needs.attrs.outputs.targetSha }}
-          git -C nixpkgs diff --name-only ${{ needs.attrs.outputs.targetSha }} \
+          git -C nixpkgs worktree add ../target ${{ needs.get-merge-commit.outputs.targetSha }}
+          git -C nixpkgs diff --name-only ${{ needs.get-merge-commit.outputs.targetSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
@@ -213,7 +166,7 @@ jobs:
   tag:
     name: Tag
     runs-on: ubuntu-24.04-arm
-    needs: [ attrs, process ]
+    needs: [ process ]
     if: needs.process.outputs.targetRunId
     permissions:
       pull-requests: write
@@ -244,7 +197,7 @@ jobs:
       - name: Check out Nixpkgs at the base commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.attrs.outputs.targetSha }}
+          ref: ${{ needs.get-merge-commit.outputs.targetSha }}
           path: base
           sparse-checkout: ci
 
