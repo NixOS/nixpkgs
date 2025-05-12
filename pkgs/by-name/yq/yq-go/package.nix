@@ -37,13 +37,13 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
     changelog = "https://github.com/mikefarah/yq/raw/v${finalAttrs.version}/release_notes.txt";
     mainProgram = "yq";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [
       lewo
       SuperSandro2000
     ];
