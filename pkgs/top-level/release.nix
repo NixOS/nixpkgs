@@ -396,9 +396,6 @@ let
           "x86_64-linux"
           "aarch64-linux"
         ];
-
-        # Fails CI in its current state
-        ocamlPackages = { };
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in
