@@ -1,49 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # optional-dependencies
-  # cudf,
   dask,
-  # modin,
+  duckdb,
+  fetchFromGitHub,
+  hatchling,
+  hypothesis,
   pandas,
   polars,
   pyarrow,
   pyspark,
-  sqlframe,
-
-  # tests
-  duckdb,
-  hypothesis,
   pytest-env,
   pytestCheckHook,
+  sqlframe,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.37.0";
+  version = "1.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-AYgpHJwQVP+F2kr5YJtjnLNYedc81RvRcX1Cfh7c0xw=";
+    hash = "sha256-zqtYTqirAXLcpFA2sXczl0HPWL/3cYWws2yUfE8I8NY=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
-    dask = [
-      dask
-    ] ++ dask.optional-dependencies.dataframe;
+    dask = [ dask ] ++ dask.optional-dependencies.dataframe;
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];
@@ -60,6 +48,13 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
+
+  disabledTests = [
+    # Flaky
+    "test_rolling_var_hypothesis"
+    # Missing file
+    "test_pyspark_connect_deps_2517"
+  ];
 
   pytestFlagsArray = [
     "-W"
