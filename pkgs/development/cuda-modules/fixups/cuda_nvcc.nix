@@ -40,7 +40,7 @@ prevAttrs: {
       substituteInPlace bin/nvcc.profile \
         --replace-fail \
           '$(TOP)/$(_NVVM_BRANCH_)' \
-          "''${!outputBin}/nvvm" \
+          "''${!outputBin}/nvvm"
     ''
     + ''
       cat << EOF >> bin/nvcc.profile
