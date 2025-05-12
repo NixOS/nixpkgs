@@ -111,6 +111,7 @@ in
         rev = lib.last (lib.splitString "-" (lib.last rel));
       in
       "${date}-${rev}";
+    __intentionallyOverridingVersion = true;
 
     meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
 
