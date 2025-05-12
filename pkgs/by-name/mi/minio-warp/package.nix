@@ -19,6 +19,7 @@ buildGoModule rec {
   };
 
   patches = [
+    # upstream ships a broken go.sum file in the release and fixes it one commit later ..
     (fetchpatch {
       url = "https://github.com/minio/warp/commit/c830e94367efce6e6d70c337d490a3b6eba5e558.patch";
       hash = "sha256-LXkgwpTPe4WvU+nAsYfjs38uXiBoeoavnxliw8nweRQ=";
@@ -51,6 +52,7 @@ buildGoModule rec {
   meta = {
     description = "S3 benchmarking tool";
     homepage = "https://github.com/minio/warp";
+    changelog = "https://github.com/minio/warp/releases/tag/v${version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ christoph-heiss ];
     mainProgram = "minio-warp";
