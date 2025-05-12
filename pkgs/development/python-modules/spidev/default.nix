@@ -1,25 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "spidev";
-  version = "3.6";
-  format = "setuptools";
+  version = "3.7";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FNvDdZSkqu+FQDq2F5hdPD70ZNYrybdp71UttTcBEVs=";
+  src = fetchFromGitHub {
+    owner = "doceme";
+    repo = "py-spidev";
+    tag = "v${version}";
+    hash = "sha256-XLCWuLjBpsEGjP3yUNbFMxJQ1m9S7TY0LfVVteUU2bY=";
   };
 
-  # package does not include tests
-  doCheck = false;
+  build-system = [ setuptools ];
+
+  doCheck = false; # no tests
 
   pythonImportsCheck = [ "spidev" ];
 
   meta = with lib; {
+    changelog = "https://github.com/doceme/py-spidev/releases/tag/${src.tag}";
     homepage = "https://github.com/doceme/py-spidev";
     description = "Python bindings for Linux SPI access through spidev";
     license = licenses.mit;
