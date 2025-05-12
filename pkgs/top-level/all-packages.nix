@@ -16860,6 +16860,7 @@ with pkgs;
   yamale = with python3Packages; toPythonApplication yamale;
 
   inherit (callPackage ../applications/emulators/yuzu { })
+    citron-emu
     torzu
     ;
 
