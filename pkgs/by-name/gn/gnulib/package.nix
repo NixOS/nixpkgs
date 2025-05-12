@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchurl,
   python3,
   perl,
 }:
@@ -10,10 +10,11 @@ stdenv.mkDerivation {
   pname = "gnulib";
   version = "20241001";
 
-  src = fetchgit {
-    url = "https://git.savannah.gnu.org/git/gnulib.git";
-    rev = "0a01f6737dc5666c730bdfe6a038da53a4156cc2";
-    hash = "sha256-kbmXnXXoaTPGwjUJvnHWCQFS2KGQ9fsjIyloNmkKdc4=";
+  # Use the coreutils mirror so we can fetch a tarball for bootstrapping reasons.
+  # (The official source is only available via git.)
+  src = fetchurl {
+    url = "https://github.com/coreutils/gnulib/archive/d70f5b940c486b2cc49027ec5f057bdce9b907c5.tar.gz";
+    hash = "sha256-sOO9uNxGX8YSILzqCmNAQcp9AYcJDYd3OYgOLgK8/yw=";
   };
 
   postPatch = ''
