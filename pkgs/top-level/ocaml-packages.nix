@@ -898,7 +898,7 @@ let
                   };
                   ipaddr-sexp = self.ipaddr-sexp.override { inherit (self') ppx_sexp_conv; };
                   conduit = self.conduit.override {
-                    inherit (self') ppx_sexp_conv sexplib;
+                    inherit (self') ppx_sexp_conv sexplib0;
                     inherit ipaddr-sexp;
                   };
                   conduit-async = self.conduit-async.override {
@@ -907,8 +907,7 @@ let
                       ppx_sexp_conv
                       ppx_here
                       core
-                      sexplib
-                      async_ssl
+                      sexplib0
                       ;
                     inherit conduit ipaddr-sexp;
                   };
