@@ -66,6 +66,10 @@ import ./make-test-python.nix (
       machine.wait_for_unit("multi-user.target")
       machine.succeed("test /etc/post-boot-ran")
       machine.fail("touch /nix/store/should-not-work");
+
+      for opt in ["ro", "nosuid", "nodev"]:
+        with subtest(f"testing store mount option: {opt}"):
+          machine.succeed(f'[[ "$(findmnt --direction backward --first-only --noheadings --output OPTIONS /nix/store)" =~ (^|,){opt}(,|$) ]]')
     '';
 
     meta.maintainers = with pkgs.lib.maintainers; [ numinit ];
