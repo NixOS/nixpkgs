@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.fluxbox;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.fluxbox.enable = mkEnableOption "fluxbox";
+  options.services.xserver.windowManager.fluxbox = {
+    enable = lib.mkEnableOption "fluxbox";
+    package = lib.mkPackageOption pkgs "fluxbox" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "fluxbox";
       start = ''
-        ${pkgs.fluxbox}/bin/startfluxbox &
+        ${cfg.package}/bin/startfluxbox &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.fluxbox ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
