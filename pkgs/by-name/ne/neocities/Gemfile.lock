@@ -3,13 +3,15 @@ GEM
   specs:
     equatable (0.5.0)
     httpclient-fixcerts (2.8.5)
+    mutex_m (0.3.0)
     necromancer (0.4.0)
-    neocities (0.0.18)
+    neocities (0.0.20)
       httpclient-fixcerts (~> 2.8, >= 2.8.5)
       pastel (~> 0.7, = 0.7.2)
       rake (~> 12.3, >= 12.3.1)
       tty-prompt (~> 0.12, = 0.12.0)
       tty-table (~> 0.10, = 0.10.0)
+      whirly (~> 0.3, >= 0.3.0)
     pastel (0.7.2)
       equatable (~> 0.5.0)
       tty-color (~> 0.4.0)
@@ -35,14 +37,16 @@ GEM
       tty-screen (~> 0.6.4)
     unicode-display_width (1.8.0)
     unicode_utils (1.4.0)
+    whirly (0.3.0)
+      unicode-display_width (>= 1.1)
     wisper (1.6.1)
 
 PLATFORMS
   ruby
-  x86_64-linux
 
 DEPENDENCIES
+  mutex_m (~> 0.3.0)
   neocities
 
 BUNDLED WITH
-   2.5.5
+   2.6.6
