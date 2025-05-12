@@ -24,18 +24,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-F2ZyATDKnUgEOAI++54fR6coJOr9rtyGm5TzsKzkDmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YNRj44bgZfJYMBPI3q9OnWFaG6x1xez8LZM1sIti5mQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-mQyGQXEFmMkTvkZcniws/11u1RqnsxgNi9dvYn1Mx0o=";
+    hash = "sha256-uK5kPPBBa5hI4RHj1RRohur0jzkjwePafY6E9U9vEFk=";
   };
 
   nativeBuildInputs = [
