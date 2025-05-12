@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonAtLeast,
 
   # build-system
@@ -23,9 +23,11 @@ buildPythonPackage rec {
   version = "8.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NcPypBcrMxNqufaz7xwAJg3S9m+FjyTYhBigFfRGUGw=";
+  src = fetchFromGitHub {
+    owner = "lincolnloop";
+    repo = "python-qrcode";
+    tag = "v${version}";
+    hash = "sha256-qLIYUFnBJQGidnfC0bQAkO/aUmT94uXFMeMhnUgUnfQ=";
   };
 
   build-system = [ poetry-core ];
