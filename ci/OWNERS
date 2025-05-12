@@ -171,6 +171,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/python-packages.nix                     @natsukium
 /pkgs/top-level/release-python.nix                      @natsukium
 
+# CUDA
+/pkgs/top-level/cuda-packages.nix             @NixOS/cuda-maintainers
+/pkgs/top-level/release-cuda.nix              @NixOS/cuda-maintainers
+/pkgs/development/cuda-modules                @NixOS/cuda-maintainers
+
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
