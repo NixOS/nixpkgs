@@ -1830,6 +1830,7 @@ mapAliases {
   tor-browser-bundle-bin = tor-browser; # Added 2023-09-23
   torrenttools = throw "torrenttools has been removed due to lack of maintanance upstream"; # Added 2025-04-06
   torq = throw "torq has been removed because the project went closed source"; # Added 2024-11-24
+  torzu = throw "torzu has been removed from nixpkgs, as it is subject to a DMCA takedown"; # Added 2025-05-12
   transmission = lib.warnOnInstantiate (transmission3Warning { }) transmission_3; # Added 2024-06-10
   transmission-gtk = lib.warnOnInstantiate (transmission3Warning {
     suffix = "-gtk";
