@@ -8,7 +8,6 @@
   mock,
   msgpack,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "cachecontrol";
   version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
