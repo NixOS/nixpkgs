@@ -274,8 +274,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags;
-  inherit (cudaFlags) cmakeCudaArchitecturesString cudaCapabilities;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString cudaCapabilities;
 
 in
 
