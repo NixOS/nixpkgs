@@ -436,6 +436,9 @@ let
                 "test-fs-readv-sync"
                 "test-vm-memleak"
               ]
+              ++ lib.optional (
+                stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 && majorVersion == "20"
+              ) "test-tick-processor-arguments" # flaky
             )
           }"
         ];
