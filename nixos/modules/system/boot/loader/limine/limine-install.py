@@ -203,7 +203,8 @@ def copy_file(from_path: str, to_path: str):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
-    shutil.copyfile(from_path, to_path)
+    shutil.copyfile(from_path, to_path + ".tmp")
+    os.rename(to_path + ".tmp", to_path)
 
 def option_from_config(name: str, config_path: List[str], conversion: Callable[[str], str] | None = None) -> str:
     if config(*config_path):
