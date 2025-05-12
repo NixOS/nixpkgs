@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-AiygCfBze7J1Emy6mc27Dim34eLR7VId9wodUZapIL4=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ autoreconfHook ];
 
   doCheck = true;
