@@ -16863,6 +16863,7 @@ with pkgs;
     citron-emu
     torzu
     sudachi
+    eden
     ;
 
   zap-chip-gui = zap-chip.override { withGui = true; };

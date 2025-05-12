@@ -154,4 +154,24 @@
       mainProgram = "sudachi";
     }
   );
+
+  eden = callPackage ./generic.nix (
+    let
+      version = "0.0.2";
+    in
+    {
+      forkName = "eden";
+      inherit version;
+      source = fetchFromGitea {
+        domain = "git.eden-emu.dev";
+        owner = "eden-emu";
+        repo = "eden";
+        rev = "${version}-pre-alpha";
+        hash = "sha256-bf4QF0POVD8siviDxp3n4ZspRm8ETkmAx0WVrg2nyYI=";
+        fetchSubmodules = true;
+      };
+      homepage = "https://git.eden-emu.dev/eden-emu/eden/releases";
+      mainProgram = "eden";
+    }
+  );
 }
