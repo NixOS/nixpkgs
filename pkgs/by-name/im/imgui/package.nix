@@ -45,7 +45,7 @@
   IMGUI_FREETYPE ? false,
   IMGUI_FREETYPE_LUNASVG ? false,
   IMGUI_USE_WCHAR32 ? false,
-}@args:
+}:
 let
   vcpkgRevs.postSdl3 = lib.versionAtLeast vcpkg.version "2025.03.19";
   vcpkgRevs.others = !vcpkgRevs.postSdl3;
