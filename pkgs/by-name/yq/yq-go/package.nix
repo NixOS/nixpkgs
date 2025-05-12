@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "yq-go";
-  version = "4.45.3";
+  version = "4.45.4";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xa0kIdb/Y+1zqGulmQ3qR62E9q4s5CCooYvsUDsZN9E=";
+    hash = "sha256-qcsm7dB7F7Snul2PbH/7RdK17c5qT+mk+FvfqnFfuak=";
   };
 
   vendorHash = "sha256-cA5Y0/2lvYfVXr4zgtp/U8aBUkHnh9xb9jDHVk/2OME=";
