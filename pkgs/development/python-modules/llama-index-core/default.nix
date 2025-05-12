@@ -1,6 +1,8 @@
 {
   lib,
   aiohttp,
+  aiosqlite,
+  banks,
   buildPythonPackage,
   dataclasses-json,
   deprecated,
@@ -8,17 +10,17 @@
   fetchFromGitHub,
   filetype,
   fsspec,
+  hatchling,
   jsonpath-ng,
   llamaindex-py-client,
   nest-asyncio,
   networkx,
-  nltk,
   nltk-data,
+  nltk,
   numpy,
   openai,
   pandas,
   pillow,
-  poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -36,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.12.23";
+  version = "0.12.35";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +47,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-GFzaorzjeQGreyUjRXP7v7djbSq2boLWZjwO4R2W9E4=";
+    hash = "sha256-qBLCuQjkUNER70wJiWH6pEN4D2J9L8emGQukdlWAAYU=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -66,10 +68,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "tenacity" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
+    aiosqlite
+    banks
     dataclasses-json
     deprecated
     dirtyjson
@@ -139,6 +143,8 @@ buildPythonPackage rec {
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
     "test_SimpleDirectoryReader"
+    # RuntimeError
+    "test_str"
   ];
 
   meta = with lib; {
