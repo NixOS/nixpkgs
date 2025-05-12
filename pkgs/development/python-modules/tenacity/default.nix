@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -17,9 +17,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EWnTdsKX5944jRi0SBdg1Hiw6Zp3fK06nIblVvS2l8s=";
+  src = fetchFromGitHub {
+    owner = "jd";
+    repo = "tenacity";
+    tag = version;
+    hash = "sha256-RmoW3gwblwoM4L9QTuc/7gLJJOSxMUYv7FmWxdf/KxE=";
   };
 
   build-system = [ setuptools-scm ];
