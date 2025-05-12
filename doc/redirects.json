@@ -72,9 +72,18 @@
   "cuda-using-cudapackages": [
     "index.html#cuda-using-cudapackages"
   ],
+  "cuda-using-cudapackages-pkgs": [
+    "index.html#cuda-using-cudapackages-pkgs"
+  ],
   "cuda-using-docker-compose": [
     "index.html#cuda-using-docker-compose",
     "index.html#using-docker-compose"
+  ],
+  "cuda-using-pkgscuda": [
+    "index.html#cuda-using-pkgscuda"
+  ],
+  "cuda-using-pkgsforcudaarch": [
+    "index.html#cuda-using-pkgsforcudaarch"
   ],
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
