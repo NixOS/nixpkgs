@@ -21,7 +21,6 @@
   suitesparse,
   crocoddyl,
   pinocchio,
-  proxsuite-nlp,
 
   # checkInputs
   gbenchmark,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i+NQzhYdHQ+KcNxSLELgnMk98mdfN/vbXfRlU3k/dUU=";
+    hash = "sha256-SkhFV/a3A6BqzoicQa7MUgsEuDzd+JfgYvL4ztHg/K0=";
   };
 
   outputs = [
@@ -67,12 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.crocoddyl
       python3Packages.matplotlib
       python3Packages.pinocchio
-      python3Packages.proxsuite-nlp
     ]
     ++ lib.optionals (!pythonSupport) [
       crocoddyl
       pinocchio
-      proxsuite-nlp
     ];
   checkInputs =
     [ gbenchmark ]
