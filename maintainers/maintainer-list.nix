@@ -6485,6 +6485,11 @@
     github = "dietmarw";
     githubId = 9332;
   };
+  different-error = {
+    name = "Sanfer D'souza";
+    github = "different-error";
+    githubId = 9338001;
+  };
   different-name = {
     name = "different-name";
     email = "hello@different-name.dev";
