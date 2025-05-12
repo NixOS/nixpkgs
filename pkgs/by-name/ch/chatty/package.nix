@@ -30,21 +30,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Chatty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iPqV3xluzHPm8TCOOLvczoAPe3LuJuhWEBnQWBUU18U=";
+    hash = "sha256-VQgEXegP4SjniueyVQNx6Jt8/cHUpUcHP0yEa1cF00w=";
   };
-
-  postPatch = ''
-    # https://gitlab.gnome.org/World/Chatty/-/merge_requests/1465
-    substituteInPlace src/matrix/chatty-ma-account.c \
-      --replace-fail '#include <libsecret/secret.h>' ""
-  '';
 
   nativeBuildInputs = [
     appstream-glib
