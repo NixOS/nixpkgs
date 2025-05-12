@@ -1025,6 +1025,7 @@ in
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
   peroxide = handleTest ./peroxide.nix { };
   pgadmin4 = runTest ./pgadmin4.nix;
+  pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = handleTest ./pgbouncer.nix { };
   pghero = runTest ./pghero.nix;
   pgweb = runTest ./pgweb.nix;
