@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   file, # for libmagic
@@ -10,17 +11,17 @@
   zlib,
   cmake,
   gperf,
-  stdenv,
+  nix-update-script,
 }:
 
 let
-  version = "5.4.2";
+  version = "5.6.7";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-NrAU47GA7ZASJ7vCo1S8nyGBpfsZn4EBBqx2c4HKx7k=";
+    hash = "sha256-tHyNwTmpNRKsjjoX2RP1jk5wzn2xLgKE9KZXPo2Beco=";
   };
 
   libcgowm = buildGoModule {
@@ -28,14 +29,18 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-EdbOO5cCDT1CcPlCBgMoPDg65FcoOYvBwZa4bz0hfGE=";
+    vendorHash = "sha256-8q2156gYsKduzEKvxDTZJNzsxqcJr62bD4JNuJMR/Qc=";
 
     buildPhase = ''
+      runHook preBuild
+
       mkdir -p $out/
       go build -o $out/ -buildmode=c-archive
       mv $out/go.a $out/libcgowm.a
       ln -s $out/libcgowm.a $out/libref-cgowm.a
       mv $out/go.h $out/libcgowm.h
+
+      runHook postBuild
     '';
   };
 in
@@ -86,6 +91,16 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
+
+  passthru = {
+    inherit libcgowm;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "libcgowm"
+      ];
+    };
+  };
 
   meta = {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";

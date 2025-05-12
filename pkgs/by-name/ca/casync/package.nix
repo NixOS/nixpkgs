@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation {
   pname = "casync";
-  version = "2-226-gbd8898e";
+  version = "2-unstable-2023-10-16";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "casync";
-    rev = "bd8898ed92685e12022dd33a04c87786b5262344";
-    sha256 = "04ibglizjzyd7ih13q6m7ic78n0mzw9nfmb3zd1fcm9j62qlq11i";
+    rev = "e6817a79d89b48e1c6083fb1868a28f1afb32505";
+    hash = "sha256-L7I80kSG4/ES2tGvHHgvOxJZzF76yeqy2WquKCPhnFk=";
   };
 
   buildInputs =
@@ -39,9 +39,9 @@ stdenv.mkDerivation {
       xz
       zstd
     ]
-    ++ lib.optionals (fuseSupport) [ fuse ]
-    ++ lib.optionals (selinuxSupport) [ libselinux ]
-    ++ lib.optionals (udevSupport) [ udev ];
+    ++ lib.optionals fuseSupport [ fuse ]
+    ++ lib.optionals selinuxSupport [ libselinux ]
+    ++ lib.optionals udevSupport [ udev ];
   nativeBuildInputs = [
     meson
     ninja
