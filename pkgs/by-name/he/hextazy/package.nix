@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TUI hexeditor in Rust with colored bytes";
     homepage = "https://github.com/0xfalafel/hextazy";
-    changelog = "https://github.com/0xfalafel/hextazy/releases/tags/${src.rev}";
+    changelog = "https://github.com/0xfalafel/hextazy/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ akechishiro ];
     mainProgram = "hextazy";
