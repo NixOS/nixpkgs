@@ -1,5 +1,6 @@
 {
   stdenv,
+  nixosTests,
   dotool,
 }:
 
@@ -23,6 +24,10 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) dotool;
+  };
 
   meta = dotool.meta // {
     description = "UDev rules for dotool";
