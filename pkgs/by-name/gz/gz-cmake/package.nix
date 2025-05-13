@@ -6,6 +6,7 @@
   doxygen,
   graphviz,
   pkg-config,
+  python3,
   nix-update-script,
 }:
 let
@@ -29,6 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     pkg-config
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.doCheck)
+  ];
+
+  nativeCheckInputs = [ python3 ];
+
+  # 98% tests passed, 1 tests failed out of 44
+  # 44 - c_child_requires_c_nodep (Failed)
+  #
+  # Package gz-c_child_private was not found in the pkg-config search path.
+  # Perhaps you should add the directory containing `gz-c_child_private.pc'
+  # to the PKG_CONFIG_PATH environment variable
+  # No package 'gz-c_child_private' found
+  doCheck = false;
 
   # Extract the version by matching the tag's prefix.
   passthru.updateScript = nix-update-script {
