@@ -1,0 +1,55 @@
+{
+    "release_date": "2022-08-09",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "version": "8.5.0.96",
+        "linux-x86_64": {
+            "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.5.0.96_cuda11-archive.tar.xz",
+            "sha256": "5454a6fd94f008728caae9adad993c4e85ef36302e26bce43bea7d458a5e7b6d",
+            "md5": "2c7878f9c383117918695e7f98a9aa86",
+            "size": "692647752"
+        },
+        "linux-ppc64le": {
+            "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-8.5.0.96_cuda11-archive.tar.xz",
+            "sha256": "00373c3d5e0b536a5557d0d0eb50706777f213a222b4030e1b71b1bec43d205f",
+            "md5": "5681cd14bf9cd7f09aa911d36187cc31",
+            "size": "696655296"
+        },
+        "linux-sbsa": {
+            "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-8.5.0.96_cuda11-archive.tar.xz",
+            "sha256": "86780abbecd4634e7363fad1d000ae23b7905a5f8383bddbf7332c6934791dde",
+            "md5": "f5a8d567b2a5add62be36f0dfb575461",
+            "size": "683894696"
+        },
+        "windows-x86_64": {
+            "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.5.0.96_cuda11-archive.zip",
+            "sha256": "bf277ed350addb8f97e0ab6a20b6fad869abe49ea24277d38ca79f5f23fbec6b",
+            "md5": "8c0bafe2f2761a9b3bcc5ce78a6fad55",
+            "size": "542516637"
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "version": "8.5.0.96",
+        "linux-x86_64": {
+            "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.5.0.96_cuda11-archive.tar.xz",
+            "sha256": "fbceac5e05d05394b8ae15925a9d4b6985fd9311d387efbfc0b560fc670d84d9",
+            "md5": "bee1fea86ccd48d1c6bc50a8577cf45b",
+            "size": "1666248"
+        },
+        "linux-ppc64le": {
+            "relative_path": "cudnn_samples/linux-ppc64le/cudnn_samples-linux-ppc64le-8.5.0.96_cuda11-archive.tar.xz",
+            "sha256": "be0aef97ecdd94e9a701989e74b74a57886928943fc9a0183041fcfa95acaaac",
+            "md5": "b3fb9e387127ca96daa1453b93f676c7",
+            "size": "1666292"
+        },
+        "linux-sbsa": {
+            "relative_path": "cudnn_samples/linux-sbsa/cudnn_samples-linux-sbsa-8.5.0.96_cuda11-archive.tar.xz",
+            "sha256": "b6310d69708ca52435b10ce960c2f327f3d01a42e2f906def1c4e8d1db958d26",
+            "md5": "a5a9173f4acb578cfc705936e838f3eb",
+            "size": "1666040"
+        }
+    }
+}
