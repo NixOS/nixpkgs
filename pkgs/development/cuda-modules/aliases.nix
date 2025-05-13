@@ -9,6 +9,11 @@ in
 builtins.mapAttrs mkRenamed {
   # A comment to prevent empty { } from collapsing into a single line
 
+  cudaFlags = {
+    path = "cudaPackages.flags";
+    package = final.flags;
+  };
+
   cudaVersion = {
     path = "cudaPackages.cudaMajorMinorVersion";
     package = final.cudaMajorMinorVersion;
