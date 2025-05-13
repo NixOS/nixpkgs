@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-
 stdenvNoCC.mkDerivation {
   pname = "dm-mono";
   version = "1.0-unstable-2020-04-15";
@@ -26,6 +25,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Monospace typeface";
     homepage = "https://github.com/googlefonts/dm-mono";
+    changelog = "https://github.com/googlefonts/dm-mono/blob/main/CHANGELOG.md";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ jennifgcrl ];
   };
