@@ -109,8 +109,9 @@ buildPythonPackage rec {
     poppler-utils
     pytest-django
     pytest-factoryboy
-    pytest-playwright
     pytestCheckHook
+  ] ++ lib.optional lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers [
+    pytest-playwright
   ];
 
   disabledTests = [
