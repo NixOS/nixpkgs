@@ -2538,6 +2538,11 @@ with pkgs;
       # If we want to switch for that before upstream fixes it, use this patch:
       # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
       fmt = fmt_9;
+
+      # Remove once Ceph supports arrow-cpp >= 20, see:
+      # * https://tracker.ceph.com/issues/71269
+      # * https://github.com/NixOS/nixpkgs/issues/406306
+      arrow-cpp = callPackage ../tools/filesystems/ceph/arrow-cpp-19.nix { };
     })
     ceph
     ceph-client
@@ -10908,6 +10913,10 @@ with pkgs;
   };
 
   stalwart-mail-webadmin = stalwart-mail.webadmin;
+
+  stalwart-mail-enterprise = stalwart-mail.override {
+    stalwartEnterprise = true;
+  };
 
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
 
