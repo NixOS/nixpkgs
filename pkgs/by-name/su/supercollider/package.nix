@@ -15,6 +15,7 @@
   libXt,
   qtbase,
   qttools,
+  qtwayland,
   qtwebengine,
   readline,
   qtwebsockets,
@@ -53,18 +54,23 @@ mkDerivation rec {
     qttools
   ] ++ lib.optionals useSCEL [ emacs ];
 
-  buildInputs = [
-    gcc
-    libjack2
-    libsndfile
-    fftw
-    curl
-    libXt
-    qtbase
-    qtwebengine
-    qtwebsockets
-    readline
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  buildInputs =
+    [
+      gcc
+      libjack2
+      libsndfile
+      fftw
+      curl
+      libXt
+      qtbase
+      qtwebengine
+      qtwebsockets
+      readline
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      alsa-lib
+      qtwayland
+    ];
 
   hardeningDisable = [ "stackprotector" ];
 
