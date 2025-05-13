@@ -10,9 +10,9 @@
   httpx,
   netifaces,
   pytest-asyncio,
-  pytestCheckHook,
   pytest-httpx,
   pytest-timeout,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -21,8 +21,6 @@ buildPythonPackage rec {
   pname = "denonavr";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ol-iver";
