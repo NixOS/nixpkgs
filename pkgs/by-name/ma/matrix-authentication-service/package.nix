@@ -14,14 +14,14 @@
   cctools,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/UrMmC5DTxoN6uzvTB+V3//hGQmKlkYvi5Lv4p31fq4=";
   };
 
@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-UvRv69rHqPNqTg5nhUojTDHEFUIXF8LEB4ndzA7CHc0=";
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = "${src}/${npmRoot}";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
     hash = "sha256-7EN8GIO8VutAZujVvgM67fGIXWD2aJhHhEJrTeHRiGE=";
   };
 
@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
@@ -85,9 +86,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
     homepage = "https://github.com/element-hq/matrix-authentication-service";
-    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
   };
-}
+})

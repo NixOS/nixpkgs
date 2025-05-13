@@ -37,11 +37,12 @@
   uvloop,
   uvicorn,
   nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.65.0";
+  version = "1.69.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}-stable";
-    hash = "sha256-q6FDgSwU3G41bVvdofsTBVG90xoqi+NP6zUg9geNz9I=";
+    hash = "sha256-W2uql9fKzwAmSgeLTuESguh+dVn+b3JNTeGlCc9NP2A=";
   };
 
   build-system = [ poetry-core ];
@@ -99,11 +100,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "litellm" ];
 
+  # Relax dependency check on openai, may not be needed in the future
+  pythonRelaxDeps = [ "openai" ];
+
   # access network
   doCheck = false;
 
-  passthru.tests = {
-    inherit (nixosTests) litellm;
+  passthru = {
+    tests = { inherit (nixosTests) litellm; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)-stable"
+      ];
+    };
   };
 
   meta = {
