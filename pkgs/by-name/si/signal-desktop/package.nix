@@ -84,6 +84,7 @@ let
       hash = "sha256-TuPyRVNFIlR0A4YHMpQsQ6m+lm2fsp79FzQ1P5qqjIc=";
     };
 
+    strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpm.configHook
@@ -106,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop";
   inherit src version;
 
+  strictDeps = true;
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
