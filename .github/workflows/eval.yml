@@ -166,7 +166,7 @@ jobs:
   tag:
     name: Tag
     runs-on: ubuntu-24.04-arm
-    needs: [ process ]
+    needs: [ get-merge-commit, process ]
     if: needs.process.outputs.targetRunId
     permissions:
       pull-requests: write
