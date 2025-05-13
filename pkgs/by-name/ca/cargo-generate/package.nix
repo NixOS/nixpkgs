@@ -18,8 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
   };
 
   useFetchCargoVendor = true;
