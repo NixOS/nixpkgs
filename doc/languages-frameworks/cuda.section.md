@@ -1,69 +1,125 @@
 # CUDA {#cuda}
 
-CUDA-only packages are stored in the `cudaPackages` packages set. This set
-includes the `cudatoolkit`, portions of the toolkit in separate derivations,
-`cudnn`, `cutensor` and `nccl`.
+Compute Unified Device Architecture (CUDA) is a parallel computing platform and application programming interface (API) model created by NVIDIA. It's commonly used to accelerate computationally intensive problems and has been widely adopted for High Performance Computing (HPC) and Machine Learning (ML) applications.
 
-A package set is available for each CUDA version, so for example
-`cudaPackages_11_6`. Within each set is a matching version of the above listed
-packages. Additionally, other versions of the packages that are packaged and
-compatible are available as well. For example, there can be a
-`cudaPackages.cudnn_8_3` package.
+Packages which require CUDA are typically stored in the CUDA package sets.
 
-To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
+Nixpkgs provides a number of CUDA package sets, each based on a different CUDA release. Generally, there are three forms of name:
+
+- `cudaPackages_x_y`: A major-minor-versioned package set for a specific CUDA release, where `x` and `y` are the major and minor versions of the CUDA release.
+- `cudaPackages_x`: A major-versioned alias to the major-minor-versioned CUDA package set with the latest widely supported major CUDA release.
+- `cudaPackages`: An alias to the major-versioned alias for the latest widely supported CUDA release. This package set referenced by this alias is also referred to as the "default" CUDA package set. As an example, which is an alias to the most recent variant of `cudaPackages_x`. This is also referred to as the "default" CUDA package set.
+
+Two examples to illustrate:
+
+- If `cudaPackages_12_8` is the latest release in the 12.x series, but core libraries like OpenCV or ONNX Runtime fail to build with it, `cudaPackages_12` may alias `cudaPackages_12_6` instead of `cudaPackages_12_8`.
+- If `cudaPackages_13_1` is the latest release, but core libraries like PyTorch or Torch Vision fail to build with it, `cudaPackages` may alias `cudaPackages_12` instead of `cudaPackages_13`.
+
+All CUDA package sets include common CUDA packages like `libcublas`, `cudnn`, `tensorrt`, and `nccl`.
+
+## Configuring Nixpkgs for CUDA {#cuda-configuring-nixpkgs-for-cuda}
+
+CUDA support is not enabled by default in Nixpkgs. To enable CUDA support, make sure Nixpkgs is imported with a configuration similar to the following:
+
+```nix
+{
+  allowUnfreePredicate =
+    let
+      ensureList = x: if builtins.isList x then x else [ x ];
+    in
+    package:
+    builtins.all (
+      license:
+      license.free
+      || builtins.elem license.shortName [
+        "CUDA EULA"
+        "cuDNN EULA"
+        "cuSPARSELt EULA"
+        "cuTENSOR EULA"
+        "NVidia OptiX EULA"
+      ]
+    ) (ensureList package.meta.license);
+  cudaCapabilities = [ ... ];
+  cudaForwardCompat = true;
+  cudaSupport = true;
+}
+```
+
+The majority of CUDA packages are unfree, so either `allowUnfreePredicate` or `allowUnfree` should be set.
+
+The `cudaSupport` configuration option is used by packages to conditionally enable CUDA-specific functionality. This configuration option is commonly used by packages which can be built with or without CUDA support.
+
+The `cudaCapabilities` configuration option specifies a list of CUDA capabilities. Packages may use this option to control device code generation to take advantage of architecture-specific functionality, speed up compile times by producing less device code, or slim package closures. As an example, one can build for Ada Lovelace GPUs with `cudaCapabilities = [ "8.9" ];`. If `cudaCapabilities` is not provided, the default value is calculated per-package set, derived from a list of GPUs supported by that version of CUDA. Please consult [supported GPUs](https://en.wikipedia.org/wiki/CUDA#GPUs_supported) for specific cards. Library maintainers should consult [NVCC Docs](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/) and its release notes.
+
+The `cudaForwardCompat` boolean configuration option determines whether PTX support for future hardware is enabled.
+
+## Configuring CUDA package sets {#cuda-configuring-cuda-package-sets}
+
+CUDA package sets are created by `callPackage`.
+
+::: {.important}
+The `cudaLib` and `cudaFixups` attributes are not part of the CUDA package set fixed-point, but are instead provided by `callPackage` from the top-level in the construction of the package set. As such, for changes to `cudaLib` or `cudaFixups` to take effect, they should be modified at the top-level or overridden via the package set's `override` attribute.
+:::
+
+The `cudaFixups` attribute set is a mapping from package name to a `callPackage`-able expression which will be provided to `overrideAttrs` on the result of our generic builder.
+
+::: {.important}
+The fixup is chosen by `pname`, so packages with multiple versions (e.g., `cudnn`, `cudnn_8_9`, etc.) all share a single fixup function (i.e., `pkgs/development/cuda-modules/fixups/cudnn.nix`).
+:::
+
+As an example, you can change the fixup function used for cuDNN for only the default CUDA package set with this overlay:
+
+```nix
+final: prev: {
+  cudaPackages = prev.cudaPackages.override (prevAttrs: {
+    cudaFixups = prevAttrs.cudaFixups // {
+      cudnn = <your-fixup-function>;
+    };
+  });
+}
+```
+
+## Using cudaPackages {#cuda-using-cudapackages}
+
+::: {.important}
+A non-trivial amount of CUDA package discoverability and usability relies on the various setup hooks used by a CUDA package set. As a result, users will likely encounter issues trying to perform builds within a `devShell` without manually invoking phases.
+:::
+
+Nixpkgs makes CUDA package sets available under a number of attributes. While versioned package sets are available (e.g., `cudaPackages_12_2`), it is recommended to use the unversioned `cudaPackages` attribute, which is an alias to the latest version, as versioned attributes are periodically removed.
+
+To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA support is optional, add a `config` and `cudaSupport` parameter:
+
 ```nix
 {
   config,
   cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-  ...
+  cudaPackages,
 }:
-{ }
+...
 ```
 
-When using `callPackage`, you can choose to pass in a different variant, e.g.
-when a different version of the toolkit suffices
+In your package's derivation arguments, it is _strongly_ recommended the following are set:
+
 ```nix
 {
-  mypkg = callPackage { cudaPackages = cudaPackages_11_5; };
+  __structuredAttrs = true;
+  strictDeps = true;
 }
 ```
 
-If another version of say `cudnn` or `cutensor` is needed, you can override the
-package set to make it the default. This guarantees you get a consistent package
-set.
+These settings ensure that the CUDA setup hooks function as intended.
+
+When using `callPackage`, you can choose to pass in a different variant, e.g. when a package requires a specific version of CUDA:
+
 ```nix
 {
-  mypkg =
-    let
-      cudaPackages = cudaPackages_11_5.overrideScope (
-        final: prev: {
-          cudnn = prev.cudnn_8_3;
-        }
-      );
-    in
-    callPackage { inherit cudaPackages; };
+  mypkg = callPackage { cudaPackages = cudaPackages_12_2; };
 }
 ```
 
-The CUDA NVCC compiler requires flags to determine which hardware you
-want to target for in terms of SASS (real hardware) or PTX (JIT kernels).
-
-Nixpkgs tries to target support real architecture defaults based on the
-CUDA toolkit version with PTX support for future hardware.  Experienced
-users may optimize this configuration for a variety of reasons such as
-reducing binary size and compile time, supporting legacy hardware, or
-optimizing for specific hardware.
-
-You may provide capabilities to add support or reduce binary size through
-`config` using `cudaCapabilities = [ "6.0" "7.0" ];` and
-`cudaForwardCompat = true;` if you want PTX support for future hardware.
-
-Please consult [GPUs supported](https://en.wikipedia.org/wiki/CUDA#GPUs_supported)
-for your specific card(s).
-
-Library maintainers should consult [NVCC Docs](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/)
-and release notes for their software package.
+::: {.important}
+Overriding the CUDA package set used by a package may cause inconsistences, since the override does not affect dependencies of the package. As a result, it is easy to end up with a package which uses a different CUDA package set than its dependencies. If at all possible, it is recommended to change the default CUDA package set globally, to ensure a consistent environment.
+:::
 
 ## Adding a new CUDA release {#adding-a-new-cuda-release}
 
@@ -148,11 +204,11 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 2. Successfully build the closure of the new package set, updating `pkgs/development/cuda-modules/cuda/overrides.nix` as needed. Below are some common failures:
 
-| Unable to ... | During ... | Reason | Solution | Note |
-| --- | --- | --- | --- | --- |
-| Find headers | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contain the headers |
-| Find libraries | `configurePhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contain CMake configuration files |
-| Find libraries | `buildPhase` or `patchelf` | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
+| Unable to ...  | During ...                       | Reason                                           | Solution                   | Note                                                         |
+| -------------- | -------------------------------- | ------------------------------------------------ | -------------------------- | ------------------------------------------------------------ |
+| Find headers   | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contain the headers               |
+| Find libraries | `configurePhase`                 | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contain CMake configuration files |
+| Find libraries | `buildPhase` or `patchelf`       | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
 
 In the scenario you are unable to run the resulting binary: this is arguably the most complicated as it could be any combination of the previous reasons. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. As a first step, ensure that dependencies are patched with [`autoAddDriverRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=autoAddDriverRunpath). Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
 
