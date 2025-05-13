@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "krillinai";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "krillinai";
     repo = "KrillinAI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-espj6BFc0GA5pURyly1HV3rIqyEgd1S/bmqkUPczTqM=";
+    hash = "sha256-jQlgkpQ+UTzn6MqGa+yVQ9v04IGGlMQQim3s0Oc9Zts=";
   };
 
   vendorHash = "sha256-mpvypCZmvVVljftGpcV1aea3s7Xmhr0jLfKZIZ0nkX8=";
