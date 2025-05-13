@@ -110,9 +110,8 @@ buildPythonPackage rec {
     pytest-django
     pytest-factoryboy
     pytestCheckHook
-  ] ++ lib.optional lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers [
-    pytest-playwright
-  ];
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers) pytest-playwright;
 
   disabledTests = [
     # AssertionError: Locator expected to be visible
