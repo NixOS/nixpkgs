@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "2.3.0";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JMOFWke/qO3cWHuhWJChzaH+sD5AVqYCTTz0Q0+r2AE=";
+    hash = "sha256-WS9awjnJV0ok6ePlLcpHPAr2gsZjbZcdFSDEmyx7vwk=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DSVT_AV1_LTO=ON"
+    "-DUSE_CPUINFO=OFF"
   ];
 
   passthru = {
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/AOMediaCodec/SVT-AV1";
     description = "AV1-compliant encoder/decoder library core";
 
@@ -53,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       aom
       bsd3
     ];
-    maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ Madouura ];
+    platforms = lib.platforms.unix;
   };
 })
