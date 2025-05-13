@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reflection-cpp";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "reflection-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3TVoJkM+4RmB+KwWEpGo7gvzqCASNBmDHT+AzkR5KKk=";
+    hash = "sha256-ylaAS0zlkiJlBwibFBIyNOQ2h6IGRXTiKV1g6So9M9s=";
   };
 
   nativeBuildInputs = [ cmake ];

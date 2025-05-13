@@ -171,6 +171,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/python-packages.nix                     @natsukium
 /pkgs/top-level/release-python.nix                      @natsukium
 
+# CUDA
+/pkgs/top-level/cuda-packages.nix             @NixOS/cuda-maintainers
+/pkgs/top-level/release-cuda.nix              @NixOS/cuda-maintainers
+/pkgs/development/cuda-modules                @NixOS/cuda-maintainers
+
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
@@ -304,8 +309,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/dlang @jtbx @TomaSajt
 
 # Dhall
-/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
-/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
+/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
+/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
@@ -378,12 +383,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Xfce
 /doc/hooks/xfce4-dev-tools.section.md @NixOS/xfce
-
-# nim
-/doc/languages-frameworks/nim.section.md  @ehmry
-/pkgs/build-support/build-nim-package.nix @ehmry
-/pkgs/build-support/build-nim-sbom.nix    @ehmry
-/pkgs/top-level/nim-overrides.nix         @ehmry
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
