@@ -24,7 +24,7 @@ let
     cuda_cudart
     cuda_nvcc
     cuda_nvml_dev
-    cudaFlags
+    flags
     nccl
     ;
 
@@ -101,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals enableAvx [ "--with-avx" ]
     ++ optionals enableCuda [
       "--with-cuda=${cuda_nvcc}"
-      "--with-nvcc-gencode=${concatStringsSep " " cudaFlags.gencode}"
+      "--with-nvcc-gencode=${concatStringsSep " " flags.gencode}"
     ];
 
   postInstall = ''

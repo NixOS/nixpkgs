@@ -14,17 +14,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-away";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitea {
     domain = "git.gammaspectra.live";
     owner = "git";
     repo = "go-away";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-txHS7KljO7t/VoRonsELPo8cELxpaDmQmD24Ta+kPMw=";
+    hash = "sha256-5rcuR3ke+BSgYJQbJhqQmDgjrtj6jt1Q18eLkRpp8wE=";
   };
 
-  vendorHash = "sha256-bSIG7m7f/dexJeGbvCLSGCWZNEXXqrUdI1ArZuOBoeA=";
+  vendorHash = "sha256-DOAJrQlh+5gfxKIBbf5rEYt+hZ0luNkX4MxtwNoLiKo=";
 
   nativeBuildInputs = [
     # build-compress.sh
