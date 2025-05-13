@@ -49,6 +49,7 @@ stdenvNoCC.mkDerivation (
     postPatch = ''
       ln -s ${optionsJSON}/share/doc/nixos/options.json ./config-options.json
       ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
+      ln -s ${treefmt.optionsDoc.optionsJSON}/share/doc/nixos/options.json ./treefmt-options.json
     '';
 
     buildPhase = ''
