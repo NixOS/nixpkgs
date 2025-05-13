@@ -23,7 +23,7 @@
   perl,
   pkg-config,
   python3Packages,
-  systemdMinimal,
+  systemd,
   xz,
   yajl,
   zlib,
@@ -62,6 +62,7 @@
 let
   inherit (lib)
     enableFeature
+    getExe
     getExe'
     licenses
     makeSearchPathOutput
@@ -84,7 +85,6 @@ let
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.17";
 
-  #TODO: fix paths instead.
   scriptEnvPath = makeSearchPathOutput "out" "bin" [
     bridge-utils
     coreutils
@@ -145,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-07.patch";
       hash = "sha256-+BsCJa01R2lrbu7tEluGrYSAqu2jJcrpFNUoLMY466c=";
     })
+
+    # XSA #470
     (fetchpatch {
       url = "https://xenbits.xenproject.org/xsa/xsa470.patch";
       hash = "sha256-zhMZ6pCZtt0ocgsMFVqthMaof46lMMTaYmlepMXVJqM=";
@@ -203,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
       zstd
     ]
     ++ optionals withFlask [ checkpolicy ]
-    ++ optionals (versionOlder finalAttrs.version "4.19") [ systemdMinimal ];
+    ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ];
 
   configureFlags = [
     "--enable-systemd"
@@ -225,8 +227,8 @@ stdenv.mkDerivation (finalAttrs: {
       "XEN_WHOAMI=${finalAttrs.pname}"
       "XEN_DOMAIN=${finalAttrs.vendor}"
 
-      "GIT=${coreutils}/bin/false"
-      "WGET=${coreutils}/bin/false"
+      "GIT=${getExe' coreutils "false"}"
+      "WGET=${getExe' coreutils "false"}"
       "EFI_VENDOR=${finalAttrs.vendor}"
       "INSTALL_EFI_STRIP=1"
       "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
@@ -255,7 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   # Remove in-tree QEMU sources, we don't need them in any circumstance.
-  prePatch = "rm --recursive --force tools/qemu-xen tools/qemu-xen-traditional";
+  prePatch = "rm -rf tools/qemu-xen tools/qemu-xen-traditional";
 
   postPatch =
     # The following patch forces Xen to install xen.efi on $out/boot
@@ -273,7 +275,7 @@ stdenv.mkDerivation (finalAttrs: {
     # launch_xenstore.sh helper script.
     + ''
       substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
-        --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+        --replace-fail "/bin/mkdir" "${getExe' coreutils "mkdir"}"
     ''
 
     # The following expression fixes the paths called by Xen's systemd
@@ -281,16 +283,16 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace \
         tools/hotplug/Linux/systemd/{xen-init-dom0,xen-qemu-dom0-disk-backend,xenconsoled,xendomains,xenstored}.service.in \
-        --replace-fail /bin/grep ${gnugrep}/bin/grep
+        --replace-fail /bin/grep ${getExe gnugrep}
       substituteInPlace \
        tools/hotplug/Linux/systemd/{xen-qemu-dom0-disk-backend,xenconsoled}.service.in \
-        --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+        --replace-fail "/bin/mkdir" "${getExe' coreutils "mkdir"}"
     '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir --parents $out $out/share $boot
+    mkdir -p $out $out/share $boot
     cp -prvd dist/install/nix/store/*/* $out/
     cp -prvd dist/install/etc $out
     cp -prvd dist/install/boot $boot
@@ -310,11 +312,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
 
     # Fix shebangs in Xen's various scripts.
-    #TODO: Remove any and all usage of `sed` and replace these complicated magic runes with readable code.
+    # TODO: Patch the individual calls instead.
     + ''
       shopt -s extglob
       for i in $out/etc/xen/scripts/!(*.sh); do
-        sed --in-place "2s@^@export PATH=$out/bin:${scriptEnvPath}\n@" $i
+        sed -i "2s@^@export PATH=$out/bin:${scriptEnvPath}\n@" $i
       done
     '';
 
