@@ -34,7 +34,7 @@ buildPythonApplication {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-VHONba7ywvIFlH1swUU8oCTu+Y+RcerqJMe6+URgldo=";
+    hash = "sha256-ApoAcYaqPIurgDM+ctyyx9+OyUmhJ+1fjdGj0ln6v7w=";
   };
 
   build-system = [ setuptools ];
