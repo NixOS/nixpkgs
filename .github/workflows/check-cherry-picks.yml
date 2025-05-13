@@ -1,6 +1,9 @@
 name: "Check cherry-picks"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/check-cherry-picks.yml
   pull_request_target:
     branches:
       - 'release-**'
