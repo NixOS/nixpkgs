@@ -10,6 +10,7 @@
   openssl,
   gitMinimal,
   gitSetupHook,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,10 +27,6 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-CmDTNE0nn2BxB//3vE1ao+xnzA1JBhIQdqcQNWuIKHU=";
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeBuildInputs = [
     perl
     pkg-config
@@ -45,6 +42,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     gitMinimal
     gitSetupHook
+    writableTmpDirAsHomeHook
   ];
 
   meta = {
