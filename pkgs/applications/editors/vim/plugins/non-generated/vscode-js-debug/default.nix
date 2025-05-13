@@ -26,6 +26,13 @@ let
     npmPackFlags = [ "--ignore-scripts" "--legacy-peer-deps" ];
     makeCacheWritable = true;
 
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+      libsecret
+      gcc
+      node-gyp
+    ];
+
     NODE_OPTIONS = "--openssl-legacy-provider";
   });
 
