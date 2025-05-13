@@ -25,6 +25,7 @@
   cudaFixups,
   cudaLib,
   cudaMajorMinorVersion,
+  cudaPackagesExtensions,
   lib,
   newScope,
   pkgs,
@@ -202,6 +203,7 @@ let
       (import ../development/cuda-modules/cuda-library-samples/extension.nix { inherit lib stdenv; })
     ]
     ++ lib.optionals config.allowAliases [ (import ../development/cuda-modules/aliases.nix) ]
+    ++ cudaPackagesExtensions
   );
 
   cudaPackages = customisation.makeScope newScope (
