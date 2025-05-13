@@ -11,12 +11,12 @@
 rebar3Relx rec {
   releaseType = "escript";
   pname = "elvis-erlang";
-  version = "4.0.0";
+  version = "4.0.0-otp24";
 
   src = fetchFromGitHub {
     owner = "inaka";
     repo = "elvis";
-    hash = "sha256-HJH/p8EHE4zor0LOczpOlDy6sPSI+WVWIS22hGhjQ0s=";
+    hash = "sha256-U327vNqS8pkIQLM4e4c8YDkX9KH8Q8/h+64zaick/Y4=";
     tag = version;
   };
 
