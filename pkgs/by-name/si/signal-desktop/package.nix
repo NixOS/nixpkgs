@@ -128,12 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   preBuild = ''
-    if [ "`jq -r '.engines.node' < package.json | head -c 2`" != `head -c 2 <<< "${nodejs.version}"` ]
+    if [ "`jq -r '.engines.node' < package.json | cut -d. -f1`" != "${lib.versions.major nodejs.version}" ]
     then
       die "nodejs version mismatch"
     fi
 
-    if [ "`jq -r '.devDependencies.electron' < package.json | head -c 2`" != `head -c 2 <<< "${electron.version}"` ]
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1`" != "${lib.versions.major electron.version}" ]
     then
       die "electron version mismatch"
     fi
