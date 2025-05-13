@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qT4HM/FRL8qugKKNlMYM/0zgUsC6cDOa9fgd1d4VIrc=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
