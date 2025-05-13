@@ -7,6 +7,7 @@
   runtimeInputs ? [
     calibre
   ],
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -77,6 +78,12 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [
     "taguette"
   ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) taguette;
+    };
+  };
 
   meta = {
     description = "Free and open source qualitative research tool";
