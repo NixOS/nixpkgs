@@ -179,11 +179,10 @@ in
 
       enableStrictShellChecks = true;
       serviceConfig = {
-        Type = "oneshot";
+        Type = "notify";
       };
       path = [
         cfg.package
-        pkgs.coreutils # date
         pkgs.iproute2 # ip
         pkgs.jq
       ];
@@ -199,39 +198,32 @@ in
         in
         # bash
         ''
-          timeout=$((1000 * 30)) # 30s in ms
-          start=$(date +%s%3N)   # start time in ms
-          end=$((start + timeout))
-
-          # exit 1 to let systemd continue (and activation rollback)
-          timeCheck() {
-            current=$(date +%s%3N)
-            if [[ $current -ge $end ]]; then
-              echo "Timed out $1"
-              exit 1
-            fi
-          }
-
-          statusCommand() {
+          getState() {
             tailscale status --json --peers=false | jq -r '.BackendState'
           }
 
-          echo "Waiting for Tailscale daemon"
-          while [[ "$(statusCommand)" == "NoState" ]]; do
-            sleep 0.5
-            timeCheck "waiting for Tailscale login"
+          while true; do
+            status="$(getState)"
+            # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+            case "$status" in
+              NoState)
+                echo "Daemon is in NoState, waiting for it to initialize."
+                sleep 0.5
+                ;;
+              NeedsLogin | NeedsMachineAuth)
+                echo "Server needs authentication ($status), sending auth key."
+                tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                ;;
+              Running)
+                echo "Tailscale is running."
+                break
+                ;;
+              *)
+                echo "Tailscale is in state ($status). Waiting for desired state."
+                sleep 1
+                ;;
+            esac
           done
-          echo "Tailscale connected to control server"
-
-          echo "Checking if authentication needed"
-          status="$(statusCommand)"
-          # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
-          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            echo "Sending authentication"
-            tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
-          elif [[ "$status" == "Running" ]]; then
-            echo "Tailscale is running"
-          fi
 
           addrsUp() {
             out="$(ip -oneline -json address show ${cfg.interfaceName})"
@@ -240,12 +232,13 @@ in
                 and any(.family == "inet6" and .scope == "global")' >/dev/null
           }
 
-          echo "Waiting for Tailscale interface IPs to be configured"
           until addrsUp; do
+            echo "Waiting for Tailscale interface IPs to be configured."
             sleep 0.5
-            timeCheck "waiting for IPs to configure"
           done
-          echo "Tailscale IPs configured"
+          echo "Tailscale IPs configured."
+
+          systemd-notify --ready
         '';
     };
 
