@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "dm-mono";
-  version = "0.0";
+  version = "1.0-unstable-2020-04-15";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
