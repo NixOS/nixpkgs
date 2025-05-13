@@ -5,6 +5,10 @@
   python,
 
   # build-system
+  cmake,
+  conan,
+  cython,
+  jupyterlab,
   setuptools,
 
   # dependencies
@@ -28,9 +32,23 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/catboost/python-package";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml setup.py \
+      --replace-fail "conan ~= 2.4.1" conan \
+      --replace-fail "cython ~= 3.0.10" cython \
+      --replace-fail "jupyterlab (>=3.0.6, <3.6.0)" jupyterlab
+  '';
+
   build-system = [
+    cmake
+    conan
+    cython
+    jupyterlab
+    numpy
     setuptools
   ];
+
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     graphviz
@@ -42,14 +60,10 @@ buildPythonPackage rec {
     six
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    # these arguments must set after bdist_wheel
-    ${python.pythonOnBuildForHost.interpreter} setup.py bdist_wheel --no-widget --prebuilt-extensions-build-root-dir=${lib.getDev catboost}
-
-    runHook postBuild
-  '';
+  pypaBuildFlags = [
+    "-C--no-widget"
+    "-C--prebuilt-extensions-build-root-dir=${lib.getDev catboost}"
+  ];
 
   # setup a test is difficult
   doCheck = false;
