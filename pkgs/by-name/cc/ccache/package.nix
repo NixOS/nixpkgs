@@ -15,6 +15,8 @@
   doctest,
   xcodebuild,
   makeWrapper,
+  ctestCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -82,31 +84,24 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
+    ctestCheckHook
+    writableTmpDirAsHomeHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
   ];
 
-  checkPhase =
-    let
-      badTests =
-        [
-          "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "test.basedir"
-          "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
-          "test.multi_arch"
-          "test.nocpp2"
-        ];
-    in
-    ''
-      runHook preCheck
-      export HOME=$(mktemp -d)
-      ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
-      runHook postCheck
-    '';
+  disabledTests =
+    [
+      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+      "test.fileclone" # flaky on hydra, also seems to fail on zfs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test.basedir"
+      "test.multi_arch"
+      "test.nocpp2"
+    ];
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
