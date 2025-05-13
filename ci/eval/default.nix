@@ -73,7 +73,9 @@ let
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       checkMeta ? true,
-      includeBroken ? true,
+
+      # Don't try to eval packages marked as broken.
+      includeBroken ? false,
       # Whether to just evaluate a single chunk for quick testing
       quickTest ? false,
     }:
