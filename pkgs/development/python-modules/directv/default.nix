@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   aiohttp,
   yarl,
   aresponses,
@@ -12,13 +13,13 @@
 buildPythonPackage rec {
   pname = "directv";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-directv";
-    rev = version;
-    sha256 = "19jckf6qvl8fwi8yff1qy8c44xdz3zpi1ip1md6zl2c503qc91mk";
+    tag = version;
+    hash = "sha256-s4bE8ACFCfpNq+HGEO8fv3VCGPI4OOdR5A7RjY2bTKY=";
   };
 
   postPatch = ''
@@ -27,7 +28,9 @@ buildPythonPackage rec {
       --replace-fail "with async_timeout.timeout" "async with async_timeout.timeout"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     yarl
   ];
@@ -45,10 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "directv" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ctalkington/python-directv/releases/tag/${src.tag}";
     description = "Asynchronous Python client for DirecTV (SHEF)";
     homepage = "https://github.com/ctalkington/python-directv";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
