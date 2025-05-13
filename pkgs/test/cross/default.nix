@@ -71,7 +71,7 @@ let
 
   mapMultiPlatformTest =
     crossSystemFun: test:
-    lib.recurseIntoAttrs (
+    lib.dontRecurseIntoAttrs (
       lib.mapAttrs (
         name: system:
         lib.recurseIntoAttrs (test rec {
