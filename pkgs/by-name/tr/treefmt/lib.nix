@@ -1,53 +1,71 @@
 {
   lib,
-  runCommand,
-  formats,
+  pkgs,
   treefmt,
-  makeBinaryWrapper,
 }:
 {
+  /**
+    Evaluate a treefmt configuration.
+
+    # Type
+
+    ```
+    Module -> Configuration
+    ```
+
+    # Inputs
+
+    `module`
+    : A treefmt module, configuring options that include:
+      - `name`: `String` (default `"treefmt-with-config"`)
+      - `settings`: `Module` (default `{ }`)
+      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
+  */
+  evalConfig =
+    module:
+    lib.evalModules {
+      class = "treefmtConfig";
+      specialArgs.modulesPath = ./modules;
+      modules = [
+        {
+          _file = "treefmt.evalConfig";
+          _module.args.pkgs = lib.mkOptionDefault pkgs;
+          package = lib.mkOptionDefault treefmt;
+        }
+        {
+          _file = "<treefmt.evalConfig args>";
+          imports = lib.toList module;
+        }
+        ./modules/default.nix
+      ];
+    };
+
   /**
     Wrap treefmt, configured using structured settings.
 
     # Type
 
     ```
-    AttrSet -> Derivation
+    Module -> Derivation
     ```
 
     # Inputs
 
-    - `name`: `String` (default `"treefmt-configured"`)
-    - `settings`: `Module` (default `{ }`)
-    - `runtimeInputs`: `[Derivation]` (default `[ ]`)
+    `module`
+    : A treefmt module, configuring options that include:
+      - `name`: `String` (default `"treefmt-with-config"`)
+      - `settings`: `Module` (default `{ }`)
+      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
   */
   withConfig =
-    {
-      name ? "treefmt-with-config",
-      settings ? { },
-      runtimeInputs ? [ ],
-    }:
-    runCommand name
-      {
-        nativeBuildInputs = [ makeBinaryWrapper ];
-        treefmtExe = lib.getExe treefmt;
-        binPath = lib.makeBinPath runtimeInputs;
-        passthru = { inherit runtimeInputs; };
-        configFile = treefmt.buildConfig {
-          # Wrap user's modules with a default file location
-          _file = "<treefmt.withConfig settings arg>";
-          imports = lib.toList settings;
-        };
-        inherit (treefmt) meta version;
-      }
-      ''
-        mkdir -p $out/bin
-        makeWrapper \
-          $treefmtExe \
-          $out/bin/treefmt \
-          --prefix PATH : "$binPath" \
-          --add-flags "--config-file $configFile"
-      '';
+    module:
+    let
+      configuration = treefmt.evalConfig {
+        _file = "<treefmt.withConfig args>";
+        imports = lib.toList module;
+      };
+    in
+    configuration.config.result;
 
   /**
     Build a treefmt config file from structured settings.
@@ -57,32 +75,24 @@
     ```
     Module -> Derivation
     ```
+
+    # Inputs
+
+    `settings`
+    : A settings module, used to build a treefmt config file
   */
   buildConfig =
     module:
     let
-      settingsFormat = formats.toml { };
-      configuration = lib.evalModules {
-        modules = [
-          {
-            _file = ./build-config.nix;
-            freeformType = settingsFormat.type;
-          }
-          {
-            # Wrap user's modules with a default file location
-            _file = "<treefmt.buildConfig args>";
-            imports = lib.toList module;
-          }
-        ];
+      configuration = treefmt.evalConfig {
+        _file = "<treefmt.buildConfig args>";
+        settings.imports = lib.toList module;
       };
-      settingsFile = settingsFormat.generate "treefmt.toml" configuration.config;
     in
-    settingsFile.overrideAttrs {
+    configuration.config.configFile.overrideAttrs {
       passthru = {
-        format = settingsFormat;
-        settings = configuration.config;
-        inherit (configuration) _module options;
-        optionType = configuration.type;
+        inherit (configuration.config) settings;
+        options = (opt: opt.type.getSubOptions opt.loc) configuration.options.settings;
       };
     };
 }

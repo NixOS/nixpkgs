@@ -30,6 +30,7 @@ buildGoModule rec {
 
   passthru = {
     inherit (callPackages ./lib.nix { })
+      evalConfig
       withConfig
       buildConfig
       ;
