@@ -8,17 +8,18 @@
   openssl,
   stdenv,
   gitMinimal,
+  gitSetupHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-generate";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
-    rev = "v${version}";
-    sha256 = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
   };
 
   useFetchCargoVendor = true;
@@ -40,15 +41,16 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    gitSetupHook
+  ];
 
   # disable vendored libgit2 and openssl
   buildNoDefaultFeatures = true;
 
   preCheck = ''
-    export HOME=$(mktemp -d) USER=nixbld
-    git config --global user.name Nixbld
-    git config --global user.email nixbld@localhost.localnet
+    export USER=nixbld
   '';
 
   # Exclude some tests that don't work in sandbox:
@@ -71,19 +73,19 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
-    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       turbomack
       matthiasbeyer
     ];
   };
-}
+})

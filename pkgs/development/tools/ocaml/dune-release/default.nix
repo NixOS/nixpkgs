@@ -2,7 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
-  makeWrapper,
+  makeBinaryWrapper,
   curly,
   fmt,
   bos,
@@ -12,6 +12,8 @@
   logs,
   fpath,
   odoc,
+  gitSetupHook,
+  writableTmpDirAsHomeHook,
   opam-format,
   opam-core,
   opam-state,
@@ -45,11 +47,11 @@ buildDunePackage rec {
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ocamllabs/dune-release/releases/download/${version}/dune-release-${version}.tbz";
     hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ runtimeInputs;
   buildInputs = [
     curly
     fmt
@@ -69,6 +71,8 @@ buildDunePackage rec {
   nativeCheckInputs = [
     odoc
     gitMinimal
+    gitSetupHook
+    writableTmpDirAsHomeHook
   ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
@@ -80,10 +84,6 @@ buildDunePackage rec {
   '';
 
   preCheck = ''
-    export HOME=$TMPDIR
-    git config --global user.email "nix-builder@nixos.org"
-    git config --global user.name "Nix Builder"
-
     # it fails when it tries to reference "./make_check_deterministic.exe"
     rm -r tests/bin/check
   '';
@@ -94,12 +94,12 @@ buildDunePackage rec {
       --prefix PATH : "${lib.makeBinPath runtimeInputs}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Release dune packages in opam";
     mainProgram = "dune-release";
     homepage = "https://github.com/ocamllabs/dune-release";
     changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

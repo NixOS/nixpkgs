@@ -5,20 +5,19 @@
   rustPlatform,
   versionCheckHook,
   nix-update-script,
-  git,
+  gitMinimal,
+  gitSetupHook,
+  writableTmpDirAsHomeHook,
   libz,
 }:
-let
-  version = "1.1.5";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "committed";
-  inherit version;
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "committed";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-puv64/btSEkxGNhGGkh2A08gI+EIHWjC+s+QQDKj/ZQ=";
   };
 
@@ -34,16 +33,10 @@ rustPlatform.buildRustPackage {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
+    gitSetupHook
+    writableTmpDirAsHomeHook
   ];
-
-  # Ensure libgit2 can read user.name and user.email for `git_signature_default`.
-  # https://github.com/crate-ci/committed/blob/v1.1.5/crates/committed/tests/cmd.rs#L126
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    git config --global user.name nobody
-    git config --global user.email no@where
-  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -55,7 +48,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/crate-ci/committed";
-    changelog = "https://github.com/crate-ci/committed/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/crate-ci/committed/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Nitpicking commit history since beabf39";
     mainProgram = "committed";
     license = [
@@ -64,4 +57,4 @@ rustPlatform.buildRustPackage {
     ];
     maintainers = [ lib.maintainers.pigeonf ];
   };
-}
+})

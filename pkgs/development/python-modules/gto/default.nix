@@ -6,13 +6,14 @@
   fetchFromGitHub,
   freezegun,
   funcy,
-  gitMinimal,
   pydantic,
   pytest-cov-stub,
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
-  pythonOlder,
+  gitMinimal,
+  gitSetupHook,
+  writableTmpDirAsHomeHook,
   rich,
   ruamel-yaml,
   scmrepo,
@@ -27,8 +28,6 @@ buildPythonPackage rec {
   pname = "gto";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -61,14 +60,11 @@ buildPythonPackage rec {
     pytest-mock
     pytest-test-utils
     pytestCheckHook
+    gitSetupHook
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    git config --global user.email "nobody@example.com"
-    git config --global user.name "Nobody"
-
     # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
@@ -82,12 +78,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Git Tag Operations";
     homepage = "https://github.com/iterative/gto";
     changelog = "https://github.com/iterative/gto/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gto";
   };
 }

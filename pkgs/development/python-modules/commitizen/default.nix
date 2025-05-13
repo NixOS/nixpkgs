@@ -3,8 +3,6 @@
   commitizen,
   fetchFromGitHub,
   buildPythonPackage,
-  gitMinimal,
-  pythonOlder,
   stdenv,
   installShellFiles,
   poetry-core,
@@ -21,6 +19,9 @@
   questionary,
   termcolor,
   tomlkit,
+  gitMinimal,
+  gitSetupHook,
+  writableTmpDirAsHomeHook,
   py,
   pytest-freezer,
   pytest-mock,
@@ -33,8 +34,6 @@ buildPythonPackage rec {
   pname = "commitizen";
   version = "4.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
@@ -71,11 +70,13 @@ buildPythonPackage rec {
     argcomplete
     deprecated
     gitMinimal
+    gitSetupHook
     py
     pytest-freezer
     pytest-mock
     pytest-regressions
     pytest7CheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "commitizen" ];
@@ -83,10 +84,6 @@ buildPythonPackage rec {
   # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
-    export HOME="$(mktemp -d)"
-
-    git config --global user.name "Nix Builder"
-    git config --global user.email "nix-builder@nixos.org"
     git init .
   '';
 
@@ -122,13 +119,13 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "cz";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
       anthonyroussel
     ];
