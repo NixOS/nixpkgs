@@ -1,0 +1,99 @@
+{
+    "release_date": "2024-03-15",
+    "release_label": "8.7.0",
+    "release_product": "cudnn",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "license_path": "cudnn/LICENSE.txt",
+        "version": "8.7.0.84",
+        "cuda_variant": [
+            "10",
+            "11"
+        ],
+        "linux-x86_64": {
+            "cuda10": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.7.0.84_cuda10-archive.tar.xz",
+                "sha256": "6d985aa9cf3e19b3d5d8542fbdb6ee7ddf159c4260bdf90809cd8ddff822b518",
+                "md5": "61ea2bb2163647587bcfdf1e1fdc03ee",
+                "size": "323732444"
+            },
+            "cuda11": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.7.0.84_cuda11-archive.tar.xz",
+                "sha256": "976c4cba7233c97ae74006afab5172976300ba40f5b250a21f8cf71f59c9f76d",
+                "md5": "89de47ec551f0df18e95951895da8acb",
+                "size": "886423308"
+            }
+        },
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-8.7.0.84_cuda11-archive.tar.xz",
+                "sha256": "0433d6d8b6841298e049e8a542750aa330a6e046a52ad95fae0c2f75dabe5575",
+                "md5": "d9aea437e490b864f6ec2ebe3c1e6d16",
+                "size": "889100672"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-8.7.0.84_cuda11-archive.tar.xz",
+                "sha256": "cf967f78dbf6c075243cc83aa18759e370db3754aa15b12a0a14e8bf67a3a9d4",
+                "md5": "16115756f409b86a27db47e5c9142dbe",
+                "size": "885403232"
+            }
+        },
+        "windows-x86_64": {
+            "cuda10": {
+            "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.7.0.84_cuda10-archive.zip",
+                "sha256": "ba74343bbdf0a99b3c0ad981e3ad97dea851950123545c232316153c8c8399db",
+                "md5": "386ef285ac4aa9be5fd867657a4f6cbc",
+                "size": "241280237"
+            },
+            "cuda11": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.7.0.84_cuda11-archive.zip",
+                "sha256": "55328581df06e161284b25c4869afb5fe59b7e9782d8743d8ee0c621892ad09c",
+                "md5": "15379516385a5d8c2ff9e785c3f68c29",
+                "size": "708092962"
+            }
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "license_path": "cudnn_samples/LICENSE.txt",
+        "version": "8.7.0.84",
+        "cuda_variant": [
+            "10",
+            "11"
+        ],
+        "linux-x86_64": {
+            "cuda10": {
+                "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.7.0.84_cuda10-archive.tar.xz",
+                "sha256": "3a48eb910a3025ba1ce439d95e12a5c75776fa9f99c50220e08c535e30f9e295",
+                "md5": "469d6c75036abdc4e02d825a70384236",
+                "size": "1666712"
+            },
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.7.0.84_cuda11-archive.tar.xz",
+                "sha256": "780fa410972fe9450c3fd14d8e44a5fc129ec9c972b6a2615b980db07215ceae",
+                "md5": "6ccaab59e795d12a61d7cd7c49d34e77",
+                "size": "1667128"
+            }
+        },
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-ppc64le/cudnn_samples-linux-ppc64le-8.7.0.84_cuda11-archive.tar.xz",
+                "sha256": "9ee49505544df2285a6a47760a473c3d58df2343385056ce1cd40837f3c3a03e",
+                "md5": "02f21943a800716d04d563ed846cf5b0",
+                "size": "1666684"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-sbsa/cudnn_samples-linux-sbsa-8.7.0.84_cuda11-archive.tar.xz",
+                "sha256": "fb5567e28c6c70ec0d599a2da826a54ebe4db84bc48cdb3fc89619544159f9f0",
+                "md5": "b06416b3c64f241c8532acc4c0fec62f",
+                "size": "1666716"
+            }
+        }
+    }
+}
