@@ -1,0 +1,26 @@
+{
+    "release_date": "2023-04-28",
+    "libcusparse_lt": {
+        "name": "NVIDIA cuSPARSELt",
+        "license": "cuSPARSELt",
+        "version": "0.4.0.7",
+        "linux-x86_64": {
+            "relative_path": "libcusparse_lt/linux-x86_64/libcusparse_lt-linux-x86_64-0.4.0.7-archive.tar.xz",
+            "sha256": "15fc65cddcc76dceec41985a0737bc055c3944eadd02589ec8883f1196911f78",
+            "md5": "d386b7860d931f6fb1475bfdbb82ccc5",
+            "size": "18339120"
+        },
+        "linux-sbsa": {
+            "relative_path": "libcusparse_lt/linux-sbsa/libcusparse_lt-linux-sbsa-0.4.0.7-archive.tar.xz",
+            "sha256": "866ee6cefb17d8041f099c6b43a731278721aa0ab682ddaa08886667a85495d6",
+            "md5": "ace04f2a85bfdeaab85d851b363834c7",
+            "size": "17804572"
+        },
+        "windows-x86_64": {
+            "relative_path": "libcusparse_lt/windows-x86_64/libcusparse_lt-windows-x86_64-0.4.0.7-archive.zip",
+            "sha256": "09dc2e7b95da72f315cdd75a815e84b6c9bb9d01677f2837013fe6d57af616fd",
+            "md5": "eba3413306fa0a864f2c758d5b8f4a78",
+            "size": "42888044"
+        }
+    }
+}
