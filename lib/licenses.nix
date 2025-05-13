@@ -1037,6 +1037,8 @@ lib.mapAttrs mkLicense (
     };
 
     nvidiaCuda = {
+      # Nixpkgs used this name historically, but, if you are to change it,
+      # please ensure shortName is different from that of the redistributable version.
       shortName = "CUDA EULA";
       fullName = "CUDA Toolkit End User License Agreement (EULA)";
       url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
@@ -1044,9 +1046,14 @@ lib.mapAttrs mkLicense (
     };
 
     nvidiaCudaRedist = {
-      shortName = "CUDA EULA";
+      shortName = "CUDA Toolkit"; # As per .json manifests
       fullName = "CUDA Toolkit End User License Agreement (EULA)";
-      url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+      # At the time of writing (May 2025) it's the same text as `nvidiaCuda`,
+      # but (1) it may change in future, and (2) we're referring not to the text
+      # but to the service providing the license.
+      # There's a copy of the same license in each component's directory, e.g. cudart below.
+      # Note `cudaPackages` automatically replace this `url` for each package based on metadata published upstream:
+      url = "https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/LICENSE.txt";
       free = false;
       redistributable = true;
     };
