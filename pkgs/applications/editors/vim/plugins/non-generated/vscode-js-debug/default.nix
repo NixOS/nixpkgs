@@ -1,6 +1,7 @@
 {
   pkgs,
   nodejs_20,
+  buildNpmPackage,
   fetchFromGitHub,
   vimUtils,
   system
@@ -14,12 +15,16 @@ let
     rev = "v1.100.0";
     sha256 = "sha256-y3N54lOTI9IdRv2WgZd1e7ntUHh/qd9ybIi7Copd/wA=";
   };
-  srcDeps = fetchFromGitHub {
-    owner = "relief-melone";
-    repo = "vscode-js-debug-nixpkgs-dependencies";
-    rev = "v1.100.0";
-    sha256 = "sha256-gWS01tlFVyV7/VCsR1TJkaosdmcsFQI5tyUwheFnuVM=";
-  };
+
+  nodePackage = buildNpmPackage (finalAttrs: {
+    inherit src;
+
+    pname = "vscode-js-debug";
+    version = "v1.100.0";
+
+    npmPackFlags = [ "--ignore-scripts" ];
+    NODE_OPTIONS = "--openssl-legacy-provider";
+  });
 
   def = import ./dependencies/default.nix;
 
@@ -37,9 +42,9 @@ vimUtils.buildVimPlugin {
   nativeBuildInputs = [ nodejs ];
 
   buildPhase = ''
-    ln -s ${nodeDependencies}/lib/node_modules ./node_modules
+    ln -s ${nodePackage}/lib/node_modules ./node_modules
 
-    export PATH="${nodeDependencies}/bin:$PATH"
+    export PATH="${nodePackage}/bin:$PATH"
     export XDG_CACHE_HOME=$(pwd)/node-gyp-cache
 
     npx gulp dapDebugServer
