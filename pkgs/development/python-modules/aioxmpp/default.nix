@@ -34,6 +34,13 @@ buildPythonPackage rec {
     hash = "sha256-bQPKEM5eKhFI3Kx3U1espdxqjnG4yUgOXmYCrd98PDo=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/bookmarks/test_service.py \
+      --replace-fail 'can only assign an iterable$' 'must assign iterable'
+    substituteInPlace tests/test_utils.py \
+      --replace-fail 'property of .* has no' 'property .*of .* has no'
+  '';
+
   pythonRelaxDeps = [
     "lxml"
   ];
