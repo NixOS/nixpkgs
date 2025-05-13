@@ -269,6 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
       marcin-serwin
+      teutat3s
     ];
     mainProgram = "signal-desktop";
     platforms = [
