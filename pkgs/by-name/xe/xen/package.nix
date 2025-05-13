@@ -1,17 +1,17 @@
 {
   lib,
   stdenv,
-  autoPatchelfHook,
-  cmake,
-  pkg-config,
   testers,
-  which,
   fetchgit,
+  fetchpatch,
 
   # Xen
   acpica-tools,
+  autoPatchelfHook,
+  binutils-unwrapped-all-targets,
   bison,
   bzip2,
+  cmake,
   dev86,
   e2fsprogs,
   flex,
@@ -21,6 +21,7 @@
   ncurses,
   ocamlPackages,
   perl,
+  pkg-config,
   python3Packages,
   systemdMinimal,
   xz,
@@ -29,12 +30,14 @@
   zstd,
 
   # Optional Components
-  seabios-qemu,
-  systemSeaBIOS ? seabios-qemu,
-  OVMF,
-  ipxe,
+  withFlask ? false,
   checkpolicy,
-  binutils-unwrapped-all-targets,
+  withIPXE ? true,
+  ipxe,
+  withOVMF ? true,
+  OVMF,
+  withSeaBIOS ? true,
+  seabios-qemu,
 
   # Documentation
   pandoc,
@@ -53,22 +56,7 @@
   nbd,
   openvswitch,
   util-linux,
-}:
-
-{
-  pname,
-  branch ? lib.versions.majorMinor version,
-  version,
-  vendor ? "nixos",
-  upstreamVersion ? version,
-  withFlask ? false,
-  withSeaBIOS ? true,
-  withOVMF ? true,
-  withIPXE ? true,
-  rev,
-  hash,
-  patches ? [ ],
-  meta ? { },
+  which,
 }:
 
 let
@@ -83,6 +71,7 @@ let
     systems
     teams
     versionOlder
+    versions
     warn
     ;
   inherit (systems.inspect.patterns) isLinux isAarch64;
@@ -117,7 +106,56 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version patches;
+  pname = "xen";
+  version = "4.19.1";
+
+  # This attribute can be overriden to correct the file paths in
+  # `passthru` when building an unstable Xen.
+  upstreamVersion = finalAttrs.version;
+  # Useful for further identifying downstream Xen variants. (i.e. Qubes)
+  vendor = "nixos";
+
+  patches = [
+    # OCaml Build Fix
+    (fetchpatch {
+      url = "https://lore.kernel.org/xen-devel/e2caa6648a0b6c429349a9826d8fbc4338222482.1733766758.git.andrii.sultanov@cloud.com/raw";
+      hash = "sha256-JC1ueXuC1Jdi2gtUsjOHmTeEx56zjotMMLde5vBonxc=";
+    })
+    # XSA #467
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa467.patch";
+      hash = "sha256-O2IwfRo6BnXAO04xjKmOyrV6J6Q1mAVLHWNCxqIEQGU=";
+    })
+    # XSA #469
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-01.patch";
+      hash = "sha256-YUcp9QI49RM/7WCxYzpzppv+vKtyl/NvLy6rIX5hVMw=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-02.patch";
+      hash = "sha256-FTtEGAPFYxsun38hLhVMKJ1TFJOsTMK3WWPkO0R/OHg=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-03.patch";
+      hash = "sha256-UkYMSpUgFvr4GJPXLgQsCyppGkNbeiFMyCZORK5tfmA=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-04.patch";
+      hash = "sha256-lpiDPSHi+v2VfaWE9kp4+hveZKTzojD1F+RHsOtKE3A=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-05.patch";
+      hash = "sha256-EKo9a5STX0mTRopoThe3+6gCWat+3XbguLr9QgMheZs=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-06.patch";
+      hash = "sha256-HU+4apyTZNIFZ9cySOEtNh0JBJDG3LjDLwMvQYq0src=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-07.patch";
+      hash = "sha256-9S85nkQ9Nn0cMzyRe4KGrFUaLggVxXBeKhoFF4R0y78=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -129,7 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xen.git";
-    inherit rev hash;
+    rev = "ccf400846780289ae779c62ef0c94757ff43bb60";
+    hash = "sha256-s0eCBCd6ybl+kLtXCC6E1sk++w7txXn/B/Cg5acQFfY=";
   };
 
   nativeBuildInputs = [
@@ -167,13 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython
     ]
     ++ optional withFlask checkpolicy
-    ++ optional (versionOlder version "4.19") systemdMinimal;
+    ++ optional (versionOlder finalAttrs.version "4.19") systemdMinimal;
 
   configureFlags = [
     "--enable-systemd"
     "--disable-qemu-traditional"
     "--with-system-qemu"
-    (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
+    (if withSeaBIOS then "--with-system-seabios=${seabios-qemu.firmware}" else "--disable-seabios")
     (if withOVMF then "--with-system-ovmf=${OVMF.mergedFirmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
@@ -186,12 +225,12 @@ stdenv.mkDerivation (finalAttrs: {
       "PREFIX=$(out)"
       "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
 
-      "XEN_WHOAMI=${pname}"
-      "XEN_DOMAIN=${vendor}"
+      "XEN_WHOAMI=${finalAttrs.pname}"
+      "XEN_DOMAIN=${finalAttrs.vendor}"
 
       "GIT=${coreutils}/bin/false"
       "WGET=${coreutils}/bin/false"
-      "EFI_VENDOR=${vendor}"
+      "EFI_VENDOR=${finalAttrs.vendor}"
       "INSTALL_EFI_STRIP=1"
       "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
     ]
@@ -295,10 +334,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    efi = "boot/xen-${upstreamVersion}.efi";
+    efi = "boot/xen-${finalAttrs.upstreamVersion}.efi";
     flaskPolicy =
       if withFlask then
-        warn "This Xen was compiled with FLASK support, but the FLASK file does not match the Xen version number. Please hardcode the path to the FLASK file instead." "boot/xenpolicy-${version}"
+        warn "This Xen was compiled with FLASK support, but the FLASK file may not match the Xen version number. Please hardcode the path to the FLASK file instead." "boot/xenpolicy-${finalAttrs.upstreamVersion}"
       else
         throw "This Xen was compiled without FLASK support.";
     # This test suite is very simple, as Xen's userspace
@@ -328,7 +367,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    inherit branch;
+    branch = versions.majorMinor finalAttrs.version;
 
     description = "Type-1 hypervisor intended for embedded and hyperscale use cases";
     longDescription =
@@ -342,15 +381,15 @@ stdenv.mkDerivation (finalAttrs: {
 
         Use with the `qemu_xen` package.
       ''
-      + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
-      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${upstreamVersion}` file is available on the `boot` output of this package."
+      + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${finalAttrs.meta.branch}-testing/misc/efi.html), available on the `boot` output of this package."
+      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy` file is available on the `boot` output of this package."
       + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
       + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
       + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";
 
     homepage = "https://xenproject.org/";
-    downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
-    changelog = "https://wiki.xenproject.org/wiki/Xen_Project_${branch}_Release_Notes";
+    downloadPage = "https://downloads.xenproject.org/release/xen/${finalAttrs.version}/";
+    changelog = "https://wiki.xenproject.org/wiki/Xen_Project_${finalAttrs.meta.branch}_Release_Notes";
 
     license = [
       # Documentation.
@@ -364,11 +403,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     teams = [ teams.xen ];
-    knownVulnerabilities = optional (versionOlder version minSupportedVersion) "The Xen Project Hypervisor version ${version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
+    knownVulnerabilities = optional (versionOlder finalAttrs.version minSupportedVersion) "The Xen Project Hypervisor version ${finalAttrs.version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
 
     mainProgram = "xl";
 
     platforms = [ isLinux ];
     badPlatforms = [ isAarch64 ];
-  } // meta;
+  };
 })
