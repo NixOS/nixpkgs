@@ -20,6 +20,15 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "cuda-configuring-cuda-package-sets": [
+    "index.html#cuda-configuring-cuda-package-sets"
+  ],
+  "cuda-configuring-nixpkgs-for-cuda": [
+    "index.html#cuda-configuring-nixpkgs-for-cuda"
+  ],
+  "cuda-using-cudapackages": [
+    "index.html#cuda-using-cudapackages"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
