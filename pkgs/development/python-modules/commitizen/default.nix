@@ -22,6 +22,7 @@
   tomlkit,
   gitMinimal,
   gitSetupHook,
+  writableTmpDirAsHomeHook,
   py,
   pytest-freezer,
   pytest-mock,
@@ -78,6 +79,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-regressions
     pytest7CheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "commitizen" ];
@@ -85,7 +87,6 @@ buildPythonPackage rec {
   # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
-    export HOME="$(mktemp -d)"
     git init .
   '';
 
