@@ -13,7 +13,7 @@ makeSetupHook {
   propagatedBuildInputs = [ autoFixElfFiles ];
 
   substitutions = {
-    libcudaPath = if cuda_compat != null then "${cuda_compat}/compat" else null;
+    libcudaPath = "${cuda_compat}/compat";
   };
 
   meta =
