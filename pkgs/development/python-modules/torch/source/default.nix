@@ -180,7 +180,13 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      rocmPackages.clr.gpuTargets
+      # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
+      # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
+      # TODO: Retest after ROCm 6.4 or torch 2.8
+      lib.lists.subtractLists [
+        "gfx1010"
+        "gfx1012"
+      ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
     else
       throw "No GPU targets specified"
   );
@@ -194,6 +200,7 @@ let
       rccl
       miopen
       aotriton
+      composable_kernel
       rocrand
       rocblas
       rocsparse
@@ -241,10 +248,6 @@ let
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport
       && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
-    # ... fatal error: 'ck/config.h' file not found
-    # 6 | #include "ck/config.h"
-    #   |          ^~~~~~~~~~~~~
-    "ROCm is failing to compile" = rocmSupport;
   };
 
   unroll-src = writeShellScript "unroll-src" ''
@@ -670,7 +673,7 @@ buildPythonPackage rec {
         --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
 
       substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-        --replace-fail "/build/source/torch/include" "$dev/include"
+        --replace-fail "/build/${src.name}/torch/include" "$dev/include"
     '';
 
   postFixup =
