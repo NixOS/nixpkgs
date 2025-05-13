@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [
@@ -14,4 +14,24 @@
   # Don't use a desktop manager.
   services.displayManager.defaultSession = lib.mkDefault "none+icewm";
   services.xserver.windowManager.icewm.enable = true;
+
+  # Help with OCR
+  systemd.tmpfiles.settings =
+    let
+      icewmSettingsDir = "/root/.icewm";
+    in
+    {
+      "10-icewm-root-test-setup" = {
+        "${icewmSettingsDir}".d = {
+          mode = "0700";
+          user = "root";
+          group = "root";
+        };
+        "${icewmSettingsDir}/theme".L.argument = builtins.toString (
+          pkgs.writeText "icewm-testing-theme" ''
+            Theme="gtk2/default.theme"
+          ''
+        );
+      };
+    };
 }
