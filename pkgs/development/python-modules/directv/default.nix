@@ -21,6 +21,12 @@ buildPythonPackage rec {
     sha256 = "19jckf6qvl8fwi8yff1qy8c44xdz3zpi1ip1md6zl2c503qc91mk";
   };
 
+  postPatch = ''
+    # TypeError: 'Timeout' object does not support the context manager protocol
+    substituteInPlace directv/directv.py \
+      --replace-fail "with async_timeout.timeout" "async with async_timeout.timeout"
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     yarl
