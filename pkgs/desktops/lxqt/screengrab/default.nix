@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "screengrab";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-V5ulRkckeSX2EsYmhmA9phVssDtix31M5oZXkOgF660=";
+    hash = "sha256-cTDGVNnnjgIiCS/KzEVmTagJvNwDKAP2UrWKwdn3WmE=";
   };
 
   nativeBuildInputs = [
