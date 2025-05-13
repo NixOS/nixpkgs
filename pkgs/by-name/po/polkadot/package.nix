@@ -17,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "2503";
+  version = "2503-2";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${version}";
-    hash = "sha256-nPZFmsf82JpBrOrErH5hrEcmieECfgA7JWzEyEh8AAE=";
+    hash = "sha256-sUBUWFAJ8PwWUVSqPef0SMJcvSt+bGruTW+GmJGTLdE=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-yOJyvpsEK4Ab/Bh6xmqAEHhj1Rq4u/CevcP7vJi0zxo=";
+  cargoHash = "sha256-U3roe7rQL1BaHr3rKV1Dl7Lhjic3pZlxo2DpD9C2ong=";
 
   buildType = "production";
   buildAndTestSubdir = "polkadot";
