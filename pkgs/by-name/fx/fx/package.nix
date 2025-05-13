@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "fx";
-  version = "35.0.0";
+  version = "36.0.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = pname;
     rev = version;
-    hash = "sha256-EirlA/gcW77UP9I4pVCjjG3pSYnCPw+idX9YS1izEpY=";
+    hash = "sha256-wUiyMczToGqfHZ/FMUhCO4ud6h/bNHhVt4eWoZJckbU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-h9BUL7b8rNmhVxmXL3CBF39WSkX+8eS2M9NDJhbPI0o=";
+  vendorHash = "sha256-8KiCj2khO0zxsZDG1YD0EjsoZSY4q+IXC+NLeeXgVj4=";
 
   postInstall = ''
     installShellCompletion --cmd fx \
