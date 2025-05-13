@@ -35,6 +35,7 @@
   heatshrink,
   catch2,
   webkitgtk_4_0,
+  ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   wxGTK-override ? null,
@@ -205,16 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-
-    ctest \
-      --force-new-ctest-process \
-      -E 'libslic3r_tests|sla_print_tests'
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "--force-new-ctest-process"
+    "-E"
+    "libslic3r_tests|sla_print_tests"
+  ];
 
   meta =
     with lib;
