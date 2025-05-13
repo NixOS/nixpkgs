@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $dev/include
-    mv $out/include/${python.libPrefix}*/CXX/ $dev/include/CXX/
+    mv $out/include/${python.libPrefix}*/cxx/ $dev/include/CXX/
     mv $out/CXX $dev/src
     sed -i "s|Src|$dev/src|" $dev/src/cxxextensions.c $dev/src/cxxsupport.cxx
   '';
