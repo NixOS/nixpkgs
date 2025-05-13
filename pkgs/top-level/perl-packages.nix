@@ -8273,14 +8273,13 @@ with self;
       TestRequires
     ];
     meta = {
-      description = "Grep-like program for searching source code";
+      description = "MessagePack serialization format";
       homepage = "https://github.com/msgpack/msgpack-perl";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataMessagePack.x86_64-darwin
     };
   };
 
