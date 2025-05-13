@@ -1,5 +1,6 @@
 {
   lib,
+  pythonAtLeast,
   buildPythonPackage,
   fetchurl,
   libguestfs,
@@ -10,6 +11,10 @@ buildPythonPackage rec {
   pname = "guestfs";
   version = "1.40.2";
   format = "setuptools";
+
+  # FIXME: "error: implicit declaration of function 'PyEval_ThreadsInitialized'"
+  # https://bugzilla.redhat.com/show_bug.cgi?id=2343777
+  disabled = pythonAtLeast "3.13";
 
   src = fetchurl {
     url = "http://download.libguestfs.org/python/guestfs-${version}.tar.gz";
