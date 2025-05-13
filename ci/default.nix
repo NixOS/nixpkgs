@@ -63,10 +63,7 @@ let
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
         root = ../.;
-        fileset = fs.difference (fs.unions [
-          (fs.fileFilter (file: file.hasExt "nix") ../.)
-          ../.git-blame-ignore-revs
-        ]) (fs.maybeMissing ../.git);
+        fileset = fs.difference ../. (fs.maybeMissing ../.git);
       };
     in
     {

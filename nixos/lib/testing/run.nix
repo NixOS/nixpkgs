@@ -43,27 +43,30 @@ in
   };
 
   config = {
-    rawTestDerivation = hostPkgs.stdenv.mkDerivation {
-      name = "vm-test-run-${config.name}";
+    rawTestDerivation =
+      assert lib.assertMsg (!config.sshBackdoor.enable)
+        "The SSH backdoor is currently not supported for non-interactive testing! Please make sure to only set `interactive.sshBackdoor.enable = true;`!";
+      hostPkgs.stdenv.mkDerivation {
+        name = "vm-test-run-${config.name}";
 
-      requiredSystemFeatures =
-        [ "nixos-test" ]
-        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
-        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
+        requiredSystemFeatures =
+          [ "nixos-test" ]
+          ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
+          ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
 
-      buildCommand = ''
-        mkdir -p $out
+        buildCommand = ''
+          mkdir -p $out
 
-        # effectively mute the XMLLogger
-        export LOGFILE=/dev/null
+          # effectively mute the XMLLogger
+          export LOGFILE=/dev/null
 
-        ${config.driver}/bin/nixos-test-driver -o $out
-      '';
+          ${config.driver}/bin/nixos-test-driver -o $out
+        '';
 
-      passthru = config.passthru;
+        passthru = config.passthru;
 
-      meta = config.meta;
-    };
+        meta = config.meta;
+      };
     test = lib.lazyDerivation {
       # lazyDerivation improves performance when only passthru items and/or meta are used.
       derivation = config.rawTestDerivation;
