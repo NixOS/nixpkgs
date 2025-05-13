@@ -10113,6 +10113,8 @@ self: super: with self; {
 
   numbaWithCuda = self.numba.override { cudaSupport = true; };
 
+  numbagg = callPackage ../development/python-modules/numbagg { };
+
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
   numdifftools = callPackage ../development/python-modules/numdifftools { };
