@@ -22,6 +22,7 @@
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
   config,
+  cudaFixups,
   cudaLib,
   cudaMajorMinorVersion,
   lib,
@@ -39,9 +40,6 @@ let
     versions
     ;
 
-  # MUST be defined outside fix-point (cf. "NAMESET STRICTNESS" above)
-  fixups = import ../development/cuda-modules/fixups { inherit lib; };
-
   # Since Jetson capabilities are never built by default, we can check if any of them were requested
   # through final.config.cudaCapabilities and use that to determine if we should change some manifest versions.
   # Copied from backendStdenv.
@@ -54,9 +52,9 @@ let
 
   passthruFunction = final: {
     inherit
+      cudaFixups
       cudaLib
       cudaMajorMinorVersion
-      fixups
       lib
       pkgs
       ;
