@@ -21,23 +21,6 @@ let
   pnpm = pnpm_10.override { inherit nodejs; };
   electron = electron_35;
 
-  nodeOS =
-    {
-      "linux" = "linux";
-      "darwin" = "darwin";
-    }
-    .${stdenv.hostPlatform.parsed.kernel.name}
-      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.kernel.name}");
-
-  nodeArch =
-    {
-      # https://nodejs.org/api/os.html#osarch
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "unsupported platform ${stdenv.hostPlatform.parsed.cpu.name}");
-
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
 
@@ -170,14 +153,21 @@ stdenv.mkDerivation (finalAttrs: {
       die "ringrtc version mismatch"
     fi
 
-    mkdir -p node_modules/@signalapp/ringrtc/build
     install -D ${ringrtc}/lib/libringrtc${stdenv.hostPlatform.extensions.library} \
-      node_modules/@signalapp/ringrtc/build/${nodeOS}/libringrtc-${nodeArch}.node
+      node_modules/@signalapp/ringrtc/build/libringrtc.node
 
-    rm -fr node_modules/@signalapp/libsignal-client/prebuilds
+    substituteInPlace package.json \
+      --replace-fail '"node_modules/@signalapp/ringrtc/build/''${platform}/*''${arch}*.node",' \
+                     '"node_modules/@signalapp/ringrtc/build/libringrtc.node",'
+
+    substituteInPlace node_modules/@signalapp/ringrtc/dist/ringrtc/Native.js \
+      --replace-fail 'exports.default = require(`../../build/''${os.platform()}/libringrtc-''${process.arch}.node`);' \
+                     'exports.default = require(`../../build/libringrtc.node`);'
+
+    rm -r node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
 
-    rm -fr node_modules/@signalapp/sqlcipher
+    rm -r node_modules/@signalapp/sqlcipher
     cp -r ${signal-sqlcipher} node_modules/@signalapp/sqlcipher
   '';
 
