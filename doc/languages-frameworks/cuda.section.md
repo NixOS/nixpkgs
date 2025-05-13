@@ -95,6 +95,22 @@ final: prev: {
 }
 ```
 
+## Extending CUDA package sets {#cuda-extending-cuda-package-sets}
+
+CUDA package sets are scopes, so they provide the usual `overrideScope` attribute for overriding package attributes (see the note about `cudaMajorMinorVersion` and `_cuda` in [Configuring CUDA package sets](#cuda-configuring-cuda-package-sets)).
+
+Inspired by `pythonPackagesExtensions`, the `_cuda.extensions` attribute is a list of extensions applied to every version of the CUDA package set, allowing modification of all versions of the CUDA package set without having to know what they are or find a way to enumerate and modify them explicitly. As an example, disabling `cuda_compat` across all CUDA package sets can be accomplished with this overlay:
+
+```nix
+final: prev: {
+  _cuda = prev._cuda.extend (
+    _: prevAttrs: {
+      extensions = prevAttrs.extensions ++ [ (_: _: { cuda_compat = null; }) ];
+    }
+  );
+}
+```
+
 ## Using cudaPackages {#cuda-using-cudapackages}
 
 ::: {.caution}
