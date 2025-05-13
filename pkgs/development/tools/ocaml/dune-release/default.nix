@@ -46,7 +46,7 @@ buildDunePackage rec {
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ocamllabs/dune-release/releases/download/${version}/dune-release-${version}.tbz";
     hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
   };
 
