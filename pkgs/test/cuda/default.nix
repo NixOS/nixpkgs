@@ -2,6 +2,12 @@
   lib,
   recurseIntoAttrs,
 
+  cmark,
+  formats,
+  nixosOptionsDoc,
+  runCommand,
+  _cuda,
+
   cudaPackages,
 
   cudaPackages_11_0,
@@ -34,6 +40,15 @@ let
       "cuda-library-samples"
       "saxpy"
     ];
+
+  inherit (_cuda) db dbEvaluation;
+  # Based on nixos/doc/manual/default.nix
+  prefixesToStrip = [ ((toString dbEvaluation._module.specialArgs.modulesPath or ../../../.) + "/") ];
+  stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
+  dbDocs = nixosOptionsDoc {
+    inherit (dbEvaluation) options;
+    transformOptions = opt: opt // { declarations = map stripAnyPrefixes opt.declarations; };
+  };
 in
 (lib.trivial.pipe args [
   (lib.filterAttrs (name: _: lib.hasPrefix "cudaPackages" name))
@@ -46,3 +61,26 @@ in
   ))
   recurseIntoAttrs
 ])
+// {
+  db = (formats.json { }).generate "cudb.json" dbEvaluation.validConfig;
+  dbDocs = dbDocs // {
+    html =
+      runCommand "cudb-options.html"
+        {
+          nativeBuildInputs = [ cmark ];
+          src = dbDocs.optionsCommonMark;
+        }
+        ''
+          cat << EOF > "$out"
+          <!DOCTYPE html>
+          <html>
+          <head><meta charset="utf-8"></head>
+          <body>
+          EOF
+
+          cmark "$src" >> "$out"
+
+          echo "</body></html>" >> "$out"
+        '';
+  };
+}

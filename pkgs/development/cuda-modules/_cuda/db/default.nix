@@ -1,65 +1,75 @@
-{
-  lib,
-  bootstrapData,
-  db,
-}:
+let
+  lib = import (nixpkgsPath + "/lib");
+  inherit (lib) evalModules;
 
-bootstrapData
-// {
-  /**
-    All CUDA capabilities, sorted by version.
+  inherit (import ./nixpkgs_paths.nix)
+    cudaPackagesPath
+    nixpkgsPath
+    ;
 
-    NOTE: Since the capabilities are sorted by version and architecture/family-specific features are
-    appended to the minor version component, the sorted list groups capabilities by baseline feature
-    set.
-
-    # Type
-
-    ```
-    allSortedCudaCapabilities :: [CudaCapability]
-    ```
-
-    # Example
-
-    ```
-    allSortedCudaCapabilities = [
-      "5.0"
-      "5.2"
-      "6.0"
-      "6.1"
-      "7.0"
-      "7.2"
-      "7.5"
-      "8.0"
-      "8.6"
-      "8.7"
-      "8.9"
-      "9.0"
-      "9.0a"
-      "10.0"
-      "10.0a"
-      "10.0f"
-      "10.1"
-      "10.1a"
-      "10.1f"
-      "10.3"
-      "10.3a"
-      "10.3f"
+  # NOTE: move to cudaLib
+  intreeManifests =
+    let
+      root = cudaPackagesPath;
+    in
+    lib.concatMap (
+      name:
+      let
+        manifestsDir = root + "/${name}/manifests";
+        children = lib.attrsToList (builtins.readDir manifestsDir);
+        isManifest = { name, value }: value == "regular" && lib.hasSuffix ".json" name;
+        entToPath = { name, ... }: manifestsDir + "/${name}";
+        manifests = map entToPath (builtins.filter isManifest children);
+      in
+      lib.optionals (lib.pathIsDirectory manifestsDir) manifests
+    ) (builtins.attrNames (builtins.readDir root));
+  jsonToModule = import ./json.nix { inherit lib; };
+  ingestTensorrt = import ./ingest_releases_file.nix {
+    inherit lib;
+    baseUrlAttr = "trt_base_url";
+  };
+  ingestLegacyCudnn = import ./ingest_releases_file.nix {
+    inherit lib;
+    baseUrlAttr = "base_url";
+  };
+  releaseFileModules =
+    [
+      (ingestTensorrt (cudaPackagesPath + "/tensorrt/releases.nix"))
+    ]
+    ++ [
+      (ingestLegacyCudnn (cudaPackagesPath + "/cudnn/releases.nix"))
     ];
-    ```
-  */
-  allSortedCudaCapabilities = lib.sort lib.versionOlder (lib.attrNames db.cudaCapabilityToInfo);
-
-  /**
-    Mapping of CUDA micro-architecture name to capabilities belonging to that micro-architecture.
-
-    # Type
-
-    ```
-    cudaArchNameToCapabilities :: AttrSet NonEmptyStr (NonEmptyListOf CudaCapability)
-    ```
-  */
-  cudaArchNameToCapabilities = lib.groupBy (
-    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
-  ) db.allSortedCudaCapabilities;
+  modulesPath = nixpkgsPath;
+in
+{
+  manifests ? intreeManifests, # :: List Path
+  extraModules ? [ ],
+  _includeReleaseFiles ? true,
+}:
+let
+  manifestModules = builtins.map jsonToModule manifests;
+  evaluated =
+    evalModules {
+      specialArgs = { inherit modulesPath; };
+      modules =
+        extraModules
+        ++ manifestModules
+        ++ lib.optionals _includeReleaseFiles releaseFileModules
+        ++ [
+          ./schema.nix
+        ];
+    }
+    // {
+      inherit intreeManifests;
+    };
+  errors = builtins.concatMap (
+    { assertion, message }: lib.optionals (!assertion) [ message ]
+  ) evaluated.config.assertions;
+  error = if errors == [ ] then null else lib.concatStringsSep "\n" errors;
+in
+evaluated
+// {
+  validConfig =
+    assert lib.assertMsg (errors == [ ]) error;
+    evaluated.config;
 }
