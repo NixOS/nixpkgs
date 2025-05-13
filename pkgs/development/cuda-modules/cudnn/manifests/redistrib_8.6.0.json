@@ -1,0 +1,99 @@
+{
+    "release_date": "2024-03-15",
+    "release_label": "8.6.0",
+    "release_product": "cudnn",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "license_path": "cudnn/LICENSE.txt",
+        "version": "8.6.0.163",
+        "cuda_variant": [
+            "10",
+            "11"
+        ],
+        "linux-x86_64": {
+            "cuda10": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.6.0.163_cuda10-archive.tar.xz",
+                "sha256": "b78b2bfc6ac5aaa771bb6561689424e4ad579bfd255387215c6f2154bd3d47d9",
+                "md5": "489c9f5a9ec03de347c0d2a43727ebc3",
+                "size": "430166076"
+            },
+            "cuda11": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.6.0.163_cuda11-archive.tar.xz",
+                "sha256": "bbc396df47294c657edc09c600674d608cb1bfc80b82dcf4547060c21711159e",
+                "md5": "587d48435012fb9c9bdf61b3cf873645",
+                "size": "864470696"
+            }
+        },
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-8.6.0.163_cuda11-archive.tar.xz",
+                "sha256": "c8a25e7e3df1bb9c4e18a4f24dd5f25cfd4bbe8b7054e34008e53b2be4f58a80",
+                "md5": "cc3e5e298be65644b40ea9df18f70812",
+                "size": "887390128"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-8.6.0.163_cuda11-archive.tar.xz",
+                "sha256": "a0202278d3cbd4f3adc3f7816bff6071621cb042b0903698b477acac8928ac06",
+                "md5": "dc4b40a75f04a0574f9f1128a9cf9f9a",
+                "size": "885771400"
+             }
+        },
+        "windows-x86_64": {
+            "cuda10": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.6.0.163_cuda10-archive.zip",
+                "sha256": "fa34d362b8d61e33a20da2a5b91dbd72e5b6db5b53fd77900b3363f29ee9ccd9",
+                "md5": "fb84f9f990373e239ddb9515c30c754e",
+                "size": "323521206"
+            },
+            "cuda11": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.6.0.163_cuda11-archive.zip",
+                "sha256": "78b4e5c455c4e8303b5d6c5401916fb0d731ea5da72b040cfa81e0a340040ae3",
+                "md5": "55f0fc87255861ab10b0b796d271256c",
+                "size": "696014171"
+            }
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "license_path": "cudnn_samples/LICENSE.txt",
+        "version": "8.6.0.163",
+        "cuda_variant": [
+            "10",
+            "11"
+        ],
+        "linux-x86_64": {
+            "cuda10": {
+                "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.6.0.163_cuda10-archive.tar.xz",
+                "sha256": "5e3fb2c6edfb11ec7a789ea4f62e0ec91f33daafc3218d71fdd1bc3ea38b6753",
+                "md5": "1e078630b5de50cf6a9439531549eb74",
+                "size": "1666752"
+            },
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.6.0.163_cuda11-archive.tar.xz",
+                "sha256": "8339e99af68a43d10c28d3f3e80cc1f38ff04cd56adc37c0ffac684dfbc6589a",
+                "md5": "afa831c1710f147f24286f276cc7a856",
+                "size": "1665016"
+            }
+        },
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-ppc64le/cudnn_samples-linux-ppc64le-8.6.0.163_cuda11-archive.tar.xz",
+                "sha256": "07cbc14fe34d281e51278f8c12740a7da1399841f4e3feced35e6d9585f286c9",
+                "md5": "ebc14122656e467b53d510509c1d7f1c",
+                "size": "1667336"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-sbsa/cudnn_samples-linux-sbsa-8.6.0.163_cuda11-archive.tar.xz",
+                "sha256": "3e54ed6c7bd0ed75c0e0dce77ef5b3a343c80901338b9e7dc183588e11d8410c",
+                "md5": "5e7f3817d7051bba127c9786395b2d61",
+                "size": "1666848"
+            }
+        }
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "release_date": "2023-02-08",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "version": "8.8.0.121",
+        "linux-x86_64": {
+            "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.8.0.121_cuda11-archive.tar.xz",
+            "sha256": "62046476076d1b455fb13fb78b38d3496bacafbfdbb0494fb3392240a04466ea",
+            "md5": "881f1abee85e400f07fcd8604b5f3e2b",
+            "size": "874684972"
+        },
+        "linux-ppc64le": {
+            "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-8.8.0.121_cuda11-archive.tar.xz",
+            "sha256": "521c4b6ef579582953e4df2f5fe95a106bfc6d9dc30c6ac26ed6fd92fd0767b9",
+            "md5": "3dfc8989c18866ac91db3ee571094afe",
+            "size": "877165648"
+        },
+        "linux-sbsa": {
+            "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-8.8.0.121_cuda11-archive.tar.xz",
+            "sha256": "a019f2c8a300991d94d718a3524377d978efadaa62349858741f17ef859a9e55",
+            "md5": "e513e6867f47923fbfffb0ea4ef6ee58",
+            "size": "873877016"
+        },
+        "windows-x86_64": {
+            "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.8.0.121_cuda11-archive.zip",
+            "sha256": "4f0105a51ac6ea947154e252c8b220baf3345803f55644b5aad84e22ae4f8986",
+            "md5": "de5643f6fabb14badedf0066fa28a0fa",
+            "size": "699730750"
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "version": "8.8.0.121",
+        "linux-x86_64": {
+            "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.8.0.121_cuda11-archive.tar.xz",
+            "sha256": "e65e11ba7939e08866c2b2532be9c4e8c3210432ee397d97b30a69d7fa61cca2",
+            "md5": "0175d13df1887decda1ab1726323d033",
+            "size": "1666860"
+        },
+        "linux-ppc64le": {
+            "relative_path": "cudnn_samples/linux-ppc64le/cudnn_samples-linux-ppc64le-8.8.0.121_cuda11-archive.tar.xz",
+            "sha256": "dcbc6d1407e678f2abb5b525dbd193de8189d9d443b9db4822345c9673cde2fb",
+            "md5": "40d4d3249bde84c49516515b567de5b5",
+            "size": "1665408"
+        },
+        "linux-sbsa": {
+            "relative_path": "cudnn_samples/linux-sbsa/cudnn_samples-linux-sbsa-8.8.0.121_cuda11-archive.tar.xz",
+            "sha256": "3872220101da79a4265b2737d92031e7e593cbe7eb6fd953b784628d2db0072d",
+            "md5": "60e2ac548189f3c3cdf77f63a33bf6ec",
+            "size": "1666988"
+        }
+    }
+}
