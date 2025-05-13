@@ -297,7 +297,6 @@ stdenv.mkDerivation rec {
       equirosa
       urandom
       bkchr
-      teutat3s
       emily
       Gliczy
     ];
