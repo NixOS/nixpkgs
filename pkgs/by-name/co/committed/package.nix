@@ -10,17 +10,14 @@
   writableTmpDirAsHomeHook,
   libz,
 }:
-let
-  version = "1.1.5";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "committed";
-  inherit version;
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "committed";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-puv64/btSEkxGNhGGkh2A08gI+EIHWjC+s+QQDKj/ZQ=";
   };
 
@@ -51,7 +48,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/crate-ci/committed";
-    changelog = "https://github.com/crate-ci/committed/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/crate-ci/committed/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Nitpicking commit history since beabf39";
     mainProgram = "committed";
     license = [
@@ -60,4 +57,4 @@ rustPlatform.buildRustPackage {
     ];
     maintainers = [ lib.maintainers.pigeonf ];
   };
-}
+})
