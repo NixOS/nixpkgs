@@ -13,6 +13,7 @@
   pytestCheckHook,
   gitMinimal,
   gitSetupHook,
+  writableTmpDirAsHomeHook,
   pythonOlder,
   rich,
   ruamel-yaml,
@@ -63,11 +64,10 @@ buildPythonPackage rec {
     pytest-test-utils
     pytestCheckHook
     gitSetupHook
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
