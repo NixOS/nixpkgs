@@ -385,6 +385,7 @@ mapAliases ({
   livestreamer-curses = throw "'livestreamer-curses' has been removed as it, and livestreamer itself are unmaintained."; # added 2023-11-14
   lmcloud = pylamarzocco; # added 2024-11-26
   localstack = throw "localstack was promoted to a top-level attribute"; # added 2025-02-21
+  logi-circle = throw "logi-circle has been removed because the logi_circle integration was removed from Home Assistant"; # added 2025-05-13
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
