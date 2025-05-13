@@ -1,6 +1,9 @@
 name: "Build NixOS manual v2"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/manual-nixos-v2.yml
   pull_request_target:
     branches:
       - master

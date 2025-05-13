@@ -1,6 +1,9 @@
 name: "Check shell"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/check-shell.yml
   pull_request_target:
     paths:
       - 'shell.nix'
