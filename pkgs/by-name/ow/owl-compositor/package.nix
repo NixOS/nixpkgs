@@ -54,9 +54,6 @@ stdenv.mkDerivation {
       libxkbcommon
       wayland
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gnustep-back
     ];
@@ -78,7 +75,15 @@ stdenv.mkDerivation {
 
     mkdir -p $out/{Applications,bin}
     mv Owl.app $out/Applications
-    makeWrapper $out/{Applications/Owl.app${lib.optionalString stdenv.hostPlatform.isDarwin "/Contents/MacOS"},bin}/Owl
+
+    cat > $out/bin/Owl <<EOF
+    #!/bin/sh
+    export XDG_RUNTIME_DIR="/tmp/runtime-\$(id -un)"
+    mkdir -p "\$XDG_RUNTIME_DIR"
+    chmod 700 "\$XDG_RUNTIME_DIR"
+    exec "$out/Applications/Owl.app${lib.optionalString stdenv.hostPlatform.isDarwin "/Contents/MacOS"}/Owl" "\$@"
+    EOF
+    chmod +x $out/bin/Owl
 
     runHook postInstall
   '';
