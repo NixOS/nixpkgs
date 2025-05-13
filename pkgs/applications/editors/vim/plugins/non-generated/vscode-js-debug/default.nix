@@ -23,7 +23,7 @@ let
     version = "v1.100.0";
 
     npmDepsHash = "sha256-4SweyCohiTAMhGFwqmtQtmyic3/34azMTou6vpM2Bqo=";
-    npmPackFlags = [ "--ignore-scripts" ];
+    npmPackFlags = [ "--ignore-scripts" "--legacy-peer-deps" ];
     NODE_OPTIONS = "--openssl-legacy-provider";
   });
 
