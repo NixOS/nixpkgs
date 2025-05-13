@@ -22,6 +22,7 @@ lib.fixedPoints.makeExtensible (final: {
     inherit (final) bootstrapData db;
     inherit lib;
   };
+  extensions = [ ]; # Extensions applied to every CUDA package set.
   fixups = import ./fixups { inherit lib; };
   lib = import ./lib {
     _cuda = final;
