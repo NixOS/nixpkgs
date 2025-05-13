@@ -116,7 +116,8 @@ let
     ++ (lib.optional (cfg.config.objectstore.s3.enable) "s3_secret:${cfg.config.objectstore.s3.secretFile}")
     ++ (lib.optional (
       cfg.config.objectstore.s3.sseCKeyFile != null
-    ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}");
+    ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
+    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
 
   requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
 
@@ -195,7 +196,6 @@ let
   overrideConfig =
     let
       c = cfg.config;
-      requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
       objectstoreConfig =
         let
           s3 = c.objectstore.s3;
@@ -232,7 +232,7 @@ let
     in
     pkgs.writeText "nextcloud-config.php" ''
       <?php
-      ${optionalString requiresReadSecretFunction ''
+      ${optionalString requiresRuntimeSystemdCredentials ''
         function nix_read_secret($credential_name) {
           $credentials_directory = getenv("CREDENTIALS_DIRECTORY");
           if (!$credentials_directory) {
@@ -253,7 +253,19 @@ let
           }
 
           return trim(file_get_contents($credential_path));
-        }''}
+        }
+
+        function nix_read_secret_and_decode_json_file($credential_name) {
+          $decoded = json_decode(nix_read_secret($credential_name), true);
+
+          if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+            exit(1);
+          }
+
+          return $decoded;
+        }
+      ''}
       function nix_decode_json_file($file, $error) {
         if (!file_exists($file)) {
           throw new \RuntimeException(sprintf($error, $file));
@@ -287,10 +299,7 @@ let
       ));
 
       ${optionalString (cfg.secretFile != null) ''
-        $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
-          "${cfg.secretFile}",
-          "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
-        ));
+        $CONFIG = array_replace_recursive($CONFIG, nix_read_secret_and_decode_json_file('secret_file'));
       ''}
     '';
 in
