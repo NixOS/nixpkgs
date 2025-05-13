@@ -49,7 +49,7 @@ let
     (acceleration == "cuda") || (config.cudaSupport && acceleration == null);
 
   minRequiredCudaCapability = "6.1"; # build fails with 6.0
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
   cudaCapabilityString =
     if cudaCapability == null then
       (builtins.head (
@@ -60,7 +60,7 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.cudaFlags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDot cudaCapabilityString);
 
   mklSupport =
     assert accelIsValid;

@@ -52,12 +52,20 @@ let
     lib.versionAtLeast cudaMajorMinorVersion package.minCudaVersion
     && lib.versionAtLeast package.maxCudaVersion cudaMajorMinorVersion;
 
-  # Releases for our platform and CUDA version.
-  # See ../modules/${pname}/releases/releases.nix
-  # allPackages :: List Package
-  allPackages = lib.filter satisfiesCudaVersion (
-    evaluatedModules.config.${pname}.releases.${redistArch} or [ ]
-  );
+  # FIXME: do this at the module system level
+  propagatePlatforms = lib.mapAttrs (redistArch: lib.map (p: { inherit redistArch; } // p));
+
+  # Releases for all platforms and all CUDA versions.
+  allReleases = propagatePlatforms evaluatedModules.config.${pname}.releases;
+
+  # Releases for all platforms and our CUDA version.
+  allReleases' = lib.mapAttrs (_: lib.filter satisfiesCudaVersion) allReleases;
+
+  # Packages for all platforms and our CUDA versions.
+  allPackages = lib.concatLists (lib.attrValues allReleases');
+
+  packageOlder = p1: p2: lib.versionOlder p1.version p2.version;
+  packageSupportedPlatform = p: p.redistArch == redistArch;
 
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
@@ -77,8 +85,15 @@ let
         newestPackages
         // {
           ${majorMinorVersion} =
-            # Only keep the existing package if it is newer than the one we are considering.
-            if existingPackage != null && lib.versionOlder package.version existingPackage.version then
+            # Only keep the existing package if it is newer than the one we are considering or it is supported on the
+            # current platform and the one we are considering is not.
+            if
+              existingPackage != null
+              && (
+                packageOlder package existingPackage
+                || (!packageSupportedPlatform package && packageSupportedPlatform existingPackage)
+              )
+            then
               existingPackage
             else
               package;
@@ -87,9 +102,8 @@ let
     in
     # Sort the packages by version so the newest is first.
     # NOTE: builtins.sort requires a strict weak ordering, so we must use versionOlder rather than versionAtLeast.
-    lib.sort (p1: p2: lib.versionOlder p2.version p1.version) (
-      lib.attrValues newestForEachMajorMinorVersion
-    );
+    # See https://github.com/NixOS/nixpkgs/commit/9fd753ea84e5035b357a275324e7fd7ccfb1fc77.
+    lib.sort (lib.flip packageOlder) (lib.attrValues newestForEachMajorMinorVersion);
 
   extension =
     final: _:

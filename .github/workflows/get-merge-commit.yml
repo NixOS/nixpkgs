@@ -6,6 +6,12 @@ on:
       mergedSha:
         description: "The merge commit SHA"
         value: ${{ jobs.resolve-merge-commit.outputs.mergedSha }}
+      targetSha:
+        description: "The target commit SHA"
+        value: ${{ jobs.resolve-merge-commit.outputs.targetSha }}
+      systems:
+        description: "The supported systems"
+        value: ${{ jobs.resolve-merge-commit.outputs.systems }}
 
 permissions: {}
 
@@ -14,6 +20,8 @@ jobs:
     runs-on: ubuntu-24.04-arm
     outputs:
       mergedSha: ${{ steps.merged.outputs.mergedSha }}
+      targetSha: ${{ steps.merged.outputs.targetSha }}
+      systems: ${{ steps.systems.outputs.systems }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -31,13 +39,17 @@ jobs:
               echo "mergedSha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
               ;;
             pull_request_target)
-              if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
-                echo "Checking the merge commit $mergedSha"
-                echo "mergedSha=$mergedSha" >> "$GITHUB_OUTPUT"
+              if commits=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
+                echo "Checking the commits:\n$commits"
+                echo "$commits" >> "$GITHUB_OUTPUT"
               else
                 # Skipping so that no notifications are sent
                 echo "Skipping the rest..."
               fi
               ;;
           esac
-          rm -rf base
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <base/ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"

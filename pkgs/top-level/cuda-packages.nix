@@ -82,9 +82,6 @@ let
       __attrsFailEvaluation = true;
     };
 
-    # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
-    cudaFlags = flags;
-
     # Loose packages
     # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
     # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically

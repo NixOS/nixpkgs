@@ -7,33 +7,34 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cmctl";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cmctl";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Kr7vwVW6v08QRbJDs2u0vK241ljNfhLVYIQCBl31QSs=";
   };
 
-  vendorHash = "sha256-D83Ufpa7PLQWBCHX5d51me3aYprGzc9RoKVma2Ax1Is=";
+  vendorHash = "sha256-SYCWvt2K3MEow4cDKxLSK+Bp0hZG9rNI9PoXdPcPESg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cert-manager/cert-manager/pkg/util.AppVersion=v${version}"
-    "-X github.com/cert-manager/cert-manager/pkg/util.AppGitCommit=${src.rev}"
+    "-X github.com/cert-manager/cert-manager/pkg/util.AppVersion=v${finalAttrs.version}"
+    "-X github.com/cert-manager/cert-manager/pkg/util.AppGitCommit=${finalAttrs.src.rev}"
   ];
+
+  # integration tests require running etcd, kubernetes
+  postPatch = ''
+    rm -r test/integration
+  '';
 
   nativeBuildInputs = [
     installShellFiles
   ];
-
-  checkPhase = ''
-    go test --race $(go list ./... | grep -v /test/)
-  '';
 
   # Trusted by this computer: no: x509: “cert-manager” certificate is not
   # trusted
@@ -46,7 +47,9 @@ buildGoModule rec {
         --zsh <($out/bin/cmctl completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command line utility to interact with a cert-manager instalation on Kubernetes";
     mainProgram = "cmctl";
     longDescription = ''
@@ -63,8 +66,8 @@ buildGoModule rec {
       resources inside your Kubernetes cluster.
     '';
     downloadPage = "https://github.com/cert-manager/cmctl";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://cert-manager.io/";
-    maintainers = with maintainers; [ joshvanl ];
+    maintainers = with lib.maintainers; [ joshvanl ];
   };
-}
+})
