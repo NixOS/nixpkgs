@@ -96,6 +96,7 @@ let
     inetutils
     iproute2
     iptables
+    libnl.bin
     multipath-tools
     nbd
     openvswitch
@@ -171,39 +172,42 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-s0eCBCd6ybl+kLtXCC6E1sk++w7txXn/B/Cg5acQFfY=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    bison
-    cmake
-    flex
-    pandoc
-    pkg-config
-    python3Packages.setuptools
-  ];
+  strictDeps = true;
+
+  nativeBuildInputs =
+    [
+      acpica-tools
+      autoPatchelfHook
+      bison
+      cmake
+      dev86
+      flex
+      pandoc
+      perl
+      pkg-config
+
+      # oxenstored
+      ocamlPackages.findlib
+      ocamlPackages.ocaml
+    ]
+    ++ (with python3Packages; [
+      python
+      setuptools
+      wrapPython
+    ]);
+
   buildInputs =
     [
-      # Xen
-      acpica-tools
       bzip2
-      dev86
       e2fsprogs.dev
       libnl
       libuuid
       lzo
       ncurses
-      perl
-      python3Packages.python
       xz
       yajl
       zlib
       zstd
-
-      # oxenstored
-      ocamlPackages.findlib
-      ocamlPackages.ocaml
-
-      # Python Fixes
-      python3Packages.wrapPython
     ]
     ++ optional withFlask checkpolicy
     ++ optional (versionOlder finalAttrs.version "4.19") systemdMinimal;
