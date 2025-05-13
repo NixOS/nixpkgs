@@ -40,7 +40,7 @@ jobs:
               ;;
             pull_request_target)
               if commits=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
-                echo "Checking the commits:\n$commits"
+                echo -e "Checking the commits:\n$commits"
                 echo "$commits" >> "$GITHUB_OUTPUT"
               else
                 # Skipping so that no notifications are sent
