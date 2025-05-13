@@ -286,6 +286,9 @@ stdenv.mkDerivation (finalAttrs: {
       "test_vsioss_6"
       # flaky?
       "test_tiledb_read_arbitrary_array"
+      # tests for magic numbers, seem to change with different poppler versions,
+      # and architectures
+      "test_pdf_extra_rasters"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
       # likely precision-related expecting x87 behaviour
