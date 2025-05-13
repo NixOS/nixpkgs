@@ -13,6 +13,7 @@
   fpath,
   odoc,
   gitSetupHook,
+  writableTmpDirAsHomeHook,
   opam-format,
   opam-core,
   opam-state,
@@ -71,6 +72,7 @@ buildDunePackage rec {
     odoc
     gitMinimal
     gitSetupHook
+    writableTmpDirAsHomeHook
   ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
@@ -82,8 +84,6 @@ buildDunePackage rec {
   '';
 
   preCheck = ''
-    export HOME=$TMPDIR
-
     # it fails when it tries to reference "./make_check_deterministic.exe"
     rm -r tests/bin/check
   '';
