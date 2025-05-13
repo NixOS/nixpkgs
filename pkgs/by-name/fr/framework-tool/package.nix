@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "framework-tool";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "framework-system";
     tag = "v${version}";
-    hash = "sha256-JPIpaAfXraqU6YM31bLImeJUCD3/O+PLcaZBxUjDqlM=";
+    hash = "sha256-tC20ca5dRGumRQAcdGLOtEPAwBYYUg6+j7Xbowp3WAo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Kf3DXEDpCbbixUjeyBi1xkR32sW2uuasxqeWeq/X2Xk=";
+  cargoHash = "sha256-W2kiZB/ddXGpKVfaYlpaEBSYtp6EdXs/vMKenYcA+EY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
