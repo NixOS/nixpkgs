@@ -12,16 +12,15 @@
 # from import caching, as it should be evaluated once per system, rather than per-system and CUDA package set.)
 
 let
-  lib = import ../../../../lib;
+  inherit (import ./db/nixpkgs_paths.nix) libPath;
+  lib = import libPath;
 in
 lib.fixedPoints.makeExtensible (final: {
   bootstrapData = import ./db/bootstrap {
     inherit lib;
   };
-  db = import ./db {
-    inherit (final) bootstrapData db;
-    inherit lib;
-  };
+  dbEvaluation = import ./db { };
+  db = final.dbEvaluation.config;
   fixups = import ./fixups { inherit lib; };
   lib = import ./lib {
     _cuda = final;

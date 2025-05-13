@@ -45,8 +45,18 @@
     ;
 
   # See ./versions.nix for documentation.
-  inherit (import ./versions.nix { inherit _cuda lib; })
+  inherit (import ./versions.nix { inherit lib; })
     majorMinorPatch
+    matchQuantized
+    quantizeVersion
+    selectQuantized
     trimComponents
     ;
+
+  inherit (import ./db.nix { inherit _cuda lib; })
+    _archiveIsSupported
+    solveGreedy
+    ;
+
+  mkFlagsRaw = import ./flags.nix { inherit _cuda lib; };
 }

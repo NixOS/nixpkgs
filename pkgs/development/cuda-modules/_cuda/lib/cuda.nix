@@ -120,6 +120,7 @@
       license.free
       || lib.elem license.shortName [
         "CUDA EULA"
+        "CUDA Toolkit"
         "cuDNN EULA"
         "cuSPARSELt EULA"
         "cuTENSOR EULA"

@@ -34,7 +34,6 @@ let
     lists
     strings
     trivial
-    licenses
     teams
     sourceTypes
     ;
@@ -324,33 +323,15 @@ in
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
-    platforms = trivial.pipe supportedRedistSystems [
-      # Map each redist system to the equivalent nix systems.
-      (lib.concatMap _cuda.lib.getNixSystems)
-      # Take all the unique values.
-      lib.unique
-      # Sort the list.
-      lib.naturalSort
-    ];
+    platforms = builtins.attrNames (
+      lib.concatMapAttrs (name: _: _cuda.db.system.fromNvidia.${name}) _cuda.db.package.systemsNv.${pname}
+    );
     badPlatforms =
       let
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license =
-      if redistName == "cuda" then
-        # Add the package-specific license.
-        let
-          licensePath =
-            if redistribRelease.license_path != null then
-              redistribRelease.license_path
-            else
-              "${pname}/LICENSE.txt";
-          url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
-        in
-        lib.licenses.nvidiaCudaRedist // { inherit url; }
-      else
-        licenses.unfree;
+    license = _cuda.db.license.compiled.${_cuda.db.package.license.${pname}};
     teams = [ teams.cuda ];
   };
 })).overrideAttrs
