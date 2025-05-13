@@ -89,6 +89,8 @@ callPackage ./generic.nix rec {
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
+  hasVsceSign = true;
+
   meta = with lib; {
     description = ''
       Open source source code editor developed by Microsoft for Windows,
