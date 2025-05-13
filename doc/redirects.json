@@ -483,6 +483,9 @@
   "tester-testEqualArrayOrMap-return": [
     "index.html#tester-testEqualArrayOrMap-return"
   ],
+  "treefmt": [
+    "index.html#treefmt"
+  ],
   "typst": [
     "index.html#typst",
     "doc/languages-frameworks/typst.section.md#typst"
