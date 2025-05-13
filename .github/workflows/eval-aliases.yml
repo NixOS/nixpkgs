@@ -1,6 +1,9 @@
 name: Eval aliases
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/eval-aliases.yml
   pull_request_target:
 
 permissions: {}
