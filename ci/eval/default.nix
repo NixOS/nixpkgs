@@ -35,17 +35,23 @@ let
 
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
+  abortSource = builtins.toFile "dont-use-nix-path-in-nixpkgs.nix" ''
+    builtins.abort "Illegal use of <nixpkgs> in Nixpkgs"
+  '';
+
   attrpathsSuperset =
     {
       evalSystem,
+      nixpkgsPath ? nixpkgs,
     }:
     runCommand "attrpaths-superset.json"
       {
-        src = nixpkgs;
+        src = nixpkgsPath;
         nativeBuildInputs = [
           nix
           time
         ];
+        env.NIX_PATH = "nixpkgs=${abortSource}";
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -69,13 +75,22 @@ let
       # because `--argstr system` would only be passed to the ci/default.nix file!
       evalSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
+      attrpathFile ? "${attrpathsSuperset { inherit evalSystem nixpkgsPath; }}/paths.json",
+      nixpkgsPath ? nixpkgs,
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       checkMeta ? true,
 
       # Don't try to eval packages marked as broken.
       includeBroken ? false,
+
+      # This is a misnomer, as we still catch and detect packages that aren't in a
+      # package's `meta.platforms`, but we still want to try and eval it to make
+      # sure that we can even get to the unsupported `throw`. (See
+      # https://github.com/NixOS/nixpkgs/pull/406207 as an example where the broken
+      # `throw` wasn't reached, therefore breaking `nixpkgs-review`.)
+      includeUnsupported ? true,
+
       # Whether to just evaluate a single chunk for quick testing
       quickTest ? false,
     }:
@@ -93,12 +108,13 @@ let
         set +e
         command time -o "$outputDir/timestats/$myChunk" \
           -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
-          nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          nix-env -f "${nixpkgsPath}/pkgs/top-level/release-attrpaths-parallel.nix" \
           --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
           --query --available \
           --no-name --attr-path --out-path \
+          --meta --json \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
@@ -106,7 +122,8 @@ let
           --arg systems "[ \"$system\" ]" \
           --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
-          -I ${nixpkgs} \
+          --arg includeUnsupported ${lib.boolToString includeUnsupported} \
+          -I ${nixpkgsPath} \
           -I ${attrpathFile} \
           > "$outputDir/result/$myChunk" \
           2> "$outputDir/stderr/$myChunk"
@@ -134,6 +151,7 @@ let
         ];
         env = {
           inherit evalSystem chunkSize;
+          NIX_PATH = "nixpkgs=${abortSource}";
         };
       }
       ''
@@ -192,7 +210,22 @@ let
 
         # Make sure the glob doesn't break when there's no files
         shopt -s nullglob
-        cat "$chunkOutputDir"/result/* > $out/paths
+
+        cat "$chunkOutputDir"/result/* | jq -r '
+          to_entries[]
+          | select(.value.meta.unsupported | not)
+          | .key + " " +
+            .value.outputs as $outputs
+            | $outputs
+            | to_entries
+            | map(select(.key != "out") | .key + "=" + .value)
+            | join(";")
+            + if $outputs.out then
+                (if $outputs | length == 1 then "" else ";" end) + $outputs.out
+              else
+                ""
+              end
+        ' > $out/paths
         cat "$chunkOutputDir"/stats/* > $out/stats.jsonstream
       '';
 
@@ -278,6 +311,16 @@ let
       ;
   };
 
+  releaseChecks = import ./release-checks.nix {
+    inherit
+      lib
+      runCommand
+      nixpkgs
+      singleSystem
+      linkFarm
+      ;
+  };
+
   full =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
@@ -303,11 +346,11 @@ let
 in
 {
   inherit
-    attrpathsSuperset
     singleSystem
     combine
     compare
-    # The above three are used by separate VMs in a GitHub workflow,
+    releaseChecks
+    # The above four are used by separate VMs in a GitHub workflow,
     # while the below is intended for testing on a single local machine
     full
     ;

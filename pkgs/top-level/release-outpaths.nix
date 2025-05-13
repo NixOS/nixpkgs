@@ -12,6 +12,9 @@
   # used by pkgs/top-level/release-attrnames-superset.nix
   attrNamesOnly ? false,
 
+  # used by pkgs/top-level/release-attrpaths-parallel.nix
+  includeUnsupported ? false,
+
   # Set this to `null` to build for builtins.currentSystem only
   systems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
 }:
@@ -21,7 +24,7 @@ let
     import (path + "/pkgs/top-level/release.nix")
       # Compromise: accuracy vs. resources needed for evaluation.
       {
-        inherit attrNamesOnly;
+        inherit attrNamesOnly includeUnsupported;
         supportedSystems = if systems == null then [ builtins.currentSystem ] else systems;
         nixpkgsArgs = {
           config = {
