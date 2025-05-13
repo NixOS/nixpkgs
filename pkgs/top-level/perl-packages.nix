@@ -979,7 +979,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = true; # DB.c:(.text+0x153): undefined reference to `Perl_init_debugger'
+      broken = stdenv.hostPlatform.isLinux; # DB.c: undefined reference to `Perl_init_debugger'
     };
   };
 
