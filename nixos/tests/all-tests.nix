@@ -427,6 +427,7 @@ in
   endlessh = handleTest ./endlessh.nix { };
   endlessh-go = handleTest ./endlessh-go.nix { };
   engelsystem = handleTest ./engelsystem.nix { };
+  ente = runTest ./ente;
   enlightenment = handleTest ./enlightenment.nix { };
   env = handleTest ./env.nix { };
   envfs = handleTest ./envfs.nix { };
