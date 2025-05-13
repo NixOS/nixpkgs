@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.6.7";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     tag = "v${version}";
-    hash = "sha256-2BwFCRbVvs7pAM5SnhynWws2+QthB/F9V6DYPViDICU=";
+    hash = "sha256-c+VAlm32/NXvUr5i0AY/zuTrFIQLtPxNNeSiQTMoJAY=";
   };
 
   postPatch = ''
