@@ -26,6 +26,9 @@
   "cuda-configuring-nixpkgs-for-cuda": [
     "index.html#cuda-configuring-nixpkgs-for-cuda"
   ],
+  "cuda-extending-cuda-package-sets": [
+    "index.html#cuda-extending-cuda-package-sets"
+  ],
   "cuda-using-cudapackages": [
     "index.html#cuda-using-cudapackages"
   ],
