@@ -63,6 +63,8 @@ in
     services.opendkim = {
       enable = lib.mkEnableOption "OpenDKIM sender authentication system";
 
+      package = lib.mkPackageOption pkgs "opendkim" { };
+
       socket = lib.mkOption {
         type = lib.types.str;
         default = defaultSock;
@@ -186,7 +188,10 @@ in
           "opendkim/TrustedHosts".source = trustedHostsFile;
         })
       ];
-      systemPackages = [ pkgs.opendkim ];
+      systemPackages = [
+        lib.getExe
+        cfg.package
+      ];
     };
 
     services.opendkim.configFile = lib.mkIf (cfg.settings != { }) configFile;
@@ -208,7 +213,7 @@ in
               lib.mapAttrsToList (domain: conf: ''
                 mkdir -p "${cfg.keyPath}/${domain}"
                 if ! test -f ${domain}/${conf.selector}.private; then
-                  ${pkgs.opendkim}/bin/opendkim-genkey -b ${toString cfg.keySize} -s ${conf.selector} -d ${domain} -D "${cfg.keyPath}/${domain}"
+                  ${lib.getExe cfg.package}-genkey -b ${toString cfg.keySize} -s ${conf.selector} -d ${domain} -D "${cfg.keyPath}/${domain}"
                   echo "Generated OpenDKIM key for ${domain}! Please update your DNS settings:\n"
                   cat ${domain}/${conf.selector}.txt
                 fi
@@ -236,14 +241,14 @@ in
           ''
             cd "${cfg.keyPath}"
             if ! test -f ${cfg.selector}.private; then
-              ${pkgs.opendkim}/bin/opendkim-genkey -b ${toString cfg.keySize} -s ${cfg.selector} -d all-domains-generic-key
+              ${lib.getExe cfg.package}-genkey -b ${toString cfg.keySize} -s ${cfg.selector} -d all-domains-generic-key
               echo "Generated OpenDKIM key! Please update your DNS settings:\n"
               cat ${cfg.selector}.txt
             fi
           '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.opendkim}/bin/opendkim ${lib.escapeShellArgs args}";
+        ExecStart = "lib.getExe cfg.package ${lib.escapeShellArgs args}";
         User = cfg.user;
         Group = cfg.group;
         RuntimeDirectory = lib.optional (cfg.socket == defaultSock) "opendkim";
