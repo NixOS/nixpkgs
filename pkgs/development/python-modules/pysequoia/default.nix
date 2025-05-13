@@ -58,7 +58,5 @@ buildPythonPackage rec {
     homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
-    # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
