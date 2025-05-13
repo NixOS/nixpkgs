@@ -27,6 +27,7 @@
   lib,
   pkgs,
   stdenv,
+  runCommand,
 }:
 let
   inherit (lib)
@@ -171,7 +172,10 @@ let
     [
       (
         final: _:
-        lib.packagesFromDirectoryRecursive {
+        {
+          cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false"; # Prevent missing attribute errors
+        }
+        // lib.packagesFromDirectoryRecursive {
           inherit (final) callPackage;
           directory = ../development/cuda-modules/packages;
         }
