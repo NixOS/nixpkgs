@@ -19,8 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
     rocm-cmake
   ];
+
+  strictDeps = true;
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;

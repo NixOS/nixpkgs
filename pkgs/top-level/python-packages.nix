@@ -4129,6 +4129,8 @@ self: super: with self; {
 
   dotwiz = callPackage ../development/python-modules/dotwiz { };
 
+  doubleratchet = callPackage ../development/python-modules/doubleratchet { };
+
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
   dparse = callPackage ../development/python-modules/dparse { };
@@ -14865,6 +14867,8 @@ self: super: with self; {
   rclone-python = callPackage ../development/python-modules/rclone-python { };
 
   rcssmin = callPackage ../development/python-modules/rcssmin { };
+
+  rctclient = callPackage ../development/python-modules/rctclient { };
 
   rdbtools = callPackage ../development/python-modules/rdbtools { };
 

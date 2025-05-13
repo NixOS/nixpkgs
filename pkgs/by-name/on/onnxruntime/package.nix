@@ -98,7 +98,7 @@ let
     hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
   };
 
-  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";

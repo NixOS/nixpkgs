@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-v4R+5jgC4dTrL+i6O+UCCr7+g673hKi9YmrSeROLpZs=";
+    hash = "sha256-fSryNbWqIO5+oyU9uP7zO6TJzrtFPwrtaU0toxBysao=";
   };
 
   patches = [
@@ -202,6 +202,8 @@ buildPythonPackage rec {
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
+    # expects timeout, but we have no route in the sandbox
+    "test_connect_error_multi_hosts_each_message_preserved"
   ];
 
   disabledTestPaths = [
@@ -220,9 +222,6 @@ buildPythonPackage rec {
     "-o cache_dir=.cache"
     "-m"
     "'not refcount and not timing and not flakey'"
-    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
-    "-W"
-    "ignore::pytest.PytestRemovedIn9Warning"
   ];
 
   postCheck = ''
