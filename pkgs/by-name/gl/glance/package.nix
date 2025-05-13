@@ -8,24 +8,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "glance";
-  version = "0.7.13";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = "glance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MinskibgOCb8OytC+Uxg31g00Ha/un7MF+uvL9xosUU=";
+    hash = "sha256-syWalphoKjUYrQjKrQUMDijgILQ+AIOVTMqYCiYVWyU=";
   };
 
-  vendorHash = "sha256-+7mOCU5GNQV8+s9QPki+7CDi4qtOIpwjC//QracwzHI=";
+  vendorHash = "sha256-81FAWMe7ksmbklXGGg15v2W4nuT6AcBHLIhXF7bI78c=";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/glanceapp/glance/internal/glance.buildVersion=v${finalAttrs.version}"
   ];
-
-  excludedPackages = [ "scripts/build-and-ship" ];
 
   passthru = {
     updateScript = nix-update-script { };
