@@ -108,6 +108,7 @@ mkDerivation rec {
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
     maintainers = [ ];
+    mainProgram = "scide";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
