@@ -53,8 +53,7 @@
    More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
    When editing this file:
-    * keep the list alphabetically sorted, check with:
-        nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
+    * keep the list alphabetically sorted
     * test the validity of the format with:
         nix-build lib/tests/maintainers.nix
 
@@ -26233,6 +26232,12 @@
     email = "wf@dewith.io";
     github = "wfdewith";
     githubId = 2306085;
+  };
+  wgordon17 = {
+    email = "will@gordoncode.dev";
+    github = "wgordon17";
+    githubId = 22222756;
+    name = "Will Gordon";
   };
   wgunderwood = {
     email = "wg.underwood13@gmail.com";
