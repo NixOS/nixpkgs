@@ -2,7 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
-  makeWrapper,
+  makeBinaryWrapper,
   curly,
   fmt,
   bos,
@@ -50,7 +50,7 @@ buildDunePackage rec {
     hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ runtimeInputs;
   buildInputs = [
     curly
     fmt
