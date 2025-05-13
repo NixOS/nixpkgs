@@ -35827,7 +35827,6 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from el6
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextIconv.x86_64-darwin
     };
   };
 
