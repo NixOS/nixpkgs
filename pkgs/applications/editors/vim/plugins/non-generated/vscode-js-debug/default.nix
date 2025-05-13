@@ -24,6 +24,8 @@ let
 
     npmDepsHash = "sha256-4SweyCohiTAMhGFwqmtQtmyic3/34azMTou6vpM2Bqo=";
     npmPackFlags = [ "--ignore-scripts" "--legacy-peer-deps" ];
+    makeCacheWritable = true;
+
     NODE_OPTIONS = "--openssl-legacy-provider";
   });
 
