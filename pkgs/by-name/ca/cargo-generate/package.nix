@@ -11,14 +11,14 @@
   gitSetupHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-generate";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
   };
 
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
-    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with licenses; [
       asl20 # or
       mit
@@ -88,4 +88,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})
