@@ -53,8 +53,7 @@
    More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
    When editing this file:
-    * keep the list alphabetically sorted, check with:
-        nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
+    * keep the list alphabetically sorted
     * test the validity of the format with:
         nix-build lib/tests/maintainers.nix
 
