@@ -32,6 +32,9 @@
   "cuda-docker-podman": [
     "index.html#cuda-docker-podman"
   ],
+  "cuda-extending-cuda-package-sets": [
+    "index.html#cuda-extending-cuda-package-sets"
+  ],
   "cuda-package-set-maintenance": [
     "index.html#cuda-package-set-maintenance",
     "index.html#adding-a-new-cuda-release"

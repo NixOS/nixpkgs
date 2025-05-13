@@ -205,6 +205,7 @@ let
     ++ lib.optionals config.allowAliases [
       (import ../development/cuda-modules/aliases.nix { inherit lib; })
     ]
+    ++ _cuda.extensions
   );
 
   cudaPackages = customisation.makeScope newScope (
