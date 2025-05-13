@@ -2,7 +2,7 @@
   lib,
   stdenv,
   mkDerivation,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   runtimeShell,
   pkg-config,
@@ -32,9 +32,12 @@ mkDerivation rec {
   pname = "supercollider";
   version = "3.13.1";
 
-  src = fetchurl {
-    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
+  src = fetchFromGitHub {
+    owner = "supercollider";
+    repo = "supercollider";
+    tag = "Version-${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-WlzaZ6DG5J3U1yBB6Emhas3HUSBtOiHfh8IZ8j6zI0Y=";
   };
 
   patches = [
