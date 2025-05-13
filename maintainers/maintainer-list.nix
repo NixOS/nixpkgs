@@ -537,6 +537,12 @@
       }
     ];
   };
+  Acconut = {
+    email = "marius@transloadit.com";
+    github = "Acconut";
+    githubId = 1375043;
+    name = "Marius Kleidl";
+  };
   acesyde = {
     name = "Pierre-Emmanuel Mercier";
     email = "acesyde@gmail.com";
@@ -13422,6 +13428,12 @@
     github = "okvik";
     githubId = 58425080;
     name = "Viktor Pocedulić";
+  };
+  kvz = {
+    email = "kevin@transloadit.com";
+    github = "kvz";
+    githubId = 26752;
+    name = "Kevin van Zonneveld";
   };
   kwaa = {
     name = "藍+85CD";
