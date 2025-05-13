@@ -11,6 +11,9 @@
   autoreconfHook,
   makeWrapper,
   jq,
+  libgcrypt,
+  texinfo,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoreconfHook
     makeWrapper
+    libgcrypt # AM_PATH_LIBGCRYPT
+    texinfo # makeinfo
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -50,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     # for ltdl.h
     libtool
   ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [ gnunet ];
 
@@ -61,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     cat Makefile.am.in Makefile.am.ext >> Makefile.am
     popd
   '';
+
+  configureFlags = [
+    "ac_cv_path__libcurl_config=${lib.getDev curl}/bin/curl-config"
+  ];
 
   # NOTE: The executables that need database access fail to detect the
   # postgresql library in `$out/lib/taler`, so we need to wrap them.
