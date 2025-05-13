@@ -16,7 +16,7 @@
   rocmPackages,
   rocmGpuTargets ? rocmPackages.clr.localGpuTargets or (rocmPackages.clr.gpuTargets or [ ]),
   cudaPackages,
-  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
+  cudaArches ? cudaPackages.flags.realArches or [ ],
   autoAddDriverRunpath,
 
   # passthru
