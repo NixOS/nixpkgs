@@ -1,12 +1,13 @@
 { lib, ... }:
 let
-  inherit (lib) options trivial types;
+  inherit (lib)
+    options
+    types
+    ;
   Release = import ./release.nix { inherit lib; };
 in
-options.mkOption {
-  description = "Redistributable manifest is an attribute set which includes a mapping from package name to release";
-  example = trivial.importJSON ../../../../cuda/manifests/redistrib_11.5.2.json;
-  type = types.submodule {
+{
+  keepIndent = {
     # Allow any attribute name as these will be the package names
     freeformType = types.attrsOf Release.type;
     options = {
@@ -31,3 +32,4 @@ options.mkOption {
     };
   };
 }
+.keepIndent

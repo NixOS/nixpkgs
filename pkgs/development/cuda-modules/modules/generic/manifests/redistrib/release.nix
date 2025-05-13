@@ -5,7 +5,6 @@ let
 in
 options.mkOption {
   description = "Release is an attribute set which includes a mapping from platform to package";
-  example = (import ./manifest.nix { inherit lib; }).cuda_cccl;
   type = types.submodule {
     # Allow any attribute name as these will be the platform names
     freeformType = types.attrsOf Package.type;
@@ -13,12 +12,14 @@ options.mkOption {
       name = options.mkOption {
         description = "Full name of the package";
         example = "CXX Core Compute Libraries";
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
       };
       license = options.mkOption {
         description = "License of the package";
         example = "CUDA Toolkit";
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
       };
       license_path = options.mkOption {
         description = "Path to the license of the package";

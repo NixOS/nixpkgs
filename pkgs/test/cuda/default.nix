@@ -2,6 +2,8 @@
   lib,
   recurseIntoAttrs,
 
+  formats,
+
   cudaPackages,
 
   cudaPackages_11_0,
@@ -46,3 +48,6 @@ in
   ))
   recurseIntoAttrs
 ])
+// {
+  db = (formats.json { }).generate "cudb.json" (import ../../development/cuda-modules/db { }).config;
+}
