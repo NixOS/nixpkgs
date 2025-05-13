@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
