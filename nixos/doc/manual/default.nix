@@ -173,7 +173,7 @@ rec {
         nativeBuildInputs = [ buildPackages.nixos-render-docs ];
         inputs = sourceFilesBySuffices ./. [ ".md" ];
         meta.description = "The NixOS manual in HTML format";
-        # allowedReferences = [ "out" ];
+        allowedReferences = [ "out" ] ++ (map (p: "${p.value}") config.meta.doc);
       }
       ''
         # Generate the HTML manual.
