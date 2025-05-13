@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.2.100";
+  version = "8.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lUHnaorIUwoac1YgYimxF8KTJOPSUiJg5BKC+hFy0lc=";
+    hash = "sha256-5uexcItbBgO2Tv52clS0N+IhplqpKwq43p2yqSxANek=";
   };
 
   patches = [
@@ -91,8 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     piper-tts
     podofo
     poppler-utils
-    qt6.qtbase
-    qt6.qtwayland
+    (if stdenv.hostPlatform.isLinux then qt6.qtwayland else qt6.qtbase)
     sqlite
     (python3Packages.python.withPackages (
       ps:
@@ -143,7 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional speechSupport speechd-minimal;
+  ] ++ lib.optionals (speechSupport && stdenv.hostPlatform.isLinux) [
+    speechd-minimal
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -240,7 +241,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
     license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
