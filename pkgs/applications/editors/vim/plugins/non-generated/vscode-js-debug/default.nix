@@ -33,6 +33,13 @@ let
       node-gyp
     ];
 
+    buildInputs = with pkgs; [
+      pkg-config
+      libsecret
+      gcc
+      node-gyp
+    ];
+
     NODE_OPTIONS = "--openssl-legacy-provider";
   });
 
