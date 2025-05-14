@@ -203,17 +203,26 @@ self: super:
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
 
-  # Support hie-bios >= 0.15 (unreleased to hackage)
-  ghcide = appendPatch (pkgs.fetchpatch2 {
-    name = "ghcide-hie-bios-0.15.patch";
-    url = "https://github.com/haskell/haskell-language-server/commit/eb06c6f6ad7d7fcc29ff4b62f679f428897147f8.patch";
-    sha256 = "0im3mf71chsgk787lz942c8zlmq00gfsd5rclprlsncg0zli1whq";
-    includes = [
-      "ghcide.cabal"
-      "**/Diagnostics.hs"
-    ];
-    stripLen = 1;
-  }) super.ghcide;
+  ghcide = appendPatches [
+    # Support ghc == 9.10.2
+    (pkgs.fetchpatch2 {
+      name = "ghcide-ghc-9.10.2.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/fb17921128bd56ba74872cae9539767e63b9fd79.patch";
+      sha256 = "161kcpfnv3q0n1fgsc0rx2v1rqf16g3pnjqabayym47yg2kp1qiv";
+      stripLen = 1;
+    })
+    # Support hie-bios >= 0.15 (unreleased to hackage)
+    (pkgs.fetchpatch2 {
+      name = "ghcide-hie-bios-0.15.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/eb06c6f6ad7d7fcc29ff4b62f679f428897147f8.patch";
+      sha256 = "0im3mf71chsgk787lz942c8zlmq00gfsd5rclprlsncg0zli1whq";
+      includes = [
+        "ghcide.cabal"
+        "**/Diagnostics.hs"
+      ];
+      stripLen = 1;
+    })
+  ] super.ghcide;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
