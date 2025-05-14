@@ -197,7 +197,7 @@ in
 
               [node]
               nickname = ${settings.nickname}
-              tub.port = ${toString settings.tub.port}
+              tub.port = tcp6:${toString settings.tub.port}
               ${lib.optionalString (settings.tub.location != null) "tub.location = ${settings.tub.location}"}
             '';
           }
@@ -273,11 +273,11 @@ in
 
               [node]
               nickname = ${settings.nickname}
-              tub.port = ${toString settings.tub.port}
+              tub.port = tcp6:${toString settings.tub.port}
               ${lib.optionalString (settings.tub.location != null) "tub.location = ${settings.tub.location}"}
               # This is a Twisted endpoint. Twisted Web doesn't work on
               # non-TCP. ~ C.
-              web.port = tcp:${toString settings.web.port}
+              web.port = tcp6:${toString settings.web.port}
 
               [client]
               ${lib.optionalString (
