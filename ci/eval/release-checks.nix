@@ -64,3 +64,6 @@ in
   }) checks
 ))
 // checks
+// {
+  inherit secondEval;
+}
