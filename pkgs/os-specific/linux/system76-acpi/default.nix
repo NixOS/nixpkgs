@@ -34,6 +34,9 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
+  # GCC 14 makes this an error by default, remove when fixed upstream
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Only ];
