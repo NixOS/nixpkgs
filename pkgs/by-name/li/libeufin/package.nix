@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libeufin";
-  version = "0.13.0";
+  version = "1.0.0";
 
   src = fetchgit {
     url = "https://git.taler.net/libeufin.git/";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-whGcFZYuyeFfhu+mIi7oUNJRXjaVGuL67sfUrHF85Fs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/v9EQdLJmDKM32/Xz91Jhol+sdBwFuSc0Oju37M1f7k=";
     fetchSubmodules = true;
     leaveDotGit = true; # required for correct submodule fetching
-    # Delete .git folder for reproducibility (otherwise, the hash changes unexpectedly after fetching submodules)
     # Save the HEAD short commit hash in a file so it can be retrieved later for versioning.
+    # Delete .git folder for reproducibility (otherwise, the hash changes unexpectedly after fetching submodules)
     postFetch = ''
       pushd $out
-      git rev-parse --short HEAD > ./common/src/main/resources/HEAD.txt
+      git rev-parse HEAD > ./common/src/main/resources/HEAD.txt
       rm -rf .git
       popd
     '';
@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Integration and sandbox testing for FinTech APIs and data formats";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ atemu ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "libeufin-bank";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
