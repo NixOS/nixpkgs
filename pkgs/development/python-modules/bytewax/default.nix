@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -106,7 +105,5 @@ buildPythonPackage rec {
       mslingsby
       kfollesdal
     ];
-    # mismatched type expected u8, found i8
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }
