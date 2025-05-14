@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zinnia";
   version = "2016-08-28";
 
@@ -15,15 +15,19 @@ stdenv.mkDerivation {
     sha256 = "1izjy5qw6swg0rs2ym2i72zndb90mwrfbd1iv8xbpwckbm4899lg";
   };
 
-  setSourceRoot = ''
-    sourceRoot=$(echo */zinnia)
-  '';
+  sourceRoot = "${finalAttrs.src.name}/zinnia";
 
-  meta = with lib; {
+  patches = [
+    # Fixes the following error on darwin:
+    # svm.cpp:50:10: error: no member named 'random_shuffle' in namespace 'std'
+    ./remove-random-shuffle-usage.patch
+  ];
+
+  meta = {
     description = "Online hand recognition system with machine learning";
     homepage = "http://taku910.github.io/zinnia/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
