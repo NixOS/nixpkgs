@@ -33,6 +33,8 @@
   nodejs,
   markdown,
   nh3,
+  enableTests ? !stdenv.hostPlatform.isRiscV64,
+  # lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
 }:
 
 buildPythonPackage rec {
@@ -111,7 +113,7 @@ buildPythonPackage rec {
     pytest-factoryboy
     pytestCheckHook
   ]
-  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers) pytest-playwright;
+  ++ lib.optional enableTests pytest-playwright;
 
   disabledTests = [
     # AssertionError: Locator expected to be visible
@@ -128,14 +130,13 @@ buildPythonPackage rec {
     ''
       export DJANGO_SETTINGS_MODULE="test_project.settings"
     ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    + lib.optionalString enableTests ''
       export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
     '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 
-  # Playwright tests not supported on RiscV yet
-  doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
+  doCheck = enableTests;
 
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";
