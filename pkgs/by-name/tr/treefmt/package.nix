@@ -31,7 +31,7 @@ buildGoModule rec {
 
   passthru = {
     /**
-      Wrap treefmt, configured  using structured settings.
+      Wrap treefmt, configured using structured settings.
 
       # Type
 
