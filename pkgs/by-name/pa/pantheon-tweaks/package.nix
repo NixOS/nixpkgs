@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    hash = "sha256-85Yfhh6otNWhRqLeM6UMBiCf/omn0FyY5hdK1ZjjgmM=";
+    hash = "sha256-+dkjmeY4WJfXwgNR8HlRaVfvS/2icbi8eSAkiB9x7uI=";
   };
 
   nativeBuildInputs = [
