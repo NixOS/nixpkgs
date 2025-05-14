@@ -1859,6 +1859,12 @@
     name = "Austin Lund";
     keys = [ { fingerprint = "7083 E268 4BFD 845F 2B84  9E74 B695 8918 ED23 32CE"; } ];
   };
+  appleboblin = {
+    email = "github@appleboblin.com";
+    github = "appleboblin";
+    githubId = 16847957;
+    name = "Po-Hui Lin";
+  };
   applejag = {
     email = "applejag.luminance905@passmail.com";
     github = "applejag";

@@ -18,6 +18,15 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-1VVpjeGU6/+apTHv7klo7FkAQ3AVjiziQRNI7yFbvh0=";
 
+  __darwinAllowLocalNetworking = true;
+
+  # On Darwin, sendme invokes CoreFoundation APIs that read ICU data from the
+  # system. Ensure these paths are accessible in the sandbox to avoid segfaults
+  # during checkPhase.
+  sandboxProfile = ''
+    (allow file-read* (subpath "/usr/share/icu"))
+  '';
+
   meta = with lib; {
     description = "Tool to send files and directories, based on iroh";
     homepage = "https://iroh.computer/sendme";
