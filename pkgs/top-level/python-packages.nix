@@ -13568,6 +13568,8 @@ self: super: with self; {
 
   pysuezv2 = callPackage ../development/python-modules/pysuezv2 { };
 
+  pysunspec2 = callPackage ../development/python-modules/pysunspec2 { };
+
   pysvg-py3 = callPackage ../development/python-modules/pysvg-py3 { };
 
   pysvn = callPackage ../development/python-modules/pysvn {
