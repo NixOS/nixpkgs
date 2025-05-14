@@ -1,14 +1,16 @@
 {
-  rustPlatform,
   lib,
-  callPackage,
-  pkg-config,
-  openssl,
-  libsoup_3,
-  webkitgtk_4_1,
+  rustPlatform,
   fetchFromGitHub,
+
+  nodejs,
+  pkg-config,
+  pnpm_9,
+
   libayatana-appindicator,
-  nix-update-script,
+  libsoup_3,
+  openssl,
+  webkitgtk_4_1,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,20 +24,24 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3GFg8czBf1csojXUNC51xFXJnGuXltP6D46fCt6q24I=";
   };
 
-  sourceRoot = "${src.name}/apps/desktop/src-tauri";
+  cargoRoot = "apps/desktop/src-tauri";
+  buildAndTestSubdir = "apps/desktop/src-tauri";
 
-  webui = callPackage ./webui.nix {
-    inherit meta src version;
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit src pname version;
+    hash = "sha256-+yyxoodcDfqJ2pkosd6sMk77/71RDsGthedo1Oigwto=";
   };
 
   nativeBuildInputs = [
+    nodejs
     pkg-config
+    pnpm_9.configHook
   ];
 
   buildInputs = [
+    libsoup_3
     openssl
     webkitgtk_4_1
-    libsoup_3
   ];
 
   env = {
@@ -54,9 +60,6 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '../dist' '${webui}' \
-      --replace-fail 'pnpm build' ' '
   '';
 
   meta = {
