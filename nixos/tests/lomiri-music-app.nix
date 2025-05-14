@@ -140,8 +140,10 @@ in
 
     with subtest("lomiri music launches"):
         machine.succeed("lomiri-music-app >&2 &")
-        machine.wait_for_text("favorite music")
+        machine.sleep(10)
         machine.send_key("alt-f10")
+        machine.sleep(2)
+        machine.wait_for_text("favorite music")
         machine.screenshot("lomiri-music")
 
     with subtest("lomiri music plays music"):
@@ -187,6 +189,9 @@ in
 
     with subtest("lomiri music localisation works"):
         machine.succeed("env LANG=de_DE.UTF-8 lomiri-music-app .mp4 >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(2)
         machine.wait_for_text("Titel")
         machine.screenshot("lomiri-music_localised")
   '';
