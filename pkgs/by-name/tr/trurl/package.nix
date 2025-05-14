@@ -6,7 +6,7 @@
   python3,
   perl,
   trurl,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ python3 ];
   checkTarget = "test";
 
-  passthru.tests.version = testers.testVersion {
-    package = trurl;
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Command line tool for URL parsing and manipulation";
