@@ -16858,6 +16858,8 @@ self: super: with self; {
 
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
 
+  sphinx-tippy = callPackage ../development/python-modules/sphinx-tippy { };
+
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
   sphinx-version-warning = callPackage ../development/python-modules/sphinx-version-warning { };
