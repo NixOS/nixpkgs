@@ -65,6 +65,7 @@ in
   gnum4,
   gtk3,
   icu73,
+  icu76,
   libGL,
   libGLU,
   libevent,
@@ -313,6 +314,10 @@ buildStdenv.mkDerivation {
       rm -rf obj-x86_64-pc-linux-gnu
       patchShebangs mach build
     ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
+    + lib.optionalString (lib.versionAtLeast version "134") ''
+      sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
+    ''
     + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
@@ -455,8 +460,7 @@ buildStdenv.mkDerivation {
       "--with-distribution-id=org.nixos"
       "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
       "--with-system-ffi"
-      # Firefox 136 fails to link with our icu76.1
-      (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
+      "--with-system-icu"
       "--with-system-jpeg"
       "--with-system-libevent"
       "--with-system-libvpx"
@@ -552,13 +556,11 @@ buildStdenv.mkDerivation {
       zip
       zlib
     ]
-    ++ lib.optionals (lib.versionOlder version "136") [
-      icu73
-      libpng
-    ]
+    ++ [ (if (lib.versionAtLeast version "138") then icu76 else icu73) ]
+    ++ lib.optionals (lib.versionOlder version "136") [ libpng ]
     ++ [
       (
-        if (lib.versionAtLeast version "116") then nss_latest else nss_esr # 3.90
+        if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
       )
     ]
     ++ lib.optional alsaSupport alsa-lib
