@@ -595,6 +595,7 @@ let
         let
           opts =
             v.crypttabExtraOpts
+            ++ optional true "tries=${builtins.toString v.passphraseRetries}"
             ++ optional v.allowDiscards "discard"
             ++ optionals v.bypassWorkqueues [
               "no-read-workqueue"
@@ -742,6 +743,16 @@ in
                   description = ''
                     If keyFile fails then try an empty passphrase first before
                     prompting for password.
+                  '';
+                };
+
+                passphraseRetries = mkOption {
+                  default = 0;
+                  example = 5;
+                  type = types.int;
+                  description = ''
+                    The amount of times the user is queried for a password.
+                    If set to 0, the user is queried for a password indefinetely.
                   '';
                 };
 
