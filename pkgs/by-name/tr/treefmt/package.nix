@@ -1,7 +1,6 @@
 {
   lib,
   buildGoModule,
-  callPackage,
   callPackages,
   fetchFromGitHub,
 }:
@@ -30,33 +29,10 @@ buildGoModule rec {
   ];
 
   passthru = {
-    /**
-      Wrap treefmt, configured using structured settings.
-
-      # Type
-
-      ```
-      AttrSet -> Derivation
-      ```
-
-      # Inputs
-
-      - `name`: `String` (default `"treefmt-configured"`)
-      - `settings`: `Module` (default `{ }`)
-      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
-    */
-    withConfig = callPackage ./with-config.nix { };
-
-    /**
-      Build a treefmt config file from structured settings.
-
-      # Type
-
-      ```
-      Module -> Derivation
-      ```
-    */
-    buildConfig = callPackage ./build-config.nix { };
+    inherit (callPackages ./lib.nix { })
+      withConfig
+      buildConfig
+      ;
 
     tests = callPackages ./tests.nix { };
   };
