@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       thoughtpolice
       sgo
+      prince213
     ];
   };
 }
