@@ -1,6 +1,9 @@
 name: Check that files are formatted
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/check-format.yml
   pull_request_target:
     types: [opened, synchronize, reopened, edited]
 

@@ -1,6 +1,9 @@
 name: "Build Nixpkgs manual v2"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/manual-nixpkgs-v2.yml
   pull_request_target:
     branches:
       - master
@@ -25,7 +28,6 @@ jobs:
           extra_nix_config: sandbox = true
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
-        if: github.repository_owner == 'NixOS'
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci

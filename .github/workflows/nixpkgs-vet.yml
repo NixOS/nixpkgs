@@ -6,6 +6,9 @@
 name: Vet nixpkgs
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/nixpkgs-vet.yml
   pull_request_target:
     # This workflow depends on the base branch of the PR, but changing the base branch is not included in the default trigger events, which would be `opened`, `synchronize` or `reopened`.
     # Instead it causes an `edited` event, so we need to add it explicitly here.
