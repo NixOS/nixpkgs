@@ -22,6 +22,7 @@
   perl,
   makeWrapper,
   nixosTests,
+  ffmpeg,
 }:
 
 stdenv.mkDerivation rec {
@@ -138,6 +139,7 @@ stdenv.mkDerivation rec {
       libjpeg_turbo
       pixman
       gawk
+      ffmpeg
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux (
       with xorg;
