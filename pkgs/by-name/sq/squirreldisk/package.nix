@@ -1,21 +1,25 @@
 {
-  dbus,
-  openssl,
-  freetype,
-  libsoup_2_4,
-  gtk3,
-  webkitgtk_4_0,
-  pkg-config,
-  wrapGAppsHook3,
-  parallel-disk-usage,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
-  nodejs,
-  rustPlatform,
-  cargo-tauri_1,
   lib,
   stdenv,
+  rustPlatform,
+
+  fetchFromGitHub,
+  fetchNpmDeps,
+
+  cargo-tauri_1,
+  makeBinaryWrapper,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  wrapGAppsHook3,
+
+  dbus,
+  freetype,
+  gtk3,
+  libsoup_2_4,
+  openssl,
+  parallel-disk-usage,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -53,20 +57,26 @@ rustPlatform.buildRustPackage rec {
     cp ${parallel-disk-usage}/bin/pdu src-tauri/bin/pdu-${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
-    npmHooks.npmConfigHook
-    nodejs
-    cargo-tauri_1.hook
-  ];
+  nativeBuildInputs =
+    [
+      cargo-tauri_1.hook
+      npmHooks.npmConfigHook
+      nodejs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeBinaryWrapper
+    ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     dbus
-    openssl
     freetype
-    libsoup_2_4
     gtk3
+    libsoup_2_4
+    openssl
     webkitgtk_4_0
   ];
 
@@ -77,10 +87,14 @@ rustPlatform.buildRustPackage rec {
   dontWrapGApps = true;
 
   # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
-  postFixup = ''
-    wrapGApp "$out/bin/squirrel-disk" \
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapGApp "$out/bin/squirrel-disk" \
+        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeWrapper "$out/Applications/SquirrelDisk.app/Contents/MacOS/SquirrelDisk" "$out/bin/squirrel-disk"
+    '';
 
   meta = with lib; {
     description = "Cross-platform disk usage analysis tool";
