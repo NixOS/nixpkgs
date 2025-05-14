@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       charain
       Emin017
     ];
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl3-ttf" ];
     platforms = lib.platforms.all;
   };
