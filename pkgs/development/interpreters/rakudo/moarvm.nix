@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2025.03";
+  version = "2025.04";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
     rev = version;
-    hash = "sha256-8uvO4GcediL0ysYWApEo6C583nw5QcrjN+0EmO2NKWo=";
+    hash = "sha256-g2L7pEFU/ECNRYcNORH66qYKIAO7Uqtk3pFxyvxgKT4=";
     fetchSubmodules = true;
   };
 
@@ -36,15 +36,16 @@ stdenv.mkDerivation rec {
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
 
-  meta = with lib; {
+  meta = {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       sgo
+      prince213
     ];
     mainProgram = "moar";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
