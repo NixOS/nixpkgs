@@ -14,6 +14,7 @@
   nixpkgs ? { },
   markdown-code-runner,
   roboto,
+  treefmt,
 }:
 
 stdenvNoCC.mkDerivation (
@@ -47,6 +48,7 @@ stdenvNoCC.mkDerivation (
 
     postPatch = ''
       ln -s ${optionsJSON}/share/doc/nixos/options.json ./config-options.json
+      ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
     '';
 
     buildPhase = ''

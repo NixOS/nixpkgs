@@ -36,6 +36,9 @@ buildGoModule rec {
       ;
 
     tests = callPackages ./tests.nix { };
+
+    # Documentation for functions defined in `./lib.nix`
+    functionsDoc = callPackages ./functions-doc.nix { };
   };
 
   meta = {
