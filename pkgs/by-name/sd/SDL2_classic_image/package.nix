@@ -1,13 +1,5 @@
 {
-  SDL2_image,
   SDL2_classic,
-  enableSTB ? true,
+  enableSTB ? null,
 }:
-
-(SDL2_image.override {
-  SDL2 = SDL2_classic;
-  inherit enableSTB;
-}).overrideAttrs
-  {
-    pname = "SDL2_classic_image";
-  }
+if enableSTB == null then SDL2_classic.sdlLibs.SDL2_image else SDL2_classic.sdlLibs.SDL2_image.override { }
