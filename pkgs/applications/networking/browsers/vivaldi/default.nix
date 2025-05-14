@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     patchelf
     makeWrapper
+    qt5.wrapQtAppsHook
   ];
 
   dontWrapQtApps = true;
@@ -137,6 +138,7 @@ stdenv.mkDerivation rec {
       systemd
       libva
       qt5.qtbase
+      qt5.qtwayland
       freetype
       fontconfig
       libXrender
@@ -219,6 +221,7 @@ stdenv.mkDerivation rec {
         --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
         --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
         --prefix PATH : ${coreutils}/bin \
+        ''${qtWrapperArgs[@]} \
         ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
     ''
     + lib.optionalString enableWidevine ''
