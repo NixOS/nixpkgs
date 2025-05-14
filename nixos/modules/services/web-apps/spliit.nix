@@ -10,10 +10,11 @@ in
 {
   meta = {
     maintainers = with lib.maintainers; [ qvalentin ];
+    doc = ./spliit.md;
   };
 
   options.services.spliit = with lib; {
-    enable = mkEnableOption (mdDoc "Spliit bill-splitting web application");
+    enable = mkEnableOption "Spliit bill-splitting web application";
     package = mkPackageOption pkgs "spliit" { };
 
     port = mkOption {
