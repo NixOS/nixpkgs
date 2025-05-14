@@ -4,12 +4,10 @@
   fetchFromGitHub,
   fetchurl,
   povray,
-  qmake,
-  qttools,
+  libsForQt5,
   replaceVars,
   zlib,
   testers,
-  wrapQtAppsHook,
   nix-update-script,
   libGL,
 }:
@@ -38,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
