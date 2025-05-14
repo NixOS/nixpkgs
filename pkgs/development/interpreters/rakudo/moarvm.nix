@@ -36,16 +36,16 @@ stdenv.mkDerivation rec {
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
 
-  meta = with lib; {
+  meta = {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       sgo
       prince213
     ];
     mainProgram = "moar";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
