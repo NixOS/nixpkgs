@@ -4,7 +4,6 @@
   lib,
   jre,
   qt5,
-  wrapQtAppsHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     qt5.qtbase
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
     python3Packages.setuptools
     python3Packages.rfc3987
     python3Packages.jpype1

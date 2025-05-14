@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtsvg,
-  qttools,
-  exiv2,
-  wrapQtAppsHook,
   cmake,
+  qt6Packages,
+  exiv2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtsvg
+    qt6Packages.qtsvg
     exiv2
   ];
 
