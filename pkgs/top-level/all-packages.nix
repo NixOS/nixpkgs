@@ -2643,6 +2643,8 @@ with pkgs;
 
     cangjie = callPackage ../tools/inputmethods/ibus-engines/ibus-cangjie { };
 
+    chewing = callPackage ../tools/inputmethods/ibus-engines/ibus-chewing { };
+
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
     kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
