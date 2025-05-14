@@ -75,8 +75,9 @@ buildNpmPackage rec {
     homepage = "https://github.com/sourcegraph/amp";
     downloadPage = "https://www.npmjs.com/package/@sourcegraph/amp";
     license = lib.licenses.unfree;
-    maintainers = [
-      # Add maintainer(s) here, e.g., lib.maintainers.your_github_username
+    maintainers = with lib.maintainers; [
+      keegancsmith
+      owickstrom
     ];
     mainProgram = "amp";
   };
