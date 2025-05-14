@@ -7,7 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  jdk23,
+  jdk24,
   dpkg,
   writeShellScript,
   bash,
@@ -20,7 +20,7 @@
 let
   version = "2.1.7";
 
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = jdk24.override { enableJavaFX = true; };
 
   bisq-launcher =
     args:

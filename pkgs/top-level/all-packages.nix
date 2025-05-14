@@ -4483,7 +4483,7 @@ with pkgs;
 
   sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
     openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix { };
-    openjdk = jdk23.override { enableJavaFX = true; };
+    openjdk = jdk24.override { enableJavaFX = true; };
   };
 
   sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix { };
@@ -5735,11 +5735,6 @@ with pkgs;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
-
-  openjdk23 = javaPackages.compiler.openjdk23;
-  openjdk23_headless = javaPackages.compiler.openjdk23.headless;
-  jdk23 = openjdk23;
-  jdk23_headless = openjdk23_headless;
 
   openjdk24 = javaPackages.compiler.openjdk24;
   openjdk24_headless = javaPackages.compiler.openjdk24.headless;
@@ -7375,7 +7370,7 @@ with pkgs;
     inherit
       jdk17
       jdk21
-      jdk23
+      jdk24
       ;
   };
   gradleGen = gradle-packages.gen;
