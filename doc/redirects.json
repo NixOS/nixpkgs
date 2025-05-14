@@ -72,6 +72,15 @@
   "part-toolchains": [
     "index.html#part-toolchains"
   ],
+  "pkgs.treefmt.buildConfig": [
+    "index.html#pkgs.treefmt.buildConfig"
+  ],
+  "pkgs.treefmt.evalConfig": [
+    "index.html#pkgs.treefmt.evalConfig"
+  ],
+  "pkgs.treefmt.withConfig": [
+    "index.html#pkgs.treefmt.withConfig"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -110,6 +119,9 @@
   ],
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
+  ],
+  "sec-functions-library-treefmt": [
+    "index.html#sec-functions-library-treefmt"
   ],
   "sec-inkscape": [
     "index.html#sec-inkscape"
