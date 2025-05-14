@@ -89,3 +89,11 @@ insert_final_newline = unset
 # Keep this hint at the bottom:
 # Please don't add entries for subfolders here.
 # Create <subfolder>/.editorconfig instead.
+
+# Added to avoid mass-rebuild in stable
+[pkgs/build-support/kernel/paths-from-graph.pl]
+trim_trailing_whitespace = unset
+
+# Added to avoid mass-rebuild in stable
+[pkgs/by-name/po/polkit/system_bus.conf]
+trim_trailing_whitespace = unset
