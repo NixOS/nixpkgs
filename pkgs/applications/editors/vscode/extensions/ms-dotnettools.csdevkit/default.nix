@@ -14,19 +14,19 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-NTmo45hhvVp5atYWt3046Fe7AtHouH6UBF/FPUllIQQ=";
+        hash = "sha256-XHx64V8JJl+/kb+kkTowu7mE7ysBRhUQJqicxjbHM3k=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-7K7i+4NtoTmwT1a3dIBF7M2oXyqc66Evos8q1B1RWkk=";
+        hash = "sha256-Pm3jUARrH8bksiCpYtUvo0UB3Oq67EjJGYLGLV54rl4=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-O/bpKFoCqtzwdNjwWA4WfaeFPUdZtfn14opiSXtjD90=";
+        hash = "sha256-hgd7tpRn2WP0PL4IOpZLL6Uzw1V9rSqlOTDfgFxwWGk=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-9kNKHg8lpXf94RT1/oYYeSOX0uHqjpg+zW64NNMQs7A=";
+        hash = "sha256-PQPxwwHbLXa5+p/SfH4IFu/OBEa/1CKdfaM+HAegiDA=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -36,7 +36,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csdevkit";
     publisher = "ms-dotnettools";
-    version = "1.18.25";
+    version = "1.19.63";
     inherit (extInfo) hash arch;
   };
   sourceRoot = "extension"; # This has more than one folder.
