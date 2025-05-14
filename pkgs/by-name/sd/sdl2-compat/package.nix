@@ -11,6 +11,7 @@
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
+  SDL2_Pango,
   sdl3,
   stdenv,
   testers,
@@ -71,18 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests =
-      {
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    sdlLibs = {
+      inherit
+        SDL2_ttf
+        SDL2_net
+        SDL2_gfx
+        SDL2_sound
+        SDL2_mixer
+        SDL2_image
+        SDL2_Pango
+        ;
+    };
 
-        inherit
-          SDL2_ttf
-          SDL2_net
-          SDL2_gfx
-          SDL2_sound
-          SDL2_mixer
-          SDL2_image
-          ;
+    tests =
+      finalAttrs.passthru.sdlLibs
+      // {
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         inherit monado;
