@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "goto";
-  version = "2.1.0-unstable-2020-11-15";
+  version = "2.0.0-unstable-2020-11-15";
 
   src = fetchFromGitHub {
     owner = "iridakos";
