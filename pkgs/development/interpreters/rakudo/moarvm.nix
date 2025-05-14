@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       thoughtpolice
       sgo
+      prince213
     ];
     mainProgram = "moar";
     platforms = platforms.unix;
