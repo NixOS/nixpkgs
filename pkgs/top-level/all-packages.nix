@@ -14702,6 +14702,7 @@ with pkgs;
     # that it requires sixel graphics compatible terminals like mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
   zotero_7 = pkgs.zotero-beta;
