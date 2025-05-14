@@ -261,7 +261,7 @@ in
         lib.nameValuePair "tahoe.introducer-${node}" {
           isSystemUser = true;
           group = "tahoe.introducer-${node}";
-          home = "/var/db/tahoe-lafs/introducer-${node}";
+          home = "/var/lib/tahoe-lafs/introducer-${node}";
         }
       );
       users.groups = lib.flip lib.mapAttrs' cfg.introducers (
@@ -365,7 +365,7 @@ in
         lib.nameValuePair "tahoe.${node}" {
           isSystemUser = true;
           group = "tahoe.${node}";
-          home = "/var/db/tahoe-lafs/${node}";
+          home = "/var/lib/tahoe-lafs/${node}";
         }
       );
       users.groups = lib.flip lib.mapAttrs' cfg.nodes (node: _: lib.nameValuePair "tahoe.${node}" { });
