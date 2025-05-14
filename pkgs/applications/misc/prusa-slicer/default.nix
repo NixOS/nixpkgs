@@ -90,13 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # required for GCC 14
+  # Patch required for GCC 14.
   # (not applicable to super-slicer fork)
+  # Make Gcode viewer open newer bgcode files.
   postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
     substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
       --replace-fail \
       "WritableDataStoreTraits<ArrItem>::template set" \
       "WritableDataStoreTraits<ArrItem>::set"
+    substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
+      --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
   '';
 
   nativeBuildInputs = [
@@ -197,6 +200,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/pixmaps/"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
+
+    mkdir -p "$out"/share/mime/packages
+    cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+      <mime-type type="application/x-bgcode">
+        <comment xml:lang="en">Binary G-code file</comment>
+        <glob pattern="*.bgcode"/>
+      </mime-type>
+    </mime-info>
+    EOF
   '';
 
   preFixup = ''
@@ -222,6 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
       maintainers = with maintainers; [
         tweber
         tmarkus
+        fliegendewurst
       ];
       platforms = platforms.unix;
     }
