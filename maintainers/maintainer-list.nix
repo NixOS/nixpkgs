@@ -12687,6 +12687,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keegancsmith = {
+    email = "keegan.csmith@gmail.com";
+    name = "Keegan Carruthers-Smith";
+    github = "keegancsmith";
+    githubId = 187831;
+  };
   keenanweaver = {
     email = "keenanweaver@protonmail.com";
     name = "Keenan Weaver";
@@ -18509,6 +18515,12 @@
     name = "Ondrej Vlach";
     github = "ovlach";
     githubId = 4405107;
+  };
+  owickstrom = {
+    email = "oskar@wickstrom.tech";
+    name = "Oskar Wickström";
+    github = "owickstrom";
+    githubId = 1464328;
   };
   oxalica = {
     email = "oxalicc@pm.me";
