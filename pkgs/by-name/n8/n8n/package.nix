@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.91.0";
+  version = "1.91.3";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-YbN1i1c/AhLczpX5Zp3x+4mX0R6pwre47Pr5/YzzhYw=";
+    hash = "sha256-FkjYe+OSSzEHGx2NW1I3ZAsg4FbEP1VS2hA4Li3JvXc=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
