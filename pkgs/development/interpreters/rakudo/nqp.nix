@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Not Quite Perl -- a lightweight Raku-like environment for virtual machines";
+    description = "Lightweight Raku-like environment for virtual machines";
     homepage = "https://github.com/Raku/nqp";
     license = lib.licenses.artistic2;
     platforms = lib.platforms.unix;
