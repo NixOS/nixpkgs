@@ -46,6 +46,8 @@ buildGoModule rec {
       --replace "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   vendorHash = "sha256-dnbctKxwQqfxZfKPa3ZlKjF5a/7eC5arK9RrPksSNVg=";
 
   meta = {
