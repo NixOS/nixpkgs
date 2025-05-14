@@ -122,6 +122,10 @@ def perform_pairwise_tests(before_metrics: dict, after_metrics: dict) -> pd.Data
                 "t_stat": t_stat
             })
 
+    if len(results) == 0:
+        print("⚠️  Skipping comparison: we don't have enough results to compare. (Run evals without `quickTest` set to compare stats.)")
+        exit(0)
+
     df = pd.DataFrame(results).sort_values("p_value")
     return df
 
