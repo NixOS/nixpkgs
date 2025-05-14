@@ -1,6 +1,7 @@
 {
   lib,
   mkDerivation,
+  fetchFromGitHub,
   fetchFromSourcehut,
   cmake,
   extra-cmake-modules,
@@ -11,8 +12,25 @@
   qtimageformats,
   qtmultimedia,
   qtwebengine,
+  rustPlatform,
 }:
 
+let
+  libdeltachat' = libdeltachat.overrideAttrs rec {
+    version = "1.155.6";
+    src = fetchFromGitHub {
+      owner = "chatmail";
+      repo = "core";
+      tag = "v${version}";
+      hash = "sha256-d7EmmyLSJjFIZM1j6LP8f4WnXiptNTAqOdJD/oPL02Y=";
+    };
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      pname = "deltachat-core-rust";
+      inherit version src;
+      hash = "sha256-E01aEzNi06LQntrlA+342a8Nl5API6v7HbdmuKpfajs=";
+    };
+  };
+in
 mkDerivation {
   pname = "kdeltachat";
   version = "unstable-2024-01-14";
@@ -32,7 +50,7 @@ mkDerivation {
 
   buildInputs = [
     kirigami2
-    libdeltachat
+    libdeltachat'
     qtimageformats
     qtmultimedia
     qtwebengine
