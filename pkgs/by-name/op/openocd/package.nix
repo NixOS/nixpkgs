@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
       prusnak
     ];
     platforms = platforms.unix ++ platforms.windows;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
