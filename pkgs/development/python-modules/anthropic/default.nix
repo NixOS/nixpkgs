@@ -6,7 +6,6 @@
   # build-system
   hatch-fancy-pypi-readme,
   hatchling,
-  pythonAtLeast,
 
   # dependencies
   anyio,
@@ -31,15 +30,20 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.49.0";
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-vbK8rqCekWbgLAU7YlHUhfV+wB7Q3Rpx0OUYvq3WYWw=";
+    hash = "sha256-gD3qZpPKtKZtuoGqnKVgFp0gCxpL0Aq5NGFCMk+z3cQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"hatchling==1.26.3"' '"hatchling>=1.26.3"'
+  '';
 
   build-system = [
     hatchling
@@ -71,15 +75,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anthropic" ];
 
-  disabledTests =
-    [
-      # Test require network access
-      "test_copy_build_request"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # Fails on RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
-      "test_multi_byte_character_multiple_chunks[async]"
-    ];
+  disabledTests = [
+    # Test require network access
+    "test_copy_build_request"
+  ];
 
   disabledTestPaths = [
     # Test require network access
