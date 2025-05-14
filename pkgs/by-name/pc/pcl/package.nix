@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CUDA" cudaSupport)
     (lib.cmakeBool "BUILD_GPU" cudaSupport)
+    (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
     (lib.cmakeBool "WITH_CUDA" cudaSupport)
   ];
 
