@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pocket-id";
-  version = "0.51.1";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L+Mmgyeiv/AoboGN1ux4BDhEyVQ8w7IMR8Z34eM8tSU=";
+    hash = "sha256-3lW4jPh9YElgpBcIooGQ2zZbNwC/rz7CABsp7ScTxyQ=";
   };
 
   backend = buildGoModule {
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/backend";
 
-    vendorHash = "sha256-0LAlltXd7YNQu7ymdjUSy75hMBz6MpvmUtgct43BU7M=";
+    vendorHash = "sha256-wOrYIhOrUxz22Ay2A26FTrPJA8YRgdRihP78Ls8VgNM=";
 
     preFixup = ''
       mv $out/bin/cmd $out/bin/pocket-id-backend
