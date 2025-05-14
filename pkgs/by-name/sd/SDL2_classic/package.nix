@@ -48,14 +48,13 @@
   withStatic ? stdenv.hostPlatform.isMinGW,
   # passthru.tests
   testers,
-  guile-sdl2,
-  jazz2,
   SDL2_ttf,
   SDL2_net,
   SDL2_gfx,
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
+  SDL2_Pango,
   python3Packages,
 }:
 
@@ -206,29 +205,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = {
-    inherit openglSupport;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "release-(.*)"
-      ];
+  passthru =
+    let
+      overrideSdl = p: p.override { SDL2 = finalAttrs.finalPackage; };
+    in
+    {
+      inherit openglSupport;
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "release-(.*)"
+        ];
+      };
+      sdlLibs = {
+        SDL2_ttf = overrideSdl SDL2_ttf;
+        SDL2_net = overrideSdl SDL2_net;
+        SDL2_gfx = overrideSdl SDL2_gfx;
+        SDL2_sound = overrideSdl SDL2_sound;
+        SDL2_mixer = overrideSdl SDL2_mixer;
+        SDL2_image = overrideSdl SDL2_image;
+        SDL2_Pango = overrideSdl SDL2_Pango;
+      };
+      tests = finalAttrs.passthru.sdlLibs // {
+        pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+        inherit (python3Packages) pygame pygame-ce pygame-sdl2;
+      };
     };
-    tests = {
-      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-      inherit
-        guile-sdl2
-        jazz2
-        SDL2_ttf
-        SDL2_net
-        SDL2_gfx
-        SDL2_sound
-        SDL2_mixer
-        SDL2_image
-        ;
-      inherit (python3Packages) pygame pygame-ce pygame-sdl2;
-    };
-  };
 
   meta = with lib; {
     description = "Cross-platform multimedia library";
