@@ -18,7 +18,7 @@
                 "args": {
                     "hash": "sha256-NVaErCSvuTQyt7yv2sc4aIX2J/6mxM648Wbbut2Jjxc=",
                     "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "rev": "132.0.6834.210",
+                    "tag": "132.0.6834.210",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -60,7 +60,7 @@
                     "hash": "sha256-NdeVWtmGpBqUuRtPBc0xLn7z4YNZ9p765a9nM3XdjCw=",
                     "owner": "electron",
                     "repo": "electron",
-                    "rev": "v34.5.5"
+                    "tag": "v34.5.5"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -397,7 +397,7 @@
                     "hash": "sha256-vc3Ztw8m0P96QoCjtyu2Nb0TpVMu9ifrVlkJY15aVbE=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "rev": "v20.19.1"
+                    "tag": "v20.19.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1295,7 +1295,7 @@
                 "args": {
                     "hash": "sha256-LL0lmb23zTjOwi8Sbz0Vb3Nj3ptqpRL/5V5rI8vXu0U=",
                     "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "rev": "134.0.6998.205",
+                    "tag": "134.0.6998.205",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -1337,7 +1337,7 @@
                     "hash": "sha256-rRrXXuCfS9X+00u7/18A3m8V+k9MK0QITuheQlHFZdQ=",
                     "owner": "electron",
                     "repo": "electron",
-                    "rev": "v35.3.0"
+                    "tag": "v35.3.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1666,7 +1666,7 @@
                     "hash": "sha256-bJPSHe3CsL9T1SYwC8hyDbAMqj/5WvgM8VqQU9mpVww=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "rev": "v22.14.0"
+                    "tag": "v22.14.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2604,7 +2604,7 @@
                 "args": {
                     "hash": "sha256-7ykQd8jKE9aVfTBPrJnOGHQYhmm+gJoMX7kET7eYFXM=",
                     "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "rev": "136.0.7103.49",
+                    "tag": "136.0.7103.49",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2646,7 +2646,7 @@
                     "hash": "sha256-mErVGqPBvplWEEOnEFnEdxDU34jc5YECLj18rU7E/XM=",
                     "owner": "electron",
                     "repo": "electron",
-                    "rev": "v36.2.0"
+                    "tag": "v36.2.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2975,7 +2975,7 @@
                     "hash": "sha256-KXhkO1qKbf7/KktyLQcPGEzcIErsIKAUE89oGTP2mbI=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "rev": "v22.15.0"
+                    "tag": "v22.15.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
