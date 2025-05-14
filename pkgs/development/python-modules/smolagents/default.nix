@@ -148,7 +148,7 @@ buildPythonPackage rec {
   meta = {
     description = "Barebones library for agents";
     homepage = "https://github.com/huggingface/smolagents";
-    changelog = "https://github.com/huggingface/smolagents/releases/tag/v${src.tag}";
+    changelog = "https://github.com/huggingface/smolagents/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
