@@ -11,7 +11,6 @@
   cereal,
   cgal,
   curl,
-  darwin,
   dbus,
   eigen,
   expat,
@@ -28,7 +27,6 @@
   nlopt,
   opencascade-occt_7_6_1,
   openvdb,
-  pcre,
   qhull,
   tbb_2021_11,
   wxGTK32,
@@ -37,6 +35,7 @@
   heatshrink,
   catch2,
   webkitgtk_4_0,
+  ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   wxGTK-override ? null,
@@ -130,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
       nlopt
       opencascade-override'
       openvdb_tbb_2021_8
-      pcre
       qhull
       tbb_2021_11
       wxGTK-override'
@@ -142,9 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withSystemd [
       systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreWLAN
     ];
 
   strictDeps = true;
@@ -211,16 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-
-    ctest \
-      --force-new-ctest-process \
-      -E 'libslic3r_tests|sla_print_tests'
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "--force-new-ctest-process"
+    "-E"
+    "libslic3r_tests|sla_print_tests"
+  ];
 
   meta =
     with lib;

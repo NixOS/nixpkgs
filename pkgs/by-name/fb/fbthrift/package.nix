@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2025.02.10.00";
+  version = "2025.04.21.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-130BHYUFDo11T9bI7cQ7Y+lTnFSr3WNgJ7IA+3BE9+g=";
+    hash = "sha256-W86jBqq0wC8ZYcE7MQ76rV3axPf7efXieEot6ahonUI=";
   };
 
   patches = [
@@ -48,6 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-cmake-install-rpath.patch
 
     ./glog-0.7.patch
+
+    # Backport upstream build system fixes. Remove on next update.
+    (fetchpatch {
+      url = "https://github.com/facebook/fbthrift/commit/638384afb83e5fae29a6483d20f9443b2342ca0b.patch";
+      hash = "sha256-q0VgaQtwAEgDHZ6btOLSnKfkP2cXstFPxPNdX1wcdCg=";
+    })
+    (fetchpatch {
+      url = "https://github.com/facebook/fbthrift/commit/350955beef40abec1e9d13112c9d2b7f95c29022.patch";
+      hash = "sha256-SaCZ0iczj8He2wujWN08QpizsTsK6OhreroOHY9f0BA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -65,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     wangle
     zlib
     zstd
-    xxHash
   ];
 
   propagatedBuildInputs = [
     mvfst
+    xxHash
   ];
 
   cmakeFlags =

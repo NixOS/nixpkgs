@@ -62,13 +62,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Create simple and beautiful presentations";
     homepage = "https://github.com/Philip-Scott/Spice-up";
-    maintainers =
-      with maintainers;
-      [
-        samdroid-apps
-        xiorcale
-      ]
-      ++ teams.pantheon.members;
+    maintainers = with maintainers; [
+      samdroid-apps
+      xiorcale
+    ];
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
     license = licenses.gpl3Plus;

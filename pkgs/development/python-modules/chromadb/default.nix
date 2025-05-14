@@ -6,7 +6,6 @@
   buildPythonPackage,
   cargo,
   chroma-hnswlib,
-  darwin,
   fastapi,
   fetchFromGitHub,
   grpcio,
@@ -91,7 +90,7 @@ buildPythonPackage rec {
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   dependencies = [
     bcrypt

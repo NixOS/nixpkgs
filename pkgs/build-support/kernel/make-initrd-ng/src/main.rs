@@ -212,7 +212,7 @@ fn copy_file<
         }
 
         // Remove writable permissions
-        permissions.set_mode(permissions.mode() ^ 0o222);
+        permissions.set_mode(permissions.mode() & 0o555);
         fs::set_permissions(&target, permissions)
             .wrap_err_with(|| format!("failed to remove writable permissions for {:?}", target))?;
     };

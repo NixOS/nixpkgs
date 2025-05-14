@@ -44,7 +44,6 @@ in
   lib,
   pkgs,
   stdenv,
-  fetchpatch,
   patchelf,
 
   # build time
@@ -77,6 +76,7 @@ in
   gnum4,
   gtk3,
   icu73,
+  icu77,
   libGL,
   libGLU,
   libevent,
@@ -98,6 +98,7 @@ in
 
   # Darwin
   apple-sdk_14,
+  apple-sdk_15,
   cups,
   rsync, # used when preparing .app directory
 
@@ -151,11 +152,12 @@ in
   # Set to `!privacySupport` or `false`.
 
   crashreporterSupport ?
-    !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl,
+    !privacySupport
+    && !stdenv.hostPlatform.isLoongArch64
+    && !stdenv.hostPlatform.isRiscV
+    && !stdenv.hostPlatform.isMusl,
   curl,
   geolocationSupport ? !privacySupport,
-  googleAPISupport ? geolocationSupport,
-  mlsAPISupport ? geolocationSupport,
   webrtcSupport ? !privacySupport,
 
   # digital rights managemewnt
@@ -249,12 +251,21 @@ let
       }
     );
 
-  defaultPrefs = {
-    "geo.provider.network.url" = {
-      value = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
-      reason = "Use MLS by default for geolocation, since our Google API Keys are not working";
-    };
-  };
+  defaultPrefs =
+    if geolocationSupport then
+      {
+        "geo.provider.network.url" = {
+          value = "https://api.beacondb.net/v1/geolocate";
+          reason = "We have no Google API keys and Mozilla Location Services were retired.";
+        };
+      }
+    else
+      {
+        "geo.provider.use_geoclue" = {
+          value = false;
+          reason = "Geolocation support has been disabled through the `geolocationSupport` package attribute.";
+        };
+      };
 
   defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (
     lib.concatStringsSep "\n" (
@@ -295,68 +306,20 @@ buildStdenv.mkDerivation {
       ./env_var_for_system_dir-ff111.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
-    ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [
-      ./no-buildconfig-ffx96.patch
-    ]
     ++ lib.optionals (lib.versionAtLeast version "121" && lib.versionOlder version "136") [
       ./no-buildconfig-ffx121.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "136") [ ./no-buildconfig-ffx136.patch ]
-    ++
-      lib.optionals
-        (
-          lib.versionOlder version "128.2"
-          || (lib.versionAtLeast version "129" && lib.versionOlder version "130")
-        )
-        [
-          (fetchpatch {
-            # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
-            name = "cbindgen-0.27.0-compat.patch";
-            url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
-            hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
-          })
-        ]
-    ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch ]
-    ++ lib.optionals (lib.versionOlder version "123") [
-      (fetchpatch {
-        name = "clang-18.patch";
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
-        hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
-      })
-    ]
-    ++
-      lib.optionals
-        (
-          (lib.versionAtLeast version "129" && lib.versionOlder version "134")
-          || lib.versionOlder version "128.6.0"
-        )
-        [
-          # Python 3.12.8 compat
-          # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
-          # https://phabricator.services.mozilla.com/D231480
-          ./mozbz-1935621-attachment-9442305.patch
-        ]
     ++ [
-      # LLVM 19 turned on WASM reference types by default, exposing a bug
-      # that broke the Mozilla WASI build. Supposedly, it has been fixed
-      # upstream in LLVM, but the build fails in the same way for us even
-      # with LLVM 19 versions that contain the upstream patch.
-      #
-      # Apply the temporary patch Mozilla used to work around this bug
-      # for now until someone can investigate what’s going on here.
-      #
-      # TODO: Please someone figure out what’s up with this.
-      #
-      # See: <https://bugzilla.mozilla.org/show_bug.cgi?id=1905251>
-      # See: <https://github.com/llvm/llvm-project/pull/97451>
-      (fetchpatch {
-        name = "wasi-sdk-disable-reference-types.patch";
-        url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
-        hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
-      })
       # Fix for missing vector header on macOS
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1939405
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1959377
+      # Fixed on Firefox 139
       ./firefox-mac-missing-vector-header.patch
+
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1962497
+      # https://phabricator.services.mozilla.com/D246545
+      # Fixed on Firefox 140
+      ./build-fix-RELRHACK_LINKER-setting-when-linker-name-i.patch
     ]
     ++ extraPatches;
 
@@ -364,6 +327,10 @@ buildStdenv.mkDerivation {
     ''
       rm -rf obj-x86_64-pc-linux-gnu
       patchShebangs mach build
+    ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
+    + lib.optionalString (lib.versionAtLeast version "134") ''
+      sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
     ''
     + extraPostPatch;
 
@@ -398,6 +365,7 @@ buildStdenv.mkDerivation {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
     ++ lib.optionals crashreporterSupport [
       dump_syms
       patchelf
@@ -467,22 +435,6 @@ buildStdenv.mkDerivation {
         }
       fi
     ''
-    + lib.optionalString googleAPISupport ''
-      # Google API key used by Chromium and Firefox.
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
-      echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/google-api-key
-      # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
-      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
-      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
-    ''
-    + lib.optionalString mlsAPISupport ''
-      # Mozilla Location services API key
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys at https://location.services.mozilla.com/api.
-      echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
-      configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
-    ''
     + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
       export MOZILLA_OFFICIAL=1
     ''
@@ -519,13 +471,12 @@ buildStdenv.mkDerivation {
     ]
     ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
     ++ lib.optional (!drmSupport) "--disable-eme"
-    ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
+    ++ lib.optional allowAddonSideload "--allow-addon-sideload"
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
       "--enable-system-pixman"
       "--with-system-ffi"
-      # Firefox 136 fails to link with our icu76.1
-      (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
+      "--with-system-icu"
       "--with-system-jpeg"
       "--with-system-libevent"
       "--with-system-libvpx"
@@ -573,12 +524,11 @@ buildStdenv.mkDerivation {
       libGL
       libGLU
       libstartup_notification
-      nasm
       perl
       zip
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
+      (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
       cups
     ]
     ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (
@@ -610,7 +560,7 @@ buildStdenv.mkDerivation {
         xorg.xorgproto
         zlib
         (
-          if (lib.versionAtLeast version "116") then nss_latest else nss_esr # 3.90
+          if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
         )
       ]
       ++ lib.optional alsaSupport alsa-lib
@@ -622,7 +572,7 @@ buildStdenv.mkDerivation {
         libdrm
       ]
     ))
-    ++ lib.optionals (lib.versionOlder version "136") [ icu73 ]
+    ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
     ++ lib.optional gssSupport libkrb5
     ++ lib.optional jemallocSupport jemalloc
     ++ extraBuildInputs;

@@ -119,6 +119,7 @@ let
     "fortify"
     "fortify3"
     "shadowstack"
+    "nostrictaliasing"
     "pacret"
     "pic"
     "pie"

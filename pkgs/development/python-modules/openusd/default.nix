@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  darwin,
   distutils,
   doxygen,
   draco,
@@ -24,7 +23,7 @@
   ninja,
   numpy,
   opencolorio,
-  openimageio,
+  openimageio_2,
   opensubdiv,
   osl,
   ptex,
@@ -52,14 +51,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.11";
+  version = "25.02a";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-ugTb28DAn8D3URxCyGeptf7F3YpL7bX4++lyVN+apas=";
+    hash = "sha256-QFwG6kOLM+R+QIAozk/Dbldj8LRt9kCJv0W/EGHkq6Q=";
   };
 
   stdenv = python.stdenv;
@@ -72,19 +71,6 @@ buildPythonPackage rec {
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
       url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/a07a6b4d1da19bfc499db49641d74fb7c1a71e9b.patch?full_index=1";
       hash = "sha256-Gww6Ll2nKwpcxMY9lnf5BZ3eqUWz1rik9P3mPKDOf+Y=";
-    })
-    # https://github.com/PixarAnimationStudios/OpenUSD/issues/3442
-    # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 1
-    (fetchpatch {
-      name = "explicitly-adding-template-keyword.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/274cf7c6fe1c121d095acd38dd1a33214e0c8448.patch?full_index=1";
-      hash = "sha256-nlw7o2jVWV9f1Lzl32UXcRVXcWnfyMNv9Mp4SVgFvyw=";
-    })
-    # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 2
-    (fetchpatch {
-      name = "fix-removes-unused-path.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/5a6437e44269534bfde0c35cc2c7bdef087b70e8.patch?full_index=1";
-      hash = "sha256-X2v14U0pJjd4IMD8viXK2/onVFqUabJTXwDGRFKDZ+g=";
     })
   ];
 
@@ -132,7 +118,7 @@ buildPythonPackage rec {
       imath
       materialx
       opencolorio
-      openimageio
+      openimageio_2
       opensubdiv
       ptex
       tbb
@@ -142,13 +128,9 @@ buildPythonPackage rec {
       libX11
       libXt
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
   propagatedBuildInputs =
     [
@@ -188,6 +170,7 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
     license = lib.licenses.tost;
     maintainers = with lib.maintainers; [
       shaddydc

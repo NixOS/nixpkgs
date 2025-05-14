@@ -66,7 +66,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AliveToolkit/alive2";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ shogo ] ++ lib.teams.ngi.members;
+    maintainers = with lib.maintainers; [ shogo ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "alive";
   };
 })

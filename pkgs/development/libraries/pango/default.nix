@@ -7,7 +7,6 @@
   harfbuzz,
   libintl,
   libthai,
-  darwin,
   fribidi,
   gnome,
   gi-docgen,
@@ -61,20 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
       gobject-introspection
     ];
 
-  buildInputs =
-    [
-      fribidi
-      libthai
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-        Carbon
-        CoreGraphics
-        CoreText
-      ]
-    );
+  buildInputs = [
+    fribidi
+    libthai
+  ];
 
   propagatedBuildInputs =
     [
@@ -141,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.pango.org/";
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
 
     pkgConfigModules = [

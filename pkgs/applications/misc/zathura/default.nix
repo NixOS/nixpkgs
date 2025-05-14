@@ -3,7 +3,6 @@
   lib,
   stdenv,
   newScope,
-  gtk3,
   useMupdf ? true,
 }:
 
@@ -14,8 +13,6 @@ lib.makeScope newScope (
   in
   {
     inherit useMupdf;
-
-    gtk = gtk3;
 
     zathura_core = callPackage ./core { };
 

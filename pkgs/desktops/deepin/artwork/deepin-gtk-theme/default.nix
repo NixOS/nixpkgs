@@ -25,6 +25,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-gtk-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

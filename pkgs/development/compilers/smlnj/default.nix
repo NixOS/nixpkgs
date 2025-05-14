@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  Libsystem,
 }:
 let
   version = "110.99.7.1";
@@ -62,16 +61,10 @@ stdenv.mkDerivation {
     ./config/unpack $TMP runtime
   '';
 
-  patchPhase =
-    ''
-      sed -i '/^PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
-      echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Locate standard headers like <unistd.h>
-      substituteInPlace base/runtime/config/gen-posix-names.sh \
-        --replace "\$SDK_PATH/usr" "${Libsystem}"
-    '';
+  patchPhase = ''
+    sed -i '/^PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
+    echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
+  '';
 
   buildPhase = ''
     ./config/install.sh -default ${arch}

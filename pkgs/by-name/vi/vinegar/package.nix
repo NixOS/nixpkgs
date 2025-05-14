@@ -51,16 +51,20 @@ let
             hash = "sha256-89wnr2rIbyw490hHwckB9g1GKCXm6BERnplfwEUlNOg=";
           })
         ];
+
+        postInstall = ''
+          cp $out/bin/wine $out/bin/wine64
+        '';
       });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vinegar";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7rc6LKZx0OOZDedtTpHIQT4grx1FejRiVnJnVDUddy4=";
   };
 
@@ -133,7 +137,7 @@ buildGoModule rec {
           winetricks
         ]
       } \
-      --prefix PUREGOTK_LIB_FOLDER : ${passthru.libraryPath}/lib
+      --prefix PUREGOTK_LIB_FOLDER : ${finalAttrs.passthru.libraryPath}/lib
   '';
 
   passthru = {
@@ -155,7 +159,7 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/vinegarhq/vinegar/releases/tag/v${version}";
+    changelog = "https://github.com/vinegarhq/vinegar/releases/tag/v${finalAttrs.version}";
     description = "Open-source, minimal, configurable, fast bootstrapper for running Roblox Studio on Linux";
     homepage = "https://github.com/vinegarhq/vinegar";
     license = lib.licenses.gpl3Only;
@@ -164,4 +168,4 @@ buildGoModule rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

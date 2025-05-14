@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   rustPlatform,
@@ -10,7 +9,6 @@
   rustfmt,
   setuptools-rust,
   openssl,
-  Security,
   msgpack,
   fetchpatch,
   nixosTests,
@@ -59,7 +57,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [ msgpack ];
 
@@ -76,7 +74,6 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://www.etebase.com/";
     description = "Python client library for Etebase";
     license = licenses.bsd3;

@@ -43,12 +43,6 @@
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libpulseaudio,
-  AudioUnit,
-  Cocoa,
-  CoreAudio,
-  CoreServices,
-  ForceFeedback,
-  OpenGL,
   audiofile,
   libiconv,
   withStatic ? stdenv.hostPlatform.isMinGW,
@@ -154,15 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     [ libiconv ]
     ++ finalAttrs.dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
-    ++ lib.optionals waylandSupport [ wayland-protocols ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreAudio
-      CoreServices
-      ForceFeedback
-      OpenGL
-    ];
+    ++ lib.optionals waylandSupport [ wayland-protocols ];
 
   enableParallelBuilding = true;
 
@@ -251,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${finalAttrs.version}";
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = lib.teams.sdl.members;
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl2" ];
   };
 })

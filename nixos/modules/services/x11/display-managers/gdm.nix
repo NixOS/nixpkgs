@@ -206,7 +206,7 @@ in
       ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
-    systemd.packages = with pkgs.gnome; [
+    systemd.packages = [
       gdm
       pkgs.gnome-session
       pkgs.gnome-shell

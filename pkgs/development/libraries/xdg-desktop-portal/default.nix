@@ -27,7 +27,7 @@
   gst_all_1,
   libgudev,
   umockdev,
-  substituteAll,
+  replaceVars,
   enableGeoLocation ? true,
   enableSystemd ? true,
 }:
@@ -51,14 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
     # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
-    (substituteAll {
-      src = ./fix-icon-validation.patch;
+    (replaceVars ./fix-icon-validation.patch {
       inherit (builtins) storeDir;
     })
 
     # Same for the sound validator, except the gdk-pixbuf part.
-    (substituteAll {
-      src = ./fix-sound-validation.patch;
+    (replaceVars ./fix-sound-validation.patch {
       inherit (builtins) storeDir;
     })
 
@@ -94,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       gst_all_1.gst-plugins-base
       libgudev
-      umockdev
 
       # For icon validator
       gdk-pixbuf
@@ -127,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
+  checkInputs = [ umockdev ];
+
   mesonFlags =
     [
       "--sysconfdir=/etc"
@@ -155,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/run-test.sh
   '';
 
-  preCheck = ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # For test_trash_file
     export HOME=$(mktemp -d)
 

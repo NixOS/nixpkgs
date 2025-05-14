@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/osprofiler/";
     license = licenses.asl20;
     mainProgram = "osprofiler";
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

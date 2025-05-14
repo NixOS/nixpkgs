@@ -45,7 +45,7 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -60,7 +60,23 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # Only required for ghc >= 9.2
+  nothunks = super.nothunks.override {
+    wherefrom-compat = null;
+  };
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # Jailbreaks & Version Updates
+
+  # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
+  tar = doDistribute (doJailbreak self.tar_0_6_0_0);
+  # text-metrics >= 0.3.3 requires GHC2021
+  text-metrics = doDistribute self.text-metrics_0_3_2;
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
@@ -95,7 +111,7 @@ self: super: {
   haskell-language-server = throw "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+  ghc-tags = doDistribute self.ghc-tags_1_5;
 
   # ghc-lib >= 9.6 and friends no longer build with GHC 9.0
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
@@ -120,6 +136,9 @@ self: super: {
 
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
+
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
 
   # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
   # which means that the upstream cabal file isn't allowed to add the flag.

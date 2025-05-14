@@ -55,37 +55,12 @@ def emoji_to_noto_name(emoji: str) -> str:
     )
 
 
-def emoji_to_emoji_data_name(emoji: str) -> str:
-    r"""Return the npm emoji-data emoji name of an emoji.
-
-    emoji-data emoji names are hyphen‐minus‐separated Unicode scalar
-    values, represented in lowercase big‐endian hex padded to at least
-    four digits.
-
-    >>> emoji_to_emoji_data_name("😶‍🌫️")
-    '1f636-200d-1f32b-fe0f'
-    >>> emoji_to_emoji_data_name("\U0001f636\u200d\U0001f32b\ufe0f")
-    '1f636-200d-1f32b-fe0f'
-    """
-    return "-".join(f"{ord(scalar_value):04x}" for scalar_value in emoji)
-
-
 def _main() -> None:
     noto_png_path, asar_root = (Path(arg) for arg in sys.argv[1:])
     asar_root = asar_root.absolute()
 
     out_path = asar_root / "images" / "nixpkgs-emoji"
     out_path.mkdir(parents=True)
-
-    emoji_data_out_path = (
-        asar_root
-        / "node_modules"
-        / "emoji-datasource-apple"
-        / "img"
-        / "apple"
-        / "64"
-    )
-    emoji_data_out_path.mkdir(parents=True)
 
     jumbomoji_json_path = asar_root / "build" / "jumbomoji.json"
     with jumbomoji_json_path.open() as jumbomoji_json_file:
@@ -106,10 +81,6 @@ def _main() -> None:
                     file=sys.stderr,
                 )
                 continue
-
-            (
-                emoji_data_out_path / f"{emoji_to_emoji_data_name(emoji)}.png"
-            ).symlink_to(out_path / emoji)
 
     print(out_path.relative_to(asar_root))
 

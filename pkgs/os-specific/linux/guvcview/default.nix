@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchurl,
+  cmake,
   intltool,
   pkg-config,
   portaudio,
@@ -27,18 +28,19 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.1.0";
   pname = "guvcview";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-PZPkyfq40aepveGm278E1s+dNHwTS1EotFhqHZC2PPs=";
+    hash = "sha256-0q3HznYpYehTw+FrURutYVBEktEvPi634w2kovet5a8=";
   };
 
   nativeBuildInputs =
     [
       intltool
       pkg-config
+      cmake
     ]
     ++ lib.optionals useGtk [ wrapGAppsHook3 ]
     ++ lib.optionals useQt [ wrapQtAppsHook ];

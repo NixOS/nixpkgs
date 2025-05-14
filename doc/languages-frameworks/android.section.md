@@ -50,6 +50,7 @@ let
     platformVersions = [
       "34"
       "35"
+      "latest"
     ];
     systemImageTypes = [ "google_apis_playstore" ];
     abiVersions = [
@@ -130,7 +131,8 @@ For each requested system image we can specify the following options:
   be included. Defaults to `armeabi-v7a` and `arm64-v8a`.
 
 Most of the function arguments have reasonable default settings, preferring the latest
-versions of tools when possible.
+versions of tools when possible. You can additionally specify "latest" for any plugin version
+that you do not care about, and just want the latest of.
 
 You can specify license names:
 

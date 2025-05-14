@@ -11,7 +11,6 @@
   openssl,
   pcsclite,
   stdenv,
-  darwin,
   libiconv,
 }:
 
@@ -48,8 +47,6 @@ buildPythonPackage rec {
       pcsclite
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
       libiconv
     ];
 
@@ -61,7 +58,5 @@ buildPythonPackage rec {
     homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
-    # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

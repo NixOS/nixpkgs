@@ -6,7 +6,6 @@
   pkg-config,
   lua,
   fpc,
-  pcre,
   portaudio,
   freetype,
   libpng,
@@ -26,7 +25,6 @@
 
 let
   sharedLibs = [
-    pcre
     portaudio
     freetype
     SDL2
@@ -64,11 +62,6 @@ stdenv.mkDerivation rec {
     fpc
     libpng
   ] ++ sharedLibs;
-
-  postPatch = ''
-    substituteInPlace src/config.inc.in \
-      --subst-var-by libpcre_LIBNAME libpcre.so.1
-  '';
 
   preBuild =
     let

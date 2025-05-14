@@ -129,8 +129,8 @@ stdenv.mkDerivation (
     ];
 
     env = {
-      # only build shell/IDE docs and man pages
-      DOC_TARGETS = "chunks man";
+      # only build man pages and shell/IDE docs
+      DOC_TARGETS = "man chunks";
     };
 
     buildInputs =
@@ -245,7 +245,7 @@ stdenv.mkDerivation (
           '';
 
           platforms = platforms.unix;
-          maintainers = teams.beam.members;
+          teams = [ teams.beam ];
           license = licenses.asl20;
         }
         // meta

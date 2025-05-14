@@ -108,13 +108,14 @@ in
               ++ lib.optional cfg.proxied "--proxied";
           in
           ''
-            export CLOUDFLARE_API_TOKEN=$(< "''${CREDENTIALS_DIRECTORY}/apiToken")
+            export CLOUDFLARE_API_TOKEN_FILE=''${CREDENTIALS_DIRECTORY}/apiToken
 
             # Added 2025-03-10: `cfg.apiTokenFile` used to be passed as an
             # `EnvironmentFile` to the service, which required it to be of
             # the form "CLOUDFLARE_API_TOKEN=" rather than just the secret.
             # If we detect this legacy usage, error out.
-            if [[ $CLOUDFLARE_API_TOKEN == CLOUDFLARE_API_TOKEN* ]]; then
+            token=$(< "''${CLOUDFLARE_API_TOKEN_FILE}")
+            if [[ $token == CLOUDFLARE_API_TOKEN* ]]; then
               echo "Error: your api token starts with 'CLOUDFLARE_API_TOKEN='. Remove that, and instead specify just the token." >&2
               exit 1
             fi

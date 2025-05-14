@@ -1,6 +1,6 @@
 from graphlib import TopologicalSorter
 from pathlib import Path
-from typing import Any, Generator, Literal
+from typing import Any, Final, Generator, Literal
 import argparse
 import asyncio
 import contextlib
@@ -13,6 +13,11 @@ import tempfile
 
 
 Order = Literal["arbitrary", "reverse-topological", "topological"]
+
+
+FAKE_DEPENDENCY_FOR_INDEPENDENT_PACKAGES: Final[str] = (
+    "::fake_dependency_for_independent_packages"
+)
 
 
 class CalledProcessError(Exception):
@@ -116,10 +121,14 @@ def requisites_to_attrs(
 def reverse_edges(graph: dict[str, set[str]]) -> dict[str, set[str]]:
     """
     Flips the edges of a directed graph.
+
+    Packages without any dependency relation in the updated set
+    will be added to `FAKE_DEPENDENCY_FOR_INDEPENDENT_PACKAGES` node.
     """
 
     reversed_graph: dict[str, set[str]] = {}
     for dependent, dependencies in graph.items():
+        dependencies = dependencies or {FAKE_DEPENDENCY_FOR_INDEPENDENT_PACKAGES}
         for dependency in dependencies:
             reversed_graph.setdefault(dependency, set()).add(dependent)
 
@@ -413,6 +422,8 @@ async def populate_queue(
         ready_packages = list(sorter.get_ready())
         eprint(f"Enqueuing group of {len(ready_packages)} packages")
         for package in ready_packages:
+            if package == FAKE_DEPENDENCY_FOR_INDEPENDENT_PACKAGES:
+                continue
             await packages_to_update.put(attr_packages[package])
         await packages_to_update.join()
         sorter.done(*ready_packages)

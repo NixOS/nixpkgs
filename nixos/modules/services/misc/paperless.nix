@@ -358,6 +358,14 @@ in
         description = "Settings to pass to the document exporter as CLI arguments.";
       };
     };
+
+    configureTika = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to configure Tika and Gotenberg to process Office and e-mail files with OCR.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -378,12 +386,18 @@ in
           ];
         };
 
-        services.paperless.settings = lib.mkIf cfg.database.createLocally {
-          PAPERLESS_DBENGINE = "postgresql";
-          PAPERLESS_DBHOST = "/run/postgresql";
-          PAPERLESS_DBNAME = "paperless";
-          PAPERLESS_DBUSER = "paperless";
-        };
+        services.paperless.settings = lib.mkMerge [
+          (lib.mkIf cfg.database.createLocally {
+            PAPERLESS_DBENGINE = "postgresql";
+            PAPERLESS_DBHOST = "/run/postgresql";
+            PAPERLESS_DBNAME = "paperless";
+            PAPERLESS_DBUSER = "paperless";
+          })
+          (lib.mkIf cfg.configureTika {
+            PAPERLESS_GOTENBERG_ENABLED = true;
+            PAPERLESS_TIKA_ENABLED = true;
+          })
+        ];
 
         systemd.slices.system-paperless = {
           description = "Paperless Document Management System Slice";
@@ -570,6 +584,18 @@ in
           groups.${defaultUser} = {
             gid = config.ids.gids.paperless;
           };
+        };
+
+        services.gotenberg = lib.mkIf cfg.configureTika {
+          enable = true;
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.15.3/docker/compose/docker-compose.sqlite-tika.yml#L64-L69
+          chromium.disableJavascript = true;
+          extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
+        };
+
+        services.tika = lib.mkIf cfg.configureTika {
+          enable = true;
+          enableOcr = true;
         };
       }
 

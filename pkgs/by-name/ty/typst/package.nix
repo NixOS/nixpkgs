@@ -73,6 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       drupol
       figsoda
       kanashimia
+      RossSmyth
     ];
   };
 })

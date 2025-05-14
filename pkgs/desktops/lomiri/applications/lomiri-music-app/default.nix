@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
     ];
     mainProgram = "lomiri-music-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

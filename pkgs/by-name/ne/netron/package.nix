@@ -1,43 +1,37 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildNpmPackage,
-  electron_34,
+  electron_36,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
 }:
 
 let
-  electron = electron_34;
+  electron = electron_36;
   description = "Visualizer for neural network, deep learning and machine learning models";
   icon = "netron";
 
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "netron";
-  version = "8.1.8";
+  version = "8.3.3";
 
   src = fetchFromGitHub {
     owner = "lutzroeder";
     repo = "netron";
-    tag = "v${version}";
-    hash = "sha256-h03nqBE82mw/XpUOnnQwUxhjXpBF9Ysc1fVTBQpMIS4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7OdHg0nLVz7xno1FTE+fr6FZkzkI+6KjX3EsDzyZbOM=";
   };
 
-  # Upstream doesn't ship package-lock.json in their sources
-  # https://github.com/lutzroeder/netron/issues/1430
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-  '';
+  npmDepsHash = "sha256-oOGHo/KCc/qlJRdIyUmoRayV1i+e0mEqMr7TTCo5YKA=";
 
-  npmDepsHash = "sha256-oS/s2ZcqynPTJDjoY4hIHEaBKyci/AfaCqpSHhBZB+s=";
-
-  nativeBuildInputs = [
-    jq
-  ];
+  nativeBuildInputs = [ jq ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  makeCacheWritable = true;
 
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
@@ -96,7 +90,7 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/lutzroeder/netron/releases/tag/v${version}";
+    changelog = "https://github.com/lutzroeder/netron/releases/tag/v${finalAttrs.version}";
     inherit description;
     homepage = "https://netron.app";
     license = lib.licenses.mit;
@@ -108,4 +102,4 @@ buildNpmPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

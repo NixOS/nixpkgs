@@ -30,7 +30,7 @@
     "@hapi/boom": "^10.0.0",
     "@puppeteer/browsers": "^2.3.1",
     "chokidar": "^3.5.2",
-    "dompurify": "^2.5.4",
+    "dompurify": "^3.2.4",
     "express": "^4.21.1",
     "express-prom-bundle": "^6.5.0",
     "jimp": "^0.22.12",
@@ -49,18 +49,18 @@
   },
   "devDependencies": {
     "@grafana/eslint-config": "^6.0.0",
-    "@types/dompurify": "2.3.4",
+    "@types/dompurify": "^3.2.0",
     "@types/express": "^4.17.14",
     "@types/jest": "^29.5.12",
     "@types/jsdom": "20.0.0",
     "@types/multer": "^1.4.7",
-    "@types/node": "^22.13.1",
+    "@types/node": "^20.17.27",
     "@types/pixelmatch": "^5.2.6",
     "@types/supertest": "^2.0.15",
     "@typescript-eslint/eslint-plugin": "5.37.0",
     "@typescript-eslint/parser": "5.37.0",
     "@yao-pkg/pkg": "^6.3.0",
-    "axios": "1.7.4",
+    "axios": "1.8.2",
     "cross-env": "7.0.3",
     "eslint": "8.23.1",
     "fast-png": "^6.2.0",
@@ -88,6 +88,6 @@
   },
   "bin": "build/app.js",
   "engines": {
-    "node": ">= 22"
+    "node": ">= 20"
   }
 }

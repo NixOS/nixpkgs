@@ -22,6 +22,7 @@
   tenacity,
 
   # tests
+  blockbuster,
   httpx,
   langchain-tests,
   lark,
@@ -37,24 +38,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.20";
+  version = "0.3.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-community==${version}";
-    hash = "sha256-6YLy7G1kZIqHAGMUIQoGCfDO2ZuVgNEtpkOI1o8eFvc=";
+    hash = "sha256-fotu3vUCWnAVyjFjsIUjk1If81yQ3/YLj26PksmnvGE=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ pdm-backend ];
-
-  patches = [
-    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
-    ./rm-blockbuster.patch
-  ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest langchain and -core.
@@ -64,10 +60,6 @@ buildPythonPackage rec {
     "numpy"
     "pydantic-settings"
     "tenacity"
-  ];
-
-  pythonRemoveDeps = [
-    "blockbuster"
   ];
 
   dependencies = [
@@ -87,6 +79,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
+    blockbuster
     httpx
     langchain-tests
     lark
@@ -108,8 +101,6 @@ buildPythonPackage rec {
     # Test require network access
     "test_ovhcloud_embed_documents"
     "test_yandex"
-    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
-    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
     "test_sql_database_run"
     # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
@@ -118,19 +109,21 @@ buildPythonPackage rec {
     "test_proper_inputs"
     # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
     "test_variable_key_naming"
-    # Fails due to the lack of blockbuster
-    "test_group_dependencies"
+    # Tests against magic values in dict
+    "test_serializable_mapping"
   ];
 
   disabledTestPaths = [
     # ValueError: Received unsupported arguments {'strict': None}
     "tests/unit_tests/chat_models/test_cloudflare_workersai.py"
+    # depends on Pydantic v1 notations, will not load
+    "tests/unit_tests/document_loaders/test_gitbook.py"
   ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^langchain-community==(.*)"
+      "langchain-community==([0-9.]+)"
     ];
   };
 

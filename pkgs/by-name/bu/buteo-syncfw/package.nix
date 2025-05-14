@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/sailfishos/buteo-syncfw/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
     mainProgram = "msyncd";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "buteosyncfw5"

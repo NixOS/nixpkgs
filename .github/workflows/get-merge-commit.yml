@@ -1,19 +1,30 @@
 name: Get merge commit
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/get-merge-commit.yml
   workflow_call:
     outputs:
       mergedSha:
         description: "The merge commit SHA"
         value: ${{ jobs.resolve-merge-commit.outputs.mergedSha }}
+      targetSha:
+        description: "The target commit SHA"
+        value: ${{ jobs.resolve-merge-commit.outputs.targetSha }}
+      systems:
+        description: "The supported systems"
+        value: ${{ jobs.resolve-merge-commit.outputs.systems }}
 
 permissions: {}
 
 jobs:
   resolve-merge-commit:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     outputs:
       mergedSha: ${{ steps.merged.outputs.mergedSha }}
+      targetSha: ${{ steps.merged.outputs.targetSha }}
+      systems: ${{ steps.systems.outputs.systems }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -30,14 +41,18 @@ jobs:
             push)
               echo "mergedSha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
               ;;
-            pull_request_target)
-              if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
-                echo "Checking the merge commit $mergedSha"
-                echo "mergedSha=$mergedSha" >> "$GITHUB_OUTPUT"
+            pull_request*)
+              if commits=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
+                echo -e "Checking the commits:\n$commits"
+                echo "$commits" >> "$GITHUB_OUTPUT"
               else
                 # Skipping so that no notifications are sent
                 echo "Skipping the rest..."
               fi
               ;;
           esac
-          rm -rf base
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <base/ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"

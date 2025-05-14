@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cloudsmith-api";
-  version = "2.0.17";
+  version = "2.0.18";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cloudsmith_api";
     inherit format version;
-    hash = "sha256-XxstBavFdr3kLAlmrgs4ZrfSkY/W2ymClLbqIxb1wD0=";
+    hash = "sha256-5Mnf1VaEhfhTdmIaSCW5vUDcKc4zWF3IELP1y+1oi48=";
   };
 
   propagatedBuildInputs = [

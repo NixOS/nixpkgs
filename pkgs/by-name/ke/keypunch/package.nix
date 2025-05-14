@@ -63,13 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/bragefuglseth/keypunch";
     license = lib.licenses.gpl3Plus;
     mainProgram = "keypunch";
-    maintainers =
-      with lib.maintainers;
-      [
-        tomasajt
-        getchoo
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      tomasajt
+      getchoo
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

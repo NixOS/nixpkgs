@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pe-bear";
-  version = "0.7.0";
+  version = "0.7.0.4";
 
   src = fetchFromGitHub {
     owner = "hasherezade";
     repo = "pe-bear";
     rev = "v${version}";
-    hash = "sha256-jHFH1GAbAtOzUh+Gma89YCU5r/yuwekv/bqiyy8VmRk=";
+    hash = "sha256-W8Sa7MKTf7mbdzAEL6tNDpmXIFWAC/8qSXBqqsZ4WFk=";
     fetchSubmodules = true;
   };
 

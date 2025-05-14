@@ -1,10 +1,19 @@
-{ buildGoModule, hasura-graphql-engine }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "hasura";
-  version = hasura-graphql-engine.version;
+  version = "2.3.1";
 
-  src = hasura-graphql-engine.src;
+  src = fetchFromGitHub {
+    owner = "hasura";
+    repo = "graphql-engine";
+    rev = "v${version}";
+    sha256 = "1r19qw2wxzmngb6sjpin3dk6i5r491brcb0ir4g8kw9d0ic90hpy";
+  };
   modRoot = "./cli";
 
   subPackages = [ "cmd/hasura" ];
@@ -28,7 +37,9 @@ buildGoModule rec {
   '';
 
   meta = {
-    inherit (hasura-graphql-engine.meta) license homepage maintainers;
+    homepage = "https://www.hasura.io";
+    maintainers = [ lib.maintainers.lassulus ];
+    license = lib.licenses.asl20;
     description = "Hasura GraphQL Engine CLI";
     mainProgram = "hasura";
   };

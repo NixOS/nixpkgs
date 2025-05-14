@@ -3,7 +3,6 @@
   lib,
   postgresql,
   postgresqlTestExtension,
-  tcl,
   tclPackages,
 }:
 
@@ -41,7 +40,7 @@ let
             homepage
             license
             changelog
-            maintainers
+            teams
             platforms
             ;
           description = "PL/Tcl - Tcl Procedural Language";

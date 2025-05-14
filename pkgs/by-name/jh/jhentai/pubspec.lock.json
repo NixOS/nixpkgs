@@ -40,11 +40,11 @@
       "dependency": "direct main",
       "description": {
         "name": "android_intent_plus",
-        "sha256": "2bfdbee8d65e7c26f88b66f0a91f2863da4d3596d8a658b4162c8de5cf04b074",
+        "sha256": "dfc1fd3a577205ae8f11e990fb4ece8c90cceabbee56fcf48e463ecf0bd6aae3",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.0.2"
+      "version": "5.3.0"
     },
     "animate_do": {
       "dependency": "direct main",
@@ -1021,7 +1021,7 @@
       "description": {
         "path": ".",
         "ref": "HEAD",
-        "resolved-ref": "02ec76afab6bf24fd1f8c1d90a2f4c8f9d82d11f",
+        "resolved-ref": "f107851fe1ac540103ab172645e071154ed82ef8",
         "url": "https://github.com/jiangtian616/http_proxy"
       },
       "source": "git",
@@ -1683,11 +1683,12 @@
     "receive_sharing_intent": {
       "dependency": "direct main",
       "description": {
-        "name": "receive_sharing_intent",
-        "sha256": "ec76056e4d258ad708e76d85591d933678625318e411564dcb9059048ca3a593",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "HEAD",
+        "resolved-ref": "2cea396843cd3ab1b5ec4334be4233864637874e",
+        "url": "https://github.com/KasemJaffer/receive_sharing_intent"
       },
-      "source": "hosted",
+      "source": "git",
       "version": "1.8.1"
     },
     "retry": {
@@ -2011,11 +2012,11 @@
       "dependency": "direct main",
       "description": {
         "name": "sqlite3_flutter_libs",
-        "sha256": "349653db9221e3d65afb351b026ae8dd0a3a28d65fc8754d32b48c6cf9fce3c3",
+        "sha256": "1a96b59227828d9eb1463191d684b37a27d66ee5ed7597fcf42eee6452c88a14",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.8"
+      "version": "0.5.32"
     },
     "sqlparser": {
       "dependency": "transitive",
@@ -2102,7 +2103,7 @@
       "description": {
         "path": "system_network_proxy",
         "ref": "HEAD",
-        "resolved-ref": "2880fba3b30efec1be35fbcc2a199755f9536bac",
+        "resolved-ref": "10d02b4e7097622cd24ba0b537ee7ecb6a85a538",
         "url": "https://github.com/jiangtian616/system_network_proxy"
       },
       "source": "git",
@@ -2157,6 +2158,16 @@
       },
       "source": "hosted",
       "version": "1.0.2"
+    },
+    "telegram": {
+      "dependency": "direct main",
+      "description": {
+        "name": "telegram",
+        "sha256": "8af9420f4c95b90e7dd15fed450d185b17dac72adff6592a5e759025ab7629d9",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.9"
     },
     "template_expressions": {
       "dependency": "direct main",
@@ -2262,11 +2273,11 @@
       "dependency": "direct main",
       "description": {
         "name": "url_launcher",
-        "sha256": "698fa0b4392effdc73e9e184403b627362eb5fbf904483ac9defbb1c2191d809",
+        "sha256": "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.1.8"
+      "version": "6.3.1"
     },
     "url_launcher_android": {
       "dependency": "transitive",

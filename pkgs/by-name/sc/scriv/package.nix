@@ -10,14 +10,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.5.1";
+  version = "1.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MK6f+NFE+ODPOUxOHTeVQvGzgjdnZClVtU7EDcALMrY=";
+    hash = "sha256-fBqL5jUdA2kuXnV4Te6g2PEbLJD5G+GLD7OjdVVbUl4=";
   };
 
-  propagatedBuildInputs =
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies =
     with python3.pkgs;
     [
       attrs
@@ -46,6 +49,9 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # assumes we have checked out the full repo (including remotes)
     "test_real_get_github_repos"
+    # requires a newer pandoc version (as it tests for a specific format of the
+    # error message)
+    "test_bad_convert_to_markdown"
   ];
 
   passthru.tests = {

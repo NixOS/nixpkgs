@@ -25,7 +25,6 @@
   enableDbus ? false,
   libintl,
   libiconv,
-  Foundation,
   bash,
   python3,
   argp-standalone,
@@ -84,7 +83,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Foundation
     ]
     ++ lib.optionals enableDbus [
       dbus

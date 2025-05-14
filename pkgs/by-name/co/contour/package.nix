@@ -24,17 +24,18 @@
   sigtool,
   nixosTests,
   installShellFiles,
+  reflection-cpp,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.5.1.7247";
+  version = "0.6.1.7494";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
-    rev = "v${final.version}";
-    hash = "sha256-/vpbyaULemyM3elwaoofvbeeID7jNrmu8X8HlZxWGCk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jgasZhdcJ+UF3VIl8HLcxBayvbA/dkaOG8UtANRgeP4=";
   };
 
   patches = [ ./dont-fix-app-bundle.diff ];
@@ -69,6 +70,7 @@ stdenv.mkDerivation (final: {
       microsoft-gsl
       range-v3
       yaml-cpp
+      reflection-cpp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -100,13 +102,13 @@ stdenv.mkDerivation (final: {
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 
-  meta = with lib; {
+  meta = {
     description = "Modern C++ Terminal Emulator";
     homepage = "https://github.com/contour-terminal/contour";
-    changelog = "https://github.com/contour-terminal/contour/raw/v${version}/Changelog.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ moni ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/contour-terminal/contour/raw/v${finalAttrs.version}/Changelog.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moni ];
+    platforms = lib.platforms.unix;
     mainProgram = "contour";
   };
 })

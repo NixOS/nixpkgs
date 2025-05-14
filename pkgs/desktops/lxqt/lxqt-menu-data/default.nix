@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Menu files for LXQt Panel, Configuration Center and PCManFM-Qt/libfm-qt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
       cc-by-40
     ]; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

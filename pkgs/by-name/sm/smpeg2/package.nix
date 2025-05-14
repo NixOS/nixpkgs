@@ -3,7 +3,6 @@
   stdenv,
   autoconf,
   automake,
-  darwin,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
@@ -28,7 +27,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [ SDL2 ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
+  buildInputs = [ SDL2 ];
 
   outputs = [
     "out"

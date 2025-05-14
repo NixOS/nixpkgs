@@ -69,11 +69,9 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/StractOrg/stract";
     license = lib.licenses.agpl3Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        ailsa-sun
-      ]
-      ++ lib.teams.ngi.members;
+    maintainers = with lib.maintainers; [
+      ailsa-sun
+    ];
+    teams = [ lib.teams.ngi ];
   };
 }

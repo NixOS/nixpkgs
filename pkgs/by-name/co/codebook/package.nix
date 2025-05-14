@@ -2,34 +2,22 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
-  openssl,
-  pkg-config,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codebook";
-  version = "0.2.10";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "blopker";
     repo = "codebook";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LH5/xMbmHo0vBlPnNTsj3iX6gvBp9PFGZcAy999402E=";
+    hash = "sha256-8cbXdK0QbUVtqWvKSDRk3ejJrWo2lgykJG3O57e1ik8=";
   };
 
   buildAndTestSubdir = "crates/codebook-lsp";
-  cargoHash = "sha256-EbcG99T0T5Hh7bRI5I3gf9qBiOcnl0EoCtVIfcJHeJg=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
-
-  env.OPENSSL_NO_VENDOR = 1;
+  cargoHash = "sha256-NsPdNjqVFa3bbDu/VZk++lsh5NW01+eVOGe1BlgHDiQ=";
 
   # Integration tests require internet access for dictionaries
   doCheck = false;

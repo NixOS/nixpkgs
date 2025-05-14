@@ -6,7 +6,6 @@
   automake,
   libtool,
   gmp,
-  darwin,
   libunistring,
 }:
 
@@ -26,7 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.ApplicationServices
     libunistring
   ];
 

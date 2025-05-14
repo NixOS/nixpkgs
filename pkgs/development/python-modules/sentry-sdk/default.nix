@@ -204,7 +204,9 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # timing sensitive
     "test_profile_captured"
-    "test_continuous_profiler_manual_start_and_stop"
+    "test_continuous_profiler_auto"
+    "test_continuous_profiler_manual"
+    "test_stacktrace_big_recursion"
     # assert ('socks' in "<class 'httpcore.connectionpool'>") == True
     "test_socks_proxy"
     # requires socksio to mock, but that crashes pytest-forked

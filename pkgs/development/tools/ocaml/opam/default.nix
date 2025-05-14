@@ -9,7 +9,6 @@
   ncurses,
   curl,
   bubblewrap,
-  Foundation,
 }:
 
 assert lib.versionAtLeast ocaml.version "4.08.0";
@@ -31,13 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     ocaml
     curl
   ];
-  buildInputs =
-    [
-      ncurses
-      getconf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  buildInputs = [
+    ncurses
+    getconf
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
 
   patches = [ ./opam-shebangs.patch ];
 

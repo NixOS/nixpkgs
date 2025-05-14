@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   abseil-cpp,
-  protobuf,
+  protobuf_29,
   pybind11,
   zlib,
 }:
@@ -32,7 +32,7 @@ buildPythonPackage {
 
   buildInputs = [
     abseil-cpp
-    protobuf
+    protobuf_29
     pybind11
     zlib
   ];

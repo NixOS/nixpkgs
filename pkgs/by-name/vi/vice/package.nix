@@ -24,6 +24,7 @@
   wrapGAppsHook3,
   xdg-utils,
   libevdev,
+  pulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     xa
     xdg-utils
     libevdev
+    pulseaudio
   ];
   dontDisableStatic = true;
   configureFlags = [

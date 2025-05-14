@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "GUI to query passwords on behalf of SSH agents";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
     mainProgram = "lxqt-openssh-askpass";
   };
 }

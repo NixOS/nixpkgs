@@ -20,7 +20,6 @@
   xclip,
   inotify-tools,
   procps,
-  darwin,
 }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
@@ -63,10 +62,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.apple_sdk.frameworks.Cocoa
     ];
 
   dontStrip = true;

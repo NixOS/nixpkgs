@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9atn5qyBDy4P6iUoHFhg+TV6Ur71fiah4oTJbBMeEy4=";
 
   meta = {
@@ -113,7 +112,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iDYh52rj1M5Uupvbx2WeDd/jvQZ+2A50V5rp5e2t7q4=";
   cargoDepsName = finalAttrs.pname;
 
@@ -1011,7 +1009,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9atn5qyBDy4P6iUoHFhg+TV6Ur71fiah4oTJbBMeEy4=";
 
   # Tests require network access. Skipping.

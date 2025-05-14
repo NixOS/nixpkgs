@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.12.14";
+  version = "0.12.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     tag = version;
-    hash = "sha256-QPA9ek0szYgN6R0mnnU5MN4cYa8DVqIw10DxQ/TzaH0=";
+    hash = "sha256-+DRHOX4X2ez+G/nHYnXfANNzdPU7QDbq6lBWBwLJoP4=";
   };
 
   postPatch = ''
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter-server/pycrdt";
     changelog = "https://github.com/jupyter-server/pycrdt/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

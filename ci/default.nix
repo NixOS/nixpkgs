@@ -44,18 +44,26 @@ let
         # By default it's info, which is too noisy since we have many unmatched files
         settings.on-unmatched = "debug";
 
+        programs.actionlint.enable = true;
+
+        programs.keep-sorted.enable = true;
+
         # This uses nixfmt-rfc-style underneath,
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
+
+        settings.formatter.editorconfig-checker = {
+          command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
+          options = [ "-disable-indent-size" ];
+          includes = [ "*" ];
+          priority = 1;
+        };
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
         root = ../.;
-        fileset = fs.difference (fs.unions [
-          (fs.fileFilter (file: file.hasExt "nix") ../.)
-          ../.git-blame-ignore-revs
-        ]) (fs.maybeMissing ../.git);
+        fileset = fs.difference ../. (fs.maybeMissing ../.git);
       };
     in
     {
@@ -70,4 +78,16 @@ in
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
   eval = pkgs.callPackage ./eval { };
+
+  # CI jobs
+  lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
+  manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
+  manual-nixpkgs = (import ../pkgs/top-level/release.nix { }).manual;
+  manual-nixpkgs-tests = (import ../pkgs/top-level/release.nix { }).manual.tests;
+  parse = pkgs.lib.recurseIntoAttrs {
+    latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
+    lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
+  };
+  shell = import ../shell.nix { inherit nixpkgs system; };
 }

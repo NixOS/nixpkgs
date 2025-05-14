@@ -3,14 +3,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   stdenv,
-  overrideSDK,
 }:
-let
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "eslint";
   version = "9.20.0";
 

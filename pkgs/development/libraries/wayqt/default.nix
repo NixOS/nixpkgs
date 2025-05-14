@@ -5,7 +5,6 @@
   replaceVars,
   meson,
   pkg-config,
-  qttools,
   ninja,
   qtbase,
   qtwayland,
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     pkg-config
-    qttools
     ninja
   ];
 
@@ -41,10 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtwayland
     wayland
-  ];
-
-  mesonFlags = [
-    "-Duse_qt_version=qt6"
   ];
 
   dontWrapQtApps = true;

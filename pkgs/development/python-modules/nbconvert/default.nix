@@ -109,6 +109,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbconvert";
     changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

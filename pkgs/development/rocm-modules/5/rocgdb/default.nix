@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3
       bsd3
     ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken = versionAtLeast finalAttrs.version "6.0.0";
   };

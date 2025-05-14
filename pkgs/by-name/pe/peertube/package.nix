@@ -10,7 +10,7 @@
   fixup-yarn-lock,
   jq,
   fd,
-  nodejs_18,
+  nodejs_20,
   which,
   yarn,
 }:
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     fd
   ];
 
-  buildInputs = [ nodejs_18 ];
+  buildInputs = [ nodejs_20 ];
 
   buildPhase = ''
     # Build node modules

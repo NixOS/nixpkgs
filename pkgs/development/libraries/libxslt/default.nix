@@ -7,7 +7,7 @@
   libxml2,
   findXMLCatalogs,
   gettext,
-  python,
+  python3,
   ncurses,
   libgcrypt,
   cryptoSupport ? false,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals pythonSupport [
       libxml2.py
-      python
+      python3
       ncurses
     ]
     ++ lib.optionals cryptoSupport [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python3.pythonOnBuildForHost.interpreter}")
     (lib.withFeature cryptoSupport "crypto")
   ];
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString pythonSupport ''
       mkdir -p $py/nix-support
       echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-      moveToOutput ${python.sitePackages} "$py"
+      moveToOutput ${python3.sitePackages} "$py"
     '';
 
   passthru = {

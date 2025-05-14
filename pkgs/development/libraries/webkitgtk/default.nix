@@ -261,7 +261,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "webkit2gtk-web-extension-4.0"
     ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

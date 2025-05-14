@@ -25,12 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-CvQSSrCdFAl2HpHsYWgUdogtRvlBjuqJCNOcASIuD2s=";
   };
 
-  # relax dependencies
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'pillow = "^10.3.0"' 'pillow = ">=10.3.0"' \
-      --replace-fail 'tiktoken = "^0.7.0"' 'tiktoken = ">=0.7.0"' \
-  '';
+  pythonRelaxDeps = [
+    "pillow"
+    "tiktoken"
+  ];
 
   build-system = [ poetry-core ];
 

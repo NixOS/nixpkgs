@@ -281,9 +281,9 @@ in
       hardware.bluetooth.enable = mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
+      security.rtkit.enable = mkDefault true;
       services.accounts-daemon.enable = true;
-      services.dleyna-renderer.enable = mkDefault true;
-      services.dleyna-server.enable = mkDefault true;
+      services.dleyna.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;

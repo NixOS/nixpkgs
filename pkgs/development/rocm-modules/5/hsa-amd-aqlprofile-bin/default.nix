@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "AQLPROFILE library for AMD HSA runtime API extension support";
     homepage = "https://rocm.docs.amd.com/en/latest/";
     license = with licenses; [ unfree ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
     broken =
       versions.minor finalAttrs.version != versions.minor stdenv.cc.version

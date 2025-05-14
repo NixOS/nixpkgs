@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-windowck-plugin";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

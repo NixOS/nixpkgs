@@ -8,7 +8,7 @@
   bzip2,
   zstd,
   spdlog,
-  tbb,
+  tbb_2022_0,
   openssl,
   boost,
   libpqxx,
@@ -22,7 +22,6 @@
   libpng,
   file,
   runCommand,
-  catch2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
@@ -32,6 +31,8 @@ let
     chmod -R +w $out
     cp -r ${rapidcheck.dev}/* $out
   '';
+  catch2 = catch2_3;
+  tbb = tbb_2022_0;
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
-    catch2_3
+    catch2
     clang-tools
     cmake
     python3
@@ -89,9 +90,6 @@ stdenv.mkDerivation rec {
     rapidcheck'
     catch2
   ];
-
-  # fatal error: catch.hpp: No such file or directory
-  doCheck = false;
 
   nativeCheckInputs = [
     gtest

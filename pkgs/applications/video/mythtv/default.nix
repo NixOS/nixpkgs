@@ -48,8 +48,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
-    rev = "v${version}";
-    hash = "sha256-ZhVlDX5I6SJEntVg30Iy/XxgsorDjFycAt2uksJMJps=";
+    tag = "v${version}";
+    hash = "sha256-4mWtPJi2CBoek8LWEfdFxe1ybomAOCTWBTKExMm7nLU=";
   };
 
   patches = [

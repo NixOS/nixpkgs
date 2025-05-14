@@ -15,7 +15,7 @@
   addDriverRunpath,
   appstream,
   glslang,
-  mako,
+  python3Packages,
   meson,
   ninja,
   pkg-config,
@@ -31,7 +31,7 @@
   libXrandr,
   x11Support ? true,
   waylandSupport ? true,
-  nvidiaSupport ? true,
+  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
   gamescopeSupport ? true,
   mangoappSupport ? gamescopeSupport,
   mangohudctlSupport ? gamescopeSupport,
@@ -173,21 +173,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "mangohudctl" mangohudctlSupport)
   ];
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      glslang
-      mako
-      meson
-      ninja
-      pkg-config
-      unzip
-    ]
-    # Only the headers are used from these packages
-    # The corresponding libraries are loaded at runtime from the app's runpath
-    ++ lib.optional x11Support libX11
-    ++ lib.optional waylandSupport wayland
-    ++ lib.optional nvidiaSupport libXNVCtrl;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    addDriverRunpath
+    glslang
+    python3Packages.mako
+    meson
+    ninja
+    pkg-config
+    unzip
+  ];
 
   buildInputs =
     [
@@ -195,6 +191,9 @@ stdenv.mkDerivation (finalAttrs: {
       nlohmann_json
       spdlog
     ]
+    ++ lib.optional waylandSupport wayland
+    ++ lib.optional x11Support libX11
+    ++ lib.optional nvidiaSupport libXNVCtrl
     ++ lib.optional (x11Support || waylandSupport) libxkbcommon
     ++ lib.optionals mangoappSupport [
       glew

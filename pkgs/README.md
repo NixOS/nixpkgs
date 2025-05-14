@@ -501,28 +501,29 @@ When using the `patches` parameter to `mkDerivation`, make sure the patch name c
 
 ### Fetching patches
 
-In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch2`:
 
 ```nix
 {
   patches = [
-    (fetchpatch {
+    (fetchpatch2 {
       name = "fix-check-for-using-shared-freetype-lib.patch";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=8f5d28536e4518716fdfe974e580194c8f57871d";
       hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
     })
   ];
 }
 ```
 
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch2`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+
+When adding patches in this manner you should be reasonably sure that the used URL is stable. Patches referencing open pull requests will change when the PR is updated and code forges (such as GitHub) usually garbage collect commits that are no longer reachable due to rebases/amends.
 
 ### Vendoring patches
 
 In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
 
 - solves problems unique to packaging in Nixpkgs
-- is already proposed upstream but not merged yet
 - cannot be fetched easily
 - has a high chance to disappear in the future due to unstable or unreliable URLs
 

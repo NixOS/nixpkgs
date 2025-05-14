@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Program for calculating with L-functions";
     mainProgram = "lcalc";
     license = with licenses; [ gpl2 ];
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.all;
   };
 }

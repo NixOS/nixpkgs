@@ -41,6 +41,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Clipboard manager for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

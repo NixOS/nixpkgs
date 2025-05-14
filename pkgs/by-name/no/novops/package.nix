@@ -7,7 +7,6 @@
   stdenv,
   installShellFiles,
   libiconv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   nativeBuildInputs = [

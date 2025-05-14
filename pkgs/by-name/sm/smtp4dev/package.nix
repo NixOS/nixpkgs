@@ -7,19 +7,26 @@
   npmHooks,
   fetchNpmDeps,
   dotnetCorePackages,
+  nix-update-script,
 }:
 let
-  version = "3.6.1";
+  version = "3.8.6";
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
     tag = version;
-    hash = "sha256-T6ci7+xbzpOrNr8hpDCwk5qe01L2Ho5V1oM7Hhd8bgg=";
+    hash = "sha256-k4nerh4cVVcFQF7a4Wvcfhefa3SstEOASk+0soN0n9k=";
   };
   npmRoot = "Rnwood.Smtp4dev/ClientApp";
+  patches = [ ./smtp4dev-npm-packages.patch ];
 in
 buildDotnetModule {
-  inherit version src npmRoot;
+  inherit
+    version
+    src
+    npmRoot
+    patches
+    ;
   pname = "smtp4dev";
 
   nativeBuildInputs = [
@@ -30,8 +37,9 @@ buildDotnetModule {
   ];
 
   npmDeps = fetchNpmDeps {
-    src = "${src}/${npmRoot}";
-    hash = "sha256-/Z6sBxA2ReHlEbz0zJjlpn6IwzHDQiXN5ixEV1/iCJI=";
+    inherit src patches;
+    hash = "sha256-Uj0EnnsA+QHq5KHF2B93OG8rwxYrV6sEgMTbd43ttCA=";
+    postPatch = "cd ${npmRoot}";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -43,6 +51,10 @@ buildDotnetModule {
   postFixup = ''
     mv $out/bin/Rnwood.Smtp4dev $out/bin/smtp4dev
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+  };
 
   meta = {
     description = "Fake smtp email server for development and testing";

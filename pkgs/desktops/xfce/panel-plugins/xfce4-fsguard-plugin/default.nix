@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "Filesystem usage monitor plugin for the Xfce panel";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

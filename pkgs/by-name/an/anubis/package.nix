@@ -4,6 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   stdenv,
 
   esbuild,
@@ -12,20 +13,20 @@
 }:
 let
   pname = "anubis";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${version}";
-    hash = "sha256-/7GMf0QGR0rtz05vHN/yYYuzxN25NhqidITdAf6jSXY=";
+    hash = "sha256-grtzkNxgShbldjm+lnANbKVhkUrbwseAT1NaBL85mHg=";
   };
 
   anubisXess = buildNpmPackage {
     inherit version src;
     pname = "${pname}-xess";
 
-    npmDepsHash = "sha256-QrW0grgNRZRum2mCec86Za1UV4R5QSRlhjVYFsZDwY8=";
+    npmDepsHash = "sha256-hTKTTBmfMGv6I+4YbWrOt6F+qD6ysVYi+DEC1konBFk=";
 
     buildPhase = ''
       runHook preBuild
@@ -44,7 +45,7 @@ in
 buildGoModule (finalAttrs: {
   inherit pname version src;
 
-  vendorHash = "sha256-D0+SDJIagAPqd71fIHCh29vPMVL0ZZAFg0rmgW2EaGw=";
+  vendorHash = "sha256-EOT/sdVINj9oO1jZHPYB3jQ+XApf9eCUKuMY0tV+vpg=";
 
   nativeBuildInputs = [
     esbuild
@@ -78,7 +79,10 @@ buildGoModule (finalAttrs: {
     export DONT_USE_NETWORK=1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) anubis; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Weighs the soul of incoming HTTP requests using proof-of-work to stop AI crawlers";
@@ -88,6 +92,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       knightpp
       soopyc
+      ryand56
     ];
     mainProgram = "anubis";
   };

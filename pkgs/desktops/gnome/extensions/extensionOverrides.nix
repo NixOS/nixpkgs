@@ -27,6 +27,9 @@
   vte,
   wrapGAppsHook3,
   xdg-utils,
+  gtk4,
+  desktop-file-utils,
+  xdg-user-dirs,
 }:
 let
   # Helper method to reduce redundancy
@@ -128,7 +131,10 @@ lib.trivial.pipe super [
         inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
-        nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
+        gtk_update_icon_cache = "${gtk4.out}/bin/gtk4-update-icon-cache";
+        update_desktop_database = "${desktop-file-utils.out}/bin/update-desktop-database";
+        xdg_user_dirs = lib.getExe xdg-user-dirs;
+        nautilus_gsettings_path = glib.getSchemaPath nautilus;
       })
     ];
   }))

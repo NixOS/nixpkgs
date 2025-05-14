@@ -81,6 +81,6 @@ buildPythonPackage rec {
     description = "OpenStack Object Storage";
     homepage = "https://github.com/openstack/swift";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

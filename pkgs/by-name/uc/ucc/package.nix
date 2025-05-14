@@ -24,7 +24,7 @@ let
     cuda_cudart
     cuda_nvcc
     cuda_nvml_dev
-    cudaFlags
+    flags
     nccl
     ;
 
@@ -40,13 +40,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
-  version = "1.3.0";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xcJLYktkxNK2ewWRgm8zH/dMaIoI+9JexuswXi7MpAU=";
+    hash = "sha256-2OtMNI4teMnSBxsujf8LMrNOjqK/oJTrrmE2Awxgbd8=";
   };
 
   outputs = [
@@ -101,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals enableAvx [ "--with-avx" ]
     ++ optionals enableCuda [
       "--with-cuda=${cuda_nvcc}"
-      "--with-nvcc-gencode=${concatStringsSep " " cudaFlags.gencode}"
+      "--with-nvcc-gencode=${concatStringsSep " " flags.gencode}"
     ];
 
   postInstall = ''

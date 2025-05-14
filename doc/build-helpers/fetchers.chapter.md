@@ -773,9 +773,14 @@ Additionally, the following optional arguments can be given:
 
 : Whether to fetch LFS objects.
 
+*`preFetch`* (String)
+
+: Shell code to be executed before the repository has been fetched, to allow
+  changing the environment the fetcher runs in.
+
 *`postFetch`* (String)
 
-: Shell code executed after the file has been fetched successfully.
+: Shell code executed after the repository has been fetched successfully.
   This can do things like check or transform the file.
 
 *`leaveDotGit`* (Boolean)

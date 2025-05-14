@@ -28,7 +28,7 @@
   armTrustedFirmwareRK3588,
   armTrustedFirmwareS905,
   buildPackages,
-}:
+}@pkgs:
 
 let
   defaultVersion = "2025.01";
@@ -59,6 +59,7 @@ let
       extraMakeFlags ? [ ],
       extraMeta ? { },
       crossTools ? false,
+      stdenv ? pkgs.stdenv,
       ...
     }@args:
     stdenv.mkDerivation (
@@ -607,11 +608,23 @@ in
     filesToInstall = [ "u-boot.rom" ];
   };
 
+  ubootQemuX86_64 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = [ "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+  };
+
   ubootQuartz64B = buildUBoot {
     defconfig = "quartz64-b-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
-    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    ROCKCHIP_TPL = rkbin.TPL_RK3566;
     filesToInstall = [
       "idbloader.img"
       "idbloader-spi.img"

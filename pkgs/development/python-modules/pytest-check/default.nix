@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "2.5.2";
+  version = "2.5.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    hash = "sha256-Ex+letLw4h45iG4FJVFCu1hOYYgaXkWE/QaxSq5j7l0=";
+    hash = "sha256-I1fX33fDldMMDElXck/fzhp16ovJ6yMIwP/lb2KscMo=";
   };
 
   build-system = [ hatchling ];

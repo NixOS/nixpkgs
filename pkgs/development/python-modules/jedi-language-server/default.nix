@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.44.0";
+  version = "0.45.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = "jedi-language-server";
     tag = "v${version}";
-    hash = "sha256-b3wty4ir/JHh3018Kk0zyX7mM2yrE5n0f2YoidnSIw8=";
+    hash = "sha256-uO7+ui9FEeMF4sC/jI91px5wEWecvfJApogFMfwpPEs=";
   };
 
   build-system = [

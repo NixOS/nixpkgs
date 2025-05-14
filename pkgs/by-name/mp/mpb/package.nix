@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preCheck = "export OMP_NUM_THREADS=2";
+
   meta = {
     description = "MIT Photonic-Bands: computation of photonic band structures in periodic media";
     homepage = "https://mpb.readthedocs.io/en/latest/";

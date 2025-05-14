@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gxml/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jmarmstrong1207 ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ jmarmstrong1207 ];
+    teams = [ teams.gnome ];
   };
 })

@@ -35,6 +35,6 @@ python3Packages.buildPythonPackage rec {
     description = "Validator for the SpatioTemporal Asset Catalog (STAC) specification";
     homepage = "https://github.com/stac-utils/stac-validator";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

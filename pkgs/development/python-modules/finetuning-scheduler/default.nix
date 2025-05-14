@@ -37,6 +37,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<77.0.0" "setuptools"
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [

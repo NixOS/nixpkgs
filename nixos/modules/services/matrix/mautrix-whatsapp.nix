@@ -51,6 +51,8 @@ in
   options.services.mautrix-whatsapp = {
     enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp";
 
+    package = lib.mkPackageOption pkgs "mautrix-whatsapp" { };
+
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = defaultConfig;
@@ -168,7 +170,7 @@ in
 
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
+          ${cfg.package}/bin/mautrix-whatsapp \
             --generate-registration \
             --config='${settingsFile}' \
             --registration='${registrationFile}'
@@ -196,7 +198,7 @@ in
         StateDirectory = baseNameOf dataDir;
         WorkingDirectory = dataDir;
         ExecStart = ''
-          ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
+          ${cfg.package}/bin/mautrix-whatsapp \
           --config='${settingsFile}' \
           --registration='${registrationFile}'
         '';

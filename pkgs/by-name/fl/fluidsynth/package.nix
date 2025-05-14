@@ -1,6 +1,5 @@
 {
   stdenv,
-  darwin,
   lib,
   fetchFromGitHub,
   buildPackages,
@@ -45,17 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libpulseaudio
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        AudioUnit
-        CoreAudio
-        CoreMIDI
-        CoreServices
-      ]
-    );
+    ];
 
   cmakeFlags = [
     "-Denable-framework=off"

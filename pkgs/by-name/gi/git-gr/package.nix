@@ -6,7 +6,6 @@
   rustPlatform,
   installShellFiles,
   libiconv,
-  darwin,
   nix-update-script,
   pkg-config,
   openssl,
@@ -40,8 +39,6 @@ rustPlatform.buildRustPackage {
     lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   postInstall = lib.optionalString canRunGitGr ''

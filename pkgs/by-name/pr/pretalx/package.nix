@@ -37,7 +37,8 @@ let
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/changelog/#${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
+    maintainers = with maintainers; [ hexa ];
+    teams = [ teams.c3d2 ];
     platforms = platforms.linux;
   };
 

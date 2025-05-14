@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-fTXwrxZXtAUakMPAwsDSQz886Dnbkw/b7T1lFt4qXfE=";
   };
 
+  prePatch = ''
+    # pythonRelaxDeps doesn't work here
+    substituteInPlace pyproject.toml --replace-fail "setuptools >= 61.2, < 72" "setuptools"
+  '';
+
   nativeBuildInputs = [
     cython
     nasm

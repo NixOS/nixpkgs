@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vincentsarago/color-operations";
     changelog = "https://github.com/vincentsarago/color-operations/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

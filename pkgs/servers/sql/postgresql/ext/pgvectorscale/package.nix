@@ -65,7 +65,7 @@ buildPgrxExtension (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/timescale/pgvectorscale";
-    maintainers = lib.teams.flyingcircus.members;
+    teams = [ lib.teams.flyingcircus ];
     description = "Complement to pgvector for high performance, cost efficient vector search on large workloads";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;

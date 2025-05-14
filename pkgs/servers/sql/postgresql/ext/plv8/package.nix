@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  jitSupport,
   lib,
   nodejs_20,
   perl,
@@ -135,11 +134,8 @@ postgresqlBuildExtension (finalAttrs: {
     homepage = "https://plv8.github.io/";
     changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
     maintainers = [ ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
-    broken = jitSupport;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -80,7 +80,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.gnome.org/World/amberol";
     description = "Small and simple sound and music player";
-    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ linsui ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "amberol";

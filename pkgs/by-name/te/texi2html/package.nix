@@ -4,42 +4,49 @@
   fetchurl,
   perl,
   gettext,
+  versionCheckHook,
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "texi2html";
   version = "5.0";
 
   src = fetchurl {
-    url = "mirror://savannah/texi2html/${pname}-${version}.tar.bz2";
-    sha256 = "1yprv64vrlcbksqv25asplnjg07mbq38lfclp1m5lj8cw878pag8";
+    url = "mirror://savannah/texi2html/texi2html-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-6KmLDuIMSVpquJQ5igZe9YAnLb1aFbGxnovRvInZ+fo=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    perl
+  ];
+
+  buildInputs = [
     gettext
     perl
   ];
-  buildInputs = [ perl ];
 
   postPatch = ''
-    patchShebangs separated_to_hash.pl
+    patchShebangs --build separated_to_hash.pl
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    for f in $out/bin/*; do
-      substituteInPlace $f --replace "${buildPackages.perl}" "${perl}"
-    done
+  postInstall = ''
+    patchShebangs --host --update $out/bin/*
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
     description = "Perl script which converts Texinfo source files to HTML output";
     mainProgram = "texi2html";
     homepage = "https://www.nongnu.org/texi2html/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
-}
+})

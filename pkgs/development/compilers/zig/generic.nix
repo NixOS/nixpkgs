@@ -173,7 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ] ++ lib.teams.zig.members;
+    maintainers = with lib.maintainers; [ andrewrk ];
+    teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;
   };

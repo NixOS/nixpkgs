@@ -7,7 +7,6 @@
   openssl,
   stdenv,
   curl,
-  darwin,
   git,
 }:
 
@@ -36,7 +35,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   nativeCheckInputs = [

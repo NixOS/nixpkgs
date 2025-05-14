@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
       koral
     ];
     mainProgram = "dysk";
+    platforms = platforms.linux;
   };
 }

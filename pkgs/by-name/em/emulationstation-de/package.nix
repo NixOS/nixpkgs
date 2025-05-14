@@ -17,6 +17,7 @@
   poppler,
   pugixml,
   SDL2,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     poppler
     pugixml
     SDL2
+    libGL
   ];
 
   cmakeFlags = [ (lib.cmakeBool "APPLICATION_UPDATER" false) ];

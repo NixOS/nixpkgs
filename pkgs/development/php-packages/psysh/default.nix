@@ -58,6 +58,6 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

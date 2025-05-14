@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = teams.flyingcircus.members ++ [ maintainers.izorkin ];
+    maintainers = [ maintainers.izorkin ];
+    teams = [ teams.flyingcircus ];
   };
 })

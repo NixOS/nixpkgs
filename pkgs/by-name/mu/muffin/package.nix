@@ -126,6 +126,6 @@ stdenv.mkDerivation rec {
     mainProgram = "muffin";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

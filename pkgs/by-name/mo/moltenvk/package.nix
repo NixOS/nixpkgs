@@ -101,8 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    lib.optional (stdenv.cc.libcxx != null) "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    ++ [
       "-I${lib.getDev spirv-cross}/include/spirv_cross"
       "-I${lib.getDev spirv-headers}/include/spirv/unified1"
 

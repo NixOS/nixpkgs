@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.flyn.org/projects/libdmapsharing/";
     description = "Library that implements the DMAP family of protocols";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

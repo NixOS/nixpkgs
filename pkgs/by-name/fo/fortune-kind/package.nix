@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   libiconv,
   makeBinaryWrapper,
   installShellFiles,
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   buildNoDefaultFeatures = true;

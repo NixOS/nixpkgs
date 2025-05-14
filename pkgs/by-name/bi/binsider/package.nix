@@ -1,6 +1,5 @@
 {
   lib,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   stdenv,
@@ -20,14 +19,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ZoZbhmUeC63IZ5kNuACfRaCsOicZNUAGYABSpCkUCXA=";
 
   buildNoDefaultFeatures = !stdenv.hostPlatform.isLinux;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      AppKit
-      CoreServices
-    ]
-  );
 
   checkType = "debug";
   checkFlags = [

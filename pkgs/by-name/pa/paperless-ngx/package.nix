@@ -8,7 +8,6 @@
   gettext,
   python3,
   giflib,
-  darwin,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -27,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.15.2";
+  version = "2.15.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-3IGXjMVMSbpcdwEvJcMbFuQI9GYy1TY9NWAvum14UK4=";
+    hash = "sha256-zkOOUMyAvYYJnYn4s7D4tsYhodVX5kvPdXBBknBsusY=";
   };
 
   python = python3.override {
@@ -91,7 +90,6 @@ let
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           giflib
-          darwin.apple_sdk.frameworks.CoreText
         ];
 
       CYPRESS_INSTALL_BINARY = "0";

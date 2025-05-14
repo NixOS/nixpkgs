@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     description = "Network-related giomodules for glib";
     homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
     badPlatforms = [
       # GIO shared modules are mandatory.

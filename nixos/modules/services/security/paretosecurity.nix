@@ -12,7 +12,11 @@ in
   options.services.paretosecurity = {
     enable = lib.mkEnableOption "[ParetoSecurity](https://paretosecurity.com) [agent](https://github.com/ParetoSecurity/agent) and its root helper";
     package = lib.mkPackageOption pkgs "paretosecurity" { };
-    trayIcon = lib.mkEnableOption "tray icon for ParetoSecurity";
+    trayIcon = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Set to false to disable the tray icon and run as a CLI tool only.";
+    };
   };
 
   config = lib.mkIf cfg.enable {

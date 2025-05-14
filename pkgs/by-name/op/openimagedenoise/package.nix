@@ -3,7 +3,6 @@
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
-  darwin,
   fetchzip,
   ispc,
   lib,
@@ -15,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
-  version = "2.3.2";
+  version = "2.3.3";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/RenderKit/oidn/releases/download/v${finalAttrs.version}/oidn-${finalAttrs.version}.src.tar.gz";
-    sha256 = "sha256-yTa6U/1idfidbfNTQ7mXcroe7M4eM7Frxi45A/7e2A8=";
+    sha256 = "sha256-JzAd47fYGLT6DeOep8Wag29VY9HOTpqf0OSv1v0kGQU=";
   };
 
   patches = lib.optional cudaSupport ./cuda.patch;
@@ -42,14 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [ tbb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Accelerate
-        MetalKit
-        MetalPerformanceShadersGraph
-      ]
-    )
+
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
       cudaPackages.cuda_cccl

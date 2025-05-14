@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "geocode-glib_2";
       packageName = "geocode-glib";
     };
     tests = {
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Convenience library for the geocoding and reverse geocoding using Nominatim service";
     homepage = "https://gitlab.gnome.org/GNOME/geocode-glib";
     license = lib.licenses.lgpl2Plus;
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
 })

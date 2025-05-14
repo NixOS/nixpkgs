@@ -2,10 +2,6 @@
   stdenv,
   fetchFromGitHub,
   lib,
-  zsh,
-  coreutils,
-  inetutils,
-  procps,
   txt2tags,
 }:
 stdenv.mkDerivation rec {
@@ -21,11 +17,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ txt2tags ];
-  buildInputs = [
-    zsh
-    coreutils
-    procps
-  ] ++ lib.optional stdenv.hostPlatform.isLinux inetutils;
 
   buildPhase = ''
     cd doc

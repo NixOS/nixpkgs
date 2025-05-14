@@ -114,6 +114,9 @@ let
 
       # https://github.com/TES3MP/openmw-tes3mp/issues/552
       ./tes3mp.patch
+
+      # https://github.com/TES3MP/TES3MP/pull/691
+      ./tes3mp-gcc14-fix.patch
     ];
 
     env.NIX_CFLAGS_COMPILE = "-fpermissive";

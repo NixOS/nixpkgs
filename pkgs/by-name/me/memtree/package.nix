@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication {
     hash = "sha256-Ifp8hwkuyBw57fGer3GbDiJaRjL4TD3hzj+ecGXWqI0=";
   };
 
+  pythonRelaxDeps = [ "rich" ];
+
   nativeBuildInputs = with python3Packages; [
     poetry-core
   ];

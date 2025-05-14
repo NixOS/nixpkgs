@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/Incubator/decibels";
     changelog = "https://gitlab.gnome.org/GNOME/decibels/-/blob/${version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "org.gnome.Decibels";
     platforms = lib.platforms.linux;
   };

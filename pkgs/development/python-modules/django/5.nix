@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.8";
+  version = "5.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-TZjqB9khEHnkkxYvAC/RzAvOIwdemh0uT4UVdosMq6M=";
+    hash = "sha256-uBP6MoVjPUtNu6KxLjaYmKTN42JIUCTJSuSnQWSxyQU=";
   };
 
   patches =
@@ -82,9 +82,6 @@ buildPythonPackage rec {
     ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=61.0.0,<69.3.0" setuptools
-
     substituteInPlace tests/utils_tests/test_autoreload.py \
       --replace-fail "/usr/bin/python" "${python.interpreter}"
   '';

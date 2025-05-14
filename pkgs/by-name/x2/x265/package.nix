@@ -5,6 +5,7 @@
   fetchurl,
   cmake,
   nasm,
+  fetchpatch2,
 
   # NUMA support enabled by default on NUMA platforms:
   numaSupport ? (
@@ -25,6 +26,9 @@
   unittestsSupport ? stdenv.hostPlatform.isx86_64, # Unit tests - only testing x64 assembly
   vtuneSupport ? false, # Vtune profiling instrumentation
   werrorSupport ? false, # Warnings as errors
+  # NEON support is always enabled for aarch64
+  # this flag is only needed for armv7.
+  neonSupport ? false, # force enable the NEON fpu support for arm v7 CPUs
 }:
 
 let
@@ -49,9 +53,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
   };
 
-  patches = [
-    ./darwin-__rdtsc.patch
-  ];
+  patches =
+    [
+      ./darwin-__rdtsc.patch
+    ]
+    # TODO: remove after update to version 4.2
+    ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
+      (fetchpatch2 {
+        url = "https://bitbucket.org/multicoreware/x265_git/commits/ddb1933598736394b646cb0f78da4a4201ffc656/raw";
+        hash = "sha256-ZH+jbVtfNJ+CwRUEgsnzyPVzajR/+4nDnUDz5RONO6c=";
+        stripLen = 1;
+      })
+    ];
 
   sourceRoot = "x265_${version}/source";
 
@@ -88,7 +101,13 @@ stdenv.mkDerivation rec {
     # Clang does not support the endfunc directive so use GCC.
     ++ lib.optional (
       stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
-    ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc";
+    ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
+    # Neon support
+    ++ lib.optionals (neonSupport && stdenv.hostPlatform.isAarch32) [
+      "-DENABLE_NEON=ON"
+      "-DCPU_HAS_NEON=ON"
+      "-DENABLE_ASSEMBLY=ON"
+    ];
 
   cmakeStaticLibFlags =
     [

@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "http-ece"
+    "protobuf"
   ];
 
   dependencies = [

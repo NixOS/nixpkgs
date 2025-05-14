@@ -33,7 +33,6 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  Security,
   writeShellScriptBin,
 }:
 
@@ -124,7 +123,7 @@ lib.extendMkDerivation {
       cargoPgrxFlags' = lib.escapeShellArgs cargoPgrxFlags;
     in
     {
-      buildInputs = (args.buildInputs or [ ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+      buildInputs = (args.buildInputs or [ ]);
 
       nativeBuildInputs =
         (args.nativeBuildInputs or [ ])

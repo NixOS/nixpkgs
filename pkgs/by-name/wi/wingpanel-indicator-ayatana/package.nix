@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Lafydev/wingpanel-indicator-ayatana";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

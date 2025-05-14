@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Spatial inequality analysis";
     homepage = "https://github.com/pysal/inequality";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

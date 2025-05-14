@@ -101,7 +101,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/jpu/cambalache";
     description = "RAD tool for GTK 4 and 3 with data model first philosophy";
     mainProgram = "cambalache";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = with licenses; [
       lgpl21Only # Cambalache
       gpl2Only # tools

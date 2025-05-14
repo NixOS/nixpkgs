@@ -117,13 +117,11 @@ let
         homepage = "https://vala.dev";
         license = licenses.lgpl21Plus;
         platforms = platforms.unix;
-        maintainers =
-          with maintainers;
-          [
-            antono
-            jtojnar
-          ]
-          ++ teams.pantheon.members;
+        maintainers = with maintainers; [
+          antono
+          jtojnar
+        ];
+        teams = [ teams.pantheon ];
       };
     }
   );

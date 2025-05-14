@@ -51,6 +51,6 @@ stdenvNoCC.mkDerivation {
     description = "Change folder colors for Nemo and Caja";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

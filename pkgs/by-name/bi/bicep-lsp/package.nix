@@ -50,7 +50,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ] ++ lib.teams.stridtech.members;
+    teams = [ lib.teams.stridtech ];
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-linux" ];
   };

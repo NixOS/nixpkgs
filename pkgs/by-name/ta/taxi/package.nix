@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   pname = "taxi";
   version = "2.0.2-unstable-2024-12-26";
 
+  # Temporarily disable nixpkgs-update before we have a tagged release.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "ellie-commons";
     repo = "taxi";
@@ -53,7 +55,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ellie-commons/taxi";
     description = "FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     mainProgram = "io.github.ellie_commons.taxi";
   };

@@ -31,16 +31,9 @@
   enableZookeeper ? true,
 }:
 
-let
-  version = "3.3.0";
-  webUiStatic = fetchurl {
-    url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    hash = "sha256-hF8eLIaef4Z5ZGyjqX1Wyd/DD4Bk571ODQ11b+nHTTA=";
-  };
-in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus";
-  inherit version;
+  version = "3.1.0";
 
   outputs = [
     "out"
@@ -51,11 +44,16 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "prometheus";
-    tag = "v${version}";
-    hash = "sha256-WZR6c7uN8I+egoqABaWay0MfA3tv3O74jlrkC/1zt10=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q3f0L6cRVQRL1AHgUI3VNbMG9eTfcApbXfSjOTHr7Go=";
   };
 
-  vendorHash = "sha256-xBopACaDrtGveVoza/WIge9m5bBAxnZC+qtsuAF20J4=";
+  vendorHash = "sha256-vQwBnSxoyIYTeWLk3GD9pKDuUjjsMfwPptgyVnzcTok=";
+
+  webUiStatic = fetchurl {
+    url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
+    hash = "sha256-05DaaDIFtADnkLFqdHe5eUvo6LRz6BduMvGVmzOeurM=";
+  };
 
   excludedPackages = [
     "documentation/prometheus-mixin"
@@ -63,7 +61,7 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    tar -C web/ui -xzf ${webUiStatic}
+    tar -C web/ui -xzf ${finalAttrs.webUiStatic}
 
     patchShebangs scripts
 
@@ -109,7 +107,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -142,4 +140,4 @@ buildGoModule rec {
       Frostman
     ];
   };
-}
+})

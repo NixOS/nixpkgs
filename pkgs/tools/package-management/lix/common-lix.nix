@@ -9,7 +9,6 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
 }@args:
 
 assert lib.assertMsg (
@@ -59,7 +58,6 @@ assert lib.assertMsg (
   python3,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
   util-linuxMinimal,
   removeReferencesTo,
@@ -183,7 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals hasExternalLixDoc [ lix-doc ]
     ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
     # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
     # libunwind library path directly in the wrappers, but it does inject
     # -lunwind without injecting the library path...
@@ -369,7 +366,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";

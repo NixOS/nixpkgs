@@ -34,6 +34,7 @@ buildPythonPackage {
 
   disabledTests = [
     "test_expand" # It depends on FHS
+    "test_blocking" # flaky, depends on comparing running time w/ magic value
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

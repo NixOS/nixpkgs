@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail-modeladmin";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail-nest";
     repo = "wagtail-modeladmin";
     tag = "v${version}";
-    hash = "sha256-IG7e7YomMM7K2IlJ1Dr1zo+blDPHnu/JeS5csos8ncc=";
+    hash = "sha256-P75jrH4fMODZHht+RAOd0/MutxsWtmui5Kxk8F/Ew0Q=";
   };
 
   # Fail with `AssertionError`
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Add any model in your project to the Wagtail admin. Formerly wagtail.contrib.modeladmin";
     homepage = "https://github.com/wagtail-nest/wagtail-modeladmin";
-    changelog = "https://github.com/wagtail/wagtail-modeladmin/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wagtail/wagtail-modeladmin/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };

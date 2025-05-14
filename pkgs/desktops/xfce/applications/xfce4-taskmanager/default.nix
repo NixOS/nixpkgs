@@ -36,6 +36,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Easy to use task manager for Xfce";
     mainProgram = "xfce4-taskmanager";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

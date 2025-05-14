@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fastnetmon.com";
     changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

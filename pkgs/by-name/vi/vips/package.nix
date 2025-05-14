@@ -13,9 +13,7 @@
   buildPackages,
 
   # Build inputs
-  ApplicationServices,
   expat,
-  Foundation,
   glib,
   libxml2,
   python3,
@@ -54,7 +52,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.16.0";
+  version = "8.16.1";
 
   outputs = [
     "bin"
@@ -67,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libvips";
     repo = "libvips";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cx657BEZecPeB9rCeVym3C/d+/u+YLJn9vwxfe8b0dM=";
+    hash = "sha256-F2ymfvqwuCtNtFIOLgXvqRWATSMaeV7EQKYyQalCNfc=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -87,41 +85,36 @@ stdenv.mkDerivation (finalAttrs: {
       gtk-doc
     ];
 
-  buildInputs =
-    [
-      glib
-      libxml2
-      expat
-      (python3.withPackages (p: [ p.pycairo ]))
+  buildInputs = [
+    glib
+    libxml2
+    expat
+    (python3.withPackages (p: [ p.pycairo ]))
 
-      # Optional dependencies
-      cfitsio
-      cgif
-      fftw
-      imagemagick
-      lcms2
-      libarchive
-      libexif
-      libheif
-      libhwy
-      libimagequant
-      libjpeg
-      libjxl
-      librsvg
-      libspng
-      libtiff
-      libwebp
-      matio
-      openexr
-      openjpeg
-      openslide
-      pango
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      Foundation
-    ];
+    # Optional dependencies
+    cfitsio
+    cgif
+    fftw
+    imagemagick
+    lcms2
+    libarchive
+    libexif
+    libheif
+    libhwy
+    libimagequant
+    libjpeg
+    libjxl
+    librsvg
+    libspng
+    libtiff
+    libwebp
+    matio
+    openexr
+    openjpeg
+    openslide
+    pango
+    poppler
+  ];
 
   # Required by .pc file
   propagatedBuildInputs = [

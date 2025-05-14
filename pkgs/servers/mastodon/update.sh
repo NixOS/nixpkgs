@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq prefetch-yarn-deps
+#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq yarn-berry_4.yarn-berry-fetcher
 set -e
 
 OWNER=mastodon
@@ -110,5 +110,6 @@ echo "Creating gemset.nix"
 bundix --lockfile="$SOURCE_DIR/Gemfile.lock" --gemfile="$SOURCE_DIR/Gemfile"
 echo "" >> gemset.nix  # Create trailing newline to please EditorConfig checks
 
-echo "Required manual update of yarn-hash"
-exit 1
+echo "Updating yarnHash"
+YARN_HASH="$(yarn-berry-fetcher prefetch "$SOURCE_DIR/yarn.lock" 2>/dev/null)"
+sed -i "s;sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=;$YARN_HASH;g" source.nix

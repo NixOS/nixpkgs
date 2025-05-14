@@ -9,8 +9,6 @@
 
   # native darwin dependencies
   libiconv,
-  Security,
-  SystemConfiguration,
 
   # tests
   pytestCheckHook,
@@ -53,8 +51,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
-    SystemConfiguration
   ];
 
   pythonImportsCheck = [ "css_inline" ];

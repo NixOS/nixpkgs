@@ -35,6 +35,6 @@ mkXfceDerivation {
     description = "Modern, minimalist taskbar for Xfce";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

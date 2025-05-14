@@ -3,11 +3,13 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  age-plugin-tpm,
-  age-plugin-sss,
-  age-plugin-ledger,
-  age-plugin-yubikey,
   age-plugin-fido2-hmac,
+  age-plugin-ledger,
+  age-plugin-se,
+  age-plugin-sss,
+  age-plugin-tpm,
+  age-plugin-yubikey,
+  age-plugin-1p,
   makeWrapper,
   runCommand,
 }:
@@ -58,11 +60,13 @@ buildGoModule (final: {
   # group age plugins together
   passthru.plugins = {
     inherit
-      age-plugin-tpm
-      age-plugin-sss
-      age-plugin-ledger
-      age-plugin-yubikey
       age-plugin-fido2-hmac
+      age-plugin-ledger
+      age-plugin-se
+      age-plugin-sss
+      age-plugin-tpm
+      age-plugin-yubikey
+      age-plugin-1p
       ;
   };
 

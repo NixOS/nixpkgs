@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/add-a-space-after-type-in-check-response-opt-sh.patch
+
+    # https://github.com/dns-stats/compactor/pull/91
+    ./patches/update-golden-cbor2diag-output.patch
   ];
 
   nativeBuildInputs = [

@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/idoavrah/terraform-tui";
     changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; teams.bitnomial.members;
+    teams = [ teams.bitnomial ];
     mainProgram = "tftui";
   };
 }

@@ -221,6 +221,6 @@ stdenv.mkDerivation rec {
         lib.intersectLists glib.meta.platforms tpm2-tss.meta.platforms
       else
         glib.meta.platforms;
-    inherit (glib.meta) maintainers;
+    inherit (glib.meta) maintainers teams;
   };
 }

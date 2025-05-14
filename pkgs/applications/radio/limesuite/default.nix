@@ -11,7 +11,6 @@
   libX11,
   gnuplot,
   fltk,
-  GLUT,
   withGui ? false,
 }:
 
@@ -39,9 +38,6 @@ stdenv.mkDerivation rec {
       gnuplot
       libusb1
       soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      GLUT
     ]
     ++ lib.optionals withGui [
       fltk

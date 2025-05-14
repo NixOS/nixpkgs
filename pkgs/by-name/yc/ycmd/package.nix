@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  python,
+  python3,
   withGodef ? true,
   godef,
   withGopls ? true,
@@ -17,13 +17,12 @@
   boost,
   llvmPackages,
   fixDarwinDylibNames,
-  Cocoa,
 }:
 
 stdenv.mkDerivation {
   pname = "ycmd";
   version = "unstable-2023-11-06";
-  disabled = !python.isPy3k;
+  disabled = !python3.isPy3k;
 
   # required for third_party directory creation
   src = fetchFromGitHub {
@@ -39,7 +38,7 @@ stdenv.mkDerivation {
     ninja
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    with python.pkgs;
+    with python3.pkgs;
     with llvmPackages;
     [
       abseil-cpp
@@ -51,12 +50,11 @@ stdenv.mkDerivation {
       jedi
       jedi-language-server
       pybind11
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+    ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"
-    ${python.pythonOnBuildForHost.interpreter} build.py --system-libclang --clang-completer --ninja
+    ${python3.pythonOnBuildForHost.interpreter} build.py --system-libclang --clang-completer --ninja
   '';
 
   dontConfigure = true;
@@ -77,7 +75,7 @@ stdenv.mkDerivation {
       find third_party -type d -name "test" -exec rm -rf {} +
 
       chmod +x ycmd/__main__.py
-      sed -i "1i #!${python.interpreter}\
+      sed -i "1i #!${python3.interpreter}\
       " ycmd/__main__.py
 
       mkdir -p $out/lib/ycmd

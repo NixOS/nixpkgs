@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.71.0";
+  version = "2.72.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
-    rev = "azure-cli-${version}";
-    hash = "sha256-vtuDgj3UJCmKxYg0OgG59ezQh7HlscNywz61BHDzJF8=";
+    tag = "azure-cli-${version}";
+    hash = "sha256-LuQhGrAYVgv+OH214A4xz4LV+xwIshNAH8nAlQL4mDc=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -473,7 +473,8 @@ py.pkgs.toPythonApplication (
       sourceProvenance = [ lib.sourceTypes.fromSource ];
       license = lib.licenses.mit;
       mainProgram = "az";
-      maintainers = with lib.maintainers; [ katexochen ] ++ lib.teams.stridtech.members;
+      maintainers = with lib.maintainers; [ katexochen ];
+      teams = [ lib.teams.stridtech ];
       platforms = lib.platforms.all;
     };
   }

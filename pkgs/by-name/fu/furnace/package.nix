@@ -12,13 +12,13 @@
   freetype,
   libsndfile,
   libX11,
+  libGL,
   rtmidi,
   SDL2,
   zlib,
   withJACK ? stdenv.hostPlatform.isUnix,
   libjack2,
   withGUI ? true,
-  darwin,
   portaudio,
   alsa-lib,
   # Enable GL/GLES rendering
@@ -63,9 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
       libsndfile
       rtmidi
       SDL2
-      libX11
       zlib
       portaudio
+    ]
+    ++ lib.optionals withGL [
+      libGL
     ]
     ++ lib.optionals withJACK [
       libjack2
@@ -73,13 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-      ]
-    );
+      libX11
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_GUI" withGUI)

@@ -86,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.geospatial ];
     platforms = platforms.unix;
   };
 })

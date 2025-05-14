@@ -12,7 +12,6 @@
   withNcurses ? (!withEmscripten),
   ncurses,
   static ? withEmscripten,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optional withEmscripten emscripten
     ++ lib.optional withCurl curl
-    ++ lib.optional withNcurses ncurses
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ lib.optional withNcurses ncurses;
 
   postPatch =
     ''

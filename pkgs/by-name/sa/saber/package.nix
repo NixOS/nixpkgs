@@ -1,7 +1,7 @@
 {
   lib,
-  fetchFromGitHub,
   flutter329,
+  fetchFromGitHub,
   gst_all_1,
   libunwind,
   orc,
@@ -17,18 +17,19 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.25.4";
+  version = "0.25.5";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-3ZTvGF5Ip6VTmyeuuZoJaGO1dDOee5GuRp6/YxSz27c=";
+    hash = "sha256-iZy/Eb3BUe8Zs52gw7+hpncEqUwcgKFAgzB8VIsFv/E=";
   };
 
   gitHashes = {
-    receive_sharing_intent = "sha256-ppKPBL2ZOx2MeuLY6Q8aiVGsektK+Mqtwyxps0aNtwk=";
+    receive_sharing_intent = "sha256-8D5ZENARPZ7FGrdIErxOoV3Ao35/XoQ2tleegI42ZUY=";
     json2yaml = "sha256-Vb0Bt11OHGX5+lDf8KqYZEGoXleGi5iHXVS2k7CEmDw=";
+    workmanager = "sha256-fpB8CwNIn+HCQujyIXciq7Y9yd78Ie0IjkSewv3u5iw=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

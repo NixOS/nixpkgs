@@ -33,13 +33,13 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "psst";
-  version = "0-unstable-2025-04-18";
+  version = "0-unstable-2025-04-20";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = "psst";
-    rev = "062ed4bca8119ec77a8e50e5d6b71281356f2642";
-    hash = "sha256-xYGGfbuxKb42kGOSbGsQCs6SNPreW4k6/SfpVXx8t5E=";
+    rev = "86169f8b05c1b3502261cfe1fae9af2487b8f1bb";
+    hash = "sha256-BkGoaYflCTiElTj47r2j/ngUrZ9wIe0q4pl+zhoattA=";
   };
 
   useFetchCargoVendor = true;

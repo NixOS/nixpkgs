@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   gettext,
-  magic,
+  packaging,
   pexpect,
   pyyaml,
   setuptools,
@@ -11,24 +11,26 @@
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.9.0";
+  version = "4.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
     tag = version;
-    sha256 = "sha256-UJzDRse1rjbGRV/+3JLLrXNwYTJtqlDudB1dDB7uslg=";
+    hash = "sha256-97S8b4PfjUN8uzvp01PGCLs4J3CbwpJsgBKtY8kI0HE=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     gettext
   ];
 
-  propagatedBuildInputs = [
-    magic
+  dependencies = [
+    packaging
     pexpect
     pyyaml
-    setuptools
   ];
 
   # requires avocado-framework 94.0, latest version as of writing is 96.0
@@ -40,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified tool for collecting system logs and other debug information";
     homepage = "https://github.com/sosreport/sos";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

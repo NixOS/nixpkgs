@@ -7,7 +7,7 @@
   pkg-config,
   vulkan-headers,
   SDL2_classic,
-  SDL2_ttf,
+  SDL2_classic_ttf,
   ffmpeg,
   libopus,
   libplacebo,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       (SDL2_classic.override { drmSupport = stdenv.hostPlatform.isLinux; })
-      SDL2_ttf
+      SDL2_classic_ttf
       ffmpeg
       libopus
       libplacebo

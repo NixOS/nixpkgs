@@ -12,7 +12,6 @@
   desktop-file-utils,
   libadwaita,
   openssl,
-  darwin,
   nix-update-script,
 }:
 
@@ -27,10 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FqualaTkirB+gBcgkThQpSBHhM4iaXkiGujwBUnUX0E=";
   };
 
+  patches = [
+    ./wasm-bindgen.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     name = "share-preview-${finalAttrs.version}";
-    hash = "sha256-XY48fQ5HLvZ1nxLk6rbuxSBAHAPUcnwu/5AwgTWhfbg=";
+    hash = "sha256-lDSRXe+AjJzWT0hda/aev6kNJAvHblGmmAYXdYhrnQs=";
   };
 
   nativeBuildInputs = [
@@ -44,15 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    libadwaita
+    openssl
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [ "-Wno-error=incompatible-function-pointer-types" ]
@@ -65,9 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Preview and debug websites metadata tags for social media share";
     homepage = "https://apps.gnome.org/SharePreview";
+    downloadPage = "https://github.com/rafaelmardojai/share-preview";
+    changelog = "https://github.com/rafaelmardojai/share-preview/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "share-preview";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
   };
 })

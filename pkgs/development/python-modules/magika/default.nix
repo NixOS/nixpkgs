@@ -6,7 +6,7 @@
   magika,
   numpy,
   onnxruntime,
-  poetry-core,
+  hatchling,
   python-dotenv,
   pythonOlder,
   stdenv,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-490ixzk2Ywsc150PQS1tmlPcmbpeNwmxrFP1a8mY5jU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     click

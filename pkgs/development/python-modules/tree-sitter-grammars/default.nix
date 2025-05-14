@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pytestCheckHook,
   tree-sitter,
@@ -131,6 +132,10 @@ buildPythonPackage {
       '')
     ];
   };
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="${grammarDrv}"
+  '';
 
   preCheck = ''
     # https://github.com/NixOS/nixpkgs/issues/255262

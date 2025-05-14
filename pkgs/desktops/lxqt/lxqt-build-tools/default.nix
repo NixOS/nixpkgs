@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  pcre,
   qtbase,
   glib,
   perl,
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     glib
-    pcre
   ];
 
   propagatedBuildInputs = [
@@ -69,6 +67,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-transupdate";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
 
-  substituteAll,
+  replaceVars,
 
   # nativeBuildInputs
   cmake,
@@ -41,8 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # prevent CMake from trying to download some libraries from the internet
-    (substituteAll {
-      src = ./cmake_dont_fetch_enkits.patch;
+    (replaceVars ./cmake_dont_fetch_enkits.patch {
       enkits_src = fetchFromGitHub {
         owner = "dougbinks";
         repo = "enkiTS";

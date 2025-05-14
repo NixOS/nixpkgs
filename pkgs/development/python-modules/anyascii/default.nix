@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Unicode to ASCII transliteration";
     homepage = "https://github.com/anyascii/anyascii";
     license = licenses.isc;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

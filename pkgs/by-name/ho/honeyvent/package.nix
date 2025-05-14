@@ -5,14 +5,14 @@
 }:
 buildGoModule rec {
   pname = "honeyvent";
-  version = "1.1.0";
+  version = "1.1.3";
   vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "honeycombio";
     repo = "honeyvent";
     rev = "v${version}";
-    hash = "sha256-yFQEOshjaH6fRCQ7IZChANI9guZlTXk35p1NzQvxUdI=";
+    hash = "sha256-L8hM4JJDDfVv/0O8H3lcI0SRVjDMYC82HG/4WU6Vim8=";
   };
 
   meta = with lib; {

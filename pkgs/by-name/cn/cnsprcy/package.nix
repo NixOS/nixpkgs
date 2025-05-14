@@ -31,13 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "End to end encrypted connections between trusted devices";
     homepage = "https://git.sr.ht/~xaos/cnsprcy";
     license = lib.licenses.gpl3;
-    maintainers =
-      with lib.maintainers;
-      [
-        supinie
-        oluchitheanalyst
-      ]
-      ++ lib.teams.ngi.members;
+    maintainers = with lib.maintainers; [
+      supinie
+      oluchitheanalyst
+    ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "cnspr";
     platforms = lib.platforms.linux;
   };

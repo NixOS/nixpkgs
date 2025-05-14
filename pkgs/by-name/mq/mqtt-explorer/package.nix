@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
-      mv "build/mac/MQTT Explorer.app" $out/Applications
+      mv build/mac*/MQTT\ Explorer.app $out/Applications
 
       makeWrapper "$out/Applications/MQTT Explorer.app/Contents/MacOS/MQTT Explorer" \
         $out/bin/mqtt-explorer

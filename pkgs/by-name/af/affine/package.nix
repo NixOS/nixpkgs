@@ -4,9 +4,9 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_34,
+  electron_35,
   nodejs_22,
-  yarn-berry,
+  yarn-berry_4,
   cacert,
   writableTmpDirAsHomeHook,
   cargo,
@@ -17,12 +17,12 @@
   jq,
   copyDesktopItems,
   makeWrapper,
+  llvmPackages,
+  apple-sdk_15,
   makeDesktopItem,
   nix-update-script,
   buildType ? "stable",
   commandLineArgs ? "",
-  llvmPackages,
-  apple-sdk_15,
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
@@ -34,32 +34,32 @@ let
     }
     .${hostPlatform.parsed.cpu.name}
       or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
-  electron = electron_34;
+  electron = electron_35;
   nodejs = nodejs_22;
-  yarn = yarn-berry.override { inherit nodejs; };
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
   binName = lib.toLower productName;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.21.2";
+  version = "0.21.6";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d5dHHiiCXhzn8qJlCqJVw0qC86PvKyDZstPivX9bpCI=";
+    hash = "sha256-xiOfy3uskqYv5b0U2s1Zpc4/ydsRhhUd8M33IH0BJ10=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0vhUeqCStM7P8+sDs3ZI+JlEzPAreoP+1X8x5zKOJUo=";
+    hash = "sha256-1BTSvHaSPE55v6awnvRry1Exms+zeGug3PNldZ2v2HY=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
     inherit (finalAttrs) src;
     nativeBuildInputs = [
-      yarn
+      yarn-berry
       cacert
       writableTmpDirAsHomeHook
     ];
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-pJiMCyBJSuTaxix3kKnSCrURL2+t26zB4Y59gGdxalo=";
+    outputHash = "sha256-XpVygLwK/vjQJ5cDckIRM3Uo5hcahTz/XV1WjBQmOac=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       nodejs
-      yarn
+      yarn-berry
       cargo
       rustc
       findutils

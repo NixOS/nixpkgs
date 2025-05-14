@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "6.0.4";
+  version = "6.0.5";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
-    hash = "sha256-vr+Ky0/RhD+I5fQoX/C0l/q0MyDDPngKXDThEkxeF3o=";
+    hash = "sha256-lNzFMRXgWBrEbmDD7ZMY8ZJs5GS6u7OF5SNiF9Hmpk4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

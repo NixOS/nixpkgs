@@ -22,6 +22,8 @@ let
   pname = "ghidra";
   version = "11.3.2";
 
+  isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
   src = fetchFromGitHub {
@@ -129,7 +131,21 @@ stdenv.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${openjdk21}" ];
+  gradleFlags =
+    [ "-Dorg.gradle.java.home=${openjdk21}" ]
+    ++ lib.optionals isMacArm64 [
+      # For some reason I haven't been able to figure out yet, ghidra builds for
+      # arm64 seems to build the x64 binaries of the decompiler. These fail to
+      # build due to trying to link the x64 object files with arm64 stdc++
+      # library, which obviously fails.
+      #
+      # Those binaries are entirely unnecessary anyways, since we're targeting
+      # arm64 build here, so let's exclude them from the build.
+      "-x"
+      "Decompiler:linkSleighMac_x86_64Executable"
+      "-x"
+      "Decompiler:linkDecompileMac_x86_64Executable"
+    ];
 
   preBuild = ''
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"

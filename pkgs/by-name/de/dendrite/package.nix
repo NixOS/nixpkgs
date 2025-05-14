@@ -70,7 +70,7 @@ buildGoModule rec {
     description = "Second-generation Matrix homeserver written in Go";
     changelog = "https://github.com/element-hq/dendrite/releases/tag/v${version}";
     license = licenses.agpl3Plus;
-    maintainers = teams.matrix.members;
+    teams = [ teams.matrix ];
     platforms = platforms.unix;
   };
 }

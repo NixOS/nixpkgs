@@ -37,7 +37,7 @@ let
 
       buildCommand = ''
         jar=$out/share/alloy/${pname}.jar
-        install -Dm644 ${src} $jar
+        install -Dm644 $src $jar
 
         mkdir -p $out/bin
         makeWrapper ${jre}/bin/java $out/bin/${pname} --add-flags \

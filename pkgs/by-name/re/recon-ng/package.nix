@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
-  substituteAll,
+  replaceVars,
   fetchpatch,
 }:
 python3.pkgs.buildPythonApplication rec {
@@ -49,8 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch =
     let
-      setup = substituteAll {
-        src = ./setup.py;
+      setup = replaceVars ./setup.py {
         inherit pname version;
       };
     in

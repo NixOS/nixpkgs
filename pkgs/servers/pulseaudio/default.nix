@@ -61,10 +61,6 @@
   # Whether to build only the library.
   libOnly ? false,
 
-  AudioUnit,
-  Cocoa,
-  CoreServices,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -133,12 +129,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       glib
       dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreServices
-      CoreAudio
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
       libintl

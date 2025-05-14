@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/sailfishos/timed/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
     mainProgram = "timed";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "timed-qt${lib.versions.major qtbase.version}"

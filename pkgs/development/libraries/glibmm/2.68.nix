@@ -7,7 +7,6 @@
   glib,
   libsigcxx30,
   gnome,
-  Cocoa,
   meson,
   ninja,
 }:
@@ -34,10 +33,6 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-schemas
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
-
   propagatedBuildInputs = [
     glib
     libsigcxx30
@@ -57,7 +52,8 @@ stdenv.mkDerivation rec {
     description = "C++ interface to the GLib library";
     homepage = "https://gtkmm.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

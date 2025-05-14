@@ -3,6 +3,7 @@
   doxygen,
   fetchFromGitHub,
   lib,
+  jrl-cmakemodules,
   pkg-config,
   pythonSupport ? false,
   python3Packages,
@@ -16,9 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-702+hR8YzxfHBZYF2Q//4gRF/cx4kdQ1oNHtnYL5xp0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i5YU5lcbB3gm8/YrRRiE2NDcLEq7+eF7GtIrJ1DF1cU=";
   };
 
   outputs = [
@@ -39,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.pythonImportsCheckHook
     ];
 
-  propagatedBuildInputs = lib.optionals pythonSupport [ python3Packages.pinocchio ];
+  propagatedBuildInputs = [
+    jrl-cmakemodules
+  ] ++ lib.optionals pythonSupport [ python3Packages.pinocchio ];
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport) ];
 

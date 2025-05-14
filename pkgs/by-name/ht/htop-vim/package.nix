@@ -6,7 +6,6 @@
   autoreconfHook,
   pkg-config,
   ncurses,
-  darwin,
   libcap,
   libnl,
   sensorsSupport ? stdenv.hostPlatform.isLinux,
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.IOKit ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libcap
       libnl

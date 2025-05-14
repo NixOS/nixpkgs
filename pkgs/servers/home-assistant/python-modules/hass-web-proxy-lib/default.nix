@@ -55,6 +55,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/dermotduffy/hass-web-proxy-lib/issues/65
+    "test_proxy_view_aiohttp_read_error"
+  ];
+
   pythonImportsCheck = [
     "hass_web_proxy_lib"
   ];

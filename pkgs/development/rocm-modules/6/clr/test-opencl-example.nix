@@ -54,7 +54,7 @@ let
       homepage = "https://github.com/OpenCL/AMD_APP_samples";
       license = licenses.bsd2;
       platforms = platforms.linux;
-      maintainers = lib.teams.rocm.members;
+      teams = [ lib.teams.rocm ];
     };
   };
 
@@ -83,6 +83,6 @@ makeImpureTest {
   '';
 
   meta = with lib; {
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
   };
 }

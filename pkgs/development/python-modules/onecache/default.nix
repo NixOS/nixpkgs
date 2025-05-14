@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "onecache";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sonic182";
     repo = "onecache";
     tag = version;
-    hash = "sha256-go/3HntSLzzTmHS9CxGPHT6mwXl+6LuWFmkGygGIjqU=";
+    hash = "sha256-uUtH2MIsnAa3cC5W1NEecrSScpKsKLFrqz7f3WdAO70=";
   };
 
   build-system = [ poetry-core ];

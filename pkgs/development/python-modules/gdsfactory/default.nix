@@ -2,8 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   flit-core,
+
+  # dependencies
   jinja2,
   loguru,
   matplotlib,
@@ -32,21 +35,25 @@
   ipykernel,
   attrs,
   graphviz,
+  pyglet,
+  typing-extensions,
+
   # tests
   jsondiff,
   jsonschema,
   pytest-regressions,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "gdsfactory";
-  version = "8.18.1";
+  version = "9.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "gdsfactory";
-    rev = "v${version}";
-    hash = "sha256-wDz8QpRgu40FB8+otnGsHVn2e6/SWXIZgA1aeMqMhPQ=";
+    tag = "v${version}";
+    hash = "sha256-BcFEMcHt0qUQ0hTLSznuIH37rAk+10JGrPdrhE/sTfU=";
   };
 
   build-system = [ flit-core ];
@@ -80,13 +87,15 @@ buildPythonPackage rec {
     ipykernel
     attrs
     graphviz
+    pyglet
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     jsondiff
     jsonschema
-    pytestCheckHook
     pytest-regressions
+    pytestCheckHook
   ];
 
   pythonRelaxDeps = [
@@ -99,10 +108,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gdsfactory" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to generate GDS layouts";
     homepage = "https://github.com/gdsfactory/gdsfactory";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
+    changelog = "https://github.com/gdsfactory/gdsfactory/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
   };
 }

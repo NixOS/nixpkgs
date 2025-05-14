@@ -82,11 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://osm2pgsql.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers =
-      lib.teams.geospatial.members
-      ++ (with lib.maintainers; [
-        jglukasik
-        das-g
-      ]);
+    maintainers = with lib.maintainers; [
+      jglukasik
+      das-g
+    ];
+    teams = [ lib.teams.geospatial ];
   };
 })

@@ -863,18 +863,20 @@ if [ -z "$rollback" ]; then
                 "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
-                in set.${attr:+$attr.}config.system.build.images.$imageVariant.v.passthru.filePath" \
-                "${extraBuildFlags[@]}"
+                in set.${attr:+$attr.}config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}" \
+                | jq -r .
             )"
         elif [[ -z $flake ]]; then
             imageName="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
                 "with import <nixpkgs/nixos> {}; config.system.build.images.$imageVariant.passthru.filePath" \
-                "${extraBuildFlags[@]}"
+                "${extraBuildFlags[@]}" \
+                | jq -r .
             )"
         else
             imageName="$(
-                runCmd nix "${flakeFlags[@]}" eval --json \
+                runCmd nix "${flakeFlags[@]}" eval --raw \
                 "$flake#$flakeAttr.config.system.build.images.$imageVariant.passthru.filePath" \
                 "${evalArgs[@]}" "${extraBuildFlags[@]}"
             )"

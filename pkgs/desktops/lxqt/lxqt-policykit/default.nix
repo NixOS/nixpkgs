@@ -7,7 +7,6 @@
   liblxqt,
   libqtxdg,
   lxqt-build-tools,
-  pcre,
   pkg-config,
   polkit,
   polkit-qt-1,
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
-    pcre
     polkit
     polkit-qt-1
     qtbase
@@ -58,6 +56,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-policykit-agent";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.0.0-beta.1";
+  version = "2.0.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-ghrvBOTR2v7i50OrwfwbwwFFF4uBQuEPxhXimdcFUJI=";
+    hash = "sha256-PPB9eRXit89lwkLCN86+Un/msMqnFAulJxEGi+7Fa/c=";
   };
 
   metaCommon = {
@@ -45,8 +45,6 @@ let
     sourceRoot = "${src.name}/wox.ui.flutter/wox";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-    gitHashes.window_manager = "sha256-OGVrby09QsCvXnkLdEcCoZBO2z/LXY4xFBVdRHnvKEQ=";
 
     nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -155,7 +153,7 @@ buildGoModule {
       --replace-fail "Exec=%s" "Exec=wox"
   '';
 
-  vendorHash = "sha256-n3lTx1od4EvWdTSe3sIsUStp2qcuSWMqztJZoNLrzQg=";
+  vendorHash = "sha256-MKxMHABeKotErM+PEhWxeQmPcHH4jJSGWa8wzj42hoE=";
 
   proxyVendor = true;
 

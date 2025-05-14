@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library that provides some debugging functionality for ROCr";
     homepage = "https://github.com/ROCm/rocr_debug_agent";
     license = with licenses; [ ncsa ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
   };
 })

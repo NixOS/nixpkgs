@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     mainProgram = "endeavour";
     homepage = "https://gitlab.gnome.org/World/Endeavour";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

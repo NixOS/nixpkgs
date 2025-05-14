@@ -90,6 +90,12 @@ in
       "extraConfig"
     ] "Use services.postgresql.settings instead.")
 
+    (mkRemovedOptionModule [
+      "services"
+      "postgresql"
+      "recoveryConfig"
+    ] "PostgreSQL v12+ doesn't support recovery.conf.")
+
     (mkRenamedOptionModule
       [ "services" "postgresql" "logLinePrefix" ]
       [ "services" "postgresql" "settings" "log_line_prefix" ]
@@ -268,6 +274,14 @@ in
           Defines the mapping from system users to database users.
 
           See the [auth doc](https://postgresql.org/docs/current/auth-username-maps.html).
+
+          There is a default map "postgres" which is used for local peer authentication
+          as the postgres superuser role.
+          For example, to allow the root user to login as the postgres superuser, add:
+
+          ```
+          postgres root postgres
+          ```
         '';
       };
 
@@ -588,14 +602,6 @@ in
         '';
       };
 
-      recoveryConfig = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-        description = ''
-          Contents of the {file}`recovery.conf` file.
-        '';
-      };
-
       superUser = mkOption {
         type = types.str;
         default = "postgres";
@@ -676,11 +682,19 @@ in
       (mkBefore "# Generated file; do not edit!")
       (mkAfter ''
         # default value of services.postgresql.authentication
+        local all postgres         peer map=postgres
         local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '')
     ];
+
+    # The default allows to login with the same database username as the current system user.
+    # This is the default for peer authentication without a map, but needs to be made explicit
+    # once a map is used.
+    services.postgresql.identMap = mkAfter ''
+      postgres postgres postgres
+    '';
 
     services.postgresql.systemCallFilter = mkMerge [
       (mapAttrs (const mkDefault) {
@@ -741,10 +755,6 @@ in
         fi
 
         ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
-        ${optionalString (cfg.recoveryConfig != null) ''
-          ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
-            "${cfg.dataDir}/recovery.conf"
-        ''}
       '';
 
       # Wait for PostgreSQL to be ready to accept connections.

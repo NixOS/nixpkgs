@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-r14ApN9kGWIyeNlbqrb+vOvvmH2n+O5ovvtSVNTMASo=";
-
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   checkFlags = [
     # expected to panic if unix user has no secondary group,

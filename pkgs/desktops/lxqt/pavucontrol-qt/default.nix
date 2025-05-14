@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     mainProgram = "pavucontrol-qt";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 }

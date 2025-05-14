@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lxqt/libdbusmenu-lxqt";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

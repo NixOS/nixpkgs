@@ -219,7 +219,7 @@ stdenv.mkDerivation (
       description = "ROCm Ahead of Time (AOT) Triton Math Library ";
       homepage = "https://github.com/ROCm/aotriton";
       license = with licenses; [ mit ];
-      maintainers = teams.rocm.members;
+      teams = [ teams.rocm ];
       platforms = platforms.linux;
     };
   }

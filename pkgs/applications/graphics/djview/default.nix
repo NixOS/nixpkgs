@@ -12,7 +12,6 @@
   qttools,
   xorg,
   libtiff,
-  darwin,
 }:
 
 mkDerivation rec {
@@ -42,7 +41,7 @@ mkDerivation rec {
     qtbase
     xorg.libXt
     libtiff
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AGL;
+  ];
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh

@@ -51,6 +51,7 @@ buildPecl {
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = lib.licenses.bsd3;
     homepage = "https://pecl.php.net/package/gnupg";
-    maintainers = with lib.maintainers; [ taikx4 ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [ taikx4 ];
+    teams = [ lib.teams.php ];
   };
 }

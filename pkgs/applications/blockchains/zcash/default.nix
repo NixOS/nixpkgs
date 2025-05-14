@@ -13,9 +13,9 @@
   libevent,
   libsodium,
   makeWrapper,
+  rustc,
   rustPlatform,
   pkg-config,
-  Security,
   stdenv,
   testers,
   tl-expected,
@@ -25,7 +25,7 @@
   zeromq,
 }:
 
-rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
+stdenv.mkDerivation rec {
   pname = "zcash";
   version = "5.4.2";
 
@@ -36,14 +36,16 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
 
-  prePatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace .cargo/config.offline \
-      --replace "[target.aarch64-unknown-linux-gnu]" "" \
-      --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
-  '';
+  patches = [
+    # upstream has a custom way of specifying a cargo vendor-directory
+    # we'll remove that logic, since cargoSetupHook from nixpkgs works better
+    ./dont-use-custom-vendoring-logic.patch
+  ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VBqasLpxqI4kr73Mr7OVuwb2OIhUwnY9CTyZZOyEElU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-VBqasLpxqI4kr73Mr7OVuwb2OIhUwnY9CTyZZOyEElU=";
+  };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -53,34 +55,19 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     hexdump
     makeWrapper
     pkg-config
+    rustc
+    rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      boost
-      db62
-      libevent
-      libsodium
-      tl-expected
-      utf8cpp
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
-
-  # Use the stdenv default phases (./configure; make) instead of the
-  # ones from buildRustPackage.
-  configurePhase = "configurePhase";
-  dontCargoBuild = true;
-  dontCargoCheck = true;
-  dontCargoInstall = true;
-
-  postPatch = ''
-    # Have to do this here instead of in preConfigure because
-    # cargoDepsCopy gets unset after postPatch.
-    configureFlagsArray+=("RUST_VENDORED_SOURCES=$cargoDepsCopy")
-  '';
+  buildInputs = [
+    boost
+    db62
+    libevent
+    libsodium
+    tl-expected
+    utf8cpp
+    zeromq
+  ];
 
   CXXFLAGS = [
     "-I${lib.getDev utf8cpp}/include/utf8cpp"

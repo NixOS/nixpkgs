@@ -14,7 +14,6 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   openclSupport ? !cudaSupport,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,18 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXi
     ]
     ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [ ocl-icd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenCL
-        Cocoa
-        CoreVideo
-        IOKit
-        AppKit
-        AGL
-        MetalKit
-      ]
-    )
+
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
     ];
@@ -78,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
   preConfigure = lib.optionalString cudaSupport ''
     cmakeFlagsArray+=(
-      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.cudaFlags.gencode}"
+      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.flags.gencode}"
     )
   '';
 

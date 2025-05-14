@@ -4,7 +4,6 @@
   ceres-solver,
   cmake,
   cminpack,
-  darwin,
   dlib,
   fetchFromGitHub,
   hdf5,
@@ -24,9 +23,6 @@
   enablePython ? false,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Accelerate;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openturns";
   version = "1.24";
@@ -64,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.matplotlib
       python3Packages.psutil
       python3Packages.python
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
     ];
 
   cmakeFlags = [

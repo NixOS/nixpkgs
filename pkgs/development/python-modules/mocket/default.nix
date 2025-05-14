@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  stdenv,
   fetchPypi,
 
   # build-system
@@ -78,15 +79,20 @@ buildPythonPackage rec {
 
   _darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # tests that require network access (like DNS lookups)
-    "test_truesendall_with_dump_from_recording"
-    "test_aiohttp"
-    "test_asyncio_record_replay"
-    "test_gethostbyname"
-    # httpx read failure
-    "test_no_dangling_fds"
-  ];
+  disabledTests =
+    [
+      # tests that require network access (like DNS lookups)
+      "test_truesendall_with_dump_from_recording"
+      "test_aiohttp"
+      "test_asyncio_record_replay"
+      "test_gethostbyname"
+      # httpx read failure
+      "test_no_dangling_fds"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
+      "test_httprettish_httpx_session"
+    ];
 
   pythonImportsCheck = [ "mocket" ];
 

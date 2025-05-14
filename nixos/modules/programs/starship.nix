@@ -65,6 +65,47 @@ in
         See https://starship.rs/config/#prompt for documentation.
       '';
     };
+
+    transientPrompt =
+      let
+        mkTransientPromptOption =
+          side:
+          lib.mkOption {
+            type =
+              with lib.types;
+              nullOr (str // { description = "Fish shell code concatenated with \"\\n\""; });
+            description =
+              let
+                function = "`starship_transient_${lib.optionalString (side == "right") "r"}prompt_func` function";
+              in
+              ''
+                Fish code composing the body of the ${function}. The output of
+                this code will become the ${side} side of the transient prompt.
+
+                Not setting this option (or setting it to `null`) will prevent
+                the ${function} from being generated. By default, the ${side}
+                prompt is ${if (side == "right") then "empty" else "a bold-green '❯' character"}.
+              '';
+            example = "starship module ${if (side == "right") then "time" else "character"}";
+            default = null;
+          };
+      in
+      {
+        enable = lib.mkEnableOption ''
+          Starship's [transient prompt](https://starship.rs/advanced-config/#transientprompt-and-transientrightprompt-in-fish)
+          feature in `fish` shells. After a command has been entered, Starship
+          replaces the usual prompt with the terminal output of the commands
+          defined in the `programs.starship.transientPrompt.left`
+          and `programs.starship.transientPrompt.right` options.
+
+          This option only works with `fish`, as `bash` requires a
+          [custom configuration](https://starship.rs/advanced-config/#transientprompt-and-transientrightprompt-in-bash)
+          involving [Ble.sh](https://github.com/akinomyoga/ble.sh), which can be
+          enabled with `programs.bash.blesh.enable`, but not configured using NixOS
+        '';
+        left = mkTransientPromptOption "left";
+        right = mkTransientPromptOption "right";
+      };
   };
 
   config = lib.mkIf cfg.enable {
@@ -90,7 +131,18 @@ in
         if not test -f "$HOME/.config/starship.toml";
           set -x STARSHIP_CONFIG ${settingsFile}
         end
+        ${lib.optionalString (!isNull cfg.transientPrompt.left) ''
+          function starship_transient_prompt_func
+            ${cfg.transientPrompt.left}
+          end
+        ''}
+        ${lib.optionalString (!isNull cfg.transientPrompt.right) ''
+          function starship_transient_rprompt_func
+            ${cfg.transientPrompt.right}
+          end
+        ''}
         eval (${cfg.package}/bin/starship init fish)
+        ${lib.optionalString cfg.transientPrompt.enable "enable_transience"}
       end
     '';
 

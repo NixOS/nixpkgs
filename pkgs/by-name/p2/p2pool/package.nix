@@ -12,12 +12,8 @@
   openssl,
   pkg-config,
   zeromq,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Foundation;
-in
 stdenv.mkDerivation rec {
   pname = "p2pool";
   version = "4.4";
@@ -42,7 +38,7 @@ stdenv.mkDerivation rec {
     hwloc
     openssl
     curl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  ];
 
   cmakeFlags = [ "-DWITH_LTO=OFF" ];
 

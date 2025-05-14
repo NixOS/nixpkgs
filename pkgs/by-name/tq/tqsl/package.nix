@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
-  version = "2.7.5";
+  version = "2.8";
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-recq2FTyvmt5tDTjZRjQKWf5HgdkmTsMmRTWTfTPGbQ=";
+    sha256 = "sha256-zcC6T6FevoPsr9r/EKDCJhkzWImKxghVNo0eX9P7oNg=";
   };
 
   nativeBuildInputs = [

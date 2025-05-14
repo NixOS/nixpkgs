@@ -261,6 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ mindavi ];
+    teams = [ teams.helsinki-systems ];
   };
 })

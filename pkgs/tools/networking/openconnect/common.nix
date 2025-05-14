@@ -17,7 +17,6 @@
   zlib,
   pcsclite,
   vpnc-scripts,
-  PCSC,
   useDefaultExternalBrowser ?
     stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
   xdg-utils,
@@ -47,7 +46,6 @@ stdenv.mkDerivation {
       zlib
       (if useOpenSSL then openssl else gnutls)
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       p11-kit
       pcsclite

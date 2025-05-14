@@ -35,7 +35,8 @@ buildPythonApplication rec {
     homepage = "https://github.com/containers/podman-compose";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.sikmir ] ++ lib.teams.podman.members;
+    maintainers = [ lib.maintainers.sikmir ];
+    teams = [ lib.teams.podman ];
     mainProgram = "podman-compose";
   };
 }

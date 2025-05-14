@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     description = "FUSE implementation for overlayfs";
     longDescription = "An implementation of overlay+shiftfs in FUSE for rootless containers.";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma9e ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ma9e ];
+    teams = [ teams.podman ];
     platforms = platforms.linux;
     inherit (src.meta) homepage;
     mainProgram = "fuse-overlayfs";

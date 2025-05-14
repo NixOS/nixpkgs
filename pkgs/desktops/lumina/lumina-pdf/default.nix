@@ -48,6 +48,6 @@ mkDerivation rec {
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = teams.lumina.members;
+    teams = [ teams.lumina ];
   };
 }

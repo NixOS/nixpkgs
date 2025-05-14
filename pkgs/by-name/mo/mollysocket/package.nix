@@ -5,8 +5,6 @@
   pkg-config,
   openssl,
   sqlite,
-  stdenv,
-  darwin,
   nixosTests,
 }:
 
@@ -28,14 +26,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   checkFlags = [
     # tests interact with Signal servers

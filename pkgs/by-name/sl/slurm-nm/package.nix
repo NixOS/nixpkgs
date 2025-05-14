@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Generic network load monitor";
     homepage = "https://github.com/mattthias/slurm";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ mikaelfangel ];
     mainProgram = "slurm";
   };

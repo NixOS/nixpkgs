@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyarrow-hotfix";
-  version = "0.6";
+  version = "0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pitrou";
     repo = "pyarrow-hotfix";
     tag = "v${version}";
-    hash = "sha256-LlSbxIxvouzvlP6PB8J8fJaxWoRbxz4wTs7Gb5LbM4A=";
+    hash = "sha256-9K7rQUSd+at1WghTP8DlD44Op2VkvN1vlzF3ZLEIaRE=";
   };
 
   nativeBuildInputs = [ hatchling ];

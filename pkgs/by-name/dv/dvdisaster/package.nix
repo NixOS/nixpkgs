@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   patches = lib.optionals enableSoftening [
     ./encryption.patch
     ./dvdrom.patch
+    ./gcc14-fix.patch
   ];
 
   postPatch = ''

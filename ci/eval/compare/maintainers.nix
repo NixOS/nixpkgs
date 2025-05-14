@@ -53,9 +53,7 @@ let
     // {
       # TODO: Refactor this so we can ping entire teams instead of the individual members.
       # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
-      maintainers =
-        meta.maintainers or [ ]
-        ++ lib.flatten (map (team: team.members or [ ]) (meta.teams or [ ]));
+      maintainers = meta.maintainers or [ ];
     }
   ) attrsWithPackages;
 
@@ -64,7 +62,8 @@ let
     (lib.lists.unique (
       builtins.map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
         builtins.filter (x: x != null) [
-          (builtins.unsafeGetAttrPos "maintainers" (drv.meta or { }))
+          ((drv.meta or { }).maintainersPosition or null)
+          ((drv.meta or { }).teamsPosition or null)
           (builtins.unsafeGetAttrPos "src" drv)
           # broken because name is always set by stdenv:
           #    # A hack to make `nix-env -qa` and `nix search` ignore broken packages.

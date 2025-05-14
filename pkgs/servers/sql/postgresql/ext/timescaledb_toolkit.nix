@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  nixosTests,
   postgresql,
 }:
 
@@ -27,7 +26,7 @@
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
+    tests = postgresql.pkgs.timescaledb.tests;
   };
 
   # tests take really long

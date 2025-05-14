@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL2_classic,
+  SDL2,
   SDL2_image,
+  libX11,
   rtaudio,
   rtmidi,
   glew,
@@ -14,20 +15,14 @@
   zenity,
   withEditor ? true,
 }:
-let
-  # package depends on SDL2main static library
-  SDL2' = SDL2_classic.override {
-    withStatic = true;
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "theforceengine";
   version = "1.22.300";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
   };
 
@@ -37,13 +32,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2'
+    SDL2
     SDL2_image
+    libX11
     rtaudio
     rtmidi
     glew
     alsa-lib
     angelscript
+    zenity
   ];
 
   hardeningDisable = [ "format" ];
@@ -63,12 +60,12 @@ stdenv.mkDerivation rec {
       --replace-fail "flags(flag::has_zenity) ? \"zenity\"" "flags(flag::has_zenity) ? \"${lib.getExe zenity}\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern \"Jedi Engine\" replacement supporting Dark Forces, mods, and in the future, Outlaws";
     mainProgram = "theforceengine";
     homepage = "https://theforceengine.github.io";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ devusb ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,7 +6,7 @@
 
 let
   pname = "postman";
-  version = "11.32.2";
+  version = "11.44.0";
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";

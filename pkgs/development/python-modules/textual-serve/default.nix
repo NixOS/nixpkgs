@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "textual-serve";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   # No tags on GitHub
   src = fetchPypi {
     pname = "textual_serve";
     inherit version;
-    hash = "sha256-ccZiRyxGLl42je/GYO5ujq47/aiMpAwFDFVHRobrDFQ=";
+    hash = "sha256-DMr5ud+cCNSy16CIfK0yciQ7qH9oGSw2T0vtW2g+S9Q=";
   };
 
   build-system = [

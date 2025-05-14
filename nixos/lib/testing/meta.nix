@@ -36,7 +36,9 @@ in
           };
           platforms = lib.mkOption {
             type = types.listOf types.raw;
-            default = lib.platforms.linux ++ lib.platforms.darwin;
+            # darwin could be added, but it would add VM tests that don't work on Hydra.nixos.org (so far)
+            # see https://github.com/NixOS/nixpkgs/pull/303597#issuecomment-2128782362
+            default = lib.platforms.linux;
             description = ''
               Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.
             '';

@@ -188,7 +188,8 @@ runCommand drvName
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = teams.android.members ++ (with maintainers; [ robbins ]);
+      maintainers = with maintainers; [ robbins ];
+      teams = [ teams.android ];
       mainProgram = pname;
     };
   }

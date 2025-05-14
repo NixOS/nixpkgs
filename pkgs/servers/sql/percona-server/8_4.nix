@@ -22,7 +22,6 @@
   libfido2,
   numactl,
   cctools,
-  CoreServices,
   developer_cmds,
   libtirpc,
   rpcsvc-proto,
@@ -112,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
-      CoreServices
       developer_cmds
       DarwinTools
     ]
@@ -223,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
       Long-term support release.
     '';
     license = licenses.gpl2Only;
-    maintainers = teams.flyingcircus.members;
+    teams = [ teams.flyingcircus ];
     platforms = platforms.unix;
   };
 })

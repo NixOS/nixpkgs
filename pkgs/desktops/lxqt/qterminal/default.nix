@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qterminal";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }
