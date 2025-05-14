@@ -3,6 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
 
+  cargo-tauri,
+  jq,
+  moreutils,
   nodejs,
   pkg-config,
   pnpm_9,
@@ -33,12 +36,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
+    cargo-tauri.hook
+    jq
+    moreutils
     nodejs
     pkg-config
     pnpm_9.configHook
   ];
 
   buildInputs = [
+    libayatana-appindicator
     libsoup_3
     openssl
     webkitgtk_4_1
@@ -60,6 +67,10 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+    # disable updater
+    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' \
+      apps/desktop/src-tauri/tauri.conf.json | sponge apps/desktop/src-tauri/tauri.conf.json
   '';
 
   meta = {
