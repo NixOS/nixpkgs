@@ -1,18 +1,14 @@
 {
   lib,
-  mkDerivation,
   fetchFromGitHub,
   fetchFromSourcehut,
   cmake,
   extra-cmake-modules,
   pkg-config,
-  kirigami2,
   libdeltachat,
-  qtbase,
-  qtimageformats,
-  qtmultimedia,
-  qtwebengine,
+  libsForQt5,
   rustPlatform,
+  stdenv,
 }:
 
 let
@@ -30,8 +26,16 @@ let
       hash = "sha256-E01aEzNi06LQntrlA+342a8Nl5API6v7HbdmuKpfajs=";
     };
   };
+  inherit (libsForQt5)
+    kirigami2
+    qtbase
+    qtimageformats
+    qtmultimedia
+    qtwebengine
+    wrapQtAppsHook
+    ;
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "kdeltachat";
   version = "unstable-2024-01-14";
 
@@ -46,6 +50,7 @@ mkDerivation {
     cmake
     extra-cmake-modules
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
