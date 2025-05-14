@@ -11352,6 +11352,13 @@
     githubId = 19669567;
     name = "Willy";
   };
+  jennifgcrl = {
+    email = "jennifer@jezh.me";
+    github = "jennifgcrl";
+    githubId = 110419915;
+    matrix = "@fgcrl:matrix.org";
+    name = "Jennifer Zhou";
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
