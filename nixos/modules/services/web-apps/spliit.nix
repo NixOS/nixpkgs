@@ -20,25 +20,25 @@ in
     port = mkOption {
       type = types.port;
       default = 3000;
-      description = mdDoc "Port to listen on.";
+      description = "Port to listen on.";
     };
 
     user = mkOption {
       type = types.str;
       default = "spliit";
-      description = mdDoc "User account under which Spliit runs.";
+      description = "User account under which Spliit runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = "spliit";
-      description = mdDoc "Group under which Spliit runs.";
+      description = "Group under which Spliit runs.";
     };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     configureNginx = mkOption {
