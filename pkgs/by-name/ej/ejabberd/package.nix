@@ -35,7 +35,7 @@
   withTools ? false,
   withRedis ? false,
   withImageMagick ? false,
-  imagemagick,
+  imagemagickBig,
 }:
 
 let
@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
       -e "s,\(^ *ERL_LIBS=.*\),\1:$ERL_LIBS," \
       $out/sbin/ejabberdctl
     ${lib.optionalString withImageMagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${
-      lib.makeBinPath [ imagemagick ]
+      lib.makeBinPath [ imagemagickBig ]
     }"''}
   '';
 
