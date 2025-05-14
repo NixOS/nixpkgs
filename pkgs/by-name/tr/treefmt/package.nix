@@ -46,6 +46,19 @@ buildGoModule rec {
 
   meta = {
     description = "one CLI to format the code tree";
+    longDescription = ''
+      [treefmt](${meta.homepage}) streamlines the process of applying formatters
+      to your project, making it a breeze with just one command line.
+
+      The `treefmt` package provides functions for configuring treefmt using
+      the module system, which are documented in the [treefmt section] of the
+      Nixpkgs Manual.
+
+      Alternatively, treefmt can be configured using [treefmt-nix].
+
+      [treefmt section]: https://nixos.org/manual/nixpkgs/unstable#treefmt
+      [treefmt-nix]: https://github.com/numtide/treefmt-nix
+    '';
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
