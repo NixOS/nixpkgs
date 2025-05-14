@@ -20,14 +20,14 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "lux-lua";
 
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
     # NOTE: Lux's tags represent the lux-cli version, which may differ from the lux-lua version
-    tag = "v0.4.4";
-    hash = "sha256-jhkd5JDMXMwGCmaKLXoZepRwO+EIqLK2NL3hXDj627Q=";
+    tag = "v0.5.0";
+    hash = "sha256-maVnRaEuB8q7wUukDGwB4d+go+oerkoWsnb5swPagMY=";
   };
 
   buildAndTestSubdir = "lux-lua";
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ luaFeature ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ymESnATGxczfwM4Vy7qQ/UREpJDYIceFcZ9uAJpyRjU=";
+  cargoHash = "sha256-CWPHE+j6RDtVrnYzakKecIM5dXuHuWaWK+T9xFEdmz8=";
 
   nativeBuildInputs = [
     pkg-config

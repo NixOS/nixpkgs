@@ -17,7 +17,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "lux-cli";
 
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = luaPackages.lux-lua.src;
 
