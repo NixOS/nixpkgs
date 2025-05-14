@@ -71,8 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     vtk
   ];
 
-  cmakeFlags = lib.optionals cudaSupport [
-    (lib.cmakeBool "WITH_CUDA" true)
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_CUDA" cudaSupport)
+    (lib.cmakeBool "BUILD_GPU" cudaSupport)
+    (lib.cmakeBool "WITH_CUDA" cudaSupport)
   ];
 
   passthru.updateScript = gitUpdater {
