@@ -24,6 +24,9 @@ stdenv.mkDerivation {
     patchShebangs configure
   '';
 
+  # GCC 14 makes this an error by default, remove when fixed upstream
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
+
   configureFlags = [
     "--with-klibc"
     "--with-x86emu"
