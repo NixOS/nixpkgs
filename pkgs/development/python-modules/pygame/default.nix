@@ -21,9 +21,6 @@
   libpng,
   libX11,
   portmidi,
-  SDL2_classic_image,
-  SDL2_classic_mixer,
-  SDL2_classic_ttf,
 }:
 
 buildPythonPackage rec {
@@ -87,9 +84,9 @@ buildPythonPackage rec {
     libX11
     portmidi
     SDL2_classic
-    (SDL2_classic_image.override { enableSTB = false; })
-    SDL2_classic_mixer
-    SDL2_classic_ttf
+    (SDL2_classic.sdlLibs.SDL2_image.override { enableSTB = false; })
+    SDL2_classic.sdlLibs.SDL2_mixer
+    SDL2_classic.sdlLibs.SDL2_ttf
   ];
 
   preConfigure = ''
