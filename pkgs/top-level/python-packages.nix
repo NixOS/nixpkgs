@@ -4408,6 +4408,8 @@ self: super: with self; {
 
   elevenlabs = callPackage ../development/python-modules/elevenlabs { };
 
+  elfdeps = toPythonModule (pkgs.elfdeps.override { python3Packages = self; });
+
   elgato = callPackage ../development/python-modules/elgato { };
 
   eliot = callPackage ../development/python-modules/eliot { };
@@ -10110,6 +10112,8 @@ self: super: with self; {
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
   numbaWithCuda = self.numba.override { cudaSupport = true; };
+
+  numbagg = callPackage ../development/python-modules/numbagg { };
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 

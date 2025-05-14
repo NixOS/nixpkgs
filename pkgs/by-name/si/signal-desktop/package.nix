@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
+      name = "signal";
       desktopName = "Signal";
       exec = "${finalAttrs.meta.mainProgram} %U";
       type = "Application";
@@ -269,6 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional withAppleEmojis unfree;
     maintainers = with lib.maintainers; [
       marcin-serwin
+      teutat3s
     ];
     mainProgram = "signal-desktop";
     platforms = [

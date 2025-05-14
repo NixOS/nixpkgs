@@ -53,8 +53,7 @@
    More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
    When editing this file:
-    * keep the list alphabetically sorted, check with:
-        nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
+    * keep the list alphabetically sorted
     * test the validity of the format with:
         nix-build lib/tests/maintainers.nix
 
@@ -536,6 +535,12 @@
         fingerprint = "DCBD 2175 8A30 9C1F 41D7  A0FC 890F FDB1 1860 FE1C";
       }
     ];
+  };
+  Acconut = {
+    email = "marius@transloadit.com";
+    github = "Acconut";
+    githubId = 1375043;
+    name = "Marius Kleidl";
   };
   acesyde = {
     name = "Pierre-Emmanuel Mercier";
@@ -13422,6 +13427,12 @@
     github = "okvik";
     githubId = 58425080;
     name = "Viktor Pocedulić";
+  };
+  kvz = {
+    email = "kevin@transloadit.com";
+    github = "kvz";
+    githubId = 26752;
+    name = "Kevin van Zonneveld";
   };
   kwaa = {
     name = "藍+85CD";
@@ -26843,6 +26854,12 @@
     github = "YanniPapandreou";
     githubId = 15948162;
     name = "Yanni Papandreou";
+  };
+  yarekt = {
+    name = "Yarek T";
+    email = "yarekt+nixpkgs@gmail.com";
+    github = "yarektyshchenko";
+    githubId = 185304;
   };
   yarny = {
     github = "Yarny0";

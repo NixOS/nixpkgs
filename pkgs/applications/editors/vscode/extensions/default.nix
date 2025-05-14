@@ -2853,8 +2853,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.138.1";
-          hash = "sha256-r98S0J+9sKlQacUuUakCI1WE6uRJ9zhYc2foLCN8Xzo=";
+          version = "1.140.2";
+          hash = "sha256-YQwJq3QSzb2pAOLyy0w8RtrjAlxudBGN52fQtj+OmOk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -4565,8 +4565,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.21.0";
-          hash = "sha256-pnxHROhjbQq93CeWkBU3KwIPeXVDA4K6ifkkoGfagIM=";
+          version = "4.22.0";
+          hash = "sha256-E50BmbYgm9w+jpr8m8BdZcOuCtPhpmhXTBhbx/tsips=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4770,8 +4770,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.268.0";
-          hash = "sha256-Gx9hQqieXTmFudRJaySI8+8cNIaKVRMtNwJqxGH0DV8=";
+          version = "3.271.0";
+          hash = "sha256-+lNWQOfmoxT6+j+oqT4Z2QTYWSJbVwSukxEx4fwXqPc=";
         };
         meta = {
           license = lib.licenses.mit;
