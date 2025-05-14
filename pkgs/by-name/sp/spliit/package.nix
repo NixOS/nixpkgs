@@ -21,8 +21,6 @@ buildNpmPackage rec {
 
   preBuild = ''
     prisma generate
-    # The build.env file is required for the building, during runtime it will not be used.
-    cp ./scripts/build.env .env
   '';
 
   npmDepsHash = "sha256-0wMd6bxWsIv90eHVt95Y8//AUERx2P9LpzeO05DIm1U=";
@@ -37,6 +35,10 @@ buildNpmPackage rec {
 
   env = {
     NEXT_TELEMETRY_DISABLED = 1;
+
+    # Mock values for build
+    POSTGRES_PRISMA_URL = "postgresql://postgres:1234@db";
+    POSTGRES_URL_NON_POOLING = "postgresql://postgres:1234@db";
   };
 
   postBuild = ''
