@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, love, makeWrapper, makeDesktopItem, copyDesktopItems }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  love,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 
 let
   pname = "90secondportraits";
@@ -20,7 +28,8 @@ let
     })
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname desktopItems;
   version = "1.01b";
 
@@ -29,7 +38,10 @@ in stdenv.mkDerivation rec {
     sha256 = "0jj3k953r6vb02212gqcgqpb4ima87gnqgls43jmylxq2mcm33h5";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   dontUnpack = true;
 
@@ -46,7 +58,13 @@ in stdenv.mkDerivation rec {
     mainProgram = "90secondportraits";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
-    license = with licenses; [ zlib cc-by-sa-40 cc-by-sa-30 /* vendored */ x11 mit ];
+    license = with licenses; [
+      zlib
+      cc-by-sa-40
+      cc-by-sa-30 # vendored
+      x11
+      mit
+    ];
     downloadPage = "http://tangramgames.dk/games/90secondportraits";
   };
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.hardware.nitrokey;
@@ -11,14 +16,12 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Enables udev rules for Nitrokey devices. By default grants access
-        to users in the "nitrokey" group. You may want to install the
-        nitrokey-app package, depending on your device and needs.
+        Enables udev rules for Nitrokey devices.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.udev.packages = [ pkgs.libnitrokey ];
+    services.udev.packages = [ pkgs.nitrokey-udev-rules ];
   };
 }

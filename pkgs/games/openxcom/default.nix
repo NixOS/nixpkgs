@@ -1,18 +1,19 @@
-{ boost
-, cmake
-, fetchFromGitHub
-, lib
-, libGLU
-, libGL
-, openssl
-, pkg-config
-, SDL
-, SDL_image
-, SDL_mixer
-, SDL_gfx
-, stdenv
-, yaml-cpp
-, zlib
+{
+  boost,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libGLU,
+  libGL,
+  openssl,
+  pkg-config,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_gfx,
+  stdenv,
+  yaml-cpp,
+  zlib,
 }:
 
 stdenv.mkDerivation {

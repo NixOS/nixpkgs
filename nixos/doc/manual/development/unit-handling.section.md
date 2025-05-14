@@ -58,11 +58,16 @@ checks:
     before the activation script is run. This behavior is different when the
     service is socket-activated, as outlined in the following steps.
 
-  - The last thing that is taken into account is whether the unit is a service
-    and socket-activated. If `X-StopIfChanged` is **not** set, the service
-    is **restart**ed with the others. If it is set, both the service and the
-    socket are **stop**ped and the socket is **start**ed, leaving socket
-    activation to start the service when it's needed.
+  - The last thing that is taken into account is whether the unit is a
+    service and socket-activated. A correspondence between a
+    `.service` and its `.socket` unit is detected automatically, but
+    services can **opt out** of that detection by setting
+    `X-NotSocketActivated` to `yes` in their `[Service]`
+    section. Otherwise, if `X-StopIfChanged` is **not** set, the
+    service is **restart**ed with the others. If it is set, both the
+    service and the socket are **stop**ped and the socket is
+    **start**ed, leaving socket activation to start the service when
+    it's needed.
 
 ## Sysinit reactivation {#sec-sysinit-reactivation}
 

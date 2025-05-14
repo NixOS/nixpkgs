@@ -42,11 +42,20 @@ buildPythonPackage rec {
     i18n = [ sqlalchemy-i18n ];
   };
 
-  nativeCheckInputs = [
-    psycopg2
-    pymysql
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    [
+      psycopg2
+      pymysql
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.flask
+    ++ optional-dependencies.flask-login
+    ++ optional-dependencies.flask-sqlalchemy;
+
+  disabledTestPaths = [
+    # requires sqlalchemy-i18n, which is incompatible with sqlalchemy>=2
+    "tests/test_i18n.py"
+  ];
 
   preCheck = ''
     # Indicate tests that we don't have a database server at hand

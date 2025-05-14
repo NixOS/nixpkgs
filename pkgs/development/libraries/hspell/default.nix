@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, perl, zlib, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   name = "${passthru.pname}-${passthru.version}";
@@ -15,10 +22,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-cxD11YdA0h1tIVwReWWGAu99qXqBa8FJfIdkvpeqvqM=";
   };
 
-  patches = [./remove-shared-library-checks.patch];
+  patches = [ ./remove-shared-library-checks.patch ];
   postPatch = "patchShebangs .";
   preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
+    make CC='${buildPackages.stdenv.cc}/bin/cc -I${lib.getDev buildPackages.zlib}/include -L${buildPackages.zlib}/lib' find_sizes
     mv find_sizes find_sizes_build
     make clean
 
@@ -27,8 +34,19 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "ranlib" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     substituteInPlace Makefile --replace "STRIP=strip" "STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
   '';
-  nativeBuildInputs = [ perl zlib ];
-#  buildInputs = [ zlib ];
+  postInstall = ''
+    patchShebangs --update $out/bin/multispell
+  '';
+  nativeBuildInputs = [
+    perl
+    zlib
+  ];
+  buildInputs = [
+    perl
+    zlib
+  ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Hebrew spell checker";

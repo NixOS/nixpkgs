@@ -1,41 +1,51 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  isPyPy,
+  # nativeCheckInputs
   pytest,
-  safe-pysha3,
+  pytest-xdist,
+  # optional dependencies
   pycryptodome,
+  safe-pysha3,
 }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.5.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
-    rev = "v${version}";
-    hash = "sha256-6UN+kvLjjAtkmLgUaovjZC/6n3FZtXCwyXZH7ijQObU=";
+    tag = "v${version}";
+    hash = "sha256-91jWZDqrd7ZZlM0D/3sDokJ26NiAQ3gdeBebTV1Lq8s=";
   };
 
-  nativeCheckInputs =
-    [ pytest ]
-    ++ optional-dependencies.pycryptodome
-    # eth-hash can use either safe-pysha3 or pycryptodome;
-    # safe-pysha3 requires Python 3.9+ while pycryptodome does not.
-    # https://github.com/ethereum/eth-hash/issues/46#issuecomment-1314029211
-    ++ lib.optional (pythonAtLeast "3.9") optional-dependencies.pysha3;
+  build-system = [ setuptools ];
 
+  nativeCheckInputs =
+    [
+      pytest
+      pytest-xdist
+    ]
+    ++ optional-dependencies.pycryptodome
+    # safe-pysha3 is not available on pypy
+    ++ lib.optional (!isPyPy) optional-dependencies.pysha3;
+
+  # Backends need to be tested separately and can not use hook
   checkPhase =
     ''
-      pytest tests/backends/pycryptodome/
+      runHook preCheck
+      pytest tests/core tests/backends/pycryptodome
     ''
-    + lib.optionalString (pythonAtLeast "3.9") ''
-      pytest tests/backends/pysha3/
+    + lib.optionalString (!isPyPy) ''
+      pytest tests/backends/pysha3
+    ''
+    + ''
+      runHook postCheck
     '';
 
   optional-dependencies = {
@@ -43,10 +53,11 @@ buildPythonPackage rec {
     pysha3 = [ safe-pysha3 ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/ethereum/eth-hash/blob/v${version}/docs/release_notes.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }

@@ -1,15 +1,16 @@
-{ mkDerivation
-, extra-cmake-modules
-, kcoreaddons
-, kconfig
-, kcrash
-, kdbusaddons
-, ki18n
-, kiconthemes
-, knotifications
-, kwidgetsaddons
-, kwindowsystem
-, polkit-qt
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kcoreaddons,
+  kconfig,
+  kcrash,
+  kdbusaddons,
+  ki18n,
+  kiconthemes,
+  knotifications,
+  kwidgetsaddons,
+  kwindowsystem,
+  polkit-qt,
 }:
 
 mkDerivation {
@@ -27,5 +28,8 @@ mkDerivation {
     kwindowsystem
     polkit-qt
   ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

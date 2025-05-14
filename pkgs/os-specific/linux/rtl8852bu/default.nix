@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+  nukeReferences,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rtl8852bu";
@@ -11,8 +18,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-22vzAdzzM5YnfU8kRWSK3HXxw6BA4FOWXLdWEb7T5IE=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
-  hardeningDisable = [ "pic" "format" ];
+  nativeBuildInputs = [
+    bc
+    nukeReferences
+  ] ++ kernel.moduleBuildDependencies;
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
@@ -22,13 +35,15 @@ stdenv.mkDerivation rec {
       --replace-fail /lib/modules "${kernel.dev}/lib/modules"
   '';
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
-    ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+      ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
+      ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ];
 
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"

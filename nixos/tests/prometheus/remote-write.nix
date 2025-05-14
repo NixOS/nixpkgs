@@ -1,58 +1,54 @@
-import ../make-test-python.nix ({ lib, pkgs, ... }:
-
 {
   name = "prometheus-remote-write";
 
   nodes = {
-    receiver = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
+    receiver =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-      networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+        networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
-      services.prometheus = {
-        enable = true;
-        globalConfig.scrape_interval = "2s";
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "2s";
 
-        extraFlags = [ "--web.enable-remote-write-receiver" ];
+          extraFlags = [ "--web.enable-remote-write-receiver" ];
+        };
       };
-    };
 
-    prometheus = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
+    prometheus =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-      networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+        networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
-      services.prometheus = {
-        enable = true;
-        globalConfig.scrape_interval = "2s";
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "2s";
 
-        remoteWrite = [
-          {
-            url = "http://receiver:9090/api/v1/write";
-          }
-        ];
+          remoteWrite = [ { url = "http://receiver:9090/api/v1/write"; } ];
 
-        scrapeConfigs = [
-          {
-            job_name = "node";
-            static_configs = [
-              {
-                targets = [
-                  "node:${toString config.services.prometheus.exporters.node.port}"
-                ];
-              }
-            ];
-          }
-        ];
+          scrapeConfigs = [
+            {
+              job_name = "node";
+              static_configs = [
+                { targets = [ "node:${toString config.services.prometheus.exporters.node.port}" ]; }
+              ];
+            }
+          ];
+        };
       };
-    };
 
-    node = { config, pkgs, ... }: {
-      services.prometheus.exporters.node = {
-        enable = true;
-        openFirewall = true;
+    node =
+      { config, pkgs, ... }:
+      {
+        services.prometheus.exporters.node = {
+          enable = true;
+          openFirewall = true;
+        };
       };
-    };
   };
 
   testScript = ''
@@ -70,4 +66,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
         + "jq '.data.result[0].value[1]' | grep '\"1\"'"
       )
   '';
-})
+}

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
   arrow,
   delorean,
   pendulum,
@@ -13,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pycron";
-  version = "3.0.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "pycron";
-    rev = version;
-    hash = "sha256-+67yU2o31SdgnV3CtiEkLHDltQYgosnqxEuO51rGE4o=";
+    tag = version;
+    hash = "sha256-WnaQfS3VzF9fZHX9eNRjih/U7SgWeWVynLdwPZgF950=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     arrow

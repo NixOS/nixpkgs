@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, libgee
-, libhandy
-, elementary-notifications
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  wingpanel,
+  libgee,
+  libhandy,
+  elementary-notifications,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-notifications";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

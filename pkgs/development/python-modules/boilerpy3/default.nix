@@ -18,7 +18,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "jmriebold";
     repo = "BoilerPy3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dhAB0VbBGsSrgYGUlZEYaKA6sQB/f9Bb3alsRuQ8opo=";
   };
 

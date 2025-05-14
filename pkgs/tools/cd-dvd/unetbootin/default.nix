@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, mtools
-, p7zip
-, wrapQtAppsHook
-, qtbase
-, qttools
-, qmake
-, syslinux
-, util-linux
-, which
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  mtools,
+  p7zip,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  qmake,
+  syslinux,
+  util-linux,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,7 +71,13 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ mtools p7zip which ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        mtools
+        p7zip
+        which
+      ]
+    }"
     "--set QT_X11_NO_MITSHM 1"
   ];
 

@@ -1,7 +1,13 @@
-{ stdenv, config, callPackage, wineBuild }:
+{
+  lib,
+  stdenv,
+  config,
+  callPackage,
+  wineBuild,
+}:
 
 rec {
-  fonts = callPackage ../applications/emulators/wine/fonts.nix {};
+  fonts = callPackage ../applications/emulators/wine/fonts.nix { };
   minimal = callPackage ../applications/emulators/wine {
     wineRelease = config.wine.release or "stable";
     inherit wineBuild;
@@ -52,6 +58,16 @@ rec {
   staging = base.override { wineRelease = "staging"; };
   stagingFull = full.override { wineRelease = "staging"; };
 
-  wayland = base.override { wineRelease = "wayland"; waylandSupport = true; };
-  waylandFull = full.override { wineRelease = "wayland"; waylandSupport = true; };
+  wayland = base.override {
+    x11Support = false;
+  };
+  waylandFull = full.override {
+    x11Support = false;
+  };
+
+  yabridge =
+    let
+      yabridge = base.override { wineRelease = "yabridge"; };
+    in
+    if wineBuild == "wineWow" then yabridge else lib.dontDistribute yabridge;
 }

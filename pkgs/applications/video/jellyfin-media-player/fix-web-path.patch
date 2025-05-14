@@ -1,0 +1,38 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 9df49da..be1c479 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -106,7 +106,8 @@ endif()
+ set(RESOURCE_ROOT .)
+ if(APPLE)
+   set(RESOURCE_ROOT Resources)
+-  add_resources(TARGET ${MAIN_TARGET} SOURCES ${CMAKE_SOURCE_DIR}/native/ DEST ${RESOURCE_ROOT}/web-client/extension)
++  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../jellyfin-web/ DESTINATION ${RESOURCE_ROOT}/web-client/desktop)
++  install(DIRECTORY ${CMAKE_SOURCE_DIR}/native/ DESTINATION ${RESOURCE_ROOT}/web-client/extension)
+ endif()
+ 
+ if(NOT APPLE)
+@@ -119,6 +120,7 @@ if(NOT APPLE)
+       install(FILES ${loc}/qtwebengine_devtools_resources.pak DESTINATION resources)
+     endif()
+   endforeach()
++  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../jellyfin-web/ DESTINATION ${INSTALL_RESOURCE_DIR}/web-client/desktop)
+   install(DIRECTORY ${CMAKE_SOURCE_DIR}/native/ DESTINATION ${INSTALL_RESOURCE_DIR}/web-client/extension)
+ endif()
+ 
+diff --git a/src/settings/SettingsComponent.cpp b/src/settings/SettingsComponent.cpp
+index c398523..7023948 100644
+--- a/src/settings/SettingsComponent.cpp
++++ b/src/settings/SettingsComponent.cpp
+@@ -748,7 +748,7 @@ QString SettingsComponent::getWebClientUrl(bool desktop)
+ 
+   if (url == "bundled")
+   {
+-    auto path = Paths::webExtensionPath() + "find-webclient.html";
++    auto path = Paths::webClientPath("desktop");
+ 
+     url = "file:///" + path;
+   }
+-- 
+2.36.0
+

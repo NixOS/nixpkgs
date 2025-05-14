@@ -10,7 +10,7 @@
   # optional-dependencies
   furo,
   myst-parser,
-  sphinx-autobuild,
+  sphinx,
   sphinxHook,
 
   # tests
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.3.6";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3cin755WD3e75l+mm//KG+g2UEkHvdYYEFvkJ9j9D6s=";
+    tag = "v${version}";
+    hash = "sha256-qqe/h633uEbJPpdsuCzZKW86Z6BQUmPdCju1vg7OLXc=";
   };
 
   outputs = [
@@ -38,13 +38,13 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [ poetry-core ] ++ optional-dependencies.docs;
+  build-system = [ poetry-core ] ++ optional-dependencies.docs;
 
   optional-dependencies = {
     docs = [
       furo
       myst-parser
-      sphinx-autobuild
+      sphinx
       sphinxHook
     ];
   };

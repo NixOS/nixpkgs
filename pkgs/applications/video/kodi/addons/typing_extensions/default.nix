@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "typing_extensions";
   namespace = "script.module.typing_extensions";
@@ -20,6 +26,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/python/typing/tree/master/typing_extensions";
     description = "Python typing extensions";
     license = licenses.psfl;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

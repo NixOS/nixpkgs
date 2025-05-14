@@ -46,11 +46,11 @@
      return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
-@@ -33,11 +33,7 @@
-   }
-
-   suspend fun getJdkHome(communityRoot: BuildDependenciesCommunityRoot, os: OS, arch: Arch, infoLog: (String) -> Unit): Path {
--    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch)
+@@ -55,11 +55,7 @@
+     variation: String? = null,
+     infoLog: (String) -> Unit,
+   ): Path {
+-    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch, jdkBuildNumber = jdkBuildNumber, variation = variation)
 -    val jdkArchive = downloadFileToCacheLocation(url = jdkUrl.toString(), communityRoot = communityRoot)
 -    val jdkExtracted = BuildDependenciesDownloader.extractFileToCacheLocation(communityRoot = communityRoot,
 -                                                                              archiveFile = jdkArchive,
@@ -72,15 +72,15 @@
     * Set both properties if a .snap package should be produced.
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
-@@ -45,7 +45,7 @@
-       withContext(Dispatchers.IO) {
+@@ -50,7 +50,7 @@
          val distBinDir = targetPath.resolve("bin")
          val sourceBinDir = context.paths.communityHomeDir.resolve("bin/linux")
--        copyFileToDir(NativeBinaryDownloader.downloadRestarter(context = context, os = OsFamily.LINUX, arch = arch), distBinDir)
+         addNativeLauncher(distBinDir, targetPath, arch)
+-        copyFileToDir(NativeBinaryDownloader.getRestarter(context, OsFamily.LINUX, arch), distBinDir)
 +        copyFileToDir(sourceBinDir.resolve("${arch.dirName}/restarter"), distBinDir)
          copyFileToDir(sourceBinDir.resolve("${arch.dirName}/fsnotifier"), distBinDir)
-         copyFileToDir(sourceBinDir.resolve("${arch.dirName}/libdbm.so"), distBinDir)
          generateBuildTxt(context, targetPath)
+         copyDistFiles(context, targetPath, OsFamily.LINUX, arch)
 @@ -85,6 +85,8 @@
          }
        }
@@ -90,6 +90,16 @@
        val runtimeDir = context.bundledRuntime.extract(os = OsFamily.LINUX, arch = arch)
        updateExecutablePermissions(runtimeDir, executableFileMatchers)
        val tarGzPath = buildTarGz(arch = arch, runtimeDir = runtimeDir, unixDistPath = osAndArchSpecificDistPath, suffix = suffix(arch))
+@@ -383,7 +385,8 @@
+   }
+ 
+   private suspend fun addNativeLauncher(distBinDir: Path, targetPath: Path, arch: JvmArchitecture) {
+-    val (execPath, licensePath) = NativeBinaryDownloader.getLauncher(context, OsFamily.LINUX, arch)
++    val execPath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/Linux-${arch.archName}/xplat-launcher")
++    val licensePath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/license/xplat-launcher-third-party-licenses.html")
+     copyFile(execPath, distBinDir.resolve(context.productProperties.baseFileName))
+     copyFile(licensePath, targetPath.resolve("license/launcher-third-party-libraries.html"))
+   }
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 @@ -9,6 +9,8 @@
@@ -137,7 +147,7 @@
 -    // Ideal solution would be to move compilation to other process altogether and do not modify current process classpath
 -    println(" * Downloading $kotlinJpsPluginUrl")
 -    val tmpLocation = Files.createTempFile(cacheLocation.parent, cacheLocation.name, ".tmp")
--    suspendingRetryWithExponentialBackOff {
+-    retryWithExponentialBackOff {
 -      FileUtils.copyURLToFile(kotlinJpsPluginUrl.toURL(), tmpLocation.toFile())
 -    }
 -    Files.move(tmpLocation, cacheLocation, StandardCopyOption.ATOMIC_MOVE)

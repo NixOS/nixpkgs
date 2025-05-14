@@ -7,15 +7,16 @@
   extraPackages ? [ ],
   optionalDeps ? [
     jq
-    poppler_utils
+    poppler-utils
     _7zz
-    ffmpegthumbnailer
+    ffmpeg
     fd
     ripgrep
     fzf
     zoxide
     imagemagick
     chafa
+    resvg
   ],
 
   # deps
@@ -24,15 +25,16 @@
 
   # optional deps
   jq,
-  poppler_utils,
+  poppler-utils,
   _7zz,
-  ffmpegthumbnailer,
+  ffmpeg,
   fd,
   ripgrep,
   fzf,
   zoxide,
   imagemagick,
   chafa,
+  resvg,
 
   settings ? { },
   plugins ? { },

@@ -17,7 +17,6 @@
   msgpack,
   mujson,
   orjson,
-  pytest-asyncio,
   pytest7CheckHook,
   pyyaml,
   rapidjson,
@@ -30,18 +29,19 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "3.1.3";
-  format = "pyproject";
+  version = "4.0.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "falconry";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-7719gOM8WQVjODwOSo7HpH3HMFFeCGQQYBKktBAevig=";
+    repo = "falcon";
+    tag = version;
+    hash = "sha256-umNuHyZrdDGyrhQEG9+f08D4Wwrz6bVJ6ysw8pfbHv4=";
   };
 
-  nativeBuildInputs = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
+  build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -64,7 +64,6 @@ buildPythonPackage rec {
     orjson
 
     # ASGI specific
-    pytest-asyncio
     aiofiles
     httpx
     uvicorn
@@ -90,7 +89,8 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "Unladen web framework for building APIs and app backends";
+    changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";
+    description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];

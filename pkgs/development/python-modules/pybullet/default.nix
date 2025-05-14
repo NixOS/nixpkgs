@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pybullet";
-  version = "3.2.6";
+  version = "3.2.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2idSVDPIhpjcn9i8IPpK5NB3OLRlZjNlnr2CwtKITgg=";
+    hash = "sha256-BCh5240QGsdZDe5HX8at7VCLhf4Sc/27/eHYi9IA4U8=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -1,13 +1,12 @@
-{ AppKit
-, cmake
-, fetchFromGitHub
-, fetchpatch2
-, Foundation
-, jsoncpp
-, lib
-, libGL
-, stdenv
-, nix-update-script
+{
+  cmake,
+  fetchFromGitHub,
+  fetchpatch2,
+  jsoncpp,
+  lib,
+  libGL,
+  stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     jsoncpp
     libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Foundation
   ];
 
-  cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_JSONCPP=ON"
+    "-DBUILD_SHARED=1"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

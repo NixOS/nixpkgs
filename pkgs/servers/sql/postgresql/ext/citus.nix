@@ -1,52 +1,77 @@
-{ lib
-, stdenv
-, curl
-, fetchFromGitHub
-, lz4
-, postgresql
+{
+  curl,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  lz4,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
 }:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "citus";
-  version = "12.1.2";
+  version = "13.0.3";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "citus";
-    rev = "v${version}";
-    hash = "sha256-0uYNMLAYigtGlDRvOEkQeC5i58QfXcdSVjTQwWVFX+8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tQ2YkMUeziz+dhfXtfuK0x8PWH3vfoJiVbE+YvQ/Gzc=";
   };
+
+  patches = [
+    # Even though this commit is on main since Sep 2023, it hasn't made its way to the release-13.0 branch, yet.
+    # https://github.com/citusdata/citus/pull/7221
+    # Fixes build for PG 16 + 17 on darwin
+    (fetchpatch {
+      url = "https://github.com/citusdata/citus/commit/0f28a69f12418d211ffba5f7ddd222fd0c47daeb.patch";
+      hash = "sha256-8JAM+PUswzbdlAZUpRApgO0eBsMbUHFdFGsdATsG88I=";
+    })
+  ];
 
   buildInputs = [
     curl
     lz4
-    postgresql
   ];
 
-  installPhase = ''
-    runHook preInstall
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    postgresqlExtraSettings = ''
+      shared_preload_libraries=citus
+    '';
+    sql = ''
+      CREATE EXTENSION citus;
 
-    install -D -t $out/lib src/backend/columnar/citus_columnar${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension src/backend/columnar/build/sql/*.sql
-    install -D -t $out/share/postgresql/extension src/backend/columnar/*.control
+      CREATE TABLE examples (
+        id bigserial,
+        shard_key int,
+        PRIMARY KEY (id, shard_key)
+      );
 
-    install -D -t $out/lib src/backend/distributed/citus${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension src/backend/distributed/build/sql/*.sql
-    install -D -t $out/share/postgresql/extension src/backend/distributed/*.control
+      SELECT create_distributed_table('examples', 'shard_key');
 
-    runHook postInstall
-  '';
+      INSERT INTO examples (shard_key) SELECT shard % 10 FROM generate_series(1,1000) shard;
+    '';
+    asserts = [
+      {
+        query = "SELECT count(*) FROM examples";
+        expected = "1000";
+        description = "Distributed table can be queried successfully.";
+      }
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     # "Our soft policy for Postgres version compatibility is to support Citus'
     # latest release with Postgres' 3 latest releases."
     # https://www.citusdata.com/updates/v12-0/#deprecated_features
-    broken = versionOlder postgresql.version "14";
+    broken = lib.versionOlder postgresql.version "15";
     description = "Distributed PostgreSQL as an extension";
     homepage = "https://www.citusdata.com/";
-    changelog = "https://github.com/citusdata/citus/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
+    changelog = "https://github.com/citusdata/citus/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };
-}
+})

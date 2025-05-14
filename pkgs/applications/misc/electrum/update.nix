@@ -1,14 +1,15 @@
-{ lib
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, fetchurl
-, gnugrep
-, gnupg
-, gnused
-, nix
+{
+  lib,
+  writeScript,
+  common-updater-scripts,
+  bash,
+  coreutils,
+  curl,
+  fetchurl,
+  gnugrep,
+  gnupg,
+  gnused,
+  nix,
 }:
 
 let
@@ -33,41 +34,43 @@ let
 in
 
 writeScript "update-electrum" ''
-#! ${bash}/bin/bash
+  #! ${bash}/bin/bash
 
-set -eu -o pipefail
+  set -eu -o pipefail
 
-export PATH=${lib.makeBinPath [
-  common-updater-scripts
-  coreutils
-  curl
-  gnugrep
-  gnupg
-  gnused
-  nix
-]}
+  export PATH=${
+    lib.makeBinPath [
+      common-updater-scripts
+      coreutils
+      curl
+      gnugrep
+      gnupg
+      gnused
+      nix
+    ]
+  }
 
-version=$(curl -L --list-only -- '${downloadPageUrl}' \
-    | grep -Po '<a href="\K([[:digit:]]+\.?)+' \
-    | sort -Vu \
-    | tail -n1)
+  version=$(curl -L --list-only -- '${downloadPageUrl}' \
+      | grep -Po '<a href="\K([[:digit:]]+\.?)+' \
+      | sort -Vu \
+      | tail -n1)
 
-srcName=Electrum-$version
-srcFile=$srcName.tar.gz
-srcUrl="${downloadPageUrl}/$version/$srcFile"
-sigUrl=$srcUrl.asc
-sigFile=$srcFile.asc
+  srcName=Electrum-$version
+  srcFile=$srcName.tar.gz
+  srcUrl="${downloadPageUrl}/$version/$srcFile"
+  sigUrl=$srcUrl.asc
+  sigFile=$srcFile.asc
 
-[[ -e "$srcFile" ]] || curl -L -o "$srcFile" -- "$srcUrl"
-[[ -e "$sigFile" ]] || curl -L -o "$sigFile" -- "$sigUrl"
+  [[ -e "$srcFile" ]] || curl -L -o "$srcFile" -- "$srcUrl"
+  [[ -e "$sigFile" ]] || curl -L -o "$sigFile" -- "$sigUrl"
 
-export GNUPGHOME=$PWD/gnupg
-mkdir -m 700 -p "$GNUPGHOME"
+  export GNUPGHOME=$PWD/gnupg
+  mkdir -m 700 -p "$GNUPGHOME"
 
-gpg --batch --import ${gpgImportPaths}
-gpg --batch --verify "$sigFile" "$srcFile"
+  gpg --batch --import ${gpgImportPaths}
+  gpg --batch --verify "$sigFile" "$srcFile"
 
-sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$srcFile")
+  sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$srcFile")
 
-update-source-version electrum "$version" "$sha256"
+  update-source-version electrum "$version" "$sha256"
 ''

@@ -2,19 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
+  go,
 }:
 
 buildGoModule rec {
   pname = "gotools";
-  version = "0.25.0";
+  version = "0.30.0";
 
   # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is to basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "v${version}";
-    hash = "sha256-iM6mGIQF+TOo1iV8hH9/4iOPdNiS9ymPmhslhDVnIIs=";
+    hash = "sha256-yUkdZSe/GV0w1qK8aQjcFE4tNKYC8f4JeFgPiv8GlQc=";
   };
+
+  allowGoReference = true;
+  doCheck = false;
+
+  vendorHash = "sha256-+jhCNi7bGkRdI1Ywfe3q4i+zcm3UJ0kbQalsDD3WkS4=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
     # The gopls folder contains a Go submodule which causes a build failure
@@ -22,15 +31,16 @@ buildGoModule rec {
     rm -r gopls
   '';
 
-  vendorHash = "sha256-9NSgtranuyRqtBq1oEnHCPIDFOIUJdVh5W/JufqN2Ko=";
-
-  doCheck = false;
-
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
     mkdir -p $out/nix-support
     substitute ${./setup-hook.sh} $out/nix-support/setup-hook \
       --subst-var-by bin $out
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/goimports \
+      --suffix PATH : ${lib.makeBinPath [ go ]}
   '';
 
   meta = with lib; {

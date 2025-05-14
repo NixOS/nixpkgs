@@ -1,24 +1,26 @@
 {
-  buildDotnetModule
-  , fetchFromGitHub
-  , lib
-  , openal
+  buildDotnetModule,
+  fetchFromGitHub,
+  lib,
+  openal,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     rev = "v${version}";
-    hash = "sha256-vlSiM6kskV4wfBZF7Rv5ICyqKG0Zhz/iU8kflYOaf0U=";
+    hash = "sha256-XaCBuZ4Hf2ISw3hVQ1s2Hp8PLxp2eFr+I7U5ttUDQvU=";
   };
 
-  patches = [ ./targetframework.patch ];
+  patches = [ ./dotnet-8-upgrade.patch ];
 
-  nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  nugetDeps = ./deps.json;
   executables = [ "Knossos.NET" ];
 
   runtimeDeps = [ openal ];

@@ -1,11 +1,13 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
 let
   cfg = config.programs.regreet;
   settingsFormat = pkgs.formats.toml { };
+  user = config.services.greetd.settings.default_session.user;
 in
 {
   options.programs.regreet = {
@@ -24,7 +26,10 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
+    package = lib.mkPackageOption pkgs [
+      "greetd"
+      "regreet"
+    ] { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
@@ -39,10 +44,9 @@ in
     cageArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ "-s" ];
-      example = lib.literalExpression
-        ''
-          [ "-s" "-m" "last" ]
-        '';
+      example = lib.literalExpression ''
+        [ "-s" "-m" "last" ]
+      '';
       description = ''
         Additional arguments to be passed to
         [cage](https://github.com/cage-kiosk/cage).
@@ -155,23 +159,39 @@ in
 
     environment.etc = {
       "greetd/regreet.css" =
-        if lib.isPath cfg.extraCss
-        then {source = cfg.extraCss;}
-        else {text = cfg.extraCss;};
+        if lib.isPath cfg.extraCss then { source = cfg.extraCss; } else { text = cfg.extraCss; };
 
       "greetd/regreet.toml".source =
-        settingsFormat.generate "regreet.toml" cfg.settings;
+        if lib.isPath cfg.settings then
+          cfg.settings
+        else
+          settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
-    systemd.tmpfiles.settings."10-regreet" = let
-      defaultConfig = {
-        user = "greeter";
-        group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
-        mode = "0755";
-      };
-    in {
-      "/var/log/regreet".d = defaultConfig;
-      "/var/cache/regreet".d = defaultConfig;
-    };
+    systemd.tmpfiles.settings."10-regreet" =
+      let
+        defaultConfig = {
+          inherit user;
+          group =
+            if config.users.users.${user}.group != "" then config.users.users.${user}.group else "greeter";
+          mode = "0755";
+        };
+        dataDir =
+          if lib.versionAtLeast (cfg.package.version) "0.2.0" then
+            { "/var/lib/regreet".d = defaultConfig; }
+          else
+            { "/var/cache/regreet".d = defaultConfig; };
+      in
+      {
+        "/var/log/regreet".d = defaultConfig;
+      }
+      // dataDir;
+
+    assertions = [
+      {
+        assertion = (config.users.users.${user} or { }) != { };
+        message = "regreet: user ${user} does not exist. Please create it before referencing it.";
+      }
+    ];
   };
 }

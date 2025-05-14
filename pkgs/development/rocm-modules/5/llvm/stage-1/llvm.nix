@@ -1,6 +1,7 @@
-{ stdenv
-, callPackage
-, rocmUpdateScript
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
 }:
 
 callPackage ../base.nix {

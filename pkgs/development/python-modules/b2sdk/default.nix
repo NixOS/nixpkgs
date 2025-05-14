@@ -10,7 +10,7 @@
   packaging,
   pdm-backend,
   pyfakefs,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.4.0";
+  version = "2.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,14 +29,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SaoQzP7vtzVWmkUTw0vCeneeSMTmBTIr5kiMXGcgm9g=";
+    tag = "v${version}";
+    hash = "sha256-KUz/OaFZwJPVNCZ1j73SrpWknQmrvwfr5MLVYxOojZc=";
   };
 
   build-system = [ pdm-backend ];
-
-
-  pythonRemoveDeps = [ "setuptools" ];
 
   dependencies =
     [
@@ -49,8 +46,7 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
-    pyfakefs
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytest-mock
     pytestCheckHook
     tqdm
@@ -71,6 +67,7 @@ buildPythonPackage rec {
     "test_files_headers"
     "test_large_file"
     "test_file_info_b2_attributes"
+    "test_sync_folder"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];
@@ -78,8 +75,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
-    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ pmw ];
   };
 }

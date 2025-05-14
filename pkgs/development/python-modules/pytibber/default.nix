@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.30.2";
+  version = "0.31.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9Tnn68RxKwEruYEGo2pZQTQTlYnVMfa3MRzA55HlBRc=";
+    tag = version;
+    hash = "sha256-qQ/F7SF91wiWelV6kFBDjv5UmrrcD5TmwCsNuG5c25s=";
   };
 
   build-system = [ setuptools ];
@@ -36,18 +36,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
-
   # Tests access network
   doCheck = false;
 
   pythonImportsCheck = [ "tibber" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
-    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   preCheck = ''
     # Make `libgcc_s.so' visible for `pthread_cancel'.
     export LD_LIBRARY_PATH=\
-    "$(dirname $(echo ${stdenv.cc.cc.lib}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    "$(dirname $(echo ${lib.getLib stdenv.cc.cc}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
   meta = with lib; {
@@ -53,7 +54,10 @@ stdenv.mkDerivation rec {
       for Guile".
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp foo-dogsquared ];
+    maintainers = with maintainers; [
+      vyp
+      foo-dogsquared
+    ];
     platforms = guile.meta.platforms;
   };
 }

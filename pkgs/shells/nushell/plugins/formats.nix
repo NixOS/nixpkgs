@@ -4,21 +4,15 @@
   rustPlatform,
   nushell,
   pkg-config,
-  IOKit,
-  Foundation,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
-  inherit (nushell) version src;
-  cargoHash = "sha256-9wKJkZnbM8Zt90LlSTd9hb40Xuy2cOBThwUWyS2NuaI=";
+  inherit (nushell) version src cargoHash;
+  useFetchCargoVendor = true;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    IOKit
-    Foundation
-  ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];
 
   checkPhase = ''

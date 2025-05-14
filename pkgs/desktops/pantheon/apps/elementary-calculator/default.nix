@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
-, elementary-gtk-theme
-, elementary-icon-theme
-, granite7
-, gtk4
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  elementary-gtk-theme,
+  elementary-icon-theme,
+  granite7,
+  gtk4,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Calculator app designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.calculator";
   };
 }

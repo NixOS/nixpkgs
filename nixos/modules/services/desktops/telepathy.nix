@@ -1,5 +1,10 @@
 # Telepathy daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   meta = {
@@ -25,7 +30,6 @@
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.telepathy.enable {
@@ -37,7 +41,6 @@
     # Enable runtime optional telepathy in gnome-shell
     services.xserver.desktopManager.gnome.sessionPath = with pkgs; [
       telepathy-glib
-      telepathy-logger
     ];
   };
 

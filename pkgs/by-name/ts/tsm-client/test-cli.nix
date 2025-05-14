@@ -1,7 +1,8 @@
-{ lib
-, writeText
-, runCommand
-, tsm-client
+{
+  lib,
+  writeText,
+  runCommand,
+  tsm-client,
 }:
 
 # Let the client try to connect to a server.
@@ -30,7 +31,7 @@ let
       patch = lib.versions.patch version;
       fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
     in
-      "Client Version ${major}, Release ${minor}, Level ${patch}.${fixup}";
+    "Client Version ${major}, Release ${minor}, Level ${patch}.${fixup}";
 
 in
 

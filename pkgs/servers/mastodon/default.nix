@@ -1,15 +1,24 @@
-{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn-berry, callPackage, ruby, writeShellScript
-, brotli, python3
+{
+  lib,
+  stdenv,
+  nodejs-slim,
+  bundlerEnv,
+  nixosTests,
+  yarn-berry,
+  callPackage,
+  ruby,
+  writeShellScript,
+  brotli,
+  python3,
 
   # Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon"
-, version ? srcOverride.version
-, patches ? []
+  pname ? "mastodon",
+  version ? srcOverride.version,
+  patches ? [ ],
   # src is a package
-, srcOverride ? callPackage ./source.nix { inherit patches; }
-, gemset ? ./. + "/gemset.nix"
-, yarnHash ? srcOverride.yarnHash
+  srcOverride ? callPackage ./source.nix { inherit patches; },
+  gemset ? ./. + "/gemset.nix",
+  yarnHash ? srcOverride.yarnHash,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,12 +36,20 @@ stdenv.mkDerivation rec {
     pname = "${pname}-modules";
     inherit src version;
 
-    yarnOfflineCache = callPackage ./yarn.nix {
-      inherit version src;
+    yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src;
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [ nodejs-slim yarn-berry mastodonGems mastodonGems.wrappedRuby brotli python3 ];
+    nativeBuildInputs = [
+      nodejs-slim
+      yarn-berry
+      yarn-berry.yarnBerryConfigHook
+      mastodonGems
+      mastodonGems.wrappedRuby
+      brotli
+      python3
+    ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -40,34 +57,28 @@ stdenv.mkDerivation rec {
     buildPhase = ''
       runHook preBuild
 
-      export HOME=$PWD
-      export YARN_ENABLE_TELEMETRY=0
-      export npm_config_nodedir=${nodejs-slim}
       export SECRET_KEY_BASE_DUMMY=1
 
-      mkdir -p ~/.yarn/berry
-      ln -s $yarnOfflineCache ~/.yarn/berry/cache
-
-      yarn install --immutable --immutable-cache
-
-      patchShebangs ~/bin
-      patchShebangs ~/node_modules
+      patchShebangs bin
 
       bundle exec rails assets:precompile
 
-      yarn cache clean --all
-      rm -rf ~/node_modules/.cache
+      rm -rf node_modules/.cache
+
+      # Remove workspace "package" as it contains broken symlinks
+      # See https://github.com/NixOS/nixpkgs/issues/380366
+      rm -rf node_modules/@mastodon
 
       # Remove execute permissions
-      find ~/public/assets -type f ! -perm 0555 \
+      find public/assets -type f ! -perm 0555 \
         -exec chmod 0444 {} ';'
 
       # Create missing static gzip and brotli files
-      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
+      find public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
         -exec gzip --best --keep --force {} ';' \
         -exec brotli --best --keep {} ';'
-      gzip --best --keep ~/public/packs/report.html
-      brotli --best --keep ~/public/packs/report.html
+      gzip --best --keep public/packs/report.html
+      brotli --best --keep public/packs/report.html
 
       runHook postBuild
     '';
@@ -86,7 +97,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
   nativeBuildInputs = [ brotli ];
-  buildInputs = [ mastodonGems nodejs-slim ];
+  buildInputs = [
+    mastodonGems
+    nodejs-slim
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -128,21 +142,23 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = let
-    run-streaming = writeShellScript "run-streaming.sh" ''
-      # NixOS helper script to consistently use the same NodeJS version the package was built with.
-      ${nodejs-slim}/bin/node ./streaming
+  installPhase =
+    let
+      run-streaming = writeShellScript "run-streaming.sh" ''
+        # NixOS helper script to consistently use the same NodeJS version the package was built with.
+        ${nodejs-slim}/bin/node ./streaming
+      '';
+    in
+    ''
+      runHook preInstall
+
+      mkdir -p $out
+      mv .{env*,ruby*} $out/
+      mv * $out/
+      ln -s ${run-streaming} $out/run-streaming.sh
+
+      runHook postInstall
     '';
-  in ''
-    runHook preInstall
-
-    mkdir -p $out
-    mv .{env*,ruby*} $out/
-    mv * $out/
-    ln -s ${run-streaming} $out/run-streaming.sh
-
-    runHook postInstall
-  '';
 
   passthru = {
     tests.mastodon = nixosTests.mastodon;
@@ -154,7 +170,16 @@ stdenv.mkDerivation rec {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      happy-river
+      erictapen
+      izorkin
+      ghuntley
+    ];
   };
 }

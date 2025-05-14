@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchurl,
   pkg-config,
   gnutls,
@@ -13,17 +12,7 @@
   nixosTests,
 }:
 
-let
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin then
-      overrideSDK stdenv {
-        darwinSdkVersion = "11.0";
-        darwinMinVersion = "10.13";
-      }
-    else
-      stdenv;
-in
-stdenv'.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chrony";
   version = "4.6.1";
 

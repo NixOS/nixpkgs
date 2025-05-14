@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.ubertooth;
 
   ubertoothPkg = pkgs.ubertooth.override {
     udevGroup = cfg.group;
   };
-in {
+in
+{
   options.hardware.ubertooth = {
     enable = lib.mkEnableOption "Ubertooth software and its udev rules";
 
@@ -21,6 +27,6 @@ in {
     environment.systemPackages = [ ubertoothPkg ];
 
     services.udev.packages = [ ubertoothPkg ];
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
   };
 }

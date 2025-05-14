@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem
-, pkgs ? import ../../.. { inherit system; }
-, lib ? pkgs.lib
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../../.. { inherit system; },
+  lib ? pkgs.lib,
 }:
 let
   allRKE2 = lib.filterAttrs (n: _: lib.strings.hasPrefix "rke2" n) pkgs;

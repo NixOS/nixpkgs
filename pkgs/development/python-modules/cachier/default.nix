@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-cachier";
     repo = "cachier";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LphmYL8Jmry8Jmd5Eps68wD113JMWwyBl18pqdtl+DQ=";
+    tag = "v${version}";
+    hash = "sha256-siighT6hMicN+F/LIXfUAPQ2kkRiyk7CtjqmyC/qCFg=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];

@@ -8,13 +8,17 @@
   zlib,
   patchelf,
   makeWrapper,
+  wayland,
+  libX11,
 }:
 let
-  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
+  virtualboxVersion = "7.1.8";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "3f7132c55ac6c5f50585bfaa115d29e30b47ccf535cb0a12ff50214ddae2f63d";
 
-  # Forced to 1.18; vboxvideo doesn't seem to provide any newer ABI,
-  # and nixpkgs doesn't support older ABIs anymore.
-  xserverABI = "118";
+  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
+    inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
+  };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
@@ -32,11 +36,23 @@ let
       name = "libXrandr.so";
       pkg = xorg.libXrandr;
     }
+    {
+      name = "libwayland-client.so";
+      pkg = wayland;
+    }
+    {
+      name = "libX11.so";
+      pkg = libX11;
+    }
+    {
+      name = "libXt.so";
+      pkg = xorg.libXt;
+    }
   ];
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
-  version = "${virtualBoxNixGuestAdditionsBuilder.version}-${kernel.version}";
+  version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
   src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
     if stdenv.hostPlatform.is32bit then "x86" else "amd64"
@@ -60,7 +76,7 @@ stdenv.mkDerivation {
     runHook preBuild
 
     # Build kernel modules.
-    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+    cd src/vboxguest-${virtualboxVersion}_NixOS
     # Run just make first. If we only did make install, we get symbol warnings during build.
     make
     cd ../..
@@ -92,7 +108,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
 
     # Install kernel modules.
-    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+    cd src/vboxguest-${virtualboxVersion}_NixOS
     make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
@@ -134,7 +150,7 @@ stdenv.mkDerivation {
       host/guest clipboard support.
     '';
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     maintainers = [
       lib.maintainers.sander
       lib.maintainers.friedrichaltheide

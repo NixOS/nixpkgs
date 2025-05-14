@@ -1,32 +1,68 @@
 # currently needs to be installed into an environment and needs a `kbuildsycoca5` run afterwards for plugin discovery
 {
-  mkDerivation, fetchFromGitHub, fetchpatch, lib, makeWrapper,
-  cmake, extra-cmake-modules, pkg-config,
-  libkcddb, kconfig, kconfigwidgets, ki18n, kdelibs4support, kio, solid, kwidgetsaddons, kxmlgui,
-  qtbase, phonon,
-  taglib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  makeWrapper,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  libkcddb,
+  kconfig,
+  kconfigwidgets,
+  ki18n,
+  kdelibs4support,
+  kio,
+  solid,
+  kwidgetsaddons,
+  kxmlgui,
+  qtbase,
+  phonon,
+  taglib_1,
   # optional backends
-  withCD ? true, cdparanoia,
-  withFlac ? true, flac,
-  withMidi ? true, fluidsynth, timidity,
-  withSpeex ? false, speex,
-  withVorbis ? true, vorbis-tools, vorbisgain,
-  withMp3 ? true, lame, mp3gain,
-  withAac ? true, faad2, aacgain,
-  withUnfreeAac ? false, faac,
-  withFfmpeg ? true, ffmpeg-full,
-  withMplayer ? false, mplayer,
-  withSox ? true, sox,
-  withOpus ? true, opusTools,
-  withTwolame ? false, twolame,
-  withApe ? false, mac,
-  withWavpack ? false, wavpack
+  withCD ? true,
+  cdparanoia,
+  withFlac ? true,
+  flac,
+  withMidi ? true,
+  fluidsynth,
+  timidity,
+  withSpeex ? false,
+  speex,
+  withVorbis ? true,
+  vorbis-tools,
+  vorbisgain,
+  withMp3 ? true,
+  lame,
+  mp3gain,
+  withAac ? true,
+  faad2,
+  aacgain,
+  withUnfreeAac ? false,
+  faac,
+  withFfmpeg ? true,
+  ffmpeg-full,
+  withMplayer ? false,
+  mplayer,
+  withSox ? true,
+  sox,
+  withOpus ? true,
+  opusTools,
+  withTwolame ? false,
+  twolame,
+  withApe ? false,
+  monkeysAudio,
+  withWavpack ? false,
+  wavpack,
 }:
 
 assert withAac -> withFfmpeg || withUnfreeAac;
 assert withUnfreeAac -> withAac;
 
-let runtimeDeps = []
+let
+  runtimeDeps =
+    [ ]
     ++ lib.optional withCD cdparanoia
     ++ lib.optional withFlac flac
     ++ lib.optional withSpeex speex
@@ -35,13 +71,25 @@ let runtimeDeps = []
     ++ lib.optional withSox sox
     ++ lib.optional withOpus opusTools
     ++ lib.optional withTwolame twolame
-    ++ lib.optional withApe mac
+    ++ lib.optional withApe monkeysAudio
     ++ lib.optional withWavpack wavpack
     ++ lib.optional withUnfreeAac faac
-    ++ lib.optionals withMidi [ fluidsynth timidity ]
-    ++ lib.optionals withVorbis [ vorbis-tools vorbisgain ]
-    ++ lib.optionals withMp3 [ lame mp3gain ]
-    ++ lib.optionals withAac [  faad2 aacgain ];
+    ++ lib.optionals withMidi [
+      fluidsynth
+      timidity
+    ]
+    ++ lib.optionals withVorbis [
+      vorbis-tools
+      vorbisgain
+    ]
+    ++ lib.optionals withMp3 [
+      lame
+      mp3gain
+    ]
+    ++ lib.optionals withAac [
+      faad2
+      aacgain
+    ];
 
 in
 mkDerivation rec {
@@ -63,16 +111,34 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config kdelibs4support makeWrapper ];
-  propagatedBuildInputs = [ libkcddb kconfig kconfigwidgets ki18n kdelibs4support kio solid kwidgetsaddons kxmlgui qtbase phonon];
-  buildInputs = [ taglib ] ++ runtimeDeps;
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    kdelibs4support
+    makeWrapper
+  ];
+  propagatedBuildInputs = [
+    libkcddb
+    kconfig
+    kconfigwidgets
+    ki18n
+    kdelibs4support
+    kio
+    solid
+    kwidgetsaddons
+    kxmlgui
+    qtbase
+    phonon
+  ];
+  buildInputs = [ taglib_1 ] ++ runtimeDeps;
   # encoder plugins go to ${out}/lib so they're found by kbuildsycoca5
   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out" ];
   sourceRoot = "${src.name}/src";
   # add runt-time deps to PATH
   postInstall = ''
-    wrapProgram $out/bin/soundkonverter --prefix PATH : ${lib.makeBinPath runtimeDeps }
-    '';
+    wrapProgram $out/bin/soundkonverter --prefix PATH : ${lib.makeBinPath runtimeDeps}
+  '';
   meta = {
     homepage = "https://github.com/dfaust/soundkonverter";
     license = lib.licenses.gpl2;
@@ -103,6 +169,6 @@ mkDerivation rec {
 
       - CD ripping
         Backends: cdparanoia
-      '';
+    '';
   };
 }

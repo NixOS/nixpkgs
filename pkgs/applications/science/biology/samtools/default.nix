@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchurl, zlib, htslib, perl, ncurses ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  htslib,
+  perl,
+  ncurses ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "samtools";
-  version = "1.19.2";
+  version = "1.21";
 
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-cfYEmWaOTAjn10X7/yTBXMigl3q6sazV0rtBm9sGXpY=";
+    hash = "sha256-BXJLCDprbwMF/K5SQ6BWzDbPgmMJw8uTR6a4nuP8Wto=";
   };
 
   # tests require `bgzip` from the htslib package
@@ -14,17 +22,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ zlib ncurses htslib ];
+  buildInputs = [
+    zlib
+    ncurses
+    htslib
+  ];
 
   preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
     export LIBS="-lz -lbz2 -llzma"
   '';
   makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";
 
-  configureFlags = [ "--with-htslib=${htslib}" ]
+  configureFlags =
+    [ "--with-htslib=${htslib}" ]
     ++ lib.optional (ncurses == null) "--without-curses"
-    ++ lib.optionals stdenv.hostPlatform.isStatic ["--without-curses" ]
-    ;
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ "--without-curses" ];
 
   preCheck = ''
     patchShebangs test/
@@ -39,6 +51,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "http://www.htslib.org/";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mimame unode ];
+    maintainers = with maintainers; [
+      mimame
+      unode
+    ];
   };
 }

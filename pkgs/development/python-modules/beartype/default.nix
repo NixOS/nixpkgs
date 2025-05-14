@@ -1,26 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.18.5";
-  format = "setuptools";
+  version = "0.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Jk3cLx2p7JT/Y5FB++M9IuEqn3WqhjuDtwRv//E4GSc=";
+  src = fetchFromGitHub {
+    owner = "beartype";
+    repo = "beartype";
+    tag = "v${version}";
+    hash = "sha256-uUwqgK7K8x61J7A6S/DGLJljSKABxsbOCsFBDtsameU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -29,11 +29,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beartype" ];
 
-  meta = with lib; {
+  disabledTests =
+    [
+      # No warnings of type (<class 'beartype.roar._roarwarn.BeartypeValeLambdaWarning'>,) were emitted.
+      "test_is_hint_pep593_beartype"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # this test is not run upstream, and broke in 3.13 (_nparams removed)
+      "test_door_is_subhint"
+    ];
+
+  meta = {
     description = "Fast runtime type checking for Python";
     homepage = "https://github.com/beartype/beartype";
     changelog = "https://github.com/beartype/beartype/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

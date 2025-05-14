@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwinfo";
-  version = "23.2";
+  version = "23.5";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = finalAttrs.version;
-    hash = "sha256-YAhsnE1DJ5UlYAuhDxS/5IpfIJB6DrhCT3E0YiKENjU=";
+    hash = "sha256-OweEFxNxQpD7blHywhmHTA66vsYG+Qvsufm3huyUhi0=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/udevinfo" "${systemdMinimal}/bin/udevinfo" \
       --replace-fail "/usr/bin/udevadm" "${systemdMinimal}/bin/udevadm"
 
+    # Replace /usr/bin/perl
+    patchShebangs src/ids/convert_hd
   '';
+
+  outputs = [
+    "bin"
+    "dev"
+    "lib"
+    "out"
+  ];
 
   # The pci/usb ids in hwinfo are ancient. We can get a more up-to-date list simply by copying from systemd
   preBuild = ''
@@ -91,6 +100,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ARCH=${stdenv.hostPlatform.uname.processor}"
   ];
   installFlags = [ "DESTDIR=$(out)" ];
+
+  enableParallelBuilding = false; # broken parallel dependencies
+
+  postInstall = ''
+    moveToOutput bin "$bin"
+    moveToOutput lib "$lib"
+  '';
 
   passthru = {
     tests = {

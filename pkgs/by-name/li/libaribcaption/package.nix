@@ -1,15 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 
-, fontconfig
-, freetype
+  fontconfig,
+  freetype,
 
-, ApplicationServices
-, CoreFoundation
-, CoreGraphics
-, CoreText
 }:
 
 stdenv.mkDerivation rec {
@@ -30,11 +27,6 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     fontconfig
     freetype
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
-    CoreFoundation
-    CoreGraphics
-    CoreText
   ];
 
   meta = with lib; {

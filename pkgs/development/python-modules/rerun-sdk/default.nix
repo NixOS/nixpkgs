@@ -1,21 +1,25 @@
 {
-  buildPythonPackage,
   lib,
-  rustPlatform,
   stdenv,
+  buildPythonPackage,
+  rerun,
+  python,
+
+  # nativeBuildInputs
+  rustPlatform,
+
+  # dependencies
   attrs,
-  darwin,
   numpy,
+  opencv4,
   pillow,
   pyarrow,
-  rerun,
-  torch,
-  typing-extensions,
-  pytestCheckHook,
-  python,
-  libiconv,
   semver,
-  opencv4,
+  typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  torch,
 }:
 
 buildPythonPackage {
@@ -26,8 +30,7 @@ buildPythonPackage {
     src
     version
     cargoDeps
-    cargoPatches
-    patches
+    postPatch
     ;
 
   nativeBuildInputs = [
@@ -36,23 +39,14 @@ buildPythonPackage {
     rerun
   ];
 
-  buildInputs =
-    [
-      libiconv # No-op on Linux, necessary on Darwin.
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     numpy
+    opencv4
     pillow
     pyarrow
-    typing-extensions
     semver
-    opencv4
+    typing-extensions
   ];
 
   buildAndTestSubdir = "rerun_py";
@@ -76,6 +70,15 @@ buildPythonPackage {
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
+
+  disabledTests = [
+    # numpy 2 incompatibility: AssertionError / IndexError
+    # Issue: https://github.com/rerun-io/rerun/issues/9105
+    # PR: https://github.com/rerun-io/rerun/pull/9109
+    "test_any_value"
+    "test_bad_any_value"
+    "test_none_any_value"
+  ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"

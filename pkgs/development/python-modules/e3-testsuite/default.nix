@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-testsuite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V20tX0zi2DRHO42udUcW/CDMyBxh1uSTgac0zZGubsI=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic testsuite framework in Python";
-    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/v${version}";
     homepage = "https://github.com/AdaCore/e3-testsuite/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ heijligen ];

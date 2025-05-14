@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "django-two-factor-auth";
-  version = "1.15.5";
+  version = "1.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,17 +25,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-two-factor-auth";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Sr7L3ioeofyADHb1NSgs0GmVbzX7rro7yhhG9Gq6GJE=";
+    tag = version;
+    hash = "sha256-gg5QpPQbYnQr7KkCXFZ9Gnz48Cf4Nm67uV6JuyxK18c=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "django-phonenumber-field"
+    "qrcode"
   ];
 
-  pythonRelaxDeps = [ "django-phonenumber-field" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-formtools
     django-otp

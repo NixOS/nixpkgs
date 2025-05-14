@@ -2,15 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pyasn1,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyasn1";
     repo = "pyasn1-modules";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UJycVfj08+3zjHPji5Qlh3yqeS30dEwu1pyrN1yo1Vc=";
+    tag = "v${version}";
+    hash = "sha256-jpMIxQ4BJ7MY3cV276sVJv+3M/MMFKRIoL2m2QJFxRY=";
   };
 
   build-system = [ setuptools ];

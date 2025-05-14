@@ -13,23 +13,25 @@
   xkeyboard_config,
   libthai,
   libsForQt5,
+  xz,
 }:
 
 let
   pname = "insync";
   # Find a binary from https://www.insynchq.com/downloads/linux
-  version = "3.9.3.60019";
-  ubuntu-dist = "trixie_amd64";
+  version = "3.9.6.60027";
+  web-archive-id = "20250502161201"; # upload via https://web.archive.org/save/
+  debian-dist = "trixie_amd64";
   insync-pkg = stdenvNoCC.mkDerivation {
     pname = "${pname}-pkg";
     inherit version;
 
     src = fetchurl rec {
       urls = [
-        "https://cdn.insynchq.com/builds/linux/${version}/insync_${version}-${ubuntu-dist}.deb"
-        "https://web.archive.org/web/20240731170718/${builtins.elemAt urls 0}"
+        "https://cdn.insynchq.com/builds/linux/${version}/insync_${version}-${debian-dist}.deb"
+        "https://web.archive.org/web/${web-archive-id}/${builtins.elemAt urls 0}"
       ];
-      hash = "sha256-jexbcKU2N4esl6UHxre6C+0o8GD3DcdRJW2YYT5fUZs=";
+      hash = "sha256-q1s4hFQTXjS9VmA6XETpsvEEES79b84y8zCZwpy3gKo=";
     };
 
     nativeBuildInputs = [
@@ -44,15 +46,8 @@ let
       lz4
       libgcrypt
       libthai
+      xz
     ] ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-permissions --no-same-owner
-
-      runHook postUnpack
-    '';
 
     installPhase = ''
       runHook preInstall
@@ -107,11 +102,11 @@ buildFHSEnv {
 
   dieWithParent = true;
 
-  meta = with lib; {
+  meta = {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ hellwolf ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ hellwolf ];
     homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''

@@ -24,10 +24,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
-
 
   propagatedBuildInputs = [
     requests

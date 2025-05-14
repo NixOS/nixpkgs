@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "versioningit";
   version = "3.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -29,12 +29,15 @@ buildPythonPackage rec {
     hash = "sha256-Tbg+2Z9WsH2DlAvuNEXKRsoSDRO2swTNtftE5apO3sA=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs =
+  dependencies =
     [ packaging ]
     ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
     ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  # AttributeError: type object 'CaseDetails' has no attribute 'model_validate_json'
+  doCheck = lib.versionAtLeast pydantic.version "2";
 
   nativeCheckInputs = [
     pytestCheckHook

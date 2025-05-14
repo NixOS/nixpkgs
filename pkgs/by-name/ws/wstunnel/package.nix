@@ -2,15 +2,13 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
   nixosTests,
   nix-update-script,
   versionCheckHook,
-  darwin,
 }:
 
 let
-  version = "10.1.3";
+  version = "10.2.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -20,22 +18,17 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
-    rev = "v${version}";
-    hash = "sha256-mrCDx9f+EeA6McRc1s9YwYL4RHKSla10fxXZc1WYPio=";
+    tag = "v${version}";
+    hash = "sha256-j4JJWa8y9fAiCcnFQY9u67XPb6m9cY7Q6p0cxHPQQzc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9YAjC5XBRcXYmQoYs9FoxbVtFoM9hvAweLfrodtj+bw=";
+
+  cargoBuildFlags = [ "--package wstunnel-cli" ];
 
   nativeBuildInputs = [ versionCheckHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   checkFlags = [
@@ -57,6 +50,7 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      raylas
       rvdp
       neverbehave
     ];

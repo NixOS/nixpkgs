@@ -1,14 +1,15 @@
-{ cacert
-, cmake
-, fetchFromGitHub
-, git
-, lib
-, lld
-, ninja
-, nix-update-script
-, perl
-, python3
-, stdenv
+{
+  cacert,
+  cmake,
+  fetchFromGitHub,
+  git,
+  lib,
+  lld,
+  ninja,
+  nix-update-script,
+  perl,
+  python3,
+  stdenv,
 }:
 
 let
@@ -137,5 +138,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.bsl11;
     platforms = lib.platforms.all;
+    broken = true; # `codon-llvm` build fails on darwin and linux
   };
 }

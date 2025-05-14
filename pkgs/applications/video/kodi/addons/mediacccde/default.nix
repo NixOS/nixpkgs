@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, routing }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+  routing,
+}:
 
 buildKodiAddon rec {
   pname = "media.ccc.de";
@@ -25,6 +33,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/voc/plugin.video.media-ccc-de/";
     description = "media.ccc.de for Kodi";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

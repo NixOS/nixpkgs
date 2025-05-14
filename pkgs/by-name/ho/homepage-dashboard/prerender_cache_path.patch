@@ -1,0 +1,104 @@
+diff --git c/patches/next.patch i/patches/next.patch
+new file mode 100644
+index 00000000..f4e808ed
+--- /dev/null
++++ i/patches/next.patch
+@@ -0,0 +1,13 @@
++diff --git a/dist/server/lib/incremental-cache/file-system-cache.js b/dist/server/lib/incremental-cache/file-system-cache.js
++index cbf9f0ce142ecf2202ec957ccb5dffc7d176bed7..6a19329d33e471e9d49b4a80ccb712ab5b6f39a6 100644
++--- a/dist/server/lib/incremental-cache/file-system-cache.js
+++++ b/dist/server/lib/incremental-cache/file-system-cache.js
++@@ -24,7 +24,7 @@ class FileSystemCache {
++     constructor(ctx){
++         this.fs = ctx.fs;
++         this.flushToDisk = ctx.flushToDisk;
++-        this.serverDistDir = ctx.serverDistDir;
+++        this.serverDistDir = require("path").join((process.env.NIXPKGS_HOMEPAGE_CACHE_DIR || "/var/cache/homepage-dashboard"), "homepage");
++         this.revalidatedTags = ctx.revalidatedTags;
++         this.debug = !!process.env.NEXT_PRIVATE_DEBUG_CACHE;
++         if (ctx.maxMemoryCacheSize) {
+diff --git c/pnpm-lock.yaml i/pnpm-lock.yaml
+index 170e380e..a6b1df1b 100644
+--- c/pnpm-lock.yaml
++++ i/pnpm-lock.yaml
+@@ -4,6 +4,11 @@ settings:
+   autoInstallPeers: true
+   excludeLinksFromLockfile: false
+ 
++patchedDependencies:
++  next:
++    hash: 183a00d10b2d534fdac49f2a3fe0e99fac7e401361e53e91c29d6f548caea03f
++    path: patches/next.patch
++
+ importers:
+ 
+   .:
+@@ -52,10 +57,10 @@ importers:
+         version: 1.2.2
+       next:
+         specifier: ^15.2.4
+-        version: 15.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++        version: 15.2.4(patch_hash=183a00d10b2d534fdac49f2a3fe0e99fac7e401361e53e91c29d6f548caea03f)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+       next-i18next:
+         specifier: ^12.1.0
+-        version: 12.1.0(next@15.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++        version: 12.1.0(next@15.2.4(patch_hash=183a00d10b2d534fdac49f2a3fe0e99fac7e401361e53e91c29d6f548caea03f)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+       ping:
+         specifier: ^0.4.4
+         version: 0.4.4
+@@ -101,10 +106,6 @@ importers:
+       xml-js:
+         specifier: ^1.6.11
+         version: 1.6.11
+-    optionalDependencies:
+-      osx-temperature-sensor:
+-        specifier: ^1.0.8
+-        version: 1.0.8
+     devDependencies:
+       '@tailwindcss/forms':
+         specifier: ^0.5.10
+@@ -154,6 +155,10 @@ importers:
+       typescript:
+         specifier: ^5.7.3
+         version: 5.7.3
++    optionalDependencies:
++      osx-temperature-sensor:
++        specifier: ^1.0.8
++        version: 1.0.8
+ 
+ packages:
+ 
+@@ -4905,7 +4910,7 @@ snapshots:
+ 
+   natural-compare@1.4.0: {}
+ 
+-  next-i18next@12.1.0(next@15.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
++  next-i18next@12.1.0(next@15.2.4(patch_hash=183a00d10b2d534fdac49f2a3fe0e99fac7e401361e53e91c29d6f548caea03f)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+     dependencies:
+       '@babel/runtime': 7.26.9
+       '@types/hoist-non-react-statics': 3.3.6
+@@ -4913,14 +4918,14 @@ snapshots:
+       hoist-non-react-statics: 3.3.2
+       i18next: 21.10.0
+       i18next-fs-backend: 1.2.0
+-      next: 15.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++      next: 15.2.4(patch_hash=183a00d10b2d534fdac49f2a3fe0e99fac7e401361e53e91c29d6f548caea03f)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+       react: 18.3.1
+       react-i18next: 11.18.6(i18next@21.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+     transitivePeerDependencies:
+       - react-dom
+       - react-native
+ 
+-  next@15.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
++  next@15.2.4(patch_hash=183a00d10b2d534fdac49f2a3fe0e99fac7e401361e53e91c29d6f548caea03f)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+     dependencies:
+       '@next/env': 15.2.4
+       '@swc/counter': 0.1.3
+diff --git c/pnpm-workspace.yaml i/pnpm-workspace.yaml
+new file mode 100644
+index 00000000..fc500af5
+--- /dev/null
++++ i/pnpm-workspace.yaml
+@@ -0,0 +1,2 @@
++patchedDependencies:
++  next: patches/next.patch

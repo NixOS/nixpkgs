@@ -1,4 +1,8 @@
-{ skawarePackages, stdenv, skalibs }:
+{
+  skawarePackages,
+  stdenv,
+  skalibs,
+}:
 
 skawarePackages.buildPackage {
   pname = "tipidee";
@@ -7,7 +11,13 @@ skawarePackages.buildPackage {
 
   description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
 
-  outputs = [ "bin" "lib" "out" "dev" "doc" ];
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   configureFlags = [
     "--libdir=\${lib}/lib"

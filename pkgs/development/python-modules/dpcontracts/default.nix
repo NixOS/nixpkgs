@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dpcontracts";
   version = "unstable-2018-11-20";
   format = "setuptools";

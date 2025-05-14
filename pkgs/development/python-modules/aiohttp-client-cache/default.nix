@@ -14,22 +14,19 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   redis,
   url-normalize,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-client-cache";
-  version = "0.11.1";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "aiohttp_client_cache";
     inherit version;
-    hash = "sha256-MuY60hAkD4Ik8+Encv5TrBAs8kx88Y3bhqy7n9+eS28=";
+    hash = "sha256-3FzWI0CtvuGOD+3HsMN1Qmkt8I+O2ZRddRtykqBDOFM=";
   };
 
   build-system = [ poetry-core ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_IO_Python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OwTHMyc2ePSdYVuY1h3PY+uDBl6/7fTMXiZC3sZm8fU=";
   };
 

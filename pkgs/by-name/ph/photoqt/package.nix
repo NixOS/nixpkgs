@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "4.6";
+  version = "4.9";
 
   src = fetchurl {
     url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-5VbGMJ1B9yDbTiri7SZ+r+c9LdfG/C1c0/01QBUvbCY=";
+    hash = "sha256-Kd8h6JFJ02JH+IKMltvKT/mgnhz9jOJAFXMnNmI1BYA=";
   };
 
   nativeBuildInputs = [

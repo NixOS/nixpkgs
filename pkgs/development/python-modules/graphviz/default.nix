@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   graphviz-nox,
   xdg-utils,
   makeFontsConf,
@@ -27,13 +27,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IqjqcBEL4BK/VfRjdxJ9t/DkG8OMAoXJxbW5JXpALuw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       graphviz = graphviz-nox;
       xdgutils = xdg-utils;
     })

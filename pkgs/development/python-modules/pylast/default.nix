@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "5.3.0";
+  version = "5.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dgqTNISeyBkZ2m68pqw5rsoyPxLW4wWkv6iqq9bD5Ek=";
+    tag = version;
+    hash = "sha256-mPdFG3wqdAyluD37cy2q6oO/x9NgXpOb57s4nU05EzQ=";
   };
 
   build-system = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to last.fm (and compatibles)";
     homepage = "https://github.com/pylast/pylast";
-    changelog = "https://github.com/pylast/pylast/releases/tag/${version}";
+    changelog = "https://github.com/pylast/pylast/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       fab

@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, which
-, xmlada # for src
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  which,
+  xmlada, # for src
 }:
 
 let
-  version = "24.0.0";
+  version = "25.0.0";
 
   gprConfigKbSrc = fetchFromGitHub {
     name = "gprconfig-kb-${version}-src";
     owner = "AdaCore";
     repo = "gprconfig_kb";
     rev = "v${version}";
-    sha256 = "1vnjv2q63l8nq2w4wya75m40isvs78j5ss9b5ga3zx3cpdx3xh09";
+    sha256 = "09x1njq0i0z7fbwg0mg39r5ghy7369avbqvdycfj67lpmw17gb1r";
   };
 in
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     owner = "AdaCore";
     repo = "gprbuild";
     rev = "v${version}";
-    sha256 = "096a43453z2xknn6x4hyk2ldp2wh0qhfdfmzsrks50zqcvmkq4v7";
+    sha256 = "1mqsmc0q5bzg8223ls18kbvaz6mhzjz7ik8d3sqhhn24c0j6wjaw";
   };
 
   nativeBuildInputs = [
@@ -53,14 +54,16 @@ stdenv.mkDerivation {
   # introducing a wrapper for it in the future remains TODO.
   # For the moment this doesn't matter since we have no situation
   # were gprbuild is used to build something used at build time.
-  setupHooks = [
-    ./gpr-project-path-hook.sh
-  ] ++ lib.optionals stdenv.targetPlatform.isDarwin [
-    # This setupHook replaces the paths of shared libraries starting
-    # with @rpath with the absolute paths on Darwin, so that the
-    # binaries can be run without additional setup.
-    ./gpr-project-darwin-rpath-hook.sh
-  ];
+  setupHooks =
+    [
+      ./gpr-project-path-hook.sh
+    ]
+    ++ lib.optionals stdenv.targetPlatform.isDarwin [
+      # This setupHook replaces the paths of shared libraries starting
+      # with @rpath with the absolute paths on Darwin, so that the
+      # binaries can be run without additional setup.
+      ./gpr-project-darwin-rpath-hook.sh
+    ];
 
   installPhase = ''
     runHook preInstall

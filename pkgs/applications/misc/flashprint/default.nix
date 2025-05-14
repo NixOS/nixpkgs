@@ -1,17 +1,33 @@
-{ lib, stdenv, libGLU, qtbase, fetchurl, dpkg, autoPatchelfHook, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  libGLU,
+  qtbase,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprint";
-  version = "5.8.6";
+  version = "5.8.7";
 
   src = fetchurl {
     url = "http://www.ishare3d.com/3dapp/public/FlashPrint-5/FlashPrint/flashprint5_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-oi/nEdOjhbYf9IZmppfKiEmlNGXdc907LS2x8jUck+M=";
+    hash = "sha256-DVY5XxAz3HPAWMNaGauUop7OWHeFuuRHuVllyJvHqFk=";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook wrapQtAppsHook ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase libGLU ];
+  buildInputs = [
+    qtbase
+    libGLU
+  ];
 
   qtWrapperArgs = [ "--prefix QT_QPA_PLATFORM : xcb" ];
 

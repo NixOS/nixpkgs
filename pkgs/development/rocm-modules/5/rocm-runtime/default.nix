@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, pkg-config
-, cmake
-, xxd
-, rocm-device-libs
-, rocm-thunk
-, elfutils
-, libdrm
-, numactl
-, valgrind
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  pkg-config,
+  cmake,
+  xxd,
+  rocm-device-libs,
+  rocm-thunk,
+  elfutils,
+  libdrm,
+  numactl,
+  valgrind,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,8 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/ROCm/ROCR-Runtime";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

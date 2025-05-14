@@ -1,4 +1,11 @@
-{ lib, buildNpmPackage, fetchFromGitHub, runCommand, hred, jq }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  runCommand,
+  hred,
+  jq,
+}:
 
 buildNpmPackage rec {
   pname = "hred";
@@ -16,7 +23,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       set -e -o pipefail
       echo '<i id="foo">bar</i>' | ${hred}/bin/hred 'i#foo { @id => id, @.textContent => text }' -c | ${jq}/bin/jq -c > $out
       [ "$(cat $out)" = '{"id":"foo","text":"bar"}' ]

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-logger-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i6S5S2ZUwC5gQPdVjefUXrKj43iLIqxd8tdXbMBJNnA=";
   };
 

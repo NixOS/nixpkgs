@@ -1,23 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
 }:
 
 let
   os = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
   arch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64";
-  hashes =
-    {
-      "x86_64-linux" = "1v596zi4zmx88r4axrp7pmci3w9c6f1kz4izrbj65c7ch6wwa7f2";
-      "aarch64-linux" = "0xf6lqm9xgph8q95h6smq6dzn5549nfsnayny5nyvm56nbmv5iw9";
-      "x86_64-darwin" = "0kijrjfbr7hn469x67yya6ndfwj901m54gd96sq3yiay0jvmapga";
-      "aarch64-darwin" = "1iigsd4ac0cbb1q2g02zxjxpcma6yyd7ms72ri8g2vq8i90zys9n";
-    };
+  hashes = {
+    "x86_64-linux" = "15a69bfa98155651749e31c68d05a04fcf48bdccb86bce77b7c8872f545cecfa";
+    "aarch64-linux" = "68a16bbbd2ed0ee19c36112a4c2d0abca66cf17465747e55adf2596b0921f8d7";
+    "x86_64-darwin" = "af2c63a60a689091a01bfd212e0ce141a6d7ba61d34a585d8f83159d0ed39c6f";
+    "aarch64-darwin" = "06f9f7fdcbb392a0a8a5034baf915d2b95b2876255aa8df8397ddafd1e540b7a";
+  };
 in
 
 stdenv.mkDerivation rec {
   pname = "lamdera";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://static.lamdera.com/bin/lamdera-${version}-${os}-${arch}";
@@ -34,7 +34,12 @@ stdenv.mkDerivation rec {
     homepage = "https://lamdera.com";
     license = licenses.unfree;
     description = "Delightful platform for full-stack web apps";
-    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
     maintainers = with maintainers; [ Zimmi48 ];
   };
 }

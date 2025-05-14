@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dfunckt";
     repo = "django-rules";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8Kay2b2uwaI/ml/cPpcj9svoDQI0ptV8tyGeZ76SgZw=";
   };
 

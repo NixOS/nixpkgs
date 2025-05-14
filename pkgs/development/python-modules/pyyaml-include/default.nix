@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tanbro";
     repo = "pyyaml-include";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xsNMIEBYqMVQp+H8R7XpFCwROXA8I6bFvAuHrRvC+DI=";
   };
 

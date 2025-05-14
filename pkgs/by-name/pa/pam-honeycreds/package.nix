@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pam
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pam,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pam-honeycreds";

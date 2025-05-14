@@ -1,6 +1,11 @@
-{ buildPythonApplication, fetchFromGitHub, dnslib, lib }:
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  dnslib,
+  lib,
+}:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "dnschef";
   version = "0.4";
 

@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, qtbase
-, mpv
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  qtbase,
+  mpv,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mpc-qt";
-  version = "24.06";
+  version = "24.12.1-flatpak";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     rev = "v${version}";
-    hash = "sha256-kEG7B99io3BGjN94nEX1pN10Bcjj21rb46Vcn2OtpN8=";
+    hash = "sha256-gn94kVs3Lbd+ggj4jTacHpmnVO2lH/QDhFk+hJC1N/c=";
   };
 
   nativeBuildInputs = [

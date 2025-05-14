@@ -5,21 +5,24 @@
   pytestCheckHook,
   nodejs,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pscript";
   version = "0.7.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "flexxui";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pscript";
+    tag = "v${version}";
     hash = "sha256-AhVI+7FiWyH+DfAXnau4aAHJAJtsWEpmnU90ey2z35o=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -32,6 +35,11 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "pscript" ];
+
+  disabledTests = [
+    # https://github.com/flexxui/pscript/issues/69
+    "test_async_and_await"
+  ];
 
   meta = with lib; {
     description = "Python to JavaScript compiler";

@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.interception-tools;
-in {
+in
+{
   options.services.interception-tools = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -43,13 +49,19 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.interception-tools = {
       description = "Interception tools";
-      path = [ pkgs.bash pkgs.interception-tools ] ++ cfg.plugins;
+      path = [
+        pkgs.bash
+        pkgs.interception-tools
+      ] ++ cfg.plugins;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.interception-tools}/bin/udevmon -c \
-          ${if builtins.typeOf cfg.udevmonConfig == "path"
-          then cfg.udevmonConfig
-          else pkgs.writeText "udevmon.yaml" cfg.udevmonConfig}
+          ${
+            if builtins.typeOf cfg.udevmonConfig == "path" then
+              cfg.udevmonConfig
+            else
+              pkgs.writeText "udevmon.yaml" cfg.udevmonConfig
+          }
         '';
         Nice = -20;
       };

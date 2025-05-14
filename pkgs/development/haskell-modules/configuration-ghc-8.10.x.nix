@@ -11,9 +11,7 @@ self: super: {
 
   # ghcjs does not use `llvmPackages` and exposes `null` attribute.
   llvmPackages =
-    if self.ghc.llvmPackages != null
-    then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages
-    else null;
+    if self.ghc.llvmPackages != null then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages else null;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -44,14 +42,18 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
@@ -59,16 +61,38 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
+
+  # Only required for ghc >= 9.2
+  nothunks = super.nothunks.override {
+    wherefrom-compat = null;
+  };
+
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
+
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
-  hashable = addBuildDepends [
-    self.data-array-byte
-    self.base-orphans
-  ] (super.hashable.override {
-    os-string = null;
-  });
+  hashable =
+    addBuildDepends
+      [
+        self.data-array-byte
+        self.base-orphans
+      ]
+      (
+        super.hashable.override {
+          os-string = null;
+        }
+      );
   hashable-time = doDistribute (unmarkBroken super.hashable-time);
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
 
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
@@ -77,7 +101,7 @@ self: super: {
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
   # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+  ghc-tags = doDistribute self.ghc-tags_1_5;
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -92,13 +116,14 @@ self: super: {
   shower = doJailbreak super.shower;
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
-  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
-    (overrideCabal (drv: {
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] (
+    overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
-      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
-    }) super.hnix);
+      executableHaskellDepends = drv.executableToolDepends or [ ] ++ [ self.repline ];
+    }) super.hnix
+  );
 
-  haskell-language-server =  throw "haskell-language-server dropped support for ghc 8.10 in version 2.3.0.0 please use a newer ghc version or an older nixpkgs version";
+  haskell-language-server = throw "haskell-language-server dropped support for ghc 8.10 in version 2.3.0.0 please use a newer ghc version or an older nixpkgs version";
 
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
@@ -113,18 +138,28 @@ self: super: {
   # weeder 2.3.* no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
   # Unnecessarily strict upper bound on lens
-  weeder_2_2_0 = doJailbreak (super.weeder_2_2_0.override {
-    # weeder < 2.6 only supports algebraic-graphs < 0.7
-    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
-    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-  });
+  weeder_2_2_0 = doJailbreak (
+    super.weeder_2_2_0.override {
+      # weeder < 2.6 only supports algebraic-graphs < 0.7
+      # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+      algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+    }
+  );
 
   # Uses haddock placement that isn't supported by the versions of haddock
   # bundled with GHC < 9.0.
   wai-extra = dontHaddock super.wai-extra;
 
-  # Overly-strict bounds introducted by a revision in version 0.3.2.
-  text-metrics = doJailbreak super.text-metrics;
+  # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
+  tar = overrideCabal (drv: {
+    jailbreak = true;
+    buildDepends = drv.buildDepends or [ ] ++ [
+      self.bytestring-handle
+    ];
+  }) self.tar_0_6_0_0;
+  # text-metrics >= 0.3.3 requires GHC2021
+  text-metrics = doDistribute (doJailbreak self.text-metrics_0_3_2);
+  bytestring-handle = unmarkBroken (doDistribute super.bytestring-handle);
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
@@ -164,30 +199,32 @@ self: super: {
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 
-  # Requires GHC < 9.4
-  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+  # 0.4.6.0 only supports >= 9.0
+  ghc-source-gen = doDistribute self.ghc-source-gen_0_4_5_0;
 
   # No instance for (Show B.Builder) arising from a use of ‘print’
   http-types = dontCheck super.http-types;
 
   # Packages which need compat library for GHC < 9.6
-  inherit
-    (lib.mapAttrs
-      (_: addBuildDepends [ self.foldable1-classes-compat ])
-      super)
+  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
     these
-  ;
+    ;
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple
   ] super.base-compat-batteries;
 
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
-  OneTuple = addBuildDepends [
-    self.foldable1-classes-compat
-    self.base-orphans
-  ] (super.OneTuple.override {
-    ghc-prim = self.hashable;
-  });
+  OneTuple =
+    addBuildDepends
+      [
+        self.foldable1-classes-compat
+        self.base-orphans
+      ]
+      (
+        super.OneTuple.override {
+          ghc-prim = self.hashable;
+        }
+      );
 }

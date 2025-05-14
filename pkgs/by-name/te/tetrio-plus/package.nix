@@ -2,74 +2,25 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  rustPlatform,
-  rustc,
-  wasm-pack,
-  wasm-bindgen-cli,
-  binaryen,
-
   fetchYarnDeps,
   yarn,
   fixup-yarn-lock,
   nodejs,
   asar,
 
+  tpsecore,
   tetrio-desktop,
 }:
 
 let
-  version = "0.27.4";
-  rev = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
+  version = "0.27.7";
+  tag = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
-    inherit rev;
-    hash = "sha256-HwGFg8dxqtqghdP+PXWXr6Fi5vfgopThs+QNa3N1awk=";
-    fetchSubmodules = true;
-  };
-
-  wasm-bindgen-82 = wasm-bindgen-cli.override {
-    version = "0.2.82";
-    hash = "sha256-BQ8v3rCLUvyCCdxo5U+NHh30l9Jwvk9Sz8YQv6fa0SU=";
-    cargoHash = "sha256-mP85+qi2KA0GieaBzbrQOBqYxBZNRJipvd2brCRGyOM=";
-  };
-
-  tpsecore = rustPlatform.buildRustPackage {
-    pname = "tpsecore";
-    inherit version src;
-
-    sourceRoot = "${src.name}/tpsecore";
-
-    cargoHash = "sha256-zqeoPeGZvSz7W3c7MXnvvq73hvavg1RGzPc3iTqAjBo=";
-
-    nativeBuildInputs = [
-      wasm-pack
-      wasm-bindgen-82
-      binaryen
-      rustc.llvmPackages.lld
-    ];
-
-    buildPhase = ''
-      HOME=$(mktemp -d) wasm-pack build --target web --release
-    '';
-
-    installPhase = ''
-      cp -r pkg/ $out
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "Self contained toolkit for creating, editing, and previewing TPSE files";
-      homepage = "https://gitlab.com/UniQMG/tpsecore";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
-        huantian
-        wackbyte
-      ];
-      platforms = lib.platforms.linux;
-    };
+    inherit tag;
+    hash = "sha256-AEn1TrC0hUVRgfL2QZ5TMN8pTOm36zpHr2b/LqQp5RY=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -93,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # tetrio-plus expects the vanilla asar to be extracted into 'out' and
-    # 'out' is the directory contianing the final patched asar's contents
+    # 'out' is the directory containing the final patched asar's contents
     asar extract ${tetrio-desktop.src}/opt/TETR.IO/resources/app.asar out
 
     # Install custom package.json/yarn.lock that describe the additional node
@@ -119,16 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Actually install tetrio-plus where the above patch script expects
     cp -r $src out/tetrioplus
     chmod -R u+w out/tetrioplus
-
     # Install tpsecore
     cp ${tpsecore}/{tpsecore_bg.wasm,tpsecore.js} out/tetrioplus/source/lib/
-    # Remove uneeded tpsecore source code
-    rm -rf out/tetrioplus/tpsecore/
 
     # Disable useless uninstall button in the tetrio-plus popup
     substituteInPlace out/tetrioplus/desktop-manifest.js \
       --replace-fail '"show_uninstaller_button": true' '"show_uninstaller_button": false'
-
     # Display 'nixpkgs' next to version in tetrio-plus popup
     echo "nixpkgs" > out/tetrioplus/resources/override-commit
 
@@ -136,11 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    runHook preinstall
+    runHook preInstall
 
     asar pack out $out
 
-    runHook postinstall
+    runHook postInstall
   '';
 
   meta = {
@@ -150,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/UniQMG/tetrio-plus";
     downloadPage = "https://gitlab.com/UniQMG/tetrio-plus/-/releases";
-    changelog = "https://gitlab.com/UniQMG/tetrio-plus/-/releases/${rev}";
+    changelog = "https://gitlab.com/UniQMG/tetrio-plus/-/releases/${tag}";
     license = [
       lib.licenses.mit
       # while tetrio-plus is itself mit, the result of this derivation

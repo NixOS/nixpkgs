@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "3.0.0";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_kms";
     inherit version;
-    hash = "sha256-suyMBB/cl8hkW/w7S2TNFJ32JFl8dbSuS8qmIU7oSus=";
+    hash = "sha256-9BqX3B7SlAgM2LZaOFvHPeMlPG+PtnPcneWWlZhZbqU=";
   };
 
   nativeBuildInputs = [ setuptools ];

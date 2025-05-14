@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "jupyter_server_terminals";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-af7jBscGkbekXgfDxwAfrJSY1uEuIGfzzSsjaPdlYcY=";
     };
 

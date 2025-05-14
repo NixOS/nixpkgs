@@ -3,7 +3,7 @@
   commitizen,
   fetchFromGitHub,
   buildPythonPackage,
-  git,
+  gitMinimal,
   pythonOlder,
   stdenv,
   installShellFiles,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "commitizen";
-  version = "3.29.1";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,13 +39,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qB0XP5y9NjD0AV9gVleq+MbL5l/7M5JBb57pgssbyo4=";
+    tag = "v${version}";
+    hash = "sha256-fCQtSzOUezd3UE8bktn2cw4qwnl2pM6L7bBgKKFq5AM=";
   };
 
   pythonRelaxDeps = [
     "argcomplete"
     "decli"
+    "termcolor"
   ];
 
   build-system = [ poetry-core ];
@@ -69,15 +70,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     argcomplete
     deprecated
-    git
+    gitMinimal
     py
     pytest-freezer
     pytest-mock
     pytest-regressions
     pytest7CheckHook
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "commitizen" ];
 

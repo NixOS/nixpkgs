@@ -1,43 +1,40 @@
-import ../make-test-python.nix ({ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "prometheus-pushgateway";
 
   nodes = {
-    prometheus = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
+    prometheus =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-      networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+        networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
-      services.prometheus = {
-        enable = true;
-        globalConfig.scrape_interval = "2s";
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "2s";
 
-        scrapeConfigs = [
-          {
-            job_name = "pushgateway";
-            static_configs = [
-              {
-                targets = [
-                  "pushgateway:9091"
-                ];
-              }
-            ];
-          }
-        ];
+          scrapeConfigs = [
+            {
+              job_name = "pushgateway";
+              static_configs = [ { targets = [ "pushgateway:9091" ]; } ];
+            }
+          ];
+        };
       };
-    };
 
-    pushgateway = { config, pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ 9091 ];
+    pushgateway =
+      { config, pkgs, ... }:
+      {
+        networking.firewall.allowedTCPPorts = [ 9091 ];
 
-      services.prometheus.pushgateway = {
-        enable = true;
+        services.prometheus.pushgateway = {
+          enable = true;
+        };
       };
-    };
 
-    client = { config, pkgs, ... }: {
-    };
+    client = { config, pkgs, ... }: { };
   };
 
   testScript = ''
@@ -58,8 +55,6 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
       "curl -sf 'http://127.0.0.1:9090/api/v1/query?query=sum(pushgateway_build_info)%20by%20(version)' | "
       + "jq '.data.result[0].metric.version' | grep '\"${pkgs.prometheus-pushgateway.version}\"'"
     )
-
-    client.wait_for_unit("network-online.target")
 
     # Add a metric and check in Prometheus
     client.wait_until_succeeds(
@@ -93,4 +88,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
 
     pushgateway.log(pushgateway.succeed("systemd-analyze security pushgateway.service | grep -v '✓'"))
   '';
-})
+}

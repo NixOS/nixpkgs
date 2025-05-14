@@ -1,4 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, standard-library }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 
 mkDerivation rec {
   version = "0.2.0";
@@ -33,6 +38,9 @@ mkDerivation rec {
     description = "New Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice turion ];
+    maintainers = with maintainers; [
+      alexarice
+      turion
+    ];
   };
 }

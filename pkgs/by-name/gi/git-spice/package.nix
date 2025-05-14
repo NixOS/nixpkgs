@@ -1,26 +1,29 @@
 {
   lib,
   stdenv,
-  buildGo123Module,
+  buildGo124Module,
   fetchFromGitHub,
   git,
   nix-update-script,
+  installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGo124Module rec {
   pname = "git-spice";
-  version = "0.7.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ap0ZGRDdHQMVYSk9J8vsZNpvaAwpHFmPT5REiCxYepQ=";
+    tag = "v${version}";
+    hash = "sha256-hqdU0j7H3hhhjGV4lmluG1D6NXNqI80d9gGr5KJ9D+Q=";
   };
 
-  vendorHash = "sha256-YJ8OxmonnxNu4W17tD1Z7K625LCINlh6ZgoxOpmtNC0=";
+  vendorHash = "sha256-Wi/NNqHnHrfikO0EWDXNdTjPmgHrGSs2k612c0w8OA8=";
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
@@ -38,6 +41,13 @@ buildGo123Module rec {
     # timeout
     rm testdata/script/branch_submit_remote_prompt.txt
     rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gs \
+      --bash <($out/bin/gs shell completion bash) \
+      --zsh <($out/bin/gs shell completion zsh) \
+      --fish <($out/bin/gs shell completion fish)
   '';
 
   passthru.updateScript = nix-update-script { };

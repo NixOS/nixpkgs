@@ -1,0 +1,100 @@
+From 20419f739f632fb30666650544f0055e8d4f1afa Mon Sep 17 00:00:00 2001
+From: Maxim Samsonov <m.samsonov@computer.org>
+Date: Wed, 19 Jun 2024 16:52:08 +0300
+Subject: [PATCH] Removed lookup against basic_string<uint8_t>
+
+---
+ comm/third_party/rnp/src/lib/types.h                |  5 +----
+ comm/third_party/rnp/src/lib/utils.cpp              | 17 +----------------
+ comm/third_party/rnp/src/librekey/key_store_g10.cpp |  8 ++++----
+ 3 files changed, 7 insertions(+), 25 deletions(-)
+
+diff --git a/comm/third_party/rnp/src/lib/types.h b/comm/third_party/rnp/src/lib/types.h
+index f0c25d3d..a7eac3a1 100644
+--- a/comm/third_party/rnp/src/lib/types.h
++++ b/comm/third_party/rnp/src/lib/types.h
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2017-2021, [Ribose Inc](https://www.ribose.com).
++ * Copyright (c) 2017-2024, [Ribose Inc](https://www.ribose.com).
+  * Copyright (c) 2009 The NetBSD Foundation, Inc.
+  * All rights reserved.
+  *
+@@ -71,9 +71,6 @@ class id_str_pair {
+     static int         lookup(const id_str_pair           pair[],
+                               const std::vector<uint8_t> &bytes,
+                               int                         notfound = 0);
+-    static int         lookup(const id_str_pair                 pair[],
+-                              const std::basic_string<uint8_t> &bytes,
+-                              int                               notfound = 0);
+ };
+ 
+ /** pgp_fingerprint_t */
+diff --git a/comm/third_party/rnp/src/lib/utils.cpp b/comm/third_party/rnp/src/lib/utils.cpp
+index 3c6216c6..fd526379 100644
+--- a/comm/third_party/rnp/src/lib/utils.cpp
++++ b/comm/third_party/rnp/src/lib/utils.cpp
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2021, [Ribose Inc](https://www.ribose.com).
++ * Copyright (c) 2021, 2024 [Ribose Inc](https://www.ribose.com).
+  * All rights reserved.
+  *
+  * Redistribution and use in source and binary forms, with or without
+@@ -63,18 +63,3 @@ id_str_pair::lookup(const id_str_pair pair[], const std::vector<uint8_t> &bytes,
+     }
+     return notfound;
+ }
+-
+-int
+-id_str_pair::lookup(const id_str_pair                 pair[],
+-                    const std::basic_string<uint8_t> &bytes,
+-                    int                               notfound)
+-{
+-    while (pair && pair->str) {
+-        if ((strlen(pair->str) == bytes.size()) &&
+-            !memcmp(pair->str, bytes.data(), bytes.size())) {
+-            return pair->id;
+-        }
+-        pair++;
+-    }
+-    return notfound;
+-}
+diff --git a/comm/third_party/rnp/src/librekey/key_store_g10.cpp b/comm/third_party/rnp/src/librekey/key_store_g10.cpp
+index e646f02f..21136866 100644
+--- a/comm/third_party/rnp/src/librekey/key_store_g10.cpp
++++ b/comm/third_party/rnp/src/librekey/key_store_g10.cpp
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2017-2022, [Ribose Inc](https://www.ribose.com).
++ * Copyright (c) 2017-2024, [Ribose Inc](https://www.ribose.com).
+  * All rights reserved.
+  *
+  * Redistribution and use in source and binary forms, with or without
+@@ -311,12 +311,12 @@ read_curve(const sexp_list_t *list, const std::string &name, pgp_ec_key_t &key)
+ 
+     const auto &bytes = data->get_string();
+     pgp_curve_t curve = static_cast<pgp_curve_t>(
+-      id_str_pair::lookup(g10_curve_aliases, data->get_string(), PGP_CURVE_UNKNOWN));
++      id_str_pair::lookup(g10_curve_aliases, (const char *) bytes.data(), PGP_CURVE_UNKNOWN));
+     if (curve != PGP_CURVE_UNKNOWN) {
+         key.curve = curve;
+         return true;
+     }
+-    RNP_LOG("Unknown curve: %.*s", (int) bytes.size(), (char *) bytes.data());
++    RNP_LOG("Unknown curve: %.*s", (int) bytes.size(), (const char *) bytes.data());
+     return false;
+ }
+ 
+@@ -807,7 +807,7 @@ g23_parse_seckey(pgp_key_pkt_t &seckey,
+ 
+     auto &           alg_bt = alg_s_exp->sexp_string_at(0)->get_string();
+     pgp_pubkey_alg_t alg = static_cast<pgp_pubkey_alg_t>(
+-      id_str_pair::lookup(g10_alg_aliases, alg_bt.c_str(), PGP_PKA_NOTHING));
++      id_str_pair::lookup(g10_alg_aliases, (const char *) alg_bt.data(), PGP_PKA_NOTHING));
+     if (alg == PGP_PKA_NOTHING) {
+         RNP_LOG(
+           "Unsupported algorithm: '%.*s'", (int) alg_bt.size(), (const char *) alg_bt.data());
+-- 
+2.47.0
+

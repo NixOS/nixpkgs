@@ -2,24 +2,40 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.229.0";
+  version = "0.250.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-ap2IypBPFV4yJVXRS8zSXC0kW/QKpOvFS9Cod0pSlG0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AqXwlt7Aqi0cRoDiUfE1LFOJqtRmySuA6D4RMYOonU4=";
   };
 
-  vendorHash = "sha256-yCwevuivIHZ0dns9QljiKvwws4cFknIydvfjs4Jib3s=";
+  # Otherwise these tests fail asserting that the version is 0.0.0-dev
+  postPatch = ''
+    substituteInPlace bundle/deploy/terraform/init_test.go \
+      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
+  '';
 
-  excludedPackages = [ "bundle/internal" ];
+  vendorHash = "sha256-tpm7eCjJuRpVnZfMZais1bHVhnQ8DxchaN1/7ljKNOo=";
+
+  excludedPackages = [
+    "bundle/internal"
+    "acceptance"
+    "integration"
+  ];
+
+  ldflags = [
+    "-X github.com/databricks/cli/internal/build.buildVersion=${finalAttrs.version}"
+  ];
 
   postBuild = ''
     mv "$GOPATH/bin/cli" "$GOPATH/bin/databricks"
@@ -29,14 +45,19 @@ buildGoModule rec {
     "-skip="
     + (lib.concatStringsSep "|" [
       # Need network
+      "TestConsistentDatabricksSdkVersion"
       "TestTerraformArchiveChecksums"
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      # Use uv venv which doesn't work with nix
+      # https://github.com/astral-sh/uv/issues/4450
+      "TestVenvSuccess"
+      "TestPatchWheel"
     ]);
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     (python3.withPackages (
       ps: with ps; [
         setuptools
@@ -51,12 +72,28 @@ buildGoModule rec {
     git remote add origin https://github.com/databricks/cli.git
   '';
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/databricks";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Databricks CLI";
     mainProgram = "databricks";
     homepage = "https://github.com/databricks/cli";
-    changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
-    license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    changelog = "https://github.com/databricks/cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.databricks;
+    maintainers = with lib.maintainers; [
+      kfollesdal
+      taranarmo
+    ];
   };
-}
+})

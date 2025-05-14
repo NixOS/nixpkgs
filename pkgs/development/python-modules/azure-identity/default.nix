@@ -7,25 +7,31 @@
   cryptography,
   msal,
   msal-extensions,
+  typing-extensions,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.17.0";
-  format = "setuptools";
+  version = "1.21.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oRaPIjstf6OWg2K3iv/RV6Hzdy8xCozc6IPMUVxsiZg=";
+    pname = "azure_identity";
+    inherit version;
+    hash = "sha256-6iLObmsPQpvBuNkhLVufmHe9TILxckv6kQdgYSwHqaY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-core
     cryptography
     msal
     msal-extensions
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "azure.identity" ];
@@ -36,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure Identity Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/identity/azure-identity";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-identity_${version}/sdk/identity/azure-identity/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];

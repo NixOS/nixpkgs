@@ -2,44 +2,40 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreServices,
   eventlet,
   fetchPypi,
   flaky,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "4.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "6.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7rqs9nT6JVEeiGcCjSgeYC7mUABFtX9DsId4CC9/i0Q=";
+    hash = "sha256-nd98gv2jro4k3s2hM47eZuHJmIPbk3Edj7lB6qLYwoI=";
   };
 
-  # force kqueue on x86_64-darwin, because our api version does
-  # not support fsevents
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
-    ./force-kqueue.patch
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  build-system = [ setuptools ];
 
   optional-dependencies.watchmedo = [ pyyaml ];
 
-  nativeCheckInputs = [
-    eventlet
-    flaky
-    pytest-timeout
-    pytestCheckHook
-  ] ++ optional-dependencies.watchmedo;
+  nativeCheckInputs =
+    [
+      flaky
+      pytest-cov-stub
+      pytest-timeout
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.watchmedo
+    ++ lib.optionals (pythonOlder "3.13") [ eventlet ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -51,12 +47,12 @@ buildPythonPackage rec {
     [
       "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
       "--deselect=tests/test_emitter.py::test_close"
+      # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
+      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # fails to stop process in teardown
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
-      # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
-      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # FileCreationEvent != FileDeletionEvent

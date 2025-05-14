@@ -24,8 +24,6 @@ buildPythonPackage rec {
     tomli
   ];
 
-  doCheck = true;
-
   checkPhase = ''
     runHook preCheck
     $out/bin/turnt test/*/*.t

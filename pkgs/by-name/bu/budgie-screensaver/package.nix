@@ -56,7 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXxf86vm
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
+  # Fix GCC 14 build.
+  # https://hydra.nixos.org/build/282164464/nixlog/3
+  env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE -Wno-error=implicit-function-declaration";
 
   passthru = {
     tests.version = testers.testVersion {
@@ -72,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-screensaver";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-screensaver/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     mainProgram = "budgie-screensaver";
     platforms = lib.platforms.linux;
   };

@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, isPy3k, buildbot }:
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  buildbot,
+}:
 
 buildPythonPackage {
   pname = "buildbot_pkg";
@@ -21,7 +26,7 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2;
   };
 }

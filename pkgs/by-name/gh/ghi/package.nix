@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bundlerEnv
-, tree
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bundlerEnv,
+  tree,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ghi";
     homepage = "https://github.com/drazisil/ghi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })

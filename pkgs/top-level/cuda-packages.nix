@@ -11,22 +11,22 @@
 #
 # To summarize:
 #
-# - `prev` should only be used to access attributes which are going to be overriden.
+# - `prev` should only be used to access attributes which are going to be overridden.
 # - `final` should only be used to access `callPackage` to build new packages.
-# - Attribute names should be computable without relying on `final`.
-#   - Extensions should take arguments to build attribute names before relying on `final`.
+# - Attribute names are evaluated eagerly ("NAMESET STRICTNESS").
+#   - Extensions must not depend on `final` when computing names and count of new attributes.
 #
 # Silvan's recommendation then is to explicitly use `callPackage` to provide everything our
 # extensions need to compute the attribute names, without relying on `final`.
 #
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
-  callPackage,
-  cudaVersion,
+  config,
+  cudaMajorMinorVersion,
   lib,
   newScope,
   pkgs,
-  config,
+  stdenv,
 }:
 let
   inherit (lib)
@@ -35,20 +35,42 @@ let
     fixedPoints
     lists
     strings
-    trivial
     versions
     ;
-  # Backbone
-  gpus = builtins.import ../development/cuda-modules/gpus.nix;
-  nvccCompatibilities = builtins.import ../development/cuda-modules/nvcc-compatibilities.nix;
-  flags = callPackage ../development/cuda-modules/flags.nix { inherit cudaVersion gpus; };
-  passthruFunction = final: ({
-    inherit cudaVersion lib pkgs;
-    inherit gpus nvccCompatibilities flags;
-    cudaMajorVersion = versions.major cudaVersion;
-    cudaMajorMinorVersion = versions.majorMinor cudaVersion;
-    cudaOlder = strings.versionOlder cudaVersion;
-    cudaAtLeast = strings.versionAtLeast cudaVersion;
+  # MUST be defined outside fix-point (cf. "NAMESET STRICTNESS" above)
+  fixups = import ../development/cuda-modules/fixups { inherit lib; };
+  gpus = import ../development/cuda-modules/gpus.nix;
+  nvccCompatibilities = import ../development/cuda-modules/nvcc-compatibilities.nix;
+  flags = import ../development/cuda-modules/flags.nix {
+    inherit
+      config
+      cudaMajorMinorVersion
+      gpus
+      lib
+      stdenv
+      ;
+  };
+
+  mkVersionedPackageName =
+    name: version: name + "_" + strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version);
+
+  passthruFunction = final: {
+    inherit
+      cudaMajorMinorVersion
+      fixups
+      flags
+      gpus
+      lib
+      nvccCompatibilities
+      pkgs
+      ;
+    cudaMajorVersion = versions.major cudaMajorMinorVersion;
+    cudaOlder = strings.versionOlder cudaMajorMinorVersion;
+    cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
+
+    # NOTE: mkVersionedPackageName is an internal, implementation detail and should not be relied on by outside consumers.
+    # It may be removed in the future.
+    inherit mkVersionedPackageName;
 
     # Maintain a reference to the final cudaPackages.
     # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
@@ -60,28 +82,14 @@ let
       __attrsFailEvaluation = true;
     };
 
-    # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
-    cudaFlags = flags;
-
-    # Exposed as cudaPackages.backendStdenv.
-    # This is what nvcc uses as a backend,
-    # and it has to be an officially supported one (e.g. gcc11 for cuda11).
-    #
-    # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
-    # when linked with other C++ libraries.
-    # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
-    # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
-    backendStdenv = final.callPackage ../development/cuda-modules/backend-stdenv.nix { };
-
     # Loose packages
+    # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
+    # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically
+    # discovered and added to the package set.
 
     # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
     cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
-
-    saxpy = final.callPackage ../development/cuda-modules/saxpy { };
-    nccl = final.callPackage ../development/cuda-modules/nccl { };
-    nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
     tests =
       let
@@ -121,41 +129,66 @@ let
           };
       in
       attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
-
-    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
-  });
-
-  mkVersionedPackageName =
-    name: version:
-    strings.concatStringsSep "_" [
-      name
-      (strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version))
-    ];
+  };
 
   composedExtension = fixedPoints.composeManyExtensions (
     [
-      (import ../development/cuda-modules/setup-hooks/extension.nix)
-      (callPackage ../development/cuda-modules/cuda/extension.nix { inherit cudaVersion; })
-      (import ../development/cuda-modules/cuda/overrides.nix)
-      (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
-        inherit cudaVersion flags mkVersionedPackageName;
+      (
+        final: _:
+        lib.packagesFromDirectoryRecursive {
+          inherit (final) callPackage;
+          directory = ../development/cuda-modules/packages;
+        }
+      )
+      (import ../development/cuda-modules/cuda/extension.nix { inherit cudaMajorMinorVersion lib; })
+      (import ../development/cuda-modules/generic-builders/multiplex.nix {
+        inherit
+          cudaMajorMinorVersion
+          flags
+          lib
+          mkVersionedPackageName
+          stdenv
+          ;
         pname = "cudnn";
+        redistName = "cudnn";
         releasesModule = ../development/cuda-modules/cudnn/releases.nix;
         shimsFn = ../development/cuda-modules/cudnn/shims.nix;
-        fixupFn = ../development/cuda-modules/cudnn/fixup.nix;
       })
-      (callPackage ../development/cuda-modules/cutensor/extension.nix {
-        inherit cudaVersion flags mkVersionedPackageName;
+      (import ../development/cuda-modules/cutensor/extension.nix {
+        inherit
+          cudaMajorMinorVersion
+          flags
+          lib
+          mkVersionedPackageName
+          stdenv
+          ;
       })
-      (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
-        inherit cudaVersion flags mkVersionedPackageName;
+      (import ../development/cuda-modules/cusparselt/extension.nix {
+        inherit
+          cudaMajorMinorVersion
+          flags
+          lib
+          mkVersionedPackageName
+          stdenv
+          ;
+      })
+      (import ../development/cuda-modules/generic-builders/multiplex.nix {
+        inherit
+          cudaMajorMinorVersion
+          flags
+          lib
+          mkVersionedPackageName
+          stdenv
+          ;
         pname = "tensorrt";
+        redistName = "tensorrt";
         releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
         shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
-        fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
       })
-      (callPackage ../development/cuda-modules/cuda-samples/extension.nix { inherit cudaVersion; })
-      (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix { })
+      (import ../development/cuda-modules/cuda-samples/extension.nix {
+        inherit cudaMajorMinorVersion lib stdenv;
+      })
+      (import ../development/cuda-modules/cuda-library-samples/extension.nix { inherit lib stdenv; })
     ]
     ++ lib.optionals config.allowAliases [ (import ../development/cuda-modules/aliases.nix) ]
   );

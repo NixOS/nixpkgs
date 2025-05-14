@@ -1,33 +1,40 @@
-{ fetchFromGitHub
-, elfutils
-, pkg-config
-, stdenv
-, zlib
-, lib
+{
+  fetchFromGitHub,
+  elfutils,
+  pkg-config,
+  stdenv,
+  zlib,
+  lib,
 
-# for passthru.tests
-, knot-dns
-, nixosTests
-, systemd
-, tracee
+  # for passthru.tests
+  knot-dns,
+  nixosTests,
+  systemd,
+  tracee,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.4.6";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    hash = "sha256-TGwGEYapanhp2RjnH6Mo+kQFmqFEX0LcAZTCk6SyIk8=";
+    hash = "sha256-+L/rbp0a3p4PHq1yTJmuMcNj0gT5sqAPeaNRo3Sh6U8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ elfutils zlib ];
+  buildInputs = [
+    elfutils
+    zlib
+  ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "-C src"
+  ];
 
   passthru.tests = {
     inherit knot-dns tracee;
@@ -49,8 +56,16 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
     homepage = "https://github.com/libbpf/libbpf";
-    license = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
+    license = with licenses; [
+      lgpl21 # or
+      bsd2
+    ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      vcunat
+      saschagrunert
+      martinetd
+    ];
     platforms = platforms.linux;
   };
 }

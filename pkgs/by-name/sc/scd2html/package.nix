@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
-    repo = pname;
+    repo = "scd2html";
     rev = "v${version}";
     hash = "sha256-oZSHv5n/WOrvy77tC94Z8pYugLpHkcv7U1PrzR+8fHM=";
   };
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "scd2html generates HTML from scdoc source files";
     homepage = "https://git.sr.ht/~bitfehler/scd2html";
     license = licenses.mit;
-    maintainers = with maintainers; [ ianmjones ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "scd2html";
   };

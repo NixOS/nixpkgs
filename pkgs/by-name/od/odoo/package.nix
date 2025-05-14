@@ -1,31 +1,20 @@
-{ lib
-, fetchgit
-, fetchzip
-, python310
-, rtlcss
-, wkhtmltopdf
-, nixosTests
-, odoo_version ? "17.0"
-, odoo_release ? "20240610"
+{
+  lib,
+  fetchzip,
+  python312,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
 }:
 
 let
-  python = python310.override {
+  odoo_version = "18.0";
+  odoo_release = "20250506";
+  python = python312.override {
     self = python;
-    packageOverrides = final: prev: {
-      # requirements.txt fixes docutils at 0.17; the default 0.21.1 tested throws exceptions
-      docutils-0_17 = prev.docutils.overridePythonAttrs (old: rec {
-        version = "0.17";
-        src = fetchgit {
-          url = "git://repo.or.cz/docutils.git";
-          rev = "docutils-${version}";
-          hash = "sha256-O/9q/Dg1DBIxKdNBOhDV16yy5ez0QANJYMjeovDoWX8=";
-        };
-        buildInputs = with prev; [setuptools];
-      });
-    };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
@@ -34,15 +23,18 @@ in python.pkgs.buildPythonApplication rec {
   src = fetchzip {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
-    name = "${pname}-${version}";
-    hash = "sha256-blibGJyaz+MxMazOXhPbGBAJWZoGubirwSnjVYyLBJs="; # odoo
+    name = "odoo-${version}";
+    hash = "sha256-rNG0He+51DnRT5g1SovGZ9uiE1HWXtcmAybcadBMjY4="; # odoo
   };
 
-  # needs some investigation
-  doCheck = false;
-
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -50,7 +42,8 @@ in python.pkgs.buildPythonApplication rec {
     chardet
     cryptography
     decorator
-    docutils-0_17  # sphinx has a docutils requirement >= 18
+    docutils
+    distutils
     ebaysdk
     freezegun
     geoip2
@@ -104,10 +97,13 @@ in python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mkg20001 siriobalmelli ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      mkg20001
+      siriobalmelli
+    ];
   };
 }

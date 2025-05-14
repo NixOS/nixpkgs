@@ -38,7 +38,8 @@ mapAttrs
   )
   {
     "null" = null;
-    "file" = ./nuget-deps.nix;
+    "nix-file" = ./nuget-deps.nix;
+    "json-file" = ./nuget-deps.json;
     "derivation" = emptyDirectory;
     "list" = [ emptyDirectory ];
   }

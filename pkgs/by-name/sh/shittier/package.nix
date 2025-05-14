@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "shittier";
   # No tagged release on GitHub yet
   # Commit corresponds to release tagged as 0.1.1 on [npm](https://www.npmjs.com/package/shittier)

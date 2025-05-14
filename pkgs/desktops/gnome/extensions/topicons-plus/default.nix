@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, glib, gettext }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-topicons-plus";

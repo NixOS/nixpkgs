@@ -5,15 +5,16 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
   freebsd,
+  glibcLocales,
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstraping
+  # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
   ncurses,
   procps,
@@ -57,7 +58,7 @@ stdenv.mkDerivation {
 
   postPatch =
     ''
-      patchShebangs tp/maintain
+      patchShebangs tp/maintain/regenerate_commands_perl_info.pl
     ''
     # This patch is needed for IEEE-standard long doubles on
     # powerpc64; it does not apply cleanly to texinfo 5.x or
@@ -83,7 +84,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs =
     [
-      bash
+      bashNonInteractive
       libintl
     ]
     ++ optionals stdenv.hostPlatform.isSunOS [
@@ -113,8 +114,18 @@ stdenv.mkDerivation {
   ];
 
   nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
+  checkInputs = optionals (lib.versionAtLeast version "7.2") [ glibcLocales ];
 
   doCheck = interactive && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
+
+  # musl does not support locales.
+  preCheck =
+    if interactive && stdenv.hostPlatform.isMusl then
+      ''
+        checkFlagsArray+=(XFAIL_TESTS="different_languages_gen_master_menu.sh test_scripts/formatting_documentlanguage_cmdline.sh test_scripts/layout_formatting_fr_info.sh test_scripts/layout_formatting_fr.sh test_scripts/layout_formatting_fr_icons.sh")
+      ''
+    else
+      null;
 
   checkFlags = optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
@@ -125,7 +136,7 @@ stdenv.mkDerivation {
   postFixup = optionalString crossBuildTools ''
     for f in "$out"/bin/{pod2texi,texi2any}; do
       substituteInPlace "$f" \
-        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+        --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
     done
   '';
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "SimpleFin4py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S+E2zwvrXN0YDY6IxplG0D15zSoeUPMyQt2oyM3QB2Q=";
   };
 

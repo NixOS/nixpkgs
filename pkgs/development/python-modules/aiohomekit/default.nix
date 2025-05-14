@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.4";
+  version = "3.2.14";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9TvpdsWmNXz7UAh0BCgjdRWLKCP2FdE8TIjvyDXydLU=";
+    tag = version;
+    hash = "sha256-TP5YW4pIWO0xHV1EY5hDa80MrBOvkZLyQTNP7m0x+AU=";
   };
 
   build-system = [ poetry-core ];
@@ -49,8 +49,6 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
-
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
@@ -59,17 +57,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/test_ip_pairing.py"
-  ];
-
-  disabledTests = [
-    # AttributeError: 'MockedAsyncServiceInfo' object has no attribute '_set_properties'
-    "test_discover_find_one_unpaired"
-    "test_find_device_id_case_lower"
-    "test_find_device_id_case_upper"
-    "test_discover_missing_csharp"
-    "test_discover_csharp_case"
-    "test_discover_device_id_case_lower"
-    "test_discover_device_id_case_upper"
   ];
 
   pythonImportsCheck = [ "aiohomekit" ];
@@ -81,7 +68,7 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aiohomekitctl";

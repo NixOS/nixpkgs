@@ -1,33 +1,45 @@
-{ lib
-, callPackage
-, fetchurl
-, makeWrapper
-, nixosTests
-, stdenv
-, jre
-, unzip
+{
+  lib,
+  callPackage,
+  fetchurl,
+  makeWrapper,
+  nixosTests,
+  stdenv,
+  jre,
+  unzip,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "geoserver";
-  version = "2.25.3";
+  version = "2.27.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    hash = "sha256-EmW3i0qi7P48AftCz7tqI2Wtvdy3cpyR57+s42dYwt8=";
+    hash = "sha256-bhL+u+BoKgW2cwOXEzaq0h07dKFz9u9WB2jW8nAF0vI=";
   };
+
+  sourceRoot = "source";
+
+  unpackPhase = ''
+    runHook preUnpack
+    unzip $src -d "$sourceRoot"
+    runHook postUnpack
+  '';
 
   patches = [
     # set GEOSERVER_DATA_DIR to current working directory if not provided
     ./data-dir.patch
   ];
 
-  sourceRoot = ".";
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase =
     let
       inputs = finalAttrs.buildInputs or [ ];
-      ldLibraryPathEnvName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      ldLibraryPathEnvName =
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstall
@@ -48,28 +60,34 @@ stdenv.mkDerivation (finalAttrs: rec {
       runHook postInstall
     '';
 
-
   passthru =
     let
       geoserver = finalAttrs.finalPackage;
       extensions = lib.attrsets.filterAttrs (n: v: lib.isDerivation v) (callPackage ./extensions.nix { });
     in
     {
-      withExtensions = selector:
+      withExtensions =
+        selector:
         let
           selectedExtensions = selector extensions;
         in
-        geoserver.overrideAttrs (finalAttrs: previousAttrs: {
-          pname = previousAttrs.pname + "-with-extensions";
-          buildInputs = lib.lists.unique ((previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions);
-          postInstall = (previousAttrs.postInstall or "") + ''
-            for extension in ${builtins.toString selectedExtensions} ; do
-              cp -r $extension/* $out
-              # Some files are the same for all/several extensions. We allow overwriting them again.
-              chmod -R +w $out
-            done
-          '';
-        });
+        geoserver.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            pname = previousAttrs.pname + "-with-extensions";
+            buildInputs = lib.lists.unique (
+              (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
+            );
+            postInstall =
+              (previousAttrs.postInstall or "")
+              + ''
+                for extension in ${builtins.toString selectedExtensions} ; do
+                  cp -r $extension/* $out
+                  # Some files are the same for all/several extensions. We allow overwriting them again.
+                  chmod -R +w $out
+                done
+              '';
+          }
+        );
       tests.geoserver = nixosTests.geoserver;
       updateScript = ./update.sh;
     };
@@ -79,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://geoserver.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     platforms = platforms.all;
   };
 })

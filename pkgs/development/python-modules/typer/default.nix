@@ -2,73 +2,85 @@
   lib,
   stdenv,
   buildPythonPackage,
-  click,
-  coverage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   pdm-backend,
-  pytest-sugar,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+
+  # dependencies
+  click,
+  typing-extensions,
+
+  # optional-dependencies
   rich,
   shellingham,
-  typing-extensions,
+
+  # tests
+  coverage,
+  pytest-xdist,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  procps,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.12.3";
-  format = "pyproject";
+  version = "0.15.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SecxMUgdgEKI72JZjZehzu8wWJBapTahE0+QiRujVII=";
+  src = fetchFromGitHub {
+    owner = "fastapi";
+    repo = "typer";
+    tag = version;
+    hash = "sha256-9YukmX16fn5u7N9K9fUqZsAzKjio4bl70gHNmsYuQxo";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     typing-extensions
-  # Build includes the standard optional by default
-  # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
+    # Build includes the standard optional by default
+    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
   ] ++ optional-dependencies.standard;
 
   optional-dependencies = {
     standard = [
-      shellingham
       rich
+      shellingham
     ];
   };
 
-  nativeCheckInputs = [
-    coverage # execs coverage in tests
-    pytest-sugar
-    pytest-xdist
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    [
+      coverage # execs coverage in tests
+      pytest-xdist
+      pytestCheckHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      procps
+    ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
-  disabledTests = [
-    "test_scripts"
-    # Likely related to https://github.com/sarugaku/shellingham/issues/35
-    # fails also on Linux
-    "test_show_completion"
-    "test_install_completion"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [ "test_install_completion" ];
+  disabledTests =
+    [
+      "test_scripts"
+      # Likely related to https://github.com/sarugaku/shellingham/issues/35
+      # fails also on Linux
+      "test_show_completion"
+      "test_install_completion"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      "test_install_completion"
+    ];
 
   pythonImportsCheck = [ "typer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winpat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winpat ];
   };
 }

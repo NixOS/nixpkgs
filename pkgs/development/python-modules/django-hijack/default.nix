@@ -1,59 +1,44 @@
 {
   lib,
   fetchFromGitHub,
-  fetchNpmDeps,
   buildPythonPackage,
   nix-update-script,
 
   # build-system
   flit-gettext,
   flit-scm,
-  nodejs,
-  npmHooks,
 
   # dependencies
   django,
 
   # tests
+  pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.6.1";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xnRVoCs+TyAbvFSBD58MJhwLw7ecKpMFuWewAgmnzqk=";
-  };
-
-  postPatch = ''
-    sed -i "/addopts/d" pyproject.toml
-
-  # missing integrity hashes for yocto-queue, yargs-parser
-    cp ${./package-lock.json} package-lock.json
-  '';
-
-  npmDeps = fetchNpmDeps {
-    inherit src postPatch;
-    hash = "sha256-npAFpdqGdttE4facBimS/y2SqwnCvOHJhd60SPR/IaA=";
+    tag = version;
+    hash = "sha256-JGcVXM/kWsahGNh1llV4NB+/FLAh3hqFRbs3PyYqRnA=";
   };
 
   build-system = [
     flit-gettext
     flit-scm
-    nodejs
-    npmHooks.npmConfigHook
   ];
 
   dependencies = [ django ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-django
   ];
 

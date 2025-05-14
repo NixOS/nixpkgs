@@ -35,10 +35,10 @@ index 3a13e04a27..4fd58068a1 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index b94f37c31c..48f5a2526b 100644
+index 29afb08ebc..398ff340cd 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
-@@ -1412,7 +1412,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
+@@ -1418,7 +1418,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
  
          assert(ret);
  
@@ -47,7 +47,7 @@ index b94f37c31c..48f5a2526b 100644
          if (!f)
                  return -errno;
  
-@@ -1453,7 +1453,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
+@@ -1459,7 +1459,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
  
          assert(ret);
  
@@ -56,7 +56,7 @@ index b94f37c31c..48f5a2526b 100644
          if (!f)
                  return -errno;
  
-@@ -1565,7 +1565,7 @@ int verify_timezone(const char *name, int log_level) {
+@@ -1570,7 +1570,7 @@ int verify_timezone(const char *name, int log_level) {
          if (p - name >= PATH_MAX)
                  return -ENAMETOOLONG;
  
@@ -65,7 +65,7 @@ index b94f37c31c..48f5a2526b 100644
  
          fd = open(t, O_RDONLY|O_CLOEXEC);
          if (fd < 0)
-@@ -1617,7 +1617,7 @@ int get_timezone(char **ret) {
+@@ -1622,7 +1622,7 @@ int get_timezone(char **ret) {
          if (r < 0)
                  return r; /* Return EINVAL if not a symlink */
  
@@ -75,10 +75,10 @@ index b94f37c31c..48f5a2526b 100644
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index 6afabef430..c1e3af77e1 100644
+index 9be62b8df3..2044e9f8d0 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
-@@ -648,7 +648,7 @@ static int process_timezone(int rfd) {
+@@ -598,7 +598,7 @@ static int process_timezone(int rfd) {
          if (isempty(arg_timezone))
                  return 0;
  
@@ -88,10 +88,10 @@ index 6afabef430..c1e3af77e1 100644
          r = symlinkat_atomic_full(e, pfd, f, /* make_relative= */ false);
          if (r < 0)
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 756ce11b1f..436804b3bd 100644
+index 2b735e4df4..7a21f34edd 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -1862,8 +1862,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+@@ -1851,8 +1851,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
  static const char *timezone_from_path(const char *path) {
          return PATH_STARTSWITH_SET(
                          path,
@@ -103,7 +103,7 @@ index 756ce11b1f..436804b3bd 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 448aa7e94d..2161e09579 100644
+index cbd30214b7..b9b2f533a4 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -280,7 +280,7 @@ static int context_read_data(Context *c) {

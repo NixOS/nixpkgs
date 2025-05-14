@@ -1,7 +1,10 @@
-{ mkDerivation, base, lib
+{
+  mkDerivation,
+  base,
+  lib,
   # GHC source tree to build ghc-toolchain from
-, ghcSrc
-, ghcVersion
+  ghcSrc,
+  ghcVersion,
 }:
 mkDerivation {
   pname = "ghc-platform";

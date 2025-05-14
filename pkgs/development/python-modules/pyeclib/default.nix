@@ -12,21 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.6.1";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pa3majZ68+DQGtgGCpZVRshof+w9jvpxreo4dkckLXk=";
+    tag = version;
+    hash = "sha256-oRitXlQunfqLSKMaSW3E1BnL0otA4UPj/y6bbiN0kPM=";
   };
 
   postPatch = ''
-    # patch dlopen call
-    substituteInPlace src/c/pyeclib_c/pyeclib_c.c \
-      --replace-fail "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
-
     # python's platform.platform() doesn't return "Darwin" (anymore?)
     substituteInPlace setup.py \
       --replace-fail '"Darwin"' '"macOS"'
@@ -54,12 +50,17 @@ buildPythonPackage rec {
     six
   ];
 
+  disabledTests = [
+    # The memory usage goes *down* on Darwin, which the test confuses for an increase and fails
+    "test_get_metadata_memory_usage"
+  ];
+
   pythonImportsCheck = [ "pyeclib" ];
 
   meta = with lib; {
     description = "This library provides a simple Python interface for implementing erasure codes";
     homepage = "https://github.com/openstack/pyeclib";
     license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

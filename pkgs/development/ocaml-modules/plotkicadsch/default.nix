@@ -1,20 +1,21 @@
-{ lib
-, buildDunePackage
-, substituteAll
-, base64
-, cmdliner
-, digestif
-, git-unix
-, kicadsch
-, lwt
-, lwt_ppx
-, sha
-, tyxml
-, coreutils
-, imagemagick
+{
+  lib,
+  buildDunePackage,
+  replaceVars,
+  base64,
+  cmdliner,
+  digestif,
+  git-unix,
+  kicadsch,
+  lwt,
+  lwt_ppx,
+  sha,
+  tyxml,
+  coreutils,
+  imagemagick,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "plotkicadsch";
   duneVersion = "3";
 
@@ -23,8 +24,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.09";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit coreutils imagemagick;
     })
   ];

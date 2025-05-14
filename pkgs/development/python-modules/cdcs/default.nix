@@ -6,7 +6,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cdcs";
-  version = "0.2.3";
+  version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HhAzULVWkKOWDJ6IZyBy0MYc/YGAFkSTLIgpdyvw1eI=";
+    tag = "v${version}";
+    hash = "sha256-u3txoe8ZfofMqhDB1ZhNF0mq9fYgwotRguVUezhDvwk=";
   };
 
   build-system = [ setuptools ];
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cdcs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for performing REST calls to configurable data curation system (CDCS) databases";
     homepage = "https://github.com/usnistgov/pycdcs";
     changelog = "https://github.com/usnistgov/pycdcs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

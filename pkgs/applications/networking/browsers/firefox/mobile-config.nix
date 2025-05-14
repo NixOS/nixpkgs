@@ -1,4 +1,9 @@
-{ runCommand, fetchFromGitLab, wrapFirefox, firefox-unwrapped }:
+{
+  runCommand,
+  fetchFromGitLab,
+  wrapFirefox,
+  firefox-unwrapped,
+}:
 
 let
   pkg = fetchFromGitLab {
@@ -7,13 +12,14 @@ let
     rev = "ff2f07873f4ebc6e220da0e9b9f04c69f451edda";
     sha256 = "sha256-8wRz8corz00+0qROMiOmZAddM4tjfmE91bx0+P8JNx4=";
   };
-  userChrome = runCommand "userChrome.css" {} ''
+  userChrome = runCommand "userChrome.css" { } ''
     cat ${pkg}/src/userChrome/*.css > $out
   '';
-  userContent = runCommand "userContent.css" {} ''
+  userContent = runCommand "userContent.css" { } ''
     cat ${pkg}/src/userContent/*.css > $out
   '';
-in wrapFirefox firefox-unwrapped {
+in
+wrapFirefox firefox-unwrapped {
   # extraPolicies = (lib.importJSON "${pkg}/src/policies.json").policies;
   extraPoliciesFiles = [ "${pkg}/src/policies.json" ];
   extraPrefs = ''

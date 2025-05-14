@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "RxPY";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W1qYNbYV6Roz1GJtP/vpoPD6KigWaaQOWe1R5DZHlUw=";
   };
 

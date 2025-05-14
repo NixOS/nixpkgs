@@ -1,28 +1,34 @@
-{ pkgsBuildBuild
-, go
-, buildGoModule
-, stdenv
-, lib
-, procps
-, fetchFromGitHub
-, nixosTests
-, autoSignDarwinBinariesHook
+{
+  pkgsBuildBuild,
+  go,
+  buildGoModule,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  autoSignDarwinBinariesHook,
+  nix-update-script,
 }:
 
 let
-  common = { stname, target, postInstall ? "" }:
+  common =
+    {
+      stname,
+      target,
+      postInstall ? "",
+    }:
     buildGoModule rec {
       pname = stname;
-      version = "1.27.12";
+      version = "1.29.5";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "v${version}";
-        hash = "sha256-/HPq71KkWUE0vG7qUBD3JON4N5KBkuRWc4SvX/JA2nQ=";
+        tag = "v${version}";
+        hash = "sha256-mM+llkF9aMFkMzLptcEz+nXyHcuMHt+dpnqkzJgOZqQ=";
       };
 
-      vendorHash = "sha256-R5GlsCkfoMc5km+NaV+TNUlM3Ot1ARcXfEFimcZOLI4=";
+      vendorHash = "sha256-5U0lsGSO4v++eMvz2r1rG5i/XPLbJAbvM9V66BKE6A8=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -43,7 +49,7 @@ let
         (
           export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
           go build build.go
-          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
         )
         ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
@@ -57,8 +63,17 @@ let
 
       inherit postInstall;
 
-      passthru.tests = {
-        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+      passthru = {
+        tests = {
+          inherit (nixosTests)
+            syncthing
+            syncthing-init
+            syncthing-many-devices
+            syncthing-no-settings
+            syncthing-relay
+            ;
+        };
+        updateScript = nix-update-script { };
       };
 
       meta = {
@@ -66,7 +81,10 @@ let
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ joko peterhoeg ];
+        maintainers = with lib.maintainers; [
+          joko
+          peterhoeg
+        ];
         mainProgram = target;
         platforms = lib.platforms.unix;
       };
@@ -78,26 +96,30 @@ in
     stname = "syncthing";
     target = "syncthing";
 
-    postInstall = ''
-      # This installs man pages in the correct directory according to the suffix
-      # on the filename
-      for mf in man/*.[1-9]; do
-        mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
-        mandir="$out/share/man/man$mantype"
-        install -Dm644 "$mf" "$mandir/$(basename "$mf")"
-      done
+    postInstall =
+      ''
+        # This installs man pages in the correct directory according to the suffix
+        # on the filename
+        for mf in man/*.[1-9]; do
+          mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
+          mandir="$out/share/man/man$mantype"
+          install -Dm644 "$mf" "$mandir/$(basename "$mf")"
+        done
 
-    '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      mkdir -p $out/lib/systemd/{system,user}
+        install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
 
-      substitute etc/linux-systemd/system/syncthing@.service \
-                 $out/lib/systemd/system/syncthing@.service \
-                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
+      ''
+      + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+        mkdir -p $out/lib/systemd/{system,user}
 
-      substitute etc/linux-systemd/user/syncthing.service \
-                 $out/lib/systemd/user/syncthing.service \
-                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
-    '';
+        substitute etc/linux-systemd/system/syncthing@.service \
+                   $out/lib/systemd/system/syncthing@.service \
+                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
+
+        substitute etc/linux-systemd/user/syncthing.service \
+                   $out/lib/systemd/user/syncthing.service \
+                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
+      '';
   };
 
   syncthing-discovery = common {

@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.bcg;
-  configFile = (pkgs.formats.yaml {}).generate "bcg.conf.yaml" (
+  configFile = (pkgs.formats.yaml { }).generate "bcg.conf.yaml" (
     lib.filterAttrsRecursive (n: v: v != null) {
       inherit (cfg) device name mqtt;
       retain_node_messages = cfg.retainNodeMessages;
@@ -26,7 +26,7 @@ in
       package = lib.mkPackageOption pkgs [ "python3Packages" "bcg" ] { };
       environmentFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [];
+        default = [ ];
         example = [ "/run/keys/bcg.env" ];
         description = ''
           File to load as environment file. Environment variables from this file
@@ -36,7 +36,13 @@ in
         '';
       };
       verbose = lib.mkOption {
-        type = lib.types.enum ["CRITICAL" "ERROR" "WARNING" "INFO" "DEBUG"];
+        type = lib.types.enum [
+          "CRITICAL"
+          "ERROR"
+          "WARNING"
+          "INFO"
+          "DEBUG"
+        ];
         default = "WARNING";
         description = "Verbosity level.";
       };
@@ -131,7 +137,7 @@ in
       };
       rename = lib.mkOption {
         type = with lib.types; attrsOf str;
-        default = {};
+        default = { };
         description = "Rename nodes to different name.";
       };
     };
@@ -143,25 +149,27 @@ in
       python3Packages.bch
     ];
 
-    systemd.services.bcg = let
-      envConfig = cfg.environmentFiles != [];
-      finalConfig = if envConfig
-                    then "\${RUNTIME_DIRECTORY}/bcg.config.yaml"
-                    else configFile;
-    in {
-      description = "BigClown Gateway";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
-      after = [ "network-online.target" ];
-      preStart = lib.mkIf envConfig ''
-        umask 077
-        ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
+    systemd.services.bcg =
+      let
+        envConfig = cfg.environmentFiles != [ ];
+        finalConfig = if envConfig then "\${RUNTIME_DIRECTORY}/bcg.config.yaml" else configFile;
+      in
+      {
+        description = "BigClown Gateway";
+        wantedBy = [ "multi-user.target" ];
+        wants = [
+          "network-online.target"
+        ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
+        after = [ "network-online.target" ];
+        preStart = lib.mkIf envConfig ''
+          umask 077
+          ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
         '';
-      serviceConfig = {
-        EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
-        RuntimeDirectory = "bcg";
+        serviceConfig = {
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = "${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
+          RuntimeDirectory = "bcg";
+        };
       };
-    };
   };
 }

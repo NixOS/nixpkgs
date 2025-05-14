@@ -1,22 +1,23 @@
-{ buildGoModule
-, fetchFromGitHub
-, getent
-, lib
-, makeWrapper
-, stdenv
-, xdg-utils
+{
+  buildGoModule,
+  fetchFromGitHub,
+  getent,
+  lib,
+  makeWrapper,
+  stdenv,
+  xdg-utils,
 }:
 buildGoModule rec {
   pname = "aws-sso-cli";
-  version = "1.17.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VEI+vCNeNoFOE+2j/OUjRszXsUQP2E1iUdPUW9X3tHk=";
+    hash = "sha256-D6ytiuh335r1XHwX6riI5OkpA8C1Ta0EwD1yPwob2ms=";
   };
-  vendorHash = "sha256-a57RtK8PxwaRrSA6W6R//GacZ+pK8mBi4ZASS5NvShE=";
+  vendorHash = "sha256-SNMU7qDfLRGUSLjzrJHtIMgbcRc2DxXwWEUaUEY6PME=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -32,13 +33,14 @@ buildGoModule rec {
 
   nativeCheckInputs = [ getent ];
 
-  checkFlags = let
-    skippedTests = [
-      "TestAWSConsoleUrl"
-      "TestAWSFederatedUrl"
-      "TestServerWithSSL" # https://github.com/synfinatic/aws-sso-cli/issues/1030 -- remove when version >= 2.x
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
-  in
+  checkFlags =
+    let
+      skippedTests = [
+        "TestAWSConsoleUrl"
+        "TestAWSFederatedUrl"
+        "TestServerWithSSL" # https://github.com/synfinatic/aws-sso-cli/issues/1030 -- remove when version >= 2.x
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
+    in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = with lib; {

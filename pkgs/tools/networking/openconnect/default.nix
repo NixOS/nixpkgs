@@ -1,9 +1,11 @@
-{ callPackage, fetchurl, darwin }:
+{
+  callPackage,
+  fetchurl,
+}:
 let
-  common = opts: callPackage (import ./common.nix opts) {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-  };
-in rec {
+  common = opts: callPackage (import ./common.nix opts) { };
+in
+rec {
   openconnect = common rec {
     version = "9.12";
     src = fetchurl {

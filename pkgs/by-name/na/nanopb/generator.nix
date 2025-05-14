@@ -1,8 +1,9 @@
-{ python3
-, stdenvNoCC
-, protobuf
-, version
-, generator-out
+{
+  python3,
+  stdenvNoCC,
+  protobuf,
+  version,
+  generator-out,
 }:
 stdenvNoCC.mkDerivation {
   pname = "nanopb-generator";

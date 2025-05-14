@@ -12,6 +12,7 @@
   proton-vpn-local-agent,
   pycairo,
   pygobject3,
+  pyxdg,
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-network-manager";
-  version = "0.9.1";
+  version = "0.12.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dwWEcLowNlIoxeVQnEpmI+PK18DQRiW4A4qfWHSqRw8=";
+    tag = "v${version}";
+    hash = "sha256-LRjC1uuAG2OG52moRBSvTR7HvqdldNmW0Tv7AZmUf60=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     proton-vpn-local-agent
     pycairo
     pygobject3
+    pyxdg
   ];
 
   postPatch = ''
@@ -67,15 +69,21 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   meta = {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sebtm ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

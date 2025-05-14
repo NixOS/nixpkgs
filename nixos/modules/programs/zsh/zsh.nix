@@ -1,6 +1,12 @@
 # This module defines global configuration for the zshell.
 
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -10,8 +16,9 @@ let
   opt = options.programs.zsh;
 
   zshAliases = builtins.concatStringsSep "\n" (
-    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
-      (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
+    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}") (
+      lib.filterAttrs (k: v: v != null) cfg.shellAliases
+    )
   );
 
   zshStartupNotes = ''
@@ -121,7 +128,10 @@ in
           "SHARE_HISTORY"
           "HIST_FCNTL_LOCK"
         ];
-        example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
+        example = [
+          "EXTENDED_HISTORY"
+          "RM_STAR_WAIT"
+        ];
         description = ''
           Configure zsh options. See
           {manpage}`zshoptions(1)`.
@@ -173,144 +183,141 @@ in
 
     programs.zsh.shellAliases = builtins.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
-    environment.etc.zshenv.text =
-      ''
-        # /etc/zshenv: DO NOT EDIT -- this file has been generated automatically.
-        # This file is read for all shells.
+    environment.etc.zshenv.text = ''
+      # /etc/zshenv: DO NOT EDIT -- this file has been generated automatically.
+      # This file is read for all shells.
 
-        # Only execute this file once per shell.
-        if [ -n "''${__ETC_ZSHENV_SOURCED-}" ]; then return; fi
-        __ETC_ZSHENV_SOURCED=1
+      # Only execute this file once per shell.
+      if [ -n "''${__ETC_ZSHENV_SOURCED-}" ]; then return; fi
+      __ETC_ZSHENV_SOURCED=1
 
-        if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE-}" ]; then
-            . ${config.system.build.setEnvironment}
-        fi
+      if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE-}" ]; then
+          . ${config.system.build.setEnvironment}
+      fi
 
-        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+      HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
-        # Tell zsh how to find installed completions.
-        for p in ''${(z)NIX_PROFILES}; do
-            fpath=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions $fpath)
-        done
+      # Tell zsh how to find installed completions.
+      for p in ''${(z)NIX_PROFILES}; do
+          fpath=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions $fpath)
+      done
 
-        # Setup custom shell init stuff.
-        ${cfge.shellInit}
+      # Setup custom shell init stuff.
+      ${cfge.shellInit}
 
-        ${cfg.shellInit}
+      ${cfg.shellInit}
 
-        # Read system-wide modifications.
-        if test -f /etc/zshenv.local; then
-            . /etc/zshenv.local
-        fi
-      '';
+      # Read system-wide modifications.
+      if test -f /etc/zshenv.local; then
+          . /etc/zshenv.local
+      fi
+    '';
 
-    environment.etc.zprofile.text =
-      ''
-        # /etc/zprofile: DO NOT EDIT -- this file has been generated automatically.
-        # This file is read for login shells.
-        #
-        ${zshStartupNotes}
+    environment.etc.zprofile.text = ''
+      # /etc/zprofile: DO NOT EDIT -- this file has been generated automatically.
+      # This file is read for login shells.
+      #
+      ${zshStartupNotes}
 
-        # Only execute this file once per shell.
-        if [ -n "''${__ETC_ZPROFILE_SOURCED-}" ]; then return; fi
-        __ETC_ZPROFILE_SOURCED=1
+      # Only execute this file once per shell.
+      if [ -n "''${__ETC_ZPROFILE_SOURCED-}" ]; then return; fi
+      __ETC_ZPROFILE_SOURCED=1
 
-        # Setup custom login shell init stuff.
-        ${cfge.loginShellInit}
+      # Setup custom login shell init stuff.
+      ${cfge.loginShellInit}
 
-        ${cfg.loginShellInit}
+      ${cfg.loginShellInit}
 
-        # Read system-wide modifications.
-        if test -f /etc/zprofile.local; then
-            . /etc/zprofile.local
-        fi
-      '';
+      # Read system-wide modifications.
+      if test -f /etc/zprofile.local; then
+          . /etc/zprofile.local
+      fi
+    '';
 
-    environment.etc.zshrc.text =
-      ''
-        # /etc/zshrc: DO NOT EDIT -- this file has been generated automatically.
-        # This file is read for interactive shells.
-        #
-        ${zshStartupNotes}
+    environment.etc.zshrc.text = ''
+      # /etc/zshrc: DO NOT EDIT -- this file has been generated automatically.
+      # This file is read for interactive shells.
+      #
+      ${zshStartupNotes}
 
-        # Only execute this file once per shell.
-        if [ -n "$__ETC_ZSHRC_SOURCED" -o -n "$NOSYSZSHRC" ]; then return; fi
-        __ETC_ZSHRC_SOURCED=1
+      # Only execute this file once per shell.
+      if [ -n "$__ETC_ZSHRC_SOURCED" -o -n "$NOSYSZSHRC" ]; then return; fi
+      __ETC_ZSHRC_SOURCED=1
 
-        ${lib.optionalString (cfg.setOptions != []) ''
-          # Set zsh options.
-          setopt ${builtins.concatStringsSep " " cfg.setOptions}
-        ''}
+      ${lib.optionalString (cfg.setOptions != [ ]) ''
+        # Set zsh options.
+        setopt ${builtins.concatStringsSep " " cfg.setOptions}
+      ''}
 
-        # Alternative method of determining short and full hostname.
-        HOST=${config.networking.fqdnOrHostName}
+      # Alternative method of determining short and full hostname.
+      HOST=${config.networking.fqdnOrHostName}
 
-        # Setup command line history.
-        # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
-        SAVEHIST=${builtins.toString cfg.histSize}
-        HISTSIZE=${builtins.toString cfg.histSize}
-        HISTFILE=${cfg.histFile}
+      # Setup command line history.
+      # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
+      SAVEHIST=${builtins.toString cfg.histSize}
+      HISTSIZE=${builtins.toString cfg.histSize}
+      HISTFILE=${cfg.histFile}
 
-        # Configure sane keyboard defaults.
-        . /etc/zinputrc
+      # Configure sane keyboard defaults.
+      . /etc/zinputrc
 
-        ${lib.optionalString cfg.enableGlobalCompInit ''
-          # Enable autocompletion.
-          autoload -U compinit && compinit
-        ''}
+      ${lib.optionalString cfg.enableGlobalCompInit ''
+        # Enable autocompletion.
+        autoload -U compinit && compinit
+      ''}
 
-        ${lib.optionalString cfg.enableBashCompletion ''
-          # Enable compatibility with bash's completion system.
-          autoload -U bashcompinit && bashcompinit
-        ''}
+      ${lib.optionalString cfg.enableBashCompletion ''
+        # Enable compatibility with bash's completion system.
+        autoload -U bashcompinit && bashcompinit
+      ''}
 
-        # Setup custom interactive shell init stuff.
-        ${cfge.interactiveShellInit}
+      # Setup custom interactive shell init stuff.
+      ${cfge.interactiveShellInit}
 
-        ${cfg.interactiveShellInit}
+      ${cfg.interactiveShellInit}
 
-        ${lib.optionalString cfg.enableLsColors ''
-          # Extra colors for directory listings.
-          eval "$(${pkgs.coreutils}/bin/dircolors -b)"
-        ''}
+      ${lib.optionalString cfg.enableLsColors ''
+        # Extra colors for directory listings.
+        eval "$(${pkgs.coreutils}/bin/dircolors -b)"
+      ''}
 
-        # Setup aliases.
-        ${zshAliases}
+      # Setup aliases.
+      ${zshAliases}
 
-        # Setup prompt.
-        ${cfg.promptInit}
+      # Setup prompt.
+      ${cfg.promptInit}
 
-        # Disable some features to support TRAMP.
-        if [ "$TERM" = dumb ]; then
-            unsetopt zle prompt_cr prompt_subst
-            unset RPS1 RPROMPT
-            PS1='$ '
-            PROMPT='$ '
-        fi
+      # Disable some features to support TRAMP.
+      if [ "$TERM" = dumb ]; then
+          unsetopt zle prompt_cr prompt_subst
+          unset RPS1 RPROMPT
+          PS1='$ '
+          PROMPT='$ '
+      fi
 
-        # Read system-wide modifications.
-        if test -f /etc/zshrc.local; then
-            . /etc/zshrc.local
-        fi
-      '';
+      # Read system-wide modifications.
+      if test -f /etc/zshrc.local; then
+          . /etc/zshrc.local
+      fi
+    '';
 
     # Bug in nix flakes:
     # If we use `.source` here the path is garbage collected also we point to it with a symlink
     # see https://github.com/NixOS/nixpkgs/issues/132732
     environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
-    environment.systemPackages = [ pkgs.zsh ]
-      ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
+    environment.systemPackages = [
+      pkgs.zsh
+    ] ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = lib.optional cfg.enableCompletion "/share/zsh";
 
     #users.defaultUserShell = lib.mkDefault "/run/current-system/sw/bin/zsh";
 
-    environment.shells =
-      [
-        "/run/current-system/sw/bin/zsh"
-        "${pkgs.zsh}/bin/zsh"
-      ];
+    environment.shells = [
+      "/run/current-system/sw/bin/zsh"
+      "${pkgs.zsh}/bin/zsh"
+    ];
 
   };
 

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "l-smash";

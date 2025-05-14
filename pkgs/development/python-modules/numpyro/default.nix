@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -14,30 +15,28 @@
   tqdm,
 
   # tests
-  # Our current version of tensorflow (2.13.0) is too old and doesn't support python>=3.12
-  # We remove optional test dependencies that require tensorflow and skip the corresponding tests to
-  # avoid introducing a useless incompatibility with python 3.12:
-  # dm-haiku,
-  # flax,
-  # tensorflow-probability,
+  dm-haiku,
+  flax,
   funsor,
   graphviz,
   optax,
   pyro-api,
+  pytest-xdist,
   pytestCheckHook,
   scikit-learn,
+  tensorflow-probability,
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.15.3";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
-    rev = "refs/tags/${version}";
-    hash = "sha256-g+ep221hhLbCjQasKpiEAXkygI5A3Hglqo1tV8lv5eg=";
+    tag = version;
+    hash = "sha256-0X/ta2yfzjf3JnZYdUAzQmXvbsDpwFCJe/bArMSWQgU=";
   };
 
   build-system = [ setuptools ];
@@ -51,73 +50,59 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    # dm-haiku
-    # flax
+    dm-haiku
+    flax
     funsor
     graphviz
     optax
     pyro-api
+    pytest-xdist
     pytestCheckHook
     scikit-learn
-    # tensorflow-probability
+    tensorflow-probability
   ];
 
   pythonImportsCheck = [ "numpyro" ];
 
-  disabledTests = [
-    # AssertionError due to tolerance issues
-    "test_beta_binomial_log_prob"
-    "test_collapse_beta"
-    "test_cpu"
-    "test_gamma_poisson"
-    "test_gof"
-    "test_hpdi"
-    "test_kl_dirichlet_dirichlet"
-    "test_kl_univariate"
-    "test_mean_var"
+  pytestFlagsArray = [
+    # Tests memory consumption grows significantly with the number of parallel processes (reaches ~200GB with 80 jobs)
+    "--maxprocesses=8"
 
-    # Tests want to download data
-    "data_load"
-    "test_jsb_chorales"
-
-    # RuntimeWarning: overflow encountered in cast
-    "test_zero_inflated_logits_probs_agree"
-
-    # NameError: unbound axis name: _provenance
-    "test_model_transformation"
-
-    # require dm-haiku
-    "test_flax_state_dropout_smoke"
-    "test_flax_module"
-    "test_random_module_mcmc"
-
-    # require flax
-    "test_haiku_state_dropout_smoke"
-    "test_haiku_module"
-    "test_random_module_mcmc"
-
-    # require tensorflow-probability
-    "test_modified_bessel_first_kind_vect"
-    "test_diag_spectral_density_periodic"
-    "test_kernel_approx_periodic"
-    "test_modified_bessel_first_kind_one_dim"
-    "test_modified_bessel_first_kind_vect"
-    "test_periodic_gp_one_dim_model"
-    "test_no_tracer_leak_at_lazy_property_sample"
-
-    # flaky on darwin
-    # TODO: uncomment at next release (0.15.4) as it has been fixed:
-    # https://github.com/pyro-ppl/numpyro/pull/1863
-    "test_change_point_x64"
+    # A few tests fail with:
+    # UserWarning: There are not enough devices to run parallel chains: expected 2 but got 1.
+    # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.
+    # You can double-check how many devices are available in your system using `jax.local_device_count()`.
+    "-W"
+    "ignore::UserWarning"
   ];
 
-  disabledTestPaths = [
-    # require jaxns (unpackaged)
-    "test/contrib/test_nested_sampling.py"
+  disabledTests =
+    [
+      # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
+      "test_mcmc_parallel_chain"
 
-    # requires tensorflow-probability
-    "test/contrib/test_tfp.py"
-    "test/test_distributions.py"
+      # AssertionError due to tolerance issues
+      "test_bijective_transforms"
+      "test_cpu"
+      "test_entropy_categorical"
+      "test_gaussian_model"
+
+      # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
+      # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+      # E        Emitted warnings: [].
+      "test_laplace_approximation_warning"
+
+      # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
+      "test_chain"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AssertionError: Not equal to tolerance rtol=0.06, atol=0
+      "test_functional_map"
+    ];
+
+  disabledTestPaths = [
+    # Require internet access
+    "test/test_example_utils.py"
   ];
 
   meta = {

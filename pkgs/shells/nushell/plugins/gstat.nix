@@ -5,17 +5,16 @@
   openssl,
   nushell,
   pkg-config,
-  Security,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_gstat";
-  inherit (nushell) version src;
-  cargoHash = "sha256-Z2A6DaARkffU7FABuLSTNeDLClRr4V21bD76ns8ueAM=";
+  inherit (nushell) version src cargoHash;
+  useFetchCargoVendor = true;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
   cargoBuildFlags = [ "--package nu_plugin_gstat" ];
 
   checkPhase = ''

@@ -5,7 +5,7 @@
 }:
 let
   pname = "saucectl";
-  version = "0.183.0";
+  version = "0.195.0";
 in
 buildGoModule {
   inherit pname version;
@@ -13,8 +13,8 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "saucelabs";
     repo = "saucectl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-43X+GBm0pasSSwBB8Q2V8Vr2SjFInHaNMvUNVqD0/pI=";
+    tag = "v${version}";
+    hash = "sha256-Y/4j2CC43cf496RugC8Eli6TMGBGFS8/W8UxLx2n+iY=";
   };
 
   ldflags = [
@@ -22,7 +22,7 @@ buildGoModule {
     "-X github.com/saucelabs/saucectl/internal/version.GitCommit=${version}"
   ];
 
-  vendorHash = "sha256-SQveLJzicQSCBwfV3eZyXkArO1wLly1cCvol9PbeEV0=";
+  vendorHash = "sha256-zRmTAb4Y86bQHW8oEf3oJqYQv81k1PkvjWnGAy2ZOLM=";
 
   checkFlags = [ "-skip=^TestNewRequestWithContext$" ];
 

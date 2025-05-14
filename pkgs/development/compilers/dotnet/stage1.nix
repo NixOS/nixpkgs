@@ -7,6 +7,7 @@
   tarballHash,
   depsFile,
   bootstrapSdk,
+  fallbackTargetPackages,
 }@args:
 
 let
@@ -23,7 +24,7 @@ let
   vmr =
     (mkVMR {
       inherit releaseManifestFile tarballHash;
-      bootstrapSdk = stage0.sdk;
+      bootstrapSdk = stage0.sdk.unwrapped;
     }).overrideAttrs
       (old: {
         passthru = old.passthru or { } // {
@@ -33,8 +34,7 @@ let
 
 in
 mkPackages {
-  inherit vmr;
-  fallbackTargetPackages = bootstrapSdk.targetPackages;
+  inherit vmr fallbackTargetPackages;
 }
 // {
   stage0 = lib.dontRecurseIntoAttrs stage0;

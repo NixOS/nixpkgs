@@ -17,26 +17,26 @@
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.9.0";
+  version = "1.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cE3wlI8uTMYMJZatboQOpnn09D5Y7UrQwYV4ByQOq5Y=";
+    pname = "setuptools_rust";
+    inherit version;
+    hash = "sha256-92XWbz3vb9yF4ebYicaoEq6hQwyNrc8ce2d5tF+HT7I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     semantic-version
     setuptools
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "setuptools_rust" ];
 

@@ -5,17 +5,14 @@
   linkFarm,
   cmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   wrapGAppsHook3,
-  qtbase,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
   deepin-pw-check,
   gsettings-qt,
   lightdm_qt,
-  qtx11extras,
   linux-pam,
   xorg,
   gtest,
@@ -30,7 +27,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
-    repo = pname;
+    # DDE 23 releases has moved to `linuxdeepin/dde-session-shell-snipe`
+    repo = "dde-session-shell-snipe";
     rev = version;
     hash = "sha256-v0+Bz6J77Kgf4YV1iDhCqhmcNn493GFq1IEQbXBAVUU=";
   };
@@ -64,20 +62,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
   ];
   dontWrapGApps = true;
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     deepin-pw-check
     gsettings-qt
     lightdm_qt
-    qtx11extras
+    libsForQt5.qtx11extras
     linux-pam
     xorg.libXcursor
     xorg.libXtst
@@ -90,9 +89,6 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -110,6 +106,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-session-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

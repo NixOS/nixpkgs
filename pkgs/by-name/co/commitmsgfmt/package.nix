@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, testers
-, commitmsgfmt
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  testers,
+  commitmsgfmt,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitmsgfmt";
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-HEkPnTO1HeJg8gpHFSUTkEVBPWJ0OdfUhNn9iGfaDD4=";
   };
-  cargoHash = "sha256-jTRB9ogFQGVC4C9xpGxsJYV3cnWydAJLMcjhzUPULTE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cej+Jpp12QEaru1mecuXtIFDEnSBvTwpx0Vgp8s7jj8=";
 
   passthru.tests.version = testers.testVersion {
     package = commitmsgfmt;

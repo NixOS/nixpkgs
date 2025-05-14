@@ -23,7 +23,7 @@ import ./make-test-python.nix (
       { pkgs, lib, ... }:
       {
         services.kanidm = {
-          package = pkgs.kanidm.withSecretProvisioning;
+          package = pkgs.kanidmWithSecretProvisioning;
           enableServer = true;
           serverSettings = {
             origin = "https://${serverDomain}";
@@ -305,6 +305,10 @@ import ./make-test-python.nix (
         with subtest("Test Provisioning - credentialProvision"):
             provision.succeed('${specialisations}/credentialProvision/bin/switch-to-configuration test')
             provision_login("${provisionIdmAdminPassword}")
+
+            # Make sure neither password is logged
+            provision.fail("journalctl --since -10m --unit kanidm.service --grep '${provisionAdminPassword}'")
+            provision.fail("journalctl --since -10m --unit kanidm.service --grep '${provisionIdmAdminPassword}'")
 
             # Test provisioned admin pw
             out = provision.succeed("KANIDM_PASSWORD=${provisionAdminPassword} kanidm login -D admin")

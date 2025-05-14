@@ -1,22 +1,24 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, dbus
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  dbus,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ianny";
-  version = "1.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "ianny";
     rev = "v${version}";
-    hash = "sha256-1QkGs4qCzEA4K3H39QcRV+yINIeZRkjBBkASO69F7ik=";
+    hash = "sha256-XNXlU9cCXPJhPytnVGHol8Cd5nZOEDDoDM4sm1+I/Qc=";
   };
 
-  cargoHash = "sha256-gKCmiqHkCB7nP5XIaFi/8Wi/x5WFEHEmHczKiIDDxXE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7XpM6WWJaHHui85HCZ7SL1G2ICNw453xfZx5kUa/oeg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus.dev ];

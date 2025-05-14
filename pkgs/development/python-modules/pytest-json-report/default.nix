@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numirias";
     repo = "pytest-json-report";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hMB/atDuo7CjwhHFUOxVfgJ7Qp4AA9J428iv7hyQFcs=";
   };
 

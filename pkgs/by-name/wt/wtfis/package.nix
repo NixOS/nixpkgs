@@ -1,18 +1,20 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
   pname = "wtfis";
-  version = "0.10.0";
+  version = "0.10.2";
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5mvbwIKnCk8mbjVJAmUwV1zKzGk8HVVZLiUVQXRvczA=";
+    tag = "v${version}";
+    hash = "sha256-2p5xFNr08WCgCQY8socmZ5UsyGCMId3zXQhXTX909PE=";
   };
-in python3.pkgs.buildPythonApplication {
+in
+python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
   format = "pyproject";
@@ -39,6 +41,6 @@ in python3.pkgs.buildPythonApplication {
     description = "Passive hostname, domain and IP lookup tool for non-robots";
     mainProgram = "wtfis";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

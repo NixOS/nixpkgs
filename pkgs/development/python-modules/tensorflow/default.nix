@@ -22,7 +22,6 @@
   packaging,
   setuptools,
   wheel,
-  keras-preprocessing,
   google-pasta,
   opt-einsum,
   astunparse,
@@ -71,7 +70,7 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
-  cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities,
+  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   mklSupport ? false,
   mkl,
   tensorboardSupport ? true,
@@ -80,9 +79,6 @@
   sse42Support ? stdenv.hostPlatform.sse4_2Support,
   avx2Support ? stdenv.hostPlatform.avx2Support,
   fmaSupport ? stdenv.hostPlatform.fmaSupport,
-  # Darwin deps
-  Foundation,
-  Security,
   cctools,
   llvmPackages,
 }:
@@ -153,7 +149,7 @@ let
   ];
 
   cudatoolkitDevMerged = symlinkJoin {
-    name = "cuda-${cudaPackages.cudaVersion}-dev-merged";
+    name = "cuda-${cudaPackages.cudaMajorMinorVersion}-dev-merged";
     paths = lib.concatMap (p: [
       (lib.getBin p)
       (lib.getDev p)
@@ -197,7 +193,6 @@ let
     google-pasta
     grpcio
     h5py
-    keras-preprocessing
     numpy
     opt-einsum
     packaging
@@ -294,7 +289,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
     };
 
@@ -341,10 +336,6 @@ let
         cudnnMerged
       ]
       ++ lib.optionals mklSupport [ mkl ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Foundation
-        Security
-      ]
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ nsync ];
 
     # arbitrarily set to the current latest bazel version, overly careful
@@ -448,9 +439,6 @@ let
         # bazel 3.3 should work just as well as bazel 3.1
         rm -f .bazelversion
         patchShebangs .
-      ''
-      + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-        cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
       ''
       + lib.optionalString (!withTensorboard) ''
         # Tensorboard pulls in a bunch of dependencies, some of which may
@@ -610,6 +598,7 @@ let
   };
 in
 buildPythonPackage {
+  __structuredAttrs = true;
   inherit version pname;
   disabled = pythonAtLeast "3.12";
 
@@ -639,7 +628,10 @@ buildPythonPackage {
     rm $out/bin/tensorboard
   '';
 
-  setupPyGlobalFlags = [ "--project_name ${pname}" ];
+  setupPyGlobalFlags = [
+    "--project_name"
+    pname
+  ];
 
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [
@@ -651,7 +643,6 @@ buildPythonPackage {
     google-pasta
     grpcio
     h5py
-    keras-preprocessing
     numpy
     opt-einsum
     packaging

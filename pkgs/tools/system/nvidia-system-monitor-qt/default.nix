@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -25,17 +26,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvidia-system-monitor-qt";
-  version = "1.5";
+  version = "1.6-1";
 
   src = fetchFromGitHub {
     owner = "congard";
     repo = "nvidia-system-monitor-qt";
     rev = "v${version}";
-    sha256 = "sha256-VDw5Wp/QFDV1zKF4yz0aR0Hox9KHXZmeAKzKLSlu8Ck=";
+    sha256 = "sha256-JHK7idyk5UxgDyt+SzvYjTLmlNzx6+Z+OPYsRD4NWPg=";
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    copyDesktopItems
+  ];
 
   cmakeFlags = [
     "-DIconPath=${placeholder "out"}/share/icons/hicolor/512x512/apps/qnvsm.png"

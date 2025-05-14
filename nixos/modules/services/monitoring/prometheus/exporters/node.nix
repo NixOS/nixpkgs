@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.node;
@@ -18,7 +24,7 @@ in
   extraOpts = {
     enabledCollectors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "systemd" ];
       description = ''
         Collectors to enable. The collectors listed here are enabled in addition to the default ones.
@@ -26,7 +32,7 @@ in
     };
     disabledCollectors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "timex" ];
       description = ''
         Collectors to disable which are enabled by default.
@@ -43,13 +49,17 @@ in
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}
       '';
-      RestrictAddressFamilies = optionals (collectorIsEnabled "logind" || collectorIsEnabled "systemd") [
-        # needs access to dbus via unix sockets (logind/systemd)
-        "AF_UNIX"
-      ] ++ optionals (collectorIsEnabled "network_route" || collectorIsEnabled "wifi" || ! collectorIsDisabled "netdev") [
-        # needs netlink sockets for wireless collector
-        "AF_NETLINK"
-      ];
+      RestrictAddressFamilies =
+        optionals (collectorIsEnabled "logind" || collectorIsEnabled "systemd") [
+          # needs access to dbus via unix sockets (logind/systemd)
+          "AF_UNIX"
+        ]
+        ++ optionals
+          (collectorIsEnabled "network_route" || collectorIsEnabled "wifi" || !collectorIsDisabled "netdev")
+          [
+            # needs netlink sockets for wireless collector
+            "AF_NETLINK"
+          ];
       # The timex collector needs to access clock APIs
       ProtectClock = collectorIsDisabled "timex";
       # Allow space monitoring under /home

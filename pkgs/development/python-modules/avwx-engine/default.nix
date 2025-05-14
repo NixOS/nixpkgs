@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "avwx-engine";
-  version = "1.9.0";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CUnUz2SsXtWaqGzaB1PH+EoHqebSue6e8GXhRZRcXLs=";
+    tag = version;
+    hash = "sha256-x8qb9nAAl7F+w0lHHQtLYwMZYdZ9WhAxJ63jdjlyfhQ=";
   };
 
   build-system = [ hatchling ];

@@ -1,5 +1,6 @@
 {
   lib,
+  audioop-lts,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -7,7 +8,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jiaaro";
     repo = "pydub";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FTEMT47wPXK5i4ZGjTVAhI/NjJio3F2dbBZzYzClU3c=";
   };
 
@@ -32,8 +33,7 @@ buildPythonPackage rec {
       hash = "sha256-3OIzvTgGK3r4/s5y7izHvouB4uJEmjO6cgKvegtTf7A=";
     })
     # Fix paths to ffmpeg, ffplay and ffprobe
-    (substituteAll {
-      src = ./ffmpeg-fix-path.patch;
+    (replaceVars ./ffmpeg-fix-path.patch {
       ffmpeg = lib.getExe ffmpeg-full;
       ffplay = lib.getExe' ffmpeg-full "ffplay";
       ffprobe = lib.getExe' ffmpeg-full "ffprobe";
@@ -41,6 +41,8 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ setuptools ];
+
+  dependencies = [ audioop-lts ];
 
   nativeCheckInputs = [
     pytestCheckHook

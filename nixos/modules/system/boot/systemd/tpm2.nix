@@ -27,13 +27,13 @@
 
   options = {
     systemd.tpm2.enable = lib.mkEnableOption "systemd TPM2 support" // {
-      default = config.systemd.package.withTpm2Tss;
-      defaultText = "systemd.package.withTpm2Tss";
+      default = config.systemd.package.withTpm2Units;
+      defaultText = "systemd.package.withTpm2Units";
     };
 
     boot.initrd.systemd.tpm2.enable = lib.mkEnableOption "systemd initrd TPM2 support" // {
-      default = config.boot.initrd.systemd.package.withTpm2Tss;
-      defaultText = "boot.initrd.systemd.package.withTpm2Tss";
+      default = config.boot.initrd.systemd.package.withTpm2Units;
+      defaultText = "boot.initrd.systemd.package.withTpm2Units";
     };
   };
 

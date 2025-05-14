@@ -4,29 +4,24 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  overrideSDK,
-  pnpm_9,
+  pnpm_10,
   python3,
   testers,
   xcbuild,
   nixosTests,
   nix-update-script,
+  yq-go,
 }:
 
-let
-  # fix build error, `no member named 'aligned_alloc'` on x86_64-darwin
-  # https://github.com/NixOS/nixpkgs/issues/272156#issuecomment-1839904283
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "38.105.2";
+  version = "39.264.0";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-gF8bxzNF1AUJJDxFdNfa+sr/TP0S4uLCXyu3tjRuBjc=";
+    tag = finalAttrs.version;
+    hash = "sha256-ACeZ0RAIplcaRKyoEXFCwA/zu96CaLxTwjV0ok3TQ8w=";
   };
 
   postPatch = ''
@@ -37,13 +32,14 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     python3
-  ] ++ lib.optional stdenv'.hostPlatform.isDarwin xcbuild;
+    yq-go
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AdNleEe1wVBfhhoM6xit06ql1xEz/TLhZ7qpofwQ874=";
+    hash = "sha256-2F4vcdu2f0yh+hvs1WWM6MsWv2mmUUhzFVWN3BQvfNk=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -52,8 +48,12 @@ stdenv'.mkDerivation (finalAttrs: {
     ''
       runHook preBuild
 
+      # relax nodejs version
+      yq '.engines.node = "${nodejs.version}"' -i package.json
+
       pnpm build
-      pnpm prune --prod --ignore-scripts
+      find -name 'node_modules' -type d -exec rm -rf {} \; || true
+      pnpm install --offline --prod --ignore-scripts
     ''
     # The optional dependency re2 is not built by pnpm and needs to be built manually.
     # If re2 is not built, you will get an annoying warning when you run renovate.
@@ -93,7 +93,12 @@ stdenv'.mkDerivation (finalAttrs: {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
       vm-test = nixosTests.renovate;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {

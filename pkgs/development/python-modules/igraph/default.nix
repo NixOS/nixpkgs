@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.6";
+  version = "0.11.8";
 
   disabled = pythonOlder "3.8";
 
@@ -24,16 +24,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = "refs/tags/${version}";
+    tag = version;
     postFetch = ''
       # export-subst prevents reproducability
       rm $out/.git_archival.json
     '';
-    hash = "sha256-DXYNFSvmKiulMnWL8w5l9lWGtS9Sff/Hn4x538nrvzo=";
+    hash = "sha256-FEp9kwUAPSAnGcAuxApAq1AXiT0klXuXE2M6xNVilRg=";
   };
 
   postPatch = ''
     rm -r vendor
+
+    # TODO remove starting with 0.11.9
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=64,<72.2.0" setuptools
   '';
 
   nativeBuildInputs = [ pkg-config ];

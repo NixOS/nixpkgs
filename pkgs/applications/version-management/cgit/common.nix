@@ -1,27 +1,68 @@
-{ pname, version, src, gitSrc, buildInputs ? []
-, homepage, description, maintainers
-, passthru ? {}
+{
+  pname,
+  version,
+  src,
+  gitSrc,
+  buildInputs ? [ ],
+  homepage,
+  description,
+  maintainers,
+  passthru ? { },
 }:
 
-{ lib, stdenv, openssl, zlib, asciidoc, libxml2, libxslt
-, docbook_xsl, pkg-config
-, coreutils, gnused, groff, docutils
-, gzip, bzip2, lzip, xz, zstd
-, python3Packages
+{
+  lib,
+  stdenv,
+  openssl,
+  zlib,
+  asciidoc,
+  libxml2,
+  libxslt,
+  docbook_xsl,
+  pkg-config,
+  coreutils,
+  gnused,
+  groff,
+  docutils,
+  gzip,
+  bzip2,
+  lzip,
+  xz,
+  zstd,
+  python3Packages,
 }:
 
 stdenv.mkDerivation {
-  inherit pname version src gitSrc passthru;
+  inherit
+    pname
+    version
+    src
+    gitSrc
+    passthru
+    ;
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [
-    pkg-config asciidoc
-  ] ++ (with python3Packages; [ python wrapPython ]);
+  nativeBuildInputs =
+    [
+      pkg-config
+      asciidoc
+    ]
+    ++ (with python3Packages; [
+      python
+      wrapPython
+    ]);
   buildInputs = buildInputs ++ [
-    openssl zlib libxml2 libxslt docbook_xsl
+    openssl
+    zlib
+    libxml2
+    libxslt
+    docbook_xsl
   ];
-  pythonPath = with python3Packages; [ pygments markdown ];
+  pythonPath = with python3Packages; [
+    pygments
+    markdown
+  ];
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
@@ -65,7 +106,12 @@ stdenv.mkDerivation {
     wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
 
     for script in $out/lib/cgit/filters/*.sh $out/lib/cgit/filters/html-converters/txt2html; do
-      wrapProgram $script --prefix PATH : '${lib.makeBinPath [ coreutils gnused ]}'
+      wrapProgram $script --prefix PATH : '${
+        lib.makeBinPath [
+          coreutils
+          gnused
+        ]
+      }'
     done
   '';
 

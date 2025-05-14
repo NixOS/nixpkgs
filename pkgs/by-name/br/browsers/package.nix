@@ -14,22 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "browsers";
-  version = "0.5.8";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Browsers-software";
     repo = "browsers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-o9vyrHQsZQ3qywA4bviM+W4xx64IZL24VHErMFAEMFE=";
+    tag = version;
+    hash = "sha256-qLqyv5XXG7cpW+/eNCWguqemT3G2BhnolntHi2zZJ0o=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "druid-0.8.3" = "sha256-s9csjZ0ZimOrPnjJpPjrrMdNKAXFfroWHBPeR369Phk=";
-      "rolling-file-0.2.0" = "sha256-3xeOSXFVVgeKRE39gtzTURt0OkKScQ4uwtvLl4CE3R4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-b8sqzv7Mg8w3eA381r9vkB7yh3G8fgTvQFqmkoX4JQk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -67,7 +62,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Browsers-software/browsers/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ravenz46 ];
-    platforms = lib.platforms.linux;
     mainProgram = "browsers";
   };
 }

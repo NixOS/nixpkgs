@@ -2,29 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   aiohttp,
   dataclasses-json,
-  langchain-core,
+  httpx-sse,
   langchain,
+  langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
 
-  # optional-dependencies
-  typer,
-  numpy,
-
   # tests
+  blockbuster,
   httpx,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -38,45 +38,50 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.1";
+  version = "0.3.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-h7+89w8PkSpFxGGQKFC6FuB6Q2B27EYgLk0aiPqwp4s=";
+    tag = "langchain-community==${version}";
+    hash = "sha256-fotu3vUCWnAVyjFjsIUjk1If81yQ3/YLj26PksmnvGE=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "pydantic-settings" ];
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest langchain and -core.
+    # That prevents us from updating individul components.
+    "langchain"
+    "langchain-core"
+    "numpy"
+    "pydantic-settings"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp
     dataclasses-json
-    langchain-core
+    httpx-sse
     langchain
+    langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
     sqlalchemy
     tenacity
   ];
-
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
-
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
+    blockbuster
     httpx
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio
@@ -90,27 +95,46 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-  };
-
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # Test require network access
     "test_ovhcloud_embed_documents"
     "test_yandex"
-    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
-    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
     "test_sql_database_run"
+    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
+    "test_create_sql_agent"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_proper_inputs"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_variable_key_naming"
+    # Tests against magic values in dict
+    "test_serializable_mapping"
   ];
+
+  disabledTestPaths = [
+    # ValueError: Received unsupported arguments {'strict': None}
+    "tests/unit_tests/chat_models/test_cloudflare_workersai.py"
+    # depends on Pydantic v1 notations, will not load
+    "tests/unit_tests/document_loaders/test_gitbook.py"
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-community==([0-9.]+)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

@@ -1,11 +1,10 @@
-{ lib
-, bzip2
-, darwin
-, fetchFromGitHub
-, pkg-config
-, rustPlatform
-, stdenv
-, zstd
+{
+  lib,
+  bzip2,
+  fetchFromGitHub,
+  pkg-config,
+  rustPlatform,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Achiefs";
     repo = "fim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V9BzgVcDTnYSy7N5fCo38vQmXRDXLjY6wvnSkIpuDGg=";
   };
 
@@ -34,11 +33,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     bzip2
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {

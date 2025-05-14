@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
+  libsForQt5,
   udisks2-qt5,
   util-linux,
   libnl,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-anything";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

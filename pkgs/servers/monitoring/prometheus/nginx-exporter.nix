@@ -1,19 +1,35 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "nginx_exporter";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
     rev = "v${version}";
-    sha256 = "sha256-TcQXYZsr3hjE93GfeBt8AJLuQQA7UM+wv1SmCnqON+M=";
+    sha256 = "sha256-V/4h212N1U4wMRt1oL6c1fe/BJH7FVjvx1cSb48mUi0=";
   };
 
-  vendorHash = "sha256-qmyqAbwQYgUFFQwCLakQGta2XMGCbCOvCB93S8/TWIs=";
+  vendorHash = "sha256-gsdmLg4wtSoY9tg4hDzf4wuCgYEEzopSLJ/7qkVvIzU=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+    ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 
@@ -22,6 +38,11 @@ buildGoModule rec {
     mainProgram = "nginx-prometheus-exporter";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz willibutz globin ];
+    maintainers = with maintainers; [
+      benley
+      fpletz
+      willibutz
+      globin
+    ];
   };
 }

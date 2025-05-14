@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "ansi2image";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1sPEEWcOzesLQXSeMsUra8ZRSMAKzH6iisOgdhpxhKM=";
   };
 

@@ -4,17 +4,17 @@
   fetchFromGitHub,
   pythonOlder,
   stdenvNoCC,
-  substituteAll,
+  replaceVars,
 
   # build
   setuptools,
 
-  # propagates
+  # dependencies
   aiohttp,
   aiorun,
   async-timeout,
+  atomicwrites,
   coloredlogs,
-  dacite,
   orjson,
   home-assistant-chip-clusters,
 
@@ -34,13 +34,13 @@
 let
   paaCerts = stdenvNoCC.mkDerivation rec {
     pname = "matter-server-paa-certificates";
-    version = "1.3.0.0";
+    version = "1.4.0.0";
 
     src = fetchFromGitHub {
       owner = "project-chip";
       repo = "connectedhomeip";
       rev = "refs/tags/v${version}";
-      hash = "sha256-5MI6r0KhSTzolesTQ8YWeoko64jFu4jHfO5KOOKpV0A=";
+      hash = "sha256-uJyStkwynPCm1B2ZdnDC6IAGlh+BKGfJW7tU4tULHFo=";
     };
 
     installPhase = ''
@@ -56,7 +56,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "6.6.0";
+  version = "7.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -65,12 +65,11 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-g+97a/X0FSapMLfdW6iNf1akkHGLqCmHYimQU/M6loo=";
+    hash = "sha256-kwN7mLSKrxsAydp7PnN7kTvvi5zQSpXVwMh2slL6aIA=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./link-paa-root-certs.patch;
+    (replaceVars ./link-paa-root-certs.patch {
       paacerts = paaCerts;
     })
   ];
@@ -91,8 +90,8 @@ buildPythonPackage rec {
     aiohttp
     aiorun
     async-timeout
+    atomicwrites
     coloredlogs
-    dacite
     orjson
     home-assistant-chip-clusters
   ];
@@ -119,10 +118,9 @@ buildPythonPackage rec {
       export PYTHONPATH=${pythonEnv}/${python.sitePackages}
     '';
 
-  pytestFlagsArray = [
-    # Upstream theymselves limit the test scope
-    # https://github.com/home-assistant-libs/python-matter-server/blob/main/.github/workflows/test.yml#L65
-    "tests/server"
+  disabledTestPaths = [
+    # requires internet access
+    "tests/server/ota/test_dcl.py"
   ];
 
   meta = with lib; {
@@ -131,6 +129,6 @@ buildPythonPackage rec {
     mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

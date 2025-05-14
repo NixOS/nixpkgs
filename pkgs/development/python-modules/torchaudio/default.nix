@@ -3,6 +3,7 @@
   symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -25,7 +26,7 @@
 
 let
   # TODO: Reuse one defined in torch?
-  # Some of those dependencies are probbly not required,
+  # Some of those dependencies are probably not required,
   # but it breaks when the store path is different between torch and torchaudio
   rocmtoolkit_joined = symlinkJoin {
     name = "rocm-merged";
@@ -35,7 +36,6 @@ let
       clr
       rccl
       miopen
-      miopengemm
       rocrand
       rocblas
       rocsparse
@@ -48,9 +48,9 @@ let
       rocsolver
       hipfft
       hipsolver
+      hipblas-common
       hipblas
       rocminfo
-      rocm-thunk
       rocm-comgr
       rocm-device-libs
       rocm-runtime
@@ -76,29 +76,27 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
+
+  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Swh+HnkGRzjQFt9mYO+qBq4BDTbmLGSkOrN2ZUQdNUI=";
+    tag = "v${version}";
+    hash = "sha256-WNdDBB2nShbPPW7GU5cMij00u5PUdN+j5pm41yrKnCA=";
   };
 
-  patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
+  patches = [
+    ./0001-setup.py-propagate-cmakeFlags.patch
+  ];
 
-  postPatch =
-    ''
-      substituteInPlace setup.py \
-        --replace 'print(" --- Initializing submodules")' "return" \
-        --replace "_fetch_archives(_parse_sources())" "pass"
-    ''
-    + lib.optionalString rocmSupport ''
-      # There is no .info/version-dev, only .info/version
-      substituteInPlace cmake/LoadHIP.cmake \
-        --replace "/.info/version-dev" "/.info/version"
-    '';
+  postPatch = lib.optionalString rocmSupport ''
+    # There is no .info/version-dev, only .info/version
+    substituteInPlace cmake/LoadHIP.cmake \
+      --replace-fail "/.info/version-dev" "/.info/version"
+  '';
 
   env = {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
@@ -153,16 +151,16 @@ buildPythonPackage rec {
 
   doCheck = false; # requires sox backend
 
+  pythonImportsCheck = [ "torchaudio" ];
+
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     license = lib.licenses.bsd2;
-    platforms = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms =
+      lib.platforms.linux
+      ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

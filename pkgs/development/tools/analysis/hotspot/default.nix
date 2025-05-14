@@ -1,51 +1,43 @@
-{ lib
-, stdenv
-, binutils
-, cmake
-, extra-cmake-modules
-, patchelfUnstable
-, wrapQtAppsHook
-, elfutils
-, fetchFromGitHub
-, fetchpatch
-, kconfigwidgets
-, kddockwidgets
-, ki18n
-, kio
-, kitemmodels
-, kitemviews
-, kparts
-, kwindowsystem
-, libelf
-, linuxPackages
-, qtbase
-, qtsvg
-, rustc-demangle
-, syntax-highlighting
-, threadweaver
-, zstd
+{
+  lib,
+  stdenv,
+  binutils,
+  cmake,
+  extra-cmake-modules,
+  patchelfUnstable,
+  wrapQtAppsHook,
+  elfutils,
+  fetchFromGitHub,
+  kconfigwidgets,
+  kddockwidgets,
+  ki18n,
+  kio,
+  kitemmodels,
+  kitemviews,
+  konsole,
+  kparts,
+  kwindowsystem,
+  libelf,
+  linuxPackages,
+  qtbase,
+  qtsvg,
+  rustc-demangle,
+  syntax-highlighting,
+  threadweaver,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hotspot";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FJkDPWqNwoWg/15tvMnwke7PVtWVuqT0gtJBFQE0qZ4=";
+    tag = "v${version}";
+    hash = "sha256-O2wp19scyHIwIY2AzKmPmorGXDH249/OhSg+KtzOYhI=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Backport stuck UI bug fix
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://github.com/KDAB/hotspot/commit/7639dee8617dba9b88182c7ff4887e8d3714ac98.patch";
-      hash = "sha256-aAo9uEy+MBztMhnC5jB08moZBeRCENU22R39pqSBXOY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,6 +55,7 @@ stdenv.mkDerivation rec {
     kio
     kitemmodels
     kitemviews
+    konsole
     kparts
     kwindowsystem
     libelf
@@ -75,7 +68,12 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ linuxPackages.perf binutils ]}"
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        linuxPackages.perf
+        binutils
+      ]
+    }"
   ];
 
   preFixup = ''
@@ -95,7 +93,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/KDAB/hotspot";
     changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
-    license = with licenses; [ gpl2Only gpl3Only ];
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ nh2 ];
   };

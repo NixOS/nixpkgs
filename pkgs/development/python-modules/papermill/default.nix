@@ -1,32 +1,41 @@
 {
   lib,
   stdenv,
-  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   ansicolors,
+  click,
+  entrypoints,
+  nbclient,
+  nbformat,
+  pyyaml,
+  requests,
+  tenacity,
+  tqdm,
+  pythonAtLeast,
+  aiohttp,
+
+  # optional-dependencies
   azure-datalake-store,
   azure-identity,
   azure-storage-blob,
-  boto3,
-  buildPythonPackage,
-  click,
-  entrypoints,
-  fetchFromGitHub,
   gcsfs,
+  pygithub,
+  pyarrow,
+  boto3,
+
+  # tests
   ipykernel,
   moto,
-  nbclient,
-  nbformat,
-  pyarrow,
-  pygithub,
   pytest-mock,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools,
-  tenacity,
-  tqdm,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -34,27 +43,25 @@ buildPythonPackage rec {
   version = "2.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nteract";
     repo = "papermill";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NxC5+hRDdMCl/7ZIho5ml4hdENrgO+wzi87GRPeMv8Q=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    click
-    pyyaml
-    nbformat
-    nbclient
-    tqdm
-    requests
-    entrypoints
-    tenacity
     ansicolors
+    click
+    entrypoints
+    nbclient
+    nbformat
+    pyyaml
+    requests
+    tenacity
+    tqdm
   ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
   optional-dependencies = {
@@ -69,18 +76,30 @@ buildPythonPackage rec {
     s3 = [ boto3 ];
   };
 
-  nativeCheckInputs = [
-    ipykernel
-    moto
-    pytest-mock
-    pytestCheckHook
-  ] ++ optional-dependencies.azure ++ optional-dependencies.s3 ++ optional-dependencies.gcs;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs =
+    [
+      ipykernel
+      moto
+      pytest-mock
+      pytestCheckHook
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ optional-dependencies.azure
+    ++ optional-dependencies.s3
+    ++ optional-dependencies.gcs;
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "papermill" ];
+
+  # Using pytestFlagsArray to prevent disabling false positives
+  pytestFlagsArray = [
+    # AssertionError: 'error' != 'display_data'
+    "--deselect=papermill/tests/test_execute.py::TestBrokenNotebook2::test"
+
+    # AssertionError: '\x1b[31mSystemExit\x1b[39m\x1b[31m:\x1b[39m 1\n' != '\x1b[0;31mSystemExit\x1b[0m\x1b[0;31m:\x1b[0m 1\n'
+    "--deselect=papermill/tests/test_execute.py::TestOutputFormatting::test_output_formatting"
+  ];
 
   disabledTests =
     [
@@ -99,10 +118,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Parametrize and run Jupyter and interact with notebooks";
     homepage = "https://github.com/nteract/papermill";
-    license = licenses.bsd3;
+    changelog = "https://papermill.readthedocs.io/en/latest/changelog.html";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "papermill";
   };

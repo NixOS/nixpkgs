@@ -9,7 +9,7 @@
   fire,
   fonttools,
   numpy,
-  opencv4,
+  opencv-python-headless,
   tkinter,
   python-docx,
   setuptools,
@@ -25,7 +25,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "ArtifexSoftware";
     repo = "pdf2docx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tMITDm2NkxWS+H/hhd2LlaPbyuI86ZKaALqqHJqb8V0=";
   };
 
@@ -34,8 +34,6 @@ buildPythonPackage {
     setuptools
   ];
 
-  pythonRemoveDeps = [ "opencv-python" ];
-
   preBuild = "echo '${version}' > version.txt";
 
   dependencies = [
@@ -43,7 +41,7 @@ buildPythonPackage {
     fire
     fonttools
     numpy
-    opencv4
+    opencv-python-headless
     python-docx
   ];
 

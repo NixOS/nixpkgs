@@ -1,6 +1,7 @@
-{ callPackage
-, fetchFromGitHub
-, fetchpatch2
+{
+  callPackage,
+  fetchFromGitHub,
+  fetchpatch2,
 }:
 
 callPackage ./build.nix rec {

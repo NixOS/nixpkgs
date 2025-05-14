@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/GNOME/swell-foop/-/tree/${version}?ref_type=tags";
     description = "Puzzle game, previously known as Same GNOME";
     mainProgram = "swell-foop";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

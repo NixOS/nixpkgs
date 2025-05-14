@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "HWI";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sQqft+5M+X+91bFqpUrbDRrFzpe/l1+w+pnIHwqezR8=";
   };
 

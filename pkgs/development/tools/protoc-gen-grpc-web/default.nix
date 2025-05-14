@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, protobuf
-, isStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  protobuf,
+  isStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

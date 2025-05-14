@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -63,29 +68,29 @@ in
 
   config = mkIf config.services.morty.enable {
 
-    users.users.morty =
-      { description = "Morty user";
-        createHome = true;
-        home = "/var/lib/morty";
-        isSystemUser = true;
-        group = "morty";
-      };
-    users.groups.morty = {};
+    users.users.morty = {
+      description = "Morty user";
+      createHome = true;
+      home = "/var/lib/morty";
+      isSystemUser = true;
+      group = "morty";
+    };
+    users.groups.morty = { };
 
-    systemd.services.morty =
-      {
-        description = "Morty sanitizing proxy server.";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = "morty";
-          ExecStart = ''${cfg.package}/bin/morty              \
-            -listen ${cfg.listenAddress}:${toString cfg.port} \
-            ${optionalString cfg.ipv6 "-ipv6"}                \
-            ${optionalString (cfg.key != "") "-key " + cfg.key} \
-          '';
-        };
+    systemd.services.morty = {
+      description = "Morty sanitizing proxy server.";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = "morty";
+        ExecStart = ''
+          ${cfg.package}/bin/morty              \
+                      -listen ${cfg.listenAddress}:${toString cfg.port} \
+                      ${optionalString cfg.ipv6 "-ipv6"}                \
+                      ${optionalString (cfg.key != "") "-key " + cfg.key} \
+        '';
       };
+    };
     environment.systemPackages = [ cfg.package ];
 
   };

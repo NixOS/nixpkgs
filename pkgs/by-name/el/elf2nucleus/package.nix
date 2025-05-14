@@ -1,10 +1,10 @@
 {
-  installShellFiles
-, fetchFromGitHub
-, lib
-, micronucleus
-, rustPlatform
-, stdenv
+  installShellFiles,
+  fetchFromGitHub,
+  lib,
+  micronucleus,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
+    repo = "elf2nucleus";
     rev = "v${version}";
     hash = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
   };
 
-  cargoHash = "sha256-IeQnI6WTzxSI/VzoHtVukZtB1jX98wzLOT01NMLD5wQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Xw+heCEwQePyU2gElpG8PTIUZA7y+Onx+2AX2NZzDGs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

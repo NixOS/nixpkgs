@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, okteto }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  okteto,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.0.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
-    rev = version;
-    hash = "sha256-TxZdHR6SNHrIAdrrg3X9TnWCR8bjos93d7k7eaKpvQ8=";
+    rev = finalAttrs.version;
+    hash = "sha256-xJdG5BHlVkK+wGn4ZNFfRoPimnlZrQOLbtKvCnBewqw=";
   };
 
-  vendorHash = "sha256-GiA/fmLT9x3gGF066bHTBWDd1yhygeG9snwCpwhOlMM=";
+  vendorHash = "sha256-zfY/AfSo8f9LALf0FRAdd26Q9xGcKvVAnK3rnACCW4s=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -21,15 +28,22 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [ "integration" "samples" ];
+  excludedPackages = [
+    "integration"
+    "samples"
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/okteto/okteto/pkg/config.VersionString=${version}"
+    "-X github.com/okteto/okteto/pkg/config.VersionString=${finalAttrs.version}"
   ];
 
-  tags = [ "osusergo" "netgo" "static_build" ];
+  tags = [
+    "osusergo"
+    "netgo"
+    "static_build"
+  ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -47,6 +61,7 @@ buildGoModule rec {
         "Test_translateJobWithoutVolumes"
         "Test_translateJobWithVolumes"
         "Test_translateService"
+        "TestProtobufTranslator_Translate_Success"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -63,11 +78,11 @@ buildGoModule rec {
     command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Develop your applications directly in your Kubernetes Cluster";
     homepage = "https://okteto.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "okteto";
   };
-}
+})

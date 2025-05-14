@@ -1,11 +1,11 @@
 {
-  lib
-, stdenv
-, src
-, version
-, autoPatchelfHook
-, fontconfig
-, xorg
+  lib,
+  stdenv,
+  src,
+  version,
+  autoPatchelfHook,
+  fontconfig,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     fontconfig
     xorg.libXrandr
     xorg.libXfixes
@@ -71,4 +71,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

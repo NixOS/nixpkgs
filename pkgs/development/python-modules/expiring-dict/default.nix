@@ -2,20 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "expiring-dict";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PEBK2x5DaUaMt+Ub+8nEcNfi6GPv4qHHXU7XBtDc4aY=";
+    pname = "expiring_dict";
+    inherit version;
+    hash = "sha256-yoy4AjBOrlszoj7EwZAZthCt/aUMvEyb+jrVws04djE=";
   };
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  build-system = [ setuptools ];
+
+  dependencies = [ sortedcontainers ];
 
   pythonImportsCheck = [ "expiring_dict" ];
 

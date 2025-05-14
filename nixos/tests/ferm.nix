@@ -1,21 +1,32 @@
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "ferm";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ mic92 ];
+    };
 
-import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "ferm";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mic92 ];
-  };
-
-  nodes =
-    { client =
+    nodes = {
+      client =
         { pkgs, ... }:
         with pkgs.lib;
         {
           networking = {
             dhcpcd.enable = false;
-            interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::2"; prefixLength = 64; } ];
-            interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.2"; prefixLength = 24; } ];
+            interfaces.eth1.ipv6.addresses = mkOverride 0 [
+              {
+                address = "fd00::2";
+                prefixLength = 64;
+              }
+            ];
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [
+              {
+                address = "192.168.1.2";
+                prefixLength = 24;
+              }
+            ];
           };
-      };
+        };
       server =
         { pkgs, ... }:
         with pkgs.lib;
@@ -24,8 +35,18 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             dhcpcd.enable = false;
             useNetworkd = true;
             useDHCP = false;
-            interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::1"; prefixLength = 64; } ];
-            interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.1"; prefixLength = 24; } ];
+            interfaces.eth1.ipv6.addresses = mkOverride 0 [
+              {
+                address = "fd00::1";
+                prefixLength = 64;
+              }
+            ];
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [
+              {
+                address = "192.168.1.1";
+                prefixLength = 24;
+              }
+            ];
           };
 
           services = {
@@ -51,8 +72,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         };
     };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       client.systemctl("start network-online.target")
@@ -74,4 +94,5 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           client.fail("curl --fail -g http://192.168.1.1:8080/status")
           client.fail("curl --fail -g http://[fd00::1]:8080/status")
     '';
-})
+  }
+)

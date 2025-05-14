@@ -3,6 +3,7 @@
   beautifulsoup4,
   buildPythonPackage,
   cryptography,
+  curl-cffi,
   fetchFromGitHub,
   frozendict,
   html5lib,
@@ -12,7 +13,6 @@
   pandas,
   peewee,
   platformdirs,
-  pythonOlder,
   pytz,
   requests-cache,
   requests-ratelimiter,
@@ -23,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.44";
+  version = "0.2.58";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XaenqZMvbimuptfCpvyhXxvbJTPA94+nN938HI5gDQo=";
+    tag = version;
+    hash = "sha256-Xndky4sMVn0sPH4CFdLuwcfhPzMXtH4rdakQdve3RK0=";
   };
 
   build-system = [ setuptools ];
@@ -40,6 +38,7 @@ buildPythonPackage rec {
   dependencies = [
     beautifulsoup4
     cryptography
+    curl-cffi
     frozendict
     html5lib
     lxml
@@ -70,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to doiwnload Yahoo! Finance market data";
     homepage = "https://github.com/ranaroussi/yfinance";
-    changelog = "https://github.com/ranaroussi/yfinance/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

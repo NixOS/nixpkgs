@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   tbb,
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ikos";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
     repo = "ikos";
     rev = "v${version}";
-    hash = "sha256-xJuSpQHShggDqLVQaj0a0fEPOWUFIrbGmxazu4FKISs=";
+    hash = "sha256-kqgGD0plTW0N30kD7Y8xOvGODplJbi37Wh6yYAkzNKI=";
   };
 
   nativeBuildInputs = [

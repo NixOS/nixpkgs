@@ -36,7 +36,7 @@ for asset in $(curl --silent https://api.github.com/repos/AdguardTeam/AdGuardHom
     if [ -n "$adg_system" ]; then
         fetch="$(grep '\.zip$' <<< "$url" > /dev/null && echo fetchzip || echo fetchurl)"
         nix_system=${systems[$adg_system]}
-        nix_src="$(nix-prefetch -s --output nix $fetch --url $url)"
+        nix_src="$(nix-prefetch --option extra-experimental-features flakes -s --output nix $fetch --url $url)"
         echo "$nix_system = $fetch $nix_src;" >> $bins
     fi
 done

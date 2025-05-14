@@ -1,19 +1,23 @@
-{ lib, stdenv
-, cmake
-, libSrc
-, stepreduce
-, parallel
-, zip
+{
+  lib,
+  stdenv,
+  cmake,
+  libSrc,
+  stepreduce,
+  parallel,
+  zip,
 }:
 let
-  mkLib = name:
+  mkLib =
+    name:
     stdenv.mkDerivation {
       pname = "kicad-${name}";
       version = builtins.substring 0 10 (libSrc name).rev;
 
       src = libSrc name;
 
-      nativeBuildInputs = [ cmake ]
+      nativeBuildInputs =
+        [ cmake ]
         ++ lib.optionals (name == "packages3d") [
           stepreduce
           parallel
@@ -24,7 +28,7 @@ let
         find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
       '';
 
-      meta = rec {
+      meta = {
         license = lib.licenses.cc-by-sa-40;
         platforms = lib.platforms.all;
       };

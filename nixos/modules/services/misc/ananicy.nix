@@ -19,12 +19,6 @@ let
   );
   servicename =
     if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
-  # Ananicy-CPP with BPF is not supported on hardened kernels https://github.com/NixOS/nixpkgs/issues/327382
-  finalPackage =
-    if (servicename == "ananicy-cpp" && config.boot.kernelPackages.isHardened) then
-      (cfg.package { withBpf = false; })
-    else
-      cfg.package;
 in
 {
   options.services.ananicy = {
@@ -113,23 +107,28 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ finalPackage ];
-      etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
-        mkdir -p $out
-        # ananicy-cpp does not include rules or settings on purpose
-        if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
-          cp -r ${cfg.rulesProvider}/etc/ananicy.d/* $out
-        else
-          cp -r ${cfg.rulesProvider}/* $out
-        fi
+      systemPackages = [ cfg.package ];
+      etc."ananicy.d".source =
+        pkgs.runCommand "ananicyfiles"
+          {
+            preferLocalBuild = true;
+          }
+          ''
+            mkdir -p $out
+            # ananicy-cpp does not include rules or settings on purpose
+            if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
+              cp -r ${cfg.rulesProvider}/etc/ananicy.d/* $out
+            else
+              cp -r ${cfg.rulesProvider}/* $out
+            fi
 
-        # configured through .setings
-        rm -f $out/ananicy.conf
-        cp ${configFile} $out/ananicy.conf
-        ${lib.optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
-        ${lib.optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
-        ${lib.optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
-      '';
+            # configured through .setings
+            rm -f $out/ananicy.conf
+            cp ${configFile} $out/ananicy.conf
+            ${lib.optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
+            ${lib.optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
+            ${lib.optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
+          '';
     };
 
     # ananicy and ananicy-cpp have different default settings
@@ -165,7 +164,7 @@ in
       );
 
     systemd = {
-      packages = [ finalPackage ];
+      packages = [ cfg.package ];
       services."${servicename}" = {
         wantedBy = [ "default.target" ];
       };

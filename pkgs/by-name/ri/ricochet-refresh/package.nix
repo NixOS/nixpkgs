@@ -1,39 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, openssl
-, protobuf
-, pkg-config
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  openssl,
+  protobuf,
+  pkg-config,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.25";
+  version = "3.0.31";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     rev = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-MXbsNrF3y2DimXUuf6XbqqCxcNsTGfNHSAMstdX1MoU=";
+    hash = "sha256-MEYq5WOt9t8WWqLOJcEVs0guPpob0EVUa+tAIbnDafY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
   strictDeps = true;
 
-  buildInputs = (with qt5; [
-    qtbase
-    qttools
-    qtmultimedia
-    qtquickcontrols2
-    qtwayland
-  ]) ++ [
-    openssl
-    protobuf
-  ];
+  buildInputs =
+    (with qt5; [
+      qtbase
+      qttools
+      qtmultimedia
+      qtquickcontrols2
+      qtwayland
+    ])
+    ++ [
+      openssl
+      protobuf
+    ];
 
   nativeBuildInputs = [
     pkg-config

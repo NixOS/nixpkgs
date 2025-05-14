@@ -1,9 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, eigen, libGL, spglib
-, mmtf-cpp, glew, python3, libarchive, libmsym, msgpack, qttools, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  eigen,
+  libGL,
+  spglib,
+  mmtf-cpp,
+  glew,
+  python3,
+  libarchive,
+  libmsym,
+  msgpack,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 let
-  pythonWP = python3.withPackages (p: with p; [ openbabel-bindings numpy ]);
+  pythonWP = python3.withPackages (
+    p: with p; [
+      openbabel-bindings
+      numpy
+    ]
+  );
 
   # Pure data repositories
   moleculesRepo = fetchFromGitHub {
@@ -25,15 +45,16 @@ let
     hash = "sha256-Valc5zwlaZ//eDupFouCfWCeID7/4ObU1SDLFJ/mo/g=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "avogadrolibs";
-  version = "1.99.0";
+  version = "1.100.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = pname;
     rev = version;
-    hash = "sha256-3jUbzEd7tUeHlVFAO9KJ+LOQlkLzJQvwmHp8gOriZRI=";
+    hash = "sha256-zDn5cgMBJYM27mfQHujxhIf4ZTljFxvFrKl7pNa4K9E=";
   };
 
   postUnpack = ''
@@ -41,15 +62,6 @@ in stdenv.mkDerivation rec {
     cp -r ${crystalsRepo} crystals
     cp -r ${fragmentsRepo} fragments
   '';
-
-  patches = [
-    # Fix a Cmake error when searching the fragments directory.
-    # Can be removed upon next release
-    (fetchpatch {
-      url = "https://github.com/OpenChemistry/avogadrolibs/commit/6e2e84dbb088a40d69117c1836f4306792f57acd.patch";
-      hash = "sha256-0tY9kHh6e5IDZQ8cWPgTpwIBhfZQlgUEZbPHOmtOVUQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

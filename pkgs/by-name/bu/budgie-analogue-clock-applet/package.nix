@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/samlane-ma/analogue-clock-applet";
     changelog = "https://github.com/samlane-ma/analogue-clock-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
   };
 })

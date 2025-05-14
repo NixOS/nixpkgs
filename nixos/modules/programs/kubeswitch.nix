@@ -29,7 +29,7 @@ in
 
   config =
     let
-      shell_files = pkgs.runCommand "kubeswitch-shell-files" {} ''
+      shell_files = pkgs.runCommand "kubeswitch-shell-files" { } ''
         mkdir -p $out/share
         for shell in bash zsh; do
           ${cfg.package}/bin/switcher init $shell | sed 's/switch(/${cfg.commandName}(/' > $out/share/${cfg.commandName}_init.$shell

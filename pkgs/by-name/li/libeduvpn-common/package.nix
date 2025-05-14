@@ -1,15 +1,16 @@
-{ lib
-, buildGoModule
-, fetchurl
+{
+  lib,
+  buildGoModule,
+  fetchurl,
 }:
 
 buildGoModule rec {
   pname = "libeduvpn-common";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchurl {
-    url = "https://github.com/eduvpn/eduvpn-common/releases/download/${version}/eduvpn-common-${version}.tar.xz";
-    hash = "sha256-OgcinEeKMDtZj3Tw+7cMsF385ZZTBR/J5dqIihDTlj8=";
+    url = "https://codeberg.org/eduVPN/eduvpn-common/releases/download/${version}/eduvpn-common-${version}.tar.xz";
+    hash = "sha256-aQpOoY3rDF9DeQ/8tRYdBs4s2IdwAe62y9KfXPMsb4k=";
   };
 
   vendorHash = null;
@@ -30,7 +31,10 @@ buildGoModule rec {
     changelog = "https://raw.githubusercontent.com/eduvpn/eduvpn-common/${version}/CHANGES.md";
     description = "Code to be shared between eduVPN clients";
     homepage = "https://github.com/eduvpn/eduvpn-common";
-    maintainers = with maintainers; [ benneti jwijenbergh ];
+    maintainers = with maintainers; [
+      benneti
+      jwijenbergh
+    ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

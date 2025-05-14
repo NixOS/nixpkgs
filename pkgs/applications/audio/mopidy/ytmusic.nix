@@ -1,12 +1,14 @@
-{ lib
-, python3
-, fetchFromGitHub
-, mopidy
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  mopidy,
 }:
 
 let
   python = python3;
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "mopidy-ytmusic";
   version = "0.3.9";
   pyproject = true;

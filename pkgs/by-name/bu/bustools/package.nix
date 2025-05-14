@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bustools";
-  version = "0.44.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "BUStools";
     repo = "bustools";
     rev = "v${version}";
-    sha256 = "sha256-chdHwwnhHFGJLu4KZmFJp3SZ26GFnbelm3Qz0yeKoBs=";
+    sha256 = "sha256-Af2WUryx4HQuAlNJ1RWJK1Mj2M7X+4Ckap3rqEJ3vto=";
   };
 
   nativeBuildInputs = [ cmake ];

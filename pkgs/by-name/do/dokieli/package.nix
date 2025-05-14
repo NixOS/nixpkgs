@@ -1,37 +1,50 @@
 {
   lib,
-  mkYarnPackage,
+  stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
+  yarnConfigHook,
   makeWrapper,
+  yarnBuildHook,
+  yarnInstallHook,
   nodejs,
   xsel,
 }:
 
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2024-09-23";
+  version = "0-unstable-2024-12-12";
 
+  # Can't update newer versions currently because newer versions require yarn-berry, and it's not in nixpkgs, yet.
   src = fetchFromGitHub {
     owner = "linkeddata";
     repo = "dokieli";
-    rev = "40ebbc60ba48d8b08f763b07befba96382c5f027";
-    hash = "sha256-lc96jOR8uXLcZFhN3wpSd9O5cUdKxllB8WWCh2oWuEw=";
+    rev = "d8dc72c81b84ec12f791892a6377a7f6ec46ed3b";
+    hash = "sha256-CzSyQVyeJVOP8NCsa7ST3atG87V1KPSBzTRi0brMFYw=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "sha256-TEXCCLFhpwHZJ8zRGsC7J6EwNaFpIi+CZ3L5uilebK4=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash =
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-bw5HszcHZ60qgYgm4qfhZEYXjJAQ2DXhWU0Reqb9VpQ="
+      else
+        "sha256-rwHBDBWZe4cdTyL7lNkB4nlpd5MWzbTU6kzdLBWcq0M=";
   };
-
-  packageJSON = ./package.json;
 
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    # Needed for executing package.json scripts
+    nodejs
+  ];
 
   postFixup = ''
     makeWrapper ${nodejs}/bin/npx $out/bin/dokieli           \
@@ -53,6 +66,7 @@ mkYarnPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "dokieli";
   };
-}
+})

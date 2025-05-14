@@ -1,5 +1,6 @@
 {
   lib,
+  apple-sdk_15,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -16,31 +17,21 @@
   pango,
   vulkan-loader,
   stdenv,
-  darwin,
   wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bite";
-  version = "0.2.1";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "WINSDK";
     repo = "bite";
     rev = "V${version}";
-    hash = "sha256-A5NII5pLnM4BBy2L+ylXU0anqw4DpKgXmc29fcTq2z8=";
+    hash = "sha256-gio4J+V8achSuR2vQa2dnvOR/u4Zbb5z0UE0xP0gGCU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libc-0.2.140" = "sha256-5cP25BDfkrybiZjmwmzeqd0nzdItFdNSZ4te7FdLpnk=";
-      "nix-0.26.1" = "sha256-AsOX8sLGHJNJhq0P9WDxWsNiRXgZJl15paTcGdPMQXA=";
-      "pdb-0.8.0" = "sha256-CEglHzBpS3rN7+05tS09FbBcOM0jjyvR+DWrEbvRYwE=";
-      "tree-sitter-c-0.21.0" = "sha256-7L3Ua6LBeX2492RTikKYeCNIG5e5XSrCu4UyXX1eQiI=";
-      "tree-sitter-cpp-0.21.0" = "sha256-WZy3S8+bRkpzUFpnLVp18rY5DxN70fdEPYIYx0UqJhs=";
-      "tree-sitter-rust-0.21.0" = "sha256-kZT4Hil7u4GFWImuQCt9nQJ+HL3B5yHD5wjalpDLlSE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ESGX1hnDnU2taKQXre4AQRzQxTC7W+0cEIoQPPC9Lfs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,15 +51,11 @@ rustPlatform.buildRustPackage rec {
       pango
       vulkan-loader
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.Metal
-      darwin.apple_sdk.frameworks.QuartzCore
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
     ];
 
   runtimeDependencies =
@@ -95,7 +82,10 @@ rustPlatform.buildRustPackage rec {
       icon = "bite";
       desktopName = "BiTE";
       comment = meta.description;
-      categories = ["Development" "Utility"];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
@@ -103,8 +93,7 @@ rustPlatform.buildRustPackage rec {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
     license = licenses.mit;
-    maintainers = with maintainers; [vinnymeller];
+    maintainers = with maintainers; [ vinnymeller ];
     mainProgram = "bite";
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

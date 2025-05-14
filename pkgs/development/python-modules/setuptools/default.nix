@@ -5,27 +5,23 @@
   distutils,
   fetchFromGitHub,
   python,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "72.1.0";
-  format = "pyproject";
+  version = "78.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3Hm9HxJdSmyhHtDZeMF76HaR17vZwZWYYhS6Z0nA8rU=";
+    tag = "v${version}";
+    hash = "sha256-6vJ7nzpbm34cpso21Pnh9Ej9AhJa+4/K22XrwuF0R3k=";
   };
 
   patches = [
     ./tag-date.patch
-    ./setuptools-distutils-C++.patch
   ];
-
-  nativeBuildInputs = [ wheel ];
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
@@ -46,6 +42,6 @@ buildPythonPackage rec {
     }";
     license = with licenses; [ mit ];
     platforms = python.meta.platforms;
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "invoiceplane";
@@ -9,43 +9,53 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   nodes = {
-    invoiceplane_caddy = { ... }: {
-      services.invoiceplane.webserver = "caddy";
-      services.invoiceplane.sites = {
-        "site1.local" = {
-          database.name = "invoiceplane1";
-          database.createLocally = true;
-          enable = true;
+    invoiceplane_caddy =
+      { ... }:
+      {
+        services.invoiceplane.webserver = "caddy";
+        services.invoiceplane.sites = {
+          "site1.local" = {
+            database.name = "invoiceplane1";
+            database.createLocally = true;
+            enable = true;
+          };
+          "site2.local" = {
+            database.name = "invoiceplane2";
+            database.createLocally = true;
+            enable = true;
+          };
         };
-        "site2.local" = {
-          database.name = "invoiceplane2";
-          database.createLocally = true;
-          enable = true;
-        };
+
+        networking.firewall.allowedTCPPorts = [ 80 ];
+        networking.hosts."127.0.0.1" = [
+          "site1.local"
+          "site2.local"
+        ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
-    };
+    invoiceplane_nginx =
+      { ... }:
+      {
+        services.invoiceplane.webserver = "nginx";
+        services.invoiceplane.sites = {
+          "site1.local" = {
+            database.name = "invoiceplane1";
+            database.createLocally = true;
+            enable = true;
+          };
+          "site2.local" = {
+            database.name = "invoiceplane2";
+            database.createLocally = true;
+            enable = true;
+          };
+        };
 
-    invoiceplane_nginx = { ... }: {
-      services.invoiceplane.webserver = "nginx";
-      services.invoiceplane.sites = {
-        "site1.local" = {
-          database.name = "invoiceplane1";
-          database.createLocally = true;
-          enable = true;
-        };
-        "site2.local" = {
-          database.name = "invoiceplane2";
-          database.createLocally = true;
-          enable = true;
-        };
+        networking.firewall.allowedTCPPorts = [ 80 ];
+        networking.hosts."127.0.0.1" = [
+          "site1.local"
+          "site2.local"
+        ];
       };
-
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
-    };
   };
 
   testScript = ''
@@ -103,4 +113,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
               f"curl -sSfl --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/setup/upgrade_tables"
             )
   '';
-})
+}

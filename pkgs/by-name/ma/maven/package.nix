@@ -5,8 +5,8 @@
   jdk_headless,
   makeWrapper,
   stdenvNoCC,
+  testers,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
   version = "3.9.9";
@@ -34,14 +34,40 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    buildMaven = callPackage ./build-maven.nix {
-      maven = finalAttrs.finalPackage;
+  passthru =
+    let
+      makeOverridableMavenPackage =
+        mavenRecipe: mavenArgs:
+        let
+          drv = mavenRecipe mavenArgs;
+          overrideWith =
+            newArgs: mavenArgs // (if lib.isFunction newArgs then newArgs mavenArgs else newArgs);
+        in
+        drv
+        // {
+          overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
+        };
+    in
+    {
+      buildMaven = callPackage ./build-maven.nix {
+        maven = finalAttrs.finalPackage;
+      };
+
+      buildMavenPackage = makeOverridableMavenPackage (
+        callPackage ./build-maven-package.nix {
+          maven = finalAttrs.finalPackage;
+        }
+      );
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env MAVEN_OPTS="-Dmaven.repo.local=$TMPDIR/m2" \
+              mvn --version
+          '';
+        };
+      };
     };
-    buildMavenPackage = callPackage ./build-maven-package.nix {
-      maven = finalAttrs.finalPackage;
-    };
-  };
 
   meta = {
     homepage = "https://maven.apache.org/";
@@ -52,9 +78,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tricktron ];
+    teams = [ lib.teams.java ];
     inherit (jdk_headless.meta) platforms;
   };
 })

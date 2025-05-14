@@ -1,31 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, granite7
-, gtk4
-, cups
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  granite7,
+  gtk4,
+  cups,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cPoqpx9G/wwzr4LbCg7+Law4Z1od2+R+uyCT5Jsnqs4=";
+    sha256 = "sha256-1znz8B4CGQGDiJC4Mt61XAh9wWAV8J0+K3AIpFcffXQ=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-printers";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 
 }

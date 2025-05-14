@@ -2,39 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  bunbun,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bunbun";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "devraza";
     repo = "bunbun";
-    # TODO: remove '-bump' at next release
-    rev = "refs/tags/v${version}-bump";
-    hash = "sha256-r4xBUfNY+Q3uAC919ZQbIDgiF981FVqZCOT8XNojZP4=";
+    tag = "v${version}";
+    hash = "sha256-3f/G0Vx1uXeH3QMDVUAHWi4Pf/B88/4F+4XywVsp3/4=";
   };
 
-  cargoHash = "sha256-CcGfaSyCMv0Wm4QsYASBwEnpX8fKbLHRqyEcUmj2w2o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2pgQB2myEnLvrU3ApNL/bwaVcGku+X/TjR6YBqXD7Xg=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreFoundation
-      IOKit
-      SystemConfiguration
-    ]
-  );
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = bunbun; };
   };
 
   meta = {

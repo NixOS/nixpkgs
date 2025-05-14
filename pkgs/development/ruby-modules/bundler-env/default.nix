@@ -1,30 +1,53 @@
-{ ruby, lib, callPackage, defaultGemConfig, buildEnv, runCommand
-, buildPackages
-, bundler
+{
+  ruby,
+  lib,
+  callPackage,
+  defaultGemConfig,
+  buildEnv,
+  runCommand,
+  buildPackages,
+  bundler,
 }@defs:
 
-{ name ? null
-, pname ? null
-, gemdir ? null
-, gemfile ? null
-, lockfile ? null
-, gemset ? null
-, groups ? ["default"]
-, ruby ? defs.ruby
-, copyGemFiles ? false # Copy gem files instead of symlinking
-, gemConfig ? defaultGemConfig
-, postBuild ? null
-, document ? []
-, meta ? {}
-, ignoreCollisions ? false
-, passthru ? {}
-, ...
+{
+  name ? null,
+  pname ? null,
+  gemdir ? null,
+  gemfile ? null,
+  lockfile ? null,
+  gemset ? null,
+  groups ? [ "default" ],
+  ruby ? defs.ruby,
+  copyGemFiles ? false, # Copy gem files instead of symlinking
+  gemConfig ? defaultGemConfig,
+  postBuild ? null,
+  document ? [ ],
+  meta ? { },
+  ignoreCollisions ? false,
+  passthru ? { },
+  ...
 }@args:
 
 let
-  inherit (import ../bundled-common/functions.nix { inherit lib ruby gemConfig groups; }) genStubsScript;
+  inherit
+    (import ../bundled-common/functions.nix {
+      inherit
+        lib
+        ruby
+        gemConfig
+        groups
+        ;
+    })
+    genStubsScript
+    ;
 
-  basicEnv = (callPackage ../bundled-common { inherit bundler; }) (args // { inherit pname name; mainGemName = pname; });
+  basicEnv = (callPackage ../bundled-common { inherit bundler; }) (
+    args
+    // {
+      inherit pname name;
+      mainGemName = pname;
+    }
+  );
 
   inherit (basicEnv) envPaths;
   # Idea here is a mkDerivation that gen-bin-stubs new stubs "as specified" -
@@ -37,40 +60,53 @@ let
   # Different use cases should use different variations on this file, rather
   # than the expression trying to deduce a use case.
 
-  # The basicEnv should be put into passthru so that e.g. nix-shell can use it.
 in
-  if pname == null then
-    basicEnv // { inherit name basicEnv; }
-  else
-    let
-      bundlerEnvArgs = {
-        inherit ignoreCollisions;
+# The basicEnv should be put into passthru so that e.g. nix-shell can use it.
+if pname == null then
+  basicEnv // { inherit name basicEnv; }
+else
+  let
+    bundlerEnvArgs = {
+      inherit ignoreCollisions;
 
-        name = basicEnv.name;
+      name = basicEnv.name;
 
-        paths = envPaths;
-        pathsToLink = [ "/lib" ];
+      paths = envPaths;
+      pathsToLink = [ "/lib" ];
 
-        postBuild = genStubsScript {
-          inherit lib runCommand ruby bundler groups;
+      postBuild =
+        genStubsScript {
+          inherit
+            lib
+            runCommand
+            ruby
+            bundler
+            groups
+            ;
           confFiles = basicEnv.confFiles;
           binPaths = [ basicEnv.gems.${pname} ];
-        } + lib.optionalString (postBuild != null) postBuild;
+        }
+        + lib.optionalString (postBuild != null) postBuild;
 
-        meta = { platforms = ruby.meta.platforms; } // meta;
-        passthru = basicEnv.passthru // {
+      meta = {
+        platforms = ruby.meta.platforms;
+      } // meta;
+      passthru =
+        basicEnv.passthru
+        // {
           inherit basicEnv;
           inherit (basicEnv) env;
-        } // passthru;
-      };
-    in
-      if copyGemFiles then
-        runCommand basicEnv.name bundlerEnvArgs ''
-          mkdir -p $out
-          for i in $paths; do
-            ${buildPackages.rsync}/bin/rsync -a $i/lib $out/
-          done
-          eval "$postBuild"
-        ''
-      else
-        buildEnv bundlerEnvArgs
+        }
+        // passthru;
+    };
+  in
+  if copyGemFiles then
+    runCommand basicEnv.name bundlerEnvArgs ''
+      mkdir -p $out
+      for i in $paths; do
+        ${buildPackages.rsync}/bin/rsync -a $i/lib $out/
+      done
+      eval "$postBuild"
+    ''
+  else
+    buildEnv bundlerEnvArgs

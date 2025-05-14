@@ -13,40 +13,47 @@
   pythonOlder,
   setuptools-scm,
   skia-pathops,
+  syrupy,
   ufolib2,
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.2.8";
+  version = "3.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HSD66FbCxZyACRq7b8p2uizoO4ZqPAn1O8BFoi1/Mkc=";
+    hash = "sha256-jGMH1VZQAUszd8uxH+3mRAfudTiOEoBXSnGOUcqPXao=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
   pythonRelaxDeps = [ "cffsubr" ];
 
-  propagatedBuildInputs = [
-    cu2qu
-    fontmath
-    fonttools
-    defcon
-    compreffor
-    booleanoperations
-    cffsubr
-    ufolib2
-    skia-pathops
-  ] ++ fonttools.optional-dependencies.lxml ++ fonttools.optional-dependencies.ufo;
+  dependencies =
+    [
+      cu2qu
+      fontmath
+      fonttools
+      defcon
+      compreffor
+      booleanoperations
+      cffsubr
+      ufolib2
+      skia-pathops
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
 
   disabledTests = [
     # Do not depend on skia.

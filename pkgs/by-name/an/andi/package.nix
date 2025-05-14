@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "evolbioinf";
     repo = "andi";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tjQ9exFyqu/xnbUGpF6k0kE5C1D93kISjRErwHfjW9E=";
   };
 

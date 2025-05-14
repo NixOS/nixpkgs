@@ -31,21 +31,96 @@ in
               type = (
                 types.submodule {
                   options = {
-                    HOME_NET = mkOption { default = "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"; };
-                    EXTERNAL_NET = mkOption { default = "!$HOME_NET"; };
-                    HTTP_SERVERS = mkOption { default = "$HOME_NET"; };
-                    SMTP_SERVERS = mkOption { default = "$HOME_NET"; };
-                    SQL_SERVERS = mkOption { default = "$HOME_NET"; };
-                    DNS_SERVERS = mkOption { default = "$HOME_NET"; };
-                    TELNET_SERVERS = mkOption { default = "$HOME_NET"; };
-                    AIM_SERVERS = mkOption { default = "$EXTERNAL_NET"; };
-                    DC_SERVERS = mkOption { default = "$HOME_NET"; };
-                    DNP3_SERVER = mkOption { default = "$HOME_NET"; };
-                    DNP3_CLIENT = mkOption { default = "$HOME_NET"; };
-                    MODBUS_CLIENT = mkOption { default = "$HOME_NET"; };
-                    MODBUS_SERVER = mkOption { default = "$HOME_NET"; };
-                    ENIP_CLIENT = mkOption { default = "$HOME_NET"; };
-                    ENIP_SERVER = mkOption { default = "$HOME_NET"; };
+                    HOME_NET = mkOption {
+                      default = "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]";
+                      description = ''
+                        HOME_NET variable.
+                      '';
+                    };
+                    EXTERNAL_NET = mkOption {
+                      default = "!$HOME_NET";
+                      description = ''
+                        EXTERNAL_NET variable.
+                      '';
+                    };
+                    HTTP_SERVERS = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        HTTP_SERVERS variable.
+                      '';
+                    };
+                    SMTP_SERVERS = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        SMTP_SERVERS variable.
+                      '';
+                    };
+                    SQL_SERVERS = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        SQL_SERVERS variable.
+                      '';
+                    };
+                    DNS_SERVERS = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        DNS_SERVERS variable.
+                      '';
+                    };
+                    TELNET_SERVERS = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        TELNET_SERVERS variable.
+                      '';
+                    };
+                    AIM_SERVERS = mkOption {
+                      default = "$EXTERNAL_NET";
+                      description = ''
+                        AIM_SERVERS variable.
+                      '';
+                    };
+                    DC_SERVERS = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        DC_SERVERS variable.
+                      '';
+                    };
+                    DNP3_SERVER = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        DNP3_SERVER variable.
+                      '';
+                    };
+                    DNP3_CLIENT = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        DNP3_CLIENT variable.
+                      '';
+                    };
+                    MODBUS_CLIENT = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        MODBUS_CLIENT variable
+                      '';
+                    };
+                    MODBUS_SERVER = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        MODBUS_SERVER variable.
+                      '';
+                    };
+                    ENIP_CLIENT = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        ENIP_CLIENT variable.
+                      '';
+                    };
+                    ENIP_SERVER = mkOption {
+                      default = "$HOME_NET";
+                      description = ''
+                        ENIP_SERVER variable.
+                      '';
+                    };
                   };
                 }
               );
@@ -97,6 +172,9 @@ in
         }
       );
       default = { }; # add default values to config
+      description = ''
+        Variables to be used within the suricata rules.
+      '';
     };
 
     stats = mkOption {
@@ -142,13 +220,16 @@ in
           };
         });
       default = null; # do not add to config unless specified
+      description = ''
+        Engine statistics such as packet counters, memory use counters and others can be logged in several ways. A separate text log 'stats.log' and an EVE record type 'stats' are enabled by default.
+      '';
     };
 
     plugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
       description = ''
-        Plugins -- Experimental -- specify the filename for each plugin shared object
+        Plugins -- Experimental -- specify the filename for each plugin shared object.
       '';
     };
 
@@ -282,7 +363,7 @@ in
             ];
             default = "info";
             description = ''
-              Loglevel for logs written to the logfile
+              Loglevel for logs written to the logfile.
             '';
           };
 
@@ -290,7 +371,7 @@ in
             type = types.str;
             default = "suricata.log";
             description = ''
-              Filename of the logfile
+              Filename of the logfile.
             '';
           };
 
@@ -298,7 +379,7 @@ in
             type = types.nullOr types.str;
             default = null;
             description = ''
-              Logformat for logs written to the logfile
+              Logformat for logs written to the logfile.
             '';
           };
 
@@ -306,7 +387,7 @@ in
             type = types.nullOr types.str;
             default = null;
             description = ''
-              Type of logfile
+              Type of logfile.
             '';
           };
         };
@@ -317,7 +398,7 @@ in
             type = types.str;
             default = "local5";
             description = ''
-              Facility to log to
+              Facility to log to.
             '';
           };
 
@@ -325,7 +406,7 @@ in
             type = types.nullOr types.str;
             default = null;
             description = ''
-              Logformat for logs send to syslog
+              Logformat for logs send to syslog.
             '';
           };
 
@@ -333,7 +414,7 @@ in
             type = types.nullOr types.str;
             default = null;
             description = ''
-              Type of logs send to syslog
+              Type of logs send to syslog.
             '';
           };
         };
@@ -350,13 +431,16 @@ in
               interface = mkOption {
                 type = types.str;
                 default = null;
+                description = ''
+                  af-packet capture interface, see [upstream docs reagrding tuning](https://docs.suricata.io/en/latest/performance/tuning-considerations.html#af-packet).
+                '';
               };
             };
           })
         );
       default = null;
       description = ''
-        Linux high speed capture support
+        Linux high speed capture support.
       '';
     };
 
@@ -370,6 +454,9 @@ in
               interface = mkOption {
                 type = types.str;
                 default = null;
+                description = ''
+                  af-xdp capture interface, see [upstream docs](https://docs.suricata.io/en/latest/capture-hardware/af-xdp.html).
+                '';
               };
             };
           })
@@ -377,7 +464,7 @@ in
       default = null;
       description = ''
         Linux high speed af-xdp capture support, see
-        [docs/capture-hardware/af-xdp](https://docs.suricata.io/en/suricata-7.0.3/capture-hardware/af-xdp.html)
+        [docs/capture-hardware/af-xdp](https://docs.suricata.io/en/suricata-7.0.3/capture-hardware/af-xdp.html).
       '';
     };
 
@@ -389,6 +476,9 @@ in
             eal-params.proc-type = mkOption {
               type = with types; nullOr str;
               default = null;
+              description = ''
+                dpdk eal-params.proc-type, see [data plane development kit docs](https://doc.dpdk.org/guides/linux_gsg/linux_eal_parameters.html#multiprocessing-related-options).
+              '';
             };
             interfaces = mkOption {
               type =
@@ -400,18 +490,26 @@ in
                       interface = mkOption {
                         type = types.str;
                         default = null;
+                        description = ''
+                          See upstream docs: [docs/capture-hardware/dpdk](https://docs.suricata.io/en/suricata-7.0.7/capture-hardware/dpdk.html) and [docs/configuration/suricata-yaml.html#data-plane-development-kit-dpdk](https://docs.suricata.io/en/suricata-7.0.7/configuration/suricata-yaml.html#data-plane-development-kit-dpdk).
+                        '';
                       };
                     };
                   })
                 );
               default = null;
+              description = ''
+                See upstream docs: [docs/capture-hardware/dpdk](https://docs.suricata.io/en/suricata-7.0.7/capture-hardware/dpdk.html) and [docs/configuration/suricata-yaml.html#data-plane-development-kit-dpdk](https://docs.suricata.io/en/suricata-7.0.7/configuration/suricata-yaml.html#data-plane-development-kit-dpdk).
+              '';
             };
           };
         });
       default = null;
       description = ''
-        DPDK capture support, see
-        [docs/capture-hardware/dpdk](https://docs.suricata.io/en/suricata-7.0.3/capture-hardware/dpdk.html)
+        Data Plane Development Kit is a framework for fast packet processing in data plane applications running on a wide variety of CPU architectures. DPDK's Environment Abstraction Layer (EAL) provides a generic interface to low-level resources. It is a unique way how DPDK libraries access NICs. EAL creates an API for an application to access NIC resources from the userspace level. In DPDK, packets are not retrieved via interrupt handling. Instead, the application polls the NIC for newly received packets.
+
+        DPDK allows the user space application to directly access memory where the NIC stores the packets. As a result, neither DPDK nor the application copies the packets for the inspection. The application directly processes packets via passed packet descriptors.
+        See [docs/capture-hardware/dpdk](https://docs.suricata.io/en/suricata-7.0.7/capture-hardware/dpdk.html) and [docs/configuration/suricata-yaml.html#data-plane-development-kit-dpdk](https://docs.suricata.io/en/suricata-7.0.7/configuration/suricata-yaml.html#data-plane-development-kit-dpdk).
       '';
     };
 
@@ -425,13 +523,16 @@ in
               interface = mkOption {
                 type = types.str;
                 default = null;
+                description = ''
+                  pcap capture interface, see [upstream docs](https://docs.suricata.io/en/latest/manpages/suricata.html).
+                '';
               };
             };
           })
         );
       default = null;
       description = ''
-        Cross platform libpcap capture support
+        Cross platform libpcap capture support.
       '';
     };
 
@@ -448,7 +549,7 @@ in
         - no: checksum validation is disabled
         - auto: Suricata uses a statistical approach to detect when
         checksum off-loading is used. (default)
-        Warning: 'checksum-validation' must be set to yes to have checksum tested
+        Warning: 'checksum-validation' must be set to yes to have checksum tested.
       '';
     };
 
@@ -498,22 +599,28 @@ in
                   })
                 );
               default = null;
+              description = ''
+                app-layer protocols, see [upstream docs](https://docs.suricata.io/en/latest/rules/app-layer.html).
+              '';
             };
           };
         });
       default = null; # do not add to config unless specified
+      description = ''
+        app-layer configuration, see [upstream docs](https://docs.suricata.io/en/latest/rules/app-layer.html).
+      '';
     };
 
     "run-as" = {
       user = mkOption {
         type = types.str;
         default = "suricata";
-        description = "Run Suricata with a specific user-id";
+        description = "Run Suricata with a specific user-id.";
       };
       group = mkOption {
         type = types.str;
         default = "suricata";
-        description = "Run Suricata with a specific group-id";
+        description = "Run Suricata with a specific group-id.";
       };
     };
 
@@ -540,10 +647,16 @@ in
             enabled = mkOption {
               type = types.either types.bool (types.enum [ "auto" ]);
               default = "auto";
+              description = ''
+                Enable unix-command socket.
+              '';
             };
             filename = mkOption {
               type = types.path;
               default = "/run/suricata/suricata-command.socket";
+              description = ''
+                Filename for unix-command socket.
+              '';
             };
           };
         });
@@ -585,31 +698,33 @@ in
     "default-rule-path" = mkOption {
       type = types.path;
       default = "/var/lib/suricata/rules";
-      description = "Path in which suricata-update managed rules are stored by default";
+      description = "Path in which suricata-update managed rules are stored by default.";
     };
 
     "rule-files" = mkOption {
       type = types.listOf types.str;
       default = [ "suricata.rules" ];
-      description = "Files to load suricata-update managed rules, relative to 'default-rule-path'";
+      description = "Files to load suricata-update managed rules, relative to 'default-rule-path'.";
     };
 
     "classification-file" = mkOption {
       type = types.str;
       default = "/var/lib/suricata/rules/classification.config";
-      description = "Suricata classification configuration file";
+      description = "Suricata classification configuration file.";
     };
 
     "reference-config-file" = mkOption {
       type = types.str;
       default = "${cfg.package}/etc/suricata/reference.config";
-      description = "Suricata reference configuration file";
+      defaultText = "\${config.services.suricata.package}/etc/suricata/reference.config";
+      description = "Suricata reference configuration file.";
     };
 
     "threshold-file" = mkOption {
       type = types.str;
       default = "${cfg.package}/etc/suricata/threshold.config";
-      description = "Suricata threshold configuration file";
+      defaultText = "\${config.services.suricata.package}/etc/suricata/threshold.config";
+      description = "Suricata threshold configuration file.";
     };
 
     includes = mkOption {

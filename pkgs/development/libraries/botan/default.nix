@@ -6,9 +6,23 @@
   docutils,
   bzip2,
   zlib,
+  jitterentropy,
   darwin,
+  esdm,
+  tpm2-tss,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
+
+  # build ESDM RNG plugin
+  with_esdm ? false,
+  # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
+  with_tpm2 ? false,
+  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
+  with_bsi_policy ? false,
+  # only allow NIST approved algorithms
+  with_fips140_policy ? false,
 }:
+
+assert (!with_bsi_policy && !with_fips140_policy) || (with_bsi_policy != with_fips140_policy);
 
 let
   common =
@@ -50,17 +64,19 @@ let
           bzip2
           zlib
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin (
-          with darwin.apple_sdk.frameworks;
-          [
-            CoreServices
-            Security
-          ]
-        );
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && with_tpm2) [
+          tpm2-tss
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+          jitterentropy
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
+          esdm
+        ];
 
       buildTargets =
         [ "cli" ]
-        ++ lib.optionals finalAttrs.doCheck [ "tests" ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
         ++ lib.optionals static [ "static" ]
         ++ lib.optionals (!static) [ "shared" ];
 
@@ -75,12 +91,27 @@ let
           "--with-bzip2"
           "--with-zlib"
           "--with-rst2man"
+          "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
         ]
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "--cpu=aarch64"
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && with_tpm2) [
+          "--with-tpm2"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+          "--enable-modules=jitter_rng"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
+          "--enable-modules=esdm_rng"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && with_bsi_policy) [
+          "--module-policy=bsi"
+          "--enable-module=ffi"
+          "--enable-module=shake"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && with_fips140_policy) [
+          "--module-policy=fips140"
         ];
 
       configurePhase = ''
@@ -117,10 +148,8 @@ let
 in
 {
   botan3 = common {
-    version = "3.5.0";
-    hash = "sha256-Z+ja4cokaNkN5OYByH1fMf9JKzjoq4vL0C3fcQTtip8=";
-    # this patch fixes build errors on MacOS with SDK 10.12, recheck to remove this again
-    patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./botan3-macos.patch ];
+    version = "3.8.1";
+    hash = "sha256-sDloHUuGGi9YU3Rti6gG9VPiOGntctie2/o8Pb+hfmg=";
   };
 
   botan2 = common {

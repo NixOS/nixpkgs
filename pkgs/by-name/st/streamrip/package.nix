@@ -1,20 +1,21 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 
-, ffmpeg
+  ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamrip";
-  version = "2.0.5";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nathom";
     repo = "streamrip";
     rev = "v${version}";
-    hash = "sha256-KwMt89lOPGt6nX7ywliG/iAJ1WnG0CRPwhAVlPR85q0=";
+    hash = "sha256-Klrkz0U36EIGO2sNxTnKPACvvqu1sslLFFrQRjFdxiE=";
   };
 
   patches = [
@@ -51,15 +52,9 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  prePatch = ''
-    sed -i 's#aiofiles = ".*"#aiofiles = "*"#' pyproject.toml
-    sed -i 's#deezer-py = ".*"#deezer-py = "*"#' pyproject.toml
-    sed -i 's#m3u8 = ".*"#m3u8 = "*"#' pyproject.toml
-    sed -i 's#pathvalidate = ".*"#pathvalidate = "*"#' pyproject.toml
-    sed -i 's#Pillow = ".*"#Pillow = "*"#' pyproject.toml
-    sed -i 's#pytest-asyncio = ".*"#pytest-asyncio = "*"#' pyproject.toml
-    sed -i 's#tomlkit = ".*"#tomlkit = "*"#' pyproject.toml
+  pythonRelaxDeps = true;
 
+  prePatch = ''
     sed -i 's#"ffmpeg"#"${lib.getBin ffmpeg}/bin/ffmpeg"#g' streamrip/client/downloadable.py
   '';
 

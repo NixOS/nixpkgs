@@ -3,17 +3,18 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pythonAtLeast,
 
+  # build-system
   setuptools,
 
+  # dependencies
   boltons,
   orjson,
   pyrsistent,
   zope-interface,
 
-  daemontools,
+  # tests
+  addBinToPathHook,
   dask,
   distributed,
   hypothesis,
@@ -21,20 +22,19 @@
   pytestCheckHook,
   testtools,
   twisted,
+  daemontools,
 }:
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.15.0";
+  version = "1.17.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "itamarst";
     repo = "eliot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Ur7q7PZ5HH4ttD3b0HyBTe1B7eQ2nEWcTBR/Hjeg9yw=";
+    tag = version;
+    hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     dask
     distributed
     hypothesis
@@ -60,14 +61,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eliot" ];
 
-  # Tests run eliot-prettyprint in out/bin.
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = {
-    homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
+    homepage = "https://eliot.readthedocs.io";
     changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
     license = lib.licenses.asl20;

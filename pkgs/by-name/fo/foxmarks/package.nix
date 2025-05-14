@@ -7,16 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "foxmarks";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "zer0-x";
     repo = "foxmarks";
     rev = "v${version}";
-    hash = "sha256-tkmmu6A7vqK4yO9zHjVEeACaOHP3+hJQLBK7p/Svn7Q=";
+    hash = "sha256-6lJ9acVo444RMxc3wUakBz4zT74oNUpwoP69rdf2mmE=";
   };
 
-  cargoHash = "sha256-m3JtibgNHsZScxziNEu1ycslJocBXRbtloMWE0G5ZyM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BAUqH2RVpLLXvN43J67xqtrQZT3OgNA9ot+joOB70DY=";
 
   buildInputs = [ sqlite ];
 

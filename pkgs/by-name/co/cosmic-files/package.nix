@@ -1,61 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, cosmic-icons
-, just
-, pkg-config
-, glib
-, libxkbcommon
-, wayland
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  libcosmicAppHook,
+  glib,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
-    rev = "epoch-${version}";
-    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-bI5yTpqU2N6hFwI9wi4b9N5onY5iN+8YDM3bSgdYxjQ=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.12.2" = "sha256-1UwgRyUe0PQrZrpS7574oNLi13fg5HpgILtZGW6JNtQ=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
-      "cosmic-client-toolkit-0.1.0" = "sha256-1XtyEvednEMN4MApxTQid4eed19dEN5ZBDt/XRjuda0=";
-      "cosmic-config-0.1.0" = "sha256-d2R5xytwf0BIbllG6elc/nn7nmiC3+VI1g3EiW8WEHA=";
-      "cosmic-text-0.12.1" = "sha256-x0XTxzbmtE2d4XCG/Nuq3DzBpz15BbnjRRlirfNJEiU=";
-      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
-      "fs_extra-1.3.0" = "sha256-ftg5oanoqhipPnbUsqnA4aZcyHqn9XsINJdrStIPLoE=";
-      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
-      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
-      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "trash-5.0.0" = "sha256-6cMo2GtMJjU+fbehlsGNmj3LbzSP+vOjA4en3OgmZ54=";
-      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
-    };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7AOdSk9XIXFCDyCus3XgOK3ZBVa4CvX+NFM0jHf7Wbs=";
+
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-04-22";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
 
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-08-05";
-  env.VERGEN_GIT_SHA = src.rev;
+  nativeBuildInputs = [
+    just
+    libcosmicAppHook
+  ];
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ glib libxkbcommon wayland ];
+  buildInputs = [ glib ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -64,20 +47,76 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
+    "--set"
+    "applet-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-files" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi wayland ]}
+  # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
+  # at the same time, which would cause problems with the desktop items applet
+  buildPhase = ''
+    runHook preBuild
+
+    defaultCargoBuildFlags="$cargoBuildFlags"
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files"
+    runHook cargoBuildHook
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-applet"
+    runHook cargoBuildHook
+
+    runHook postBuild
   '';
 
-  meta = with lib; {
+  checkPhase = ''
+    runHook preCheck
+
+    defaultCargoTestFlags="$cargoTestFlags"
+
+    # Some tests with the `compio` runtime expect io_uring support but that
+    # is disabled in the Nix sandbox and the tests fail because they can't
+    # run in the sandbox. Ideally, the `compio` crate should fallback to a
+    # non-io_uring runtime but for some reason, that doesn't happen.
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files -- \
+      --skip operation::tests::copy_dir_to_same_location \
+      --skip operation::tests::copy_file_to_same_location \
+      --skip operation::tests::copy_file_with_diff_name_to_diff_dir \
+      --skip operation::tests::copy_file_with_extension_to_same_loc \
+      --skip operation::tests::copy_to_diff_dir_doesnt_dupe_files \
+      --skip operation::tests::copying_file_multiple_times_to_same_location"
+    runHook cargoCheckHook
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
+    runHook cargoCheckHook
+
+    runHook postCheck
+  '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "cosmic-files";
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

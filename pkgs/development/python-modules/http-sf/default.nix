@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "http-sf";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mnot";
     repo = "http-sf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p2GTCvuRhQVchFiLzoDYop9TUz/DT7eVY6Zioh+/rE8=";
+    tag = "v${version}";
+    hash = "sha256-P4dr0prd4FeMdHP4vu6SBWNjYLF/gPAkkL8xyBMtDxQ=";
   };
 
   build-system = [ setuptools ];

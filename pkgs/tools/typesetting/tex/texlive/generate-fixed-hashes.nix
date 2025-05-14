@@ -1,7 +1,14 @@
-{ pkgs ? (import ../../../../.. { }) }:
+{
+  pkgs ? (import ../../../../.. { }),
+}:
 
 let
-  inherit (pkgs) runCommand writeText texlive nix;
+  inherit (pkgs)
+    runCommand
+    writeText
+    texlive
+    nix
+    ;
   inherit (pkgs.lib)
     attrValues
     concatMap
@@ -14,7 +21,9 @@ let
     strings
     ;
 
-  getFods = drv: optional (isDerivation drv.tex) (drv.tex // { tlType = "run"; })
+  getFods =
+    drv:
+    optional (isDerivation drv.tex) (drv.tex // { tlType = "run"; })
     ++ optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; })
     ++ optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
     ++ optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; });
@@ -22,16 +31,24 @@ let
   sorted = sort (a: b: a.pname < b.pname) (attrValues texlive.pkgs);
   fods = concatMap getFods sorted;
 
-  computeHash = fod: runCommand "${fod.pname}-${fod.tlType}-fixed-hash"
-    { buildInputs = [ nix ]; inherit fod; }
-    ''echo -n "$(nix-hash --base32 --type sha256 "$fod")" >"$out"'';
+  computeHash =
+    fod:
+    runCommand "${fod.pname}-${fod.tlType}-fixed-hash" {
+      buildInputs = [ nix ];
+      inherit fod;
+    } ''echo -n "$(nix-hash --base32 --type sha256 "$fod")" >"$out"'';
 
   hash = fod: fod.outputHash or (builtins.readFile (computeHash fod));
 
-  hashes = fods:
-    concatMapStrings ({ tlType, ... }@p: ''${tlType}="${hash p}";'') fods;
+  hashes = fods: concatMapStrings ({ tlType, ... }@p: ''${tlType}="${hash p}";'') fods;
 
-  hashLine = { pname, revision, extraRevision ? "", ... }@drv:
+  hashLine =
+    {
+      pname,
+      revision,
+      extraRevision ? "",
+      ...
+    }@drv:
     let
       fods = getFods drv;
       # NOTE: the fixed naming scheme must match default.nix
@@ -44,11 +61,10 @@ in
 {
   # fixedHashesNix uses 'import from derivation' which does not parallelize well
   # you should build newHashes first, before evaluating (and building) fixedHashesNix
-  newHashes = map computeHash (filter (fod: ! fod ? outputHash) fods);
+  newHashes = map computeHash (filter (fod: !fod ? outputHash) fods);
 
-  fixedHashesNix = writeText "fixed-hashes.nix"
-    ''
-      {
-      ${concatMapStrings hashLine sorted}}
-    '';
+  fixedHashesNix = writeText "fixed-hashes.nix" ''
+    {
+    ${concatMapStrings hashLine sorted}}
+  '';
 }

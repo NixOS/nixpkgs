@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, fetchurl, extlib, lutils, rdbg, yaml }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  extlib,
+  lutils,
+  rdbg,
+  yaml,
+}:
 
 buildDunePackage rec {
   pname = "lustre-v6";
@@ -22,7 +30,10 @@ buildDunePackage rec {
     description = "Lustre V6 compiler";
     homepage = "https://www-verimag.imag.fr/lustre-v6.html";
     license = licenses.cecill21;
-    maintainers = with maintainers; [ delta wegank ];
+    maintainers = with maintainers; [
+      delta
+      wegank
+    ];
     mainProgram = "lv6";
   };
 }

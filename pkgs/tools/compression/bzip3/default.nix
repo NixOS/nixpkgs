@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
-  version = "1.4.0";
+  version = "1.5.2";
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "kspalaiologos";
     repo = "bzip3";
     rev = finalAttrs.version;
-    hash = "sha256-UVCZWcjlueKSGYqdm7oiJ5i7/irkWv7IOyeCWT2r4sk=";
+    hash = "sha256-mu95ZYkD0isDuHdHcU4zhWxCTlaYXoM85j76IGwVAak=";
   };
 
   postPatch = ''

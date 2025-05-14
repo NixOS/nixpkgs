@@ -1,13 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtsvg
-, lxqt-build-tools
-, wrapQtAppsHook
-, gitUpdater
-, version ? "4.0.1"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qtbase,
+  qtsvg,
+  lxqt-build-tools,
+  wrapQtAppsHook,
+  gitUpdater,
+  version ? "4.1.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +20,22 @@ stdenv.mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = {
-      "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
-      "4.0.1" = "sha256-h8uHIB0KuSHQVHI61h5BmpvpJHumloHMKN3GabH66EM=";
-    }."${version}";
+    hash =
+      {
+        "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
+        "4.1.0" = "sha256-Efn08a8MkR459Ww0WiEb5GXKgQzJwKupIdL2TySpivE=";
+      }
+      ."${version}";
   };
+
+  # Fix build with Qt 6.9
+  # FIXME: remove in next release
+  patches = lib.optionals (version == "4.1.0") [
+    (fetchpatch {
+      url = "https://github.com/lxqt/libqtxdg/commit/35ce74f1510a9f41b2aff82fd1eda63014c3fe2b.patch";
+      hash = "sha256-udO3RQkzkcDBCxMNTIsORlDCLsZrxCbi0dXCBRuoQQQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +63,6 @@ stdenv.mkDerivation rec {
     description = "Qt implementation of freedesktop.org xdg specs";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

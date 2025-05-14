@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.ledger;
 
-in {
+in
+{
   options.hardware.ledger.enable = lib.mkEnableOption "udev rules for Ledger devices";
 
   config = lib.mkIf cfg.enable {

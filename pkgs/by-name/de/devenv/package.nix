@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, testers
-, cachix
-, darwin
-, sqlx-cli
-, nixVersions
-, openssl
-, pkg-config
-, devenv  # required to run version test
+{
+  lib,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  installShellFiles,
+  rustPlatform,
+  testers,
+  cachix,
+  nixVersions,
+  openssl,
+  pkg-config,
+  glibcLocalesUtf8,
+  devenv, # required to run version test
 }:
 
 let
@@ -19,15 +19,16 @@ let
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
-      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
+      rev = "b455edf3505f1bf0172b39a735caef94687d0d9c";
+      hash = "sha256-bYyjarS3qSNqxfgc89IoVz8cAFDkF9yPE63EJr+h50s=";
     };
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.3.1";
-in rustPlatform.buildRustPackage {
+  version = "1.6.1";
+in
+rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
 
@@ -35,32 +36,49 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-FhlknassIb3rKEucqnfFAzgny1ANmenJcTyRaXYwbA0=";
+    hash = "sha256-CEVWxRaln3sp0541QpMfcfmI2w+RN72UgNLV5Dy9sco=";
   };
 
-  cargoHash = "sha256-dJ8A2kVXkpJcRvMLE/IawFUZNJqok/IRixTRGtLsE3w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-t4Cj7JlBVrMP02Dqibq2IgdKy6ejv+CeffmcPAkh7BE=";
 
   buildAndTestSubdir = "devenv";
 
-  # Force sqlx to use the prepared queries
-  SQLX_OFFLINE = true;
-  # A local database to use for preparing queries
-  DATABASE_URL = "sqlite:nix-eval-cache.db";
-
-  preBuild = ''
-    cargo sqlx database setup --source devenv-eval-cache/migrations
-    cargo sqlx prepare --workspace
-  '';
-
-  nativeBuildInputs = [ makeWrapper pkg-config sqlx-cli ];
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+    pkg-config
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/devenv --set DEVENV_NIX ${devenv_nix} --prefix PATH ":" "$out/bin:${cachix}/bin"
-  '';
+  buildInputs = [ openssl ];
+
+  postInstall =
+    let
+      setDefaultLocaleArchive = lib.optionalString (glibcLocalesUtf8 != null) ''
+        --set-default LOCALE_ARCHIVE ${glibcLocalesUtf8}/lib/locale/locale-archive
+      '';
+    in
+    ''
+      wrapProgram $out/bin/devenv \
+        --prefix PATH ":" "$out/bin:${cachix}/bin" \
+        --set DEVENV_NIX ${devenv_nix} \
+        ${setDefaultLocaleArchive}
+
+      # Generate manpages
+      cargo xtask generate-manpages --out-dir man
+      installManPage man/*
+
+      # Generate shell completions
+      compdir=./completions
+      for shell in bash fish zsh; do
+        cargo xtask generate-shell-completion $shell --out-dir $compdir
+      done
+
+      installShellCompletion --cmd devenv \
+        --bash $compdir/devenv.bash \
+        --fish $compdir/devenv.fish \
+        --zsh $compdir/_devenv
+    '';
 
   passthru.tests = {
     version = testers.testVersion {

@@ -1,8 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, runCommandLocal, mbrola-voices }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runCommandLocal,
+  mbrola-voices,
+}:
 
 let
   pname = "mbrola";
-  version = "3.3";
+  version = "3.3-unstable-2024-01-29";
 
   meta = with lib; {
     license = licenses.agpl3Plus;
@@ -19,8 +25,8 @@ let
     src = fetchFromGitHub {
       owner = "numediart";
       repo = "MBROLA";
-      rev = version;
-      sha256 = "1w86gv6zs2cbr0731n49z8v6xxw0g8b0hzyv2iqb9mqcfh38l8zy";
+      rev = "bf17e9e1416a647979ac683657a536e8ca5d880e";
+      hash = "sha256-ZjCl1gx/6sGtpXAYO4sAh6dutjwzClQ7kZoq0WaaBlU=";
     };
 
     # required for cross compilation
@@ -43,13 +49,12 @@ let
   };
 
 in
-  runCommandLocal
-    "${pname}-${version}"
-    {
-      inherit pname version meta;
-    }
-    ''
-      mkdir -p "$out/share/mbrola"
-      ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
-      ln -s '${bin}/bin' "$out/"
-    ''
+runCommandLocal "${pname}-${version}"
+  {
+    inherit pname version meta;
+  }
+  ''
+    mkdir -p "$out/share/mbrola"
+    ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
+    ln -s '${bin}/bin' "$out/"
+  ''

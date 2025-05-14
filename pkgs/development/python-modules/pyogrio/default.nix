@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "pyogrio";
-    rev = "v${version}";
-    hash = "sha256-AyKBktZWzUxD1HKKp89gQ97c4WPB5PkXnkFqN+RHx7c=";
+    tag = "v${version}";
+    hash = "sha256-3XrP3/sqGRtA+sfaoOV/ByGAtfpGZB5RYRr5lyYZUj0=";
   };
 
   postPatch = ''
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://pyogrio.readthedocs.io/";
     changelog = "https://github.com/geopandas/pyogrio/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

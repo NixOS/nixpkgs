@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "fichub-cli";
@@ -35,21 +39,8 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  # The package tries to create a file under the home directory on import
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  pytestFlagsArray = [
-    # pytest exits with a code of 5 if no tests are selected.
-    # handle this specific case as not an error
-    "|| ([ $? = 5 ] || exit $?)"
-  ];
-
-  disabledTestPaths = [
-    # Loading tests tries to download something from pypi.org
-    "tests/test_cli.py"
-  ];
+  # Loading tests tries to download something from pypi.org
+  doCheck = false;
 
   meta = {
     description = "CLI for the fichub.net API";

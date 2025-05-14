@@ -1,6 +1,11 @@
-{ lib, ruby, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  ruby,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
-bundlerApp rec {
+bundlerApp {
   pname = "brakeman";
   exes = [ "brakeman" ];
   gemdir = ./.;

@@ -1,29 +1,25 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, darwin
-, makeWrapper
-, typst
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  makeWrapper,
+  typst,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-live";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-9GhrWhT0mYU2OOeoHGd5XY7BKO/S7cKTnURXi9dF+IU=";
+    hash = "sha256-bR4Rhhs6rAC6C1nfPFj/3rCtfEziuTGn5m33CR0qZkU=";
   };
 
-  cargoHash = "sha256-KGwmTXkY2nv5oWwjs5ZLz6u3bJ7YWJQPqOqJJNxKDkM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-C85hV7uCsuRsxH2/8arjz9Pqs5j23s5b9RHmFsRtZSw=";
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   postInstall = ''

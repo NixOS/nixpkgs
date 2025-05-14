@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, alcotest, qcheck
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  alcotest,
+  qcheck,
 }:
 
 buildDunePackage rec {
@@ -16,7 +20,7 @@ buildDunePackage rec {
     sha256 = "sha256-B4li8vIK6AnPXJ1QSJ8rtr+JOcy4+h5sc1SH97U+Vgw=";
   };
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   doCheck = true;
   checkInputs = [

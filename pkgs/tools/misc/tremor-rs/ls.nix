@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  cargoHash = "sha256-/RKwmslhMm30QxviVV7HthDHSmTmaGZn1hdt6bNF3d4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Hl0TY/xZaDybYjrGiRftZhFx8dns+ONuNcxzl8lBUMM=";
 
   meta = with lib; {
     description = "Tremor Language Server (Trill)";

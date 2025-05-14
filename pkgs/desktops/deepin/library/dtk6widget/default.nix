@@ -14,22 +14,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6widget";
-  version = "6.0.19";
+  version = "6.0.33";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6widget";
     rev = finalAttrs.version;
-    hash = "sha256-VlFzecX76RMNSBpnMc9HwMPZ5z3zzzkcVcNlGKSShyA=";
+    hash = "sha256-CSsN/6Geban/l6Rp5NuxIUomgTlqXyvttafTbjZIwSc=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
     (fetchpatch {
-      name = "fix-build-on-qt-6.8.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6widget/-/raw/c4ac094715daa4ec319dc4d55bbca9d818845f82/qt-6.8.patch";
-      hash = "sha256-XEgtAV0mF1+C26wCaukjuv4WNbP4ISGgXt/eav7h9ko=";
+      name = "resolve-compilation-issues-on-Qt-6_9.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6widget/-/raw/ce8f89bbed6ebd4659c7f964f158857ebfdee01c/qt-6.9.patch";
+      hash = "sha256-LlFBXuoPxuszO9bkXK1Cy6zMTSnlh33UnmlKMJk3QH0=";
     })
   ];
 
@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6widget";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

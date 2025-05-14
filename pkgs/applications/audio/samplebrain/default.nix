@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fftw
-, liblo
-, libsndfile
-, makeDesktopItem
-, portaudio
-, qmake
-, qtbase
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  fftw,
+  liblo,
+  libsndfile,
+  makeDesktopItem,
+  portaudio,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}_release";
     hash = "sha256-/pMHmwly5Dar7w/ZawvR3cWQHw385GQv/Wsl1E2w5p4=";
   };
+
+  patches = [
+    # Fixes build with recent liblo, see https://gitlab.com/then-try-this/samplebrain/-/merge_requests/16
+    (fetchpatch {
+      url = "https://gitlab.com/then-try-this/samplebrain/-/commit/032fd7c03931d1ca2d5c3d5e29901569aa2b2a86.patch";
+      hash = "sha256-aaZJh/vx8fOqrJTuFzQ9+1mXvDQQXLy1k/2SwkMkVk4=";
+    })
+  ];
 
   nativeBuildInputs = [
     qmake

@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeWrapper
-, jdk17_headless
-, nixosTests
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  jdk17_headless,
+  nixosTests,
 }:
 
 let

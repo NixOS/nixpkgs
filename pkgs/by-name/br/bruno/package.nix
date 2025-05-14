@@ -5,7 +5,6 @@
   buildNpmPackage,
   nix-update-script,
   electron,
-  writeShellScriptBin,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -14,37 +13,28 @@
   cairo,
   pango,
   npm-lockfile-fix,
-  overrideSDK,
-  darwin,
 }:
 
-let
-  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "bruno";
-  version = "1.32.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
-    rev = "v${version}";
-    hash = "sha256-n/3zNS3aME7ZSoJ7TQ7gqVod469g7PGTsLcdNIwB09Y=";
+    tag = "v${version}";
+    hash = "sha256-4SIOLVXVxRSaSmZcje//+o/dyLINDAM2CvLQGEAykq0=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-p3kdYuDiPZ9SmtrFajXd76Ohd+VUqn/Y8SpAPFrTBZA=";
+  npmDepsHash = "sha256-W4qF2/AAcygqykB4zcBjb8KhfVaMrj8FLgadalDNF+0=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
     [
-      (writeShellScriptBin "phantomjs" "echo 2.1.1")
       pkg-config
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -52,15 +42,11 @@ buildNpmPackage' rec {
       copyDesktopItems
     ];
 
-  buildInputs =
-    [
-      pixman
-      cairo
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreText
-    ];
+  buildInputs = [
+    pixman
+    cairo
+    pango
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -77,6 +63,10 @@ buildNpmPackage' rec {
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+
+    # disable telemetry
+    substituteInPlace packages/bruno-app/src/providers/App/index.js \
+      --replace-fail "useTelemetry({ version });" ""
   '';
 
   postConfigure = ''
@@ -86,12 +76,26 @@ buildNpmPackage' rec {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  dontNpmBuild = true;
-  postBuild = ''
+  # remove giflib dependency
+  npmRebuildFlags = [ "--ignore-scripts" ];
+  preBuild = ''
+    # upstream keeps removing and adding back canvas, only patch it when it is present
+    if [[ -e node_modules/canvas/binding.gyp ]]; then
+      substituteInPlace node_modules/canvas/binding.gyp \
+        --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
+      npm rebuild
+    fi
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
 
@@ -127,13 +131,14 @@ buildNpmPackage' rec {
     }
 
     popd
+
+    runHook postBuild
   '';
 
   npmPackFlags = [ "--ignore-scripts" ];
 
   installPhase = ''
     runHook preInstall
-
 
     ${
       if stdenv.hostPlatform.isDarwin then
@@ -150,7 +155,7 @@ buildNpmPackage' rec {
 
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 
@@ -166,19 +171,19 @@ buildNpmPackage' rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    mainProgram = "bruno";
+    maintainers = with lib.maintainers; [
       gepbird
       kashw2
       lucasew
       mattpolzin
-      water-sucks
       redyf
+      water-sucks
     ];
-    mainProgram = "bruno";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

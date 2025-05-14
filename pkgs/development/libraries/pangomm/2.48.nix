@@ -1,26 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, python3
-, pango
-, glibmm_2_68
-, cairomm_1_16
-, gnome
-, ApplicationServices
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  pango,
+  glibmm_2_68,
+  cairomm_1_16,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.52.0";
+  version = "2.56.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-NKE0EmpkhP8S93Q1jDbsxE0OnfCU4bg3ltl3S7fSSUc=";
+    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
+    hash = "sha256-U59apg6b3GuVW7RI4qYswUVidE32kCWAQPu3S/iFdV0=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +31,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
   ];
 
   propagatedBuildInputs = [
@@ -42,8 +43,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}_2_48";
+      packageName = "pangomm";
+      attrPath = "pangomm_2_48";
       versionPolicy = "odd-unstable";
     };
   };
@@ -59,7 +60,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.pango.org/";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "flask-migrate";
-  version = "4.0.7";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "Flask-Migrate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TnihrZ+JQ1XCBlFp6k8lrNpZr4P2/Z6AmFwWZbabz+8=";
+    tag = "v${version}";
+    hash = "sha256-7xQu0Y6aM9WWuH2ImuaopbBS2jE9pVChekVp7SEMHCc=";
   };
 
   nativeBuildInputs = [ setuptools ];

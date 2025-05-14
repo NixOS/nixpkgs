@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-t6bycmaquZ0IMs/WnAzkz5FnIWKIq0BTbeeoUFLeuYg=";
   };
 
-  cargoHash = "sha256-1hJLu/ndnBYdzJ+NjLaCYENFszvAj9MYpLsZyLEq0Sg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XrU519ibku7OMKxt51gzVOZVOiqgdrBrxAJuBIcAtgc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   runtimeDependencies = [

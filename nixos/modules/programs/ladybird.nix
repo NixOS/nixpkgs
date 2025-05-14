@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.ladybird;
-in {
+in
+{
   options = {
     programs.ladybird.enable = lib.mkEnableOption "the Ladybird web browser";
   };

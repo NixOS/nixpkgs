@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, kcoreaddons
-, kdeclarative
-, kdecoration
-, plasma-framework
-, plasma-workspace
-, libSM
-, qtx11extras
-, kwindowsystem
-, libdbusmenu
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  kcoreaddons,
+  kdeclarative,
+  kdecoration,
+  plasma-framework,
+  plasma-workspace,
+  libSM,
+  qtx11extras,
+  kwindowsystem,
+  libdbusmenu,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation {

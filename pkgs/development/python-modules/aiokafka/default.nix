@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiokafka";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CeEPRCsf2SFI5J5FuQlCRRtlOPcCtRiGXJUIQOAbyCc=";
+    tag = "v${version}";
+    hash = "sha256-OU/Kept3TvMfGvVCjSthfZnfTX6/T0Fy3PS/ynrV3Cg=";
   };
 
   build-system = [

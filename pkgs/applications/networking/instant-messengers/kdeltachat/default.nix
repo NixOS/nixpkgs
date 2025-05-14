@@ -1,18 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromSourcehut
-, cmake
-, extra-cmake-modules
-, pkg-config
-, kirigami2
-, libdeltachat
-, qtbase
-, qtimageformats
-, qtmultimedia
-, qtwebengine
+{
+  lib,
+  mkDerivation,
+  fetchFromSourcehut,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  kirigami2,
+  libdeltachat,
+  qtbase,
+  qtimageformats,
+  qtmultimedia,
+  qtwebengine,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kdeltachat";
   version = "unstable-2024-01-14";
 
@@ -39,9 +40,10 @@ mkDerivation rec {
 
   # needed for qmlplugindump to work
   QT_PLUGIN_PATH = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
-  QML2_IMPORT_PATH = lib.concatMapStringsSep ":"
-    (lib: "${lib}/${qtbase.qtQmlPrefix}")
-    [ kirigami2 qtmultimedia ];
+  QML2_IMPORT_PATH = lib.concatMapStringsSep ":" (lib: "${lib}/${qtbase.qtQmlPrefix}") [
+    kirigami2
+    qtmultimedia
+  ];
 
   meta = with lib; {
     description = "Delta Chat client using Kirigami framework";

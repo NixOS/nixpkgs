@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

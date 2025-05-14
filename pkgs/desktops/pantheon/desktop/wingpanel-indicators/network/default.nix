@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, networkmanager
-, polkit
-, libnma
-, wingpanel
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  networkmanager,
+  polkit,
+  libnma,
+  wingpanel,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-network";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

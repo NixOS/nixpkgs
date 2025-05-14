@@ -1,10 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, kernel
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kernelModuleMakeFlags,
 }:
 
-let cfg = import ./version.nix; in
+let
+  cfg = import ./version.nix;
+in
 
 stdenv.mkDerivation rec {
   pname = "batman-adv";
@@ -16,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -31,7 +35,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fpletz philiptaron ];
+    maintainers = with lib.maintainers; [
+      fpletz
+      philiptaron
+    ];
     platforms = with lib.platforms; linux;
   };
 }

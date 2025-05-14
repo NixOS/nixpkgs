@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
   # Python deps
   blockfrost-python,
   cachetools,
@@ -12,12 +13,15 @@
   frozendict,
   frozenlist,
   mnemonic,
+  ogmios,
   poetry-core,
   pprintpp,
   pynacl,
+  requests,
   setuptools,
   typeguard,
   websocket-client,
+  websockets,
 }:
 
 let
@@ -34,18 +38,21 @@ let
 in
 buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.11.1";
-
-  format = "pyproject";
+  version = "0.12.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";
     repo = "pycardano";
-    rev = "v${version}";
-    hash = "sha256-OWm6ztt3s3DUbxDZqpvwTO6XwdY/57AI6Bc6x6kxH7k=";
+    tag = "v${version}";
+    hash = "sha256-jxgskdQ7Us+utndUgFYK7G2IW/e5QbeXytOsxQfFiJI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     blockfrost-python
     cachetools
     cbor2
@@ -55,22 +62,31 @@ buildPythonPackage rec {
     frozendict
     frozenlist
     mnemonic
+    ogmios
     poetry-core
     pprintpp
     pynacl
-    setuptools
+    requests
     typeguard
     websocket-client
+    websockets
   ];
 
-  pythonRelaxDeps = [ "typeguard" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "ogmios"
+    "websockets"
+  ];
 
   pythonImportsCheck = [ "pycardano" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Cardano library in Python";
     homepage = "https://github.com/Python-Cardano/pycardano";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
   };
 }

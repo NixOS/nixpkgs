@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cmake-lint";
     repo = "cmake-lint";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/OuWwerBlJynEibaYo+jkLpHt4x9GZrqMRJNxgrDBlM=";
   };
 

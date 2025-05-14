@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ottowayi";
     repo = "pycomm3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KdvmISMH2HHU8N665QevVw7q9Qs5CwjXxcWpLoziY/Y=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycomm3" ];
 
   disabledTestPaths = [
-    # Don't test examples as some have aditional requirements
+    # Don't test examples as some have additional requirements
     "examples/"
     # No physical PLC available
     "tests/online/"

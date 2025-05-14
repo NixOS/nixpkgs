@@ -6,6 +6,7 @@
   makeWrapper,
   lib,
   zlib,
+  testers,
 }:
 let
   platform =
@@ -15,18 +16,17 @@ let
       aarch64-darwin = "arm64-apple-darwin";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
-
   hash =
     {
-      x86_64-linux = "sha256-dB8reN5rTlY5czFH7BaRya7qBa6czAIH2NkFWZh81ek=";
-      x86_64-darwin = "sha256-tpUcduCPCbVVaYZZOhWdPlN6SW3LGZPWSO9bDStVDms=";
-      aarch64-darwin = "sha256-V8QGF3Dpuy9I6CqKsJRHBHRdaLhc4XKZkv/rI7zs+qQ=";
+      x86_64-linux = "sha256-hWALcrduSO92nmPyPcL1T/6u4y4g5n6Wc/IabfB1V9o=";
+      x86_64-darwin = "sha256-PZQNhbTn0Oz1zqrgHfzX7BqUluQIHj7ocXDacgt+CLc=";
+      aarch64-darwin = "sha256-n+dqtC8rOpYNOoq5nk4259p7m741tKy1LWdUzCqfKL4=";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bleep";
-  version = "0.0.7";
+  version = "0.0.12";
 
   src = fetchzip {
     url = "https://github.com/oyvindberg/bleep/releases/download/v${finalAttrs.version}/bleep-${platform}.tar.gz";
@@ -58,6 +58,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         --bash <(bleep install-tab-completions-bash --stdout) \
         --zsh <(bleep install-tab-completions-zsh --stdout) \
     '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "bleep --help | sed -n '/Bleeping/s/[^0-9.]//gp'";
+  };
 
   meta = {
     homepage = "https://bleep.build/";

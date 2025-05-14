@@ -1,11 +1,14 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 let
   port = 5678;
   webhookUrl = "http://example.com";
 in
 {
   name = "n8n";
-  meta.maintainers = with lib.maintainers; [ freezeboy k900 ];
+  meta.maintainers = with lib.maintainers; [
+    freezeboy
+    k900
+  ];
 
   nodes.machine =
     { pkgs, ... }:
@@ -22,4 +25,4 @@ in
     machine.succeed("curl --fail -vvv http://localhost:${toString port}/")
     machine.succeed("grep -qF ${webhookUrl} /etc/systemd/system/n8n.service")
   '';
-})
+}

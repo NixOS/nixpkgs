@@ -1,21 +1,9 @@
 {
   lib,
   stdenv,
-  alsa-lib,
-  autoPatchelfHook,
   fetchFromGitHub,
-  godot_4,
-  godot_4-export-templates,
-  libGL,
-  libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  godot_4_3,
   nix-update-script,
-  udev,
-  vulkan-loader,
 }:
 
 let
@@ -28,45 +16,31 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
+  godot = godot_4_3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.0.3";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IMHv5pOLxj7sqRtWmddziCiOX3T20bcMp2+ZzyhcIFg=";
+    hash = "sha256-UJ9sQ9igB2YAtkeHRUPvA60lbR2OXd4tqBDFxf9YTnI=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    godot_4
-  ];
-
-  runtimeDependencies = map lib.getLib [
-    alsa-lib
-    libGL
-    libpulseaudio
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXrandr
-    udev
-    vulkan-loader
+    godot
   ];
 
   buildPhase = ''
     runHook preBuild
 
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
+    mkdir -p $HOME/.local/share/godot/
+    ln -s "${godot.export-template}"/share/godot/export_templates "$HOME"/.local/share/godot/
     mkdir -p build
     godot4 --headless --export-release "${preset}" ./build/pixelorama
 

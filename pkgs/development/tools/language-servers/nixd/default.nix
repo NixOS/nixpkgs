@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost182,
+  boost,
   gtest,
   llvmPackages,
   meson,
   ninja,
-  nix,
+  nixVersions,
   nix-update-script,
   nixd,
   nixf,
@@ -20,14 +20,15 @@
 }:
 
 let
+  nix = nixVersions.nix_2_28;
   common = rec {
-    version = "2.4.0";
+    version = "2.6.4";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
-      rev = version;
-      hash = "sha256-8F97zAu+icDC9ZYS7m+Y58oZQ7R3gVuXMvzAfgkVmJo=";
+      tag = version;
+      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
     };
 
     nativeBuildInputs = [
@@ -72,7 +73,7 @@ in
 
       buildInputs = [
         gtest
-        boost182
+        boost
         nlohmann_json
       ];
 
@@ -103,10 +104,8 @@ in
       buildInputs = [
         nix
         gtest
-        boost182
+        boost
       ];
-
-      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -132,12 +131,10 @@ in
         nixt
         llvmPackages.llvm
         gtest
-        boost182
+        boost
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
-
-      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

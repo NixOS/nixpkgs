@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtgraphicaleffects
-, themeConfig ? { }
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtgraphicaleffects,
+  themeConfig ? { },
 }:
 let
   customToString = x: if builtins.isBool x then lib.boolToString x else toString x;
   configLines = lib.mapAttrsToList (name: value: lib.nameValuePair name value) themeConfig;
-  configureTheme = "cp theme.conf theme.conf.orig \n" +
-    (lib.concatMapStringsSep "\n"
-      (configLine:
-        "grep -q '^${configLine.name}=' theme.conf || echo '${configLine.name}=' >> \"$1\"\n" +
-          "sed -i -e 's/^${configLine.name}=.*$/${configLine.name}=${
-        lib.escape [ "/" "&" "\\"] (customToString configLine.value)
+  configureTheme =
+    "cp theme.conf theme.conf.orig \n"
+    + (lib.concatMapStringsSep "\n" (
+      configLine:
+      "grep -q '^${configLine.name}=' theme.conf || echo '${configLine.name}=' >> \"$1\"\n"
+      + "sed -i -e 's/^${configLine.name}=.*$/${configLine.name}=${
+        lib.escape [ "/" "&" "\\" ] (customToString configLine.value)
       }/' theme.conf"
-      )
-      configLines);
+    ) configLines);
 in
 stdenv.mkDerivation {
   pname = "sddm-chili-theme";

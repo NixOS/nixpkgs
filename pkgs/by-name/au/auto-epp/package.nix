@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "auto-epp";
   version = "1.2.1";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jothi-prasath";
     repo = "auto-epp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7sI8K+7ZAdzBN/XOzYQQZ1f9t+fFo6fcXYzX6abNyQ8=";
   };
 

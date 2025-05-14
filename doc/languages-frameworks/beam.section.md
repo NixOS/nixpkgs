@@ -60,7 +60,10 @@ $ nix-shell -p beamPackages.rebar3
 
 ```nix
 let
-  pkgs = import <nixpkgs> { config = {}; overlays = []; };
+  pkgs = import <nixpkgs> {
+    config = { };
+    overlays = [ ];
+  };
 in
 pkgs.mkShell {
   packages = [ pkgs.beamPackages.rebar3 ];
@@ -120,26 +123,28 @@ If there are git dependencies.
 {
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = (final: prev: {
-      # mix2nix does not support git dependencies yet,
-      # so we need to add them manually
-      prometheus_ex = beamPackages.buildMix rec {
-        name = "prometheus_ex";
-        version = "3.0.5";
+    overrides = (
+      final: prev: {
+        # mix2nix does not support git dependencies yet,
+        # so we need to add them manually
+        prometheus_ex = beamPackages.buildMix rec {
+          name = "prometheus_ex";
+          version = "3.0.5";
 
-        # Change the argument src with the git src that you actually need
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
-          repo = "prometheus.ex";
-          rev = "a4e9beb3c1c479d14b352fd9d6dd7b1f6d7deee5";
-          hash = "sha256-U17LlN6aGUKUFnT4XyYXppRN+TvUBIBRHEUsfeIiGOw=";
+          # Change the argument src with the git src that you actually need
+          src = fetchFromGitLab {
+            domain = "git.pleroma.social";
+            group = "pleroma";
+            owner = "elixir-libraries";
+            repo = "prometheus.ex";
+            rev = "a4e9beb3c1c479d14b352fd9d6dd7b1f6d7deee5";
+            hash = "sha256-U17LlN6aGUKUFnT4XyYXppRN+TvUBIBRHEUsfeIiGOw=";
+          };
+          # you can re-use the same beamDeps argument as generated
+          beamDeps = with final; [ prometheus ];
         };
-        # you can re-use the same beamDeps argument as generated
-        beamDeps = with final; [ prometheus ];
-      };
-    });
+      }
+    );
   };
 }
 ```
@@ -195,15 +200,21 @@ let
     hash = lib.fakeHash;
     mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
     # if you have build time environment variables add them here
-    MY_ENV_VAR="my_value";
+    MY_ENV_VAR = "my_value";
   };
 
   nodeDependencies = (pkgs.callPackage ./assets/default.nix { }).shell.nodeDependencies;
 
-in packages.mixRelease {
-  inherit src pname version mixFodDeps;
+in
+packages.mixRelease {
+  inherit
+    src
+    pname
+    version
+    mixFodDeps
+    ;
   # if you have build time environment variables add them here
-  MY_ENV_VAR="my_value";
+  MY_ENV_VAR = "my_value";
 
   postBuild = ''
     ln -sf ${nodeDependencies}/lib/node_modules assets/node_modules
@@ -231,7 +242,12 @@ In order to create a service with your release, you could add a `service.nix`
 in your project with the following
 
 ```nix
-{config, pkgs, lib, ...}:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   release = pkgs.callPackage ./default.nix;
@@ -241,10 +257,16 @@ in
 {
   systemd.services.${release_name} = {
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" "postgresql.service" ];
+    after = [
+      "network.target"
+      "postgresql.service"
+    ];
     # note that if you are connecting to a postgres instance on a different host
     # postgresql.service should not be included in the requires.
-    requires = [ "network-online.target" "postgresql.service" ];
+    requires = [
+      "network-online.target"
+      "postgresql.service"
+    ];
     description = "my app";
     environment = {
       # RELEASE_TMP is used to write the state of the
@@ -292,11 +314,13 @@ in
 Usually, we need to create a `shell.nix` file and do our development inside of the environment specified therein. Just install your version of Erlang and any other interpreters, and then use your normal build tools. As an example with Elixir:
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 with pkgs;
 let
-  elixir = beam.packages.erlang_24.elixir_1_12;
+  elixir = beam.packages.erlang_27.elixir_1_18;
 in
 mkShell {
   buildInputs = [ elixir ];
@@ -311,18 +335,20 @@ If you need to use an overlay to change some attributes of a derivation, e.g. if
 
 ```nix
 let
-  elixir_1_13_1_overlay = (self: super: {
-      elixir_1_13 = super.elixir_1_13.override {
-        version = "1.13.1";
-        sha256 = "sha256-t0ic1LcC7EV3avWGdR7VbyX7pGDpnJSW1ZvwvQUPC3w=";
+  elixir_1_18_1_overlay = (
+    self: super: {
+      elixir_1_18 = super.elixir_1_18.override {
+        version = "1.18.1";
+        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       };
-    });
-  pkgs = import <nixpkgs> { overlays = [ elixir_1_13_1_overlay ]; };
+    }
+  );
+  pkgs = import <nixpkgs> { overlays = [ elixir_1_18_1_overlay ]; };
 in
 with pkgs;
 mkShell {
   buildInputs = [
-    elixir_1_13
+    elixir_1_18
   ];
 }
 ```
@@ -338,7 +364,7 @@ let
   # define packages to install
   basePackages = [
     git
-    # replace with beam.packages.erlang.elixir_1_13 if you need
+    # replace with beam.packages.erlang.elixir_1_18 if you need
     beam.packages.erlang.elixir
     nodejs
     postgresql_14
@@ -349,9 +375,7 @@ let
     nodePackages.prettier
   ];
 
-  inputs = basePackages ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices ]);
+  inputs = basePackages ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   # define shell startup command
   hooks = ''
@@ -380,7 +404,8 @@ let
     export ENV_VAR="your_env_var"
   '';
 
-in mkShell {
+in
+mkShell {
   buildInputs = inputs;
   shellHook = hooks;
 }

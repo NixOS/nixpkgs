@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ebroecker";
     repo = "canmatrix";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UUJnLVt+uOj8Eav162btprkUeTemItGrSnBBB9UhJJI=";
   };
 

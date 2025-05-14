@@ -1,50 +1,36 @@
-{ lib
-, mkDerivation
-, fetchurl
-, fetchpatch
-, cmake
-, flatbuffers
-, gettext
-, pkg-config
-, libdigidocpp
-, opensc
-, openldap
-, openssl
-, pcsclite
-, qtbase
-, qtsvg
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  cmake,
+  flatbuffers,
+  gettext,
+  pkg-config,
+  libdigidocpp,
+  opensc,
+  openldap,
+  openssl,
+  pcsclite,
+  qtbase,
+  qtsvg,
+  qttools,
 }:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.5.1";
+  version = "4.7.0";
 
   src = fetchurl {
-    url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-grhSuexp5yd/s8h5AdmdSLBmQY85l9HKZ15oTTvC6PI=";
+    url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    hash = "sha256-XP7KqhIYriHQzQrw77zUp/I9nnh9EqK0m9+N+69Lh5c=";
   };
 
-  tsl = fetchurl {
-    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
-    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
-  };
-
-  patches = [
-    # https://github.com/open-eid/DigiDoc4-Client/pull/1251
-    (fetchpatch {
-      url = "https://github.com/open-eid/DigiDoc4-Client/commit/30281d14c5fb5582832eafbc254b56f8d685227d.patch";
-      hash = "sha256-nv23NbPUogOhS8No3SMIrAcPChl+d1HkxnePpCKIoUw=";
-    })
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    qttools
   ];
-
-  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
-
-  postPatch = ''
-    substituteInPlace client/CMakeLists.txt \
-      --replace $\{TSL_URL} file://${tsl}
-  '';
 
   buildInputs = [
     flatbuffers
@@ -55,6 +41,18 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
+  ];
+
+  # qdigidoc needs a (somewhat recent) config, as well as a TSL list for signing to work.
+  # To refresh, re-fetch and update what's in the vendor/ directory.
+  cmakeFlags = [
+    # If not provided before the build, qdigidoc tries to download a TSL list during the build.
+    # We pass it in via TSL_URL, fetched from https://ec.europa.eu/tools/lotl/eu-lotl.xml.
+    "-DTSL_URL=file://${./vendor/eu-lotl.xml}"
+    # `config.{json,pub,rsa}`, from https://id.eesti.ee/config.{json,pub,rsa}.
+    # The build system also looks for `config.{pub,rsa}` in the same directory,
+    # all three files need to be present.
+    "-DCONFIG_URL=file://${./vendor}/config.json"
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,
@@ -73,6 +71,9 @@ mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli mmahut ];
+    maintainers = with maintainers; [
+      flokli
+      mmahut
+    ];
   };
 }

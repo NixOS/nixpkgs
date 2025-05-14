@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.journalbeat;
 
@@ -27,7 +32,7 @@ in
 
       tags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 
@@ -56,8 +61,8 @@ in
       {
         assertion = !lib.hasPrefix "/" cfg.stateDir;
         message =
-          "The option services.journalbeat.stateDir shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib/.";
+          "The option services.journalbeat.stateDir shouldn't be an absolute directory."
+          + " It should be a directory relative to /var/lib/.";
       }
     ];
 

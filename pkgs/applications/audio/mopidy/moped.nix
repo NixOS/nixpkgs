@@ -1,4 +1,10 @@
-{ lib, pythonPackages, fetchPypi, mopidy, glibcLocales }:
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  mopidy,
+  glibcLocales,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Moped";
@@ -21,6 +27,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Web client for Mopidy";
     license = licenses.mit;
     maintainers = [ ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

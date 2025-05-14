@@ -14,6 +14,7 @@
 
   # testing
   pkgs,
+  pytest-cov-stub,
   pytest-django,
   pytest-mock,
   pytestCheckHook,
@@ -29,15 +30,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-redis";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m7z3c7My24vrSSnyfDQ/LlWhy7pV4U0L8LATMvkfczc=";
   };
 
-  postPatch = ''
-    sed -i '/-cov/d' setup.cfg
-  '';
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     django
@@ -52,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_redis" ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings.sqlite";
-
   preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
+    export DJANGO_SETTINGS_MODULE=tests.settings.sqlite
+
+    ${pkgs.valkey}/bin/redis-server &
     REDIS_PID=$!
   '';
 
@@ -64,10 +61,11 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-django
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"

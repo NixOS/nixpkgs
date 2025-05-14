@@ -18,8 +18,8 @@
   harminv,
   libctl,
   libGDSII,
-  openssh,
   guile,
+  mpb,
   python,
   numpy,
   scipy,
@@ -35,13 +35,13 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.29.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TB85obdk8pSWRaz3+3I6P6+dQtCHosWHRnKGck/wG9Q=";
+    tag = "v${version}";
+    hash = "sha256-9cQHvwUAeop5dRMVvedph+KQvTcmnkHdfqPQlSY280c=";
   };
 
   format = "other";
@@ -73,6 +73,7 @@ buildPythonPackage rec {
     libGDSII
     guile
     gsl
+    mpb
   ];
 
   propagatedBuildInputs =
@@ -94,7 +95,6 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
 
   enableParallelBuilding = true;
 
@@ -122,10 +122,11 @@ buildPythonPackage rec {
     (calls `sim.run()`), as only then MPI will be initialised and MPI linking
     errors can be caught.
   */
-  doCheck = true;
   nativeCheckInputs = [
     mpiCheckPhaseHook
-    openssh
+  ];
+  pythonImportsCheck = [
+    "meep.mpb"
   ];
   checkPhase = ''
     runHook preCheck
@@ -157,12 +158,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free finite-difference time-domain (FDTD) software for electromagnetic simulations";
     homepage = "https://meep.readthedocs.io/en/latest/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

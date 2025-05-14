@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gfortran
-, hdf5
-, python3
-, emacs
-, swig
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  hdf5,
+  python3,
+  emacs,
+  swig,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "TREX-CoE";
-    repo = pname;
+    repo = "trexio";
     rev = "v${version}";
     hash = "sha256-KP8tpwBr/ymjcXmCssdn+Xti0UKgazJSGTgVpvE+CiM=";
   };
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
     hdf5
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
 

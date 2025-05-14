@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "signxml";
-  version = "3.2.2";
+  version = "4.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XML-Security";
     repo = "signxml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TlOIHYvx1o46nr/3qq45pgeOqmuyWaaTGvOS0Jwz1zs=";
+    tag = "v${version}";
+    hash = "sha256-TZqYNYVzGEhftP/RXiBtThK38AOPLi2DRAwnFh2Za5U=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     cryptography
     lxml

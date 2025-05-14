@@ -1,35 +1,30 @@
 {
+  apple-sdk_15,
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jikken";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
     rev = "v${version}";
-    hash = "sha256-e1n5Q1bF/n9ELA93ucdaIeXx3LPhd7cWkLxWRRdGlo4=";
+    hash = "sha256-8A9b9Ms/unv+qQRd5jiTV/6SJa6ZYLsE0fK97ohacPI=";
   };
 
-  cargoHash = "sha256-DALY88q5xsjnoaGJxnVWx/5v4yE80+HNGT/vdFdzkXk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nwFTKol5phXFuDzAcnPoFq8UrrqMDE6NuitpXE5qJwU=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.IOKit
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   passthru.updateScript = nix-update-script { };
 

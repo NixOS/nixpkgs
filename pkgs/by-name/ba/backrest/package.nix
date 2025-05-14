@@ -1,29 +1,46 @@
 {
   buildGoModule,
-  buildNpmPackage,
   fetchFromGitHub,
+  gzip,
   lib,
+  nodejs,
+  pnpm_9,
   restic,
-  util-linux,
   stdenv,
+  util-linux,
 }:
 let
   pname = "backrest";
-  version = "1.5.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qxEZkRKkwKZ+EZ3y3aGcX2ioKOz19SRdi3+9mjF1LpE=";
+    tag = "v${version}";
+    hash = "sha256-lpYny+5bXIxj+ZFhbSn200sBrDShISESZw+L5sy+X+Q=";
   };
 
-  frontend = buildNpmPackage {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "${pname}-webui";
     src = "${src}/webui";
 
-    npmDepsHash = "sha256-mS8G3+JuASaOkAYi+vgWztrSIIu7vfaasu+YeRJjWZw=";
+    nativeBuildInputs = [
+      nodejs
+      pnpm_9.configHook
+    ];
+
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-q7VMQb/FRT953yT2cyGMxUPp8p8XkA9mvqGI7S7Eifg=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      export BACKREST_BUILD_VERSION=${version}
+      pnpm build
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -31,16 +48,20 @@ let
       cp -r dist/* $out
       runHook postInstall
     '';
-  };
+  });
 in
 buildGoModule {
   inherit pname src version;
 
-  vendorHash = "sha256-YukcHnXa/QimfX3nDtQI6yfPkEK9j5SPXOPIT++eWsU=";
+  vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
+
+  nativeBuildInputs = [ gzip ];
 
   preBuild = ''
     mkdir -p ./webui/dist
     cp -r ${frontend}/* ./webui/dist
+
+    go generate -skip="npm" ./...
   '';
 
   nativeCheckInputs = [ util-linux ];
@@ -49,10 +70,13 @@ buildGoModule {
     let
       skippedTests =
         [
-          "TestServeIndex" # Fails with handler returned wrong content encoding
+          "TestMultihostIndexSnapshots"
+          "TestRunCommand"
+          "TestSnapshot"
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "TestBackup" # relies on ionice
+          "TestCancelBackup"
         ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

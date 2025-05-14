@@ -1,19 +1,22 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "zsh-history";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
   };
 
-  nodes.default = { ... }: {
-    programs = {
-      zsh.enable = true;
+  nodes.default =
+    { ... }:
+    {
+      programs = {
+        zsh.enable = true;
+      };
+      environment.systemPackages = [ pkgs.zsh-history ];
+      programs.zsh.interactiveShellInit = ''
+        source ${pkgs.zsh-history.out}/share/zsh/init.zsh
+      '';
+      users.users.root.shell = "${pkgs.zsh}/bin/zsh";
     };
-    environment.systemPackages = [ pkgs.zsh-history ];
-    programs.zsh.interactiveShellInit = ''
-      source ${pkgs.zsh-history.out}/share/zsh/init.zsh
-    '';
-    users.users.root.shell = "${pkgs.zsh}/bin/zsh";
-  };
 
   testScript = ''
     start_all()
@@ -32,4 +35,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     # Ensure that command was recorded in history
     default.succeed("/run/current-system/sw/bin/history list | grep -q foobar")
   '';
-})
+}

@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  cppzmq,
+  doxygen,
+  ffmpeg,
+  imagemagick,
+  jsoncpp,
+  libopenshot-audio,
+  llvmPackages,
+  pkg-config,
+  python3,
+  qtbase,
+  qtmultimedia,
+  swig,
+  zeromq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9X2UIRDD+1kNLbV8AnnPabdO2M0OfTDxQ7xyZtsE10k=";
+    hash = "sha256-zroTnJRYIIglhha6jQvaVNTgnIV6kUWcu7s5zEvgH6Q=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -41,21 +42,24 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs = [
-    cppzmq
-    ffmpeg
-    imagemagick
-    jsoncpp
-    libopenshot-audio
-    python3
-    qtbase
-    qtmultimedia
-    zeromq
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      cppzmq
+      ffmpeg
+      imagemagick
+      jsoncpp
+      libopenshot-audio
+      python3
+      qtbase
+      qtmultimedia
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
 
   strictDeps = true;
 
@@ -65,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_RUBY" false)
+    (lib.cmakeBool "ENABLE_PYTHON" true)
+    (lib.cmakeOptionType "filepath" "PYTHON_EXECUTABLE" (lib.getExe python3))
     (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
   ];
 
@@ -81,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       to the world. API currently supports C++, Python, and Ruby.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

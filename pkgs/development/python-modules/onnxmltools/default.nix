@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "onnxmltools";
-  version = "1.12.0";
+  version = "1.13";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/UKGo56riLnATcn7kA++QoFkkILVGYBwqRZZ+PYB1/0=";
+    tag = "v${version}";
+    hash = "sha256-uNd7N7/FgX8zaJp8ouvftwGqGqas8lZRXFmjpS+t2B4=";
   };
 
   propagatedBuildInputs = [

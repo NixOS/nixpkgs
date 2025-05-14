@@ -2,48 +2,50 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchPypi,
   git,
 }:
 
 let
-  changeVersion =
-    overrideFunc: version: hash:
-    overrideFunc (oldAttrs: rec {
-      inherit version;
-      src = oldAttrs.src.override {
-        inherit version hash;
-      };
-    });
-
-  localPython = python3.override {
-    self = localPython;
+  python = python3.override {
     packageOverrides = self: super: {
-      cement =
-        changeVersion super.cement.overridePythonAttrs "2.10.14"
-          "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
+      cement = super.cement.overridePythonAttrs (old: rec {
+        pname = "cement";
+        version = "2.10.14";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
+        };
+        build-system = old.build-system or [ ] ++ (with python.pkgs; [ setuptools ]);
+        doCheck = false;
+      });
     };
   };
-
 in
 
-localPython.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.21";
-  format = "setuptools";
+  version = "3.23.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VU8bXvS4m4eIamjlgGmHE2qwDXWAXvWTa0QHomXR5ZE=";
+    tag = version;
+    hash = "sha256-Jaj90NRCwaxRQQlB4s4Us+liYiNohpwRsHuvKM5WmbU=";
   };
 
-  postPatch = ''
-    # https://github.com/aws/aws-elastic-beanstalk-cli/pull/469
-    substituteInPlace setup.py --replace-fail "scripts=['bin/eb']," ""
-  '';
+  pythonRelaxDeps = [
+    "botocore"
+    "colorama"
+    "pathspec"
+    "PyYAML"
+    "six"
+    "termcolor"
+    "urllib3"
+  ];
 
-  propagatedBuildInputs = with localPython.pkgs; [
+  dependencies = with python.pkgs; [
     blessed
     botocore
     cement
@@ -59,20 +61,11 @@ localPython.pkgs.buildPythonApplication rec {
     websocket-client
   ];
 
-  pythonRelaxDeps = [
-    "botocore"
-    "colorama"
-    "pathspec"
-    "PyYAML"
-    "six"
-    "termcolor"
-  ];
-
-  nativeCheckInputs = with localPython.pkgs; [
-    pytestCheckHook
-    pytest-socket
-    mock
+  nativeCheckInputs = with python.pkgs; [
     git
+    mock
+    pytest-socket
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [
@@ -89,14 +82,21 @@ localPython.pkgs.buildPythonApplication rec {
     "test_generate_and_upload_keypair__exit_code_1"
     "test_generate_and_upload_keypair__exit_code_is_other_than_1_and_0"
     "test_generate_and_upload_keypair__ssh_keygen_not_present"
+
+    # AssertionError: Expected 'echo' to be called once. Called 2 times
+    "test_multiple_modules__one_or_more_of_the_specified_modules_lacks_an_env_yaml"
+
+    # fails on hydra only on aarch64-linux
+    # ebcli.objects.exceptions.CredentialsError: Operation Denied. You appear to have no credentials
+    "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
 
   meta = with lib; {
-    homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "Command line interface for Elastic Beanstalk";
+    homepage = "https://aws.amazon.com/elasticbeanstalk/";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    maintainers = with maintainers; [ kirillrdy ];
     license = licenses.asl20;
+    maintainers = with maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
 }

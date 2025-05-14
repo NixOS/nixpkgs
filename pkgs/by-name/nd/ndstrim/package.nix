@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-k5SlsIWHEZaYwk5cmLb1QMs3lk0VGGwiGd1TSQJC3Ss=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wRMMWeZDk9Xt3263pq20Qioy1x8egiPhuoPxmpNTq8M=";
 
   # TODO: remove this after upstream merge above patch.
   # Without the workaround below the build results in the following error:

@@ -1,12 +1,34 @@
-{ fetchFromGitHub, lib, stdenv, perl, makeWrapper
-, iproute2, acpi, sysstat, alsa-utils
-, scripts ? [ "bandwidth" "battery" "cpu_usage" "disk" "iface"
-              "load_average" "memory" "volume" "wifi" ]
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  perl,
+  makeWrapper,
+  iproute2,
+  acpi,
+  sysstat,
+  alsa-utils,
+  scripts ? [
+    "bandwidth"
+    "battery"
+    "cpu_usage"
+    "disk"
+    "iface"
+    "load_average"
+    "memory"
+    "volume"
+    "wifi"
+  ],
 }:
 
 let
-  perlscripts = [ "battery" "cpu_usage" "openvpn" "temperature" ];
-  contains_any = l1: l2: 0 < lib.length( lib.intersectLists l1 l2 );
+  perlscripts = [
+    "battery"
+    "cpu_usage"
+    "openvpn"
+    "temperature"
+  ];
+  contains_any = l1: l2: 0 < lib.length (lib.intersectLists l1 l2);
 
 in
 stdenv.mkDerivation rec {
@@ -21,27 +43,35 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "all" ];
-  installFlags = [ "PREFIX=\${out}" "VERSION=${version}" ];
+  installFlags = [
+    "PREFIX=\${out}"
+    "VERSION=${version}"
+  ];
 
   buildInputs = lib.optional (contains_any scripts perlscripts) perl;
   nativeBuildInputs = [ makeWrapper ];
 
-  postFixup = lib.optionalString (lib.elem "bandwidth" scripts) ''
-    wrapProgram $out/libexec/i3blocks/bandwidth \
-      --prefix PATH : ${lib.makeBinPath [ iproute2 ]}
-  '' + lib.optionalString (lib.elem "battery" scripts) ''
-    wrapProgram $out/libexec/i3blocks/battery \
-      --prefix PATH : ${lib.makeBinPath [ acpi ]}
-  '' + lib.optionalString (lib.elem "cpu_usage" scripts) ''
-    wrapProgram $out/libexec/i3blocks/cpu_usage \
-      --prefix PATH : ${lib.makeBinPath [ sysstat ]}
-  '' + lib.optionalString (lib.elem "iface" scripts) ''
-    wrapProgram $out/libexec/i3blocks/iface \
-      --prefix PATH : ${lib.makeBinPath [ iproute2 ]}
-  '' + lib.optionalString (lib.elem "volume" scripts) ''
-    wrapProgram $out/libexec/i3blocks/volume \
-      --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
-  '';
+  postFixup =
+    lib.optionalString (lib.elem "bandwidth" scripts) ''
+      wrapProgram $out/libexec/i3blocks/bandwidth \
+        --prefix PATH : ${lib.makeBinPath [ iproute2 ]}
+    ''
+    + lib.optionalString (lib.elem "battery" scripts) ''
+      wrapProgram $out/libexec/i3blocks/battery \
+        --prefix PATH : ${lib.makeBinPath [ acpi ]}
+    ''
+    + lib.optionalString (lib.elem "cpu_usage" scripts) ''
+      wrapProgram $out/libexec/i3blocks/cpu_usage \
+        --prefix PATH : ${lib.makeBinPath [ sysstat ]}
+    ''
+    + lib.optionalString (lib.elem "iface" scripts) ''
+      wrapProgram $out/libexec/i3blocks/iface \
+        --prefix PATH : ${lib.makeBinPath [ iproute2 ]}
+    ''
+    + lib.optionalString (lib.elem "volume" scripts) ''
+      wrapProgram $out/libexec/i3blocks/volume \
+        --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
+    '';
 
   meta = with lib; {
     description = "Flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";

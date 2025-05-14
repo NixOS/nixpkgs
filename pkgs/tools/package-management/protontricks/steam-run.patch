@@ -29,7 +29,7 @@ index 8168dae..cb3e7d9 100644
  # for the duration of the Protontricks session.
  # This is accomplished by launching a simple Windows batch script that will
 diff --git a/src/protontricks/util.py b/src/protontricks/util.py
-index 9262cd0..00b2b2f 100644
+index 0c7de98..afea7e4 100644
 --- a/src/protontricks/util.py
 +++ b/src/protontricks/util.py
 @@ -99,7 +99,7 @@ def get_host_library_paths():
@@ -42,10 +42,10 @@ index 9262cd0..00b2b2f 100644
      )
      lines = result.stdout.decode("utf-8").split("\n")
 diff --git a/tests/conftest.py b/tests/conftest.py
-index a516437..88bf804 100644
+index fdb44ed..4758799 100644
 --- a/tests/conftest.py
 +++ b/tests/conftest.py
-@@ -170,7 +170,7 @@ def steam_runtime_dir(steam_dir):
+@@ -175,7 +175,7 @@ def steam_runtime_dir(steam_dir):
      """
      (steam_dir.parent / "root" / "ubuntu12_32" / "steam-runtime").mkdir(parents=True)
      (steam_dir.parent / "root" / "ubuntu12_32" / "steam-runtime" / "run.sh").write_text(
@@ -54,7 +54,7 @@ index a516437..88bf804 100644
          """if [ "$1" = "--print-steam-runtime-library-paths" ]; then\n"""
          "    echo 'fake_steam_runtime/lib:fake_steam_runtime/lib64'\n"
          "fi"
-@@ -764,7 +764,7 @@ def xdg_user_dir_bin(home_dir):
+@@ -768,7 +768,7 @@ def xdg_user_dir_bin(home_dir):
      # Only mock PICTURES and DOWNLOAD; mocking everything isn't necessary
      # for the tests.
      (home_dir / ".local" / "bin" / "xdg-user-dir").write_text(

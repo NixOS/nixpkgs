@@ -123,14 +123,8 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
-  # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
-    "https://cdn.download.kde.org/"
-    "https://download.kde.org/download.php?url="
-    "https://ftp.gwdg.de/pub/linux/kde/"
-    "https://mirrors.ocf.berkeley.edu/kde/"
-    "https://mirrors.mit.edu/kde/"
-    "https://mirrors.ustc.edu.cn/kde/"
+    "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
@@ -221,13 +215,19 @@
 
   # SAMBA
   samba = [
-    "https://www.samba.org/ftp/"
-    "http://www.samba.org/ftp/"
+    "https://download.samba.org/pub/"
+    "http://download.samba.org/pub/"
   ];
 
   # GNU Savannah
   savannah = [
-    # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
+    # Try the official HTTP(S) dispatchers first.
+    # These generate redirects to mirrors appropriate for the user.
+    "https://download.savannah.gnu.org/releases/"
+    "https://download.savannah.nongnu.org/releases/"
+
+    # If the above fail, try some individual mirrors.
+    # These are taken from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
     "https://mirror.easyname.at/nongnu/"
     "https://savannah.c3sl.ufpr.br/"
     "https://mirror.csclub.uwaterloo.ca/nongnu/"

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_loggers" ];
 
-  # skipping the checks, becaus it requires a cycle dependency to spacy as well.
+  # skipping the checks, because it requires a cycle dependency to spacy as well.
   doCheck = false;
 
   meta = with lib; {

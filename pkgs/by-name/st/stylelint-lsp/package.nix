@@ -4,17 +4,18 @@
   nodejs,
   pnpm_9,
   stdenvNoCC,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylelint-lsp";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bmatcuk";
     repo = "stylelint-lsp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mzhY6MKkXb1jFYZvs/VkGipBjBfUY3GukICb9qVQI80=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LUX/H7yY8Dl44vgpf7vOgtMdY7h//m5BAfrK5RRH9DM=";
   };
 
   buildInputs = [
@@ -38,6 +39,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # remove unnecessary files
+    pnpm --ignore-scripts prune --prod
+    rm -rf node_modules/.pnpm/typescript*
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -49,12 +59,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "A stylelint Language Server";
     homepage = "https://github.com/bmatcuk/stylelint-lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gepbird ];
+    license = lib.licenses.mit;
     mainProgram = "stylelint-lsp";
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
+    platforms = lib.platforms.unix;
   };
 })

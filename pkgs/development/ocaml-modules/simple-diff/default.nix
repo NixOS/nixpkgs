@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, topkg, ocamlbuild, re }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  topkg,
+  ocamlbuild,
+  re,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-simple-diff";
@@ -11,7 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OaKECUBCCt9KfdRJf3HcXTUJVxKKdYtnzOHpMPOllrk=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
   propagatedBuildInputs = [ re ];
 

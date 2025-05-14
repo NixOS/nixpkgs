@@ -14,12 +14,12 @@
 let
   finalAttrs = {
     pname = "loompy";
-    version = "3.0.7";
+    version = "3.0.8";
     pyproject = true;
 
     src = fetchPypi {
       inherit (finalAttrs) pname version;
-      hash = "sha256-tc33tUc0xr7ToYHRGUevcK8sbg3K3AL9Docd8jL6qPQ=";
+      hash = "sha256-wfSNC/Iaorve7iGgV3VTy6lgnZQ118MraHaGu7WGnKc=";
     };
 
     build-system = [ setuptools ];

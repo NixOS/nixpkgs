@@ -44,7 +44,7 @@ in
       };
       description = ''
         Config environment variables for the gotify-server.
-        See https://gotify.net/docs/config for more details.
+        See <https://gotify.net/docs/config> for more details.
       '';
     };
 

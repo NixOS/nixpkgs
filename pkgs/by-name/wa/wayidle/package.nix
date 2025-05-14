@@ -1,20 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromSourcehut
+{
+  lib,
+  rustPlatform,
+  fetchFromSourcehut,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wayidle";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "wayidle";
     rev = "v${version}";
-    hash = "sha256-7hFk/YGOQ5+gQy6pT5DRgMLThQ1vFAvUvdHekTyzIRU=";
+    hash = "sha256-DgsktRIGWswSBYeij5OL4nJwWaURv+v+qzOdZnLKG/E=";
   };
 
-  cargoHash = "sha256-PohfLmUoK+2a7Glnje4Rbym2rvzydUJAYW+edOj7qeo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rpmMUrVobYa9mGERJnhGsvebzWbuL+51VeuXKUIFdwg=";
 
   meta = with lib; {
     description = "Execute a program when a Wayland compositor reports being N seconds idle";

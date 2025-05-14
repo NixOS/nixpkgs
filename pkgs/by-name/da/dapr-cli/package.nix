@@ -1,17 +1,22 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "dapr-cli";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-NjGTH9aKupv/32ibqMSmPPaNA0TSq6AXjN8cjVD6r/M=";
+    hash = "sha256-hMBXNJKerRjI2vWsqRlMHyxlgyfN6WNbwVbMpe59rM4=";
   };
 
-  vendorHash = "sha256-Ec1z8Wvq8gk8dYcm10ujy7zYWR7Mus1nl21Od3SUFrU=";
+  vendorHash = "sha256-RH802JcEHzrVEf4t7O0croSc36LNM6MtFXFJtDffIvU=";
 
   proxyVendor = true;
 
@@ -42,7 +47,10 @@ buildGoModule rec {
     description = "CLI for managing Dapr, the distributed application runtime";
     homepage = "https://dapr.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joshvanl lucperkins ];
+    maintainers = with maintainers; [
+      joshvanl
+      lucperkins
+    ];
     mainProgram = "dapr";
   };
 }

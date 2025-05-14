@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, nsplist
-, pugixml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  nsplist,
+  pugixml,
 }:
 
 stdenv.mkDerivation {

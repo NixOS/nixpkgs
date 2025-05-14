@@ -1,18 +1,19 @@
-{ lib
-, python3Packages
-, fetchFromGitLab
-, meson
-, ninja
-, glib
-, pkg-config
-, pandoc
-, appstream
-, blueprint-compiler
-, gobject-introspection
-, wrapGAppsHook4
-, dbus
-, libadwaita
-, xdg-user-dirs
+{
+  lib,
+  python3Packages,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  glib,
+  pkg-config,
+  pandoc,
+  appstream,
+  blueprint-compiler,
+  gobject-introspection,
+  wrapGAppsHook4,
+  dbus,
+  libadwaita,
+  xdg-user-dirs,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -51,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     pillow
   ];
 
-  # wrapGAppsHook4 propogates gtk4 -- which provides gtk4-update-icon-cache instead
+  # wrapGAppsHook4 propagates gtk4 -- which provides gtk4-update-icon-cache instead
   postPatch = ''
     substituteInPlace meson_post_install.py \
       --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
@@ -61,7 +62,12 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ glib xdg-user-dirs ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          glib
+          xdg-user-dirs
+        ]
+      }
     )
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

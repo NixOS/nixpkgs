@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, requests, requests-cache, routing }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  requests,
+  requests-cache,
+  routing,
+}:
 
 buildKodiAddon rec {
   pname = "steam-library";
@@ -22,6 +29,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/aanderse/plugin.program.steam.library";
     description = "View your entire Steam library right from Kodi";
     license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

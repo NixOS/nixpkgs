@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3
-, gobject-introspection
-, libayatana-appindicator
-, polkit
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  gobject-introspection,
+  libayatana-appindicator,
+  polkit,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

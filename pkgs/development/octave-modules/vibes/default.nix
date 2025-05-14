@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, vibes
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  vibes,
 }:
 
 buildOctavePackage rec {
@@ -17,10 +18,13 @@ buildOctavePackage rec {
     vibes
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/vibes/index.html";
-    license = with licenses; [ gpl3Plus mit ];
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/vibes/";
+    license = with lib.licenses; [
+      gpl3Plus
+      mit
+    ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Easily display results (boxes, pavings) from interval methods";
     longDescription = ''
       The VIBes API allows one to easily display results (boxes, pavings) from

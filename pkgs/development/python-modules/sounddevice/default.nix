@@ -4,28 +4,33 @@
   buildPythonPackage,
   fetchPypi,
   isPy27,
+  setuptools,
   cffi,
   numpy,
   portaudio,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.4.7";
-  format = "setuptools";
+  version = "0.5.1";
+  pyproject = true;
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-abOGgY1QotUYYH1LlzRC6NUkdgx81si4vgPYyY/EvOc=";
+    hash = "sha256-CcqZHa7ajOS+mskeFamoHI+B76a2laNIyRceoMFssEE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cffi
     numpy
     portaudio
   ];
+
+  nativeBuildInputs = [ cffi ];
 
   # No tests included nor upstream available.
   doCheck = false;
@@ -33,8 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sounddevice" ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-portaudio-library-path.patch;
+    (replaceVars ./fix-portaudio-library-path.patch {
       portaudio = "${portaudio}/lib/libportaudio${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, oath-toolkit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  oath-toolkit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pass-otp";
@@ -19,15 +24,20 @@ stdenv.mkDerivation rec {
     sed -i -e 's|OATH=\$(which oathtool)|OATH=${oath-toolkit}/bin/oathtool|' otp.bash
   '';
 
-  installFlags = [ "PREFIX=$(out)"
-                   "BASHCOMPDIR=$(out)/share/bash-completion/completions"
-                 ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "BASHCOMPDIR=$(out)/share/bash-completion/completions"
+  ];
 
   meta = with lib; {
     description = "Pass extension for managing one-time-password (OTP) tokens";
     homepage = "https://github.com/tadfisher/pass-otp";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jwiegley tadfisher toonn ];
+    maintainers = with maintainers; [
+      jwiegley
+      tadfisher
+      toonn
+    ];
     platforms = platforms.unix;
   };
 }

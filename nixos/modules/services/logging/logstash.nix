@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.logstash;
   ops = lib.optionalString;
@@ -22,21 +27,31 @@ let
 
   logstashJvmOptionsFile = pkgs.writeText "jvm.options" cfg.extraJvmOptions;
 
-  logstashSettingsDir = pkgs.runCommand "logstash-settings" {
-      inherit logstashJvmOptionsFile;
-      inherit logstashSettingsYml;
-      preferLocalBuild = true;
-    } ''
-    mkdir -p $out
-    ln -s $logstashSettingsYml $out/logstash.yml
-    ln -s $logstashJvmOptionsFile $out/jvm.options
-  '';
+  logstashSettingsDir =
+    pkgs.runCommand "logstash-settings"
+      {
+        inherit logstashJvmOptionsFile;
+        inherit logstashSettingsYml;
+        preferLocalBuild = true;
+      }
+      ''
+        mkdir -p $out
+        ln -s $logstashSettingsYml $out/logstash.yml
+        ln -s $logstashJvmOptionsFile $out/jvm.options
+      '';
 in
 
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
-    (lib.mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+    (lib.mkRenamedOptionModule
+      [ "services" "logstash" "address" ]
+      [ "services" "logstash" "listenAddress" ]
+    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "logstash"
+      "enableWeb"
+    ] "The web interface was removed from logstash")
   ];
 
   ###### interface
@@ -70,7 +85,13 @@ in
       };
 
       logLevel = lib.mkOption {
-        type = lib.types.enum [ "debug" "info" "warn" "error" "fatal" ];
+        type = lib.types.enum [
+          "debug"
+          "info"
+          "warn"
+          "error"
+          "fatal"
+        ];
         default = "warn";
         description = "Logging verbosity level.";
       };
@@ -161,7 +182,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -171,15 +191,17 @@ in
       path = [ pkgs.bash ];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
-        ExecStart = lib.concatStringsSep " " (lib.filter (s: lib.stringLength s != 0) [
-          "${cfg.package}/bin/logstash"
-          "-w ${toString cfg.filterWorkers}"
-          (lib.concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
-          "${verbosityFlag}"
-          "-f ${logstashConf}"
-          "--path.settings ${logstashSettingsDir}"
-          "--path.data ${cfg.dataDir}"
-        ]);
+        ExecStart = lib.concatStringsSep " " (
+          lib.filter (s: lib.stringLength s != 0) [
+            "${cfg.package}/bin/logstash"
+            "-w ${toString cfg.filterWorkers}"
+            (lib.concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
+            "${verbosityFlag}"
+            "-f ${logstashConf}"
+            "--path.settings ${logstashSettingsDir}"
+            "--path.data ${cfg.dataDir}"
+          ]
+        );
       };
     };
   };

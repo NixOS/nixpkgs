@@ -1,56 +1,60 @@
-import ../make-test-python.nix ({ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "prometheus-pair";
 
   nodes = {
-    prometheus1 = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
+    prometheus1 =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-      networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+        networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
-      services.prometheus = {
-        enable = true;
-        globalConfig.scrape_interval = "2s";
-        scrapeConfigs = [
-          {
-            job_name = "prometheus";
-            static_configs = [
-              {
-                targets = [
-                  "prometheus1:${toString config.services.prometheus.port}"
-                  "prometheus2:${toString config.services.prometheus.port}"
-                ];
-              }
-            ];
-          }
-        ];
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "2s";
+          scrapeConfigs = [
+            {
+              job_name = "prometheus";
+              static_configs = [
+                {
+                  targets = [
+                    "prometheus1:${toString config.services.prometheus.port}"
+                    "prometheus2:${toString config.services.prometheus.port}"
+                  ];
+                }
+              ];
+            }
+          ];
+        };
       };
-    };
 
-    prometheus2 = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.jq ];
+    prometheus2 =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-      networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+        networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
-      services.prometheus = {
-        enable = true;
-        globalConfig.scrape_interval = "2s";
-        scrapeConfigs = [
-          {
-            job_name = "prometheus";
-            static_configs = [
-              {
-                targets = [
-                  "prometheus1:${toString config.services.prometheus.port}"
-                  "prometheus2:${toString config.services.prometheus.port}"
-                ];
-              }
-            ];
-          }
-        ];
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "2s";
+          scrapeConfigs = [
+            {
+              job_name = "prometheus";
+              static_configs = [
+                {
+                  targets = [
+                    "prometheus1:${toString config.services.prometheus.port}"
+                    "prometheus2:${toString config.services.prometheus.port}"
+                  ];
+                }
+              ];
+            }
+          ];
+        };
       };
-    };
   };
 
   testScript = ''
@@ -84,4 +88,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
 
     prometheus1.log(prometheus1.succeed("systemd-analyze security prometheus.service | grep -v '✓'"))
   '';
-})
+}

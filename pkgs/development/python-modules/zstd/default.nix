@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.5.5.1";
+  version = "1.5.6.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HvmAq/Dh4HKwKNLXbvlbR2YyZRyWIlzzC2Gcbu9iVnI=";
+    hash = "sha256-gixLZXXc0waR695lRUJbUcFOwbLlGfaE70sNBhaSEIg=";
   };
 
   postPatch = ''

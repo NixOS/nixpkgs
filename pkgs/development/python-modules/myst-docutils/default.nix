@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "myst-docutils";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "MyST-Parser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
+    tag = "v${version}";
+    hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
   };
 
   build-system = [ flit-core ];
@@ -60,6 +60,13 @@ buildPythonPackage rec {
     # Tests require linkify
     "test_cmdline"
     "test_extended_syntaxes"
+    # sphinx compat
+    "test_sphinx_directives"
+  ];
+
+  disabledTestPaths = [
+    # Assertion errors
+    "tests/test_sphinx/"
   ];
 
   meta = with lib; {

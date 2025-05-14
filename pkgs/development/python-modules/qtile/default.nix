@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cairocffi,
-  dbus-next,
+  dbus-fast,
   glib,
   iwlib,
   libcst,
@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.28.1";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r8cAht40r1/6rG1xrfx34YEPuPeyBCuSvX7MarLTTCc=";
+    tag = "v${version}";
+    hash = "sha256-aBVIkyR906+vSLDNxvkmWu6DBujZHErSi+aZPVMRuCI=";
   };
 
   patches = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   dependencies = extraPackages ++ [
     (cairocffi.override { withXcffib = true; })
-    dbus-next
+    dbus-fast
     iwlib
     libcst
     mpd2

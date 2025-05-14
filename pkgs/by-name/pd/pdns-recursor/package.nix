@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, boost, nixosTests
-, openssl, systemd, lua, luajit, protobuf
-, libsodium
-, curl
-, rustPlatform, cargo, rustc
-, enableProtoBuf ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  boost,
+  nixosTests,
+  openssl,
+  systemd,
+  lua,
+  luajit,
+  protobuf,
+  libsodium,
+  curl,
+  rustPlatform,
+  cargo,
+  rustc,
+  enableProtoBuf ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-s6N+uyAoWrmsu7DhNw5iO7OY7TCH8OZ48j/6OwBjmD0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-1CHhnW8s4AA06HAgW+A/mx1jGTynj4CvIc/I7n0h+VY";
+    hash = "sha256-/fxFqs5lDzOhatc6KBc7Zwsq3A7N5AOanGOebttr1l8=";
   };
 
   cargoRoot = "settings/rust";
@@ -31,8 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    boost openssl systemd
-    lua luajit
+    boost
+    openssl
+    systemd
+    lua
+    luajit
     libsodium
     curl
   ] ++ lib.optional enableProtoBuf protobuf;
@@ -57,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
     badPlatforms = [
-      "i686-linux"  # a 64-bit time_t is needed
+      "i686-linux" # a 64-bit time_t is needed
     ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ rnhmjoj ];

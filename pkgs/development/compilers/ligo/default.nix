@@ -1,16 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, git
-, coq
-, ocamlPackages
-, cacert
-, ocaml-crunch
-, jq
-, mustache-go
-, yaml2json
-, tezos-rust-libs
-, darwin
+{
+  lib,
+  fetchFromGitLab,
+  git,
+  coq,
+  ocamlPackages,
+  cacert,
+  ocaml-crunch,
+  jq,
+  mustache-go,
+  yaml2json,
+  tezos-rust-libs,
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -113,8 +112,6 @@ ocamlPackages.buildDunePackage rec {
     seqes
     stdint
     tezt
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeCheckInputs = [

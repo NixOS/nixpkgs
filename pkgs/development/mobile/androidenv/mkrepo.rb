@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'json'
+require 'rubygems'
 require 'nokogiri'
 require 'slop'
+require 'shellwords'
+require 'erb'
 
 # Returns a repo URL for a given package name.
 def repo_url value
@@ -157,8 +160,12 @@ def package_archives package
   archives = {}
   package.css('> archives > archive').each do |archive|
     host_os = text archive.at_css('> host-os')
+    host_arch = text archive.at_css('> host-arch')
     host_os = 'all' if empty?(host_os)
-    archives[host_os] = {
+    host_arch = 'all' if empty?(host_arch)
+    archives[host_os + host_arch] = {
+      'os' => host_os,
+      'arch' => host_arch,
       'size' => Integer(text(archive.at_css('> complete > size'))),
       'sha1' => text(archive.at_css('> complete > checksum')),
       'url' => yield(text(archive.at_css('> complete > url')))
@@ -184,7 +191,7 @@ def fixup value
   Hash[value.map do |k, v|
     if k == 'archives' && v.is_a?(Hash)
       [k, v.map do |os, archive|
-        fixup({'os' => os}.merge(archive))
+        fixup(archive)
       end]
     elsif v.is_a?(Hash)
       [k, fixup(v)]
@@ -248,10 +255,17 @@ end
 def parse_package_xml doc
   licenses = get_licenses doc
   packages = {}
+  # check https://github.com/NixOS/nixpkgs/issues/373785
+  extras = {}
 
   doc.css('remotePackage').each do |package|
     name, _, version = package['path'].partition(';')
     next if version == 'latest'
+
+    is_extras = name == 'extras'
+    if is_extras
+      name = package['path'].tr(';', '-')
+    end
 
     type, revision, _ = package_revision(package)
     next unless revision
@@ -267,8 +281,14 @@ def parse_package_xml doc
     dependencies_xml = package.at_css('> dependencies')
     dependencies = to_json_collector dependencies_xml if dependencies_xml
 
-    target = (packages[name] ||= {})
-    target = (target[revision] ||= {})
+    if is_extras
+      target = extras
+      component = package['path']
+      target = (target[component] ||= {})
+    else
+      target = (packages[name] ||= {})
+      target = (target[revision] ||= {})
+    end
 
     target['name'] ||= name
     target['path'] ||= path
@@ -284,7 +304,7 @@ def parse_package_xml doc
     target['last-available-day'] = today
   end
 
-  [licenses, packages]
+  [licenses, packages, extras]
 end
 
 def parse_image_xml doc
@@ -431,9 +451,10 @@ result['addons'] = {}
 result['extras'] = {}
 
 opts[:packages].each do |filename|
-  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+  licenses, packages, extras = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['packages'], packages
+  merge result['extras'], extras
 end
 
 opts[:images].each do |filename|
@@ -449,6 +470,18 @@ opts[:addons].each do |filename|
   merge result['extras'], extras
 end
 
+result['latest'] = {}
+result['packages'].each do |name, versions|
+  max_version = Gem::Version.new('0')
+  versions.each do |version, package|
+    if package['license'] == 'android-sdk-license' && Gem::Version.correct?(package['revision'])
+      package_version = Gem::Version.new(package['revision'])
+      max_version = package_version if package_version > max_version
+    end
+  end
+  result['latest'][name] = max_version.to_s
+end
+
 # As we keep the old packages in the repo JSON file, we should have
 # a strategy to remove them at some point!
 # So with this variable we claim it's okay to remove them from the
@@ -456,16 +489,20 @@ end
 two_years_ago = today - 2 * 365
 
 input = {}
+prev_latest = {}
 begin
-  input_json = (STDIN.tty?) ? "{}" : $stdin.read
+  input_json = (STDIN.tty?) ? "{}" : STDIN.read
   if input_json != nil && !input_json.empty?
-    input =  expire_records(JSON.parse(input_json), two_years_ago)
+    input = expire_records(JSON.parse(input_json), two_years_ago)
+
+    # Just create a new set of latest packages.
+    prev_latest = input['latest'] || {}
+    input['latest'] = {}
   end
 rescue JSON::ParserError => e
-  $stderr.write(e.message)
+  STDERR.write(e.message)
   return
 end
-
 
 fixup_result = fixup(result)
 
@@ -474,4 +511,70 @@ fixup_result = fixup(result)
 # therefore the old packages will work as long as the links are working on the Google servers.
 output = merge input, fixup_result
 
-puts JSON.pretty_generate(sort_recursively(output))
+# See if there are any changes in the latest versions.
+cur_latest = output['latest'] || {}
+
+old_versions = []
+new_versions = []
+changes = []
+changed = false
+
+cur_latest.each do |k, v|
+  prev = prev_latest[k]
+  if prev && prev != v
+    old_versions << "#{k}:#{prev}"
+    new_versions << "#{k}:#{v}"
+    changes << "#{k}: #{prev} -> #{v}"
+    changed = true
+  end
+end
+
+# Write the repository. Append a \n to keep nixpkgs Github Actions happy.
+File.write 'repo.json', (JSON.pretty_generate(sort_recursively(output)) + "\n")
+
+# Output metadata for the nixpkgs update script.
+changed_paths = []
+if changed
+  if ENV['UPDATE_NIX_ATTR_PATH']
+    # Instantiate it.
+    test_result = `NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1 nix-build ../../../../default.nix -A #{Shellwords.join [ENV['UPDATE_NIX_ATTR_PATH']]} 2>&1`
+    test_status = $?.exitstatus
+    tests_ran = true
+  else
+    tests_ran = false
+  end
+
+  template = ERB.new(<<-EOF, trim_mode: '<>-')
+androidenv: <%= changes.join('; ') %>
+
+Performed the following automatic androidenv updates:
+
+<% changes.each do |change| %>
+- <%= change -%>
+<% end %>
+
+<% if tests_ran %>
+Tests exited with status: <%= test_status -%>
+
+<% if !test_result.empty? %>
+Last 100 lines of output:
+```
+<%= test_result.lines.last(100).join -%>
+```
+<% end %>
+<% end %>
+EOF
+
+  changed_paths << {
+    attrPath: 'androidenv.androidPkgs.androidsdk',
+    oldVersion: old_versions.join('; '),
+    newVersion: new_versions.join('; '),
+    files: [
+      File.realpath('repo.json')
+    ],
+    commitMessage: template.result(binding)
+  }
+end
+
+# nix-update info is on stderr
+STDOUT.puts JSON.pretty_generate(changed_paths)

@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "pystac-client";
-  version = "0.8.4";
+  version = "0.8.6";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EetS0MD5DLBR+ht9YfD+oRdfHbVONuVHdSZj3FQ5Sm8=";
+    tag = "v${version}";
+    hash = "sha256-rbRxqR6hZy284JfQu5+dukFTBHllqzjo0k9aWhrkRAU=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "A Python client for working with STAC Catalogs and APIs";
     homepage = "https://github.com/stac-utils/pystac-client";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

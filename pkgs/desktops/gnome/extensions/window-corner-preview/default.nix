@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, gnome-shell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnome-shell,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-window-corner-preview";
   version = "unstable-2019-04-03";
 

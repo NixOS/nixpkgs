@@ -20,7 +20,7 @@
 
 let
   # Bcftools needs perl
-  runtime =  [
+  runtime = [
     bcftools
     htslib
     my-python
@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Illumina";
-    repo = pname;
+    repo = "hap.py";
     rev = "v${version}";
     hash = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
   };
   # For illumina script
   BOOST_ROOT = "${boost.out}";
   ZLIBSTATIC = "${zlib.static}";
-  # For cmake : boost lib and includedir are in differernt location
+  # For cmake : boost lib and includedir are in different location
   BOOST_LIBRARYDIR = "${boost.out}/lib";
   BOOST_INCLUDEDIR = "${boost.dev}/include";
 

@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, m4, camlp-streams, core_kernel, ounit }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  m4,
+  camlp-streams,
+  core_kernel,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "cfstream";
@@ -8,16 +16,22 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = version;
+    repo = pname;
+    rev = version;
     hash = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
   };
 
-  patches = [ ./git_commit.patch ./janestreet-0.17.patch ];
+  patches = [
+    ./git_commit.patch
+    ./janestreet-0.17.patch
+  ];
 
   nativeBuildInputs = [ m4 ];
   checkInputs = [ ounit ];
-  propagatedBuildInputs = [ camlp-streams core_kernel ];
+  propagatedBuildInputs = [
+    camlp-streams
+    core_kernel
+  ];
 
   doCheck = true;
 

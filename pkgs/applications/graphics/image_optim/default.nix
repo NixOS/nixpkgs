@@ -1,20 +1,37 @@
-{ lib, bundlerApp, bundlerUpdateScript, makeWrapper,
-  withPngcrush ? true,       pngcrush,
-  withPngout ? false,        pngout, # disabled by default because it's unfree
-  withAdvpng ? true,         advancecomp,
-  withOptipng ? true,        optipng,
-  withPngquant ? true,       pngquant,
-  withOxipng ? true,         oxipng,
-  withJhead ? true,          jhead,
-  withJpegoptim ? true,      jpegoptim,
-  withJpegrecompress ? true, jpeg-archive,
-  withJpegtran ? true,       libjpeg,
-  withGifsicle ? true,       gifsicle,
-  withSvgo ? true,           svgo
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeWrapper,
+  withPngcrush ? true,
+  pngcrush,
+  withPngout ? false,
+  pngout, # disabled by default because it's unfree
+  withAdvpng ? true,
+  advancecomp,
+  withOptipng ? true,
+  optipng,
+  withPngquant ? true,
+  pngquant,
+  withOxipng ? true,
+  oxipng,
+  withJhead ? true,
+  jhead,
+  withJpegoptim ? true,
+  jpegoptim,
+  withJpegrecompress ? true,
+  jpeg-archive,
+  withJpegtran ? true,
+  libjpeg,
+  withGifsicle ? true,
+  gifsicle,
+  withSvgo ? true,
+  svgo,
 }:
 
 let
-  optionalDepsPath = lib.optional withPngcrush pngcrush
+  optionalDepsPath =
+    lib.optional withPngcrush pngcrush
     ++ lib.optional withPngout pngout
     ++ lib.optional withAdvpng advancecomp
     ++ lib.optional withOptipng optipng
@@ -27,7 +44,8 @@ let
     ++ lib.optional withGifsicle gifsicle
     ++ lib.optional withSvgo svgo;
 
-  disabledWorkersFlags = lib.optional (!withPngcrush) "--no-pngcrush"
+  disabledWorkersFlags =
+    lib.optional (!withPngcrush) "--no-pngcrush"
     ++ lib.optional (!withPngout) "--no-pngout"
     ++ lib.optional (!withAdvpng) "--no-advpng"
     ++ lib.optional (!withOptipng) "--no-optipng"
@@ -67,7 +85,10 @@ bundlerApp {
     '';
     homepage = "https://github.com/toy/image_optim";
     license = licenses.mit;
-    maintainers = with maintainers; [ srghma nicknovitski ];
+    maintainers = with maintainers; [
+      srghma
+      nicknovitski
+    ];
     platforms = platforms.all;
     mainProgram = "image_optim";
   };

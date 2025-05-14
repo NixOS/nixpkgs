@@ -74,7 +74,7 @@ this could be most useful for testing a particular plug-in in isolation.
   : This is a known [issue](https://github.com/NixOS/nixpkgs/issues/64611) and there is no known workaround.
 
 [Does AppCenter work, or is it available?]{#sec-pantheon-faq-appcenter}
-  : AppCenter has been available since 20.03. Starting from 21.11, the Flatpak backend should work so you can install some Flatpak applications using it. However, due to missing appstream metadata, the Packagekit backend does not function currently. See this [issue](https://github.com/NixOS/nixpkgs/issues/15932).
+  : AppCenter is available and the Flatpak backend should work so you can install some Flatpak applications using it. However, due to missing appstream metadata, the Packagekit backend does not function currently. See this [issue](https://github.com/NixOS/nixpkgs/issues/15932).
 
     If you are using Pantheon, AppCenter should be installed by default if you have [Flatpak support](#module-services-flatpak) enabled. If you also wish to add the `appcenter` Flatpak remote:
 

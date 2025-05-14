@@ -3,11 +3,8 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qttools,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
@@ -31,15 +28,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     qt5integration
-    qtsvg
+    libsForQt5.qtsvg
     dtkwidget
     qt5platform-plugins
   ];
@@ -54,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-draw";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

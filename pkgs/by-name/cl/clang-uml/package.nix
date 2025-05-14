@@ -1,42 +1,53 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, pkg-config
-, installShellFiles
-, libclang
-, clang
-, llvmPackages
-, libllvm
-, yaml-cpp
-, elfutils
-, libunwind
-, enableLibcxx ? false
-, debug ? false
-,
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  pkg-config,
+  installShellFiles,
+  libclang,
+  llvmPackages,
+  libllvm,
+  yaml-cpp,
+  elfutils,
+  libunwind,
+  versionCheckHook,
+  enableLibcxx ? false,
+  debug ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
-  version = "0.5.5";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "bkryza";
     repo = "clang-uml";
     rev = finalAttrs.version;
-    hash = "sha256-YzHlauVuFLT2PmfqJBNwqQ/P7d7tyl3brk7Vo/kTOF4=";
+    hash = "sha256-mY6kJnwWLgCeKXSquNTxsnr4S3bKwedgiRixzyLWTK8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    installShellFiles
-  ] ++ (if debug then [
-    elfutils
-    libunwind
-  ] else [ ]);
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      installShellFiles
+    ]
+    ++ (
+      if debug then
+        [
+          elfutils
+          libunwind
+        ]
+      else
+        [ ]
+    );
+
+  cmakeFlags = [
+    "-DCUSTOM_COMPILE_OPTIONS=-Wno-error=sign-compare"
+    "-DGIT_VERSION=${finalAttrs.version}"
+  ];
 
   buildInputs = [
-    clang
     libclang
     libllvm
     yaml-cpp
@@ -63,7 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontFixup = debug;
   dontStrip = debug;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Customizable automatic UML diagram generator for C++ based on Clang";
     longDescription = ''
       clang-uml is an automatic C++ to UML class, sequence, package and include diagram generator, driven by YAML configuration files.
@@ -71,9 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
       The configuration file or files for clang-uml define the types and contents of each generated diagram.
       The diagrams can be generated in PlantUML, MermaidJS and JSON formats.
     '';
-    maintainers = with maintainers; [ eymeric ];
+    maintainers = with lib.maintainers; [ eymeric ];
     homepage = "https://clang-uml.github.io/";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    mainProgram = "clang-uml";
   };
 })

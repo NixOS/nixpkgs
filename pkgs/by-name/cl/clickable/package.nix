@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "8.2.0";
+  version = "8.3.1";
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    hash = "sha256-MFzpeiWeqJ0MG8ouwRkYXD1e6Nsxshmz1NSzCIBRjZ0=";
+    hash = "sha256-Vn2PyALaRrE+jJRdZzW+jjCm3f2GfpgrQcFGB7kr4EM=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -65,7 +65,7 @@ python3Packages.buildPythonApplication rec {
       "test_godot_plugin"
     ]
     ++
-    # There are no docker images available for the aarch64 architecutre
+    # There are no docker images available for the aarch64 architecture
     # which are required for tests.
     lib.optionals stdenv.hostPlatform.isAarch64 [
       "test_arch"
@@ -82,6 +82,7 @@ python3Packages.buildPythonApplication rec {
       lib.strings.replaceStrings [ "." ] [ "-" ] version
     }";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members ++ (with lib.maintainers; [ ilyakooo0 ]);
+    maintainers = with lib.maintainers; [ ilyakooo0 ];
+    teams = [ lib.teams.lomiri ];
   };
 }

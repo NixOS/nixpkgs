@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openxml";
     repo = "python-docx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-isxMtq5j5J02GcHMzOJdJw+ZokLoxA6fG1xsN21Irbc=";
   };
 

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rspeer";
     repo = "wordfreq";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ANOBbQWLB35Vz6oil6QZDpsNpKHeKUJnDKA5Q9JRVdE=";
   };
 

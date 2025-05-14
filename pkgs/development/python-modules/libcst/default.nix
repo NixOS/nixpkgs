@@ -10,36 +10,30 @@
   libiconv,
   pytestCheckHook,
   python,
-  pythonOlder,
   pyyaml,
   rustPlatform,
   rustc,
   setuptools-rust,
   setuptools-scm,
-  typing-extensions,
-  typing-inspect,
   ufmt,
 }:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.5.0";
+  version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "LibCST";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0r2xQ8QVmA4I6eZHBWd/U1fQ8nK5rdblIoMACudOYPY=";
+    tag = "v${version}";
+    hash = "sha256-KqiB1LieRJJ34kJgIlqyMKCzO7iDen8j9+s0ZmrHe+c=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-mexXuOsL1+F/GL2wMf/pwK7bJLFRgPtPSYE4W3E0VQ0=";
+    hash = "sha256-EPS506x8KUFAbZ47ZWtH1q0ndXutM2fOqcsYpXRc0+c=";
   };
 
   cargoRoot = "native";
@@ -58,8 +52,6 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = [
-    typing-extensions
-    typing-inspect
     pyyaml
   ];
 
@@ -93,7 +85,7 @@ buildPythonPackage rec {
   meta = {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/LibCST";
-    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Instagram/LibCST/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20

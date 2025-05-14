@@ -3,21 +3,21 @@
   callPackage,
   fetchFromGitHub,
   stdenv,
-  zig,
+  zig_0_13,
 }:
 stdenv.mkDerivation rec {
   pname = "superhtml";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "kristoff-it";
     repo = "superhtml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E4IVDYps6K+SdemkfwtTjOE+Rdu8m4Itfd3Kv0XO7qk=";
+    tag = "v${version}";
+    hash = "sha256-rO7HS07nSqwOq6345q/SOL2imoD0cKV16QJcVVr6mHw=";
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig_0_13.hook
   ];
 
   postPatch = ''

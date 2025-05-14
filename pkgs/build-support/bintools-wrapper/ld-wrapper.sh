@@ -16,6 +16,8 @@ fi
 
 source @out@/nix-support/utils.bash
 
+source @out@/nix-support/darwin-sdk-setup.bash
+
 if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
@@ -42,9 +44,9 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
     while (( "$n" < "$nParams" )); do
         p=${params[n]}
         p2=${params[n+1]:-} # handle `p` being last one
-        if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
+        if [ "${p:0:3}" = -L/ ] && badPathWithDarwinSdk "${p:2}"; then
             skip "${p:2}"
-        elif [ "$p" = -L ] && badPath "$p2"; then
+        elif [ "$p" = -L ] && badPathWithDarwinSdk "$p2"; then
             n+=1; skip "$p2"
         elif [ "$p" = -rpath ] && badPath "$p2"; then
             n+=1; skip "$p2"
@@ -235,6 +237,11 @@ if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
     extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
+# if a ld-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/ld-wrapper-hook ]]; then
+    linker=@prog@
+    source @out@/nix-support/ld-wrapper-hook
+fi
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
@@ -251,8 +258,8 @@ PATH="$path_backup"
 # Old bash workaround, see above.
 
 if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    responseFile=$(mktemp "${TMPDIR:-/tmp}/ld-params.XXXXXX")
-    trap 'rm -f -- "$responseFile"' EXIT
+    responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/ld-params.XXXXXX")
+    trap '@rm@ -f -- "$responseFile"' EXIT
     printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \

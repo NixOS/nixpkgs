@@ -1,9 +1,10 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, alcotest
-, eqaf
-, fmt
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  eqaf,
+  fmt,
 }:
 
 buildDunePackage rec {
@@ -19,7 +20,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [ fmt eqaf ];
+  propagatedBuildInputs = [
+    fmt
+    eqaf
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

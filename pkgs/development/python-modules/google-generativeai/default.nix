@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.8.2";
+  version = "0.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,14 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "generative-ai-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7l7Tg4sCdRtYnDwrQBA4rUIz4gO2YGf+3qn7OQRMCDc=";
+    tag = "v${version}";
+    hash = "sha256-wc35JSc98xvepI7Gpe5jSJ+c8n7WLKa96axoWVcH7UM=";
   };
 
   pythonRelaxDeps = [ "google-ai-generativelanguage" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     google-ai-generativelanguage
@@ -52,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for Google's large language model PaLM API";
     homepage = "https://github.com/google/generative-ai-python";
-    changelog = "https://github.com/google/generative-ai-python/releases/tag/v${version}";
+    changelog = "https://github.com/google/generative-ai-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

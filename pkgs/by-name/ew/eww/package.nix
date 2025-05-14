@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   wrapGAppsHook3,
   gtk3,
@@ -14,23 +15,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.6.0-unstable-2024-07-05";
+  version = "0.6.0-unstable-2025-03-25";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    # FIXME: change to a release tag once a new release is available
-    # https://github.com/elkowar/eww/pull/1084
-    # using the revision to fix string truncation issue in eww config
-    rev = "4d55e9ad63d1fae887726dffcd25a32def23d34f";
-    hash = "sha256-LTSFlW/46hl1u9SzqnvbtNxswCW05bhwOY6CzVEJC5o=";
+    rev = "a9aa0f96892f20e4741e94f4cd46ca31106e492c";
+    hash = "sha256-T9OZ8jke2T73Zeqt8VekH82ar23AV7llA7ta8b7HP2o=";
   };
 
-  # needed to fix build errors with rust 1.80 due to outdated time crate
-  cargoPatches = [ ./lockfile.patch ];
-  cargoHash = "sha256-55lmQl5pJwrEj5RlSG8b0PqtZVrASxTmX4Qdk090DZo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tjhF4D5WFw6qBUXRWcWjaB57zyXeWBDULsOcr2MJJgA=";
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     wrapGAppsHook3
   ];
@@ -51,6 +49,13 @@ rustPlatform.buildRustPackage rec {
 
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd eww \
+      --bash <($out/bin/eww shell-completions --shell bash) \
+      --fish <($out/bin/eww shell-completions --shell fish) \
+      --zsh <($out/bin/eww shell-completions --shell zsh)
+  '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

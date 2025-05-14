@@ -1,41 +1,42 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, dejagnu
-, gettext
-, gnum4
-, pkg-config
-, texinfo
-, fribidi
-, gdbm
-, gnutls
-, gss
-, guile_2_2
-, libmysqlclient
-, mailcap
-, nettools
-, pam
-, readline
-, ncurses
-, python3
-, sasl
-, system-sendmail
-, libxcrypt
-, mkpasswd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  dejagnu,
+  gettext,
+  gnum4,
+  pkg-config,
+  texinfo,
+  fribidi,
+  gdbm,
+  gnutls,
+  gss,
+  guile_2_2,
+  libmysqlclient,
+  mailcap,
+  nettools,
+  pam,
+  readline,
+  ncurses,
+  python3,
+  sasl,
+  system-sendmail,
+  libxcrypt,
+  mkpasswd,
 
-, pythonSupport ? true
-, guileSupport ? true
+  pythonSupport ? true,
+  guileSupport ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.17";
+  version = "3.18";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-+km6zsN1Zv5S+IIh04cWc6Yzru4M2SPMOo5lu+8rhOk=";
+    hash = "sha256-VZBJyNhRYEFSipBsE52bt6YvHQXX5WF/qP4PIxoTFXc=";
   };
 
   separateDebugInfo = true;
@@ -55,21 +56,23 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    fribidi
-    gdbm
-    gnutls
-    gss
-    libmysqlclient
-    mailcap
-    ncurses
-    pam
-    readline
-    sasl
-    libxcrypt
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
-  ++ lib.optionals pythonSupport [ python3 ]
-  ++ lib.optionals guileSupport [ guile_2_2 ];
+  buildInputs =
+    [
+      fribidi
+      gdbm
+      gnutls
+      gss
+      libmysqlclient
+      mailcap
+      ncurses
+      pam
+      readline
+      sasl
+      libxcrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
+    ++ lib.optionals pythonSupport [ python3 ]
+    ++ lib.optionals guileSupport [ guile_2_2 ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -88,18 +91,23 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--with-gssapi"
-    "--with-gsasl"
-    "--with-mysql"
-    "--with-path-sendmail=${system-sendmail}/bin/sendmail"
-    "--with-mail-rc=/etc/mail.rc"
-    "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
-  ] ++ lib.optional (!pythonSupport) "--without-python"
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--with-gssapi"
+      "--with-gsasl"
+      "--with-mysql"
+      "--with-path-sendmail=${system-sendmail}/bin/sendmail"
+      "--with-mail-rc=/etc/mail.rc"
+      "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
+    ]
+    ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional (!guileSupport) "--without-guile";
 
-  nativeCheckInputs = [ dejagnu mkpasswd ];
+  nativeCheckInputs = [
+    dejagnu
+    mkpasswd
+  ];
   doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
   doInstallCheck = false; # fails
 
@@ -139,8 +147,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-      lgpl3Plus /* libraries */
-      gpl3Plus /* tools */
+      lgpl3Plus # libraries
+      gpl3Plus # tools
     ];
 
     maintainers = with maintainers; [ orivej ];

@@ -12,6 +12,7 @@
   datashaper,
   devtools,
   environs,
+  fnllm,
   graspologic,
   json-repair,
   lancedb,
@@ -29,6 +30,7 @@
   rich,
   tenacity,
   tiktoken,
+  typer,
   typing-extensions,
   umap-learn,
   nbformat,
@@ -38,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.3.6";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-H5ITK4m3l+rlIEYXoMIpsE9faCu6rRZuB5zaZQeArOU=";
+    tag = "v${version}";
+    hash = "sha256-z3gO0wV8YBNi2Z53avujAt/Es9mSzugEFa/qRgq7ItM=";
   };
 
   build-system = [
@@ -64,6 +66,7 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
+    fnllm
     graspologic
     json-repair
     lancedb
@@ -81,6 +84,7 @@ buildPythonPackage rec {
     rich
     tenacity
     tiktoken
+    typer
     typing-extensions
     umap-learn
   ];
@@ -104,13 +108,14 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context"
     "test_sort_context_max_tokens"
   ];
 
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
-    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/graphrag/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

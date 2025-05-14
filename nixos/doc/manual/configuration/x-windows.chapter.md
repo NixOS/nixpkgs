@@ -114,25 +114,75 @@ using lightdm for a user `alice`:
 }
 ```
 
+## Running X without a display manager  {#sec-x11-startx}
+
+It is possible to avoid a display manager entirely and starting the X server
+manually from a virtual terminal. Add to your configuration:
+```nix
+{
+  services.xserver.displayManager.startx = {
+    enable = true;
+    generateScript = true;
+  };
+}
+```
+then you can start the X server with the `startx` command.
+
+The second option will generate a base `xinitrc` script that will run your
+window manager and set up the systemd user session.
+You can extend the script using the
+[extraCommands](#opt-services.xserver.displayManager.startx.extraCommands)
+option, for example:
+```nix
+{
+  services.xserver.displayManager.startx = {
+    generateScript = true;
+    extraCommands = ''
+      xrdb -load .Xresources
+      xsetroot -solid '#666661'
+      xsetroot -cursor_name left_ptr
+    '';
+  };
+}
+```
+or, alternatively, you can write your own from scratch in `~/.xinitrc`.
+
+In this case, remember you're responsible for starting the window manager, for
+example:
+```shell
+sxhkd &
+bspwm &
+```
+and if you have enabled some systemd user service, you will probably want to
+also add these lines too:
+```shell
+# import required env variables from the current shell
+systemctl --user import-environment DISPLAY XDG_SESSION_ID
+# start all graphical user services
+systemctl --user start nixos-fake-graphical-session.target
+# start the user dbus daemon
+dbus-daemon --session --address="unix:path=/run/user/$(id -u)/bus" &
+```
+
 ## Intel Graphics drivers {#sec-x11--graphics-cards-intel}
 
-There are two choices for Intel Graphics drivers in X.org: `modesetting`
-(included in the xorg-server itself) and `intel` (provided by the
-package xf86-video-intel).
-
-The default and recommended is `modesetting`. It is a generic driver
-which uses the kernel [mode
-setting](https://en.wikipedia.org/wiki/Mode_setting) (KMS) mechanism. It
+The default and recommended driver for Intel Graphics in X.org is `modesetting`
+(included in the xorg-server package itself).
+This is a generic driver which uses the kernel [mode
+setting](https://en.wikipedia.org/wiki/Mode_setting) (KMS) mechanism, it
 supports Glamor (2D graphics acceleration via OpenGL) and is actively
-maintained but may perform worse in some cases (like in old chipsets).
+maintained, it may perform worse in some cases (like in old chipsets).
 
-The second driver, `intel`, is specific to Intel GPUs, but not
-recommended by most distributions: it lacks several modern features (for
-example, it doesn't support Glamor) and the package hasn't been
-officially updated since 2015.
+There is a second driver, `intel` (provided by the xf86-video-intel package),
+specific to older Intel iGPUs from generation 2 to 9. It is not recommended by
+most distributions: it lacks several modern features (for example, it doesn't
+support Glamor) and the package hasn't been officially updated since 2015.
 
-The results vary depending on the hardware, so you may have to try both
-drivers. Use the option
+Third generation and older iGPUs (15-20+ years old) are not supported by the
+`modesetting` driver (X will crash upon startup). Thus, the `intel` driver is
+required for these chipsets.
+Otherwise, the results vary depending on the hardware, so you may have to try
+both drivers. Use the option
 [](#opt-services.xserver.videoDrivers)
 to set one. The recommended configuration for modern systems is:
 
@@ -141,6 +191,12 @@ to set one. The recommended configuration for modern systems is:
   services.xserver.videoDrivers = [ "modesetting" ];
 }
 ```
+::: {.note}
+The `modesetting` driver doesn't currently provide a `TearFree` option (this
+will become available in an upcoming X.org release), So, without using a
+compositor (for example, see [](#opt-services.picom.enable)) you will
+experience screen tearing.
+:::
 
 If you experience screen tearing no matter what, this configuration was
 reported to resolve the issue:
@@ -148,7 +204,7 @@ reported to resolve the issue:
 ```nix
 {
   services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.deviceSection = ''
+    services.xserver.deviceSection = ''
     Option "DRI" "2"
     Option "TearFree" "true"
   '';

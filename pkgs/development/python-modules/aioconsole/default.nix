@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -18,7 +19,7 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,19 +27,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aioconsole";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gexVeMlDRxZXcBi/iIYPip0DZIKvxCxKmTd+9jm0ud8=";
+    tag = "v${version}";
+    hash = "sha256-gFkRhewuRScEhXy0lv2R0kHfaHT1gSp3TVrqL36cRVs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " --cov aioconsole --strict-markers --count 2 -vv" ""
+      --replace-fail " --strict-markers --count 2 -vv" ""
   '';
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -80,7 +80,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ mit ];
     mainProgram = "emulationstation";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       edwtjo
     ];
     platforms = lib.platforms.linux;

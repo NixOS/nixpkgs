@@ -1,7 +1,7 @@
 # Setup hook to use in case a conda binary package is installed
 echo "Sourcing conda install hook"
 
-condaInstallPhase(){
+condaInstallPhase() {
     echo "Executing condaInstallPhase"
     runHook preInstall
 
@@ -10,11 +10,11 @@ condaInstallPhase(){
     # or multiple top level directories.
     siteDir=@pythonSitePackages@
     if [ -e ./site-packages ]; then
-      mkdir -p $out/$siteDir
-      cp -r ./site-packages/* $out/$siteDir
+        mkdir -p $out/$siteDir
+        cp -r ./site-packages/* $out/$siteDir
     else
-      cp -r . $out
-      rm $out/env-vars
+        cp -r . $out
+        rm $out/env-vars
     fi
 
     runHook postInstall

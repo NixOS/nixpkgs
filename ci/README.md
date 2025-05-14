@@ -44,21 +44,21 @@ Why not just build the tooling right from the PRs Nixpkgs version?
 ## `get-merge-commit.sh GITHUB_REPO PR_NUMBER`
 
 Check whether a PR is mergeable and return the test merge commit as
-[computed by GitHub](https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests).
+[computed by GitHub](https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests) and its parent.
 
 Arguments:
 - `GITHUB_REPO`: The repository of the PR, e.g. `NixOS/nixpkgs`
 - `PR_NUMBER`: The PR number, e.g. `1234`
 
 Exit codes:
-- 0: The PR can be merged, the test merge commit hash is returned on stdout
+- 0: The PR can be merged, the hashes of the test merge commit and the target commit are returned on stdout
 - 1: The PR cannot be merged because it's not open anymore
 - 2: The PR cannot be merged because it has a merge conflict
 - 3: The merge commit isn't being computed, GitHub is likely having internal issues, unknown if the PR is mergeable
 
 ### Usage
 
-This script can be used in GitHub Actions workflows as follows:
+This script is implemented as a reusable GitHub Actions workflow, and can be used as follows:
 
 ```yaml
 on: pull_request_target
@@ -67,32 +67,19 @@ on: pull_request_target
 permissions: {}
 
 jobs:
+  get-merge-commit:
+    # use the relative path of the get-merge-commit workflow yaml here
+    uses: ./.github/workflows/get-merge-commit.yml
+
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    needs: get-merge-commit
     steps:
-      # Important: Because of `pull_request_target`, this doesn't check out the PR,
-      # but rather the base branch of the PR, which is needed so we don't run untrusted code
-      - uses: actions/checkout@<VERSION>
-        with:
-          path: base
-          sparse-checkout: ci
-      - name: Resolving the merge commit
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
-            echo "Checking the merge commit $mergedSha"
-            echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-          else
-            # Skipping so that no notifications are sent
-            echo "Skipping the rest..."
-          fi
-          rm -rf base
       - uses: actions/checkout@<VERSION>
         # Add this to _all_ subsequent steps to skip them
-        if: env.mergedSha
+        if: needs.get-merge-commit.outputs.mergedSha
         with:
-          ref: ${{ env.mergedSha }}
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
       - ...
 ```

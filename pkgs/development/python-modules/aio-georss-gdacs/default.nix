@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-gdacs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PhOI0v3dKTNGZLk1/5wIgvQkm4Cwfr1UYilr5rW7e3g=";
   };
 

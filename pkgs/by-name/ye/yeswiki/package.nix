@@ -5,7 +5,8 @@
 }:
 let
   version = "4.4.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "yeswiki";
   inherit version;
 

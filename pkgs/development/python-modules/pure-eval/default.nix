@@ -9,22 +9,22 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pure_eval";
-  version = "0.2.2";
+  pname = "pure-eval";
+  version = "0.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
-    repo = pname;
+    repo = "pure_eval";
     rev = "v${version}";
-    hash = "sha256-9N+UcgAv30s4ctgsBrOHiix4BoXhKPgxH/GOz/NIFdU=";
+    hash = "sha256-gdP8/MkzTyjkZaWUG5PoaOtBqzbCXYNYBX2XBLWLh18=";
   };
 
-  buildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ toml ];
+  dependencies = [ toml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Safely evaluate AST nodes without side effects";
     homepage = "https://github.com/alexmojaki/pure_eval";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

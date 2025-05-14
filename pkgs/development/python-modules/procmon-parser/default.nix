@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eronnen";
     repo = "procmon-parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XkMf3MQK4WFRLl60XHDG/j2gRHAiz7XL9MmC6SRg9RE=";
   };
 

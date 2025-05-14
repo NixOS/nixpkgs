@@ -1,30 +1,34 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, nixosTests
-, php
-, writeText
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  php,
+  writeText,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.24.3";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-JgniYjw+Fk5EaXrXVjelBYBP1JOZarAF07iToiwnkdY=";
+    hash = "sha256-TVtyX0/HKtLHFjHHjZDwOOcbHJ7Bq0NrlI3drlm6Gy4=";
   };
 
   postPatch = ''
     patchShebangs cli/*.php app/actualize_script.php
   '';
 
-  # the thirdparty_extension_path can only be set by config, but should be read by an env-var.
+  # THIRDPARTY_EXTENSIONS_PATH can only be set by config, but should be read from an env-var.
   overrideConfig = writeText "constants.local.php" ''
     <?php
-      define('THIRDPARTY_EXTENSIONS_PATH', getenv('THIRDPARTY_EXTENSIONS_PATH') . '/extensions');
+      $thirdpartyExtensionsPath = getenv('THIRDPARTY_EXTENSIONS_PATH');
+      if (is_string($thirdpartyExtensionsPath) && $thirdpartyExtensionsPath !== "") {
+        define('THIRDPARTY_EXTENSIONS_PATH', $thirdpartyExtensionsPath . '/extensions');
+      }
   '';
 
   buildInputs = [ php ];
@@ -41,13 +45,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth freshrss-extensions;
+    inherit (nixosTests) freshrss;
   };
 
   meta = with lib; {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
     homepage = "https://www.freshrss.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ etu stunkymonkey ];
+    maintainers = with maintainers; [
+      etu
+      stunkymonkey
+    ];
   };
 }

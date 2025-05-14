@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.3.2";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7a9IX9seqI2prGQrIAbGPZlQ3RXU0TL3IFMF04Pm90U=";
+    hash = "sha256-HTxdxMUlfgwjjcH+U4dwC4y5h+q4CO2z4Mc4KfHMROw=";
   };
 
   buildInputs = [

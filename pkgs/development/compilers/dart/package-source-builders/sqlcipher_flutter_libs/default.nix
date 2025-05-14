@@ -1,20 +1,25 @@
-{ stdenv
-, fetchurl
-, lib
+{
+  stdenv,
+  fetchurl,
+  lib,
 }:
 
 { version, src, ... }:
 
 let
-  artifacts = lib.mapAttrs (version: sha512:
-    fetchurl {
-      url = "https://storage.googleapis.com/simon-public-euw3/assets/sqlcipher/${version}.c";
-      inherit sha512;
-    })
-    {
-      v4_5_7 = "11bb454d761b994f7e44f35dabd3fc8ac3b40499d6fdc29d58a38fb9b4dcdd6eb14ff3978ceb7c6f3bd5eee4a5abeec5f0453b944268f9aaf942b0366df1e73d";
-      v4_5_6 = "939ae692239adc0581211a37ed9ffa8b37c8f771c830977ecb06dc6accc4c3db767ce6abeaf91133815e2ae837785affa92f4c95b2e68cb6d563bd761f3e0cb1";
-    };
+  artifacts =
+    lib.mapAttrs
+      (
+        version: sha512:
+        fetchurl {
+          url = "https://storage.googleapis.com/simon-public-euw3/assets/sqlcipher/${version}.c";
+          inherit sha512;
+        }
+      )
+      {
+        v4_5_7 = "11bb454d761b994f7e44f35dabd3fc8ac3b40499d6fdc29d58a38fb9b4dcdd6eb14ff3978ceb7c6f3bd5eee4a5abeec5f0453b944268f9aaf942b0366df1e73d";
+        v4_5_6 = "939ae692239adc0581211a37ed9ffa8b37c8f771c830977ecb06dc6accc4c3db767ce6abeaf91133815e2ae837785affa92f4c95b2e68cb6d563bd761f3e0cb1";
+      };
 in
 stdenv.mkDerivation rec {
   pname = "sqlcipher_flutter_libs";

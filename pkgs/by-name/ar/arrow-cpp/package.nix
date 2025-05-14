@@ -35,7 +35,8 @@
   nlohmann_json,
   openssl,
   perl,
-  protobuf,
+  pkg-config,
+  protobuf_29,
   python3,
   rapidjson,
   re2,
@@ -49,44 +50,47 @@
   zstd,
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  enableFlight ? true,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin,
+  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
+  # Disable also on RiscV
+  # configure: error: cannot determine number of significant virtual address bits
+  enableJemalloc ?
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
-  enableGcs ? !stdenv.hostPlatform.isDarwin,
+  # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
 }:
 
-assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.hostPlatform.isDarwin)
-  -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-) "S3 on Darwin requires Boost != 1.69";
-
 let
+  # https://github.com/apache/arrow/issues/45807
+  protobuf = protobuf_29;
+
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "735ae7128d571398dd798d7ff004adebeb342883";
-    hash = "sha256-67KwnSt+EeEDvk+9kxR51tErL2wJqEPRITKb/dN+HMQ=";
+    rev = "d2a13712303498963395318a4eb42872e66aead7";
+    hash = "sha256-c8FL37kG0uo7o0Zp71WjCl7FD5BnVgqUCCXXX9gI0lg=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
-    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
+    rev = "18d17540097fca7c40be3d42c167e6bfad90763c";
+    hash = "sha256-gKEQc2RKpVp39RmuZbIeIXAwiAXDHGnLXF6VQuJtnRA=";
   };
 
+  version = "20.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "17.0.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "arrow";
-    rev = "apache-arrow-17.0.0";
-    hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
+    rev = "apache-arrow-${version}";
+    hash = "sha256-JFPdKraCU+xRkBTAHyY4QGnBVlOjQ1P5+gq9uxyqJtk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -125,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
@@ -171,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+      --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags =
@@ -179,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
       "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-      "-DARROW_BUILD_TESTS=ON"
+      "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_INTEGRATION=ON"
       "-DARROW_BUILD_UTILITIES=ON"
       "-DARROW_EXTRA_ERROR_CONTEXT=ON"
@@ -259,11 +264,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    perl
-    which
-    sqlite
-  ] ++ lib.optionals enableS3 [ minio ] ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs =
+    [
+      perl
+      which
+      sqlite
+    ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let

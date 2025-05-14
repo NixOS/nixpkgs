@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +11,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "michaelforney";
-    repo = pname;
+    repo = "samurai";
     rev = version;
     hash = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
   };
 
-  makeFlags = [ "DESTDIR=" "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=${placeholder "out"}"
+  ];
 
   patches = [
     # NULL pointer dereference in writefile() in util.c; remove this at the next
@@ -50,10 +54,12 @@ stdenv.mkDerivation rec {
       respectively.
     '';
     homepage = "https://github.com/michaelforney/samurai";
-    license = with licenses; [ mit asl20 ]; # see LICENSE
-    maintainers = with maintainers; [ dtzWill AndersonTorres ];
+    license = with licenses; [
+      mit
+      asl20
+    ]; # see LICENSE
+    maintainers = with maintainers; [ dtzWill ];
     mainProgram = "samu";
     platforms = platforms.all;
   };
 }
-

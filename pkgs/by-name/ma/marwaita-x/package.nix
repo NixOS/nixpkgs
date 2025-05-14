@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nix-update-script
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

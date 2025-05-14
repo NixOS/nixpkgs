@@ -1,35 +1,38 @@
-{ lib, fetchFromGitHub, buildPythonApplication
-, pythonOlder
-, aiohttp
-, appdirs
-, beautifulsoup4
-, defusedxml
-, devpi-common
-, execnet
-, itsdangerous
-, nginx
-, packaging
-, passlib
-, platformdirs
-, pluggy
-, py
-, httpx
-, pyramid
-, pytestCheckHook
-, repoze-lru
-, setuptools
-, strictyaml
-, waitress
-, webtest
-, testers
-, devpi-server
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  gitUpdater,
+  pythonOlder,
+  aiohttp,
+  appdirs,
+  beautifulsoup4,
+  defusedxml,
+  devpi-common,
+  execnet,
+  itsdangerous,
+  nginx,
+  packaging,
+  passlib,
+  platformdirs,
+  pluggy,
+  py,
+  httpx,
+  pyramid,
+  pytestCheckHook,
+  repoze-lru,
+  setuptools,
+  strictyaml,
+  waitress,
+  webtest,
+  testers,
+  devpi-server,
+  nixosTests,
 }:
-
 
 buildPythonApplication rec {
   pname = "devpi-server";
-  version = "6.10.0";
+  version = "6.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +41,7 @@ buildPythonApplication rec {
     owner = "devpi";
     repo = "devpi";
     rev = "server-${version}";
-    hash = "sha256-JqYWWItdAgtUtiYSqxUd40tT7ON4oHiDA4/3Uhb01b8=";
+    hash = "sha256-j8iILbptUw8DUE9lFpjDp/VYzdJzmOYqM/RCnkpWdcA=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -116,7 +119,12 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib;{
+  # devpi uses a monorepo for server,common,client and web
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "server-";
+  };
+
+  meta = with lib; {
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";

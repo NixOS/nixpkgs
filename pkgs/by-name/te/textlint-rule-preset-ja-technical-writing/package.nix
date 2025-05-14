@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "textlint-ja";
     repo = "textlint-rule-preset-ja-technical-writing";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8KoP/JagMf2kFxz8hr9e0hJH7yPukRURb48v0nPkC/8=";
   };
 

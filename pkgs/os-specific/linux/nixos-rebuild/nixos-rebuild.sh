@@ -29,6 +29,7 @@ upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
 specialisation=
+imageVariant=
 buildHost=
 targetHost=
 remoteSudo=
@@ -52,7 +53,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
+      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|build-image|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         if [ "$i" = list-generations ]; then
             buildNix=
@@ -141,7 +142,7 @@ while [ "$#" -gt 0 ]; do
         fi
         if [ "$1" != system ]; then
             profile="/nix/var/nix/profiles/system-profiles/$1"
-            mkdir -p -m 0755 "$(dirname "$profile")"
+            (umask 022 && mkdir -p "$(dirname "$profile")")
         fi
         shift 1
         ;;
@@ -151,6 +152,14 @@ while [ "$#" -gt 0 ]; do
             exit 1
         fi
         specialisation="$1"
+        shift 1
+        ;;
+      --image-variant)
+        if [ -z "$1" ]; then
+            log "$0: ‘--image-variant’ requires an argument"
+            exit 1
+        fi
+        imageVariant="$1"
         shift 1
         ;;
       --build-host)
@@ -307,6 +316,10 @@ nixBuild() {
             esac
         done
 
+        if [[ -z $buildingAttribute ]]; then
+            instArgs+=("$buildFile")
+        fi
+
         drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
@@ -427,6 +440,25 @@ if [[ -z $flake && -e /etc/nixos/flake.nix && -z $noFlake ]]; then
     flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
 fi
 
+tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
+
+if [[ ${#tmpDir} -ge 60 ]]; then
+    # Very long tmp dirs lead to "too long for Unix domain socket"
+    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+    rmdir "$tmpDir"
+    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
+fi
+
+cleanup() {
+    for ctrl in "$tmpDir"/ssh-*; do
+        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
+    done
+    rm -rf "$tmpDir"
+}
+trap cleanup EXIT
+
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
+
 # For convenience, use the hostname as the default configuration to
 # build from the flake.
 if [[ -n $flake ]]; then
@@ -449,23 +481,6 @@ if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; t
     log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
     exit 1
 fi
-
-tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
-
-if [[ ${#tmpDir} -ge 60 ]]; then
-    # Very long tmp dirs lead to "too long for Unix domain socket"
-    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-    rmdir "$tmpDir"
-    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
-fi
-
-cleanup() {
-    for ctrl in "$tmpDir"/ssh-*; do
-        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
-    done
-    rm -rf "$tmpDir"
-}
-trap cleanup EXIT
 
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
@@ -509,8 +524,6 @@ if [ "$action" = edit ]; then
     fi
     exit 1
 fi
-
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
@@ -815,6 +828,67 @@ if [ -z "$rollback" ]; then
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
+    elif [ "$action" = build-image ]; then
+        if [[ -z $buildingAttribute ]]; then
+            variants="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "let
+                    value = import \"$(realpath $buildFile)\";
+                    set = if builtins.isFunction value then value {} else value;
+                in builtins.attrNames set.${attr:+$attr.}config.system.build.images" \
+                "${extraBuildFlags[@]}"
+            )"
+        elif [[ -z $flake ]]; then
+            variants="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "with import <nixpkgs/nixos> {}; builtins.attrNames config.system.build.images" \
+                "${extraBuildFlags[@]}"
+            )"
+        else
+            variants="$(
+                runCmd nix "${flakeFlags[@]}" eval --json \
+                "$flake#$flakeAttr.config.system.build.images" \
+                --apply "builtins.attrNames" "${evalArgs[@]}" "${extraBuildFlags[@]}"
+            )"
+        fi
+        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "any(. == \$variant)" > /dev/null; then
+            echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
+            echo "$variants" | jq -r 'join ("\n")'
+            exit 1
+        fi
+
+        if [[ -z $buildingAttribute ]]; then
+            imageName="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "let
+                    value = import \"$(realpath $buildFile)\";
+                    set = if builtins.isFunction value then value {} else value;
+                in set.${attr:+$attr.}config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}" \
+                | jq -r .
+            )"
+        elif [[ -z $flake ]]; then
+            imageName="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "with import <nixpkgs/nixos> {}; config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}" \
+                | jq -r .
+            )"
+        else
+            imageName="$(
+                runCmd nix "${flakeFlags[@]}" eval --raw \
+                "$flake#$flakeAttr.config.system.build.images.$imageVariant.passthru.filePath" \
+                "${evalArgs[@]}" "${extraBuildFlags[@]}"
+            )"
+        fi
+
+        if [[ -z $buildingAttribute ]]; then
+            pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.images.${imageVariant}" "${extraBuildFlags[@]}")"
+        elif [[ -z $flake ]]; then
+            pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A config.system.build.images.${imageVariant} -k "${extraBuildFlags[@]}")"
+        else
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.images.${imageVariant}" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
+        fi
     else
         showSyntax
     fi
@@ -855,7 +929,6 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "--no-ask-password"
         "--pipe"
         "--quiet"
-        "--same-dir"
         "--service-type=exec"
         "--unit=nixos-rebuild-switch-to-configuration"
         "--wait"
@@ -900,7 +973,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     if ! targetHostSudoCmd "${cmd[@]}" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
+    else
+        echo -n "Done. The new configuration is " >&2
+        echo "$pathToConfig"
     fi
+elif [[ "$action" = build ]]; then
+    echo -n "Done. The new configuration is " >&2
+    echo "$pathToConfig"
 fi
 
 
@@ -909,4 +988,9 @@ if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
 
 Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
+fi
+
+if [[ "$action" = build-image ]]; then
+    echo -n "Done.  The disk image can be found in " >&2
+    echo "${pathToConfig}/${imageName}"
 fi

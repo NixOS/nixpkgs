@@ -10,7 +10,7 @@
   lmdb,
   lxml,
   numpy,
-  opencv4,
+  opencv-python,
   openpyxl,
   pdf2docx,
   pillow,
@@ -27,9 +27,9 @@
 }:
 
 let
-  version = "2.7.5";
+  version = "2.9.1";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "paddleocr";
   inherit version;
   format = "setuptools";
@@ -37,8 +37,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8mnSV4ga6G2cbYCX84XJRFiLCoXstTAtqvg9QqVN6GI=";
+    tag = "v${version}";
+    hash = "sha256-QCddxgVdLaAJLfKCy+tnQsxownfl1Uv0TXhFRiFi9cY=";
   };
 
   patches = [
@@ -58,7 +58,6 @@ buildPythonPackage {
   pythonRemoveDeps = [
     "imgaug"
     "visualdl"
-    "opencv-python"
     "opencv-contrib-python"
   ];
 
@@ -71,7 +70,7 @@ buildPythonPackage {
     lmdb
     lxml
     numpy
-    opencv4
+    opencv-python
     openpyxl
     pdf2docx
     pillow
@@ -101,7 +100,7 @@ buildPythonPackage {
       PaddleOCR aims to create multilingual, awesome, leading, and practical OCR
       tools that help users train better models and apply them into practice.
     '';
-    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
+    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/${src.tag}";
     maintainers = with maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"

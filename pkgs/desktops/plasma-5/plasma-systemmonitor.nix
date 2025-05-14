@@ -1,24 +1,28 @@
-{ mkDerivation
-, extra-cmake-modules
-, kdoctools
-, qtquickcontrols2
-, kconfig
-, kcoreaddons
-, ki18n
-, kiconthemes
-, kitemmodels
-, kitemviews
-, knewstuff
-, libksysguard
-, kquickcharts
-, ksystemstats
-, qqc2-desktop-style
-, qtbase
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kdoctools,
+  qtquickcontrols2,
+  kconfig,
+  kcoreaddons,
+  ki18n,
+  kiconthemes,
+  kitemmodels,
+  kitemviews,
+  knewstuff,
+  libksysguard,
+  kquickcharts,
+  ksystemstats,
+  qqc2-desktop-style,
+  qtbase,
 }:
 
 mkDerivation {
   pname = "plasma-systemmonitor";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [
     qtquickcontrols2
     kconfig

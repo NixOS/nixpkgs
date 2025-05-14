@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "scons";
   version = "4.7.0";
@@ -15,10 +20,19 @@ python3Packages.buildPythonApplication rec {
   patches = [
     ./env.patch
     ./no-man-pages.patch
+    # Fix builds on sandboxed Darwin: https://github.com/SCons/scons/pull/4603
+    (fetchpatch {
+      url = "https://github.com/SCons/scons/commit/2d5e3a40a613225b329776ab9dbd9abcd2d24222.patch";
+      hash = "sha256-N1xQOvsPTi7a2maEZJQVu6vJ9AoWMqDOsScXHp9KuXI=";
+    })
   ];
 
   build-system = [
     python3Packages.setuptools
+  ];
+
+  dependencies = [
+    python3Packages.distutils
   ];
 
   setupHook = ./setup-hook.sh;
@@ -40,6 +54,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://scons.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

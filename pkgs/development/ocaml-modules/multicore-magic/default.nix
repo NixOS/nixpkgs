@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl
-, alcotest, domain_shims
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  domain_shims,
 }:
 
 buildDunePackage rec {
@@ -13,7 +17,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  checkInputs = [ alcotest domain_shims ];
+  checkInputs = [
+    alcotest
+    domain_shims
+  ];
 
   meta = {
     description = "Low-level multicore utilities for OCaml";

@@ -11,6 +11,7 @@
   freebsd-lib,
   expat,
   zlib,
+  extraSrc ? [ ],
 }:
 
 let
@@ -41,7 +42,7 @@ mkDerivation {
 
       "sys/rpc/types.h"
     ]
-    ++ lib.optionals (versionData.major == 14) [
+    ++ lib.optionals (versionData.major >= 14) [
       "sys/sys/bitcount.h"
       "sys/sys/linker_set.h"
       "sys/sys/module.h"
@@ -60,7 +61,7 @@ mkDerivation {
       "include/elf.h"
       "sys/sys/ctf.h"
     ]
-    ++ lib.optionals (versionData.major == 14) [
+    ++ lib.optionals (versionData.major >= 14) [
       "include/bitstring.h"
       "sys/sys/bitstring.h"
       "sys/sys/nv_namespace.h"
@@ -115,7 +116,8 @@ mkDerivation {
 
       # idk bro
       "sys/sys/kbio.h"
-    ];
+    ]
+    ++ extraSrc;
 
   preBuild =
     ''
@@ -173,5 +175,7 @@ mkDerivation {
   # Compat is for making other platforms look like FreeBSD (e.g. to
   # build build-time dependencies for building FreeBSD packages). It is
   # not needed when building for FreeBSD.
-  meta.broken = stdenv.hostPlatform.isFreeBSD;
+  meta.platforms = lib.platforms.linux;
+
+  alwaysKeepStatic = true;
 }

@@ -1,32 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qtbase
-, qttools
-, spdlog
-, ffmpeg
-, taglib
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qtbase,
+  qttools,
+  spdlog,
+  ffmpeg,
+  taglib,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyaudiosync";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "EasyAudioSync";
     rev = "v${version}";
-    hash = "sha256-w98tj9BuixPhuDgwn74EYY0gvKH6kbfQmtg030RWRU0=";
+    hash = "sha256-UCOL4DzynKjNDvS0HZ4/K+Wn5lOqHZ0bNop0zqJl5kc=";
   };
 
   patches = [
     ./0001-fix-project-name.patch
-    ./0002-fix-qt67-deprecated-methods.patch
     ./0003-fix-darwin-app.patch
     ./0004-force-qt6.patch
   ];
@@ -48,11 +48,13 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       runHook preInstall
-    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       mv "easyaudiosync.app" "Easy Audio Sync.app"
       cp -r "Easy Audio Sync.app" $out/Applications
-    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm755 easyaudiosync $out/bin/easyaudiosync
 
       for RES in 48 64 128 256; do
@@ -60,7 +62,8 @@ stdenv.mkDerivation rec {
       done
 
       install -Dm755 "$src/assets/icons/easyaudiosync.svg" "$out/share/icons/hicolor/scalable/apps/easyaudiosync.svg"
-    '' + ''
+    ''
+    + ''
       runHook postInstall
     '';
 

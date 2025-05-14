@@ -1,6 +1,7 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
@@ -12,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-u5Nb9PVyMoR0lIzXEMtkZntXbBfpyXrtLB8U+dkgYrc=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/sockets/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/sockets/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Socket functions for networking from within octave";
   };
 }

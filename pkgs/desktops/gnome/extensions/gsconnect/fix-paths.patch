@@ -32,6 +32,19 @@ index 53ecd5fc..78782357 100644
  import Gio from 'gi://Gio';
  import GObject from 'gi://GObject';
  
+diff --git i/src/gsconnect-preferences w/src/gsconnect-preferences
+index b16ddc7d..263dfb04 100755
+--- a/src/gsconnect-preferences
++++ b/src/gsconnect-preferences
+@@ -6,6 +6,8 @@
+ 
+ // -*- mode: js; -*-
+ 
++import './__nix-prepend-search-paths.js';
++
+ import Gdk from 'gi://Gdk?version=3.0';
+ import 'gi://GdkPixbuf?version=2.0';
+ import Gio from 'gi://Gio?version=2.0';
 diff --git a/src/prefs.js b/src/prefs.js
 index dd20fd20..5f82c53a 100644
 --- a/src/prefs.js

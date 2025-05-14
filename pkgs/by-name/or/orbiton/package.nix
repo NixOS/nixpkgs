@@ -1,49 +1,58 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper, pkg-config
-, withGui ? true, vte
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  withGui ? true,
+  vte,
 }:
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.65.12";
+  version = "2.69.0";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
-    rev = "v${version}";
-    hash = "sha256-1KVw2dj//6vwUUj1jVWe2J/9F6J8BQsvCAEbJZnW26c=";
+    tag = "v${version}";
+    hash = "sha256-0ba+IkiBQUsesq54S4Ngd9vTO5E7kqOQS61HidxE0jM=";
   };
 
   vendorHash = null;
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "-Wl,--as-needed" ""
-
-    # Requires impure pbcopy and pbpaste
-    substituteInPlace v2/pbcopy_test.go \
-      --replace TestPBcopy SkipTestPBcopy
-  '';
-
-  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
 
   buildInputs = lib.optional withGui vte;
 
   preBuild = "cd v2";
 
-  postInstall = ''
-    cd ..
-    installManPage o.1
-    mv $out/bin/{orbiton,o}
-  '' + lib.optionalString withGui ''
-    make install-gui PREFIX=$out
-    wrapProgram $out/bin/og --prefix PATH : $out/bin
-  '';
+  checkFlags = [
+    "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
+  ];
 
-  meta = with lib; {
+  postInstall =
+    ''
+      cd ..
+      installManPage o.1
+      mv $out/bin/{orbiton,o}
+    ''
+    + lib.optionalString withGui ''
+      make install-gui PREFIX=$out
+      wrapProgram $out/bin/og --prefix PATH : $out/bin
+    '';
+
+  meta = {
     description = "Config-free text editor and IDE limited to VT100";
-    homepage = "https://orbiton.zip";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
+    homepage = "https://roboticoverlords.org/orbiton/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "o";
   };
 }

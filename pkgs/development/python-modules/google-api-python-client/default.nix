@@ -7,21 +7,21 @@
   google-api-core,
   httplib2,
   uritemplate,
-  oauth2client,
   setuptools,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.135.0";
+  version = "2.166.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tVKigSPtlUkwNWmNuA6O14yRBqi0IuY6F1FQubVbcE4=";
+    pname = "google_api_python_client";
+    inherit version;
+    hash = "sha256-uM+EO9nXNsE0rvds8dx6R8koOi7yQme5cge53UOzDvc=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,6 @@ buildPythonPackage rec {
     google-api-core
     httplib2
     uritemplate
-    oauth2client
   ];
 
   # No tests included in archive

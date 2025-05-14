@@ -5,7 +5,7 @@
   git,
   testers,
   makeWrapper,
-  githooks
+  githooks,
 }:
 buildGoModule rec {
   pname = "githooks";

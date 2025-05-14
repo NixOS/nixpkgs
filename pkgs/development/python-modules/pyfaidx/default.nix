@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdshw5";
     repo = "pyfaidx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PKcopIu/0ko4Jl2+G0ZivZXvMwACeIFFFlPt5dlDDfQ=";
   };
 

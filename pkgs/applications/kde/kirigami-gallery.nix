@@ -1,17 +1,21 @@
-{ mkDerivation
-, lib
-, kirigami2
-, extra-cmake-modules
-, kitemmodels
-, qtgraphicaleffects
-, qtquickcontrols2
-, qttools
+{
+  mkDerivation,
+  lib,
+  kirigami2,
+  extra-cmake-modules,
+  kitemmodels,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  qttools,
 }:
 
 mkDerivation {
   pname = "kirigami-gallery";
 
-  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    qttools
+  ];
 
   buildInputs = [
     qtgraphicaleffects

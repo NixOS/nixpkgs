@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, gtk3
-, caja
-, dbus-glib
-, libnotify
-, libxml2
-, libcanberra-gtk3
-, apacheHttpdPackages
-, hicolor-icon-theme
-, mate
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtk3,
+  caja,
+  dbus-glib,
+  libnotify,
+  libxml2,
+  libcanberra-gtk3,
+  apacheHttpdPackages,
+  hicolor-icon-theme,
+  mate,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 let
@@ -72,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

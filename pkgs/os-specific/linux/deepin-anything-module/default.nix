@@ -1,6 +1,7 @@
-{ stdenv
-, deepin
-, kernel
+{
+  stdenv,
+  deepin,
+  kernel,
 }:
 
 stdenv.mkDerivation {
@@ -26,4 +27,3 @@ stdenv.mkDerivation {
     description = "Deepin Anything file search tool (kernel modules)";
   };
 }
-

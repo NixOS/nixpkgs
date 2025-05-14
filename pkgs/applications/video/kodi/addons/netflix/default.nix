@@ -1,4 +1,13 @@
-{ lib, buildKodiAddon, fetchFromGitHub, signals, inputstream-adaptive, inputstreamhelper, requests, myconnpy }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  signals,
+  inputstream-adaptive,
+  inputstreamhelper,
+  requests,
+  myconnpy,
+}:
 
 buildKodiAddon rec {
   pname = "netflix";
@@ -24,6 +33,7 @@ buildKodiAddon rec {
     homepage = "https://github.com/CastagnaIT/plugin.video.netflix";
     description = "Netflix VOD Services Add-on";
     license = licenses.mit;
-    maintainers = teams.kodi.members ++ [ maintainers.pks ];
+    maintainers = [ maintainers.pks ];
+    teams = [ teams.kodi ];
   };
 }

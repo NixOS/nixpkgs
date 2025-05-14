@@ -1,4 +1,14 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kconfig, kcrash, kiconthemes, knotifyconfig }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kconfig,
+  kcrash,
+  kiconthemes,
+  knotifyconfig,
+}:
 
 mkDerivation {
   pname = "kteatime";

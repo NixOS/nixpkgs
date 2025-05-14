@@ -1,13 +1,14 @@
-{ lib
-, buildNpmPackage
-, fetchNpmDeps
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchNpmDeps,
+  testers,
 }:
 
 let
   inherit (lib) fileset;
 
-  packageLock = builtins.fromJSON (builtins.readFile ./package-lock.json);
+  packageLock = builtins.fromJSON (builtins.readFile ./manifests/package-lock.json);
 
   pname = "purescm";
   version = packageLock.packages."node_modules/${pname}".version;
@@ -15,24 +16,11 @@ let
   package = buildNpmPackage {
     inherit pname version;
 
-    src = fileset.toSource {
-      root = ./.;
-      fileset = fileset.unions [
-        ./package.json
-        ./package-lock.json
-        ./.gitignore
-      ];
-    };
+    src = ./manifests;
     dontNpmBuild = true;
 
     npmDeps = fetchNpmDeps {
-      src = fileset.toSource {
-        root = ./.;
-        fileset = fileset.unions [
-          ./package-lock.json
-          ./package.json
-        ];
-      };
+      src = ./manifests;
       hash = "sha256-ljeFcLvIET77Q0OR6O5Ok1fGnaxaKaoywpcy2aHq/6o=";
     };
 

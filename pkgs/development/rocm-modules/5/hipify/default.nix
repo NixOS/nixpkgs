@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clang
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clang,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,8 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

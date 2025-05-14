@@ -10,6 +10,9 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-prebuilt,
+  langgraph-sdk,
+  xxhash,
 
   # tests
   aiosqlite,
@@ -31,19 +34,18 @@
   postgresqlTestHook,
 
   # passthru
-  langgraph-sdk,
+  nix-update-script,
 }:
-
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.34";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5Suyj6pEslgR383MkYGGz7IC2A0A++02YooZmi8YtyM=";
+    tag = "${version}";
+    hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
   };
 
   postgresqlTestSetupPost = ''
@@ -58,6 +60,9 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-prebuilt
+    langgraph-sdk
+    xxhash
   ];
 
   pythonImportsCheck = [ "langgraph" ];
@@ -67,6 +72,12 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    pytestCheckHook
+    postgresql
+    postgresqlTestHook
+  ];
+
+  checkInputs = [
     aiosqlite
     dataclasses-json
     grandalf
@@ -81,10 +92,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-repeat
     pytest-xdist
-    pytestCheckHook
     syrupy
-    postgresql
-    postgresqlTestHook
   ];
 
   disabledTests = [
@@ -105,16 +113,26 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+
+    # pydantic.errors.PydanticForbiddenQualifier,
+    # see https://github.com/langchain-ai/langgraph/issues/4360
+    "test_state_schema_optional_values"
   ];
 
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
-    "tests/test_pregel_async.py"
+    "tests/test_checkpoint_migration.py"
+    "tests/test_large_cases.py"
+    "tests/test_large_cases_async.py"
     "tests/test_pregel.py"
+    "tests/test_pregel_async.py"
   ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

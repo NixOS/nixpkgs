@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "QwikSwitch USB Modem API binding for Python";
     homepage = "https://github.com/kellerza/pyqwikswitch";
     license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

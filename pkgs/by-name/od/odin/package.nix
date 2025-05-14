@@ -1,41 +1,34 @@
 {
-  fetchFromGitHub,
   lib,
-  libiconv,
   llvmPackages,
-  MacOSX-SDK,
+  fetchFromGitHub,
   makeBinaryWrapper,
-  nix-update-script,
-  Security,
   which,
+  nix-update-script,
 }:
 
 let
   inherit (llvmPackages) stdenv;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "0-unstable-2024-10-12";
+  version = "dev-2025-04";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "af9ae4897ad9e526d74489ddd12cfae179639ff3";
-    hash = "sha256-ky3jiVk2KfOW4JjXqiCTdnbEu7bnmTVupw2r5fwyB00=";
+    tag = finalAttrs.version;
+    hash = "sha256-dVC7MgaNdgKy3X9OE5ZcNCPnuDwqXszX9iAoUglfz2k=";
   };
 
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/linker.cpp \
-          --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
-    ''
-    + ''
-      substituteInPlace build_odin.sh \
-          --replace-fail '-framework System' '-lSystem'
-      patchShebangs build_odin.sh
-    '';
+  patches = [
+    ./darwin-remove-impure-links.patch
+  ];
+  postPatch = ''
+    patchShebangs --build build_odin.sh
+  '';
 
-  LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+  LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
 
   dontConfigure = true;
 
@@ -44,11 +37,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     which
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Security
   ];
 
   installPhase = ''
@@ -74,6 +62,10 @@ stdenv.mkDerivation {
       } \
       --set-default ODIN_ROOT $out/share
 
+    make -C "$out/share/vendor/cgltf/src/"
+    make -C "$out/share/vendor/stb/src/"
+    make -C "$out/share/vendor/miniaudio/src/"
+
     runHook postInstall
   '';
 
@@ -83,14 +75,13 @@ stdenv.mkDerivation {
     description = "Fast, concise, readable, pragmatic and open sourced programming language";
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
+    changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      luc65r
-      znaniye
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
   };
-}
+})

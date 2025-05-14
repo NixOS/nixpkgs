@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clr
-, git
-, rocdbgapi
-, elfutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clr,
+  git,
+  rocdbgapi,
+  elfutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,8 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library that provides some debugging functionality for ROCr";
     homepage = "https://github.com/ROCm/rocr_debug_agent";
     license = with licenses; [ ncsa ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

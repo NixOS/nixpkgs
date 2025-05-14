@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, boehmgc
-, glib
-, help2man
-, libgee
-, ncurses
-, perl
-, pkg-config
-, vala
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boehmgc,
+  glib,
+  help2man,
+  libgee,
+  ncurses,
+  perl,
+  pkg-config,
+  vala,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zile";
-  version = "2.6.2";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${pname}-${version}.tar.gz";
-    hash = "sha256-d+t9r/PJi9yI2qGsBA3MynK4HcMvwxZuB53Xpj5Cx0E=";
+    hash = "sha256-1dRLhctJBkPQcH4aIYbzoymYwvbquqlIFHm2XK7uV8A=";
   };
 
   buildInputs = [
@@ -26,23 +27,24 @@ stdenv.mkDerivation rec {
     libgee
     ncurses
   ];
-  nativeBuildInputs = [
-    perl
-    pkg-config
-    vala
-  ]
-  # `help2man' wants to run Zile, which won't work when the
-  # newly-produced binary can't be run at build-time.
-  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
+  nativeBuildInputs =
+    [
+      perl
+      pkg-config
+      vala
+    ]
+    # `help2man' wants to run Zile, which won't work when the
+    # newly-produced binary can't be run at build-time.
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  gl_cv_func_fstatat_zero_flag="yes";
+  gl_cv_func_fstatat_zero_flag = "yes";
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/zile/";
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
       every Emacs user should feel at home.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub AndersonTorres ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
     mainProgram = "zile";
   };

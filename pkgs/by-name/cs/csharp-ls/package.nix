@@ -2,24 +2,29 @@
   lib,
   buildDotnetGlobalTool,
   dotnetCorePackages,
+  versionCheckHook,
   nix-update-script,
 }:
 let
-  inherit (dotnetCorePackages) sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 in
 
 buildDotnetGlobalTool rec {
   pname = "csharp-ls";
-  version = "0.15.0";
+  version = "0.17.0";
 
-  nugetHash = "sha256-Fp1D2z4x2e85z4IO4xQentS7dbqhFT3e/BPZm0d5L5M=";
+  nugetHash = "sha256-8dPBDhLc+L/njlRE4UPqhWRV2k+jjgRri4rLW0dIHzM=";
 
-  dotnet-sdk = sdk_8_0;
-  dotnet-runtime = sdk_8_0;
+  inherit dotnet-sdk;
+  dotnet-runtime = dotnet-sdk;
 
-  passthru.tests = {
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Roslyn-based LSP language server for C#";
@@ -29,5 +34,11 @@ buildDotnetGlobalTool rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # Crashes immediately at runtime
+      # terminated by signal SIGKILL (Forced quit)
+      # https://github.com/razzmatazz/csharp-language-server/issues/211
+      "aarch64-darwin"
+    ];
   };
 }

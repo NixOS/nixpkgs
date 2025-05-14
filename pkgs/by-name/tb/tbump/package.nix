@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "tomlkit" ];
 
-
   build-system = with python3Packages; [ poetry-core ];
 
   dependencies = with python3Packages; [

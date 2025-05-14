@@ -9,7 +9,7 @@
   cffi,
   cloudpickle,
   cmake,
-  cython_0,
+  cython,
   fsspec,
   hypothesis,
   numpy,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython_0
+    cython
     pkg-config
     setuptools
     setuptools-scm
@@ -80,7 +80,6 @@ buildPythonPackage rec {
   PARQUET_HOME = arrow-cpp;
 
   ARROW_TEST_DATA = lib.optionalString doCheck arrow-cpp.ARROW_TEST_DATA;
-
   doCheck = true;
 
   dontUseCmakeConfigure = true;
@@ -142,8 +141,6 @@ buildPythonPackage rec {
     ];
 
   disabledTests = [ "GcsFileSystem" ];
-
-  dontUseSetuptoolsCheck = true;
 
   preCheck =
     ''

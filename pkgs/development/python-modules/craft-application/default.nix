@@ -6,7 +6,9 @@
   craft-cli,
   craft-grammar,
   craft-parts,
+  craft-platforms,
   craft-providers,
+  jinja2,
   fetchFromGitHub,
   git,
   hypothesis,
@@ -23,25 +25,24 @@
   responses,
   setuptools-scm,
   snap-helpers,
+  freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.2.5";
+  version = "4.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Y/Eci0ByE1HxUcxWhpQq0F2Ef1xkXZMBDGmUSIyPKII=";
+    tag = version;
+    hash = "sha256-9M49/XQuWwKuQqseleTeZYcrwd/S16lNCljvlVsoXbs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==74.1.1" "setuptools"
+      --replace-fail "setuptools==75.8.0" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];
@@ -56,7 +57,9 @@ buildPythonPackage rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
+    jinja2
     license-expression
     pygit2
     pyyaml
@@ -64,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     git
     hypothesis
     pyfakefs
@@ -97,6 +101,14 @@ buildPythonPackage rec {
       "test_to_yaml_file"
       # Tests expecting pytest-time
       "test_monitor_builds_success"
+      # Temporary fix until new release to support Python 3.13
+      "test_grammar_aware_part_error"
+      "test_grammar_aware_part_error[part2]"
+      "test_grammar_aware_project_error[project0]"
+      # Temp fix - asserts fail against error messages which have changed
+      # slightly in a later revision of craft-platforms. No functional error.
+      "test_platform_invalid_arch"
+      "test_platform_invalid_build_arch"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
@@ -110,7 +122,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
-    changelog = "https://github.com/canonical/craft-application/blob/${src.rev}/docs/reference/changelog.rst";
+    changelog = "https://github.com/canonical/craft-application/blob/${src.tag}/docs/reference/changelog.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

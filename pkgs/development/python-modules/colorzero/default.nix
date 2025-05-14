@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "waveform80";
     repo = pname;
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-0NoQsy86OHQNLZsTEuF5s2MlRUoacF28jNeHgFKAH14=";
   };
 

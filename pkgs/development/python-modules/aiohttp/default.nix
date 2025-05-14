@@ -2,10 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  substituteAll,
-  python,
+  replaceVars,
+  isPy310,
+  isPyPy,
 
   # build-system
   cython,
@@ -16,21 +16,27 @@
 
   # dependencies
   aiohappyeyeballs,
-  attrs,
-  multidict,
-  async-timeout,
-  yarl,
-  frozenlist,
   aiosignal,
+  async-timeout,
+  attrs,
+  frozenlist,
+  multidict,
+  propcache,
+  yarl,
+
+  # optional dependencies
   aiodns,
   brotli,
+  brotlicffi,
 
   # tests
   freezegun,
   gunicorn,
   proxy-py,
+  pytest-codspeed,
   pytest-cov-stub,
   pytest-mock,
+  pytest-xdist,
   pytestCheckHook,
   python-on-whales,
   re-assert,
@@ -39,21 +45,18 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.10.5";
+  version = "3.11.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HN2TJ8hVbClakV3ldTOn3wbrhCuf2Qn9EjWCSlSyJpw=";
+    tag = "v${version}";
+    hash = "sha256-cmPvhSnkocq87lJUtdQSs9QuJlgZB8p5m1pZs2bplh4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./unvendor-llhttp.patch;
+    (replaceVars ./unvendor-llhttp.patch {
       llhttpDev = lib.getDev llhttp;
       llhttpLib = lib.getLib llhttp;
     })
@@ -76,28 +79,28 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohappyeyeballs
-    attrs
-    multidict
-    async-timeout
-    yarl
-    frozenlist
     aiosignal
+    async-timeout
+    attrs
+    frozenlist
+    multidict
+    propcache
+    yarl
+  ] ++ optional-dependencies.speedups;
+
+  optional-dependencies.speedups = [
     aiodns
-    brotli
+    (if isPyPy then brotlicffi else brotli)
   ];
 
-  postInstall = ''
-    # remove source code file with reference to dev dependencies
-    rm $out/${python.sitePackages}/aiohttp/_cparser.pxd{,.orig}
-  '';
-
-  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
     freezegun
     gunicorn
     proxy-py
+    pytest-codspeed
     pytest-cov-stub
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     python-on-whales
     re-assert
@@ -112,6 +115,11 @@ buildPythonPackage rec {
       "test_requote_redirect_url_default"
       # don't run benchmarks
       "test_import_time"
+    ]
+    # these tests fail with python310 but succeeds with 11+
+    ++ lib.optionals isPy310 [
+      "test_https_proxy_unsupported_tls_in_tls"
+      "test_tcp_connector_raise_connector_ssl_error"
     ]
     ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

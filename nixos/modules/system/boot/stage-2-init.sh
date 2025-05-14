@@ -69,7 +69,8 @@ fi
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
 if [ -n "@readOnlyNixStore@" ]; then
-    if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
+    # #375257: Ensure that we pick the "top" (i.e. last) mount so we don't get a false positive for a lower mount.
+    if ! [[ "$(findmnt --direction backward --first-only --noheadings --output OPTIONS /nix/store)" =~ (^|,)ro(,|$) ]]; then
         if [ -z "$container" ]; then
             mount --bind /nix/store /nix/store
         else

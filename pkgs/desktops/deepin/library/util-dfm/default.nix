@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qtbase,
+  libsForQt5,
   libmediainfo,
   libsecret,
   libisoburn,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libmediainfo
     libsecret
     libuuid
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/util-dfm";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

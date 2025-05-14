@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dWEXoqW4JyYeLFLS3J4CaRJ45wjdVf8wrtMGCKgBds8=";
   };
 

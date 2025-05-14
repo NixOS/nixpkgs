@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, libevdev
-, json-glib
-, libinput
-, gtk4
-, libadwaita
-, wrapGAppsHook4
-, libxkbcommon
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  libevdev,
+  json-glib,
+  libinput,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  libxkbcommon,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "showmethekey";
-  version = "1.14.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
     repo = "showmethekey";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uBhciNkDBXrME8YRztlUdm3oV2y8YiA9Fhib9KLVeBY=";
+    tag = "v${version}";
+    hash = "sha256-/pfXAn6dWFIHsP1VBj+Cf989RuVzv4IbSClbJEvGstI=";
   };
 
   nativeBuildInputs = [

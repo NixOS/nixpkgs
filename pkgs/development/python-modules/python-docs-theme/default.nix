@@ -9,28 +9,28 @@
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
-  version = "2024.6";
+  version = "2025.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YKKF2e1La8jsCRS3M+LT+KmK0HxCRGQOof3MlVkMAuY=";
+    tag = version;
+    hash = "sha256-fHhgr8JPNLpATAGOBE1lJYA5rBNKZg5paY+MQsgWXqQ=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ sphinx ];
+  dependencies = [ sphinx ];
 
   pythonImportsCheck = [ "python_docs_theme" ];
 
   meta = with lib; {
     description = "Sphinx theme for CPython project";
     homepage = "https://github.com/python/python-docs-theme";
-    changelog = "https://github.com/python/python-docs-theme/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/python/python-docs-theme/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.psfl;
     maintainers = with maintainers; [ kaction ];
   };

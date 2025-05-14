@@ -1,94 +1,111 @@
-{ fetchpatch
-, bashInteractive
-, diffPlugins
-, glibcLocales
-, gobject-introspection
-, gst_all_1
-, lib
-, python3Packages
-, sphinxHook
-, runtimeShell
-, writeScript
+{
+  lib,
+  stdenv,
+  src,
+  version,
+  fetchpatch,
+  bashInteractive,
+  diffPlugins,
+  gobject-introspection,
+  gst_all_1,
+  python3Packages,
+  sphinxHook,
+  writableTmpDirAsHomeHook,
+  runtimeShell,
+  writeScript,
 
-  # plugin deps
-, aacgain
-, essentia-extractor
-, ffmpeg
-, flac
-, imagemagick
-, keyfinder-cli
-, mp3gain
-, mp3val
+  # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
+  aacgain,
+  essentia-extractor,
+  ffmpeg,
+  flac,
+  imagemagick,
+  keyfinder-cli,
+  mp3gain,
+  mp3val,
 
-, src
-, version
-, extraPatches ? [ ]
-, pluginOverrides ? { }
-, disableAllPlugins ? false
-, disabledTests ? []
-, extraNativeBuildInputs ? []
+  extraPatches ? [ ],
+  pluginOverrides ? { },
+  disableAllPlugins ? false,
+  disabledTests ? [ ],
+  extraNativeBuildInputs ? [ ],
 
   # tests
-, runCommand
-, beets
+  runCommand,
+  beets,
 }@inputs:
 let
   inherit (lib) attrNames attrValues concatMap;
 
-  mkPlugin = { name
-  , enable ? !disableAllPlugins
-  , builtin ? false
-  , propagatedBuildInputs ? [ ]
-  , testPaths ? [
-    # NOTE: This conditional can be removed when beets-stable is updated and
-    # the default plugins test path is changed
-    (if (lib.versions.majorMinor version) == "1.6" then
-      "test/test_${name}.py"
-    else
-      "test/plugins/test_${name}.py"
-    )
-  ]
-  , wrapperBins ? [ ]
-  }: {
-    inherit name enable builtin propagatedBuildInputs testPaths wrapperBins;
-  };
+  mkPlugin =
+    {
+      name,
+      enable ? !disableAllPlugins,
+      builtin ? false,
+      propagatedBuildInputs ? [ ],
+      testPaths ? [
+        "test/plugins/test_${name}.py"
+      ],
+      wrapperBins ? [ ],
+    }:
+    {
+      inherit
+        name
+        enable
+        builtin
+        propagatedBuildInputs
+        testPaths
+        wrapperBins
+        ;
+    };
 
   basePlugins = lib.mapAttrs (_: a: { builtin = true; } // a) (import ./builtin-plugins.nix inputs);
-  pluginOverrides' = lib.mapAttrs
-    (plugName: lib.throwIf
-      (basePlugins.${plugName}.deprecated or false)
+  pluginOverrides' = lib.mapAttrs (
+    plugName:
+    lib.throwIf (basePlugins.${plugName}.deprecated or false)
       "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
-    )
-    pluginOverrides
-  ;
+  ) pluginOverrides;
 
-  allPlugins = lib.mapAttrs ( n: a: mkPlugin { name = n; } // a) (lib.recursiveUpdate basePlugins pluginOverrides');
+  allPlugins = lib.mapAttrs (n: a: mkPlugin { name = n; } // a) (
+    lib.recursiveUpdate basePlugins pluginOverrides'
+  );
   builtinPlugins = lib.filterAttrs (_: p: p.builtin) allPlugins;
   enabledPlugins = lib.filterAttrs (_: p: p.enable) allPlugins;
   disabledPlugins = lib.filterAttrs (_: p: !p.enable) allPlugins;
+  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
 
   pluginWrapperBins = concatMap (p: p.wrapperBins) (attrValues enabledPlugins);
 in
 python3Packages.buildPythonApplication {
   pname = "beets";
   inherit src version;
+  pyproject = true;
 
-  patches = extraPatches;
+  patches = [
+  ] ++ extraPatches;
 
-  propagatedBuildInputs = with python3Packages; [
-    confuse
-    gst-python
-    jellyfish
-    mediafile
-    munkres
-    musicbrainzngs
-    mutagen
-    pygobject3
-    pyyaml
-    reflink
-    unidecode
-    typing-extensions
-  ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
+  build-system = [
+    python3Packages.poetry-core
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      confuse
+      gst-python
+      jellyfish
+      mediafile
+      munkres
+      musicbrainzngs
+      platformdirs
+      pyyaml
+      unidecode
+      typing-extensions
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
+      lap
+    ]
+    ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
   nativeBuildInputs = [
     gobject-introspection
@@ -96,15 +113,24 @@ python3Packages.buildPythonApplication {
     python3Packages.pydata-sphinx-theme
   ] ++ extraNativeBuildInputs;
 
-  buildInputs = [
-  ] ++ (with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+    ]);
 
-  outputs = [ "out" "doc" "man" ];
-  sphinxBuilders = [ "html" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -117,16 +143,44 @@ python3Packages.buildPythonApplication {
     "--prefix PATH : ${lib.makeBinPath pluginWrapperBins}"
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    pytest-cov
-    mock
-    rarfile
-    responses
-  ] ++ pluginWrapperBins;
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      pytest-cov
+      mock
+      rarfile
+      responses
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
+      requests-mock
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
+    ]
+    ++ pluginWrapperBins;
 
-  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
-  inherit disabledTests;
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths =
+    disabledTestPaths
+    ++ [
+      # touches network
+      "test/plugins/test_aura.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: several tests fail randomly with:
+      # if not self._poll(timeout):
+      #   raise Empty
+      #   _queue.Empty
+      "test/plugins/test_player.py"
+    ];
+  disabledTests = disabledTests ++ [
+    # beets.ui.UserError: unknown command 'autobpm'
+    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
+    # AssertionError: assert 0 == 117
+    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+  ];
 
   # Perform extra "sanity checks", before running pytest tests.
   preCheck = ''
@@ -138,8 +192,7 @@ python3Packages.buildPythonApplication {
       | sort -u > plugins_available
     ${diffPlugins (attrNames builtinPlugins) "plugins_available"}
 
-    export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
-    export HOME="$(mktemp -d)"
+    export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}
@@ -150,30 +203,38 @@ python3Packages.buildPythonApplication {
     env EDITOR=true "$out/bin/beet" config -e
   '';
 
-
   passthru.plugins = allPlugins;
 
-  passthru.tests.gstreamer = runCommand "beets-gstreamer-test" {
-    meta.timeout = 60;
-  } ''
-    set -euo pipefail
-    export HOME=$(mktemp -d)
-    mkdir $out
+  passthru.tests.gstreamer =
+    runCommand "beets-gstreamer-test"
+      {
+        meta.timeout = 60;
+      }
+      ''
+            set -euo pipefail
+            export HOME=$(mktemp -d)
+            mkdir $out
 
-    cat << EOF > $out/config.yaml
-replaygain:
-  backend: gstreamer
-EOF
+            cat << EOF > $out/config.yaml
+        replaygain:
+          backend: gstreamer
+        EOF
 
-    ${beets}/bin/beet -c $out/config.yaml > /dev/null
-  '';
+            ${beets}/bin/beet -c $out/config.yaml > /dev/null
+      '';
 
-  meta = with lib; {
+  meta = {
     description = "Music tagger and library organizer";
     homepage = "https://beets.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      aszlig
+      doronbehar
+      lovesegfault
+      montchr
+      pjones
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "beet";
   };
 }

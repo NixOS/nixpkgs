@@ -1,5 +1,6 @@
-{ qtModule
-, qtbase
+{
+  qtModule,
+  qtbase,
 }:
 
 qtModule {

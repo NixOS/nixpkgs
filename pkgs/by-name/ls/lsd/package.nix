@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  darwin,
   pandoc,
   testers,
   lsd,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,14 +20,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LlMcBMb40yN+rlvGVsh7JaC3j9sF60YxitQQXe1q/oI=";
   };
 
-  cargoHash = "sha256-yyXFtMyiMq6TaN9/7+BaBERHgubeA8SJGOr08Mn3RnY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yOJKXfPtzaYF012YCyW3m+9ffag4En4ZfTaiVh/85dM=";
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1
@@ -40,8 +38,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/lsd-*/out/_lsd
   '';
 
-  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   passthru.tests.version = testers.testVersion { package = lsd; };
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,8 +15,8 @@ let
     proxyAddress = ${cfg.proxyAddress}
     proxyPort = ${toString cfg.proxyPort}
     allowedClients = ${concatStringsSep ", " cfg.allowedClients}
-    ${optionalString (cfg.parentProxy != "") "parentProxy = ${cfg.parentProxy}" }
-    ${optionalString (cfg.socksParentProxy != "") "socksParentProxy = ${cfg.socksParentProxy}" }
+    ${optionalString (cfg.parentProxy != "") "parentProxy = ${cfg.parentProxy}"}
+    ${optionalString (cfg.socksParentProxy != "") "socksParentProxy = ${cfg.socksParentProxy}"}
     ${config.services.polipo.extraConfig}
   '';
 
@@ -39,8 +44,16 @@ in
 
       allowedClients = mkOption {
         type = types.listOf types.str;
-        default = [ "127.0.0.1" "::1" ];
-        example = [ "127.0.0.1" "::1" "134.157.168.0/24" "2001:660:116::/48" ];
+        default = [
+          "127.0.0.1"
+          "::1"
+        ];
+        example = [
+          "127.0.0.1"
+          "::1"
+          "134.157.168.0/24"
+          "2001:660:116::/48"
+        ];
         description = ''
           List of IP addresses or network addresses that may connect to Polipo.
         '';
@@ -81,24 +94,27 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users.polipo =
-      { uid = config.ids.uids.polipo;
-        description = "Polipo caching proxy user";
-        home = "/var/cache/polipo";
-        createHome = true;
-      };
+    users.users.polipo = {
+      uid = config.ids.uids.polipo;
+      description = "Polipo caching proxy user";
+      home = "/var/cache/polipo";
+      createHome = true;
+    };
 
-    users.groups.polipo =
-      { gid = config.ids.gids.polipo;
-        members = [ "polipo" ];
-      };
+    users.groups.polipo = {
+      gid = config.ids.gids.polipo;
+      members = [ "polipo" ];
+    };
 
     systemd.services.polipo = {
       description = "caching web proxy";
-      after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target"];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart  = "${pkgs.polipo}/bin/polipo -c ${polipoConfig}";
+        ExecStart = "${pkgs.polipo}/bin/polipo -c ${polipoConfig}";
         User = "polipo";
       };
     };

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.script;
@@ -14,26 +20,28 @@ in
   port = 9172;
   extraOpts = {
     settings.scripts = mkOption {
-      type = with types; listOf (submodule {
-        options = {
-          name = mkOption {
-            type = str;
-            example = "sleep";
-            description = "Name of the script.";
+      type =
+        with types;
+        listOf (submodule {
+          options = {
+            name = mkOption {
+              type = str;
+              example = "sleep";
+              description = "Name of the script.";
+            };
+            script = mkOption {
+              type = str;
+              example = "sleep 5";
+              description = "Shell script to execute when metrics are requested.";
+            };
+            timeout = mkOption {
+              type = nullOr int;
+              default = null;
+              example = 60;
+              description = "Optional timeout for the script in seconds.";
+            };
           };
-          script = mkOption {
-            type = str;
-            example = "sleep 5";
-            description = "Shell script to execute when metrics are requested.";
-          };
-          timeout = mkOption {
-            type = nullOr int;
-            default = null;
-            example = 60;
-            description = "Optional timeout for the script in seconds.";
-          };
-        };
-      });
+        });
       example = literalExpression ''
         {
           scripts = [

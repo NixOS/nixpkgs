@@ -1,11 +1,11 @@
-{ lib
-, buildFishPlugin
-, fetchFromGitHub
-,
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
 }:
 buildFishPlugin {
   pname = "bobthefisher";
-  version = "unstable-2023-10-25";
+  version = "0-unstable-2023-10-25";
 
   src = fetchFromGitHub {
     owner = "Scrumplex";

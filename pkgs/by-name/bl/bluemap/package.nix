@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, jre }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bluemap";
@@ -24,7 +30,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://bluemap.bluecolored.de/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dandellion h7x4 ];
+    maintainers = with lib.maintainers; [
+      dandellion
+      h7x4
+    ];
     mainProgram = "bluemap";
   };
 }

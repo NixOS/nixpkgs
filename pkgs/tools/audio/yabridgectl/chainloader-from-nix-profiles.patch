@@ -1,5 +1,5 @@
 diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
-index da5f4ff5..c220d62d 100644
+index d948beff..9b3f9ffb 100644
 --- a/tools/yabridgectl/src/config.rs
 +++ b/tools/yabridgectl/src/config.rs
 @@ -22,6 +22,7 @@ use serde_derive::{Deserialize, Serialize};
@@ -58,7 +58,7 @@ index da5f4ff5..c220d62d 100644
                          ));
                      }
 diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
-index 0a29d431..479eaef0 100644
+index e66ef0da..bfe9c8bf 100644
 --- a/tools/yabridgectl/src/main.rs
 +++ b/tools/yabridgectl/src/main.rs
 @@ -134,7 +134,7 @@ fn main() -> Result<()> {

@@ -1,39 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, buildPackages
-, cargo
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, darwin
-, gettext
-, glib
-, gtk4
-, libadwaita
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  buildPackages,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  gettext,
+  glib,
+  gtk4,
+  libadwaita,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bustle";
-  version = "0.9.2";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "bustle";
-    rev = finalAttrs.version;
-    hash = "sha256-/B1rY8epcP0OFv+kVgv4Jx6x/oK3XpNnZcpSGvdIPx0=";
+    tag = finalAttrs.version;
+    hash = "sha256-aO7f5xLRuIGVAp+TVveFXtWx/rl/jqbmXNd6zN9dZZw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "bustle-${finalAttrs.version}";
-    hash = "sha256-r29Z+6P+yuCpOBUE3vkESd15lcGXs5+ZTBiQ9nW6DJ4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-cofqxgSyj24wVhzImYs/gsWGjQpzOjaf49RdtYgsrbo=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -60,17 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-    libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical D-Bus message analyser and profiler";
     homepage = "https://gitlab.gnome.org/World/bustle";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
+      jtojnar
+    ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "bustle";
-    platforms = platforms.all;
+    platforms = lib.platforms.unix;
   };
 })

@@ -7,13 +7,14 @@
   pyopenssl,
   pytest-mock,
   pytestCheckHook,
-  pythonAtLeast,
   pyvmomi,
   qemu,
   requests,
+  distutils,
   setuptools,
   stdenv,
   verboselogs,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -26,8 +27,14 @@ buildPythonPackage rec {
     hash = "sha256-9LNVNBX5DarGVvidPoLnmz11F5Mjm7FzpoO0zAzrJjU=";
   };
 
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
   propagatedBuildInputs = [
     colorlog
+    distutils
     pyvmomi
     requests
     verboselogs
@@ -46,6 +53,7 @@ buildPythonPackage rec {
     # argparse is part of the standardlib
     substituteInPlace setup.py \
       --replace "'argparse'," ""
+    rm versioneer.py
   '';
 
   disabledTests = [
@@ -84,6 +92,5 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evanjs ];
-    broken = pythonAtLeast "3.12"; # Because it requires packages removed from 3.12 onwards
   };
 }

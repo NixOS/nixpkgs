@@ -1,11 +1,11 @@
 {
   buildPythonPackage,
+  setuptools,
   cirq-core,
-  freezegun,
   google-api-core,
   protobuf,
+  freezegun,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,6 +16,10 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/${pname}";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     cirq-core

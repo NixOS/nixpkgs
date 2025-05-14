@@ -11,6 +11,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.20.2";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,15 +30,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7P/V83dGkfJJjZxZtiEwQXIY7CeBZ/fmvTdEjDirKj0=";
+    tag = "v${version}";
+    hash = "sha256-yJ7tiJWSOpkkLwKXo4lYlDrp1FEJ/cGoDaXJamY4ARg=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}" \
-      --replace-fail "--cov" ""
   '';
 
   build-system = [ poetry-core ];
@@ -62,6 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
   ];

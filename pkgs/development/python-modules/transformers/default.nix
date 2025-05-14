@@ -58,14 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.45.2";
+  version = "4.51.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5Ric+pEbBf6HswsPb8cdVLdqTRgicFjzcrk0oO2PtC0=";
+    tag = "v${version}";
+    hash = "sha256-VYEkBt0fpG27MVdnABcMAMmk2Pzsc+2Fetx/GmeFBac=";
   };
 
   build-system = [ setuptools ];
@@ -134,6 +134,9 @@ buildPythonPackage rec {
         flax
         optax
       ];
+      hf_xet = [
+        # hf-xet (unpackaged)
+      ];
       tokenizers = [ tokenizers ];
       ftfy = [ ftfy ];
       onnxruntime = [
@@ -154,7 +157,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [
@@ -173,7 +176,6 @@ buildPythonPackage rec {
       # natten = [ natten ];
       # codecarbon = [ codecarbon ];
       video = [
-        # decord
         av
       ];
       sentencepiece = [

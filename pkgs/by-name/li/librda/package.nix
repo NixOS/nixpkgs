@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, testers
-, autoreconfHook
-, glib
-, gobject-introspection
-, gtk3
-, intltool
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  testers,
+  autoreconfHook,
+  glib,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

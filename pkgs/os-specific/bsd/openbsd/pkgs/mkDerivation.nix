@@ -27,6 +27,25 @@ lib.makeOverridable (
         stdenvLibcMinimal
       else
         stdenv;
+
+    machineMap = {
+      aarch64 = "arm64";
+      armv7l = "armv7";
+      i486 = "i386";
+      i586 = "i386";
+      i686 = "i386";
+      x86_64 = "amd64";
+    };
+
+    archMap = {
+      aarch64 = "aarch64";
+      armv7l = "arm";
+      i486 = "i386";
+      i586 = "i386";
+      i686 = "i386";
+      x86_64 = "amd64";
+    };
+
   in
   stdenv'.mkDerivation (
     rec {
@@ -53,26 +72,16 @@ lib.makeOverridable (
         install
         tsort
         lorder
-      ];
+      ] ++ (attrs.extraNativeBuildInputs or [ ]);
 
       HOST_SH = stdenv'.shell;
 
-      MACHINE_ARCH =
-        {
-          # amd64 not x86_64 for this on unlike NetBSD
-          x86_64 = "amd64";
-          aarch64 = "arm64";
-          i486 = "i386";
-          i586 = "i386";
-          i686 = "i386";
-        }
-        .${stdenv'.hostPlatform.parsed.cpu.name} or stdenv'.hostPlatform.parsed.cpu.name;
-
-      MACHINE = MACHINE_ARCH;
-
+      MACHINE = machineMap.${stdenv'.hostPlatform.parsed.cpu.name};
+      MACHINE_ARCH = archMap.${stdenv'.hostPlatform.parsed.cpu.name};
       MACHINE_CPU = MACHINE_ARCH;
 
-      MACHINE_CPUARCH = MACHINE_ARCH;
+      TARGET_MACHINE_ARCH = archMap.${stdenv'.targetPlatform.parsed.cpu.name};
+      TARGET_MACHINE_CPU = TARGET_MACHINE_ARCH;
 
       COMPONENT_PATH = attrs.path or null;
 
@@ -93,6 +102,6 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
-    // attrs
+    // (builtins.removeAttrs attrs [ "extraNativeBuildInputs" ])
   )
 )

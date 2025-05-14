@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, substituteAll
-, coreutils
-, gnugrep
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  replaceVars,
+  coreutils,
+  gnugrep,
 }:
 
 stdenv.mkDerivation rec {
   pname = "likwid";
-  version = "5.3.0";
+  version = "5.4.1";
 
   src = fetchurl {
     url = "https://ftp.fau.de/pub/likwid/likwid-${version}.tar.gz";
-    hash = "sha256-wpDlVMQlMSSsKriwVuFO5NI5ZrjJ+/oQuoH3WuVDzk4=";
+    hash = "sha256-V3OFFFXbukieLjc1kx5RVHN3zReWyYKlrIjQ8imcCBE=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -22,8 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nosetuid.patch
-    (substituteAll {
-      src = ./cat-grep-sort-wc.patch;
+    (replaceVars ./cat-grep-sort-wc.patch {
       coreutils = "${coreutils}/bin/";
       gnugrep = "${gnugrep}/bin/";
     })

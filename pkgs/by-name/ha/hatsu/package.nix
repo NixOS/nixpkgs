@@ -1,37 +1,34 @@
-{ cmake
-, fetchFromGitHub
-, gitUpdater
-, lib
-, openssl
-, pkg-config
-, rustPlatform
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hatsu";
-  version = "0.2.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
-    rev = "v${version}";
-    hash = "sha256-iQrwqv5q002rJMcvUhlsLVN3O7mHyL5zmLGjegZDVG0=";
+    tag = "v${version}";
+    hash = "sha256-mqs26srbEkGeQzeF4OdqI7o18Ajs+mmAXGLlVfS52sk=";
   };
 
-  cargoHash = "sha256-LkGkifmHy7cEGrPg0WCf1nCGfcW60AGWQSB0Zb01mk0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5c6boVdq0XXbtVHqmIGoxJGQRh8lvn2jbmALPuOSMs4=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  env = { OPENSSL_NO_VENDOR = true; };
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    ignoredVersions = "beta";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Self-hosted and fully-automated ActivityPub bridge for static sites";
     homepage = "https://github.com/importantimport/hatsu";
+    changelog = "https://github.com/importantimport/hatsu/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     mainProgram = "hatsu";
     maintainers = with lib.maintainers; [ kwaa ];

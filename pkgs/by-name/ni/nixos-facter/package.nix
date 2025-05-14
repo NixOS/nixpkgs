@@ -6,9 +6,9 @@
   libusb1,
   gcc,
   pkg-config,
-  util-linux,
-  pciutils,
+  makeWrapper,
   stdenv,
+  systemdMinimal,
 }:
 let
   # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls
@@ -16,25 +16,25 @@ let
     src = fetchFromGitHub {
       owner = "numtide";
       repo = "hwinfo";
-      rev = "a559f34934098d54096ed2078e750a8245ae4044";
-      hash = "sha256-3abkWPr98qXXQ17r1Z43gh2M5hl/DHjW2hfeWl+GSAs=";
+      rev = "c2259845d10694c099fb306a8cfc5a403e71c708";
+      hash = "sha256-RGIoJkYiNMRHwUclzdRMELxCgBU9Pfvaghvt3op0zM0=";
     };
   };
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.1.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     rev = "v${version}";
-    hash = "sha256-vlPmvCrgX64dcf//BPtQszBt7dkq35JpgQg+/LW0AqM=";
+    hash = "sha256-SuD6FTyCGT+H5uEPkPmBSI00R87weAoO5xZHPJElSu8=";
   };
 
-  vendorHash = "sha256-5leiTNp3FJmgFd0SKhu18hxYZ2G9SuQPhZJjki2SDVs=";
+  vendorHash = "sha256-A7ZuY8Gc/a0Y8O6UG2WHWxptHstJOxi4n9F8TY6zqiw=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   buildInputs = [
     libusb1
@@ -44,13 +44,14 @@ buildGoModule rec {
   nativeBuildInputs = [
     gcc
     pkg-config
+    makeWrapper
   ];
 
-  runtimeInputs = [
-    libusb1
-    util-linux
-    pciutils
-  ];
+  # nixos-facter calls systemd-detect-virt
+  postInstall = ''
+    wrapProgram "$out/bin/nixos-facter" \
+        --prefix PATH : "${lib.makeBinPath [ systemdMinimal ]}"
+  '';
 
   ldflags = [
     "-s"

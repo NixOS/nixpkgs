@@ -1,33 +1,33 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, stdenv
-, darwin
-, libsecret
-, pkg-config
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  stdenv,
+  libsecret,
+  pkg-config,
+  python3,
 }:
 
 buildNpmPackage rec {
   pname = "azurite";
-  version = "3.31.0";
+  version = "3.34.0";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "Azurite";
     rev = "v${version}";
-    hash = "sha256-WT1eprN6SBnsfITCopybEHCuxrHvKEhdmVs7xL3cUi0=";
+    hash = "sha256-6NECduq2ewed8bR4rlF5MW8mGcsgu8bqgA/DBt8ywtM=";
   };
 
-  npmDepsHash = "sha256-+ptjsz2MDIB/aqu4UxkBLCcehtamFdmswNUsHs23LuE=";
+  npmDepsHash = "sha256-WRaD99CsIuH3BrO01eVuoEZo40VjuScnVzmlFcKpj8g=";
 
-  nativeBuildInputs = [ pkg-config python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libsecret
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin; [
-    Security
-    apple_sdk.frameworks.AppKit
-  ]);
+  ];
 
   meta = {
     description = "An open source Azure Storage API compatible server";

@@ -9,23 +9,29 @@
   pyyaml,
   six,
   stevedore,
+  pytestCheckHook,
+  setuptools,
+  testtools,
+  pytest-mock,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "6.3.0";
-  format = "setuptools";
+  version = "6.4.2";
+
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RD9VQFlwLJ3TiReKty+q056CjsOnSD2J2bpASmqHIEM=";
+    hash = "sha256-G+DVRd6o3GwTdFNnJkotIidrxexJZSdgCGXTA4KnJJA=";
   };
 
   postPatch = ''
     export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     pbr
     python-jenkins
     pyyaml
@@ -35,14 +41,19 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  # Need to fix test deps, relies on stestr and a few other packages that aren't available on nixpkgs
-  checkPhase = "$out/bin/jenkins-jobs --help";
+  nativeCheckInputs = [
+    pytestCheckHook
+    testtools
+    pytest-mock
+  ];
 
-  meta = with lib; {
+  passthru.tests = { inherit (nixosTests) jenkins; };
+
+  meta = {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
     mainProgram = "jenkins-jobs";
     homepage = "https://jenkins-job-builder.readthedocs.io/en/latest/";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

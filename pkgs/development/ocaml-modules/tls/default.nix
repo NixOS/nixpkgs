@@ -1,16 +1,28 @@
-{ lib, fetchurl, buildDunePackage
-, domain-name, fmt, logs, hkdf, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-crypto-rng, ptime, x509
-, ipaddr
-, alcotest, ounit2
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  domain-name,
+  fmt,
+  logs,
+  kdf,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-pk,
+  mirage-crypto-rng,
+  x509,
+  ipaddr,
+  alcotest,
+  ounit2,
 }:
 
 buildDunePackage rec {
   pname = "tls";
-  version = "1.0.1";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-${version}.tbz";
-    hash = "sha256-2uS1/8gD6ILphIBCWP+KrKe4N9hVbeaEABldpccKjYM=";
+    hash = "sha256-a6uNo61SjT8xLXtO4h2kxZw0qRrj5c9CNHFauaGCDq0=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -19,12 +31,11 @@ buildDunePackage rec {
     domain-name
     fmt
     logs
-    hkdf
+    kdf
     mirage-crypto
     mirage-crypto-ec
     mirage-crypto-pk
     mirage-crypto-rng
-    ptime
     x509
     ipaddr
   ];

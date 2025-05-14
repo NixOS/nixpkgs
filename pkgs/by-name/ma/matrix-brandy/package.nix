@@ -1,7 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  SDL,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    libX11
     SDL
   ];
 
@@ -33,4 +36,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fiq ];
   };
 }
-

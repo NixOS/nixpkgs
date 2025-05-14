@@ -1,4 +1,10 @@
-{ stdenv, lib, nuspell, makeWrapper, dicts ? [] }:
+{
+  stdenv,
+  lib,
+  nuspell,
+  makeWrapper,
+  dicts ? [ ],
+}:
 
 let
   searchPath = lib.makeSearchPath "share/hunspell" dicts;
@@ -9,5 +15,5 @@ stdenv.mkDerivation {
   buildCommand = ''
     makeWrapper ${nuspell}/bin/nuspell $out/bin/nuspell --prefix DICPATH : ${lib.escapeShellArg searchPath}
   '';
-  meta = removeAttrs nuspell.meta ["outputsToInstall"];
+  meta = removeAttrs nuspell.meta [ "outputsToInstall" ];
 }

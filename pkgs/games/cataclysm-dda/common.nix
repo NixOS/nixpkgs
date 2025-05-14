@@ -1,22 +1,45 @@
-{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses, CoreFoundation
-, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
-, debug
-, useXdgDir
-, desktopFilePath
+{
+  lib,
+  stdenv,
+  runtimeShell,
+  pkg-config,
+  gettext,
+  ncurses,
+  tiles,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  libX11,
+  freetype,
+  zlib,
+  debug,
+  useXdgDir,
+  desktopFilePath,
 }:
 
 let
   inherit (lib) optionals optionalString;
 
-  cursesDeps = [ gettext ncurses ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ CoreFoundation ];
+  commonDeps = [
+    gettext
+    zlib
+  ];
 
-  tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  cursesDeps = commonDeps ++ [ ncurses ];
+
+  tilesDeps = commonDeps ++ [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    libX11
+    freetype
+  ];
 
   patchDesktopFile = if desktopFilePath != "" then ''
     substituteInPlace ${desktopFilePath} \
-      --replace "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
+      --replace-fail "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
   '' else '''';
 
   installMacOSAppLauncher = ''
@@ -38,29 +61,33 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = cursesDeps ++ optionals tiles tilesDeps;
+  buildInputs = if tiles then tilesDeps else cursesDeps;
 
   postPatch = ''
     patchShebangs lang/compile_mo.sh
   '';
 
-  makeFlags = [
-    "PREFIX=$(out)" "LANGUAGES=all"
-    (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
-  ] ++ optionals (!debug) [
-    "RELEASE=1"
-  ] ++ optionals tiles [
-    "TILES=1" "SOUND=1"
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    "NATIVE=osx"
-    "CLANG=1"
-    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
-  ];
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "LANGUAGES=all"
+      (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
+    ]
+    ++ optionals (!debug) [
+      "RELEASE=1"
+    ]
+    ++ optionals tiles [
+      "TILES=1"
+      "SOUND=1"
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [
+      "NATIVE=osx"
+      "CLANG=1"
+      "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
+    ];
 
-  postInstall = optionalString tiles
-  ( if !stdenv.hostPlatform.isDarwin
-    then patchDesktopFile
-    else installMacOSAppLauncher
+  postInstall = optionalString tiles (
+    if !stdenv.hostPlatform.isDarwin then patchDesktopFile else installMacOSAppLauncher
   );
 
   dontStrip = debug;
@@ -99,7 +126,10 @@ stdenv.mkDerivation {
     '';
     homepage = "https://cataclysmdda.org/";
     license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ mnacamura DeeUnderscore ];
+    maintainers = with maintainers; [
+      mnacamura
+      DeeUnderscore
+    ];
     platforms = platforms.unix;
   };
 }

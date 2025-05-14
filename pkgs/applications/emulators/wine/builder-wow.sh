@@ -1,6 +1,4 @@
 ## build described at https://wiki.winehq.org/Building_Wine#Shared_WoW64
-
-source $stdenv/setup
 preFlags="${configureFlags}"
 
 unpackPhase

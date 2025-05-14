@@ -127,8 +127,6 @@ in
     system.disableInstallerTools = true;
 
     nix.settings = {
-      auto-optimise-store = true;
-
       min-free = cfg.min-free;
 
       max-free = cfg.max-free;
@@ -165,7 +163,7 @@ in
 
         hostPkgs = config.virtualisation.host.pkgs;
 
-        script = hostPkgs.writeShellScriptBin "create-builder" (
+        add-keys = hostPkgs.writeShellScriptBin "add-keys" (
           ''
             set -euo pipefail
           ''
@@ -193,9 +191,21 @@ in
             if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
               (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
             fi
-            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
           ''
         );
+
+        run-builder = hostPkgs.writeShellScriptBin "run-builder" (''
+          set -euo pipefail
+          KEYS="''${KEYS:-./keys}"
+          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
+        '');
+
+        script = hostPkgs.writeShellScriptBin "create-builder" (''
+          set -euo pipefail
+          export KEYS="''${KEYS:-./keys}"
+          ${lib.getExe add-keys}
+          ${lib.getExe run-builder}
+        '');
 
       in
       script.overrideAttrs (old: {
@@ -207,6 +217,8 @@ in
           # Let users in the repl inspect the config
           nixosConfig = config;
           nixosOptions = options;
+
+          inherit add-keys run-builder;
         };
       });
 

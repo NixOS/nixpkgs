@@ -1,17 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "grocy";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
-  nodes.machine = { pkgs, ... }: {
-    services.grocy = {
-      enable = true;
-      hostName = "localhost";
-      nginx.enableSSL = false;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.grocy = {
+        enable = true;
+        hostName = "localhost";
+        nginx.enableSSL = false;
+      };
+      environment.systemPackages = [ pkgs.jq ];
     };
-    environment.systemPackages = [ pkgs.jq ];
-  };
 
   testScript = ''
     from base64 import b64encode
@@ -21,7 +24,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_open_port(80)
     machine.wait_for_unit("multi-user.target")
 
+    # This establishes _something_
     machine.succeed("curl -sSf http://localhost")
+    # The second request creates the database, unsure why both are required
+    machine.succeed("curl -sSf http://localhost/")
 
     machine.succeed(
         "curl -c cookies -sSf -X POST http://localhost/login -d 'username=admin&password=admin'"
@@ -70,4 +76,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     machine.shutdown()
   '';
-})
+}

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.bazarr;
 in
@@ -37,7 +42,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.bazarr = {
-      description = "bazarr";
+      description = "Bazarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -54,6 +59,8 @@ in
             --no-update True
         '';
         Restart = "on-failure";
+        KillSignal = "SIGINT";
+        SuccessExitStatus = "0 156";
       };
     };
 
@@ -70,7 +77,7 @@ in
     };
 
     users.groups = lib.mkIf (cfg.group == "bazarr") {
-      bazarr = {};
+      bazarr = { };
     };
   };
 }

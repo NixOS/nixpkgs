@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gst_all_1
-, wrapGAppsHook4
-, appstream-glib
-, gtk4
-, libadwaita
-, desktop-file-utils
-, libGL
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gst_all_1,
+  wrapGAppsHook4,
+  appstream-glib,
+  gtk4,
+  libadwaita,
+  desktop-file-utils,
+  libGL,
 }:
 
 stdenv.mkDerivation rec {
   pname = "livi";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "guidog";
     repo = "livi";
     domain = "gitlab.gnome.org";
     rev = "v${version}";
-    hash = "sha256-4CWH8TWxuDGYlOilxyCa/HL/vtO6A9u/x39s1OLDODo";
+    hash = "sha256-cPnmKepXPeA3h0VYHypEPHAOclhVseokL1NsCKxGJ78=";
   };
   nativeBuildInputs = [
     meson

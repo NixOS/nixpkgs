@@ -2,14 +2,12 @@
   lib,
   aiodns,
   aiohttp,
+  aiosqlite,
   boto3,
   buildPythonPackage,
-  codecov,
   fetchFromGitHub,
   flake8,
-  flask-sockets,
   moto,
-  pythonOlder,
   psutil,
   pytest-asyncio,
   pytestCheckHook,
@@ -17,72 +15,63 @@
   sqlalchemy,
   websocket-client,
   websockets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.33.1";
+  version = "3.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OcGzpYwa8Ouf1ojQS9KnqlL37EYCZo5yjNeXXrkd0B4=";
+    tag = "v${version}";
+    hash = "sha256-yjYpALyHSTLQSuwd6xth7nqfi3m1C9tqnWrrVRmI220=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "pytest-runner"' ""
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiodns
     aiohttp
+    aiosqlite
     boto3
     sqlalchemy
     websocket-client
     websockets
   ];
 
+  pythonImportsCheck = [ "slack_sdk" ];
+
   nativeCheckInputs = [
-    codecov
     flake8
-    flask-sockets
     moto
     psutil
     pytest-asyncio
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  disabledTests = [
+    # Requires internet access (to slack API)
+    "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
+    # Requires network access: [Errno 111] Connection refused
+    "test_send_message_while_disconnection"
+  ];
 
   disabledTestPaths = [
-    # Exclude tests that requires network features
-    "integration_tests"
+    # Event loop issues
+    "tests/slack_sdk/oauth/installation_store/test_file.py"
+    "tests/slack_sdk/oauth/state_store/test_file.py"
   ];
 
-  disabledTests = [
-    # Requires network features
-    "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
-    "test_org_installation"
-    "test_interactions"
-    "test_issue_690_oauth_access"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "slack_sdk" ];
-
-  meta = with lib; {
+  meta = {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
     changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

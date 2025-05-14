@@ -1,19 +1,21 @@
-import ../make-test-python.nix ({pkgs, ...}:
+{ pkgs, ... }:
 {
   name = "nifi";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   nodes = {
-    nifi = { pkgs, ... }: {
-      virtualisation = {
-        memorySize = 2048;
-        diskSize = 4096;
+    nifi =
+      { pkgs, ... }:
+      {
+        virtualisation = {
+          memorySize = 2048;
+          diskSize = 4096;
+        };
+        services.nifi = {
+          enable = true;
+          enableHTTPS = false;
+        };
       };
-      services.nifi = {
-        enable = true;
-        enableHTTPS = false;
-      };
-    };
   };
 
   testScript = ''
@@ -27,4 +29,4 @@ import ../make-test-python.nix ({pkgs, ...}:
 
     nifi.shutdown()
   '';
-})
+}

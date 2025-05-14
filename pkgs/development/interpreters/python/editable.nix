@@ -50,7 +50,7 @@ let
         entry-points
         ;
       dependencies = map lib.getName dependencies';
-      optional-dependencies = lib.mapAttrs (_: lib.getName) optional-dependencies;
+      optional-dependencies = lib.mapAttrs (_: map lib.getName) optional-dependencies;
     };
 
     # Allow empty package

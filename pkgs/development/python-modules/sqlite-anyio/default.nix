@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidbrochart";
     repo = "sqlite-anyio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cZyTpFmYD0l20Cmxl+Hwfh3oVkWvtXD45dMpcSwA2QE=";
   };
 

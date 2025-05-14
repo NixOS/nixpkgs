@@ -2,16 +2,17 @@
 # The `library` derivation exposes a .nupkg, which is then consumed by the `application` derivation.
 # https://nixos.org/manual/nixpkgs/unstable/index.html#packaging-a-dotnet-application
 
-{ lib
-, dotnet-sdk
-, buildPackages # buildDotnetModule
-, runCommand
+{
+  lib,
+  dotnet-sdk,
+  buildPackages, # buildDotnetModule
+  runCommand,
 }:
 
 let
   inherit (buildPackages) buildDotnetModule;
 
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
 
   # Specify the TargetFramework via an environment variable so that we don't
   # have to update the .csproj files when updating dotnet-sdk

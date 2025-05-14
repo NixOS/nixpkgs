@@ -1,12 +1,16 @@
-{ boost
-, faust
-, ladspaH
+{
+  boost,
+  faust,
+  ladspaH,
 }:
 
 faust.wrapWithBuildEnv {
 
   baseName = "faust2ladspa";
 
-  propagatedBuildInputs = [ boost ladspaH ];
+  propagatedBuildInputs = [
+    boost
+    ladspaH
+  ];
 
 }

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liberasurecode";
-  version = "1.6.4";
+  version = "1.6.5";
 
   outputs = [
     "out"
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "liberasurecode";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-KYXlRjUudWhFbhyv9V1fmqwBw3/vTBfusxafaNG+Q40=";
+    tag = finalAttrs.version;
+    hash = "sha256-242p6lyLM+0UpuYvQqz87Z1S0oayxGXz7CZJW7fbgBk=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Erasure Code API library written in C with pluggable Erasure Code backends";
     homepage = "https://github.com/openstack/liberasurecode";
     license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
     pkgConfigModules = [ "erasurecode-1" ];
   };
 })

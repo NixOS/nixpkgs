@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "simple-parsing";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lebrice";
     repo = "SimpleParsing";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RDS1sWzaQqXp/0a7dXlUHnd6z+GTIpUN1MnUCTI9LGw=";
+    tag = "v${version}";
+    hash = "sha256-wHk3osr5CNmA/g9ipLy1dgvJoMy1zE/BAGD9ZATE+tc=";
   };
 
   build-system = [
@@ -67,10 +67,18 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Expected: OrderedDict([('a', 1), ('b', 2), ('c', 5), ('d', 6), ('e', 7)])
-    # Got: OrderedDict({'a': 1, 'b': 2, 'c': 5, 'd': 6, 'e': 7})
-    # https://github.com/lebrice/SimpleParsing/issues/326
-    "simple_parsing.utils.dict_union"
+    # AssertionError
+    # https://github.com/lebrice/SimpleParsing/issues/338
+    "test_bool_args_in_help"
+    "test_desc_from_cls_docstring"
+    "test_docstring_builds_upon_bases"
+    "test_help_string"
+    "test_help_string_displays_default_factory_arguments"
+    "test_help_takes_value_from_docstring"
+    "test_issue_48"
+    "test_running_example_outputs_expected_without_arg"
+    "test_subgroup_partial_with_nested_field"
+    "test_weird_docstring_with_field_like"
   ];
 
   meta = {

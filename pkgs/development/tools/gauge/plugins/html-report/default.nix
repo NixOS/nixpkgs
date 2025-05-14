@@ -1,5 +1,6 @@
-{ lib
-, makeGaugePlugin
+{
+  lib,
+  makeGaugePlugin,
 }:
 makeGaugePlugin {
   pname = "html-report";
@@ -14,6 +15,11 @@ makeGaugePlugin {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ marie ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

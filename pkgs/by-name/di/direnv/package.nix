@@ -1,22 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  bash,
+  fish,
+  zsh,
+  writableTmpDirAsHomeHook,
+}:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.35.0";
+  version = "2.36.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    hash = "sha256-C4FkBS+2MZGGlpWb7ng4Aa9IvqEuY716M5h2W3b8N1E=";
+    hash = "sha256-xqHc4Eb0mHQezmElJv20AMNQPgusXdvskNmlO+JP1lw=";
   };
 
-  vendorHash = "sha256-O2NZgWn00uKLstYPIj9LwyF4kmitJ1FXltazv8RrmZg=";
+  vendorHash = "sha256-+7HnbJ6cIzYHkEJVcp2IydHyuqD5PfdL6TUcq7Dpluk=";
 
   # we have no bash at the moment for windows
-  BASH_PATH =
-    lib.optionalString (!stdenv.hostPlatform.isWindows)
-    "${bash}/bin/bash";
+  BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
@@ -27,11 +34,18 @@ buildGoModule rec {
     make install PREFIX=$out
   '';
 
-  nativeCheckInputs = [ fish zsh ];
+  nativeCheckInputs = [
+    fish
+    zsh
+    writableTmpDirAsHomeHook
+  ];
 
   checkPhase = ''
-    export HOME=$(mktemp -d)
+    runHook preCheck
+
     make test-go test-bash test-fish test-zsh
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -52,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.5.2";
+  version = "5.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -60,14 +60,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
+    tag = version;
+    hash = "sha256-sAO8wQd/YgPbi5+nQmkmmcTg7DJPYdUoT/EOMUpzr/M=";
   };
 
   build-system = [ flit-core ];
-
-  # flask-login>=0.6.2 not satisfied by version 0.7.0.dev0
-  pythonRelaxDeps = [ "flask-login" ];
 
   dependencies = [
     email-validator

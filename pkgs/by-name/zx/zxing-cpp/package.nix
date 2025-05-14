@@ -1,31 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, gitUpdater
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  gitUpdater,
+  python3,
+  stdenv,
+  zint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-teFspdATn9M7Z1vSr/7PdJx/xAv+TVai8rIekxqpBZk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e3nSxjg8p+1DEUbZOh4C2zfnA6iGhNJMPiIe2oJEbRo=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkg-config
+  ];
+
+  buildInputs = [
+    zint
   ];
 
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_BLACKBOX_TESTS=OFF"
+    "-DZXING_BLACKBOX_TESTS=OFF"
+    "-DZXING_DEPENDENCIES=LOCAL"
+    "-DZXING_EXAMPLES=OFF"
+    "-DZXING_USE_BUNDLED_ZINT=OFF"
   ];
 
   passthru = {
@@ -51,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       formats.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,11 +1,18 @@
-{ stdenv, lib, ShellCheck, haskell, pandoc }:
+{
+  stdenv,
+  lib,
+  ShellCheck,
+  haskell,
+  pandoc,
+}:
 
 # this wraps around the haskell package
 # and puts the documentation into place
 
 let
   # TODO: move to lib/ in separate PR
-  overrideMeta = drv: overrideFn:
+  overrideMeta =
+    drv: overrideFn:
     let
       drv' = if drv ? meta then drv else drv // { meta = { }; };
       pos = (builtins.unsafeGetAttrPos "pname" drv');
@@ -26,7 +33,12 @@ let
 
     nativeBuildInputs = [ pandoc ];
 
-    outputs = [ "bin" "man" "doc" "out" ];
+    outputs = [
+      "bin"
+      "man"
+      "doc"
+      "out"
+    ];
 
     buildPhase = ''
       pandoc -s -f markdown-smart -t man shellcheck.1.md -o shellcheck.1
@@ -49,5 +61,9 @@ in
 overrideMeta shellcheck (old: {
   maintainers = with lib.maintainers; [ zowoq ];
   mainProgram = "shellcheck";
-  outputsToInstall = [ "bin" "man" "doc" ];
+  outputsToInstall = [
+    "bin"
+    "man"
+    "doc"
+  ];
 })

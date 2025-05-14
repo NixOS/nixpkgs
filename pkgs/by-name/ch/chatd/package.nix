@@ -34,10 +34,10 @@ buildNpmPackage rec {
     makeWrapper
     electron
     pkg-config
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook; # for onnx libs
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook; # for onnx libs
 
   buildInputs = [
-    stdenv.cc.cc.lib # for libstdc++.so, required by onnxruntime
+    (lib.getLib stdenv.cc.cc) # for libstdc++.so, required by onnxruntime
     vips # or it will try to download from the Internet
   ];
 

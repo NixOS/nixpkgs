@@ -1,27 +1,30 @@
-{ fetchFromGitHub
-, lib
-, libGLU
-, SDL2
-, SDL2_net
-, stdenv
-, zlib
+{
+  fetchFromGitHub,
+  lib,
+  libGLU,
+  SDL2,
+  SDL2_net,
+  xorg,
+  stdenv,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "supermodel";
-  version = "0-unstable-2024-04-05";
+  version = "0-unstable-2025-04-17";
 
   src = fetchFromGitHub {
     owner = "trzy";
     repo = "supermodel";
-    rev = "250f84e78eba381adf8cd731ce20b1b9be43c8c8";
-    hash = "sha256-3sDtNMW5R5Eq9GXJzKs0mQdiLUIWl6+4+rzKg8xpqEY=";
+    rev = "2272893a0511c0b3b50f6dda64addb7014717dd3";
+    hash = "sha256-3FdLBGxmi4Xj7ao2nvjLleJSTXvKQrhUWvnQr8DK/RY=";
   };
 
   buildInputs = [
     libGLU
     SDL2
     SDL2_net
+    xorg.libX11
     zlib
   ];
 

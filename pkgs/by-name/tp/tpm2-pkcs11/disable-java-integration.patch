@@ -1,0 +1,58 @@
+diff --git a/Makefile-integration.am b/Makefile-integration.am
+index e2255de..3cea1d8 100644
+--- a/Makefile-integration.am
++++ b/Makefile-integration.am
+@@ -7,7 +7,6 @@ integration_scripts = \
+     test/integration/pkcs11-dbup.sh.nosetup \
+     test/integration/tls-tests.sh \
+     test/integration/openssl.sh \
+-    test/integration/pkcs11-javarunner.sh.java \
+     test/integration/nss-tests.sh \
+     test/integration/ptool-link.sh.nosetup \
+     test/integration/python-pkcs11.sh
+@@ -110,13 +109,5 @@ test_integration_pkcs_lockout_int_CFLAGS  = $(AM_CFLAGS) $(TESTS_CFLAGS)
+ test_integration_pkcs_lockout_int_LDADD   = $(TESTS_LDADD)  $(SQLITE3_LIBS)
+ test_integration_pkcs_lockout_int_SOURCES = test/integration/pkcs-lockout.int.c test/integration/test.c
+ 
+-#
+-# Java Tests
+-#
+-AM_JAVA_LOG_FLAGS = --tabrmd-tcti=$(TABRMD_TCTI) --tsetup-script=$(top_srcdir)/test/integration/scripts/create_pkcs_store.sh
+-JAVA_LOG_COMPILER=$(LOG_COMPILER)
+-dist_noinst_JAVA = test/integration/PKCS11JavaTests.java
+-CLEANFILES += test/integration/PKCS11JavaTests.class
+-
+ endif
+ # END INTEGRATION
+diff --git a/configure.ac b/configure.ac
+index 1ec6eb4..7a0a8ee 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -258,13 +258,6 @@ AC_ARG_ENABLE(
+     [build and execute integration tests])],,
+   [enable_integration=no])
+ 
+-# Test for Java compiler and interpreter without throwing fatal errors (since
+-# these macros are defined using AC_DEFUN they cannot be called conditionally)
+-m4_pushdef([AC_MSG_ERROR], [have_javac=no])
+-AX_PROG_JAVAC()
+-AX_PROG_JAVA()
+-m4_popdef([AC_MSG_ERROR])
+-
+ AC_DEFUN([integration_test_checks], [
+ 
+   AC_CHECK_PROG([tpm2_createprimary], [tpm2_createprimary], [yes], [no])
+@@ -382,13 +375,6 @@ AC_DEFUN([integration_test_checks], [
+         [AC_MSG_ERROR([Integration tests enabled but tss2_provision executable not found.])])
+   ])
+ 
+-  AS_IF([test "x$have_javac" = "xno"],
+-    [AC_MSG_ERROR([Integration tests enabled but no Java compiler was found])])
+-  AX_CHECK_CLASS([org.junit.Assert], ,
+-    [AC_MSG_ERROR([Integration tests enabled but JUnit not found, try setting CLASSPATH])])
+-  AX_CHECK_CLASS([org.hamcrest.SelfDescribing], ,
+-    [AC_MSG_ERROR([Integration tests enabled but Hamcrest not found, try setting CLASSPATH])])
+-
+   AC_SUBST([ENABLE_INTEGRATION], [$enable_integration])
+ ]) # end function integration_test_checks
+  

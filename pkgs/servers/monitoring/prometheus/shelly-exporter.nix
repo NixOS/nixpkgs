@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "shelly_exporter";
@@ -20,6 +25,6 @@ buildGoModule rec {
     mainProgram = "shelly_exporter";
     homepage = "https://github.com/aexel90/shelly_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [drupol];
+    maintainers = with maintainers; [ drupol ];
   };
 }

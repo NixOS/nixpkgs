@@ -1,36 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # dependencies
-  django,
-  pytz,
-
-  # optionals
   django-taggit,
-
-  # tests
+  django,
+  fetchFromGitHub,
   pytest-django,
   pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "6.3";
-  format = "setuptools";
+  version = "6.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelcluster";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AUVl2aidjW7Uu//3HlAod7pxzj6Gs1Xd0uTt3NrrqAU=";
+    tag = "v${version}";
+    hash = "sha256-JoDDHvZ9N+7hcIxRsbVrYW8/95iUcNHDQkvtmDVUzws=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     pytz
   ];
@@ -44,14 +41,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ optional-dependencies.taggit;
 
-  # https://github.com/wagtail/django-modelcluster/issues/173
-  disabledTests = lib.optionals (lib.versionAtLeast django.version "4.2") [
-    "test_formfield_callback"
-  ];
+  pythonImportsCheck = [ "modelcluster" ];
 
   meta = with lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
     homepage = "https://github.com/torchbox/django-modelcluster/";
+    changelog = "https://github.com/wagtail/django-modelcluster/blob/v${version}/CHANGELOG.txt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };

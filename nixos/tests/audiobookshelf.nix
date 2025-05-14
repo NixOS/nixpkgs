@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 {
   name = "audiobookshelf";
   meta.maintainers = with lib.maintainers; [ wietsedv ];
@@ -17,4 +17,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.wait_for_open_port(1234)
     machine.succeed("curl --fail http://localhost:1234/")
   '';
-})
+}

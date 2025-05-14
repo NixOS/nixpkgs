@@ -1,42 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook }:
+{
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+}:
 
-stdenv.mkDerivation (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_squeeze";
-  version = "1.6.2";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "REL" finalAttrs.src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
-    rev = "REL${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
-    hash = "sha256-YS13iIpQ4NJe0N6bRVa2RDxEMwEzBc2mjNYM5/Vqjn8=";
+    tag = "REL1_7_0";
+    hash = "sha256-Kh1wSOvV5Rd1CG/na3yzbWzvaR8SJ6wmTZOnM+lbgik=";
   };
 
-  buildInputs = [
-    postgresql
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib pg_squeeze${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension pg_squeeze-*.sql
-    install -D -t $out/share/postgresql/extension pg_squeeze.control
-
-    runHook postInstall
-  '';
-
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "pg_squeeze-test";
-    dontUnpack = true;
-    doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
-    failureHook = "postgresqlStop";
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=REL(.*)" ]; };
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
     postgresqlExtraSettings = ''
       wal_level = logical
       shared_preload_libraries = 'pg_squeeze'
     '';
-    passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pg_squeeze;
 
@@ -48,19 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
       VALUES ('public', 'a', ('{30}', '{22}', NULL, NULL, '{3, 5}'));
       SELECT squeeze.squeeze_table('public', 'a', NULL, NULL, NULL);
     '';
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension for automatic bloat cleanup";
     homepage = "https://github.com/cybertec-postgresql/pg_squeeze";
     changelog = "https://github.com/cybertec-postgresql/pg_squeeze/blob/${finalAttrs.src.rev}/NEWS";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

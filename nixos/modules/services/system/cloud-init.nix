@@ -1,23 +1,26 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cloud-init;
-  path = with pkgs; [
-    cloud-init
-    iproute2
-    nettools
-    openssh
-    shadow
-    util-linux
-    busybox
-  ]
-  ++ optional cfg.btrfs.enable btrfs-progs
-  ++ optional cfg.ext4.enable e2fsprogs
-  ++ optional cfg.xfs.enable xfsprogs
-  ++ cfg.extraPackages
-  ;
+  path =
+    with pkgs;
+    [
+      cloud-init
+      iproute2
+      nettools
+      openssh
+      shadow
+      util-linux
+      busybox
+    ]
+    ++ lib.optional cfg.btrfs.enable btrfs-progs
+    ++ lib.optional cfg.ext4.enable e2fsprogs
+    ++ lib.optional cfg.xfs.enable xfsprogs
+    ++ cfg.extraPackages;
   hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
   settingsFormat = pkgs.formats.yaml { };
   cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
@@ -25,8 +28,8 @@ in
 {
   options = {
     services.cloud-init = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable the cloud-init service. This services reads
@@ -44,35 +47,35 @@ in
         '';
       };
 
-      btrfs.enable = mkOption {
-        type = types.bool;
+      btrfs.enable = lib.mkOption {
+        type = lib.types.bool;
         default = hasFs "btrfs";
-        defaultText = literalExpression ''hasFs "btrfs"'';
+        defaultText = lib.literalExpression ''hasFs "btrfs"'';
         description = ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
       };
 
-      ext4.enable = mkOption {
-        type = types.bool;
+      ext4.enable = lib.mkOption {
+        type = lib.types.bool;
         default = hasFs "ext4";
-        defaultText = literalExpression ''hasFs "ext4"'';
+        defaultText = lib.literalExpression ''hasFs "ext4"'';
         description = ''
           Allow the cloud-init service to operate `ext4` filesystem.
         '';
       };
 
-      xfs.enable = mkOption {
-        type = types.bool;
+      xfs.enable = lib.mkOption {
+        type = lib.types.bool;
         default = hasFs "xfs";
-        defaultText = literalExpression ''hasFs "xfs"'';
+        defaultText = lib.literalExpression ''hasFs "xfs"'';
         description = ''
           Allow the cloud-init service to operate `xfs` filesystem.
         '';
       };
 
-      network.enable = mkOption {
-        type = types.bool;
+      network.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Allow the cloud-init service to configure network interfaces
@@ -80,26 +83,26 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         description = ''
           List of additional packages to be available within cloud-init jobs.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Structured cloud-init configuration.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
         };
         default = { };
       };
 
-      config = mkOption {
-        type = types.str;
+      config = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           raw cloud-init configuration.
@@ -112,20 +115,20 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.cloud-init.settings = {
-      system_info = mkDefault {
+      system_info = lib.mkDefault {
         distro = "nixos";
         network = {
           renderers = [ "networkd" ];
         };
       };
 
-      users = mkDefault [ "root" ];
-      disable_root = mkDefault false;
-      preserve_hostname = mkDefault false;
+      users = lib.mkDefault [ "root" ];
+      disable_root = lib.mkDefault false;
+      preserve_hostname = lib.mkDefault false;
 
-      cloud_init_modules = mkDefault [
+      cloud_init_modules = lib.mkDefault [
         "migrator"
         "seed_random"
         "bootcmd"
@@ -139,7 +142,7 @@ in
         "users-groups"
       ];
 
-      cloud_config_modules = mkDefault [
+      cloud_config_modules = lib.mkDefault [
         "disk_setup"
         "mounts"
         "ssh-import-id"
@@ -150,7 +153,7 @@ in
         "ssh"
       ];
 
-      cloud_final_modules = mkDefault [
+      cloud_final_modules = lib.mkDefault [
         "rightscale_userdata"
         "scripts-vendor"
         "scripts-per-once"
@@ -166,13 +169,9 @@ in
     };
 
     environment.etc."cloud/cloud.cfg" =
-      if cfg.config == "" then
-        { source = cfgfile; }
-      else
-        { text = cfg.config; }
-    ;
+      if cfg.config == "" then { source = cfgfile; } else { text = cfg.config; };
 
-    systemd.network.enable = mkIf cfg.network.enable true;
+    systemd.network.enable = lib.mkIf cfg.network.enable true;
 
     systemd.services.cloud-init-local = {
       description = "Initial cloud-init job (pre-networking)";
@@ -180,7 +179,10 @@ in
       # In certain environments (AWS for example), cloud-init-local will
       # first configure an IP through DHCP, and later delete it.
       # This can cause race conditions with anything else trying to set IP through DHCP.
-      before = [ "systemd-networkd.service" "dhcpcd.service" ];
+      before = [
+        "systemd-networkd.service"
+        "dhcpcd.service"
+      ];
       path = path;
       serviceConfig = {
         Type = "oneshot";
@@ -200,8 +202,14 @@ in
         "sshd.service"
         "sshd-keygen.service"
       ];
-      after = [ "network-online.target" "cloud-init-local.service" ];
-      before = [ "sshd.service" "sshd-keygen.service" ];
+      after = [
+        "network-online.target"
+        "cloud-init-local.service"
+      ];
+      before = [
+        "sshd.service"
+        "sshd-keygen.service"
+      ];
       requires = [ "network.target" ];
       path = path;
       serviceConfig = {
@@ -217,7 +225,10 @@ in
       description = "Apply the settings specified in cloud-config";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "cloud-config.target" ];
+      after = [
+        "network-online.target"
+        "cloud-config.target"
+      ];
 
       path = path;
       serviceConfig = {
@@ -233,7 +244,11 @@ in
       description = "Execute cloud user/final scripts";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "cloud-config.service" "rc-local.service" ];
+      after = [
+        "network-online.target"
+        "cloud-config.service"
+        "rc-local.service"
+      ];
       requires = [ "cloud-config.target" ];
       path = path;
       serviceConfig = {
@@ -247,9 +262,12 @@ in
 
     systemd.targets.cloud-config = {
       description = "Cloud-config availability";
-      requires = [ "cloud-init-local.service" "cloud-init.service" ];
+      requires = [
+        "cloud-init-local.service"
+        "cloud-init.service"
+      ];
     };
   };
 
-  meta.maintainers = [ maintainers.zimbatm ];
+  meta.maintainers = [ lib.maintainers.zimbatm ];
 }

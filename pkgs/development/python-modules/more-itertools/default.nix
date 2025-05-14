@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "10.3.0";
+  version = "10.6.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5dk+9BEiT7zvNmpujdxMV4G8Y1nUNBKmXdWWTkYRFGM=";
+    hash = "sha256-LNf60QCcMcyftqA1EIUJ5lR1R6enODdPEL1JoJ6z7js=";
   };
 
   nativeBuildInputs = [ flit-core ];

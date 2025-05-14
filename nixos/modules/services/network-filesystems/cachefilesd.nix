@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.cachefilesd;
@@ -17,23 +19,23 @@ in
   options = {
     services.cachefilesd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable cachefilesd network filesystems caching daemon.";
       };
 
-      cacheDir = mkOption {
-        type = types.str;
+      cacheDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/cache/fscache";
         description = "Directory to contain filesystem cache.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "brun 10%";
-        description = "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
+        description = "Additional configuration file entries. See {manpage}`cachefilesd.conf(5)` for more information.";
       };
 
     };
@@ -41,7 +43,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     boot.kernelModules = [ "cachefiles" ];
 

@@ -1,30 +1,55 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 let
   cfg = config.services.promtail;
 
-  prettyJSON = conf: pkgs.runCommandLocal "promtail-config.json" {} ''
-    echo '${builtins.toJSON conf}' | ${pkgs.buildPackages.jq}/bin/jq 'del(._module)' > $out
-  '';
+  format = pkgs.formats.json { };
+  prettyJSON =
+    conf:
+    with lib;
+    pipe conf [
+      (flip removeAttrs [ "_module" ])
+      (format.generate "promtail-config.json")
+    ];
 
-  allowSystemdJournal = cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;
+  allowSystemdJournal =
+    cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;
 
   allowPositionsFile = !lib.hasPrefix "/var/cache/promtail" positionsFile;
   positionsFile = cfg.configuration.positions.filename;
-in {
+
+  configFile = if cfg.configFile != null then cfg.configFile else prettyJSON cfg.configuration;
+
+in
+{
   options.services.promtail = with types; {
     enable = mkEnableOption "the Promtail ingresser";
 
-
     configuration = mkOption {
-      type = (pkgs.formats.json {}).type;
+      type = format.type;
       description = ''
         Specify the configuration for Promtail in Nix.
+        This option will be ignored if `services.promtail.configFile` is defined.
+      '';
+    };
+
+    configFile = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        Config file path for Promtail.
+        If this option is defined, the value of `services.promtail.configuration` will be ignored.
       '';
     };
 
     extraFlags = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       example = [ "--server.http-listen-port=3101" ];
       description = ''
         Specify a list of additional command line flags,
@@ -42,50 +67,53 @@ in {
       stopIfChanged = false;
 
       preStart = ''
-        ${lib.getExe pkgs.promtail} -config.file=${prettyJSON cfg.configuration} -check-syntax
+        ${lib.getExe pkgs.promtail} -config.file=${configFile} -check-syntax
       '';
 
-      serviceConfig = {
-        Restart = "on-failure";
-        TimeoutStopSec = 10;
+      serviceConfig =
+        {
+          Restart = "on-failure";
+          TimeoutStopSec = 10;
 
-        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
+          ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${configFile} ${escapeShellArgs cfg.extraFlags}";
 
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        RestrictSUIDSGID = true;
-        PrivateMounts = true;
-        CacheDirectory = "promtail";
-        ReadWritePaths = lib.optional allowPositionsFile (builtins.dirOf positionsFile);
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          RestrictSUIDSGID = true;
+          PrivateMounts = true;
+          CacheDirectory = "promtail";
+          ReadWritePaths = lib.optional allowPositionsFile (builtins.dirOf positionsFile);
 
-        User = "promtail";
-        Group = "promtail";
+          User = "promtail";
+          Group = "promtail";
 
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
 
-        ProtectKernelModules = true;
-        SystemCallArchitectures = "native";
-        ProtectKernelLogs = true;
-        ProtectClock = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          ProtectKernelLogs = true;
+          ProtectClock = true;
 
-        LockPersonality = true;
-        ProtectHostname = true;
-        RestrictRealtime = true;
-        MemoryDenyWriteExecute = true;
-        PrivateUsers = true;
+          LockPersonality = true;
+          ProtectHostname = true;
+          RestrictRealtime = true;
+          MemoryDenyWriteExecute = true;
+          PrivateUsers = true;
 
-        SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
-      } // (optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) { # FIXME: figure out why this breaks on aarch64
-        SystemCallFilter = "@system-service";
-      });
+          SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
+        }
+        // (optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) {
+          # FIXME: figure out why this breaks on aarch64
+          SystemCallFilter = "@system-service";
+        });
     };
 
-    users.groups.promtail = {};
+    users.groups.promtail = { };
     users.users.promtail = {
       description = "Promtail service user";
       isSystemUser = true;

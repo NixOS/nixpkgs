@@ -5,7 +5,6 @@
   cargo,
   fetchFromGitHub,
   libiconv,
-  Foundation,
   rustPlatform,
   rustc,
   setuptools-rust,
@@ -14,25 +13,24 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.8.2";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-rust";
     rev = version;
-    hash = "sha256-0hIwFJn/cwtKHKoD+upeorC52YnDlej3TrWf3PmAQAQ=";
+    hash = "sha256-yJ78P00h4SITVuDnIh5IIlWkoed/VtIw3NB8ETB95bk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Gdypi9DJAXQgNaRCLEt4LTqUhBJC8plH0YhgNOIOGvA=";
+    hash = "sha256-9OgUuuMuo2l4YsZMhBZJBqKqbNwj1W4yidoogjcNgm8=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Foundation
   ];
   nativeBuildInputs = [
     setuptools-rust

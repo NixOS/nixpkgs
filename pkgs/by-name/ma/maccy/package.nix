@@ -1,16 +1,17 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maccy";
-  version = "0.31.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/p0deje/Maccy/releases/download/${finalAttrs.version}/Maccy.app.zip";
-    hash = "sha256-vjfFtlX0b3howUc2bTR/pqXwnzjXpK6qPR8+81sANTs=";
+    hash = "sha256-Prr0t3OvPWUnUQ3cTE3D+jj1ASKKmDvGZInKlT1WsJ0=";
   };
 
   dontUnpack = true;
@@ -31,7 +32,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://maccy.app";
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [
+      emilytrau
+      baongoc124
+    ];
     platforms = platforms.darwin;
   };
 })

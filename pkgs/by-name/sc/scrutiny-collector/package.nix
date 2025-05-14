@@ -1,10 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, smartmontools
-, nixosTests
-, lib
-, nix-update-script
+{
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  smartmontools,
+  nixosTests,
+  lib,
+  nix-update-script,
 }:
 let
   version = "0.8.1";
@@ -16,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 
@@ -26,7 +27,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-extldflags=-static" ];
 

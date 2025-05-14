@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.nix-ld;
 
@@ -17,7 +22,7 @@ in
 {
   meta.maintainers = [ lib.maintainers.mic92 ];
   options.programs.nix-ld = {
-    enable = lib.mkEnableOption ''nix-ld, Documentation: <https://github.com/Mic92/nix-ld>'';
+    enable = lib.mkEnableOption ''nix-ld, Documentation: <https://github.com/nix-community/nix-ld>'';
     package = lib.mkPackageOption pkgs "nix-ld" { };
     libraries = lib.mkOption {
       type = lib.types.listOf lib.types.package;
@@ -34,7 +39,7 @@ in
 
     environment.pathsToLink = [ "/share/nix-ld" ];
 
-    environment.variables = {
+    environment.sessionVariables = {
       NIX_LD = "/run/current-system/sw/share/nix-ld/lib/ld.so";
       NIX_LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
     };

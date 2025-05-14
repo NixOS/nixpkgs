@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       Java -- basically any program in which you can use remarks/comments.
     '';
     license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 })

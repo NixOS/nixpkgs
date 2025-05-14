@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch2,
   kernel,
 }:
 
@@ -20,8 +21,8 @@ let
   rpmFusionPatches = fetchFromGitHub {
     owner = "rpmfusion";
     repo = "wl-kmod";
-    rev = "a04330284bfc38fd91eade6f8b28fa63cfcdc95e";
-    hash = "sha256-c72Pr/v+nxZPLEeNKbWnSpbH3gqYZaTgzMO9PlYQkf0=";
+    rev = "9a5a0d7195e0f6b05ff97e948b97fb0b7427cbf2";
+    hash = "sha256-pOOkkOjc77KGqc9fWuRyRsymd90OpLEnbOvxBbeIdKQ=";
   };
   patchset = [
     "wl-kmod-001_wext_workaround.patch"
@@ -51,6 +52,9 @@ let
     "wl-kmod-025_kernel_6.5_adaptation.patch"
     "wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch"
     "wl-kmod-027_wpa_supplicant-2.11_add_max_scan_ie_len.patch"
+    "wl-kmod-028_kernel_6.12_adaptation.patch"
+    "wl-kmod-029_kernel_6.13_adaptation.patch"
+    "wl-kmod-030_kernel_6.14_adaptation.patch"
   ];
 in
 stdenv.mkDerivation {
@@ -92,7 +96,7 @@ stdenv.mkDerivation {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.j0hax ];
     platforms = lib.platforms.linux;
   };
 }

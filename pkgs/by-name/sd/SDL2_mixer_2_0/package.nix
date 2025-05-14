@@ -1,9 +1,7 @@
-# SDL2_mixer_2_0 pinned for lzwolf
 {
   SDL2_mixer,
   fetchFromGitHub,
   fetchpatch,
-  lzwolf,
   timidity,
 }:
 
@@ -34,7 +32,6 @@ let
       substituteInPlace timidity/options.h \
         --replace "/usr/share/timidity" "${timidity}/share/timidity"
     '';
-
-    passthru.tests.lzwolf = lzwolf;
   };
-in SDL2_mixer.overrideAttrs(_: attrset)
+in
+SDL2_mixer.overrideAttrs (_: attrset)

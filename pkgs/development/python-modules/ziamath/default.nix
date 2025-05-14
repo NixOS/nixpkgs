@@ -8,20 +8,21 @@
   pytestCheckHook,
   nbval,
   latex2mathml,
+  writableTmpDirAsHomeHook,
   fetchurl,
 }:
 buildPythonPackage rec {
   pname = "ziamath";
-  version = "0.11";
+  version = "0.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziamath";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DLpbidQEeQVKxGCbS2jeeCvmVK9ElDIDQMj5bh/x7/Q=";
+    tag = version;
+    hash = "sha256-ShR9O170Q26l6XHSe2CO4bEuQm4JNOxiPZ2kbKDLNEU=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
     nbval
     latex2mathml
+    writableTmpDirAsHomeHook
   ];
 
   preCheck =

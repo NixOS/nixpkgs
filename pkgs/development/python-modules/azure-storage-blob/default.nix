@@ -6,22 +6,26 @@
   fetchPypi,
   isodate,
   pythonOlder,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "12.20.0";
-  format = "setuptools";
+  version = "12.25.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7rkSVuQdS1ubrWqH/QqK3gfdWKpSNE4sjSdG4noBfTs=";
+    pname = "azure_storage_blob";
+    inherit version;
+    hash = "sha256-TylN3JvEeQmsZriTS9JrUNIAAnixCtgswQl2T9xuDjs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-core
     cryptography
     isodate

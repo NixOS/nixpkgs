@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -12,6 +11,7 @@
   tablib,
 
   # tests
+  django-filter,
   lxml,
   openpyxl,
   psycopg2,
@@ -23,21 +23,19 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jieter";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VB7xmcBncTUYllzKS4o7G7u+KoivMiiEQGZ4x+Rnces=";
+    repo = "django-tables2";
+    tag = "v${version}";
+    hash = "sha256-DhPQM/OEd8ViEm7cLbb/KCb6bjyoqKnbGOcqkTPRRxo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   optional-dependencies = {
     tablib = [ tablib ] ++ tablib.optional-dependencies.xls ++ tablib.optional-dependencies.yaml;
@@ -46,6 +44,7 @@ buildPythonPackage rec {
   env.DJANGO_SETTINGS_MODULE = "tests.app.settings";
 
   nativeCheckInputs = [
+    django-filter
     lxml
     openpyxl
     psycopg2
@@ -54,11 +53,6 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  disabledTestPaths = [
-    # requires django-filters
-    "tests/test_views.py"
-  ];
 
   meta = with lib; {
     changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";

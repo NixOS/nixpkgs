@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  python,
+  python3,
   pkg-config,
   libxml2,
   glib,
@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.18.1";
+  version = "1.19.0";
   pname = "librepo";
 
   outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "rpm-software-management";
     repo = "librepo";
     rev = version;
-    sha256 = "sha256-b5f6zfQu5GQ9bZPnWgmLZLH0YFFLQu7bHwMQUt4Q4Q8=";
+    sha256 = "sha256-ws57vFoK5yBMHHNQ9W48Icp4am0/5k3n4ybem1aAzVM=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python3
     libxml2
     glib
     openssl
@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}" ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python3.pythonVersion}" ];
 
   postFixup = ''
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rpm-software-management.github.io/librepo/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

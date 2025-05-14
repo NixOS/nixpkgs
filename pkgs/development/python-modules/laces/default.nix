@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "laces";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tbrlpld";
     repo = "laces";
-    rev = "v${version}";
-    hash = "sha256-N3UUJomlihdM+6w9jmn9t10Q2meIqEOjW/rf3ZLrD78=";
+    tag = "v${version}";
+    hash = "sha256-ELpPq7pqcLfAqUuHh8NOAOOiGPDImTFsA7WUHvVfMiI=";
   };
 
   nativeBuildInputs = [ flit-core ];

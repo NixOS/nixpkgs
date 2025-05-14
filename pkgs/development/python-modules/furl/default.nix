@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "furl";
-  version = "2.1.3";
+  version = "2.1.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a6188fe2666c484a12159c18be97a1977a71d632ef5bb867ef15f54af39cc4e";
+    sha256 = "sha256-h3ZXUBJmySkmlzn7X1mAU0pBq9a7q8s2fBNtHTsqYBU=";
   };
 
   # With python 3.11.4, invalid IPv6 address does throw ValueError

@@ -13,14 +13,11 @@
   glib,
   gtk4,
   libadwaita,
-  darwin,
   gettext,
   appstream,
+  nix-update-script,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Foundation;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
   version = "1.1.0";
@@ -28,17 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8UUFatJwtxqumhHd0aiPk6nKsaaF/jIIqMFxXye0X8U=";
   };
 
-  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
-  # inheritance within Git dependencies, but importCargoLock does.
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "detexify-0.4.0" = "sha256-BPOHNr3pwu2il3/ERko+WHAWby4rPR49i62tXDlDRu0=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-JHlvSo5wl0G9yF9KIwFXILu7T0Pv6f6JC0Q90wfuD94=";
   };
 
   nativeBuildInputs = [
@@ -53,19 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+  ];
 
   # needed for darwin
   env.GETTEXT_DIR = "${gettext}";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";
@@ -74,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";
     maintainers = with lib.maintainers; [ tomasajt ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

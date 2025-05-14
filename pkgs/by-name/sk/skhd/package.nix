@@ -1,18 +1,11 @@
 {
   lib,
-  overrideSDK,
   stdenv,
-  darwin,
   fetchFromGitHub,
-  testers,
   nix-update-script,
+  versionCheckHook,
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
-
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "skhd";
   version = "0.3.9";
 
@@ -22,11 +15,6 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-fnkWws/g4BdHKDRhqoCpdPFUavOHdk8R7h7H1dAdAYI=";
   };
-
-  buildInputs = [
-    Carbon
-    Cocoa
-  ];
 
   makeFlags = [ "BUILD_PATH=$(out)/bin" ];
 
@@ -38,14 +26,11 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.skhd.plist --subst-var out
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "skhd-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple hotkey daemon for macOS";

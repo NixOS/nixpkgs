@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   matplotlib,
   numpy,
   pandas,
@@ -16,22 +15,19 @@
 
 buildPythonPackage rec {
   pname = "scikit-posthocs";
-  version = "0.9.1";
+  version = "0.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ssaTd+A7lzd4tlKHGkgKixi3XjZLQBcPs6UOEzX/hrk=";
+    tag = "v${version}";
+    hash = "sha256-W1jm9mKJCwTPihZhtuCIM3HILT/nXLXbTjR+E2nwsug=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas
@@ -50,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multiple Pairwise Comparisons (Post Hoc) Tests in Python";
     homepage = "https://github.com/maximtrp/scikit-posthocs";
-    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/v${version}";
+    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };

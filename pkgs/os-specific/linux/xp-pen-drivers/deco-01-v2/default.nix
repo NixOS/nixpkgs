@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchzip
-, libusb1
-, glibc
-, libGL
-, xorg
-, makeWrapper
-, qtx11extras
-, wrapQtAppsHook
-, autoPatchelfHook
-, libX11
-, libXtst
-, libXi
-, libXrandr
-, libXinerama
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libusb1,
+  glibc,
+  libGL,
+  xorg,
+  makeWrapper,
+  qtx11extras,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  libX11,
+  libXtst,
+  libXi,
+  libXrandr,
+  libXinerama,
 }:
 
 let
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     libXinerama
     glibc
     libGL
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     qtx11extras
   ];
 

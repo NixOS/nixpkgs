@@ -1,21 +1,22 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, hatchling
-, hatch-requirements-txt
-, hatch-vcs
-, pyserial
-, importlib-metadata
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  hatchling,
+  hatch-requirements-txt,
+  hatch-vcs,
+  pyserial,
+  importlib-metadata,
 }:
 buildPythonApplication rec {
   pname = "mpremote";
-  version = "1.23.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TEW9aDXodPYWlm7xxodaG/2sXOCPpDUKtYVzYZgAzf4=";
+    tag = "v${version}";
+    hash = "sha256-Hk/DHMb9U/mLLVRKe+K3u5snxzW5BW3+bYRPFEAmUBQ=";
   };
   sourceRoot = "${src.name}/tools/mpremote";
   format = "pyproject";

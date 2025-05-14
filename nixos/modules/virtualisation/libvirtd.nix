@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,7 +18,12 @@ let
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [ "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd", "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd" ]
+      nvram = [
+        "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd",
+        "/run/libvirt/nix-ovmf/AAVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.ms.fd",
+        "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd",
+        "/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd"
+      ]
     ''}
     ${optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
@@ -174,7 +184,7 @@ let
         type = types.attrsOf types.path;
         default = { };
         description = ''
-          Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
+          Hooks that will be placed under /var/lib/libvirt/hooks/network.d/
           and called for networks begin/end events.
           Please see https://libvirt.org/hooks.html for documentation.
         '';
@@ -210,26 +220,34 @@ in
 {
 
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
-      "Set the option `virtualisation.libvirtd.qemu.package' instead.")
+    (mkRemovedOptionModule [
+      "virtualisation"
+      "libvirtd"
+      "enableKVM"
+    ] "Set the option `virtualisation.libvirtd.qemu.package' instead.")
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "package" ])
+      [ "virtualisation" "libvirtd" "qemu" "package" ]
+    )
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuRunAsRoot" ]
-      [ "virtualisation" "libvirtd" "qemu" "runAsRoot" ])
+      [ "virtualisation" "libvirtd" "qemu" "runAsRoot" ]
+    )
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuVerbatimConfig" ]
-      [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ])
+      [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ]
+    )
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmf" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ])
-    (mkRemovedOptionModule
-      [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
-      "If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.")
+      [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ]
+    )
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
+      "If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead."
+    )
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuSwtpm" ]
-      [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ])
+      [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ]
+    )
   ];
 
   ###### interface
@@ -268,7 +286,10 @@ in
     };
 
     onBoot = mkOption {
-      type = types.enum [ "start" "ignore" ];
+      type = types.enum [
+        "start"
+        "ignore"
+      ];
       default = "start";
       description = ''
         Specifies the action to be done to / on the guests when the host boots.
@@ -280,7 +301,10 @@ in
     };
 
     onShutdown = mkOption {
-      type = types.enum [ "shutdown" "suspend" ];
+      type = types.enum [
+        "shutdown"
+        "suspend"
+      ];
       default = "suspend";
       description = ''
         When shutting down / restarting the host what method should
@@ -358,11 +382,10 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Weither to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
+        Whether to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
       '';
     };
   };
-
 
   ###### implementation
 
@@ -372,8 +395,8 @@ in
       {
         assertion = config.virtualisation.libvirtd.qemu.ovmf.package == null;
         message = ''
-        The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
-        If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
+          The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
+          If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
         '';
       }
       {
@@ -384,11 +407,13 @@ in
 
     environment = {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
-      etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n"
-        (e:
-          "allow ${e}")
-        cfg.allowedBridges;
-      systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package ];
+      etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
+      systemPackages = with pkgs; [
+        libressl.nc
+        config.networking.firewall.package
+        cfg.package
+        cfg.qemu.package
+      ];
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
@@ -426,9 +451,11 @@ in
             libvirt/qemu/networks/*.xml \
             libvirt/nwfilter/*.xml );
         do
-            mkdir -p /var/lib/$(dirname $i) -m 755
-            if [ ! -e /var/lib/$i ]; then
-              cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
+            # Intended behavior
+            # shellcheck disable=SC2174
+            mkdir -p "/var/lib/$(dirname "$i")" -m 755
+            if [ ! -e "/var/lib/$i" ]; then
+              cp -pd "${cfg.package}/var/lib/$i" "/var/lib/$i"
             fi
         done
 
@@ -440,38 +467,46 @@ in
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
         done
 
-        for helper in bin/qemu-pr-helper; do
-          ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
-        done
+        ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
-        ${optionalString cfg.qemu.ovmf.enable (let
-          ovmfpackage = pkgs.buildEnv {
-            name = "qemu-ovmf";
-            paths = cfg.qemu.ovmf.packages;
-          };
-        in
+        ${optionalString cfg.qemu.ovmf.enable (
+          let
+            ovmfpackage = pkgs.buildEnv {
+              name = "qemu-ovmf";
+              paths = cfg.qemu.ovmf.packages;
+            };
+          in
           ''
-          ln -s --force ${ovmfpackage}/FV/AAVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
-        '')}
+            ln -s --force ${ovmfpackage}/FV/AAVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${ovmfpackage}/FV/OVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${ovmfpackage}/FV/AAVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${ovmfpackage}/FV/OVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
+          ''
+        )}
 
         # Symlink hooks to /var/lib/libvirt
-        ${concatStringsSep "\n" (map (driver:
-          ''
-          mkdir -p /var/lib/${dirName}/hooks/${driver}.d
-          rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
-          ${concatStringsSep "\n" (mapAttrsToList (name: value:
-            "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}") cfg.hooks.${driver})}
-        '') (attrNames cfg.hooks))}
+        ${concatStringsSep "\n" (
+          map (driver: ''
+            mkdir -p /var/lib/${dirName}/hooks/${driver}.d
+            rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
+            ${concatStringsSep "\n" (
+              mapAttrsToList (
+                name: value: "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}"
+              ) cfg.hooks.${driver}
+            )}
+          '') (attrNames cfg.hooks)
+        )}
       '';
 
       serviceConfig = {
         Type = "oneshot";
         RuntimeDirectoryPreserve = "yes";
         LogsDirectory = subDirs [ "qemu" ];
-        RuntimeDirectory = subDirs [ "nix-emulators" "nix-helpers" "nix-ovmf" ];
+        RuntimeDirectory = subDirs [
+          "nix-emulators"
+          "nix-helpers"
+          "nix-ovmf"
+        ];
         StateDirectory = subDirs [ "dnsmasq" ];
       };
     };
@@ -479,8 +514,7 @@ in
     systemd.services.libvirtd = {
       wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
-      after = [ "libvirtd-config.service" ]
-        ++ optional vswitch.enable "ovs-vswitchd.service";
+      after = [ "libvirtd-config.service" ] ++ optional vswitch.enable "ovs-vswitchd.service";
 
       environment.LIBVIRTD_ARGS = escapeShellArgs (
         [
@@ -488,10 +522,15 @@ in
           configFile
           "--timeout"
           "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
-        ] ++ cfg.extraOptions
+        ]
+        ++ cfg.extraOptions
       );
 
-      path = [ cfg.qemu.package pkgs.netcat ] # libvirtd requires qemu-img to manage disk images
+      path =
+        [
+          cfg.qemu.package
+          pkgs.netcat
+        ] # libvirtd requires qemu-img to manage disk images
         ++ optional vswitch.enable vswitch.package
         ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
@@ -510,7 +549,13 @@ in
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ coreutils gawk cfg.package ];
+      requires = [ "libvirtd.service" ];
+      after = [ "libvirtd.service" ];
+      path = with pkgs; [
+        coreutils
+        gawk
+        cfg.package
+      ];
       restartIfChanged = false;
 
       environment.ON_BOOT = "${cfg.onBoot}";
@@ -547,13 +592,18 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
-    systemd.tmpfiles.rules = let
-      vhostUserCollection = pkgs.buildEnv {
-        name = "vhost-user";
-        paths = cfg.qemu.vhostUserPackages;
-        pathsToLink = [ "/share/qemu/vhost-user" ];
-      };
-    in [ "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user" ];
+    systemd.tmpfiles.rules =
+      let
+        vhostUserCollection = pkgs.buildEnv {
+          name = "vhost-user";
+          paths = cfg.qemu.vhostUserPackages;
+          pathsToLink = [ "/share/qemu/vhost-user" ];
+        };
+      in
+      [
+        "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user"
+        "L+ /var/lib/qemu/firmware - - - - ${cfg.qemu.package}/share/qemu/firmware"
+      ];
 
     security.polkit = {
       enable = true;

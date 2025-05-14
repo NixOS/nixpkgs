@@ -1,21 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, boost179
-, eigen
-, opencv
-, tbb
+  cmake,
+  boost179,
+  eigen,
+  opencv,
+  tbb,
 
-, avx2Support ? stdenv.hostPlatform.avx2Support
+  avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cctag";
   version = "1.0.3";
 
-  outputs = [ "lib" "dev" "out" ];
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "alicevision";

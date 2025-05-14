@@ -6,12 +6,10 @@
   gio-qt,
   cmake,
   extra-cmake-modules,
-  qttools,
+  libsForQt5,
   wayland,
-  kwayland,
   dwayland,
   pkg-config,
-  wrapQtAppsHook,
   glibmm,
   gtest,
 }:
@@ -31,15 +29,14 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
     gio-qt
     wayland
-    kwayland
     dwayland
     glibmm
     gtest
@@ -52,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-clipboard";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

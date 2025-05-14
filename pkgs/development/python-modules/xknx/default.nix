@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "3.2.0";
+  version = "3.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hgCmzWncHTsvfVeU/ePpu59THtmuLlqeCO11/L4BRvM=";
+    tag = version;
+    hash = "sha256-5Mlt4tjlk3wcLa3vHjpu3jzb6jUfLlHLADI5HSGyA14=";
   };
 
   build-system = [ setuptools ];
@@ -43,9 +43,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Test requires network access
-    "test_scan_timeout"
-    "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
+    "test_start_secure_routing_knx_keys"
+    "test_scan_timeout"
+    "test_routing_indication_multicast"
     # RuntimeError: Event loop is closed
     "test_has_group_address_localtime"
     "test_invalid_authentication"
@@ -65,7 +66,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/XKNX/xknx";
     changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
   };

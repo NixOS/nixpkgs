@@ -372,7 +372,7 @@
     "repo_path": "games/atlantik"
   },
   "attica": {
-    "description": "Attica is a Qt library that implements the Open Collaboration Services API.\n\nMailing list: https://lists.freedesktop.org/mailman/listinfo/ocs\nInternet Relay Chat: #ocs@freenode",
+    "description": "Attica is a Qt library that implements the Open Collaboration Services API.",
     "name": "attica",
     "project_path": "frameworks/attica",
     "repo_path": "frameworks/attica"
@@ -400,6 +400,12 @@
     "name": "aura-browser",
     "project_path": "kde/workspace/aura-browser",
     "repo_path": "plasma/aura-browser"
+  },
+  "aurorae": {
+    "description": "Aurorae is a themeable window decoration for KWin",
+    "name": "aurorae",
+    "project_path": "playground/base/aurorae",
+    "repo_path": "plasma/aurorae"
   },
   "automoc": {
     "description": "Automoc",
@@ -744,7 +750,7 @@
     "repo_path": "packaging/craft-blueprints-community"
   },
   "craft-blueprints-kde": {
-    "description": "Project build blueprints for Craft \u2014 the meta build system and package manager",
+    "description": "Project build blueprints for Craft - the meta build system and package manager",
     "name": "craft-blueprints-kde",
     "project_path": "kdesupport/craft-blueprints-kde",
     "repo_path": "packaging/craft-blueprints-kde"
@@ -840,7 +846,7 @@
     "repo_path": "graphics/digikam-test-data"
   },
   "discover": {
-    "description": "KDE and Plasma resources management GUI",
+    "description": "Helps you find and install applications, games, and tools",
     "name": "discover",
     "project_path": "kde/workspace/discover",
     "repo_path": "plasma/discover"
@@ -875,6 +881,12 @@
     "project_path": "documentation/docs-krita-org",
     "repo_path": "documentation/docs-krita-org"
   },
+  "documentation-docs-labplot-org": {
+    "description": "Documentation for Labplot",
+    "name": "documentation-docs-labplot-org",
+    "project_path": "documentation/docs-labplot-org",
+    "repo_path": "documentation/docs-labplot-org"
+  },
   "documentation-docs-plasma-mobile-org": {
     "description": "Plasma Mobile documentation based on Sphinx",
     "name": "documentation-docs-plasma-mobile-org",
@@ -886,6 +898,12 @@
     "name": "documentation-hig-kde-org",
     "project_path": "documentation/hig-kde-org",
     "repo_path": "documentation/hig-kde-org"
+  },
+  "documentation-kstars-docs-kde-org": {
+    "description": "Documentation for KStars",
+    "name": "documentation-kstars-docs-kde-org",
+    "project_path": "documentation/kstars-docs-kde-org",
+    "repo_path": "documentation/kstars-docs-kde-org"
   },
   "documentation-openraster-org": {
     "description": "Sphinx setup for the Openraster.org (ORA specification) website",
@@ -1073,6 +1091,12 @@
     "project_path": "extragear/edu/gcompris-data",
     "repo_path": "education/gcompris-data"
   },
+  "geonames-data": {
+    "description": "Cache of geo name exports from geonames.org",
+    "name": "geonames-data",
+    "project_path": "playground/packaging/geonames-data",
+    "repo_path": "packaging/geonames-data"
+  },
   "gestures-kde": {
     "description": "Handles gestures of multi touch input devices",
     "name": "gestures-kde",
@@ -1100,7 +1124,7 @@
   "glaxnimate": {
     "description": "Simple vector animation program.",
     "name": "glaxnimate",
-    "project_path": "kdereview/glaxnimate",
+    "project_path": "graphics/glaxnimate",
     "repo_path": "graphics/glaxnimate"
   },
   "gluon": {
@@ -1290,7 +1314,7 @@
     "repo_path": "multimedia/kaffeine"
   },
   "kaidan": {
-    "description": "Simple and user-friendly Jabber/XMPP client for every device and platform",
+    "description": "Modern chat app for every device",
     "name": "kaidan",
     "project_path": "kdereview/kaidan",
     "repo_path": "network/kaidan"
@@ -1415,6 +1439,12 @@
     "project_path": "playground/edu/kard",
     "repo_path": "education/kard"
   },
+  "karp": {
+    "description": "Simple PDF editor to arrange, merge and improve PDF file(s)",
+    "name": "karp",
+    "project_path": "playground/graphics/karp",
+    "repo_path": "graphics/karp"
+  },
   "kartesio": {
     "description": "Calculate best fit curves with experimental points using regression or neural networks",
     "name": "kartesio",
@@ -1434,7 +1464,7 @@
     "repo_path": "libraries/kasync"
   },
   "kate": {
-    "description": "Modern text editor built on the KDE Frameworks and Qt",
+    "description": "Advanced text editor",
     "name": "kate",
     "project_path": "kde/applications/kate",
     "repo_path": "utilities/kate"
@@ -1733,11 +1763,29 @@
     "project_path": "kde/workspace/kde-gtk-config",
     "repo_path": "plasma/kde-gtk-config"
   },
+  "kde-gui-test": {
+    "description": "Tool for emulating user behaviour for energy consumption measurements",
+    "name": "kde-gui-test",
+    "project_path": "playground/sdk/kde-gui-test",
+    "repo_path": "sdk/kde-gui-test"
+  },
   "kde-inotify-survey": {
     "description": "Tooling for monitoring inotify limits and informing the user when they have been or about to be reached.",
     "name": "kde-inotify-survey",
     "project_path": "extragear/system/kde-inotify-survey",
     "repo_path": "system/kde-inotify-survey"
+  },
+  "kde-linux": {
+    "description": "",
+    "name": "kde-linux",
+    "project_path": "kde-linux/kde-linux",
+    "repo_path": "kde-linux/kde-linux"
+  },
+  "kde-linux-packages": {
+    "description": "",
+    "name": "kde-linux-packages",
+    "project_path": "kde-linux/kde-linux-packages",
+    "repo_path": "kde-linux/kde-linux-packages"
   },
   "kde-nomodeset": {
     "description": "Safe Graphics Mode Startup Utility",
@@ -2386,6 +2434,12 @@
     "name": "kdsoap-ws-discovery-client",
     "project_path": "playground/libs/kdsoap-ws-discovery-client",
     "repo_path": "libraries/kdsoap-ws-discovery-client"
+  },
+  "kecolab": {
+    "description": "Measuring Energy Usage Remotely with Online Portal",
+    "name": "kecolab",
+    "project_path": "playground/sdk/kecolab",
+    "repo_path": "sdk/kecolab"
   },
   "keditbookmarks": {
     "description": "Bookmarks editor",
@@ -3245,6 +3299,12 @@
     "project_path": "kde/kdenetwork/konversation",
     "repo_path": "network/konversation"
   },
+  "konvex": {
+    "description": "3D Model Viewer",
+    "name": "konvex",
+    "project_path": "playground/base/konvex",
+    "repo_path": "graphics/konvex"
+  },
   "kooka": {
     "description": "Scanning application and libkscan library",
     "name": "kooka",
@@ -3449,6 +3509,12 @@
     "project_path": "frameworks/kpty",
     "repo_path": "frameworks/kpty"
   },
+  "kpublicalerts": {
+    "description": "Public emergency and weather alert notification.",
+    "name": "kpublicalerts",
+    "project_path": "playground/utils/kpublicalerts",
+    "repo_path": "utilities/kpublicalerts"
+  },
   "kpublictransport": {
     "description": "Library to assist with accessing public transport timetables and other data",
     "name": "kpublictransport",
@@ -3494,7 +3560,7 @@
   "krdp": {
     "description": "Library and examples for creating an RDP server.",
     "name": "krdp",
-    "project_path": "playground/libs/krdp",
+    "project_path": "kde/workspace/krdp",
     "repo_path": "plasma/krdp"
   },
   "krecipes": {
@@ -3563,6 +3629,12 @@
     "project_path": "extragear/graphics/krita-extensions/krita-analogies",
     "repo_path": "unmaintained/krita-analogies"
   },
+  "krita-ci-utilities": {
+    "description": "CI/CD utilities for Krita builds",
+    "name": "krita-ci-utilities",
+    "project_path": "playground/packaging/krita-ci-utilities",
+    "repo_path": "packaging/krita-ci-utilities"
+  },
   "krita-cimg": {
     "description": "Extension based on the cimg library. http://cimg.sourceforge.net/",
     "name": "krita-cimg",
@@ -3574,6 +3646,12 @@
     "name": "krita-ctlbrush",
     "project_path": "extragear/graphics/krita-extensions/krita-ctlbrush",
     "repo_path": "unmaintained/krita-ctlbrush"
+  },
+  "krita-deps-management": {
+    "description": "Dependencies management for Krita builds across the various platforms it supports",
+    "name": "krita-deps-management",
+    "project_path": "playground/packaging/krita-deps-management",
+    "repo_path": "packaging/krita-deps-management"
   },
   "krita-deskew": {
     "description": "Deskew rotates an image such that text is straight, which is useful when dealing with scanned images.",
@@ -3668,7 +3746,7 @@
   "ksanecore": {
     "description": "Library providing logic to interface scanners",
     "name": "ksanecore",
-    "project_path": "libraries/ksanecore",
+    "project_path": "extragear/libraries/ksanecore",
     "repo_path": "libraries/ksanecore"
   },
   "ksaneplugin": {
@@ -4106,7 +4184,7 @@
   "kunifiedpush": {
     "description": "UnifiedPush client components",
     "name": "kunifiedpush",
-    "project_path": "libraries/kunifiedpush",
+    "project_path": "playground/libraries/kunifiedpush",
     "repo_path": "libraries/kunifiedpush"
   },
   "kunitconversion": {
@@ -4218,10 +4296,16 @@
     "repo_path": "frameworks/kwidgetsaddons"
   },
   "kwin": {
-    "description": "Easy to use, but flexible, X Window Manager and Wayland Compositor",
+    "description": "Easy to use, but flexible, Wayland Compositor",
     "name": "kwin",
     "project_path": "kde/workspace/kwin",
     "repo_path": "plasma/kwin"
+  },
+  "kwin-x11": {
+    "description": "Easy to use, but flexible, X Window Manager",
+    "name": "kwin-x11",
+    "project_path": "kde/workspace/kwin-x11",
+    "repo_path": "plasma/kwin-x11"
   },
   "kwindowsaddons": {
     "description": "Runtime components for KDE software on Windows",
@@ -4850,7 +4934,7 @@
   "mimetreeparser": {
     "description": "Parser for MIME trees",
     "name": "mimetreeparser",
-    "project_path": "playground/pim/mimetreeparser",
+    "project_path": "kde/pim/mimetreeparser",
     "repo_path": "pim/mimetreeparser"
   },
   "ministro": {
@@ -5453,6 +5537,12 @@
     "project_path": "kde/workspace/plasma-integration",
     "repo_path": "plasma/plasma-integration"
   },
+  "plasma-keyboard": {
+    "description": "Virtual Keyboard for Qt based desktops",
+    "name": "plasma-keyboard",
+    "project_path": "playground/workspace/plasma-keyboard",
+    "repo_path": "plasma/plasma-keyboard"
+  },
   "plasma-lionmail": {
     "description": "A Plasma widget displaying new and important email",
     "name": "plasma-lionmail",
@@ -5627,6 +5717,12 @@
     "project_path": "kde/workspace/plasma-vault",
     "repo_path": "plasma/plasma-vault"
   },
+  "plasma-wallpaper-updater": {
+    "description": "Tooling to assist with updating wallpapers across Plasma repositories",
+    "name": "plasma-wallpaper-updater",
+    "project_path": "plasma/plasma-wallpaper-updater",
+    "repo_path": "plasma/plasma-wallpaper-updater"
+  },
   "plasma-wayland-protocols": {
     "description": "Plasma-specific protocols for Wayland",
     "name": "plasma-wayland-protocols",
@@ -5730,7 +5826,7 @@
     "repo_path": "plasma/powerdevil"
   },
   "powerplant": {
-    "description": "A verry WIP app to keep track of your plant's needs",
+    "description": "An app to keep track of your plants' needs",
     "name": "powerplant",
     "project_path": "playground/utils/powerplant",
     "repo_path": "utilities/powerplant"
@@ -5802,7 +5898,7 @@
     "repo_path": "libraries/pykde5"
   },
   "qca": {
-    "description": "Qt Cryptographic Architecture \u2014 straightforward cross-platform crypto API",
+    "description": "Qt Cryptographic Architecture - straightforward cross-platform crypto API",
     "name": "qca",
     "project_path": "kdesupport/qca",
     "repo_path": "libraries/qca"
@@ -5909,6 +6005,12 @@
     "project_path": "playground/devtools/quanta",
     "repo_path": "unmaintained/quanta"
   },
+  "qxmpp": {
+    "description": "C++ XMPP client and server library",
+    "name": "qxmpp",
+    "project_path": "playground/libs/qxmpp",
+    "repo_path": "libraries/qxmpp"
+  },
   "qyoto": {
     "description": ".NET/Mono bindings for the Qt libraries.",
     "name": "qyoto",
@@ -5966,7 +6068,7 @@
   "repo-management": {
     "description": "This project contains the hooks and scripts that power the KDE git infrastructure.",
     "name": "repo-management",
-    "project_path": "repo-management",
+    "project_path": "sysadmin/repo-management",
     "repo_path": "sysadmin/repo-management"
   },
   "ring-kde": {
@@ -6166,6 +6268,12 @@
     "name": "smokeqt",
     "project_path": "kde/kdebindings/smoke/smokeqt",
     "repo_path": "unmaintained/smokeqt"
+  },
+  "snap-kcm": {
+    "description": "KCM allowing changing permissions which have granted to installed Snap applications.",
+    "name": "snap-kcm",
+    "project_path": "kdereview/snap-kcm",
+    "repo_path": "plasma/snap-kcm"
   },
   "snap-kf5": {
     "description": "Content Snap for Qt5 and KF5",
@@ -6413,6 +6521,12 @@
     "project_path": "sysadmin/bugzilla-bot",
     "repo_path": "sysadmin/bugzilla-bot"
   },
+  "sysadmin-ci-images": {
+    "description": "Images for use on the KDE CI System",
+    "name": "sysadmin-ci-images",
+    "project_path": "sysadmin/ci-images",
+    "repo_path": "sysadmin/ci-images"
+  },
   "sysadmin-ci-management": {
     "description": "Contains all management jobs and other data needed to run our Gitlab CI infrastructure.",
     "name": "sysadmin-ci-management",
@@ -6617,6 +6731,12 @@
     "project_path": "sysadmin/neon-sftp-bridge",
     "repo_path": "sysadmin/neon-sftp-bridge"
   },
+  "sysadmin-neon-tooling": {
+    "description": "",
+    "name": "sysadmin-neon-tooling",
+    "project_path": "sysadmin/neon-tooling",
+    "repo_path": "sysadmin/neon-tooling"
+  },
   "sysadmin-projects-api": {
     "description": "",
     "name": "sysadmin-projects-api",
@@ -6791,6 +6911,12 @@
     "project_path": "kde/kdesdk/umbrello",
     "repo_path": "sdk/umbrello"
   },
+  "union": {
+    "description": "A Qt style supporting both QtQuick and QtWidgets.",
+    "name": "union",
+    "project_path": "playground/workspace/union",
+    "repo_path": "plasma/union"
+  },
   "upnp-lib-qt": {
     "description": "UPnP wrapper for Qt",
     "name": "upnp-lib-qt",
@@ -6852,7 +6978,7 @@
     "repo_path": null
   },
   "websites-20years-kde-org": {
-    "description": "Website for the \"20 years of KDE\" book \u2014 20years.kde.org",
+    "description": "Website for the \"20 years of KDE\" book - 20years.kde.org",
     "name": "websites-20years-kde-org",
     "project_path": "websites/20years-kde-org",
     "repo_path": "websites/20years-kde-org"
@@ -6918,61 +7044,61 @@
     "repo_path": "websites/akademy-registration"
   },
   "websites-akademy-schedule-kde-org": {
-    "description": "Website for the Akademy schedule \u2014 akademy-schedule.kde.org",
+    "description": "Website for the Akademy schedule - akademy-schedule.kde.org",
     "name": "websites-akademy-schedule-kde-org",
     "project_path": "websites/akademy-schedule-kde-org",
     "repo_path": "websites/akademy-schedule-kde-org"
   },
   "websites-akademy2004-kde-org": {
-    "description": "Static copy of the 2004 Conference (Akademy) website \u2014 conference2004.kde.org",
+    "description": "Static copy of the 2004 Conference (Akademy) website - conference2004.kde.org",
     "name": "websites-akademy2004-kde-org",
     "project_path": "websites/akademy2004-kde-org",
     "repo_path": "websites/akademy2004-kde-org"
   },
   "websites-akademy2005-kde-org": {
-    "description": "Static copy of the 2005 Conference (Akademy) website \u2014 conference2005.kde.org",
+    "description": "Static copy of the 2005 Conference (Akademy) website - conference2005.kde.org",
     "name": "websites-akademy2005-kde-org",
     "project_path": "websites/akademy2005-kde-org",
     "repo_path": "websites/akademy2005-kde-org"
   },
   "websites-akademy2006-kde-org": {
-    "description": "Static copy of the Akademy 2006 website \u2014 akademy2006.kde.org",
+    "description": "Static copy of the Akademy 2006 website - akademy2006.kde.org",
     "name": "websites-akademy2006-kde-org",
     "project_path": "websites/akademy2006-kde-org",
     "repo_path": "websites/akademy2006-kde-org"
   },
   "websites-akademy2007-kde-org": {
-    "description": "Static copy of the Akademy 2007 website \u2014 akademy2007.kde.org",
+    "description": "Static copy of the Akademy 2007 website - akademy2007.kde.org",
     "name": "websites-akademy2007-kde-org",
     "project_path": "websites/akademy2007-kde-org",
     "repo_path": "websites/akademy2007-kde-org"
   },
   "websites-akademy2008-kde-org": {
-    "description": "Static copy of the Akademy 2008 website \u2014 akademy2008.kde.org",
+    "description": "Static copy of the Akademy 2008 website - akademy2008.kde.org",
     "name": "websites-akademy2008-kde-org",
     "project_path": "websites/akademy2008-kde-org",
     "repo_path": "websites/akademy2008-kde-org"
   },
   "websites-akademy2009-kde-org": {
-    "description": "Static copy of the Akademy 2009 website \u2014 akademy2009.kde.org",
+    "description": "Static copy of the Akademy 2009 website - akademy2009.kde.org",
     "name": "websites-akademy2009-kde-org",
     "project_path": "websites/akademy2009-kde-org",
     "repo_path": "websites/akademy2009-kde-org"
   },
   "websites-akademy2010-kde-org": {
-    "description": "Static copy of the Akademy 2010 website \u2014 akademy2010.kde.org",
+    "description": "Static copy of the Akademy 2010 website - akademy2010.kde.org",
     "name": "websites-akademy2010-kde-org",
     "project_path": "websites/akademy2010-kde-org",
     "repo_path": "websites/akademy2010-kde-org"
   },
   "websites-akademy2012-kde-org": {
-    "description": "Static copy of the Akademy 2012 website \u2014 akademy2012.kde.org",
+    "description": "Static copy of the Akademy 2012 website - akademy2012.kde.org",
     "name": "websites-akademy2012-kde-org",
     "project_path": "websites/akademy2012-kde-org",
     "repo_path": "websites/akademy2012-kde-org"
   },
   "websites-amarok-kde-org": {
-    "description": "Static copy of the Amarok website \u2014 amarok.kde.org",
+    "description": "Static copy of the Amarok website - amarok.kde.org",
     "name": "websites-amarok-kde-org",
     "project_path": "websites/amarok-kde-org",
     "repo_path": "websites/amarok-kde-org"
@@ -6984,7 +7110,7 @@
     "repo_path": "websites/api-kde-org"
   },
   "websites-apps-kde-org": {
-    "description": "KDE application catalog \u2014 apps.kde.org",
+    "description": "KDE application catalog - apps.kde.org",
     "name": "websites-apps-kde-org",
     "project_path": "websites/apps-kde-org",
     "repo_path": "websites/apps-kde-org"
@@ -7008,7 +7134,7 @@
     "repo_path": "websites/autoconfig-kde-org"
   },
   "websites-ballot-kde-org": {
-    "description": "Ugly, simple, and very secure voting system \u2014 ballot.kde.org",
+    "description": "Ugly, simple, and very secure voting system - ballot.kde.org",
     "name": "websites-ballot-kde-org",
     "project_path": "websites/ballot-kde-org",
     "repo_path": "websites/ballot-kde-org"
@@ -7020,13 +7146,13 @@
     "repo_path": "websites/blogs-kde-org"
   },
   "websites-br-qtcon-org": {
-    "description": "Website for QtCon Brazil \u2014 br.qtcon.org",
+    "description": "Website for QtCon Brazil - br.qtcon.org",
     "name": "websites-br-qtcon-org",
     "project_path": "websites/br-qtcon-org",
     "repo_path": "websites/br-qtcon-org"
   },
   "websites-bugs-kde-org": {
-    "description": "Modified sources for the KDE Bugtracking System \u2014 bugs.kde.org",
+    "description": "Modified sources for the KDE Bugtracking System - bugs.kde.org",
     "name": "websites-bugs-kde-org",
     "project_path": "websites/bugs-kde-org",
     "repo_path": "websites/bugs-kde-org"
@@ -7038,7 +7164,7 @@
     "repo_path": "websites/buzz-kde-org"
   },
   "websites-calligra-org": {
-    "description": "Website for Calligra \u2014 calligra.org",
+    "description": "Website for Calligra - calligra.org",
     "name": "websites-calligra-org",
     "project_path": "websites/calligra-org",
     "repo_path": "websites/calligra-org"
@@ -7050,7 +7176,7 @@
     "repo_path": "websites/camp-kde-org"
   },
   "websites-cantor-kde-org": {
-    "description": "Website for Cantor \u2014 cantor.kde.org",
+    "description": "Website for Cantor - cantor.kde.org",
     "name": "websites-cantor-kde-org",
     "project_path": "websites/cantor-kde-org",
     "repo_path": "websites/cantor-kde-org"
@@ -7062,55 +7188,55 @@
     "repo_path": "websites/capacity"
   },
   "websites-choqok-kde-org": {
-    "description": "Website for Choqok \u2014 choqok.kde.org",
+    "description": "Website for Choqok - choqok.kde.org",
     "name": "websites-choqok-kde-org",
     "project_path": "websites/choqok-kde-org",
     "repo_path": "websites/choqok-kde-org"
   },
   "websites-commit-digest-kde-org": {
-    "description": "Static copy of the KDE Commit Digest \u2014 commit-digest.kde.org",
+    "description": "Static copy of the KDE Commit Digest - commit-digest.kde.org",
     "name": "websites-commit-digest-kde-org",
     "project_path": "websites/commit-digest-kde-org",
     "repo_path": "websites/commit-digest-kde-org"
   },
   "websites-conf-kde-in": {
-    "description": "Website for the KDE India Conference \u2014 conf.kde.in",
+    "description": "Website for the KDE India Conference - conf.kde.in",
     "name": "websites-conf-kde-in",
     "project_path": "websites/conf-kde-in",
     "repo_path": "websites/conf-kde-in"
   },
   "websites-conf-kde-org": {
-    "description": "Conference planning and management system \u2014 conf.kde.org",
+    "description": "Conference planning and management system - conf.kde.org",
     "name": "websites-conf-kde-org",
     "project_path": "websites/conf-kde-org",
     "repo_path": "websites/conf-kde-org"
   },
   "websites-conf-qtcon-org": {
-    "description": "Static archive of the QtCon Conference Organization system \u2014 conf.qtcon.org",
+    "description": "Static archive of the QtCon Conference Organization system - conf.qtcon.org",
     "name": "websites-conf-qtcon-org",
     "project_path": "websites/conf-qtcon-org",
     "repo_path": "websites/conf-qtcon-org"
   },
   "websites-contents-neon-kde-org": {
-    "description": "REST API for Neon package contents queries \u2014 contents.neon.kde.org",
+    "description": "REST API for Neon package contents queries - contents.neon.kde.org",
     "name": "websites-contents-neon-kde-org",
     "project_path": "websites/contents-neon-kde-org",
     "repo_path": "websites/contents-neon-kde-org"
   },
   "websites-cutehmi-kde-org": {
-    "description": "Website for CuteHMI \u2014 cutehmi.kde.org",
+    "description": "Website for CuteHMI - cutehmi.kde.org",
     "name": "websites-cutehmi-kde-org",
     "project_path": "websites/cutehmi-kde-org",
     "repo_path": "websites/cutehmi-kde-org"
   },
   "websites-desktopsummit-org": {
-    "description": "Static copy of the DesktopSummit website \u2014 desktopsummit.org",
+    "description": "Static copy of the DesktopSummit website - desktopsummit.org",
     "name": "websites-desktopsummit-org",
     "project_path": "websites/desktopsummit-org",
     "repo_path": "websites/desktopsummit-org"
   },
   "websites-digikam-org": {
-    "description": "Website for digiKam \u2014 digikam.org",
+    "description": "Website for digiKam - digikam.org",
     "name": "websites-digikam-org",
     "project_path": "websites/digikam-org",
     "repo_path": "websites/digikam-org"
@@ -7122,7 +7248,7 @@
     "repo_path": "websites/discover-kde-org"
   },
   "websites-docs-glaxnimate-org": {
-    "description": "Documentation website for Glaxnimate \u2014 docs.glaxnimate.org",
+    "description": "Documentation website for Glaxnimate - docs.glaxnimate.org",
     "name": "websites-docs-glaxnimate-org",
     "project_path": "websites/docs-glaxnimate-org",
     "repo_path": "websites/docs-glaxnimate-org"
@@ -7140,7 +7266,7 @@
     "repo_path": "websites/dot-kde-org"
   },
   "websites-download-kde-org": {
-    "description": "MirrorBrain configuration, templates, etc. \u2014 download.kde.org",
+    "description": "MirrorBrain configuration, templates, etc. - download.kde.org",
     "name": "websites-download-kde-org",
     "project_path": "websites/download-kde-org",
     "repo_path": "websites/download-kde-org"
@@ -7152,25 +7278,31 @@
     "repo_path": "websites/eco-kde-org"
   },
   "websites-edu-kde-org": {
-    "description": "Website for KDE's educational software \u2014 edu.kde.org",
+    "description": "Website for KDE's educational software - edu.kde.org",
     "name": "websites-edu-kde-org",
     "project_path": "websites/edu-kde-org",
     "repo_path": "websites/edu-kde-org"
   },
   "websites-elisa-kde-org": {
-    "description": "Website for Elisa \u2014 elisa.kde.org",
+    "description": "Website for Elisa - elisa.kde.org",
     "name": "websites-elisa-kde-org",
     "project_path": "websites/elisa-kde-org",
     "repo_path": "websites/elisa-kde-org"
   },
+  "websites-endof10-org": {
+    "description": "Website for the EndOf10 initative",
+    "name": "websites-endof10-org",
+    "project_path": "websites/endof10-org",
+    "repo_path": "websites/endof10-org"
+  },
   "websites-ev-kde-org": {
-    "description": "Website for KDE e.V. \u2014 ev.kde.org",
+    "description": "Website for KDE e.V. - ev.kde.org",
     "name": "websites-ev-kde-org",
     "project_path": "websites/ev-kde-org",
     "repo_path": "websites/ev-kde-org"
   },
   "websites-events-kde-org": {
-    "description": "Conference and sprint attendance management system \u2014 events.kde.org",
+    "description": "Conference and sprint attendance management system - events.kde.org",
     "name": "websites-events-kde-org",
     "project_path": "websites/events-kde-org",
     "repo_path": "websites/events-kde-org"
@@ -7188,13 +7320,13 @@
     "repo_path": "websites/extensions-krita-org"
   },
   "websites-falkon-org": {
-    "description": "Website for Falkon \u2014 falkon.org",
+    "description": "Website for Falkon - falkon.org",
     "name": "websites-falkon-org",
     "project_path": "websites/falkon-org",
     "repo_path": "websites/falkon-org"
   },
   "websites-forum-kde-org": {
-    "description": "KDE Community Forum version of phpBB \u2014 forum.kde.org",
+    "description": "KDE Community Forum version of phpBB - forum.kde.org",
     "name": "websites-forum-kde-org",
     "project_path": "websites/forum-kde-org",
     "repo_path": "websites/forum-kde-org"
@@ -7212,13 +7344,13 @@
     "repo_path": "websites/fosdem-2021-website-static"
   },
   "websites-fr-kde-org": {
-    "description": "Website for the French KDE community \u2014 fr.kde.org",
+    "description": "Website for the French KDE community - fr.kde.org",
     "name": "websites-fr-kde-org",
     "project_path": "websites/fr-kde-org",
     "repo_path": "websites/fr-kde-org"
   },
   "websites-freebsd-kde-org": {
-    "description": "Website of the KDE/FreeBSD initiative \u2014 freebsd.kde.org",
+    "description": "Website of the KDE/FreeBSD initiative - freebsd.kde.org",
     "name": "websites-freebsd-kde-org",
     "project_path": "websites/freebsd-kde-org",
     "repo_path": "websites/freebsd-kde-org"
@@ -7230,13 +7362,13 @@
     "repo_path": "websites/fund-krita-org"
   },
   "websites-games-kde-org": {
-    "description": "Website for KDE's games \u2014 games.kde.org",
+    "description": "Website for KDE's games - games.kde.org",
     "name": "websites-games-kde-org",
     "project_path": "websites/games-kde-org",
     "repo_path": "websites/games-kde-org"
   },
   "websites-gcompris-net": {
-    "description": "Website for GCompris \u2014 gcompris.net",
+    "description": "Website for GCompris - gcompris.net",
     "name": "websites-gcompris-net",
     "project_path": "websites/gcompris-net",
     "repo_path": "websites/gcompris-net"
@@ -7248,7 +7380,7 @@
     "repo_path": "websites/ghostwriter-kde-org"
   },
   "websites-glaxnimate-org": {
-    "description": "Website for Glaxnimate \u2014 glaxnimate.org",
+    "description": "Website for Glaxnimate - glaxnimate.org",
     "name": "websites-glaxnimate-org",
     "project_path": "websites/glaxnimate-org",
     "repo_path": "websites/glaxnimate-org"
@@ -7290,7 +7422,7 @@
     "repo_path": "websites/hugo-kde-template"
   },
   "websites-i-kaidan-im": {
-    "description": "Easy XMPP invitation landing page for Kaidan \u2014 i.kaidan.im",
+    "description": "Easy XMPP invitation landing page for Kaidan - i.kaidan.im",
     "name": "websites-i-kaidan-im",
     "project_path": "websites/i-kaidan-im",
     "repo_path": "websites/i-kaidan-im"
@@ -7302,13 +7434,13 @@
     "repo_path": "websites/identity-kde-org"
   },
   "websites-inqlude": {
-    "description": "Tools for Inqlude, the Qt library archive \u2014 inqlude.org",
+    "description": "Tools for Inqlude, the Qt library archive - inqlude.org",
     "name": "websites-inqlude",
     "project_path": "websites/inqlude",
     "repo_path": "websites/inqlude"
   },
   "websites-inqlude-data": {
-    "description": "Metadata for Inqlude, the Qt library archive \u2014 inqlude.org",
+    "description": "Metadata for Inqlude, the Qt library archive - inqlude.org",
     "name": "websites-inqlude-data",
     "project_path": "websites/inqlude-data",
     "repo_path": "websites/inqlude-data"
@@ -7326,49 +7458,49 @@
     "repo_path": "websites/jointhegame-kde-org"
   },
   "websites-jp-kde-org": {
-    "description": "Website for the Japanese KDE community / \u65e5\u672c KDE \u30e6\u30fc\u30b6\u4f1a\u306e\u30a6\u30a7\u30d6\u30b5\u30a4\u30c8 \u2014 jp.kde.org",
+    "description": "Website for the Japanese KDE community / \u65e5\u672c KDE \u30e6\u30fc\u30b6\u4f1a\u306e\u30a6\u30a7\u30d6\u30b5\u30a4\u30c8 - jp.kde.org",
     "name": "websites-jp-kde-org",
     "project_path": "websites/jp-kde-org",
     "repo_path": "websites/jp-kde-org"
   },
   "websites-juk-kde-org": {
-    "description": "Website for JuK \u2014 juk.kde.org",
+    "description": "Website for JuK - juk.kde.org",
     "name": "websites-juk-kde-org",
     "project_path": "websites/juk-kde-org",
     "repo_path": "websites/juk-kde-org"
   },
   "websites-kaidan-im": {
-    "description": "Website for Kaidan \u2014 kaidan.im",
+    "description": "Website for Kaidan - kaidan.im",
     "name": "websites-kaidan-im",
     "project_path": "websites/kaidan-im",
     "repo_path": "websites/kaidan-im"
   },
   "websites-kate-editor-org": {
-    "description": "Website for Kate \u2014 kate-editor.org",
+    "description": "Website for Kate - kate-editor.org",
     "name": "websites-kate-editor-org",
     "project_path": "websites/kate-editor-org",
     "repo_path": "websites/kate-editor-org"
   },
   "websites-kde-china-org": {
-    "description": "Website for the Chinese KDE community \u2014 kde-china.org",
+    "description": "Website for the Chinese KDE community - kde-china.org",
     "name": "websites-kde-china-org",
     "project_path": "websites/kde-china-org",
     "repo_path": "websites/kde-china-org"
   },
   "websites-kde-in": {
-    "description": "Website for the Indian KDE community \u2014 kde.in",
+    "description": "Website for the Indian KDE community - kde.in",
     "name": "websites-kde-in",
     "project_path": "websites/kde-in",
     "repo_path": "websites/kde-in"
   },
   "websites-kde-org": {
-    "description": "Main KDE Community website \u2014 kde.org",
+    "description": "Main KDE Community website - kde.org",
     "name": "websites-kde-org",
     "project_path": "websites/kde-org",
     "repo_path": "websites/kde-org"
   },
   "websites-kde-org-announcements-releases": {
-    "description": "Website for KDE.org release announcements \u2014 kde.org/announcements/releases",
+    "description": "Website for KDE.org release announcements - kde.org/announcements/releases",
     "name": "websites-kde-org-announcements-releases",
     "project_path": "websites/kde-org-announcements-releases",
     "repo_path": "websites/kde-org-announcements-releases"
@@ -7380,25 +7512,25 @@
     "repo_path": "websites/kde-org-applications-extractor"
   },
   "websites-kde-ru": {
-    "description": "Website for the Russian KDE community \u2014 kde.ru",
+    "description": "Website for the Russian KDE community - kde.ru",
     "name": "websites-kde-ru",
     "project_path": "websites/kde-ru",
     "repo_path": "websites/kde-ru"
   },
   "websites-kdeconnect-kde-org": {
-    "description": "Website for KDE Connect \u2014 kdeconnect.kde.org",
+    "description": "Website for KDE Connect - kdeconnect.kde.org",
     "name": "websites-kdeconnect-kde-org",
     "project_path": "websites/kdeconnect-kde-org",
     "repo_path": "websites/kdeconnect-kde-org"
   },
   "websites-kdeitalia-it": {
-    "description": "Website for the Italian KDE community \u2014 kdeitalia.it",
+    "description": "Website for the Italian KDE community - kdeitalia.it",
     "name": "websites-kdeitalia-it",
     "project_path": "websites/kdeitalia-it",
     "repo_path": "websites/kdeitalia-it"
   },
   "websites-kdemail-net": {
-    "description": "E-mail service for KDE contributors \u2014 kdemail.net",
+    "description": "E-mail service for KDE contributors - kdemail.net",
     "name": "websites-kdemail-net",
     "project_path": "websites/kdemail-net",
     "repo_path": "websites/kdemail-net"
@@ -7410,13 +7542,13 @@
     "repo_path": "websites/kdenlive-org"
   },
   "websites-kdesrc-build-kde-org": {
-    "description": "Website for kdesrc-build \u2014 kdesrc-build.kde.org",
+    "description": "Website for kdesrc-build - kdesrc-build.kde.org",
     "name": "websites-kdesrc-build-kde-org",
     "project_path": "websites/kdesrc-build-kde-org",
     "repo_path": "websites/kdesrc-build-kde-org"
   },
   "websites-kdetalk-net": {
-    "description": "Website for KDE's Jabber server \u2014 kdetalk.net",
+    "description": "Website for KDE's Jabber server - kdetalk.net",
     "name": "websites-kdetalk-net",
     "project_path": "websites/kdetalk-net",
     "repo_path": "websites/kdetalk-net"
@@ -7440,19 +7572,19 @@
     "repo_path": "websites/kgeotag-kde-org"
   },
   "websites-kid3-kde-org": {
-    "description": "Website for Kid3 \u2014 kid3.kde.org",
+    "description": "Website for Kid3 - kid3.kde.org",
     "name": "websites-kid3-kde-org",
     "project_path": "websites/kid3-kde-org",
     "repo_path": "websites/kid3-kde-org"
   },
   "websites-kirogi-org": {
-    "description": "Website for Kirogi \u2014 kirogi.org",
+    "description": "Website for Kirogi - kirogi.org",
     "name": "websites-kirogi-org",
     "project_path": "websites/kirogi-org",
     "repo_path": "websites/kirogi-org"
   },
   "websites-kmymoney-org": {
-    "description": "Website for KMyMoney \u2014 kmymoney.org",
+    "description": "Website for KMyMoney - kmymoney.org",
     "name": "websites-kmymoney-org",
     "project_path": "websites/kmymoney-org",
     "repo_path": "websites/kmymoney-org"
@@ -7464,31 +7596,31 @@
     "repo_path": "websites/konqueror-org"
   },
   "websites-konsole-kde-org": {
-    "description": "Website for Konsole \u2014 konsole.kde.org",
+    "description": "Website for Konsole - konsole.kde.org",
     "name": "websites-konsole-kde-org",
     "project_path": "websites/konsole-kde-org",
     "repo_path": "websites/konsole-kde-org"
   },
   "websites-kontact-kde-org": {
-    "description": "Website for Kontact \u2014 kontact.kde.org",
+    "description": "Website for Kontact - kontact.kde.org",
     "name": "websites-kontact-kde-org",
     "project_path": "websites/kontact-kde-org",
     "repo_path": "websites/kontact-kde-org"
   },
   "websites-konversation-kde-org": {
-    "description": "Website for Konversation \u2014 konversation.kde.org",
+    "description": "Website for Konversation - konversation.kde.org",
     "name": "websites-konversation-kde-org",
     "project_path": "websites/konversation-kde-org",
     "repo_path": "websites/konversation-kde-org"
   },
   "websites-kpdf-kde-org": {
-    "description": "Static copy of the KPDF website \u2014 kpdf.kde.org",
+    "description": "Static copy of the KPDF website - kpdf.kde.org",
     "name": "websites-kpdf-kde-org",
     "project_path": "websites/kpdf-kde-org",
     "repo_path": "websites/kpdf-kde-org"
   },
   "websites-kphotoalbum-org": {
-    "description": "Website for KPhotoAlbum \u2014 kphotoalbum.org",
+    "description": "Website for KPhotoAlbum - kphotoalbum.org",
     "name": "websites-kphotoalbum-org",
     "project_path": "websites/kphotoalbum-org",
     "repo_path": "websites/kphotoalbum-org"
@@ -7506,31 +7638,31 @@
     "repo_path": "websites/krita-org-theme"
   },
   "websites-krusader-org": {
-    "description": "Website for Krusader \u2014 krusader.org",
+    "description": "Website for Krusader - krusader.org",
     "name": "websites-krusader-org",
     "project_path": "websites/krusader-org",
     "repo_path": "websites/krusader-org"
   },
   "websites-kst-plot-kde-org": {
-    "description": "Static copy of the Kst Plot website \u2014 kst-plot.kde.org",
+    "description": "Static copy of the Kst Plot website - kst-plot.kde.org",
     "name": "websites-kst-plot-kde-org",
     "project_path": "websites/kst-plot-kde-org",
     "repo_path": "websites/kst-plot-kde-org"
   },
   "websites-kstars-kde-org": {
-    "description": "Website for KStars \u2014 kstars.kde.org",
+    "description": "Website for KStars - kstars.kde.org",
     "name": "websites-kstars-kde-org",
     "project_path": "websites/kstars-kde-org",
     "repo_path": "websites/kstars-kde-org"
   },
   "websites-kube-kde-org": {
-    "description": "Website for Kube \u2014 kube-project.com",
+    "description": "Website for Kube - kube-project.com",
     "name": "websites-kube-kde-org",
     "project_path": "websites/kube-kde-org",
     "repo_path": "websites/kube-kde-org"
   },
   "websites-lakademy-kde-org": {
-    "description": "Website for LaKademy \u2014 lakademy.kde.org",
+    "description": "Website for LaKademy - lakademy.kde.org",
     "name": "websites-lakademy-kde-org",
     "project_path": "websites/lakademy-kde-org",
     "repo_path": "websites/lakademy-kde-org"
@@ -7548,13 +7680,13 @@
     "repo_path": "websites/lokalize-kde-org"
   },
   "websites-manifesto-kde-org": {
-    "description": "Website for the KDE Manifesto \u2014 manifesto.kde.org",
+    "description": "Website for the KDE Manifesto - manifesto.kde.org",
     "name": "websites-manifesto-kde-org",
     "project_path": "websites/manifesto-kde-org",
     "repo_path": "websites/manifesto-kde-org"
   },
   "websites-marble-kde-org": {
-    "description": "Website for Marble \u2014 marble.kde.org",
+    "description": "Website for Marble - marble.kde.org",
     "name": "websites-marble-kde-org",
     "project_path": "websites/marble-kde-org",
     "repo_path": "websites/marble-kde-org"
@@ -7590,13 +7722,13 @@
     "repo_path": "websites/mentorship-kde-org"
   },
   "websites-minuet-kde-org": {
-    "description": "Website for Minuet \u2014 minuet.kde.org",
+    "description": "Website for Minuet - minuet.kde.org",
     "name": "websites-minuet-kde-org",
     "project_path": "websites/minuet-kde-org",
     "repo_path": "websites/minuet-kde-org"
   },
   "websites-multimedia-kde-org": {
-    "description": "Website for KDE's multimedia software \u2014 multimedia.kde.org",
+    "description": "Website for KDE's multimedia software - multimedia.kde.org",
     "name": "websites-multimedia-kde-org",
     "project_path": "websites/multimedia-kde-org",
     "repo_path": "websites/multimedia-kde-org"
@@ -7620,7 +7752,7 @@
     "repo_path": "websites/necessitas-kde-org"
   },
   "websites-neon-kde-org": {
-    "description": "Website for Neon \u2014 neon.kde.org",
+    "description": "Website for Neon - neon.kde.org",
     "name": "websites-neon-kde-org",
     "project_path": "websites/neon-kde-org",
     "repo_path": "websites/neon-kde-org"
@@ -7632,7 +7764,7 @@
     "repo_path": "websites/neverland"
   },
   "websites-okular-kde-org": {
-    "description": "Website for Okular \u2014 okular.kde.org",
+    "description": "Website for Okular - okular.kde.org",
     "name": "websites-okular-kde-org",
     "project_path": "websites/okular-kde-org",
     "repo_path": "websites/okular-kde-org"
@@ -7644,13 +7776,13 @@
     "repo_path": "websites/paste-kde-org"
   },
   "websites-pe-kde-org": {
-    "description": "Website for the Peruvian KDE community \u2014 pe.kde.org",
+    "description": "Website for the Peruvian KDE community - pe.kde.org",
     "name": "websites-pe-kde-org",
     "project_path": "websites/pe-kde-org",
     "repo_path": "websites/pe-kde-org"
   },
   "websites-peruse-kde-org": {
-    "description": "Website for Peruse \u2014 peruse.kde.org",
+    "description": "Website for Peruse - peruse.kde.org",
     "name": "websites-peruse-kde-org",
     "project_path": "websites/peruse-kde-org",
     "repo_path": "websites/peruse-kde-org"
@@ -7662,13 +7794,13 @@
     "repo_path": "websites/phonon-kde-org"
   },
   "websites-planet-kde-org": {
-    "description": "Planet KDE website code and configuration \u2014 planet.kde.org",
+    "description": "Planet KDE website code and configuration - planet.kde.org",
     "name": "websites-planet-kde-org",
     "project_path": "websites/planet-kde-org",
     "repo_path": "websites/planet-kde-org"
   },
   "websites-plasma-bigscreen-org": {
-    "description": "Website for Plasma BigScreen \u2014 plasma-bigscreen.org",
+    "description": "Website for Plasma BigScreen - plasma-bigscreen.org",
     "name": "websites-plasma-bigscreen-org",
     "project_path": "websites/plasma-bigscreen-org",
     "repo_path": "websites/plasma-bigscreen-org"
@@ -7680,13 +7812,13 @@
     "repo_path": "websites/plasma-kde-org"
   },
   "websites-plasma-mobile-org": {
-    "description": "Website for Plasma Mobile \u2014 plasma-mobile.org",
+    "description": "Website for Plasma Mobile - plasma-mobile.org",
     "name": "websites-plasma-mobile-org",
     "project_path": "websites/plasma-mobile-org",
     "repo_path": "websites/plasma-mobile-org"
   },
   "websites-product-screenshots": {
-    "description": "Screenshots of KDE software for promotional use \u2014 cdn.kde.org/screenshots",
+    "description": "Screenshots of KDE software for promotional use - cdn.kde.org/screenshots",
     "name": "websites-product-screenshots",
     "project_path": "websites/product-screenshots",
     "repo_path": "websites/product-screenshots"
@@ -7728,7 +7860,7 @@
     "repo_path": "websites/rekonq-kde-org"
   },
   "websites-releases-neon-kde-org": {
-    "description": "Metadata of Neon releases \u2014 releases.neon.kde.org",
+    "description": "Metadata of Neon releases - releases.neon.kde.org",
     "name": "websites-releases-neon-kde-org",
     "project_path": "websites/releases-neon-kde-org",
     "repo_path": "websites/releases-neon-kde-org"
@@ -7746,13 +7878,13 @@
     "repo_path": "websites/reservoir"
   },
   "websites-rkward-kde-org": {
-    "description": "Website for RKWard \u2014 rkward.kde.org",
+    "description": "Website for RKWard - rkward.kde.org",
     "name": "websites-rkward-kde-org",
     "project_path": "websites/rkward-kde-org",
     "repo_path": "websites/rkward-kde-org"
   },
   "websites-rolisteam-org": {
-    "description": "Website for Rolisteam \u2014 rolisteam.org",
+    "description": "Website for Rolisteam - rolisteam.org",
     "name": "websites-rolisteam-org",
     "project_path": "websites/rolisteam-org",
     "repo_path": "websites/rolisteam-org"
@@ -7764,19 +7896,19 @@
     "repo_path": "websites/scripting-krita-org"
   },
   "websites-season-kde-org": {
-    "description": "Website to organize programs like Season of KDE \u2014 season.kde.org",
+    "description": "Website to organize programs like Season of KDE - season.kde.org",
     "name": "websites-season-kde-org",
     "project_path": "websites/season-kde-org",
     "repo_path": "websites/season-kde-org"
   },
   "websites-simon-kde-org": {
-    "description": "Static copy of the Drupal-based Simon website \u2014 simon.kde.org",
+    "description": "Static copy of the Drupal-based Simon website - simon.kde.org",
     "name": "websites-simon-kde-org",
     "project_path": "websites/simon-kde-org",
     "repo_path": "websites/simon-kde-org"
   },
   "websites-skrooge-org": {
-    "description": "Website for Skrooge \u2014 skrooge.org",
+    "description": "Website for Skrooge - skrooge.org",
     "name": "websites-skrooge-org",
     "project_path": "websites/skrooge-org",
     "repo_path": "websites/skrooge-org"
@@ -7812,13 +7944,13 @@
     "repo_path": "websites/sysadmin-kde-org-trellis"
   },
   "websites-telemetry-krita-org": {
-    "description": "Telemetry backend for Krita \u2014 telemetry.krita.org",
+    "description": "Telemetry backend for Krita - telemetry.krita.org",
     "name": "websites-telemetry-krita-org",
     "project_path": "websites/telemetry-krita-org",
     "repo_path": "websites/telemetry-krita-org"
   },
   "websites-timeline-kde-org": {
-    "description": "Website for community history timeline \u2014 timeline.kde.org",
+    "description": "Website for community history timeline - timeline.kde.org",
     "name": "websites-timeline-kde-org",
     "project_path": "websites/timeline-kde-org",
     "repo_path": "websites/timeline-kde-org"
@@ -7830,13 +7962,13 @@
     "repo_path": "websites/tr-kde-org"
   },
   "websites-umbrello-kde-org": {
-    "description": "Website for Umbrello \u2014 umbrello.kde.org",
+    "description": "Website for Umbrello - umbrello.kde.org",
     "name": "websites-umbrello-kde-org",
     "project_path": "websites/umbrello-kde-org",
     "repo_path": "websites/umbrello-kde-org"
   },
   "websites-utils-kde-org": {
-    "description": "Website for KDE's utilities \u2014 utils.kde.org",
+    "description": "Website for KDE's utilities - utils.kde.org",
     "name": "websites-utils-kde-org",
     "project_path": "websites/utils-kde-org",
     "repo_path": "websites/utils-kde-org"
@@ -7854,13 +7986,13 @@
     "repo_path": "websites/video-subtitles"
   },
   "websites-volunteers-akademy-kde-org": {
-    "description": "Volunteer management and coordination system \u2014 volunteers.akademy.kde.org",
+    "description": "Volunteer management and coordination system - volunteers.akademy.kde.org",
     "name": "websites-volunteers-akademy-kde-org",
     "project_path": "websites/volunteers-akademy-kde-org",
     "repo_path": "websites/volunteers-akademy-kde-org"
   },
   "websites-vvave-kde-org": {
-    "description": "Website for Vvave \u2014 vvave.kde.org",
+    "description": "Website for Vvave - vvave.kde.org",
     "name": "websites-vvave-kde-org",
     "project_path": "websites/vvave-kde-org",
     "repo_path": "websites/vvave-kde-org"
@@ -7872,25 +8004,25 @@
     "repo_path": "websites/vvave-stream-kde-org"
   },
   "websites-websvn-kde-org": {
-    "description": "KDE SVN repository browser \u2014 websvn.kde.org",
+    "description": "KDE SVN repository browser - websvn.kde.org",
     "name": "websites-websvn-kde-org",
     "project_path": "websites/websvn-kde-org",
     "repo_path": "websites/websvn-kde-org"
   },
   "websites-wiki-desktopsummit-org": {
-    "description": "Static copy of the DesktopSummit wiki \u2014 wiki.desktopsummit.org",
+    "description": "Static copy of the DesktopSummit wiki - wiki.desktopsummit.org",
     "name": "websites-wiki-desktopsummit-org",
     "project_path": "websites/wiki-desktopsummit-org",
     "repo_path": "websites/wiki-desktopsummit-org"
   },
   "websites-wiki-kde-org": {
-    "description": "Landing wiki list website \u2014 wiki.kde.org",
+    "description": "Landing wiki list website - wiki.kde.org",
     "name": "websites-wiki-kde-org",
     "project_path": "websites/wiki-kde-org",
     "repo_path": "websites/wiki-kde-org"
   },
   "websites-wiki-rolisteam-org": {
-    "description": "Rolisteam documentation (wiki) \u2014 doc.rolisteam.org",
+    "description": "Rolisteam documentation (wiki) - doc.rolisteam.org",
     "name": "websites-wiki-rolisteam-org",
     "project_path": "websites/wiki-rolisteam-org",
     "repo_path": "websites/wiki-rolisteam-org"
@@ -7914,7 +8046,7 @@
     "repo_path": "websites/yakuake-kde-org"
   },
   "websites-zanshin-kde-org": {
-    "description": "Website for Zanshin \u2014 zanshin.kde.org",
+    "description": "Website for Zanshin - zanshin.kde.org",
     "name": "websites-zanshin-kde-org",
     "project_path": "websites/zanshin-kde-org",
     "repo_path": "websites/zanshin-kde-org"
@@ -8108,7 +8240,7 @@
   "xwaylandvideobridge": {
     "description": "Utility to allow streaming Wayland windows to X applications",
     "name": "xwaylandvideobridge",
-    "project_path": "system/xwaylandvideobridge",
+    "project_path": "playground/system/xwaylandvideobridge",
     "repo_path": "system/xwaylandvideobridge"
   },
   "yakuake": {

@@ -5,19 +5,22 @@
   fetchFromGitHub,
   cmake,
   setuptools,
-  darwin,
   libX11,
   libXt,
   libGL,
-  openimageio,
+  openimageio_2,
   imath,
   python,
+  apple-sdk_14,
 }:
 
 buildPythonPackage rec {
   pname = "materialx";
   version = "1.38.10";
 
+  # nixpkgs-update: no auto update
+  # Updates are disabled due to API breakage in 1.39+ that breaks almost all
+  # consumers.
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
@@ -34,16 +37,12 @@ buildPythonPackage rec {
 
   buildInputs =
     [
-      openimageio
+      openimageio_2
       imath
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        Cocoa
-      ]
-    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_14
+    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11
       libXt
@@ -53,9 +52,8 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
-    # don't build MSL shader back-end on x86_x64-darwin, as it requires a newer SDK with metal support
     (lib.cmakeBool "MATERIALX_BUILD_GEN_MSL" (
-      stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin)
+      stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin
     ))
   ];
 
@@ -68,6 +66,12 @@ buildPythonPackage rec {
     # required for cmake to find the bindings, when included in other projects
     ln -s $out/python $target_dir
   '';
+
+  # Update to 1.39 has major API changes and downstream software
+  # needs to adapt, first. So, do not include in mass updates. For reference, see
+  # https://github.com/NixOS/nixpkgs/pull/326466#issuecomment-2293029160
+  # and https://github.com/NixOS/nixpkgs/issues/380230
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.rev}/CHANGELOG.md";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "with";
   version = "unstable-2018-03-20";
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
       To exit use either :q or :exit.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     mainProgram = "with";
   };

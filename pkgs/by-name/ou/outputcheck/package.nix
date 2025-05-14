@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, lit
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  lit,
 }:
 
 python3.pkgs.buildPythonApplication rec {

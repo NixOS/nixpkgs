@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   aiohttp,
-  codecov,
   flake8,
   pytest,
   pytest-asyncio,
@@ -19,13 +18,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uburuntu";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fE35zPjBUn4e1VRkkIUMtYJ/+LbnUxnxyfnU+UEPwr4=";
   };
 
   checkInputs = [
     aiohttp
-    codecov
     flake8
     pytest
     pytest-asyncio
@@ -34,6 +32,11 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests/" ];
+
+  disabledTestPaths = [
+    # time sensitive tests
+    "tests/test_execution_timer.py"
+  ];
 
   meta = with lib; {
     description = "Zero-dependency Python package for easy throttling with asyncio support";

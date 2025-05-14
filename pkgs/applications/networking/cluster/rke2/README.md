@@ -1,34 +1,42 @@
 # RKE2 Version
 
-RKE2, Kubernetes, and other clustered software has the property of not being able to update atomically.
-Most software in nixpkgs, like for example bash, can be updated as part of a `nixos-rebuild switch`
-without having to worry about the old and the new bash interacting in some way.
+RKE2, Kubernetes, and other clustered software has the property of not being able to update
+atomically. Most software in nixpkgs, like for example bash, can be updated as part of a
+`nixos-rebuild switch` without having to worry about the old and the new bash interacting in some
+way. RKE2/Kubernetes, on the other hand, is typically run across several machines, and each machine
+is updated independently. As such, different versions of the package and NixOS module must maintain
+compatibility with each other through temporary version skew during updates. The upstream Kubernetes
+project documents this in their
+[version-skew policy](https://kubernetes.io/releases/version-skew-policy/#supported-component-upgrade-order).
+
+Within nixpkgs, we strive to maintain a valid "upgrade path" that does not run afoul of the upstream
+version skew policy.
 
 > [!NOTE]
-> Upgrade the server nodes first, one at a time. Once all servers have been upgraded, you may then upgrade agent nodes.
+> Upgrade the server nodes first, one at a time. Once all servers have been upgraded, you may then
+> upgrade agent nodes.
 
 ## Release Channels
 
-RKE2 has three main release channels, which are: `stable`, `latest` and `testing`.
+RKE2 has two named release channels, i.e. `stable` and `latest`. Additionally, there exists a
+release channel tied to each Kubernetes minor version, e.g. `v1.32`.
 
-The `stable` channel is the default channel and is recommended for production use.
-The `latest` channel is the latest release.
-The `testing` channel is the latest release, including pre-releases.
+Nixpkgs follows active minor version release channels (typically 4 at a time) and sets aliases for
+`rke2_stable` and `rke2_latest` accordingly.
 
-| Channel   | Description                                                                                                                                                                                    |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `stable`  | **(Default)** Stable is recommended for production environments. These releases have been through a period of community hardening, and are compatible with the most recent release of Rancher. |
-| `latest`  | Latest is recommended for trying out the latest features. These releases have not yet been through a period of community hardening, and may not be compatible with Rancher.                    |
-| `testing` | The most recent release, including pre-releases.                                                                                                                                               |
+Patch releases should be backported to to the latest stable release branch, however, new minor
+versions are not backported.
 
-Learn more about the [RKE2 release channels](https://docs.rke2.io/upgrade/manual_upgrade).
+For further information visit the
+[RKE2 release channels documentation](https://docs.rke2.io/upgrades/manual_upgrade?_highlight=manua#release-channels).
 
-For an exhaustive and up-to-date list of channels, you can visit the
-[rke2 channel service API](https://update.rke2.io/v1-release/channels).
-For more technical details on how channels work, you can see the [channelserver project](https://github.com/rancher/channelserver).
+## EOL Versions
 
-> [!TIP]
-> When attempting to upgrade to a new version of RKE2,
-> the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy) applies.
-> Ensure that your plan **does not skip intermediate minor versions** when upgrading. Nothing in the upgrade process will
-> protect you against unsupported changes to the Kubernetes version.
+Approximately every 4 months a minor RKE2 version reaches EOL. EOL versions should be removed from
+`nixpkgs-unstable`, preferably by throwing with an explanatory message in
+`pkgs/top-level/aliases.nix`. With stable releases, however, it isn't expected that packages will be
+removed. Instead we set `meta.knownVulnerabilities` for stable EOL packages, like it is also done
+for EOL JDKs, browser engines, Node.js versions, etc.
+
+For further information on the RKE2 lifecycle, see the
+[SUSE Product Support Lifecycle page](https://www.suse.com/lifecycle#rke2).

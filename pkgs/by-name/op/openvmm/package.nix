@@ -7,15 +7,15 @@
   protobuf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "openvmm";
-  version = "0-unstable-2024-10-19";
+  version = "0-unstable-2025-03-13";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "openvmm";
-    rev = "2e5acb8ab89b75d6ff59d537e9f21445d830386d";
-    hash = "sha256-Fi5hDFV2SfpqJjXSc7YwlNDnoL5TTgiqmFMt+ls2Uu4=";
+    rev = "047fde8a2b3eec17a46203fbc54ce7f3aa9b4dfd";
+    hash = "sha256-w6MxJVm5/ABU04MZUCSjzHVZLXQIsOVCIJZkHOfxQC0=";
   };
 
   separateDebugInfo = true;
@@ -33,15 +33,8 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bitvec-1.1.0" = "sha256-uXOTbrGCSnl/F6IJPZuViZKXg4BEMG4+lVcLxK5KIwc=";
-      "ms-tpm-20-ref-0.1.0" = "sha256-eB3MWRlOPtxG55sLH7HIWzSjVEY05IIBZOltTpsGpnE=";
-      "mshv-bindings-0.1.1" = "sha256-CZEhFb9qDR260OFA/mlTldEMFlF8bhawVAxXFWqPIcU=";
-      "pbjson-build-0.5.1" = "sha256-itmY3c35O7j0Otb1qyr2IDUw1MBWOCB3WwyU60ajBO4=";
-    };
-  };
+  cargoHash = "sha256-u0E09yFssd71wUS1BD766ztDImauu90T/jIWOb2v0mE=";
+  useFetchCargoVendor = true;
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/openvmm";

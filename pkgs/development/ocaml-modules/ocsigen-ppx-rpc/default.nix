@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppxlib }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "ocsigen-ppx-rpc";

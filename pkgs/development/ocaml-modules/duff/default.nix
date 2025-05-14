@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, fmt
-, alcotest
-, hxd
-, crowbar
-, bigstringaf
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  fmt,
+  alcotest,
+  hxd,
+  crowbar,
+  bigstringaf,
 }:
 
 buildDunePackage rec {
@@ -29,7 +30,6 @@ buildDunePackage rec {
     hxd
     bigstringaf
   ];
-
 
   meta = {
     description = "Pure OCaml implementation of libXdiff (Rabin’s fingerprint)";

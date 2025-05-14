@@ -1,30 +1,52 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
   setuptools,
-  pythonOlder,
-  pytestCheckHook,
-  torch,
+
+  # dependencies
   pytorch-lightning,
+  torch,
+
+  # tests
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
-  version = "2.4.0";
+  version = "2.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uSFGZseSJv519LpaddO6yP6AsIMZutEA0Y7Yr+mEWTQ=";
+    tag = "v${version}";
+    hash = "sha256-+jt+if9aAbEd2XDMC7RpZmJpm4VUEZMt5xoLOP/esMg=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/speediedan/finetuning-scheduler/commit/78e6e225f353d1ba95db05d7fc6ff541859ed6a2.patch";
+      hash = "sha256-7mbtsaHrnHph8lvuwhBGqxPQimbZcbGeyBYXzApFPn4=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<77.0.0" "setuptools"
+  '';
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "pytorch-lightning"
+  ];
 
   dependencies = [
     pytorch-lightning
@@ -37,12 +59,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
   disabledTests =
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
     lib.optionals (pythonOlder "3.12") [
+      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
       "test_fts_dynamo_enforce_p0"
       "test_fts_dynamo_resume"
       "test_fts_dynamo_intrafit"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_fts_dynamo_enforce_p0"
+      "test_fts_dynamo_resume"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # slightly exceeds numerical tolerance on aarch64-linux:
@@ -51,13 +78,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";
     homepage = "https://finetuning-scheduler.readthedocs.io";
-    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

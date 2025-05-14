@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "dbf";
-  version = "0.99.9";
+  version = "0.99.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MFEi1U0RNvrfDtV4HpvPgKTCibAh76z7Gnmj32IubYw=";
+    hash = "sha256-UAK7eleaUwLT22Nzjv4+nSUy6lSm9jAXbTUmQW/+AKI=";
   };
 
   # Workaround for https://github.com/ethanfurman/dbf/issues/48
-  patches = lib.optional python.stdenv.isDarwin ./darwin.patch;
+  patches = lib.optional python.stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   propagatedBuildInputs = [ aenum ];
 

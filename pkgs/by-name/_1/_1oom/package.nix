@@ -6,6 +6,7 @@
   autoreconfHook,
   allegro,
   libsamplerate,
+  libGLU,
   libX11,
   libXext,
   SDL,
@@ -17,19 +18,20 @@
 
 stdenv.mkDerivation rec {
   pname = "1oom";
-  version = "1.11";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xEHFuCOyuWmee6kgOc0WUk1iWWFqfFb42F7shGZmutQ=";
+    tag = "v${version}";
+    hash = "sha256-xvVl/XzOnItIvW0T3RpQ4tswqANHGWFvwnoY0+uHhx8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     allegro
     libsamplerate
+    libGLU
     libX11
     libXext
     SDL
@@ -58,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

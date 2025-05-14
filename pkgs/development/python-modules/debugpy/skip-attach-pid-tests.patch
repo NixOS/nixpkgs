@@ -1,5 +1,5 @@
 diff --git a/tests/debug/runners.py b/tests/debug/runners.py
-index dc60d0ae..cf4a06a3 100644
+index cac4fbf5..079bb743 100644
 --- a/tests/debug/runners.py
 +++ b/tests/debug/runners.py
 @@ -163,7 +163,7 @@ def _attach_common_config(session, target, cwd):
@@ -12,10 +12,10 @@ index dc60d0ae..cf4a06a3 100644
  
      log.info("Attaching {0} to {1} by PID.", session, target)
 diff --git a/tests/debugpy/test_attach.py b/tests/debugpy/test_attach.py
-index 017d7f59..63e86328 100644
+index 78453bfe..458716af 100644
 --- a/tests/debugpy/test_attach.py
 +++ b/tests/debugpy/test_attach.py
-@@ -151,8 +151,7 @@ def test_reattach(pyfile, target, run):
+@@ -153,8 +153,7 @@ def test_reattach(pyfile, target, run):
  
  
  @pytest.mark.parametrize("pid_type", ["int", "str"])
@@ -24,4 +24,4 @@ index 017d7f59..63e86328 100644
 +@pytest.mark.skip(
      reason="https://github.com/microsoft/debugpy/issues/311",
  )
- def test_attach_pid_client(pyfile, target, pid_type):
+ @pytest.mark.flaky(retries=2, delay=1)

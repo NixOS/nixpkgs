@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "diffsync";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "diffsync";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4LS18FPrnGE1tM0pFzAw0+ajDaw9g7MCgIwS2ptrX9c=";
+    tag = "v${version}";
+    hash = "sha256-UZpGWa/UjHXp6jD0fPNWTMl1DZ1AWmILRX/5XRIpLdE=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utility library for comparing and synchronizing different datasets";
     homepage = "https://github.com/networktocode/diffsync";
-    changelog = "https://github.com/networktocode/diffsync/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/networktocode/diffsync/blob/${src.tag}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ clerie ];
   };

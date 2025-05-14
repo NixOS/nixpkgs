@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niwinz";
     repo = "django-jinja";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0gkv9xinHux8TRiNBLl/JgcimXU3CzysxzGR2jn7OZ4=";
   };
 

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, callPackage
-, makeWrapper
-, makeDesktopItem
-, love
-, luajit
-, writeShellScript
-, nix-update
-, libcoldclear ? callPackage ./libcoldclear.nix { inherit ccloader; }
-, ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; }
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  makeWrapper,
+  makeDesktopItem,
+  love,
+  luajit,
+  writeShellScript,
+  nix-update,
+  libcoldclear ? callPackage ./libcoldclear.nix { inherit ccloader; },
+  ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; },
 }:
 
 let

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "container-inspector";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bXJ4UIDVhiU0DurEeRiyLlSUrNRgwoMqAxXxGb/CcJs=";
   };
 

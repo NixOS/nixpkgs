@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.triggerhappy;
@@ -6,35 +11,53 @@ let
   socket = "/run/thd.socket";
 
   configFile = pkgs.writeText "triggerhappy.conf" ''
-    ${lib.concatMapStringsSep "\n"
-      ({ keys, event, cmd, ... }:
-        ''${lib.concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}''
-      )
-      cfg.bindings}
+    ${lib.concatMapStringsSep "\n" (
+      {
+        keys,
+        event,
+        cmd,
+        ...
+      }:
+      ''${lib.concatMapStringsSep "+" (x: "KEY_" + x) keys} ${
+        toString
+          {
+            press = 1;
+            hold = 2;
+            release = 0;
+          }
+          .${event}
+      } ${cmd}''
+    ) cfg.bindings}
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { ... }: {
-    options = {
+  bindingCfg =
+    { ... }:
+    {
+      options = {
 
-      keys = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        description = "List of keys to match.  Key names as defined in linux/input-event-codes.h";
+        keys = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "List of keys to match.  Key names as defined in linux/input-event-codes.h";
+        };
+
+        event = lib.mkOption {
+          type = lib.types.enum [
+            "press"
+            "hold"
+            "release"
+          ];
+          default = "press";
+          description = "Event to match.";
+        };
+
+        cmd = lib.mkOption {
+          type = lib.types.str;
+          description = "What to run.";
+        };
+
       };
-
-      event = lib.mkOption {
-        type = lib.types.enum ["press" "hold" "release"];
-        default = "press";
-        description = "Event to match.";
-      };
-
-      cmd = lib.mkOption {
-        type = lib.types.str;
-        description = "What to run.";
-      };
-
     };
-  };
 
 in
 
@@ -65,9 +88,9 @@ in
 
       bindings = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
-          [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc-cli}/bin/mpc -q toggle"; } ]
+          [ { keys = ["PLAYPAUSE"];  cmd = "''${lib.getExe pkgs.mpc} -q toggle"; } ]
         '';
         description = ''
           Key bindings for {command}`triggerhappy`.
@@ -86,7 +109,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -100,19 +122,24 @@ in
     systemd.services.triggerhappy = {
       wantedBy = [ "multi-user.target" ];
       description = "Global hotkey daemon";
+      documentation = [ "man:thd(1)" ];
       serviceConfig = {
-        ExecStart = "${pkgs.triggerhappy}/bin/thd ${lib.optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
+        ExecStart = "${pkgs.triggerhappy}/bin/thd ${
+          lib.optionalString (cfg.user != "root") "--user ${cfg.user}"
+        } --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
       };
     };
 
-    services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "triggerhappy-udev-rules";
-      destination = "/etc/udev/rules.d/61-triggerhappy.rules";
-      text = ''
-        ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ATTRS{name}!="triggerhappy", \
-          RUN+="${pkgs.triggerhappy}/bin/th-cmd --socket ${socket} --passfd --udev"
-      '';
-    });
+    services.udev.packages = lib.singleton (
+      pkgs.writeTextFile {
+        name = "triggerhappy-udev-rules";
+        destination = "/etc/udev/rules.d/61-triggerhappy.rules";
+        text = ''
+          ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ATTRS{name}!="triggerhappy", \
+            RUN+="${pkgs.triggerhappy}/bin/th-cmd --socket ${socket} --passfd --udev"
+        '';
+      }
+    );
 
   };
 

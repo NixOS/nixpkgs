@@ -1,45 +1,50 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libvorbis
-, libeb
-, hunspell
-, opencc
-, xapian
-, libzim
-, lzo
-, xz
-, tomlplusplus
-, fmt
-, bzip2
-, libiconv
-, libXtst
-, qtbase
-, qtsvg
-, qtwebengine
-, qttools
-, qtwayland
-, qt5compat
-, qtmultimedia
-, qtspeech
-, wrapQtAppsHook
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libvorbis,
+  libeb,
+  hunspell,
+  opencc,
+  xapian,
+  libzim,
+  lzo,
+  xz,
+  tomlplusplus,
+  fmt,
+  bzip2,
+  libiconv,
+  libXtst,
+  qtbase,
+  qtsvg,
+  qtwebengine,
+  qttools,
+  qtwayland,
+  qt5compat,
+  qtmultimedia,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "goldendict-ng";
-  version = "24.09.0";
+  version = "25.05.0";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    rev = "v${finalAttrs.version}-Release.316ec900";
-    hash = "sha256-LriKJLjqEuD0v8yjoE35O+V6oUX2jhWGFguqlXaDlQA=";
+    tag = "v25.05.0-Release.2a2b0e16";
+    hash = "sha256-PBqkVac867xE4ZcvwTysAK6rQSoEZelKrV9USvFsaLk=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     qtbase
     qtsvg
@@ -84,7 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Advanced multi-dictionary lookup program";
     platforms = platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [ slbtty michojel ];
+    maintainers = with maintainers; [
+      slbtty
+      michojel
+      linsui
+    ];
     license = licenses.gpl3Plus;
   };
-})
+}

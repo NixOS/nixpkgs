@@ -5,7 +5,6 @@
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
   libiconv,
   installShellFiles,
   nix-update-script,
@@ -24,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-15FUA4fszbAVXop3IyOHfxroyTt9/SkWZsSTUh9RtwY=";
   };
 
-  cargoHash = "sha256-vMeljXNWfFRyeQ4ZQ/Qe1vcW5bg5Y14aEH5HgEwOX3Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IkwCa+MioL2F3fiUYm3HQOeO2yb+58YQzM9YJ2oILj4=";
   cargoExtraArgs = "-p nix-weather";
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   outputs = [

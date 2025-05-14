@@ -54,7 +54,6 @@
   gtk3,
   libpng,
   libjpeg,
-  darwin,
 }:
 
 # TODO
@@ -62,31 +61,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.6.4";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-72k79UFxhk8JUCnMzbU9lZ0Ua3Ui41EkhPGSnGkf9mE=";
+    hash = "sha256-j3rbcUUHXAQmn/7SzpKHvpxGZ3bBhIYrNOFLc7jMPlc=";
   };
 
   postPatch =
     ''
       mkdir src/private
       substituteInPlace scripts/build/macOS/fix_bundle.py \
-        --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
+        --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace libraries/lib-files/FileNames.cpp \
-        --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0")
-        ''
-          sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
-        '';
+        --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+    '';
 
   nativeBuildInputs =
     [
@@ -150,8 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreAudioKit # for portaudio
       libpng
       libjpeg
     ];
@@ -185,15 +176,17 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   # Replace audacity's wrapper, to:
-  # - put it in the right place, it shouldn't be in "$out/audacity"
+  # - Put it in the right place; it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
+  # - Use Xwayland by default on Wayland. See https://github.com/audacity/audacity/pull/5977
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram "$out/bin/audacity" \
         "''${gappsWrapperArgs[@]}" \
         --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg ]} \
         --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
-        --suffix AUDACITY_PATH : "$out/share/audacity"
+        --suffix AUDACITY_PATH : "$out/share/audacity" \
+        --set-default GDK_BACKEND x11
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}

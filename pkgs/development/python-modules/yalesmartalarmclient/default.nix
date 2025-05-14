@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domwillcode";
     repo = "yale-smart-alarm-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a0rzPEixJXLBfN+kJRPYiJiHY1BKxg/mM14RO3RiVdA=";
   };
 

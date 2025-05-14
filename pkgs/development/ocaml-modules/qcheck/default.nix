@@ -5,8 +5,6 @@ buildDunePackage {
 
   inherit (qcheck-ounit) version src patches;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [ qcheck-ounit ];
 
   meta = qcheck-ounit.meta // {

@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.20.0";
+  version = "1.21.0";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -21,8 +21,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yHhaaZZ/KxQk8RVkqNfyfWTPS5K+BhckcxqdC5gN+ko=";
+    tag = "v${version}";
+    hash = "sha256-KNBsOKd+GzxhmvM2aItnoYpob8cZ7Wzjp1fi7IRlLnk=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -32,7 +32,7 @@ buildGoModule rec {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
+  vendorHash = "sha256-l0fhZVsaoQnKVN2/3ioS/T7YSNTarOy84PxZ9Xx40t4=";
 
   doCheck = false;
 

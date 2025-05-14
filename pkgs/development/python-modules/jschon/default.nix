@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, rfc3986
-, pytestCheckHook
-, hypothesis
-, requests
-, pytest-httpserver
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  rfc3986,
+  pytestCheckHook,
+  hypothesis,
+  requests,
+  pytest-httpserver,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {

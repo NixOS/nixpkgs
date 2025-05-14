@@ -1,27 +1,35 @@
-{ lib
-, fetchzip
-, libGL
-, makeWrapper
-, openal
-, openjdk
-, stdenv
-, xorg
-, copyDesktopItems
-, makeDesktopItem
-, writeScript
+{
+  lib,
+  fetchzip,
+  libGL,
+  makeWrapper,
+  openal,
+  openjdk,
+  stdenv,
+  xorg,
+  copyDesktopItems,
+  makeDesktopItem,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.97a-RC11";
+  version = "0.98a-RC7";
 
   src = fetchzip {
     url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${version}.zip";
-    sha256 = "sha256-KT4n0kBocaljD6dTbpr6xcwy6rBBZTFjov9m+jizDW4=";
+    sha256 = "sha256-qA4/9AvRWBOIbNKA9U8U7PoPmIwz8wgJZyYFln7LZHw=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
-  buildInputs = [ xorg.libXxf86vm openal libGL ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
+  buildInputs = [
+    xorg.libXxf86vm
+    openal
+    libGL
+  ];
 
   dontBuild = true;
 
@@ -51,7 +59,12 @@ stdenv.mkDerivation rec {
       $out/share/icons/hicolor/64x64/apps/starsector.png
 
     wrapProgram $out/share/starsector/starsector.sh \
-      --prefix PATH : ${lib.makeBinPath [ openjdk xorg.xrandr ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          openjdk
+          xorg.xrandr
+        ]
+      } \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
       --chdir "$out/share/starsector"
@@ -69,9 +82,8 @@ stdenv.mkDerivation rec {
     substituteInPlace starsector.sh \
       --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
+      --replace-fail "./compiler_directives.txt" "$out/share/starsector/compiler_directives.txt" \
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
-      --replace-fail "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
-      --replace-quiet " -XX:PermSize=192m -XX:MaxPermSize=192m" "" \
       --replace-fail "com.fs.starfarer.StarfarerLauncher" "\"\$@\" com.fs.starfarer.StarfarerLauncher"
   '';
 
@@ -88,6 +100,9 @@ stdenv.mkDerivation rec {
     homepage = "https://fractalsoftworks.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras rafaelrc ];
+    maintainers = with maintainers; [
+      bbigras
+      rafaelrc
+    ];
   };
 }

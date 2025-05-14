@@ -54,9 +54,8 @@ stdenv.mkDerivation {
 
     rm $out/share/applications/gnome-panel.desktop
 
-    substitute ${gnome-panel}/share/applications/gnome-panel.desktop \
-      $out/share/applications/gnome-panel.desktop --replace \
-      "Exec=${gnome-panel}/bin/gnome-panel" "Exec=$out/bin/gnome-panel"
+    ln -s ${gnome-panel}/share/applications/gnome-panel.desktop \
+      $out/share/applications/gnome-panel.desktop
 
     runHook postInstall
   '';

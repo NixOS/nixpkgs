@@ -1,68 +1,73 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wayland-scanner
-, fetchpatch
-, libepoxy
-, lcms2
-, libICE
-, libSM
-, libcap
-, libdrm
-, libinput
-, libxkbcommon
-, mesa
-, pipewire
-, udev
-, wayland
-, xcb-util-cursor
-, xwayland
-, plasma-wayland-protocols
-, wayland-protocols
-, libxcvt
-, qtdeclarative
-, qtmultimedia
-, qtquickcontrols2
-, qtscript
-, qtsensors
-, qtvirtualkeyboard
-, qtx11extras
-, breeze-qt5
-, kactivities
-, kcompletion
-, kcmutils
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kcrash
-, kdeclarative
-, kdecoration
-, kglobalaccel
-, ki18n
-, kiconthemes
-, kidletime
-, kinit
-, kio
-, knewstuff
-, knotifications
-, kpackage
-, krunner
-, kscreenlocker
-, kservice
-, kwayland
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, plasma-framework
-, libqaccessibilityclient
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wayland-scanner,
+  fetchpatch,
+  libepoxy,
+  lcms2,
+  libICE,
+  libSM,
+  libcap,
+  libdrm,
+  libinput,
+  libxkbcommon,
+  libgbm,
+  pipewire,
+  udev,
+  wayland,
+  xcb-util-cursor,
+  xwayland,
+  plasma-wayland-protocols,
+  wayland-protocols,
+  libxcvt,
+  qtdeclarative,
+  qtmultimedia,
+  qtquickcontrols2,
+  qtscript,
+  qtsensors,
+  qtvirtualkeyboard,
+  qtx11extras,
+  breeze-qt5,
+  kactivities,
+  kcompletion,
+  kcmutils,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kcrash,
+  kdeclarative,
+  kdecoration,
+  kglobalaccel,
+  ki18n,
+  kiconthemes,
+  kidletime,
+  kinit,
+  kio,
+  knewstuff,
+  knotifications,
+  kpackage,
+  krunner,
+  kscreenlocker,
+  kservice,
+  kwayland,
+  kwidgetsaddons,
+  kwindowsystem,
+  kxmlgui,
+  plasma-framework,
+  libqaccessibilityclient,
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
 
 mkDerivation {
   pname = "kwin";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wayland-scanner
+  ];
   buildInputs = [
     libepoxy
     lcms2
@@ -72,7 +77,7 @@ mkDerivation {
     libdrm
     libinput
     libxkbcommon
-    mesa
+    libgbm
     pipewire
     udev
     wayland
@@ -120,7 +125,10 @@ mkDerivation {
     libqaccessibilityclient
 
   ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs src/effects/strip-effect-metadata.py
@@ -132,7 +140,7 @@ mkDerivation {
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
-    # Pass special environments through arguemnts to `kwin_wayland`, bypassing
+    # Pass special environments through arguments to `kwin_wayland`, bypassing
     # ld.so(8) environment stripping due to `kwin_wayland`'s capabilities.
     # We need this to have `TZDIR` correctly set for `plasmashell`, or
     # everything related to timezone, like clock widgets, will be broken.

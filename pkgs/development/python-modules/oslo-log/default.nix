@@ -2,37 +2,47 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  eventlet,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  debtcollector,
   oslo-config,
   oslo-context,
   oslo-serialization,
   oslo-utils,
-  oslotest,
   pbr,
-  pyinotify,
   python-dateutil,
+  pyinotify,
+
+  # tests
+  eventlet,
+  oslotest,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "6.1.2";
+  version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "oslo.log";
-    inherit version;
-    hash = "sha256-92gEffnXBsSE3WZl3LvqKJAh1Iy3zlq/eh9poJSR9f4=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.log";
+    tag = version;
+    hash = "sha256-ybWrNwP9L7iOzft10TgRFxA4mCRDVozVC2ZAopgITqo=";
   };
+
+  # Manually set version because prb wants to get it from the git upstream repository (and we are
+  # installing from tarball instead)
+  PBR_VERSION = version;
 
   build-system = [ setuptools ];
 
   dependencies = [
+    debtcollector
     oslo-config
     oslo-context
     oslo-serialization
@@ -56,11 +66,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_log" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "oslo.log library";
     mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

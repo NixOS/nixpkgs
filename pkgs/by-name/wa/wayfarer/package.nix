@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, blueprint-compiler
-, desktop-file-utils
-, gst_all_1
-, gtk4
-, libpulseaudio
-, meson
-, ninja
-, pipewire
-, pkg-config
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  blueprint-compiler,
+  desktop-file-utils,
+  gst_all_1,
+  gtk4,
+  libpulseaudio,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, libappindicator
-, libpulseaudio
-, librsvg
-, pycairo
-, pygobject3
-, six
-, wrapGAppsHook3
-, xlib
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  libappindicator,
+  libpulseaudio,
+  librsvg,
+  pycairo,
+  pygobject3,
+  six,
+  wrapGAppsHook3,
+  xlib,
 }:
 
 buildPythonApplication {
@@ -69,6 +70,6 @@ buildPythonApplication {
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sersorrel ];
+    maintainers = with maintainers; [ keysmashes ];
   };
 }

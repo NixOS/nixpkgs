@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "1.8.2";
+  version = "1.10.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sigma67";
     repo = "ytmusicapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-SZ5YsQNrE91ycSXy/NjtjXp0E6msVKlV0f+Td0AwYpQ=";
+    tag = version;
+    hash = "sha256-0JTuTGHAWG4lMKMvvtuNTRiYlfPsbhCNoGS0TJBZdCc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for YouTube Music";
     homepage = "https://github.com/sigma67/ytmusicapi";
-    changelog = "https://github.com/sigma67/ytmusicapi/releases/tag/${version}";
+    changelog = "https://github.com/sigma67/ytmusicapi/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
     mainProgram = "ytmusicapi";

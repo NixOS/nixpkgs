@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   options = {
@@ -16,7 +21,10 @@
       # https://github.com/NixOS/nixpkgs/issues/81138
       services.appgatedriver.wantedBy = [ "multi-user.target" ];
       services.appgate-dumb-resolver.path = [ pkgs.e2fsprogs ];
-      services.appgate-resolver.path = [ pkgs.procps pkgs.e2fsprogs ];
+      services.appgate-resolver.path = [
+        pkgs.procps
+        pkgs.e2fsprogs
+      ];
       services.appgatedriver.path = [ pkgs.e2fsprogs ];
     };
   };

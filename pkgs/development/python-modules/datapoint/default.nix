@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ejep";
     repo = "datapoint-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zUvwfBwJe8SaB96/Jz7Qeanz1mHmLVp2JW9qkR2dRnY=";
   };
 

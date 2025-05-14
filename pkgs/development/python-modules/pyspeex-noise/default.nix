@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pyspeex-noise";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XtLA5yVVCZdpALPu3fx+U+aaA729Vs1UeOJsIm6/S+k=";
   };
 

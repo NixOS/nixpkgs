@@ -1,12 +1,16 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin {
   name = "discourse-bbcode-color";
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-bbcode-color";
-    rev = "3336efe231e6c02e1dbe11ada71296af258cff58";
-    sha256 = "sha256-C2PPF8kJm0agcYcRSUUBmmxZJliPatPM1vRtjufEd4M=";
+    rev = "ecd4befeb4eae48aa0a37a88e5aca60e59730411";
+    sha256 = "sha256-enpeXc6pE9+5EdbMIFsnWd++ixlHBKFRxbXmvJYJftg=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-bbcode-color";

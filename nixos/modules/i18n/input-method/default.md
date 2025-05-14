@@ -40,6 +40,7 @@ Available extra IBus engines are:
   - Anthy (`ibus-engines.anthy`): Anthy is a system for
     Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
   - Hangul (`ibus-engines.hangul`): Korean input method.
+  - libpinyin (`ibus-engines.libpinyin`): A Chinese input method.
   - m17n (`ibus-engines.m17n`): m17n is an input method that
     uses input methods and corresponding icons in the m17n database.
   - mozc (`ibus-engines.mozc`): A Japanese input method from

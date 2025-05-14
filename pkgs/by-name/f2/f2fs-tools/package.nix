@@ -39,6 +39,13 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/patch/?id=b15b6cc56ac7764be17acbdbf96448f388992adc";
       hash = "sha256-9XrNf9MMMDGOsuP3DvUhm30Sa2xICDtXbUIvM/TP35o=";
     })
+
+    # Fix the build against C23 compilers (like gcc-15):
+    (fetchpatch {
+      name = "c23.patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/patch/?id=6617d15a660becc23825007ab3fc2d270b5b250f";
+      hash = "sha256-XgceNqwCDa5m9CJTQCmjfiDhZ7x/rO+UiBZwrovgywA=";
+    })
   ];
 
   enableParallelBuilding = true;

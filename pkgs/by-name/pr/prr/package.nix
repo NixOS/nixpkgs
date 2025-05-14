@@ -1,10 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, openssl
-, pkg-config
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,17 +12,15 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "danobi";
-    repo = pname;
+    repo = "prr";
     rev = "v${version}";
     hash = "sha256-siQZ3rDKv2lnn1bmisRsexWwfvmMhK+z4GZGPsrfPgc=";
   };
 
-  cargoHash = "sha256-vCZjgmBYO+I6MZLCOMp50bWEeHwLbZsxSz5gRmBykvI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VIJFr1HpXMC2DXt79Yb1DuLYSbo9g6zsXaNDTXjtlR4=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,4 +32,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ evalexpr ];
   };
 }
-

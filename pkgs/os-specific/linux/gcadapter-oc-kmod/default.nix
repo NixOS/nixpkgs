@@ -1,12 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, kernel
-, kmod
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  kmod,
 }:
 
 let
   kerneldir = "lib/modules/${kernel.modDirVersion}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gcadapter-oc-kmod";
   version = "unstable-2021-12-11";
 
@@ -19,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_SOURCE_DIR=${kernel.dev}/${kerneldir}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];

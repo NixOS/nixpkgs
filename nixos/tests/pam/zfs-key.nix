@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ ... }:
+import ../make-test-python.nix (
+  { ... }:
 
   let
     userPassword = "password";
@@ -8,7 +9,8 @@ import ../make-test-python.nix ({ ... }:
     name = "pam-zfs-key";
 
     nodes.machine =
-      { ... }: {
+      { ... }:
+      {
         boot.supportedFilesystems = [ "zfs" ];
 
         networking.hostId = "12345678";
@@ -27,7 +29,8 @@ import ../make-test-python.nix ({ ... }:
         };
       };
 
-    testScript = { nodes, ... }:
+    testScript =
+      { nodes, ... }:
       let
         homes = nodes.machine.security.pam.zfs.homes;
         pool = builtins.head (builtins.split "/" homes);

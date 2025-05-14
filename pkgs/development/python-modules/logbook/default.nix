@@ -7,6 +7,7 @@
   fetchFromGitHub,
   jinja2,
   pytestCheckHook,
+  pytest-rerunfailures,
   pythonOlder,
   pyzmq,
   redis,
@@ -16,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.7.0.post0";
+  version = "1.8.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "getlogbook";
     repo = "logbook";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bqfFSd7CPYII/3AJCMApqmAYrAWjecOb3JA17FPFMIc=";
+    tag = version;
+    hash = "sha256-Uq5/IdbwewfTCR+lbF8UcUhQe76EHpt4CFkbi3SLGLk=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-rerunfailures
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Some of the tests use localhost networking.
@@ -67,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
-    changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
+    changelog = "https://github.com/getlogbook/logbook/blob/${src.tag}/CHANGES";
     license = licenses.bsd3;
     maintainers = [ ];
   };

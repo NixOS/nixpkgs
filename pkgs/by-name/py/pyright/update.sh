@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused common-updater-scripts jq prefetch-npm-deps
+#!nix-shell -i bash -p curl gnused common-updater-scripts jq prefetch-npm-deps nodejs
 set -euo pipefail
 
 version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/pyright/releases/latest | jq -r '.tag_name | sub("^v"; "")')
@@ -18,11 +18,19 @@ update_hash() {
     local source_root_path="$1"
     local existing_hash="$2"
 
-    # Formulate download URL
-    local download_url="${REPO_URL_PREFIX}/${version}${source_root_path}/package-lock.json"
-
-    # Download package-lock.json to temporary directory
-    curl -fsSL -o "${TEMP_DIR}/package-lock.json" "$download_url"
+    local package_url="${REPO_URL_PREFIX}/${version}${source_root_path}"
+    if [ "$source_root_path" == "" ]; then
+        pushd "${TEMP_DIR}"
+        curl -fsSL "$package_url/package.json" | jq '
+          .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
+          | .scripts =  {  }
+        ' > package.json
+        npm install --package-lock
+        cp package-lock.json "$root/package-lock.json"
+        popd
+    else
+        curl -fsSL -o "${TEMP_DIR}/package-lock.json" "$package_url/package-lock.json"
+    fi
 
     # Calculate the new hash
     local new_hash

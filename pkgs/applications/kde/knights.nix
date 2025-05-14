@@ -1,4 +1,14 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, kplotting, plasma-framework, libkdegames }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  kplotting,
+  plasma-framework,
+  libkdegames,
+}:
 
 mkDerivation {
   pname = "knights";

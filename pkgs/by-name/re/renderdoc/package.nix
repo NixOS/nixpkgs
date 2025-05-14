@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.35";
+  version = "1.37";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iBe3JNtG9P1IAd00s/fL2RcImMrTwruld98OFHrIhp4=";
+    hash = "sha256-udi3v5DyJ9aDBsfTv+T9VTa7SyhNAyuNB3LF5G8vZVg=";
   };
 
   outputs = [
@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })

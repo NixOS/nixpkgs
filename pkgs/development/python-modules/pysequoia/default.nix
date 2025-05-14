@@ -11,24 +11,23 @@
   openssl,
   pcsclite,
   stdenv,
-  darwin,
   libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "pysequoia";
-  version = "0.1.24";
+  version = "0.1.26";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sLGPVyUVh1MxAJz8933xGAxaI9+0L/D6wViy5ARLe44=";
+    hash = "sha256-Ip4yv54e1c+zshEtLVgK5D2VcB41AzSEJHuD5t8akXI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-DLMAL1pJwJ5xU9XzJXlrqfNGloK9VNGxnapnh34bRhI=";
+    hash = "sha256-vm9PpJHRznxNVtL28PBGnQcMUHwFn5uxW7Y9UufAUPg=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +47,6 @@ buildPythonPackage rec {
       pcsclite
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
       libiconv
     ];
 
@@ -61,7 +58,5 @@ buildPythonPackage rec {
     homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
-    # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

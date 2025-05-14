@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 # When no modules are built, the $out/lib/modules directory will not
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.
@@ -87,6 +85,15 @@ for module in $(< ~-/closure); do
             fi
         done
     done || :
+done
+
+for path in $extraFirmwarePaths; do
+    mkdir -p $(dirname $out/lib/firmware/$path)
+    for name in "$path" "$path.xz" "$path.zst" ""; do
+        if cp -v --parents --no-preserve=mode lib/firmware/$name "$out" 2>/dev/null; then
+            break
+        fi
+    done
 done
 
 if test -e lib/firmware/edid ; then

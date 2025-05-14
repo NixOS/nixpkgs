@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "1.1.5";
+  version = "1.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cyqhNpV3gowSDmZhdI3NbbJ1VOwnrJTXZYR/rYNnFVE=";
+    tag = "v${version}";
+    hash = "sha256-gYZWKv70lyuZIYXpchNnZ02J65hN45agDkxZVFed28s=";
   };
 
   build-system = [ setuptools ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python-core";
-    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/v${version}";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

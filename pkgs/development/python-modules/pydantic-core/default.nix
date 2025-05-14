@@ -13,27 +13,26 @@
   pytest-timeout,
   pytest-mock,
   dirty-equals,
+  pydantic,
 }:
 
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.20.1";
+    version = "2.33.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-iFyCFkFzvTL6es3L96pyq/s6SS7h1mn+bS0SPcsxXxA=";
+      tag = "v${version}";
+      hash = "sha256-F+ie8cJ1xl8i3kQSH6H24Vi5KSkRGjX/bXIfzY+ZayM=";
     };
 
-    patches = [ ./01-remove-benchmark-flags.patch ];
-
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       inherit src;
       name = "${pname}-${version}";
-      hash = "sha256-4v4g9/8ZsQUqkwA29/S/BXn2Ea4eSOnMhEbhDvsGuQU=";
+      hash = "sha256-bGhS36Fc7LUdpTHsIM1zn1vX2T/OX+fPewLxLGSZRrk=";
     };
 
     nativeBuildInputs = [
@@ -80,7 +79,7 @@ let
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
       license = licenses.mit;
-      maintainers = with maintainers; [ blaggacao ];
+      maintainers = pydantic.meta.maintainers;
     };
   };
 in

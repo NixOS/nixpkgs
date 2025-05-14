@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation {
   pname = "oauth2ms";
@@ -12,11 +17,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    (python3.withPackages (ps: with ps; [
-      pyxdg
-      msal
-      python-gnupg
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pyxdg
+        msal
+        python-gnupg
+      ]
+    ))
   ];
 
   installPhase = ''

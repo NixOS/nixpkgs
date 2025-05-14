@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, enableJava
-, jdk
-, unzip
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  enableJava,
+  jdk,
+  unzip,
 }:
 
 buildOctavePackage rec {
@@ -23,10 +24,13 @@ buildOctavePackage rec {
     unzip
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/io/index.html";
-    license = with licenses; [ gpl3Plus bsd2 ];
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/io/";
+    license = with lib.licenses; [
+      gpl3Plus
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Input/Output in external formats";
   };
 }

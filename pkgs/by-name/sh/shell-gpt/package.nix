@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TheR1D";
     repo = "shell_gpt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4/5CLzIq+RXVTJk4chrd65GeazRp8VFKdOMt3fT+mbI=";
   };
 
@@ -22,12 +22,14 @@ python3.pkgs.buildPythonApplication rec {
     "distro"
     "typer"
     "instructor"
+    "jinja2"
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
 
-
   propagatedBuildInputs = with python3.pkgs; [
+    jinja2
+    requests
     click
     distro
     instructor
@@ -44,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/TheR1D/shell_gpt";
     changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mglolenstine ];
+    maintainers = with maintainers; [ SohamG ];
     mainProgram = "sgpt";
   };
 }

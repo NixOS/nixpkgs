@@ -34,8 +34,11 @@ $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
-$pcMap{"gbm"} = "mesa";
+$pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
+$pcMap{"fontutil"} = "fontutil";
+$pcMap{"pciaccess"} = "libpciaccess";
+$pcMap{"pthread-stubs"} = "libpthreadstubs";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -258,11 +261,28 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, pixman }:
+{
+  lib,
+  font-alias,
+  font-util,
+  gccmakedep,
+  libpciaccess,
+  libpthread-stubs,
+  luit,
+  pixman,
+}:
 
 self: with self; {
 
-  inherit pixman;
+  inherit
+    gccmakedep
+    libpciaccess
+    luit
+    pixman
+    ;
+  fontalias = font-alias;
+  fontutil = font-util;
+  libpthreadstubs = libpthread-stubs;
 
 EOF
 

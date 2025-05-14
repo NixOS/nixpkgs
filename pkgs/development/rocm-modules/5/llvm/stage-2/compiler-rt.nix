@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, callPackage
-, rocmUpdateScript
-, llvm
-, glibc
+{
+  lib,
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  llvm,
+  glibc,
 }:
 
 callPackage ../base.nix rec {

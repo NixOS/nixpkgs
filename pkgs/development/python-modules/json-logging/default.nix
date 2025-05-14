@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bobbui";
     repo = "json-logging-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
   };
 

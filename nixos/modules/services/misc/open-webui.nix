@@ -56,7 +56,7 @@ in
         '';
         description = ''
           Extra environment variables for Open-WebUI.
-          For more details see https://docs.openwebui.com/getting-started/env-configuration/
+          For more details see <https://docs.openwebui.com/getting-started/advanced-topics/env-configuration/>
         '';
       };
 
@@ -97,7 +97,7 @@ in
       } // cfg.environment;
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} serve --host ${cfg.host} --port ${toString cfg.port}";
+        ExecStart = "${lib.getExe cfg.package} serve --host \"${cfg.host}\" --port ${toString cfg.port}";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "open-webui";
@@ -120,6 +120,18 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         UMask = "0077";
+        CapabilityBoundingSet = "";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        ProtectClock = true;
+        ProtectProc = "invisible";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
 

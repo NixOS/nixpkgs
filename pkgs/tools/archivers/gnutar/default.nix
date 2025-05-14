@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, updateAutotoolsGnuConfigScriptsHook
-, libintl
-, aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl, acl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  updateAutotoolsGnuConfigScriptsHook,
+  libintl,
+  aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
+  acl,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -17,12 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TWL/NzQux67XSFNTI5MMfPlKz3HDWRiCsmp+pQ8+3BY=";
   };
 
-  # avoid retaining reference to CF during stdenv bootstrap
-  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "gt_cv_func_CFPreferencesCopyAppValue=no"
-    "gt_cv_func_CFLocaleCopyCurrent=no"
-    "gt_cv_func_CFLocaleCopyPreferredLanguages=no"
-  ];
+  # GNU tar fails to link libiconv even though the configure script detects it.
+  # https://savannah.gnu.org/bugs/index.php?64441
+  patches = [ ./link-libiconv.patch ];
 
   # gnutar tries to call into gettext between `fork` and `exec`,
   # which is not safe on darwin.
@@ -31,10 +34,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/system.c --replace '_(' 'N_('
   '';
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) updateAutotoolsGnuConfigScriptsHook;
+  nativeBuildInputs = [ autoreconfHook ];
+
   # Add libintl on Darwin specifically as it fails to link (or skip)
   # NLS on it's own:
   #  "_libintl_textdomain", referenced from:
@@ -44,11 +50,17 @@ stdenv.mkDerivation rec {
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-  FORCE_UNSAFE_CONFIGURE = lib.optionalString (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS) "1";
+  FORCE_UNSAFE_CONFIGURE = lib.optionalString (
+    stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS
+  ) "1";
 
-  preConfigure = if stdenv.hostPlatform.isCygwin then ''
-    sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  preConfigure =
+    if stdenv.hostPlatform.isCygwin then
+      ''
+        sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
+      ''
+    else
+      null;
 
   doCheck = false; # fails
   doInstallCheck = false; # fails

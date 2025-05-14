@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.2.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-9gsVvcxW9bM3HMcnHHK+vYHOzXb1ODFqN+sJ4zIRsAU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W9G9bb0zRYDBRseHbVez0J8qVpD5QbizX67H/vsudhM=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
   ];
 
-  outputs = ["out" "dev"];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeBuildType = "RelWithDebInfo";
 
@@ -38,10 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/hyprutils";
     description = "Small C++ library for utilities used across the Hypr* ecosystem";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers =  with lib.maintainers; [
-      donovanglover
-      johnrtitor
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    teams = [ lib.teams.hyprland ];
   };
 })

@@ -1,16 +1,18 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
   # build-system
   setuptools,
+
   # dependencies
   numpy,
   packaging,
   pyproj,
   rasterio,
   xarray,
+
   # tests
   dask,
   netcdf4,
@@ -20,15 +22,14 @@
 
 buildPythonPackage rec {
   pname = "rioxarray";
-  version = "0.17.0";
+  version = "0.19.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
-    rev = "refs/tags/${version}";
-    hash = "sha256-mOXyfkreQ55vWmPCG2U/ijcKZqzHoQQLfKArSh2fDmA=";
+    tag = version;
+    hash = "sha256-tNcBuMyBVDVPbmujfn4WauquutOEn727lxcR19hfyuE=";
   };
 
   build-system = [ setuptools ];
@@ -48,22 +49,28 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    [ "test_clip_geojson__no_drop" ]
-    ++ lib.optionals
-      (stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin")
-      [
-        # numerical errors
-        "test_clip_geojson"
-        "test_open_rasterio_mask_chunk_clip"
-      ];
+    [
+      # AssertionError: assert 535727386 == 535691205
+      "test_clip_geojson__no_drop"
+      # Fails with GDAL 3.11 warning
+      "test_rasterio_vrt"
+      # Fails with small numerical errors on GDAL 3.11
+      "test_rasterio_vrt_gcps"
+      "test_reproject__gcps"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # numerical errors
+      "test_clip_geojson"
+      "test_open_rasterio_mask_chunk_clip"
+    ];
 
   pythonImportsCheck = [ "rioxarray" ];
 
   meta = {
-    description = "geospatial xarray extension powered by rasterio";
+    description = "Geospatial xarray extension powered by rasterio";
     homepage = "https://corteva.github.io/rioxarray/";
     changelog = "https://github.com/corteva/rioxarray/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

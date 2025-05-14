@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, callPackage
-, swift
-, swiftpm
-, swiftpm2nix
-, Foundation
-, XCTest
-, CryptoKit
-, LocalAuthentication
+{
+  lib,
+  stdenv,
+  callPackage,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  Foundation,
+  XCTest,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -22,9 +21,14 @@ stdenv.mkDerivation {
   # repository is not tagged.
   renderArtifact = sources.swift-docc-render-artifact;
 
-  nativeBuildInputs = [ swift swiftpm ];
-  buildInputs = [ Foundation XCTest ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CryptoKit LocalAuthentication ];
+  nativeBuildInputs = [
+    swift
+    swiftpm
+  ];
+  buildInputs = [
+    Foundation
+    XCTest
+  ];
 
   configurePhase = generated.configure;
 
@@ -55,6 +59,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-docc";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

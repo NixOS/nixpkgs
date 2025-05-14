@@ -1,57 +1,55 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, cargo
-, extra-cmake-modules
-, rustc
-, rustPlatform
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  extra-cmake-modules,
+  rustc,
+  rustPlatform,
 
-# common deps
-, karchive
-, qtwebsockets
+  # common deps
+  libzip,
+  qt6Packages,
 
-# client deps
-, qtbase
-, qtkeychain
-, qtmultimedia
-, qtsvg
-, qttools
-, libsecret
+  # client deps
+  ffmpeg,
+  libsecret,
+  libwebp,
 
-# optional client deps
-, giflib
-, kdnssd
-, libvpx
-, miniupnpc
+  # optional client deps
+  giflib,
+  libvpx,
+  miniupnpc,
 
-# optional server deps
-, libmicrohttpd
-, libsodium
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd ? null
+  # optional server deps
+  libmicrohttpd,
+  libsodium,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd ? null,
 
-# options
-, buildClient ? true
-, buildServer ? true
-, buildServerGui ? true # if false builds a headless server
-, buildExtraTools ? false
+  # options
+  buildClient ? true,
+  buildServer ? true,
+  buildServerGui ? true, # if false builds a headless server
+  buildExtraTools ? false,
 }:
 
-assert lib.assertMsg (buildClient || buildServer || buildExtraTools)
-  "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
+assert lib.assertMsg (
+  buildClient || buildServer || buildExtraTools
+) "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
 
 let
-  clientDeps = [
+  clientDeps = with qt6Packages; [
     qtbase
     qtkeychain
     qtmultimedia
     qtsvg
     qttools
+    ffmpeg
     libsecret
+    libwebp
     # optional:
     giflib # gif animation export support
-    kdnssd # local server discovery with Zeroconf
     libvpx # WebM video export
     miniupnpc # automatic port forwarding
   ];
@@ -62,20 +60,21 @@ let
     libsodium # ext-auth support
   ] ++ lib.optional withSystemd systemd;
 
-in mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "drawpile";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-NS1aQlWpn3f+SW0oUjlYwHtOS9ZgbjFTrE9grjK5REM=";
+    sha256 = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-V36yiwraXK7qlJd1r8EtEA4ULxlgvMEmpn/ka3m9GjA=";
+    hash = "sha256-VUX6J7TfxWpa07HPFZ8JzpltIwJUYAl5TABIpBmGYYo=";
   };
 
   nativeBuildInputs = [
@@ -83,14 +82,21 @@ in mkDerivation rec {
     extra-cmake-modules
     rustc
     rustPlatform.cargoSetupHook
+    (
+      if buildClient || buildServerGui then
+        qt6Packages.wrapQtAppsHook
+      else
+        qt6Packages.wrapQtAppsNoGuiHook
+    )
   ];
 
-  buildInputs = [
-    karchive
-    qtwebsockets
-  ]
-  ++ lib.optionals buildClient clientDeps
-  ++ lib.optionals buildServer serverDeps;
+  buildInputs =
+    [
+      libzip
+      qt6Packages.qtwebsockets
+    ]
+    ++ lib.optionals buildClient clientDeps
+    ++ lib.optionals buildServer serverDeps;
 
   cmakeFlags = [
     (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
@@ -100,17 +106,20 @@ in mkDerivation rec {
     (lib.cmakeBool "TOOLS" buildExtraTools)
   ];
 
-  meta = {
-    description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    homepage = "https://drawpile.net/";
-    downloadPage = "https://drawpile.net/download/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
-  } // lib.optionalAttrs buildServer {
-    mainProgram = "drawpile-srv";
-  } // lib.optionalAttrs buildClient {
-    mainProgram = "drawpile";
-  };
+  meta =
+    {
+      description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
+      homepage = "https://drawpile.net/";
+      downloadPage = "https://drawpile.net/download/";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [ fgaz ];
+      platforms = lib.platforms.unix;
+      broken = stdenv.hostPlatform.isDarwin;
+    }
+    // lib.optionalAttrs buildServer {
+      mainProgram = "drawpile-srv";
+    }
+    // lib.optionalAttrs buildClient {
+      mainProgram = "drawpile";
+    };
 }

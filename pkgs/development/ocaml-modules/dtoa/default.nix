@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, buildDunePackage, ocaml, ounit2 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  ounit2,
+}:
 
 buildDunePackage rec {
   pname = "dtoa";

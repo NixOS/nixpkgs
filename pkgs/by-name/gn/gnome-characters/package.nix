@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/gnome-characters-${version}.tar.xz";
-    hash = "sha256-pOjixRC/SCBLmZSk581TeEQkbnTIqYb52+BOIj9dgnw=";
+    hash = "sha256-a88Foi8w8THYqANbD2PYapVnAHpfbfXOhVa6Bnd7dXQ=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Characters/";
     description = "Simple utility application to find and insert unusual characters";
     mainProgram = "gnome-characters";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

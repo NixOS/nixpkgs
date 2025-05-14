@@ -5,11 +5,8 @@
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
-  qmake,
-  qtbase,
-  qttools,
   pkg-config,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,14 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkwidget
     qt5integration
     qt5platform-plugins
@@ -48,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-shortcut-viewer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

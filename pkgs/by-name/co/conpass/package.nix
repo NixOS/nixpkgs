@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "login-securite";
     repo = "conpass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7o4aQ6qpaWimWqgFO35Wht7mQsdVezoPTm7hp54FWR8=";
   };
 

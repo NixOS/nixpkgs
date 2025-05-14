@@ -9,13 +9,13 @@
 }:
 buildPythonPackage rec {
   pname = "dom-toml";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "dom_toml";
-    hash = "sha256-PAfoQ2U4mUl0Ensa4DdmHRp3mskVxE/Qazq1/hQP9Yk=";
+    hash = "sha256-McWHRZXHd/QcwZHDTGbb6iFcgomnsUi0Jft6EMP0+8g=";
   };
 
   build-system = [ flit-core ];

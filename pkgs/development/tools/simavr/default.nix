@@ -1,7 +1,17 @@
-{ lib, stdenv, makeSetupHook, fetchFromGitHub, libelf, which, pkg-config, libglut
-, avrgcc, avrlibc
-, libGLU, libGL
-, GLUT }:
+{
+  lib,
+  stdenv,
+  makeSetupHook,
+  fetchFromGitHub,
+  libelf,
+  which,
+  pkg-config,
+  libglut,
+  avrgcc,
+  avrlibc,
+  libGLU,
+  libGL,
+}:
 
 let
   setupHookDarwin = makeSetupHook {
@@ -11,7 +21,8 @@ let
       avrSuffixSalt = avrgcc.suffixSalt;
     };
   } ./setup-hook-darwin.sh;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "simavr";
   version = "1.7";
 
@@ -30,10 +41,17 @@ in stdenv.mkDerivation rec {
     "AVR=avr-"
   ];
 
-  nativeBuildInputs = [ which pkg-config avrgcc ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
-  buildInputs = [ libelf libglut libGLU libGL ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
+  nativeBuildInputs = [
+    which
+    pkg-config
+    avrgcc
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
+  buildInputs = [
+    libelf
+    libglut
+    libGLU
+    libGL
+  ];
 
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -46,9 +64,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lean and mean Atmel AVR simulator";
     mainProgram = "simavr";
-    homepage    = "https://github.com/buserror/simavr";
-    license     = licenses.gpl3;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/buserror/simavr";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ goodrone ];
   };
 

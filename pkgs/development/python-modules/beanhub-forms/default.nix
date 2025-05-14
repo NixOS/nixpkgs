@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-forms";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-313c+ENmTe1LyfEiMXNB9AUoGx3Yv/1D0T3HnAbd+Zw=";
   };
 

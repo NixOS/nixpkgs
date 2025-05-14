@@ -68,48 +68,56 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config =
-  let cfg = config.hardware.trackpoint; in
-  mkMerge [
-    (mkIf cfg.enable {
-      services.udev.extraRules =
-      ''
-        ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="${cfg.device}", ATTR{device/speed}="${toString cfg.speed}", ATTR{device/sensitivity}="${toString cfg.sensitivity}"
-      '';
-
-      systemd.services.trackpoint = {
-        wantedBy = [ "sysinit.target" ] ;
-        before = [ "sysinit.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig.Type = "oneshot";
-        serviceConfig.RemainAfterExit = true;
-        serviceConfig.ExecStart = ''
-          ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}"
+    let
+      cfg = config.hardware.trackpoint;
+    in
+    mkMerge [
+      (mkIf cfg.enable {
+        services.udev.extraRules = ''
+          ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="${cfg.device}", ATTR{device/speed}="${toString cfg.speed}", ATTR{device/sensitivity}="${toString cfg.sensitivity}"
         '';
-      };
-    })
 
-    (mkIf (cfg.emulateWheel) {
-      services.xserver.inputClassSections = [
-        ''
-          Identifier "Trackpoint Wheel Emulation"
-          MatchProduct "${if cfg.fakeButtons then "PS/2 Generic Mouse" else "ETPS/2 Elantech TrackPoint|Elantech PS/2 TrackPoint|TPPS/2 IBM TrackPoint|DualPoint Stick|Synaptics Inc. Composite TouchPad / TrackPoint|ThinkPad USB Keyboard with TrackPoint|USB Trackpoint pointing device|Composite TouchPad / TrackPoint|${cfg.device}"}"
-          MatchDevicePath "/dev/input/event*"
-          Option "EmulateWheel" "true"
-          Option "EmulateWheelButton" "2"
-          Option "Emulate3Buttons" "false"
-          Option "XAxisMapping" "6 7"
-          Option "YAxisMapping" "4 5"
-        ''
-      ];
-    })
+        systemd.services.trackpoint = {
+          wantedBy = [ "sysinit.target" ];
+          before = [
+            "sysinit.target"
+            "shutdown.target"
+          ];
+          conflicts = [ "shutdown.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+          serviceConfig.ExecStart = ''
+            ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}"
+          '';
+        };
+      })
 
-    (mkIf cfg.fakeButtons {
-      boot.extraModprobeConfig = "options psmouse proto=bare";
-    })
-  ];
+      (mkIf (cfg.emulateWheel) {
+        services.xserver.inputClassSections = [
+          ''
+            Identifier "Trackpoint Wheel Emulation"
+            MatchProduct "${
+              if cfg.fakeButtons then
+                "PS/2 Generic Mouse"
+              else
+                "ETPS/2 Elantech TrackPoint|Elantech PS/2 TrackPoint|TPPS/2 IBM TrackPoint|DualPoint Stick|Synaptics Inc. Composite TouchPad / TrackPoint|ThinkPad USB Keyboard with TrackPoint|USB Trackpoint pointing device|Composite TouchPad / TrackPoint|${cfg.device}"
+            }"
+            MatchDevicePath "/dev/input/event*"
+            Option "EmulateWheel" "true"
+            Option "EmulateWheelButton" "2"
+            Option "Emulate3Buttons" "false"
+            Option "XAxisMapping" "6 7"
+            Option "YAxisMapping" "4 5"
+          ''
+        ];
+      })
+
+      (mkIf cfg.fakeButtons {
+        boot.extraModprobeConfig = "options psmouse proto=bare";
+      })
+    ];
 }

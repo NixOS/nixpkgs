@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   yarl,
@@ -21,13 +22,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-n55G6ulKcgSSrgPk70D52OO9fp3WURlcRhJQUKrZ1Nk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov" "" \
       --replace-fail '"0.0.0"' '"${version}"'
   '';
 
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

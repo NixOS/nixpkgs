@@ -1,44 +1,53 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "aesmd";
   meta = {
-    maintainers = with lib.maintainers; [ trundle veehaitch ];
+    maintainers = with lib.maintainers; [
+      trundle
+      veehaitch
+    ];
   };
 
-  nodes.machine = { lib, ... }: {
-    services.aesmd = {
-      enable = true;
-      settings = {
-        defaultQuotingType = "ecdsa_256";
-        proxyType = "direct";
-        whitelistUrl = "http://nixos.org";
-      };
-    };
-
-    # Should have access to the AESM socket
-    users.users."sgxtest" = {
-      isNormalUser = true;
-      extraGroups = [ "sgx" ];
-    };
-
-    # Should NOT have access to the AESM socket
-    users.users."nosgxtest".isNormalUser = true;
-
-    # We don't have a real SGX machine in NixOS tests
-    systemd.services.aesmd.unitConfig.AssertPathExists = lib.mkForce [ ];
-
-    specialisation = {
-      withQuoteProvider.configuration = { ... }: {
-        services.aesmd = {
-          quoteProviderLibrary = pkgs.sgx-azure-dcap-client;
-          environment = {
-            AZDCAP_DEBUG_LOG_LEVEL = "INFO";
-          };
+  nodes.machine =
+    { lib, ... }:
+    {
+      services.aesmd = {
+        enable = true;
+        settings = {
+          defaultQuotingType = "ecdsa_256";
+          proxyType = "direct";
+          whitelistUrl = "http://nixos.org";
         };
       };
-    };
-  };
 
-  testScript = { nodes, ... }:
+      # Should have access to the AESM socket
+      users.users."sgxtest" = {
+        isNormalUser = true;
+        extraGroups = [ "sgx" ];
+      };
+
+      # Should NOT have access to the AESM socket
+      users.users."nosgxtest".isNormalUser = true;
+
+      # We don't have a real SGX machine in NixOS tests
+      systemd.services.aesmd.unitConfig.AssertPathExists = lib.mkForce [ ];
+
+      specialisation = {
+        withQuoteProvider.configuration =
+          { ... }:
+          {
+            services.aesmd = {
+              quoteProviderLibrary = pkgs.sgx-azure-dcap-client;
+              environment = {
+                AZDCAP_DEBUG_LOG_LEVEL = "INFO";
+              };
+            };
+          };
+      };
+    };
+
+  testScript =
+    { nodes, ... }:
     let
       specialisations = "${nodes.machine.system.build.toplevel}/specialisation";
     in

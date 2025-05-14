@@ -10,8 +10,6 @@
   shiboken6,
   llvmPackages,
   symlinkJoin,
-  libGL,
-  darwin,
 }:
 let
   packages = with python.pkgs.qt6; [
@@ -62,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
   # We therefore symLink all required and optional Qt modules in one directory tree ("qt_linked").
-  # Also we remove "Designer" from darwin build, due to linking failure
   postPatch =
     ''
       # Don't ignore optional Qt modules
@@ -79,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # "Couldn't find libclang.dylib You will likely need to add it manually to PATH to ensure the build succeeds."
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    LLVM_INSTALL_DIR = "${llvmPackages.libclang.lib}/lib";
+    LLVM_INSTALL_DIR = "${lib.getLib llvmPackages.libclang}/lib";
   };
 
   nativeBuildInputs = [
@@ -89,27 +86,18 @@ stdenv.mkDerivation (finalAttrs: {
     pythonImportsCheckHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
-  buildInputs =
+  buildInputs = (
     if stdenv.hostPlatform.isLinux then
       # qtwebengine fails under darwin
       # see https://github.com/NixOS/nixpkgs/pull/312987
       packages ++ [ python.pkgs.qt6.qtwebengine ]
     else
-      with darwin.apple_sdk_11_0.frameworks;
-      [
+      python.pkgs.qt6.darwinVersionInputs
+      ++ [
         qt_linked
-        libGL
         cups
-        # frameworks
-        IOKit
-        DiskArbitration
-        CoreBluetooth
-        EventKit
-        AVFoundation
-        Contacts
-        AGL
-        AppKit
-      ];
+      ]
+  );
 
   propagatedBuildInputs = [ shiboken6 ];
 
@@ -134,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

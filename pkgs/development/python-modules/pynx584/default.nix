@@ -23,7 +23,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "pynx584";
-    rev = "refs/tags/0.8.2";
+    tag = "0.8.2";
     hash = "sha256-q5ra7tH4kaBrw0VAiyMsmWOkVhA7Y6bRuFP8dlxQjsE=";
   };
 

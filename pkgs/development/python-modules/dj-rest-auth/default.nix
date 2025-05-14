@@ -6,8 +6,8 @@
   djangorestframework,
   djangorestframework-simplejwt,
   fetchFromGitHub,
+  fetchpatch,
   python,
-  pythonOlder,
   responses,
   setuptools,
   unittest-xml-reporting,
@@ -15,23 +15,28 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "6.0.0";
+  version = "7.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fNy1uN3oH54Wd9+EqYpiV0ot1MbSSC7TZoAARQeR81s=";
+    tag = version;
+    hash = "sha256-bus7Sf5H4PA5YFrkX7hbALOq04koDz3KTO42hHFJPhw=";
   };
+
+  patches = [
+    # See https://github.com/iMerica/dj-rest-auth/pull/683
+    (fetchpatch {
+      name = "djangorestframework-simplejwt_5.5_compatibility.patch";
+      url = "https://github.com/iMerica/dj-rest-auth/commit/cc5587e4e3f327697709f3f0d491650bff5464e7.diff";
+      hash = "sha256-2LahibxuNECAfjqsbNs2ezaWt1VH0ZBNwSNWCZwIe8I=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "==" ">="
-    substituteInPlace dj_rest_auth/tests/test_api.py \
-      --replace-fail "assertEquals" "assertEqual"
   '';
 
   build-system = [ setuptools ];
@@ -40,7 +45,9 @@ buildPythonPackage rec {
 
   dependencies = [ djangorestframework ];
 
-  optional-dependencies.with_social = [ django-allauth ];
+  optional-dependencies.with_social = [
+    django-allauth
+  ] ++ django-allauth.optional-dependencies.socialaccount;
 
   nativeCheckInputs = [
     djangorestframework-simplejwt

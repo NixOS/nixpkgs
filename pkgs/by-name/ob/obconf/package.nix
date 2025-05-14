@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qwm66VA/ueRMFtSUcrmuObNkz+KYgWRnmR7TnQwpxiE=";
   };
 
+  patches = [ ./fix-implicit-declarations.patch ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -38,8 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     openbox
   ];
 
+  strictDeps = true;
+
   postPatch = ''
-    substituteInPlace configure.ac --replace 2.0.4 ${finalAttrs.version}
+    substituteInPlace configure.ac --replace-fail 2.0.4 ${finalAttrs.version}
   '';
 
   meta = {

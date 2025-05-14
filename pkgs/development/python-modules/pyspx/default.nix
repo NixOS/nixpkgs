@@ -6,7 +6,6 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -19,15 +18,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphincs";
     repo = "pyspx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hMZ7JZoo5RdUwQYpGjtZznH/O6rBUXv+svfOAI0cjqs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cffi
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

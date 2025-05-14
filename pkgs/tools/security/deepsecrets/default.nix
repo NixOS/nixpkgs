@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,22 +12,21 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "avito-tech";
     repo = "deepsecrets";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VfIsPgStHcIYGbfrOs1mvgoq0ZoVSZwILFVBeMt/5Jc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-warn 'pyyaml = "^5.4.1"' 'pyyaml = "*"' \
-      --replace-warn 'regex = "^2023.3.23"' 'regex = "*"' \
-      --replace-warn 'mmh3 = "^3.0.0"' 'mmh3 = "*"'
-  '';
+  pythonRelaxDeps = [
+    "pyyaml"
+    "regex"
+    "mmh3"
+  ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dotwiz
     mmh3
     ordered-set
@@ -40,12 +40,23 @@ python3.pkgs.buildPythonApplication rec {
     "deepsecrets"
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assumes package is built in /app (docker?), and not /build/${src.name} (nix sandbox)
+    "test_1_cli"
+    "test_config"
+    "test_basic_info"
+  ];
+
+  meta = {
     description = "Secrets scanner that understands code";
     mainProgram = "deepsecrets";
     homepage = "https://github.com/avito-tech/deepsecrets";
     changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

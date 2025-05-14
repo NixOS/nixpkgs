@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -10,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "ArchiveBox";
     repo = "readability-extractor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QzxwPonPrCDdVYHZ9rEfw8ok56lVZE82VykrfkdFh5I=";
   };
 

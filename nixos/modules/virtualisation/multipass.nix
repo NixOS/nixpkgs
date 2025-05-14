@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -13,7 +14,13 @@ in
       enable = lib.mkEnableOption "Multipass, a simple manager for virtualised Ubuntu instances";
 
       logLevel = lib.mkOption {
-        type = lib.types.enum [ "error" "warning" "info" "debug" "trace" ];
+        type = lib.types.enum [
+          "error"
+          "warning"
+          "info"
+          "debug"
+          "trace"
+        ];
         default = "debug";
         description = ''
           The logging verbosity of the multipassd binary.

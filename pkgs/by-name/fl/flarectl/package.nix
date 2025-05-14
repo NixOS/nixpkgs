@@ -1,24 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "flarectl";
-  version = "0.105.0";
+  version = "0.115.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflare-go";
     rev = "v${version}";
-    hash = "sha256-xUITOBXBy5Jt0DFRNffX7sRhAtgUPMEJOHa2SbjM1n0=";
+    hash = "sha256-2LdsqCqRTruTHYPwuI9Gm07cpvQNOrZvIl6rjZU+0aU=";
   };
 
-  vendorHash = "sha256-KMCwbbDpj4QAgvKLlOPDKSlrDyf+K/tGTMM/GBlvyuc=";
+  vendorHash = "sha256-f+bNNwbTj348JJJLST2j7h8/A79qzvGlf8MjldVvtGU=";
 
   subPackages = [ "cmd/flarectl" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "CLI application for interacting with a Cloudflare account";

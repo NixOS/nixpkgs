@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, substituteAll
-, vala
-, libadwaita
-, libgee
-, gettext
-, granite7
-, gtk4
-, networkmanager
-, networkmanagerapplet
-, libnma-gtk4
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  replaceVars,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  granite7,
+  gtk4,
+  networkmanager,
+  networkmanagerapplet,
+  libnma-gtk4,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-N/S4oO7wwOMJZhQeqAeLBOMEsJtoKItxmGhsLHMuOoM=";
+    hash = "sha256-mTTcavuxnRSBiifFpga14xPReHguvp9wIUS71Djorjk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit networkmanagerapplet;
     })
   ];
@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-network";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

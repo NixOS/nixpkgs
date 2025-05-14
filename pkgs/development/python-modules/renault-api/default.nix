@@ -13,13 +13,14 @@
   pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
+  syrupy,
   tabulate,
   typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.2.7";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tke2bE+djV1N70meMOytYmbPmYDN8fU+Da81Mf6nNAI=";
+    tag = "v${version}";
+    hash = "sha256-xnlFt6K7SOpeT4yXxLnep5NvNaP6REteUhBpcT7ipN0=";
   };
 
   build-system = [ poetry-core ];
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
     typeguard
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 

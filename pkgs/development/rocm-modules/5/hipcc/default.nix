@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, lsb-release
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  lsb-release,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,8 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Compiler driver utility that calls clang or nvcc";
     homepage = "https://github.com/ROCm/HIPCC";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

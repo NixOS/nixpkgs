@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, stdenvNoLibc, buildPackages }:
+{
+  stdenv,
+  fetchFromGitHub,
+  stdenvNoLibc,
+  buildPackages,
+}:
 
 stdenvNoLibc.mkDerivation {
   name = "newlib";
@@ -16,7 +21,10 @@ stdenvNoLibc.mkDerivation {
     export CC=cc
   '';
 
-  configurePlatforms = [ "build" "target" ];
+  configurePlatforms = [
+    "build"
+    "target"
+  ];
   configureFlags = [
     "--host=${stdenv.buildPlatform.config}"
 

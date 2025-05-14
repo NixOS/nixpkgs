@@ -49,8 +49,6 @@ buildPythonPackage rec {
     assay
   ];
 
-  doCheck = true;
-
   checkPhase = ''
     runHook preCheck
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "uart-devices";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rmOWyTdOwnlr8Rwsvd2oeZq79LuGVJDAkIW2/9gGrKQ=";
   };
 

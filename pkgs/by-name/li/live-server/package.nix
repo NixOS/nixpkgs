@@ -1,37 +1,28 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   openssl,
   pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "live-server";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "lomirus";
     repo = "live-server";
     rev = "v${version}";
-    hash = "sha256-VsM77cEAjX12qCHS9fvImloY05b+swg7mabPd655C+s=";
+    hash = "sha256-8NM3XJ7RC7cUNKN1DPW2huvkx7tfA8zDrETkwDMbaT8=";
   };
 
-  cargoHash = "sha256-a4yDHZm9LBNuwOrxra4da7u/2RNXry4UYPVDGu9eGxo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tUKhVDv+ZDGRpJC/sSYcQxYhGsAyOsflc+GeUyBaeEk=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "Local network server with live reload feature for static pages";

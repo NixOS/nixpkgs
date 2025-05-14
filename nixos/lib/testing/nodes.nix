@@ -1,4 +1,10 @@
-testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
+testModuleArgs@{
+  config,
+  lib,
+  hostPkgs,
+  nodes,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,17 +13,19 @@ let
     mapAttrs
     mkDefault
     mkIf
-    mkOption mkForce
+    mkMerge
+    mkOption
+    mkForce
     optional
     optionalAttrs
     types
     ;
 
-  inherit (hostPkgs) hostPlatform;
+  inherit (hostPkgs.stdenv) hostPlatform;
 
   guestSystem =
-    if hostPlatform.isLinux
-    then hostPlatform.system
+    if hostPlatform.isLinux then
+      hostPlatform.system
     else
       let
         hostToGuest = {
@@ -27,45 +35,73 @@ let
 
         supportedHosts = lib.concatStringsSep ", " (lib.attrNames hostToGuest);
 
-        message =
-          "NixOS Test: don't know which VM guest system to pair with VM host system: ${hostPlatform.system}. Perhaps you intended to run the tests on a Linux host, or one of the following systems that may run NixOS tests: ${supportedHosts}";
+        message = "NixOS Test: don't know which VM guest system to pair with VM host system: ${hostPlatform.system}. Perhaps you intended to run the tests on a Linux host, or one of the following systems that may run NixOS tests: ${supportedHosts}";
       in
-        hostToGuest.${hostPlatform.system} or (throw message);
+      hostToGuest.${hostPlatform.system} or (throw message);
 
-  baseOS =
-    import ../eval-config.nix {
-      inherit lib;
-      system = null; # use modularly defined system
-      inherit (config.node) specialArgs;
-      modules = [ config.defaults ];
-      baseModules = (import ../../modules/module-list.nix) ++
-        [
-          ./nixos-test-base.nix
-          { key = "nodes"; _module.args.nodes = config.nodesCompat; }
-          ({ config, ... }:
-            {
-              virtualisation.qemu.package = testModuleArgs.config.qemu.package;
-              virtualisation.host.pkgs = hostPkgs;
-            })
-          ({ options, ... }: {
-            key = "nodes.nix-pkgs";
-            config = optionalAttrs (!config.node.pkgsReadOnly) (
-              mkIf (!options.nixpkgs.pkgs.isDefined) {
-                # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
-                nixpkgs.system = guestSystem;
-              }
-            );
-          })
-          testModuleArgs.config.extraBaseModules
-        ];
-    };
-
+  baseOS = import ../eval-config.nix {
+    inherit lib;
+    system = null; # use modularly defined system
+    inherit (config.node) specialArgs;
+    modules = [ config.defaults ];
+    baseModules = (import ../../modules/module-list.nix) ++ [
+      ./nixos-test-base.nix
+      {
+        key = "nodes";
+        _module.args.nodes = config.nodesCompat;
+      }
+      (
+        { config, ... }:
+        {
+          virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+          virtualisation.host.pkgs = hostPkgs;
+        }
+      )
+      (
+        { options, ... }:
+        {
+          key = "nodes.nix-pkgs";
+          config = optionalAttrs (!config.node.pkgsReadOnly) (
+            mkIf (!options.nixpkgs.pkgs.isDefined) {
+              # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
+              nixpkgs.system = guestSystem;
+            }
+          );
+        }
+      )
+      testModuleArgs.config.extraBaseModules
+    ];
+  };
 
 in
 
 {
 
   options = {
+    sshBackdoor = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to turn on the VSOCK-based access to all VMs. This provides an unauthenticated access intended for debugging.";
+      };
+      vsockOffset = mkOption {
+        default = 2;
+        type = types.ints.between 2 4294967296;
+        description = ''
+          This field is only relevant when multiple users run the (interactive)
+          driver outside the sandbox and with the SSH backdoor activated.
+          The typical symptom for this being a problem are error messages like this:
+          `vhost-vsock: unable to set guest cid: Address already in use`
+
+          This option allows to assign an offset to each vsock number to
+          resolve this.
+
+          This is a 32bit number. The lowest possible vsock number is `3`
+          (i.e. with the lowest node number being `1`, this is 2+1).
+        '';
+      };
+    };
+
     node.type = mkOption {
       type = types.raw;
       default = baseOS.type;
@@ -148,21 +184,54 @@ in
 
   config = {
     _module.args.nodes = config.nodesCompat;
-    nodesCompat =
-      mapAttrs
-        (name: config: config // {
-          config = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211)
+    nodesCompat = mapAttrs (
+      name: config:
+      config
+      // {
+        config =
+          lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211)
             "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
             config;
-        })
-        config.nodes;
+      }
+    ) config.nodes;
 
     passthru.nodes = config.nodesCompat;
 
-    defaults = mkIf config.node.pkgsReadOnly {
-      nixpkgs.pkgs = config.node.pkgs;
-      imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
-    };
+    extraDriverArgs = mkIf config.sshBackdoor.enable [
+      "--dump-vsocks=${toString config.sshBackdoor.vsockOffset}"
+    ];
+
+    defaults = mkMerge [
+      (mkIf config.node.pkgsReadOnly {
+        nixpkgs.pkgs = config.node.pkgs;
+        imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
+      })
+      (mkIf config.sshBackdoor.enable (
+        let
+          inherit (config.sshBackdoor) vsockOffset;
+        in
+        { config, ... }:
+        {
+          services.openssh = {
+            enable = true;
+            settings = {
+              PermitRootLogin = "yes";
+              PermitEmptyPasswords = "yes";
+            };
+          };
+
+          security.pam.services.sshd = {
+            allowNullPassword = true;
+          };
+
+          virtualisation.qemu.options = [
+            "-device vhost-vsock-pci,guest-cid=${
+              toString (config.virtualisation.test.nodeNumber + vsockOffset)
+            }"
+          ];
+        }
+      ))
+    ];
 
   };
 }

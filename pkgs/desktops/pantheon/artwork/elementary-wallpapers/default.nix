@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, gettext
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  gettext,
+  meson,
+  ninja,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wallpapers";
     license = licenses.publicDomain;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }
-

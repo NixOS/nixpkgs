@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LEW21";
     repo = "pydbus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F1KKXG+7dWlEbToqtF3G7wU0Sco7zH5NqzlL58jyDGw=";
   };
 

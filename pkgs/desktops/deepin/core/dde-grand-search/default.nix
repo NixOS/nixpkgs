@@ -3,16 +3,15 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qttools,
+  libsForQt5,
   pkg-config,
-  wrapQtAppsHook,
   dtkwidget,
   dde-qt-dbus-factory,
   dde-tray-loader,
   deepin-pdfium,
   qt5integration,
   qt5platform-plugins,
-  taglib,
+  taglib_1,
   ffmpeg,
   ffmpegthumbnailer,
   pcre,
@@ -33,9 +32,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
     deepin-pdfium
     qt5integration
     qt5platform-plugins
-    taglib
+    taglib_1
     ffmpeg
     ffmpegthumbnailer
     pcre
@@ -78,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-grand-search";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

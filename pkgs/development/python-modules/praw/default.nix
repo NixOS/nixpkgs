@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.8.0";
+  version = "7.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oJkpFGJswG//5dnfdwkUdAkn8FOuqT/tDoTT5UncOGA=";
+    tag = "v${version}";
+    hash = "sha256-jxF7rlMwKIKwyYv35vYWAdtClsVhnIkywoyMQeggGBc=";
   };
 
   build-system = [ flit-core ];

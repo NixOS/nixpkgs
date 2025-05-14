@@ -10,12 +10,13 @@
 
 buildPythonPackage rec {
   pname = "python-snappy";
-  version = "0.7.1";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-G8KdNiEdRLufBPPXzPuurrvC9ittQPT8Tt0fsWvFLBM=";
+    pname = "python_snappy";
+    inherit version;
+    hash = "sha256-QCFsG637LTiseB7LFiodDsQPjul0fmELz+/fp5SGzuM=";
   };
 
   build-system = [

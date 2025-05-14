@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.1.3";
+  version = "2.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NjUgmvmy0buBFpXjcEsZU0F2JNeXE3GBpkaxClvo4T0=";
+    tag = "v${version}";
+    hash = "sha256-+tZMg0AmfmAFOqUQhOl+vHQVF1DApZbVNjGV4BkGRTg=";
   };
 
   # remove addops as they add test directory and coverage parameters to pytest
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Redshift interface library";
     homepage = "https://github.com/aws/amazon-redshift-python-driver";
-    changelog = "https://github.com/aws/amazon-redshift-python-driver/releases/tag/v${version}";
+    changelog = "https://github.com/aws/amazon-redshift-python-driver/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcwitt ];
   };

@@ -2,42 +2,47 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  mock,
+  pythonAtLeast,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   pillow,
   pypng,
+
+  # tests
+  mock,
   pytestCheckHook,
-  pythonAtLeast,
   qrcode,
-  setuptools,
   testers,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "7.4.2";
+  version = "8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ndlpRUgn4Sfb2TaWsgdHI55tVA4IKTfJDxSslbMPWEU=";
+    hash = "sha256-AlzisVD3/kKW0Rbum61FWmZDq09ufc5UFhOkdYy840c=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-    pypng
-    # imports pkg_resouces in console_scripts.py
-    setuptools
-  ];
-
-  optional-dependencies.pil = [ pillow ];
+  optional-dependencies = {
+    pil = [ pillow ];
+    png = [ pypng ];
+    all = [
+      pypng
+      pillow
+    ];
+  };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.pil;
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   passthru.tests = {
     version = testers.testVersion {

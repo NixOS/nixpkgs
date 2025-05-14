@@ -13,6 +13,7 @@ let
       default = true;
       example = false;
     };
+  format = pkgs.formats.toml { };
 in
 {
   options.programs.direnv = {
@@ -33,6 +34,9 @@ in
     '';
     enableFishIntegration = enabledOption ''
       Fish integration
+    '';
+    enableXonshIntegration = enabledOption ''
+      Xonsh integration
     '';
 
     direnvrcExtra = lib.mkOption {
@@ -69,11 +73,34 @@ in
         '';
       };
     };
+
+    settings = lib.mkOption {
+      inherit (format) type;
+      default = { };
+      example = lib.literalExpression ''
+        {
+          global = {
+            log_format = "-";
+            log_filter = "^$";
+          };
+        }
+      '';
+      description = ''
+        Direnv configuration. Refer to {manpage}`direnv.toml(1)`.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
 
     programs = {
+      direnv.settings = lib.mkIf cfg.silent {
+        global = {
+          log_format = lib.mkDefault "-";
+          log_filter = lib.mkDefault "^$";
+        };
+      };
+
       zsh.interactiveShellInit = lib.mkIf cfg.enableZshIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || printenv PATH | grep -vqc '/nix/store'; then
          eval "$(${lib.getExe cfg.package} hook zsh)"
@@ -94,6 +121,19 @@ in
          ${lib.getExe cfg.package} hook fish | source
         end
       '';
+
+      xonsh = lib.mkIf cfg.enableXonshIntegration {
+        extraPackages = ps: [ ps.xonsh.xontribs.xonsh-direnv ];
+        config = ''
+          if ${
+            if cfg.loadInNixShell then
+              "True"
+            else
+              "not any(map(lambda s: s.startswith('/nix/store'), __xonsh__.env.get('PATH')))"
+          }:
+              xontrib load direnv
+        '';
+      };
     };
 
     environment = {
@@ -103,18 +143,19 @@ in
         (pkgs.symlinkJoin {
           inherit (cfg.package) name;
           paths = [ cfg.package ];
+          nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
           postBuild = ''
-            rm -rf $out/share/fish
+            wrapProgram "$out/bin/direnv" \
+              --set-default 'DIRENV_CONFIG' '/etc/direnv'
+            rm -rf "$out/share/fish"
           '';
         })
       ];
 
-      variables = {
-        DIRENV_CONFIG = "/etc/direnv";
-        DIRENV_LOG_FORMAT = lib.mkIf cfg.silent "";
-      };
-
       etc = {
+        "direnv/direnv.toml" = lib.mkIf (cfg.settings != { }) {
+          source = format.generate "direnv.toml" cfg.settings;
+        };
         "direnv/direnvrc".text = ''
           ${lib.optionalString cfg.nix-direnv.enable ''
             #Load nix-direnv

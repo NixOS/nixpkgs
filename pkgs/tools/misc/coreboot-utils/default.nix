@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "24.08";
+  version = "25.03";
 
   commonMeta = {
     description = "Various coreboot-related tools";
@@ -45,7 +45,7 @@ let
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = version;
-          hash = "sha256-BwuoBuWKHTnSwV8ubm5NqcddgxP5OMXuTl3zmwwKEsg=";
+          hash = "sha256-tsNdsH+GxjLUTd7KXHMZUTNTIAWeKJ3BNy1Lehjo8Eo=";
         };
 
         enableParallelBuilding = true;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "pyls-memestra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-C1d2BibjpoZCPSy39PkdcLiLIwZZG+XTDWXVjTT1Bws=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     python-lsp-server
   ];
 
-  # Tests fail because they rely on writting to read-only files
+  # Tests fail because they rely on writing to read-only files
   doCheck = false;
 
   pythonImportsCheck = [ "pyls_memestra" ];

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twizmwazin";
     repo = "unique_log_filter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-av1pVPDsO2dto5fhBK74jKfVsVY2ChyUE5NNja2B1Qw=";
   };
 

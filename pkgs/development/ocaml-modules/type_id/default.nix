@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, alcotest
-, type_eq
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  type_eq,
 }:
 
 buildDunePackage rec {
@@ -20,7 +21,6 @@ buildDunePackage rec {
     type_eq
   ];
 
-
   checkInputs = [
     alcotest
   ];
@@ -35,4 +35,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
 }
-

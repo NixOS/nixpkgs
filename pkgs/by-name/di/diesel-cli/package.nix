@@ -1,24 +1,24 @@
 {
   lib,
   stdenv,
+  diesel-cli,
   fetchCrate,
-  rustPlatform,
   installShellFiles,
-  darwin,
   libiconv,
   libmysqlclient,
+  libpq,
   nix-update-script,
   openssl,
   pkg-config,
-  postgresql,
+  rustPlatform,
   sqlite,
   testers,
   zlib,
-  diesel-cli,
   sqliteSupport ? true,
   postgresqlSupport ? true,
   mysqlSupport ? true,
 }:
+
 assert lib.assertMsg (lib.elem true [
   postgresqlSupport
   mysqlSupport
@@ -27,15 +27,16 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.2.4";
+  version = "2.2.10";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-kTwAG1B4gy+1jj5ar5RkmIUMAO9wYsG7QnMcZii/OZk=";
+    hash = "sha256-ELl8jrTWu2pXn2+ZQh7Z/lrmxRCkCXCCXvXcAKF5IJg=";
   };
 
-  cargoHash = "sha256-qcyNFuKJldHVJDAye4K1rHPf/SvpZ+BmqBast1vh/3Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uijO0eAc9U7T5SDh3iCr/wC257Q83VOJGop4KADGfgA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,10 +45,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && mysqlSupport) libiconv
     ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresqlSupport postgresql
+    ++ lib.optional postgresqlSupport libpq
     ++ lib.optionals mysqlSupport [
       libmysqlclient
       zlib

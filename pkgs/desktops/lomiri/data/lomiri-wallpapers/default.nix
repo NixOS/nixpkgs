@@ -1,7 +1,8 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, gitUpdater
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -42,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/ubports/development/core/lomiri-wallpapers/-/blob/${finalAttrs.version}/ChangeLog";
     # On update, recheck debian/copyright for which licenses apply to the installed images
     license = with licenses; [ cc-by-sa-30 ];
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.all;
   };
 })

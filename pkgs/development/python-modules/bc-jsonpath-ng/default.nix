@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "jsonpath-ng";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FWP4tzlacAWVXG3YnPwl5MKc12geaCxZ2xyKx9PSarU=";
   };
 

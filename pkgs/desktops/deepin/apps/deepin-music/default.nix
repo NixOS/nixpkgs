@@ -12,7 +12,7 @@
   ffmpeg_6,
   libvlc,
   qt6Packages,
-  taglib,
+  taglib_1,
   SDL2,
   gst_all_1,
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       qt6Packages.qtmultimedia
       ffmpeg_6
       libvlc
-      taglib
+      taglib_1
       SDL2
     ]
     ++ (with gst_all_1; [
@@ -78,6 +78,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-music";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

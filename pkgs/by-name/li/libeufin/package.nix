@@ -4,13 +4,15 @@
   fetchgit,
   python3,
   jdk17_headless,
-  gradle,
+  gradle_8,
   makeWrapper,
   postgresql,
   postgresqlTestHook,
 }:
 let
   customPython = python3.withPackages (p: [ p.setuptools ]);
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libeufin";

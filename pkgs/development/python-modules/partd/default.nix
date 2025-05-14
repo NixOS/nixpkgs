@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "partd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-EK+HNSPh2b7jwpc6jwH/n+6HDgHhRfBeaRuiDIWVG28=";
   };
 

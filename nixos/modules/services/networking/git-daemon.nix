@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.gitDaemon;
@@ -56,8 +61,11 @@ in
 
       repositories = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "/srv/git" "/home/user/git/repo2" ];
+        default = [ ];
+        example = [
+          "/srv/git"
+          "/home/user/git/repo2"
+        ];
         description = ''
           A whitelist of paths of git repositories, or directories containing repositories
           all of which would be published. Paths must not end in "/".
@@ -120,11 +128,14 @@ in
     systemd.services.git-daemon = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${lib.getExe cfg.package} daemon --reuseaddr "
+      script =
+        "${lib.getExe cfg.package} daemon --reuseaddr "
         + (lib.optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (lib.optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")
         + "--port=${toString cfg.port} --user=${cfg.user} --group=${cfg.group} ${cfg.options} "
-        + "--verbose " + (lib.optionalString cfg.exportAll "--export-all ")  + lib.concatStringsSep " " cfg.repositories;
+        + "--verbose "
+        + (lib.optionalString cfg.exportAll "--export-all ")
+        + lib.concatStringsSep " " cfg.repositories;
     };
 
   };

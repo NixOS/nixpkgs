@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xOKfdk8Bn9f5oszS0IHUD6HgzL9VSa5GBZ28n4fvAck=";
   };
 
@@ -40,15 +40,15 @@ buildPythonPackage rec {
     # The table is already downloaded
     export ISO4217_DOWNLOAD=0
     # Copy the table file to satifiy the build process
-    cp -r ${table} $pname/table.xml
+    cp -r ${table} iso4217/table.xml
   '';
 
   postInstall = ''
     # Copy the table file
-    cp -r ${table} $out/${python.sitePackages}/$pname/table.xml
+    cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  pytestFlagsArray = [ "$pname/test.py" ];
+  pytestFlagsArray = [ "iso4217/test.py" ];
 
   pythonImportsCheck = [ "iso4217" ];
 

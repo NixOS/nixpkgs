@@ -17,7 +17,7 @@ let
   app-recursive = buildDotnetModule (finalAttrs: {
     name = "final-attrs-rec-test-application";
     src = ../structured-attrs/src;
-    nugetDeps = ../structured-attrs/nuget-deps.nix;
+    nugetDeps = ../structured-attrs/nuget-deps.json;
     dotnetFlags = [ "--property:Copyright=${finalAttrs.passthru.copyrightString}" ];
     env.TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
     __structuredAttrs = true;
@@ -29,7 +29,7 @@ let
   app-const = buildDotnetModule {
     name = "final-attrs-const-test-application";
     src = ../structured-attrs/src;
-    nugetDeps = ../structured-attrs/nuget-deps.nix;
+    nugetDeps = ../structured-attrs/nuget-deps.json;
     dotnetFlags = [ "--property:Copyright=${copyrightString}" ];
     env.TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
     __structuredAttrs = true;

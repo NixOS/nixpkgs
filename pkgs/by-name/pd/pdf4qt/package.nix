@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, lcms
-, cmake
-, pkg-config
-, qt6
-, wrapGAppsHook3
-, openjpeg
-, tbb_2021_11
-, blend2d
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lcms,
+  cmake,
+  pkg-config,
+  qt6,
+  wrapGAppsHook3,
+  openjpeg,
+  tbb_2021_11,
+  blend2d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdf4qt";
-  version = "1.4.0.0";
+  version = "1.5.0.0";
 
   src = fetchFromGitHub {
     owner = "JakubMelka";
     repo = "PDF4QT";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NlIy/C4uHRG5wwXPuqCShe113qhhsQ5jp50zrOLLA2c=";
+    hash = "sha256-ELdmnOEKFGCtuf240R/0M6r8aPwRQiXurAxrqcCZvOI=";
   };
 
   patches = [
@@ -28,6 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
     # header files instead.
     ./find_lcms2_path.patch
   ];
+
+  # make calls to QString::arg compatible with Qt 6.9
+  # see https://doc-snapshots.qt.io/qt6-6.9/whatsnew69.html#new-features-in-qt-6-9
+  postPatch = ''
+    substituteInPlace Pdf4QtLibCore/sources/pdf{documentsanitizer,optimizer}.cpp \
+      --replace-fail \
+        '.arg(counter)' \
+        '.arg<PDFInteger>(counter)'
+    substituteInPlace Pdf4QtLibCore/sources/pdfoptimizer.cpp \
+      --replace-fail \
+        '.arg(bytesSaved)' \
+        '.arg<PDFInteger>(bytesSaved)'
+  '';
 
   nativeBuildInputs = [
     cmake

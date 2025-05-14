@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  alsa-lib
+  alsa-lib,
 }:
 
 buildGoModule rec {

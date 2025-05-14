@@ -1,15 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, postgresql
-, libiconv
-, Security
-, SystemConfiguration
-, protobuf
-, rustfmt
-, nixosTests
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  libpq,
+  libiconv,
+  protobuf,
+  rustfmt,
+  nixosTests,
 }:
 let
   pinData = lib.importJSON ./pin.json;
@@ -31,10 +30,14 @@ rustPlatform.buildRustPackage rec {
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = pinData.serverCargoHash;
 
-  buildInputs = [ postgresql ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security SystemConfiguration ];
+  buildInputs =
+    [ libpq ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
@@ -45,7 +48,10 @@ rustPlatform.buildRustPackage rec {
 
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
-  nativeBuildInputs = [ protobuf rustfmt ];
+  nativeBuildInputs = [
+    protobuf
+    rustfmt
+  ];
 
   checkFlags = [
     # test requires database access
@@ -53,7 +59,7 @@ rustPlatform.buildRustPackage rec {
 
     # tests require network access
     "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
-    "--skip=scheduled_tasks::tests::test_nodeinfo_voyager_lemmy_ml"
+    "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
 
   passthru.updateScript = ./update.py;
@@ -63,7 +69,11 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick georgyo ];
+    maintainers = with maintainers; [
+      happysalada
+      billewanick
+      georgyo
+    ];
     mainProgram = "lemmy_server";
   };
 }

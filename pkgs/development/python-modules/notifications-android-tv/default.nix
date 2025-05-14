@@ -19,9 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "engrbm87";
     repo = "notifications_android_tv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JUvxxVCiQtywAWU5AYnPm4SueIWIXkzLxPYveVXpc2E=";
   };
+
+  pythonRelaxDeps = [ "httpx" ];
 
   nativeBuildInputs = [ poetry-core ];
 

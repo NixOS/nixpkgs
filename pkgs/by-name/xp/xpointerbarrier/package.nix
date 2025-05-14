@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Create X11 pointer barriers around your working area";
     license = licenses.mit;
     maintainers = with maintainers; [
-      AndersonTorres
       xzfc
     ];
     platforms = platforms.linux;

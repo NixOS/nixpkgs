@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ivsc-driver
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ivsc-driver,
+  kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ipu6-drivers";
-  version = "unstable-2024-10-10";
+  version = "unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-drivers";
-    rev = "118952d49ec598f56add50d93fa7bc3ac4a05643";
-    hash = "sha256-xdMwINoKrdRHCPMpdZQn86ATi1dAXncMU39LLXS16mc=";
+    rev = "7af071481f3d2d3cef1e70113c10f62ac6351723";
+    hash = "sha256-pe7lqK+CHpgNWpC8GEZ3FKfYcuVuRUaWlW18D9AsrSk=";
   };
 
-  patches = [ "${src}/patches/0001-v6.10-IPU6-headers-used-by-PSYS.patch" ];
+  patches = [
+    "${src}/patches/0001-v6.10-IPU6-headers-used-by-PSYS.patch"
+  ];
 
   postPatch = ''
     cp --no-preserve=mode --recursive --verbose \
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

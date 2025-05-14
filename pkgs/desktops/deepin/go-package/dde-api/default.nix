@@ -4,7 +4,6 @@
   buildGoModule,
   pkg-config,
   deepin-gettext-tools,
-  wrapQtAppsHook,
   wrapGAppsHook3,
   alsa-lib,
   gtk3,
@@ -56,10 +55,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     deepin-gettext-tools
-    wrapQtAppsHook
     wrapGAppsHook3
   ];
-  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -86,13 +83,9 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
   postFixup = ''
     for binary in $out/lib/deepin-api/*; do
-      wrapProgram $binary "''${qtWrapperArgs[@]}"
+      wrapProgram $binary "''${gappsWrapperArgs[@]}"
     done
   '';
 
@@ -102,6 +95,6 @@ buildGoModule rec {
     homepage = "https://github.com/linuxdeepin/dde-api";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

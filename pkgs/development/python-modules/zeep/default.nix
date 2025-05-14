@@ -11,6 +11,7 @@
   isodate,
   lxml,
   mock,
+  packaging,
   platformdirs,
   pretend,
   pytest-asyncio,
@@ -22,28 +23,34 @@
   requests-toolbelt,
   requests-file,
   requests-mock,
+  setuptools,
   xmlsec,
 }:
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.2.1";
-  format = "setuptools";
+  version = "4.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
+    tag = version;
+    hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
   };
 
-  propagatedBuildInputs = [
+  patches = [ ./httpx-compat.patch ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     defusedxml
     isodate
     lxml
+    packaging
     platformdirs
     pytz
     requests
@@ -52,8 +59,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    async_require = [ httpx ];
-    xmlsec_require = [ xmlsec ];
+    async = [ httpx ];
+    xmlsec = [ xmlsec ];
   };
 
   pythonImportsCheck = [ "zeep" ];
