@@ -158,8 +158,8 @@ writeScript "update-dotnet-vmr.sh" ''
           }' > "${toOutputPath releaseInfoFile}"
 
       ${lib.escapeShellArg (toOutputPath ./update.sh)} \
-          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion"
+          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion" >&2
 
-      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
+      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link) >&2
   )
 ''
