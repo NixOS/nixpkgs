@@ -16796,6 +16796,9 @@ with pkgs;
     # Note that it requires sixel capable terminals such as mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_gfx = SDL_gfx.override { SDL = SDL_sixel; };
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
+    SDL_ttf = SDL_ttf.override { SDL = SDL_sixel; };
   };
 
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
