@@ -52,7 +52,6 @@ in
       openjdk11 = mkOpenjdk "11";
       openjdk17 = mkOpenjdk "17";
       openjdk21 = mkOpenjdk "21";
-      openjdk23 = mkOpenjdk "23";
       openjdk25 = mkOpenjdk "25";
 
       # Legacy aliases
