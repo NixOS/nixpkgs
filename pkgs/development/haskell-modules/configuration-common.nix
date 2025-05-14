@@ -2695,6 +2695,20 @@ self: super:
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
   postgres-websockets = lib.pipe super.postgres-websockets [
+    (appendPatches [
+      (pkgs.fetchpatch {
+        # Needed for the patch below to apply.
+        name = "remove-protolude.patch";
+        url = "https://github.com/diogob/postgres-websockets/commit/8027c0f6dc0c5fe6bab4e3e7730db8653b2c51cc.patch";
+        hash = "sha256-gefVUR+tJLrmpwnc1hf4GjLbGVe1GwNmLn5YU7qW/HY=";
+      })
+      (pkgs.fetchpatch {
+        # Can be removed with the next update.
+        name = "fix-connection-closing-when-no-write-mode-is-present.patch";
+        url = "https://github.com/diogob/postgres-websockets/commit/577a2f0bf4750c682c2c3c63e37d90e0ec6f95eb.patch";
+        hash = "sha256-7PCVbfNiJhWfmQrEjaVqbmCL5jffhofOto1RF2FVYJo=";
+      })
+    ])
     (addTestToolDepends [
       pkgs.postgresql
       pkgs.postgresqlTestHook
