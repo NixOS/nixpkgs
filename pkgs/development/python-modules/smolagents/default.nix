@@ -123,6 +123,7 @@ buildPythonPackage rec {
       "test_vision_web_browser_main"
       # Tests require network access
       "test_agent_type_output"
+      "test_call_different_providers_without_key"
       "test_can_import_sklearn_if_explicitly_authorized"
       "test_transformers_message_no_tool"
       "test_transformers_message_vl_no_tool"
