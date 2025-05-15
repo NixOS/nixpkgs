@@ -8,6 +8,7 @@
   qt6,
   qdiskinfo,
   themeBundle ? null,
+  unstableGitUpdater,
 }:
 
 let
@@ -103,6 +104,7 @@ stdenv.mkDerivation {
         themeName: themeBundle:
         (qdiskinfo.override { inherit themeBundle; }).overrideAttrs { pname = "qdiskinfo-${themeName}"; }
       );
+      updateScript = unstableGitUpdater { };
     };
 
   meta = {
