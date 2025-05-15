@@ -1,5 +1,4 @@
 {
-  config,
   stdenv,
   lib,
   fetchFromGitHub,
@@ -117,6 +116,7 @@ stdenv.mkDerivation rec {
     [
       ./darwin.patch
       ./glog-cmake.patch
+      ./random-shuffle.patch
       (fetchpatch {
         name = "support-opencv4";
         url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
