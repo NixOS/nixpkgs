@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "simp1e-cursors";
-  version = "20221103.2";
+  version = "20250223";
 
   src = fetchFromGitLab {
     owner = "cursors";
     repo = "simp1e";
-    rev = version;
-    hash = "sha256-3DCF6TwxWwYK5pF2Ykr3OwF76H7J03vLNZch/XoZZZk=";
+    tag = version;
+    hash = "sha256-mNuGjpNZCaOlGLkHez4pFMPdCCbSoYQx1HTs7BI0DJA=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Aesthetic cursor theme for Linux desktops";
     homepage = "https://gitlab.com/cursors/simp1e";
+    changelog = "https://gitlab.com/cursors/simp1e/-/tags/${version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ natto1784 ];
