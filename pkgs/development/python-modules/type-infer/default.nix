@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   poetry-core,
   colorlog,
@@ -36,7 +37,7 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "mindsdb";
@@ -87,7 +88,5 @@ buildPythonPackage {
     homepage = "https://github.com/mindsdb/type_infer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mbalatsko ];
-    # ModuleNotFoundError: No module named 'imghdr', unrelated
-    broken = true;
   };
 }

@@ -3,6 +3,7 @@
   buildPackages,
   edid-decode,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   pkg-config,
   ninja,
@@ -48,14 +49,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.4";
+  version = "3.16.7";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-2AxqvZA1eZaJFKMfRljCIcP0M2nMngw0FQiXsfBW7IA=";
+    hash = "sha256-q0yTOyu47tQXorFfnmRa4wrt0KRnyelLDmfcg4iwPfs=";
   };
 
   patches = [
@@ -63,6 +64,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./shaders-path.patch
     # patch relative gamescopereaper path with absolute
     ./gamescopereaper.patch
+
+    # Revert change to always use vendored stb/glm libraries
+    # Upstream discussion: https://github.com/ValveSoftware/gamescope/pull/1751
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/baae74c4b13676fa76a8b200f21ac78f55079734.patch";
+      revert = true;
+      hash = "sha256-XpbyLQ4R9KgBR3hlrgPzmM7Zxr2jm4Q10zGjyhh/Qxw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/72bae179ba2ebbbc91ed07c7f66e7e4964a4cd9e.patch";
+      revert = true;
+      hash = "sha256-aglfGvEuycNyPlaFYxqqvPAgFpWns3xZ3B2GiAefxtg=";
+    })
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
