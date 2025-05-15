@@ -85,7 +85,7 @@ To add an LLVM patch in the Nixpkgs tree,
 1. Put the patch in the corresponding directory (`<VERSION>/<PACKAGE>`).
 
    _Example_: If you want your patch to apply to clang version 12 (and, optionally, later versions), put it in `./12/clang`.
-2. Add the patch to the `patches` argument of the corresponding package in `./common`, guarded by a `lib.optional` or `lib.optionals` with the desired version constraints, passed through the `getVersionFile` function.
+2. Add the patch to the `patches` argument of the corresponding package in `./common`, guarded by a `lib.optionals` with the desired version constraints, passed through the `getVersionFile` function.
 
    _Example_: If you want the patch `./12/llvm/fix-llvm-issue-49955.patch` to apply to LLVM 12, add `lib.optional (lib.versions.major release_version == "12") (getVersionFile "llvm/fix-llvm-issue-49955.patch")` to `./common/llvm/default.nix`.
 3. If you wish for this single patch to apply to multiple versions of the package, extend the conditions in the `lib.optional` guard and add the corresponding constraints to `./common/patches.nix`; note that `after` is inclusive and `before` is exclusive.
