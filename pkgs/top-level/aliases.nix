@@ -2148,6 +2148,7 @@ mapAliases {
   zig_0_11 = throw "zig 0.11 has been removed, upgrade to a newer version instead"; # Added 2025-04-09
   zimlib = throw "'zimlib' has been removed because it was an outdated and unused version of 'libzim'"; # Added 2025-03-07
   zinc = zincsearch; # Added 2023-05-28
+  zint = zint-qt; # Added 2025-05-15
   zk-shell = throw "zk-shell has been removed as it was broken and unmaintained"; # Added 2024-08-10
   zkg = throw "'zkg' has been replaced by 'zeek'";
   zsh-history = throw "'zsh-history' has been removed as it was unmaintained"; # Added 2025-04-17
