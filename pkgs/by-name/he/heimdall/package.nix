@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    broken = enableGUI && !stdenv.hostPlatform.isLinux;
     description = "Cross-platform open-source tool suite used to flash firmware onto Samsung Galaxy devices";
     homepage = "https://git.sr.ht/~grimler/Heimdall";
     license = lib.licenses.mit;
