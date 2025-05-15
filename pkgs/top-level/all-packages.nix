@@ -3864,8 +3864,6 @@ with pkgs;
     hdf5 = hdf5-mpi.override { usev110Api = true; };
   };
 
-  inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
-
   # Not in aliases because it wouldn't get picked up by callPackage
   netbox = netbox_4_2;
 
@@ -4800,12 +4798,10 @@ with pkgs;
 
   inherit (callPackages ../servers/varnish { })
     varnish60
-    varnish76
     varnish77
     ;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages
-    varnish76Packages
     varnish77Packages
     ;
   varnishPackages = varnish77Packages;
@@ -14693,7 +14689,7 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
-  zotero_7 = pkgs.zotero-beta;
+  zotero_7 = pkgs.zotero;
 
   zsteg = callPackage ../tools/security/zsteg { };
 
