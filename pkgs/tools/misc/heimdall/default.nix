@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://git.sr.ht/~grimler/Heimdall";
     description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy devices";
     license = licenses.mit;
