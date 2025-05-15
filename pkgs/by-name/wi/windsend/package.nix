@@ -8,13 +8,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "windsend";
-  version = "1.5.1";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${version}";
-    hash = "sha256-mE2pygb4o9gRUdgX/eVsr6WtZxIadxADg+3dpQgP0Ic=";
+    hash = "sha256-A0cmjllyhKkYsMyjeuuMCax0uVnaDp9OwJPY7peDjPM=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -22,6 +22,7 @@ flutter329.buildFlutterApplication rec {
   gitHashes = {
     open_filex = "sha256-dKLOmk+C9Rzw0wq18I5hkR2T4VcdmT4coimmgF+GzV8=";
     media_scanner = "sha256-vlHsSmw0/bVDSwB/jwdj/flfcizDjYKHOItOb/jWQGM=";
+    receive_sharing_intent = "sha256-CmE15epEWlnClAPjM73J74EKUJ/TvwUF90VnAPZBWwc=";
   };
 
   sourceRoot = "${src.name}/flutter/wind_send";
