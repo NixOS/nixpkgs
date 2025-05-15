@@ -4411,6 +4411,13 @@
     githubId = 631802;
     keys = [ { fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9"; } ];
   };
+  chillcicada = {
+    email = "2210227279@qq.com";
+    name = "ChillCicada";
+    github = "chillcicada";
+    githubId = 116548943;
+    keys = [ { fingerprint = "734C 20B3 33C4 FAB3 0BD0  743A 34C2 1231 0A99 754B"; } ];
+  };
   chiroptical = {
     email = "chiroptical@gmail.com";
     github = "chiroptical";
