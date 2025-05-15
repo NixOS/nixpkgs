@@ -1874,6 +1874,9 @@
   "test-opt-meta.platforms": [
     "index.html#test-opt-meta.platforms"
   ],
+  "test-opt-meta.hydraPlatforms": [
+    "index.html#test-opt-meta.hydraPlatforms"
+  ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"
   ],
