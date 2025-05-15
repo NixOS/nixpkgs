@@ -2215,8 +2215,6 @@ dont-distribute-packages:
  - midimory
  - mig-server
  - mighttpd
- - migrant-hdbc
- - migrant-sqlite-simple
  - minecraft-data
  - minesweeper
  - minilight
