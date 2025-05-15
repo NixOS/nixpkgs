@@ -15,9 +15,9 @@ let
     "mocha"
   ];
 in
-lib.checkListOfEnum "${pname}: color variant" validVariants [ variant ]
+assert lib.assertOneOf "${pname}: color variant" variant validVariants;
 
-  stdenvNoCC.mkDerivation
+stdenvNoCC.mkDerivation
   (finalAttrs: {
     inherit pname;
     version = "0-unstable-2024-10-19";
