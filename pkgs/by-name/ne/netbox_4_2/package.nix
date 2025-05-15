@@ -4,6 +4,7 @@
   python3,
   plugins ? _ps: [ ],
   nixosTests,
+  nix-update-script,
 }:
 let
   py = python3.override {
@@ -14,7 +15,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.2.7";
+  version = "4.2.9";
 
   format = "other";
 
@@ -22,7 +23,7 @@ py.pkgs.buildPythonApplication rec {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-SZES80hdoP+k6o5ablMnwaFrsVGE8Baew44eX2ZCk/Y=";
+    hash = "sha256-uVe4YTZoxRMBfvItFa9SMHu4AaVvygfAg9GDB115TFc=";
   };
 
   patches = [
@@ -112,6 +113,7 @@ py.pkgs.buildPythonApplication rec {
       netbox = nixosTests.netbox_4_2;
       inherit (nixosTests) netbox-upgrade;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
