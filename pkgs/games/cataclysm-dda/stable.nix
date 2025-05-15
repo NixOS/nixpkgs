@@ -13,7 +13,7 @@
 
 let
   common = callPackage ./common.nix {
-    inheri tiles debug useXdgDir;
+    inherit tiles debug useXdgDir;
     desktopFilePath = "$out/share/applications/org.cataclysmdda.CataclysmDDA.desktop";
   };
 
