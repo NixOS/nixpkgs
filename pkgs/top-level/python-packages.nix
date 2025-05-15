@@ -5131,6 +5131,8 @@ self: super: with self; {
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flatbencode = callPackage ../development/python-modules/flatbencode { };
+
   flatbuffers = callPackage ../development/python-modules/flatbuffers { inherit (pkgs) flatbuffers; };
 
   flatdict = callPackage ../development/python-modules/flatdict { };
