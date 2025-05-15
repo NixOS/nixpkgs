@@ -21,13 +21,13 @@ let
   # nix-prefetch-url <url> | xargs nix hash to-sri --type sha256 --extra-experimental-features nix-command
   hash =
     {
-      x86_64-linux = "sha256-Gj/VDsV+ks8bhsFwU47+oBmsYOa0lQMHZeqQ3/IHm9E=";
+      x86_64-linux = "sha256-DK5+VT4+OCcJ4Bbv6GGs6R332GMsD1gNEmcz0iaJb1c=";
       aarch64-linux = "sha256-9pIT7iiarHBtHRdX5lqdfmJLJLMkugqZdprBZm5g1A8=";
     }
     .${system};
 
   pname = "buckets";
-  version = "0.75.0";
+  version = "0.80.0";
   src = fetchurl {
     url = "https://github.com/buckets/application/releases/download/v${version}/Buckets-linux-latest-${platform}-${version}.AppImage";
     inherit hash;
