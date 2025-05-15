@@ -31,14 +31,14 @@
 let
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "25.0.1";
+    version = "25.1.1";
     format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
       tag = version;
-      hash = "sha256-V069rAL6U5KBnSc09LRCu0M7qQCH5NbMghVttlmIoRY=";
+      hash = "sha256-SZlNiKjSIDqBY+OHLZRv1LuY6aO+eNL6bbYpmmb5pl8=";
     };
 
     postPatch = ''
