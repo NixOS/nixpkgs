@@ -19,20 +19,20 @@
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.33.0";
+    version = "2.33.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
       tag = "v${version}";
-      hash = "sha256-F+ie8cJ1xl8i3kQSH6H24Vi5KSkRGjX/bXIfzY+ZayM=";
+      hash = "sha256-2jUkd/Y92Iuq/A31cevqjZK4bCOp+AEC/MAnHSt2HLY=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit src;
       name = "${pname}-${version}";
-      hash = "sha256-bGhS36Fc7LUdpTHsIM1zn1vX2T/OX+fPewLxLGSZRrk=";
+      hash = "sha256-MY6Gxoz5Q7nCptR+zvdABh2agfbpqOtfTtor4pmkb9c=";
     };
 
     nativeBuildInputs = [
