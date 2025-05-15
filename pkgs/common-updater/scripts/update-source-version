@@ -230,10 +230,10 @@ if [[ -n "$newUrl" ]]; then
     fi
 
     # Escape regex metacharacter that may appear in URLs
-    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+?\[]|\\&|g')
-    newUrlEscaped=$(echo "$newUrl" | sed -re 's|&|\\&|g')
+    oldUrlEscaped=$(echo "$oldUrl" | sed -e 's|[*.^$[\|]|\\&|g')
+    newUrlEscaped=$(echo "$newUrl" | sed -e 's|[&\|]|\\&|g')
 
-    sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrlEscaped\"|"
+    sed -i.cmp "$nixFile" -e "s|\"$oldUrlEscaped\"|\"$newUrlEscaped\"|"
     if cmp -s "$nixFile" "$nixFile.cmp"; then
         die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
     fi
