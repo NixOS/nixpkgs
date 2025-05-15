@@ -221,6 +221,8 @@ self: super: with self; {
 
   aiobroadlink = callPackage ../development/python-modules/aiobroadlink { };
 
+  aiobtclientrpc = callPackage ../development/python-modules/aiobtclientrpc { };
+
   aiocache = callPackage ../development/python-modules/aiocache { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
