@@ -9059,6 +9059,8 @@ self: super: with self; {
 
   modeled = callPackage ../development/python-modules/modeled { };
 
+  modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
+
   moderngl = callPackage ../development/python-modules/moderngl { };
 
   moderngl-window = callPackage ../development/python-modules/moderngl-window { };
