@@ -31,12 +31,12 @@ lib.makeExtensible (
 
     beets-stable = callPackage ./common.nix rec {
       inherit python3Packages extraPatches;
-      version = "2.3.0";
+      version = "2.3.1";
       src = fetchFromGitHub {
         owner = "beetbox";
         repo = "beets";
         tag = "v${version}";
-        hash = "sha256-mH3m2O+q5Ys9DJD3ulmhViyf/VPEpHevjmNerVe327s=";
+        hash = "sha256-INxL2XDn8kwRYYcZATv/NdLmAtfQvxVDWKB1OYo8dxY=";
       };
     };
 
@@ -44,12 +44,12 @@ lib.makeExtensible (
 
     beets-unstable = callPackage ./common.nix {
       inherit python3Packages;
-      version = "2.3.0";
+      version = "2.3.1";
       src = fetchFromGitHub {
         owner = "beetbox";
         repo = "beets";
-        rev = "250b0da900c095a09bedc1a0717381010c01a3c6";
-        hash = "sha256-mH3m2O+q5Ys9DJD3ulmhViyf/VPEpHevjmNerVe327s=";
+        rev = "d487d675b9115672c484eab8a6729b1f0fd24b68";
+        hash = "sha256-INxL2XDn8kwRYYcZATv/NdLmAtfQvxVDWKB1OYo8dxY=";
       };
     };
 
