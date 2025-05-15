@@ -2,13 +2,22 @@
   "index": [
     "index.html#index"
   ],
-  "chapters": [
+  "p2-chapters": [
     "index.html#chapters"
   ],
-  "chapter1": [
+  "p2-chapter1": [
     "index.html#chapter1"
   ],
-  "chapter2": [
+  "p2-chapter2": [
+    "index.html#chapter2"
+  ],
+  "p1-chapters": [
+    "index.html#chapters"
+  ],
+  "p1-chapter1": [
+    "index.html#chapter1"
+  ],
+  "p1-chapter2": [
     "index.html#chapter2"
   ],
   "appendix": [

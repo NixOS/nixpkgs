@@ -2,7 +2,8 @@
 ## h2
 
 ```{=include=} parts
-chapters/chapters.md
+part1/chapters.md
+part2/chapters.md
 ```
 
 ```{=include=} appendix html:into-file=//appendix.html
