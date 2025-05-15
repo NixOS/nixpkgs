@@ -29,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 wtf $out/bin/wtf
+    
+    runHook postInstall
   '';
 
   meta = {
