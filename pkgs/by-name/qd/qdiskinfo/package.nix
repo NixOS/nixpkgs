@@ -33,15 +33,15 @@ assert
     && themeBundle' ? rightCharacter
   );
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "qdiskinfo";
-  version = "0.3";
+  version = "0.3-unstable-2025-05-08";
 
   src = fetchFromGitHub {
     owner = "edisionnano";
     repo = "QDiskInfo";
-    tag = finalAttrs.version;
-    hash = "sha256-0zF3Nc5K8+K68HOSy30ieYvYP9/oSkTe0+cp0hVo9Gs=";
+    rev = "3416cc7ac19b25bb78eab135cf5e0b281e506de0";
+    hash = "sha256-loL6fzOSoZyCmrs7joHQCsCStLGgKxmMuqFmtADWTW0=";
   };
 
   nativeBuildInputs = [
@@ -116,4 +116,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "QDiskInfo";
   };
-})
+}
