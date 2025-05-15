@@ -52,7 +52,16 @@ stdenv.mkDerivation rec {
     })
     # Fix Threads::Threads target for static from https://github.com/oneapi-src/oneTBB/pull/1248
     # This is a conflict-resolved cherry-pick of the above PR to due to formatting differences.
-    ./patches/fix-cmake-threads-threads-target-for-static.patch
+    (fetchpatch {
+      name = "fix-cmake-threads-threads-target-for-static.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1248.patch";
+      hash = "sha256-3WKzxU93vxuy7NgW+ap+ocZz5Q5utZ/pK7+FQExzLLA=";
+    })
+  ];
+
+  patchFlags = [
+    "-p1"
+    "--ignore-whitespace"
   ];
 
   # Fix build with modern gcc

@@ -1,6 +1,9 @@
 name: "Check whether nix files are parseable v2"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/nix-parse-v2.yml
   pull_request_target:
 
 permissions: {}
