@@ -38,6 +38,12 @@ let
     '';
     distPhase = "true";
     dontInstall = true;
+
+    patches = [
+      # Update field names to work with pdu versions >=0.10.0
+      # https://github.com/adileo/squirreldisk/pull/47
+      ./update-pdu-json-format.patch
+    ];
   };
 in
 rustPlatform.buildRustPackage rec {

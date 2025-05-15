@@ -8665,6 +8665,7 @@ with pkgs;
     electron_33-bin
     electron_34-bin
     electron_35-bin
+    electron_36-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -8675,6 +8676,7 @@ with pkgs;
     electron-chromedriver_33
     electron-chromedriver_34
     electron-chromedriver_35
+    electron-chromedriver_36
     ;
 
   electron_24 = electron_24-bin;
@@ -8699,6 +8701,11 @@ with pkgs;
       electron-source.electron_35
     else
       electron_35-bin;
+  electron_36 =
+    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_36 then
+      electron-source.electron_36
+    else
+      electron_36-bin;
   electron = electron_34;
   electron-bin = electron_34-bin;
   electron-chromedriver = electron-chromedriver_34;
