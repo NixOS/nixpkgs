@@ -60,7 +60,7 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.flags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDots cudaCapabilityString);
 
   mklSupport =
     assert accelIsValid;
