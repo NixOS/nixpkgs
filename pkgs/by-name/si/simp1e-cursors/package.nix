@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ pillow ]))
+    (python3.withPackages (ps: [ ps.pillow ]))
     librsvg
     xcursorgen
   ];
@@ -39,12 +39,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aesthetic cursor theme for Linux desktops";
     homepage = "https://gitlab.com/cursors/simp1e";
     changelog = "https://gitlab.com/cursors/simp1e/-/tags/${version}";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.natto1784 ];
   };
 }
