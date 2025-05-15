@@ -19,6 +19,7 @@ let
       lib.optionals (lib.pathIsDirectory manifestsDir) manifests
     ) (builtins.attrNames (builtins.readDir root));
   jsonToModule = import ./json.nix { inherit lib; };
+  parseReleasesFile = import ./release_file.nix { inherit lib; };
 in
 {
   manifests ? intreeManifests, # :: List Path
@@ -26,10 +27,14 @@ in
 }:
 let
   manifestModules = builtins.map jsonToModule manifests;
+  releasesModules = builtins.map parseReleasesFile [
+    ../tensorrt/releases.nix
+  ];
 in
 evalModules {
   modules =
     extraModules
+    ++ releasesModules
     ++ manifestModules
     ++ [
       ./schema.nix

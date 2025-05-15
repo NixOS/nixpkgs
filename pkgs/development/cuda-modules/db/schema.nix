@@ -114,6 +114,7 @@ in
         default = "https://developer.download.nvidia.com/compute/";
       };
     };
+  # Fill in the gaps
   config = {
     licenses =
       let
@@ -134,6 +135,20 @@ in
           distribution_path = lib.mkDefault null;
           license_path = lib.mkDefault null;
         };
+        "NvidiaProprietary" = {
+          compiled = lib.licenses.unfree // {
+            shortName = "NvidiaProprietary";
+            spdxId = "LicenseRef-NvidiaProprietary"; # Shows up e.g. in TensorRT's doc/Acknowledgements.txt
+            url = lib.mkDefault null;
+          };
+          distribution_path = lib.mkDefault null;
+          license_path = lib.mkDefault null;
+        };
       };
+    recipes = {
+      tensorrt = {
+        license = "NvidiaProprietary";
+      };
+    };
   };
 }
