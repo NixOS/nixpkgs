@@ -2,12 +2,13 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_35,
+  electron_36,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
   makeWrapper,
   nodejs_22,
+  docker,
   stdenv,
 }:
 
@@ -15,17 +16,17 @@ let
   description = "Unofficial desktop application for the open-source design tool, Penpot";
   icon = "penpot";
   nodejs = nodejs_22;
-  electron = electron_35;
+  electron = electron_36;
 in
 buildNpmPackage rec {
   pname = "penpot-desktop";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "author-more";
     repo = "penpot-desktop";
     tag = "v${version}";
-    hash = "sha256-ztvwabsy7PiT8m0+DDehvwV8oclJCb1BymEpkjTPtZ8=";
+    hash = "sha256-50WKvKBzyrMPkeMDFO6JNgpZanlGfzSPTW3lxH7TGuA=";
   };
 
   makeCacheWritable = true;
@@ -33,7 +34,7 @@ buildNpmPackage rec {
     "--engine-strict"
     "--legacy-peer-deps"
   ];
-  npmDepsHash = "sha256-aRdqq0tMuNXkSy/NYdwir+LfwAr466dLi2b4vO/yjdg=";
+  npmDepsHash = "sha256-FbUG+DJhlN0uKHhAHfdqdDHqQBOFiJ0x3IL9diYnvCw=";
   # Do not run the default build script as it leads to errors caused by the electron-builder configuration
   dontNpmBuild = true;
 
@@ -83,6 +84,16 @@ buildNpmPackage rec {
     popd
 
     runHook postInstall
+  '';
+
+  # Required for being able to self-host penpot
+  postFixup = ''
+    wrapProgram $out/bin/penpot-desktop \
+      --set PATH ${
+        lib.makeBinPath [
+          docker
+        ]
+      }
   '';
 
   desktopItems = [
