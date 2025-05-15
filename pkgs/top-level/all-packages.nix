@@ -13016,8 +13016,6 @@ with pkgs;
 
   kaidan = kdePackages.callPackage ../applications/networking/instant-messengers/kaidan { };
 
-  kdeltachat = libsForQt5.callPackage ../applications/networking/instant-messengers/kdeltachat { };
-
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
   kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
@@ -14555,11 +14553,6 @@ with pkgs;
   wofi-pass = callPackage ../../pkgs/tools/security/pass/wofi-pass.nix { };
 
   worldengine-cli = python3Packages.worldengine;
-
-  wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice { };
-  wpsoffice-cn = libsForQt5.callPackage ../applications/office/wpsoffice {
-    useChineseVersion = true;
-  };
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
