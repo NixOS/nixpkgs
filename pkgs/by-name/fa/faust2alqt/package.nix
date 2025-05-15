@@ -1,13 +1,9 @@
 {
-  bash,
   faust,
-  jack2,
-  qtbase,
-  libsndfile,
   alsa-lib,
+  qt5,
   writeText,
   buildPackages,
-  which,
 }:
 let
   # Wrap the binary coming out of the the compilation script, so it knows QT_PLUGIN_PATH
@@ -18,7 +14,7 @@ let
       cd -- "$(dirname "$p")"
       binary=$(basename --suffix=.dsp "$p")
       rm -f .$binary-wrapped
-      wrapProgram $binary --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}"
+      wrapProgram $binary --set QT_PLUGIN_PATH "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
       sed -i $binary -e 's@exec@cd "$(dirname "$(readlink -f "''${BASH_SOURCE[0]}")")" \&\& exec@g'
       cd $workpath
     done
@@ -26,23 +22,11 @@ let
 in
 faust.wrapWithBuildEnv {
 
-  baseName = "faust2jaqt";
-
-  scripts = [
-    "faust2jaqt"
-    "faust2jackserver"
-  ];
-
-  buildInputs = [
-    bash
-  ];
+  baseName = "faust2alqt";
 
   propagatedBuildInputs = [
-    jack2
-    qtbase
-    libsndfile
     alsa-lib
-    which
+    qt5.qtbase
   ];
 
   dontWrapQtApps = true;
@@ -52,7 +36,7 @@ faust.wrapWithBuildEnv {
       # append the wrapping code to the compilation script
       cat ${wrapBinary} >> $script
       # prevent the qmake error when running the script
-      sed -i "/QMAKE=/c\ QMAKE="${qtbase.dev}/bin/qmake"" $script
+      sed -i "/QMAKE=/c\ QMAKE="${qt5.qtbase.dev}/bin/qmake"" $script
     done
   '';
 }
