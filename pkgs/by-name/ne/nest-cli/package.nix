@@ -33,6 +33,9 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/nestjs/nest-cli/releases/tag/${version}";
     mainProgram = "nest";
-    maintainers = [ maintainers.ehllie ];
+    maintainers = with lib.maintainers; [
+      ehllie
+      phanirithvij
+    ];
   };
 }
