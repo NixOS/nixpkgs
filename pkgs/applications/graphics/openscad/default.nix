@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  qtbase,
-  qtmultimedia,
-  qscintilla,
+  libsForQt5,
   bison,
   flex,
   eigen,
@@ -26,21 +24,17 @@
   double-conversion,
   lib3mf,
   libzip,
-  mkDerivation,
-  qtmacextras,
-  qmake,
   spacenavSupport ? stdenv.hostPlatform.isLinux,
   libspnav,
   wayland,
   wayland-protocols,
   wrapGAppsHook3,
-  qtwayland,
   cairo,
   openscad,
   runCommand,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openscad";
   version = "2021.01";
 
@@ -95,7 +89,8 @@ mkDerivation rec {
     flex
     pkg-config
     gettext
-    qmake
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
   ];
 
@@ -115,9 +110,9 @@ mkDerivation rec {
       double-conversion
       freetype
       fontconfig
-      qtbase
-      qtmultimedia
-      qscintilla
+      libsForQt5.qtbase
+      libsForQt5.qtmultimedia
+      libsForQt5.qscintilla
       cairo
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -125,9 +120,9 @@ mkDerivation rec {
       libGL
       wayland
       wayland-protocols
-      qtwayland
+      libsForQt5.qtwayland
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras
+    ++ lib.optional stdenv.hostPlatform.isDarwin libsForQt5.qtmacextras
     ++ lib.optional spacenavSupport libspnav;
 
   qmakeFlags =

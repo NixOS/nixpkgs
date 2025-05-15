@@ -1780,6 +1780,8 @@ self: super: with self; {
 
   betterproto = callPackage ../development/python-modules/betterproto { };
 
+  bezier = callPackage ../development/python-modules/bezier { };
+
   beziers = callPackage ../development/python-modules/beziers { };
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
@@ -4950,6 +4952,8 @@ self: super: with self; {
   firebase-messaging = callPackage ../development/python-modules/firebase-messaging { };
 
   firecrawl-py = callPackage ../development/python-modules/firecrawl-py { };
+
+  firedrake = callPackage ../development/python-modules/firedrake { };
 
   firedrake-fiat = callPackage ../development/python-modules/firedrake-fiat { };
 
