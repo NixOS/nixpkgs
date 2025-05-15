@@ -539,8 +539,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             for included, path in fragments:
                 inner = [
                     self._file_header(toc),
+                    '<div class="content">',
                     self.render(included),
-                    self._file_footer(toc)
+                    '</div>',
+                    self._file_footer(toc),
                 ]
                 self._in_dir = (in_dir / path).parent
 
@@ -559,6 +561,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             if into:
                 toc = TocEntry.of(fragments[0][0][0])
                 inner.append(self._file_header(toc))
+                inner.append('<div class="content">')
                 # we do not set _hlevel_offset=0 because docbook didn't either.
             else:
                 inner = outer
@@ -570,6 +573,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 except Exception as e:
                     raise RuntimeError(f"rendering {path}") from e
             if into:
+                inner.append('</div>')
                 inner.append(self._file_footer(toc))
                 (self._base_path / into).write_text("".join(inner))
 

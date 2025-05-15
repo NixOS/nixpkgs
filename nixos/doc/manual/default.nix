@@ -200,8 +200,8 @@ rec {
           --script ./anchor.min.js \
           --script ./anchor-use.js \
           --toc-depth 1 \
-          --chunk-toc-depth 1 \
           --into-pages \
+          --chunk-toc-depth 1 \
           ./manual.md \
           $dst/${common.indexPath}
 
