@@ -13,6 +13,13 @@
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
   version = "1.10";
+  outputs = [
+    "out"
+    "ladspa"
+    "lv2"
+    "lxvst"
+    "vst3"
+  ];
 
   src = fetchFromGitHub {
     owner = "werman";
@@ -42,6 +49,15 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       webkitgtk_4_0
     ];
+
+  # Move each plugin into a dedicated output, leaving a symlink in $out for backwards compatibility
+  postInstall = ''
+    for plugin in ladspa lv2 lxvst vst3; do
+      mkdir -p ''${!plugin}/lib
+      mv $out/lib/$plugin ''${!plugin}/lib/$plugin
+      ln -s ''${!plugin}/lib/$plugin $out/lib/$plugin
+    done
+  '';
 
   meta = with lib; {
     description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
