@@ -1,17 +1,17 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
+{ lib, callPackage, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
+, tiles ? true
 , debug ? false
 , useXdgDir ? false
-, version ? "2024-10-18"
-, rev ? "551c7279dafe1d283c3ef2779cb335b855e6bc59"
-, sha256 ? "sha256-1xXTGNjLma5++xIEf9n98lPAZZ+nJ7TPMS6S5n4PSzs="
+, version ? "2025-05-14"
+, rev ? "5fe71bf02f544436e0f218ed53f4a4f0f560be6b"
+, sha256 ? "sha256-hfeHrvZjo7ttLG4SQmlJ//xUt8wUU9DY1K9FrVpZKGA="
 }:
 
 let
   desktopFilePath = "";
 
   common = callPackage ./common.nix {
-    inherit CoreFoundation tiles Cocoa debug useXdgDir desktopFilePath;
+    inherit tiles debug useXdgDir desktopFilePath;
   };
 
   self = common.overrideAttrs (common: rec {
@@ -23,6 +23,12 @@ let
       repo = "Cataclysm-BN";
       inherit rev sha256;
     };
+
+    patches = [
+      # Unfortunately some READMEs in data are symlinks to doc which is not included
+      # resulting in dangling symlinks breaking build
+      ./delete-dangling-readme.patch
+    ];
 
     makeFlags = common.makeFlags ++ [
       "VERSION=git-${version}-${lib.substring 0 8 src.rev}"

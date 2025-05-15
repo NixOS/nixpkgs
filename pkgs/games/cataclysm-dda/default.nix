@@ -16,9 +16,7 @@ let
   };
 
   bn-git = rec {
-    tiles = callPackage ./bn-git.nix {
-      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
-    };
+    tiles = callPackage ./bn-git.nix { };
 
     curses = tiles.override { tiles = false; };
   };

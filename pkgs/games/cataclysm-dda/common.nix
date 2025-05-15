@@ -4,6 +4,7 @@
   runtimeShell,
   pkg-config,
   gettext,
+  sqlite,
   ncurses,
   tiles,
   SDL2,
@@ -24,6 +25,7 @@ let
   commonDeps = [
     gettext
     zlib
+    sqlite
   ];
 
   cursesDeps = commonDeps ++ [ ncurses ];
