@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   accountsservice,
@@ -49,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
-    rev = finalAttrs.version;
-    hash = "sha256-8X5a2zJ0y8bSSnbqDvRoYm/2VPAWcfZZuiH+5p8eXi4=";
+    tag = finalAttrs.version;
+    hash = "sha256-bVBxJgOy1eXqwzcgBRUTlFoJxxw9I1Qc+Wn92U0QzA4=";
   };
 
   outputs = [
@@ -64,14 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fixes compat with newer ICU
-    # Remove when version > 1.3.0
-    (fetchpatch {
-      name = "0001-lomiri-system-settings-unwrapped-Unpin-Cxx-standard.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/c0b1c773237b28ea50850810b8844033b13fb666.patch";
-      hash = "sha256-M73gQxstKyuzzx1VxdOiNYyfQbSZPIy2gxiCtKcdS1M=";
-    })
-
     ./2000-Support-wrapping-for-Nixpkgs.patch
   ];
 
@@ -80,8 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
 
     # Port from lomiri-keyboard to maliit-keyboard
-    substituteInPlace plugins/language/CMakeLists.txt \
-      --replace-fail 'LOMIRI_KEYBOARD_PLUGIN_PATH=\"''${CMAKE_INSTALL_FULL_LIBDIR}/lomiri-keyboard/plugins\"' 'LOMIRI_KEYBOARD_PLUGIN_PATH=\"${lib.getLib maliit-keyboard}/lib/maliit/keyboard2/languages\"'
     substituteInPlace plugins/language/{PageComponent,SpellChecking,ThemeValues}.qml plugins/language/onscreenkeyboard-plugin.cpp plugins/sound/PageComponent.qml \
       --replace-fail 'com.lomiri.keyboard.maliit' 'org.maliit.keyboard.maliit'
 
@@ -164,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeFeature "LOMIRI_KEYBOARD_PLUGIN_PATH" "${lib.getLib maliit-keyboard}/lib/maliit/keyboard2/languages")
   ];
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be
@@ -207,7 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "System Settings application for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-system-settings";
-    changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = licenses.gpl3Only;
     mainProgram = "lomiri-system-settings";
     teams = [ teams.lomiri ];
