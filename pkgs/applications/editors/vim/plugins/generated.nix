@@ -137,6 +137,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  GPTModels-nvim = buildVimPlugin {
+    pname = "GPTModels.nvim";
+    version = "2025-05-15";
+    src = fetchFromGitHub {
+      owner = "Aaronik";
+      repo = "GPTModels.nvim";
+      rev = "04d91c778d74f762143203ab81e155eec642b5f6";
+      sha256 = "06spvkfc1bhckq8w56w6ha4gzk60wfhjlyivrx51awz20sd6hyw0";
+    };
+    meta.homepage = "https://github.com/Aaronik/GPTModels.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   Improved-AnsiEsc = buildVimPlugin {
     pname = "Improved-AnsiEsc";
     version = "2015-08-26";
