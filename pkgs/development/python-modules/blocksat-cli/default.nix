@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Blockstream";
     repo = "satellite";
     tag = "v${version}";
-    hash = "sha256-7lSK9IGu/K03xSDxZv+BSTJwLrQoHs+POBq/ixYTVR4=";
+    hash = "sha256-SH1MZx/ZkhhWhxhREqFCGoob58J2XMZSpe+q7UgiyF4=";
   };
 
   # Upstream setup.py installs both the CLI and GUI versions.
