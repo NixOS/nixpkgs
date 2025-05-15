@@ -357,6 +357,19 @@ in
       };
     };
 
+    # Upstream recommends allowing set-timezone and set-ntp so that the KCM and
+    # the automatic timezone logic work without user interruption.
+    # However, on NixOS NTP cannot be overwritten via dbus, and timezone
+    # can only be set if `time.timeZone` is set to `null`. So, we only allow
+    # set-timezone, and we only allow it when the timezone can actually be set.
+    security.polkit.extraConfig = lib.mkIf (config.time.timeZone != null) ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.timedate1.set-timezone" && subject.active) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
+
     programs.dconf.enable = true;
 
     programs.firefox.nativeMessagingHosts.packages = [ kdePackages.plasma-browser-integration ];
