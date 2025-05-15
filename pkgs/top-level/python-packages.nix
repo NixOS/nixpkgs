@@ -4137,6 +4137,8 @@ self: super: with self; {
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
+  doxmlparser = callPackage ../development/tools/documentation/doxygen/doxmlparser.nix { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dparse2 = callPackage ../development/python-modules/dparse2 { };
@@ -9056,6 +9058,8 @@ self: super: with self; {
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modeled = callPackage ../development/python-modules/modeled { };
+
+  modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
 
