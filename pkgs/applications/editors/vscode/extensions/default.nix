@@ -4346,8 +4346,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.49.0";
-          hash = "sha256-/vzQojojvEz0KLebFCE3q4ptqPm40s4UgwxUAwMx8zs=";
+          version = "1.50.0";
+          hash = "sha256-vMO1u8w4uQc0mvgB3az4G+QnwRwsz5d1+LpDGEShyDw=";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -5721,8 +5721,8 @@ let
         mktplcRef = {
           name = "vscode-zig";
           publisher = "ziglang";
-          version = "0.6.8";
-          hash = "sha256-u4Vd2YP47ccpz4ZMOGDN1eFS8qiC7nGIbo6YtvxNHFM=";
+          version = "0.6.9";
+          hash = "sha256-R18NnnsYVLmCNdGU0plIYn2MKrlSedfJoXH/amxKKaY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";
