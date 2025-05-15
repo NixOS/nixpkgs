@@ -3,7 +3,7 @@
   boost,
   faust,
   lv2,
-  qtbase,
+  qt5,
 }:
 
 faust.wrapWithBuildEnv {
@@ -17,12 +17,12 @@ faust.wrapWithBuildEnv {
   propagatedBuildInputs = [
     boost
     lv2
-    qtbase
+    qt5.qtbase
   ];
 
   dontWrapQtApps = true;
 
   preFixup = ''
-    sed -i "/QMAKE=/c\ QMAKE="${qtbase.dev}/bin/qmake"" "$out"/bin/faust2lv2;
+    sed -i "/QMAKE=/c\ QMAKE="${qt5.qtbase.dev}/bin/qmake"" "$out"/bin/faust2lv2;
   '';
 }
