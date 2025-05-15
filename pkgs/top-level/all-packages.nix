@@ -3661,6 +3661,12 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  buildDenoPackage = callPackage ../build-support/deno/build-deno-package { };
+
+  inherit (callPackages ../build-support/deno/fetch-deno-deps { }) fetchDenoDeps;
+
+  denoHooks = callPackage ../build-support/deno/build-deno-package/hooks { };
+
   kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd { };
 
   ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
