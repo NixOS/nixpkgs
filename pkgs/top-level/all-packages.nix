@@ -14693,7 +14693,7 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
-  zotero_7 = pkgs.zotero-beta;
+  zotero_7 = pkgs.zotero;
 
   zsteg = callPackage ../tools/security/zsteg { };
 
