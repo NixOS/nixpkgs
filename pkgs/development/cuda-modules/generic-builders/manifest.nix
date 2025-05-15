@@ -5,9 +5,9 @@
   autoPatchelfHook,
   backendStdenv,
   callPackage,
+  cudaFixups,
   cudaLib,
   fetchurl,
-  fixups,
   lib,
   markForCudatoolkitRootHook,
   flags,
@@ -45,7 +45,7 @@ let
   # Last step before returning control to `callPackage` (adds the `.override` method)
   # we'll apply (`overrideAttrs`) necessary package-specific "fixup" functions.
   # Order is significant.
-  maybeFixup = fixups.${pname} or null;
+  maybeFixup = cudaFixups.${pname} or null;
   fixup = if maybeFixup != null then callPackage maybeFixup { } else { };
 
   # Get the redist systems for which package provides distributables.
