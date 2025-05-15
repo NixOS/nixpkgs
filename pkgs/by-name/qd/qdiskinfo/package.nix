@@ -109,7 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "CrystalDiskInfo alternative for Linux";
     homepage = "https://github.com/edisionnano/QDiskInfo";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ roydubnium ];
+    maintainers = with lib.maintainers; [
+      roydubnium
+      ryand56
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "QDiskInfo";
   };
