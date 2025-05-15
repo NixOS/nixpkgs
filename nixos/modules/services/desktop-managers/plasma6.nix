@@ -110,6 +110,7 @@ in
 
           # Core Plasma parts
           kwin
+          kwin-x11
           kscreen
           libkscreen
           kscreenlocker
@@ -156,6 +157,7 @@ in
         ];
         optionalPackages =
           [
+            aurorae
             plasma-browser-integration
             konsole
             (lib.getBin qttools) # Expose qdbus in PATH
