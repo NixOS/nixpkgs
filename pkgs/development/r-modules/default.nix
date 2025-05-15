@@ -1859,6 +1859,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    nanonext = old.nanonext.overrideAttrs (attrs: {
+      NIX_LDFLAGS = "-lnng -lmbedtls -lmbedx509 -lmbedcrypto";
+    });
+
     clustermq = old.clustermq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
