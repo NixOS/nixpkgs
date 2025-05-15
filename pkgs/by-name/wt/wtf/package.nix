@@ -26,13 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "source/src";
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+  ];
 
   installPhase = ''
     runHook preInstall
 
     install -Dm755 wtf $out/bin/wtf
-    
+
     runHook postInstall
   '';
 
