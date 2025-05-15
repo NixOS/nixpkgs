@@ -23,6 +23,9 @@
 name: Codeowners v2
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/codeowners-v2.yml
   pull_request_target:
     types: [opened, ready_for_review, synchronize, reopened, edited]
 
@@ -64,6 +67,7 @@ jobs:
         run: nix-build base/ci -A codeownersValidator
 
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        if: vars.OWNER_RO_APP_ID
         id: app-token
         with:
           app-id: ${{ vars.OWNER_RO_APP_ID }}
@@ -77,6 +81,7 @@ jobs:
           path: pr
 
       - name: Validate codeowners
+        if: steps.app-token.outputs.token
         run: result/bin/codeowners-validator
         env:
           OWNERS_FILE: pr/${{ env.OWNERS_FILE }}
@@ -99,6 +104,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        if: vars.OWNER_APP_ID
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
@@ -111,6 +117,7 @@ jobs:
         run: nix-build ci -A requestReviews
 
       - name: Request reviews
+        if: steps.app-token.outputs.token
         run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

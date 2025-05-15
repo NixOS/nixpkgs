@@ -1,6 +1,9 @@
 name: Get merge commit
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/get-merge-commit.yml
   workflow_call:
     outputs:
       mergedSha:
@@ -38,7 +41,7 @@ jobs:
             push)
               echo "mergedSha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
               ;;
-            pull_request_target)
+            pull_request*)
               if commits=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
                 echo -e "Checking the commits:\n$commits"
                 echo "$commits" >> "$GITHUB_OUTPUT"

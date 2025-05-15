@@ -1,6 +1,9 @@
 name: Eval
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/eval.yml
   pull_request_target:
     types: [opened, ready_for_review, synchronize, reopened]
   push:
@@ -175,6 +178,7 @@ jobs:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        if: vars.OWNER_APP_ID
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
@@ -205,6 +209,7 @@ jobs:
         run: nix-build base/ci -A requestReviews
 
       - name: Labelling pull request
+        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
         run: |
           # Get all currently set rebuild labels
           gh api \
@@ -239,7 +244,7 @@ jobs:
           NUMBER: ${{ github.event.number }}
 
       - name: Add eval summary to commit statuses
-        if: ${{ github.event_name == 'pull_request_target' }}
+        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
         run: |
           description=$(jq -r '
           "Package: added " + (.attrdiff.added | length | tostring) +
@@ -259,6 +264,7 @@ jobs:
           NUMBER: ${{ github.event.number }}
 
       - name: Requesting maintainer reviews
+        if: ${{ steps.app-token.outputs.token && github.repository_owner == 'NixOS' }}
         run: |
           # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
           # There appears to be no API to request reviews based on GitHub IDs
