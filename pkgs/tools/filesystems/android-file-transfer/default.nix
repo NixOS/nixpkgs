@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "android-file-transfer";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "sha256-1euoWM9KMauOkAp7g1FvY4olMiOg+La/Uk1QlQ3mKi8=";
+    sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];
