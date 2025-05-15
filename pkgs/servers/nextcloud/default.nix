@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
+  cacert,
+  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
   nextcloud30Packages,
   nextcloud31Packages,
 }:
@@ -31,6 +33,10 @@ let
         ) nixosTests.nextcloud;
         inherit packages;
       };
+
+      postPatch = ''
+        cp ${caBundle} resources/config/ca-bundle.crt
+      '';
 
       installPhase = ''
         runHook preInstall

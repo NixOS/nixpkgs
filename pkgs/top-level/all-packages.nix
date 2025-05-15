@@ -1011,12 +1011,7 @@ with pkgs;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
-  adlplug = callPackage ../applications/audio/adlplug {
-    jack = libjack2;
-  };
-  opnplug = adlplug.override {
-    type = "OPN";
-  };
+  opnplug = adlplug.override { type = "OPN"; };
 
   akkoma = callPackage ../by-name/ak/akkoma/package.nix {
     beamPackages = beam_minimal.packages.erlang_26.extend (
@@ -12768,8 +12763,6 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
-  sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
-
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_17
     wlroots_0_18
@@ -16211,31 +16204,7 @@ with pkgs;
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
-  faust = res.faust2;
-
-  faust2 = callPackage ../applications/audio/faust/faust2.nix { };
-
-  faust2alqt = libsForQt5.callPackage ../applications/audio/faust/faust2alqt.nix { };
-
-  faust2alsa = callPackage ../applications/audio/faust/faust2alsa.nix { };
-
-  faust2csound = callPackage ../applications/audio/faust/faust2csound.nix { };
-
-  faust2sc = callPackage ../applications/audio/faust/faust2sc.nix { };
-
-  faust2firefox = callPackage ../applications/audio/faust/faust2firefox.nix { };
-
-  faust2jack = callPackage ../applications/audio/faust/faust2jack.nix { };
-
-  faust2jackrust = callPackage ../applications/audio/faust/faust2jackrust.nix { };
-
-  faust2jaqt = libsForQt5.callPackage ../applications/audio/faust/faust2jaqt.nix { };
-
-  faust2ladspa = callPackage ../applications/audio/faust/faust2ladspa.nix { };
-
-  faust2lv2 = libsForQt5.callPackage ../applications/audio/faust/faust2lv2.nix { };
-
-  faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
+  faust = faust2;
 
   flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
 
