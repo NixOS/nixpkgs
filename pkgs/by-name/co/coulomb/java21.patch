@@ -1,0 +1,20 @@
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+index d3f7d91..37f53a9 100644
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -46,7 +46,7 @@ dependencies {
+ // Apply a specific Java toolchain to ease working on different environments.
+ java {
+     toolchain {
+-        languageVersion.set(JavaLanguageVersion.of(19))
++        languageVersion.set(JavaLanguageVersion.of(21))
+     }
+ }
+ 
+@@ -142,4 +142,4 @@ tasks.build {
+ 
+ tasks.compileJava {
+     dependsOn("resources")
+-}
+\ No newline at end of file
++}
