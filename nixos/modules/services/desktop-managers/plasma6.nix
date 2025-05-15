@@ -341,6 +341,20 @@ in
         capabilities = "cap_sys_nice+ep";
         source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
       };
+
+      ksystemstats_intel_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_perfmon+ep";
+        source = "${pkgs.kdePackages.ksystemstats}/libexec/ksystemstats_intel_helper";
+      };
+
+      ksgrd_network_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_raw+ep";
+        source = "${pkgs.kdePackages.libksysguard}/libexec/ksysguard/ksgrd_network_helper";
+      };
     };
 
     programs.dconf.enable = true;
