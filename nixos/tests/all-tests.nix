@@ -1424,10 +1424,6 @@ in
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish60;
   };
-  varnish76 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish76;
-  };
   varnish77 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish77;
