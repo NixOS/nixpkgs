@@ -2,6 +2,7 @@
   lib,
   fetchFromGitLab,
   php,
+  nixosTests,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -18,6 +19,12 @@ php.buildComposerProject2 (finalAttrs: {
 
   vendorHash = "sha256-LUZTf/Zn8p+V2K1LjhvrgaGBiTcSmGRsG1t9vXUcbeY=";
   composerNoPlugins = false;
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) drupal;
+    };
+  };
 
   meta = {
     description = "Drupal CMS";
