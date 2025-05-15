@@ -60,6 +60,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -71,7 +72,6 @@ stdenv.mkDerivation {
     python3
     python3.pkgs.pyside2
     python3.pkgs.shiboken2
-    extra-cmake-modules
     wayland
     glog
     ceres-solver
