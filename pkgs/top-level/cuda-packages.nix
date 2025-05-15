@@ -26,7 +26,6 @@
   cudaMajorMinorVersion,
   lib,
   newScope,
-  pkgs,
   stdenv,
 }:
 let
@@ -38,9 +37,6 @@ let
     strings
     versions
     ;
-
-  # MUST be defined outside fix-point (cf. "NAMESET STRICTNESS" above)
-  fixups = import ../development/cuda-modules/fixups { inherit lib; };
 
   # Since Jetson capabilities are never built by default, we can check if any of them were requested
   # through final.config.cudaCapabilities and use that to determine if we should change some manifest versions.
@@ -54,19 +50,15 @@ let
 
   passthruFunction = final: {
     # NOTE:
-    # It is important that cudaLib (and fixups, which will be addressed later) are not part of the package set
-    # fixed-point.
-    # As described by @SomeoneSerge:
+    # It is important that cudaLib and cudaFixups are not part of the package set fixed-point. As described by
+    # @SomeoneSerge:
     # > The layering should be: configuration -> (identifies/is part of) cudaPackages -> (is built using) cudaLib.
     # > No arrows should point in the reverse directions.
     # That is to say that cudaLib should only know about package sets and configurations, because it implements
     # functionality for interpreting configurations, resolving them against data, and constructing package sets.
-    inherit
-      cudaMajorMinorVersion
-      fixups
-      lib
-      pkgs
-      ;
+    # This decision is driven both by a separation of concerns and by "NAMESET STRICTNESS" (see above).
+
+    inherit cudaMajorMinorVersion;
 
     cudaNamePrefix = "cuda${cudaMajorMinorVersion}";
 
