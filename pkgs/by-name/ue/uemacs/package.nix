@@ -24,7 +24,7 @@ gccStdenv.mkDerivation {
 
     substituteInPlace epath.h --replace "/usr/global/lib/" "$out/share/uemacs/"
   '';
-  
+
   makeFlags = [ "CC=${gccStdenv.cc.targetPrefix}cc" ];
 
   strictDeps = true;
