@@ -230,7 +230,7 @@ if [[ -n "$newUrl" ]]; then
     fi
 
     # Escape regex metacharacter that are allowed in store path names
-    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+?]|\\&|g')
 
     sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
     if cmp -s "$nixFile" "$nixFile.cmp"; then
