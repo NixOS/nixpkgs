@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "moreorless";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "thatch";
     repo = "moreorless";
     tag = "v${version}";
-    hash = "sha256-N11iqsxMGgzwW2QYeOoHQaR/aDEuoUnnd/2Mc5culN0=";
+    hash = "sha256-VCvvPxDWriaeKeRaj/YbPLPfNL7fipGwCydr6K0HMjc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
