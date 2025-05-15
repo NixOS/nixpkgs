@@ -13,7 +13,13 @@
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
   version = "1.10";
-  outputs = [ "out" "ladspa" "lv2" "lxvst" "vst3" ];
+  outputs = [
+    "out"
+    "ladspa"
+    "lv2"
+    "lxvst"
+    "vst3"
+  ];
 
   src = fetchFromGitHub {
     owner = "werman";
