@@ -24,12 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     perl
+    git
   ];
-
-  # Replace hardcoded git binary
-  postPatch = ''
-    substituteInPlace crates/cli/build.rs --replace-fail 'Command::new("git")' 'Command::new("${lib.getExe git}")'
-  '';
 
   cargoBuildFlags = [ "-p spacetimedb-standalone -p spacetimedb-cli" ];
 
