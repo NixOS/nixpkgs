@@ -1,6 +1,9 @@
 name: Eval aliases
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/eval-aliases.yml
   pull_request_target:
 
 permissions: {}
@@ -26,7 +29,7 @@ jobs:
           extra_nix_config: sandbox = true
 
       - name: Ensure flake outputs on all systems still evaluate
-        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
+        run: nix flake check --all-systems --no-build ./nixpkgs
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |

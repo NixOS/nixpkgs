@@ -1531,6 +1531,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-npm-nvim = buildVimPlugin {
+    pname = "blink-cmp-npm.nvim";
+    version = "2025-05-12";
+    src = fetchFromGitHub {
+      owner = "alexandre-abrioux";
+      repo = "blink-cmp-npm.nvim";
+      rev = "364e6c21ec8b3423b8a7d0b50e541390e1d95a0f";
+      sha256 = "07zrw4p9svlradd9pf85p8azajs8gzp8n4hmalf4ci6bl3lj6crm";
+    };
+    meta.homepage = "https://github.com/alexandre-abrioux/blink-cmp-npm.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-spell = buildVimPlugin {
     pname = "blink-cmp-spell";
     version = "2025-03-05";

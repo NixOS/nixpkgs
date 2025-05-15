@@ -4,20 +4,25 @@
   fetchFromGitHub,
   curl,
   python3,
+  perl,
   trurl,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.16";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = "trurl";
     rev = "trurl-${version}";
-    hash = "sha256-Og7+FVCBWohVd58GVxFN3KChcG0Kts1MokiOQXZ1OTc=";
+    hash = "sha256-VCMT4WgZ6LG7yiKaRy7KTgTkbACVXb4rw62lWnVAuP0=";
   };
+
+  postPatch = ''
+    patchShebangs scripts/*
+  '';
 
   outputs = [
     "out"
@@ -28,17 +33,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ curl ];
+  nativeBuildInputs = [
+    curl
+    perl
+  ];
   buildInputs = [ curl ];
   makeFlags = [ "PREFIX=$(out)" ];
+
+  strictDeps = true;
 
   doCheck = true;
   nativeCheckInputs = [ python3 ];
   checkTarget = "test";
 
-  passthru.tests.version = testers.testVersion {
-    package = trurl;
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Command line tool for URL parsing and manipulation";

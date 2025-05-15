@@ -1,23 +1,17 @@
 {
-  stdenv,
   lib,
-  qtbase,
-  wrapQtAppsHook,
+  stdenv,
   fetchFromGitHub,
+  libsForQt5,
   addDriverRunpath,
   poppler-utils,
-  qtxmlpatterns,
-  qtsvg,
   libgbm,
   xvfb-run,
   fontconfig,
   freetype,
   xorg,
-  qmake,
   python3,
-  qttools,
   git,
-  qtmultimedia,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);
@@ -34,13 +28,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qtmultimedia
+    libsForQt5.qtmultimedia
     git
     qtPython
-    qtbase
+    libsForQt5.qtbase
     poppler-utils
-    qtxmlpatterns
-    qtsvg
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qtsvg
     libgbm
     freetype
     xorg.libXi
@@ -52,9 +46,9 @@ stdenv.mkDerivation rec {
     addDriverRunpath
     xvfb-run
     fontconfig
-    wrapQtAppsHook
-    qmake
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
   ];
 
   postPatch = ''

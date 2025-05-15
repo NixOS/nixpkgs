@@ -4,7 +4,7 @@
             "hash": "sha256-yomovlwRmrzsN+dvmUgOM6pzBTH41QuHQXnEJBhQglY=",
             "owner": "signalapp",
             "repo": "webrtc",
-            "rev": "6998a"
+            "tag": "6998b"
         },
         "fetcher": "fetchFromGitHub"
     },

@@ -20,7 +20,7 @@
   portmidi,
   SDL2_classic,
   SDL2_classic_image,
-  SDL2_classic_mixer_2_0,
+  SDL2_classic_mixer,
   SDL2_classic_ttf,
   numpy,
 
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     portmidi
     SDL2_classic
     (SDL2_classic_image.override { enableSTB = false; })
-    SDL2_classic_mixer_2_0
+    SDL2_classic_mixer
     SDL2_classic_ttf
   ];
 

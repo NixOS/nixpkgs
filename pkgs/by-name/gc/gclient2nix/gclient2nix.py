@@ -125,7 +125,7 @@ class GitRepo(Repo):
         self.fetcher = "fetchgit"
         self.args = {
             "url": url,
-            "rev": rev,
+            "rev" if re.match(r"[0-9a-f]{40}", rev) else "tag": rev,
         }
 
 
@@ -136,13 +136,14 @@ class GitHubRepo(Repo):
         self.args = {
             "owner": owner,
             "repo": repo,
-            "rev": rev,
+            "rev" if re.match(r"[0-9a-f]{40}", rev) else "tag": rev,
         }
 
     def get_file(self, filepath: str) -> str:
+        rev_or_tag = self.args['rev'] if 'rev' in self.args else f"refs/tags/{self.args['tag']}"
         return (
             urlopen(
-                f"https://raw.githubusercontent.com/{self.args['owner']}/{self.args['repo']}/{self.args['rev']}/{filepath}"
+                f"https://raw.githubusercontent.com/{self.args['owner']}/{self.args['repo']}/{rev_or_tag}/{filepath}"
             )
             .read()
             .decode("utf-8")
@@ -155,7 +156,7 @@ class GitilesRepo(Repo):
         self.fetcher = "fetchFromGitiles"
         self.args = {
             "url": url,
-            "rev": rev,
+            "rev" if re.match(r"[0-9a-f]{40}", rev) else "tag": rev,
         }
 
         # Quirk: Chromium source code exceeds the Hydra output limit
@@ -172,9 +173,10 @@ class GitilesRepo(Repo):
             self.args["postFetch"] += "rm -r $out/media/test/data; "
 
     def get_file(self, filepath: str) -> str:
+        rev_or_tag = self.args['rev'] if 'rev' in self.args else f"refs/tags/{self.args['tag']}"
         return base64.b64decode(
             urlopen(
-                f"{self.args['url']}/+/{self.args['rev']}/{filepath}?format=TEXT"
+                f"{self.args['url']}/+/{rev_or_tag}/{filepath}?format=TEXT"
             ).read()
         ).decode("utf-8")
 
