@@ -1,45 +1,45 @@
 {
   lib,
   stdenv,
-  mkDerivation,
-  fetchFromGitHub,
+  fetchFromSourcehut,
   cmake,
-  zlib,
   libusb1,
+  pkg-config,
+  wrapQtAppsHook,
+  zlib,
   enableGUI ? false,
   qtbase ? null,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "heimdall${lib.optionalString enableGUI "-gui"}";
-  version = "1.4.2";
+  version = "2.2.1";
 
-  src = fetchFromGitHub {
-    owner = "Benjamin-Dobell";
+  src = fetchFromSourcehut {
+    owner = "~grimler";
     repo = "Heimdall";
     rev = "v${version}";
-    sha256 = "1ygn4snvcmi98rgldgxf5hwm7zzi1zcsihfvm6awf9s6mpcjzbqz";
+    sha256 = "sha256-x+mDTT+oUJ4ffZOmn+UDk3+YE5IevXM8jSxLKhGxXSM=";
   };
 
-  buildInputs = [
-    zlib
-    libusb1
-  ] ++ lib.optional enableGUI qtbase;
-  nativeBuildInputs = [ cmake ];
+  buildInputs =
+    [
+      libusb1
+      zlib
+    ]
+    ++ lib.lists.optionals enableGUI [
+      qtbase
+      wrapQtAppsHook
+    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   cmakeFlags = [
     "-DDISABLE_FRONTEND=${if enableGUI then "OFF" else "ON"}"
     "-DLIBUSB_LIBRARY=${libusb1}"
   ];
-
-  preConfigure =
-    ''
-      # Give ownership of the Galaxy S USB device to the logged in user.
-      substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
-    '';
 
   installPhase =
     lib.optionalString (stdenv.hostPlatform.isDarwin && enableGUI) ''
@@ -51,17 +51,17 @@ mkDerivation rec {
       mkdir -p $out/{bin,share/doc/heimdall,lib/udev/rules.d}
       install -m755 -t $out/bin                bin/*
       install -m644 -t $out/lib/udev/rules.d   ../heimdall/60-heimdall.rules
-      install -m644 ../Linux/README   $out/share/doc/heimdall/README.linux
-      install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
+      install -m644 ../README.md               $out/share/doc/heimdall/README.md
+      install -m644 ../doc/*                   $out/share/doc/heimdall/
     '';
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
-    homepage = "http://www.glassechidna.com.au/products/heimdall/";
-    description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
+    homepage = "https://git.sr.ht/~grimler/Heimdall";
+    description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy devices";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    mainProgram = "heimdall";
+    mainProgram = "heimdall${lib.optionalString enableGUI "-frontend"}";
   };
 }
