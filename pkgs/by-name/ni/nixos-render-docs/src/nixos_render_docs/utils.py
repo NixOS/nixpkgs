@@ -1,4 +1,5 @@
 from typing import Any
+from pathlib import Path
 
 _frozen_classes: dict[type, type] = {}
 
@@ -19,3 +20,22 @@ class Freezeable:
             })
             _frozen_classes[cls] = frozen
         self.__class__ = frozen
+
+def relative_path_from(origin: str, to: str) -> str:
+    path_to = Path(origin)
+    path_from = Path(to)
+
+    if path_to.root != path_from.root:
+        path_to = path_to.absolute()
+        path_from = path_from.absolute()
+
+    nb_back = 0
+    while not path_from.is_relative_to(path_to.parent):
+        print(path_to, path_from)
+
+        path_to = path_to.parent
+        nb_back += 1
+
+    backtrack = "/".join([".." for _ in range(0, nb_back)])
+
+    return str(backtrack / path_from.relative_to(path_to.parent))

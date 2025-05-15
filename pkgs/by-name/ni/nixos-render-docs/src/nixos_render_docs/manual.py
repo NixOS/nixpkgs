@@ -18,6 +18,7 @@ from .manual_structure import check_structure, FragmentType, is_include, make_xm
 from .md import Converter, Renderer
 from .redirects import Redirects
 from .src_error import SrcError
+from .utils import relative_path_from
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -382,9 +383,9 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ' <head>',
             '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             f' <title>{toc.target.title}</title>',
-            "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(style, True)}" />'
+            "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(relative_path_from(toc.target.path, style), True)}" />'
                      for style in self._html_params.stylesheets)),
-            "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
+            "".join((f'<script src="{html.escape(relative_path_from(toc.target.path, script), True)}" type="text/javascript"></script>'
                      for script in scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
             f' <link rel="home" href="{home.target.href_from(toc.target)}" title="{home.target.title}" />' if home.target.href() else "",
@@ -543,20 +544,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 ]
                 self._in_dir = (in_dir / path).parent
 
-
-                print("laaaaaaaa: ", self._in_dir, in_dir, state[4], (in_dir / path))
-                print(f"current path: {self._in_dir}, file path: {path}")
-
-                if Path(path).is_relative_to(Path(in_dir)):
-                    sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html").as_posix()
-                else:
-                    # The path is not relative, likely it is absolute:
-                    # We arbitrary take the basename and write it next to the outfile.
-                    sub_file = Path(path).with_suffix(".html").name
+                assert Path(path).is_relative_to(Path(in_dir))
+                sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html").as_posix()
 
                 file_path = (self._base_path / sub_file).with_suffix(".html")
-
-                print(f"2) write file to: {file_path}")
 
                 if not file_path.parent.exists():
                     file_path.parent.mkdir(exist_ok=True)
@@ -583,7 +574,6 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 (self._base_path / into).write_text("".join(inner))
 
         self._pop(state)
-        print(f"and popped: {self._in_dir}")
         return "".join(outer)
 
     def _included_thing_split(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:

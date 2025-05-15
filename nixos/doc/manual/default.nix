@@ -115,7 +115,7 @@ let
     substituteInPlace ./configuration/configuration.md \
       --replace-fail \
           '@MODULE_CHAPTERS@' \
-          ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          ${escapeShellArg (concatMapStringsSep "\n" (p: builtins.baseNameOf "${p.value}") config.meta.doc)}
 
     substituteInPlace ./nixos-options.md \
       --replace-fail \

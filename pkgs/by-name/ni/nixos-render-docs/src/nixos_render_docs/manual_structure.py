@@ -11,6 +11,7 @@ from markdown_it.token import Token
 
 from .utils import Freezeable
 from .src_error import SrcError
+from .utils import Freezeable, relative_path_from
 
 # FragmentType is used to restrict structural include blocks.
 FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
@@ -135,24 +136,7 @@ class XrefTarget:
     drop_target: bool = False
 
     def href_from(self, origin: XrefTarget) -> str:
-        path_to = Path(origin.path)
-        path_from = Path(self.path)
-
-        # print("looking for path to reach {} from {}".format(path_from, path_to))
-
-        nb_back = 0
-        while not path_from.is_relative_to(path_to.parent):
-            # print("step: ", path_from, path_to)
-
-            path_to = path_to.parent
-            nb_back += 1
-
-        backtrack = "/".join([".." for _ in range(0, nb_back)])
-
-        path = backtrack / path_from.relative_to(path_to.parent)
-
-        # path = "" if self.drop_target else html.escape(self.path, True)
-
+        path = relative_path_from(origin.path, self.path)
         return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
 
     def href(self) -> str:
