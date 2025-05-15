@@ -2050,6 +2050,7 @@ mapAliases {
   zinc = zincsearch; # Added 2023-05-28
   zk-shell = throw "zk-shell has been removed as it was broken and unmaintained"; # Added 2024-08-10
   zkg = throw "'zkg' has been replaced by 'zeek'";
+  zotero_7 = throw "'zotero_7' has been renamed to/replaced by 'zotero'"; # Added 2025-05-15
   zq = zed.overrideAttrs (old: {
     meta = old.meta // {
       mainProgram = "zq";
