@@ -2721,6 +2721,8 @@ with pkgs;
 
   cudaLib = import ../development/cuda-modules/lib;
 
+  cudaFixups = import ../development/cuda-modules/fixups;
+
   cudaPackages_11_0 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.0"; };
   cudaPackages_11_1 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.1"; };
   cudaPackages_11_2 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.2"; };
