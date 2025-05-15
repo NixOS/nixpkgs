@@ -47,7 +47,7 @@
 
   testScript =
     let
-      qrLabel = "Image";
+      qrLabel = "Feed";
       qrContent = "Test";
     in
     ''
@@ -55,6 +55,10 @@
 
       with subtest("lomiri camera launches"):
           machine.succeed("lomiri-camera-app >&2 &")
+          machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("Cannot access")
           machine.screenshot("lomiri-camera_open")
 
@@ -64,21 +68,26 @@
       machine.succeed("modprobe v4l2loopback video_nr=10 card_label=Video-Loopback exclusive_caps=1")
       machine.succeed("qrtool encode '${qrContent}' -s 20 -m 10 > qr.png")
       # Horizontal flip, add text, flip back. Camera displays image mirrored, so need reversed text for OCR
-      machine.succeed("magick qr.png -flop -pointsize 70 -fill black -annotate +100+100 '${qrLabel}' -flop output.png")
+      machine.succeed("magick qr.png -flop -pointsize 30 -fill black -annotate +100+100 '${qrLabel}' -flop output.png")
       machine.succeed("ffmpeg -re -loop 1 -i output.png -vf format=yuv420p -f v4l2 /dev/video10 -loglevel fatal >&2 &")
 
       with subtest("lomiri camera uses camera"):
           machine.succeed("lomiri-camera-app >&2 &")
+          machine.wait_for_console_text("updateViewfinderResolution: For target resolution")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("${qrLabel}")
           machine.screenshot("lomiri-camera_feed")
 
-          machine.succeed("xdotool mousemove 320 610 click 1") # take photo
-          machine.wait_until_succeeds("find /root/Pictures/camera.ubports -name '*.jpg'")
+          machine.succeed("xdotool mousemove 510 670 click 1") # take photo
+          machine.wait_until_succeeds("ls /root/Pictures/camera.ubports | grep '\\.jpg$'")
 
           # Check that the image is correct
           machine.send_key("ctrl-alt-right")
           machine.succeed("magick /root/Pictures/camera.ubports/IMG_00000001.jpg -flop photo_flip.png")
           machine.succeed("feh photo_flip.png >&2 &")
+          machine.sleep(10)
           machine.wait_for_text("${qrLabel}")
           machine.screenshot("lomiri-camera_photo")
 
@@ -88,18 +97,25 @@
 
       with subtest("lomiri barcode scanner uses camera"):
           machine.succeed("lomiri-camera-app --mode=barcode-reader >&2 &")
+          machine.wait_for_console_text("updateViewfinderResolution: For target resolution")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("${qrLabel}")
-          machine.succeed("xdotool mousemove 320 610 click 1") # open up QR decode result
+          machine.succeed("xdotool mousemove 510 670 click 1") # open up QR decode result
 
           # OCR is struggling to recognise the text. Click the clipboard button and paste the result somewhere else
           machine.sleep(5)
           machine.screenshot("lomiri-barcode_decode")
-          machine.succeed("xdotool mousemove 350 530 click 1")
+          machine.succeed("xdotool mousemove 540 590 click 1")
           machine.sleep(5)
 
           # Need to make a new window without closing camera app, otherwise clipboard content gets lost?
           machine.send_key("ctrl-alt-right")
           machine.succeed("gnome-text-editor >&2 &")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("New")
 
           # Font size up to help with OCR
@@ -129,6 +145,10 @@
 
       with subtest("lomiri camera localisation works"):
           machine.succeed("env LANG=de_DE.UTF-8 lomiri-camera-app >&2 &")
+          machine.wait_for_console_text("updateViewfinderResolution: For target resolution")
+          machine.sleep(10)
+          machine.send_key("alt-f10")
+          machine.sleep(5)
           machine.wait_for_text("Kamera")
           machine.screenshot("lomiri-camera_localised")
     '';
