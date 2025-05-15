@@ -16,7 +16,7 @@
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
   withJack ? false,
-  jack,
+  libjack2,
 
   type ? "ADL",
 }:
@@ -34,7 +34,7 @@ let
     .${type};
   mainProgram = "${type}plug";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "${lib.strings.toLower type}plug";
   version = "unstable-2021-12-17";
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DADLplug_CHIP=${chip}"
-    "-DADLplug_USE_SYSTEM_FMT=ON"
-    "-DADLplug_Jack=${if withJack then "ON" else "OFF"}"
+    (lib.cmakeFeature "ADLplug_CHIP" chip)
+    (lib.cmakeBool "ADLplug_USE_SYSTEM_FMT" true)
+    (lib.cmakeBool "ADLplug_Jack" withJack)
   ];
 
   NIX_LDFLAGS = toString (
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       libXext
       libXcursor
     ]
-    ++ lib.optional withJack jack;
+    ++ lib.optionals withJack [ libjack2 ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,Library/Audio/Plug-Ins/{VST,Components}}
@@ -100,12 +100,12 @@ stdenv.mkDerivation rec {
     mv au/${mainProgram}.component $out/Library/Audio/Plug-Ins/Components/
   '';
 
-  meta = with lib; {
+  meta = {
     inherit mainProgram;
     description = "${chip} FM Chip Synthesizer";
-    homepage = src.meta.homepage;
-    license = licenses.boost;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    homepage = "https://github.com/jpcima/ADLplug";
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 }
