@@ -16,9 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rSIjlLr1mtgyFKRAkcnDKV/MwtYb/ifXewLXhZ4zp7E=";
   };
 
-  doCheck = false;
-  # Test can't be compiled
-
   passthru.updateScript = nix-update-script { };
 
   useFetchCargoVendor = true;
