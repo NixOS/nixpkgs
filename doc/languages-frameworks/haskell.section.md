@@ -14,8 +14,8 @@ effort and to improve performance. (More details in the subsection
 
 The compiler and most build tools are exposed at the top level:
 
-* `ghc` is the default version of GHC
-* Language specific tools: `cabal-install`, `stack`, `hpack`, …
+- `ghc` is the default version of GHC
+- Language specific tools: `cabal-install`, `stack`, `hpack`, …
 
 Many “normal” user facing packages written in Haskell, like `niv` or `cachix`,
 are also exposed at the top level, and there is nothing Haskell specific to
@@ -72,33 +72,34 @@ is roughly two to three times the size of Stackage. For choosing the version to
 use for a certain package we use the following rules:
 
 1. By default, for `haskellPackages.foo` is the newest version of the package
-`foo` found on [Hackage](https://hackage.org), which is the central registry
-of all open source Haskell packages. Nixpkgs contains a reference to a pinned
-Hackage snapshot, thus we use the state of Hackage as of the last time we
-updated this pin.
+   `foo` found on [Hackage](https://hackage.org), which is the central registry
+   of all open source Haskell packages. Nixpkgs contains a reference to a pinned
+   Hackage snapshot, thus we use the state of Hackage as of the last time we
+   updated this pin.
 2. If the [Stackage] snapshot that we use (usually the newest LTS snapshot)
-contains a package, [we use instead the version in the Stackage snapshot as
-default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml)
+   contains a package, [we use instead the version in the Stackage snapshot as
+   default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml)
 3. For some packages, which are not on Stackage, we have if necessary [manual
-overrides to set the default version to a version older than the newest on
-Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
+   overrides to set the default version to a version older than the newest on
+   Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
 4. For all packages, for which the newest Hackage version is not the default
-version, there will also be a `haskellPackages.foo_x_y_z` package with the
-newest version. The `x_y_z` part encodes the version with dots replaced by
-underscores. When the newest version changes by a new release to Hackage the
-old package will disappear under that name and be replaced by a newer one under
-the name with the new version. The package name including the version will
-also disappear when the default version e.g. from Stackage catches up with the
-newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
-1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
-gets dropped.
+   version, there will also be a `haskellPackages.foo_x_y_z` package with the
+   newest version. The `x_y_z` part encodes the version with dots replaced by
+   underscores. When the newest version changes by a new release to Hackage the
+   old package will disappear under that name and be replaced by a newer one under
+   the name with the new version. The package name including the version will
+   also disappear when the default version e.g. from Stackage catches up with the
+   newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
+   1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
+   gets dropped.
 5. For some packages, we also [manually add other `haskellPackages.foo_x_y_z`
-versions](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml),
-if they are required for a certain build.
+   versions](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml),
+   if they are required for a certain build.
 
 Relying on `haskellPackages.foo_x_y_z` attributes in derivations outside
 nixpkgs is discouraged because they may change or disappear with every package
 set update.
+
 <!-- TODO(@maralorn) We should add a link to callHackage, etc. once we added
 them to the docs. -->
 
@@ -134,10 +135,10 @@ Our main objective with `haskellPackages` is to package Haskell software in
 nixpkgs. This entails some limitations, partially due to self-imposed
 restrictions of nixpkgs, partially in the name of maintainability:
 
-* Only the packages built with the default compiler see extensive testing of the
+- Only the packages built with the default compiler see extensive testing of the
   whole package set. For other GHC versions only a few essential packages are
   tested and cached.
-* As described above we only build one version of most packages.
+- As described above we only build one version of most packages.
 
 The experience using an older or newer packaged compiler or using different
 versions may be worse, because builds will not be cached on `cache.nixos.org`
@@ -173,187 +174,183 @@ the parameters it takes when you need to
 `haskellPackages.mkDerivation` is a wrapper around `stdenv.mkDerivation` which
 re-defines the default phases to be haskell aware and handles dependency
 specification, test suites, benchmarks etc. by compiling and invoking the
-package's `Setup.hs`. It does *not* use or invoke the `cabal-install` binary,
+package's `Setup.hs`. It does _not_ use or invoke the `cabal-install` binary,
 but uses the underlying `Cabal` library instead.
 
 ### General arguments {#haskell-derivation-args}
 
-`pname`
-: Package name, assumed to be the same as on Hackage (if applicable)
+- `pname`
+  : Package name, assumed to be the same as on Hackage (if applicable)
 
-`version`
-: Packaged version, assumed to be the same as on Hackage (if applicable)
+- `version`
+  : Packaged version, assumed to be the same as on Hackage (if applicable)
 
-`src`
-: Source of the package. If omitted, fetch package corresponding to `pname`
-and `version` from Hackage.
+- `src`
+  : Source of the package. If omitted, fetch package corresponding to `pname` and `version` from Hackage.
 
-`sha256`
-: Hash to use for the default case of `src`.
+- `sha256`
+  : Hash to use for the default case of `src`.
 
-`sourceRoot`, `setSourceRoot`
-: Passed to `stdenv.mkDerivation`; see [“Variables controlling the unpack
-phase”](#variables-controlling-the-unpack-phase).
+- `sourceRoot`, `setSourceRoot`
+  : Passed to `stdenv.mkDerivation`; see [“Variables controlling the unpack phase”](#variables-controlling-the-unpack-phase).
 
-`revision`
-: Revision number of the updated cabal file to fetch from Hackage.
-If `null` (which is the default value), the one included in `src` is used.
+- `revision`
+  : Revision number of the updated cabal file to fetch from Hackage.
+  If `null` (which is the default value), the one included in `src` is used.
 
-`editedCabalFile`
-: `sha256` hash of the cabal file identified by `revision` or `null`.
+- `editedCabalFile`
+  : `sha256` hash of the cabal file identified by `revision` or `null`.
 
-`configureFlags`
-: Extra flags passed when executing the `configure` command of `Setup.hs`.
+- `configureFlags`
+  : Extra flags passed when executing the `configure` command of `Setup.hs`.
 
-`buildFlags`
-: Extra flags passed when executing the `build` command of `Setup.hs`.
+- `buildFlags`
+  : Extra flags passed when executing the `build` command of `Setup.hs`.
 
-`haddockFlags`
-: Extra flags passed to `Setup.hs haddock` when building the documentation.
+- `haddockFlags`
+  : Extra flags passed to `Setup.hs haddock` when building the documentation.
 
-`doCheck`
-: Whether to execute the package's test suite if it has one. Defaults to `true` unless cross-compiling.
+- `doCheck`
+  : Whether to execute the package's test suite if it has one. Defaults to `true` unless cross-compiling.
 
-`doBenchmark`
-: Whether to execute the package's benchmark if it has one. Defaults to `false`.
+- `doBenchmark`
+  : Whether to execute the package's benchmark if it has one. Defaults to `false`.
 
-`doHoogle`
-: Whether to generate an index file for [hoogle][hoogle] as part of
-`haddockPhase` by passing the [`--hoogle` option][haddock-hoogle-option].
-Defaults to `true`.
+- `doHoogle`
+  : Whether to generate an index file for [hoogle][hoogle] as part of `haddockPhase` by passing the [`--hoogle` option][haddock-hoogle-option].
+  Defaults to `true`.
 
-`doHaddockQuickjump`
-: Whether to generate an index for interactive navigation of the HTML documentation.
-Defaults to `true` if supported.
+- `doHaddockQuickjump`
+  : Whether to generate an index for interactive navigation of the HTML documentation.
+  Defaults to `true` if supported.
 
-`doInstallIntermediates`
-: Whether to install intermediate build products (files written to `dist/build`
-by GHC during the build process). With `enableSeparateIntermediatesOutput`,
-these files are instead installed to [a separate `intermediates`
-output.][multiple-outputs] The output can then be passed into a future build of
-the same package with the `previousIntermediates` argument to support
-incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
-more information. Defaults to `false`.
+- `doInstallIntermediates`
+  : Whether to install intermediate build products (files written to `dist/build`
+  by GHC during the build process). With `enableSeparateIntermediatesOutput`,
+  these files are instead installed to [a separate `intermediates`
+  output.][multiple-outputs] The output can then be passed into a future build of
+  the same package with the `previousIntermediates` argument to support
+  incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
+  more information. Defaults to `false`.
 
-`enableLibraryProfiling`
-: Whether to enable [profiling][profiling] for libraries contained in the
-package. Enabled by default if supported.
+- `enableLibraryProfiling`
+  : Whether to enable [profiling][profiling] for libraries contained in the
+  package. Enabled by default if supported.
 
-`enableExecutableProfiling`
-: Whether to enable [profiling][profiling] for executables contained in the
-package. Disabled by default.
+- `enableExecutableProfiling`
+  : Whether to enable [profiling][profiling] for executables contained in the
+  package. Disabled by default.
 
-`profilingDetail`
-: [Profiling detail level][profiling-detail] to set. Defaults to `exported-functions`.
+- `profilingDetail`
+  : [Profiling detail level][profiling-detail] to set. Defaults to `exported-functions`.
 
-`enableSharedExecutables`
-: Whether to link executables dynamically. By default, executables are linked statically.
+- `enableSharedExecutables`
+  : Whether to link executables dynamically. By default, executables are linked statically.
 
-`enableSharedLibraries`
-: Whether to build shared Haskell libraries. This is enabled by default unless we are using
-`pkgsStatic` or shared libraries have been disabled in GHC.
+- `enableSharedLibraries`
+  : Whether to build shared Haskell libraries. This is enabled by default unless we are using
+  `pkgsStatic` or shared libraries have been disabled in GHC.
 
-`enableStaticLibraries`
-: Whether to build static libraries. Enabled by default if supported.
+- `enableStaticLibraries`
+  : Whether to build static libraries. Enabled by default if supported.
 
-`enableDeadCodeElimination`
-: Whether to enable linker based dead code elimination in GHC.
-Enabled by default if supported.
+- `enableDeadCodeElimination`
+  : Whether to enable linker based dead code elimination in GHC.
+  Enabled by default if supported.
 
-`enableHsc2hsViaAsm`
-: Whether to pass `--via-asm` to `hsc2hs`. Enabled by default only on Windows.
+- `enableHsc2hsViaAsm`
+  : Whether to pass `--via-asm` to `hsc2hs`. Enabled by default only on Windows.
 
-`hyperlinkSource`
-: Whether to render the source as well as part of the haddock documentation
-by passing the [`--hyperlinked-source` flag][haddock-hyperlinked-source-option].
-Defaults to `true`.
+- `hyperlinkSource`
+  : Whether to render the source as well as part of the haddock documentation
+  by passing the [`--hyperlinked-source` flag][haddock-hyperlinked-source-option].
+  Defaults to `true`.
 
-`isExecutable`
-: Whether the package contains an executable.
+- `isExecutable`
+  : Whether the package contains an executable.
 
-`isLibrary`
-: Whether the package contains a library.
+- `isLibrary`
+  : Whether the package contains a library.
 
-`jailbreak`
-: Whether to execute [jailbreak-cabal][jailbreak-cabal] before `configurePhase`
-to lift any version constraints in the cabal file. Note that this can't
-lift version bounds if they are conditional, i.e. if a dependency is hidden
-behind a flag.
+- `jailbreak`
+  : Whether to execute [jailbreak-cabal][jailbreak-cabal] before `configurePhase`
+  to lift any version constraints in the cabal file. Note that this can't
+  lift version bounds if they are conditional, i.e. if a dependency is hidden
+  behind a flag.
 
-`enableParallelBuilding`
-: Whether to use the `-j` flag to make GHC/Cabal start multiple jobs in parallel.
+- `enableParallelBuilding`
+  : Whether to use the `-j` flag to make GHC/Cabal start multiple jobs in parallel.
 
-`maxBuildCores`
-: Upper limit of jobs to use in parallel for compilation regardless of
-`$NIX_BUILD_CORES`. Defaults to 16 as Haskell compilation with GHC currently
-sees a [performance regression](https://gitlab.haskell.org/ghc/ghc/-/issues/9221)
-if too many parallel jobs are used.
+- `maxBuildCores`
+  : Upper limit of jobs to use in parallel for compilation regardless of
+  `$NIX_BUILD_CORES`. Defaults to 16 as Haskell compilation with GHC currently
+  sees a [performance regression](https://gitlab.haskell.org/ghc/ghc/-/issues/9221)
+  if too many parallel jobs are used.
 
-`doCoverage`
-: Whether to generate and install files needed for [HPC][haskell-program-coverage].
-Defaults to `false`.
+- `doCoverage`
+  : Whether to generate and install files needed for [HPC][haskell-program-coverage].
+  Defaults to `false`.
 
-`doHaddock`
-: Whether to build (HTML) documentation using [haddock][haddock].
-Defaults to `true` if supported.
+- `doHaddock`
+  : Whether to build (HTML) documentation using [haddock][haddock].
+  Defaults to `true` if supported.
 
 `testTargets`
 : Names of the test suites to build and run. If unset, all test suites will be executed.
 
-`preCompileBuildDriver`
-: Shell code to run before compiling `Setup.hs`.
+- `preCompileBuildDriver`
+  : Shell code to run before compiling `Setup.hs`.
 
-`postCompileBuildDriver`
-: Shell code to run after compiling `Setup.hs`.
+- `postCompileBuildDriver`
+  : Shell code to run after compiling `Setup.hs`.
 
-`preHaddock`
-: Shell code to run before building documentation using haddock.
+- `preHaddock`
+  : Shell code to run before building documentation using haddock.
 
-`postHaddock`
-: Shell code to run after building documentation using haddock.
+- `postHaddock`
+  : Shell code to run after building documentation using haddock.
 
-`coreSetup`
-: Whether to only allow core libraries to be used while building `Setup.hs`.
-Defaults to `false`.
+- `coreSetup`
+  : Whether to only allow core libraries to be used while building `Setup.hs`.
+  Defaults to `false`.
 
-`useCpphs`
-: Whether to enable the [cpphs][cpphs] preprocessor. Defaults to `false`.
+- `useCpphs`
+  : Whether to enable the [cpphs][cpphs] preprocessor. Defaults to `false`.
 
-`enableSeparateBinOutput`
-: Whether to install executables to a separate `bin` output. Defaults to `false`.
+- `enableSeparateBinOutput`
+  : Whether to install executables to a separate `bin` output. Defaults to `false`.
 
-`enableSeparateDataOutput`
-: Whether to install data files shipped with the package to a separate `data` output.
-Defaults to `false`.
+- `enableSeparateDataOutput`
+  : Whether to install data files shipped with the package to a separate `data` output.
+  Defaults to `false`.
 
-`enableSeparateDocOutput`
-: Whether to install documentation to a separate `doc` output.
-Is automatically enabled if `doHaddock` is `true`.
+- `enableSeparateDocOutput`
+  : Whether to install documentation to a separate `doc` output.
+  Is automatically enabled if `doHaddock` is `true`.
 
-`enableSeparateIntermediatesOutput`
-: When `doInstallIntermediates` is true, whether to install intermediate build
-products to a separate `intermediates` output. See [“Incremental
-builds”](#haskell-incremental-builds) for more information. Defaults to
-`false`.
+- `enableSeparateIntermediatesOutput`
+  : When `doInstallIntermediates` is true, whether to install intermediate build
+  products to a separate `intermediates` output. See [“Incremental
+  builds”](#haskell-incremental-builds) for more information. Defaults to `false`.
 
-`allowInconsistentDependencies`
-: If enabled, allow multiple versions of the same Haskell package in the
-dependency tree at configure time. Often in such a situation compilation would
-later fail because of type mismatches. Defaults to `false`.
+- `allowInconsistentDependencies`
+  : If enabled, allow multiple versions of the same Haskell package in the
+  dependency tree at configure time. Often in such a situation compilation would
+  later fail because of type mismatches. Defaults to `false`.
 
-`enableLibraryForGhci`
-: Build and install a special object file for GHCi. This improves performance
-when loading the library in the REPL, but requires extra build time and
-disk space. Defaults to `false`.
+- `enableLibraryForGhci`
+  : Build and install a special object file for GHCi. This improves performance
+  when loading the library in the REPL, but requires extra build time and
+  disk space. Defaults to `false`.
 
-`previousIntermediates`
-: If non-null, intermediate build artifacts are copied from this input to
-`dist/build` before performing compiling. See [“Incremental
-builds”](#haskell-incremental-builds) for more information. Defaults to `null`.
+- `previousIntermediates`
+  : If non-null, intermediate build artifacts are copied from this input to
+  `dist/build` before performing compiling. See [“Incremental
+  builds”](#haskell-incremental-builds) for more information. Defaults to `null`.
 
-`buildTarget`
-: Name of the executable or library to build and install.
-If unset, all available targets are built and installed.
+- `buildTarget`
+  : Name of the executable or library to build and install.
+  If unset, all available targets are built and installed.
 
 ### Specifying dependencies {#haskell-derivation-deps}
 
@@ -363,42 +360,42 @@ are grouped by what part of the package they belong to. This helps to reduce the
 dependency closure of a derivation, for example benchmark dependencies are not
 included if `doBenchmark == false`.
 
-`setup*Depends`
-: dependencies necessary to compile `Setup.hs`
+- `setup*Depends`
+  : dependencies necessary to compile `Setup.hs`
 
-`library*Depends`
-: dependencies of a library contained in the package
+- `library*Depends`
+  : dependencies of a library contained in the package
 
-`executable*Depends`
-: dependencies of an executable contained in the package
+- `executable*Depends`
+  : dependencies of an executable contained in the package
 
-`test*Depends`
-: dependencies of a test suite contained in the package
+- `test*Depends`
+  : dependencies of a test suite contained in the package
 
-`benchmark*Depends`
-: dependencies of a benchmark contained in the package
+- `benchmark*Depends`
+  : dependencies of a benchmark contained in the package
 
 The other categorization relates to the way the package depends on the dependency:
 
-`*ToolDepends`
-: Tools we need to run as part of the build process.
-They are added to the derivation's `nativeBuildInputs`.
+- `*ToolDepends`
+  : Tools we need to run as part of the build process.
+  They are added to the derivation's `nativeBuildInputs`.
 
-`*HaskellDepends`
-: Haskell libraries the package depends on.
-They are added to `propagatedBuildInputs`.
+- `*HaskellDepends`
+  : Haskell libraries the package depends on.
+  They are added to `propagatedBuildInputs`.
 
-`*SystemDepends`
-: Non-Haskell libraries the package depends on.
-They are added to `buildInputs`
+- `*SystemDepends`
+  : Non-Haskell libraries the package depends on.
+  They are added to `buildInputs`
 
-`*PkgconfigDepends`
-: `*SystemDepends` which are discovered using `pkg-config`.
-They are added to `buildInputs` and it is additionally
-ensured that `pkg-config` is available at build time.
+- `*PkgconfigDepends`
+  : `*SystemDepends` which are discovered using `pkg-config`.
+  They are added to `buildInputs` and it is additionally
+  ensured that `pkg-config` is available at build time.
 
-`*FrameworkDepends`
-: Apple SDK Framework which the package depends on when compiling it on Darwin.
+- `*FrameworkDepends`
+  : Apple SDK Framework which the package depends on when compiling it on Darwin.
 
 Using these two distinctions, you should be able to categorize most of the dependency
 specifications that are available:
@@ -426,23 +423,23 @@ specifications that are available:
 
 That only leaves the following extra ways for specifying dependencies:
 
-`buildDepends`
-: Allows specifying Haskell dependencies which are added to `propagatedBuildInputs` unconditionally.
+- `buildDepends`
+  : Allows specifying Haskell dependencies which are added to `propagatedBuildInputs` unconditionally.
 
-`buildTools`
-: Like `*ToolDepends`, but are added to `nativeBuildInputs` unconditionally.
+- `buildTools`
+  : Like `*ToolDepends`, but are added to `nativeBuildInputs` unconditionally.
 
-`extraLibraries`
-: Like `*SystemDepends`, but are added to `buildInputs` unconditionally.
+- `extraLibraries`
+  : Like `*SystemDepends`, but are added to `buildInputs` unconditionally.
 
-`pkg-configDepends`
-: Like `*PkgconfigDepends`, but are added to `buildInputs` unconditionally.
+- `pkg-configDepends`
+  : Like `*PkgconfigDepends`, but are added to `buildInputs` unconditionally.
 
-`testDepends`
-: Deprecated, use either `testHaskellDepends` or `testSystemDepends`.
+- `testDepends`
+  : Deprecated, use either `testHaskellDepends` or `testSystemDepends`.
 
-`benchmarkDepends`
-: Deprecated, use either `benchmarkHaskellDepends` or `benchmarkSystemDepends`.
+- `benchmarkDepends`
+  : Deprecated, use either `benchmarkHaskellDepends` or `benchmarkSystemDepends`.
 
 The dependency specification methods in this list which are unconditional
 are especially useful when writing [overrides](#haskell-overriding-haskell-packages)
@@ -455,16 +452,16 @@ recommended to use the more accurate ones listed above when possible.
 arguments which are transparently set in `meta` of the resulting derivation. See
 the [Meta-attributes section](#chap-meta) for their documentation.
 
-* These attributes are populated with a default value if omitted:
-    * `homepage`: defaults to the Hackage page for `pname`.
-    * `platforms`: defaults to `lib.platforms.all` (since GHC can cross-compile)
-* These attributes are only set if given:
-    * `description`
-    * `license`
-    * `changelog`
-    * `maintainers`
-    * `broken`
-    * `hydraPlatforms`
+- These attributes are populated with a default value if omitted:
+  - `homepage`: defaults to the Hackage page for `pname`.
+  - `platforms`: defaults to `lib.platforms.all` (since GHC can cross-compile)
+- These attributes are only set if given:
+  - `description`
+  - `license`
+  - `changelog`
+  - `maintainers`
+  - `broken`
+  - `hydraPlatforms`
 
 ### Incremental builds {#haskell-incremental-builds}
 
@@ -612,13 +609,13 @@ environments: `shellFor`, a function exposed by every haskell package set. It
 takes the following arguments and returns a derivation which is suitable as a
 development environment inside `nix-shell`:
 
-`packages`
-: This argument is used to select the packages for which to build the
-development environment. This should be a function which takes a haskell package
-set and returns a list of packages. `shellFor` will pass the used package set to
-this function and include all dependencies of the returned package in the build
-environment. This means you can reuse Nix expressions of packages included in
-nixpkgs, but also use local Nix expressions like this: `hpkgs: [
+- `packages`
+  : This argument is used to select the packages for which to build the
+  development environment. This should be a function which takes a haskell package
+  set and returns a list of packages. `shellFor` will pass the used package set to
+  this function and include all dependencies of the returned package in the build
+  environment. This means you can reuse Nix expressions of packages included in
+  nixpkgs, but also use local Nix expressions like this: `hpkgs: [
 (hpkgs.callPackage ./my-project.nix { }) ]`.
 
 `extraDependencies`
@@ -632,28 +629,28 @@ your packages' dependencies. Example: `hpkgs: {libraryHaskellDepends =
 This is the place to add packages like `cabal-install`, `doctest` or `hlint`.
 Defaults to `[]`.
 
-`buildInputs`
-: Expects a list of derivations to add as library dependencies, like `openssl`.
-This is rarely necessary as the haskell package expressions usually track system
-dependencies as well. Defaults to `[]`. (see also
-[derivation dependencies](#haskell-derivation-deps))
+- `buildInputs`
+  : Expects a list of derivations to add as library dependencies, like `openssl`.
+  This is rarely necessary as the haskell package expressions usually track system
+  dependencies as well. Defaults to `[]`. (see also
+  [derivation dependencies](#haskell-derivation-deps))
 
-`withHoogle`
-: If this is true, `hoogle` will be added to `nativeBuildInputs`.
-Additionally, its database will be populated with all included dependencies,
-so you'll be able search through the documentation of your dependencies.
-Defaults to `false`.
+- `withHoogle`
+  : If this is true, `hoogle` will be added to `nativeBuildInputs`.
+  Additionally, its database will be populated with all included dependencies,
+  so you'll be able search through the documentation of your dependencies.
+  Defaults to `false`.
 
-`genericBuilderArgsModifier`
-: This argument accepts a function allowing you to modify the arguments passed
-to `mkDerivation` in order to create the development environment. For example,
-`args: { doCheck = false; }` would cause the environment to not include any test
-dependencies. Defaults to `lib.id`.
+- `genericBuilderArgsModifier`
+  : This argument accepts a function allowing you to modify the arguments passed
+  to `mkDerivation` in order to create the development environment. For example,
+  `args: { doCheck = false; }` would cause the environment to not include any test
+  dependencies. Defaults to `lib.id`.
 
-`doBenchmark`
-: This is a shortcut for enabling `doBenchmark` via `genericBuilderArgsModifier`.
-Setting it to `true` will cause the development environment to include all
-benchmark dependencies which would be excluded by default. Defaults to `false`.
+- `doBenchmark`
+  : This is a shortcut for enabling `doBenchmark` via `genericBuilderArgsModifier`.
+  Setting it to `true` will cause the development environment to include all
+  benchmark dependencies which would be excluded by default. Defaults to `false`.
 
 One neat property of `shellFor` is that it allows you to work on multiple
 packages using the same environment in conjunction with
@@ -703,10 +700,10 @@ editor to use HLS and how to test your setup.
 HLS needs to be compiled with the GHC version of the project you use it
 on.
 
-``pkgs.haskell-language-server`` provides
-``haskell-language-server-wrapper``, ``haskell-language-server``
-and ``haskell-language-server-x.x.x``
-binaries, where ``x.x.x`` is the GHC version for which it is compiled. By
+`pkgs.haskell-language-server` provides
+`haskell-language-server-wrapper`, `haskell-language-server`
+and `haskell-language-server-x.x.x`
+binaries, where `x.x.x` is the GHC version for which it is compiled. By
 default, it only includes binaries for the current GHC version, to reduce
 closure size. The closure size is large, because HLS needs to be dynamically
 linked to work reliably. You can override the list of supported GHC versions
@@ -720,6 +717,7 @@ pkgs.haskell-language-server.override {
   ];
 }
 ```
+
 Where all strings `version` are allowed such that
 `haskell.packages.ghc${version}` is an existing package set.
 
@@ -752,7 +750,7 @@ editor plugin to achieve this.
 <!-- TODO(@sternenseemann): we should document /somewhere/ that base == null etc. -->
 
 Like many language specific subsystems in nixpkgs, the Haskell infrastructure
-also has its own quirks when it comes to overriding. Overriding of the *inputs*
+also has its own quirks when it comes to overriding. Overriding of the _inputs_
 to a package at least follows the standard procedure. For example, imagine you
 need to build `nix-tree` with a more recent version of `brick` than the default
 one provided by `haskellPackages`:
@@ -840,10 +838,10 @@ lib.pipe my-haskell-package [
 
 The base interface for all overriding is the following function:
 
-`overrideCabal f drv`
-: Takes the arguments passed to obtain `drv` to `f` and uses the resulting
-attribute set to update the argument set. Then a recomputed version of `drv`
-using the new argument set is returned.
+- `overrideCabal f drv`
+  : Takes the arguments passed to obtain `drv` to `f` and uses the resulting
+  attribute set to update the argument set. Then a recomputed version of `drv`
+  using the new argument set is returned.
 
 <!--
 TODO(@sternenseemann): ideally we want to be more detailed here as well, but
@@ -861,11 +859,11 @@ for a more detailed description of the effects of the respective arguments.
 
 ##### Packaging Helpers {#haskell-packaging-helpers}
 
-`overrideSrc { src, version } drv`
-: Replace the source used for building `drv` with the path or derivation given
-as `src`. The `version` attribute is optional. Prefer this function over
-overriding `src` via `overrideCabal`, since it also automatically takes care of
-removing any Hackage revisions.
+- `overrideSrc { src, version } drv`
+  : Replace the source used for building `drv` with the path or derivation given
+  as `src`. The `version` attribute is optional. Prefer this function over
+  overriding `src` via `overrideCabal`, since it also automatically takes care of
+  removing any Hackage revisions.
 
 <!-- TODO(@sternenseemann): deprecated
 
@@ -875,8 +873,8 @@ names are given via `list`. The executables need to be using `optparse-applicati
 for this to work.
 -->
 
-`justStaticExecutables drv`
-: Only build and install the executables produced by `drv`, removing everything
+- `justStaticExecutables drv`
+  : Only build and install the executables produced by `drv`, removing everything
   that may refer to other Haskell packages' store paths (like libraries and
   documentation). This dramatically reduces the closure size of the resulting
   derivation. Note that the executables are only statically linked against their
@@ -929,46 +927,46 @@ for this to work.
 
 [164630]: https://github.com/NixOS/nixpkgs/issues/164630
 
-`enableSeparateBinOutput drv`
-: Install executables produced by `drv` to a separate `bin` output. This
-has a similar effect as `justStaticExecutables`, but preserves the libraries
-and documentation in the `out` output alongside the `bin` output with a
-much smaller closure size.
+- `enableSeparateBinOutput drv`
+  : Install executables produced by `drv` to a separate `bin` output. This
+  has a similar effect as `justStaticExecutables`, but preserves the libraries
+  and documentation in the `out` output alongside the `bin` output with a
+  much smaller closure size.
 
-`markBroken drv`
-: Sets the `broken` flag to `true` for `drv`.
+- `markBroken drv`
+  : Sets the `broken` flag to `true` for `drv`.
 
-`markUnbroken drv`, `unmarkBroken drv`
-: Set the `broken` flag to `false` for `drv`.
+- `markUnbroken drv`, `unmarkBroken drv`
+  : Set the `broken` flag to `false` for `drv`.
 
-`doDistribute drv`
-: Updates `hydraPlatforms` so that Hydra will build `drv`. This is
-sometimes necessary when working with versioned packages in
-`haskellPackages` which are not built by default.
+- `doDistribute drv`
+  : Updates `hydraPlatforms` so that Hydra will build `drv`. This is
+  sometimes necessary when working with versioned packages in
+  `haskellPackages` which are not built by default.
 
-`dontDistribute drv`
-: Sets `hydraPlatforms` to `[]`, causing Hydra to skip this package
-altogether. Useful if it fails to evaluate cleanly and is causing
-noise in the evaluation errors tab on Hydra.
+- `dontDistribute drv`
+  : Sets `hydraPlatforms` to `[]`, causing Hydra to skip this package
+  altogether. Useful if it fails to evaluate cleanly and is causing
+  noise in the evaluation errors tab on Hydra.
 
 ##### Development Helpers {#haskell-development-helpers}
 
-`sdistTarball drv`
-: Create a source distribution tarball like those found on Hackage
-instead of building the package `drv`.
+- `sdistTarball drv`
+  : Create a source distribution tarball like those found on Hackage
+  instead of building the package `drv`.
 
-`documentationTarball drv`
-: Create a documentation tarball suitable for uploading to Hackage
-instead of building the package `drv`.
+- `documentationTarball drv`
+  : Create a documentation tarball suitable for uploading to Hackage
+  instead of building the package `drv`.
 
-`buildFromSdist drv`
-: Uses `sdistTarball drv` as the source to compile `drv`. This helps to catch
-packaging bugs when building from a local directory, e.g. when required files
-are missing from `extra-source-files`.
+- `buildFromSdist drv`
+  : Uses `sdistTarball drv` as the source to compile `drv`. This helps to catch
+  packaging bugs when building from a local directory, e.g. when required files
+  are missing from `extra-source-files`.
 
-`failOnAllWarnings drv`
-: Enables all warnings GHC supports and makes it fail the build if any of them
-are emitted.
+- `failOnAllWarnings drv`
+  : Enables all warnings GHC supports and makes it fail the build if any of them
+  are emitted.
 
 <!-- TODO(@sternenseemann):
 `checkUnusedPackages opts drv`
@@ -977,122 +975,122 @@ taken as an input is not used. The `opts` attribute set allows relaxing this
 check.
 -->
 
-`enableDWARFDebugging drv`
-: Compiles the package with additional debug symbols enabled, useful
-for debugging with e.g. `gdb`.
+- `enableDWARFDebugging drv`
+  : Compiles the package with additional debug symbols enabled, useful
+  for debugging with e.g. `gdb`.
 
-`doStrip drv`
-: Sets `doStrip` to `true` for `drv`.
+- `doStrip drv`
+  : Sets `doStrip` to `true` for `drv`.
 
-`dontStrip drv`
-: Sets `doStrip` to `false` for `drv`.
+- `dontStrip drv`
+  : Sets `doStrip` to `false` for `drv`.
 
 <!-- TODO(@sternenseemann): shellAware -->
 
 ##### Trivial Helpers {#haskell-trivial-helpers}
 
-`doJailbreak drv`
-: Sets the `jailbreak` argument to `true` for `drv`.
+- `doJailbreak drv`
+  : Sets the `jailbreak` argument to `true` for `drv`.
 
-`dontJailbreak drv`
-: Sets the `jailbreak` argument to `false` for `drv`.
+- `dontJailbreak drv`
+  : Sets the `jailbreak` argument to `false` for `drv`.
 
-`doHaddock drv`
-: Sets `doHaddock` to `true` for `drv`.
+- `doHaddock drv`
+  : Sets `doHaddock` to `true` for `drv`.
 
-`dontHaddock drv`
-: Sets `doHaddock` to `false` for `drv`. Useful if the build of a package is
-failing because of e.g. a syntax error in the Haddock documentation.
+- `dontHaddock drv`
+  : Sets `doHaddock` to `false` for `drv`. Useful if the build of a package is
+  failing because of e.g. a syntax error in the Haddock documentation.
 
-`doHyperlinkSource drv`
-: Sets `hyperlinkSource` to `true` for `drv`.
+- `doHyperlinkSource drv`
+  : Sets `hyperlinkSource` to `true` for `drv`.
 
-`dontHyperlinkSource drv`
-: Sets `hyperlinkSource` to `false` for `drv`.
+- `dontHyperlinkSource drv`
+  : Sets `hyperlinkSource` to `false` for `drv`.
 
-`doCheck drv`
-: Sets `doCheck` to `true` for `drv`.
+- `doCheck drv`
+  : Sets `doCheck` to `true` for `drv`.
 
-`dontCheck drv`
-: Sets `doCheck` to `false` for `drv`. Useful if a package has a broken,
-flaky or otherwise problematic test suite breaking the build.
+- `dontCheck drv`
+  : Sets `doCheck` to `false` for `drv`. Useful if a package has a broken,
+  flaky or otherwise problematic test suite breaking the build.
 
-`dontCheckIf condition drv`
-: Sets `doCheck` to `false` for `drv`, but only if `condition` applies.
-Otherwise it's a no-op. Useful to conditionally disable tests for a package
-without interfering with previous overrides or default values.
+- `dontCheckIf condition drv`
+  : Sets `doCheck` to `false` for `drv`, but only if `condition` applies.
+  Otherwise it's a no-op. Useful to conditionally disable tests for a package
+  without interfering with previous overrides or default values.
 
 <!-- Purposefully omitting the non-list variants here. They are a bit
 ugly, and we may want to deprecate them at some point. -->
 
-`appendConfigureFlags list drv`
-: Adds the strings in `list` to the `configureFlags` argument for `drv`.
+- `appendConfigureFlags list drv`
+  : Adds the strings in `list` to the `configureFlags` argument for `drv`.
 
-`enableCabalFlag flag drv`
-: Makes sure that the Cabal flag `flag` is enabled in Cabal's configure step.
+- `enableCabalFlag flag drv`
+  : Makes sure that the Cabal flag `flag` is enabled in Cabal's configure step.
 
-`disableCabalFlag flag drv`
-: Makes sure that the Cabal flag `flag` is disabled in Cabal's configure step.
+- `disableCabalFlag flag drv`
+  : Makes sure that the Cabal flag `flag` is disabled in Cabal's configure step.
 
-`appendBuildFlags list drv`
-: Adds the strings in `list` to the `buildFlags` argument for `drv`.
+- `appendBuildFlags list drv`
+  : Adds the strings in `list` to the `buildFlags` argument for `drv`.
 
 <!-- TODO(@sternenseemann): removeConfigureFlag -->
 
-`appendPatches list drv`
-: Adds the `list` of derivations or paths to the `patches` argument for `drv`.
+- `appendPatches list drv`
+  : Adds the `list` of derivations or paths to the `patches` argument for `drv`.
 
 <!-- TODO(@sternenseemann): link dep section -->
 
-`addBuildTools list drv`
-: Adds the `list` of derivations to the `buildTools` argument for `drv`.
+- `addBuildTools list drv`
+  : Adds the `list` of derivations to the `buildTools` argument for `drv`.
 
-`addExtraLibraries list drv`
-: Adds the `list` of derivations to the `extraLibraries` argument for `drv`.
+- `addExtraLibraries list drv`
+  : Adds the `list` of derivations to the `extraLibraries` argument for `drv`.
 
-`addBuildDepends list drv`
-: Adds the `list` of derivations to the `buildDepends` argument for `drv`.
+- `addBuildDepends list drv`
+  : Adds the `list` of derivations to the `buildDepends` argument for `drv`.
 
-`addTestToolDepends list drv`
-: Adds the `list` of derivations to the `testToolDepends` argument for `drv`.
+- `addTestToolDepends list drv`
+  : Adds the `list` of derivations to the `testToolDepends` argument for `drv`.
 
-`addPkgconfigDepends list drv`
-: Adds the `list` of derivations to the `pkg-configDepends` argument for `drv`.
+- `addPkgconfigDepends list drv`
+  : Adds the `list` of derivations to the `pkg-configDepends` argument for `drv`.
 
-`addSetupDepends list drv`
-: Adds the `list` of derivations to the `setupHaskellDepends` argument for `drv`.
+- `addSetupDepends list drv`
+  : Adds the `list` of derivations to the `setupHaskellDepends` argument for `drv`.
 
-`doBenchmark drv`
-: Set `doBenchmark` to `true` for `drv`. Useful if your development
-environment is missing the dependencies necessary for compiling the
-benchmark component.
+- `doBenchmark drv`
+  : Set `doBenchmark` to `true` for `drv`. Useful if your development
+  environment is missing the dependencies necessary for compiling the
+  benchmark component.
 
-`dontBenchmark drv`
-: Set `doBenchmark` to `false` for `drv`.
+- `dontBenchmark drv`
+  : Set `doBenchmark` to `false` for `drv`.
 
-`setBuildTargets drv list`
-: Sets the `buildTarget` argument for `drv` so that the targets specified in `list` are built.
+- `setBuildTargets drv list`
+  : Sets the `buildTarget` argument for `drv` so that the targets specified in `list` are built.
 
-`doCoverage drv`
-: Sets the `doCoverage` argument to `true` for `drv`.
+- `doCoverage drv`
+  : Sets the `doCoverage` argument to `true` for `drv`.
 
-`dontCoverage drv`
-: Sets the `doCoverage` argument to `false` for `drv`.
+- `dontCoverage drv`
+  : Sets the `doCoverage` argument to `false` for `drv`.
 
-`enableExecutableProfiling drv`
-: Sets the `enableExecutableProfiling` argument to `true` for `drv`.
+- `enableExecutableProfiling drv`
+  : Sets the `enableExecutableProfiling` argument to `true` for `drv`.
 
-`disableExecutableProfiling drv`
-: Sets the `enableExecutableProfiling` argument to `false` for `drv`.
+- `disableExecutableProfiling drv`
+  : Sets the `enableExecutableProfiling` argument to `false` for `drv`.
 
-`enableLibraryProfiling drv`
-: Sets the `enableLibraryProfiling` argument to `true` for `drv`.
+- `enableLibraryProfiling drv`
+  : Sets the `enableLibraryProfiling` argument to `true` for `drv`.
 
-`disableLibraryProfiling drv`
-: Sets the `enableLibraryProfiling` argument to `false` for `drv`.
+- `disableLibraryProfiling drv`
+  : Sets the `enableLibraryProfiling` argument to `false` for `drv`.
 
-`disableParallelBuilding drv`
-: Sets the `enableParallelBuilding` argument to `false` for `drv`.
+- `disableParallelBuilding drv`
+  : Sets the `enableParallelBuilding` argument to `false` for `drv`.
 
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
@@ -1106,22 +1104,22 @@ you are working with or – even better – from the `self`/`final` fix point of
 Note: Some functions like `shellFor` that are not intended for overriding per se, are omitted
 in this section. <!-- TODO(@sternenseemann): note about ifd section -->
 
-`cabalSdist { src, name ? ... }`
-: Generates the Cabal sdist tarball for `src`, suitable for uploading to Hackage.
-Contrary to `haskell.lib.compose.sdistTarball`, it uses `cabal-install` over `Setup.hs`,
-so it is usually faster: No build dependencies need to be downloaded, and we can
-skip compiling `Setup.hs`.
+- `cabalSdist { src, name ? ... }`
+  : Generates the Cabal sdist tarball for `src`, suitable for uploading to Hackage.
+  Contrary to `haskell.lib.compose.sdistTarball`, it uses `cabal-install` over `Setup.hs`,
+  so it is usually faster: No build dependencies need to be downloaded, and we can
+  skip compiling `Setup.hs`.
 
-`buildFromCabalSdist drv`
-: Build `drv`, but run its `src` attribute through `cabalSdist` first. Useful for catching
-files necessary for compilation that are missing from the sdist.
+- `buildFromCabalSdist drv`
+  : Build `drv`, but run its `src` attribute through `cabalSdist` first. Useful for catching
+  files necessary for compilation that are missing from the sdist.
 
-`generateOptparseApplicativeCompletions list drv`
-: Generate and install shell completion files for the installed executables whose
-names are given via `list`. The executables need to be using `optparse-applicative`
-for [this to work][optparse-applicative-completions].
-Note that this feature is automatically disabled when cross-compiling, since it
-requires executing the binaries in question.
+- `generateOptparseApplicativeCompletions list drv`
+  : Generate and install shell completion files for the installed executables whose
+  names are given via `list`. The executables need to be using `optparse-applicative`
+  for [this to work][optparse-applicative-completions].
+  Note that this feature is automatically disabled when cross-compiling, since it
+  requires executing the binaries in question.
 
 ## Import-from-Derivation helpers {#haskell-import-from-derivation}
 
@@ -1157,26 +1155,25 @@ This expression should be called with `haskellPackages.callPackage`, which will
 supply [`haskellPackages.mkDerivation`](#haskell-mkderivation) and the Haskell
 dependencies as arguments.
 
-`callCabal2nix name src args`
-: Create a package named `name` from the source derivation `src` using
+- `callCabal2nix name src args`
+  : Create a package named `name` from the source derivation `src` using
   `cabal2nix`.
 
   `args` are extra arguments provided to `haskellPackages.callPackage`.
 
-`callCabal2nixWithOptions name src opts args`
-: Create a package named `name` from the source derivation `src` using
+- `callCabal2nixWithOptions name src opts args`
+  : Create a package named `name` from the source derivation `src` using
   `cabal2nix`.
 
   `opts` are extra options for calling `cabal2nix`. If `opts` is a string, it
   will be used as extra command line arguments for `cabal2nix`, e.g. `--subpath
-  path/to/dir/containing/cabal-file`. Otherwise, `opts` should be an AttrSet
+path/to/dir/containing/cabal-file`. Otherwise, `opts` should be an AttrSet
   which can contain the following attributes:
 
-  `extraCabal2nixOptions`
-  : Extra command line arguments for `cabal2nix`.
-
-  `srcModifier`
-  : A function which is used to modify the given `src` instead of the default
+  - `extraCabal2nixOptions`
+    : Extra command line arguments for `cabal2nix`.
+  - `srcModifier`
+    : A function which is used to modify the given `src` instead of the default
     filter.
 
     The default source filter will remove all files from `src` except for
@@ -1239,11 +1236,11 @@ By default, Nixpkgs builds a profiling version of each Haskell library. The
 exception to this rule are some platforms where it is disabled due to concerns
 over output size. You may want to…
 
-* …enable profiling globally so that you can build a project you are working on
+- …enable profiling globally so that you can build a project you are working on
   with profiling ability giving you insight in the time spent across your code
   and code you depend on using [GHC's profiling feature][profiling].
 
-* …disable profiling (globally) to reduce the time spent building the profiling
+- …disable profiling (globally) to reduce the time spent building the profiling
   versions of libraries which a significant amount of build time is spent on
   (although they are not as expensive as the “normal” build of a Haskell library).
 

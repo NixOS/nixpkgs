@@ -8,6 +8,7 @@ A majority of the packages supported by Octave from their [website](https://gnu-
 ## Structure {#ssec-octave-structure}
 
 All Octave add-on packages are available in two ways:
+
 1. Under the top-level `Octave` attribute, `octave.pkgs`.
 2. As a top-level attribute, `octavePackages`.
 
@@ -65,18 +66,18 @@ The `buildOctavePackage` does several things to make sure things work properly.
 
 In Octave packages, there are four sets of dependencies that can be specified:
 
-`nativeBuildInputs`
-: Just like other packages, `nativeBuildInputs` is intended for architecture-dependent build-time-only dependencies.
+- `nativeBuildInputs`
+  : Just like other packages, `nativeBuildInputs` is intended for architecture-dependent build-time-only dependencies.
 
-`buildInputs`
-: Like other packages, `buildInputs` is intended for architecture-independent build-time-only dependencies.
+- `buildInputs`
+  : Like other packages, `buildInputs` is intended for architecture-independent build-time-only dependencies.
 
-`propagatedBuildInputs`
-: Similar to other packages, `propagatedBuildInputs` is intended for packages that are required for both building and running of the package.
-See [Symbolic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/octave-modules/symbolic/default.nix) for how this works and why it is needed.
+- `propagatedBuildInputs`
+  : Similar to other packages, `propagatedBuildInputs` is intended for packages that are required for both building and running of the package.
+  See [Symbolic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/octave-modules/symbolic/default.nix) for how this works and why it is needed.
 
-`requiredOctavePackages`
-: This is a special dependency that ensures the specified Octave packages are dependent on others, and are made available simultaneously when loading them in Octave.
+- `requiredOctavePackages`
+  : This is a special dependency that ensures the specified Octave packages are dependent on others, and are made available simultaneously when loading them in Octave.
 
 ### Installing Octave Packages {#sssec-installing-octave-packages}
 
@@ -89,6 +90,6 @@ To this end, when all the requested packages have been built, the Octave package
 2. Because of the way `buildEnv` works, all tarballs that are present (which should be all Octave packages to install) should be removed.
 3. The path down to the default install location of Octave packages is recreated so that Nix-operated Octave can install the packages.
 4. Install the packages into the `$out` environment while writing package entries to the database file.
-This database file is unique for each different (according to Nix) environment invocation.
+   This database file is unique for each different (according to Nix) environment invocation.
 5. Rewrite the Octave-wide startup file to read from the list of packages installed in that particular environment.
 6. Wrap any programs that are required by the Octave packages so that they work with all the paths defined within the environment.
