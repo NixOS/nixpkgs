@@ -6,9 +6,9 @@ The `hareHook` package sets up the environment for building Hare programs by
 doing the following:
 
 1. Setting the `HARECACHE`, `HAREPATH` and `NIX_HAREFLAGS` environment variables;
-1. Propagating `harec`, `qbe` and two wrapper scripts  for the hare binary.
+1. Propagating `harec`, `qbe` and two wrapper scripts for the hare binary.
 
-It is not a function as is the case for some other languages --- *e. g.*, Go or
+It is not a function as is the case for some other languages --- _e. g._, Go or
 Rust ---, but a package to be added to `nativeBuildInputs`.
 
 ## Attributes of `hareHook` {#hareHook-attributes}
@@ -47,7 +47,7 @@ purpose of `NIX_HAREFLAGS`: In it, the `-a` flag is passed with the architecture
 of the `hostPlatform`.
 
 However, manual intervention may be needed when a binary compiled by the build
-process must be run for the build to complete --- *e. g.*, when using Hare's
+process must be run for the build to complete --- _e. g._, when using Hare's
 `hare` module for code generation.
 
 In those cases, `hareHook` provides the `hare-native` script, which is a wrapper

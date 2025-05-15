@@ -13,9 +13,7 @@ The transitive closure of these derivations' outputs will be copied into the cac
 
 ## Optional arguments {#sec-pkgs-binary-cache-arguments}
 
-`compression` (`"none"` or `"xz"` or `"zstd"`; _optional_)
-
-: The compression algorithm to use.
+- `compression` (`"none"` or `"xz"` or `"zstd"`; _optional_): The compression algorithm to use.
 
   _Default value:_ `zstd`.
 

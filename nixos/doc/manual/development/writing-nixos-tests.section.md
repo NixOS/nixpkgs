@@ -90,22 +90,16 @@ pkgs.testers.runNixOSTest {
 
 There are a few special NixOS options for test VMs:
 
-`virtualisation.memorySize`
+- `virtualisation.memorySize`: The memory of the VM in megabytes.
 
-:   The memory of the VM in megabytes.
+- `virtualisation.vlans`: The virtual networks to which the VM is connected. See
+  [`nat.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix)
+  for an example.
 
-`virtualisation.vlans`
-
-:   The virtual networks to which the VM is connected. See
-    [`nat.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix)
-    for an example.
-
-`virtualisation.writableStore`
-
-:   By default, the Nix store in the VM is not writable. If you enable
-    this option, a writable union file system is mounted on top of the
-    Nix store to make it appear writable. This is necessary for tests
-    that run Nix operations that modify the store.
+- `virtualisation.writableStore`: By default, the Nix store in the VM is not writable. If you enable
+  this option, a writable union file system is mounted on top of the
+  Nix store to make it appear writable. This is necessary for tests
+  that run Nix operations that modify the store.
 
 For more options, see the module
 [`qemu-vm.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix).
@@ -224,32 +218,28 @@ with foo_running:
 
 `polling_condition` takes the following (optional) arguments:
 
-`seconds_interval`
+- `seconds_interval`: specifies how often the condition should be polled:
 
-:   specifies how often the condition should be polled:
+  ```py
+  @polling_condition(seconds_interval=10)
+  def foo_running():
+      machine.succeed("pgrep -x foo")
+  ```
 
-```py
-@polling_condition(seconds_interval=10)
-def foo_running():
-    machine.succeed("pgrep -x foo")
-```
+- `description`: is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
 
-`description`
+  ```py
+  @polling_condition
+  def foo_running():
+      "check that foo is running"
+      machine.succeed("pgrep -x foo")
+  ```
 
-:   is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
-
-```py
-@polling_condition
-def foo_running():
-    "check that foo is running"
-    machine.succeed("pgrep -x foo")
-```
-
-```py
-@polling_condition(description="check that foo is running")
-def foo_running():
-    machine.succeed("pgrep -x foo")
-```
+  ```py
+  @polling_condition(description="check that foo is running")
+  def foo_running():
+      machine.succeed("pgrep -x foo")
+  ```
 
 ## Adding Python packages to the test script {#ssec-python-packages-in-test-script}
 

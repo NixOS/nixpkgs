@@ -5,33 +5,20 @@ It uses Linux' namespaces feature to create temporary lightweight environments w
 
 Accepted arguments are:
 
-- `name`
-        The name of the environment.
-- `pname`
-        The pname of the environment.
-- `version`
-        The version of the environment.
-- `executableName`
-        The name of the wrapper executable. Defaults to `pname` if set, or `name` otherwise.
-- `targetPkgs`
-        Packages to be installed for the main host's architecture (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also installed.
-- `multiPkgs`
-        Packages to be installed for all architectures supported by a host (i.e. i686 and x86_64 on x86_64 installations). Only libraries are installed by default.
-- `multiArch`
-        Whether to install 32bit multiPkgs into the FHSEnv in 64bit environments
-- `extraBuildCommands`
-        Additional commands to be executed for finalizing the directory structure.
-- `extraBuildCommandsMulti`
-        Like `extraBuildCommands`, but executed only on multilib architectures.
-- `extraOutputsToInstall`
-        Additional derivation outputs to be linked for both target and multi-architecture packages.
-- `extraInstallCommands`
-        Additional commands to be executed for finalizing the derivation with runner script.
-- `runScript`
-        A shell command to be executed inside the sandbox. It defaults to `bash`. Command line arguments passed to the resulting wrapper are appended to this command by default.
-        This command must be escaped; i.e. `"foo app" --do-stuff --with "some file"`. See `lib.escapeShellArgs`.
-- `profile`
-        Optional script for `/etc/profile` within the sandbox.
+- `name`: The name of the environment.
+- `pname`: The pname of the environment.
+- `version`: The version of the environment.
+- `executableName`: The name of the wrapper executable. Defaults to `pname` if set, or `name` otherwise.
+- `targetPkgs`: Packages to be installed for the main host's architecture (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also installed.
+- `multiPkgs`: Packages to be installed for all architectures supported by a host (i.e. i686 and x86_64 on x86_64 installations). Only libraries are installed by default.
+- `multiArch`: Whether to install 32bit multiPkgs into the FHSEnv in 64bit environments
+- `extraBuildCommands`: Additional commands to be executed for finalizing the directory structure.
+- `extraBuildCommandsMulti`: Like `extraBuildCommands`, but executed only on multilib architectures.
+- `extraOutputsToInstall`: Additional derivation outputs to be linked for both target and multi-architecture packages.
+- `extraInstallCommands`: Additional commands to be executed for finalizing the derivation with runner script.
+- `runScript`: A shell command to be executed inside the sandbox. It defaults to `bash`. Command line arguments passed to the resulting wrapper are appended to this command by default.
+  This command must be escaped; i.e. `"foo app" --do-stuff --with "some file"`. See `lib.escapeShellArgs`.
+- `profile`: Optional script for `/etc/profile` within the sandbox.
 
 You can create a simple environment using a `shell.nix` like this:
 
