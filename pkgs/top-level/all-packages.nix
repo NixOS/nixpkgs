@@ -12763,8 +12763,6 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
-  sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
-
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_17
     wlroots_0_18
