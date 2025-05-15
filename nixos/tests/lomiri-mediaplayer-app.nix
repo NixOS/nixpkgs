@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  ocrContent = "Video Test";
+  ocrContent = "Feed";
   videoFile = "test.webm";
 in
 {
@@ -25,8 +25,8 @@ in
               ];
             }
             ''
-              magick -size 400x400 canvas:white -pointsize 40 -fill black -annotate +100+100 '${ocrContent}' output.png
-              ffmpeg -re -loop 1 -i output.png -c:v libvpx -b:v 100K -t 120 $out -loglevel fatal
+              magick -size 600x600 canvas:white -pointsize 20 -fill black -annotate +100+100 '${ocrContent}' output.png
+              ffmpeg -re -loop 1 -i output.png -c:v libvpx -b:v 200K -t 120 $out -loglevel fatal
             '';
         systemPackages = with pkgs.lomiri; [
           suru-icon-theme
@@ -54,6 +54,8 @@ in
 
     with subtest("lomiri mediaplayer launches"):
         machine.succeed("lomiri-mediaplayer-app >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
         machine.wait_for_text("Choose from")
         machine.screenshot("lomiri-mediaplayer_open")
 
@@ -61,6 +63,8 @@ in
 
     with subtest("lomiri mediaplayer plays video"):
         machine.succeed("lomiri-mediaplayer-app /etc/${videoFile} >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
         machine.wait_for_text("${ocrContent}")
         machine.screenshot("lomiri-mediaplayer_playback")
 
@@ -71,6 +75,8 @@ in
         # Cause an error, and look for the error popup
         machine.succeed("touch invalid.mp4")
         machine.succeed("env LANG=de_DE.UTF-8 lomiri-mediaplayer-app invalid.mp4 >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
         machine.wait_for_text("Fehler")
         machine.screenshot("lomiri-mediaplayer_localised")
   '';

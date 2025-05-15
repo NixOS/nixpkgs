@@ -13,6 +13,7 @@
   gnused,
   util-linux,
   xdg-utils,
+  zsh,
   unstableGitUpdater,
 }:
 
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
       -e "s,\bsed\b,${gnused}/bin/sed," \
       -e "s,\bxargs\b,${findutils}/bin/xargs," \
       -e "s,\bxdg-open\b,${xdg-utils}/bin/xdg-open," \
+      -e "s,\bzsh\b,${zsh}/bin/zsh," \
       -e "/display-message\|fzf-git-\$o-widget\|\burl=\|\$remote_url =~ /!s,\bgit\b,${git}/bin/git,g" \
       -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${pname}/fzf-git.sh," \
       -e "/__fzf_git=.*readlink.*/d" \

@@ -373,7 +373,6 @@ in
   croc = handleTest ./croc.nix { };
   cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
-  darling = handleTest ./darling.nix { };
   darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix { };
   davis = runTest ./davis.nix;
@@ -619,6 +618,7 @@ in
   odoo = handleTest ./odoo.nix { };
   odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
   odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
+  oncall = runTest ./web-apps/oncall.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.

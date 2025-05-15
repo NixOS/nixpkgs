@@ -33,6 +33,8 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       nh2
       kalbasit
+      kvz
+      Acconut
     ];
   };
 }

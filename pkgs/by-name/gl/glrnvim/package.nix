@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "glrnvim";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "beeender";
     repo = "glrnvim";
     rev = "v${version}";
-    hash = "sha256-n3t3s3fzmBGXRDydYxNJ13itKul8dyLNW6HP8Di4hY0=";
+    hash = "sha256-fyJ3k1CBrxL6It8x9jNumzCuhXug6eB/fuvPUQYEc4A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oE1HXmJbKHegubqhsovat1ce/4rjdKGGTnmDdbRBo/k=";
+  cargoHash = "sha256-xDa2aMWx09dEbRDops2HwYSl/KMA7CeFqS2bnxX/8w8=";
 
   postInstall = ''
     install -Dm644 glrnvim.desktop -t $out/share/applications

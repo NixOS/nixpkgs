@@ -44,7 +44,6 @@ in
   lib,
   pkgs,
   stdenv,
-  fetchpatch,
   patchelf,
 
   # build time
@@ -77,6 +76,7 @@ in
   gnum4,
   gtk3,
   icu73,
+  icu77,
   libGL,
   libGLU,
   libevent,
@@ -328,6 +328,10 @@ buildStdenv.mkDerivation {
       rm -rf obj-x86_64-pc-linux-gnu
       patchShebangs mach build
     ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
+    + lib.optionalString (lib.versionAtLeast version "134") ''
+      sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
+    ''
     + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
@@ -467,13 +471,12 @@ buildStdenv.mkDerivation {
     ]
     ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
     ++ lib.optional (!drmSupport) "--disable-eme"
-    ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
+    ++ lib.optional allowAddonSideload "--allow-addon-sideload"
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
       "--enable-system-pixman"
       "--with-system-ffi"
-      # Firefox 136 fails to link with our icu76.1
-      (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
+      "--with-system-icu"
       "--with-system-jpeg"
       "--with-system-libevent"
       "--with-system-libvpx"
@@ -557,7 +560,7 @@ buildStdenv.mkDerivation {
         xorg.xorgproto
         zlib
         (
-          if (lib.versionAtLeast version "116") then nss_latest else nss_esr # 3.90
+          if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
         )
       ]
       ++ lib.optional alsaSupport alsa-lib
@@ -569,7 +572,7 @@ buildStdenv.mkDerivation {
         libdrm
       ]
     ))
-    ++ lib.optionals (lib.versionOlder version "136") [ icu73 ]
+    ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
     ++ lib.optional gssSupport libkrb5
     ++ lib.optional jemallocSupport jemalloc
     ++ extraBuildInputs;

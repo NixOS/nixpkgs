@@ -1,6 +1,9 @@
 name: "Building Nixpkgs lib-tests"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/lib-tests.yml
   pull_request_target:
     paths:
       - 'lib/**'

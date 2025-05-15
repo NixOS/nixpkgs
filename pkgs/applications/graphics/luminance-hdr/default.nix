@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   cmake,
   fetchFromGitHub,
   fetchpatch,
@@ -14,14 +14,11 @@
   libraw,
   libtiff,
   openexr,
-  qtbase,
-  qtdeclarative,
-  qttools,
-  qtwebengine,
+  libsForQt5,
   eigen,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "luminance-hdr";
   version = "2.6.1.1";
 
@@ -43,10 +40,10 @@ mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qttools
-    qtwebengine
+    libsForQt5.qtbase
+    libsForQt5.qtdeclarative
+    libsForQt5.qttools
+    libsForQt5.qtwebengine
     eigen
     boost
     exiv2
@@ -60,6 +57,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
     cmake
     pkg-config
   ];

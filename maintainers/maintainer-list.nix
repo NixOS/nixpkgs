@@ -53,8 +53,7 @@
    More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
    When editing this file:
-    * keep the list alphabetically sorted, check with:
-        nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
+    * keep the list alphabetically sorted
     * test the validity of the format with:
         nix-build lib/tests/maintainers.nix
 
@@ -536,6 +535,12 @@
         fingerprint = "DCBD 2175 8A30 9C1F 41D7  A0FC 890F FDB1 1860 FE1C";
       }
     ];
+  };
+  Acconut = {
+    email = "marius@transloadit.com";
+    github = "Acconut";
+    githubId = 1375043;
+    name = "Marius Kleidl";
   };
   acesyde = {
     name = "Pierre-Emmanuel Mercier";
@@ -1853,6 +1858,12 @@
     githubId = 1369436;
     name = "Austin Lund";
     keys = [ { fingerprint = "7083 E268 4BFD 845F 2B84  9E74 B695 8918 ED23 32CE"; } ];
+  };
+  appleboblin = {
+    email = "github@appleboblin.com";
+    github = "appleboblin";
+    githubId = 16847957;
+    name = "Po-Hui Lin";
   };
   applejag = {
     email = "applejag.luminance905@passmail.com";
@@ -11347,6 +11358,13 @@
     githubId = 19669567;
     name = "Willy";
   };
+  jennifgcrl = {
+    email = "jennifer@jezh.me";
+    github = "jennifgcrl";
+    githubId = 110419915;
+    matrix = "@fgcrl:matrix.org";
+    name = "Jennifer Zhou";
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
@@ -12675,6 +12693,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keegancsmith = {
+    email = "keegan.csmith@gmail.com";
+    name = "Keegan Carruthers-Smith";
+    github = "keegancsmith";
+    githubId = 187831;
+  };
   keenanweaver = {
     email = "keenanweaver@protonmail.com";
     name = "Keenan Weaver";
@@ -13422,6 +13446,12 @@
     github = "okvik";
     githubId = 58425080;
     name = "Viktor Pocedulić";
+  };
+  kvz = {
+    email = "kevin@transloadit.com";
+    github = "kvz";
+    githubId = 26752;
+    name = "Kevin van Zonneveld";
   };
   kwaa = {
     name = "藍+85CD";
@@ -18491,6 +18521,12 @@
     name = "Ondrej Vlach";
     github = "ovlach";
     githubId = 4405107;
+  };
+  owickstrom = {
+    email = "oskar@wickstrom.tech";
+    name = "Oskar Wickström";
+    github = "owickstrom";
+    githubId = 1464328;
   };
   oxalica = {
     email = "oxalicc@pm.me";
@@ -26843,6 +26879,12 @@
     github = "YanniPapandreou";
     githubId = 15948162;
     name = "Yanni Papandreou";
+  };
+  yarekt = {
+    name = "Yarek T";
+    email = "yarekt+nixpkgs@gmail.com";
+    github = "yarektyshchenko";
+    githubId = 185304;
   };
   yarny = {
     github = "Yarny0";
