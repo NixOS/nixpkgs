@@ -156,8 +156,10 @@ in
         ];
         optionalPackages =
           [
+            aurorae
             plasma-browser-integration
             konsole
+            kwin-x11
             (lib.getBin qttools) # Expose qdbus in PATH
             ark
             elisa
