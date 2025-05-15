@@ -8,6 +8,7 @@
   lsof,
   pkg-config,
   spirv-tools,
+  qtlocation,
   qtpositioning,
   qtsvg,
   qtwayland,
