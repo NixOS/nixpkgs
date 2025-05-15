@@ -21,8 +21,6 @@
   fetchpatch,
 }:
 
-with lib.strings;
-
 let
 
   version = "2.79.3";
@@ -170,7 +168,7 @@ let
         runHook preInstall
 
         mkdir -p "$out/bin"
-        for script in ${concatStringsSep " " scripts}; do
+        for script in ${lib.concatStringsSep " " scripts}; do
           cp "${dir}/$script" "$out/bin/"
         done
 
@@ -267,7 +265,7 @@ let
 
     let
 
-      runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
+      runtimePath = lib.concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
 
     in
     stdenv.mkDerivation (
