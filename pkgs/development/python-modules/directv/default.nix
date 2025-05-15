@@ -41,6 +41,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     #  ValueError: Host '#' cannot contain '#' (at position 0)
     "test_client_error"
