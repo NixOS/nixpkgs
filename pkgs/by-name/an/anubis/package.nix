@@ -1,49 +1,27 @@
 {
   lib,
   buildGoModule,
-  buildNpmPackage,
   fetchFromGitHub,
-  nix-update-script,
   nixosTests,
   stdenv,
+
+  anubis-xess,
 
   esbuild,
   brotli,
   zstd,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "anubis";
   version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-grtzkNxgShbldjm+lnANbKVhkUrbwseAT1NaBL85mHg=";
   };
-
-  anubisXess = buildNpmPackage {
-    inherit version src;
-    pname = "${pname}-xess";
-
-    npmDepsHash = "sha256-hTKTTBmfMGv6I+4YbWrOt6F+qD6ysVYi+DEC1konBFk=";
-
-    buildPhase = ''
-      runHook preBuild
-      npx postcss ./xess/xess.css -o xess.min.css
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp xess.min.css $out
-      runHook postInstall
-    '';
-  };
-in
-buildGoModule (finalAttrs: {
-  inherit pname version src;
 
   vendorHash = "sha256-EOT/sdVINj9oO1jZHPYB3jQ+XApf9eCUKuMY0tV+vpg=";
 
@@ -72,27 +50,25 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    go generate ./... && ./web/build.sh && cp -r ${anubisXess}/xess.min.css ./xess
+    go generate ./... && ./web/build.sh && cp -r ${anubis-xess}/xess.min.css ./xess
   '';
 
   preCheck = ''
     export DONT_USE_NETWORK=1
   '';
 
-  passthru = {
-    tests = { inherit (nixosTests) anubis; };
-    updateScript = nix-update-script { };
-  };
+  passthru.tests = { inherit (nixosTests) anubis; };
 
   meta = {
     description = "Weighs the soul of incoming HTTP requests using proof-of-work to stop AI crawlers";
-    homepage = "https://github.com/TecharoHQ/anubis/";
+    homepage = "https://anubis.techaro.lol/";
     changelog = "https://github.com/TecharoHQ/anubis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       knightpp
       soopyc
       ryand56
+      sigmasquadron
     ];
     mainProgram = "anubis";
   };
