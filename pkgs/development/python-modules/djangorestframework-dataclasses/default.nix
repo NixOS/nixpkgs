@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-dataclasses";
-  version = "1.3.1";
+  version = "1.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
     tag = "v${version}";
-    hash = "sha256-12EdSaGpsX0qDXgJ2QWYj6qAUbsrITQjWowk+gJFwwY=";
+    hash = "sha256-nUkR5xTyeBv7ziJ6Mej9TKvMOa5/k+ELBqt4BVam/wk=";
   };
 
   nativeBuildInputs = [ setuptools ];
