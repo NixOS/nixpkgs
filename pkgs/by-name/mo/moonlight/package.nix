@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.16";
+  version = "1.3.18";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aLx/HDrnGTgcRZFs5kiiz173yi/RnARERDKIq+p4OJw=";
+    hash = "sha256-CPBdZ/1mQAw0cC36D1Yo+ml+3eDDJtfSELYNIF0fKRw=";
   };
 
   nativeBuildInputs = [
