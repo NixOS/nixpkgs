@@ -352,21 +352,9 @@ let
             else
               null;
 
-          # Remove before 25.05
-          androidSdkVersion =
-            if (args ? sdkVer && !args ? androidSdkVersion) then
-              throw "For android `sdkVer` has been renamed to `androidSdkVersion`"
-            else if (args ? androidSdkVersion) then
-              args.androidSdkVersion
-            else
-              null;
-          androidNdkVersion =
-            if (args ? ndkVer && !args ? androidNdkVersion) then
-              throw "For android `ndkVer` has been renamed to `androidNdkVersion`"
-            else if (args ? androidSdkVersion) then
-              args.androidNdkVersion
-            else
-              null;
+          # Handle Android SDK and NDK versions.
+          androidSdkVersion = args.androidSdkVersion or null;
+          androidNdkVersion = args.androidNdkVersion or null;
         }
         // (
           let
