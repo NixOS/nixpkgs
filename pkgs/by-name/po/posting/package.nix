@@ -55,7 +55,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://posting.sh/";
     changelog = "https://github.com/darrenburns/posting/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jorikvanveen ];
+    maintainers = with lib.maintainers; [
+      jorikvanveen
+      fullmetalsheep
+    ];
     platforms = lib.platforms.unix;
   };
 }
