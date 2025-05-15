@@ -21,8 +21,8 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages_19,
-  llvm_19,
+  llvmPackages_20,
+  llvm_20,
   wrapCCWith,
   overrideCC,
   fetchpatch,
@@ -30,7 +30,7 @@
 let
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages_19.libllvm.override (
+    pkgSet.llvmPackages_20.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -38,25 +38,15 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages_19.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages_20.clangUseLLVM;
         };
       }
     );
 in
 import ./default.nix
   {
-    rustcVersion = "1.86.0";
-    rustcSha256 = "sha256-AionKG32eQCgRNIn2dtp1HMuw9gz5P/CWcRCXtce7YA=";
-
-    rustcPatches = [
-      # Fix for including no_std targets by default, shipping in Rust 1.87
-      # https://github.com/rust-lang/rust/pull/137073
-      (fetchpatch {
-        name = "bootstrap-skip-nostd-docs";
-        url = "https://github.com/rust-lang/rust/commit/97962d7643300b91c102496ba3ab6d9279d2c536.patch";
-        hash = "sha256-DKl9PWqJP3mX4B1pFeRLQ8/sO6mx1JhbmVLTOOMLZI4=";
-      })
-    ];
+    rustcVersion = "1.87.0";
+    rustcSha256 = "sha256-FJu5/Sm+WS2k6HkA/GjwYpo3v2hQtGM53URDTAT9jnY=";
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
@@ -75,14 +65,14 @@ import ./default.nix
             bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
           }:
           let
-            llvmPackages = llvmPackages_19;
+            llvmPackages = llvmPackages_20;
 
             setStdenv =
               pkg:
               pkg.override {
                 stdenv = stdenv.override {
                   allowedRequisites = null;
-                  cc = pkgsBuildHost.llvmPackages_19.clangUseLLVM;
+                  cc = pkgsBuildHost.llvmPackages_20.clangUseLLVM;
                 };
               };
           in
@@ -95,7 +85,7 @@ import ./default.nix
             libcxx = llvmPackages.libcxx.override {
               stdenv = stdenv.override {
                 allowedRequisites = null;
-                cc = pkgsBuildHost.llvmPackages_19.clangNoLibcxx;
+                cc = pkgsBuildHost.llvmPackages_20.clangNoLibcxx;
                 hostPlatform = stdenv.hostPlatform // {
                   useLLVM = !stdenv.hostPlatform.isDarwin;
                 };
@@ -109,39 +99,39 @@ import ./default.nix
           }
         ) { }
       else
-        llvmPackages_19;
+        llvmPackages_20;
 
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
     # https://github.com/NixOS/nixpkgs/pull/351028#issuecomment-2438244363
-    bootstrapVersion = "1.86.0";
+    bootstrapVersion = "1.87.0";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
-      i686-unknown-linux-gnu = "6d39b7599f872fe330e64800ca2ebfd58624d78e135c491226f44f5ff68b900d";
-      x86_64-unknown-linux-gnu = "f6a8c0d8b8a8a737c40eee78abe286a3cbe984d96b63de9ae83443360e3264bf";
-      x86_64-unknown-linux-musl = "2d399a43e1e4a2dea0e16f83cd0a1dd53f7f32250ba25970ea5d9c31a16df611";
-      arm-unknown-linux-gnueabihf = "d7af8bdf97c76b2c2df50486597dd0ad8af36b9213549f3e0d15384d36bc0a37";
-      armv7-unknown-linux-gnueabihf = "fbddb4d24d701362c65201dc0905f7445eb9dfa3a5d767ff29a5d3f676957253";
-      aarch64-unknown-linux-gnu = "460058cd78f06875721427a42a5ce6a8b8ef2c0c3225fccfae149d9345572ff4";
-      aarch64-unknown-linux-musl = "fcfc61f571b25c13f89545f0ab2fe1950751d8d50bcdc2d40c136e0df533d5a4";
-      x86_64-apple-darwin = "bf8121850b2f6a46566f6c2bbe9fa889b915b1039febf36853ea9d9c4256c67d";
-      aarch64-apple-darwin = "01271f83549c3b5191334a566289aa41615ea8f8f530f49548733585f21c7e5a";
-      powerpc64le-unknown-linux-gnu = "9b104428e2b0377dbdb9dc094eb4d9f4893ada0b80d2b315f0c4ea2135ed9007";
-      riscv64gc-unknown-linux-gnu = "b74cd0bf5ddeb759cd75fb4d7f3f90972dbab6e77569484491ab7ecf073558a8";
-      s390x-unknown-linux-gnu = "721121bcb8f96b98942289f627f9054ded92215c391d48f459527d4b0c63114f";
-      loongarch64-unknown-linux-gnu = "0e7827b14c77ce3ede5ba414de9806b52c655940f95fddd3e07873b8fe46c8bf";
-      loongarch64-unknown-linux-musl = "d769fb639a9116c77d5b35cb0abe4fd3bc85b6d578fe7e4440c218530e32e1cf";
-      x86_64-unknown-freebsd = "fc424d582cd45df010f3b3ff76768f6c87942002421f8896daf7e3989a8f72b4";
+      i686-unknown-linux-gnu = "53138ed9a47d520e4734fb73224925e84c8a90d391db388dcfc03a1b38dac530";
+      x86_64-unknown-linux-gnu = "1f6f18ce19387c42968a474cf175e67f99280614ded9c752d5d2e37af3204bcd";
+      x86_64-unknown-linux-musl = "ab3951f30b08104de8b578df4776645a81939d7d918000ce231a35389ae59df8";
+      arm-unknown-linux-gnueabihf = "9e62054e809534c1b2f62036d8331423a113ab3b8265bca08a715f339dec89c5";
+      armv7-unknown-linux-gnueabihf = "9c9133e8a88dede2036d240ed3b792b93a1bbf444b6b2b6998df58b0c7bcdd83";
+      aarch64-unknown-linux-gnu = "2c66e31d774a0dcd4422db74584ebc6362ff3ae90c452caff9d2fb912c821e8d";
+      aarch64-unknown-linux-musl = "6f301f0ee7d3be2fdd245432c01543a4c61413b5d0a62493e5b0d57d9756b0b6";
+      x86_64-apple-darwin = "867a84a93c6ba0b468b78b52004a6307d6f5e2e5598e64f65726c6810b6f7c82";
+      aarch64-apple-darwin = "249496972e6f845f052036b9d7e73f816418412de2b266ec717b9050c1810dc3";
+      powerpc64le-unknown-linux-gnu = "3f8f68d79460475396a52b5ae70eee73d6fb194fff1c4ff4286b64fbebee4429";
+      riscv64gc-unknown-linux-gnu = "ea25b048bad7737188345392d1a0dfa92aa3ed6c00834b0974bdba52cb2398c4";
+      s390x-unknown-linux-gnu = "198d3bda0daef12f86b8171025c62fee0a3caa59fa82c22c364d1a69305d8f46";
+      loongarch64-unknown-linux-gnu = "61eee03a25a51a74b057d661c3be6c4052e781adcb118b555cb41e0b108cabf4";
+      loongarch64-unknown-linux-musl = "b002ed82c1b7ccec039d18c5ee131e953a350c535b710d56ae204935810eb11e";
+      x86_64-unknown-freebsd = "b675d11e521e50a45506001479e77a65b9d89cf4caf588381264a511a3c1c49a";
     };
 
-    selectRustPackage = pkgs: pkgs.rust_1_86;
+    selectRustPackage = pkgs: pkgs.rust_1_87;
   }
 
   (
     builtins.removeAttrs args [
-      "llvmPackages_19"
-      "llvm_19"
+      "llvmPackages_20"
+      "llvm_20"
       "wrapCCWith"
       "overrideCC"
       "pkgsHostTarget"
