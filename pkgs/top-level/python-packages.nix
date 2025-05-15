@@ -17837,6 +17837,8 @@ self: super: with self; {
 
   twofish = callPackage ../development/python-modules/twofish { };
 
+  twscrape = callPackage ../development/python-modules/twscrape { };
+
   txaio = callPackage ../development/python-modules/txaio { };
 
   txamqp = callPackage ../development/python-modules/txamqp { };
