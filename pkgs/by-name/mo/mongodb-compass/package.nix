@@ -21,6 +21,7 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
+      "arm64-darwin"
       "x86_64-darwin"
     ];
     mainProgram = "mongodb-compass";
