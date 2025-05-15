@@ -1891,11 +1891,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "libSM";
-      version = "1.2.5";
+      version = "1.2.6";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/lib/libSM-1.2.5.tar.xz";
-        sha256 = "1g10pn1zhcyc1ys8skp6p46gn6qgkif8kqdwlz1hsrzgllny3y9a";
+        url = "mirror://xorg/individual/lib/libSM-1.2.6.tar.xz";
+        sha256 = "1gimv11iwzd9gqg345dd8x09szw75v4c2wr5qsdd5gswn6yhlz5y";
       };
       hardeningDisable = [
         "bindnow"
@@ -3483,11 +3483,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "oclock";
-      version = "1.0.5";
+      version = "1.0.6";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/oclock-1.0.5.tar.xz";
-        sha256 = "0p4nqfrhy1srqqzbamp7afa54clbydbhprd1nxbd12g8anb9f2cg";
+        url = "mirror://xorg/individual/app/oclock-1.0.6.tar.xz";
+        sha256 = "1gi41nmf5glvzasri0glka19h6gkpbiy0bwbvdxwl7i15mg5xs1y";
       };
       hardeningDisable = [
         "bindnow"
@@ -3635,11 +3635,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "transset";
-      version = "1.0.3";
+      version = "1.0.4";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/transset-1.0.3.tar.xz";
-        sha256 = "1zp6ldxb3h2zsr4nmkb8aj8ia8v3qvjj3w85by5xh3fxvlq8zqqz";
+        url = "mirror://xorg/individual/app/transset-1.0.4.tar.xz";
+        sha256 = "0f0bgi1jq9zzq2gqaszhgvz2d1clja17z8xnijm36xqkmxsapac1";
       };
       hardeningDisable = [
         "bindnow"
@@ -3677,11 +3677,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "twm";
-      version = "1.0.12";
+      version = "1.0.13.1";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/twm-1.0.12.tar.xz";
-        sha256 = "1r5gfv1gvcjn39v7n6znpnvifwhlw2zf8gfrxq8vph84vva03wma";
+        url = "mirror://xorg/individual/app/twm-1.0.13.1.tar.xz";
+        sha256 = "1igj7lr8xw5ap5wld5a18vav8jn8pa4ajbz5hk495d58b9sk89d5";
       };
       hardeningDisable = [
         "bindnow"
@@ -3847,11 +3847,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xbacklight";
-      version = "1.2.3";
+      version = "1.2.4";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xbacklight-1.2.3.tar.bz2";
-        sha256 = "1plssg0s3pbslg6rfzxp9sx8ryvn8l32zyvc8zp9zsbsfwjg69rs";
+        url = "mirror://xorg/individual/app/xbacklight-1.2.4.tar.xz";
+        sha256 = "1vp890ic26y4k2l0haw94z4nim3j7gp3g9w5flw2zj0qdw70phyl";
       };
       hardeningDisable = [
         "bindnow"
@@ -4327,11 +4327,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xcompmgr";
-      version = "1.1.9";
+      version = "1.1.10";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xcompmgr-1.1.9.tar.xz";
-        sha256 = "1w564walyqi3bqnnl8l2d949v64smipdw2q8lnrixl3jhrlvcxa8";
+        url = "mirror://xorg/individual/app/xcompmgr-1.1.10.tar.xz";
+        sha256 = "13xrn0ii8widz0pw31fbdy7x8paf729yqhkmxbm3497jqh4zf93q";
       };
       hardeningDisable = [
         "bindnow"
@@ -4496,11 +4496,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xdm";
-      version = "1.1.16";
+      version = "1.1.17";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xdm-1.1.16.tar.xz";
-        sha256 = "1737hz8g3wpgdfj6y11q1xwma40wvgz85ckp6wv0hmz9h6c21wmw";
+        url = "mirror://xorg/individual/app/xdm-1.1.17.tar.xz";
+        sha256 = "0spbxjxxrnfxf8gqncd7bry3z7dvr74ba987cx9iq0qsj7qax54l";
       };
       hardeningDisable = [
         "bindnow"
@@ -4805,11 +4805,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xf86-input-keyboard";
-      version = "2.0.0";
+      version = "2.1.0";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-keyboard-2.0.0.tar.xz";
-        sha256 = "1fgya6a0pzsb8ynp2qhx3bqg6nfc4y2sw9wmk7zd8pqplbqzsrij";
+        url = "mirror://xorg/individual/driver/xf86-input-keyboard-2.1.0.tar.xz";
+        sha256 = "0mvwxrnkq0lzhjr894p420zxffdn34nc2scinmp7qd1hikr51kkp";
       };
       hardeningDisable = [
         "bindnow"
@@ -4919,11 +4919,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xf86-input-synaptics";
-      version = "1.9.2";
+      version = "1.10.0";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.9.2.tar.xz";
-        sha256 = "0f1cjs9haxhjybfh2lh579s15i2q0q19whynpda3giizj6mlmymq";
+        url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.10.0.tar.xz";
+        sha256 = "1hmm3g6ab4bs4hm6kmv508fdc8kr2blzb1vsz1lhipcf0vdnmhp0";
       };
       hardeningDisable = [
         "bindnow"
@@ -5350,11 +5350,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xf86-video-fbdev";
-      version = "0.5.0";
+      version = "0.5.1";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.0.tar.bz2";
-        sha256 = "16a66zr0l1lmssa07i3rzy07djxnb45c17ks8c71h8l06xgxihyw";
+        url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.1.tar.xz";
+        sha256 = "11zk8whari4m99ad3w30xwcjkgya4xbcpmg8710q14phkbxw0aww";
       };
       hardeningDisable = [
         "bindnow"
@@ -5388,11 +5388,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xf86-video-geode";
-      version = "2.11.21";
+      version = "2.18.1";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-geode-2.11.21.tar.xz";
-        sha256 = "07lzbyxss0m5i4j58z43zri2baawci9q1ykv1g828wqi2hzsqml2";
+        url = "mirror://xorg/individual/driver/xf86-video-geode-2.18.1.tar.xz";
+        sha256 = "0a8c6g3ndzf76rrrm3dwzmndcdy4y2qfai4324sdkmi8k9szicjr";
       };
       hardeningDisable = [
         "bindnow"
@@ -5762,11 +5762,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xf86-video-nouveau";
-      version = "3ee7cbca8f9144a3bb5be7f71ce70558f548d268";
+      version = "1.0.18";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/archive/3ee7cbca8f9144a3bb5be7f71ce70558f548d268/xf86-video-nouveau-3ee7cbca8f9144a3bb5be7f71ce70558f548d268.tar.bz2";
-        sha256 = "0rhs3z274jdzd82pcsl25xn8hmw6i4cxs2kwfnphpfhxbbkiq7wl";
+        url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.18.tar.xz";
+        sha256 = "1z9bqfr81w2ahq2vyphgjbl0ffxndrpxb4mqqly76srjcj7d6ap8";
       };
       hardeningDisable = [
         "bindnow"
@@ -6992,11 +6992,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xhost";
-      version = "1.0.9";
+      version = "1.0.10";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xhost-1.0.9.tar.xz";
-        sha256 = "0ib66h78ykc4zki4arh8hkcsgk1mk8yyy0ay5sdb2d908qqvb1pa";
+        url = "mirror://xorg/individual/app/xhost-1.0.10.tar.xz";
+        sha256 = "1qavfaxqpj2mp2jdb8ivvv7bza546lff95dq90lp3727b40dgbx8";
       };
       hardeningDisable = [
         "bindnow"
@@ -7033,11 +7033,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xinit";
-      version = "1.4.2";
+      version = "1.4.4";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xinit-1.4.2.tar.xz";
-        sha256 = "08qz6f6yhis6jdcp6hzspql6ib9a9zp0ddhhbac1b7zg4a6xrn5p";
+        url = "mirror://xorg/individual/app/xinit-1.4.4.tar.xz";
+        sha256 = "1ygymifhg500sx1ybk8x4d1zn4g4ywvlnyvqwcf9hzsc2rx7r920";
       };
       hardeningDisable = [
         "bindnow"
@@ -7151,11 +7151,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xkbevd";
-      version = "1.1.5";
+      version = "1.1.6";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xkbevd-1.1.5.tar.xz";
-        sha256 = "0swjhk33fp15060hhzycmk288ys51wwm6l7p9xy4blz95mq7nd9q";
+        url = "mirror://xorg/individual/app/xkbevd-1.1.6.tar.xz";
+        sha256 = "0gh73dsf4ic683k9zn2nj9bpff6dmv3gzcb3zx186mpq9kw03d6r";
       };
       hardeningDisable = [
         "bindnow"
@@ -7799,7 +7799,7 @@ self: with self; {
       builder = ./builder.sh;
       src = fetchurl {
         url = "mirror://xorg/individual/xserver/xorg-server-21.1.16.tar.xz";
-        sha256 = "b14a116d2d805debc5b5b2aac505a279e69b217dae2fae2dfcb62400471a9970";
+        sha256 = "0w4r393h095nzhnswbxfglhrprkrl82wbamjnp2ynpc05mni2jmi";
       };
       hardeningDisable = [
         "bindnow"
@@ -7911,11 +7911,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xprop";
-      version = "1.2.7";
+      version = "1.2.8";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xprop-1.2.7.tar.xz";
-        sha256 = "0pw2iv7dcy2xq5fh3427nx88pjj9d9rry3930qj1c6mricaf6dj4";
+        url = "mirror://xorg/individual/app/xprop-1.2.8.tar.xz";
+        sha256 = "1vk7kl10ykgqp2iw4m1q4j1zrbkxibd1rdb9cjgl6yzgnyny52fn";
       };
       hardeningDisable = [
         "bindnow"
@@ -7949,11 +7949,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xrandr";
-      version = "1.5.2";
+      version = "1.5.3";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/app/xrandr-1.5.2.tar.xz";
-        sha256 = "0h7jy4c5zgrr06fimnnxhy5ba782b1n4aik29g6bln4h1mwy9gn8";
+        url = "mirror://xorg/individual/app/xrandr-1.5.3.tar.xz";
+        sha256 = "0744kfafd98q2zswyzva837qgvmdpfv80ilnp7x4fhdpmmk7bpgq";
       };
       hardeningDisable = [
         "bindnow"
