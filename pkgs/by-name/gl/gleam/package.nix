@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0qK9dWkKnoXbIIBMN3p5noPEke/bgC8Bjtmf6lwtyr4=";
+    hash = "sha256-oxzFAqPZ+ZHd/+GwofDg0gA4NIFYWi2v8fOjMn8ixSU=";
   };
 
-  cargoHash = "sha256-EoRu8p6cUe1li54nVUkf+3qywIsDXh4ptIVLluJ3eFs=";
+  cargoHash = "sha256-9kk7w85imYIhywBuAgJS8wYAIEM3hXoHymGgMMmrgnI=";
 
   nativeBuildInputs = [
     git
