@@ -4811,6 +4811,12 @@
     name = "Coca";
     keys = [ { fingerprint = "99CB 86FF 62BB 7DA4 8903  B16D 0328 2DF8 8179 AB19"; } ];
   };
+  cococolanosugar = {
+    name = "George Xu";
+    github = "cococolanosugar";
+    githubId = 1736138;
+    email = "cococolanosugar@gmail.com";
+  };
   coconnor = {
     email = "coreyoconnor@gmail.com";
     github = "coreyoconnor";
