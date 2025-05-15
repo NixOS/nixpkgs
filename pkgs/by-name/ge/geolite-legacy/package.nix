@@ -3,6 +3,9 @@
   stdenv,
   fetchzip,
   zstd,
+  writeShellApplication,
+  common-updater-scripts,
+  pcre2,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +32,28 @@ stdenv.mkDerivation rec {
     cp ${geoip}/usr/share/GeoIP/*.dat $out/share/GeoIP
     cp ${extra}/usr/share/GeoIP/*.dat $out/share/GeoIP
   '';
+
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-geolite-legacy";
+      runtimeInputs = [
+        common-updater-scripts
+        pcre2
+      ];
+      text = ''
+        url=https://archive.archlinux.org/packages/g/geoip-database/
+
+        version=$(list-directory-versions --pname geoip-database --url $url |
+                  pcre2grep -o1 '^(\d{8})-1-any\.pkg\.tar\.zst$' |
+                  sort -n |
+                  tail -1)
+
+        for key in geoip extra; do
+            update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" --source-key=$key --ignore-same-version
+        done
+      '';
+    });
+  };
 
   meta = {
     description = "GeoLite Legacy IP geolocation databases";
