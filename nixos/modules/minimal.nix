@@ -1,0 +1,205 @@
+/*
+  This is a minimal list of nixos modules.
+  This serves as an entry point for nixos invocations, without importing all modules.
+
+  See usage example in /nixos/tests/nixos-minimal.nix
+
+  For some cases, the modules in this list are enough to build a nixos system.
+  Many of the usual options are not available or using them leads to errors caused by missing modules.
+  In this case, any missing modules must be imported manually.
+
+  The long term goal is to:
+  - shrink this list further
+  - make dependencies between nixos modules explicit (add imports to modules)
+*/
+{ lib, ... }:
+{
+  # documentation doesn't work at the moment
+  documentation.enable = lib.mkDefault false;
+  imports = [
+    ./config/console.nix
+    ./config/fonts/fontconfig.nix
+    ./config/fonts/packages.nix
+    ./config/i18n.nix
+    ./config/iproute2.nix
+    ./config/ldap.nix
+    ./config/mysql.nix
+    ./config/networking.nix
+    ./config/nix-remote-build.nix
+    ./config/nix.nix
+    ./config/nsswitch.nix
+    ./config/power-management.nix
+    ./config/qt.nix
+    ./config/resolvconf.nix
+    ./config/shells-environment.nix
+    ./config/swap.nix
+    ./config/sysctl.nix
+    ./config/system-environment.nix
+    ./config/system-path.nix
+    ./config/users-groups.nix
+    ./config/vte.nix
+    ./config/xdg/autostart.nix
+    ./config/xdg/icons.nix
+    ./config/xdg/menus.nix
+    ./config/xdg/mime.nix
+    ./config/xdg/portal.nix
+    ./config/xdg/portals/lxqt.nix
+    ./config/xdg/portals/wlr.nix
+    ./hardware/all-firmware.nix
+    ./hardware/device-tree.nix
+    ./hardware/graphics.nix
+    ./hardware/i2c.nix
+    ./hardware/sensor/hddtemp.nix
+    ./hardware/sensor/iio.nix
+    ./hardware/system-76.nix
+    ./hardware/uinput.nix
+    ./hardware/video/switcheroo-control.nix
+    ./installer/tools/tools.nix
+    ./misc/documentation.nix
+    ./misc/extra-arguments.nix
+    ./misc/ids.nix
+    ./misc/lib.nix
+    ./misc/man-db.nix
+    ./misc/nixpkgs.nix
+    ./misc/version.nix
+    ./programs/bash/bash-completion.nix
+    ./programs/bash/bash.nix
+    ./programs/bash/blesh.nix
+    ./programs/chromium.nix
+    ./programs/dconf.nix
+    ./programs/evince.nix
+    ./programs/feedbackd.nix
+    ./programs/file-roller.nix
+    ./programs/firefox.nix
+    ./programs/gdk-pixbuf.nix
+    ./programs/geary.nix
+    ./programs/gnome-disks.nix
+    ./programs/gnome-terminal.nix
+    ./programs/gnupg.nix
+    ./programs/i3lock.nix
+    ./programs/kde-pim.nix
+    ./programs/kdeconnect.nix
+    ./programs/nm-applet.nix
+    ./programs/partition-manager.nix
+    ./programs/seahorse.nix
+    ./programs/shadow.nix
+    ./programs/ssh.nix
+    ./programs/system-config-printer.nix
+    ./programs/thunar.nix
+    ./programs/wayland/labwc.nix
+    ./programs/wayland/wayfire.nix
+    ./programs/xfconf.nix
+    ./programs/xwayland.nix
+    ./programs/zsh/zsh.nix
+    ./security/apparmor.nix
+    ./security/ca.nix
+    ./security/default.nix
+    ./security/krb5
+    ./security/oath.nix
+    ./security/pam_mount.nix
+    ./security/pam.nix
+    ./security/polkit.nix
+    ./security/rtkit.nix
+    ./security/sudo-rs.nix
+    ./security/sudo.nix
+    ./security/wrappers/default.nix
+    ./services/accessibility/orca.nix
+    ./services/accessibility/speechd.nix
+    ./services/desktops/accountsservice.nix
+    ./services/desktops/ayatana-indicators.nix
+    ./services/desktops/bamf.nix
+    ./services/desktops/blueman.nix
+    ./services/desktops/deepin/app-services.nix
+    ./services/desktops/deepin/dde-api.nix
+    ./services/desktops/deepin/dde-daemon.nix
+    ./services/desktops/dleyna.nix
+    ./services/desktops/geoclue2.nix
+    ./services/desktops/gnome/at-spi2-core.nix
+    ./services/desktops/gnome/evolution-data-server.nix
+    ./services/desktops/gnome/glib-networking.nix
+    ./services/desktops/gnome/gnome-browser-connector.nix
+    ./services/desktops/gnome/gnome-initial-setup.nix
+    ./services/desktops/gnome/gnome-keyring.nix
+    ./services/desktops/gnome/gnome-online-accounts.nix
+    ./services/desktops/gnome/gnome-remote-desktop.nix
+    ./services/desktops/gnome/gnome-settings-daemon.nix
+    ./services/desktops/gnome/gnome-user-share.nix
+    ./services/desktops/gnome/localsearch.nix
+    ./services/desktops/gnome/rygel.nix
+    ./services/desktops/gnome/sushi.nix
+    ./services/desktops/gnome/tinysparql.nix
+    ./services/desktops/gvfs.nix
+    ./services/desktops/pipewire/pipewire.nix
+    ./services/desktops/system-config-printer.nix
+    ./services/desktops/telepathy.nix
+    ./services/desktops/tumbler.nix
+    ./services/desktops/zeitgeist.nix
+    ./services/display-managers/default.nix
+    ./services/display-managers/sddm.nix
+    ./services/hardware/acpid.nix
+    ./services/hardware/argonone.nix
+    ./services/hardware/bluetooth.nix
+    ./services/hardware/bolt.nix
+    ./services/hardware/fwupd.nix
+    ./services/hardware/libinput.nix
+    ./services/hardware/power-profiles-daemon.nix
+    ./services/hardware/udev.nix
+    ./services/hardware/udisks2.nix
+    ./services/hardware/upower.nix
+    ./services/logging/logrotate.nix
+    ./services/misc/graphical-desktop.nix
+    ./services/misc/sssd.nix
+    ./services/misc/sysprof.nix
+    ./services/networking/avahi-daemon.nix
+    ./services/networking/dhcpcd.nix
+    ./services/networking/firewall.nix
+    ./services/networking/iwd.nix
+    ./services/networking/modemmanager.nix
+    ./services/networking/mstpd.nix
+    ./services/networking/multipath.nix
+    ./services/networking/networkmanager.nix
+    ./services/networking/nftables.nix
+    ./services/networking/rpcbind.nix
+    ./services/networking/ssh/sshd.nix
+    ./services/networking/wpa_supplicant.nix
+    ./services/networking/xinetd.nix
+    ./services/printing/cupsd.nix
+    ./services/security/fprintd.nix
+    ./services/security/intune.nix
+    ./services/security/kanidm.nix
+    ./services/system/dbus.nix
+    ./services/system/kerberos/default.nix
+    ./services/system/nix-daemon.nix
+    ./services/system/nscd.nix
+    ./services/x11/colord.nix
+    ./services/x11/display-managers/lightdm.nix
+    ./services/x11/touchegg.nix
+    ./services/x11/xscreensaver.nix
+    ./services/x11/xserver.nix
+    ./system/activation/activation-script.nix
+    ./system/activation/bootspec.nix
+    ./system/activation/pre-switch-check.nix
+    ./system/activation/specialisation.nix
+    ./system/activation/top-level.nix
+    ./system/boot/kernel.nix
+    ./system/boot/loader/grub/grub.nix
+    ./system/boot/modprobe.nix
+    ./system/boot/networkd.nix
+    ./system/boot/resolved.nix
+    ./system/boot/stage-1.nix
+    ./system/boot/stage-2.nix
+    ./system/boot/systemd.nix
+    ./system/boot/systemd/homed.nix
+    ./system/boot/systemd/initrd.nix
+    ./system/boot/systemd/tmpfiles.nix
+    ./system/boot/systemd/user.nix
+    ./system/boot/systemd/userdbd.nix
+    ./system/etc/etc-activation.nix
+    ./tasks/filesystems.nix
+    ./tasks/network-interfaces.nix
+    ./tasks/swraid.nix
+    ./virtualisation/containers.nix
+    ./virtualisation/nixos-containers.nix
+    ./virtualisation/openvswitch.nix
+  ];
+}

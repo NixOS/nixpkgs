@@ -870,6 +870,7 @@ in
   };
   ndppd = handleTest ./ndppd.nix { };
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
+  nixosMinimal = pkgs.callPackage ./nixos-minimal.nix { };
   nebula = handleTest ./nebula.nix { };
   netbird = handleTest ./netbird.nix { };
   nimdow = handleTest ./nimdow.nix { };
