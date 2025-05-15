@@ -10600,6 +10600,8 @@ self: super: with self; {
 
   orderly-set = callPackage ../development/python-modules/orderly-set { };
 
+  orgformat = callPackage ../development/python-modules/orgformat { };
+
   orgparse = callPackage ../development/python-modules/orgparse { };
 
   orjson = callPackage ../development/python-modules/orjson { };
