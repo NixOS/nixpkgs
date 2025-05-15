@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnick";
-  version = "2025.3.3";
+  version = "2025.5.3";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "libnick";
     tag = finalAttrs.version;
-    hash = "sha256-5GO39rtSvg96y6VE0Ej4x7j1zDatP6JSktIcyhSrb98=";
+    hash = "sha256-JibExEI5MisKZ9kEIOMzDg8A8LEM8U+ckGFfnZu+ghQ=";
   };
 
   nativeBuildInputs =
