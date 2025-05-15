@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kirsch";
-  version = "0.3.4";
+  version = "0.5.0";
 
   src = fetchzip {
     url = "https://github.com/molarmanful/kirsch/releases/download/v${finalAttrs.version}/kirsch-release_v${finalAttrs.version}.zip";
-    hash = "sha256-9B5YJLAZRPs+IuIjUwSG96pbeHL/aWnKUgCeWxVp8j8=";
+    hash = "sha256-0wqPFb2pJL94ktGwC7LtY63BDg1XFqKuQeKCAr4Xakc=";
   };
 
   nativeBuildInputs = [ xorg.mkfontscale ];
