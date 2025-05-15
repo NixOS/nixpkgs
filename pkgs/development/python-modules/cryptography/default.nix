@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "44.0.2"; # Also update the hash in vectors.nix
+  version = "44.0.3"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,13 +32,13 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-nXwW6v+U47/+CmjhREHcuQ7QQi/b26gagWBQ3F16DuQ=";
+    hash = "sha256-qpRr0ywGl9J+37T9C3oBRa4TtKF9UTJm++ABf1rzleY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-HbUsV+ABE89UvhCRZYXr+Q/zRDKUy+HgCVdQFHqaP4o=";
+    hash = "sha256-mino+eLi+KjZLgD5V5mFecwV1A5XVZn8lt41sXZFuL4=";
   };
 
   postPatch = ''
