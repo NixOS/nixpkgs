@@ -1,20 +1,18 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   autoconf,
   automake,
   libtool,
   pkg-config,
   djvulibre,
-  qtbase,
-  qttools,
+  libsForQt5,
   xorg,
   libtiff,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "djview";
   version = "4.12";
 
@@ -33,12 +31,13 @@ mkDerivation rec {
     automake
     libtool
     pkg-config
-    qttools
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     djvulibre
-    qtbase
+    libsForQt5.qtbase
     xorg.libXt
     libtiff
   ];

@@ -14,14 +14,8 @@
   netcdf,
   openssl,
   python3,
-  qscintilla,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
+  qt6Packages,
   copyDesktopItems,
-  # needed to run natively on wayland
-  qtwayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     copyDesktopItems
   ];
 
@@ -53,11 +47,12 @@ stdenv.mkDerivation rec {
     netcdf
     openssl
     python3
-    qscintilla
-    qtbase
-    qtsvg
-    qttools
-    qtwayland
+    qt6Packages.qscintilla
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qttools
+    # needed to run natively on wayland
+    qt6Packages.qtwayland
   ];
 
   # manually create a desktop file
