@@ -17581,6 +17581,8 @@ self: super: with self; {
 
   torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix { };
 
+  torf = callPackage ../development/python-modules/torf { };
+
   tornado = callPackage ../development/python-modules/tornado { };
 
   torpy = callPackage ../development/python-modules/torpy { };
