@@ -343,6 +343,16 @@ in
       };
     };
 
+    # Recommended by upstream
+    security.polkit.extraConfig = ''
+      // Allow current user or their system services to change the system time zone and time synchronization
+      polkit.addRule(function(action, subject) {
+        if ((action.id == "org.freedesktop.timedate1.set-timezone" || action.id == "org.freedesktop.timedate1.set-ntp") && subject.active) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
+
     programs.dconf.enable = true;
 
     programs.firefox.nativeMessagingHosts.packages = [ kdePackages.plasma-browser-integration ];
