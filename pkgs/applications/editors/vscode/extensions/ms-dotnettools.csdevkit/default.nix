@@ -8,6 +8,8 @@
   libz,
   glibc,
   libxml2,
+  libkrb5,
+  patchelf,
 }:
 let
   extInfo = (
@@ -41,16 +43,18 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
   sourceRoot = "extension"; # This has more than one folder.
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-    (lib.getLib glibc) # libgcc_s.so.1
-    (lib.getLib libxml2) # libxml2.so.2
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    patchelf
   ];
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.getLib openssl) # libopenssl.so.3
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib glibc) # libgcc_s.so.1
     (lib.getLib icu) # libicui18n.so libicuuc.so
+    (lib.getLib libkrb5) # libgssapi_krb5.so
+    (lib.getLib libxml2) # libxml2.so.2
     (lib.getLib libz) # libz.so.1
+    (lib.getLib openssl) # libopenssl.so.3
+    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
   ];
 
   postPatch = ''
@@ -64,21 +68,62 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   preFixup = ''
     (
+      set -euo pipefail
       shopt -s globstar
       shopt -s dotglob
+
+      # Fix all binaries.
       for file in "$out"/**/*; do
-        if [[ ! -f "$file" || "$file" == *.so || "$file" == *.dylib ]] ||
+        if [[ ! -f "$file" || "$file" == *.so || "$file" == *.a || "$file" == *.dylib ]] ||
             (! isELF "$file" && ! isMachO "$file"); then
             continue
         fi
 
         echo Making "$file" executable...
         chmod +x "$file"
+
+        ${lib.optionalString stdenv.hostPlatform.isLinux ''
+          # Add .NET deps if it is an apphost.
+          if grep 'You must install .NET to run this application.' "$file" > /dev/null; then
+            echo "Adding .NET needed libraries to: $file"
+            patchelf \
+              --add-needed libicui18n.so \
+              --add-needed libicuuc.so \
+              --add-needed libgssapi_krb5.so \
+              --add-needed libssl.so \
+              "$file"
+          fi
+        ''}
       done
+
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        # Add the ICU libraries as needed to the globalization DLLs.
+        for file in "$out"/**/{libcoreclr.so,*System.Globalization.Native.so}; do
+          echo "Adding ICU libraries to: $file"
+          patchelf \
+            --add-needed libicui18n.so \
+            --add-needed libicuuc.so \
+            "$file"
+        done
+
+        # Add the Kerberos libraries as needed to the native security DLL.
+        for file in "$out"/**/*System.Net.Security.Native.so; do
+          echo "Adding Kerberos libraries to: $file"
+          patchelf \
+            --add-needed libgssapi_krb5.so \
+            "$file"
+        done
+
+        # Add the OpenSSL libraries as needed to the OpenSSL native security DLL.
+        for file in "$out"/**/*System.Security.Cryptography.Native.OpenSsl.so; do
+          echo "Adding OpenSSL libraries to: $file"
+          patchelf \
+            --add-needed libssl.so \
+            "$file"
+        done
+      ''}
     )
   '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.csdevkit/changelog";
