@@ -92,9 +92,6 @@ stdenvNoCC.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  # FIXME: https://github.com/EliverLara/Nordic/issues/331
-  dontCheckForBrokenSymlinks = true;
-
   installPhase = ''
     runHook preInstall
 
@@ -145,6 +142,10 @@ stdenvNoCC.mkDerivation rec {
     # Replace duplicate files with symbolic links to the first file in
     # each set of duplicates, reducing the installed size in about 53%
     jdupes --quiet --link-soft --recurse $out/share
+
+    # FIXME: https://github.com/EliverLara/Nordic/issues/331
+    echo "Removing broken symlinks ..."
+    find $out -xtype l -print -delete
 
     runHook postInstall
   '';
