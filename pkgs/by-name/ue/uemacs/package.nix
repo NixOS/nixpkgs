@@ -15,9 +15,7 @@ gccStdenv.mkDerivation {
     hash = "sha256-QSouqZiBmKBU6FqRRfWtTGRIl5sqJ8tVPYwdytt/43w=";
   };
 
-  nativeBuildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "lcurses" "lncurses"
@@ -26,6 +24,12 @@ gccStdenv.mkDerivation {
 
     substituteInPlace epath.h --replace "/usr/global/lib/" "$out/share/uemacs/"
   '';
+  
+  makeFlags = [ "CC=${gccStdenv.cc.targetPrefix}cc" ];
+
+  strictDeps = true;
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share/uemacs}
