@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "nielsfaber";
   domain = "alarmo";
-  version = "1.10.7";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "alarmo";
     tag = "v${version}";
-    hash = "sha256-EFR8GveMNpwhrIA0nP+Ny3YUTHAOFw+IF72hH1+wMSM=";
+    hash = "sha256-XfeUjZ9icgWFfeJabib1KlrGuGJKuoOZuJH/OFMw/4M=";
   };
 
   postPatch = ''
