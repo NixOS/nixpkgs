@@ -109,6 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       alyaeanyx
       ryand56
       sigmasquadron
+      ddogfoodd
     ];
     badPlatforms = [
       # output app is called "Electron.app" while derivation expects "FreeTube.app"

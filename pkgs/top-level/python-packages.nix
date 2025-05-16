@@ -6256,7 +6256,9 @@ self: super: with self; {
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
-  hdf5plugin = callPackage ../development/python-modules/hdf5plugin { };
+  hdf5plugin = callPackage ../development/python-modules/hdf5plugin {
+    inherit (pkgs) zstd lz4;
+  };
 
   hdfs = callPackage ../development/python-modules/hdfs { };
 
@@ -13369,6 +13371,8 @@ self: super: with self; {
   pysdcp = callPackage ../development/python-modules/pysdcp { };
 
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
+
+  pysdl3 = callPackage ../development/python-modules/pysdl3 { };
 
   pysearpc = toPythonModule (pkgs.libsearpc.override { python3 = self.python; });
 

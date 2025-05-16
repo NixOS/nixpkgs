@@ -8564,6 +8564,12 @@
     githubId = 21362942;
     name = "Fugi";
   };
+  fullmetalsheep = {
+    email = "fullmetalsheep@proton.me";
+    github = "fullmetalsheep";
+    githubId = 23723926;
+    name = "Dash R";
+  };
   funkeleinhorn = {
     email = "git@funkeleinhorn.com";
     github = "funkeleinhorn";
@@ -24127,6 +24133,12 @@
     name = "tebriel";
     github = "tebriel";
     githubId = 821688;
+  };
+  tebro = {
+    email = "git@tebro.simplelogin.com";
+    name = "Richard Weber";
+    github = "Tebro";
+    githubId = 3861339;
   };
   techknowlogick = {
     email = "techknowlogick@gitea.com";
