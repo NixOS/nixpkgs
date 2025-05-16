@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "leanify";
-  version = "unstable-2023-12-17";
+  version = "unstable-2025-05-15";
 
   src = fetchFromGitHub {
     owner = "JayXon";
     repo = "Leanify";
-    rev = "9daa4303cdc03f6b90b72c369e6377c6beb75c39";
-    hash = "sha256-fLazKCQnOT3bN3Kz25Q80RLk54EU5U6HCf6kPLcXn9c=";
+    rev = "9488b075aeac6983eccabe5c87ce31d78d1e9a20";
+    hash = "sha256-VieLuOIEiZRAPhB+nJmjcn9+6yas4oKUbW65FiSC/j4=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -29,7 +29,9 @@ stdenv.mkDerivation {
 
   checkPhase = ''
     runHook preCheck
+
     ./leanify /dev/null
+
     runHook postCheck
   '';
 
