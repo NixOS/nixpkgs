@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "bitstruct" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python bit pack/unpack package";
