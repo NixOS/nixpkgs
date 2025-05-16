@@ -160,6 +160,7 @@
   ./programs/arp-scan.nix
   ./programs/atop.nix
   ./programs/ausweisapp.nix
+  ./programs/autoenv.nix
   ./programs/autojump.nix
   ./programs/bandwhich.nix
   ./programs/bash-my-aws.nix

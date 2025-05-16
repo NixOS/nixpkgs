@@ -10,7 +10,6 @@
   meson,
   ninja,
   rustc,
-  fetchurl,
   cargo,
   desktop-file-utils,
 
@@ -23,29 +22,15 @@
   nix-update-script,
 }:
 
-let
-  poppler' = poppler.overrideAttrs (oldAttrs: rec {
-    version = "25.01.0";
-
-    src = fetchurl {
-      url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-      hash = "sha256-fu/BIiB7u9cqMDxeB0P0lB6K6GHiTc8FAeGM4dFBQRI=";
-    };
-
-    patches = [ ];
-
-    doCheck = false;
-  });
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapgrep";
-  version = "25.04";
+  version = "25.05+1";
 
   src = fetchFromGitHub {
     owner = "luleyleo";
     repo = "clapgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mx52z+YpHdq4zSmH1d3KlNhj3ezpoWMGB0FEr4B20sg=";
+    hash = "sha256-DL3voYSsNGjPb1CnPuJGg+7UgWYZO7cH5T2Z37BuDSE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -69,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     glib
-    poppler'
+    poppler
     gtksourceview5
   ];
 
