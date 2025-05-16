@@ -10,7 +10,6 @@
   meson,
   ninja,
   rustc,
-  fetchurl,
   cargo,
   desktop-file-utils,
 
@@ -23,20 +22,6 @@
   nix-update-script,
 }:
 
-let
-  poppler' = poppler.overrideAttrs (oldAttrs: rec {
-    version = "25.01.0";
-
-    src = fetchurl {
-      url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-      hash = "sha256-fu/BIiB7u9cqMDxeB0P0lB6K6GHiTc8FAeGM4dFBQRI=";
-    };
-
-    patches = [ ];
-
-    doCheck = false;
-  });
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapgrep";
   version = "25.04";
@@ -69,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     glib
-    poppler'
+    poppler
     gtksourceview5
   ];
 
