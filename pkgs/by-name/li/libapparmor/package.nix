@@ -60,24 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
       ncurses
       which
       dejagnu
+      perl # podchecker
     ]
     ++ lib.optionals withPython [
       python3Packages.setuptools
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      # TODO FIXME This is a super ugly HACK.
-      # perl is required for podchecker.
-      # It is a native build input on native platform because checks are enabled there.
-      # Checks can't be enabled on cross, but moving perl to
-      # nativeCheckInputs causes rebuilds on native compile.
-      # Thus, hacks!
-      # This should just be made unconditional and removed from nativeCheckInputs.
-      perl
     ];
 
   nativeCheckInputs = [
     python3Packages.pythonImportsCheckHook
-    perl
   ];
 
   buildInputs =

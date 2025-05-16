@@ -89,6 +89,9 @@ rustPlatform.buildRustPackage rec {
       --bash ./completions/mise.bash \
       --fish ./completions/mise.fish \
       --zsh ./completions/_mise
+
+    mkdir -p $out/lib/mise
+    touch $out/lib/mise/.disable-self-update
   '';
 
   passthru = {

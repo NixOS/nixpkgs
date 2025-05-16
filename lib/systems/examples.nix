@@ -146,6 +146,10 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  riscv64-musl = {
+    config = "riscv64-unknown-linux-musl";
+  };
+
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";

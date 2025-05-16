@@ -141,6 +141,8 @@ stdenv.mkDerivation rec {
       "libdm.device-mapper"
     ];
 
+  enableParallelBuilding = true;
+
   # To prevent make install from failing.
   installFlags = [
     "OWNER="

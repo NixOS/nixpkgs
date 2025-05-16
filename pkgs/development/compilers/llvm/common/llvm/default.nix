@@ -559,19 +559,11 @@ stdenv.mkDerivation (
         ));
 
     # Workaround for configure flags that need to have spaces
-    preConfigure =
-      if lib.versionAtLeast release_version "15" then
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
-          )
-        ''
-      else
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
-          )
-        '';
+    preConfigure = ''
+      cmakeFlagsArray+=(
+        -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
+      )
+    '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (

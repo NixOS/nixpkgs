@@ -20,6 +20,9 @@
   opencvSupport ? false,
   opencv4,
   faad2,
+  # Enabling lcevcdecoder currently causes issues when attempting to decode regular h264 data
+  # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
+  lcevcdecSupport ? false,
   lcevcdec,
   ldacbt,
   liblc3,
@@ -174,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
       curl.dev
       fdk_aac
       gsm
-      lcevcdec
       libaom
       libdc1394
       libde265
@@ -265,6 +267,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals guiSupport [
       gtk3
     ]
+    ++ lib.optionals lcevcdecSupport [
+      lcevcdec
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_gstreamer
     ];
@@ -321,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "openh264" openh264Support)
       (lib.mesonEnable "doc" enableDocumentation)
       (lib.mesonEnable "directfb" false)
+      (lib.mesonEnable "lcevcdecoder" lcevcdecSupport)
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only

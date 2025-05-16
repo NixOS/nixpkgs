@@ -13,8 +13,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "2.6.6";
-  source.sha256 = "sha256-gysquNKtbj0nUTj7ZA3z021IGOFC0Tsne0SIZxG4l2E=";
+  version = "2.6.8";
+  source.sha256 = "sha256-vemZkXKWoWLklWSULcIxLtmo0y/C97SWyV9t88/Mh6k=";
   dontPatchShebangs = true;
 
   postFixup = ''

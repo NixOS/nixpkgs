@@ -2740,31 +2740,26 @@ self: super:
       [
         # 2023-12-20: New version needs extra dependencies
         (addBuildDepends [
+          self.cache
           self.extra
           self.fuzzyset_0_2_4
-          self.cache
-          self.timeit
+          self.jose-jwt
+          self.neat-interpolation
           self.prometheus-client
+          self.timeit
         ])
         # 2022-12-02: Too strict bounds.
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "12.2.12";
+          version = "13.0.0";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-A/3JQc9h/FKX+xZvOVMwhXsKxdkRS783I/1EiZ3e73Y=";
+            hash = "sha256-j+WlY7D3hkPHIjiyCFenC5trF31L05gEPptCwOVil6U=";
           };
         })
-        # 2024-11-03: Fixes build on aarch64-darwin. Can be removed after updating to 13+.
-        (appendPatches [
-          (fetchpatch {
-            url = "https://github.com/PostgREST/postgrest/commit/c045b261c4f7d2c2514e858120950be6b3ddfba8.patch";
-            hash = "sha256-6SeteL5sb+/K1y3f9XL7yNzXDdD1KQp91RNP4kutSLE=";
-          })
-        ])
       ];
 
   # Too strict bounds on hspec < 2.11

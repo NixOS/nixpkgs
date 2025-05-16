@@ -7,12 +7,19 @@
   gtk3-x11,
   pcre,
   pkg-config,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   xorg,
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
   version = "1.10";
+  outputs = [
+    "out"
+    "ladspa"
+    "lv2"
+    "lxvst"
+    "vst3"
+  ];
 
   src = fetchFromGitHub {
     owner = "werman";
@@ -40,8 +47,17 @@ stdenv.mkDerivation rec {
       xorg.libXrandr
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_0
+      webkitgtk_4_1
     ];
+
+  # Move each plugin into a dedicated output, leaving a symlink in $out for backwards compatibility
+  postInstall = ''
+    for plugin in ladspa lv2 lxvst vst3; do
+      mkdir -p ''${!plugin}/lib
+      mv $out/lib/$plugin ''${!plugin}/lib/$plugin
+      ln -s ''${!plugin}/lib/$plugin $out/lib/$plugin
+    done
+  '';
 
   meta = with lib; {
     description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
