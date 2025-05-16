@@ -67,6 +67,7 @@ let
 
   cef = cef-binary.overrideAttrs (oldAttrs: {
     version = "127.3.5";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
     gitRevision = "114ea2a";
     chromiumVersion = "127.0.6533.120";
 

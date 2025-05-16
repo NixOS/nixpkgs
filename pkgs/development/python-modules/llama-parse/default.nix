@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  llama-index-core,
+  llama-cloud-services,
   poetry-core,
   pythonOlder,
 }:
@@ -22,7 +22,9 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ llama-index-core ];
+  dependencies = [
+    llama-cloud-services
+  ];
 
   pythonImportsCheck = [ "llama_parse" ];
 

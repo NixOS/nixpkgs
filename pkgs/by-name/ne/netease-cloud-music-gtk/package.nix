@@ -18,20 +18,6 @@
   libxml2,
 }:
 
-let
-  libadwaita' = libadwaita.overrideAttrs (oldAttrs: {
-    version = "1.6.2-unstable-2025-01-02";
-    src = oldAttrs.src.override {
-      tag = null;
-      rev = "f5f0e7ce69405846a8f8bdad11cef2e2a7e99010";
-      hash = "sha256-n5RbGHtt2g627T/Tg8m3PjYIl9wfYTIcrplq1pdKAXk=";
-    };
-
-    # `test-application-window` is flaky on aarch64-linux
-    doCheck = false;
-  });
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "netease-cloud-music-gtk";
   version = "2.5.2";
@@ -70,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       openssl
       dbus
-      libadwaita'
+      libadwaita
       glib-networking
     ]
     ++ (with gst_all_1; [
