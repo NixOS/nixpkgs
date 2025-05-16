@@ -153,11 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
       # std is built for all platforms in --target.
       "--target=${
         concatStringsSep "," (
-          [
-            stdenv.targetPlatform.rust.rustcTargetSpec
-          ]
           # Other targets that don't need any extra dependencies to build.
-          ++ optionals (!fastCross) [
+          optionals (!fastCross) [
             "wasm32-unknown-unknown"
             "wasm32v1-none"
             "bpfel-unknown-none"
@@ -174,6 +171,13 @@ stdenv.mkDerivation (finalAttrs: {
           # build.rs scripts.
           ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
             stdenv.hostPlatform.rust.rustcTargetSpec
+          ]
+          ++ [
+            # `make install` only keeps the docs of the last target in the list.
+            # If the `targetPlatform` is not the last entry, we may end up without
+            # `alloc` or `std` docs (if the last target is `no_std`).
+            # More information: https://github.com/rust-lang/rust/issues/140922
+            stdenv.targetPlatform.rust.rustcTargetSpec
           ]
         )
       }"

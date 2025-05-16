@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "kompose";
-  version = "1.35.0";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kompose";
     rev = "v${version}";
-    hash = "sha256-M1d1pSIMRIlLKob9D8MzrUuPm+h9C5sSC8L+uIdU1Ic=";
+    hash = "sha256-OnVJkAZqN0/V0tHtDpsZDN2gIvEpI5z2Pv0lspr6ZTg=";
   };
 
   vendorHash = "sha256-UQnhakHAyldESYhQlHe5mHVv5jFB7DUp+mNo0Q0iDkc=";

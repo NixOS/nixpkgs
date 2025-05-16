@@ -10,6 +10,7 @@
   gettext,
   gtk4,
   gnome,
+  blueprint-compiler,
   wrapGAppsHook4,
   libadwaita,
   libgee,
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "47.1.1";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/gnome-sudoku-${version}.tar.xz";
-    hash = "sha256-RyW0KDZGaysqzF5RZrU9jrEczd4lh9tofK+MjUc+uIk=";
+    hash = "sha256-eXE62CpZkEzWlv8CJV627ZNk6I8+eDNDsfnQygnyx+M=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     desktop-file-utils
+    blueprint-compiler
     wrapGAppsHook4
   ];
 

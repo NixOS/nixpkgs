@@ -20,22 +20,15 @@ stdenv.mkDerivation rec {
 
   # We don't use the versions from common.nix, because libgbm is a world rebuild,
   # so the updates need to happen separately on staging.
-  version = "25.0.1";
+  version = "25.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-9D4d7EEdZysvXDRcmpbyt85Lo64sldNRomp6/HUVORo=";
+    hash = "sha256-UlI+6OMUj5F6uVAw+Mg2wOZrjfdRq73d1qufaXVI/go";
   };
-
-  # Install gbm_backend_abi.h header - this is to simplify future iteration
-  # on building Mesa and friends with system libgbm.
-  # See also:
-  # - https://github.com/NixOS/nixpkgs/pull/387292
-  # - https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/33890
-  patches = [ ./gbm-header.patch ];
 
   mesonAutoFeatures = "disabled";
 

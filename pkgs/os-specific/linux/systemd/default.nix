@@ -791,7 +791,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = false; # fails a bunch of tests
+  doCheck = true;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''

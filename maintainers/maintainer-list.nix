@@ -5852,6 +5852,11 @@
     githubId = 39909293;
     name = "Dominic Delabruere";
   };
+  ddogfoodd = {
+    github = "ddogfoodd";
+    githubId = 58050402;
+    name = "Jost Alemann";
+  };
   dduan = {
     email = "daniel@duan.ca";
     github = "dduan";
@@ -11408,6 +11413,17 @@
     github = "0mbi";
     githubId = 10786794;
     name = "Markus Hihn";
+  };
+  jess = {
+    name = "Jessica";
+    email = "jess+nix@jessie.cafe";
+    github = "ttrssreal";
+    githubId = 43591752;
+    keys = [
+      {
+        fingerprint = "8092 3BD1 ECD0 E436 671D  C8E9 BA33 5068 6C91 8606";
+      }
+    ];
   };
   jessemoore = {
     email = "jesse@jessemoore.dev";

@@ -99,14 +99,6 @@ let
   };
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
-    allowMissing = false;
-    inherit (config.boot.initrd) extraFirmwarePaths;
-  };
 
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
@@ -132,13 +124,20 @@ let
   initialRamdisk = pkgs.makeInitrdNG {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
-    inherit (cfg) strip;
 
     contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
   };
 
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "boot" "initrd" "systemd" "strip" ] ''
+      The option to strip ELF files in initrd has been removed.
+      It only saved ~1MiB of initramfs size, but caused a few issues
+      like unloadable kernel modules.
+    '')
+  ];
+
   options.boot.initrd.systemd = {
     enable = mkEnableOption "systemd in initrd" // {
       description = ''
@@ -206,19 +205,6 @@ in
       '';
       type = utils.systemdUtils.types.initrdStorePath;
       default = [ ];
-    };
-
-    strip = mkOption {
-      description = ''
-        Whether to completely strip executables and libraries copied to the initramfs.
-
-        Setting this to false may save on the order of 30MiB on the
-        machine building the system (by avoiding a binutils
-        reference), at the cost of ~1MiB of initramfs size. This puts
-        this option firmly in the territory of micro-optimisation.
-      '';
-      type = types.bool;
-      default = true;
     };
 
     extraBin = mkOption {
@@ -477,7 +463,7 @@ in
             }
           '';
 
-          "/lib".source = "${modulesClosure}/lib";
+          "/lib".source = "${config.system.build.modulesClosure}/lib";
 
           "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
