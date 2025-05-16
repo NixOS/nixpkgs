@@ -579,6 +579,11 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      git-annex = [
+        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
+        compilerNames.ghc9101
+        compilerNames.ghc9102
+      ];
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107
