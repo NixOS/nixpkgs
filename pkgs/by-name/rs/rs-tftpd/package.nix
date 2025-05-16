@@ -27,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     description = "TFTP Server Daemon implemented in Rust";
     homepage = "https://github.com/altugbakan/rs-tftpd";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; [
+      adamcstephens
+      matthewcroughan
+    ];
     mainProgram = "tftpd";
   };
 }
