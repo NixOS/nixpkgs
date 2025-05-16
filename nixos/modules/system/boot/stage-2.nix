@@ -39,6 +39,16 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "boot"
+        "readOnlyNixStore"
+      ]
+      "Please use the `boot.nixStoreMountOpts' option to define mount options for the Nix store, including 'ro'"
+    )
+  ];
+
   options = {
 
     boot = {
@@ -49,17 +59,6 @@ in
         type = types.lines;
         description = ''
           Shell commands to be executed just before systemd is started.
-        '';
-      };
-
-      readOnlyNixStore = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          If set, NixOS will enforce the immutability of the Nix store
-          by making {file}`/nix/store` a read-only bind
-          mount. Nix will automatically make the store writable when
-          needed.
         '';
       };
 
@@ -103,9 +102,5 @@ in
   config = {
 
     system.build.bootStage2 = bootStage2;
-    boot.nixStoreMountOpts = [
-      "nodev"
-      "nosuid"
-    ] ++ lib.optional config.boot.readOnlyNixStore "ro";
   };
 }
