@@ -50,7 +50,7 @@ buildPythonPackage {
   disabledTestPaths = [
     # Flaky due to host timing differences under load
     "test_perf/test_array_with_dimension_performance.py"
-    "test_perf/test_value__array_performance.py"
+    "test_perf/test_value_array_performance.py"
     "test_perf/test_value_performance.py"
     "test_perf/test_value_with_dimension_performance.py"
   ];
