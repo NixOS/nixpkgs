@@ -25,6 +25,6 @@ buildHomeAssistantComponent rec {
     description = "Alarm System for Home Assistant";
     homepage = "https://github.com/nielsfaber/alarmo";
     maintainers = with maintainers; [ mindstorms6 ];
-    license = licenses.unfree;
+    license = licenses.asl20;
   };
 }
