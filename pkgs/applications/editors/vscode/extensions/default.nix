@@ -2077,40 +2077,9 @@ let
         };
       };
 
-      github.copilot = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "github";
-          name = "copilot";
-          # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
-          version = "1.317.0";
-          hash = "sha256-w8HH1ibkOrpuKi3Yhzr+DjVIY7HWZ2L4rYzNYrHkfbc=";
-        };
+      github.copilot = callPackage ./github.copilot { };
 
-        meta = {
-          description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
-          homepage = "https://github.com/features/copilot";
-          license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.Zimmi48 ];
-        };
-      };
-
-      github.copilot-chat = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "github";
-          name = "copilot-chat";
-          # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.26.7"; # latest compatible with vscode ^1.98
-          hash = "sha256-aR6AGU/boDmYef0GWna5sUsyv9KYGCkugWpFIusDMNE=";
-        };
-        meta = {
-          description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat";
-          homepage = "https://github.com/features/copilot";
-          license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.laurent-f1z1 ];
-        };
-      };
+      github.copilot-chat = callPackage ./github.copilot-chat { };
 
       github.github-vscode-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
