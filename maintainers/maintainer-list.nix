@@ -27290,12 +27290,6 @@
     githubId = 5986078;
     name = "Zunway Liang";
   };
-  zanculmarktum = {
-    name = "Azure Zanculmarktum";
-    email = "zanculmarktum@gmail.com";
-    github = "zanculmarktum";
-    githubId = 16958511;
-  };
   zane = {
     name = "Zane van Iperen";
     email = "zane@zanevaniperen.com";
