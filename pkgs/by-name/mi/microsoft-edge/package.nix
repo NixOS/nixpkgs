@@ -284,7 +284,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "microsoft-edge";
     maintainers = with lib.maintainers; [
-      zanculmarktum
       kuwii
       rhysmdnz
     ];
