@@ -1456,8 +1456,9 @@ let
           nestedTypes.finalType = finalType;
         };
 
-      # A list of attrnames is coerced into an attrset of bools by
-      # setting the values to true.
+      # Tests: lib/tests/modules/types.nix
+      # Docs: nixos/doc/manual/development/option-types.section.md
+      # Docs: https://nixos.org/manual/nixos/unstable/#sec-option-types-basic
       attrNamesToTrue = coercedTo (types.listOf types.str) (
         enabledList: lib.genAttrs enabledList (_attrName: true)
       ) (types.attrsOf types.bool);
