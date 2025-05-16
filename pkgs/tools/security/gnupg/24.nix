@@ -35,11 +35,11 @@ assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.7";
+  version = "2.4.8";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-eyRwbk2n4OOwbKBoIxAnQB8jgQLEHJCWMTSdzDuF60Y=";
+    hash = "sha256-tYyA15sE0yQ/9JwcP8a1+DE46zeEaJVjvN0GBZUxhhY=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "freepg";
     repo = "gnupg";
-    rev = "541772915dc4ec832c37f85bc629a22051f0e8f7";
-    hash = "sha256-QOUY6EfJbTTN242BtzLojDgECGjUwbLfPJgzn/mj5L8=";
+    rev = "361c223eb00ca372fbf9506f5150ddbec193936f";
+    hash = "sha256-hRuwrB6G2vjp7Md6m+cwoi7g4GtW0sazAEN5RC+AKdg=";
   };
 
   patches =
