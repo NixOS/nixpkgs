@@ -150,6 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
       rm -r bin/libopen62541*
     '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { };
 
   passthru.tests =
