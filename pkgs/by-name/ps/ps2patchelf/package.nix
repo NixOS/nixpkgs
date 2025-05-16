@@ -32,7 +32,7 @@ buildDotnetModule rec {
 
   meta = {
     homepage = "https://github.com/CaptainSwag101/PS2PatchElf/";
-    description = "A very basic tool for converting PCSX2 .pnach cheats to game executable patches";
+    description = "Very basic tool for converting PCSX2 .pnach cheats to game executable patches";
     maintainers = [ lib.maintainers.gigahawk ];
     license = lib.licenses.mit;
   };
