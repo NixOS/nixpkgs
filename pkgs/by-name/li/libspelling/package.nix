@@ -42,12 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glib
-    gtk4
-    gtksourceview5
     enchant
     icu
     libsysprof-capture
+  ];
+
+  propagatedBuildInputs = [
+    # These were moved from buildInputs because they are
+    # listed in `Requires` key of `libspelling-1.pc`
+    glib
+    gtk4
+    gtksourceview5
   ];
 
   postFixup = ''
