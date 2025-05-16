@@ -8,16 +8,13 @@
   copyDesktopItems,
   makeWrapper,
   nodejs,
-  yarn-berry_4,
+  yarn-berry,
   zip,
 
   electron,
   commandLineArgs ? "",
 }:
 
-let
-  yarn-berry = yarn-berry_4;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
   version = "2.0.8";
