@@ -143,6 +143,9 @@ merging is handled.
     convenient to be able to write definitions as a simple list, but
     still need to be able to override and disable individual values.
 
+    If configurability of the items is needed or `false` is not a
+    desirable value, prefer `types.attrNamesToSubmodule` or `types.attrNamesToSet`.
+
     ::: {#ex-types-attrNamesToTrue .example}
     ### `types.attrNamesToTrue`
     ```
@@ -157,6 +160,53 @@ merging is handled.
     }
     ```
     :::
+
+`types.attrNamesToSet`
+
+:   Either a list of attribute names, or an attribute set of `{ }`.
+    This is similar to `types.attrNamesToTrue`, but `false` is not a permitted
+    value. This is useful when that's not an expected value, and by using this
+    type, you have the option to upgrade the type to `types.attrNamesToSubmodule`
+    without breaking anything.
+
+    ::: {#ex-types-attrNamesToSet .example}
+    ### `types.attrNamesToSet`
+    ```
+    {
+      foo = [ "bar" ];
+    }
+    ```
+
+    ```
+    {
+      foo.bar = { };
+    }
+    ```
+    :::
+
+`types.attrNamesToSubmodule` *`submodule`*
+
+:   Either a list of attribute names, or an attribute set of submodules.
+    This is similar to `types.attrNamesToSet`, but the values are submodules
+    instead of empty sets. This is useful when the values of this type are
+    optionally configurable.
+
+    ::: {#ex-types-attrNamesToSubmodule .example}
+    ### `types.attrNamesToSubmodule`
+    ```
+    {
+      foo = [ "bar" ];
+    }
+    ```
+
+    ```
+    {
+      foo.bar = { };
+      foo.baz.enableQux = true;
+    }
+    ```
+    :::
+
 
 `types.pkgs`
 
