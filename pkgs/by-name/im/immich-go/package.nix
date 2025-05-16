@@ -9,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "immich-go";
-  version = "0.26.0";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
     tag = "v${version}";
-    hash = "sha256-ya2KCUGHLdKcoxR83YqNG/4GiSgPABUeVaf1jqHtdzE=";
+    hash = "sha256-mC7C5B2e57xWrqbyaLM2n79BgdmlgiF2TxTmxT/McSA=";
 
     # Inspired by: https://github.com/NixOS/nixpkgs/blob/f2d7a289c5a5ece8521dd082b81ac7e4a57c2c5c/pkgs/applications/graphics/pdfcpu/default.nix#L20-L32
     # The intention here is to write the information into files in the `src`'s
