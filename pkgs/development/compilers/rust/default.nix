@@ -97,24 +97,64 @@ in
         };
         # Analogous to stdenv
         rustPlatform = makeRustPlatform self.buildRustPackages;
-        rustc-unwrapped = self.callPackage ./rustc.nix ({
-          version = rustcVersion;
-          sha256 = rustcSha256;
-          inherit enableRustcDev;
-          inherit
-            llvmShared
-            llvmSharedForBuild
-            llvmSharedForHost
-            llvmSharedForTarget
-            llvmPackages
+        rustc-unwrapped =
+          # Rust’s build system identifies platforms by triple, and
+          # therefore can’t handle the case where the build, host, or
+          # target platform have the same triple but different
+          # configurations (e.g., linker).
+          #
+          # This results in build failures when attempting to compile
+          # a dynamic‐to‐static Rust compiler on platforms that Nixpkgs
+          # is strict about static separation with (currently only
+          # Darwin), as it tries to link dynamic executables for the
+          # build platform using the static linker.
+          #
+          # Since the built `std` should be the same regardless of
+          # static vs. dynamic, and since Rust apparently does not
+          # remember the specified target configuration in the built
+          # compiler anyway (hence our need to teach it about the
+          # linker and so on again in wrappers and hooks), we work
+          # around the problem in this one specific case by reusing the
+          # `pkgsBuildBuild` compiler, which also conveniently saves
+          # a Rust build.
+          #
+          # This does assume that `pkgsBuildBuild.rustPackages` matches
+          # the compiler version, LLVM version, patches, etc., and may
+          # interact poorly in the face of overrides. It might possible
+          # to do this in a better way, but this beats not having a
+          # working compiler at all.
+          #
+          # The longer‐term fix would be to get Rust to use a more
+          # nuanced understanding of platforms, such as by explicitly
+          # constructing and passing Rust JSON target definitions that
+          # let us distinguish the platforms in cases like these. That
+          # would also let us supplant various hacks around the
+          # wrappers and hooks that we currently need.
+          if
             fastCross
-            ;
+            && stdenv.targetPlatform.rust.rustcTarget == stdenv.buildPlatform.rust.rustcTarget
+            && stdenv.targetPlatform.isStatic != stdenv.buildPlatform.isStatic
+          then
+            pkgsBuildBuild.rustPackages.rustc-unwrapped
+          else
+            callPackage ./rustc.nix ({
+              version = rustcVersion;
+              sha256 = rustcSha256;
+              inherit enableRustcDev;
+              inherit
+                llvmShared
+                llvmSharedForBuild
+                llvmSharedForHost
+                llvmSharedForTarget
+                llvmPackages
+                fastCross
+                ;
 
-          patches = rustcPatches;
+              patches = rustcPatches;
 
-          # Use boot package set to break cycle
-          inherit (bootstrapRustPackages) cargo rustc rustfmt;
-        });
+              # Use boot package set to break cycle
+              inherit (bootstrapRustPackages) cargo rustc rustfmt;
+            });
         rustc = wrapRustcWith {
           inherit (self) rustc-unwrapped;
           sysroot = if fastCross then self.rustc-unwrapped else null;
