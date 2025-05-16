@@ -1546,7 +1546,6 @@ with pkgs;
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   kitty = callPackage ../by-name/ki/kitty/package.nix {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
@@ -8382,9 +8381,7 @@ with pkgs;
 
   cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
 
-  pango = callPackage ../development/libraries/pango {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
-  };
+  pango = callPackage ../development/libraries/pango { };
 
   pangomm = callPackage ../development/libraries/pangomm { };
 
@@ -8462,7 +8459,6 @@ with pkgs;
   };
 
   harfbuzzFull = harfbuzz.override {
-    withCoreText = stdenv.hostPlatform.isDarwin;
     withGraphite2 = true;
     withIcu = true;
   };
