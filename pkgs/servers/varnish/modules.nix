@@ -59,4 +59,12 @@ in
     version = "0.24.0";
     hash = "sha256-2MfcrhhkBz9GyQxEWzjipdn1CBEqnCvC3t1G2YSauak=";
   };
+  modules25 = common {
+    version = "0.25.0";
+    hash = "sha256-m/7moizVyvoP8xnpircAFVUqCmCfTGkgVyRc6zkdVsk=";
+  };
+  modules26 = common {
+    version = "0.26.0";
+    hash = "sha256-xKMOkqm6/GoBve0AhPqyVMQv/oh5Rtj6uCeg/yId7BU=";
+  };
 }
