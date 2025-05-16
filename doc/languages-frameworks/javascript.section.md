@@ -890,11 +890,11 @@ For every `buildDenoPackage`, first, a [fixed output derivation](https://nix.dev
 created with all the dependencies mentioned in the `deno.lock`.
 This works as follows:
 1. They are installed using `deno install`.
-2. All non-reproducible data is pruned.
-3. The directories `.deno`, `node_modules` and `vendor` are copied to `$out`.
-4. The output of the FOD is checked against the `denoDepsHash`.
-5. The output is copied into the build of `buildDenoPackage`, which is not an FOD.
-6. The dependencies are installed again using `deno install`, this time from the local cache only.
+1. All non-reproducible data is pruned.
+1. The directories `.deno`, `node_modules` and `vendor` are copied to `$out`.
+1. The output of the FOD is checked against the `denoDepsHash`.
+1. The output is copied into the build of `buildDenoPackage`, which is not an FOD.
+1. The dependencies are installed again using `deno install`, this time from the local cache only.
 
 The `buildDenoDeps` derivation is in `passthru`, so it can be accessed from a `buildDenoPackage` derivation with `.denoDeps`
 
