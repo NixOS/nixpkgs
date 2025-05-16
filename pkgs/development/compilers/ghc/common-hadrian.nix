@@ -110,7 +110,7 @@
         # While split sections are now enabled by default in ghc 8.8 for windows,
         # they seem to lead to `too many sections` errors when building base for
         # profiling.
-        ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ];
+        ++ (if stdenv.targetPlatform.isWindows then [ "no_split_sections" ] else [ "split_sections" ]);
     in
     baseFlavour + lib.concatMapStrings (t: "+${t}") transformers,
 
