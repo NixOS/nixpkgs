@@ -6,11 +6,10 @@
   fetchFromGitHub,
   jre_minimal,
   pkg-config,
-  wrapGAppsHook3,
+  makeBinaryWrapper,
   alsa-lib,
-  gtk3,
-  openssl,
   wayland,
+  xorg,
   vulkan-loader,
   udev,
   libxkbcommon,
@@ -51,35 +50,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     [ jre_minimal ]
     ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
       pkg-config
-      wrapGAppsHook3
+      makeBinaryWrapper
     ]
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     alsa-lib
-    gtk3
-    openssl
-    wayland
-    vulkan-loader
     udev
   ];
-
-  postInstall =
-    ''
-      mv $out/bin/ruffle_desktop $out/bin/ruffle
-      install -Dm644 LICENSE.md -t $out/share/doc/ruffle
-      install -Dm644 README.md -t $out/share/doc/ruffle
-    ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
-                     -t $out/share/applications/
-
-      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
-                     -t $out/share/icons/hicolor/scalable/apps/
-
-      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
-                     -t $out/share/metainfo/
-    '';
 
   # Prevents ruffle from downloading openh264 at runtime for Linux
   openh264-241 =
@@ -97,16 +75,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       null;
 
-  preFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libxkbcommon
-        finalAttrs.openh264-241
-        vulkan-loader
-        wayland
-      ]
-    })
-  '';
+  postInstall =
+    ''
+      mv $out/bin/ruffle_desktop $out/bin/ruffle
+      install -Dm644 LICENSE.md -t $out/share/doc/ruffle
+      install -Dm644 README.md -t $out/share/doc/ruffle
+    ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
+                     -t $out/share/applications/
+
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
+                     -t $out/share/icons/hicolor/scalable/apps/
+
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
+                     -t $out/share/metainfo/
+
+      wrapProgram $out/bin/ruffle \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            wayland
+            xorg.libXcursor
+            xorg.libXrandr
+            xorg.libXi
+            xorg.libX11
+            xorg.libxcb
+            libxkbcommon
+            vulkan-loader
+            finalAttrs.openh264-241
+          ]
+        }
+    '';
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
