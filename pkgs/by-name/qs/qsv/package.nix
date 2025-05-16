@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage {
     "fetch"
     "foreach"
     "geocode"
+    "polars"
     "to"
   ];
 
