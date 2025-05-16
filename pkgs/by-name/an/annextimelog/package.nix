@@ -5,17 +5,6 @@
   fetchPypi,
 }:
 
-let
-  tzdata = python3.pkgs.tzdata.overrideAttrs rec {
-    version = "2023.4";
-
-    src = fetchPypi {
-      pname = "tzdata";
-      inherit version;
-      hash = "sha256-3VTJTylHZVIsdzmWSbT+/ZVSJHmmZKDOyH9BvrxhSMk=";
-    };
-  };
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "annextimelog";
   version = "0.15.0";
@@ -30,15 +19,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "rich" ];
 
-  nativeBuildInputs =
-    with python3.pkgs;
-    [
-      unittestCheckHook
-      setuptools
-      wheel
-      poetry-core
-    ]
-    ++ [ tzdata ];
+  nativeBuildInputs = with python3.pkgs; [
+    unittestCheckHook
+    setuptools
+    wheel
+    poetry-core
+    tzdata
+  ];
 
   unittestFlags = [ "-vb" ];
 
