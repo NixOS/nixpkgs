@@ -336,6 +336,10 @@ let
       orga = "prestonknopp";
       repo = "tree-sitter-gdscript";
     };
+    "tree-sitter-gemini" = {
+      orga = "blessanabraham";
+      repo = "tree-sitter-gemini";
+    };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";
       repo = "tree-sitter-godot-resource";
