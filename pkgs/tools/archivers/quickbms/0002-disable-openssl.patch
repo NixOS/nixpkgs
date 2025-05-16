@@ -1,9 +1,16 @@
---- src/Makefile	2023-05-25 18:16:56.000296653 +0900
-+++ src/Makefile	2023-05-25 18:17:00.772272861 +0900
-@@ -23,7 +23,6 @@
- EXTRA_TARGETS  = libs/amiga/amiga.s libs/powzix/*.cpp
- CFLAGS += -msse2
- endif
+diff --git a/Makefile b/Makefile
+index 392e541..28b0e8e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,12 +19,10 @@ CFLAGS	+= -Dunix
+ #CC		= gcc-6
+ #CXX		= g++-6
+ # necessary for my build, remove in case you don't have openssl
+-USE_OPENSSL	= 1
+ else
+ CLIBS	+= -static-libgcc
+ EXTRA_TARGETS	= libs/amiga/amiga.s libs/powzix/*.cpp
+ CFLAGS	+= -msse2
 -USE_OPENSSL	= 1
  endif
  
