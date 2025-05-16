@@ -10274,6 +10274,8 @@ self: super: with self; {
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+  omemo = callPackage ../development/python-modules/omemo { };
+
   omemo-dr = callPackage ../development/python-modules/omemo-dr { };
 
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
@@ -17852,6 +17854,8 @@ self: super: with self; {
   twitterapi = callPackage ../development/python-modules/twitterapi { };
 
   twofish = callPackage ../development/python-modules/twofish { };
+
+  twomemo = callPackage ../development/python-modules/twomemo { };
 
   twscrape = callPackage ../development/python-modules/twscrape { };
 
