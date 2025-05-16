@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    poppler
     libunarr
     libGLU
+    libsForQt5.poppler
     libsForQt5.qtmultimedia
     libsForQt5.qtscript
   ];
