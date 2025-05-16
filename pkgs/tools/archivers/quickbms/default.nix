@@ -1,39 +1,52 @@
 {
-  stdenv,
+  pkgsi686Linux,
   lib,
   fetchzip,
   fetchpatch,
   bzip2,
   lzo,
-  openssl_1_1,
+  openssl,
   opensslSupport ? false,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.11.0";
+pkgsi686Linux.stdenv.mkDerivation rec {
+
+  #TODO: assert that GCC is used, other compilers are not supported
+
+  version = "0.12.0";
   pname = "quickbms";
 
   src = fetchzip {
     url = "https://aluigi.altervista.org/papers/quickbms-src-${version}.zip";
-    hash = "sha256-uQKTE36pLO8uhrX794utqaDGUeyqRz6zLCQFA7DYkNc=";
+    hash = "sha256-thD4wYjiYuwCzjuXmhVfMEhhlSHHOLa5yl0uDhF6aMA=";
   };
 
   patches = [
-    # Fix errors on x86_64 and _rotl definition
+    # Fix errors on x86_64 and OpenSSL compatibility
     (fetchpatch {
-      name = "0001-fix-compile.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-compile.patch?h=quickbms&id=a2e3e4638295d7cfe39513bfef9447fb23154a6b";
-      hash = "sha256-49fT/L4BNzMYnq1SXhFMgSDLybLkz6KSbgKmUpZZu08=";
-      stripLen = 1;
+      name = "0001-fix-openssl-v21-padding-deprecation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Fix-OpenSSL-V21-padding-deprecation.patch?h=quickbms";
+      hash = "sha256-QFuReSEJ6XsQbGc3DW40ZRXVe/xv8cr1IAXts9P3yY4=";
     })
-  ] ++ lib.optional (!opensslSupport) ./0002-disable-openssl.patch;
+    (fetchpatch {
+      name = "0002-fix-compile-x86.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0002-fix-compile-x86.patch?h=quickbms";
+      hash = "sha256-LaLs64M0lPTOuvhWX5tC2qt/4MxwDvR7X0hnpL1xbF0=";
+    })
+    ./0004-no-atomics.patch
+  ] ++ lib.optional (!opensslSupport) ./0003-disable-openssl.patch;
 
   buildInputs = [
     bzip2
     lzo
     zlib
-  ] ++ lib.optional (opensslSupport) openssl_1_1;
+  ] ++ lib.optional (opensslSupport) openssl;
+
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
+    "-Wno-error=implicit-function-declaration" # upstream code is a bit sloppy
+    "-Wno-error=incompatible-pointer-types" # three instances in upstream code (intentional?)
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
