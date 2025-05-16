@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "amiri";
-  version = "1.001";
+  version = "1.002";
 
   src = fetchzip {
     url = "https://github.com/alif-type/amiri/releases/download/${version}/Amiri-${version}.zip";
-    hash = "sha256-YwiDY5/Ty5Pwj3d8+UafUNLVZ3omRtFRWQCLn2RkheM=";
+    hash = "sha256-Ln2AFiQ5hX4w1yu5NCF28S0hmfWUhEINi1YJVV/Gngo=";
   };
 
   installPhase = ''
