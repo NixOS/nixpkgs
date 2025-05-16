@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.mafo ];
+    mainProgram = "dumpvdl2";
   };
 })
