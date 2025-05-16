@@ -8564,6 +8564,12 @@
     githubId = 21362942;
     name = "Fugi";
   };
+  fullmetalsheep = {
+    email = "fullmetalsheep@proton.me";
+    github = "fullmetalsheep";
+    githubId = 23723926;
+    name = "Dash R";
+  };
   funkeleinhorn = {
     email = "git@funkeleinhorn.com";
     github = "funkeleinhorn";
