@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.11.1";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Tn4IyVbDNImSMOwL17D3W9I+mWS1aaTHr0LRR+in+IY=";
+    hash = "sha256-RtRk0g0ZREFPjm2i2uTqV3UfKZ/aDHUGyju3SI8vs0Y=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
