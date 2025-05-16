@@ -41,24 +41,24 @@ import { walkSync } from "@std/fs/walk";
  * ```
  */
 
-type PackageSpecifiers = {
-  [packageIdent: `${string}:${string}`]: string;
+export type PackageSpecifiers = {
+  [packageIdent: string]: string;
 };
 
-type LockJson = {
+export type LockJson = {
   specifiers: PackageSpecifiers;
   version: string;
   workspace: any;
   [registry: string]: any;
 };
 
-type Config = {
+export type Config = {
   lockJson: LockJson;
   cachePath: string;
   vendorPath: string;
 };
 
-type PackageInfo = {
+export type PackageInfo = {
   full: string;
   registry: string | undefined;
   scope: string | undefined;
@@ -67,7 +67,7 @@ type PackageInfo = {
   suffix: string | undefined;
 };
 
-type PackagesByRegistry = {
+export type PackagesByRegistry = {
   [registry: string]: {
     [packageName: string]: {
       [version: string]: PackageInfo;
@@ -75,17 +75,17 @@ type PackagesByRegistry = {
   };
 };
 
-type PathsByRegistry = {
+export type PathsByRegistry = {
   [packageRegistry: string]: string[];
 };
 
-type RegistryJson = {
+export type RegistryJson = {
   "dist-tags": any;
   versions: { [version: string]: any };
   name: string;
 };
 
-type MetaJson = {
+export type MetaJson = {
   scope: string;
   name: string;
   latest: string;
@@ -94,7 +94,7 @@ type MetaJson = {
   };
 };
 
-function getConfig(): Config {
+export function getConfig(): Config {
   const flags = parseArgs(Deno.args, {
     string: ["lock-json", "cache-path", "vendor-path"],
   });
@@ -123,7 +123,9 @@ function getConfig(): Config {
   };
 }
 
-function getAllPackageRegistries(specifiers: PackageSpecifiers): Set<string> {
+export function getAllPackageRegistries(
+  specifiers: PackageSpecifiers
+): Set<string> {
   return Object.keys(specifiers).reduce((acc: Set<string>, v: string) => {
     const s = v.split(":");
     if (s.length !== 2) {
@@ -135,7 +137,7 @@ function getAllPackageRegistries(specifiers: PackageSpecifiers): Set<string> {
   }, new Set());
 }
 
-function parsePackageSpecifier(packageSpecifier: string): PackageInfo {
+export function parsePackageSpecifier(packageSpecifier: string): PackageInfo {
   const match =
     /^((?<registry>.*):)?((?<scope>@.*?)\/)?(?<name>.*?)@(?<version>.*?)(?<suffix>_.*)?$/.exec(
       packageSpecifier
@@ -164,14 +166,14 @@ function parsePackageSpecifier(packageSpecifier: string): PackageInfo {
   throw "unexpected package specifier format";
 }
 
-function getScopedName(name: string, scope?: string): string {
+export function getScopedName(name: string, scope?: string): string {
   if (scope !== undefined) {
     return `${scope[0] === "@" ? "" : "@"}${scope}/${name}`;
   }
   return name;
 }
 
-function getAllPackagesByPackageRegistry(
+export function getAllPackagesByPackageRegistry(
   lockJson: LockJson,
   registries: Set<string>
 ): PackagesByRegistry {
@@ -192,7 +194,7 @@ function getAllPackagesByPackageRegistry(
   return result;
 }
 
-function findRegistryJsonPaths(
+export function findRegistryJsonPaths(
   cachePath: string,
   nonJsrPackages: PackagesByRegistry
 ): PathsByRegistry {
@@ -207,7 +209,33 @@ function findRegistryJsonPaths(
   return result;
 }
 
-function pruneRegistryJsonFiles(
+export function pruneRegistryJson(
+  registryJson: RegistryJson,
+  nonJsrPackages: PackagesByRegistry,
+  registry: string
+) {
+  const scopedName = registryJson.name;
+  const packageInfoByVersion = nonJsrPackages[registry][scopedName];
+  if (!packageInfoByVersion) {
+    throw `could not find key "${scopedName}" in\n${Object.keys(
+      nonJsrPackages[registry]
+    )}`;
+  }
+
+  const newRegistryJson: RegistryJson = {
+    ...registryJson,
+    "dist-tags": {},
+    versions: {},
+  };
+
+  for (const version of Object.keys(packageInfoByVersion)) {
+    newRegistryJson.versions[version] = registryJson.versions[version];
+  }
+
+  return newRegistryJson;
+}
+
+export function pruneRegistryJsonFiles(
   nonJsrPackages: PackagesByRegistry,
   registryJsonPathsByRegistry: PathsByRegistry
 ): void {
@@ -217,23 +245,11 @@ function pruneRegistryJsonFiles(
         new TextDecoder("utf-8").decode(Deno.readFileSync(path))
       );
 
-      const scopedName = registryJson.name;
-      const packageInfoByVersion = nonJsrPackages[registry][scopedName];
-      if (!packageInfoByVersion) {
-        throw `could not find key "${scopedName}" in\n${Object.keys(
-          nonJsrPackages[registry]
-        )}`;
-      }
-
-      const newRegistryJson: RegistryJson = {
-        ...registryJson,
-        "dist-tags": {},
-        versions: {},
-      };
-
-      for (const version of Object.keys(packageInfoByVersion)) {
-        newRegistryJson.versions[version] = registryJson.versions[version];
-      }
+      const newRegistryJson = pruneRegistryJson(
+        registryJson,
+        nonJsrPackages,
+        registry
+      );
 
       Deno.writeFileSync(
         path,
@@ -243,7 +259,7 @@ function pruneRegistryJsonFiles(
   }
 }
 
-function findMetaJsonPaths(
+export function findMetaJsonPaths(
   vendorPath: string,
   jsrPackages: PackagesByRegistry
 ): PathsByRegistry {
@@ -258,7 +274,31 @@ function findMetaJsonPaths(
   return result;
 }
 
-function pruneMetaJsonFiles(
+export function pruneMetaJson(
+  metaJson: MetaJson,
+  jsrPackages: PackagesByRegistry,
+  registry: string
+): MetaJson {
+  const scopedName = getScopedName(metaJson.name, metaJson.scope);
+  const packageInfoByVersion = jsrPackages[registry][scopedName];
+  if (!packageInfoByVersion) {
+    throw `could not find key "${scopedName}" in\n${Object.keys(
+      jsrPackages[registry]
+    )}`;
+  }
+  const newMetaJson: MetaJson = {
+    ...metaJson,
+    latest: "",
+    versions: {},
+  };
+
+  for (const version of Object.keys(packageInfoByVersion)) {
+    newMetaJson.versions[version] = metaJson.versions[version];
+  }
+  return newMetaJson;
+}
+
+export function pruneMetaJsonFiles(
   jsrPackages: PackagesByRegistry,
   metaJsonPathsByRegistry: PathsByRegistry
 ): void {
@@ -267,22 +307,8 @@ function pruneMetaJsonFiles(
       const metaJson: MetaJson = JSON.parse(
         new TextDecoder("utf-8").decode(Deno.readFileSync(path))
       );
-      const scopedName = getScopedName(metaJson.name, metaJson.scope);
-      const packageInfoByVersion = jsrPackages[registry][scopedName];
-      if (!packageInfoByVersion) {
-        throw `could not find key "${scopedName}" in\n${Object.keys(
-          jsrPackages[registry]
-        )}`;
-      }
-      const newMetaJson: MetaJson = {
-        ...metaJson,
-        latest: "",
-        versions: {},
-      };
 
-      for (const version of Object.keys(packageInfoByVersion)) {
-        newMetaJson.versions[version] = metaJson.versions[version];
-      }
+      const newMetaJson = pruneMetaJson(metaJson, jsrPackages, registry);
 
       Deno.writeFileSync(
         path,
