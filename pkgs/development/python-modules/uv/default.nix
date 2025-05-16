@@ -3,6 +3,7 @@
   installShellFiles,
   rustPlatform,
   pkgs,
+  versionCheckHook,
 }:
 
 buildPythonPackage {
@@ -27,6 +28,8 @@ buildPythonPackage {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   pyproject = true;
   pythonImportsCheck = [ "uv" ];
