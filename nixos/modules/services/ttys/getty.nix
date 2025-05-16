@@ -125,6 +125,18 @@ in
         '';
       };
 
+      kmscon = mkOption {
+        type = types.str;
+        default = gettyCmd "--noclear - -- $$TERM";
+        readOnly = true;
+        visible = false;
+        description = ''
+          This is a read-only option.
+
+          This passes through the arguments required to run agetty under kmscon.
+        '';
+      };
+
     };
 
   };

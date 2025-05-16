@@ -16,8 +16,7 @@ let
     ;
 
   cfg = config.services.kmscon;
-
-  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
+  gettyCmd = config.services.getty.kmscon;
 
   configDir = pkgs.writeTextFile {
     name = "kmscon-config";
@@ -26,19 +25,26 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "kmscon" "autologinUser" ] ''
+      Autologin is now handled by the agetty module.
+
+      Check `services.getty.autologinUser` instead.
+    '')
+  ];
+
   options = {
     services.kmscon = {
       enable = mkEnableOption ''
-        kmscon as the virtual console instead of gettys.
-        kmscon is a kms/dri-based userspace virtual terminal implementation.
-        It supports a richer feature set than the standard linux console VT,
-        including full unicode support, and when the video card supports drm
-        should be much faster
+        Use kmscon instead of autovt.
+
+        Kmscon is a simple terminal emulator based on linux kernel mode setting (KMS).
+        It is an attempt to replace the in-kernel VT implementation with a userspace console.
       '';
 
       package = mkPackageOption pkgs "kmscon" { };
 
-      hwRender = mkEnableOption "3D hardware acceleration to render the console";
+      hwRender = mkEnableOption "Enable hardware acceleration + DRM backend";
 
       fonts = mkOption {
         description = "Fonts used by kmscon, in order of priority.";
@@ -63,7 +69,7 @@ in
           nullOr (nonEmptyListOf fontType);
       };
 
-      useXkbConfig = mkEnableOption "" // {
+      useXkbConfig = mkEnableOption "Use XKB" // {
         description = "Whether to configure keymap from xserver keyboard settings.";
       };
 
@@ -80,34 +86,59 @@ in
         default = "";
         example = "--term xterm-256color";
       };
-
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Username of the account that will be automatically logged in at the console.
-          If unspecified, a login prompt is shown as usual.
-        '';
-      };
     };
   };
 
   config = mkIf cfg.enable {
-    systemd.packages = [ cfg.package ];
+    meta.maintainers = with lib.maintainers; [ hustlerone ];
+    systemd.packages = [
+      cfg.package
+    ];
 
     systemd.services."kmsconvt@" = {
-      after = [
-        "systemd-logind.service"
-        "systemd-vconsole-setup.service"
-      ];
-      requires = [ "systemd-logind.service" ];
+      description = "KMS System Console on %I";
+      documentation = [ "man:kmscon(1)" ];
 
-      serviceConfig.ExecStart = [
-        ""
-        ''
-          ${cfg.package}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
-        ''
+      before = [
+        "getty.target"
       ];
+
+      after = [
+        "systemd-user-sessions.service"
+        "plymouth-quit-wait.service"
+        "rc-local.service"
+      ];
+
+      conflicts = [
+        "getty@%i.service"
+      ];
+
+      onFailure = [
+        "getty@%i.service"
+      ];
+
+      wantedBy = [
+        "getty.target"
+      ];
+
+      unitConfig = {
+        IgnoreOnIsolate = "yes";
+        ConditionPathExists = "/dev/tty0";
+      };
+
+      serviceConfig = {
+        ExecStart = "${pkgs.kmscon}/bin/kmscon --vt=%I --seats=seat0 --no-switchvt ${
+          lib.optionalString (!cfg.hwRender) "--no-drm"
+        } --configdir ${configDir} --login -- ${gettyCmd}";
+
+        ## I know that usually we'd be using /bin/login directly, but this is what upstream's doing.
+
+        UtmpIdentifier = "%I";
+        TTYPath = "/dev/%I";
+        TTYReset = true;
+        TTYVHangup = true;
+        TTYVTDisallocate = true;
+      };
 
       restartIfChanged = false;
       aliases = [ "autovt@.service" ];
