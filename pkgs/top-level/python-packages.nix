@@ -10167,8 +10167,6 @@ self: super: with self; {
 
   oath = callPackage ../development/python-modules/oath { };
 
-  oauth = callPackage ../development/python-modules/oauth { };
-
   oauth2 = callPackage ../development/python-modules/oauth2 { };
 
   oauth2client = callPackage ../development/python-modules/oauth2client { };
