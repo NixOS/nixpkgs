@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   installShellFiles,
-  pkg-config,
   rustPlatform,
   pkgs,
 }:
@@ -12,7 +11,6 @@ buildPythonPackage {
     version
     src
     cargoDeps
-    dontUseCmakeConfigure
     meta
     cargoBuildFlags
     postInstall
@@ -25,9 +23,7 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pkgs.cmake
     installShellFiles
-    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
