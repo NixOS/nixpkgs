@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=github.com/ayoisaiah/f2/v2/app.VersionString=${version}"
   ];
 
   # has no tests
