@@ -881,7 +881,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 ### buildDenoPackage {#javascript-buildDenoPackage}
 
-`buildDenoPackage` allows you to package Deno-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)).
+`buildDenoPackage` allows you to package [Deno](https://deno.com/) projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)).
 It works by utilizing Deno's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing Deno to it.
 
 #### buildDenoDeps {#javascript-buildDenoPackage-buildDenoDeps}
