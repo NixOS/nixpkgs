@@ -16,7 +16,7 @@
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
-  withCoreText ? false,
+  withCoreText ? stdenv.hostPlatform.isDarwin, # withCoreText is required for macOS
   withIcu ? false, # recommended by upstream as default, but most don't needed and it's big
   withGraphite2 ? true, # it is small and major distros do include it
   python3,
