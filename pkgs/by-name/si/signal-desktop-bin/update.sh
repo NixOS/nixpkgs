@@ -15,6 +15,7 @@ latestBuildInfoAarch64=$(curl \
   | jq '.builds.latest_succeeded')
 latestBuildAarch64=$(jq '.id' <<< $latestBuildInfoAarch64)
 latestVersionAarch64=$(jq -r '.source_package.version' <<< $latestBuildInfoAarch64)
+latestPrettyVersionAarch64="${latestVersionAarch64%-*}"
 
 echo "Updating signal-desktop for x86_64-linux"
 update-source-version signal-desktop-bin "$latestVersion" \
@@ -22,7 +23,7 @@ update-source-version signal-desktop-bin "$latestVersion" \
   --file="$SCRIPT_DIR/signal-desktop.nix"
 
 echo "Updating signal-desktop for aarch64-linux"
-update-source-version signal-desktop-bin "$latestVersionAarch64" "" \
+update-source-version signal-desktop-bin "$latestPrettyVersionAarch64" "" \
   "https://download.copr.fedorainfracloud.org/results/useidel/signal-desktop/fedora-42-aarch64/$(printf "%08d" $latestBuildAarch64)-signal-desktop/signal-desktop-$latestVersionAarch64.fc42.aarch64.rpm" \
   --system=aarch64-linux \
   --file="$SCRIPT_DIR/signal-desktop-aarch64.nix"
