@@ -367,7 +367,7 @@ in
       '';
     };
 
-    manageScriptPackage = lib.mkOption {
+    manage = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
       description = ''
@@ -381,7 +381,7 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        services.paperless.manageScriptPackage = manage;
+        services.paperless.manage = manage;
         environment.systemPackages = [ manage ];
 
         services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
