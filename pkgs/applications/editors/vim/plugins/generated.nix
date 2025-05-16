@@ -8917,12 +8917,12 @@ final: prev: {
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "2025-04-16";
+    version = "2025-05-15";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "9bb1e73c534f767607e0a888f3de4c942825c501";
-      sha256 = "06qcyz3snk8bphbd2n9q4dzizkksn65is0nksd76q0zzkvb9qxhp";
+      rev = "6de4b9f9a92917f9aea3a0dbdc3dbbedc11d26be";
+      sha256 = "0z9qri9sp1aicma1yiy2vkdjixjj7pbprd86nmslrhrnchvnqrbh";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
     meta.hydraPlatforms = [ ];
