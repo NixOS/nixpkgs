@@ -5,23 +5,28 @@
   callPackage,
   fetchurl,
   icu73,
+  icu77,
   fetchpatch2,
   config,
 }:
 
 let
-  icu73' = icu73.overrideAttrs (attrs: {
-    # standardize vtzone output
-    # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-    patches = attrs.patches ++ [
-      (fetchpatch2 {
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-        stripLen = 3;
-        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-      })
-    ];
-  });
+  patchICU =
+    icu:
+    icu.overrideAttrs (attrs: {
+      # standardize vtzone output
+      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+      patches = attrs.patches ++ [
+        (fetchpatch2 {
+          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+          stripLen = 3;
+          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+        })
+      ];
+    });
+  icu73' = patchICU icu73;
+  icu77' = patchICU icu77;
 
   common =
     {
@@ -52,6 +57,7 @@ let
 
       extraPassthru = {
         icu73 = icu73';
+        icu77 = icu77';
       };
 
       meta = with lib; {
@@ -78,6 +84,7 @@ let
         pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
         icu73 = icu73';
+        icu77 = icu77';
       };
 
 in
