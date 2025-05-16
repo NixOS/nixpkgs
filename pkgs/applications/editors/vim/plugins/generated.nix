@@ -137,6 +137,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  GPTModels-nvim = buildVimPlugin {
+    pname = "GPTModels.nvim";
+    version = "2025-05-15";
+    src = fetchFromGitHub {
+      owner = "Aaronik";
+      repo = "GPTModels.nvim";
+      rev = "04d91c778d74f762143203ab81e155eec642b5f6";
+      sha256 = "06spvkfc1bhckq8w56w6ha4gzk60wfhjlyivrx51awz20sd6hyw0";
+    };
+    meta.homepage = "https://github.com/Aaronik/GPTModels.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   Improved-AnsiEsc = buildVimPlugin {
     pname = "Improved-AnsiEsc";
     version = "2015-08-26";
@@ -2906,6 +2919,19 @@ final: prev: {
       sha256 = "03rq3lpplgywvm620jzx085l74180163q8gls4gjrad2fgm9n96n";
     };
     meta.homepage = "https://github.com/manicmaniac/coconut.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  codecompanion-history-nvim = buildVimPlugin {
+    pname = "codecompanion-history.nvim";
+    version = "2025-05-15";
+    src = fetchFromGitHub {
+      owner = "ravitemer";
+      repo = "codecompanion-history.nvim";
+      rev = "f787607922be1189b58e2c61bdd0e4bae3a38c00";
+      sha256 = "16bivgra12wyhiwcci89sa7fcj0y8q4a61xzlf2gsm84bv295jms";
+    };
+    meta.homepage = "https://github.com/ravitemer/codecompanion-history.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8904,12 +8930,12 @@ final: prev: {
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "2025-04-16";
+    version = "2025-05-15";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "9bb1e73c534f767607e0a888f3de4c942825c501";
-      sha256 = "06qcyz3snk8bphbd2n9q4dzizkksn65is0nksd76q0zzkvb9qxhp";
+      rev = "6de4b9f9a92917f9aea3a0dbdc3dbbedc11d26be";
+      sha256 = "0z9qri9sp1aicma1yiy2vkdjixjj7pbprd86nmslrhrnchvnqrbh";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
     meta.hydraPlatforms = [ ];

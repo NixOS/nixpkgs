@@ -17,6 +17,7 @@
   python3,
   python3Packages,
   systemd, # for libudev
+  libpisp,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
   withQcam ? false,
@@ -26,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-m55SojGt5v5AEatBZiVqQA3xP9eeRWqHa+C3JsTiErQ=";
+    hash = "sha256-zlMjeLlEeigzisVr7kWVrTI5gRbpJb2pZvqXNdErITQ=";
   };
 
   outputs = [
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
 
       gtest
     ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
     ++ lib.optionals withTracing [ lttng-ust ]
     ++ lib.optionals withQcam [
       libtiff

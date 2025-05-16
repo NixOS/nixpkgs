@@ -49,9 +49,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # assumes we have checked out the full repo (including remotes)
     "test_real_get_github_repos"
-    # requires a newer pandoc version (as it tests for a specific format of the
-    # error message)
-    "test_bad_convert_to_markdown"
+    # test fails due to a pandoc bug (fixed in pandoc 3.6.4)
+    "test_convert_to_markdown"
   ];
 
   passthru.tests = {

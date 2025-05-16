@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.54";
+  version = "2.32.56";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-tkiKJ/YPipeqAiioWZKlL1dXKPnvbW57v97rtITpV0Y=";
+    hash = "sha256-Xg886KX54vwGANIhTAFslzPw/sZs2SvpXzXUXcOKgMs=";
   };
 
   nativeBuildInputs = [
@@ -103,9 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
       nadiaholmquist
-      grimmauld
-      marcin-serwin
     ];
+    teams = [ lib.teams.sdl ];
     platforms = lib.platforms.all;
     pkgConfigModules = [
       "sdl2-compat"

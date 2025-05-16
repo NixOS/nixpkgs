@@ -7,7 +7,8 @@
   pkg-config,
   gobject-introspection,
   vala,
-  pandoc,
+  buildPackages,
+  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
   gi-docgen,
   python3,
   libsoup_3,
@@ -41,10 +42,9 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
-    pandoc
     gi-docgen
     python3
-  ];
+  ] ++ lib.optionals enableManpages [ buildPackages.pandoc ];
 
   buildInputs = [
     libsoup_3
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dsniffer=false"
+    (lib.mesonBool "manpages" enableManpages)
   ];
 
   doCheck = true;

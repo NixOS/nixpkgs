@@ -15,7 +15,6 @@
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
-  fixDarwinDylibNames,
   fzf,
   glib,
   glibc,
@@ -33,7 +32,6 @@
   libpsl,
   libpq,
   libuuid,
-  libuv,
   libxcrypt,
   libyaml,
   lua-language-server,
@@ -111,6 +109,7 @@ in
         rev = lib.last (lib.splitString "-" (lib.last rel));
       in
       "${date}-${rev}";
+    __intentionallyOverridingVersion = true;
 
     meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
 
@@ -838,57 +837,6 @@ in
       rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
       make test
       runHook postCheck
-    '';
-  });
-
-  # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
-  # we shouldn't use luarocks machinery to build complex cmake components
-  libluv = stdenv.mkDerivation {
-
-    pname = "libluv";
-    inherit (prev.luv) version meta src;
-
-    cmakeFlags = [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_MODULE=OFF"
-      "-DWITH_SHARED_LIBUV=ON"
-      "-DLUA_BUILD_TYPE=System"
-      "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
-    ];
-
-    # to make sure we dont use bundled deps
-    postUnpack = ''
-      rm -rf deps/lua deps/libuv
-    '';
-
-    buildInputs = [
-      libuv
-      final.lua
-    ];
-
-    nativeBuildInputs = [
-      pkg-config
-      cmake
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
-  };
-
-  luv = prev.luv.overrideAttrs (oa: {
-
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ pkg-config ];
-    buildInputs = [ libuv ];
-
-    # Use system libuv instead of building local and statically linking
-    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
-      variables = {
-        WITH_SHARED_LIBUV = "ON";
-      };
-    };
-
-    # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
-    # tests is not run since they are not part of the tarball anymore
-    preCheck = ''
-      unset LUA_PATH
-      rm tests/test-{dns,thread}.lua
     '';
   });
 

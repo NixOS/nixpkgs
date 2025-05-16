@@ -4811,6 +4811,12 @@
     name = "Coca";
     keys = [ { fingerprint = "99CB 86FF 62BB 7DA4 8903  B16D 0328 2DF8 8179 AB19"; } ];
   };
+  cococolanosugar = {
+    name = "George Xu";
+    github = "cococolanosugar";
+    githubId = 1736138;
+    email = "cococolanosugar@gmail.com";
+  };
   coconnor = {
     email = "coreyoconnor@gmail.com";
     github = "coreyoconnor";
@@ -5851,6 +5857,11 @@
     github = "ddelabru";
     githubId = 39909293;
     name = "Dominic Delabruere";
+  };
+  ddogfoodd = {
+    github = "ddogfoodd";
+    githubId = 58050402;
+    name = "Jost Alemann";
   };
   dduan = {
     email = "daniel@duan.ca";
@@ -7287,6 +7298,13 @@
     githubId = 428026;
     name = "embr";
   };
+  emilia = {
+    email = "nix@emilia.codes";
+    github = "emiliaaah";
+    githubId = 55017867;
+    name = "Emilia";
+    keys = [ { fingerprint = "F772 3569 4B43 B599 73C2  A931 1EFB E941 B89B B810"; } ];
+  };
   emilioziniades = {
     email = "emilioziniades@protonmail.com";
     github = "emilioziniades";
@@ -8559,6 +8577,12 @@
     githubId = 21362942;
     name = "Fugi";
   };
+  fullmetalsheep = {
+    email = "fullmetalsheep@proton.me";
+    github = "fullmetalsheep";
+    githubId = 23723926;
+    name = "Dash R";
+  };
   funkeleinhorn = {
     email = "git@funkeleinhorn.com";
     github = "funkeleinhorn";
@@ -9170,6 +9194,12 @@
     github = "goodrone";
     githubId = 1621335;
     name = "Andrew Trachenko";
+  };
+  goodylove = {
+    github = "goodylove";
+    email = "goodyc474@gmail.com";
+    githubId = 104577296;
+    name = "Nwachukwu Goodness";
   };
   gordon-bp = {
     email = "gordy@hanakano.com";
@@ -11408,6 +11438,17 @@
     github = "0mbi";
     githubId = 10786794;
     name = "Markus Hihn";
+  };
+  jess = {
+    name = "Jessica";
+    email = "jess+nix@jessie.cafe";
+    github = "ttrssreal";
+    githubId = 43591752;
+    keys = [
+      {
+        fingerprint = "8092 3BD1 ECD0 E436 671D  C8E9 BA33 5068 6C91 8606";
+      }
+    ];
   };
   jessemoore = {
     email = "jesse@jessemoore.dev";
@@ -17730,6 +17771,12 @@
     github = "nokazn";
     githubId = 41154684;
     name = "nokazn";
+  };
+  nomaterials = {
+    email = "nomaterials@gmail.com";
+    github = "no-materials";
+    githubId = 16938952;
+    name = "nomaterials";
   };
   nomeata = {
     email = "mail@joachim-breitner.de";
@@ -24112,6 +24159,12 @@
     github = "tebriel";
     githubId = 821688;
   };
+  tebro = {
+    email = "git@tebro.simplelogin.com";
+    name = "Richard Weber";
+    github = "Tebro";
+    githubId = 3861339;
+  };
   techknowlogick = {
     email = "techknowlogick@gitea.com";
     github = "techknowlogick";
@@ -27261,12 +27314,6 @@
     github = "zaldnoay";
     githubId = 5986078;
     name = "Zunway Liang";
-  };
-  zanculmarktum = {
-    name = "Azure Zanculmarktum";
-    email = "zanculmarktum@gmail.com";
-    github = "zanculmarktum";
-    githubId = 16958511;
   };
   zane = {
     name = "Zane van Iperen";

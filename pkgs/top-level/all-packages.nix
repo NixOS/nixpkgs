@@ -1011,12 +1011,7 @@ with pkgs;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
-  adlplug = callPackage ../applications/audio/adlplug {
-    jack = libjack2;
-  };
-  opnplug = adlplug.override {
-    type = "OPN";
-  };
+  opnplug = adlplug.override { type = "OPN"; };
 
   akkoma = callPackage ../by-name/ak/akkoma/package.nix {
     beamPackages = beam_minimal.packages.erlang_26.extend (
@@ -2380,7 +2375,7 @@ with pkgs;
   patool = with python3Packages; toPythonApplication patool;
 
   pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_34;
+    electron = electron_35;
   };
 
   pixcat = with python3Packages; toPythonApplication pixcat;
@@ -2863,7 +2858,6 @@ with pkgs;
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
   rocmPackages = rocmPackages_6;
-  rocmPackages_5 = recurseIntoAttrs (callPackage ../development/rocm-modules/5 { });
   rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
@@ -3865,8 +3859,6 @@ with pkgs;
     hdf5 = hdf5-mpi.override { usev110Api = true; };
   };
 
-  inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
-
   # Not in aliases because it wouldn't get picked up by callPackage
   netbox = netbox_4_2;
 
@@ -4699,6 +4691,7 @@ with pkgs;
     # Enable next line for console graphics. Note that it requires `sixel`
     # enabled terminals such as mlterm or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
   openconnectPackages = callPackage ../tools/networking/openconnect { };
@@ -4801,12 +4794,10 @@ with pkgs;
 
   inherit (callPackages ../servers/varnish { })
     varnish60
-    varnish76
     varnish77
     ;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages
-    varnish76Packages
     varnish77Packages
     ;
   varnishPackages = varnish77Packages;
@@ -10067,14 +10058,6 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl_2_5_1 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.1"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_5_2 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.2"; };
     faslExt = "fasl";
@@ -10083,7 +10066,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_5_2;
+  sbcl_2_5_4 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.4"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_5_4;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -12773,8 +12764,6 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
-  sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
-
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_17
     wlroots_0_18
@@ -13016,8 +13005,6 @@ with pkgs;
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
   kaidan = kdePackages.callPackage ../applications/networking/instant-messengers/kaidan { };
-
-  kdeltachat = libsForQt5.callPackage ../applications/networking/instant-messengers/kdeltachat { };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
@@ -14557,11 +14544,6 @@ with pkgs;
 
   worldengine-cli = python3Packages.worldengine;
 
-  wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice { };
-  wpsoffice-cn = libsForQt5.callPackage ../applications/office/wpsoffice {
-    useChineseVersion = true;
-  };
-
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
   wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/wrapper.nix { };
@@ -14699,9 +14681,10 @@ with pkgs;
     # that it requires sixel graphics compatible terminals like mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
-  zotero_7 = pkgs.zotero-beta;
+  zotero_7 = pkgs.zotero;
 
   zsteg = callPackage ../tools/security/zsteg { };
 
@@ -16223,31 +16206,7 @@ with pkgs;
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
-  faust = res.faust2;
-
-  faust2 = callPackage ../applications/audio/faust/faust2.nix { };
-
-  faust2alqt = libsForQt5.callPackage ../applications/audio/faust/faust2alqt.nix { };
-
-  faust2alsa = callPackage ../applications/audio/faust/faust2alsa.nix { };
-
-  faust2csound = callPackage ../applications/audio/faust/faust2csound.nix { };
-
-  faust2sc = callPackage ../applications/audio/faust/faust2sc.nix { };
-
-  faust2firefox = callPackage ../applications/audio/faust/faust2firefox.nix { };
-
-  faust2jack = callPackage ../applications/audio/faust/faust2jack.nix { };
-
-  faust2jackrust = callPackage ../applications/audio/faust/faust2jackrust.nix { };
-
-  faust2jaqt = libsForQt5.callPackage ../applications/audio/faust/faust2jaqt.nix { };
-
-  faust2ladspa = callPackage ../applications/audio/faust/faust2ladspa.nix { };
-
-  faust2lv2 = libsForQt5.callPackage ../applications/audio/faust/faust2lv2.nix { };
-
-  faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
+  faust = faust2;
 
   flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
 
@@ -16785,6 +16744,9 @@ with pkgs;
     # Note that it requires sixel capable terminals such as mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_gfx = SDL_gfx.override { SDL = SDL_sixel; };
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
+    SDL_ttf = SDL_ttf.override { SDL = SDL_sixel; };
   };
 
   yacreader = callPackage ../applications/graphics/yacreader { };

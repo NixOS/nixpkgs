@@ -34,7 +34,7 @@
   libbgcode,
   heatshrink,
   catch2,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
@@ -42,20 +42,7 @@
   opencascade-override ? null,
 }:
 let
-  wxGTK-prusa = wxGTK32.overrideAttrs (old: {
-    pname = "wxwidgets-prusa3d-patched";
-    version = "3.2.0";
-    configureFlags = old.configureFlags ++ [ "--disable-glcanvasegl" ];
-    patches = [ ./wxWidgets-Makefile.in-fix.patch ];
-    src = fetchFromGitHub {
-      owner = "prusa3d";
-      repo = "wxWidgets";
-      rev = "78aa2dc0ea7ce99dc19adc1140f74c3e2e3f3a26";
-      hash = "sha256-rYvmNmvv48JSKVT4ph9AS+JdstnLSRmcpWz1IdgBzQo=";
-      fetchSubmodules = true;
-    };
-  });
-  nanosvg-fltk = nanosvg.overrideAttrs (old: rec {
+  nanosvg-fltk = nanosvg.overrideAttrs (old: {
     pname = "nanosvg-fltk";
     version = "unstable-2022-12-22";
 
@@ -67,7 +54,7 @@ let
     };
   });
   openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
-  wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+  wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
@@ -88,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
       hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
     })
+    # https://github.com/prusa3d/PrusaSlicer/pull/11769
+    ./fix-ambiguous-constructors.patch
   ];
 
   # Patch required for GCC 14.
@@ -139,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       libbgcode
       heatshrink
       catch2
-      webkitgtk_4_0
+      webkitgtk_4_1
     ]
     ++ lib.optionals withSystemd [
       systemd

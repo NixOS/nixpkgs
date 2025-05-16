@@ -7,7 +7,6 @@
   cmake,
   darwinMinVersionHook,
   dbus,
-  fcitx5,
   fetchFromGitHub,
   ibus,
   installShellFiles,
@@ -57,7 +56,7 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.10";
+  version = "3.2.12";
 
   outputs = [
     "lib"
@@ -69,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-SylXpHPT4Y/37UapfLScJJ/CGniNyK4UNVAWax+WiBo=";
+    hash = "sha256-CPCbbVbi0gwSUkaEBOQPJwCU2NN9Lex2Z4hqBfIjn+o=";
   };
 
   postPatch =
@@ -100,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
     ]
     ++ lib.optionals ibusSupport [
-      fcitx5
       ibus
     ]
     ++ lib.optional waylandSupport zenity;
@@ -228,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ getchoo ];
+    teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sdl3" ];
   };

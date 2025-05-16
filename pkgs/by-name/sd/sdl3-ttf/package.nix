@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   testers,
   validatePkgConfig,
@@ -12,6 +11,7 @@
   harfbuzz,
   glib,
   ninja,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [
     sdl3
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       charain
       Emin017
     ];
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl3-ttf" ];
     platforms = lib.platforms.all;
   };
