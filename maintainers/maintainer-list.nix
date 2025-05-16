@@ -26030,6 +26030,12 @@
     githubId = 45292658;
     name = "Julius Schmitt";
   };
+  voidnoi = {
+    email = "voidnoi@proton.me";
+    github = "VoidNoi";
+    githubId = 83523507;
+    name = "voidnoi";
+  };
   vojta001 = {
     email = "vojtech.kane@gmail.com";
     github = "vojta001";
