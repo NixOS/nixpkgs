@@ -6256,7 +6256,9 @@ self: super: with self; {
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
-  hdf5plugin = callPackage ../development/python-modules/hdf5plugin { };
+  hdf5plugin = callPackage ../development/python-modules/hdf5plugin {
+    inherit (pkgs) zstd lz4;
+  };
 
   hdfs = callPackage ../development/python-modules/hdfs { };
 
