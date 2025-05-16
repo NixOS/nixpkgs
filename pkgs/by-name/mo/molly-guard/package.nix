@@ -7,26 +7,22 @@
   systemd,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "molly-guard";
-  version = "0.8.5";
+  version = "0.7.2";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/molly-guard_${finalAttrs.version}_all.deb";
-    hash = "sha256-9CQNU+5OPmCPTN3rotyJPLcvI8eo5WJQqx0OaI7Wox4=";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/molly-guard_${version}_all.deb";
+    sha256 = "1k6b1hn8lc4rj9n036imsl7s9lqj6ny3acdhnbnamsdkkndmxrw7";
   };
 
   nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
-    runHook preInstall
-
-    sed -i "s|/lib/molly-guard|${systemd}/sbin|g" usr/lib/molly-guard/molly-guard
-    sed -i "s|run-parts|${busybox}/bin/run-parts|g" usr/lib/molly-guard/molly-guard
-    sed -i "s|/etc/molly-guard/|$out/etc/molly-guard/|g" usr/lib/molly-guard/molly-guard
-    cp -r usr $out
-
-    runHook postInstall
+    sed -i "s|/lib/molly-guard|${systemd}/sbin|g" lib/molly-guard/molly-guard
+    sed -i "s|run-parts|${busybox}/bin/run-parts|g" lib/molly-guard/molly-guard
+    sed -i "s|/etc/molly-guard/|$out/etc/molly-guard/|g" lib/molly-guard/molly-guard
+    cp -r ./ $out/
   '';
 
   postFixup = ''
@@ -35,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     done;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Attempts to prevent you from accidentally shutting down or rebooting machines";
     homepage = "https://salsa.debian.org/debian/molly-guard";
-    license = lib.licenses.artistic2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ DerTim1 ];
+    license = licenses.artistic2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ DerTim1 ];
     priority = -10;
   };
-})
+}
