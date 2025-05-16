@@ -4811,6 +4811,12 @@
     name = "Coca";
     keys = [ { fingerprint = "99CB 86FF 62BB 7DA4 8903  B16D 0328 2DF8 8179 AB19"; } ];
   };
+  cococolanosugar = {
+    name = "George Xu";
+    github = "cococolanosugar";
+    githubId = 1736138;
+    email = "cococolanosugar@gmail.com";
+  };
   coconnor = {
     email = "coreyoconnor@gmail.com";
     github = "coreyoconnor";
@@ -7292,6 +7298,13 @@
     githubId = 428026;
     name = "embr";
   };
+  emilia = {
+    email = "nix@emilia.codes";
+    github = "emiliaaah";
+    githubId = 55017867;
+    name = "Emilia";
+    keys = [ { fingerprint = "F772 3569 4B43 B599 73C2  A931 1EFB E941 B89B B810"; } ];
+  };
   emilioziniades = {
     email = "emilioziniades@protonmail.com";
     github = "emilioziniades";
@@ -9181,6 +9194,12 @@
     github = "goodrone";
     githubId = 1621335;
     name = "Andrew Trachenko";
+  };
+  goodylove = {
+    github = "goodylove";
+    email = "goodyc474@gmail.com";
+    githubId = 104577296;
+    name = "Nwachukwu Goodness";
   };
   gordon-bp = {
     email = "gordy@hanakano.com";
@@ -17752,6 +17771,12 @@
     github = "nokazn";
     githubId = 41154684;
     name = "nokazn";
+  };
+  nomaterials = {
+    email = "nomaterials@gmail.com";
+    github = "no-materials";
+    githubId = 16938952;
+    name = "nomaterials";
   };
   nomeata = {
     email = "mail@joachim-breitner.de";
@@ -27289,12 +27314,6 @@
     github = "zaldnoay";
     githubId = 5986078;
     name = "Zunway Liang";
-  };
-  zanculmarktum = {
-    name = "Azure Zanculmarktum";
-    email = "zanculmarktum@gmail.com";
-    github = "zanculmarktum";
-    githubId = 16958511;
   };
   zane = {
     name = "Zane van Iperen";

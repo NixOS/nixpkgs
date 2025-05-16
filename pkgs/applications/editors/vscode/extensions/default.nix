@@ -27,8 +27,8 @@ let
         mktplcRef = {
           name = "language-x86-64-assembly";
           publisher = "13xforever";
-          version = "3.1.4";
-          hash = "sha256-FJRDm1H3GLBfSKBSFgVspCjByy9m+j9OStlU+/pMfs8=";
+          version = "3.1.5";
+          hash = "sha256-WIhmAZLR2WOSqQF3ozJ/Vr3Rp6HdSK7L23T3h4AVaGM=";
         };
         meta = {
           description = "Cutting edge x86 and x86_64 assembly syntax highlighting";
@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.33.1";
-          hash = "sha256-iq0UpVaZMOzh4NIRPLk49ciFuO4A6PDSEMe1KKhfSxA=";
+          version = "4.33.2";
+          hash = "sha256-agCxi2UhJitdQmHIf6rK7WexkfljUQdqK5rLqzV4J6o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
@@ -4027,8 +4027,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.41.2025031208";
-          hash = "sha256-0VWLkztB7anIs19QN1yPQvVjNim+DICv43IOMwEaM+E=";
+          version = "1.42.0";
+          hash = "sha256-m6RJm8eleMjDNy5ixfXWtOcPmsjNynCUNuF9lsCB8ho=";
         };
         buildInputs = [ jdk ];
         meta = {
