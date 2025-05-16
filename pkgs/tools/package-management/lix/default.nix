@@ -13,6 +13,7 @@
   clangStdenv,
   nix-direnv,
   nix-fast-build,
+  colmena,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -91,6 +92,11 @@ let
         };
 
         nix-fast-build = nix-fast-build.override {
+          inherit (self) nix-eval-jobs;
+        };
+
+        colmena = colmena.override {
+          nix = self.lix;
           inherit (self) nix-eval-jobs;
         };
       }
