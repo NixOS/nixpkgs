@@ -11,7 +11,7 @@ buildDotnetModule rec {
 
   src = fetchFromGitHub {
     owner = "CaptainSwag101";
-    repo = pname;
+    repo = "PS2PatchElf";
     tag = "v${version}";
     hash = "sha256-iQL3tT71UOEFIYBdf9BNLUM4++Fm9qEhr77NkMCZdrU=";
   };
