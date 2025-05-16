@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "bamthomas";
+    owner = "iroco-co";
     repo = "aioimaplib";
     tag = version;
     hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
@@ -44,10 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioimaplib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python asyncio IMAP4rev1 client library";
-    homepage = "https://github.com/bamthomas/aioimaplib";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    homepage = "https://github.com/iroco-co/aioimaplib";
+    changelog = "https://github.com/iroco-co/aioimaplib/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }
