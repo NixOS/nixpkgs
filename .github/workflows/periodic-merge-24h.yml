@@ -31,7 +31,7 @@ jobs:
             into: staging-next-24.11
           - from: staging-next-24.11
             into: staging-24.11
-          - from: master
+          - from: release-25.05
             into: staging-next-25.05
           - from: staging-next-25.05
             into: staging-25.05
