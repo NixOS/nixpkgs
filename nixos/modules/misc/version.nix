@@ -58,6 +58,7 @@ let
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
       DEFAULT_HOSTNAME = config.system.nixos.distroId;
+      SUPPORT_END = "2025-12-31";
     }
     // cfg.extraOSReleaseArgs;
 
