@@ -886,7 +886,7 @@ It works by utilizing Deno's cache functionality -- creating a reproducible cach
 
 #### buildDenoDeps {#javascript-buildDenoPackage-buildDenoDeps}
 
-For every `buildDenoPackage`, first, a [fixed output derivation](https://nix.dev/manual/nix/2.18/language/advanced-attributes.html?highlight=fixed%20output#adv-attr-outputHash) is
+For every `buildDenoPackage`, first, a [fixed output derivation](https://nix.dev/manual/nix/2.18/language/advanced-attributes.html#adv-attr-outputHash) is
 created with all the dependencies mentioned in the `deno.lock`.
 This works as follows:
 1. They are installed using `deno install`.
