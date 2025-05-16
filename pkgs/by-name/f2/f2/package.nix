@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "f2";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "ayoisaiah";
     repo = "f2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hl4giLTQtqJiPseiTzWPtksEYlyQpE1UOC7JMUF9v4Y=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/ayoisaiah/f2/v2/app.VersionString=${version}"
+    "-X=github.com/ayoisaiah/f2/v2/app.VersionString=${finalAttrs.version}"
   ];
 
   # has no tests
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "f2";
   };
-}
+})
