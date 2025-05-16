@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
 }:
@@ -11,14 +11,16 @@ buildPythonPackage rec {
   version = "8.21.0";
   pyproject = true;
 
+  src = fetchFromGitHub {
+    owner = "eerimoq";
+    repo = "bitstruct";
+    tag = version;
+    hash = "sha256-r2FPfSoW1Za7kglwpPXnWvWwzhAB8fQXiLPmbsi/8Ps=";
+  };
+
   build-system = [
     setuptools
   ];
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/wvklopFyvhojgdfVcyno/6SErBpumflsnsJJqEZSKw=";
-  };
 
   pythonImportsCheck = [ "bitstruct" ];
 
