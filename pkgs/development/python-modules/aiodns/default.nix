@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiodns";
-  version = "3.2.0";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "saghul";
     repo = "aiodns";
     tag = "v${version}";
-    hash = "sha256-aXae9/x0HVp4KqydCf5/+p5PlSKUQ5cE3iVeD08rtf0=";
+    hash = "sha256-y3QuMj2y/V6orM+1+cbUCgj0UL8sXQVzLLYXLnBdlio=";
   };
 
   build-system = [ setuptools ];
