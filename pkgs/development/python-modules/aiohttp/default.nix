@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.11.15";
+  version = "3.11.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-cmPvhSnkocq87lJUtdQSs9QuJlgZB8p5m1pZs2bplh4=";
+    hash = "sha256-+vnrYdUz1Stti9XE99InAouKN5kfTSaOuEG9Anxb3gs=";
   };
 
   patches = [
@@ -115,6 +115,8 @@ buildPythonPackage rec {
       "test_requote_redirect_url_default"
       # don't run benchmarks
       "test_import_time"
+      # racy
+      "test_uvloop_secure_https_proxy"
     ]
     # these tests fail with python310 but succeeds with 11+
     ++ lib.optionals isPy310 [
