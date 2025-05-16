@@ -1,0 +1,51 @@
+From e881a383b38d4d80ee28c17a14b5de58889245de Mon Sep 17 00:00:00 2001
+From: Alexandre Iooss <erdnaxe@crans.org>
+Date: Tue, 5 Nov 2024 16:30:33 +0100
+Subject: [PATCH] Use temporary directory for esbuild
+
+---
+ src/node/hooks/express/specialpages.ts | 11 +++++------
+
+diff --git a/src/node/hooks/express/specialpages.ts b/src/node/hooks/express/specialpages.ts
+index 2e26eaa0cee..31d5138e67c 100644
+--- a/src/node/hooks/express/specialpages.ts
++++ b/src/node/hooks/express/specialpages.ts
+@@ -3,6 +3,7 @@
+ import path from 'node:path';
+ const eejs = require('../../eejs')
+ import fs from 'node:fs';
++import os from 'node:os';
+ const fsp = fs.promises;
+ const toolbar = require('../../utils/toolbar');
+ const hooks = require('../../../static/js/pluginfw/hooks');
+@@ -89,7 +90,7 @@ const convertTypescript = (content: string) => {
+   const outputRaw = buildSync({
+     stdin: {
+       contents: content,
+-      resolveDir: path.join(settings.root, 'var','js'),
++      resolveDir: settings.root,
+       loader: 'js'
+     },
+     alias:{
+@@ -222,7 +223,7 @@ const convertTypescriptWatched = (content: string, cb: (output:string, hash: str
+   build({
+     stdin: {
+       contents: content,
+-      resolveDir: path.join(settings.root, 'var','js'),
++      resolveDir: settings.root,
+       loader: 'js'
+     },
+     alias:{
+@@ -276,10 +277,8 @@ exports.expressCreateServer = async (hookName: string, args: ArgsExpressType, cb
+       settings,
+     })
+ 
+-
+-
+-  const outdir = path.join(settings.root, 'var','js')
+-  // Create the outdir if it doesn't exist
++  // Create a temporary directory to store runtime-built JS files
++  const outdir = path.join(os.tmpdir(), 'js');
+   if (!fs.existsSync(outdir)) {
+     fs.mkdirSync(outdir);
+   }
