@@ -18,14 +18,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "annextimelog";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "annextimelog";
     rev = "v${version}";
-    hash = "sha256-+3PkG33qKckagSVvVdqkypulO7uu5AMOv8fQiP8IUbs=";
+    hash = "sha256-RfqBtbfArFva3TVJGF4STx0QTio62qxXaM23lsLYLUg=";
   };
 
   pythonRelaxDeps = [ "rich" ];
@@ -33,11 +33,14 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs =
     with python3.pkgs;
     [
+      unittestCheckHook
       setuptools
       wheel
       poetry-core
     ]
     ++ [ tzdata ];
+
+  unittestFlags = [ "-vb" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     rich
