@@ -13907,6 +13907,8 @@ self: super: with self; {
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
+  pytest-timeouts = callPackage ../development/python-modules/pytest-timeouts { };
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   pytest-tornasync = callPackage ../development/python-modules/pytest-tornasync { };
