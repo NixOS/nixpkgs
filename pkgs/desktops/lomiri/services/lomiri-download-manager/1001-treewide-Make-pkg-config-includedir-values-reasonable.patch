@@ -1,0 +1,67 @@
+From 11f51ba65e5155b76e5fd12cb310a35123be772b Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 16 May 2025 22:17:51 +0200
+Subject: [PATCH] treewide: Make pkg-config includedir values reasonable
+
+---
+ src/common/public/ldm-common.pc.in                        | 2 +-
+ src/downloads/client/lomiri-download-manager-client.pc.in | 2 +-
+ src/downloads/common/lomiri-download-manager-common.pc.in | 2 +-
+ src/uploads/common/lomiri-upload-manager-common.pc.in     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/common/public/ldm-common.pc.in b/src/common/public/ldm-common.pc.in
+index 370066ce..14d7b07a 100644
+--- a/src/common/public/ldm-common.pc.in
++++ b/src/common/public/ldm-common.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+-includedir=@QT_INSTALL_FULL_INCLUDEDIR@/lomiri/transfers
++includedir=@QT_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: ldm-common
+ Description: Common Lomiri Upload Download Manager lib
+diff --git a/src/downloads/client/lomiri-download-manager-client.pc.in b/src/downloads/client/lomiri-download-manager-client.pc.in
+index 63fcabd7..1f060765 100644
+--- a/src/downloads/client/lomiri-download-manager-client.pc.in
++++ b/src/downloads/client/lomiri-download-manager-client.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+-includedir=@QT_INSTALL_FULL_INCLUDEDIR@/lomiri/download_manager
++includedir=@QT_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: lomiri-download-manager-client
+ Description: Client Lomiri Download Manager lib
+diff --git a/src/downloads/common/lomiri-download-manager-common.pc.in b/src/downloads/common/lomiri-download-manager-common.pc.in
+index bb7adaa7..a1d72703 100644
+--- a/src/downloads/common/lomiri-download-manager-common.pc.in
++++ b/src/downloads/common/lomiri-download-manager-common.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+-includedir=@QT_INSTALL_FULL_INCLUDEDIR@/lomiri/download_manager
++includedir=@QT_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: lomiri-download-manager-common
+ Description: Common Lomiri Download Manager lib
+diff --git a/src/uploads/common/lomiri-upload-manager-common.pc.in b/src/uploads/common/lomiri-upload-manager-common.pc.in
+index c86015d4..8f396718 100644
+--- a/src/uploads/common/lomiri-upload-manager-common.pc.in
++++ b/src/uploads/common/lomiri-upload-manager-common.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+-includedir=@QT_INSTALL_FULL_INCLUDEDIR@/lomiri/upload_manager
++includedir=@QT_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: lomiri-upload-manager-common
+ Description: Common Lomiri Upload Manager lib
+-- 
+2.47.2
+
