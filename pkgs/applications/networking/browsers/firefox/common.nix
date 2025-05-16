@@ -65,7 +65,7 @@ in
   gnum4,
   gtk3,
   icu73,
-  icu76,
+  icu76, # if you fiddle with the icu parameters, please check Thunderbird's overrides
   libGL,
   libGLU,
   libevent,
