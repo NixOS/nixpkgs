@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      bengsparks
       GaetanLepage
       prince213
     ];
