@@ -19,15 +19,15 @@
   check,
   buildPackages,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "kmscon";
-  version = "9.0.0-unstable-2025-01-09";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "Aetf";
     repo = "kmscon";
-    rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
-    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
+    rev = "v${version}";
+    sha256 = "sha256-y9ccvM2QtkACdH4pDdC7wnURl5rvvoKqu+bud0kJdZA=";
   };
 
   strictDeps = true;

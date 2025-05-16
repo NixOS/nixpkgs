@@ -6,16 +6,15 @@
   pkg-config,
   cmake,
 }:
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libtsm";
-  version = "4.0.2-unstable-2023-12-24";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "Aetf";
     repo = "libtsm";
-    rev = "69922bde02c7af83b4d48a414cc6036af7388626";
-    sha256 = "sha256-Rug3OWSbbiIivItULPNNptClIZ/PrXdQeUypAAxrUY8=";
+    rev = "v${version}";
+    sha256 = "sha256-C/IfFSBrQc6QdUARPAqbtcI3y3Uy0XurUaqLTY0MfuY=";
   };
 
   buildInputs = [ libxkbcommon ];
