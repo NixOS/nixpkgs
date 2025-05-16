@@ -69,37 +69,45 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
-  cargoPatches = [ ./remove-duplicate-versions-of-sys-metrics.patch ];
+  cargoPatches = [
+    ./remove-duplicate-versions-of-sys-metrics.patch
+    ./remove-code-signing-darwin.patch
+  ];
   cargoHash = app-type-either "sha256-XfN+/oC3lttDquLfoyJWBaFfdjW/wyODCIiZZksypLM=" "sha256-4vBHxuKg4P9H0FZYYNUT+AVj4Qvz99q7Bhd7x47UC2w=";
 
-  nativeBuildInputs = [
-    proper-cargo-tauri.hook
+  nativeBuildInputs =
+    [
+      proper-cargo-tauri.hook
 
-    # Setup pnpm
-    nodejs
-    pnpm_9.configHook
+      # Setup pnpm
+      nodejs
+      pnpm_9.configHook
 
-    # Make sure we can find our libraries
-    perl
-    pkg-config
-    protobuf
-    wrapGAppsHook4
-  ];
+      # Make sure we can find our libraries
+      perl
+      pkg-config
+      protobuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wrapGAppsHook4
+    ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-    ]
-    ++ lib.optionals (app-type == "main") [
-      webkitgtk_4_1
-      libsoup_3
-    ]
-    ++ lib.optionals (app-type == "legacy") [
-      webkitgtk_4_0
-      libsoup_2_4
-    ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
+      [
+        glib-networking
+        libayatana-appindicator
+      ]
+      ++ lib.optionals (app-type == "main") [
+        webkitgtk_4_1
+        libsoup_3
+      ]
+      ++ lib.optionals (app-type == "legacy") [
+        webkitgtk_4_0
+        libsoup_2_4
+      ]
+    );
 
   passthru =
     # Don't set an update script for the legacy version

@@ -869,6 +869,7 @@ with lib.maintainers;
       qyriad
       _9999years
       lf-
+      alois31
     ];
     scope = "Maintain the Lix package manager inside of Nixpkgs.";
     shortName = "Lix ecosystem";
@@ -1119,9 +1120,17 @@ with lib.maintainers;
   };
 
   sdl = {
-    members = [ ];
-    scope = "Maintain SDL libraries.";
+    members = [
+      evythedemon
+      grimmauld
+      jansol
+      marcin-serwin
+      pbsds
+    ];
+    githubTeams = [ "SDL" ];
+    scope = "Maintain core SDL libraries.";
     shortName = "SDL";
+    enableFeatureFreezePing = true;
   };
 
   sphinx = {

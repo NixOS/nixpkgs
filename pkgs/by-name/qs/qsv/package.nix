@@ -72,7 +72,6 @@ rustPlatform.buildRustPackage {
     ];
     maintainers = with lib.maintainers; [
       detroyejr
-      uncenter
     ];
   };
 }
