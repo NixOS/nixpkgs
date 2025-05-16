@@ -984,7 +984,12 @@ or the `name` attribute of the derivation.
 Related options:
 
 * `hostPlatform`: The [host platform](#ssec-cross-platform-parameters) the binary is built for. Defaults to `builtins.currentSystem`.
-Supported are `"x86_64-darwin", "aarch64-darwin", "x86_64-linux", "aarch64-linux"`.
+
+  Supported values:
+  - `"x86_64-darwin"`
+  - `"aarch64-darwin"`
+  - `"x86_64-linux"`
+  - `"aarch64-linux"`
 * `denoCompileFlags`: Flags passed to `deno compile`.
 * `binaryEntrypointPath`: If not `null`, create a binary using the specified path as the entrypoint,
 copy it to `$out/bin` in `installPhase`. It's prefixed by `denoWorkspacePath`, if using workspaces.
