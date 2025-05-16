@@ -55,6 +55,8 @@
 
       with subtest("lomiri camera launches"):
           machine.succeed("lomiri-camera-app >&2 &")
+          # emitted twice
+          machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
           machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
           machine.sleep(10)
           machine.send_key("alt-f10")
@@ -73,7 +75,9 @@
 
       with subtest("lomiri camera uses camera"):
           machine.succeed("lomiri-camera-app >&2 &")
-          machine.wait_for_console_text("updateViewfinderResolution: For target resolution")
+          # emitted twice
+          machine.wait_for_console_text("No flash control support")
+          machine.wait_for_console_text("No flash control support")
           machine.sleep(10)
           machine.send_key("alt-f10")
           machine.sleep(5)
@@ -95,9 +99,16 @@
       machine.send_key("ctrl-alt-left")
       machine.succeed("pkill -f lomiri-camera-app")
 
+      # Sometimes no camera feed, GStreamer errors out with: CameraBin error: "Failed to allocate required memory."
+      # Adding more VM memory didn't affect this. Maybe flaky in general?
+      # Current assumption: Camera access gets requested in a weird/still-in-use state, so sleep abit
+      machine.sleep(10)
+
       with subtest("lomiri barcode scanner uses camera"):
           machine.succeed("lomiri-camera-app --mode=barcode-reader >&2 &")
-          machine.wait_for_console_text("updateViewfinderResolution: For target resolution")
+          # emitted twice
+          machine.wait_for_console_text("No flash control support")
+          machine.wait_for_console_text("No flash control support")
           machine.sleep(10)
           machine.send_key("alt-f10")
           machine.sleep(5)
@@ -143,9 +154,16 @@
       machine.send_key("ctrl-alt-left")
       machine.succeed("pkill -f lomiri-camera-app")
 
+      # Sometimes no camera feed, GStreamer errors out with: CameraBin error: "Failed to allocate required memory."
+      # Adding more VM memory didn't affect this. Maybe flaky in general?
+      # Current assumption: Camera access gets requested in a weird/still-in-use state, so sleep abit
+      machine.sleep(10)
+
       with subtest("lomiri camera localisation works"):
           machine.succeed("env LANG=de_DE.UTF-8 lomiri-camera-app >&2 &")
-          machine.wait_for_console_text("updateViewfinderResolution: For target resolution")
+          # emitted twice
+          machine.wait_for_console_text("No flash control support")
+          machine.wait_for_console_text("No flash control support")
           machine.sleep(10)
           machine.send_key("alt-f10")
           machine.sleep(5)
