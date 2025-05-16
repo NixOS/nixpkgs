@@ -40,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     "SPIFFS_VERSION=unknown"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
   installPhase = ''
     install -Dm755 -t $out/bin mkspiffs
   '';

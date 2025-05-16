@@ -1994,6 +1994,9 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
+  "sec-release-25.05-wiki": [
+    "release-notes.html#sec-release-25.05-wiki"
+  ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],

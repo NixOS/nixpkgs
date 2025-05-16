@@ -20,9 +20,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-tzlJJsP3uDA57LuOtfbYjd5yu2fkEunTqDM90LxVgnI=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.2.1/calendar-v5.2.1.tar.gz",
-    "version": "5.2.1",
+    "hash": "sha256-z/BMKay9Fj+aIypPA9cbEJ6dcB03oGPhy2TSGHJeRz0=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.2.4/calendar-v5.2.4.tar.gz",
+    "version": "5.2.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-1BEK5T+6w8yLSXyj/Me8QMls/LSWaor5TpvC2HK3/4U=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v2.16.1/collectives-2.16.1.tar.gz",
-    "version": "2.16.1",
+    "hash": "sha256-U6EQumuN7b309JtaWwdbluQcK7Gpt5O6q9fJu6qyVhE=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v2.17.0/collectives-2.17.0.tar.gz",
+    "version": "2.17.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-3G1di/PnOAIML2vwKglmuMApvn8+nXYjdqnySSSoLDI=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.0.6/contacts-v7.0.6.tar.gz",
-    "version": "7.0.6",
+    "hash": "sha256-OYObGIEAViBMWesL/kNv4FHO7SSa73rdVjklwuyPSrY=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.1.0/contacts-v7.1.0.tar.gz",
+    "version": "7.1.0",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -70,9 +70,9 @@
     ]
   },
   "deck": {
-    "hash": "sha256-Rb8VSCy/jL9U02mh2FBBK45nahMU6A90BFtKlLs4nNI=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.14.4/deck-v1.14.4.tar.gz",
-    "version": "1.14.4",
+    "hash": "sha256-A2n68T7x4la4VrMwsBMIWk6LWM4nge9FtQhl5eLp8jQ=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.14.5/deck-v1.14.5.tar.gz",
+    "version": "1.14.5",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "files_retention": {
-    "hash": "sha256-krJOb925AjmnwmkFYg00eC4KmICr4Tf3jUANYWTRJdA=",
-    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v1.19.0/files_retention-v1.19.0.tar.gz",
-    "version": "1.19.0",
+    "hash": "sha256-1Ga6l+k+QWyFxcR65Zf9aCXgIe6uSAwofTcsCvFN530=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v1.19.1/files_retention-v1.19.1.tar.gz",
+    "version": "1.19.1",
     "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
     "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
@@ -190,18 +190,18 @@
     ]
   },
   "mail": {
-    "hash": "sha256-AV0vrDU4zeg7AQQpJkj5mHQatxCa2RMON5tY4Q/OjyM=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.0.0/mail-v5.0.0.tar.gz",
-    "version": "5.0.0",
-    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
+    "hash": "sha256-uDig7ySWlx7WqYzjB9H45p3a9EfUFxY3Es0dso6uQJs=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.0.7/mail-v5.0.7.tar.gz",
+    "version": "5.0.7",
+    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
       "agpl"
     ]
   },
   "maps": {
-    "hash": "sha256-/uoM29jXqeOvOJBu3xhv+KgqPE7T03pV269fdr2Er+0=",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.6.0-2-nightly/maps-1.6.0-2-nightly.tar.gz",
+    "hash": "sha256-E0S/CwXyye19lcuiONEQCyHJqlL0ZG1A9Q7oOTEZH1g=",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.6.0-3-nightly/maps-1.6.0-3-nightly.tar.gz",
     "version": "1.6.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -330,9 +330,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-4J4tEwwVjSUgJa6A1Luz8u0x8wjlkA6nukaqtt1VOZc=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.5.6/richdocuments-v8.5.6.tar.gz",
-    "version": "8.5.6",
+    "hash": "sha256-vvZZE76NLNgrqwufVV/FVp09W8udJvY6iWzxxMuLCU0=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.5.7/richdocuments-v8.5.7.tar.gz",
+    "version": "8.5.7",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -420,9 +420,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-qEsUJG63j+VRZc+tqeX4iTEs9/GIVsTsyeFEOwSBYCg=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v7.1.0/user_oidc-v7.1.0.tar.gz",
-    "version": "7.1.0",
+    "hash": "sha256-nXDWfRP9n9eH+JGg1a++kD5uLMsXh5BHAaTAOgLI9W4=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v7.2.0/user_oidc-v7.2.0.tar.gz",
+    "version": "7.2.0",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
@@ -430,9 +430,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-i9V8fmmmed0rVKRNtYJysqJReuGPjE54GP5K5wN0+Ok=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.5.0/user_saml-v6.5.0.tar.gz",
-    "version": "6.5.0",
+    "hash": "sha256-MS1+fiDTufQXtKCG/45B2hQEfAVbsZb+TZb74f4EvAE=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.6.0/user_saml-v6.6.0.tar.gz",
+    "version": "6.6.0",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [

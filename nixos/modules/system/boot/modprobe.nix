@@ -7,6 +7,16 @@
 
 with lib;
 
+let
+
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
+
+in
+
 {
 
   ###### interface
@@ -25,7 +35,7 @@ with lib;
       };
 
     boot.blacklistedKernelModules = mkOption {
-      type = types.attrNamesToTrue;
+      type = attrNamesToTrue;
       default = { };
       example = [
         "cirrusfb"

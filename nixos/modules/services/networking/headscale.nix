@@ -633,6 +633,7 @@ in
         in
         {
           Restart = "always";
+          RestartSec = "5s";
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
