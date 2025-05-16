@@ -3,23 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.20.0";
+  version = "8.21.0";
   pyproject = true;
 
   build-system = [
     setuptools
   ];
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9rFqkwlzE/KmwUZkDJPl+YijnDM2T4wgpChqwcXtXa4=";
+    hash = "sha256-/wvklopFyvhojgdfVcyno/6SErBpumflsnsJJqEZSKw=";
   };
 
   pythonImportsCheck = [ "bitstruct" ];
