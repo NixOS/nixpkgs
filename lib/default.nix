@@ -279,6 +279,7 @@ let
         naturalSort
         compareLists
         take
+        takeEnd
         drop
         dropEnd
         sublist
@@ -347,6 +348,7 @@ let
         toSentenceCase
         addContextFrom
         splitString
+        splitStringBy
         removePrefix
         removeSuffix
         versionOlder
@@ -446,6 +448,7 @@ let
         fixupOptionType
         mkIf
         mkAssert
+        mkDefinition
         mkMerge
         mkOverride
         mkOptionDefault

@@ -56,9 +56,11 @@
   hypothesis,
   altair,
   boto3,
+  docker,
   gradio-pdf,
   ffmpeg,
   ipython,
+  mcp,
   pytest-asyncio,
   respx,
   scikit-image,
@@ -71,19 +73,19 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.20.0";
+  version = "5.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-gAAyhsnc1LUcAvlUC5hftsWN1kSiRWqcQ4iKGpSIL+U=";
+    hash = "sha256-zNqWJHnjWezueev5J2Ew8FsbHXUBDkfjCOmWhJJng8k=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-y0Bdupn19gEtwatc6Q3KD7aekXDk0xrq04LaG7gxMFI=";
+    hash = "sha256-h3ulPik0Uf8X687Se3J7h3+8jYzwXtbO6obsO27zyfA=";
   };
 
   pythonRelaxDeps = [
@@ -147,17 +149,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs =
     [
-      pytestCheckHook
-      hypothesis
       altair
       boto3
-      gradio-pdf
+      docker
       ffmpeg
+      gradio-pdf
+      hypothesis
       ipython
+      mcp
       pytest-asyncio
+      pytestCheckHook
       respx
-      scikit-image
       # shap is needed as well, but breaks too often
+      scikit-image
       torch
       tqdm
       transformers
@@ -301,6 +305,7 @@ buildPythonPackage rec {
       "test_updates_stored_up_to_capacity"
       "test_varying_output_forms_with_generators"
     ];
+
   disabledTestPaths = [
     # 100% touches network
     "test/test_networking.py"
@@ -310,7 +315,13 @@ buildPythonPackage rec {
 
     # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
+
+    # No module named build.__main__; 'build' is a package and cannot be directly executed
+    "test/test_docker/test_reverse_proxy/test_reverse_proxy.py"
+    "test/test_docker/test_reverse_proxy_fastapi_mount/test_reverse_proxy_fastapi_mount.py"
+    "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
+
   pytestFlagsArray = [
     "-x" # abort on first failure
     "-m 'not flaky'"

@@ -1,0 +1,27 @@
+libhsa-amd-aqlprofile64 library is unfree
+Bug: https://github.com/ROCm/ROCm/issues/1781
+--- a/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
++++ b/runtime/hsa-runtime/core/runtime/amd_gpu_agent.cpp
+@@ -1333,11 +1333,6 @@ hsa_status_t GpuAgent::GetInfo(hsa_agent_info_t attribute, void* value) const {
+         setFlag(HSA_EXTENSION_AMD_PC_SAMPLING);
+       }
+ 
+-      if (os::LibHandle lib = os::LoadLib(kAqlProfileLib)) {
+-        os::CloseLib(lib);
+-        setFlag(HSA_EXTENSION_AMD_AQLPROFILE);
+-      }
+-
+       setFlag(HSA_EXTENSION_AMD_PROFILER);
+ 
+       break;
+--- a/runtime/hsa-runtime/core/runtime/hsa.cpp
++++ b/runtime/hsa-runtime/core/runtime/hsa.cpp
+@@ -490,7 +490,7 @@ hsa_status_t hsa_system_get_major_extension_table(uint16_t extension, uint16_t v
+     return HSA_STATUS_SUCCESS;
+   }
+ 
+-  if (extension == HSA_EXTENSION_AMD_AQLPROFILE) {
++  if (0) {
+     if (version_major != hsa_ven_amd_aqlprofile_VERSION_MAJOR) {
+       debug_print("aqlprofile API incompatible ver %d, current ver %d\n",
+         version_major, hsa_ven_amd_aqlprofile_VERSION_MAJOR);

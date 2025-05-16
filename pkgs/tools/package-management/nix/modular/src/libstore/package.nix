@@ -4,7 +4,6 @@
   mkMesonLibrary,
 
   unixtools,
-  darwin,
 
   nix-util,
   boost,
@@ -23,31 +22,11 @@
   embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonLibrary (finalAttrs: {
   pname = "nix-store";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./meson.build
-    ./meson.options
-    ./linux/meson.build
-    ./unix/meson.build
-    ./windows/meson.build
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-    (fileset.fileFilter (file: file.hasExt "sb") ./.)
-    (fileset.fileFilter (file: file.hasExt "md") ./.)
-    (fileset.fileFilter (file: file.hasExt "sql") ./.)
-  ];
 
   nativeBuildInputs = lib.optional embeddedSandboxShell unixtools.hexdump;
 
@@ -59,7 +38,6 @@ mkMesonLibrary (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
     # There have been issues building these dependencies
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.sandbox
     ++ lib.optional (
       stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
     ) aws-sdk-cpp;

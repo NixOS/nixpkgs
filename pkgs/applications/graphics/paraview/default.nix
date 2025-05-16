@@ -6,12 +6,7 @@
   boost,
   cmake,
   ffmpeg,
-  wrapQtAppsHook,
-  qtbase,
-  qtx11extras,
-  qttools,
-  qtxmlpatterns,
-  qtsvg,
+  libsForQt5,
   gdal,
   gfortran,
   libXt,
@@ -62,7 +57,7 @@ stdenv.mkDerivation rec {
 
   # Find the Qt platform plugin "minimal"
   preConfigure = ''
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [
@@ -88,7 +83,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     ninja
     gfortran
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -100,11 +95,11 @@ stdenv.mkDerivation rec {
     boost
     ffmpeg
     gdal
-    qtbase
-    qtx11extras
-    qttools
-    qtxmlpatterns
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+    libsForQt5.qttools
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qtsvg
   ];
 
   postInstall =

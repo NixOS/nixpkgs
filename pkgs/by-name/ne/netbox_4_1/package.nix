@@ -15,7 +15,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.1.7";
+  version = "4.1.11";
 
   format = "other";
 
@@ -23,7 +23,7 @@ py.pkgs.buildPythonApplication rec {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-0AyIXSiNsAHELM8Ry/bcm7sd7K+ApeoEguiEm8ecAU0=";
+    hash = "sha256-Nd8HWXn7v0llmg934KGtS5+Tj2RvBhJDuXEvB2Pg3nQ=";
   };
 
   patches = [
@@ -127,6 +127,9 @@ py.pkgs.buildPythonApplication rec {
     description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
     mainProgram = "netbox";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "Netbox version ${version} is EOL; please upgrade by following the current release notes instructions."
+    ];
     maintainers = with lib.maintainers; [
       minijackson
       raitobezarius

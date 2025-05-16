@@ -367,17 +367,14 @@ rec {
         '';
 
       checkPhase =
-        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
-        # but we still want to use writeShellApplication on those platforms
         let
-          shellcheckSupported =
-            lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler
-            && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
           excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
             "--exclude"
             (lib.concatStringsSep "," excludeShellChecks)
           ];
-          shellcheckCommand = lib.optionalString shellcheckSupported ''
+          # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+          # but we still want to use writeShellApplication on those platforms
+          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
             ${lib.getExe shellcheck-minimal} ${
@@ -1028,6 +1025,18 @@ rec {
     if patches == [ ] && prePatch == "" && postPatch == "" then
       src # nothing to do, so use original src to avoid additional drv
     else
+      let
+        keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
+        # enables tools like nix-update to determine what src attributes to replace
+        extraPassthru = lib.optionalAttrs (lib.isAttrs src) (
+          keepAttrs [
+            "rev"
+            "tag"
+            "url"
+            "outputHash"
+          ] src
+        );
+      in
       stdenvNoCC.mkDerivation (
         {
           inherit
@@ -1042,11 +1051,19 @@ rec {
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }
-        # Carry `meta` information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta) { inherit (src) meta; })
+        # Carry and merge information from the underlying `src` if present.
+        // (optionalAttrs (src ? meta || args ? meta) {
+          meta = src.meta or { } // args.meta or { };
+        })
+        // (optionalAttrs (extraPassthru != { } || src ? passthru || args ? passthru) {
+          passthru = extraPassthru // src.passthru or { } // args.passthru or { };
+        })
+        # Forward any additional arguments to the derviation
         // (removeAttrs args [
           "src"
           "name"
+          "meta"
+          "passthru"
           "patches"
           "prePatch"
           "postPatch"

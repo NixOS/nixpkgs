@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.6.0";
+  version = "65.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-4ilsaGkfkwKvbaQylvZAelapkH4PZe+/uPh4WgbInlE=";
+    hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ${python.interpreter} -m django compilemessages
+    ${python.pythonOnBuildForHost.interpreter} -m django compilemessages
   '';
 
   optional-dependencies = {

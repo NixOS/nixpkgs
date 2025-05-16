@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'CDLL("libbytesize.so.1")' "CDLL('$out/lib/libbytesize.so.1')"
 
     # Force compilation of .pyc files to make them deterministic
-    ${python3Packages.python.interpreter} -m compileall $out/${python3Packages.python.sitePackages}/bytesize
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} -m compileall $out/${python3Packages.python.sitePackages}/bytesize
   '';
 
   pythonImportsCheck = [ "bytesize" ];

@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-font-viewer";
-  version = "47.0";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/gnome-font-viewer-${version}.tar.xz";
-    hash = "sha256-uOWgQuCyQbDHyuQ/dNoNX4jmQjAXqR/rhudhfttAgO0=";
+    hash = "sha256-cyYkIxtiT/XHrAOoznG+Ejk9qlNVHRFVCyDXsKOocqc=";
   };
 
   doCheck = true;
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Program that can preview fonts and create thumbnails for fonts";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-font-viewer";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

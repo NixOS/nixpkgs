@@ -1,36 +1,65 @@
 {
+  config,
   lib,
   stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  chafa,
+  curl,
+  faad2,
   fetchFromGitHub,
   fftwFloat,
-  chafa,
   glib,
-  libopus,
-  opusfile,
-  libvorbis,
-  taglib,
-  faad2,
   libogg,
+  libopus,
+  libjack2,
+  libpulseaudio,
+  libvorbis,
+  nix-update-script,
+  opusfile,
   pkg-config,
+  taglib,
   versionCheckHook,
-  gitUpdater,
+
+  withALSA ? stdenv.hostPlatform.isLinux,
+  withJACK ? false,
+  withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
 }:
+
+let
+  uppercaseFirst =
+    x: (lib.toUpper (lib.substring 0 1 x)) + (lib.substring 1 ((lib.strings.stringLength x) - 1) x);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.0.3";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DzJ+7PanA15A9nIbFPWZ/tdxq4aDyParJORcuqHV7jc=";
+    hash = "sha256-nntbxDy1gfd4F/FvlilLeOAepqtxhnYE2XRjJSlFvgI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
+      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
+  '';
+
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+    ];
+
   buildInputs = [
     fftwFloat.dev
     chafa
+    curl.dev
     glib.dev
     libopus
     opusfile
@@ -40,6 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
   ];
 
+  runtimeDependencies =
+    lib.optionals withPulseaudio [
+      libpulseaudio
+    ]
+    ++ lib.optionals (withALSA || withJACK) [
+      alsa-lib
+    ]
+    ++ lib.optionals withJACK [
+      libjack2
+    ];
+
+  enableParallelBuilding = true;
+
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
     "PREFIX=${placeholder "out"}"
@@ -47,11 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

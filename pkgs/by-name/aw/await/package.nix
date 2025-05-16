@@ -40,11 +40,12 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
+    changelog = "https://github.com/slavaGanzin/await/releases/tag/${version}";
     description = "Small binary that runs a list of commands in parallel and awaits termination";
-    homepage = "https://await-cli.app";
+    homepage = "https://github.com/slavaGanzin/await";
     license = licenses.mit;
     maintainers = with maintainers; [ chewblacka ];
     platforms = platforms.all;

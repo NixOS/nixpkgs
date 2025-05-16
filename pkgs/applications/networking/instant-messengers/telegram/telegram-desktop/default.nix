@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  inherit (unwrapped) version meta passthru;
+  inherit (finalAttrs.unwrapped) version meta passthru;
 
   inherit unwrapped;
 

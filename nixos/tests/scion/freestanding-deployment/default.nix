@@ -23,7 +23,7 @@ import ../../make-test-python.nix (
           networkConfig.Address = "192.168.1.${toString hostId}/24";
         };
         environment.etc = {
-          "scion/topology.json".source = ./topology${toString hostId}.json;
+          "scion/topology.json".source = ./topology + "${toString hostId}.json";
           "scion/crypto/as".source = trust-root-configuration-keys + "/AS${toString hostId}";
           "scion/certs/ISD42-B1-S1.trc".source = trust-root-configuration-keys + "/ISD42-B1-S1.trc";
           "scion/keys/master0.key".text = "U${toString hostId}v4k23ZXjGDwDofg/Eevw==";

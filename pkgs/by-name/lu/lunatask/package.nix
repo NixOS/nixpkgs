@@ -6,12 +6,12 @@
 }:
 
 let
-  version = "2.0.19";
+  version = "2.0.22";
   pname = "lunatask";
 
   src = fetchurl {
     url = "https://github.com/lunatask/lunatask/releases/download/v${version}/Lunatask-${version}.AppImage";
-    hash = "sha256-JJyGpVak0bBouvFduD5mWna0QlUwQ898HGdnL7fGvPA=";
+    hash = "sha256-5V4h7x9NMZPAEinWmvhcBj8WrtKXp7naacSaMOEzwl0=";
   };
 
   appimageContents = appimageTools.extract {

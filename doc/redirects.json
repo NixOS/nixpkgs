@@ -5,8 +5,28 @@
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "cmake-ctest": [
+    "index.html#cmake-ctest"
+  ],
+  "cmake-ctest-disabled-tests": [
+    "index.html#cmake-ctest-disabled-tests"
+  ],
+  "cmake-ctest-flags": [
+    "index.html#cmake-ctest-flags"
+  ],
+  "cmake-ctest-variables": [
+    "index.html#cmake-ctest-variables"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-pkgs-replace-vars": [
+    "index.html#ex-pkgs-replace-vars",
+    "index.html#ex-pkgs-substituteAll",
+    "index.html#ex-pkgs-substitute-all-files"
+  ],
+  "ex-pkgs-replace-vars-with": [
+    "index.html#ex-pkgs-replace-vars-with"
   ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
@@ -35,6 +55,17 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nostrictaliasing": [
+    "index.html#nostrictaliasing"
+  ],
+  "pkgs-replacevars": [
+    "index.html#pkgs-replacevars",
+    "index.html#pkgs-substituteall",
+    "index.html#pkgs-substituteallfiles"
+  ],
+  "pkgs-replacevarswith": [
+    "index.html#pkgs-replacevarswith"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -49,6 +80,9 @@
   ],
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
+  ],
+  "python-tree-sitter": [
+    "index.html#python-tree-sitter"
   ],
   "sec-allow-broken": [
     "index.html#sec-allow-broken"
@@ -409,6 +443,30 @@
   ],
   "tester-testEqualArrayOrMap-return": [
     "index.html#tester-testEqualArrayOrMap-return"
+  ],
+  "typst": [
+    "index.html#typst",
+    "doc/languages-frameworks/typst.section.md#typst"
+  ],
+  "typst-custom-environment": [
+    "index.html#typst-custom-environment",
+    "doc/languages-frameworks/typst.section.md#typst-custom-environment"
+  ],
+  "typst-custom-packages": [
+    "index.html#typst-custom-packages",
+    "doc/languages-frameworks/typst.section.md#typst-custom-packages"
+  ],
+  "typst-handling-outdated-package-hashes": [
+    "index.html#typst-handling-outdated-package-hashes"
+  ],
+  "typst-package-scope-and-usage": [
+    "index.html#typst-package-scope-and-usage"
+  ],
+  "var-meta-teams": [
+    "index.html#var-meta-teams"
+  ],
+  "var-go-goSum": [
+    "index.html#var-go-goSum"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -1057,6 +1115,9 @@
   ],
   "var-meta-broken": [
     "index.html#var-meta-broken"
+  ],
+  "var-meta-knownVulnerabilities": [
+    "index.html#var-meta-knownVulnerabilities"
   ],
   "sec-meta-license": [
     "index.html#sec-meta-license"
@@ -2064,6 +2125,9 @@
   "setup-hook-automake": [
     "index.html#setup-hook-automake"
   ],
+  "setup-hook-autopatchcilhook": [
+    "index.html#setup-hook-autopatchcilhook"
+  ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
   ],
@@ -2754,6 +2818,24 @@
   "declarative-debugging": [
     "index.html#declarative-debugging"
   ],
+  "sec-language-factor": [
+    "index.html#sec-language-factor"
+  ],
+  "ssec-factor-scaffolding": [
+    "index.html#ssec-factor-scaffolding"
+  ],
+  "ssec-factor-packaging": [
+    "index.html#ssec-factor-packaging"
+  ],
+  "ssec-factor-buildFactorApplication-func": [
+    "index.html#ssec-factor-buildFactorApplication-func"
+  ],
+  "ssec-factor-dev-env": [
+    "index.html#ssec-factor-dev-env"
+  ],
+  "ssec-factor-applications": [
+    "index.html#ssec-factor-applications"
+  ],
   "sec-language-gnome": [
     "index.html#sec-language-gnome"
   ],
@@ -3166,6 +3248,12 @@
   "javascript-yarn": [
     "index.html#javascript-yarn"
   ],
+  "javascript-yarn-v1": [
+    "index.html#javascript-yarn-v1"
+  ],
+  "javascript-yarn-v3-v4": [
+    "index.html#javascript-yarn-v3-v4"
+  ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
   ],
@@ -3192,6 +3280,18 @@
   ],
   "javascript-yarn2nix-pitfalls": [
     "index.html#javascript-yarn2nix-pitfalls"
+  ],
+  "javascript-yarnBerry-missing-hashes": [
+    "index.html#javascript-yarnBerry-missing-hashes"
+  ],
+  "javascript-yarnBerryConfigHook": [
+    "index.html#javascript-yarnBerryConfigHook"
+  ],
+  "javascript-yarnBerry-patching": [
+    "index.html#javascript-yarnBerry-patching"
+  ],
+  "javascript-fetchYarnBerryDeps": [
+    "index.html#javascript-fetchYarnBerryDeps"
   ],
   "javascript-outside-nixpkgs": [
     "index.html#javascript-outside-nixpkgs"
@@ -4147,18 +4247,6 @@
   ],
   "ex-pkgs-substitute": [
     "index.html#ex-pkgs-substitute"
-  ],
-  "pkgs-substituteall": [
-    "index.html#pkgs-substituteall"
-  ],
-  "ex-pkgs-substituteAll": [
-    "index.html#ex-pkgs-substituteAll"
-  ],
-  "pkgs-substituteallfiles": [
-    "index.html#pkgs-substituteallfiles"
-  ],
-  "ex-pkgs-substitute-all-files": [
-    "index.html#ex-pkgs-substitute-all-files"
   ],
   "part-development": [
     "index.html#part-development"

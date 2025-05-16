@@ -78,7 +78,7 @@ let
     meta = with lib; {
       description = "Xfce file manager";
       mainProgram = "thunar";
-      maintainers = with maintainers; [ ] ++ teams.xfce.members;
+      teams = [ teams.xfce ];
     };
   };
 

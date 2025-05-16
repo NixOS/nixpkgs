@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace '-mtune=native' ""
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   passthru = {
     inherit blas64;
   };

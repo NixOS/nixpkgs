@@ -12,17 +12,16 @@
   ninja,
   meson-python,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
   libpng,
   libX11,
   portmidi,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  SDL2_classic,
+  SDL2_classic_image,
+  SDL2_classic_mixer,
+  SDL2_classic_ttf,
   numpy,
 
   pygame-gui,
@@ -60,8 +59,6 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
   ];
 
   postPatch =
@@ -101,11 +98,11 @@ buildPythonPackage rec {
     libjpeg
     libpng
     portmidi
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+    SDL2_classic
+    (SDL2_classic_image.override { enableSTB = false; })
+    SDL2_classic_mixer
+    SDL2_classic_ttf
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -117,7 +114,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2_classic) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
@@ -128,6 +125,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
   '';
 
   checkPhase = ''

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     tag = "v${version}";
-    hash = "sha256-wfp/ubFZv54z2d44hvG56xcCjGedYqW/zeNvaoPPJYE=";
+    hash = "sha256-N/Y3K/QyJ6Djy9h08wgNdDm1gdy19f+6tkcV6mLaSag=";
   };
 
   postPatch = ''

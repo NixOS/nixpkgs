@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   ncurses,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+
+  # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
+  mesonFlags = [
+    "-Dcanfigger:b_sanitize=none"
   ];
 
   meta = with lib; {

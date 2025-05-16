@@ -11,27 +11,29 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.57.0";
+  version = "1.63.0";
 
   # vv Also update this vv
   tag = "nixpkgs-dependabot-cli-${version}";
+
   updateJobProxy = dockerTools.pullImage {
     imageName = "ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy";
     # Get these hashes from
     # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
-    imageDigest = "sha256:cc4a9b7db8ddf3924b6c25cc8a74d9937bf803e64733035809862a1c0a6df984";
-    sha256 = "0wkr0rac7dp1080s4zik5yzi5967gkfylly2148ipgw50sp0sq8s";
+    imageDigest = "sha256:3030ba5ff8f556e47016fca94d81c677b5c6abde99fef228341e1537588e503a";
+    hash = "sha256-RiXUae5ONScoDu85L6BEf3T4JodBYha6v+d9kWl8oWc=";
 
     # Don't update this, it's used to refer to the imported image later
     finalImageName = "dependabot-update-job-proxy";
     finalImageTag = tag;
   };
+
   updaterGitHubActions = dockerTools.pullImage {
     imageName = "ghcr.io/dependabot/dependabot-updater-github-actions";
     # Get these hashes from
     # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
-    imageDigest = "sha256:6665b3e26ef97577e83f2dfd0007a73c02b003126e72c0b4b196fe570088ed93";
-    sha256 = "0q7w3yp49wb70gkjjl2syvs75hm1jkva2qslzckwxh73z0kq2z0q";
+    imageDigest = "sha256:a356576adbec11bc34b142b6ef69a5856a09dc3654bdc9f9b046c08ee2d73ff8";
+    hash = "sha256-zqydb2v39xiSBT5ayWEacD0NIH6LoFX8lkRcCKppH08=";
 
     # Don't update this, it's used to refer to the imported image later
     finalImageName = "dependabot-updater-github-actions";
@@ -45,10 +47,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-ZT1fwDT19uUjp5iG0NLSrc/6PLW/sukAd0w66mLdFVg=";
+    hash = "sha256-lk0AEFQYemr4wP7JXx5mPzzo2VzSJvygPP5vtUvPaxs=";
   };
 
-  vendorHash = "sha256-jSINiETadd0ixzFBilgphi1vJNsRYeDkbaVNk5stTp4=";
+  vendorHash = "sha256-pnB1SkuEGm0KfkDfjnoff5fZRsAgD5w2H4UwsD3Jlbo=";
 
   ldflags = [
     "-s"

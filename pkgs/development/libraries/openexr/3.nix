@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit libjxl;
-    musl = pkgsCross.musl64.openexr_3;
+    musl = pkgsCross.musl64.openexr;
   };
 
   meta = with lib; {

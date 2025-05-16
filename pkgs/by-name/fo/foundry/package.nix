@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "foundry";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${version}";
-    hash = "sha256-YTsneUj5OPw7EyKZMFLJJeAtZoD0je1DdmfMjVju4L8=";
+    hash = "sha256-bFr1mzp1evaCJsVj5H20ShoaGMJ1TPB/91Yd37ZGNsI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vVRFS7o0zV+ek9ho+URks6peOryMpFCE1sDzN9g7uH0=";
+  cargoHash = "sha256-v+7sykIVdrzBOkNVnpgUnCUG7SUf2UToq9P539UAOH4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/forge";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

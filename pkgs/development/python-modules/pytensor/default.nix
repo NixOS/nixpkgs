@@ -32,14 +32,17 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.30.2";
+  version = "2.30.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-l9/N6DFR8qTF4BiH+g6H32r0FkpL9Pjtn/xkiFYYJhU=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+    '';
+    hash = "sha256-Iyiuvt86pfz8MmpwgDecKJFVOw+fKpEaA9m1MBA9Yxs=";
   };
 
   build-system = [

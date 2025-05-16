@@ -55,6 +55,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ymattw/ydiff";
     license = licenses.bsd3;
-    maintainers = (with maintainers; [ leenaars ]) ++ teams.deshaw.members;
+    maintainers = with maintainers; [ leenaars ];
+    teams = [ teams.deshaw ];
   };
 }

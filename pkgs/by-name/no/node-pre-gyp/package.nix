@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "node-pre-gyp";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "node-pre-gyp";
     tag = "v${version}";
-    hash = "sha256-i7iBy+X9zBKrrbIwVa61y9cbmHJmqeacXrZk+XGRok8=";
+    hash = "sha256-9MADe6oY28MBAdQsu/ddVveZYwD4xeVNKUffhcvK+Q0=";
   };
 
-  npmDepsHash = "sha256-0Xa5bByTskrQ8v2O1FUxtQzRb1ZEV0TvUhe8hh05QHI=";
+  npmDepsHash = "sha256-yNu66HlkOVsYv60saTf7M4QuN9B2euYFu5WB7UAwhUw=";
 
   dontNpmBuild = true;
 

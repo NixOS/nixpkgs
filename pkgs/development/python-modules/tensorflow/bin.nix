@@ -53,7 +53,7 @@ let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
 
-  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
 buildPythonPackage rec {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";

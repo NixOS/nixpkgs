@@ -58,12 +58,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-ER90i0BlHC8SXfz6DzoIPCP1G8n4NNyJcRE88YY0gXk=";
+    hash = "sha256-OewUmnYpRByOgTi42G2reoaSuwxyPGHwP0+Uts/pg54=";
     rev = "v${version}";
   };
 
@@ -178,13 +178,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
-    maintainers =
-      with lib.maintainers;
-      [
-        matthewbauer
-        kolbycrouch
-      ]
-      ++ lib.teams.libretro.members;
+    maintainers = with lib.maintainers; [
+      matthewbauer
+      kolbycrouch
+    ];
+    teams = [ lib.teams.libretro ];
     mainProgram = "retroarch";
     # If you want to (re)-add support for macOS, see:
     # https://docs.libretro.com/development/retroarch/compilation/osx/

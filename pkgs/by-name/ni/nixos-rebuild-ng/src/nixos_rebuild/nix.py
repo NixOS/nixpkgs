@@ -29,6 +29,22 @@ from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
+SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
+    "systemd-run",
+    "-E",
+    # Will be set to new value early in switch-to-configuration script,
+    # but interpreter starts out with old value
+    "LOCALE_ARCHIVE",
+    "-E",
+    "NIXOS_INSTALL_BOOTLOADER",
+    "--collect",
+    "--no-ask-password",
+    "--pipe",
+    "--quiet",
+    "--same-dir",
+    "--service-type=exec",
+    "--unit=nixos-rebuild-switch-to-configuration",
+]
 logger = logging.getLogger(__name__)
 
 
@@ -266,6 +282,59 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     return Path(r.stdout.strip())
 
 
+def get_build_image_name(
+    build_attr: BuildAttr,
+    image_variant: str,
+    instantiate_flags: Args | None = None,
+) -> str:
+    path = (
+        f'"{build_attr.path.resolve()}"'
+        if isinstance(build_attr.path, Path)
+        else build_attr.path
+    )
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import {path};
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              set.{build_attr.to_attr("config.system.build.images", image_variant, "passthru", "filePath")}
+            """),
+            *dict_to_flags(instantiate_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: str = json.loads(r.stdout.strip())
+    return j
+
+
+def get_build_image_name_flake(
+    flake: Flake,
+    image_variant: str,
+    eval_flags: Args | None = None,
+) -> str:
+    r = run_wrapper(
+        [
+            "nix",
+            "eval",
+            "--json",
+            flake.to_attr(
+                "config.system.build.images", image_variant, "passthru", "filePath"
+            ),
+            *dict_to_flags(eval_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: str = json.loads(r.stdout.strip())
+    return j
+
+
 def get_build_image_variants(
     build_attr: BuildAttr,
     instantiate_flags: Args | None = None,
@@ -287,7 +356,7 @@ def get_build_image_variants(
               value = import {path};
               set = if builtins.isFunction value then value {{}} else value;
             in
-              builtins.mapAttrs (n: v: v.passthru.filePath) set.{build_attr.to_attr("config.system.build.images")}
+              builtins.attrNames set.{build_attr.to_attr("config.system.build.images")}
             """),
             *dict_to_flags(instantiate_flags),
         ],
@@ -308,7 +377,7 @@ def get_build_image_variants_flake(
             "--json",
             flake.to_attr("config.system.build.images"),
             "--apply",
-            "builtins.mapAttrs (n: v: v.passthru.filePath)",
+            "builtins.attrNames",
             *dict_to_flags(eval_flags),
         ],
         stdout=PIPE,
@@ -575,8 +644,21 @@ def switch_to_configuration(
         if not path_to_config.exists():
             raise NRError(f"specialisation not found: {specialisation}")
 
+    r = run_wrapper(
+        ["test", "-d", "/run/systemd/system"],
+        remote=target_host,
+        check=False,
+    )
+    cmd = SWITCH_TO_CONFIGURATION_CMD_PREFIX
+    if r.returncode:
+        logger.debug(
+            "skipping systemd-run to switch configuration since systemd is "
+            + "not working in target host"
+        )
+        cmd = []
+
     run_wrapper(
-        [path_to_config / "bin/switch-to-configuration", str(action)],
+        [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
         remote=target_host,
         sudo=sudo,

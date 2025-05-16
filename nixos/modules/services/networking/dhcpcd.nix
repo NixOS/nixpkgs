@@ -69,7 +69,7 @@ let
     hostname
 
     # A list of options to request from the DHCP server.
-    option domain_name_servers, domain_name, domain_search, host_name
+    option domain_name_servers, domain_name, domain_search
     option classless_static_routes, ntp_servers, interface_mtu
 
     # A ServerID is required by RFC2131.
@@ -112,6 +112,7 @@ let
     ${lib.optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
       noipv6rs
     ''}
+    ${lib.optionalString cfg.setHostname "option host_name"}
 
     ${cfg.extraConfig}
   '';
@@ -137,11 +138,27 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Whenever to leave interfaces configured on dhcpcd daemon
+        Whether to leave interfaces configured on dhcpcd daemon
         shutdown. Set to true if you have your root or store mounted
         over the network or this machine accepts SSH connections
         through DHCP interfaces and clients should be notified when
         it shuts down.
+      '';
+    };
+
+    networking.dhcpcd.setHostname = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether to set the machine hostname based on the information
+        received from the DHCP server.
+
+        ::: {.note}
+        The hostname will be changed only if the current one is
+        the empty string, `localhost` or `nixos`.
+
+        Polkit ([](#opt-security.polkit.enable)) is also required.
+        :::
       '';
     };
 
@@ -185,6 +202,15 @@ in
       '';
     };
 
+    networking.dhcpcd.allowSetuid = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to relax the security sandbox to allow running setuid
+        binaries (e.g. `sudo`) in the dhcpcd hooks.
+      '';
+    };
+
     networking.dhcpcd.runHook = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -196,7 +222,7 @@ in
         ::: {.note}
         To use sudo or similar tools in your script you may have to set:
 
-            systemd.services.dhcpcd.serviceConfig.NoNewPrivileges = false;
+            networking.dhcpcd.allowSetuid = true;
 
         In addition, as most of the filesystem is inaccessible to dhcpcd
         by default, you may want to define some exceptions, e.g.
@@ -263,11 +289,16 @@ in
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path = [
-          dhcpcd
-          pkgs.nettools
-          config.networking.resolvconf.package
-        ];
+        path =
+          [
+            dhcpcd
+            config.networking.resolvconf.package
+          ]
+          ++ lib.optional cfg.setHostname (
+            pkgs.writeShellScriptBin "hostname" ''
+              ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
+            ''
+          );
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -299,7 +330,7 @@ in
             "CAP_NET_RAW"
             "CAP_NET_BIND_SERVICE"
           ];
-          CapabilityBoundingSet = [
+          CapabilityBoundingSet = lib.optionals (!cfg.allowSetuid) [
             "CAP_NET_ADMIN"
             "CAP_NET_RAW"
             "CAP_NET_BIND_SERVICE"
@@ -313,7 +344,7 @@ in
           DeviceAllow = "";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
-          NoNewPrivileges = lib.mkDefault true; # may be disabled for sudo in runHook
+          NoNewPrivileges = lib.mkDefault (!cfg.allowSetuid); # may be disabled for sudo in runHook
           PrivateDevices = true;
           PrivateMounts = true;
           PrivateTmp = true;
@@ -338,15 +369,18 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [
-            "@system-service"
-            "~@aio"
-            "~@keyring"
-            "~@memlock"
-            "~@mount"
-            "~@privileged"
-            "~@resources"
-          ];
+          SystemCallFilter =
+            [
+              "@system-service"
+              "~@aio"
+              "~@keyring"
+              "~@memlock"
+              "~@mount"
+            ]
+            ++ lib.optionals (!cfg.allowSetuid) [
+              "~@privileged"
+              "~@resources"
+            ];
           SystemCallArchitectures = "native";
           UMask = "0027";
         };
@@ -371,17 +405,27 @@ in
       /run/current-system/systemd/bin/systemctl reload dhcpcd.service
     '';
 
-    security.polkit.extraConfig = lib.mkIf config.services.resolved.enable ''
-      polkit.addRule(function(action, subject) {
-          if (action.id == 'org.freedesktop.resolve1.revert' ||
-              action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
-              action.id == 'org.freedesktop.resolve1.set-domains') {
-              if (subject.user == '${config.systemd.services.dhcpcd.serviceConfig.User}') {
-                  return polkit.Result.YES;
-              }
-          }
-      });
-    '';
+    security.polkit.extraConfig = lib.mkMerge [
+      (lib.mkIf config.services.resolved.enable ''
+        polkit.addRule(function(action, subject) {
+            if (action.id == 'org.freedesktop.resolve1.revert' ||
+                action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
+                action.id == 'org.freedesktop.resolve1.set-domains') {
+                if (subject.user == 'dhcpcd') {
+                    return polkit.Result.YES;
+                }
+            }
+        });
+      '')
+      (lib.mkIf cfg.setHostname ''
+        polkit.addRule(function(action, subject) {
+            if (action.id == 'org.freedesktop.hostname1.set-hostname' &&
+                subject.user == 'dhcpcd') {
+                return polkit.Result.YES;
+            }
+        });
+      '')
+    ];
 
   };
 

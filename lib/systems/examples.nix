@@ -146,6 +146,10 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  riscv64-musl = {
+    config = "riscv64-unknown-linux-musl";
+  };
+
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";
@@ -215,6 +219,10 @@ rec {
     config = "arm-none-eabi";
     libc = "newlib";
   };
+  arm-embedded-nano = {
+    config = "arm-none-eabi";
+    libc = "newlib-nano";
+  };
   armhf-embedded = {
     config = "arm-none-eabihf";
     libc = "newlib";
@@ -276,17 +284,8 @@ rec {
   #
 
   iphone64 = {
-    config = "aarch64-apple-ios";
+    config = "arm64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    darwinSdkVersion = "14.3";
-    xcodeVer = "12.3";
-    xcodePlatform = "iPhoneOS";
-    useiOSPrebuilt = true;
-  };
-
-  iphone32 = {
-    config = "armv7a-apple-ios";
-    # config = "arm-apple-darwin10";
     darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
@@ -303,18 +302,8 @@ rec {
     useiOSPrebuilt = true;
   };
 
-  iphone32-simulator = {
-    config = "i686-apple-ios";
-    # config = "i386-apple-darwin11";
-    darwinSdkVersion = "14.3";
-    xcodeVer = "12.3";
-    xcodePlatform = "iPhoneSimulator";
-    darwinPlatform = "ios-simulator";
-    useiOSPrebuilt = true;
-  };
-
   aarch64-darwin = {
-    config = "aarch64-apple-darwin";
+    config = "arm64-apple-darwin";
     xcodePlatform = "MacOSX";
     platform = { };
   };

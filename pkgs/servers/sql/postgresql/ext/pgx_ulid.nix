@@ -6,7 +6,7 @@
   postgresql,
   util-linux,
 }:
-buildPgrxExtension rec {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
 
   pname = "pgx_ulid";
@@ -15,7 +15,7 @@ buildPgrxExtension rec {
   src = fetchFromGitHub {
     owner = "pksunkara";
     repo = "pgx_ulid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VdLWwkUA0sVs5Z/Lyf5oTRhcHVzPmhgnYQhIM8MWJ0c=";
   };
 
@@ -42,8 +42,8 @@ buildPgrxExtension rec {
     broken = lib.versionOlder postgresql.version "14";
     description = "ULID Postgres extension written in Rust";
     homepage = "https://github.com/pksunkara/pgx_ulid";
-    changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ myypo ];
   };
-}
+})

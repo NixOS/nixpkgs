@@ -26,6 +26,7 @@ mkWrapper "sdk" (
     paths = dotnetPackages;
     pathsToLink = map (x: "/share/dotnet/${x}") [
       "host"
+      "metadata"
       "packs"
       "sdk"
       "sdk-manifests"

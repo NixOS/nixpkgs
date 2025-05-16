@@ -228,11 +228,11 @@ let
         };
       };
 
-      AutoUpdate.Enable = lib.mkOption {
+      AutoUpdate.UpdateToLatestVersion = lib.mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether or not to enable autoupdate for goal state processing.
+          Whether or not to enable auto-update of the Extension Handler.
         '';
       };
     };

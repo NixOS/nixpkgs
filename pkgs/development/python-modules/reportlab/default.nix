@@ -17,7 +17,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.3.1";
+  version = "4.4.0";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Iw94shZnGU2EkKydEpWNXBRoY1Lbf74DuVFA+v31qpc=";
+    hash = "sha256-pk2FUTkQ4kbCHcl8zDyQVKHUQ3C/j8H6uAr5N4FDVNU=";
   };
 
   postPatch = ''
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;

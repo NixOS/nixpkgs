@@ -299,6 +299,9 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+    (mkRemovedOptionModule [ "services" "gsignond" ] ''
+      The corresponding package was unmaintained, abandoned upstream, used outdated library and thus removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "haka" ] ''
       The corresponding package was broken and removed from nixpkgs.
     '')
@@ -310,6 +313,10 @@ in
     '')
     (mkRemovedOptionModule [ "services" "rippleDataApi" ] ''
       The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "conduwuit" ] ''
+      The conduwuit project has been discontinued by upstream.
+      See https://github.com/NixOS/nixpkgs/pull/397902 for more information.
     '')
 
     # Do NOT add any option renames here, see top of the file

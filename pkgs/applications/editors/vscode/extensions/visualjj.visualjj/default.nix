@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   vscode-utils,
-  vscode-extensions-update-script,
+  vscode-extension-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -11,31 +11,31 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-s3peDZApzSfemXRqRjf5fYQGHVf1DAP7XG4NuOqiGcY=";
+          hash = "sha256-tnZh8WioZ4EtooQlM5RYQkvWO35PPeNTAyCbMQ4raXE=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-WutwGOcXoREk6oUdFjhsKcrf64CG4GSn9JgGWiQe9l8=";
+          hash = "sha256-tkZRGO1W0QA/aEW2BqyPhmGt06yTvrsQ4Xp8jmbzPP0=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-377T8cfY4jHX+iJjdDScMP+wX6UZCYLasl16ngwfq6U=";
+          hash = "sha256-hoZf3ofcPHkqyWwfL79Hnu5pzcLKRHD5PVOBjTXq828=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-fufJ9NV73skhwBFe2vCLjh5ykQagXfO0VAdHGPhfOQ4=";
+          hash = "sha256-qZnHSdcby7FNb1+EUB4O8dK30xtZWS4m07m8je0/CHI=";
         };
       };
     in
     {
       name = "visualjj";
       publisher = "visualjj";
-      version = "0.14.2";
+      version = "0.15.0";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
-  passthru.updateScript = vscode-extensions-update-script { extraArgs = [ "--platforms" ]; };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Jujutsu version control integration, for simpler Git workflow";

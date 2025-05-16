@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "al-one";
   domain = "xiaomi_miot";
-  version = "1.0.15";
+  version = "1.0.18";
 
   src = fetchFromGitHub {
     owner = "al-one";
     repo = "hass-xiaomi-miot";
     rev = "v${version}";
-    hash = "sha256-2qUzLGFXbBq5m+ecSQScC2PHeI6kz6CDeRAjyVu4oWk=";
+    hash = "sha256-eKh3oa/dPmOIywdTkRhItzP4LQNLguNDfkQWMJjQkpo=";
   };
 
   dependencies = [
@@ -25,8 +25,6 @@ buildHomeAssistantComponent rec {
     micloud
     python-miio
   ];
-
-  dontBuild = true;
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9.]+)$" ]; };
 

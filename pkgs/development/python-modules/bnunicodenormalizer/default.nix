@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Bangla Unicode Normalization Toolkit";
     homepage = "https://github.com/mnansary/bnUnicodeNormalizer";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

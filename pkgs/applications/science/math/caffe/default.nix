@@ -1,5 +1,4 @@
 {
-  config,
   stdenv,
   lib,
   fetchFromGitHub,
@@ -14,9 +13,6 @@
   protobuf,
   doxygen,
   blas,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
   lmdbSupport ? true,
   lmdb,
   leveldbSupport ? true,
@@ -82,11 +78,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals pythonSupport [
       python
       numpy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreGraphics
-      CoreVideo
     ];
 
   propagatedBuildInputs = lib.optionals pythonSupport (
@@ -124,6 +115,8 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./darwin.patch
+      ./glog-cmake.patch
+      ./random-shuffle.patch
       (fetchpatch {
         name = "support-opencv4";
         url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";

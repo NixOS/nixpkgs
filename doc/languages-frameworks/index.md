@@ -67,6 +67,7 @@ dhall.section.md
 dlang.section.md
 dotnet.section.md
 emscripten.section.md
+factor.section.md
 gnome.section.md
 go.section.md
 gradle.section.md
@@ -97,6 +98,7 @@ scheme.section.md
 swift.section.md
 tcl.section.md
 texlive.section.md
+typst.section.md
 vim.section.md
 neovim.section.md
 ```

@@ -10,8 +10,6 @@
   openssl,
   wavpack,
   xcbuildHook,
-  Foundation,
-  AppKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,19 +59,13 @@ stdenv.mkDerivation rec {
         ''
     );
 
-  buildInputs =
-    [
-      bzip2
-      icu
-      openssl
-      wavpack
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      AppKit
-    ];
+  buildInputs = [
+    bzip2
+    icu
+    openssl
+    wavpack
+    zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ];
 
   nativeBuildInputs = [
     installShellFiles

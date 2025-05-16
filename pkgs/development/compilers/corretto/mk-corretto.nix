@@ -18,12 +18,13 @@
 # builds. However, Corretto uses `gradle` as build tool (which in turn will
 # invoke `make`). The configure/build phases are adapted as needed.
 
-let
-  pname = "corretto";
-in
 # The version scheme is different between OpenJDK & Corretto.
 # See https://github.com/corretto/corretto-17/blob/release-17.0.8.8.1/build.gradle#L40
 # "major.minor.security.build.revision"
+let
+  majorVersion = builtins.head (lib.strings.splitString "." version); # same as "featureVersion" for OpenJDK
+  pname = "corretto${majorVersion}";
+in
 jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
     inherit pname version src;
@@ -122,6 +123,7 @@ jdk.overrideAttrs (
       license = lib.licenses.gpl2Only;
       description = "Amazon's distribution of OpenJDK";
       maintainers = with lib.maintainers; [ rollf ];
+      teams = [ ];
     };
   }
 )

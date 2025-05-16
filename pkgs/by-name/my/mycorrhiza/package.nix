@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
@@ -7,14 +6,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mycorrhiza";
   version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "bouncepaw";
     repo = "mycorrhiza";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Cgf2YtAatfKWxhe4xAqNRB4ktsGs3ONi5XqbjcZwzTw=";
   };
 
@@ -29,12 +28,12 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem and git-based wiki engine written in Go using mycomarkup as its primary markup language";
     homepage = "https://github.com/bouncepaw/mycorrhiza";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ chekoopa ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ chekoopa ];
+    platforms = lib.platforms.unix;
     mainProgram = "mycorrhiza";
   };
-}
+})

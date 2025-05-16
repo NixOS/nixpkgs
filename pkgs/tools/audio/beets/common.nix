@@ -101,8 +101,6 @@ python3Packages.buildPythonApplication {
       pyyaml
       unidecode
       typing-extensions
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
       lap
     ]
     ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
@@ -151,8 +149,6 @@ python3Packages.buildPythonApplication {
       mock
       rarfile
       responses
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
       requests-mock
     ]
     ++ [

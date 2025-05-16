@@ -323,12 +323,19 @@ let
           # source-code itself).
           platforms = [ "x86_64-linux" ];
           maintainers =
-            with lib.maintainers;
             rec {
-              stable = [
+              stable = with lib.maintainers; [
                 alapshin
-                johnrtitor
-                numinit
+              ];
+              beta = stable;
+              canary = stable;
+              dev = stable;
+            }
+            ."${channel}";
+          teams =
+            rec {
+              stable = with lib.teams; [
+                android
               ];
               beta = stable;
               canary = stable;
@@ -337,6 +344,7 @@ let
             ."${channel}";
           mainProgram = pname;
           sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+          position = "pkgs/applications/editors/android-studio/common.nix:303";
         };
       }
       ''

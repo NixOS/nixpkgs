@@ -48,8 +48,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.15.2";
-  srcHash = "sha256-JcCLMWjvlA4KYd42VcEJuXBpxuMKZ4BXC0q5Li/baOA=";
+  version = "1.15.3";
+  srcHash = "sha256-97z5CLRq/2kWjL2+ewHRA71vSfvCLHVJdOUZfDFnyhM=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -91,6 +91,21 @@ buildPythonPackage {
       excludes = [ "doc/source/dev/contributor/meson_advanced.rst" ];
     })
   ];
+  # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
+  # 2.x are supported. However upstream wants to always build with Numpy 2,
+  # and with it to still be able to run with a Numpy 1 or 2. We insist to
+  # perform this substitution even though python3.pkgs.numpy is of version 2
+  # nowadays, because our ecosystem unfortunately doesn't allow easily
+  # separating runtime and build-system dependencies. See also:
+  #
+  # https://discourse.nixos.org/t/several-comments-about-priorities-and-new-policies-in-the-python-ecosystem/51790
+  #
+  # Being able to build (& run) with Numpy 1 helps for python environments
+  # that override globally the `numpy` attribute to point to `numpy_1`.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0,<2.5" numpy
+  '';
 
   build-system =
     [
@@ -131,6 +146,8 @@ buildPythonPackage {
   disabledTests =
     [
       "test_cumulative_simpson_against_simpson_with_default_dx"
+      # https://github.com/scipy/scipy/issues/22789
+      "test_funcs"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # The following tests are broken on aarch64-darwin with newer compilers and library versions.

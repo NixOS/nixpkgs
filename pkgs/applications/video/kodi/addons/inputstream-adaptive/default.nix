@@ -23,13 +23,13 @@ in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "21.5.9";
+  version = "21.5.13";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     tag = "${version}-${rel}";
-    hash = "sha256-OArvp/MgJGsRs3Z59JfgOkfwyhQ3ArC1yf37z7Y7khg=";
+    hash = "sha256-XcRg0FtoN7SXRVEBWM9gIlLOMGT3x64s9WD12UJdblw=";
   };
 
   extraCMakeFlags = [
@@ -64,6 +64,6 @@ buildKodiBinaryAddon rec {
     description = "Kodi inputstream addon for several manifest types";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

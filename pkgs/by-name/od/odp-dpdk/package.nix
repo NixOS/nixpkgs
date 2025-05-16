@@ -29,13 +29,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 
+  patches = [
+    ./odp-dpdk_25.03.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
   buildInputs = [
-    dpdk
+    (dpdk.overrideAttrs {
+      patches = [
+        ./dpdk_25.03.patch
+      ];
+    })
     libconfig
     libpcap
     numactl

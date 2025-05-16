@@ -52,6 +52,7 @@ buildFHSEnv {
           xorg.xorgproto
           SDL2
           wayland
+          mesa-gl-headers
           # Additional dependencies required for Monado WMR support
           bc
           fmt
@@ -60,9 +61,11 @@ buildFHSEnv {
           gtest
           jq
           libepoxy
+          lz4
           lz4.dev
           tbb
           libxkbcommon
+          librealsense
           boost
           glew
         ])

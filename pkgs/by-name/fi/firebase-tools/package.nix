@@ -7,18 +7,19 @@
   xcbuild,
   nix-update-script,
 }:
+
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "13.35.1";
+  version = "14.3.0";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-66VG82o+gg+Vt4QR/RkaM6aOv8i3lQ7bUmeqGqj1JGs=";
+    hash = "sha256-Y3+Nw6+ZCnHOJeoMRhWafBVi0yrb41NX/4FcpqHk4eA=";
   };
 
-  npmDepsHash = "sha256-/UuQ1bwEFDPahxUgqrxY/xIcHQ+KKxnc2QUMOW+GwHE=";
+  npmDepsHash = "sha256-+rAwYopIP/NEb602TVuZEZUY+dQPzkuTXpWCBeLCjmg=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -32,9 +33,7 @@ buildNpmPackage rec {
       xcbuild
     ];
 
-  env = {
-    PUPPETEER_SKIP_DOWNLOAD = true;
-  };
+  env.PUPPETEER_SKIP_DOWNLOAD = true;
 
   passthru.updateScript = nix-update-script { };
 

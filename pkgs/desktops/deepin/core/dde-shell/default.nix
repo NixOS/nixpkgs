@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   extra-cmake-modules,
   pkg-config,
@@ -23,17 +24,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
     rev = finalAttrs.version;
-    hash = "sha256-Gko1fFut5zWH/L6X5hEe5OZBjRIbKWIrrjjhh2wrsCg=";
+    hash = "sha256-0nyTvSIJglx8raehPi6pYfQcxIjsCAaD1hVbuGvtfY8=";
   };
 
   patches = [
     ./fix-path-for-nixos.diff
+    (fetchpatch {
+      name = "resolve-compilation-issues-on-Qt-6_9.patch";
+      url = "https://github.com/linuxdeepin/dde-shell/commit/936d62a2c20398b9ca6ae28f9101dd288c8b1678.patch";
+      hash = "sha256-u5TcPy2kZsOLGUgjTGZ5JX3mWnr/rOQ3SWBRyjWEiw4=";
+    })
+
   ];
 
   postPatch = ''

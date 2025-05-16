@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.5.3";
+  version = "0.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-Vfo+wY51b3triiDhURlMl1iKNlYDy7eqEtT9/RVNZCM=";
+    hash = "sha256-BDDvALeQSBVld2gEmcnlpf3GDpdEs64nFyE6cNKpeww=";
   };
 
   build-system = with python3Packages; [
@@ -27,7 +27,9 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       chromadb
+      colorlog
       httpx
+      json5
       numpy
       pathspec
       psutil
@@ -78,6 +80,8 @@ python3Packages.buildPythonApplication rec {
     # Require internet access
     "test_get_embedding_function"
     "test_get_embedding_function_fallback"
+    "test_get_reranker"
+    "test_supported_rerankers_initialization"
   ];
 
   meta = {

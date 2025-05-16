@@ -27,7 +27,6 @@
 
   # platform-specific dependencies
   bashNonInteractive,
-  darwin,
   windows,
 
   # optional dependencies
@@ -55,6 +54,7 @@
   pkgsBuildTarget,
   pkgsHostHost,
   pkgsTargetTarget,
+  __splices ? { },
 
   # build customization
   sourceVersion,
@@ -145,10 +145,28 @@ let
       # When we override the interpreter we also need to override the spliced versions of the interpreter
       # bluez is excluded manually to break an infinite recursion.
       inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && !lib.isDerivation v) inputs;
+      # Memoization of the splices to avoid re-evaluating this function for all combinations of splices e.g.
+      # python3.pythonOnBuildForHost.pythonOnBuildForTarget == python3.pythonOnBuildForTarget by consuming
+      # __splices as an arg and using the cache if populated.
+      splices = {
+        pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
+        pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
+        pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
+        pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
+        pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
+          override pkgsTargetTarget.${pythonAttr}
+        );
+      } // __splices;
       override =
         attr:
         let
-          python = attr.override (inputs' // { self = python; });
+          python = attr.override (
+            inputs'
+            // {
+              self = python;
+              __splices = splices;
+            }
+          );
         in
         python;
     in
@@ -160,13 +178,13 @@ let
       pythonVersion = with sourceVersion; "${major}.${minor}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
-      pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
-      pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
-      pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
-      pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
-      pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
-        override pkgsTargetTarget.${pythonAttr}
-      );
+      inherit (splices)
+        pythonOnBuildForBuild
+        pythonOnBuildForHost
+        pythonOnBuildForTarget
+        pythonOnHostForHost
+        pythonOnTargetForTarget
+        ;
     };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -211,9 +229,6 @@ let
     ]
     ++ optionals bluezSupport [
       bluez
-    ]
-    ++ optionals enableFramework [
-      darwin.apple_sdk.frameworks.Cocoa
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
@@ -290,14 +305,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ buildInputs;
 
-  prePatch =
-    optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
-    ''
-    + optionalString (pythonOlder "3.9" && stdenv.hostPlatform.isDarwin && x11Support) ''
-      # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
-      substituteInPlace setup.py --replace-fail /Library/Frameworks /no-such-path
-    '';
+  prePatch = optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
+  '';
 
   patches =
     [
@@ -307,10 +317,6 @@ stdenv.mkDerivation (finalAttrs: {
       # (since it will do a futile invocation of gcc (!) to find
       # libuuid, slowing down program startup a lot).
       noldconfigPatch
-    ]
-    ++ optionals (pythonOlder "3.12") [
-      # https://www.cve.org/CVERecord?id=CVE-2025-0938
-      ./CVE-2025-0938.patch
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # Cross compilation only supports a limited number of "known good"
@@ -363,15 +369,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./loongarch-support.patch
       # fix failing tests with openssl >= 3.4
       # https://github.com/python/cpython/pull/127361
-    ]
-    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
-      ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
-    ]
-    ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
-        sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
-      })
     ]
     ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
       # backport fix for https://github.com/python/cpython/issues/95855
@@ -753,14 +750,6 @@ stdenv.mkDerivation (finalAttrs: {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
 
-      patches = optionals (pythonAtLeast "3.9" && pythonOlder "3.10") [
-        # https://github.com/python/cpython/issues/98366
-        (fetchpatch {
-          url = "https://github.com/python/cpython/commit/5612471501b05518287ed61c1abcb9ed38c03942.patch";
-          hash = "sha256-p41hJwAiyRgyVjCVQokMSpSFg/VDDrqkCSxsodVb6vY=";
-        })
-      ];
-
       postPatch = lib.optionalString (pythonAtLeast "3.9" && pythonOlder "3.11") ''
         substituteInPlace Doc/tools/extensions/pyspecific.py \
           --replace-fail "from sphinx.util import status_iterator" "from sphinx.util.display import status_iterator"
@@ -814,7 +803,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
-    maintainers = lib.teams.python.members;
+    teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:
     # configure: error: C compiler cannot create executables
 

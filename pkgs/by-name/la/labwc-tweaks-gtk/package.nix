@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-tweaks-gtk";
-  version = "0-unstable-2025-03-07";
+  version = "0-unstable-2025-04-01";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-tweaks-gtk";
-    rev = "24635c72d4da21df0b66fa23fb4a15686d257521";
-    hash = "sha256-rDmY4+xUBv6Vw150X/3rP5bhW8Dmd8zEAyt86/c1+ss=";
+    rev = "b1779b293f1d0b07b328a6cbbfb5b1c4e3529d97";
+    hash = "sha256-K2f1ztuhi3+btc41/1FYVvTBnPEVM5XQmlJxW7y9MlY=";
   };
 
   nativeBuildInputs = [

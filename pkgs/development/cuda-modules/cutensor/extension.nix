@@ -13,7 +13,7 @@
 # - Instead of providing different releases for each version of CUDA, CuTensor has multiple subdirectories in `lib`
 #   -- one for each version of CUDA.
 {
-  cudaVersion,
+  cudaMajorMinorVersion,
   flags,
   lib,
   mkVersionedPackageName,
@@ -25,7 +25,6 @@ let
     lists
     modules
     versions
-    strings
     trivial
     ;
 
@@ -74,7 +73,7 @@ let
       releaseGrabber
     ]) cutensorVersions;
 
-  # Our cudaVersion tells us which version of CUDA we're building against.
+  # Our cudaMajorMinorVersion tells us which version of CUDA we're building against.
   # The subdirectories in lib/ tell us which versions of CUDA are supported.
   # Typically the names will look like this:
   #
@@ -86,10 +85,9 @@ let
   # libPath :: String
   libPath =
     let
-      cudaMajorMinor = versions.majorMinor cudaVersion;
-      cudaMajor = versions.major cudaVersion;
+      cudaMajorVersion = versions.major cudaMajorMinorVersion;
     in
-    if cudaMajorMinor == "10.2" then cudaMajorMinor else cudaMajor;
+    if cudaMajorMinorVersion == "10.2" then cudaMajorMinorVersion else cudaMajorVersion;
 
   # A release is supported if it has a libPath that matches our CUDA version for our platform.
   # LibPath are not constant across the same release -- one platform may support fewer
@@ -127,28 +125,8 @@ let
         redistribRelease = redistrib.${pname};
         featureRelease = feature.${pname};
       };
-      fixedDrv = drv.overrideAttrs (prevAttrs: {
-        buildInputs =
-          prevAttrs.buildInputs
-          ++ lists.optionals (strings.versionOlder cudaVersion "11.4") [ final.cudatoolkit ]
-          ++ lists.optionals (strings.versionAtLeast cudaVersion "11.4") (
-            [ final.libcublas.lib ]
-            # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
-            ++ lists.optionals (strings.hasPrefix "1.4" redistrib.${pname}.version) [ final.cuda_cudart.lib ]
-          );
-        meta = prevAttrs.meta // {
-          description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
-          homepage = "https://developer.nvidia.com/cutensor";
-          maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.obsidian-systems-maintenance ];
-          license = lib.licenses.unfreeRedistributable // {
-            shortName = "cuTENSOR EULA";
-            fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
-            url = "https://docs.nvidia.com/cuda/cutensor/license.html";
-          };
-        };
-      });
     in
-    attrsets.nameValuePair (computeName redistrib.${pname}) fixedDrv;
+    attrsets.nameValuePair (computeName redistrib.${pname}) drv;
 
   extension =
     let

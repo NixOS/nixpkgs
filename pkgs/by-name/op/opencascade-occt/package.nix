@@ -5,6 +5,7 @@
   fetchpatch,
   cmake,
   ninja,
+  rapidjson,
   tcl,
   tk,
   libGL,
@@ -12,7 +13,6 @@
   libXext,
   libXmu,
   libXi,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,9 +48,11 @@ stdenv.mkDerivation rec {
     libXext
     libXmu
     libXi
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    rapidjson
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+  cmakeFlags = [ "-DUSE_RAPIDJSON=ON" ];
 
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";

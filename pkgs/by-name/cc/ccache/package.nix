@@ -15,12 +15,14 @@
   doctest,
   xcodebuild,
   makeWrapper,
+  ctestCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.11.2";
+  version = "4.11.3";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-Jno0CeMyy911aZSro5LqYINyVD8haZJF2aOSGF26thY=";
+    hash = "sha256-w41e73Zh5HhYhgLPtaaSiJ48BklBNtnK9S859tol5wc=";
   };
 
   outputs = [
@@ -82,31 +84,24 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
+    ctestCheckHook
+    writableTmpDirAsHomeHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
   ];
 
-  checkPhase =
-    let
-      badTests =
-        [
-          "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "test.basedir"
-          "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
-          "test.multi_arch"
-          "test.nocpp2"
-        ];
-    in
-    ''
-      runHook preCheck
-      export HOME=$(mktemp -d)
-      ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
-      runHook postCheck
-    '';
+  disabledTests =
+    [
+      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+      "test.fileclone" # flaky on hydra, also seems to fail on zfs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test.basedir"
+      "test.multi_arch"
+      "test.nocpp2"
+    ];
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that

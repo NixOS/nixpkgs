@@ -7,10 +7,12 @@
   jdk,
   libsecret,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   _7zz,
   nixosTests,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+      copyDesktopItems
     ];
 
   sourceRoot = if stdenv.hostPlatform.isDarwin then "." else null;
@@ -55,6 +58,8 @@ stdenv.mkDerivation rec {
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       ''
+        runHook preInstall
+
         mkdir -p $out/bin $out/libexec
         for f in configuration features p2 plugins Archi.ini; do
           cp -r $f $out/libexec
@@ -65,17 +70,39 @@ stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH : ${
             lib.makeLibraryPath ([
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
             ])
           } \
           --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
           --prefix PATH : ${jdk}/bin
+
+        install -Dm444 icon.xpm $out/share/icons/hicolor/256x256/apps/archi.xpm
+
+        runHook postInstall
       ''
     else
       ''
+        runHook preInstall
+
         mkdir -p "$out/Applications"
         mv Archi.app "$out/Applications/"
+
+        runHook postInstall
       '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "archi";
+      desktopName = "Archi";
+      exec = "Archi";
+      type = "Application";
+      comment = meta.description;
+      icon = "archi";
+      categories = [
+        "Development"
+      ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 

@@ -8,17 +8,14 @@
   mock,
   msgpack,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -26,7 +23,7 @@ buildPythonPackage rec {
     owner = "ionrock";
     repo = "cachecontrol";
     tag = "v${version}";
-    hash = "sha256-m3ywSskVtZrOA+ksLz5XZflAJsbSAjdJsRpeq341q70=";
+    hash = "sha256-V8RWTDxhKCvf5bz2j6anp8bkCzkicTRY+Kd6eHu1peg=";
   };
 
   build-system = [ flit-core ];

@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cobalt";
-  version = "0.19.8";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "cobalt-org";
     repo = "cobalt.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-neOJ3UqRisCcyarRIXfHyl9nAe2Wl9IXVDNwIYEQYys=";
+    hash = "sha256-6WbJjPz+1KX04xMCiylJZiAPjF6jKPTPz7rObgFF4dY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-j2xmEoMV7lVhqj4lKWA3QdEDEGUpRlZc4ikZoDQJlB8=";
+  cargoHash = "sha256-Y9+zJ89XrVk3mZD1s9N7oaXvcBP5RNjp3hMjX1Wz3HA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

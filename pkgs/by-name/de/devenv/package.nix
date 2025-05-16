@@ -6,7 +6,6 @@
   rustPlatform,
   testers,
   cachix,
-  sqlx-cli,
   nixVersions,
   openssl,
   pkg-config,
@@ -20,14 +19,14 @@ let
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
-      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
+      rev = "b455edf3505f1bf0172b39a735caef94687d0d9c";
+      hash = "sha256-bYyjarS3qSNqxfgc89IoVz8cAFDkF9yPE63EJr+h50s=";
     };
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.4.1";
+  version = "1.6.1";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -37,29 +36,18 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-OjdnHKQ+eWA8YvPUpl3xxyaNK91c9sMebqXgVdN8Lm4=";
+    hash = "sha256-CEVWxRaln3sp0541QpMfcfmI2w+RN72UgNLV5Dy9sco=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Z7xf1fuXi2Lx005rQwWa7ZNw8nJGz1z33KPnX/pxO3E=";
+  cargoHash = "sha256-t4Cj7JlBVrMP02Dqibq2IgdKy6ejv+CeffmcPAkh7BE=";
 
   buildAndTestSubdir = "devenv";
-
-  # Force sqlx to use the prepared queries
-  SQLX_OFFLINE = true;
-  # A local database to use for preparing queries
-  DATABASE_URL = "sqlite:nix-eval-cache.db";
-
-  preBuild = ''
-    cargo sqlx database setup --source devenv-eval-cache/migrations
-    cargo sqlx prepare --workspace
-  '';
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
     pkg-config
-    sqlx-cli
   ];
 
   buildInputs = [ openssl ];

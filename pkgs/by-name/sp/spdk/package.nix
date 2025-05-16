@@ -69,6 +69,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+
+    # can be removed again with next release, check is already in master
+    substituteInPlace module/scheduler/dpdk_governor/dpdk_governor.c \
+      --replace-fail "<rte_power.h>" " <rte_power_cpufreq.h>"
   '';
 
   enableParallelBuilding = true;

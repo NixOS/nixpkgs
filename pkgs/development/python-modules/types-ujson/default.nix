@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-ujson";
-  version = "5.10.0.20240515";
+  version = "5.10.0.20250326";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zq5xJ/Da/kr13Q7PmO4T6ddZUe+WO1xam36pLg1x8Nc=";
+    pname = "types_ujson";
+    inherit version;
+    hash = "sha256-VGngXywx7LPEwCZ8yP5BvNEWgm+7Te1pgBpkXGh90BQ=";
   };
 
   build-system = [ setuptools ];

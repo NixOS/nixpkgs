@@ -10,10 +10,10 @@
 let
   # get rid of rec
   pname = "pyspread";
-  version = "2.3.1";
+  version = "2.4";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l6b02CIUqPnT16zqOWl6gDdAobkhiqBMFvT+R1Dvtek=";
+    hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
   };
   inherit (libsForQt5)
     qtsvg

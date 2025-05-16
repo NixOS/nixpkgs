@@ -47,15 +47,15 @@
   libpng,
   librsvg,
   libsecret,
-  libsoup_2_4,
   libsysprof-capture,
   libthai,
   libtiff,
   libwebp,
+  libxml2,
   libxslt,
   lua,
   util-linux,
-  openexr_3,
+  openexr,
   openjpeg,
   osm-gps-map,
   pcre2,
@@ -133,14 +133,14 @@ stdenv.mkDerivation rec {
       libpng
       librsvg
       libsecret
-      libsoup_2_4
       libsysprof-capture
       libthai
       libtiff
       libwebp
+      libxml2
       libxslt
       lua
-      openexr_3
+      openexr
       openjpeg
       osm-gps-map
       pcre2
@@ -196,7 +196,7 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {

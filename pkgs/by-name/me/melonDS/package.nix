@@ -27,17 +27,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0rc-unstable-2025-03-09";
+  version = "1.0rc-unstable-2025-04-09";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "0fcf1f6e3a443cb249f85d948ff6e58dc58501d6";
-    hash = "sha256-llRmW596UHs/q/DjqG8qQ1RqjvmGMsOO1IUkpjPW4h4=";
+    rev = "9ed7e5803e55c5eeb29ec560c8659b38ed331749";
+    hash = "sha256-wLCaGnaMYaPjFzYTph16WTdE89j4MFaO4FuIQdH9R80=";
   };
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -46,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       SDL2
       enet
-      extra-cmake-modules
       libarchive
       libslirp
       libGL

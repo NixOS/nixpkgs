@@ -49,6 +49,15 @@ in
         description = "Whether to configure SSH_ASKPASS in the environment.";
       };
 
+      systemd-ssh-proxy.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable systemd's ssh proxy plugin.
+          See {manpage}`systemd-ssh-proxy(1)`.
+        '';
+      };
+
       askPassword = lib.mkOption {
         type = lib.types.str;
         default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
@@ -334,6 +343,11 @@ in
 
       # Generated options from other settings
       Host *
+      ${lib.optionalString cfg.systemd-ssh-proxy.enable ''
+        # See systemd-ssh-proxy(1)
+        Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
+      ''}
+
       GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
 
       ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}

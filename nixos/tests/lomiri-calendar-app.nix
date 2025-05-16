@@ -44,23 +44,33 @@
 
     with subtest("lomiri calendar launches"):
         machine.succeed("lomiri-calendar-app >&2 &")
-        machine.wait_for_text(r"(January|February|March|April|May|June|July|August|September|October|November|December)")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(2)
+        # Default page is unbearably slow to OCR on, switch to another
+        machine.succeed("xdotool mousemove 580 50 click 1")
+        machine.sleep(2)
+        machine.wait_for_text(r"(January|February|March|April|May|June|July|August|September|October|November|December|Mon|Tue|Wed|Thu|Fri|Sat|Sun)")
         machine.screenshot("lomiri-calendar")
 
     with subtest("lomiri calendar works"):
         # Switch to Agenda tab, less busy
-        machine.succeed("xdotool mousemove 300 50 click 1")
+        machine.succeed("xdotool mousemove 380 50 click 1")
+        machine.sleep(2)
 
         # Still on main page
-        machine.succeed("xdotool mousemove 500 650 click 1")
+        machine.succeed("xdotool mousemove 500 720 click 1")
+        machine.sleep(2)
         machine.wait_for_text(r"(Date|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|All day|Name|Details|More)")
         machine.screenshot("lomiri-calendar_newevent")
 
         # On New Event page
         machine.succeed("xdotool mousemove 500 230 click 1")
+        machine.sleep(2)
         machine.send_chars("foobar")
         machine.sleep(2) # make sure they're actually in there
-        machine.succeed("xdotool mousemove 780 40 click 1")
+        machine.succeed("xdotool mousemove 1000 40 click 1")
+        machine.sleep(2)
         machine.wait_for_text("Agenda")
         machine.screenshot("lomiri-calendar_eventadded")
 
@@ -73,6 +83,9 @@
 
     with subtest("lomiri calendar localisation works"):
         machine.succeed("env LANG=de_DE.UTF-8 lomiri-calendar-app >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(2)
         machine.wait_for_text(r"(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)")
         machine.screenshot("lomiri-calendar_localised")
   '';

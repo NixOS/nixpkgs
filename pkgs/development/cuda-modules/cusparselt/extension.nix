@@ -3,7 +3,7 @@
 {
   lib,
   stdenv,
-  cudaVersion,
+  cudaMajorMinorVersion,
   flags,
   mkVersionedPackageName,
 }:
@@ -12,8 +12,6 @@ let
     attrsets
     lists
     modules
-    versions
-    strings
     trivial
     ;
 
@@ -56,23 +54,6 @@ let
       releaseGrabber
     ]) cusparseltVersions;
 
-  # Our cudaVersion tells us which version of CUDA we're building against.
-  # The subdirectories in lib/ tell us which versions of CUDA are supported.
-  # Typically the names will look like this:
-  #
-  # - 10.2
-  # - 11
-  # - 11.0
-  # - 12
-
-  # libPath :: String
-  libPath =
-    let
-      cudaMajorMinor = versions.majorMinor cudaVersion;
-      cudaMajor = versions.major cudaVersion;
-    in
-    if cudaMajorMinor == "10.2" then cudaMajorMinor else cudaMajor;
-
   # A release is supported if it has a libPath that matches our CUDA version for our platform.
   # LibPath are not constant across the same release -- one platform may support fewer
   # CUDA versions than another.
@@ -109,29 +90,8 @@ let
         redistribRelease = redistrib.${pname};
         featureRelease = feature.${pname};
       };
-      fixedDrv = drv.overrideAttrs (prevAttrs: {
-        buildInputs =
-          prevAttrs.buildInputs
-          ++ lists.optionals (strings.versionOlder cudaVersion "11.4") [ final.cudatoolkit ]
-          ++ lists.optionals (strings.versionAtLeast cudaVersion "11.4") (
-            [ final.libcublas.lib ]
-            # For some reason, the 1.4.x release of cusparselt requires the cudart library.
-            ++ lists.optionals (strings.hasPrefix "1.4" redistrib.${pname}.version) [ final.cuda_cudart.lib ]
-          );
-        meta = prevAttrs.meta // {
-          description = "cuSPARSELt: A High-Performance CUDA Library for Sparse Matrix-Matrix Multiplication";
-          homepage = "https://developer.nvidia.com/cusparselt-downloads";
-
-          maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.sepiabrown ];
-          license = lib.licenses.unfreeRedistributable // {
-            shortName = "cuSPARSELt EULA";
-            fullName = "cuSPARSELt SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
-            url = "https://docs.nvidia.com/cuda/cusparselt/license.html";
-          };
-        };
-      });
     in
-    attrsets.nameValuePair (computeName redistrib.${pname}) fixedDrv;
+    attrsets.nameValuePair (computeName redistrib.${pname}) drv;
 
   extension =
     let

@@ -300,7 +300,8 @@ let
         description = "Cryptographic library that implements the SSL and TLS protocols";
         license = lib.licenses.openssl;
         mainProgram = "openssl";
-        maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
+        maintainers = with lib.maintainers; [ thillux ];
+        teams = [ lib.teams.stridtech ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"

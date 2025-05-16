@@ -354,6 +354,11 @@ buildPythonPackage rec {
 
     # Requires newer botocore version
     "test_dynamodb_with_account_id_routing"
+
+    # Assumes too much about threading.Timer() behavior (that it honors the
+    # timeout precisely and that the thread handler will complete in just 0.1s
+    # from the requested timeout)
+    "test_start_and_fire_timer_decision"
   ];
 
   disabledTestPaths = [

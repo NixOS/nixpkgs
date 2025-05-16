@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-camera-app";
-  version = "4.0.7";
+  version = "4.0.8";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-camera-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x0hxOGPIxzQdwzb8f4wvllAW1hJ5lyR4qYvyX96RMoA=";
+    hash = "sha256-4Tkiv0f+1uZKkeyE60G/ThThMyNp+l8q6d4tiKipM3A=";
   };
 
   # We don't want absolute paths in desktop files
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30 # extra graphics
     ];
     mainProgram = "lomiri-camera-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

@@ -162,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
     ];
     mainProgram = "lomiri-content-hub-service";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-content-hub"

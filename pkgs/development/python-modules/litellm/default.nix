@@ -5,6 +5,7 @@
   azure-identity,
   azure-keyvault-secrets,
   backoff,
+  boto3,
   buildPythonPackage,
   click,
   cryptography,
@@ -17,6 +18,7 @@
   importlib-metadata,
   jinja2,
   jsonschema,
+  mcp,
   openai,
   orjson,
   poetry-core,
@@ -24,23 +26,27 @@
   pydantic,
   pyjwt,
   pynacl,
+  python,
   python-dotenv,
   python-multipart,
   pythonOlder,
   pyyaml,
   requests,
   resend,
+  rich,
   rq,
   tiktoken,
   tokenizers,
   uvloop,
   uvicorn,
+  websockets,
   nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.63.11";
+  version = "1.69.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +55,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}-stable";
-    hash = "sha256-j2RfuVffmWoeAAVcT579S9pU06haKEYYa7FcpMzu9uA=";
+    hash = "sha256-W2uql9fKzwAmSgeLTuESguh+dVn+b3JNTeGlCc9NP2A=";
   };
 
   build-system = [ poetry-core ];
@@ -73,35 +79,59 @@ buildPythonPackage rec {
     proxy = [
       apscheduler
       backoff
+      boto3
       cryptography
       fastapi
       fastapi-sso
       gunicorn
+      mcp
       orjson
       pyjwt
+      pynacl
       python-multipart
       pyyaml
+      rich
       rq
       uvloop
       uvicorn
+      websockets
     ];
+
     extra_proxy = [
       azure-identity
       azure-keyvault-secrets
       google-cloud-kms
       prisma
-      pynacl
       resend
     ];
   };
 
-  pythonImportsCheck = [ "litellm" ];
+  pythonImportsCheck = [
+    "litellm"
+    "litellm_enterprise"
+  ];
+
+  # Relax dependency check on openai, may not be needed in the future
+  pythonRelaxDeps = [ "openai" ];
 
   # access network
   doCheck = false;
 
-  passthru.tests = {
-    inherit (nixosTests) litellm;
+  postFixup = ''
+    # Symlink litellm_enterprise to make it discoverable
+    pushd $out/lib/python${python.pythonVersion}/site-packages
+    ln -s enterprise/litellm_enterprise litellm_enterprise
+    popd
+  '';
+
+  passthru = {
+    tests = { inherit (nixosTests) litellm; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)-stable"
+      ];
+    };
   };
 
   meta = {

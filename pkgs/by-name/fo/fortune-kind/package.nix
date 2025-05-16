@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   libiconv,
   makeBinaryWrapper,
   installShellFiles,
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   buildNoDefaultFeatures = true;
@@ -54,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   postInstall =
     ''
       wrapProgram $out/bin/fortune-kind \
-        --prefix FORTUNE_DIR : "$out/fortunes"
+        --set-default FORTUNE_DIR "$out/fortunes"
     ''
     + lib.optionalString fortuneAlias ''
       ln -s fortune-kind $out/bin/fortune

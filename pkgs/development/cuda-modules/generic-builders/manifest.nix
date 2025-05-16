@@ -4,7 +4,9 @@
   autoAddCudaCompatRunpath,
   autoPatchelfHook,
   backendStdenv,
+  callPackage,
   fetchurl,
+  fixups,
   lib,
   markForCudatoolkitRootHook,
   flags,
@@ -30,7 +32,6 @@ let
   inherit (lib)
     attrsets
     lists
-    meta
     strings
     trivial
     licenses
@@ -39,6 +40,12 @@ let
     ;
 
   inherit (stdenv) hostPlatform;
+
+  # Last step before returning control to `callPackage` (adds the `.override` method)
+  # we'll apply (`overrideAttrs`) necessary package-specific "fixup" functions.
+  # Order is significant.
+  maybeFixup = fixups.${pname} or null;
+  fixup = if maybeFixup != null then callPackage maybeFixup { } else { };
 
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
@@ -50,7 +57,7 @@ let
 
   sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
 in
-backendStdenv.mkDerivation (finalAttrs: {
+(backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
   # redistributables are sensitive to the compiler flags provided to stdenv. The patchelf package
   # is sensitive to the compiler flags provided to stdenv, and we depend on it. As such, we are
@@ -303,8 +310,12 @@ backendStdenv.mkDerivation (finalAttrs: {
     true
   '';
 
-  # Make the CUDA-patched stdenv available
-  passthru.stdenv = backendStdenv;
+  passthru = {
+    # Provide access to the release information for fixup functions.
+    inherit redistribRelease featureRelease;
+    # Make the CUDA-patched stdenv available
+    stdenv = backendStdenv;
+  };
 
   meta = {
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
@@ -321,7 +332,21 @@ backendStdenv.mkDerivation (finalAttrs: {
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license = licenses.unfree;
-    maintainers = teams.cuda.members;
+    license =
+      if redistName == "cuda" then
+        # Add the package-specific license.
+        let
+          licensePath =
+            if redistribRelease.license_path != null then
+              redistribRelease.license_path
+            else
+              "${pname}/LICENSE.txt";
+          url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
+        in
+        lib.licenses.nvidiaCudaRedist // { inherit url; }
+      else
+        licenses.unfree;
+    teams = [ teams.cuda ];
   };
-})
+})).overrideAttrs
+  fixup

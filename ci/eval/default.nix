@@ -9,6 +9,7 @@
   nixVersions,
   jq,
   sta,
+  python3,
 }:
 
 let
@@ -25,14 +26,14 @@ let
           "nixos"
           "pkgs"
           ".version"
-          "ci/supportedSystems.nix"
+          "ci/supportedSystems.json"
         ]
       );
     };
 
   nix = nixVersions.nix_2_24;
 
-  supportedSystems = import ../supportedSystems.nix;
+  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
   attrpathsSuperset =
     runCommand "attrpaths-superset.json"
@@ -42,8 +43,6 @@ let
           nix
           time
         ];
-        env.supportedSystems = builtins.toJSON supportedSystems;
-        passAsFile = [ "supportedSystems" ];
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -57,7 +56,6 @@ let
             --option restrict-eval true \
             --option allow-import-from-derivation false \
             --arg enableWarnings false > $out/paths.json
-        mv "$supportedSystemsPath" $out/systems.json
       '';
 
   singleSystem =
@@ -67,7 +65,7 @@ let
       # because `--argstr system` would only be passed to the ci/default.nix file!
       evalSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile,
+      attrpathFile ? "${attrpathsSuperset}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       checkMeta ? true,
@@ -179,6 +177,8 @@ let
           xargs -I{} -P"$cores" \
           ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir"
 
+        cp -r "$chunkOutputDir"/stats $out/stats-by-chunk
+
         if (( chunkSize * chunkCount != attrCount )); then
           # A final incomplete chunk would mess up the stats, don't include it
           rm "$chunkOutputDir"/stats/"$seq_end"
@@ -253,6 +253,12 @@ let
           done
         } |
           jq -s from_entries > $out/stats.json
+
+        mkdir -p $out/stats
+
+        for d in ${resultsDir}/*; do
+          cp -r "$d"/stats-by-chunk $out/stats/$(basename "$d")
+        done
       '';
 
   compare = import ./compare {
@@ -262,6 +268,7 @@ let
       runCommand
       writeText
       supportedSystems
+      python3
       ;
   };
 
@@ -279,7 +286,6 @@ let
           name = evalSystem;
           path = singleSystem {
             inherit quickTest evalSystem chunkSize;
-            attrpathFile = attrpathsSuperset + "/paths.json";
           };
         }) evalSystems
       );

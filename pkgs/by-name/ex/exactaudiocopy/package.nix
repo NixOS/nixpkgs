@@ -13,16 +13,16 @@
 
 let
   pname = "exact-audio-copy";
-  version = "1.6.0";
+  version = "1.8.0";
 
   eac_exe = fetchurl {
     url = "http://www.exactaudiocopy.de/eac-${lib.versions.majorMinor version}.exe";
-    sha256 = "8291d33104ebab2619ba8d85744083e241330a286f5bd7d54c7b0eb08f2b84c1";
+    sha256 = "205530cfbfdff82343858f38b0e709e586051fb8900ecd513d7992a3c1ef031b";
   };
 
-  cygwin_dll = fetchurl {
-    url = "https://cygwin.com/snapshots/x86/cygwin1-20220301.dll.xz";
-    sha256 = "0zxn0r5q69fhciy0mrplhxj1hxwy3sq4k1wdy6n6kyassm4zyz1x";
+  cygwin = fetchurl {
+    url = "https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.1-1-x86_64.tar.xz";
+    sha256 = "45d1c76a15426209c20a8d4df813e94fbd17bd5d85ad4d742515ff432400143e";
   };
 
   patched_eac = stdenv.mkDerivation {
@@ -40,9 +40,11 @@ let
       cd $_tmp
       7z x -aoa ${eac_exe}
       chmod -R 755 .
-      cp ${cygwin_dll} cygwin1.dll.xz
-      xz --decompress cygwin1.dll.xz
-      mv cygwin1.dll CDRDAO/
+      cp ${cygwin} cygwin1.tar.xz
+      tar xf cygwin1.tar.xz
+      mv usr/bin/cygwin1.dll CDRDAO/
+      rm -rf usr
+      rm cygwin1.tar.xz
       cp -r * $out
       7z x EAC.exe
       convert .rsrc/1033/ICON/29.ico -thumbnail 128x128 -alpha on -background none -flatten "$out/eac.ico.128.png"

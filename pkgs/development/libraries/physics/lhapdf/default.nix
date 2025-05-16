@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   bash,
-  python,
+  python3,
   makeWrapper,
 }:
 
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
       bash
       makeWrapper
     ]
-    ++ lib.optionals (python != null && lib.versionAtLeast python.version "3.10") [
-      python.pkgs.cython
+    ++ lib.optionals (python3 != null && lib.versionAtLeast python3.version "3.10") [
+      python3.pkgs.cython
     ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
-  configureFlags = lib.optionals (python == null) [ "--disable-python" ];
+  configureFlags = lib.optionals (python3 == null) [ "--disable-python" ];
 
-  preBuild = lib.optionalString (python != null && lib.versionAtLeast python.version "3.10") ''
+  preBuild = lib.optionalString (python3 != null && lib.versionAtLeast python3.version "3.10") ''
     rm wrappers/python/lhapdf.cpp
   '';
 

@@ -5,7 +5,6 @@
   openssl,
   pkg-config,
   stdenv,
-  darwin,
   nix-update-script,
   testers,
   speedtest-rs,
@@ -22,12 +21,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1FAFYiWDD/KG/7/UTv/EW6Nj2GnU0GZFFq6ouMc0URA=";
   };
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 

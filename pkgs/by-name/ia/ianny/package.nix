@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ianny";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "ianny";
     rev = "v${version}";
-    hash = "sha256-F8Uc2BsQ5f7yaUXXDhLvyyYKUDAuvP9cCR2h3vblr0g=";
+    hash = "sha256-XNXlU9cCXPJhPytnVGHol8Cd5nZOEDDoDM4sm1+I/Qc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-QqdcOftbVt/yNzmvvy6AI66oTZvTgWHfY3Q/ikWGaLM=";
+  cargoHash = "sha256-7XpM6WWJaHHui85HCZ7SL1G2ICNw453xfZx5kUa/oeg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus.dev ];

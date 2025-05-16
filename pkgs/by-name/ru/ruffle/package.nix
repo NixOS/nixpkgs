@@ -7,7 +7,6 @@
   jre_minimal,
   pkg-config,
   wrapGAppsHook3,
-  darwin,
   alsa-lib,
   gtk3,
   openssl,
@@ -23,17 +22,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0-nightly-2025-03-28";
+  version = "0-nightly-2025-05-11";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = lib.strings.removePrefix "0-" finalAttrs.version;
-    hash = "sha256-p2EEoHXseIXms4Xjyi3aNWCU0W9slXkeqrCrPvq1BjI=";
+    hash = "sha256-m/4e15znssmDASvuLu7BpkhKLZmw7TZ2nXB0bAPrN+4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RcCIt6xVZaQA7eSgKngHtsGafHFwv1bISK0XKWoNWtI=";
+  cargoHash = "sha256-JtapILlrDbTFBa763h04lMMP2xQxW0vOpAfyIlHPjeI=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
@@ -56,16 +55,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ]
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      openssl
-      wayland
-      vulkan-loader
-      udev
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    openssl
+    wayland
+    vulkan-loader
+    udev
+  ];
 
   postInstall =
     ''

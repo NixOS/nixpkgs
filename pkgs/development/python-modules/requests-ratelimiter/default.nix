@@ -41,6 +41,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "requests_ratelimiter" ];
 
   meta = with lib; {
+    # https://github.com/JWCook/requests-ratelimiter/issues/78
+    broken = lib.versionAtLeast pyrate-limiter.version "3";
     description = "Module for rate-limiting for requests";
     homepage = "https://github.com/JWCook/requests-ratelimiter";
     changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${src.rev}/HISTORY.md";

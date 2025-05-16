@@ -1,14 +1,21 @@
 # Packages which have been deprecated or removed from cudaPackages
-final: prev:
+final: _:
 let
-  inherit (prev.lib) warn;
-  inherit (builtins) mapAttrs;
-
   mkRenamed =
     oldName:
     { path, package }:
-    warn "cudaPackages.${oldName} is deprecated, use ${path} instead" package;
+    final.lib.warn "cudaPackages.${oldName} is deprecated, use ${path} instead" package;
 in
-mapAttrs mkRenamed {
+builtins.mapAttrs mkRenamed {
   # A comment to prevent empty { } from collapsing into a single line
+
+  cudaFlags = {
+    path = "cudaPackages.flags";
+    package = final.flags;
+  };
+
+  cudaVersion = {
+    path = "cudaPackages.cudaMajorMinorVersion";
+    package = final.cudaMajorMinorVersion;
+  };
 }

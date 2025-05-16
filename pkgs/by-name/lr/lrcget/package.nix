@@ -13,7 +13,6 @@
   copyDesktopItems,
   makeDesktopItem,
   alsa-lib,
-  darwin,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
@@ -75,10 +74,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       webkitgtk_4_1
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreAudio
-      darwin.apple_sdk.frameworks.WebKit
     ];
 
   # Disable checkPhase, since the project doesn't contain tests

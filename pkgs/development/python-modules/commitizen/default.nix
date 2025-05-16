@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.4.1";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,12 +40,13 @@ buildPythonPackage rec {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-nKX5mMqcUcQfL0r0uVj2tFTW3qaSCx42roSV6qaf0yU=";
+    hash = "sha256-fCQtSzOUezd3UE8bktn2cw4qwnl2pM6L7bBgKKFq5AM=";
   };
 
   pythonRelaxDeps = [
     "argcomplete"
     "decli"
+    "termcolor"
   ];
 
   build-system = [ poetry-core ];

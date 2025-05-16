@@ -1,46 +1,40 @@
 {
-  stdenv,
   lib,
-  qtbase,
-  wrapQtAppsHook,
+  stdenv,
   fetchFromGitHub,
+  libsForQt5,
   addDriverRunpath,
   poppler-utils,
-  qtxmlpatterns,
-  qtsvg,
   libgbm,
   xvfb-run,
   fontconfig,
   freetype,
   xorg,
-  qmake,
   python3,
-  qttools,
   git,
-  qtmultimedia,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);
 in
 stdenv.mkDerivation rec {
   pname = "seamly2d";
-  version = "2025.3.17.207";
+  version = "2025.4.14.211";
 
   src = fetchFromGitHub {
     owner = "FashionFreedom";
     repo = "Seamly2D";
     tag = "v${version}";
-    hash = "sha256-5Bi+SycUZFOxmP0bWbqSnKRZ+UW6b48Cn4YUVfHi4Js=";
+    hash = "sha256-Zs1zinWWbodF340fo18HbRD//JIm/fhEgapAcR0JnzA=";
   };
 
   buildInputs = [
-    qtmultimedia
+    libsForQt5.qtmultimedia
     git
     qtPython
-    qtbase
+    libsForQt5.qtbase
     poppler-utils
-    qtxmlpatterns
-    qtsvg
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qtsvg
     libgbm
     freetype
     xorg.libXi
@@ -52,9 +46,9 @@ stdenv.mkDerivation rec {
     addDriverRunpath
     xvfb-run
     fontconfig
-    wrapQtAppsHook
-    qmake
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
   ];
 
   postPatch = ''

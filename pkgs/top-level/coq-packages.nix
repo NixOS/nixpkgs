@@ -101,7 +101,6 @@ let
       equations = callPackage ../development/coq-modules/equations { };
       ExtLib = callPackage ../development/coq-modules/ExtLib { };
       extructures = callPackage ../development/coq-modules/extructures { };
-      fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix { };
       flocq = callPackage ../development/coq-modules/flocq { };
       fourcolor = callPackage ../development/coq-modules/fourcolor { };
       gaia = callPackage ../development/coq-modules/gaia { };
@@ -130,6 +129,8 @@ let
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
       ssreflect = self.mathcomp.ssreflect;
+      mathcomp-boot = self.mathcomp.boot;
+      mathcomp-order = self.mathcomp.order;
       mathcomp-ssreflect = self.mathcomp.ssreflect;
       mathcomp-fingroup = self.mathcomp.fingroup;
       mathcomp-algebra = self.mathcomp.algebra;
@@ -166,6 +167,18 @@ let
       metacoq-erasure-plugin = self.metacoq.erasure-plugin;
       metacoq-translations = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
+      metarocq = callPackage ../development/coq-modules/metarocq { };
+      metarocq-utils = self.metarocq.utils;
+      metarocq-common = self.metarocq.common;
+      metarocq-template-rocq = self.metarocq.template-rocq;
+      metarocq-pcuic = self.metarocq.pcuic;
+      metarocq-safechecker = self.metarocq.safechecker;
+      metarocq-template-pcuic = self.metarocq.template-pcuic;
+      metarocq-erasure = self.metarocq.erasure;
+      metarocq-quotation = self.metarocq.quotation;
+      metarocq-safechecker-plugin = self.metarocq.safechecker-plugin;
+      metarocq-erasure-plugin = self.metarocq.erasure-plugin;
+      metarocq-translations = self.metarocq.translations;
       mtac2 = callPackage ../development/coq-modules/mtac2 { };
       multinomials = callPackage ../development/coq-modules/multinomials { };
       odd-order = callPackage ../development/coq-modules/odd-order { };

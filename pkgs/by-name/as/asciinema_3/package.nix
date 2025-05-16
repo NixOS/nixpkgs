@@ -9,18 +9,18 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "asciinema";
-    version = "3.0.0-rc.3";
+    version = "3.0.0-rc.4";
 
     src = fetchFromGitHub {
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
       rev = "v${self.version}";
-      hash = "sha256-TYJ17uVj8v1u630MTb033h0X3aYRXY9d89GjAxG8muk=";
+      hash = "sha256-w1LV21EqHNC+LYMLpljGQrxmBJ8ztCQ7g3YbJ6ME5j0=";
     };
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-dgeHQs1IYD8m8gOtPEn+l0A2RbSmwTyzrbiusD3dUX0=";
+    cargoHash = "sha256-Q6HoKrcwa67lAsl4zgNYilo4LzPxySz2lE85ZdOSPpM=";
 
     nativeCheckInputs = [ python3 ];
 
@@ -56,7 +56,10 @@ let
       '';
       license = with lib.licenses; [ gpl3Plus ];
       mainProgram = "asciinema";
-      maintainers = with lib.maintainers; [ jiriks74 ];
+      maintainers = with lib.maintainers; [
+        jiriks74
+        llakala
+      ];
     };
   };
 in

@@ -5,8 +5,9 @@
   installShellFiles,
   stdenv,
   buildPackages,
-  versionCheckHook,
   nix-update-script,
+  testers,
+  az-pim-cli,
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";
@@ -37,11 +38,13 @@ buildGoModule (finalAttrs: {
     ''
   );
 
-  doInstallCheck = true;
-  nativeInstallCheck = [ versionCheckHook ];
-  versionCheckProgramArg = "version";
-
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      command = "HOME=$TMPDIR az-pim-cli --version";
+      package = az-pim-cli;
+    };
+  };
 
   meta = {
     description = "List and activate Azure Entra ID Privileged Identity Management roles from the CLI";

@@ -43,6 +43,6 @@ buildGoModule rec {
     description = "Helm plugin to push chart package to ChartMuseum";
     homepage = "https://github.com/chartmuseum/helm-push";
     license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

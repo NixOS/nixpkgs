@@ -20,7 +20,7 @@
   qt5,
   xorg,
   cudaSupport ? config.cudaSupport,
-  cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities,
+  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
 }:
 
@@ -46,7 +46,7 @@ stdenv'.mkDerivation rec {
   cmakeFlags = lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" true)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-      lib.strings.concatStringsSep ";" (map cudaPackages.cudaFlags.dropDot cudaCapabilities)
+      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDot cudaCapabilities)
     ))
   ];
 

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "git-bug";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "git-bug";
     repo = "git-bug";
     rev = "v${version}";
-    sha256 = "12byf6nsamwz0ssigan1z299s01cyh8bhgj86bibl90agd4zs9n8";
+    sha256 = "sha256-w4PrcWLqkxwtyccf2OZAqFlLXNsZZNOTyny26VZr9Cg=";
   };
 
-  vendorHash = "sha256-32kNDoBE50Jx1Ef9YwhDk7nd3CaTSnHPlu7PgWPUGfE=";
+  vendorHash = "sha256-z9StU5cvZlDkmC7TE6JOhpxAx5oSTxAQTBh1LEksKww=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,9 +28,9 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/MichaelMure/git-bug/commands.GitCommit=v${version}"
-    "-X github.com/MichaelMure/git-bug/commands.GitLastTag=${version}"
-    "-X github.com/MichaelMure/git-bug/commands.GitExactTag=${version}"
+    "-X github.com/git-bug/git-bug/commands.GitCommit=v${version}"
+    "-X github.com/git-bug/git-bug/commands.GitLastTag=${version}"
+    "-X github.com/git-bug/git-bug/commands.GitExactTag=${version}"
   ];
 
   postInstall = ''

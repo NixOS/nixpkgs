@@ -3,6 +3,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
+  fetchpatch,
   pillow,
   pythonOlder,
   reportlab,
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-8JTHYQIBbu/4fknK2ZEQeDSgaxKGDfflxumcFMpaGQk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "python313-compat.patch";
+      url = "https://github.com/SmileyChris/easy-thumbnails/pull/650.patch";
+      hash = "sha256-qD/YnDlDZ7DghLv/mxjQ2o6pSl3fGR+Ipx5NX2BV6zc=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

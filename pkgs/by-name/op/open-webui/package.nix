@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.0";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-YCob6Tgnpdbt9QqnwakorXGlyaxy4wo2QCp4EMGHTrU=";
+    hash = "sha256-Eib5UpPPQHXHOBVWrsNH1eEJrF8Vx9XshGYUnnAehpM=";
   };
 
   frontend = buildNpmPackage rec {
@@ -24,13 +24,13 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.27.2";
+    pyodideVersion = "0.27.3";
     pyodide = fetchurl {
-      hash = "sha256-sZ47IxPiL1e12rmpH3Zv2v6L2+1tz/kIrT4uYbng+Ec=";
+      hash = "sha256-SeK3RKqqxxLLf9DN5xXuPw6ZPblE6OX9VRXMzdrmTV4=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-lWVkZDlPDCmiNMj+7K47wSFwTKRJkS762uGtcBfx59s=";
+    npmDepsHash = "sha256-Vcc8ExET53EVtNUhb4JoxYIUWoQ++rVTpxUPgcZ+GNI=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -82,6 +82,7 @@ python312.pkgs.buildPythonApplication rec {
   dependencies =
     with python312.pkgs;
     [
+      accelerate
       aiocache
       aiofiles
       aiohttp
@@ -129,6 +130,7 @@ python312.pkgs.buildPythonApplication rec {
       markdown
       moto
       nltk
+      onnxruntime
       openai
       opencv-python-headless
       openpyxl
@@ -150,6 +152,7 @@ python312.pkgs.buildPythonApplication rec {
       peewee-migrate
       pgvector
       pillow
+      pinecone-client
       playwright
       psutil
       psycopg2-binary
@@ -177,6 +180,7 @@ python312.pkgs.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      tencentcloud-sdk-python
       tiktoken
       transformers
       unstructured

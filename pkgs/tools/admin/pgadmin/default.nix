@@ -2,38 +2,37 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchYarnDeps,
   zlib,
   nixosTests,
   postgresqlTestHook,
   postgresql,
-  yarn,
-  fixup-yarn-lock,
+  yarn-berry_3,
   nodejs,
+  autoconf,
+  automake,
+  libtool,
+  libpng,
+  nasm,
+  pkg-config,
   stdenv,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.1";
-  yarnHash = "sha256-RMsmYtesCaNI4SGH2QIdcZAivKp/a8Wo6cBzi13MXqs=";
+  version = "9.3";
+  yarnHash = "sha256-75FwwQ67j0aTHGvD4YwAaR8CWV4u4KsuMghidbkgVsw=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-NqtdR0aX6PDskbA6+AaBMhyvuKjl/CHQso9V4Vpd+LU=";
+    hash = "sha256-4uupF1dw6OE/briAI5PWiQ7h6RPx1sUqf8PB8cJsNSU=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: { });
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = yarnHash;
-  };
 
   # don't bother to test kerberos authentication
   # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
@@ -50,6 +49,11 @@ in
 
 pythonPackages.buildPythonApplication rec {
   inherit pname version src;
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    src = src + "/web";
+    hash = yarnHash;
+  };
 
   # from Dockerfile
   CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
@@ -76,9 +80,6 @@ pythonPackages.buildPythonApplication rec {
     sed 's|==|>=|g' -i requirements.txt
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
-    # remove packageManager from package.json so we can work without corepack
-    substituteInPlace web/package.json \
-      --replace-fail "\"packageManager\": \"yarn@3.8.7\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
       --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
@@ -86,6 +87,8 @@ pythonPackages.buildPythonApplication rec {
         --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
     ''}
   '';
+
+  dontYarnBerryInstallDeps = true;
 
   preBuild = ''
     # Adapted from pkg/pip/build.sh
@@ -108,18 +111,12 @@ pythonPackages.buildPythonApplication rec {
     done
     cd ../
 
-    # mkYarnModules and mkYarnPackage have problems running the webpacker
     echo Building the web frontend...
     cd web
-    export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "${offlineCache}"
-    # replace with converted yarn.lock file
-    rm yarn.lock
-    cp ${./yarn.lock} yarn.lock
-    chmod +w yarn.lock
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
+    (
+    export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
+    yarnBerryConfigHook
+    )
     yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
@@ -145,13 +142,23 @@ pythonPackages.buildPythonApplication rec {
     cython
     pip
     sphinx
-    yarn
-    fixup-yarn-lock
+    yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
     nodejs
+
+    # for building mozjpeg2
+    autoconf
+    automake
+    libtool
+    nasm
+    pkg-config
   ];
+
   buildInputs = [
     zlib
     pythonPackages.wheel
+    # for mozjpeg2
+    libpng
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -242,7 +249,6 @@ pythonPackages.buildPythonApplication rec {
     python regression/runtests.py --pkg browser --exclude ${skippedTests}
 
     ## Reverse engineered SQL test ##
-
     python regression/runtests.py --pkg resql
 
     runHook postCheck

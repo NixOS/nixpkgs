@@ -1,9 +1,9 @@
 {
+  pkgs,
   lib,
   buildPythonPackage,
   fetchPypi,
   flit-core,
-  ghostscript,
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     pillow
     pytestCheckHook
     pytest-cov-stub

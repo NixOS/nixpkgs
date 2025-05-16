@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
@@ -14,15 +14,13 @@
   laszip,
   mpfr,
   pcl,
-  qtbase,
-  qtsvg,
-  qttools,
+  libsForQt5,
   tbb,
   xercesc,
   wrapGAppsHook3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cloudcompare";
   version = "2.13.2";
 
@@ -39,6 +37,7 @@ mkDerivation rec {
     eigen # header-only
     wrapGAppsHook3
     copyDesktopItems
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -50,9 +49,9 @@ mkDerivation rec {
     laszip
     mpfr
     pcl
-    qtbase
-    qtsvg
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qttools
     tbb
     xercesc
   ];

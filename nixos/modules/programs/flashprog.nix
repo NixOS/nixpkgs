@@ -20,6 +20,8 @@ in
   config = lib.mkIf cfg.enable {
     services.udev.packages = [ cfg.package ];
     environment.systemPackages = [ cfg.package ];
+    hardware.libjaylink.enable = true;
+    hardware.libftdi.enable = true;
   };
 
   meta.maintainers = with lib.maintainers; [ felixsinger ];

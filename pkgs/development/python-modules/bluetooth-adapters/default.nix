@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-adapters";
     changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

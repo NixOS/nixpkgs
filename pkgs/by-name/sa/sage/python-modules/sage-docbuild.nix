@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Build system of the Sage documentation";
     homepage = "https://www.sagemath.org";
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
   };
 }

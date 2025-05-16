@@ -18,13 +18,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snx-rs";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
     tag = "v${version}";
-    hash = "sha256-eWtoCU5JkpHGcOLzjzj9icDlnIW1y+fiEn5V/E5IQ4U=";
+    hash = "sha256-bLuIXd2pqqiyEP+lDTJYVDZkRZ0HcDkKFZd/qlpuf98=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Hjc2wKkNmlVjZb5wz9fq9hzUsxXJyeFYq+4C+weUlq0=";
+  cargoHash = "sha256-E5OJVf9CkLn5mFtk4Yacs2OIvAuIw0idSs7QuTNvfgU=";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";

@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fsspec,
   indexed-gzip,
   indexed-zstd,
   libarchive-c,
   pytestCheckHook,
   python-xz,
   pythonOlder,
+  writableTmpDirAsHomeHook,
   rapidgzip,
   rarfile,
   setuptools,
@@ -54,6 +56,8 @@ buildPythonPackage rec {
     pytestCheckHook
     zstandard
     zstd
+    fsspec
+    writableTmpDirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "ratarmountcore" ];
@@ -73,6 +77,8 @@ buildPythonPackage rec {
     "test_file_versions"
     "test_stream_compressed"
     "test_chimera_file"
+    "test_URLContextManager"
+    "test_URL"
   ];
 
   meta = with lib; {

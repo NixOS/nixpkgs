@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     tag = "v${version}";
-    hash = "sha256-r94dDXPpkLS1PsB9L4qlDw15tPa2vpxOS52eqJk2dNU=";
+    hash = "sha256-cgcoxDTfXeP2w1k8Miw8zY1Bln0XpTdtUY13SSvrHXw=";
   };
 
   build-system = [ setuptools ];

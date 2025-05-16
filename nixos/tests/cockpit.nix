@@ -23,11 +23,9 @@ import ./make-test-python.nix (
             enable = true;
             port = 7890;
             openFirewall = true;
-            settings = {
-              WebService = {
-                Origins = "https://server:7890";
-              };
-            };
+            allowed-origins = [
+              "https://server:${toString config.services.cockpit.port}"
+            ];
           };
         };
       client =
@@ -123,10 +121,14 @@ import ./make-test-python.nix (
                     assert "Web console is running in limited access mode" in driver.page_source
 
                     log("Clicking the sudo button")
+                    for button in driver.find_elements(By.TAG_NAME, "button"):
+                        if 'admin' in button.text:
+                            button.click()
                     driver.switch_to.default_content()
-                    driver.find_element(By.CSS_SELECTOR, 'button.ct-locked').click()
+
                     log("Checking that /nonexistent is not a thing")
                     assert '/nonexistent' not in driver.page_source
+                    assert len(driver.find_elements(By.CSS_SELECTOR, '#machine-reconnect')) == 0
 
                     driver.close()
                   '';

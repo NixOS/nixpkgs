@@ -8,12 +8,13 @@
   docutils,
   setuptools,
   kivy-garden,
+  libGL,
+  libX11,
   mtdev,
   SDL2,
   SDL2_image,
   SDL2_ttf,
   SDL2_mixer,
-  libcxx,
   withGstreamer ? true,
   gst_all_1,
   pygments,
@@ -50,6 +51,8 @@ buildPythonPackage rec {
       SDL2_mixer
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
       mtdev
     ]
     ++ lib.optionals withGstreamer (
@@ -82,7 +85,7 @@ buildPythonPackage rec {
       "-Wno-error=incompatible-pointer-types"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getDev libcxx}/include/c++/v1"
+      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     ]
   );
 

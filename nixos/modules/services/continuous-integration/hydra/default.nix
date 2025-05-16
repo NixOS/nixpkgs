@@ -564,16 +564,14 @@ in
     services.postgresql.enable = lib.mkIf haveLocalDB true;
 
     services.postgresql.identMap = lib.optionalString haveLocalDB ''
-      hydra-users hydra hydra
-      hydra-users hydra-queue-runner hydra
-      hydra-users hydra-www hydra
-      hydra-users root hydra
-      # The postgres user is used to create the pg_trgm extension for the hydra database
-      hydra-users postgres postgres
+      hydra hydra hydra
+      hydra hydra-queue-runner hydra
+      hydra hydra-www hydra
+      hydra root hydra
     '';
 
     services.postgresql.authentication = lib.optionalString haveLocalDB ''
-      local hydra all ident map=hydra-users
+      local all hydra peer map=hydra
     '';
 
   };

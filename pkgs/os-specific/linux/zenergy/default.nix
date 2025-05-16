@@ -41,6 +41,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/BoukeHaarsma23/zenergy";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ wizardlink ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

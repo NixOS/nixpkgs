@@ -2,6 +2,15 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "module-services-anubis": [
+    "index.html#module-services-anubis"
+  ],
+  "module-services-anubis-configuration": [
+    "index.html#module-services-anubis-configuration"
+  ],
+  "module-services-anubis-quickstart": [
+    "index.html#module-services-anubis-quickstart"
+  ],
   "module-services-crab-hole": [
     "index.html#module-services-crab-hole"
   ],
@@ -50,6 +59,12 @@
   "module-services-strfry-reverse-proxy": [
     "index.html#module-services-strfry-reverse-proxy"
   ],
+  "module-services-dump1090-fa": [
+    "index.html#module-services-dump1090-fa"
+  ],
+  "module-services-dump1090-fa-configuration": [
+    "index.html#module-services-dump1090-fa-configuration"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -67,6 +82,21 @@
   ],
   "sec-mattermost-plugins-build": [
     "index.html#sec-mattermost-plugins-build"
+  ],
+  "sec-nixos-test-wifi": [
+    "index.html#sec-nixos-test-wifi"
+  ],
+  "sec-nixos-test-wifi-ap": [
+    "index.html#sec-nixos-test-wifi-ap"
+  ],
+  "sec-nixos-test-wifi-monitor": [
+    "index.html#sec-nixos-test-wifi-monitor"
+  ],
+  "sec-nixos-test-wifi-station": [
+    "index.html#sec-nixos-test-wifi-station"
+  ],
+  "sec-nixos-test-wifi-vwifi-server": [
+    "index.html#sec-nixos-test-wifi-vwifi-server"
   ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
@@ -137,6 +167,9 @@
   "ex-config": [
     "index.html#ex-config"
   ],
+  "ex-nixos-rebuild-build-image-customize": [
+    "index.html#ex-nixos-rebuild-build-image-customize"
+  ],
   "sec-installation-additional-notes": [
     "index.html#sec-installation-additional-notes"
   ],
@@ -190,6 +223,9 @@
   ],
   "sec-image-nixos-rebuild-build-image": [
     "index.html#sec-image-nixos-rebuild-build-image"
+  ],
+  "sec-image-nixos-rebuild-build-image-customize": [
+    "index.html#sec-image-nixos-rebuild-build-image-customize"
   ],
   "sec-image-repart": [
     "index.html#sec-image-repart"
@@ -1250,6 +1286,12 @@
   "module-services-postgres-initializing-extra-permissions-service-user-oneshot": [
     "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
   ],
+  "module-services-postgres-authentication": [
+    "index.html#module-services-postgres-authentication"
+  ],
+  "module-services-postgres-authentication-user-mapping": [
+    "index.html#module-services-postgres-authentication-user-mapping"
+  ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
   ],
@@ -1261,6 +1303,9 @@
   ],
   "module-services-postgres-plugins": [
     "index.html#module-services-postgres-plugins"
+  ],
+  "module-services-postgres-pls": [
+    "index.html#module-services-postgres-pls"
   ],
   "module-services-postgres-jit": [
     "index.html#module-services-postgres-jit"
@@ -1664,6 +1709,9 @@
   "sec-option-definitions-merging": [
     "index.html#sec-option-definitions-merging"
   ],
+  "sec-option-definitions-definitions": [
+    "index.html#sec-option-definitions-definitions"
+  ],
   "sec-assertions": [
     "index.html#sec-assertions"
   ],
@@ -1781,6 +1829,12 @@
   "sec-test-options-reference": [
     "index.html#sec-test-options-reference"
   ],
+  "test-opt-sshBackdoor.enable": [
+    "index.html#test-opt-sshBackdoor.enable"
+  ],
+  "test-opt-sshBackdoor.vsockOffset": [
+    "index.html#test-opt-sshBackdoor.vsockOffset"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
@@ -1819,6 +1873,9 @@
   ],
   "test-opt-meta.platforms": [
     "index.html#test-opt-meta.platforms"
+  ],
+  "test-opt-meta.hydraPlatforms": [
+    "index.html#test-opt-meta.hydraPlatforms"
   ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"
@@ -1868,6 +1925,9 @@
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
   ],
+  "sec-nixos-test-ssh-access": [
+    "index.html#sec-nixos-test-ssh-access"
+  ],
   "sec-nixos-test-port-forwarding": [
     "index.html#sec-nixos-test-port-forwarding"
   ],
@@ -1879,6 +1939,9 @@
   ],
   "sec-linking-nixos-tests-to-packages": [
     "index.html#sec-linking-nixos-tests-to-packages"
+  ],
+  "sec-nixos-test-testing-hardware-features": [
+    "index.html#sec-nixos-test-testing-hardware-features"
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"

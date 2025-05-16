@@ -53,7 +53,7 @@ let
         }
         {
           case = "8.20";
-          out = "1.19.2";
+          out = "2.0.7";
         }
         {
           case = "9.0";
@@ -76,7 +76,7 @@ let
       }
       {
         case = "8.20";
-        out = "2.2.0";
+        out = "2.5.0";
       }
       {
         case = "8.19";
@@ -117,6 +117,7 @@ let
     ] null;
     release."2.5.0".sha256 = "sha256-Z5xjO83X/ZoTQlWnVupGXPH3HuJefr57Kv128I0dltg=";
     release."2.4.0".sha256 = "sha256-W2+vVGExLLux8e0nSZESSoMVvrLxhL6dmXkb+JuKiqc=";
+    release."2.3.0".sha256 = "sha256-XVOI+s8Qpa7f17+Xq0y7IGPLFeJqo+cDcd3zfMuO7UU=";
     release."2.2.0".sha256 = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
     release."2.0.1".sha256 = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
     release."2.0.0".sha256 = "sha256-A/cH324M21k3SZ7+YWXtaYEbu6dZQq3K0cb1RMKjbsM=";

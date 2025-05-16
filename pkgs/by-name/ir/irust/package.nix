@@ -21,17 +21,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "irust";
-  version = "1.72.0";
+  version = "1.73.0";
 
   src = fetchFromGitHub {
     owner = "sigmaSd";
     repo = "IRust";
     rev = "irust@${version}";
-    hash = "sha256-PRs6pG2aJQkmsZ1nRBaOTIrmjcYnaI9zZIHKJS/pueQ=";
+    hash = "sha256-oBHqyOqUNXO5c3TYFp84fDKA+R8ZmrgFCQswu7yXkGw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oWMKJLVmJ/UQuTNUwZ7VWOFtFa/mJGgbRMQC3aNK3Y0=";
+  cargoHash = "sha256-YRptwZm00Px+3S+QFZAZxg25ObwmRdbgonzbMnBBb50=";
 
   nativeBuildInputs = [ makeWrapper ];
 

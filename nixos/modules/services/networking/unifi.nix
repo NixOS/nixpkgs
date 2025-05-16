@@ -47,9 +47,7 @@ in
       '';
     };
 
-    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" {
-      default = "unifi8";
-    };
+    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" { };
 
     services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
       default = "mongodb-7_0";
@@ -116,7 +114,7 @@ in
           only supports migrating one major version at a time; therefore, you
           may wish to set `services.unifi.mongodbPackage = pkgs.mongodb-6_0;`
           and activate your configuration before upgrading again to the default
-          `mongodb-7_0` supported by `unifi8`.
+          `mongodb-7_0` supported by `unifi`.
 
           For more information, see the MongoDB upgrade notes:
           <https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/#upgrade-recommendations-and-checklists>

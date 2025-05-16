@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/libmatemixer";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

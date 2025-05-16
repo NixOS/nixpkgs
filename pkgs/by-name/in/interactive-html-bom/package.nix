@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "interactive-html-bom";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openscopeproject";
     repo = "InteractiveHtmlBom";
     tag = "v${version}";
-    hash = "sha256-jUHEI0dWMFPQlXei3+0m1ruHzpG1hcRnxptNOXzXDqQ=";
+    hash = "sha256-o7GWdAFFK3zK0fc7aTSwOsd/c4uPg3cJfR0SXbl2RW8=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     description = "Interactive HTML BOM generation for KiCad, EasyEDA, Eagle, Fusion360 and Allegro PCB designer";
     homepage = "https://github.com/openscopeproject/InteractiveHtmlBom/";
     license = lib.licenses.mit;
-    changelog = "https://github.com/openscopeproject/InteractiveHtmlBom/releases/tag/v${version}";
+    changelog = "https://github.com/openscopeproject/InteractiveHtmlBom/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ wuyoli ];
     mainProgram = "generate_interactive_bom";
   };

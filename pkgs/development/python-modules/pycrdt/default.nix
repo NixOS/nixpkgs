@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.12.11";
+  version = "0.12.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     tag = version;
-    hash = "sha256-qeDhNr7ZQ0Sxmulye1u5Y2ETdAKYbmYWY0udUaAclpQ=";
+    hash = "sha256-+DRHOX4X2ez+G/nHYnXfANNzdPU7QDbq6lBWBwLJoP4=";
   };
 
   postPatch = ''
@@ -53,6 +53,11 @@ buildPythonPackage rec {
     y-py
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestUnknownMarkWarning" # requires unpackaged pytest-mypy-testing
+  ];
+
   passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
@@ -60,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter-server/pycrdt";
     changelog = "https://github.com/jupyter-server/pycrdt/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

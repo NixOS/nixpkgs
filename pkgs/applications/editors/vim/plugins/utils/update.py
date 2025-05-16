@@ -82,10 +82,14 @@ class VimEditor(pluginupdate.Editor):
             f.write(
                 textwrap.dedent(
                     """
-                { lib, buildVimPlugin, buildNeovimPlugin, fetchFromGitHub }:
-
-                final: prev:
                 {
+                  lib,
+                  buildVimPlugin,
+                  buildNeovimPlugin,
+                  fetchFromGitHub,
+                }:
+
+                final: prev: {
                 """
                 )
             )
@@ -97,7 +101,7 @@ class VimEditor(pluginupdate.Editor):
                     and plugin.commit != nvim_treesitter_rev
                 ):
                     self.nvim_treesitter_updated = True
-            f.write("\n}\n")
+            f.write("}\n")
         print(f"updated {outfile}")
 
     def plugin2nix(

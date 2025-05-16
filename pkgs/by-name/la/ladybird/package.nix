@@ -32,23 +32,18 @@
 }:
 
 let
-  adobe-icc-profiles = fetchurl {
-    url = "https://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesCS4Win_end-user.zip";
-    hash = "sha256-kgQ7fDyloloPaXXQzcV9tgpn3Lnr37FbFiZzEb61j5Q=";
-    name = "adobe-icc-profiles.zip";
-  };
   # Note: The cacert version is synthetic and must match the version in the package's CMake
   cacert_version = "2023-12-12";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-03-27";
+  version = "0-unstable-2025-05-07";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "5ea45da15f5ac956db1cfe0aad74b570f7e88339";
-    hash = "sha256-wODm5O15jwnyxvkHVCQBptwoC97tTD0KzwYqGPdY520=";
+    rev = "5610f5a8652fb5273acd3739634bb8f69df1d786";
+    hash = "sha256-XG7FmadzZN9ew3oPOFjv0CzB/UzLWGq3AANRp2MQAq8=";
   };
 
   postPatch = ''
@@ -83,10 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
-
-    mkdir build/Caches/AdobeICCProfiles
-    cp ${adobe-icc-profiles} build/Caches/AdobeICCProfiles/adobe-icc-profiles.zip
-    chmod +w build/Caches/AdobeICCProfiles
   '';
 
   nativeBuildInputs = [
@@ -131,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      # Takes an enormous amount of resources, even with mold
+      (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
       # Disable network operations
       "-DSERENITY_CACHE_DIR=Caches"
       "-DENABLE_NETWORK_DOWNLOADS=OFF"

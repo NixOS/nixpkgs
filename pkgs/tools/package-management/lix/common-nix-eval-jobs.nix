@@ -4,7 +4,6 @@
   version,
   src,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
 }@args:
 
 {
@@ -17,7 +16,7 @@
   pkg-config,
   ninja,
   cmake,
-  clang-tools,
+  buildPackages,
 }:
 
 stdenv.mkDerivation {
@@ -35,11 +34,19 @@ stdenv.mkDerivation {
     ninja
     # nlohmann_json can be only discovered via cmake files
     cmake
-  ] ++ (lib.optional stdenv.cc.isClang [ clang-tools ]);
+  ] ++ (lib.optional stdenv.cc.isClang [ buildPackages.clang-tools ]);
 
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
+
+  # Since this package is intimately tied to a specific Nix release, we
+  # propagate the Nix used for building it to make it easier for users
+  # downstream to reference it.
+  passthru = {
+    nix = lix;
+  };
+
   meta = {
     description = "Hydra's builtin `hydra-eval-jobs` as a standalone tool";
     mainProgram = "nix-eval-jobs";
@@ -50,7 +57,8 @@ stdenv.mkDerivation {
       else
         "https://git.lix.systems/lix-project/nix-eval-jobs";
     license = lib.licenses.gpl3;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isStatic;
   };
 }

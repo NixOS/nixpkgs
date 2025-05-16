@@ -29,6 +29,6 @@ echo >&2 "=== Updating package.nix ..."
 # update-source-version expects to be at the root of nixpkgs
 (cd "$nixpkgs" && update-source-version zoom-us "$version_aarch64_darwin" $hash_aarch64_darwin --system=aarch64-darwin --version-key=versions.aarch64-darwin)
 (cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_darwin" $hash_x86_64_darwin --system=x86_64-darwin --version-key=versions.x86_64-darwin)
-(cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_linux" $hash_x86_64_linux --system=x86_64-linux --version-key=versions.x86_64-linux)
+(cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_linux" $hash_x86_64_linux --system=x86_64-linux --version-key=versions.x86_64-linux --source-key=unpacked.src)
 
 echo >&2 "=== Done!"

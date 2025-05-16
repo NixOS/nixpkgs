@@ -5,7 +5,6 @@
   fetchPypi,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -15,20 +14,13 @@
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.36";
+  version = "0.37";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MstJ4RwbyvCgdid4Let3RPrDHWXkuUa8WePtCwVaf+4=";
+    hash = "sha256-3jQtEuKABN0P2AmQ7NEKsabbokd73RIjFvbBpa52pfg=";
   };
-
-  postPatch = ''
-    # Remove vendorized versioneer
-    rm versioneer.py
-  '';
 
   pythonRelaxDeps = [
     "defusedxml"

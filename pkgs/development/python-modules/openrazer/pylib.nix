@@ -20,7 +20,7 @@ buildPythonPackage (
 
     nativeBuildInputs = [ setuptools ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       dbus-python
       numpy
       openrazer-daemon

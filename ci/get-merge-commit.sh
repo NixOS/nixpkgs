@@ -55,7 +55,10 @@ done
 
 if [[ "$mergeable" == "true" ]]; then
     log "The PR can be merged"
-    jq -r .merge_commit_sha <<< "$prInfo"
+    mergedSha="$(jq -r .merge_commit_sha <<< "$prInfo")"
+    echo "mergedSha=$mergedSha"
+    targetSha="$(gh api "/repos/$repo/commits/$mergedSha" --jq '.parents[0].sha')"
+    echo "targetSha=$targetSha"
 else
     log "The PR has a merge conflict"
     exit 2
