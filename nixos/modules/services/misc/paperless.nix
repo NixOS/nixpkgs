@@ -373,7 +373,6 @@ in
       description = ''
         The package derivation for the `paperless-manage` wrapper script.
         Useful for other modules that need to add this specific script to a service's PATH.
-        This is automatically set when `services.paperless.enable` is true.
       '';
     };
   };
