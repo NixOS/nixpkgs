@@ -1456,12 +1456,6 @@ let
           nestedTypes.finalType = finalType;
         };
 
-      # A list of attrnames is coerced into an attrset of bools by
-      # setting the values to true.
-      attrNamesToTrue = coercedTo (types.listOf types.str) (
-        enabledList: lib.genAttrs enabledList (_attrName: true)
-      ) (types.attrsOf types.bool);
-
       # Augment the given type with an additional type check function.
       addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 

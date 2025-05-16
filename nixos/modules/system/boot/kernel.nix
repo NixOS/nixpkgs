@@ -25,6 +25,12 @@ let
     ${concatStringsSep "\n" config.boot.kernelModules}
   '';
 
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
+
 in
 
 {
@@ -196,7 +202,7 @@ in
     };
 
     boot.kernelModules = mkOption {
-      type = types.attrNamesToTrue;
+      type = attrNamesToTrue;
       default = { };
       description = ''
         The set of kernel modules to be loaded in the second stage of
@@ -211,7 +217,7 @@ in
     };
 
     boot.initrd.availableKernelModules = mkOption {
-      type = types.attrNamesToTrue;
+      type = attrNamesToTrue;
       default = { };
       example = [
         "sata_nv"
@@ -238,7 +244,7 @@ in
     };
 
     boot.initrd.kernelModules = mkOption {
-      type = types.attrNamesToTrue;
+      type = attrNamesToTrue;
       default = { };
       description = ''
         Set of modules that are always loaded by the initrd.
