@@ -39,6 +39,7 @@ buildGoModule rec {
     changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
     license = licenses.mit;
     platforms = platforms.linux;
+    teams = [ lib.teams.ngi ];
     maintainers = with maintainers; [
       rgrunbla
       erdnaxe
