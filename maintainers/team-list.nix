@@ -1119,9 +1119,17 @@ with lib.maintainers;
   };
 
   sdl = {
-    members = [ ];
-    scope = "Maintain SDL libraries.";
+    members = [
+      evythedemon
+      grimmauld
+      jansol
+      marcin-serwin
+      pbsds
+    ];
+    githubTeams = [ "SDL" ];
+    scope = "Maintain core SDL libraries.";
     shortName = "SDL";
+    enableFeatureFreezePing = true;
   };
 
   sphinx = {
