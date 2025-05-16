@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.kpbaks ];
     mainProgram = "tuistash";
-    platforms = lib.platforms.all;
   };
 })
