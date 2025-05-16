@@ -105,6 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
     # ./configure doesn't understand --build / --host
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.buildPlatform.config != stdenv.hostPlatform.config;
   };
 })
