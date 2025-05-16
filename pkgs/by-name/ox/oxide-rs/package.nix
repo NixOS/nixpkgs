@@ -25,11 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-We5yNF8gtHWAUAead0uc99FIoMcicDWdGbTzPgpiFyY=";
-
-  cargoPatches = [
-    ./0001-use-crates-io-over-git-dependencies.patch
-  ];
+  cargoHash = "sha256-clFsJg1mZcQZrAGguNfS0esoQdnhdanbk46+o2NRI3w=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"
