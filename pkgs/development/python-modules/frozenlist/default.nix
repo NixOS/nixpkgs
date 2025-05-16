@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "frozenlist";
     tag = "v${version}";
-    hash = "sha256-yhoJc9DR3vL2E9srN3F4VksIor324H9dUarzzmoc4/A=";
+    hash = "sha256-x2o4eiSDxA7nvrifzvV38kjIGmOY8gaQrPNDhCupovg=";
   };
 
   postPatch = ''
