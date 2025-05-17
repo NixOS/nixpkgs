@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "8.2.1";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-kBCoDB0+STKIOVFnQ1FWKulJ0qNwNfvxB3QwaGnl7sM=";
+    hash = "sha256-Q++34JKmJCciK53fmMPUxOPr35+Nd7YPYR4SwKOldQA=";
   };
 
   nativeBuildInputs = [
