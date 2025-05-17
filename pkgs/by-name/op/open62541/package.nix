@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.10";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UUN8zLkXyXRbUOGFD6TYKUlbkZCIEJGw/S7xpUWVPxQ=";
+    hash = "sha256-FhlYowmu3McXuhOplnN/tnfkHAvRJqIuk60ceFYOmR0=";
     fetchSubmodules = true;
   };
 
@@ -149,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
       # references to /build/ in ua_server_ctt
       rm -r bin/libopen62541*
     '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

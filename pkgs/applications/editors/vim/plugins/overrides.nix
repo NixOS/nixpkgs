@@ -1314,6 +1314,13 @@ in
     ];
   };
 
+  GPTModels-nvim = super.GPTModels-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      telescope-nvim
+    ];
+  };
+
   guard-collection = super.guard-collection.overrideAttrs {
     dependencies = [ self.guard-nvim ];
   };

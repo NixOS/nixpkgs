@@ -345,7 +345,7 @@ See [Nix Channel Status](https://status.nixos.org/) for the current channels and
 Here's a brief overview of the main Git branches and what channels they're used for:
 
 - `master`: The main branch, used for the unstable channels such as `nixpkgs-unstable`, `nixos-unstable` and `nixos-unstable-small`.
-- `release-YY.MM` (e.g. `release-25.05`): The NixOS release branches, used for the stable channels such as `nixos-25.05`, `nixos-25.05-small` and `nixpkgs-25.05-darwin`.
+- `release-YY.MM` (e.g. `release-25.11`): The NixOS release branches, used for the stable channels such as `nixos-25.11`, `nixos-25.11-small` and `nixpkgs-25.11-darwin`.
 
 When a channel is updated, a corresponding Git branch is also updated to point to the corresponding commit.
 So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/nixpkgs-unstable) corresponds to the Git commit from the [`nixpkgs-unstable` channel](https://channels.nixos.org/nixpkgs-unstable).

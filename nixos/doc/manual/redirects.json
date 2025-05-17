@@ -1979,6 +1979,21 @@
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
   ],
+  "sec-release-25.11": [
+    "release-notes.html#sec-release-25.11"
+  ],
+  "sec-release-25.11-highlights": [
+    "release-notes.html#sec-release-25.11-highlights"
+  ],
+  "sec-release-25.11-new-modules": [
+    "release-notes.html#sec-release-25.11-new-modules"
+  ],
+  "sec-release-25.11-incompatibilities": [
+    "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-notable-changes": [
+    "release-notes.html#sec-release-25.11-notable-changes"
+  ],
   "sec-release-25.05": [
     "release-notes.html#sec-release-25.05"
   ],
@@ -1993,6 +2008,9 @@
   ],
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
+  ],
+  "sec-release-25.05-wiki": [
+    "release-notes.html#sec-release-25.05-wiki"
   ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"

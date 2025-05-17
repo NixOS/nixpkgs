@@ -3248,6 +3248,9 @@ self: super:
 
   # 2025-04-19: Tests randomly fail 5 out of 10 times
   fft = dontCheck super.fft;
+
+  # 2025-5-15: Too strict bounds on base <4.19, see: https://github.com/zachjs/sv2v/issues/317
+  sv2v = doJailbreak super.sv2v;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
