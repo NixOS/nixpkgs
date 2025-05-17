@@ -16241,8 +16241,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
-
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   # using the new configuration style proposal which is unstable
