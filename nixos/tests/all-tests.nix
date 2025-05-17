@@ -388,7 +388,10 @@ in
   dex-oidc = handleTest ./dex-oidc.nix { };
   dhparams = handleTest ./dhparams.nix { };
   disable-installer-tools = handleTest ./disable-installer-tools.nix { };
-  discourse = handleTest ./discourse.nix { };
+  discourse = runTest {
+    imports = [ ./discourse.nix ];
+    _module.args.package = pkgs.discourse;
+  };
   dnscrypt-proxy2 = handleTestOn [ "x86_64-linux" ] ./dnscrypt-proxy2.nix { };
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
