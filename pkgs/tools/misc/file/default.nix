@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # https://github.com/NixOS/nixpkgs/pull/402318#issuecomment-2881163359
     ./32-bit-time_t.patch
+
+    # Backported fix for a buffer overflow issue. Should be removed with the next version bump.
+    # https://github.com/file/file/commit/b3384a1fbfa1fee99986e5750ab8e700de4f24ad.patch
+    ./fix-stack-overrun.patch
   ];
 
   strictDeps = true;
