@@ -21,8 +21,8 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages_19,
-  llvm_19,
+  llvmPackages,
+  llvm,
   wrapCCWith,
   overrideCC,
   fetchpatch,
@@ -30,7 +30,7 @@
 let
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages_19.libllvm.override (
+    pkgSet.llvmPackages.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -38,7 +38,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages_19.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages.clangUseLLVM;
         };
       }
     );
@@ -75,27 +75,25 @@ import ./default.nix
             bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
           }:
           let
-            llvmPackages = llvmPackages_19;
-
             setStdenv =
               pkg:
               pkg.override {
                 stdenv = stdenv.override {
                   allowedRequisites = null;
-                  cc = pkgsBuildHost.llvmPackages_19.clangUseLLVM;
+                  cc = pkgsBuildHost.llvmPackages.clangUseLLVM;
                 };
               };
           in
           rec {
-            inherit (llvmPackages) bintools;
+            inherit (args.llvmPackages) bintools;
 
-            libunwind = setStdenv llvmPackages.libunwind;
-            llvm = setStdenv llvmPackages.llvm;
+            libunwind = setStdenv args.llvmPackages.libunwind;
+            llvm = setStdenv args.llvmPackages.llvm;
 
-            libcxx = llvmPackages.libcxx.override {
+            libcxx = args.llvmPackages.libcxx.override {
               stdenv = stdenv.override {
                 allowedRequisites = null;
-                cc = pkgsBuildHost.llvmPackages_19.clangNoLibcxx;
+                cc = pkgsBuildHost.llvmPackages.clangNoLibcxx;
                 hostPlatform = stdenv.hostPlatform // {
                   useLLVM = !stdenv.hostPlatform.isDarwin;
                 };
@@ -103,13 +101,13 @@ import ./default.nix
               inherit libunwind;
             };
 
-            clangUseLLVM = llvmPackages.clangUseLLVM.override { inherit libcxx; };
+            clangUseLLVM = args.llvmPackages.clangUseLLVM.override { inherit libcxx; };
 
             stdenv = overrideCC args.stdenv clangUseLLVM;
           }
         ) { }
       else
-        llvmPackages_19;
+        args.llvmPackages;
 
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
@@ -140,8 +138,8 @@ import ./default.nix
 
   (
     builtins.removeAttrs args [
-      "llvmPackages_19"
-      "llvm_19"
+      "llvmPackages"
+      "llvm"
       "wrapCCWith"
       "overrideCC"
       "pkgsHostTarget"
