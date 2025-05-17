@@ -1,5 +1,6 @@
-{ lib }:
-
+let
+  lib = import ../../../../lib;
+in
 lib.concatMapAttrs (
   fileName: _type:
   let
