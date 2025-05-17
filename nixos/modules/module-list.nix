@@ -290,6 +290,7 @@
   ./programs/qt5ct.nix
   ./programs/quark-goldleaf.nix
   ./programs/regreet.nix
+  ./programs/reminders.nix
   ./programs/rog-control-center.nix
   ./programs/rush.nix
   ./programs/rust-motd.nix
