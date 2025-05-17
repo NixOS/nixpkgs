@@ -16054,8 +16054,6 @@ self: super: with self; {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
-  slimit = callPackage ../development/python-modules/slimit { };
-
   slip10 = callPackage ../development/python-modules/slip10 { };
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
