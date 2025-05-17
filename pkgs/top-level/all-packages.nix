@@ -15708,7 +15708,6 @@ with pkgs;
 
   sageWithDoc = sage.override { withDoc = true; };
 
-  suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
   };
