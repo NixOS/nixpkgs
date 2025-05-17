@@ -6258,10 +6258,14 @@ with pkgs;
   inherit (callPackages ../servers/varnish { })
     varnish60
     varnish75
+    varnish76
+    varnish77
     ;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages
     varnish75Packages
+    varnish76Packages
+    varnish77Packages
     ;
 
   varnishPackages = varnish75Packages;

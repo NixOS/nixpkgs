@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_33,
+  electron_34,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -15,16 +15,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "1.12.7";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-26YNDXZUMQA3AuRPTxB+X8hg2IEYvAGBHvzIAxSL3nk=";
+    hash = "sha256-0u5UyhRSa4gsLVQLctWMZe/oE8l9jrwCzkPtLWv2xlo=";
   };
 
-  npmDepsHash = "sha256-Vu7VAV8hoQKqa8d2hMaNlBB4e8HA0h4ySc1qsYn8M6o=";
+  npmDepsHash = "sha256-BHz1+pd88TDfTXtG0gl5kYiDeG/M94pYdpPtwBrBYzQ=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,7 +42,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_33.dist} electron-dist
+    cp -r ${electron_34.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -50,7 +50,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_33.version}
+        -c.electronVersion=${electron_34.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ buildNpmPackage rec {
       popd
 
       # Linux needs 'aplay' for notification sounds
-      makeWrapper '${lib.getExe electron_33}' "$out/bin/teams-for-linux" \
+      makeWrapper '${lib.getExe electron_34}' "$out/bin/teams-for-linux" \
         --prefix PATH : ${
           lib.makeBinPath [
             alsa-utils
