@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.50";
+  version = "3.1.57";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WmF7tH5PiaggyvP/klWwNgaLKVhIoApxDtwwLpug52A=";
+    hash = "sha256-1b24tclqXGx85BGFYL9cbthLScVWau2OmRh9YElfCLs=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-ntXZ4gRXRqiPQxdwXDsLxGdBqUV5eboy9ntTlJsz9FA=";
+    hash = "sha256-3SMvUx+TwUmOur/50HDLWt0EayY5tst4YANWIlXdiPQ=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/r2modman" \
       --inherit-argv0 \
       --add-flags "$out/share/r2modman" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
