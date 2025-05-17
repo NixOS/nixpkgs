@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
       [ -e $out/success ]
     '';
   };
+
   meta = {
     homepage = "https://e2fsprogs.sourceforge.net/";
     changelog = "https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
@@ -128,6 +129,6 @@ stdenv.mkDerivation rec {
       mit # lib/et, lib/ss
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ usertam ];
   };
 }
