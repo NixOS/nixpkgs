@@ -4217,6 +4217,8 @@ self: super: with self; {
 
   dsnap = callPackage ../development/python-modules/dsnap { };
 
+  dspy = callPackage ../development/python-modules/dspy { };
+
   dtfabric = callPackage ../development/python-modules/dtfabric { };
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
@@ -8424,6 +8426,8 @@ self: super: with self; {
   magic-wormhole-transit-relay =
     callPackage ../development/python-modules/magic-wormhole-transit-relay
       { };
+
+  magicattr = callPackage ../development/python-modules/magicattr { };
 
   magicgui = callPackage ../development/python-modules/magicgui { };
 
