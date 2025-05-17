@@ -10,7 +10,7 @@ let
 
   canonicalizePortList = ports: lib.unique (builtins.sort builtins.lessThan ports);
 
-  commonOptions = {
+  commonOptions = direction: {
     allowedTCPPorts = lib.mkOption {
       type = lib.types.listOf lib.types.port;
       default = [ ];
@@ -20,7 +20,7 @@ let
         80
       ];
       description = ''
-        List of TCP ports on which incoming connections are
+        List of TCP ports on which ${direction} connections are
         accepted.
       '';
     };
@@ -35,7 +35,7 @@ let
         }
       ];
       description = ''
-        A range of TCP ports on which incoming connections are
+        A range of TCP ports on which ${direction} connections are
         accepted.
       '';
     };
@@ -46,7 +46,8 @@ let
       apply = canonicalizePortList;
       example = [ 53 ];
       description = ''
-        List of open UDP ports.
+        List of UDP ports on which ${direction} packets are
+        accepted.
       '';
     };
 
@@ -60,11 +61,61 @@ let
         }
       ];
       description = ''
-        Range of open UDP ports.
+        A range of UDP ports on which ${direction} UDP packets are
+        accepted.
       '';
     };
   };
 
+  commonOptionsIncoming = commonOptions "incoming";
+  commonOptionsOutgoing = commonOptions "outgoing";
+
+  filterOutputOptions = {
+    enabled = lib.mkEnableOption "filtering for outgoing traffic";
+
+    interfaces = lib.mkOption {
+      default = { };
+      type = with lib.types; attrsOf (submodule [ { options = commonOptionsOutgoing; } ]);
+      description = ''
+        Interface-specific allowed outgoing ports.
+      '';
+    };
+
+    trustedInterfaces = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "enp0s2" ];
+      description = ''
+        Traffic leaving via these interfaces will be accepted
+        unconditionally. Traffic going into the loopback (lo)
+        interface will always be accepted.
+      '';
+    };
+
+    extraRules = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      example = "oifname wg0 accept";
+      description = ''
+        Additional nftables rules to be appended to the output-allow
+        chain.
+
+        This option only works with the nftables based firewall.
+      '';
+    };
+
+    allInterfaces = lib.mkOption {
+      internal = true;
+      visible = false;
+      default = {
+        default = lib.mapAttrs (name: value: cfg.filterOutput.${name}) commonOptionsOutgoing;
+      } // cfg.filterOutput.interfaces;
+      type = with lib.types; attrsOf (submodule [ { options = commonOptionsOutgoing; } ]);
+      description = ''
+        All open ports.
+      '';
+    };
+  } // commonOptionsOutgoing;
 in
 
 {
@@ -208,6 +259,16 @@ in
         '';
       };
 
+      filterOutput = lib.mkOption {
+        type = lib.types.submodule { options = filterOutputOptions; };
+        default = { };
+        description = ''
+          Configure firewall for outgoing packages.
+
+          This option only works with the nftables based firewall.
+        '';
+      };
+
       filterForward = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -272,7 +333,7 @@ in
 
       interfaces = lib.mkOption {
         default = { };
-        type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with lib.types; attrsOf (submodule [ { options = commonOptionsIncoming; } ]);
         description = ''
           Interface-specific open ports.
         '';
@@ -282,14 +343,14 @@ in
         internal = true;
         visible = false;
         default = {
-          default = lib.mapAttrs (name: value: cfg.${name}) commonOptions;
+          default = lib.mapAttrs (name: value: cfg.${name}) commonOptionsIncoming;
         } // cfg.interfaces;
-        type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with lib.types; attrsOf (submodule [ { options = commonOptionsIncoming; } ]);
         description = ''
           All open ports.
         '';
       };
-    } // commonOptions;
+    } // commonOptionsIncoming;
 
   };
 
@@ -301,6 +362,10 @@ in
         message = "filterForward only works with the nftables based firewall";
       }
       {
+        assertion = cfg.filterOutput.enabled -> config.networking.nftables.enable;
+        message = "filterOutput.enabled only works with the nftables based firewall";
+      }
+      {
         assertion =
           cfg.autoLoadConntrackHelpers -> lib.versionOlder config.boot.kernelPackages.kernel.version "6";
         message = "conntrack helper autoloading has been removed from kernel 6.0 and newer";
@@ -308,6 +373,7 @@ in
     ];
 
     networking.firewall.trustedInterfaces = [ "lo" ];
+    networking.firewall.filterOutput.trustedInterfaces = [ "lo" ];
 
     environment.systemPackages = [
       cfg.package
