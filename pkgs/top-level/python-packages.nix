@@ -16838,6 +16838,8 @@ self: super: with self; {
 
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
 
+  subtitle-parser = callPackage ../development/python-modules/subtitle-parser { };
+
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
