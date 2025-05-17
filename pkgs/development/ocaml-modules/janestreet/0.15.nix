@@ -631,6 +631,8 @@ with self;
     minimalOCamlVersion = "4.04.1";
     hash = "00if2f7j9d8igdkj4rck3p74y17j6b233l91mq02drzrxj199qjv";
     meta.description = "OCaml compiler libraries repackaged";
+    meta.broken = true; # This expression has type Cmo_format.compunit list but an expression was expected of type StdLabels.String.t list Type Cmo_format.compunit is not compatible with type StdLabels.String.t = string
+
   };
 
   ocaml-embed-file = janePackage {
@@ -1396,6 +1398,7 @@ with self;
     minimalOCamlVersion = "4.04.2";
     meta.description = "Typerep is a library for runtime types";
     propagatedBuildInputs = [ base ];
+    meta.broken = true; # This field value has type ('b A.t, 'b B.t) Typerep_lib.Type_equal.t which is less general than 'a. ('a A.t, 'a B.t) Typerep_lib.Type_equal.t
   };
 
   variantslib = janePackage {
