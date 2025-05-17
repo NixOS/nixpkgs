@@ -82,6 +82,24 @@ checkConfigOutput() {
     fi
 }
 
+checkConfigOutputVerbatim() {
+    local expected=$1
+    shift
+    local actual
+    set +e
+    actual=$(evalConfig "$@" 2> /dev/null)
+    set -e
+    if [[ "$actual" == "$expected" ]]; then
+        ((++pass))
+    else
+        logStartFailure
+        echo "ACTUAL:"
+        reportFailure "$@"
+        echo "EXPECTED: '$expected'"
+        logFailure
+        logEndFailure
+    fi
+}
 checkConfigError() {
     local errorContains=$1
     local err=""
@@ -304,6 +322,20 @@ checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+
+# Check `modules` attribute
+expected='
+[
+  {
+    "_file": "./modules/modules/root.nix",
+    "imports": [],
+    "type": "attrset"
+  }
+]
+'
+
+expected=$(echo "$expected" | jq --compact-output)
+checkConfigOutputVerbatim "$expected" modules ./modules/root.nix
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix

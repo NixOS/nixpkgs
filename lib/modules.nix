@@ -358,6 +358,7 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        modules = [];
         inherit extendModules type class;
       };
     in
@@ -513,6 +514,7 @@ let
           disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
           keyFilter = filter (attrs: !elem attrs.key disabledKeys);
         in
+        # CONITUE HERE ALI AND DAWN
         map (attrs: attrs.module) (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
