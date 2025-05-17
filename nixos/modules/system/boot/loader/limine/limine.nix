@@ -358,12 +358,13 @@ in
 
       system = {
         boot.loader.id = "limine";
-        build.installBootLoader = pkgs.substituteAll {
+        build.installBootLoader = pkgs.replaceVarsWith {
           src = ./limine-install.py;
           isExecutable = true;
-
-          python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-          configPath = limineInstallConfig;
+          replacements = {
+            python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+            configPath = limineInstallConfig;
+          };
         };
       };
     })
