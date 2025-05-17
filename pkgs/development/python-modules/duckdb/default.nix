@@ -18,7 +18,6 @@ buildPythonPackage rec {
   inherit (duckdb)
     patches
     pname
-    rev
     src
     version
     ;
@@ -27,6 +26,8 @@ buildPythonPackage rec {
   postPatch =
     (duckdb.postPatch or "")
     + ''
+      export OVERRIDE_GIT_DESCRIBE="v${version}-0-g$(< .git/HEAD)";
+
       # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
       cd tools/pythonpkg
 
@@ -39,7 +40,6 @@ buildPythonPackage rec {
 
   env = {
     DUCKDB_BUILD_UNITY = 1;
-    OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
   };
 
   nativeBuildInputs = [
@@ -95,6 +95,9 @@ buildPythonPackage rec {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      paparodeo
+    ];
   };
 }
