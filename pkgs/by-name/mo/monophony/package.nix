@@ -12,16 +12,17 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.15.0";
-  pyproject = false;
+  version = "3.1.3";
+  pyproject = true;
 
-  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
+    hash = "sha256-O6zP/lC/7306tJkWvQQUk3vYG/7CQnabfXOa/4CQt0M=";
   };
+
+  sourceRoot = "${src.name}/source";
 
   pythonPath = with python3Packages; [
     mpris-server
@@ -68,13 +69,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/zehkira/monophony";
     description = "Linux app for streaming music from YouTube";
     longDescription = "Monophony is a free and open source Linux app for streaming music from YouTube. It has no ads and does not require an account.";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "monophony";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ quadradical ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ quadradical ];
   };
 }
