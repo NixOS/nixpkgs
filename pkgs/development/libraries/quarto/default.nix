@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.7.30";
+  version = "1.7.31";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-JcDeZGexvVxCLf1Vcgs59IslLYACs0bgIaGMIphiw/k=";
+    hash = "sha256-YRSe4MLcJCaqBDGwHiYxOxAGFcehZLIVCkXjTE0ezFc=";
   };
 
   patches = [
