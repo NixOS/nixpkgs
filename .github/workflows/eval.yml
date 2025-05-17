@@ -21,6 +21,8 @@ permissions: {}
 jobs:
   get-merge-commit:
     uses: ./.github/workflows/get-merge-commit.yml
+    with:
+      leader: true
 
   outpaths:
     name: Outpaths

@@ -5,6 +5,14 @@ on:
     paths:
       - .github/workflows/get-merge-commit.yml
   workflow_call:
+    inputs:
+      leader:
+        description: "Whether this job should get the merge commit, or wait for another job to do so"
+        type: boolean
+      leaderName:
+        description: "The name of the leader workflow"
+        type: string
+        default: "eval.yml"
     outputs:
       mergedSha:
         description: "The merge commit SHA"
@@ -22,8 +30,8 @@ jobs:
   resolve-merge-commit:
     runs-on: ubuntu-24.04-arm
     outputs:
-      mergedSha: ${{ steps.merged.outputs.mergedSha }}
-      targetSha: ${{ steps.merged.outputs.targetSha }}
+      mergedSha: ${{ steps.getCommits.outputs.mergedSha }}
+      targetSha: ${{ steps.getCommits.outputs.targetSha }}
       systems: ${{ steps.systems.outputs.systems }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -32,6 +40,7 @@ jobs:
           sparse-checkout: ci
 
       - name: Check if the PR can be merged and get the test merge commit
+        if: inputs.leader == true
         id: merged
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,13 +53,61 @@ jobs:
             pull_request*)
               if commits=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
                 echo -e "Checking the commits:\n$commits"
-                echo "$commits" >> "$GITHUB_OUTPUT"
+                echo "$commits" >> checked-commits
               else
                 # Skipping so that no notifications are sent
                 echo "Skipping the rest..."
               fi
               ;;
           esac
+
+      - name: Upload commits to check as an artifact
+        if: inputs.leader == true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: checked-commits
+          path: checked-commits
+
+      - name: Get leader workflow's run ID
+        id: getLeaderRun
+        timeout-minutes: 5
+        if: inputs.leader == false
+        env:
+          LEADER: ${{ inputs.leaderName }}
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/"$LEADER"/runs \
+            -f head_sha="$HEAD_SHA" \
+            --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
+            || [[ -z "$run" ]]; then
+            echo "Could not find a leader ($LEADER) workflow run for $HEAD_SHA"
+            exit 1
+          fi
+          echo "Leader is $(jq .html_url <<< "$run")"
+          runId=$(jq .id <<< "$run")
+          artifactCount=$(gh api --method GET /repos/"$REPOSITORY"/actions/runs/"$runId"/artifacts --jq '.total_count')
+          while (( artifactCount < 1 )); do
+            echo "Leader workflow didn't get merge commit yet, waiting 10 seconds before checking again"
+            sleep 10
+            artifactCount=$(gh api --method GET /repos/"$REPOSITORY"/actions/runs/"$runId"/artifacts --jq '.total_count')
+          done
+
+          echo "leaderRunId=$runId" >> "$GITHUB_OUTPUT"
+
+      - name: Download commit hashes from leader
+        if: inputs.leader == false
+        uses: actions/download-artifact@v4
+        with:
+          name: checked-commits
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.getLeaderRun.outputs.leaderRunId }}
+
+      - name: Output commits
+        id: getCommits
+        run: |
+          cat checked-commits >> "$GITHUB_OUTPUT"
 
       - name: Load supported systems
         id: systems
