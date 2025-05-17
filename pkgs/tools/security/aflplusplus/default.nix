@@ -17,6 +17,10 @@
   wine ? null,
   cmocka,
   llvmPackages,
+
+  # Enables support for replaying persistent mode test cases, which is useful
+  # when the target keeps state and crashes aren't reproducible on their own.
+  persistentReplaySupport ? false,
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -67,32 +71,37 @@ let
     # warning: "_FORTIFY_SOURCE" redefined
     hardeningDisable = [ "fortify" ];
 
-    postPatch = ''
-      # Don't care about this.
-      rm Android.bp
+    postPatch =
+      ''
+        # Don't care about this.
+        rm Android.bp
 
-      # Replace the CLANG_BIN variables with the correct path.
-      # Replace "gcc" and friends with full paths in afl-gcc.
-      # Prevents afl-gcc picking up any (possibly incorrect) gcc from the path.
-      # Replace LLVM_BINDIR with a non-existing path to give a hard error when it's used.
-      substituteInPlace src/afl-cc.c \
-        --replace-fail "CLANGPP_BIN" '"${clang}/bin/clang++"' \
-        --replace-fail "CLANG_BIN" '"${clang}/bin/clang"' \
-        --replace-fail '"gcc"' '"${gcc}/bin/gcc"' \
-        --replace-fail '"g++"' '"${gcc}/bin/g++"' \
-        --replace-fail 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
+        # Replace the CLANG_BIN variables with the correct path.
+        # Replace "gcc" and friends with full paths in afl-gcc.
+        # Prevents afl-gcc picking up any (possibly incorrect) gcc from the path.
+        # Replace LLVM_BINDIR with a non-existing path to give a hard error when it's used.
+        substituteInPlace src/afl-cc.c \
+          --replace-fail "CLANGPP_BIN" '"${clang}/bin/clang++"' \
+          --replace-fail "CLANG_BIN" '"${clang}/bin/clang"' \
+          --replace-fail '"gcc"' '"${gcc}/bin/gcc"' \
+          --replace-fail '"g++"' '"${gcc}/bin/g++"' \
+          --replace-fail 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
 
-      substituteInPlace src/afl-ld-lto.c \
-        --replace-fail 'LLVM_BINDIR' '"/nixpkgs-patched-does-not-exist"'
+        substituteInPlace src/afl-ld-lto.c \
+          --replace-fail 'LLVM_BINDIR' '"/nixpkgs-patched-does-not-exist"'
 
-      # Remove the rest of the line
-      sed -i 's|LLVM_BINDIR = .*|LLVM_BINDIR = |' utils/aflpp_driver/GNUmakefile
-      substituteInPlace utils/aflpp_driver/GNUmakefile \
-        --replace-fail 'LLVM_BINDIR = ' 'LLVM_BINDIR = ${clang}/bin/'
+        # Remove the rest of the line
+        sed -i 's|LLVM_BINDIR = .*|LLVM_BINDIR = |' utils/aflpp_driver/GNUmakefile
+        substituteInPlace utils/aflpp_driver/GNUmakefile \
+          --replace-fail 'LLVM_BINDIR = ' 'LLVM_BINDIR = ${clang}/bin/'
 
-      substituteInPlace GNUmakefile.llvm \
-        --replace-fail "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
-    '';
+        substituteInPlace GNUmakefile.llvm \
+          --replace-fail "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
+      ''
+      + lib.optionalString persistentReplaySupport ''
+        substituteInPlace include/config.h \
+          --replace-fail '// #define AFL_PERSISTENT_RECORD' '#define AFL_PERSISTENT_RECORD'
+      '';
 
     env.NIX_CFLAGS_COMPILE = toString [
       # Needed with GCC 12
