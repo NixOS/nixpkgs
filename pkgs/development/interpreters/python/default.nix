@@ -176,8 +176,8 @@
         {
           aarch64-linux = "sha256-qN9c4WUPR1aTP4eAhwyRoKQOfJhw10YpvyQTkry1wuM=";
           x86_64-linux = "sha256-nzSX+HszctF+RHNp4AFqS+yZprTSpZq6d0olv+Q1NHQ=";
-          aarch64-darwin = "sha256-gCJIc5sqzIwb5tlH8Zsy/A44wI4xKzXAXMf7IvEHCeQ=";
-          x86_64-darwin = "sha256-gtRgQhRmyBraSh2Z3y3xuLNTQbOXyF///lGkwwItCDM=";
+          aarch64-darwin = "sha256-hXMXLbN37ggxvyBJLN7pusTgsZTj3+i/fETuJXqCR2Y=";
+          x86_64-darwin = "sha256-4+GvHWrRXlHY0Z6jbhrGXEx5IxTMi43Fz3cexDU7UPg=";
         }
         .${stdenv.system};
       pythonVersion = "2.7";
