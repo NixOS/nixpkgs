@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
-    rev = version;
+    tag = version;
     hash = "sha256-4C+96rPtEFDJc08D5qXEuNvoDWJR5drvsvZ6mCGd5Vo=";
   };
 

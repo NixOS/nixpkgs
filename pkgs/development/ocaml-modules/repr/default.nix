@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "repr";
-    rev = version;
+    tag = version;
     hash = "sha256-SM55m5NIaQ2UKAtznNFSt3LN4QA7As0DyTxVeQjOTjI=";
   };
 

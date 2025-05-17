@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gmr";
     repo = "pamqp";
-    rev = version;
+    tag = version;
     hash = "sha256-0vjiPBLd8afnATjmV2sINsBd4j7L544u5DA3jLiLSsY=";
   };
 

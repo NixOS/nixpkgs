@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "R-Vision";
     repo = "wmi-client";
-    rev = version;
+    tag = version;
     sha256 = "1w1mdbiwz37wzry1q38h8dyjaa6iggmsb9wcyhhlawwm1vj50w48";
   };
 

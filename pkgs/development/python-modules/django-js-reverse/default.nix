@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BITSOLVER";
     repo = "django-js-reverse";
-    rev = version;
+    tag = version;
     hash = "sha256-i78UsxVwxyDAc8LrOVEXLG0tdidoQhvUx7GvPDaH0KY=";
   };
 

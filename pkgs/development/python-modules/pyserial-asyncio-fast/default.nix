@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "pyserial-asyncio-fast";
-    rev = version;
+    tag = version;
     hash = "sha256-bEJySiVVy77vSF/M5f3WGxjeay/36vU8oBbmkpDCFrI=";
   };
 

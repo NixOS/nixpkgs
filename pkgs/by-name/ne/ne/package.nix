@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vigna";
     repo = "ne";
-    rev = version;
+    tag = version;
     sha256 = "sha256-n8PERQD9G4jmW4avQjbFofrSapyRoSbQ2k1LzVt0i1o=";
   };
 

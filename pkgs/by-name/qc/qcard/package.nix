@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~psic4t";
     repo = "qcard";
-    rev = version;
+    tag = version;
     hash = "sha256-OwmJSeAOZTX7jMhoLHSIJa0jR8zCadISQF/PqFqltRY=";
   };
 

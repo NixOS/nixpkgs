@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.special-circumstanc.es";
     owner = "hammer";
     repo = "hammer";
-    rev = version;
+    tag = version;
     sha256 = "sha256-xMZhUnycGeHkNZfHQ2d9mETti8HwGHZNskFqh9f0810=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
-    rev = version;
+    tag = version;
     hash = "sha256-3+LzFLDZ1zfRPBETMlpEn66zsfHRHQLlgeZPdMtmA14=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
-    rev = version;
+    tag = version;
     hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
   };
 

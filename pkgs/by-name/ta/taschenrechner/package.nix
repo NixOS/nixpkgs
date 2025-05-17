@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     domain = "gitlab.fem-net.de";
     owner = "mabl";
     repo = "taschenrechner";
-    rev = version;
+    tag = version;
     hash = "sha256-ZZVghL0R3p5sE8V9Z0MsmTiCacuE2RXohQQEYJYgp/o=";
   };
 

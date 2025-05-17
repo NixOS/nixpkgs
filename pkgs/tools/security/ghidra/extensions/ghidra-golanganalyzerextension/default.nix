@@ -10,7 +10,7 @@ buildGhidraExtension rec {
   src = fetchFromGitHub {
     owner = "mooncat-greenpy";
     repo = "Ghidra_GolangAnalyzerExtension";
-    rev = version;
+    tag = version;
     hash = "sha256-uxozIJ+BLcP1vBnLOCZD9ueY10hd37fON/Miii3zabo=";
   };
 

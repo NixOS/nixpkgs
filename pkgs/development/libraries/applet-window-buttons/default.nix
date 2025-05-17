@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "psifidotos";
     repo = "applet-window-buttons";
-    rev = version;
+    tag = version;
     hash = "sha256-Qww/22bEmjuq+R3o0UDcS6U+34qjaeSEy+g681/hcfE=";
   };
 

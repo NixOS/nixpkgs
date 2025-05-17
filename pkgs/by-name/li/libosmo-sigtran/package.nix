@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # fetchFromGitea hangs
   src = fetchgit {
     url = "https://gitea.osmocom.org/osmocom/libosmo-sigtran.git";
-    rev = version;
+    tag = version;
     hash = "sha256-/MUFTo5Uo60CZV0ZTDVLVgEXrNw9kX5gafq7rJb82Do=";
   };
 

@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-toml";
     repo = "to.ml";
-    rev = version;
+    tag = version;
     hash = "sha256-uk14Py7lEEDJhFsRRtStXqKlJLtx0o8eS9DEIes4SHw=";
   };
 

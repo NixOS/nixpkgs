@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "timewall";
-    rev = version;
+    tag = version;
     hash = "sha256-KUPy/mv6cV0BmvBcom+cCXk0s4Erz0hf5dg1i5QB0OE=";
   };
 

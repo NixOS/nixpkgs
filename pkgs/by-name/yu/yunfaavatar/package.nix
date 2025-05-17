@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yunfachi";
     repo = "yunfaAvatar";
-    rev = version;
+    tag = version;
     hash = "sha256-hCpbe+gW9hkiVOKq7a55n5s3bMpyCNGWiY3D2b4VYxg=";
   };
 

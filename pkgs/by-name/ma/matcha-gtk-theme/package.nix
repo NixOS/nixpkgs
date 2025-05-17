@@ -29,7 +29,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      rev = version;
+      tag = version;
       sha256 = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
     };
 

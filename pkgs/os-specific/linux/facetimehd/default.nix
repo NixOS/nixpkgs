@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "patjak";
     repo = "facetimehd";
-    rev = version;
+    tag = version;
     sha256 = "sha256-3BDIQNMdNeZyuEgnAkJ0uy7b5lOOx1CfS3eamyZyZm8=";
   };
 

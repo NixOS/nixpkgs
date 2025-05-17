@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
-    rev = version;
+    tag = version;
     hash = "sha256-jJGIsNw7wplTL5FBWGL8osb9255o9ZaWgl77R+RLDMM=";
   };
 

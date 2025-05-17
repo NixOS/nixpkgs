@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "pantalaimon";
-    rev = version;
+    tag = version;
     hash = "sha256-g+ZWarZnjlSOpD75yf53Upqj1qDlil7pdbfEsMAsjh0=";
   };
 

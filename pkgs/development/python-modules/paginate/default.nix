@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "paginate";
-    rev = version;
+    tag = version;
     hash = "sha256-+zX9uGNWcV4BWbD2lcd1u9zZ4m7CnbsYZnc99HNaF8I=";
   };
 

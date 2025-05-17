@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-80o8y+mbzpyMQYUGHYs/zgQT23nLVCs7Jcr8FbbXn8M=";
   };
 

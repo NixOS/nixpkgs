@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
-    rev = version;
+    tag = version;
     hash = "sha256-rEE3MZLwqnvn5MqbSTCErbsGRjKMK8cC3wTJxtf8WaU=";
   };
 

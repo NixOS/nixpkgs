@@ -12,7 +12,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "trueromanus";
     repo = "TorrentStream";
-    rev = version;
+    tag = version;
     hash = "sha256-3lmQWx00Ulp0ZyQBEhFT+djHBi84foMlWGJEp/UOGek=";
   };
 

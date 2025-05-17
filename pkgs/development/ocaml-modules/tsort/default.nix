@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "dmbaturin";
     repo = "ocaml-tsort";
-    rev = version;
+    tag = version;
     sha256 = "sha256-/gxjXDRhQdbt0ZBdCNk/j1oWhAbm2UOfye2D9QvPr3o=";
   };
 

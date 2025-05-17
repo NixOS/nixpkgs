@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arsenetar";
     repo = "dupeguru";
-    rev = version;
+    tag = version;
     hash = "sha256-/jkZiCapmCLMp7WfgUmpsR8aNCfb3gBELlMYaC4e7zI=";
   };
 

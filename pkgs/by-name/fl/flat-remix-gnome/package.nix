@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix-gnome";
-    rev = version;
+    tag = version;
     hash = "sha256-NgRqpL2bqdgiLfs08htqAsTFAbi7E+G/R0aBFpE9bmc=";
   };
 

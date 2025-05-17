@@ -24,7 +24,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
-    rev = version;
+    tag = version;
     hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
     fetchSubmodules = true;
   };

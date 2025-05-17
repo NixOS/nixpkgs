@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bougyman";
     repo = "wifish";
-    rev = version;
+    tag = version;
     sha256 = "sha256-eTErN6CfKDey/wV+9o9cBVaG5FzCRBiA9UicrMz3KBc=";
   };
 

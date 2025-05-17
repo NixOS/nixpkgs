@@ -28,7 +28,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 

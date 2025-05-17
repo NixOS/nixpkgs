@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
-    rev = version;
+    tag = version;
     hash = "sha256-XPWfSL1395TBkUmAO5kB9TdAZHL011o6t/2s01W/kk8=";
   };
 

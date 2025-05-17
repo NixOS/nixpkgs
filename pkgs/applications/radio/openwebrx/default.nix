@@ -29,7 +29,7 @@ let
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = pname;
-      rev = version;
+      tag = version;
       sha256 = "1j80zclg1cl5clqd00qqa16prz7cyc32bvxqz2mh540cirygq24w";
     };
 
@@ -53,7 +53,7 @@ let
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = pname;
-      rev = version;
+      tag = version;
       sha256 = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
     };
 
@@ -87,7 +87,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-i3Znp5Sxs/KtJazHh2v9/2P+3cEocWB5wIpF7E4pK9s=";
   };
 

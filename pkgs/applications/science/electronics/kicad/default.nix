@@ -95,7 +95,7 @@ let
     group = "kicad";
     owner = "code";
     repo = "kicad";
-    rev = versionsImport.${baseName}.kicadVersion.src.rev;
+    tag = versionsImport.${baseName}.kicadVersion.src.rev;
     sha256 = versionsImport.${baseName}.kicadVersion.src.sha256;
   };
 
@@ -105,7 +105,7 @@ let
       group = "kicad";
       owner = "libraries";
       repo = "kicad-${name}";
-      rev = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
+      tag = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
       sha256 = versionsImport.${baseName}.libVersion.libSources.${name}.sha256;
     };
 

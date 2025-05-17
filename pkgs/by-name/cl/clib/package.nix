@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "clib";
 
   src = fetchFromGitHub {
-    rev = version;
+    tag = version;
     owner = "clibs";
     repo = "clib";
     sha256 = "sha256-uL8prMk2DrYLjCmZW8DdbCg5FJ5uksT3vIATyOW2ZzY=";

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromBitbucket {
     owner = "agriggio";
     repo = "art";
-    rev = version;
+    tag = version;
     hash = "sha256-TpjmmDeXuxnlvCimsq6mZZk15VOVU3WGrPd3vmcIClI=";
   };
 

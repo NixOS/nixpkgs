@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dbry";
     repo = "WavPack";
-    rev = version;
+    tag = version;
     hash = "sha256-V9jRIuDpZYIBohJRouGr2TI32BZMXSNVfavqPl56YO0=";
   };
 

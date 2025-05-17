@@ -17,7 +17,7 @@ let
     src = fetchFromGitLab {
       owner = "porn-vault";
       repo = "izzy";
-      rev = version;
+      tag = version;
       hash = "sha256-UauA5mZi5a5QF7d17pKSzvyaWbeSuFjBrXEAxR3wNkk=";
     };
 

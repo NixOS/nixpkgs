@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "codedownio";
     repo = "time-ghc-modules";
-    rev = version;
+    tag = version;
     sha256 = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
   };
 

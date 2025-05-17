@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-amtk";
-    rev = version;
+    tag = version;
     hash = "sha256-myKpZtqtf40UByBUKVF0jv521kGAUA6KDmbDJy/Q1q8=";
   };
 

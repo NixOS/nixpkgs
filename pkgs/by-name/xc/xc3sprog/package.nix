@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xc3sprog/code/trunk";
     sha256 = "1rfhms3i7375kdlg0sdg5k52ix3xv5llj2dr30vamyg7pk74y8rx";
-    rev = version;
+    tag = version;
   };
 
   nativeBuildInputs = [ cmake ];

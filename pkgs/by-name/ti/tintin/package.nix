@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scandum";
     repo = "tintin";
-    rev = version;
+    tag = version;
     hash = "sha256-8+tYI9+yAIEqByr6kDEEs2hqtIVKwC9bgWssXq24dbg=";
   };
 

@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~geb";
     repo = "dotool";
-    rev = version;
+    tag = version;
     hash = "sha256-4QmTHeU3TnpRATKIvilkIA3i2hDjM5zQwSvmRvoWuNE=";
   };
 

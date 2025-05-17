@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "git-quick-stats";
     owner = "arzzen";
-    rev = version;
+    tag = version;
     sha256 = "sha256-k8JydRHjEJ4z5uJXCijF7DB9hULbLQ6YfJgFJLX4Ug4=";
   };
 

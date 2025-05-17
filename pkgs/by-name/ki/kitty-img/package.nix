@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "kitty-img";
-    rev = version;
+    tag = version;
     hash = "sha256-5thx4ADmJE29bxN+ZO3hF0jhgXK+boqt8oj4Sygl5SU=";
   };
 

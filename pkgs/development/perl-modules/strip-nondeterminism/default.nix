@@ -24,7 +24,7 @@ buildPerlPackage rec {
     owner = "reproducible-builds";
     repo = "strip-nondeterminism";
     domain = "salsa.debian.org";
-    rev = version;
+    tag = version;
     sha256 = "C/812td9BX1YRqFpD9QYgBfzE+biZeAKgxoNcxpb6UU=";
   };
 

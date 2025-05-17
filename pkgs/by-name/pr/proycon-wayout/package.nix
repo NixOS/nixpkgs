@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~proycon";
     repo = "wayout";
-    rev = version;
+    tag = version;
     sha256 = "sha256-pxHz8y63xX9I425OG0jPvQVx4mAbTYHxVMMkfjZpURo=";
   };
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hbons";
     repo = "SparkleShare";
-    rev = version;
+    tag = version;
     sha256 = "1a9csflmj96iyr1l0mdm3ziv1bljfcjnzm9xb2y4qqk7ha2p6fbq";
   };
 

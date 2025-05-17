@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openbgpd-portable";
     repo = "openbgpd-portable";
-    rev = version;
+    tag = version;
     sha256 = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
   };
 

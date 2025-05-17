@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~craftyguy";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-5g9Y1Lpxp9cUe0sNvU5CdsTGcN+j00gIKPO9pD5j8uM=";
   };
 

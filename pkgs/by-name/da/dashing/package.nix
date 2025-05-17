@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "technosophos";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-CcEgGPnJGrTXrgo82u5dxQTB/YjFBhHdsv7uggsHG1Y=";
   };
 

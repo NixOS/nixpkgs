@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-XmIuXR/uxJbXaB0G+tS9I47Pke20qj8jI1vqnDDgrpE=";
   };
 

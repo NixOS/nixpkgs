@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
-    rev = version;
+    tag = version;
     hash = "sha256-VBuOnUVB6n8ahVtunubgao9jHPu9ncX0dhDT0PdSFhU=";
   };
 

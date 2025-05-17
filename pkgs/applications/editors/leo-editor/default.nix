@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
-    rev = version;
+    tag = version;
     sha256 = "sha256-nK6JMR4XrxZxvLOAsYjuyHQo/sob+OLSk/8U3zZ/Iyo=";
   };
 

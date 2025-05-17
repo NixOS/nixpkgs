@@ -20,7 +20,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     src = fetchFromGitHub {
       owner = "dsheets";
       repo = "ocaml-sodium";
-      rev = version;
+      tag = version;
       sha256 = "124gpi1jhac46x05gp5viykyrafnlp03v1cmkl13c6pgcs8w04pv";
     };
 

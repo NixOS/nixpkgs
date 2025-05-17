@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
-    rev = version;
+    tag = version;
     hash = "sha256-3RL2LJdIHmDAjXaxqsE0n5UQMsuBJWEMoyAEoSBemR0=";
   };
 

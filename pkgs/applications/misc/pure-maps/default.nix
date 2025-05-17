@@ -22,7 +22,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
-    rev = version;
+    tag = version;
     hash = "sha256-3XghdDwzt0r8Qi8W3ZMwar2aaqTNGiGsM27BHVr5C2E=";
     fetchSubmodules = true;
   };

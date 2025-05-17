@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "fatrace";
-    rev = version;
+    tag = version;
     sha256 = "sha256-QkavhxORENQSLUg4tq+W1WB7zSYYinWOOYPqNbv+pEI=";
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
-    rev = version;
+    tag = version;
     sha256 = "1avdl4qcpznvf3s2id5qi1vnzy4wgh6vxpnrz777a1s4iydxpcd8";
   };
 

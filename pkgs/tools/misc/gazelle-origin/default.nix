@@ -16,7 +16,7 @@ buildPythonApplication rec {
     # Use the spinfast319 fork, since it seems that upstream
     # at <https://github.com/x1ppy/gazelle-origin> is inactive
     owner = "spinfast319";
-    rev = version;
+    tag = version;
     hash = "sha256-+yMKnfG2f+A1/MxSBFLaHfpCgI2m968iXqt+2QanM/c=";
   };
 

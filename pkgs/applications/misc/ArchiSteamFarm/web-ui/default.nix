@@ -14,7 +14,7 @@ buildNpmPackage rec {
     repo = "ASF-ui";
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
-    rev = version;
+    tag = version;
     hash = "sha256-Mj7ubIB84gCE/Y3ZzISQ4coGLGZfg4curuBYQdRWiUY=";
   };
 

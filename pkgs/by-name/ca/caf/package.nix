@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
-    rev = version;
+    tag = version;
     hash = "sha256-1DJ8VYBTC4Kd6IQZoj4AjP3CoHhb+bmtBEozc5T0R/0=";
   };
 

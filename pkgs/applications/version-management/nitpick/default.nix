@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "travisb-ca";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "11gn6nc6ypwivy20bx1r0rm2giblwx6jv485zk875a9pdbcwbrf6";
   };
 

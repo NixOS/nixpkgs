@@ -52,7 +52,7 @@ in
   src = fetchFromGitHub {
     owner = "quassel";
     repo = "quassel";
-    rev = version;
+    tag = version;
     sha256 = "sha256-eulhNcyCmy9ryietOhT2yVJeJH+MMZRbTUo2XuTy9qU=";
   };
 

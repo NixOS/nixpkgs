@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "git-learning-game";
     repo = "oh-my-git";
-    rev = version;
+    tag = version;
     sha256 = "sha256-XqxliMVU55D5JSt7Yo5btvZnnTlagSukyhXv6Akgklo=";
   };
 

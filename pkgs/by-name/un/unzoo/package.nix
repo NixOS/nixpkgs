@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "unzoo";
-    rev = version;
+    tag = version;
     hash = "sha256-oPq1I7EsvHaJ7anHbm/KWrYrxJkM79rLhgRfSAdoLtk=";
   };
 

@@ -31,7 +31,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
-    rev = version;
+    tag = version;
     hash = "sha256-hjt2bXQov4lC6O4VY/eu/PZ2taSKng9gRhFDFhQR9SY=";
   };
 

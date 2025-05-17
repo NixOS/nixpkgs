@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
-    rev = version;
+    tag = version;
     hash = "sha256-Shsv5Zd59FN5tq1LY7QqPRtAHEysHIVbPeKIIZ/2eMw=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coldsofttech";
     repo = "pycolorecho";
-    rev = version;
+    tag = version;
     hash = "sha256-h/7Wi0x8iLMZpPYekK6W9LTM+2nYJTaKClNtRTzbmdg=";
   };
 

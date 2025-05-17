@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
-    rev = version;
+    tag = version;
     sha256 = "sha256-3msc3B8NyF8PUlNaAHdUDfCpcUmz8JVW2X58USJ5HRw=";
   };
 

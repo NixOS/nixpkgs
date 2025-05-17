@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-python-client";
-    rev = version;
+    tag = version;
     hash = "sha256-mhPq9O/LCu3+E1jKlaJmrI8dxbA9BIwlc34qGwoxi5g=";
   };
 

@@ -24,7 +24,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = "opam-publish";
-    rev = version;
+    tag = version;
     hash = "sha256-clTEm2DGxcNsv+Y1wwWwnM/lrRJDQBHsncwrdqVWA5U=";
   };
 

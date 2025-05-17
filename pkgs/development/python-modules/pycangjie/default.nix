@@ -21,7 +21,7 @@ buildPythonPackage rec {
     domain = "gitlab.freedesktop.org";
     owner = "cangjie";
     repo = "pycangjie";
-    rev = version;
+    tag = version;
     hash = "sha256-REWX6u3Rc72+e5lIImBwV5uFoBBUTMM5BOfYdKIFL4k=";
   };
 

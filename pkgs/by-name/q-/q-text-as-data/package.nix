@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "harelba";
     repo = "q";
-    rev = version;
+    tag = version;
     sha256 = "18cwyfjgxxavclyd08bmb943c8bvzp1gnqp4klkq5xlgqwivr4sv";
   };
 

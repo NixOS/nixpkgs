@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "lisgd";
-    rev = version;
+    tag = version;
     hash = "sha256-ljRZpBo4lW2cYZYxKKMrXanE0YaHSFwcdyECK0czdWY=";
   };
 

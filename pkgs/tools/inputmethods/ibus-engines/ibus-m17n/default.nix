@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus-m17n";
-    rev = version;
+    tag = version;
     sha256 = "sha256-K7grmYROFRwdmYWiWNRv8TnEUpOie1W8Glx9BP6Orzc=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DaveDavenport";
     repo = "gpx-viewer";
-    rev = version;
+    tag = version;
     hash = "sha256-6AChX0UEIrQExaq3oo9Be5Sr13+POHFph7pZegqcjio=";
   };
 

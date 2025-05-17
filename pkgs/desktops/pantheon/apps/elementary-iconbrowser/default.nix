@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "iconbrowser";
-    rev = version;
+    tag = version;
     sha256 = "sha256-T0VCpk3pdq+2gr/UblLu8mRX7TKJrAtyyFk4i+tAVfI=";
   };
 

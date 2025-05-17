@@ -20,7 +20,7 @@ buildPythonApplication rec {
     domain = "opendev.org";
     owner = "opendev";
     repo = "git-review";
-    rev = version;
+    tag = version;
     hash = "sha256-UfYc662NqnQt0+CKc+18jXnNTOcZv8urCNBsWd6x0VQ=";
   };
 

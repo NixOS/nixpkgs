@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "opensearch-cli";
     owner = "opensearch-project";
-    rev = version;
+    tag = version;
     hash = "sha256-Ah64a9hpc2tnIXiwxg/slE6fUTAoHv9koNmlUHrVj/s=";
   };
 

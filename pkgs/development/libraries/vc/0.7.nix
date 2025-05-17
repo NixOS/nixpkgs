@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VcDevel";
     repo = "Vc";
-    rev = version;
+    tag = version;
     sha256 = "190s4r2n3jsivl4j2m288j3rqmgjj6gl308hi9mzwyhcfn17q8br";
   };
 

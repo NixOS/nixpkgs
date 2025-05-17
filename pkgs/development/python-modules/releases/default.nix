@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bitprophet";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-IgEKAUk97R3ZvqvexD/ptT8i0uf48K+DKkk4q3pn3G8=";
   };
 

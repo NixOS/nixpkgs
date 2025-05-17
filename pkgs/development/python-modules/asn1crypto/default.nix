@@ -19,7 +19,7 @@ let
     if lib.versionOlder python.version "3.12" then
       rec {
         version = "1.5.1";
-        rev = version;
+        tag = version;
         hash = "sha256-M8vASxhaJPgkiTrAckxz7gk/QHkrFlNz7fFbnLEBT+M=";
       }
     else

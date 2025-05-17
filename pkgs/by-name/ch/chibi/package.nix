@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ashinn";
     repo = "chibi-scheme";
-    rev = version;
+    tag = version;
     sha256 = "sha256-i+xiaYwM7a+0T824VSuh7UUNI6HV9KpqzQPE1WAZ+As=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "media-player-info";
     repo = "media-player-info";
-    rev = version;
+    tag = version;
     hash = "sha256-VoMr5Lxy6u/BA/9t65/S8AW41YU0FLp6eftYUVdoMjY=";
   };
 

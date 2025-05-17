@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "libmesode";
-    rev = version;
+    tag = version;
     sha256 = "1bxnkhrypgv41qyy1n545kcggmlw1hvxnhwihijhhcf2pxd2s654";
   };
 

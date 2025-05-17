@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jamielinux";
     repo = "bashmount";
-    rev = version;
+    tag = version;
     sha256 = "1irw47s6i1qwxd20cymzlfw5sv579cw877l27j3p66qfhgadwxrl";
   };
 

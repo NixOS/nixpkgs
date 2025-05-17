@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
-    rev = version;
+    tag = version;
     hash = "sha256-E6JmV4W0plFJfOAPK1Vn7qkmFalwl6OjqSpxYnhAPmw=";
   };
 

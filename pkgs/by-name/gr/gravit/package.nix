@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gak";
     repo = "gravit";
-    rev = version;
+    tag = version;
     hash = "sha256-JuqnLLD5+Ec8kQI0SK98V1O6TTbGM6+yKn5KCHe85eM=";
   };
 

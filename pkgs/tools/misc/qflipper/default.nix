@@ -37,7 +37,7 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "flipperdevices";
     repo = "qFlipper";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     inherit hash;
   };

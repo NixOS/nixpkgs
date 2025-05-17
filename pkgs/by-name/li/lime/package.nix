@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "lime";
-    rev = version;
+    tag = version;
     hash = "sha256-LdwXBJpwSA/PoCXL+c1pcX1V2Fq/eR6nNmwBKDM1Vr8=";
   };
 

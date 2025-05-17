@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-connector";
-    rev = version;
+    tag = version;
     hash = "sha256-hiCh/TG1epSmJtaptfVzcPklDTaBh0biKqfM01YoWo0=";
   };
 

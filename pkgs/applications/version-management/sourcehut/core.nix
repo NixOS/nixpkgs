@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "core.sr.ht";
-    rev = version;
+    tag = version;
     hash = "sha256-lAN1JZXQuN2zxi/BdBtbNj52LPj9iYn0WB2OpyQcyuU=";
     fetchSubmodules = true;
   };

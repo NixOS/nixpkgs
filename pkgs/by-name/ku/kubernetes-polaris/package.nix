@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = version;
+    tag = version;
     sha256 = "sha256-g7qttmh5iYCtDvt3YW5aECpbpNsG7fC9itODsD40q+w=";
   };
 

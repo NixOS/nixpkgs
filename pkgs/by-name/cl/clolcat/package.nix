@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "IchMageBaume";
     repo = "clolcat";
-    rev = version;
+    tag = version;
     sha256 = "sha256-fLa239dwEXe4Jyy5ntgfU9V0h5wrBsvq6/s2HCis7Sc=";
   };
 

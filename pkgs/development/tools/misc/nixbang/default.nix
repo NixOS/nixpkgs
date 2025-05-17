@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "madjar";
     repo = "nixbang";
-    rev = version;
+    tag = version;
     sha256 = "1kzk53ry60i814wa6n9y2ni0bcxhbi9p8gdv10b974gf23mhi8vc";
   };
 

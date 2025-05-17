@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     domain = "codeberg.org";
     owner = "eduVPN";
     repo = "linux-app";
-    rev = version;
+    tag = version;
     hash = "sha256-cm1N/Z6/9zyhWBYUIUIYeB+KphHl+89MD4M9mO/tNMg=";
   };
 

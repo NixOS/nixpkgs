@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "enchive";
-    rev = version;
+    tag = version;
     sha256 = "0fdrfc5l42lj2bvmv9dmkmhmm7qiszwk7cmdvnqad3fs7652g0qa";
   };
 

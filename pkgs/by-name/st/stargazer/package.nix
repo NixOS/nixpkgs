@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
-    rev = version;
+    tag = version;
     hash = "sha256-Yulm0XkVaN+yBKj8LDsn8pBYXEqTOSGLqbpIKDN0G2U=";
   };
 

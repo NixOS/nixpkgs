@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = "fontfinder";
-    rev = version;
+    tag = version;
     hash = "sha256-C4KqEdqToVnPXFPWvNkl/md9L2W4NxRd5jvZ4E7CtfA=";
   };
 

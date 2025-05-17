@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "aarch64-esr-decoder";
-    rev = version;
+    tag = version;
     hash = "sha256-U9i5L3s4oQOIqlECSaKkHxS2Vzr6SY4tIUpvl3+oSl0=";
   };
 

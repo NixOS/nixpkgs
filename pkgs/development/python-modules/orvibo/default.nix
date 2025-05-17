@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "happyleavesaoc";
     repo = "python-orvibo";
-    rev = version;
+    tag = version;
     sha256 = "sha256-Azmho47CEbRo18emmLKhYa/sViQX0oxUTUk4zdrpOaE=";
   };
 

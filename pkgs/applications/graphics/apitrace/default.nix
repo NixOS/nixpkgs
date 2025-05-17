@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "apitrace";
     repo = "apitrace";
-    rev = version;
+    tag = version;
     hash = "sha256-Y2ceE0F7q5tP64Mtvkc7JHOZQN30MDVCPHfiWDnfTSQ=";
     fetchSubmodules = true;
   };

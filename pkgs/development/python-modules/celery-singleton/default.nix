@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "steinitzu";
     repo = "celery-singleton";
-    rev = version;
+    tag = version;
     hash = "sha256-fHlakxxjYIADELZdxIj6rvsZ/+1QfnKvAg3w5cdzvDc=";
   };
 

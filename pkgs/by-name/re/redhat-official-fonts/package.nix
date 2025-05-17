@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RedHatOfficial";
     repo = "RedHatFont";
-    rev = version;
+    tag = version;
     hash = "sha256-r43KtMIedNitb5Arg8fTGB3hrRZoA8oUHVEL24k4LeQ=";
   };
 

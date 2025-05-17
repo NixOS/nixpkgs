@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
-    rev = version;
+    tag = version;
     hash = "sha256-+zxqiz5yPpgTwAw7w8GqJFb3OCcJEH/UhS5u2Xs7pzo=";
   };
 

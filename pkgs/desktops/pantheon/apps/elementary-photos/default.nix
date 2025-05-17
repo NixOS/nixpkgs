@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
-    rev = version;
+    tag = version;
     sha256 = "sha256-+aqBeGRisngbH/EALROTr0IZvyrWIlQvFFEgJNfv95Y=";
   };
 

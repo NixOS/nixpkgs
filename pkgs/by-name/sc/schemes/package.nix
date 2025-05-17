@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "schemes";
-    rev = version;
+    tag = version;
     hash = "sha256-m82jR958f1g/4gSJ4NbNa4fwxVseH399Z8JpWr7tLh8=";
   };
 

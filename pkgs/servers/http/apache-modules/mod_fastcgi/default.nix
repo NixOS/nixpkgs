@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FastCGI-Archives";
     repo = "mod_fastcgi";
-    rev = version;
+    tag = version;
     hash = "sha256-ovir59kCjKkgbraX23nsmzlMzGdeNTyj3MQd8cgvLsg=";
   };
 

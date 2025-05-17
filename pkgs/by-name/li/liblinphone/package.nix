@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
 

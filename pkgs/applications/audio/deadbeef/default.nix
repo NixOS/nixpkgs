@@ -80,7 +80,7 @@ clangStdenv.mkDerivation {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     fetchSubmodules = true;
-    rev = version;
+    tag = version;
     hash = "sha256-qa0ULmE15lV2vkyXPNW9kSISQZEANrjwJwykTiifk5Q=";
   };
 

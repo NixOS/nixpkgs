@@ -15,7 +15,7 @@ rofi-unwrapped.overrideAttrs (oldAttrs: rec {
   src = fetchFromGitHub {
     owner = "lbonn";
     repo = "rofi";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-6hQfy0c73z1Oi2mGjuhKLZQIBpG1u06v40dmlc5fL/w=";
   };

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = "fontforge";
-    rev = version;
+    tag = version;
     sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
 

@@ -16,7 +16,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "protegeproject";
     repo = "protege";
-    rev = version;
+    tag = version;
     hash = "sha256-Q3MHa7nCeF31n7JPltcemFBc/sJwGA9Ev0ymjQhY/U0=";
   };
 

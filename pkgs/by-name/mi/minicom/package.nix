@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "minicom-team";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-wC6VlMRwuhV1zQ26wNx7gijuze8E2CvnzpqOSIPzq2s=";
   };
 

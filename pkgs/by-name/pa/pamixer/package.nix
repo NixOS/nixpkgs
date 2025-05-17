@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cdemoulins";
     repo = "pamixer";
-    rev = version;
+    tag = version;
     hash = "sha256-LbRhsW2MiTYWSH6X9Pz9XdJdH9Na0QCO8CFmlzZmDjQ=";
   };
 

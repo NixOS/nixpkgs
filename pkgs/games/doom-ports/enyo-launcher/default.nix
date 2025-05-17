@@ -13,7 +13,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-launcher";
-    rev = version;
+    tag = version;
     hash = "sha256-k6Stc1tQOcdS//j+bFUNfnOUlwuhIPKxf9DHU+ng164=";
   };
 

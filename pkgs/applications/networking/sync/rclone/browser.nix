@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kapitainsky";
     repo = "RcloneBrowser";
-    rev = version;
+    tag = version;
     sha256 = "14ckkdypkfyiqpnz0y2b73wh1py554iyc3gnymj4smy0kg70ai33";
   };
 

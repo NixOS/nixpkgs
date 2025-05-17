@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "polarsys";
     repo = "b612";
-    rev = version;
+    tag = version;
     hash = "sha256-uyBC8UNOwztCHXhR9XZuWDwrty0eClbo0E+gI1PmjEg=";
   };
 

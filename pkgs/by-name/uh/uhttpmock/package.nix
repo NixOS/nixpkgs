@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = "uhttpmock";
-    rev = version;
+    tag = version;
     sha256 = "NuxiVVowZ8ilP9rcgapCe9OzFCpoOfZxZiSyjTeOrts=";
   };
 

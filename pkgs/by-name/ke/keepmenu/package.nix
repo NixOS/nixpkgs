@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "keepmenu";
-    rev = version;
+    tag = version;
     hash = "sha256-Kzt2RqyYvOWnbkflwTHzlnpUaruVQvdGys57DDpH9o8=";
   };
 

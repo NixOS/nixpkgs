@@ -19,7 +19,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "camlspotter";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-/Dkj8IBVPjGCJCXrLOuJtuaa+nD/a9e8/N+TN9ukw4k=";
   };
 

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
-    rev = version;
+    tag = version;
     hash = "sha256-h3LQYZgyv2l3U7r+mcsrEOGRldaK0zJFwAAva4hV/6g=";
   };
 

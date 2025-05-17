@@ -28,7 +28,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.3")
     src = fetchFromGitHub {
       owner = "ocsigen";
       repo = "eliom";
-      rev = version;
+      tag = version;
       hash = "sha256-ALuoyO6axNQEeBteBVIFwdoSrbLxxcaSTObAcLPGIvo=";
     };
 

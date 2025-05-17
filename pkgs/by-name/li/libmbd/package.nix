@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libmbd";
     repo = "libMBD";
-    rev = version;
+    tag = version;
     hash = "sha256-ctUaBLPaZHoV1rU3u1idvPLGbvC9Z17YBxYKCaL7EMk=";
   };
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jameshilliard";
     repo = "hlk-sw16";
-    rev = version;
+    tag = version;
     sha256 = "010s85nr6xn89i8yvdagg72a97dh1v2pyfqa33v76p9p8xbgh8dz";
   };
 

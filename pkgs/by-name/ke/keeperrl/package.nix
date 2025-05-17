@@ -22,7 +22,7 @@ let
   free_src = fetchFromGitHub {
     owner = "miki151";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeospatialPython";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-yfxhgk8a1rdpGVkE1sjJqT6tiFLimhu2m2SjGxLI6wo=";
   };
 

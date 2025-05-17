@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libinotify-kqueue";
     repo = "libinotify-kqueue";
-    rev = version;
+    tag = version;
     sha256 = "sha256-m59GWrx5C+JXDbhVdKx+SNSn8wwIKyW+KlXabNi17A0=";
   };
 

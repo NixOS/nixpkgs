@@ -18,7 +18,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
-    rev = version;
+    tag = version;
     hash = "sha256-pBoLgS/9MLMrc98niI+o2JoJ3gpvhyRY2o9GmVc5hIA=";
     fetchSubmodules = true;
   };

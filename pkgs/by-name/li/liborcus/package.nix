@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "orcus";
     repo = "orcus";
-    rev = version;
+    tag = version;
     hash = "sha256-+9C52H99c/kL5DEIoXV+WcLnTftRbicRLQN/FdIXBw8=";
   };
 

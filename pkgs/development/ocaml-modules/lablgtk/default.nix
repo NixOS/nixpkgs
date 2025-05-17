@@ -24,7 +24,7 @@ let
         src = fetchFromGitHub {
           owner = "garrigue";
           repo = "lablgtk";
-          rev = version;
+          tag = version;
           sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
         };
         env = { };

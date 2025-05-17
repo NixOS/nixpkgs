@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "domschrei";
     repo = "krunner-symbols";
-    rev = version;
+    tag = version;
     sha256 = "sha256-YsoZdPTWpk3/YERwerrVEcaf2IfGVJwpq32onhP8Exo=";
   };
 

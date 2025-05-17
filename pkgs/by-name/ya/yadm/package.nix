@@ -37,7 +37,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TheLocehiliosan";
     repo = "yadm";
-    rev = version;
+    tag = version;
     hash = "sha256-VQhfRtg9wtquJGjhB8fFQqHIJ5GViMfNQQep13ZH5SE=";
   };
 

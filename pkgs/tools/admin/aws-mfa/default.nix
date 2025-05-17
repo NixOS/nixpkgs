@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "broamski";
     repo = "aws-mfa";
-    rev = version;
+    tag = version;
     hash = "sha256-XhnDri7QV8esKtx0SttWAvevE3SH2Yj2YMq/P4K6jK4=";
   };
 

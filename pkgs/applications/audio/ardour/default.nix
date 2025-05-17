@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = version;
+    tag = version;
     hash = "sha256-z+rIWFVua1IG4GZ8kH3quKaBbN+I7Yr62vukJZk6KAg=";
   };
 

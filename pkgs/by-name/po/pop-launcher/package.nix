@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "launcher";
-    rev = version;
+    tag = version;
     hash = "sha256-CLpquNgdtnGMlMpGLv72WZmizalvYPfMWlE/qLprVrs=";
   };
 

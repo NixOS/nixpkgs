@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
-    rev = version;
+    tag = version;
     hash = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
   };
 

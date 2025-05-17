@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cornices";
     repo = "cornice";
-    rev = version;
+    tag = version;
     hash = "sha256-jAf8unDPpr/ZAWkb9LhOW4URjwcRnaYVUKmfnYBStTg=";
   };
 

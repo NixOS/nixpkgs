@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zap-api-python";
-    rev = version;
+    tag = version;
     sha256 = "0b46m9s0vwaaq8vhiqspdr2ns9qdw65fnjh8mf58gjinlsd27ygk";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # tarball is missing file common.h
   src = fetchgit {
     url = "git://git.suckless.org/surf";
-    rev = version;
+    tag = version;
     sha256 = "1v926hiayddylq79n8l7dy51bm0dsa9n18nx9bkhg666cx973x4z";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Vifon";
     repo = "autocomplete-ALL-the-things";
-    rev = version;
+    tag = version;
     sha256 = "06xd59c6gd9rglwq4km93n2p078k7v4x300lqrg1f32vvnjvs7sr";
   };
 

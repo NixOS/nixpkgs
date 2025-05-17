@@ -34,7 +34,7 @@ crystal.buildCrystalPackage rec {
     owner = "iv-org";
     repo = "invidious";
     fetchSubmodules = true;
-    rev = versions.invidious.rev or "refs/tags/v${version}";
+    tag = versions.invidious.rev or "refs/tags/v${version}";
     inherit (versions.invidious) hash;
   };
 

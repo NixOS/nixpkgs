@@ -23,7 +23,7 @@ let
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
-    rev = version;
+    tag = version;
     hash = "sha256-P+ypiW3GHoMClBmW5lUNAG6/sydHHnFGyGajmC3WARg=";
   };
 

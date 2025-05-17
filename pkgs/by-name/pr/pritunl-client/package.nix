@@ -23,7 +23,7 @@ let
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
-    rev = version;
+    tag = version;
     sha256 = "sha256-AqolwsGHDxVQMjgQdWz24BmM+uMT/XII1vtDjA3fFcQ=";
   };
 

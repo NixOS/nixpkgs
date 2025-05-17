@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Attempto";
     repo = "Clex";
-    rev = version;
+    tag = version;
     sha256 = "0p9s64g1jic213bwm6347jqckszgnni9szrrz31qjgaf32kf7nkp";
   };
 

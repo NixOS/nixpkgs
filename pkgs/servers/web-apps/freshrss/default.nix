@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
-    rev = version;
+    tag = version;
     hash = "sha256-TVtyX0/HKtLHFjHHjZDwOOcbHJ7Bq0NrlI3drlm6Gy4=";
   };
 

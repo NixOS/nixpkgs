@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.freedesktop.org";
     owner = "ofourdan";
     repo = "xwayland-run";
-    rev = version;
+    tag = version;
     hash = "sha256-FP/2KNPehZEGKXr+fKdVj4DXzRMpfc3x7K6vH6ZsGdo=";
   };
 

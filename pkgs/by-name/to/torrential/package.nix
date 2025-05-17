@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "davidmhewitt";
     repo = "torrential";
-    rev = version;
+    tag = version;
     sha256 = "sha256-uHc/VNtbhetmGyuhynZH1TvxJscVX17eWO6dzX6Ft3A=";
   };
 

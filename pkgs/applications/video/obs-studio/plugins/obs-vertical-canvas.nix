@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Aitum";
     repo = "obs-vertical-canvas";
-    rev = version;
+    tag = version;
     sha256 = "sha256-0XfJ8q8n2ANO0oDtLZhZjRunZ5S1EouQ6Ak/pxEQYOQ=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "mr_goldberg";
     repo = "goldberg_emulator";
-    rev = version;
+    tag = version;
     hash = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
   };
 

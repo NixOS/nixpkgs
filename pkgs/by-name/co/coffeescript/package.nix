@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jashkenas";
     repo = "coffeescript";
-    rev = version;
+    tag = version;
     hash = "sha256-vr46LKICX61rFPCkZ3G+8gJykg+MO43YRJnZGM3RoY0=";
   };
 

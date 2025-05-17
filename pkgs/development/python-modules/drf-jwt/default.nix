@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Styria-Digital";
     repo = "django-rest-framework-jwt";
-    rev = version;
+    tag = version;
     hash = "sha256-bbkk78uYTG+JTzY3AyOmEVtVSgout/TETfr5N5fUto4=";
   };
 

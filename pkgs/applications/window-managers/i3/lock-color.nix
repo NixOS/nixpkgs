@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
-    rev = version;
+    tag = version;
     sha256 = "sha256-fuLeglRif2bruyQRqiL3nm3q6qxoHcPdVdL+QjGBR/k=";
   };
 

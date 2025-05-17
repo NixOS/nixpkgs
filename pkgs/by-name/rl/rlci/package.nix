@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orsinium-labs";
     repo = "rlci";
-    rev = version;
+    tag = version;
     hash = "sha256-+Hd1Ymm2LKnHUKoUlfN6D6pwebxgwJQHgqwMHXXtP6Y=";
   };
 

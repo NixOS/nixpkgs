@@ -16,7 +16,7 @@ buildDunePackage rec {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "xtmpl";
-    rev = version;
+    tag = version;
     sha256 = "sha256:0vwj0aayg60wm98d91fg3hmj90730liljy4cn8771dpxvz8m07bw";
   };
 

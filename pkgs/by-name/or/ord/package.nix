@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
-    rev = version;
+    tag = version;
     hash = "sha256-jYu9NPvs7nwgiqMCvZlLQqoYESwjKAYlhJ9ehev70EY=";
   };
 

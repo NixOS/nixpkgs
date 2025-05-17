@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
-    rev = version;
+    tag = version;
     hash = "sha256-y+aaAsAW1e+k5dnkYbq6JyRlKiC9wdXvyykUiKfQXis=";
   };
 

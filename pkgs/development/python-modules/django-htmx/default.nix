@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-htmx";
-    rev = version;
+    tag = version;
     hash = "sha256-IgVkHgTk4hC0lL6LVM16QoT2xtPWxKNu+NrcyxZ5oVY=";
   };
 

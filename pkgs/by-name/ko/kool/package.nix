@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kool-dev";
     repo = "kool";
-    rev = version;
+    tag = version;
     hash = "sha256-UVdkymG9Ni83NhGRAXalJiLbpn3xzNl0quew+vDfyec=";
   };
 

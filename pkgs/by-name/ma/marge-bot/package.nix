@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "marge-org";
     repo = "marge-bot";
-    rev = version;
+    tag = version;
     hash = "sha256-2L7c/NEKyjscwpyf/5GtWXr7Ig14IQlRR5IbDYxp8jA=";
   };
 

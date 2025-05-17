@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = version;
+    tag = version;
     sha256 = "12cv5ms1j3vfrq066km020nwxb6x2dzh12g8nz6xxyxysn44wzzi";
   };
 

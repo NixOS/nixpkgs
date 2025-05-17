@@ -44,7 +44,7 @@ let
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
-          rev = version;
+          tag = version;
           hash = "sha256-tsNdsH+GxjLUTd7KXHMZUTNTIAWeKJ3BNy1Lehjo8Eo=";
         };
 

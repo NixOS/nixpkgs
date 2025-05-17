@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
-    rev = version;
+    tag = version;
     hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
   };
 

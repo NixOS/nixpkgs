@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "pwithnall";
     repo = "libglib-testing";
-    rev = version;
+    tag = version;
     sha256 = "U3epLDdLES7MA71z7Q1WXMjzySTFERWBU0u8poObbEo=";
   };
 

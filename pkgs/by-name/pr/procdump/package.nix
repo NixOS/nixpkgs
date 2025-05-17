@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "ProcDump-for-Linux";
-    rev = version;
+    tag = version;
     sha256 = "sha256-gVswAezHl7E2cBTJEQhPFXhHkzhWVHSpPF8m0s8+ekc=";
   };
 

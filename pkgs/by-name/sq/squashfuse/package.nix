@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vasi";
     repo = "squashfuse";
-    rev = version;
+    tag = version;
     sha256 = "sha256-HuDVCO+hKdUKz0TMfHquI0eqFNAoNhPfY2VBM2kXupk=";
   };
 

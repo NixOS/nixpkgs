@@ -22,7 +22,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreen";
-    rev = version;
+    tag = version;
     sha256 = "1a85vbsi53mhzva49smqwcs61c51wv3ic410nvb9is9nlsbifwan";
   };
 

@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
-    rev = version;
+    tag = version;
     sha256 = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xk=";
   };
 

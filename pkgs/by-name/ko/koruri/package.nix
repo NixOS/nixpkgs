@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Koruri";
     repo = "Koruri";
-    rev = version;
+    tag = version;
     hash = "sha256-zL9UtT15mWvsXgGJqbTs6cOsQaoh/0AIAyQ5z7JpTXk=";
   };
 

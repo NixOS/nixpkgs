@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "git-autoshare";
-    rev = version;
+    tag = version;
     hash = "sha256-F8wcAayIR6MH8e0cQSwFJn/AVSLG3tVil80APjcFG/0=";
   };
 

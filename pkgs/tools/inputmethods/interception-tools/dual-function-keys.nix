@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "interception";
     owner = "linux/plugins";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-m/oEczUNKqj0gs/zMOIBxoQaffNg+YyPINMXArkATJ4=";
   };
 

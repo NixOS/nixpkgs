@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Joungkyun";
     repo = "libchardet";
-    rev = version;
+    tag = version;
     sha256 = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
   };
 

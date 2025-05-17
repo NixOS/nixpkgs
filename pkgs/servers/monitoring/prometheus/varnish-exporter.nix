@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jonnenauha";
     repo = "prometheus_varnish_exporter";
-    rev = version;
+    tag = version;
     hash = "sha256-1sUzKLNkLP/eX0wYSestMAJpjAmX1iimjYoFYb6Mgpc=";
   };
 

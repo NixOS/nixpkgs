@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-cClSNBlresMHqJrqSFWvUo589TlwJ2tL5FWJG9QBuis=";
   };
 

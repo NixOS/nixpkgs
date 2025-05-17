@@ -27,7 +27,7 @@ buildPythonPackage rec {
     group = "World";
     owner = "OpenPaperwork";
     repo = "pyocr";
-    rev = version;
+    tag = version;
     hash = "sha256-gE0+qbHCwpDdxXFY+4rjVU2FbUSfSVrvrVMcWUk+9FU=";
   };
 

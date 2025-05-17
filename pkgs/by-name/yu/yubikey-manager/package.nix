@@ -15,7 +15,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
-    rev = version;
+    tag = version;
     hash = "sha256-qEEAByg6Smn1Wk8U4VA6MIJDLWBtM+S+qTDIcgPUGA0=";
   };
 

@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Enthymeme";
     repo = "hackneyed-x11-cursors";
-    rev = version;
+    tag = version;
     hash = "sha256-+7QtHgBuhJtQejiHeZ+QoedJo24LqSY51XRVLv9Ho2g=";
   };
 

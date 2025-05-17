@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
-    rev = version;
+    tag = version;
     hash = "sha256-vG1HUkuNUZkhBumoJJy3AyFU6cZOo1YGmaOYcU6bPOM=";
   };
 

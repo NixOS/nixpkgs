@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Kentzo";
     repo = "git-archive-all";
-    rev = version;
+    tag = version;
     hash = "sha256-fIPjggOx+CEorj1bazz8s81ZdppkTL0OlA5tRqCYZyc=";
   };
 

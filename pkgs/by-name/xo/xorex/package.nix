@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Neo23x0";
     repo = "xorex";
-    rev = version;
+    tag = version;
     sha256 = "rBsOSXWnHRhpLmq20XBuGx8gGBM8ouMyOISkbzUcvE4=";
   };
 

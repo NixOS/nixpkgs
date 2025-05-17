@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gapan";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "rh1rRgbw8uqii4oN3XXNNKsWam1d8TY0qGceHERlG1k=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "pidgin-opensteamworks";
-    rev = version;
+    tag = version;
     sha256 = "sha256-VWsoyFG+Ro+Y6ngSTMQ7yBYf6awCMNOc6U0WqNeg/jU=";
   };
 

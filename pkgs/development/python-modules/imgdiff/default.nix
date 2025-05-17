@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "imgdiff";
-    rev = version;
+    tag = version;
     hash = "sha256-Y5nUnjihRpVVehhP1LUgfuJN5nCxEJu6P1w99Igpxjs=";
   };
 

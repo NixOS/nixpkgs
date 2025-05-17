@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "off-world";
     repo = "lightdm-tiny-greeter";
-    rev = version;
+    tag = version;
     sha256 = "08azpj7b5qgac9bgi1xvd6qy6x2nb7iapa0v40ggr3d1fabyhrg6";
   };
 

@@ -22,7 +22,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yadayada";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "0a0fr632l24a3jmgla3b1vcm50ayfa9hdbp677ch1chwj5dq4zfp";
   };
 

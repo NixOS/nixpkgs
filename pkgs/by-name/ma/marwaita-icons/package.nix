@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-icons";
-    rev = version;
+    tag = version;
     hash = "sha256-UehujziT13kA9ltjyCvbSDTEpR8ISxoBpoLj22Zih8k=";
   };
 

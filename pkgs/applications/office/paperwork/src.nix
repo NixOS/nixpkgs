@@ -14,7 +14,7 @@ rec {
       repo = "paperwork";
       group = "World";
       owner = "OpenPaperwork";
-      rev = version;
+      tag = version;
       sha256 = "sha256-PRh0ohmPLwpM76qYfbExFqq4OK6Hm0fbdzrjXungSoY=";
     };
     patches = [

@@ -17,7 +17,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "PintaProject";
     repo = "Pinta";
-    rev = version;
+    tag = version;
     hash = "sha256-87uzUIgivBI2W+vJV/LflxJoUPJCW5SlodwcC1pSOUk=";
   };
 

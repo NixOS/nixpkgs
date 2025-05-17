@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libmbim";
-    rev = version;
+    tag = version;
     hash = "sha256-sHTpu9WeMZroT+1I18ObEHWSzcyj/Relyz8UNe+WawI=";
   };
 

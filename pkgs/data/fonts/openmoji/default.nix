@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-k37MsBbRUZ4vIEPAgVMiCK8gz377DWwAfjjjOassNMY=";
   };
 

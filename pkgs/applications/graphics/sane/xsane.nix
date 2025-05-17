@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "frontend";
     group = "sane-project";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-oOg94nUsT9LLKnHocY0S5g02Y9a1UazzZAjpEI/s+yM=";
   };
 

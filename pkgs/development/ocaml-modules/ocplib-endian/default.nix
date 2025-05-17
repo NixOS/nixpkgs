@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocplib-endian";
-    rev = version;
+    tag = version;
     sha256 = "sha256-THTlhOfXAPaqTt1qBkht+D67bw6M175QLvXoUMgjks4=";
   };
 

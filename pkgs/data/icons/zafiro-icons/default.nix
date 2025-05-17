@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-IbFnlUOSADYMNMfvRuRPndxcQbnV12BqMDb9bJRjnoU=";
   };
 

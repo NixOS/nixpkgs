@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-gtk-theme";
-    rev = version;
+    tag = version;
     hash = "sha256-2B2BtbPeg3cEbnEIgdGFzy8MjCMWlbP/Sq4jzG5cjmc=";
   };
 

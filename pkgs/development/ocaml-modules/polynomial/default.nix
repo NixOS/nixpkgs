@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-polynomial";
-    rev = version;
+    tag = version;
     hash = "sha256-is/PrYLCwStHiQsNq5OVRCwHdXjO2K2Z7FrXgytRfAU=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/msieve/code/trunk";
-    rev = version;
+    tag = version;
     hash = "sha256-6ErVn4pYPMG5VFjOQURLsHNpN0pGdp55+rjY8988onU=";
   };
 

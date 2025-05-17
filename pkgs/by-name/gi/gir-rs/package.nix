@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "gtk-rs";
     repo = "gir";
-    rev = version;
+    tag = version;
     sha256 = "sha256-GAAK4ej16e5/sjnPOVWs4ul1H9sqa+tDE8ky9tbB9No=";
   };
 

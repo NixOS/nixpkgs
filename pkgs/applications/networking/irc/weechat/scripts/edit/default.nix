@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "keith";
     repo = "edit-weechat";
-    rev = version;
+    tag = version;
     sha256 = "1s42r0l0xkhlp6rbc23cm4vlda91il6cg53w33hqfhd2wz91s66w";
   };
 

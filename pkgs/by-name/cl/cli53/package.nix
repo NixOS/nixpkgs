@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "barnybug";
     repo = "cli53";
-    rev = version;
+    tag = version;
     sha256 = "sha256-wfb3lK/WB/B8gd4BOqh+Ol10cNZdsoCoQ+hM33+goM8=";
   };
 

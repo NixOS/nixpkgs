@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rebar";
     repo = "rebar";
-    rev = version;
+    tag = version;
     sha256 = "sha256-okvG7X2uHtZ1p+HUoFOmslrWvYjk0QWBAvAMAW2E40c=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-backgrounds";
-    rev = version;
+    tag = version;
     sha256 = "04hmbmzf97rsii8gpwy3wkljy5xhxmlsl34d63s6hfy05knclydj";
   };
 

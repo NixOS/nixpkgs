@@ -17,7 +17,7 @@ buildDunePackage rec {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "ocaml-iri";
-    rev = version;
+    tag = version;
     hash = "sha256-6Q7qPezmdcO6JSevWl55XAxFuIROZNDrMkYw8VRR7qg=";
   };
 

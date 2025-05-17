@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "caveman250";
     repo = "Headlines";
-    rev = version;
+    tag = version;
     hash = "sha256-wamow0UozX5ecKbXWOgsWCerInL4J0gK0+Muf+eoO9k=";
   };
 

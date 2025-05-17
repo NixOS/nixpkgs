@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "digininja";
     repo = "CeWL";
-    rev = version;
+    tag = version;
     sha256 = "sha256-5LTZUr3OMeu1NODhIgBiVqtQnUWYfZTm73q61vT3rXc=";
   };
 

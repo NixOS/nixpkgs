@@ -23,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "Naios";
       repo = "function2";
-      rev = version;
+      tag = version;
       hash = "sha256-JceZU8ZvtYhFheh8BjMvjjZty4hcYxHEK+IIo5X4eSk=";
     };
   };

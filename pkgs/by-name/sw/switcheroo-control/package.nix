@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "switcheroo-control";
-    rev = version;
+    tag = version;
     hash = "sha256-F+5HhMxM8pcnAGmVBARKWNCL0rIEzHW/jsGHHqYZJug=";
   };
 
