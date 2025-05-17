@@ -32,6 +32,15 @@ stdenv.mkDerivation rec {
       url = "https://git.entrouvert.org/entrouvert/lasso/commit/ffaddeb015a61db3e52c391de00430107a23e2f1.patch";
       hash = "sha256-D2npxpIuR/KrNYiKO3KXCvHEb/XVXUKIP0HQUd+w56k=";
     })
+    # Fix GCC 14 implicit declaration of function
+    ./fix-gcc14-implicit-function-declaration.diff
+    # Fix GCC 14 incompatible pointer
+    ./fix-gcc14-incompatible-pointer.diff
+    # Fix GCC 14 int-conversion (xmlsec)
+    (fetchpatch {
+      url = "https://git.entrouvert.org/entrouvert/lasso/commit/66c9f50f1f6b00d621a9a0ca2f924875f94d14ae.patch";
+      hash = "sha256-UkWxznKx2xAbjY29+NQ+cjIDhWLuyoWsmBTSiLUxWgU=";
+    })
   ];
 
   nativeBuildInputs = [
