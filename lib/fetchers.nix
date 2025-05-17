@@ -30,8 +30,13 @@ rec {
     "ALL_PROXY"
     "NO_PROXY"
 
-    # https proxies typically need to inject custom root CAs too
-    "NIX_SSL_CERT_FILE"
+    # "NIX_SSL_CERT_FILE" was once added to the list because
+    # usually https proxies need to inject custom root CAs.
+    # However, it was removed because it broke builds for
+    # too many people that had the variable set automatically by the
+    # nix-daemon to an unreadable path.
+    # If you still wish to use it as an impure variable, you could
+    # add it back in your local checkout, or you could apply an overlay
   ];
 
   /**
