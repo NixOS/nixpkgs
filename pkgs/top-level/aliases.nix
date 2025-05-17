@@ -2032,6 +2032,12 @@ mapAliases {
 
   ### Z ###
 
+  z3_4_11 = throw "'z3_4_11' has been removed in favour of the latest version. Consider using 'z3' or 'z3_4_15'."; # Added 2025-05-17
+  z3_4_12 = throw "'z3_4_12' has been removed in favour of the latest version. Consider using 'z3' or 'z3_4_15'."; # Added 2025-05-17
+  z3_4_13 = throw "'z3_4_13' has been removed in favour of the latest version. Consider using 'z3' or 'z3_4_15'."; # Added 2025-05-17
+  z3_4_14 = throw "'z3_4_14' has been removed in favour of the latest version. Consider using 'z3' or 'z3_4_15'."; # Added 2025-05-17
+  z3_4_8_5 = throw "'z3_4_8_5' has been removed in favour of the latest version. Consider using 'z3' or 'z3_4_15'."; # Added 2025-05-17
+  z3_4_8 = throw "'z3_4_8' has been removed in favour of the latest version. Consider using 'z3' or 'z3_4_15'."; # Added 2025-05-17
   zabbix50 = throw "'zabbix50' has been removed, it would have reached its End of Life a few days after the release of NixOS 25.05. Consider upgrading to 'zabbix60' or 'zabbix70'.";
   zabbix64 = throw "'zabbix64' has been removed because it reached its End of Life. Consider upgrading to 'zabbix70'.";
   zeroadPackages = recurseIntoAttrs {
