@@ -24440,6 +24440,12 @@
     githubId = 70479099;
     matrix = "@eyes1238:matrix.org";
   };
+  The1Penguin = {
+    name = "Nor Führ";
+    email = "nix@acorneroftheweb.com";
+    github = "The1Penguin";
+    githubId = 49118502;
+  };
   theaninova = {
     name = "Thea Schöbl";
     email = "dev@theaninova.de";
