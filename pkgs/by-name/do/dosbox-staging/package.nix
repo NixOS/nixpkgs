@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
-  version = "0.82.1";
+  version = "0.82.2";
   shortRev = "13441a2";
 
   src = fetchFromGitHub {
     owner = "dosbox-staging";
     repo = "dosbox-staging";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BVeFBKqTQiEftWVvMkSYBjC6dCYI4juWD4A6Bx8E8/Y=";
+    hash = "sha256-cnMGGLJ4RYgEqBmYWNfN9a/xUlv6X/ISmS9VOftD54Q=";
   };
 
   nativeBuildInputs = [
