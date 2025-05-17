@@ -6819,8 +6819,6 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS
 
-  actiona = libsForQt5.callPackage ../applications/misc/actiona { };
-
   inherit (callPackage ../development/tools/alloy { })
     alloy5
     alloy6
