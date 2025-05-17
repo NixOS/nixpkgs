@@ -1,0 +1,114 @@
+From bc6bea6b2f26d219163979a9f3eb540f2c9f9ec6 Mon Sep 17 00:00:00 2001
+From: soyouzpanda <soyouzpanda@soyouzpanda.fr>
+Date: Fri, 16 May 2025 23:46:36 +0200
+Subject: [PATCH 2/2] =?UTF-8?q?=F0=9F=94=A7(backend)=20support=20`=5FFILE`?=
+ =?UTF-8?q?=20for=20secret=20environment=20variables?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ meet/settings.py | 43 +++++++++++++++++++++++++++++-------
+ 1 file changed, 35 insertions(+), 8 deletions(-)
+
+diff --git a/meet/settings.py b/meet/settings.py
+index 9c67986..da9819c 100755
+--- a/meet/settings.py
++++ b/meet/settings.py
+@@ -24,6 +24,33 @@ from sentry_sdk.integrations.logging import ignore_logger
+ # Build paths inside the project like this: BASE_DIR / 'subdir'.
+ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ 
++class SecretFileValue(values.Value):
++    file_suffix = 'FILE'
++
++    def setup(self, name):
++        value = self.default
++        if self.environ:
++            full_environ_name = self.full_environ_name(name)
++            full_environ_name_file = f'{full_environ_name}_{self.file_suffix}'
++            if full_environ_name_file in os.environ:
++                filename = os.environ[full_environ_name_file]
++                if not os.path.exists(filename):
++                    raise ValueError('Path {0!r} does not exist.'.format(filename))
++                try:
++                    file = open(filename, 'r')
++                    value = self.to_python(file.read().removesuffix("\n"))
++                    file.close()
++                except:
++                    raise ValueError('Path {0!r} cannot be read.'.format(filename))
++            elif full_environ_name in os.environ:
++                value = self.to_python(os.environ[full_environ_name])
++            elif self.environ_required:
++                raise ValueError('Value {0!r} is required to be set as the '
++                                 'environment variable {1!r} or {2!r}'
++                                 .format(name, full_environ_name_file, full_environ_name))
++        self.value = value
++        return value
++
+ 
+ def get_release():
+     """
+@@ -73,7 +100,7 @@ class Base(Configuration):
+ 
+     # Security
+     ALLOWED_HOSTS = values.ListValue([])
+-    SECRET_KEY = values.Value(None)
++    SECRET_KEY = SecretFileValue(None)
+     SILENCED_SYSTEM_CHECKS = values.ListValue([])
+     ALLOW_UNSECURE_USER_LISTING = values.BooleanValue(
+         False, environ_name="ALLOW_UNSECURE_USER_LISTING", environ_prefix=None
+@@ -128,10 +155,10 @@ class Base(Configuration):
+     AWS_S3_ENDPOINT_URL = values.Value(
+         environ_name="AWS_S3_ENDPOINT_URL", environ_prefix=None
+     )
+-    AWS_S3_ACCESS_KEY_ID = values.Value(
++    AWS_S3_ACCESS_KEY_ID = SecretFileValue(
+         environ_name="AWS_S3_ACCESS_KEY_ID", environ_prefix=None
+     )
+-    AWS_S3_SECRET_ACCESS_KEY = values.Value(
++    AWS_S3_SECRET_ACCESS_KEY = SecretFileValue(
+         environ_name="AWS_S3_SECRET_ACCESS_KEY", environ_prefix=None
+     )
+     AWS_S3_REGION_NAME = values.Value(
+@@ -325,7 +352,7 @@ class Base(Configuration):
+     EMAIL_BACKEND = values.Value("django.core.mail.backends.smtp.EmailBackend")
+     EMAIL_HOST = values.Value(None)
+     EMAIL_HOST_USER = values.Value(None)
+-    EMAIL_HOST_PASSWORD = values.Value(None)
++    EMAIL_HOST_PASSWORD = SecretFileValue(None)
+     EMAIL_PORT = values.PositiveIntegerValue(None)
+     EMAIL_USE_TLS = values.BooleanValue(False)
+     EMAIL_USE_SSL = values.BooleanValue(False)
+@@ -381,7 +408,7 @@ class Base(Configuration):
+     OIDC_RP_CLIENT_ID = values.Value(
+         "meet", environ_name="OIDC_RP_CLIENT_ID", environ_prefix=None
+     )
+-    OIDC_RP_CLIENT_SECRET = values.Value(
++    OIDC_RP_CLIENT_SECRET = SecretFileValue(
+         None,
+         environ_name="OIDC_RP_CLIENT_SECRET",
+         environ_prefix=None,
+@@ -455,8 +482,8 @@ class Base(Configuration):
+ 
+     # Video conference configuration
+     LIVEKIT_CONFIGURATION = {
+-        "api_key": values.Value(environ_name="LIVEKIT_API_KEY", environ_prefix=None),
+-        "api_secret": values.Value(
++        "api_key": SecretFileValue(environ_name="LIVEKIT_API_KEY", environ_prefix=None),
++        "api_secret": SecretFileValue(
+             environ_name="LIVEKIT_API_SECRET", environ_prefix=None
+         ),
+         "url": values.Value(environ_name="LIVEKIT_API_URL", environ_prefix=None),
+@@ -526,7 +553,7 @@ class Base(Configuration):
+         environ_name="MARKETING_SERVICE_CLASS",
+         environ_prefix=None,
+     )
+-    BREVO_API_KEY = values.Value(
++    BREVO_API_KEY = SecretFileValue(
+         None, environ_name="BREVO_API_KEY", environ_prefix=None
+     )
+     BREVO_API_CONTACT_LIST_IDS = values.ListValue(
+-- 
+2.47.2
+

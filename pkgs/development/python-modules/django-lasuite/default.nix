@@ -1,0 +1,69 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  django,
+  djangorestframework,
+  joserfc,
+  mozilla-django-oidc,
+  pyjwt,
+  requests,
+  factory-boy,
+  pytest,
+  pytest-django,
+  responses,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "django-lasuite";
+  version = "0.0.7";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "django-lasuite";
+    tag = "v${version}";
+    hash = "sha256-0UeXMqpk7DPWAGZto7nHhvFK6YsNqywrTFQ/q+7IHDY=";
+  };
+
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
+    django
+    djangorestframework
+    joserfc
+    mozilla-django-oidc
+    pyjwt
+    requests
+  ];
+
+  pythonRelaxDeps = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+    factory-boy
+    responses
+  ];
+
+  preCheck = ''
+    export PYTHONPATH=tests:$PYTHONPATH
+    export DJANGO_SETTINGS_MODULE=test_project.settings
+  '';
+
+  pythonImportsCheck = [
+    "lasuite"
+  ];
+
+  meta = {
+    description = "The common library for La Suite Django projects and Proconnected Django projects";
+    homepage = "https://github.com/suitenumerique/django-lasuite";
+    changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soyouzpanda ];
+  };
+}
