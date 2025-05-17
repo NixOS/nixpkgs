@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B8/e5urhy5tAgHNd/PR3HlNQd0M0CxgC56nArFGlQ9c=";
   };
 
+  patches = [
+    ./wrap-workaround.patch
+  ];
+
   nativeBuildInputs =
     [
       cmake

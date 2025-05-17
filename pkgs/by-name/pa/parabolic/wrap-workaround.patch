@@ -1,0 +1,24 @@
+diff --git a/resources/linux/org.nickvision.tubeconverter.desktop.in b/resources/linux/org.nickvision.tubeconverter.desktop.in
+index ad60a122..e221a9ea 100644
+--- a/resources/linux/org.nickvision.tubeconverter.desktop.in
++++ b/resources/linux/org.nickvision.tubeconverter.desktop.in
+@@ -2,7 +2,7 @@
+ Version=1.0
+ Name=@DISPLAY_NAME@
+ Comment=Download web video and audio
+-Exec=@CMAKE_INSTALL_FULL_LIBDIR@/@PROJECT_NAME@/@OUTPUT_NAME@
++Exec=@CMAKE_INSTALL_BINDIR@/@PROJECT_NAME@
+ Icon=@PROJECT_NAME@
+ Terminal=false
+ Type=Application
+diff --git a/resources/linux/org.nickvision.tubeconverter.service.in b/resources/linux/org.nickvision.tubeconverter.service.in
+index e138a00d..d3c914d9 100644
+--- a/resources/linux/org.nickvision.tubeconverter.service.in
++++ b/resources/linux/org.nickvision.tubeconverter.service.in
+@@ -1,3 +1,3 @@
+ [D-BUS Service]
+ Name=@PROJECT_NAME@
+-Exec=@CMAKE_INSTALL_FULL_LIBDIR@/@PROJECT_NAME@/@OUTPUT_NAME@ --gapplication-service
+\ No newline at end of file
++Exec=@CMAKE_INSTALL_BINDIR@/@PROJECT_NAME@ --gapplication-service
+\ No newline at end of file
