@@ -150,11 +150,16 @@ let
                   wcl -bcl=dos -fe=dos test.c
 
                   echo "Test file format"
-                  file ./linux | grep "32-bit" | grep "Linux"
-                  file ./nt.exe | grep "PE32" | grep "Windows"
-                  file ./dos4g.exe | grep "MS-DOS" | grep "LE executable"
-                  file ./windows.exe | grep "MS-DOS" | grep "Windows 3.x"
-                  file ./dos.exe | grep "MS-DOS" | grep -v "LE" | grep -v "Windows 3.x"
+                  file ./linux
+                  file ./linux | grep "32-bit" | grep -q "Linux"
+                  file ./nt.exe
+                  file ./nt.exe | grep "PE32" | grep -q "Windows"
+                  file ./dos4g.exe
+                  file ./dos4g.exe | grep "MS-DOS" | grep -q "executable, LE"
+                  file ./windows.exe
+                  file ./windows.exe | grep "MS-DOS" | grep -q "Windows 3.00"
+                  file ./dos.exe
+                  file ./dos.exe | grep "MS-DOS" | grep -v "LE" | grep -qv "Windows 3."
                   touch $out
                 '';
           };
