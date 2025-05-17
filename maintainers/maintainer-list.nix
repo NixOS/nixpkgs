@@ -8106,6 +8106,12 @@
     githubId = 8182846;
     name = "Francesco Gazzetta";
   };
+  fgrcl = {
+    email = "fgrclaberge@gmail.com";
+    github = "FGRCL";
+    githubId = 35940434;
+    name = "Francois LaBerge";
+  };
   fidgetingbits = {
     name = "fidgetingbits";
     email = "nixpkgs.xe7au@passmail.net";
