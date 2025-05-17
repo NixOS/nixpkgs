@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  boost,
+  boost-python,
   gfal2,
   glib,
   pythonAtLeast,
@@ -13,19 +13,19 @@
 }:
 buildPythonPackage rec {
   pname = "gfal2-python";
-  version = "1.12.2";
+  version = "1.13.0";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";
     rev = "v${version}";
-    hash = "sha256-Xk+gLTrqfWb0kGB6QhnM62zAHVFb8rRAqCIBxn0V824=";
+    hash = "sha256-TF8EwT1UEtB9lhfq8Jkn9rrSkSxMSLzuAywfB23K1kE=";
   };
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
   buildInputs = [
-    boost
+    boost-python
     gfal2
     glib
   ];

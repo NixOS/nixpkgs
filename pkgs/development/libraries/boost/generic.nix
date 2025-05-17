@@ -6,12 +6,13 @@
   bzip2,
   zstd,
   xz,
-  python ? null,
   fixDarwinDylibNames,
   libiconv,
-  libxcrypt,
   makePkgconfigItem,
   copyPkgconfigItems,
+  callPackage,
+  runCommandLocal,
+  lndir,
   boost-build,
   fetchpatch,
   which,
@@ -51,7 +52,13 @@
 # We must build at least one type of libraries
 assert enableShared || enableStatic;
 
-assert enableNumpy -> enablePython;
+# Remove the enable* options after the NixOS 25.05 branch off.
+assert lib.asserts.assertMsg (
+  !enablePython
+) "The `boost.enablePython` flag has been replaced by `boost.pythonLib pythonVer`";
+assert lib.asserts.assertMsg (
+  !enableNumpy
+) "The `boost.enableNumpy` flag has been replaced by `boost.pythonLib pythonVer`";
 
 let
 
@@ -145,7 +152,7 @@ let
     ++ lib.optional (link != "static") "runtime-link=${runtime-link}"
     ++ lib.optional (variant == "release") "debug-symbols=off"
     ++ lib.optional (toolset != null) "toolset=${toolset}"
-    ++ lib.optional (!enablePython) "--without-python"
+    ++ [ "--without-python" ]
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -154,259 +161,265 @@ let
     ++ extraB2Args
   );
 
-in
+  self = stdenv.mkDerivation {
+    pname = "boost";
 
-stdenv.mkDerivation {
-  pname = "boost";
+    inherit src version;
 
-  inherit src version;
+    patchFlags = [ ];
 
-  patchFlags = [ ];
-
-  patches =
-    patches
-    ++ lib.optional (
-      lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
-    ) ./darwin-no-system-python.patch
-    ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
-    ++ lib.optional (version == "1.77.0") (fetchpatch {
-      url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
-      relative = "include";
-      sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
-    })
-    # Fixes ABI detection
-    ++ lib.optional (version == "1.83.0") (fetchpatch {
-      url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
-      stripLen = 1;
-      extraPrefix = "libs/context/";
-      sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
-    })
-    # This fixes another issue regarding ill-formed constant expressions, which is a default error
-    # in clang 16 and will be a hard error in clang 17.
-    ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
-      url = "https://github.com/boostorg/log/commit/77f1e20bd69c2e7a9e25e6a9818ae6105f7d070c.patch";
-      relative = "include";
-      hash = "sha256-6qOiGJASm33XzwoxVZfKJd7sTlQ5yd+MMFQzegXm5RI=";
-    })
-    ++ lib.optionals (lib.versionOlder version "1.81") [
-      # libc++ 15 dropped support for `std::unary_function` and `std::binary_function` in C++17+.
-      # C++17 is the default for clang 16, but clang 15 is also affected in that language mode.
-      # This patch is for Boost 1.80, but it also applies to earlier versions.
-      (fetchpatch {
-        url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
-        hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
-      })
-      # This fixes another ill-formed contant expressions issue flagged by clang 16.
-      (fetchpatch {
-        url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
+    patches =
+      patches
+      ++ lib.optional (
+        lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
+      ) ./darwin-no-system-python.patch
+      ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+      ++ lib.optional (version == "1.77.0") (fetchpatch {
+        url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
         relative = "include";
-        hash = "sha256-dq4SVgxkPJSC7Fvr59VGnXkM4Lb09kYDaBksCHo9C0s=";
+        sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
       })
-      # This fixes an issue in Python 3.11 about Py_TPFLAGS_HAVE_GC
-      (fetchpatch {
-        name = "python311-compatibility.patch";
-        url = "https://github.com/boostorg/python/commit/a218babc8daee904a83f550fb66e5cb3f1cb3013.patch";
-        hash = "sha256-IHxLtJBx0xSy7QEr8FbCPofsjcPuSYzgtPwDlx1JM+4=";
-        stripLen = 1;
-        extraPrefix = "libs/python/";
-      })
-    ]
-
-    ++ lib.optional (
-      lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
-    ) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
-      # Backport fix for NumPy 2 support.
-      (fetchpatch {
-        name = "boost-numpy-2-compatibility.patch";
-        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
-        stripLen = 1;
-        extraPrefix = "libs/python/";
-        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
-      })
-    ]
-    ++ lib.optional (version == "1.87.0") [
-      # Fix operator<< for shared_ptr and intrusive_ptr
-      # https://github.com/boostorg/smart_ptr/issues/115
-      (fetchpatch {
-        url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
-        relative = "include";
-        hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
-      })
-      # Fixes ABI detection on some platforms (like loongarch64)
-      (fetchpatch {
-        url = "https://github.com/boostorg/context/commit/63996e427b4470c7b99b0f4cafb94839ea3670b6.patch";
+      # Fixes ABI detection
+      ++ lib.optional (version == "1.83.0") (fetchpatch {
+        url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
         stripLen = 1;
         extraPrefix = "libs/context/";
-        hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
+        sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
+      })
+      # This fixes another issue regarding ill-formed constant expressions, which is a default error
+      # in clang 16 and will be a hard error in clang 17.
+      ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
+        url = "https://github.com/boostorg/log/commit/77f1e20bd69c2e7a9e25e6a9818ae6105f7d070c.patch";
+        relative = "include";
+        hash = "sha256-6qOiGJASm33XzwoxVZfKJd7sTlQ5yd+MMFQzegXm5RI=";
+      })
+      ++ lib.optionals (lib.versionOlder version "1.81") [
+        # libc++ 15 dropped support for `std::unary_function` and `std::binary_function` in C++17+.
+        # C++17 is the default for clang 16, but clang 15 is also affected in that language mode.
+        # This patch is for Boost 1.80, but it also applies to earlier versions.
+        (fetchpatch {
+          url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
+          hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
+        })
+        # This fixes another ill-formed contant expressions issue flagged by clang 16.
+        (fetchpatch {
+          url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
+          relative = "include";
+          hash = "sha256-dq4SVgxkPJSC7Fvr59VGnXkM4Lb09kYDaBksCHo9C0s=";
+        })
+        # This fixes an issue in Python 3.11 about Py_TPFLAGS_HAVE_GC
+        (fetchpatch {
+          name = "python311-compatibility.patch";
+          url = "https://github.com/boostorg/python/commit/a218babc8daee904a83f550fb66e5cb3f1cb3013.patch";
+          hash = "sha256-IHxLtJBx0xSy7QEr8FbCPofsjcPuSYzgtPwDlx1JM+4=";
+          stripLen = 1;
+          extraPrefix = "libs/python/";
+        })
+      ]
+
+      ++ lib.optional (
+        lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
+      ) ./fix-clang-target.patch
+      ++ lib.optional (version == "1.87.0") [
+        # Fix operator<< for shared_ptr and intrusive_ptr
+        # https://github.com/boostorg/smart_ptr/issues/115
+        (fetchpatch {
+          url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
+          relative = "include";
+          hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
+        })
+        # Fixes ABI detection on some platforms (like loongarch64)
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/63996e427b4470c7b99b0f4cafb94839ea3670b6.patch";
+          stripLen = 1;
+          extraPrefix = "libs/context/";
+          hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
+        })
+      ];
+
+    meta = with lib; {
+      homepage = "http://boost.org/";
+      description = "Collection of C++ libraries";
+      license = licenses.boost;
+      platforms = platforms.unix ++ platforms.windows;
+      # boost-context lacks support for the N32 ABI on mips64.  The build
+      # will succeed, but packages depending on boost-context will fail with
+      # a very cryptic error message.
+      badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
+      maintainers = with maintainers; [ hjones2199 ];
+    };
+
+    passthru = {
+      inherit boostBuildPatches;
+      pythonLib =
+        python:
+        callPackage ./python.nix {
+          inherit boost-build python;
+          boost = self;
+        };
+      withPython =
+        python:
+        let
+          pythonLib = self.pythonLib python;
+        in
+        runCommandLocal "boost-combined"
+          {
+            outputs = [
+              "out"
+              "dev"
+            ];
+            propagatedBuildInputs = [
+              self
+            ];
+          }
+          ''
+            mkdir -p $out
+            ${lib.getExe lndir} -silent ${self.out} $out
+            ${lib.getExe lndir} -silent ${lib.getLib pythonLib} $out
+            mkdir -p $dev/lib
+            ${lib.getExe lndir} -silent ${self.dev}/lib $dev/lib
+            ln -s ${lib.getDev pythonLib}/lib/cmake/boost_python-${version}* $dev/lib/cmake/
+            ln -s ${lib.getDev pythonLib}/lib/cmake/boost_numpy-${version}* $dev/lib/cmake/
+            ln -s ${lib.getInclude self}/include $dev/include
+            recordPropagatedDependencies
+          '';
+    };
+
+    preConfigure =
+      lib.optionalString useMpi ''
+        cat << EOF >> user-config.jam
+        using mpi : ${lib.getDev mpi}/bin/mpiCC ;
+        EOF
+      ''
+      # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,
+      # otherwise the dynamic linker is unable to resolve the reference to @rpath
+      # when the boost libraries want to load each other at runtime.
+      + lib.optionalString (stdenv.hostPlatform.isDarwin && enableShared) ''
+        cat << EOF >> user-config.jam
+        using clang-darwin : : ${stdenv.cc.targetPrefix}c++
+          : <linkflags>"-rpath $out/lib/"
+            <archiver>$AR
+            <ranlib>$RANLIB
+          ;
+        EOF
+      ''
+      # b2 has trouble finding the correct compiler and tools for cross compilation
+      # since it apparently ignores $CC, $AR etc. Thus we need to set everything
+      # in user-config.jam. To keep things simple we just set everything in an
+      # uniform way for clang and gcc (which works thanks to our cc-wrapper).
+      # We pass toolset later which will make b2 invoke everything in the right
+      # way -- the other toolset in user-config.jam will be ignored.
+      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+        cat << EOF >> user-config.jam
+        using gcc : cross : ${stdenv.cc.targetPrefix}c++
+          : <archiver>$AR
+            <ranlib>$RANLIB
+          ;
+
+        using clang : cross : ${stdenv.cc.targetPrefix}c++
+          : <archiver>$AR
+            <ranlib>$RANLIB
+          ;
+        EOF
+      '';
+
+    # Fix compilation to 32-bit ARM with clang in downstream packages
+    # https://github.com/ned14/outcome/pull/308
+    # https://github.com/boostorg/json/pull/1064
+    postPatch = lib.optionalString (version == "1.87.0") ''
+      substituteInPlace \
+        boost/outcome/outcome_gdb.h \
+        boost/outcome/experimental/status-code/status_code.hpp \
+        boost/json/detail/gdb_printers.hpp \
+        boost/unordered/unordered_printers.hpp \
+        boost/interprocess/interprocess_printers.hpp \
+        libs/json/pretty_printers/generate-gdb-header.py \
+        --replace-fail ",@progbits,1" ",%progbits,1"
+    '';
+
+    env = {
+      NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+      # copyPkgconfigItems will substitute these in the pkg-config file
+      includedir = "${placeholder "dev"}/include";
+      libdir = "${placeholder "out"}/lib";
+    };
+
+    pkgconfigItems = [
+      (makePkgconfigItem {
+        name = "boost";
+        inherit version;
+        # Exclude other variables not needed by meson
+        variables = {
+          includedir = "@includedir@";
+          libdir = "@libdir@";
+        };
       })
     ];
 
-  meta = with lib; {
-    homepage = "http://boost.org/";
-    description = "Collection of C++ libraries";
-    license = licenses.boost;
-    platforms = platforms.unix ++ platforms.windows;
-    # boost-context lacks support for the N32 ABI on mips64.  The build
-    # will succeed, but packages depending on boost-context will fail with
-    # a very cryptic error message.
-    badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
-    maintainers = with maintainers; [ hjones2199 ];
-    broken =
-      enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
-  };
+    enableParallelBuilding = true;
 
-  passthru = {
-    inherit boostBuildPatches;
-  };
+    nativeBuildInputs = [
+      which
+      boost-build
+      copyPkgconfigItems
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    buildInputs =
+      [
+        zlib
+        bzip2
+        libiconv
+      ]
+      ++ lib.optional (lib.versionAtLeast version "1.69") zstd
+      ++ [ xz ]
+      ++ lib.optional enableIcu icu;
 
-  preConfigure =
-    lib.optionalString useMpi ''
-      cat << EOF >> user-config.jam
-      using mpi : ${lib.getDev mpi}/bin/mpiCC ;
-      EOF
-    ''
-    # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,
-    # otherwise the dynamic linker is unable to resolve the reference to @rpath
-    # when the boost libraries want to load each other at runtime.
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && enableShared) ''
-      cat << EOF >> user-config.jam
-      using clang-darwin : : ${stdenv.cc.targetPrefix}c++
-        : <linkflags>"-rpath $out/lib/"
-          <archiver>$AR
-          <ranlib>$RANLIB
-        ;
-      EOF
-    ''
-    # b2 has trouble finding the correct compiler and tools for cross compilation
-    # since it apparently ignores $CC, $AR etc. Thus we need to set everything
-    # in user-config.jam. To keep things simple we just set everything in an
-    # uniform way for clang and gcc (which works thanks to our cc-wrapper).
-    # We pass toolset later which will make b2 invoke everything in the right
-    # way -- the other toolset in user-config.jam will be ignored.
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      cat << EOF >> user-config.jam
-      using gcc : cross : ${stdenv.cc.targetPrefix}c++
-        : <archiver>$AR
-          <ranlib>$RANLIB
-        ;
+    configureScript = "./bootstrap.sh";
+    configurePlatforms = [ ];
+    dontDisableStatic = true;
+    dontAddStaticConfigureFlags = true;
+    configureFlags =
+      [
+        "--includedir=$(dev)/include"
+        "--libdir=$(out)/lib"
+        "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
+      ]
+      ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
+      ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
-      using clang : cross : ${stdenv.cc.targetPrefix}c++
-        : <archiver>$AR
-          <ranlib>$RANLIB
-        ;
-      EOF
-    ''
-    # b2 needs to be explicitly told how to find Python when cross-compiling
-    + lib.optionalString enablePython ''
-      cat << EOF >> user-config.jam
-      using python : : ${python.pythonOnBuildForHost.interpreter}
-        : ${python}/include/python${python.pythonVersion}
-        : ${python}/lib
-        ;
-      EOF
+    buildPhase = ''
+      runHook preBuild
+      b2 ${b2Args}
+      runHook postBuild
     '';
 
-  # Fix compilation to 32-bit ARM with clang in downstream packages
-  # https://github.com/ned14/outcome/pull/308
-  # https://github.com/boostorg/json/pull/1064
-  postPatch = lib.optionalString (version == "1.87.0") ''
-    substituteInPlace \
-      boost/outcome/outcome_gdb.h \
-      boost/outcome/experimental/status-code/status_code.hpp \
-      boost/json/detail/gdb_printers.hpp \
-      boost/unordered/unordered_printers.hpp \
-      boost/interprocess/interprocess_printers.hpp \
-      libs/json/pretty_printers/generate-gdb-header.py \
-      --replace-fail ",@progbits,1" ",%progbits,1"
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  env = {
-    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
-    # copyPkgconfigItems will substitute these in the pkg-config file
-    includedir = "${placeholder "dev"}/include";
-    libdir = "${placeholder "out"}/lib";
-  };
+      # boostbook is needed by some applications
+      mkdir -p $dev/share/boostbook
+      cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
 
-  pkgconfigItems = [
-    (makePkgconfigItem {
-      name = "boost";
-      inherit version;
-      # Exclude other variables not needed by meson
-      variables = {
-        includedir = "@includedir@";
-        libdir = "@libdir@";
-      };
-    })
-  ];
+      # Let boost install everything else
+      b2 ${b2Args} install
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [
-    which
-    boost-build
-    copyPkgconfigItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      zlib
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
-
-  configureScript = "./bootstrap.sh";
-  configurePlatforms = [ ];
-  dontDisableStatic = true;
-  dontAddStaticConfigureFlags = true;
-  configureFlags =
-    [
-      "--includedir=$(dev)/include"
-      "--libdir=$(out)/lib"
-      "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-    ]
-    ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
-
-  buildPhase = ''
-    runHook preBuild
-    b2 ${b2Args}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    # boostbook is needed by some applications
-    mkdir -p $dev/share/boostbook
-    cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
-
-    # Let boost install everything else
-    b2 ${b2Args} install
-
-    runHook postInstall
-  '';
-
-  postFixup =
-    ''
-      # Make boost header paths relative so that they are not runtime dependencies
-      cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-        -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      $RANLIB "$out/lib/"*.a
+      runHook postInstall
     '';
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-  setOutputFlags = false;
-}
+    postFixup =
+      ''
+        # Make boost header paths relative so that they are not runtime dependencies
+        cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
+          -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
+      ''
+      + lib.optionalString stdenv.hostPlatform.isMinGW ''
+        $RANLIB "$out/lib/"*.a
+      '';
+
+    outputs = [
+      "out"
+      "dev"
+    ];
+    setOutputFlags = false;
+  };
+in
+self
