@@ -16744,6 +16744,12 @@
     githubId = 7026881;
     name = "Jarosław Jedynak";
   };
+  msoos = {
+    email = "soos.mate@gmail.com";
+    github = "msoos";
+    githubId = 1334841;
+    name = "Mate Soos";
+  };
   mstarzyk = {
     email = "mstarzyk@gmail.com";
     github = "mstarzyk";
