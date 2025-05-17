@@ -29,7 +29,7 @@ let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
   pname = "torchvision";
-  version = "0.21.0";
+  version = "0.22.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -40,7 +40,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     tag = "v${version}";
-    hash = "sha256-eDWw1Lt/sUc2Xt6cqOM5xaOfmsm+NEL5lZO+cIJKMtU=";
+    hash = "sha256-+70Rhfma4dM5tRlYNz0cuuTIxRbYf6dsnAhvkw7a5kM=";
   };
 
   nativeBuildInputs = [
@@ -71,15 +71,15 @@ buildPythonPackage {
     scipy
   ];
 
-  preConfigure =
-    ''
-      export TORCHVISION_INCLUDE="${libjpeg_turbo.dev}/include/"
-      export TORCHVISION_LIBRARY="${libjpeg_turbo}/lib/"
-    ''
-    + lib.optionalString cudaSupport ''
-      export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
-      export FORCE_CUDA=1
-    '';
+  env =
+    {
+      TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
+      TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
+    }
+    // lib.optionalAttrs cudaSupport {
+      TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
+      FORCE_CUDA = 1;
+    };
 
   # tests download big datasets, models, require internet connection, etc.
   doCheck = false;
@@ -101,6 +101,6 @@ buildPythonPackage {
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
