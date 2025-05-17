@@ -494,6 +494,11 @@ lib.makeOverridable (
           # Keep linker scripts (they are required for out-of-tree modules on aarch64)
           find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
+          # Keep devicetree related files (they are required for out-of-tree dts compile)
+          if [ -d scripts/dtc/include-prefixes/"$arch" ]; then
+            find -L scripts/dtc/include-prefixes/"$arch" -type f -print0 | xargs -0 -r chmod u-w
+          fi
+
           # Keep root and arch-specific Makefiles
           chmod u-w Makefile arch/"$arch"/Makefile*
 
