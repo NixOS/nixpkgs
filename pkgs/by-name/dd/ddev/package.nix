@@ -27,8 +27,8 @@ buildGoModule rec {
 
   ldflags = [
     "-extldflags -static"
-    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=${version}"
-    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=${version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=${src.rev}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=${src.rev}"
   ];
 
   # Tests need docker.
@@ -61,6 +61,9 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "ddev";
-    maintainers = with maintainers; [ remyvv ];
+    maintainers = with maintainers; [
+      montchr
+      remyvv
+    ];
   };
 }
