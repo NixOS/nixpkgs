@@ -8,8 +8,7 @@
   eigen,
   libGLU,
   fltk,
-  itk,
-  vtk,
+  vtk_9_2,
   zlib,
   tbb,
 }:
@@ -27,18 +26,20 @@ stdenv.mkDerivation {
   };
 
   cmakeFlags = [
+    "-DMODULE_PointSet=ON"
+    "-DMODULE_IO=ON"
+    "-DMODULE_Registration=ON"
+    "-DMODULE_Transformation=ON"
+    "-DMODULE_Deformable=ON"
+    "-DMODULE_DrawEM=OFF"
+    "-DMODULE_Mapping=ON"
+    "-DMODULE_Scripting=ON"
+    "-DMODULE_Viewer=ON"
     "-DWITH_VTK=ON"
-    "-DBUILD_ALL_MODULES=ON"
     "-DWITH_TBB=ON"
-    "-DWITH_ITK=ON"
     "-DWITH_GIFTICLIB=ON"
     "-DWITH_NIFTILIB=ON"
   ];
-
-  # tries to download data during configuration
-  postPatch = ''
-    substituteInPlace Packages/DrawEM/CMakeLists.txt --replace "include(Atlases.cmake)" ""
-  '';
 
   # tests don't seem to be maintained and gtest fails to link with BUILD_TESTING=ON;
   # unclear if specific to Nixpkgs
@@ -55,11 +56,10 @@ stdenv.mkDerivation {
     boost186
     eigen
     fltk
-    itk
     libGLU
     python3
     tbb
-    vtk
+    vtk_9_2
     zlib
   ];
 

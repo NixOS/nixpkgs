@@ -28,7 +28,7 @@
   ifcSupport ? false,
   stdenv,
   swig,
-  vtk,
+  vtk_9_2,
   wrapGAppsHook3,
   xercesc,
   yaml-cpp,
@@ -115,7 +115,7 @@ freecad-utils.makeCustomizable (
         pyyaml # (at least for) PyrateWorkbench
         scipy
         swig
-        vtk
+        vtk_9_2
         xercesc
         yaml-cpp
         zlib
