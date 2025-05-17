@@ -359,7 +359,10 @@ let
     ++ lib.optional enableDwarf elfutils
     ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (
-      platform.libc != "glibc" && !targetPlatform.isWindows && !targetPlatform.isGhcjs
+      platform.libc != "glibc"
+      && !targetPlatform.isWindows
+      && !targetPlatform.isGhcjs
+      && !targetPlatform.useAndroidPrebuilt
     ) libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?

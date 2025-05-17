@@ -515,6 +515,14 @@ let
                   ;
               };
 
+              haskell.packages.ghc910 = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.haskell.packages.ghc910)
+                  ghc
+                  hello
+                  microlens
+                  ;
+              };
+
               haskell.packages.ghcHEAD = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
                   ghc
