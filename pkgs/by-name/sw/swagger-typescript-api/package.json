@@ -1,0 +1,83 @@
+{
+  "name": "swagger-typescript-api",
+  "version": "13.0.23",
+  "description": "Generate the API client for Fetch or Axios from an OpenAPI Specification",
+  "homepage": "https://github.com/acacode/swagger-typescript-api",
+  "bugs": "https://github.com/acacode/swagger-typescript-api/issues",
+  "repository": "github:acacode/swagger-typescript-api",
+  "license": "MIT",
+  "author": "Sergey Volkov <js2me@outlook.com>",
+  "contributors": [
+    "Sora Morimoto <sora@morimoto.io>"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types.d.ts",
+        "default": "./dist/lib.js"
+      },
+      "require": {
+        "types": "./dist/types.d.cts",
+        "default": "./dist/lib.cjs"
+      }
+    }
+  },
+  "main": "./dist/lib.cjs",
+  "module": "./dist/lib.js",
+  "types": "./dist/types.d.cts",
+  "bin": {
+    "sta": "./dist/cli.js",
+    "swagger-typescript-api": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "cli:help": "node index.js -h",
+    "cli:json": "node index.js -r -d -p ./swagger-test-cli.json -n swagger-test-cli.ts",
+    "cli:yaml": "node index.js -r -d -p ./swagger-test-cli.yaml -n swagger-test-cli.ts",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome check",
+    "prepack": "tsup",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@types/swagger-schema-official": "^2.0.25",
+    "consola": "^3.2.3",
+    "cosmiconfig": "^9.0.0",
+    "didyoumean": "^1.2.2",
+    "eta": "^2.2.0",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "nanoid": "^3.3.7",
+    "prettier": "~3.3.3",
+    "swagger-schema-official": "2.0.0-bab6bed",
+    "swagger2openapi": "^7.0.8",
+    "typescript": "~5.5.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@tsconfig/node18": "18.2.4",
+    "@tsconfig/strictest": "2.0.5",
+    "@types/didyoumean": "1.2.2",
+    "@types/js-yaml": "4.0.9",
+    "@types/lodash": "4.17.7",
+    "@types/node": "22.5.0",
+    "@types/swagger2openapi": "7.0.4",
+    "axios": "1.7.5",
+    "shx": "0.3.4",
+    "tsup": "8.2.4",
+    "vitest": "2.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}
