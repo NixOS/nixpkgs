@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "odyssey";
+    broken = true;
   };
 }
