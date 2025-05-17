@@ -16,10 +16,24 @@
   torch,
   transformers,
   wurlitzer,
+
+  config,
+  cudaSupport ? config.cudaSupport,
 }:
 
+let
+  ctranslate2-cpp' =
+    if !cudaSupport then
+      ctranslate2-cpp
+    else
+      ctranslate2-cpp.override {
+        withCUDA = true;
+        withCuDNN = true;
+      };
+in
+
 buildPythonPackage rec {
-  inherit (ctranslate2-cpp) pname version src;
+  inherit (ctranslate2-cpp') pname version src;
   pyproject = true;
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
@@ -30,7 +44,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ ctranslate2-cpp ];
+  buildInputs = [ ctranslate2-cpp' ];
 
   dependencies = [
     numpy
@@ -66,11 +80,11 @@ buildPythonPackage rec {
     "tests/test_transformers.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast inference engine for Transformer models";
     homepage = "https://github.com/OpenNMT/CTranslate2";
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }
