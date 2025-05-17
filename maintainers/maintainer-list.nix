@@ -9996,6 +9996,11 @@
     githubId = 6074754;
     name = "Hlodver Sigurdsson";
   };
+  hmac = {
+    github = "hmac";
+    githubId = 237543;
+    name = "Harry Maclean";
+  };
   hmajid2301 = {
     name = "Haseeb Majid";
     email = "hello@haseebmajid.dev";
