@@ -491,19 +491,27 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 ## Commit conventions
 [commit-conventions]: #commit-conventions
 
-- Create a commit for each logical unit.
+- Commits should be independent and understandable by themselves.
+
+  For example:
+  - For example, when adding yourself as maintainer in the same pull request,
+    make a separate commit with the message `maintainers: add <handle>`.
+    Add the commit before those making changes to the package or module.
+    See [Nixpkgs Maintainers](./maintainers/README.md) for details.
+
+- Later commits that undo changes from earlier commits should be combined.
+
+  For example:
+  - If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
+    See [Squashing Commits](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History#_squashing) for additional information.
+
+> [!Note]
+> Reviewers should _not_ ask commit authors to make changes to the commit history unless it _clearly_ violates a written guideline.
+> Notably there is a wide range of acceptable options for the commit history, ranging from many small independent commits to larger commits that are still independent and understandable by themselves.
 
 - Check for unnecessary whitespace with `git diff --check` before committing.
 
-- If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
-  See [Squashing Commits](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History#_squashing) for additional information.
-
 - For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
-
-- When adding yourself as maintainer in the same pull request, make a separate
-  commit with the message `maintainers: add <handle>`.
-  Add the commit before those making changes to the package or module.
-  See [Nixpkgs Maintainers](./maintainers/README.md) for details.
 
 - Make sure you read about any commit conventions specific to the area you're touching. See:
   - [Commit conventions](./pkgs/README.md#commit-conventions) for changes to `pkgs`.
