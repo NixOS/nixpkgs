@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  exiftool,
   nix-update-script,
 }:
 
@@ -24,8 +25,7 @@ buildGoModule (finalAttrs: {
     "-X=github.com/ayoisaiah/f2/v2/app.VersionString=${finalAttrs.version}"
   ];
 
-  # has no tests
-  doCheck = false;
+  nativeCheckInputs = [ exiftool ];
 
   passthru.updateScript = nix-update-script { };
 
