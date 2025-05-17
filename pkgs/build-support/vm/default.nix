@@ -358,7 +358,7 @@ rec {
     will build the derivation `patchelf' inside a VM.  The attribute
     `preVM' can optionally contain a shell command to be evaluated
     *before* the VM is started (i.e., on the host).  The attribute
-    `memSize' specifies the memory size of the VM in megabytes,
+    `memSize' specifies the memory size of the VM in mebibytes,
     defaulting to 512.  The attribute `diskImage' can optionally
     specify a file system image to be attached to /dev/sda.  (Note
     that currently we expect the image to contain a filesystem, not a
@@ -1518,7 +1518,7 @@ rec {
     `extraPackages' specifies the names of additional packages from
     the distribution that should be included in the image; `packages'
     allows the entire set of packages to be overridden; and `size'
-    sets the size of the disk in megabytes.  E.g.,
+    sets the size of the disk in mebibytes.  E.g.,
     `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
     size = 8192; }' builds an 8 GiB image containing Firefox in
     addition to the default packages.
