@@ -1,0 +1,20 @@
+# To run it manually:
+# 1. Acquire a GITHUB OAUTH token with permission edit nixos/nixpkgs labels
+# 2. Make sure the git remote origin exists and points to
+#    https://github.com/NixOS/nixpkgs.git (it doesn't work with SSH).
+# 3. Run nix-shell -p act --run "act -s GITHUB_TOKEN=xxx -j label-merge-conflict > label-merge-conflict.log"
+
+on:
+  schedule:
+    #daily
+    - cron: '0 0 * * *'
+
+jobs:
+  label-merge-conflict:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-label merge conflicts
+        uses: ryantm/auto-label-merge-conflicts@720e6dddd1a208158b2b880393ff54c9e905e99f
+        with:
+          CONFLICT_LABEL_NAME: "2.status: merge conflict"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
