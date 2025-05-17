@@ -50,22 +50,11 @@ in
 {
   options.i18n = {
     inputMethod = {
-      enable = lib.mkEnableOption "an additional input method type" // {
-        default = cfg.enabled != null;
-        defaultText = lib.literalMD "`true` if the deprecated option `enabled` is set, false otherwise";
-      };
-
-      enabled = lib.mkOption {
-        type = lib.types.nullOr allowedTypes;
-        default = null;
-        example = "fcitx5";
-        description = "Deprecated - use `type` and `enable = true` instead";
-      };
+      enable = lib.mkEnableOption "an additional input method type";
 
       type = lib.mkOption {
         type = lib.types.nullOr allowedTypes;
-        default = cfg.enabled;
-        defaultText = lib.literalMD "The value of the deprecated option `enabled`, defaulting to null";
+        default = null;
         example = "fcitx5";
         description = ''
           Select the enabled input method. Input methods is a software to input symbols that are not available on standard input devices.
@@ -100,10 +89,15 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "i18n"
+      "inputMethod"
+      "enabled"
+    ] "Set i18n.inputMethod.enable = true; and use i18n.inputMethod.type instead")
+  ];
+
   config = lib.mkIf cfg.enable {
-    warnings =
-      lib.optional (cfg.enabled != null)
-        "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
     environment.systemPackages =
       [
         cfg.package
