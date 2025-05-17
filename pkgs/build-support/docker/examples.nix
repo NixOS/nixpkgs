@@ -88,7 +88,7 @@ rec {
     tag = "latest";
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
-      paths = [ pkgs.bashInteractive ];
+      paths = [ pkgs.bash ];
       pathsToLink = [ "/bin" ];
     };
   };
@@ -541,7 +541,7 @@ rec {
     tag = "latest";
     compressor = "none";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   bashZstdCompressed = pkgs.dockerTools.buildImage {
@@ -549,20 +549,20 @@ rec {
     tag = "latest";
     compressor = "zstd";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   # buildLayeredImage without explicit tag
   bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
     name = "bash-no-tag-layered";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage without compression
@@ -570,7 +570,7 @@ rec {
     name = "bash-layered-uncompressed";
     tag = "latest";
     compressor = "none";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage with zstd compression
@@ -578,13 +578,13 @@ rec {
     name = "bash-layered-zstd";
     tag = "latest";
     compressor = "zstd";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage with non-root user
@@ -833,7 +833,7 @@ rec {
     tag = "latest";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -842,7 +842,7 @@ rec {
     name = "layered-image-with-path";
     tag = "latest";
     contents = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -853,7 +853,7 @@ rec {
     architecture = "arm64";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -863,7 +863,7 @@ rec {
     tag = "latest";
     architecture = "arm64";
     contents = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -949,6 +949,23 @@ rec {
       *) echo This shell is not interactive ;;
       esac
     '';
+  };
+
+  nix-shell-command-override = streamNixShellImage {
+    name = "nix-shell-command-override";
+    tag = "latest";
+    drv = pkgs.mkShell {
+      packages = [
+        pkgs.hello
+      ];
+    };
+    includeBuildDerivation = false;
+    extraContents = [
+      (pkgs.runCommand "bin-sh" { } ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.bash}/bin/bash $out/bin/sh
+      '')
+    ];
   };
 
   nix-shell-writable-home = streamNixShellImage {
