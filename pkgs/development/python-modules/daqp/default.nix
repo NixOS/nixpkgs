@@ -10,14 +10,14 @@
 }:
 buildPythonPackage rec {
   pname = "daqp";
-  version = "0.6.0";
+  version = "0.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
     tag = "v${version}";
-    hash = "sha256-9sPYyd8J78HKDxbwkogu8tW38rgYIctEWqrriqJKy0M=";
+    hash = "sha256-s22LVnK1qGjIpat21eXYF/Io49IYbWf1y+VUbYuPZaY=";
   };
 
   sourceRoot = "${src.name}/interfaces/daqp-python";
