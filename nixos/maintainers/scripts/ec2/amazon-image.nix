@@ -86,7 +86,6 @@ in
   config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
-  config.system.nixos.tags = [ "amazon" ];
   config.system.build.image = config.system.build.amazonImage;
   config.image.extension = cfg.format;
 
