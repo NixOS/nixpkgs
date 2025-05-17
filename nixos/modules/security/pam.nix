@@ -296,7 +296,7 @@ let
         };
 
         fprintAuth = lib.mkOption {
-          default = config.services.fprintd.enable;
+          default = config.security.pam.fprintd.enable;
           defaultText = lib.literalExpression "config.services.fprintd.enable";
           type = lib.types.bool;
           description = ''
@@ -1780,6 +1780,20 @@ in
         description = ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
+        '';
+      };
+    };
+
+    security.pam.fprintd = {
+      enable = lib.mkOption {
+        default = config.services.fprintd.enable;
+        defaultText = lib.literalExpression "config.security.fprintd.enable";
+        type = lib.types.bool;
+        description = ''
+          Enables fprintd PAM (`pam_fprintd`) module.
+
+          If set, fingerprint reader will be used (if exists and
+          your fingerprints are enrolled).
         '';
       };
     };
