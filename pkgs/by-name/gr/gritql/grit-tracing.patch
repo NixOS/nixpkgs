@@ -1,0 +1,16 @@
+diff --git a/crates/cli_bin/Cargo.toml b/crates/cli_bin/Cargo.toml
+index 3c11e317..e4473f8e 100644
+--- a/crates/cli_bin/Cargo.toml
++++ b/crates/cli_bin/Cargo.toml
+@@ -29,9 +29,8 @@ opentelemetry = { version = "0.21.0", optional = true }
+ opentelemetry_sdk = { version = "0.21.1", optional = true, features = [
+   "rt-tokio",
+ ] }
+-tracing-opentelemetry = { version = "0.22.0", optional = true, default-features = false }
+-tracing-subscriber = { version = "0.3", default-features = false, optional = true }
+-
++tracing-opentelemetry = { version = "0.22.0", optional = true, default-features = true }
++tracing-subscriber = { version = "0.3", optional = true, default-features = true }
+ 
+ [dev-dependencies]
+ serde_json = "1.0.96"
