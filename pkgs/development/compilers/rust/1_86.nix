@@ -19,6 +19,7 @@
   pkgsBuildHost,
   pkgsHostTarget,
   pkgsTargetTarget,
+  pkgsStatic,
   makeRustPlatform,
   wrapRustcWith,
   llvmPackages_19,
