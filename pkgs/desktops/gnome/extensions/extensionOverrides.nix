@@ -6,6 +6,7 @@
   easyeffects,
   gjs,
   glib,
+  gnome-menus,
   nautilus,
   gobject-introspection,
   hddtemp,
@@ -47,6 +48,17 @@ in
 # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
+  (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (replaceVars
+        ./extensionOverridesPatches/apps-menu_at_gnome-shell-extensions.gcampax.github.com.patch
+        {
+          gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+        }
+      )
+    ];
+  }))
+
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
