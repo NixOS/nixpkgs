@@ -154,9 +154,12 @@ jobs:
             --arg beforeResultDir ./targetResult \
             --arg afterResultDir "$(realpath prResult)" \
             --arg touchedFilesJson ./touched-files.json \
+            --argstr githubAuthorId "$AUTHOR_ID" \
             -o comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
+        env:
+          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
 
       - name: Upload the combined results
         if: steps.targetRunId.outputs.targetRunId
@@ -211,10 +214,10 @@ jobs:
       - name: Labelling pull request
         if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
         run: |
-          # Get all currently set rebuild labels
+          # Get all currently set labels that we manage
           gh api \
             /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            --jq '.[].name | select(startswith("10.rebuild"))' \
+            --jq '.[].name | select(startswith("10.rebuild") or . == "11.by: package-maintainer")' \
             | sort > before
 
           # And the labels that should be there
