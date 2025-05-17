@@ -7,6 +7,7 @@
   testers,
   which,
   fetchgit,
+  fetchpatch,
 
   # Xen
   acpica-tools,
@@ -117,7 +118,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version patches;
+  inherit pname version;
 
   outputs = [
     "out"
@@ -131,6 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://xenbits.xenproject.org/git-http/xen.git";
     inherit rev hash;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff";
+      hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
+    })
+  ] ++ patches;
 
   nativeBuildInputs = [
     autoPatchelfHook
