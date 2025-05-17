@@ -82,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
           # only on some aarch64-linux systems?
           "cpio/test/test_basic.c"
           "cpio/test/test_format_newc.c"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # test won't work in nix sandbox
+          "tar/test/test_copy.c"
         ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
