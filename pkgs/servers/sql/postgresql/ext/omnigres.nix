@@ -48,8 +48,6 @@ postgresqlBuildExtension (finalAttrs: {
   cmakeFlags = [
     "-DOPENSSL_CONFIGURED=1"
     "-DPG_CONFIG=${pgWithExtensions.pg_config}/bin/pg_config"
-    "-DPostgreSQL_EXTENSION_DIR=${pgWithExtensions}/share/postgresql/extension/"
-    "-DPostgreSQL_PACKAGE_LIBRARY_DIR=${pgWithExtensions}/lib/"
     "-DPostgreSQL_TARGET_EXTENSION_DIR=${builtins.placeholder "out"}/share/postgresql/extension/"
     "-DPostgreSQL_TARGET_PACKAGE_LIBRARY_DIR=${builtins.placeholder "out"}/lib/"
   ];

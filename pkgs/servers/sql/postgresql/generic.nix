@@ -610,66 +610,78 @@ let
     f:
     let
       installedExtensions = f postgresql.pkgs;
-    in
-    buildEnv {
-      name = "${postgresql.pname}-and-plugins-${postgresql.version}";
-      paths = installedExtensions ++ [
-        postgresql
-        postgresql.man # in case user installs this into environment
-      ];
+      finalPackage = buildEnv {
+        name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+        paths = installedExtensions ++ [
+          # consider keeping in-sync with `postBuild` below
+          postgresql
+          postgresql.man # in case user installs this into environment
+        ];
 
-      pathsToLink = [
-        "/"
-        "/bin"
-      ];
+        pathsToLink = [
+          "/"
+          "/bin"
+          "/share/postgresql/extension"
+          # Unbreaks Omnigres' build system
+          "/share/postgresql/timezonesets"
+          "/share/postgresql/tsearch_data"
+        ];
 
-      nativeBuildInputs = [ makeBinaryWrapper ];
-      postBuild =
-        let
-          args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-        in
-        ''
-          wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-        '';
+        nativeBuildInputs = [ makeBinaryWrapper ];
+        postBuild =
+          let
+            args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+          in
+          ''
+            wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
 
-      passthru = {
-        inherit installedExtensions;
-        inherit (postgresql)
-          pg_config
-          pkgs
-          psqlSchema
-          version
-          ;
+            mkdir -p "$out/nix-support"
+            substitute "${lib.getDev postgresql}/nix-support/pg_config.env" "$out/nix-support/pg_config.env" \
+              --replace-fail "${postgresql}" "$out" \
+              --replace-fail "${postgresql.man}" "$out"
+          '';
 
-        withJIT = postgresqlWithPackages {
-          inherit
-            buildEnv
-            lib
-            makeBinaryWrapper
-            postgresql
+        passthru = {
+          inherit installedExtensions;
+          inherit (postgresql)
+            pkgs
+            psqlSchema
+            version
             ;
-        } (_: installedExtensions ++ [ postgresql.jit ]);
-        withoutJIT = postgresqlWithPackages {
-          inherit
-            buildEnv
-            lib
-            makeBinaryWrapper
-            postgresql
-            ;
-        } (_: lib.remove postgresql.jit installedExtensions);
 
-        withPackages =
-          f':
-          postgresqlWithPackages {
+          pg_config = postgresql.pg_config.override { inherit finalPackage; };
+
+          withJIT = postgresqlWithPackages {
             inherit
               buildEnv
               lib
               makeBinaryWrapper
               postgresql
               ;
-          } (ps: installedExtensions ++ f' ps);
+          } (_: installedExtensions ++ [ postgresql.jit ]);
+          withoutJIT = postgresqlWithPackages {
+            inherit
+              buildEnv
+              lib
+              makeBinaryWrapper
+              postgresql
+              ;
+          } (_: lib.remove postgresql.jit installedExtensions);
+
+          withPackages =
+            f':
+            postgresqlWithPackages {
+              inherit
+                buildEnv
+                lib
+                makeBinaryWrapper
+                postgresql
+                ;
+            } (ps: installedExtensions ++ f' ps);
+        };
       };
-    };
+    in
+    finalPackage;
 
 in
 # passed by <major>.nix
