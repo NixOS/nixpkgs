@@ -17,16 +17,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.23.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uJ3cCwGp2cZ/6uCi0YmRZ+0Q9X7KuPfJRDbIUZqmdmU=";
+    hash = "sha256-tZw9iEhZ5ss+mv/WUFaj+xQ6GP4GAHq+PvBOv6F5tgM=";
   };
 
-  npmDepsHash = "sha256-QYTnOZ9eSE6H3iXbWCQG6FUlNR6LLQdsmsfayawolBQ=";
+  npmDepsHash = "sha256-dx66k82o+TWrrK9xBHPbnudDn0CG8mM7c1xeoSAM4Fs=";
 
   postPatch = ''
     substituteInPlace package.json \
