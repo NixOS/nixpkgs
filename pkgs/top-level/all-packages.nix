@@ -12247,6 +12247,8 @@ with pkgs;
 
   evilpixie = callPackage ../applications/graphics/evilpixie { };
 
+  gpgfrontend = callPackage ../applications/misc/gpgfrontend { };
+
   greenfoot = callPackage ../applications/editors/greenfoot {
     openjdk = openjdk21.override {
       enableJavaFX = true;
