@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlspool";
-  version = "0.9.7";
+  version = "0.9.6";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "tlspool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nODnRoFlgCTtBjPief9SkVlLgD3g+2zbwM0V9pt3Crk=";
+    hash = "sha256-cscA7204nONYyuthDoVOlVwN1AW2EtvSamXpqjAAaqY=";
   };
 
   strictDeps = true;
