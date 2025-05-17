@@ -294,8 +294,8 @@ rec {
       "sha256-twmdIgbVpRFwUcRu0Kyoti+Y1KCPmRgaCsf6Kozhmg8=";
 
   mypy-boto3-codepipeline =
-    buildMypyBoto3Package "codepipeline" "1.38.12"
-      "sha256-HTZJEjSM1J/lQPFSDIRDQZW8DdskT4L9Te6zPUoqT8c=";
+    buildMypyBoto3Package "codepipeline" "1.38.18"
+      "sha256-C++b8vPawYw1J2nsjf0b2brkHQfAeT10zsaO9molFgk=";
 
   mypy-boto3-codestar =
     buildMypyBoto3Package "codestar" "1.35.0"
