@@ -456,6 +456,7 @@ mapAliases ({
   Nuitka = nuitka; # added 2023-02-19
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
+  oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   openai-triton = triton; # added 2024-07-18
   openai-triton-bin = triton-bin; # added 2024-07-18
   openai-triton-cuda = triton-cuda; # added 2024-07-18
