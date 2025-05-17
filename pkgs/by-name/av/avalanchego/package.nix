@@ -34,7 +34,9 @@ buildGoModule rec {
     mv $out/bin/{main,${pname}}
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=v([\\d.]+)$" ];
+  };
 
   meta = {
     description = "Go implementation of an Avalanche node";
