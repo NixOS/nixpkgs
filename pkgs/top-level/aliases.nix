@@ -507,6 +507,7 @@ mapAliases {
   dat = nodePackages.dat;
   dave = throw "'dave' has been removed as it has been archived upstream. Consider using 'webdav' instead"; # Added 2025-02-03
   dbeaver = throw "'dbeaver' has been renamed to/replaced by 'dbeaver-bin'"; # Added 2024-05-16
+  dbench = throw "'dbench' has been removed as it is unmaintained for 14 years and broken"; # Added 2025-05-17
   dbus-map = throw "'dbus-map' has been dropped as it is unmaintained"; # Added 2024-11-01
   deadpixi-sam = deadpixi-sam-unstable;
 
