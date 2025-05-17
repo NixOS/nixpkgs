@@ -126,9 +126,7 @@ in
         "systemd-journal-flush.service"
         "systemd-journal-catalog-update.service"
         "systemd-journald-sync@.service"
-      ]
-      ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket")
-      ++ [
+        "systemd-journald-audit.socket"
         "systemd-journald-dev-log.socket"
         "syslog.socket"
       ];
