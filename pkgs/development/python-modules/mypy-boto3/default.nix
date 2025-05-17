@@ -414,8 +414,8 @@ rec {
       "sha256-mFFkE37/+8k+YZ4ZJdg3QiFN2bkqArnSmjoCWdxMJ4c=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.38.0"
-      "sha256-R1ZfmeNMPkkCg/O/nDR0Vqa7oNXlhxYOUG5jHW05NSo=";
+    buildMypyBoto3Package "dms" "1.38.17"
+      "sha256-fGqy3xSfdZPi4BX9o+nqjAQzSnx64y1PllxB6j+4ISY=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.38.0"
