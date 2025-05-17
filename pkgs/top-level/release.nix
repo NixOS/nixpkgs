@@ -395,6 +395,10 @@ let
           "x86_64-linux"
           "aarch64-linux"
         ];
+        pkgsLTO.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
 
         tests = packagePlatforms pkgs.tests;
 

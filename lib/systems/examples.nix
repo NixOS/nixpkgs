@@ -84,6 +84,15 @@ rec {
     useLLVM = true;
   };
 
+  aarch64-linux-gnu-neoverse-n1 = {
+    config = "aarch64-unknown-linux-gnu";
+    gcc = {
+      arch = "armv8-a";
+      tune = "neoverse-n1";
+    };
+    useLLVM = true;
+  };
+
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
   } // platforms.pogoplug4;
