@@ -154,7 +154,7 @@ jobs:
             --arg beforeResultDir ./targetResult \
             --arg afterResultDir "$(realpath prResult)" \
             --arg touchedFilesJson ./touched-files.json \
-            --arg githubAuthorId "$AUTHOR_ID" \
+            --argstr githubAuthorId "$AUTHOR_ID" \
             -o comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
