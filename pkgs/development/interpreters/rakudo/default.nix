@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2025.04";
+  version = "2025.05";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
     rev = version;
-    hash = "sha256-gVW1CB2LbgXV4uApmcl0/uxkcl9/PKk8sxj2R5dgowI=";
+    hash = "sha256-F4CWVUlDtPjnZaOPIoTMAw6kxM7FlQqr3Lm+Mg0CV2M=";
     fetchSubmodules = true;
   };
 
