@@ -13,6 +13,8 @@
 
   dbus-python,
 
+  pytestCheckHook,
+
   directoryListingUpdater,
 }:
 
@@ -48,7 +50,30 @@ buildPythonPackage rec {
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"
   '';
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # make sure we load the library from $out instead of the cwd
+    # because cwd doesn't contain the built extensions
+    rm -r efl/
+
+    patchShebangs tests/ecore/exe_helper.sh
+
+    # use the new name instead of the removed alias
+    substituteInPlace tests/evas/test_01_rect.py \
+      --replace-fail ".assert_(" ".assertTrue("
+  '';
+
+  pytestFlagsArray = [ "tests/" ];
+
+  disabledTestPaths = [
+    "tests/dbus/test_01_basics.py" # needs dbus daemon
+    "tests/ecore/test_09_file_download.py" # uses network
+    "tests/ecore/test_11_con.py" # uses network
+    "tests/elementary/test_02_image_icon.py" # RuntimeWarning: Setting standard icon failed
+  ];
 
   passthru.updateScript = directoryListingUpdater { };
 
