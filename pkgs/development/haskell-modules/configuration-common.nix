@@ -595,6 +595,24 @@ self: super:
       )
   );
 
+  # Overly strict bounds on postgresql-simple (< 0.7), tasty (< 1.5) and tasty-quickcheck (< 0.11)
+  # https://github.com/tdammers/migrant/pull/5
+  migrant-core = doJailbreak super.migrant-core;
+  migrant-sqlite-simple = doJailbreak super.migrant-sqlite-simple;
+  migrant-hdbc = doJailbreak super.migrant-hdbc;
+  migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
+    (overrideCabal {
+      preCheck = ''
+        postgresqlTestUserOptions="LOGIN SUPERUSER"
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    doJailbreak
+  ];
+
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
