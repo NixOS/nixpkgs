@@ -73,6 +73,7 @@ self: super:
   }) super.hevm;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   saltine = doJailbreak super.saltine; # bytestring  && <0.12, deepseq <1.5, text > 1.2 && <1.3 || >=2.0 && <2.1
+  sv2v = doJailbreak super.sv2v; # base <4.19
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
 
   #
