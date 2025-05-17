@@ -11,6 +11,7 @@
   glib,
   gtk3,
   harfbuzz,
+  lcms,
   lib,
   libglvnd,
   libjack2,
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     harfbuzz
+    lcms
     libglvnd
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
