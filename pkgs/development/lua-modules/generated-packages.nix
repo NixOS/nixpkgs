@@ -4706,6 +4706,50 @@ final: prev: {
     }
   ) { };
 
+  sofa = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaAtLeast,
+      luaOlder,
+      argparse,
+      compat53,
+      luatext,
+      lyaml,
+    }:
+    buildLuarocksPackage {
+      pname = "sofa";
+      version = "0.7.0-0";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/sofa-0.7.0-0.rockspec";
+          sha256 = "0hkdm4h8yjh5zw9116cclff8q6br4yyhb7f7y7lv4ydrkxfl1lzq";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "f4z3r";
+        repo = "sofa";
+        rev = "v0.7.0";
+        hash = "sha256-aoFmzhzWuBTbDnSWDGLbkhORlrtvVOtfIV7oq2xc0pQ=";
+      };
+
+      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      propagatedBuildInputs = [
+        argparse
+        compat53
+        luatext
+        lyaml
+      ];
+
+      meta = {
+        homepage = "https://github.com/f4z3r/sofa";
+        description = "A command execution engine powered by rofi.";
+        maintainers = with lib.maintainers; [ f4z3r ];
+        license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+      };
+    }
+  ) { };
+
   sqlite = callPackage (
     {
       buildLuarocksPackage,
