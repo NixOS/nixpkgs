@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index 6585129..d68f20d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -67,6 +67,7 @@ if not meson.is_subproject()
+     name: meson.project_name(),
+     version: meson.project_version(),
+     libraries: [ unity_lib ],
++    subdirs: 'unity',
+     description: 'C Unit testing framework.'
+   )
+ endif
