@@ -43,6 +43,12 @@ buildPythonPackage rec {
       --replace "--cov-report=term-missing" ""
   '';
 
+  # otherwise "tests/test_inotify_c.py::test_select_fd"
+  # fails with "OSError: [Errno 24] Too many open files"
+  preCheck = ''
+    ulimit -n 4096
+  '';
+
   pytestFlagsArray =
     [
       "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
@@ -61,7 +67,7 @@ buildPythonPackage rec {
       # segfaults
       "--deselect=tests/test_delayed_queue.py::test_delayed_get"
       "--deselect=tests/test_emitter.py::test_delete"
-      # AttributeError: '_thread.RLock' object has no attribute 'key'"
+      # AttributeError: '_thread.RLock' object has no attribute 'key'
       "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
