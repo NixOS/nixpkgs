@@ -47,9 +47,9 @@ let
   fakeSession = action: ''
     session_is_systemd_aware=$(
       IFS=:
-      for i in $XDG_CURRENT_DESKTOP; do
+      for i in $XDG_CURRENT_DESKTOP $XDG_SESSION_DESKTOP; do
         case $i in
-          KDE|GNOME|Pantheon|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
+          ${lib.concatStringsSep "|" cfg.displayManager.extraSystemdAwareSessions}) echo "1"; exit; ;;
           *) ;;
         esac
       done
@@ -63,6 +63,12 @@ let
   # file provided by services.xserver.displayManager.sessionData.wrapper
   xsessionWrapper = pkgs.writeScript "xsession-wrapper" ''
     #! ${pkgs.bash}/bin/bash
+
+    _WAYLAND_SESSION=$(
+      if [ "$XDG_SESSION_TYPE" = "wayland" ] ; then
+        echo "1"
+      fi
+    )
 
     # Shared environment setup for graphical sessions.
 
@@ -89,12 +95,14 @@ let
       exec &> >(tee ~/.xsession-errors)
     ''}
 
-    # Load X defaults. This should probably be safe on wayland too.
-    ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
-    if test -e ~/.Xresources; then
-        ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
-    elif test -e ~/.Xdefaults; then
-        ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+    if [ -z "$_WAYLAND_SESSION" ] ; then
+      # Load X defaults. This should probably be safe on wayland too.
+      ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
+      if test -e ~/.Xresources; then
+          ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
+      elif test -e ~/.Xdefaults; then
+          ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+      fi
     fi
 
     # Import environment variables into the systemd user environment.
@@ -124,9 +132,11 @@ let
 
     ${fakeSession "start"}
 
-    # Allow the user to setup a custom session type.
-    if test -x ~/.xsession; then
-        eval exec ~/.xsession "$@"
+    if [ -z "$_WAYLAND_SESSION" ] ; then
+        # Allow the user to setup a custom session type.
+        if test -x ~/.xsession; then
+            eval exec ~/.xsession "$@"
+        fi
     fi
 
     if test "$1"; then
@@ -229,6 +239,20 @@ in
         '';
       };
 
+      extraSystemdAwareSessions = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "KDE"
+          "GNOME"
+          "Pantheon"
+          "X-NIXOS-SYSTEMD-AWARE"
+        ];
+        description = ''
+          A list of sessions that are systemd aware and don't need the
+          systemd awareness workaround. This list will be checked against
+          `$XDG_SESSION_DESKTOP` and `$XDG_CURRENT_DESKTOP`.
+        '';
+      };
     };
 
   };
