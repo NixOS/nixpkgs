@@ -19,9 +19,7 @@ The above instructions don't deal with the appendix of available `configuration.
 
 ## Testing redirects {#sec-contributing-redirects}
 
-Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
-
-Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
+Check further context and instructions in the [Nixpkgs manual docs README](../../../doc/README.md#redirects-check).
 
 ## Contributing to the `configuration.nix` options documentation {#sec-contributing-options}
 
