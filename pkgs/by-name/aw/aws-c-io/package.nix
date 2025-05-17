@@ -9,16 +9,16 @@
   s2n-tls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-io";
   # nixpkgs-update: no auto update
-  version = "0.15.3";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/pG/+MHAu/TYTtY/RQrr1U1ev2FZ1p/O8kIRUDDOcvQ=";
+    repo = "aws-c-io";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Nw/rQHEoIMrpM08CB6810qnDDrkGARDne3h3AMkzr70=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,19 +29,17 @@ stdenv.mkDerivation rec {
     s2n-tls
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   passthru.tests = {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK for C module for IO and TLS";
     homepage = "https://github.com/awslabs/aws-c-io";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ orivej ];
   };
-}
+})
