@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtas";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "clementgallet";
     repo = "libTAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-n4iaJG9k+/TFfGMDCYL83Z6paxpm/gY3thP9T84GeQU=";
+    hash = "sha256-/hyKJ8HGLN7hT+9If/lcp0C7GnhJMRpc7EKDgA1kQcI=";
   };
 
   nativeBuildInputs = [
