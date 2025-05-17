@@ -1192,7 +1192,12 @@ with lib.maintainers;
   };
 
   systemd = {
-    members = [ ];
+    members = [
+      flokli
+      arianvp
+      elvishjerricco
+      aanderse
+    ];
     githubTeams = [ "systemd" ];
     scope = "Maintain systemd for NixOS.";
     shortName = "systemd";
