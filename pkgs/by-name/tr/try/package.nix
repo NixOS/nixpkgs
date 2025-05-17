@@ -62,15 +62,15 @@ stdenv.mkDerivation {
   '';
   versionCheckProgramArg = "-v";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/binpash/try";
     description = "Lets you run a command and inspect its effects before changing your live system";
     mainProgram = "try";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pasqui23
       ezrizhu
     ];
-    license = with licenses; [ mit ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.linux;
   };
 }
