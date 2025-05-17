@@ -865,6 +865,9 @@ in
         ++ lib.optionals (lib.versionAtLeast version "4.16") [
           buildPackages.bison
           buildPackages.flex
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "5.10") [
+          buildPackages.pahole
         ];
       patches = map (p: p.patch) kernelPatches; # Patches may include new configs.
       postPatch = ''
