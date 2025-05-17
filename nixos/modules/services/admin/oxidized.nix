@@ -97,54 +97,42 @@ in
       isSystemUser = true;
     };
 
-    systemd.tmpfiles.settings."10-oxidized" =
-      {
-        "${cfg.dataDir}" = {
-          d = {
-            mode = "0750";
-            user = cfg.user;
-            group = cfg.group;
-          };
-        };
-
-        "${cfg.dataDir}/.config" = {
-          d = {
-            mode = "0750";
-            user = cfg.user;
-            group = cfg.group;
-          };
-        };
-
-        "${cfg.dataDir}/.config/oxidized" = {
-          d = {
-            mode = "0750";
-            user = cfg.user;
-            group = cfg.group;
-          };
-        };
-
-        "${cfg.dataDir}/.config/oxidized/config" = {
-          L = {
-            argument = "${cfg.configFile}";
-            user = cfg.user;
-            group = cfg.group;
-          };
-        };
-
-      }
-      // lib.optionalAttrs (cfg.routerDB != null) {
-        "${cfg.dataDir}/.config/oxidized/router.db" = {
-          L = {
-            argument = "${cfg.routerDB}";
-            user = cfg.user;
-            group = cfg.group;
-          };
+    systemd.tmpfiles.settings."10-oxidized" = {
+      "${cfg.dataDir}" = {
+        d = {
+          mode = "0750";
+          user = cfg.user;
+          group = cfg.group;
         };
       };
+
+      "${cfg.dataDir}/.config" = {
+        d = {
+          mode = "0750";
+          user = cfg.user;
+          group = cfg.group;
+        };
+      };
+
+      "${cfg.dataDir}/.config/oxidized" = {
+        d = {
+          mode = "0750";
+          user = cfg.user;
+          group = cfg.group;
+        };
+      };
+    };
 
     systemd.services.oxidized = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+
+      preStart = ''
+        ln -f -s ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
+        ${lib.optionalString (cfg.routerDB != null) ''
+          ln -f -s ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
+        ''}
+      '';
 
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
