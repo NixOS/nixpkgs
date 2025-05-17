@@ -6831,6 +6831,12 @@
     githubId = 7389000;
     name = "Dominic Wrege";
   };
+  dwt = {
+    email = "spamfaenger@gmx.de";
+    github = "dwt";
+    githubId = 57199;
+    name = "Martin Häcker";
+  };
   dxf = {
     email = "dingxiangfei2009@gmail.com";
     github = "dingxiangfei2009";
