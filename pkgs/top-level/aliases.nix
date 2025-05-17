@@ -1174,6 +1174,7 @@ mapAliases {
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
   '';
 
+  mapmap = throw "'mapmap' has been removed as it has been unmaintained since 2021";
   markets = throw "'markets' has been removed as it was archived upstream in 2023"; # Added 2025-04-17
   marwaita-manjaro = lib.warnOnInstantiate "marwaita-manjaro has been renamed to marwaita-teal" marwaita-teal; # Added 2024-07-08
   marwaita-peppermint = lib.warnOnInstantiate "marwaita-peppermint has been renamed to marwaita-red" marwaita-red; # Added 2024-07-01
