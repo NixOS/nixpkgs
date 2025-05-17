@@ -612,6 +612,7 @@ in
   invidious = handleTest ./invidious.nix { };
   iosched = handleTest ./iosched.nix { };
   isolate = handleTest ./isolate.nix { };
+  linkding = discoverTests (import ./web-apps/linkding { inherit handleTest; });
   livebook-service = handleTest ./livebook-service.nix { };
   pyload = handleTest ./pyload.nix { };
   oci-containers = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./oci-containers.nix { };
