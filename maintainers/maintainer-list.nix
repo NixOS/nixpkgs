@@ -11564,6 +11564,12 @@
     githubId = 56772267;
     name = "Jürgen Hahn";
   };
+  jhartma = {
+    email = "jhartma@kommespaeter.de";
+    github = "jhartma";
+    githubId = 8858337;
+    name = "Jörg Hartmann";
+  };
   jhh = {
     email = "jeff@j3ff.io";
     github = "jhh";
