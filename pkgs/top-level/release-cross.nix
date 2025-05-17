@@ -71,6 +71,7 @@ let
   embedded = {
     buildPackages.binutils = nativePlatforms;
     buildPackages.gcc = nativePlatforms;
+    buildPackages.gdb = nativePlatforms;
     libcCross = nativePlatforms;
   };
 
