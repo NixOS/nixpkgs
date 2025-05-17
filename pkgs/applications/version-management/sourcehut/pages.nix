@@ -13,7 +13,7 @@ buildGoModule (
     src = fetchFromSourcehut {
       owner = "~sircmpwn";
       repo = "pages.sr.ht";
-      rev = version;
+      tag = version;
       hash = "sha256-XnKNXYzg9wuL4U2twkAspaQJZy2HWLQQQl9AITtipVU=";
     };
 

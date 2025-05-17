@@ -27,7 +27,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "hackwaly";
     repo = "ocamlearlybird";
-    rev = version;
+    tag = version;
     hash = "sha256-TzRJ+0I3VEx4Lvj3lhN9POzlXRgmTTdD5Bg1AX0pf3c=";
   };
 

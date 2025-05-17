@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "dlalic";
     repo = "gitlab-clippy";
-    rev = version;
+    tag = version;
     hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
   useFetchCargoVendor = true;

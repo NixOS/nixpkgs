@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "Watson";
-    rev = version;
+    tag = version;
     sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
-    rev = version;
+    tag = version;
     sha256 = "sha256-TZkWDs0KC2Kb7l5QFiHITJqWyq+ryj5mnhNY1wxcUyE=";
   };
 

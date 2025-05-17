@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mediacloud";
     repo = "sentence-splitter";
-    rev = version;
+    tag = version;
     hash = "sha256-FxRi8fhKB9++lCTFpCAug0fxjkSVTKChLY84vkshR34=";
   };
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
-    rev = version;
+    tag = version;
     hash = "sha256-sC3XdZWJSXyCIYr/Y41ogz5bNBTfwKjOFtYwhayXPhY=";
   };
 

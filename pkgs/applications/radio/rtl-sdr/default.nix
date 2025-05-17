@@ -95,7 +95,7 @@ in
     src = fetchFromGitHub {
       owner = "rtlsdrblog";
       repo = "rtl-sdr-blog";
-      rev = version;
+      tag = version;
       hash = "sha256-7FpT+BoQ2U8KiKwX4NfEwrO3lMBti7RX8uKtT5dFH8M=";
     };
     meta = {

@@ -23,7 +23,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "sporto";
     repo = "jwto";
-    rev = version;
+    tag = version;
     hash = "sha256-TOWwNyrOqboCm8Y4mM6GgtmxGO3NmyDdAX7m8CifA7Y=";
   };
 

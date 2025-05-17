@@ -16,7 +16,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "repos-holder";
     repo = "kdecoration2-kde2";
-    rev = version;
+    tag = version;
     sha256 = "y2q1j36EURJc7k1huqhEH1Z82PnVSKlfx20bpQWY28c=";
   };
 

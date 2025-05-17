@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
-    rev = version;
+    tag = version;
     sha256 = "sha256-b7ck48wRPga/ugCVbPCKRSRrpawIJCsEV1kbNeXDIHk=";
   };
 

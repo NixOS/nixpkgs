@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
-    rev = version;
+    tag = version;
     hash = "sha256-lJkZXiwZUr/qACb9X52EGR0FBOicuPMmyA1105G7gZU=";
   };
 

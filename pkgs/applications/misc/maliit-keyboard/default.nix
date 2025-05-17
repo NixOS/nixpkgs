@@ -27,7 +27,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "keyboard";
-    rev = version;
+    tag = version;
     sha256 = "sha256-XH3sKQuNMLgJi2aV+bnU2cflwkFIw4RYVfxzQiejCT0=";
   };
 

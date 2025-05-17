@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
-    rev = version;
+    tag = version;
     hash = "sha256-GtMq7E2qBqFu54hjUotzPyxScTKXNdEQcmgHnS7lBhc=";
   };
 

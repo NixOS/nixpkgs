@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "kimg";
-    rev = version;
+    tag = version;
     sha256 = "040782k3rh2a5mhbfgr9gnbfis0wgxvi27vhfn7l35vrr12sw1l3";
   };
 

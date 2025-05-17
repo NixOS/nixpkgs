@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-sepaxml";
-    rev = version;
+    tag = version;
     hash = "sha256-l5UMy0M3Ovzb6rcSAteGOnKdmBPHn4L9ZWY+YGOCn40=";
   };
 

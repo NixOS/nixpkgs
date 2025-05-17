@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bmabey";
     repo = "pyLDAvis";
-    rev = version;
+    tag = version;
     sha256 = "sha256-WIQytds3PeU85l6ix2UUIwypjpM5rMZvQxiHx9BY91Y=";
   };
 

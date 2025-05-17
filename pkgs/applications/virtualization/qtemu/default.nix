@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "qtemu";
     repo = "gui";
-    rev = version;
+    tag = version;
     sha256 = "1555178mkfw0gwmw8bsxmg4339j2ifp0yb4b2f39nxh9hwshg07j";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
-    rev = version;
+    tag = version;
     hash = "sha256-YzSUwShj7QGCVKlTRM2Gro38Y+jGYQsMGBMAH0radmA=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "strophe";
     repo = "libstrophe";
-    rev = version;
+    tag = version;
     hash = "sha256-53O8hHyw9y0Bzs+BpGouAxuSGJxh6NSNNWZqi7RHAsY=";
   };
 

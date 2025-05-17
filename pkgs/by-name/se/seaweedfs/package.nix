@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
-    rev = version;
+    tag = version;
     hash = "sha256-B6MgmgxvbGTcJ4GHK+TT30sb++29gvr0Ce004YCGF2E=";
   };
 

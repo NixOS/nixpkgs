@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "libmongocrypt";
-    rev = version;
+    tag = version;
     hash = "sha256-I4KG2BHAovin9EaF8lNzJzucARvi0Qptz5Y9gTt3WkE=";
   };
 

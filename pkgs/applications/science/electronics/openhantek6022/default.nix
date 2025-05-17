@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenHantek";
     repo = "OpenHantek6022";
-    rev = version;
+    tag = version;
     sha256 = "sha256-FT+DyfD5WHBblRXWXFnyB2xwoIgoh84oB+QN32wx78c=";
   };
 

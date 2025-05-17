@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "python-qnap-qsw";
-    rev = version;
+    tag = version;
     sha256 = "WP1bGt7aAtSVFOMJgPXKqVSbi5zj9K7qoIVrYCrPGqk=";
   };
 

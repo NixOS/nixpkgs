@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phisch";
     repo = "giph";
-    rev = version;
+    tag = version;
     sha256 = "19l46m1f32b3bagzrhaqsfnl5n3wbrmg3sdy6fdss4y1yf6nqayk";
   };
 

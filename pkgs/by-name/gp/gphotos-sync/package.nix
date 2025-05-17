@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gilesknap";
     repo = "gphotos-sync";
-    rev = version;
+    tag = version;
     hash = "sha256-iTqD/oUQqC7Fju8SEPkSZX7FC9tE4eRCewiJR8STmEw=";
   };
 

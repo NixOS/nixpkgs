@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
-    rev = version;
+    tag = version;
     sha256 = "sha256-0hZ4VnscnKYBrXy58IjeoeDxja1oNq0mNaQGPmej5BA=";
   };
 

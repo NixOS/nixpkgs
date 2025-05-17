@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "yassinebridi";
     repo = "serpl";
-    rev = version;
+    tag = version;
     hash = "sha256-koD5aFqL+XVxc5Iq3reTYIHiPm0z7hAQ4K59IfbY4Hg=";
   };
 

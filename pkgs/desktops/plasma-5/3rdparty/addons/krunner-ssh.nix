@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Programie";
     repo = "krunner-ssh";
-    rev = version;
+    tag = version;
     hash = "sha256-rFTTvmetDeN6t0axVc+8t1TRiuyPBpwqhvsq2IFxa/A=";
   };
 

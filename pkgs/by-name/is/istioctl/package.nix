@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
-    rev = version;
+    tag = version;
     hash = "sha256-8CisYUKQCspgs3uXFcM4MNsWbsYSgd7VYv++3JzSOik=";
   };
   vendorHash = "sha256-TfIzpdq2H7RHqx9xVrGiStGn4lIROR36li/JDe7W2pQ=";

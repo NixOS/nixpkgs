@@ -19,7 +19,7 @@ buildGoModule rec {
     domain = "codeberg.org";
     owner = "eris";
     repo = "eris-go";
-    rev = version;
+    tag = version;
     hash = "sha256-v4pN+fVwYoir3GLneWhg/azsg7ifvcKAksoqDkkQGwk=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mindigmarton";
     repo = "emulated_roku";
-    rev = version;
+    tag = version;
     hash = "sha256-7DbJl1e1ESWPCNuQX7m/ggXNDyPYZ5eNGwSz+jnxZj0=";
   };
 

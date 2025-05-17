@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/splitter/trunk";
-    rev = version;
+    tag = version;
     sha256 = "sha256-y/pl8kIQ6fiF541ho72LMgJFWJdkUBqPToQGCGmmcfg=";
   };
 

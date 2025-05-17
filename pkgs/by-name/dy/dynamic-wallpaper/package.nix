@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dusansimic";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-DAdx34EYO8ysQzbWrAIPoghhibwFtoqCi8oyDVyO5lk=";
   };
 

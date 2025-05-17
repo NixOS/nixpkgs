@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "AdRoll";
     repo = "hologram";
-    rev = version;
+    tag = version;
     hash = "sha256-b65mplfDuwk8lEfJLKBY7BF0yGRksxHjwbEW6A7moo4=";
   };
 

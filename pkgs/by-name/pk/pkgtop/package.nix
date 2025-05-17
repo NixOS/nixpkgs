@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "pkgtop";
-    rev = version;
+    tag = version;
     hash = "sha256-NY8nx4BKAUq1nGBlzRzm2OH1k01TV6qs2IcoErhuxTc=";
   };
 

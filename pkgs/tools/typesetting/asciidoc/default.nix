@@ -149,7 +149,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "asciidoc-py";
     repo = "asciidoc-py";
-    rev = version;
+    tag = version;
     hash = "sha256-td3C7xTWfSzdo9Bbz0dHW2oPaCQYmUE9H2sUFfg5HH0=";
   };
 

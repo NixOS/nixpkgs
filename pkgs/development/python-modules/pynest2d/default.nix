@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "pynest2d";
-    rev = version;
+    tag = version;
     hash = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
   };
 

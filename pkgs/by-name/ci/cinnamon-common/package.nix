@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
-    rev = version;
+    tag = version;
     hash = "sha256-WBdzlourYf2oEXUMbzNcNNsc8lBo6ujAy/K1Y6nGOjU=";
   };
 

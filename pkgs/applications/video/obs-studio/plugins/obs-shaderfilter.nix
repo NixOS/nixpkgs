@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-shaderfilter";
-    rev = version;
+    tag = version;
     sha256 = "sha256-RJistQXHu0SQTrLEt7dfo443AJIY2WgjIA5nHOijrOk=";
   };
 

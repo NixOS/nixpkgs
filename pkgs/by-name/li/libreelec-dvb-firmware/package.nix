@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "dvb-firmware";
     owner = "LibreElec";
-    rev = version;
+    tag = version;
     sha256 = "sha256-uEobcv5kqGxIOfSVVKH+iT7DHPF13OFiRF7c1GIUqtU=";
   };
 

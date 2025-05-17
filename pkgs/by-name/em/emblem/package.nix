@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "design";
     repo = "emblem";
-    rev = version;
+    tag = version;
     sha256 = "sha256-knq8OKoc8Xv7lOr0ub9+2JfeQE84UlTHR1q4SFFF8Ug=";
   };
 

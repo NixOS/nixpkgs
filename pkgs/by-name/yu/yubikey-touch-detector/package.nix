@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
-    rev = version;
+    tag = version;
     hash = "sha256-eNRwDGTNxBtDepQvf2TXCH/5fb4kRYBn80tzvI4fzME=";
   };
   vendorHash = "sha256-x8Fmhsk6MtgAtLxgH/V3KusM0BXAOaSU+2HULR5boJQ=";

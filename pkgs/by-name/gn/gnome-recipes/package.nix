@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "recipes";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     sha256 = "GyFOwEYmipQdFLtTXn7+NvhDTzxBlOAghr3cZT4QpQw=";
   };

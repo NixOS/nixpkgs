@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
-    rev = version;
+    tag = version;
     sha256 = "sha256-D7E2mpC7v2kbsb1EyhR6hLvGbnIvGB2MK1n1gptYyKI=";
   };
 

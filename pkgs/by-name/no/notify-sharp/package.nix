@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Archive";
     repo = "notify-sharp";
 
-    rev = version;
+    tag = version;
     sha256 = "1vm7mnmxdwrgy4mr07lfva8sa6a32f2ah5x7w8yzcmahaks3sj5m";
   };
 

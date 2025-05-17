@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     repo = "libinsane";
     group = "World";
     owner = "OpenPaperwork";
-    rev = version;
+    tag = version;
     sha256 = "sha256-2BLg8zB0InPJqK9JypQIMVXIJndo9ZuNB4OeOAo/Hsc=";
   };
 

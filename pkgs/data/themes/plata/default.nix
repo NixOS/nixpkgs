@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
-    rev = version;
+    tag = version;
     sha256 = "1iwvlv9qcrjyfbzab00vjqafmp3vdybz1hi02r6lwbgvwyfyrifk";
   };
 

@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mzucker";
     repo = "noteshrink";
-    rev = version;
+    tag = version;
     sha256 = "0xhrvg3d8ffnbbizsrfppcd2y98znvkgxjdmvbvin458m2rwccka";
   };
 

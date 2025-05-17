@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "reactiveData";
-    rev = version;
+    tag = version;
     sha256 = "sha256-MO9WMe1k2QcC5RynE6uZHohmu3QlpTHvAkvQNgu3P90=";
   };
 

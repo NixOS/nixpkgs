@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exaile";
     repo = "exaile";
-    rev = version;
+    tag = version;
     sha256 = "sha256-9SK0nvGdz2j6qp1JTmSuLezxX/kB93CZReSfAnfKZzg=";
   };
 

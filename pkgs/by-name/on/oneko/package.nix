@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "IreneKnapp";
     repo = "oneko";
-    rev = version_name;
+    tag = version_name;
     sha256 = "0vx12v5fm8ar3f1g6jbpmd3b1q652d32nc67ahkf28djbqjgcbnc";
   };
   nativeBuildInputs = [

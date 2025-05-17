@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libqmi";
-    rev = version;
+    tag = version;
     hash = "sha256-cGNnw0vO/Hr9o/eIf6lLTsoGiEkTvZiArgO7tAc208U=";
   };
 

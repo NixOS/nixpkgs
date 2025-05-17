@@ -82,7 +82,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "gpaw";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-tdS383qT6hBr5hOqjoFS36nRSS2vdVkUR7sExwjWhng=";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KonradIT";
     repo = "gopro-linux";
-    rev = version;
+    tag = version;
     sha256 = "0sb9vpiadrq8g4ag828h8mvq01fg0306j0wjwkxdmwfqync1128l";
   };
 

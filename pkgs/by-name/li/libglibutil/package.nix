@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-wp87cStOuQILSKFPFlFDL2vGvTQ4Cg5kuSlwnM4kc64=";
   };
 

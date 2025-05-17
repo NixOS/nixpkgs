@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~adnano";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-9lsZgh/OyxAu1rsixD6XUgQzR1xDGOxGt0sR12zrs2M=";
   };
   vendorHash = "sha256-ppplXXqb2DM/AU+B+LefndrBiiTgCRNw6hEupfeWr+o=";

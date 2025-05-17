@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "soundtouch";
     repo = "soundtouch";
-    rev = version;
+    tag = version;
     hash = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
   };
 

@@ -23,7 +23,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     src = fetchFromGitHub {
       owner = "serokell";
       repo = pname;
-      rev = version;
+      tag = version;
       sha256 = "gOKvjmlcHDOgsTllj2sPL/qNtW/rlNlEVIrosahNsAQ=";
     };
 

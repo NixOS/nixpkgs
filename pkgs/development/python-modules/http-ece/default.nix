@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "web-push-libs";
     repo = "encrypted-content-encoding";
-    rev = version;
+    tag = version;
     hash = "sha256-HjXJWoOvCVOdEto4Ss4HPUuf+uNcQkfvj/cxJGHOhQ8=";
   };
 

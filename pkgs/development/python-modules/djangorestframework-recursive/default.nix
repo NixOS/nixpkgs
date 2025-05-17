@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "heywbj";
     repo = "django-rest-framework-recursive";
-    rev = version;
+    tag = version;
     hash = "sha256-Q/6yxpz3c402sMZudAeFIht9+5GmTRlzM51AMAx5muY=";
   };
 

@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Gandi";
     repo = "gandi.cli";
-    rev = version;
+    tag = version;
     sha256 = "sha256-KLeEbbzgqpmBjeTc5RYsFScym8xtMqVjU+H0lyDM0+o=";
   };
 

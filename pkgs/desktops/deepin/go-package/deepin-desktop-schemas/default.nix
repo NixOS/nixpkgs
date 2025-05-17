@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-Zp80Yz0qkFAwpQJPgs/gcfCG2DMtvpKdVKRlqOTmaCk=";
   };
 

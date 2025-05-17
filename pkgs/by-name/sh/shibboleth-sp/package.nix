@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-sp.git";
-    rev = version;
+    tag = version;
     sha256 = "1qb4dbz5gk10b9w1rf6f4vv7c2wb3a8bfzif6yiaq96ilqad7gdr";
   };
 

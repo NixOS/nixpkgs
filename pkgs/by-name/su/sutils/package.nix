@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "sutils";
-    rev = version;
+    tag = version;
     sha256 = "0i2g6a6xdaq3w613dhq7mnsz4ymwqn6kvkyan5kgy49mzq97va6j";
   };
 

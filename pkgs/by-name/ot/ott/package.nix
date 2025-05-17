@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
-    rev = version;
+    tag = version;
     hash = "sha256-S6EMQgEBrtXB9hTM7x6irZPsI9c9JHeuCk/9pcpQMNg=";
   };
 

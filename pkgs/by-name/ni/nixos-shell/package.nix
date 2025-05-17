@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixos-shell";
-    rev = version;
+    tag = version;
     sha256 = "sha256-plRKXQqww7easx0wgGKAkOJH1TW/PeeB20dq9XUN8J4=";
   };
 

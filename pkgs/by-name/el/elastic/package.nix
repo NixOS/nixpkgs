@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
-    rev = version;
+    tag = version;
     hash = "sha256-D7DqSBP0E0CzjTROh97JXhB8N8q0I2pDo4HbAK8vQ/Y=";
   };
 

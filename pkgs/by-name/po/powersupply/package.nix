@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "martijnbraam";
     repo = "powersupply";
-    rev = version;
+    tag = version;
     hash = "sha256-3NXoOqveMlMezYe4C78F3764KeAy5Sz3M714PO3h/eI=";
   };
 

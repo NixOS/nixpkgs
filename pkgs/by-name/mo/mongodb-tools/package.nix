@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
-    rev = version;
+    tag = version;
     sha256 = "sha256-9DUfPD6wrv65PLVtxAF21BZ/joWFVFk+cItt9m/1Nx8=";
   };
 

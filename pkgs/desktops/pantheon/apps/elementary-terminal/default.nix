@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
-    rev = version;
+    tag = version;
     sha256 = "sha256-2Z56U6nbqwlbrSMzTYv7cSI7LT7pvDhW0w4f3wxv6ZA=";
   };
 

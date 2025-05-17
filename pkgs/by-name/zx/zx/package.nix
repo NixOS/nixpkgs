@@ -35,7 +35,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
-    rev = version;
+    tag = version;
     hash = "sha256-jajkHUz+3ujKXbcsfN7y3pwHqAofTgdQHEC29srzs1M=";
   };
 

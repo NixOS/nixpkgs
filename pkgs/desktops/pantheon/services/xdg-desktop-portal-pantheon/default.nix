@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
-    rev = version;
+    tag = version;
     sha256 = "sha256-oBOyYE4NLlNmCRO9Uk22/OZb9+fXcyOICE8V3n4grEw=";
   };
 

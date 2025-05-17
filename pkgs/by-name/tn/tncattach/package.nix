@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "tncattach";
-    rev = version;
+    tag = version;
     sha256 = "0n7ad4gqvpgabw2i67s51lfz386wmv0cvnhxq9ygxpsqmx9aynxk";
   };
 

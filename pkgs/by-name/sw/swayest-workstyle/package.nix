@@ -10,7 +10,7 @@ let
   src = fetchFromGitHub {
     owner = "Lyr-7D1h";
     repo = "swayest_workstyle";
-    rev = version;
+    tag = version;
     hash = "sha256-0IFEVk6LQagwbm/QZG+dzYFfNhb7ieMxaCbFdeoZWwc=";
   };
 in

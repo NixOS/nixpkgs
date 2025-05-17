@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
-    rev = version;
+    tag = version;
     hash = "sha256-9v0faB5HhUUPXOWDDyTUPaPwzMjhqdiAyuv9kM4mm2Q=";
   };
 

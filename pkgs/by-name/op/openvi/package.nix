@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
-    rev = version;
+    tag = version;
     hash = "sha256-RqmulYHQFZmTHQAYgZmB8tAG6mSquNODmssfKB8YqDU=";
   };
 

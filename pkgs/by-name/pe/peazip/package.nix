@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
-    rev = version;
+    tag = version;
     hash = "sha256-tA2JLO4KIqFOVZyt7CPMRJTojQFQVQqGGOeh3sU/FuQ=";
   };
   sourceRoot = "${src.name}/peazip-sources";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sorayuki";
     repo = "obs-multi-rtmp";
-    rev = version;
+    tag = version;
     sha256 = "sha256-MRBQY9m6rj8HVdn58mK/Vh07FSm0EglRUaP20P3FFO4=";
   };
 

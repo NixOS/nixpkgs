@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~psic4t";
     repo = "qcal";
-    rev = version;
+    tag = version;
     hash = "sha256-azUN4oYbD0fBZav4ogh/mELV9+IW6aAV7Oom8Wq6sYI=";
   };
   vendorHash = "sha256-W9g2JzShvm2hJ+fcdwsoD3B6iUU55ufN6FTTl6qK6Oo=";

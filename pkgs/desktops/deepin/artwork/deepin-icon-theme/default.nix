@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-Vt2rYZthGelXVUp8/L57ZlDsVEjjZhCv+kSGeU6nC2s=";
   };
 

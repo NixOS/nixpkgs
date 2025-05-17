@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-rotate-backups";
-    rev = version;
+    tag = version;
     sha256 = "0r4dyd7hj403rksgp3vh1azp9n4af75r3wq3x39wxcqizpms3vkx";
   };
 

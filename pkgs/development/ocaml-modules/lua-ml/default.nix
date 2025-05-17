@@ -20,7 +20,7 @@ else
     src = fetchFromGitHub {
       owner = "lindig";
       repo = pname;
-      rev = version;
+      tag = version;
       sha256 = "sha256-xkjsjKD89W7Y5XK8kfL/ZErYKS14z0u0QCARN0DbTC8=";
     };
 

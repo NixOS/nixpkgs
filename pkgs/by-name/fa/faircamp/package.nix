@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
-    rev = version;
+    tag = version;
     hash = "sha256-41mec9AdNdWRJz+5xFU7to/4LxIb7fEgm1EQVMAtyto=";
   };
 

@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-client-gui";
-    rev = version;
+    tag = version;
     hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
   };
 

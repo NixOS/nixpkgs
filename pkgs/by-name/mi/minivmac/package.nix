@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "erichelgeson";
     repo = "minivmac";
-    rev = version;
+    tag = version;
     hash = "sha256-iiEE0ioXh3keKUPfAB+YcE1iggGLpxT9N8LSVFDhttE=";
   };
 

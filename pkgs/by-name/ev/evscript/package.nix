@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "valpackett";
     repo = "evscript";
-    rev = version;
+    tag = version;
     hash = "sha256-lCXDDLovUb5aSOPTyVJL25v1JT1BGrrUlUR0Mu0XX4Q=";
   };
 

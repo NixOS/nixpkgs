@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = version;
+    tag = version;
     hash = "sha256-HlSO1VCrMJtYlSL9/GvVw4mp/pEtuDju6V+6etrAAEk=";
   };
 

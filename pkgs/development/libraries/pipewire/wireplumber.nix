@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = "wireplumber";
-    rev = version;
+    tag = version;
     hash = "sha256-RILzGhFQEpwGlpLbTzw7qrXIX3uNQZfJJ4d5ftXZzzw=";
   };
 

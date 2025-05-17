@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "landscapeio";
     repo = "dodgy";
-    rev = version;
+    tag = version;
     sha256 = "0ywwjpz0p6ls3hp1lndjr9ql6s5lkj7dgpll1h87w04kwan70j0x";
   };
 

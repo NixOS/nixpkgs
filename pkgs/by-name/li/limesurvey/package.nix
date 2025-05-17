@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
-    rev = version;
+    tag = version;
     hash = "sha256-2ZRN2zbrrGWTXgsPeRWsQbg1qw2vVIAwzUI0LWgCL9g=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "skvadrik";
     repo = "re2c";
-    rev = version;
+    tag = version;
     sha256 = "sha256-xB4oH0QS0VKTK2we+wdylS8VBijpp6tv7YV7fIX1s4A=";
   };
 

@@ -30,7 +30,7 @@ let
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = pname;
-    rev = version;
+    tag = version;
     inherit hash;
   };
 

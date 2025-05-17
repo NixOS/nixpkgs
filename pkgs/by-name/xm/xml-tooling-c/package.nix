@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xmltooling.git";
-    rev = version;
+    tag = version;
     hash = "sha256-czmBu7ThDwq+x7FahgZDMHqid8jeUNnTuKMI/Fj4IIw=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "astrale-sharp";
     repo = "typstfmt";
-    rev = version;
+    tag = version;
     hash = "sha256-JsNaHeFYr92VdruE87dLj2kPGc9M+ww7AGiGO4Gbbr0=";
   };
 

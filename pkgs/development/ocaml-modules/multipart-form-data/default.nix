@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "cryptosense";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-3MYJDvVbPIv/JDiB9nKcLRFC5Qa0afyEfz7hk8MWRII=";
   };
 

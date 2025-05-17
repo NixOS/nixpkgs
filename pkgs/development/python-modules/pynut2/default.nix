@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "python-nut2";
-    rev = version;
+    tag = version;
     sha256 = "1lg7n1frndfgw73s0ssl1h7kc6zxm7fpiwlc6v6d60kxzaj1dphx";
   };
 

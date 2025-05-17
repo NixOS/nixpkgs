@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.suckless.org/slstatus";
-    rev = version;
+    tag = version;
     hash = "sha256-MRDovZpQsvnLEvsbJNBzprkzQQ4nIs1T9BLT+tSGta8=";
   };
 

@@ -20,7 +20,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "tarides";
     repo = "get-activity";
-    rev = version;
+    tag = version;
     hash = "sha256-QU/LPIxcem5nFvSxcNApOuBu6UHqLHIXVSOJ2UT0eKA=";
   };
 

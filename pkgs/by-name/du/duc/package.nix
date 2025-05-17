@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "duc";
-    rev = version;
+    tag = version;
     sha256 = "sha256-ZLNsyp82UnsveEfDKzH8WfRh/Y/PQlXq8Ma+jIZl9Gk=";
   };
 

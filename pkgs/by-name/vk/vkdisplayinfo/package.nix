@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ChristophHaag";
     repo = "vkdisplayinfo";
-    rev = version;
+    tag = version;
     hash = "sha256-n6U7T5aOYTpgWE2WGPBPHtQKzitf9PxAoXJNWyz4rYw=";
   };
 

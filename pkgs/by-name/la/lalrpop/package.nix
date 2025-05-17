@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lalrpop";
     repo = "lalrpop";
-    rev = version;
+    tag = version;
     hash = "sha256-RvKJ3PKOKJbY0/WBpUwbau9LyCzb/peD73Ey9stECeg=";
   };
 

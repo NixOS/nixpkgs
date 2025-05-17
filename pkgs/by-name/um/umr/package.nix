@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "tomstdenis";
     repo = "umr";
-    rev = version;
+    tag = version;
     hash = "sha256-i0pTcg1Y+G/nGZSbMtlg37z12gF4heitEl5L4gfVO9c=";
   };
 

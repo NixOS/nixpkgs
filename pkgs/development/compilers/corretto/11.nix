@@ -30,7 +30,7 @@ let
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-11";
-      rev = version;
+      tag = version;
       hash = "sha256-buJlSvmyOVeMwaP9oDcHhG+Sabr1exf0nRUt4O7MaIY=";
     };
   };

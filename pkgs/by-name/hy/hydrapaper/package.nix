@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "HydraPaper";
-    rev = version;
+    tag = version;
     hash = "sha256-IDaM8bM/0KH9h59523WqLKe400V5lLNyJ4faPf980Ro=";
   };
 

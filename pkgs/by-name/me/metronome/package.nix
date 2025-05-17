@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "metronome";
-    rev = version;
+    tag = version;
     hash = "sha256-Sn2Ua/XxPnJjcQvWeOPkphl+BE7/BdOrUIpf+tLt20U=";
   };
 

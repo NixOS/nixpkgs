@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libinput";
-    rev = version;
+    tag = version;
     hash = "sha256-3U+2a/uSoSj1t34uz7xO2QQtJExygKOhBL7BUGP0Fbo=";
   };
 

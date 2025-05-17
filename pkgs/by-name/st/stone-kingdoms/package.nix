@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "stone-kingdoms";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-W2hzJg22O857Kh7CJVVHV5qu8QKjXCwW3hmgKBc0n2g=";
   };
 

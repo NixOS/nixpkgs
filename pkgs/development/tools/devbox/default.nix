@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jetify-com";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-bnquJceB1zaW1ZWU5yOWP35fkpgZWW8QQA6wzsq+RKc=";
   };
 

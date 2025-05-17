@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "numberstation";
-    rev = version;
+    tag = version;
     hash = "sha256-0T/Dc2i6auuZiWjcPR72JT8yOrzmdEmbW2PS5YhmEwI=";
   };
 

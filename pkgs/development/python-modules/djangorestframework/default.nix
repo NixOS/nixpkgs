@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
-    rev = version;
+    tag = version;
     hash = "sha256-LFq8mUx+jAFFnQTfysYs+DSN941p+8h9mDDOp+LO7VU=";
   };
 

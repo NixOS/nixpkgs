@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     hash = "sha256-MeD/jjhwoiWTb/G8pHrnEEX22h+entPr9MhJ6WHO3DM=";
-    rev = version;
+    tag = version;
     repo = "yodl";
     owner = "fbb-git";
   };

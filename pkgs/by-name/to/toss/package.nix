@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "05ql0d8wbdhnmh3dw8ch5bi6clfb9h8v21lq2a74iy02slya2y0r";
   };
   preInstall = "export DESTDIR=$out/bin";

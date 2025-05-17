@@ -25,7 +25,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "apm_planner";
-    rev = version;
+    tag = version;
     sha256 = "0wvbfjnnf7sh6fpgw8gimh5hgzywj3nwrgr80r782f5gayd3v2l1";
   };
 

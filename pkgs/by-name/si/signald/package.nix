@@ -19,7 +19,7 @@ let
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-EofgwZSDp2ZFhlKL2tHfzMr3EsidzuY4pkRZrV2+1bA=";
   };
 

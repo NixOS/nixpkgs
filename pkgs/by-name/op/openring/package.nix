@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
   };
 

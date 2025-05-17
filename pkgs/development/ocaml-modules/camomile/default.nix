@@ -20,7 +20,7 @@ let
           src = fetchFromGitHub {
             owner = "yoriyuki";
             repo = "camomile";
-            rev = version;
+            tag = version;
             sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
           };
 

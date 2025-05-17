@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "sound-theme";
-    rev = version;
+    tag = version;
     sha256 = "sha256-fR6gtKx9J6o2R1vQZ5yx4kEX3Ak+q8I6hRVMZzyB2E8=";
   };
 

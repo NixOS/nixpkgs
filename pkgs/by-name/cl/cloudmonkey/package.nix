@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "cloudstack-cloudmonkey";
-    rev = version;
+    tag = version;
     sha256 = "sha256-mkEGOZw7GDIFnYUpgvCetA4dU9R1m4q6MOUDG0TWN64=";
   };
 

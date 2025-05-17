@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "134q0z0dqzxzr0jw5jr98kp90kx2dl0qw9smykwxdgq555q1l6qa";
   };
 

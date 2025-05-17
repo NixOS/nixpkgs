@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
-    rev = version;
+    tag = version;
     hash = "sha256-LrUs6/YRQYU0o1kmNdBhafvDIyw91FnW8+9i0Jj5f+Y=";
   };
 

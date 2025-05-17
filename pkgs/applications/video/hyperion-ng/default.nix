@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-nQPtJw9DOKMPGI5trxZxpP+z2PYsbRKqOQEyaGzvmmA=";
     # needed for `dependencies/external/`:
     # * rpi_ws281x` - not possible to use as a "system" lib

@@ -19,7 +19,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "issuu";
     repo = "ocaml-protoc-plugin";
-    rev = version;
+    tag = version;
     hash = "sha256-ZHeOi3y2X11MmkRuthmYFSjPLoGlGTO1pnRfk/XmgPU=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = version;
+    tag = version;
     sha256 = "sha256-j5ADlKZriwLARpEJ/4xgvyAhF5ld9Hl2gXZS3NPJJj8=";
   };
 

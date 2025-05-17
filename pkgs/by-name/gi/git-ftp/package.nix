@@ -23,7 +23,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "git-ftp";
     repo = "git-ftp";
-    rev = version;
+    tag = version;
     sha256 = "1hxkqf7jbrx24q18yxpnd3dxzh4xk6asymwkylp1x7zg6mcci87d";
   };
 

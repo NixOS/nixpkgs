@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-qt-tools";
     repo = "PyQt5-stubs";
-    rev = version;
+    tag = version;
     hash = "sha256-qWnvlHnFRy8wbZJ28C0pYqAxod623Epe5z5FZufheDc=";
   };
   postPatch =

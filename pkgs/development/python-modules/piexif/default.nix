@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hMatoba";
     repo = "Piexif";
-    rev = version;
+    tag = version;
     sha256 = "1akmaxq1cjr8wghwaaql1bd3sajl8psshl58lprgfsigrvnklp8b";
   };
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     domain = "opendev.org";
     owner = "openstack";
     repo = "python-designateclient";
-    rev = version;
+    tag = version;
     hash = "sha256-Upfu6FDaCRXniJLacuIt6K0qi8aOvHU0t43F3uWvhG8=";
   };
 

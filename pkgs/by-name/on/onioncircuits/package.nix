@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.tails.boum.org";
     owner = "tails";
     repo = "onioncircuits";
-    rev = version;
+    tag = version;
     sha256 = "sha256-5VGOuvngZvUFQ+bubdt4YV3/IflOhBB1i+oEQaV4kr0=";
   };
 

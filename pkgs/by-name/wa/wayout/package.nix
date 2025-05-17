@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromSourcehut {
     owner = "~shinyzenith";
     repo = "wayout";
-    rev = version;
+    tag = version;
     sha256 = "sha256-EzRetxx0NojhBlBPwhQ7p9rGXDUBlocVqxcEVGIF3+0=";
   };
 

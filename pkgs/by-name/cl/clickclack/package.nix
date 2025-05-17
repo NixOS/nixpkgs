@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~proycon";
     repo = "clickclack";
-    rev = version;
+    tag = version;
     hash = "sha256-YmlbGEmZgT/30c+mWQzdz4rKc69d75zhoNUA5FdxdMc=";
   };
 

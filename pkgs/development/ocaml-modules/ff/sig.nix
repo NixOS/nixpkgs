@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-ff";
-    rev = version;
+    tag = version;
     hash = "sha256-IoUH4awMOa1pm/t8E5io87R0TZsAxJjGWaXhXjn/w+Y=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "m-click";
     repo = "requests_pkcs12";
-    rev = version;
+    tag = version;
     hash = "sha256-ukS0vxG2Rd71GsF1lmpsDSM2JovwqhXsaAnZdF8WGQo=";
   };
 

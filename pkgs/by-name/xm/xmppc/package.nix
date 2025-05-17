@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "Anoxinon_e.V.";
     repo = "xmppc";
-    rev = version;
+    tag = version;
     sha256 = "07cy3j4g7vycagdiva3dqb59361lw7s5f2yydpczmyih29v7hkm8";
   };
 

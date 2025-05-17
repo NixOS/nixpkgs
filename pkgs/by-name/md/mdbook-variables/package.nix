@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "tglman";
     repo = "mdbook-variables";
-    rev = version;
+    tag = version;
     hash = "sha256-whvRCV1g2avKegfQpMgYi+E6ETxT2tQqVS2SWRpAqF8=";
   };
 

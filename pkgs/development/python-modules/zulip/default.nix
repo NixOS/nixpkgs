@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "python-zulip-api";
-    rev = version;
+    tag = version;
     hash = "sha256-YnNXduZ2KOjRHGwhojkqpMP2mwhflk8/f4FVZL8NvHU=";
   };
   sourceRoot = "${src.name}/zulip";

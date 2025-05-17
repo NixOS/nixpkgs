@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
-    rev = version;
+    tag = version;
     hash = "sha256-ieaj97CjoSc/qt/JebATHmiJ7RIvNUpFZjEM6mqG9Rk=";
   };
 

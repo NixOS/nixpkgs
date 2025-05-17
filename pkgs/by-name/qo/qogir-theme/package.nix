@@ -37,7 +37,7 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      rev = version;
+      tag = version;
       sha256 = "Q9DWBzaLZjwXsYRa/oDIrccypO3TCbSRXTkbXWRmm70=";
     };
 

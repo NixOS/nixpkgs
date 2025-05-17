@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pali";
     repo = "igmpproxy";
-    rev = version;
+    tag = version;
     sha256 = "sha256-kv8XtZ/z8zPHYSZ4k4arn2Y+L2xegr2DwhvlguJV820=";
   };
 

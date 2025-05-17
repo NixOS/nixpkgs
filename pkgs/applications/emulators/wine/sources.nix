@@ -244,7 +244,7 @@ rec {
     hash = "sha256-Km2vVTYsLs091cjmNTW8Kqku3vdsEA0imTtZfqZWDQo=";
     owner = "Winetricks";
     repo = "winetricks";
-    rev = version;
+    tag = version;
 
     updateScript = writeShellScript "update-winetricks" ''
       ${updateScriptPreamble}

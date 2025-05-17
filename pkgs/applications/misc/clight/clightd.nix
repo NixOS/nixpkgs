@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
-    rev = version;
+    tag = version;
     hash = "sha256-LOhBBd7QL5kH4TzMFgrh70C37WsFdsiKArP+tIEiPWo=";
   };
 

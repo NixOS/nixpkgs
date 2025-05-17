@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "zn_poly";
-    rev = version;
+    tag = version;
     hash = "sha256-QBItcrrpOGj22/ShTDdfZjm63bGW2xY4c71R1q8abPE=";
   };
 

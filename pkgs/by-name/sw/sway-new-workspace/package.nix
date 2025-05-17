@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nzig";
     repo = "sway-new-workspace";
-    rev = version;
+    tag = version;
     hash = "sha256-CoSfpsaGqNNR5jdAQys3nQxshI0NXXr8MacUnSTKFNo=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "pspg";
-    rev = version;
+    tag = version;
     sha256 = "sha256-kkynCpnwdoAwWEs+gXO0ZPkPk+U4Phl0iL/s3CnL0zA=";
   };
 

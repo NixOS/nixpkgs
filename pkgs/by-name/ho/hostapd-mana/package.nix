@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "hostapd-mana";
-    rev = version;
+    tag = version;
     hash = "sha256-co5LMJAUYSdcvhLv1gfjDvdVqdSXgjtFoiQ7+KxR07M=";
   };
 

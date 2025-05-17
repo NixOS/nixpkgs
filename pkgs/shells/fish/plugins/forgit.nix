@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = version;
+    tag = version;
     hash = "sha256-U+MtgunPEmo/kv/lQI2BBi2WUBgt3wFkaUdfRzJWoGQ=";
   };
 

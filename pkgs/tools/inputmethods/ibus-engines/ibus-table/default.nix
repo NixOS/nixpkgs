@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kaio";
     repo = "ibus-table";
-    rev = version;
+    tag = version;
     sha256 = "sha256-ecs99Y7NctnKTdRT9UHiDqliinvPNMHIyb5mwT7dDL8=";
   };
 

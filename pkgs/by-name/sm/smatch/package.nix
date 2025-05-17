@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "error27";
     repo = "smatch";
-    rev = version;
+    tag = version;
     sha256 = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 

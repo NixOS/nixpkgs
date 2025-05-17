@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "pluthon";
-    rev = version;
+    tag = version;
     hash = "sha256-IYpkb/RXRu53HoeVKik7Jog5FyXwrWItrxSla9dN0s4=";
   };
 

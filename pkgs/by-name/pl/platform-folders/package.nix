@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sago007";
     repo = "PlatformFolders";
-    rev = version;
+    tag = version;
     hash = "sha256-ruhAP9kjwm6pIFJ5a6oy6VE5W39bWQO3qSrT5IUtiwA=";
   };
 

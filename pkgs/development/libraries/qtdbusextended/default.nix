@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nemomobile";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-tUp7OhNBXwomR2tO4UOaR0vJQ3GTirMk/hRl1cMk61o=";
   };
 

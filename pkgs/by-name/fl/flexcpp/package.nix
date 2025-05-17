@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "0s25d9jsfsqvm34rwf48cxwz23aq1zja3cqlzfz3z33p29wwazwz";
-    rev = version;
+    tag = version;
     repo = "flexcpp";
     owner = "fbb-git";
   };

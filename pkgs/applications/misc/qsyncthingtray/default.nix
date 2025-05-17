@@ -21,7 +21,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sieren";
     repo = "QSyncthingTray";
-    rev = version;
+    tag = version;
     sha256 = "1n9g4j7qznvg9zl6x163pi9f7wsc3x6q76i33psnm7x2v1i22x5w";
   };
 

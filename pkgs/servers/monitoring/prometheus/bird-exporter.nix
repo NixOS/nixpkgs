@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "bird_exporter";
-    rev = version;
+    tag = version;
     sha256 = "sha256-aClwJ+J83iuZbfNP+Y1vKEjBULD5wh/R3TMceCccacc=";
   };
 

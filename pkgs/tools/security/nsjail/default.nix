@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "nsjail";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-/K+qJV5Dq+my45Cpw6czdsWLtO9lnJwZTsOIRt4Iijk=";
   };

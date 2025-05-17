@@ -12,7 +12,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "lthms";
     repo = "spatial-shell";
-    rev = version;
+    tag = version;
     hash = "sha256-OeNBP/jea1ABh/WpvCP7We+L20WoTfLZH71raH7bKPI=";
   };
 

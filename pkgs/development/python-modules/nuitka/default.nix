@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
-    rev = version;
+    tag = version;
     hash = "sha256-QKJAMDVXO78VQ0P+nuuQ4dxCKEJLtcqCinJYs018rTA=";
   };
 

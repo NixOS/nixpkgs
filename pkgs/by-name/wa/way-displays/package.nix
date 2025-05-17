@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
-    rev = version;
+    tag = version;
     sha256 = "sha256-HIm5cHi9yX9IHDrxqYzxwefuZtOCu5TJzf3j0aiSC5g=";
   };
 

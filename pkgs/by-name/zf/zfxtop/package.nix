@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ssleert";
     repo = "zfxtop";
-    rev = version;
+    tag = version;
     hash = "sha256-7qeTC9CIx4K2fLRM/pYrSU1NHv9TFMsl7TT0W5Uph60=";
   };
 

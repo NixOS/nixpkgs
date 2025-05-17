@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Upscaler";
-    rev = version;
+    tag = version;
     hash = "sha256-yff33enYV42dRUr3zzDwUOud7mRxwFCz9BCGXpSgV9k=";
   };
 

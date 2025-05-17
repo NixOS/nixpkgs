@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stamparm";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-6LA2n7Kv0MiZcqUJpi0lDN4Q+GcOttYw7hJwVqK/DU0=";
   };
 

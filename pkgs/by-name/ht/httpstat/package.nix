@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "reorx";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-zUdis41sQpJ1E3LdNwaCVj6gexi/Rk21IBUgoFISiDM=";
   };
   doCheck = false; # No tests

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-verboselogs";
-    rev = version;
+    tag = version;
     hash = "sha256-hcIdbn0gdkdJ33KcOx6uv0iMXW0x+i880SoROi+qX4I=";
   };
 

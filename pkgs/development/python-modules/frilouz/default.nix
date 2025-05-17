@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "frilouz";
-    rev = version;
+    tag = version;
     sha256 = "0w2qzi4zb10r9iw64151ay01vf0yzyhh0bsjkx1apxp8fs15cdiw";
   };
 

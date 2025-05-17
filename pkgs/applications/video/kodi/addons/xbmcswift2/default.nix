@@ -12,7 +12,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "XBMC-Addons";
     repo = namespace;
-    rev = version;
+    tag = version;
     sha256 = "sha256-Z+rHz3wncoNvV1pwhRzJFB/X0H6wdfwg88otVh27wg8=";
   };
 

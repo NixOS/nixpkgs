@@ -31,7 +31,7 @@ let
     src = fetchFromGitLab {
       owner = "ubports";
       repo = "development/core/click";
-      rev = version;
+      tag = version;
       hash = "sha256-AV3n6tghvpV/6Ew6Lokf8QAGBIMbHFAnp6G4pefVn+8=";
     };
 

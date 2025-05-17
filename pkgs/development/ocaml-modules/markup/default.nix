@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "markup.ml";
-    rev = version;
+    tag = version;
     sha256 = "sha256-tsXz39qFSyL6vPYKG7P73zSEiraaFuOySL1n0uFij6k=";
   };
 

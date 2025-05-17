@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "woob";
     repo = "woob";
-    rev = version;
+    tag = version;
     hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 

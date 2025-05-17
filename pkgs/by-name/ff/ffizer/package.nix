@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ffizer";
     repo = "ffizer";
-    rev = version;
+    tag = version;
     hash = "sha256-GL1tdWOcbdybPayfShoGnxHsqYi8p+DZ6Eo/8bvWElE=";
   };
 

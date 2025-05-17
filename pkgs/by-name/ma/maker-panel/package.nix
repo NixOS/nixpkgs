@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "twitchyliquid64";
     repo = "maker-panel";
-    rev = version;
+    tag = version;
     sha256 = "0dlsy0c46781sb652kp80pvga7pzx6xla64axir92fcgg8k803bi";
   };
 

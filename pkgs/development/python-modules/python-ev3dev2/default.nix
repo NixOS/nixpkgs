@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ev3dev";
     repo = "ev3dev-lang-python";
-    rev = version;
+    tag = version;
     sha256 = "XxsiQs3k5xKb+3RewARbvBbxaztdvdq3w5ZMgTq+kRc=";
     fetchSubmodules = true;
   };

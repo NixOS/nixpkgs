@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OceanSprint";
     repo = "tesh";
-    rev = version;
+    tag = version;
     hash = "sha256-GIwg7Cv7tkLu81dmKT65c34eeVnRR5MIYfNwTE7j2Vs=";
   };
 

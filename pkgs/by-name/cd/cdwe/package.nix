@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "synoet";
     repo = "cdwe";
-    rev = version;
+    tag = version;
     hash = "sha256-6NWhx82BXhWhbI18k5gE3vEkw9v5gstE8ICJhtq68rM=";
   };
 

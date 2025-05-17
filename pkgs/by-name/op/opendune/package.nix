@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenDUNE";
     repo = "OpenDUNE";
-    rev = version;
+    tag = version;
     sha256 = "15rvrnszdy3db8s0dmb696l4isb3x2cpj7wcl4j09pdi59pc8p37";
   };
 

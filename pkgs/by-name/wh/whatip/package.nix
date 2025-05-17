@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GabMus";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-gt/NKgnCpRoVmLvEJJq2geng4miM2g+YhXYEOm5pPTA=";
   };
 

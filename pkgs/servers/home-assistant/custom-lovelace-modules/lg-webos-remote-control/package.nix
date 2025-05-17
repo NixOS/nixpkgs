@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "madmicio";
     repo = "LG-WebOS-Remote-Control";
-    rev = version;
+    tag = version;
     hash = "sha256-ICOAi8q8dWrBFCv18JYSWc6MIwqxfDXOcc6kCKLGehs=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
-    rev = version;
+    tag = version;
     sha256 = "sha256-C0FpasSh1fKA8Xcm080dYKyXREQ0Ryy5YBknEiuiLcM=";
   };
 

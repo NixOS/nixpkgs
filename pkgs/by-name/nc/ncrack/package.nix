@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nmap";
     repo = "ncrack";
-    rev = version;
+    tag = version;
     sha256 = "1gnv5xdd7n04glcpy7q1mkb6f8gdhdrhlrh8z6k4g2pjdhxlz26g";
   };
 

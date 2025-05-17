@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-constraint";
     repo = "python-constraint";
-    rev = version;
+    tag = version;
     sha256 = "1dv11406yxmmgkkhwzqicajbg2bmla5xfad7lv57zyahxz8jzz94";
   };
 

@@ -14,7 +14,7 @@ mkHyprlandPlugin hyprland rec {
   src = fetchFromGitHub {
     owner = "DreamMaoMao";
     repo = "hycov";
-    rev = version;
+    tag = version;
     hash = "sha256-NRnxbkuiq1rQ+uauo7D+CEe73iGqxsWxTQa+1SEPnXQ=";
   };
 

@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Prior99";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "0c5ghhhrj5v3yp4zmll9ari6r5c6ha8c1izwqshvadn40b02q7xz";
   };
 

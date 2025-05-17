@@ -332,7 +332,7 @@ def update_plugins():
             if versions == []:
                 rev = repo_latest_commit
             else:
-                rev = versions[0][1]
+                tag = versions[0][1]
                 print(rev)
         except requests.exceptions.HTTPError:
             rev = repo_latest_commit

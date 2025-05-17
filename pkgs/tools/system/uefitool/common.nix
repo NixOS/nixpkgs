@@ -26,7 +26,7 @@ mkDerivation rec {
     inherit sha256;
     owner = "LongSoft";
     repo = pname;
-    rev = version;
+    tag = version;
   };
 
   buildInputs = [ qtbase ];

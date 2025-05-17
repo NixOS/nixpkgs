@@ -13,7 +13,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "imagine";
     owner = "hertogp";
-    rev = version;
+    tag = version;
     sha256 = "1wpnckc7qyrf6ga5xhr6gv38k1anpy9nx888n7n3rh6nixzcz2dw";
   };
 

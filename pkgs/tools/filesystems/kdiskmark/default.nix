@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
-    rev = version;
+    tag = version;
     hash = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
     fetchSubmodules = true;
   };

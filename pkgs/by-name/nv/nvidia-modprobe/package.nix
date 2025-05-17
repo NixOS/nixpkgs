@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
-    rev = version;
+    tag = version;
     hash = "sha256-3iQySxYLG+GwtACeY7n5IwUSc0dVVgu6S0y+XMmv7AU=";
   };
 

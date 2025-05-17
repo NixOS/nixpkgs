@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "rcaloras";
     repo = "bash-preexec";
-    rev = version;
+    tag = version;
     sha256 = "sha256-+FU5n7EkY78X5nUiW3WN9+6Bf6oiPjsG2MSRCleooFs=";
   };
 

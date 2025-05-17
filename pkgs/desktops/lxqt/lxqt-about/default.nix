@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-StPepm6XWaK1kDAspnBJ4X1/QGqHmSj48RBobJ46Sao=";
   };
 

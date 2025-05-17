@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "popsicle";
-    rev = version;
+    tag = version;
     hash = "sha256-sWQNav7odvX+peDglLHd7Jrmvhm5ddFBLBla0WK7wcE=";
   };
 

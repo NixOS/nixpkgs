@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "measureme";
-    rev = version;
+    tag = version;
     hash = "sha256-Zgl8iyBDVwqZnbfqC06DMuo0S/hV6pl812hkiovmS+I=";
   };
 

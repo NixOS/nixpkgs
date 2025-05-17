@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
-    rev = version;
+    tag = version;
     hash = "sha256-7vRz2B1aSxpQrV7Om8Zs4o1kJgSVd9rMsOagQZyWMLI=";
   };
 

@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-ctypes";
-    rev = version;
+    tag = version;
     hash = "sha256-fZfTsOMppHiI7BVvgICVt/9ofGFAfYjXzHSDA7L4vZk=";
   };
 

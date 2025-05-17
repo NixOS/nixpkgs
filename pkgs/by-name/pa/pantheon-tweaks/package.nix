@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-+dkjmeY4WJfXwgNR8HlRaVfvS/2icbi8eSAkiB9x7uI=";
   };
 

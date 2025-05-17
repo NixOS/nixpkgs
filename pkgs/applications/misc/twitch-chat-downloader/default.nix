@@ -17,7 +17,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TheDrHax";
     repo = "twitch-chat-downloader";
-    rev = version;
+    tag = version;
     hash = "sha256-mV60ygrtQa9ZkJ2CImhAV59ckCJ7vJSA9cWkYE2xo1M=";
   };
 

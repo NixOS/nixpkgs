@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = version;
+    tag = version;
     hash = "sha256-Gbm4YT9ZyrROOAbKz5xYd9J9YG9cUL2Oo6dDCPciaBs=";
   };
 

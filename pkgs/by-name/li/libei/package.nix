@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
-    rev = version;
+    tag = version;
     hash = "sha256-DoPQaTry1uzu6sM/wWEl4xeGq3h3BuMDeVYusHge6AI=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
-    rev = version;
+    tag = version;
     hash = "sha256-g2L7pEFU/ECNRYcNORH66qYKIAO7Uqtk3pFxyvxgKT4=";
     fetchSubmodules = true;
   };

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "virtuald";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "0rcpx4vvj2c6wxp31vay7a2xa5p62kabi91vps9plj6710yz29nc";
   };
 

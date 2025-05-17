@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "linuxdeepin";
     # DDE 23 releases has moved to `linuxdeepin/dde-session-shell-snipe`
     repo = "dde-session-shell-snipe";
-    rev = version;
+    tag = version;
     hash = "sha256-v0+Bz6J77Kgf4YV1iDhCqhmcNn493GFq1IEQbXBAVUU=";
   };
 

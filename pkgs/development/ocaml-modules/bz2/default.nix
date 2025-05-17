@@ -19,7 +19,7 @@ else
     src = fetchFromGitLab {
       owner = "irill";
       repo = "camlbz2";
-      rev = version;
+      tag = version;
       sha256 = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
     };
 

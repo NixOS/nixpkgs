@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devture";
     repo = "matrix-synapse-shared-secret-auth";
-    rev = version;
+    tag = version;
     sha256 = "sha256-qzXKwTEOMtdvsxoU3Xh3vQyhK+Q18LfkeSts7EyDIXE=";
   };
 

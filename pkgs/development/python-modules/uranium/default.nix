@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Uranium";
-    rev = version;
+    tag = version;
     hash = "sha256-SE9xqrloPXIRTJiiqUdRKFmb4c0OjmJK5CMn6VXMFmk=";
   };
 

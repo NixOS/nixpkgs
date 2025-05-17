@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "ntttcp-for-linux";
-    rev = version;
+    tag = version;
     sha256 = "sha256-6O7qSrR6EFr7k9lHQHGs/scZxJJ5DBNDxlSL5hzlRf4=";
   };
 

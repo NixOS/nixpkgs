@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "doitintl";
     repo = "kube-no-trouble";
-    rev = version;
+    tag = version;
     hash = "sha256-7bn7DxbZ/Nqob7ZEWRy1UVg97FiJN5JWEgpH1CDz6jQ=";
   };
 

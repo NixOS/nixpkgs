@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pawelsalawa";
     repo = "sqlitestudio";
-    rev = version;
+    tag = version;
     hash = "sha256-nGu1MYI3uaQ/3rc5LlixF6YEUU+pUsB6rn/yjFDGYf0=";
   };
 

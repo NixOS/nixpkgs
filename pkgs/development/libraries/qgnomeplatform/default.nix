@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
-    rev = version;
+    tag = version;
     sha256 = "sha256-DaIBtWmce+58OOhqFG5802c3EprBAtDXhjiSPIImoOM=";
   };
 
