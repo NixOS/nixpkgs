@@ -1,30 +1,38 @@
 {
+  patches ? [ ],
+
   lib,
   stdenv,
-  buildDotnetModule,
-  buildNpmPackage,
-  curl,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
-  nodejs_22,
-  writeShellScriptBin,
 
-  legendsviewer-next,
+  callPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
 }:
 let
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
-  frontend = import ./frontend.nix {
-    nodejs = nodejs_22;
-    inherit buildNpmPackage legendsviewer-next;
+  version = "1.2.0";
+
+  src = fetchFromGitHub {
+    owner = "Kromtec";
+    repo = "LegendsViewer-Next";
+    tag = "v${version}";
+    hash = "sha256-Fi4KARGsgDmplH/oG9OIxY2XqhHNYgUB6OxwtoTaCt4=";
+  };
+
+  frontend = callPackage ./frontend.nix {
+    inherit version src patches;
+  };
+
+  backend = callPackage ./backend.nix {
+    inherit version src patches;
+
+    inherit frontend;
   };
 in
-buildDotnetModule rec {
+stdenv.mkDerivation rec {
   pname = "legendsviewer-next";
-  version = "1.2.0";
+  inherit version src patches;
 
   desktopItems = [
     (makeDesktopItem {
@@ -33,11 +41,11 @@ buildDotnetModule rec {
       genericName = "DF Legends Export Browser";
       comment = meta.description;
       icon = "${frontend}/dist/ceretelina.png";
-      tryExec = "LegendsViewer";
-      exec = "LegendsViewer";
+      tryExec = meta.mainProgram;
+      exec = meta.mainProgram;
 
-      # Until upstream supports multiple launches, we need a terminal to keep
-      # track of if it's already launched.
+      # Remove when https://github.com/Kromtec/LegendsViewer-Next/pull/55 gets
+      # released
       terminal = true;
 
       categories = [
@@ -55,79 +63,30 @@ buildDotnetModule rec {
     })
   ];
 
-  src = fetchFromGitHub {
-    owner = "Kromtec";
-    repo = "LegendsViewer-Next";
-    tag = "v${version}";
-    hash = "sha256-Fi4KARGsgDmplH/oG9OIxY2XqhHNYgUB6OxwtoTaCt4=";
-  };
-
-  nugetDeps = ./deps.json;
-  projectFile = "./LegendsViewer.Backend/LegendsViewer.Backend.csproj";
-  testProjectFile = "./LegendsViewer.Backend.Tests/LegendsViewer.Backend.Tests.csproj";
-  executables = [ meta.mainProgram ];
-  inherit dotnet-sdk dotnet-runtime;
-
   nativeBuildInputs = [
-    # This fixes a build failure, we don't care about the frontend node build here
-    (writeShellScriptBin "npm" "")
-
     copyDesktopItems
   ];
 
+  dontUnpack = true;
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontCheck = true;
+
   installPhase = ''
-    runHook preInstall
+    runHook preBuild
 
-    lib=$out/lib/${pname}
+    mkdir -p $out
 
-    mkdir -p $lib
-
-    cp ./LegendsViewer.Backend/bin/Release/net8.0/*/* $lib
-    ln -s ${frontend} $lib/${frontend.pname}
+    ln -s ${backend}/bin $out/bin
+    ln -s ${backend}/lib $out/lib
 
     runHook postInstall
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--subpackage frontend" ];
-    };
-    tests = {
-      test = stdenv.mkDerivation {
-        pname = "${pname}-test";
-        inherit version;
-
-        nativeBuildInputs = [
-          curl
-          legendsviewer-next
-        ];
-
-        dontUnpack = true;
-        dontPatch = true;
-        dontConfigure = true;
-
-        buildPhase = ''
-          runHook preBuild
-
-          timeout 10 LegendsViewer &
-          sleep 2
-
-          # Static server is up
-          curl -f http://localhost:8081 | grep "<!doctype html>"
-
-          # Version matches expected
-          curl -f http://localhost:5054/api/version | grep ${version}
-
-          echo > $out
-
-          runHook postBuild
-        '';
-
-        dontCheck = true;
-        dontInstall = true;
-        dontFixup = true;
-      };
-    };
+    tests.tests = callPackage ./tests.nix { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

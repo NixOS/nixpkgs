@@ -1,21 +1,33 @@
 {
-  buildNpmPackage,
-  nodejs,
+  version,
+  src,
+  patches,
 
-  legendsviewer-next,
+  nodejs_22,
+
+  buildNpmPackage,
+  nix-update-script,
 }:
 buildNpmPackage rec {
   pname = "legends-viewer-frontend";
-  version = legendsviewer-next.version;
 
+  inherit version src patches;
+
+  nodejs = nodejs_22;
   npmDepsHash = "sha256-pnhjGlss8U18fK4VKCPiM9kKhmUaJMMBcDOqA/Bexj4=";
 
-  src = "${legendsviewer-next.src}/LegendsViewer.Frontend/${pname}";
-
-  inherit nodejs;
+  postPatch = ''
+    cd "./LegendsViewer.Frontend/${pname}"
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./dist $out
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 }
