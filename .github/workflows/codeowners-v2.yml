@@ -27,7 +27,7 @@ on:
     paths:
       - .github/workflows/codeowners-v2.yml
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened, edited]
+    types: [opened, ready_for_review, synchronize, reopened]
 
 permissions: {}
 
