@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       + lib.optionalString stdenv.hostPlatform.isWindows ".exe";
     maintainers = with lib.maintainers; [
       surfaceflinger
+      timschumi
     ];
     platforms = with lib.platforms; unix ++ windows;
   };
