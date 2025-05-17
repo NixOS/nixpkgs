@@ -7,6 +7,14 @@
 }:
 let
   common = opts: callPackage (import ./common.nix opts) { };
+
+  # https://github.com/advisories/GHSA-26mg-p594-q328
+  fix-cve-2025-32738 = fetchpatch {
+    name = "fix-cve-2025-32738.patch";
+    url = "https://ftp.openbsd.org/pub/OpenBSD/patches/7.6/common/013_ssh.patch.sig";
+    hash = "sha256-YF8tda2lYrSeKEp0KPqu/QHcR1rMKRnhu+Tpb8DeX9I=";
+    stripLen = 1;
+  };
 in
 {
   openssh = common rec {
@@ -18,7 +26,10 @@ in
       hash = "sha256-karbYD4IzChe3fll4RmdAlhfqU2ZTWyuW0Hhch4hVnM=";
     };
 
-    extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraPatches = [
+      ./ssh-keysign-8.5.patch
+      fix-cve-2025-32738
+    ];
     extraMeta.maintainers = lib.teams.helsinki-systems.members;
   };
 
@@ -38,6 +49,7 @@ in
       in
       [
         ./ssh-keysign-8.5.patch
+        fix-cve-2025-32738
 
         # HPN Patch from FreeBSD ports
         (fetchpatch {
@@ -77,6 +89,7 @@ in
 
     extraPatches = [
       ./ssh-keysign-8.5.patch
+      fix-cve-2025-32738
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
