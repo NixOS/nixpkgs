@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librepcb";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-/Hw7ZTv2CbDcKuyI27wC46IxCcTnrXDS/Mf7csUTc7w=";
+    hash = "sha256-J4y0ikZNuOguN9msmEQzgcY0/REnOEOoDkY/ga+Cfd8=";
     fetchSubmodules = true;
   };
 
