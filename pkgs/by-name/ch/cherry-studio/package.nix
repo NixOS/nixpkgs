@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xCS8ZomIAVEnQ2SJRay/ii7xhPMO+ctc8C14Xrje8kI=";
+    hash = "sha256-gHMM4JkFryyWTwbwG5GUncFv41CJbE0lls8U6dM4Gy4=";
   };
 
   postPatch = ''
