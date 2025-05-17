@@ -1,0 +1,18 @@
+diff --git a/crates/algorithm/src/lib.rs b/crates/algorithm/src/lib.rs
+index de792dd..03a58af 100644
+--- a/crates/algorithm/src/lib.rs
++++ b/crates/algorithm/src/lib.rs
+@@ -1,3 +1,4 @@
++#![feature(vec_pop_if)]
+ #![feature(generic_arg_infer)]
+ #![allow(clippy::collapsible_else_if)]
+ #![allow(clippy::type_complexity)]
+diff --git a/crates/simd/src/lib.rs b/crates/simd/src/lib.rs
+index e2ce830..1d8d8e4 100644
+--- a/crates/simd/src/lib.rs
++++ b/crates/simd/src/lib.rs
+@@ -1,3 +1,4 @@
++#![feature(target_feature_11)]
+ #![feature(avx512_target_feature)]
+ #![cfg_attr(target_arch = "x86_64", feature(stdarch_x86_avx512))]
+ #![cfg_attr(target_arch = "x86_64", feature(stdarch_x86_avx512_f16))]

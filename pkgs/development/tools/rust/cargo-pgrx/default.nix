@@ -76,4 +76,10 @@ in
     cargoHash = "sha256-pnMxWWfvr1/AEp8DvG4awig8zjdHizJHoZ5RJA8CL08=";
   };
 
+  cargo-pgrx_0_12_9 = generic {
+    version = "0.12.9";
+    hash = "sha256-aR3DZAjeEEAjLQfZ0ZxkjLqTVMIEbU0UiZ62T4BkQq8=";
+    cargoHash = "sha256-yZpD3FriL9UbzRtdFkfIfFfYIrRPYxr/lZ5rb0YBTPc=";
+  };
+
 }
