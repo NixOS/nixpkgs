@@ -1,59 +1,94 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
+  replaceVars,
   makeWrapper,
-  jdk17_headless,
+  gradle_8,
+  jdk21_headless,
+  jdk ? jdk21_headless,
+  suwayomi-webui,
+  webui ? suwayomi-webui,
+  nix-update-script,
   nixosTests,
 }:
 
-let
-  jdk = jdk17_headless;
-in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suwayomi-server";
-  version = "1.1.1";
-  revision = 1535;
+  version = "2.0.1727";
 
-  src = fetchurl {
-    url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}-r${toString finalAttrs.revision}.jar";
-    hash = "sha256-mPzREuH89RGhZLK+5aIPuq1gmNGc9MGG0wh4ZV5dLTg=";
+  src = fetchFromGitHub {
+    owner = "Suwayomi";
+    repo = "Suwayomi-Server";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Xe7RCsrEyvyv2g7ZyfDNs5koL/C2powh02RDIDggkSQ=";
   };
+
+  patches = [
+    (replaceVars ./version.patch {
+      inherit (finalAttrs) version;
+      inherit (webui) revision;
+    })
+  ];
+
+  postPatch = ''
+    install -m644 ${webui}/share/WebUI.zip server/src/main/resources
+  '';
 
   nativeBuildInputs = [
     makeWrapper
+    gradle_8
   ];
 
-  dontUnpack = true;
+  mitmCache = gradle_8.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+  gradleBuildTask = "shadowJar";
 
-  buildPhase = ''
-    runHook preBuild
+  installPhase = ''
+    runHook preInstall
 
-    makeWrapper ${jdk}/bin/java $out/bin/tachidesk-server \
-      --add-flags "-Dsuwayomi.tachidesk.config.server.initialOpenInBrowserEnabled=false -jar $src"
+    mkdir -p $out/{bin,share/suwayomi-server}
+    cp server/build/Suwayomi-Server-v${finalAttrs.version}.jar $out/share/suwayomi-server
 
-    runHook postBuild
+    makeWrapper ${lib.getExe jdk} $out/bin/tachidesk-server \
+      --add-flags "-Dsuwayomi.tachidesk.config.server.initialOpenInBrowserEnabled=false" \
+      --add-flags "-jar $out/share/suwayomi-server/Suwayomi-Server-v${finalAttrs.version}.jar"
+
+    runHook postInstall
   '';
 
-  passthru.tests = {
-    suwayomi-server-with-auth = nixosTests.suwayomi-server.with-auth;
-    suwayomi-server-without-auth = nixosTests.suwayomi-server.without-auth;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      suwayomi-server-with-auth = nixosTests.suwayomi-server.with-auth;
+      suwayomi-server-without-auth = nixosTests.suwayomi-server.without-auth;
+    };
   };
 
-  meta = with lib; {
-    description = "Free and open source manga reader server that runs extensions built for Tachiyomi";
+  meta = {
+    description = "Free and open source manga reader server that runs extensions built for Mihon (Tachiyomi)";
     longDescription = ''
-      Suwayomi is an independent Tachiyomi compatible software and is not a Fork of Tachiyomi.
+      Suwayomi is an independent Mihon (Tachiyomi) compatible software and is not a Fork of Mihon (Tachiyomi).
 
-      Suwayomi-Server is as multi-platform as you can get. Any platform that runs java and/or has a modern browser can run it. This includes Windows, Linux, macOS, chrome OS, etc.
+      Suwayomi-Server is as multi-platform as you can get.
+      Any platform that runs java and/or has a modern browser can run it.
+      This includes Windows, Linux, macOS, chrome OS, etc.
     '';
     homepage = "https://github.com/Suwayomi/Suwayomi-Server";
     downloadPage = "https://github.com/Suwayomi/Suwayomi-Server/releases";
     changelog = "https://github.com/Suwayomi/Suwayomi-Server/releases/tag/v${finalAttrs.version}";
-    license = licenses.mpl20;
-    platforms = jdk.meta.platforms;
-    maintainers = with maintainers; [ ratcornu ];
+    license = lib.licenses.mpl20;
+    inherit (jdk.meta) platforms;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
+    maintainers = with lib.maintainers; [
+      ratcornu
+      nanoyaki
+    ];
     mainProgram = "tachidesk-server";
   };
 })
