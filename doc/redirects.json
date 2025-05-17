@@ -5,6 +5,9 @@
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "chap-toolchains": [
+    "index.html#chap-toolchains"
+  ],
   "cmake-ctest": [
     "index.html#cmake-ctest"
   ],
@@ -66,6 +69,9 @@
   "pkgs-replacevarswith": [
     "index.html#pkgs-replacevarswith"
   ],
+  "part-toolchains": [
+    "index.html#part-toolchains"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -98,6 +104,12 @@
   ],
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
+  ],
+  "sec-building-packages-with-llvm": [
+    "index.html#sec-building-packages-with-llvm"
+  ],
+  "sec-building-packages-with-llvm-using-clang-stdenv": [
+    "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
   "sec-inkscape": [
     "index.html#sec-inkscape"
@@ -383,6 +395,9 @@
   ],
   "chap-stdenv": [
     "index.html#chap-stdenv"
+  ],
+  "sec-using-llvm": [
+    "index.html#sec-using-llvm"
   ],
   "sec-using-stdenv": [
     "index.html#sec-using-stdenv"

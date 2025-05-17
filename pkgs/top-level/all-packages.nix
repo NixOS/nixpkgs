@@ -4283,8 +4283,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
-
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
@@ -4730,8 +4728,6 @@ with pkgs;
   td = callPackage ../tools/misc/td { };
 
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
-
-  tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
 
   tremor-rs = callPackage ../tools/misc/tremor-rs { };
 
@@ -6553,7 +6549,7 @@ with pkgs;
 
   pypy = pypy2;
   pypy2 = pypy27;
-  pypy3 = pypy310;
+  pypy3 = pypy311;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -6625,6 +6621,7 @@ with pkgs;
     python3Minimal
     pypy27
     pypy310
+    pypy311
     ;
 
   # List of extensions with overrides to apply to all Python package sets.
@@ -6642,6 +6639,7 @@ with pkgs;
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
   pypy310Packages = pypy310.pkgs;
+  pypy311Packages = pypy311.pkgs;
 
   pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
 
@@ -13237,8 +13235,6 @@ with pkgs;
 
   mandelbulber = callPackage ../applications/graphics/mandelbulber { };
 
-  mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
-
   mastodon-bot = nodePackages.mastodon-bot;
 
   matrix-commander =
@@ -15710,8 +15706,6 @@ with pkgs;
 
   sageWithDoc = sage.override { withDoc = true; };
 
-  suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
-  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix { };
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
   };
