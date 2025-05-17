@@ -65,6 +65,10 @@ stdenv.mkDerivation {
       ./gpr-project-darwin-rpath-hook.sh
     ];
 
+  # ld: ./unicode.o: relocation R_X86_64_32S against symbol `unicode__valid_basechar' can not be used when making a PIE object; recompile with -fPIE
+  # ld: failed to set dynamic section sizes: bad value
+  hardeningDisable = [ "pie" ];
+
   installPhase = ''
     runHook preInstall
 
