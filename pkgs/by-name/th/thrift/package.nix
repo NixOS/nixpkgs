@@ -15,12 +15,12 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
   version = "0.18.1";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    url = "https://archive.apache.org/dist/thrift/${finalAttrs.version}/thrift-${finalAttrs.version}.tar.gz";
     hash = "sha256-BMbxDl14jKeOE+4u8NIVLHsHDAr1VIPWuULinP8pZyY=";
   };
 
@@ -53,20 +53,26 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  postPatch = ''
-    # Python 3.10 related failures:
-    # SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats
-    # AttributeError: module 'collections' has no attribute 'Hashable'
-    substituteInPlace test/py/RunClientServer.py \
-      --replace "'FastbinaryTest.py'," "" \
-      --replace "'TestEof.py'," "" \
-      --replace "'TestFrozen.py'," ""
+  postPatch =
+    ''
+      # Python 3.10 related failures:
+      # SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats
+      # AttributeError: module 'collections' has no attribute 'Hashable'
+      substituteInPlace test/py/RunClientServer.py \
+        --replace "'FastbinaryTest.py'," "" \
+        --replace "'TestEof.py'," "" \
+        --replace "'TestFrozen.py'," ""
 
-    # these functions are removed in Python3.12
-    substituteInPlace test/py/SerializationTest.py \
-      --replace-fail "assertEquals" "assertEqual" \
-      --replace-fail "assertNotEquals" "assertNotEqual"
-  '';
+      # these functions are removed in Python3.12
+      substituteInPlace test/py/SerializationTest.py \
+        --replace-fail "assertEquals" "assertEqual" \
+        --replace-fail "assertNotEquals" "assertNotEqual"
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      # Compiling the tests doesn't work for cross builds.
+      substituteInPlace lib/py/CMakeLists.txt \
+        --replace-fail 'COMMAND ''${THRIFT_COMPILER} --gen py test/test_thrift_file/TestServer.thrift' ""
+    '';
 
   preConfigure = ''
     export PY_PREFIX=$out
@@ -100,7 +106,9 @@ stdenv.mkDerivation rec {
 
       # FIXME: Fails to link in static mode with undefined reference to
       # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
-      "-DBUILD_TESTING:BOOL=${if static then "OFF" else "ON"}"
+      (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+      # Building tutorials requires running thrift.
+      (lib.cmakeBool "BUILD_TUTORIALS" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
     ]
     ++ lib.optionals static [
       "-DWITH_STATIC_LIB:BOOL=ON"
@@ -149,8 +157,9 @@ stdenv.mkDerivation rec {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
+    downloadPage = "https://github.com/apache/thrift";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor ];
   };
-}
+})
