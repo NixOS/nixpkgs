@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     gawk
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-DZAPRET_GH_VER=${finalAttrs.src.tag} -DZAPRET_GH_HASH=0000000";
+
   makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 
   installPhase = ''
@@ -88,12 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
-    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/bol-van/zapret/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
-
-    # probably gonna work on darwin, but untested
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })
