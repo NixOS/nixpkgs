@@ -261,6 +261,7 @@ mapAliases {
   addOpenGLRunpath = throw "addOpenGLRunpath has been removed. Use addDriverRunpath instead."; # Converted to throw 2024-11-17
   aeon = throw "aeon has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-07-15
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
+  afpfs-ng = throw "'afpfs-ng' has been removed as it was broken and unmaintained for 10 years"; # Added 2025-05-17
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10"
   ajour = throw "ajour has been removed, the project was archived upstream on 2024-09-17."; # Added 2025-03-12
   akkoma-emoji = recurseIntoAttrs {
