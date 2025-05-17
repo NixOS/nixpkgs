@@ -42,8 +42,33 @@ python3Packages.buildPythonApplication rec {
     "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [ versionCheckHook python3Packages.pytestCheckHook ];
   versionCheckProgramArg = "--version";
+
+  preCheck = ''
+    export YTDL_SUB_FFMPEG_PATH="${lib.getExe' ffmpeg "ffmpeg"}"
+    export YTDL_SUB_FFPROBE_PATH="${lib.getExe' ffmpeg "ffprobe"}"
+  '';
+
+  disabledTests = [
+    "test_cli_dl_command"
+    "TestPrebuiltTvShowCollectionPresets"
+    "TestPrebuiltTVShowPresets"
+    "TestPrebuiltMusicVideoPresets"
+    "test_presets_run"
+    "test_chapters_from_comments"
+    "test_file_convert_custom_args"
+    "test_download_archive_migration"
+    "test_empty_info_json_and_thumb"
+    "test_missing_thumbnail"
+    "test_logger_can_be_cleaned_during_execution"
+  ];
+
+  pytestFlagsArray = [
+    # According to documentation, e2e tests can be flaky:
+    # "This checksum can be inaccurate for end-to-end tests"
+    "--ignore=tests/e2e"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
