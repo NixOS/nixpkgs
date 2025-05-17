@@ -35,7 +35,7 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "19.1.4";
+      version = "20 Beta 3";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
@@ -57,9 +57,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-OTL83suZXt7DxDz+89zIRJD8R25/HZUQMMGlfS+Ow4I="
+                "sha256-WKwJoycj1lZN8aZ2bqeK7uELD+1lMIAFWny1Z7r24qI="
               else
-                "sha256-2u1gkaL3vdI+4RnPl5bEXE+zeRhg2BzPWjni015ISWI=";
+                "sha256-oPFX6aICmAevMbGMBcRuVrMty8dn1/wgfGI6wwBw66o=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -101,7 +101,7 @@ let
           ''
             DOWNLOADID=$(
               curl --silent --compressed "$DOWNLOADSURL" \
-                | jq --raw-output '.downloads[] | .urls.Linux?[]? | select(.downloadTitle | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .downloadId'
+                | jq --raw-output '.downloads[] | .urls.Linux?[]? | select(.downloadTitle | test("^'"$PRODUCT $VERSION"'( Beta \\d+)?( Update)?$")) | .downloadId'
             )
             echo "downloadid is $DOWNLOADID"
             test -n "$DOWNLOADID"
@@ -138,9 +138,22 @@ let
 
       installPhase =
         let
-          appimageName = "DaVinci_Resolve_${lib.optionalString studioVariant "Studio_"}${version}_Linux.run";
+          appimageVersion =
+            if lib.strings.hasInfix "Beta" version then
+              let
+                parts = lib.strings.split " " version;
+                # every odd index is empty list for the space
+                releaseVersion = builtins.elemAt parts 0;
+                # beta = builtins.elemAt parts 2;
+                betaVersion = builtins.elemAt parts 4;
+              in
+              "${releaseVersion}.0b${betaVersion}"
+            else
+              version;
+          appimageName = "DaVinci_Resolve_${lib.optionalString studioVariant "Studio_"}${appimageVersion}_Linux.run";
         in
         ''
+          echo ${appimageName}
           runHook preInstall
 
           export HOME=$PWD/home
@@ -282,13 +295,13 @@ buildFHSEnv {
         currentVersion=${lib.escapeShellArg davinci.version}
         downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
 
-        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve \K\d+\.\d+(\.\d+)?' | sort | tail -n 1)"
+        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve \K\d+(\.\d+)?(\.\d+)?( Beta \d+)?' | sort | tail -n 1)"
         update-source-version davinci-resolve "$latestLinuxVersion" --source-key=davinci.src
 
         # Since the standard and studio both use the same version we need to reset it before updating studio
         sed -i -e "s/""$latestLinuxVersion""/""$currentVersion""/" "$drv"
 
-        latestStudioLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve Studio \K\d+\.\d+(\.\d+)?' | sort | tail -n 1)"
+        latestStudioLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve Studio \K\d+(\.\d+)?(\.\d+)?( Beta \d+)?' | sort | tail -n 1)"
         update-source-version davinci-resolve-studio "$latestStudioLinuxVersion" --source-key=davinci.src
       '';
     });
