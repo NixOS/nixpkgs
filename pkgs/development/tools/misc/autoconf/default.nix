@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-uohcExlXjWyU1G6bDc60AUyq/iSQ5Deg28o/JwoiP1o=";
   };
 
+  patches = [
+    ./uutils-mkdirp.patch
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [
     m4
