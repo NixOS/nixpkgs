@@ -31,7 +31,7 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.1";
+    version = "1.3.2";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ let
       owner = "contourpy";
       repo = "contourpy";
       tag = "v${version}";
-      hash = "sha256-vZO9hHPHlfZhK/icJYE6nQPCPdXAYZFe1GF5X25MUcQ=";
+      hash = "sha256-mtD54KfCm1vNBjcGuAKqRpKF+FLy3WmTYo7FLoE01QY=";
     };
 
     # prevent unnecessary references to the build python when cross compiling
