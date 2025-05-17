@@ -1125,8 +1125,6 @@ with pkgs;
     };
   };
 
-  memos = callPackage ../servers/memos { };
-
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
   mkosi-full = mkosi.override { withQemu = true; };
@@ -4236,11 +4234,6 @@ with pkgs;
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
 
-  projectlibre = callPackage ../applications/misc/projectlibre {
-    jre = jre8;
-    jdk = jdk8;
-  };
-
   projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
@@ -4580,8 +4573,6 @@ with pkgs;
   thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
-
-  timetrap = callPackage ../applications/office/timetrap { };
 
   tinc = callPackage ../tools/networking/tinc { };
 
@@ -6820,8 +6811,6 @@ with pkgs;
   or1k-newlib = callPackage ../development/misc/or1k/newlib.nix { };
 
   ### DEVELOPMENT / TOOLS
-
-  actiona = libsForQt5.callPackage ../applications/misc/actiona { };
 
   inherit (callPackage ../development/tools/alloy { })
     alloy5
@@ -13203,8 +13192,6 @@ with pkgs;
 
   libutp = callPackage ../applications/networking/p2p/libutp { };
   libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };
-
-  ledger-web = callPackage ../applications/office/ledger-web { };
 
   linphone = libsForQt5.callPackage ../applications/networking/instant-messengers/linphone { };
 
