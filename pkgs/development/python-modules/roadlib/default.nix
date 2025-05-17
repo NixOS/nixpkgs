@@ -1,11 +1,13 @@
 {
   lib,
-  adal,
+  aiohttp,
+  cryptography,
   buildPythonPackage,
   fetchPypi,
   pyjwt,
   pythonOlder,
   setuptools,
+  requests,
   sqlalchemy,
 }:
 
@@ -24,10 +26,15 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    adal
+    cryptography
     pyjwt
+    requests
     sqlalchemy
   ];
+
+  optional-dependencies = {
+    async = [ aiohttp ];
+  };
 
   # Module has no test
   doCheck = false;
