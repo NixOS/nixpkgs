@@ -62,6 +62,16 @@
   # pkgs/top-level/.
   #
   attrNamesOnly ? false,
+
+  # This flag, if set to true, will inhibit the use of
+  # `release-lib.packagePlatforms`, instead always
+  # returning `supportedSystems`. This is so that
+  # we can properly test that unsupported platforms
+  # eval up to the point of being marked as unsupported.
+  #
+  # Like `attrNamesOnly`, the behavior of this flag may
+  # change at any time.
+  includeUnsupported ? false,
 }:
 
 let
@@ -348,7 +358,12 @@ let
   jobs =
     let
       packagePlatforms = release-lib.recursiveMapPackages (
-        if attrNamesOnly then id else release-lib.getPlatforms
+        if attrNamesOnly then
+          id
+        else if includeUnsupported then
+          drv: drv.meta.hydraPlatforms or supportedSystems
+        else
+          release-lib.getPlatforms
       );
       packageJobs = packagePlatforms pkgs // {
         haskell.compiler = packagePlatforms pkgs.haskell.compiler;
