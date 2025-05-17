@@ -13235,8 +13235,6 @@ with pkgs;
 
   mandelbulber = callPackage ../applications/graphics/mandelbulber { };
 
-  mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
-
   mastodon-bot = nodePackages.mastodon-bot;
 
   matrix-commander =
