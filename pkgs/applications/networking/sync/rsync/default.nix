@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
