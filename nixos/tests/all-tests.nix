@@ -630,6 +630,7 @@ in
   hledger-web = handleTest ./hledger-web.nix { };
   hockeypuck = handleTest ./hockeypuck.nix { };
   home-assistant = runTest ./home-assistant.nix;
+  homebridge = runTest ./homebridge.nix;
   hostname = handleTest ./hostname.nix { };
   hound = handleTest ./hound.nix { };
   hub = runTest ./git/hub.nix;
