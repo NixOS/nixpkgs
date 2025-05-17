@@ -282,9 +282,19 @@ in
             type = types.nullOr types.str;
           };
           db_path = mkOption {
-            description = "Path to Kanidm database.";
+            description = ''
+              Path to Kanidm database.
+
+              ::: {.warning
+              Please note that while it is now possible to modify this option, extra care
+              must be taken due to hardening options set on the primary kanidm daemon.
+              It is recommended to avoid putting the database in a folder with
+              other daemon files (such as TLS keys/backups), due to the current logic in the Kanidm module.
+              Consider maintaining a separate directory for the database files, such as `/path/to/kanidm-files/db/`.
+              This must then be added to `systemd.services."kanidm".serviceConfig.ReadWritePaths`
+              :::
+            '';
             default = "/var/lib/kanidm/kanidm.db";
-            readOnly = true;
             type = types.path;
           };
           tls_chain = mkOption {
