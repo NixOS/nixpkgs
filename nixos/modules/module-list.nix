@@ -1489,6 +1489,7 @@
   ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
+  ./services/video/broadcast-box.nix
   ./services/video/epgstation/default.nix
   ./services/video/frigate.nix
   ./services/video/go2rtc/default.nix
