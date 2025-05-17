@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
+    broken = true; # Unmaintained, will be removed in 25.11
     description = "Library to deal with gadu-gadu protocol (most popular polish IM protocol)";
     homepage = "https://libgadu.net/index.en.html";
     platforms = lib.platforms.linux;
