@@ -98,10 +98,10 @@ in
 
     boot.kernel.sysctl =
       {
-        "net.ipv6.conf.all.forwarding" = 1;
-        "net.ipv6.conf.all.accept_redirects" = 0;
-        "net.ipv4.conf.all.forwarding" = 1;
-        "net.ipv4.conf.all.rp_filter" = 0;
+        net.ipv6.conf.all.forwarding = true;
+        net.ipv6.conf.all.accept_redirects = false;
+        net.ipv4.conf.all.forwarding = true;
+        net.ipv4.conf.all.rp_filter = false;
       }
       // lib.mapAttrs' (
         ifname: _: lib.nameValuePair "net.ipv4.conf.${ifname}.rp_filter" (lib.mkDefault 0)

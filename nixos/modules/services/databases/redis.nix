@@ -463,7 +463,7 @@ in
     );
 
     boot.kernel.sysctl = lib.mkIf cfg.vmOverCommit {
-      "vm.overcommit_memory" = "1";
+      vm.overcommit_memory = "1";
     };
 
     networking.firewall.allowedTCPPorts = lib.concatMap (
