@@ -1,25 +1,26 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  setuptools,
   pyyaml,
   pytestCheckHook,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "pyyaml-env-tag";
-  version = "0.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "1.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyyaml_env_tag";
     inherit version;
-    sha256 = "1nsva88jsmwn0cb9jnrfiz4dvs9xakkpgfii7g1xwkx1pmsjc2bh";
+    hash = "sha256-LrOLdaLSHuBHXW2X7BnGMoen4UAjHkIUlp0OrJI81/8=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyyaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Custom YAML tag for referencing environment variables";
     homepage = "https://github.com/waylan/pyyaml-env-tag";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
