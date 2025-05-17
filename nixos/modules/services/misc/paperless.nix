@@ -326,6 +326,16 @@ in
       };
     };
 
+    configureNginx = lib.mkEnableOption "" // {
+      description = "Whether to configure nginx as a reverse proxy.";
+    };
+
+    domain = lib.mkOption {
+      type = lib.types.str;
+      example = "paperless.example.com";
+      description = "Domain under which paperless will be available.";
+    };
+
     exporter = {
       enable = lib.mkEnableOption "regular automatic document exports";
 
@@ -373,6 +383,27 @@ in
       {
         environment.systemPackages = [ manage ];
 
+        services.nginx = lib.mkIf cfg.configureNginx {
+          enable = true;
+          upstreams.paperless.servers."${cfg.address}:${toString cfg.port}" = { };
+          virtualHosts.${cfg.domain} = {
+            forceSSL = lib.mkDefault true;
+            locations = {
+              "/".proxyPass = "http://paperless";
+              "/static/" = {
+                root = config.services.paperless.package;
+                extraConfig = ''
+                  rewrite ^/(.*)$ /lib/paperless-ngx/$1 break;
+                '';
+              };
+              "/ws/status" = {
+                proxyPass = "http://paperless";
+                proxyWebsockets = true;
+              };
+            };
+          };
+        };
+
         services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
 
         services.postgresql = lib.mkIf cfg.database.createLocally {
@@ -387,6 +418,9 @@ in
         };
 
         services.paperless.settings = lib.mkMerge [
+          (lib.mkIf (cfg.domain != "") {
+            PAPERLESS_URL = "https://${cfg.domain}";
+          })
           (lib.mkIf cfg.database.createLocally {
             PAPERLESS_DBENGINE = "postgresql";
             PAPERLESS_DBHOST = "/run/postgresql";
@@ -565,6 +599,7 @@ in
             SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
             # Needs to serve web page
             PrivateNetwork = false;
+            RuntimeDirectory = lib.mkIf cfg.configureNginx "paperless";
           };
           environment = env // {
             PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.propagatedBuildInputs}:${cfg.package}/lib/paperless-ngx/src";
