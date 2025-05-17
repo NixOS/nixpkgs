@@ -336,6 +336,10 @@ let
       orga = "prestonknopp";
       repo = "tree-sitter-gdscript";
     };
+    "tree-sitter-gemini" = {
+      orga = "blessanabraham";
+      repo = "tree-sitter-gemini";
+    };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";
       repo = "tree-sitter-godot-resource";
@@ -574,15 +578,13 @@ let
      }
      ${updateImpl} print-all-grammars-nix-file "$(< ${
        jsonFile "all-grammars.json" {
-         allGrammars = (
-           lib.mapAttrsToList (
-             nixRepoAttrName: attrs:
-             attrs
-             // {
-               inherit nixRepoAttrName;
-             }
-           ) allGrammars
-         );
+         allGrammars = lib.mapAttrsToList (
+           nixRepoAttrName: attrs:
+           attrs
+           // {
+             inherit nixRepoAttrName;
+           }
+         ) allGrammars;
          inherit outputDir;
        }
      })"
