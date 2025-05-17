@@ -39,13 +39,13 @@ let
       rec {
 
         pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-        version = "2.12.1";
+        version = "2.12.2";
 
         src = fetchFromGitHub {
           owner = "ARM-software";
           repo = "arm-trusted-firmware";
           tag = "lts-v${version}";
-          hash = "sha256-yPWygW1swSwL3DrHPNIlTeTeV7XG4C9ALFA/+OTiz+4=";
+          hash = "sha256-MlfcL+qMtBKpm8ipbC0Cw7VVStx6r1ko6Uu35LUCJAY=";
         };
 
         patches = lib.optionals deleteHDCPBlobBeforeBuild [
