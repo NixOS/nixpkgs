@@ -12,6 +12,9 @@ with lib;
 let
   cfg = config.systemd.user;
 
+  hasTmpfiles =
+    cfg.tmpfiles.rules != [ ] || any (cfg': cfg'.rules != [ ]) (attrValues cfg.tmpfiles.users);
+
   systemd = config.systemd.package;
 
   inherit (systemdUtils.lib)
@@ -209,11 +212,16 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit v)) cfg.timers;
 
-    # Generate timer units for all services that have a ‘startAt’ value.
-    systemd.user.timers = mapAttrs (name: service: {
-      wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = service.startAt;
-    }) (filterAttrs (name: service: service.startAt != [ ]) cfg.services);
+    systemd.user.timers =
+      {
+        # enable systemd user tmpfiles
+        systemd-tmpfiles-clean.wantedBy = optional hasTmpfiles "timers.target";
+      }
+      # Generate timer units for all services that have a ‘startAt’ value.
+      // (mapAttrs (name: service: {
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = service.startAt;
+      }) (filterAttrs (name: service: service.startAt != [ ]) cfg.services));
 
     # Provide the systemd-user PAM service, required to run systemd
     # user instances.
@@ -232,9 +240,7 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
 
     # enable systemd user tmpfiles
-    systemd.user.services.systemd-tmpfiles-setup.wantedBy = optional (
-      cfg.tmpfiles.rules != [ ] || any (cfg': cfg'.rules != [ ]) (attrValues cfg.tmpfiles.users)
-    ) "basic.target";
+    systemd.user.services.systemd-tmpfiles-setup.wantedBy = optional hasTmpfiles "basic.target";
 
     # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
     # write the tmpfiles.d rules for everyone there
