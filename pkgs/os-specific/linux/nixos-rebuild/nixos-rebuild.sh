@@ -229,9 +229,9 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh "${SSHOPTS[@]}" "$buildHost" "${c[*]@Q} env PATH=${remoteNix@Q}:\"\$PATH\" ${*@Q}"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
+        runCmd ssh "${SSHOPTS[@]}" "$buildHost" "${c[*]@Q} ${*@Q}"
     fi
 }
 
@@ -246,7 +246,7 @@ targetHostCmd() {
     if [ -z "$targetHost" ]; then
         runCmd "${c[@]}" "$@"
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
+        runCmd ssh "${SSHOPTS[@]}" "$targetHost" "${c[*]@Q} ${*@Q}"
     fi
 }
 
@@ -257,23 +257,23 @@ targetHostSudoCmd() {
     fi
 
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
+        useSudo=1 SSHOPTS="${SSHOPTS[@]}"" $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
         # But if the user really doesn't want it, don't do it.
-        SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
+        SSHOPTS="${SSHOPTS[@]}"" $t" targetHostCmd "$@"
     fi
 }
 
 copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
-            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1"
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: ${SSHOPTS[*]}"
+            NIX_SSHOPTS=("${SSHOPTS[@]}" runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1")
         elif [ -z "$buildHost" ]; then
-            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: ${SSHOPTS[*]}"
+            NIX_SSHOPTS=("${SSHOPTS[@]}" runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1")
         else
             buildHostCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         fi
@@ -322,8 +322,8 @@ nixBuild() {
 
         drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
-            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure --to "$buildHost" "$drv"
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: ${SSHOPTS[*]}"
+            NIX_SSHOPTS=("${SSHOPTS[@]}" runCmd nix-copy-closure --to "$buildHost" "$drv")
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix-instantiate failed"
@@ -373,8 +373,8 @@ nixFlakeBuild() {
 
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
-            logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
+            logVerbose "Running nix with these NIX_SSHOPTS: ${SSHOPTS[*]}"
+            NIX_SSHOPTS=("${SSHOPTS[@]}" runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv")
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix eval failed"
