@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "25.1";
+  version = "25.1-unstable-2025-05-12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";
-    rev = "v${version}";
-    hash = "sha256-5VYw9Kq33/YFW9mFzkFzhrxavfx6r/CtC1SJhZbanhg=";
+    rev = "133bdad383af9d9c674c81ed6f96feca04841c3c";
+    hash = "sha256-DHChabMfuTRAc8zX/vQxAxictTXpx/AJIKir/sfhpdA=";
   };
 
   build-system = [ hatchling ];

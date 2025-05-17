@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "django-phonenumber-field";
-  version = "8.0.0";
+  version = "8.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "stefanfoulis";
     repo = "django-phonenumber-field";
     tag = version;
-    hash = "sha256-l+BAh7QYGN0AgDHICvlQnBYAcpEn8acu+JBmoo85kF0=";
+    hash = "sha256-KRi2rUx88NYoQhRChmNABP8KalMbf4HhWC8Wwnc/xB4=";
   };
 
   build-system = [ setuptools-scm ];

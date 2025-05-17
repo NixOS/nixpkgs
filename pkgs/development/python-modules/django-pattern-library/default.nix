@@ -13,25 +13,26 @@
 
   # tests
   beautifulsoup4,
+  jinja2,
   pytestCheckHook,
   pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-pattern-library";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-pattern-library";
     tag = "v${version}";
-    hash = "sha256-2a/Rg6ljBe1J0FOob7Z9aNVZZ3l+gTD34QCRjk4PiQg=";
+    hash = "sha256-urK34rlBU5GuEOlUtmJLGv6wlTP5H/RMAkwQu5S2Jbo=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     pyyaml
     markdown
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     beautifulsoup4
+    jinja2
     pytestCheckHook
     pytest-django
   ];

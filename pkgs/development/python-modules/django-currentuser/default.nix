@@ -3,26 +3,22 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  hatchling,
   pyhamcrest,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "django-currentuser";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zsoldosp";
     repo = "django-currentuser";
     tag = "v${version}";
-    hash = "sha256-buWYVl/nGxzoaDgA6Ds2R/AhGTYpi9JxxO0ER8Vuly4=";
+    hash = "sha256-pfgsVsWM/aehZZAQzjL1fdsqWlfnquOniu76UoLPREI=";
   };
 
   build-system = [
