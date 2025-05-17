@@ -29,19 +29,18 @@
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
-  version = "2.2-unstable-2024-05-14";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
-    rev = "8daadcc949c35a7b7aa20b7f544fdcff83e2c5f7";
-    hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HpZ1uWVwpjDEwgXOOiDDBCCfCITeRqa8oAJd7WGptWQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2Hf492/xZ/QGqDYbjiZep/FX8bPyEuoxkMJ4qnMqu+c=";
+  cargoHash = "sha256-oKbNwiA6aSHbNnkCPiPlzPcpgZ6pxCOw9hwmkwC/zi4=";
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -132,7 +131,6 @@ rustPlatform.buildRustPackage {
   passthru.tests.version = testers.testVersion {
     package = espanso;
     # remove when updating to a release version
-    version = "2.2.1";
   };
 
   meta = with lib; {
@@ -151,4 +149,4 @@ rustPlatform.buildRustPackage {
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';
   };
-}
+})
