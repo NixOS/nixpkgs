@@ -57,7 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/anufrievroman/waypaper";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ totalchaos ];
+    maintainers = with maintainers; [
+      prince213
+      totalchaos
+    ];
     platforms = platforms.linux;
   };
 }
