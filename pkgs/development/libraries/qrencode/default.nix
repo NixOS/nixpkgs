@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  SDL2,
   libpng,
   libiconv,
   libobjc,
@@ -37,8 +36,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     libiconv
     libpng
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ];
-
-  nativeCheckInputs = [ SDL2 ];
 
   doCheck = false;
 
