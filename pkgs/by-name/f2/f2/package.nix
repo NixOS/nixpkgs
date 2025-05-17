@@ -30,7 +30,10 @@ buildGoModule (finalAttrs: {
     description = "Command-line batch renaming tool";
     homepage = "https://github.com/ayoisaiah/f2";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [
+      prince213
+      zendo
+    ];
     mainProgram = "f2";
   };
 })
