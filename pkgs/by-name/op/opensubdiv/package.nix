@@ -61,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
       cudaPackages.cuda_cudart
     ];
 
+  patches = [
+    ./cmake-config.patch
+  ];
+
   # It's important to set OSD_CUDA_NVCC_FLAGS,
   # because otherwise OSD might piggyback unwanted architectures:
   # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
@@ -105,8 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     else
       ''
-        moveToOutput "lib/*.a" $static
+        moveToOutput "lib/libosd*.a" $static
       '';
+
+  postFixup = ''
+    sed -i -E "s|\\\$\{_IMPORT_PREFIX\}/lib/(libosd.*\.a)|$static/lib/\1|" \
+      $dev/lib/cmake/OpenSubdiv/OpenSubdivTargets-release.cmake
+  '';
 
   meta = {
     description = "Open-Source subdivision surface library";
