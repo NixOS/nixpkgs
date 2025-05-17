@@ -510,6 +510,7 @@ mapAliases ({
   proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py; # Added 2022-10-15
+  push-receiver = throw "push-receiver has been removed since it is unmaintained for 3 years"; # added 2025-05-17
   Pweave = pweave; # added 2023-02-19
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
